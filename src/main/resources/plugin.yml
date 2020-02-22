@@ -1,0 +1,14 @@
+name: pluginLG
+version: 1.2.7
+author: Ph1Lou
+main: io.github.ph1lou.pluginlg.MainLG
+api-version: 1.8
+commands:
+
+  lg:
+    description: commande des joueurs
+    usage: /<command> h
+  adminlg:
+    description: commande des admins
+    usage: /<command> h
+

@@ -1,0 +1,34 @@
+package io.github.ph1lou.pluginlg.enumlg;
+
+public enum TimerLG {
+	role(1200,"Révélation des Rôles"),
+	lg_liste(1800,"Révélation de la liste des Loups"),
+	pvp(2100,"PVP"),
+	vote_begin(2400,"Début des Votes"),
+	beginning_border(3600,"Début de la Bordure"),
+	minage(4200,"Fin du Minage"),
+	duration(240,"Durée pour le choix d'un Maitre et du Couple"),
+	day_duration(300,"Durée du Jour/Nuit"),
+	vote_duration(180,"Durée du Vote"),
+	use_power(240,"Durée d'utilisation des pouvoirs le Matin"),
+	flair_renard(240,"Durée du Flair du Renard");
+
+	private int value;
+	private String appearance;
+	
+	private TimerLG(int value, String appearance) {
+		this.value=value;
+		this.appearance=appearance;
+	}
+
+	public int getValue() {
+		return this.value;
+	}
+	
+	public String getAppearance() {
+		return this.appearance;
+	}
+}
+
+
+
