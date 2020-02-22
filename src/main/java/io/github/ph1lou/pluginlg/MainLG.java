@@ -32,7 +32,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
-import com.connorlinfoot.titleapi.TitleAPI;
+
 
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -42,8 +42,8 @@ public class MainLG extends JavaPlugin {
 	public Scoreboard board ;
 	public Scoreboard boardlg ;
 	public final Map<UUID, FastBoard> boards = new HashMap<>();
-	public Map<String, PlayerLG> playerlg = new HashMap<String, PlayerLG>();
-	public List<List<String>> couplerange = new ArrayList<List<String>>();
+	public Map<String, PlayerLG> playerlg = new HashMap<>();
+	public List<List<String>> couplerange = new ArrayList<>();
 	private StateLG state;
 	private Day daystate;
 	public CycleLG cycle = new CycleLG(this);
@@ -160,9 +160,9 @@ public class MainLG extends JavaPlugin {
 		String playername = player.getName();
 		FastBoard fastboard = new FastBoard(player);
 		fastboard.updateTitle(texte.getText(125));
-        boards.put(player.getUniqueId(), fastboard);  
+        boards.put(player.getUniqueId(), fastboard);
         player.setScoreboard(board);
-		TitleAPI.sendTabTitle(player, texte.getText(0),texte.getText(184)+"§9§lPh1Lou");
+		Title.sendTabTitle(player, texte.getText(0),texte.getText(184)+"§9§lPh1Lou");
 		new UpdateChecker(this, 73113).getVersion(version -> {
 			
 			ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
@@ -193,7 +193,7 @@ public class MainLG extends JavaPlugin {
 			
 		}
 		else {
-			if (!playerlg.containsKey(playername)) {	
+			if (!playerlg.containsKey(playername)) {
 				player.setGameMode(GameMode.SPECTATOR);
 				player.sendMessage(texte.getText(38));	
 			}
@@ -263,7 +263,7 @@ public class MainLG extends JavaPlugin {
 
 	public String conversion(int timer) {
 		
-		String valeur = "";
+		String valeur;
 		
 		if(timer%60>9) {
 			valeur=timer%60+"s";
@@ -321,7 +321,7 @@ public class MainLG extends JavaPlugin {
 			if(playerlg.get(p1).isState(State.JUGEMENT)) return;
 			if(playerlg.get(p1).isState(State.VIVANT)) { 
 			
-				List<String> teamange=new ArrayList<String>();
+				List<String> teamange= new ArrayList<>();
 				
 				teamange.add(p1);
 				
@@ -396,7 +396,10 @@ public class MainLG extends JavaPlugin {
 					}
 				}
 			}
-			
+
+			if(role == null){
+				return;
+			}
 			if (role.equals(RoleLG.VOLEUR)) {
 				
 				soustitrevictoire=texte.getText(4)+texte.translaterole.get(RoleLG.VOLEUR);
@@ -431,7 +434,6 @@ public class MainLG extends JavaPlugin {
 				
 				soustitrevictoire=texte.getText(4)+texte.translaterole.get(RoleLG.ANGE_GARDIEN);
 				fin();
-				return;
 			}
 		}
 	}
@@ -465,7 +467,7 @@ public class MainLG extends JavaPlugin {
 		}
 		
 		for(Player player:Bukkit.getOnlinePlayers()) {
-			TitleAPI.sendTitle(player,20,60, 20,texte.getText(3), soustitrevictoire);
+			Title.sendTitle(player,20,60, 20,texte.getText(3), soustitrevictoire);
 
 			TextComponent msgbug = new TextComponent(texte.getText(186));
 			msgbug.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,"https://discord.gg/GXXCVUA"));

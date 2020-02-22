@@ -1,6 +1,7 @@
 package io.github.ph1lou.pluginlg;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -30,11 +31,11 @@ public class PlayerLG{
 	private Boolean hasbeenstolen=false;
 	private Boolean voleur=false;
 	private	Boolean kit=false;
-	private List<String> affected_player = new ArrayList<String>();
-	private List<String> disciple = new ArrayList<String>();
-	private List<String> cibleof = new ArrayList<String>();
-	private List<String> couple = new ArrayList<String>();
-	private List<ItemStack> itemsdeath= new ArrayList<ItemStack>();
+	private List<String> affected_player = new ArrayList<>();
+	private List<String> disciple = new ArrayList<>();
+	private List<String> cibleof = new ArrayList<>();
+	private List<String> couple = new ArrayList<>();
+	private List<ItemStack> itemsdeath= new ArrayList<>();
 	private Location spawn;
 	private int deathtime=0;
 	private int vote=0;
@@ -52,8 +53,7 @@ public class PlayerLG{
 	}
 	
 	public void setItemDeath(ItemStack[] itemsdeath) {
-		for(ItemStack i:itemsdeath)
-		this.itemsdeath.add(i);
+		this.itemsdeath.addAll(Arrays.asList(itemsdeath));
 	}
 	public List<ItemStack> getItemDeath() {
 		return this.itemsdeath;
@@ -220,9 +220,7 @@ public class PlayerLG{
 		this.cibleof.add(aplayer);
 	}
 	
-	public void clearCibleOf() {
-		this.cibleof.clear();
-	}
+
 	
 	public List<String> getCibleOf() {
 		
@@ -313,9 +311,7 @@ public class PlayerLG{
 		return(this.disciple);
 	}
 	public void removeAffectedPlayer(String playername) {
-		if(this.affected_player.contains(playername)) {
-			this.affected_player.remove(playername);
-		}
+		this.affected_player.remove(playername);
 	}
 
 

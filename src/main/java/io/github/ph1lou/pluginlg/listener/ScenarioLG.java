@@ -50,7 +50,7 @@ public class ScenarioLG implements Listener {
 	@EventHandler
     public void onCraft(PrepareItemCraftEvent event) {
 		
-        if (event.getInventory() instanceof CraftingInventory) {
+        if (event.getInventory() != null) {
         	final CraftingInventory inv = event.getInventory();
             final ItemStack AIR = new ItemStack(Material.AIR);
             if (inv.getResult().getType() == Material.GOLDEN_APPLE && inv.getResult().getDurability()== 1) {
@@ -256,15 +256,15 @@ public class ScenarioLG implements Listener {
     public void onBurn(FurnaceBurnEvent event) {
         if (main.config.tool_switch.get(ToolLG.fast_smelting)) {
       
-            handleCookingTime((Furnace)event.getBlock().getState(), 8);
+            handleCookingTime((Furnace)event.getBlock().getState());
         }
     }
     
-    private void handleCookingTime(Furnace block,int speed) {
+    private void handleCookingTime(Furnace block) {
         new BukkitRunnable() {
             public void run() {
                 if (block.getCookTime() > 0 || block.getBurnTime() > 0) {
-                    block.setCookTime((short)(block.getCookTime() + speed));
+                    block.setCookTime((short)(block.getCookTime() + 8));
                     block.update();
                 }
                 else {

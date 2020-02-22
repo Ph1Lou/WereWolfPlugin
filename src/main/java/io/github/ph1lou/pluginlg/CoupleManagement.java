@@ -10,14 +10,11 @@ import io.github.ph1lou.pluginlg.enumlg.StateLG;
 import io.github.ph1lou.pluginlg.enumlg.ToolLG;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 
 public class CoupleManagement {
-
-	ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 
 	private MainLG main;
 	
@@ -27,7 +24,7 @@ public class CoupleManagement {
 	
 	public void auto_couple() {
 		
-		List<String> pcouple =new ArrayList<String>();
+		List<String> pcouple =new ArrayList<>();
 		for(String p:main.playerlg.keySet()) {
 			if(main.playerlg.get(p).isState(State.VIVANT)) {
 				pcouple.add(p);
@@ -130,7 +127,7 @@ public class CoupleManagement {
 				PlayerLG plg = main.playerlg.get(p);
 				plg.clearCouple();
 				for(int l=0;l<main.couplerange.get(i).size();l++) {
-					if(main.couplerange.get(i).get(l)!=p) {
+					if(!main.couplerange.get(i).get(l).equals(p)) {
 						plg.addCouple(main.couplerange.get(i).get(l));
 					}
 					
@@ -153,7 +150,7 @@ public class CoupleManagement {
 					StringBuilder strb =new StringBuilder();
 					
 					for(String c:plg.getCouple()) {
-						strb.append(c+" ");
+						strb.append(c).append(" ");
 						
 					}
 					pj2.sendMessage(main.texte.esthetique("§m", "§d",main.texte.powerhasbeenuse.get(RoleLG.COUPLE)+strb.toString()+main.texte.getText(11)));
@@ -178,7 +175,7 @@ public class CoupleManagement {
 		
 		while(!allcouple.isEmpty()) {
 			
-			List<String> couplelie= new ArrayList<String>();
+			List<String> couplelie= new ArrayList<>();
 			couplelie.add(allcouple.get(0));
 			allcouple.remove(0);
 			

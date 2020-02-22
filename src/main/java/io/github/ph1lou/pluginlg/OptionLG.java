@@ -148,7 +148,7 @@ public class OptionLG {
 	public int findselect(Inventory inv) {
 		
 		int i=0;
-		Boolean trouver = false;
+		boolean trouver = false;
 		while (i<inv.getSize() && !trouver) {
 			if(inv.getItem(i)!=null && inv.getItem(i).getType()==Material.FEATHER) {
 				trouver=true;

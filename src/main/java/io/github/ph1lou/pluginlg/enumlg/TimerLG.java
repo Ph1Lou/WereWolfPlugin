@@ -16,7 +16,7 @@ public enum TimerLG {
 	private int value;
 	private String appearance;
 	
-	private TimerLG(int value, String appearance) {
+	TimerLG(int value, String appearance) {
 		this.value=value;
 		this.appearance=appearance;
 	}

@@ -70,7 +70,7 @@ public class EventsLG {
 		
 		World world = Bukkit.getWorld("world");
 		WorldBorder wb =world.getWorldBorder();
-		int nb_target= (int) Math.floor(main.score.getPlayerSize()/3);
+		int nb_target = main.score.getPlayerSize() / 3;
 		if(nb_target<2) {
 			nb_target=2;
 		}

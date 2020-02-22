@@ -40,7 +40,7 @@ public class CommandLG implements CommandExecutor{
 					StringBuilder str = new StringBuilder();
 					for(RoleLG role:RoleLG.values()) {
 						if(main.config.rolecount.get(role)>0) {
-							str.append("§r"+main.config.rolecount.get(role)+" "+main.texte.translaterole.get(role)+"\n");
+							str.append("§r").append(main.config.rolecount.get(role)).append(" ").append(main.texte.translaterole.get(role)).append("\n");
 						}
 					}
 					sender.sendMessage(str.toString());
@@ -82,7 +82,7 @@ public class CommandLG implements CommandExecutor{
 
 		case "maudire":
 			
-			if(main.cmdlg.chechCommand(false, 1,RoleLG.CORBEAU, sender, cmd, label, args)) {
+			if(main.cmdlg.chechCommand(false, 1,RoleLG.CORBEAU, sender, args)) {
 				main.playerlg.get(args[1]).setMaudit(true);
 				Player playermaudit=Bukkit.getPlayer(args[1]);
 				playermaudit.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,Integer.MAX_VALUE,1,false,false));
@@ -93,14 +93,14 @@ public class CommandLG implements CommandExecutor{
 		
 		case "couple":
 			
-			if(main.cmdlg.chechCommand(false, 2, RoleLG.CUPIDON,  sender, cmd, label, args)) {
+			if(main.cmdlg.chechCommand(false, 2, RoleLG.CUPIDON,  sender, args)) {
 				sender.sendMessage(main.texte.esthetique("§m", "§e",main.texte.powerhasbeenuse.get(RoleLG.CUPIDON)+args[1]+" et "+args[2]));
 			}
 			break;
 			
 		case "infecter":
 			
-			if(main.cmdlg.chechCommand(false, 1, RoleLG.INFECT, sender, cmd, label, args)) {
+			if(main.cmdlg.chechCommand(false, 1, RoleLG.INFECT, sender, args)) {
 				
 				
 				if(!main.playerlg.get(args[1]).isCamp(Camp.LG)) {
@@ -114,7 +114,7 @@ public class CommandLG implements CommandExecutor{
 			break;
 		case "flairer":
 			
-			if(main.cmdlg.chechCommand(false,1, RoleLG.RENARD, sender, cmd, label, args)) {
+			if(main.cmdlg.chechCommand(false,1, RoleLG.RENARD, sender, args)) {
 				sender.sendMessage(main.texte.esthetique("§m", "§e",main.texte.powerhasbeenuse.get(RoleLG.RENARD)+args[1]));
 				main.playerlg.get(sender.getName()).setFlair(0f);
 			}
@@ -122,7 +122,7 @@ public class CommandLG implements CommandExecutor{
 
 		case "slv":
 			
-			if(main.cmdlg.chechCommand(true, 1,RoleLG.SALVATEUR,  sender, cmd, label, args)) {
+			if(main.cmdlg.chechCommand(true, 1,RoleLG.SALVATEUR,  sender, args)) {
 				Player playerslv =Bukkit.getPlayer(args[1]);
 				playerslv.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
 				playerslv.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,Integer.MAX_VALUE,0,false,false));
@@ -133,7 +133,7 @@ public class CommandLG implements CommandExecutor{
 			break;
 		case "sauver":
 			
-			if(main.cmdlg.chechCommand(false,1, RoleLG.SORCIERE, sender, cmd, label, args)) {
+			if(main.cmdlg.chechCommand(false,1, RoleLG.SORCIERE, sender, args)) {
 				main.deathmanage.resurrection(args[1]);
 				sender.sendMessage(main.texte.esthetique("§m", "§e",main.texte.powerhasbeenuse.get(RoleLG.SORCIERE)+args[1]));
 			}
@@ -141,7 +141,7 @@ public class CommandLG implements CommandExecutor{
 			
 		case "maitre":
 			
-			if(main.cmdlg.chechCommand(false,1, RoleLG.ENFANT_SAUVAGE, sender, cmd, label, args)) {
+			if(main.cmdlg.chechCommand(false,1, RoleLG.ENFANT_SAUVAGE, sender, args)) {
 				main.playerlg.get(args[1]).addDisciple(sender.getName());
 				sender.sendMessage(main.texte.powerhasbeenuse.get(RoleLG.ENFANT_SAUVAGE)+args[1]);
 			}
@@ -149,7 +149,7 @@ public class CommandLG implements CommandExecutor{
 			
 		case "switch":
 			
-			if (main.cmdlg.chechCommand(true, 1, RoleLG.TRUBLION, sender, cmd, label, args)) {
+			if (main.cmdlg.chechCommand(true, 1, RoleLG.TRUBLION, sender, args)) {
 				
 				main.eparpillement(args[1], Math.random()*Bukkit.getOnlinePlayers().size(),main.texte.getText(202));
 				sender.sendMessage(main.texte.powerhasbeenuse.get(RoleLG.TRUBLION)+args[1]);
@@ -160,23 +160,23 @@ public class CommandLG implements CommandExecutor{
 			
 			
 			if(main.playerlg.containsKey(sender.getName()) && main.playerlg.get(sender.getName()).isRole(RoleLG.VOYANTE_BAVARDE)) {
-				main.cmdlg.chechCommand(true, 1, RoleLG.VOYANTE_BAVARDE, sender, cmd, label, args) ;
+				main.cmdlg.chechCommand(true, 1, RoleLG.VOYANTE_BAVARDE, sender, args) ;
 			}
 			else {
-				main.cmdlg.chechCommand(true, 1, RoleLG.VOYANTE, sender, cmd, label, args) ;	
+				main.cmdlg.chechCommand(true, 1, RoleLG.VOYANTE, sender, args) ;
 			}
 			break;
 
 		case "inspecter":
 	
-			if(main.cmdlg.chechCommand(false, 2, RoleLG.DETECTIVE, sender, cmd, label, args)) {
+			if(main.cmdlg.chechCommand(false, 2, RoleLG.DETECTIVE, sender, args)) {
 				sender.sendMessage(main.texte.esthetique("§m", "§2",args[1]+" et "+args[2]+main.texte.getText(71)));
 			}	
 			break;
 	
 		case "role":
 			
-			if(main.playerlg.containsKey(sender.getName()) && main.cmdlg.chechCommand(false, 0,main.playerlg.get(sender.getName()).getRole() , sender, cmd, label, args)) {
+			if(main.playerlg.containsKey(sender.getName()) && main.cmdlg.chechCommand(false, 0,main.playerlg.get(sender.getName()).getRole() , sender, args)) {
 				
 				PlayerLG plg =main.playerlg.get(sender.getName());
 				
@@ -197,7 +197,7 @@ public class CommandLG implements CommandExecutor{
 					strb.append("§2Liste des Soeurs : ");
 					for(String soeur:main.playerlg.keySet()) {
 						if(main.playerlg.get(soeur).isState(State.VIVANT) && main.playerlg.get(soeur).isRole(RoleLG.SOEUR)) {
-							strb.append(soeur+" ");
+							strb.append(soeur).append(" ");
 						}
 					}
 					sender.sendMessage(strb.toString());
@@ -207,7 +207,7 @@ public class CommandLG implements CommandExecutor{
 			
 		case "lg":
 			
-			if(main.playerlg.containsKey(sender.getName()) && main.cmdlg.chechCommand(false, 0,main.playerlg.get(sender.getName()).getRole() , sender, cmd, label, args)) {
+			if(main.playerlg.containsKey(sender.getName()) && main.cmdlg.chechCommand(false, 0,main.playerlg.get(sender.getName()).getRole() , sender, args)) {
 				
 				PlayerLG plg = main.playerlg.get(sender.getName());
 				
@@ -228,7 +228,7 @@ public class CommandLG implements CommandExecutor{
 				
 				for(String loup:main.playerlg.keySet()) {
 					if(main.playerlg.get(loup).isState(State.VIVANT) && (main.playerlg.get(loup).isCamp(Camp.LG) || main.playerlg.get(loup).isRole(RoleLG.LOUP_GAROU_BLANC))) {
-						strb.append(loup+" ");
+						strb.append(loup).append(" ");
 					}
 				}
 				sender.sendMessage(main.texte.getText(101)+strb.toString());	
@@ -244,7 +244,7 @@ public class CommandLG implements CommandExecutor{
 		
 	}
 	
-	public boolean chechCommand(boolean autochoice ,int nbargs , RoleLG role, CommandSender sender, Command cmd, String label, String[] args) {
+	public boolean chechCommand(boolean autochoice, int nbargs, RoleLG role, CommandSender sender, String[] args) {
 		
 		if (!(sender instanceof Player)){
 			return false;

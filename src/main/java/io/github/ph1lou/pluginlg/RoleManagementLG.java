@@ -2,8 +2,6 @@ package io.github.ph1lou.pluginlg;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import io.github.ph1lou.pluginlg.enumlg.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -27,8 +25,8 @@ public class RoleManagementLG {
 	
 	public void RepartitionrolesLG() {
 		
-		List<String> joueurs = main.playerlg.keySet().stream() .collect(Collectors.toList());
-		List<RoleLG> config = new ArrayList<RoleLG>();
+		List<String> joueurs = new ArrayList<>(main.playerlg.keySet());
+		List<RoleLG> config = new ArrayList<>();
 		main.config.tool_switch.put(ToolLG.chat,false);
 		main.config.rolecount.put(RoleLG.VILLAGEOIS,main.config.rolecount.get(RoleLG.VILLAGEOIS)+joueurs.size()-main.score.getRole());
 		for(RoleLG role:RoleLG.values()) {
@@ -118,9 +116,9 @@ public class RoleManagementLG {
 		if((main.playerlg.get(playername).isRole(RoleLG.VOLEUR) || (main.playerlg.get(playername).isRole(RoleLG.ANCIEN))  && main.playerlg.get(playername).hasPower())){
 			effect.add(PotionEffectType.DAMAGE_RESISTANCE);
 		}
-		if (main.playerlg.get(playername).isRole(RoleLG.CORBEAU)) {
-			//effect.add(PotionEffectType.SLOW_FALLING);
-		}
+		/*if (main.playerlg.get(playername).isRole(RoleLG.CORBEAU)) {
+			effect.add(PotionEffectType.SLOW_FALLING);
+		}*/
 		if (main.playerlg.get(playername).isRole(RoleLG.RENARD) || main.playerlg.get(playername).isRole(RoleLG.VILAIN_PETIT_LOUP)) {
 			effect.add(PotionEffectType.SPEED);
 		}

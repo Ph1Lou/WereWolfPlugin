@@ -108,7 +108,7 @@ public class PlayerListeners implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-		if (!(player.getKiller() instanceof Player)) return;
+		if (player.getKiller() == null) return;
 		String killername = player.getKiller().getName();
 		if (!main.playerlg.containsKey(killername)) return;
 		if ((main.playerlg.get(killername).isRole(RoleLG.ASSASSIN) && !main.isDay(Day.NIGHT)) || (main.playerlg.get(killername).isCamp(Camp.LG) && main.isDay(Day.NIGHT)) ) {
@@ -199,7 +199,7 @@ public class PlayerListeners implements Listener {
             player.sendMessage(main.texte.getText(131));
         }
         
-        if (args[0].equalsIgnoreCase("/tellraw") || args[0].equalsIgnoreCase("/msg") || args[0].equalsIgnoreCase("/tell") || args[0].equalsIgnoreCase("/tell") || args[0].equalsIgnoreCase("/tell") || args[0].equalsIgnoreCase("/minecraft:tell")) {
+        if (args[0].equalsIgnoreCase("/tellraw") || args[0].equalsIgnoreCase("/msg") || args[0].equalsIgnoreCase("/tell") || args[0].equalsIgnoreCase("/minecraft:tell")) {
         	
         	event.setCancelled(true);
         	if(args.length<=2) return;
@@ -211,7 +211,7 @@ public class PlayerListeners implements Listener {
         		Player receveur = Bukkit.getPlayer(args[1]);
         		StringBuilder sb = new StringBuilder();
     			for(String w:args) {
-    				sb.append(w+" ");
+    				sb.append(w).append(" ");
     			}
     			sb.delete(0,args[0].length()+args[1].length()+2);
         		receveur.sendMessage(main.texte.getText(133)+player.getName()+"] "+sb.toString());

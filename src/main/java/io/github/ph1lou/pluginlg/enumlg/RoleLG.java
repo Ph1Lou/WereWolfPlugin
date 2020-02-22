@@ -1,8 +1,6 @@
 package io.github.ph1lou.pluginlg.enumlg;
 
 
-import io.github.ph1lou.pluginlg.enumlg.Camp;
-
 public enum RoleLG {
 	
 	COUPLE("§d§lCouple§r",null,true,"","","Vous tombez éperdumment amoureux de "),
@@ -36,12 +34,12 @@ public enum RoleLG {
 	
 	private String appearance;
 	private Camp camp;
-	private Boolean power=true;
+	private Boolean power;
 	private String description;
 	private String poweruse;
 	private String powerhasbeenuse;
 	
-	private RoleLG(String appearance ,Camp camp,Boolean power,String description,String poweruse,String powerhasbeenuse) {
+	RoleLG(String appearance, Camp camp, Boolean power, String description, String poweruse, String powerhasbeenuse) {
 		this.appearance=appearance;
 		this.camp=camp;
 		this.power=power;

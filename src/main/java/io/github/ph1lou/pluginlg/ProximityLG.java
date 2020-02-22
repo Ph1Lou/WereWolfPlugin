@@ -71,7 +71,7 @@ public class ProximityLG {
 						
 					if(renardlocation.distance(pflairlocation)<=20) {
 						
-						Float temp=main.playerlg.get(playername).getFlair()+100f/(main.config.value.get(TimerLG.flair_renard)+1);
+						float temp=main.playerlg.get(playername).getFlair()+100f/(main.config.value.get(TimerLG.flair_renard)+1);
 	
 						main.playerlg.get(playername).setFlair(temp);
 						

@@ -6,7 +6,7 @@ public enum BordureLG {
 	private int value;
 	private String appearance;
 	
-	private BordureLG(int value, String appearance) {
+	BordureLG(int value, String appearance) {
 		this.value=value;
 		this.appearance=appearance;
 	}

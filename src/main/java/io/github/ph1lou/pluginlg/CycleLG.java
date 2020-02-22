@@ -137,7 +137,7 @@ public class CycleLG {
 				if(plg.isRole(RoleLG.MONTREUR_OURS)){
 					
 					StringBuilder builder=new StringBuilder();
-					Boolean ok=false;
+					boolean ok=false;
 					
 					Location ourslocation = Bukkit.getPlayer(playername).getLocation();	
 					
@@ -146,14 +146,13 @@ public class CycleLG {
 						if(main.playerlg.containsKey(pls.getName())) {
 							
 							PlayerLG plgf = main.playerlg.get(pls.getName());
-							
-							if(plgf.isRole(RoleLG.LOUP_FEUTRE) && !plgf.isCampFeutre(Camp.LG)) {
-								
-							}
-							else if((plgf.isCamp(Camp.LG) || plgf.isRole(RoleLG.LOUP_GAROU_BLANC)) && plgf.isState(State.VIVANT)) {
-								if(ourslocation.distance(pls.getLocation())<50) {
-									builder.append("Grrrr ");
-									ok=true;
+
+							if (!plgf.isRole(RoleLG.LOUP_FEUTRE) || plgf.isCampFeutre(Camp.LG)) {
+								if((plgf.isCamp(Camp.LG) || plgf.isRole(RoleLG.LOUP_GAROU_BLANC)) && plgf.isState(State.VIVANT)) {
+									if(ourslocation.distance(pls.getLocation())<50) {
+										builder.append("Grrrr ");
+										ok=true;
+									}
 								}
 							}
 						}

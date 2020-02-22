@@ -15,7 +15,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import com.connorlinfoot.titleapi.TitleAPI;
+
 
 
 public class AdminLG implements CommandExecutor{
@@ -46,7 +46,7 @@ public class AdminLG implements CommandExecutor{
 			sender.sendMessage(main.texte.getText(118));	
 			StringBuilder sb = new StringBuilder();
 			for(String w:args) {
-				sb.append(w+" ");
+				sb.append(w).append(" ");
 			}
 			sb.delete(0,args[0].length()+1);
 			main.score.setHost(sb.toString());
@@ -96,7 +96,7 @@ public class AdminLG implements CommandExecutor{
 			sb2.append(main.texte.getText(136));
 			
 			for(String w:args) {
-				sb2.append(w+" ");
+				sb2.append(w).append(" ");
 			}
 			sb2.replace(main.texte.getText(136).length()-1, main.texte.getText(136).length()+4, "");
 			Bukkit.broadcastMessage(sb2.toString());
@@ -106,7 +106,7 @@ public class AdminLG implements CommandExecutor{
 		case "groupe" :
 			
 			for (Player player:Bukkit.getOnlinePlayers()) {		
-				TitleAPI.sendTitle(player,20,60, 20,main.texte.getText(138), main.texte.getText(139)+main.score.getGroupe());
+				Title.sendTitle(player,20,60, 20,main.texte.getText(138), main.texte.getText(139)+main.score.getGroupe());
 				
 			}  
 			Bukkit.broadcastMessage(main.texte.esthetique("§m", "§2",main.texte.getText(137)+main.score.getGroupe()));
@@ -329,7 +329,7 @@ public class AdminLG implements CommandExecutor{
 					main.stufflg.adddeathloot(i);
 				}
 			}
-			((Player) sender).sendMessage(main.texte.getText(152));
+			sender.sendMessage(main.texte.getText(152));
 			((Player) sender).getInventory().clear();
 			((Player) sender).setGameMode(GameMode.ADVENTURE);
 			break;
@@ -353,10 +353,10 @@ public class AdminLG implements CommandExecutor{
 						main.stufflg.rolestuff.get(RoleLG.values()[Integer.parseInt(args[1])]).add(i);
 					}
 				}
-				((Player) sender).sendMessage(main.texte.getText(199));
+				sender.sendMessage(main.texte.getText(199));
 				((Player) sender).getInventory().clear();
 				((Player) sender).setGameMode(GameMode.ADVENTURE);
-			} catch (NumberFormatException nfe) {
+			} catch (NumberFormatException ignored) {
 				
 			}
 			

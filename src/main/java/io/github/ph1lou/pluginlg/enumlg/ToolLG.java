@@ -31,7 +31,7 @@ public enum ToolLG {
 	private Boolean value;
 	private String appearance;
 	
-	private ToolLG(Boolean value, String appearance) {
+	ToolLG(Boolean value, String appearance) {
 		this.value=value;
 		this.appearance=appearance;
 	}

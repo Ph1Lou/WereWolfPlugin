@@ -2,8 +2,6 @@ package io.github.ph1lou.pluginlg;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.connorlinfoot.titleapi.TitleAPI;
 import io.github.ph1lou.pluginlg.enumlg.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -116,7 +114,7 @@ public class ScoreBoardLG {
 	private void updateScoreBoardRole(FastBoard board) {
 		
 		String[] score = {"","","","","","","","","","","","","","","",""};
-		List<RoleLG> roles = new ArrayList<RoleLG>();
+		List<RoleLG> roles = new ArrayList<>();
 		
 		PlayerLG plg = main.playerlg.get(board.getPlayer().getName());
 		
@@ -186,7 +184,7 @@ public class ScoreBoardLG {
 		
 		World world = player.getWorld();
 		Location plocation = player.getLocation();
-		String retour ="";
+		String retour;
 		plocation.setY(world.getSpawnLocation().getY());
 		double distance= plocation.distance(world.getSpawnLocation());
 		
@@ -214,7 +212,7 @@ public class ScoreBoardLG {
 		
 		if (!main.eventslg.chesthasbeenopen.isEmpty()) {
 				
-			if(!main.eventslg.chesthasbeenopen.values().contains(false)) {
+			if(!main.eventslg.chesthasbeenopen.containsValue(false)) {
 				
 				main.eventslg.chestlocation.clear();
 				main.eventslg.chesthasbeenopen.clear();
@@ -227,9 +225,9 @@ public class ScoreBoardLG {
 				for (int i=0;i<main.eventslg.chestlocation.size();i++) {
 					
 					if(!main.eventslg.chesthasbeenopen.get(main.eventslg.chestlocation.get(i))) {
-						stringbuilder.append("§a"+updatearrow(player, main.eventslg.chestlocation.get(i))+" ");
+						stringbuilder.append("§a").append(updatearrow(player, main.eventslg.chestlocation.get(i))).append(" ");
 					}
-					else stringbuilder.append("§6"+updatearrow(player, main.eventslg.chestlocation.get(i))+" ");
+					else stringbuilder.append("§6").append(updatearrow(player, main.eventslg.chestlocation.get(i))).append(" ");
 				}
 			}
 			
@@ -238,13 +236,13 @@ public class ScoreBoardLG {
 			
 			for (String p:main.playerlg.get(player.getName()).getCouple()) {
 				if(Bukkit.getPlayer(p)!=null) {
-					stringbuilder.append("§d "+p+" "+updatearrow(player,Bukkit.getPlayer(p).getLocation()));
+					stringbuilder.append("§d ").append(p).append(" ").append(updatearrow(player, Bukkit.getPlayer(p).getLocation()));
 				}
 			}
 			
 		}
 		if(stringbuilder.length()>0) {
-			TitleAPI.sendTabTitle(player, main.texte.getText(0),main.texte.getText(184)+"§9§lPh1Lou"+stringbuilder.toString());
+			Title.sendActionBar(player, stringbuilder.toString());
 		}
 	}
 		
@@ -278,7 +276,7 @@ public class ScoreBoardLG {
 	private String updatearrow(Player player,Location cible) {
 		
 			Location plocation = player.getLocation();
-			String flech ="";
+			String flech ;
 			plocation.setY(cible.getY());
 			Vector dirToMiddle = cible.toVector().subtract(player.getEyeLocation().toVector());
 			Integer distance = (int) Math.round(cible.distance(plocation));
@@ -340,10 +338,7 @@ public class ScoreBoardLG {
 	public void setHost(String host) {
 		this.host = host;
 	}
-	
-	public String getHost() {
-		return host;
-	}
+
 
 	public void addTimer() {
 		this.timer++;
@@ -369,7 +364,5 @@ public class ScoreBoardLG {
 
 
 
-	public void setGroupe(int groupe) {
-		this.groupsize = groupe;
-	}
+
 }

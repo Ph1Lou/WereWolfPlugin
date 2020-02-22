@@ -243,7 +243,7 @@ public class TextLG {
 public void getTexttranslate(MainLG main, String filename) {
 		
 		
-		TextLG textload=main.texte;;
+		TextLG textload=main.texte;
 		File filetext = new File(main.getDataFolder(), filename);
 		
 		if(filetext.exists()) {
@@ -336,23 +336,17 @@ public void getTexttranslate(MainLG main, String filename) {
 		return (this.DEFAULT[i]);
 	}
 	
-	
-	
-	public void setDefault(String[][] DEFAULT) {
-		this.DEFAULT=DEFAULT;
-	}
-	
 	public String[][] getDefault() {
 		return (this.DEFAULT);
 	}
 	
 	public String esthetique(String colortrait, String colorentete, String message) {
-		String vide="";
+		StringBuilder vide= new StringBuilder();
 		message=colorentete+"§l[LG UHC]§r "+message;
 		int taille=64-message.length();
 		
 		for(int i=0;i<taille/2;i++) {
-			vide=vide+" ";
+			vide.append(" ");
 		}
 		message=vide+message;
 		

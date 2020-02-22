@@ -88,7 +88,7 @@ public class VoteLG {
 
 		else if(main.playerlg.get(playermax).isState(State.VIVANT)) {
 			templayer.add(playermax);
-			Bukkit.broadcastMessage(main.texte.esthetique("§m", "§e",playermax+main.texte.getText(163)+Integer.toString(maxvote)+main.texte.getText(164)));
+			Bukkit.broadcastMessage(main.texte.esthetique("§m", "§e",playermax+main.texte.getText(163)+ maxvote +main.texte.getText(164)));
 			if(Bukkit.getPlayer(playermax)!=null){
 				Player player =Bukkit.getPlayer(playermax);
 				double life =player.getMaxHealth();

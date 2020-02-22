@@ -29,8 +29,9 @@ public class AutoStartLG extends BukkitRunnable{
 		
 		World world = Bukkit.getWorld("world");
 		WorldBorder wb = world.getWorldBorder();
-		long time =world.getTime();
-				
+		long time;
+		time = world.getTime();
+
 		main.score.updateBoard(); 
 		main.proxlg.sister_proximity();
 		main.proxlg.renard_proximity();

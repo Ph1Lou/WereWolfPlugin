@@ -9,5 +9,8 @@
         <module name="pluginlg" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="workspace" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

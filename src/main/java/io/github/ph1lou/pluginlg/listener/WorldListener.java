@@ -77,21 +77,15 @@ public class WorldListener implements Listener {
             break;
 		
 		case REDSTONE_ORE:
-			if(main.score.getTimer()> main.config.value.get(TimerLG.minage)) Block.setType(Material.AIR) ;
+
+			case LAPIS_ORE:
+
+			case EMERALD_ORE:
+				if(main.score.getTimer()> main.config.value.get(TimerLG.minage)) Block.setType(Material.AIR) ;
 			Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop()*(xprate));
 			break;
-			
-		case LAPIS_ORE:
-			if(main.score.getTimer()> main.config.value.get(TimerLG.minage)) Block.setType(Material.AIR) ;
-			Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop()*(xprate));
-			break;	
-			
-		case EMERALD_ORE:
-			if(main.score.getTimer()> main.config.value.get(TimerLG.minage)) Block.setType(Material.AIR) ;
-			Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop()*(xprate));
-			break;	
-			
-		case DIAMOND_ORE:
+
+			case DIAMOND_ORE:
 			
 			if(!event.getPlayer().getItemInHand().getType().equals(Material.DIAMOND_PICKAXE) && !event.getPlayer().getItemInHand().getType().equals(Material.IRON_PICKAXE)){
 				return;
@@ -125,7 +119,7 @@ public class WorldListener implements Listener {
                     Block.getWorld().dropItem(loc, new ItemStack(Material.IRON_INGOT,1));
 
            		}
-                Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(1*(xprate));
+                Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(xprate);
            	}
             break;
            
@@ -138,7 +132,7 @@ public class WorldListener implements Listener {
 				if(main.score.getTimer()<=main.config.value.get(TimerLG.minage)) {
 					Block.getWorld().dropItem(loc, new ItemStack(Material.GOLD_INGOT,1 ));
 				}
-                Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(1*(xprate));
+                Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(xprate);
 			}
             break;
             
@@ -162,7 +156,7 @@ public class WorldListener implements Listener {
 		
         if (main.config.tool_switch.get(ToolLG.cutclean)) {
         	
-        	List<ItemStack> loots = (List<ItemStack>)event.getDrops();
+        	List<ItemStack> loots = event.getDrops();
             
             for (int i = loots.size() - 1; i >= 0; --i) {
                 ItemStack is = loots.get(i);
