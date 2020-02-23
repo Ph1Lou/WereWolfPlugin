@@ -29,8 +29,7 @@ public class AutoStartLG extends BukkitRunnable{
 		
 		World world = Bukkit.getWorld("world");
 		WorldBorder wb = world.getWorldBorder();
-		long time;
-		time = world.getTime();
+		long time = world.getTime();
 
 		main.score.updateBoard(); 
 		main.proxlg.sister_proximity();
@@ -54,12 +53,20 @@ public class AutoStartLG extends BukkitRunnable{
 			}
 		}
 		
-		if(main.score.getTimer()==main.config.value.get(TimerLG.duration) + main.config.value.get(TimerLG.role)) {
-			
-			main.rolemanage.auto_ange() ;
+		if(main.score.getTimer()==main.config.value.get(TimerLG.maitre_duration) + main.config.value.get(TimerLG.role)) {
+
 			main.rolemanage.auto_master();
+
+		}
+		if(main.score.getTimer()==main.config.value.get(TimerLG.couple_duration) + main.config.value.get(TimerLG.role)) {
+
 			main.couplemanage.auto_couple();
-			
+
+		}
+		if(main.score.getTimer()==main.config.value.get(TimerLG.ange_duration) + main.config.value.get(TimerLG.role)) {
+
+			main.rolemanage.auto_ange() ;
+
 		}
 		
 		if(main.config.tool_switch.get(ToolLG.lg_liste) && main.score.getTimer()==main.config.value.get(TimerLG.lg_liste)) {
@@ -110,10 +117,10 @@ public class AutoStartLG extends BukkitRunnable{
 		}
 		
 		
-		if (time<12000  && !main.isDay(Day.DAY)) {
+		if (main.score.getTimer()%(main.config.value.get(TimerLG.day_duration)*2)==0  && !main.isDay(Day.DAY)) {
 			
 			main.setDay(Day.DAY);
-			
+			world.setTime(0);
 			if(main.config.tool_switch.get(ToolLG.vote) && main.score.getPlayerSize()<10) {
 				
 				main.config.tool_switch.put(ToolLG.vote,false);
@@ -136,9 +143,10 @@ public class AutoStartLG extends BukkitRunnable{
 		if(main.score.getTimer()%(main.config.value.get(TimerLG.day_duration)*2) == main.config.value.get(TimerLG.day_duration)*2-30 ){
 			main.cycle.prejour();
 		}
-		
-		if (time>=12000 && !main.isDay(Day.NIGHT)) {
+
+		if (main.score.getTimer()%(main.config.value.get(TimerLG.day_duration)*2)==main.config.value.get(TimerLG.day_duration) && !main.isDay(Day.NIGHT)) {
 			main.setDay(Day.NIGHT);
+			world.setTime(12000);
 			main.cycle.nuit();
 		}
 			

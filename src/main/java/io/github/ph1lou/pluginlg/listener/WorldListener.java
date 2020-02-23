@@ -57,7 +57,7 @@ public class WorldListener implements Listener {
 		int xprate=1;
 		
 		if (main.config.tool_switch.get(ToolLG.xpboost) ) {
-				xprate=5;
+				xprate=main.config.getXpboost();
 		}
 		
 		switch (Block.getType()){
@@ -67,7 +67,7 @@ public class WorldListener implements Listener {
 			if(!event.getPlayer().getItemInHand().getType().equals(Material.DIAMOND_PICKAXE) && !event.getPlayer().getItemInHand().getType().equals(Material.IRON_PICKAXE) && !event.getPlayer().getItemInHand().getType().equals(Material.STONE_PICKAXE)  && !event.getPlayer().getItemInHand().getType().equals(Material.GOLD_PICKAXE)  && !event.getPlayer().getItemInHand().getType().equals(Material.WOOD_PICKAXE)){
    				return;
    			}
-			Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop()*(xprate));
+			Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop()*xprate);
 			if (main.config.tool_switch.get(ToolLG.cutclean) ) {
 				 Block.setType(Material.AIR);
 				 if(main.score.getTimer()<=main.config.value.get(TimerLG.minage)) {
@@ -82,7 +82,7 @@ public class WorldListener implements Listener {
 
 			case EMERALD_ORE:
 				if(main.score.getTimer()> main.config.value.get(TimerLG.minage)) Block.setType(Material.AIR) ;
-			Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop()*(xprate));
+			Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop()*xprate);
 			break;
 
 			case DIAMOND_ORE:
@@ -105,7 +105,7 @@ public class WorldListener implements Listener {
 				}
 			}
 			
-			Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop()*(xprate));
+			Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop()*xprate);
 			break;
 			
 		case IRON_ORE:
@@ -119,7 +119,7 @@ public class WorldListener implements Listener {
                     Block.getWorld().dropItem(loc, new ItemStack(Material.IRON_INGOT,1));
 
            		}
-                Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(xprate);
+                Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop()*xprate);
            	}
             break;
            
@@ -132,7 +132,7 @@ public class WorldListener implements Listener {
 				if(main.score.getTimer()<=main.config.value.get(TimerLG.minage)) {
 					Block.getWorld().dropItem(loc, new ItemStack(Material.GOLD_INGOT,1 ));
 				}
-                Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(xprate);
+                Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop()*xprate);
 			}
             break;
             

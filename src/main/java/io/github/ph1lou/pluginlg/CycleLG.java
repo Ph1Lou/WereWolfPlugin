@@ -10,6 +10,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.NameTagVisibility;
 
 
 public class CycleLG {
@@ -182,6 +183,9 @@ public class CycleLG {
 					player.removePotionEffect(PotionEffectType.INVISIBILITY);
 					player.removePotionEffect(PotionEffectType.WEAKNESS);
 					plg.setPower(true);
+					if(plg.isRole(RoleLG.LOUP_PERFIDE)){
+						main.boardlg.getTeam(playername).setNameTagVisibility(NameTagVisibility.ALWAYS);
+					}
 					player.sendMessage(main.texte.getText(18));
 				}
 				if(plg.hasMaudit()) {

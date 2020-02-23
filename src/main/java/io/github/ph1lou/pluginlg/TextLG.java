@@ -31,8 +31,8 @@ public class TextLG {
 					"§4§l[LG UHC] §6Loup Garou UHC",
 					esthetique("§m", "§6","Bienvenue dans cette partie de Loup Garou"),
 					esthetique("§m", "§2","Le plugin est à jour"),
-					"§6Victoire ",
-					"§6Equipe ",
+					"Victoire ",
+					"Equipe ",
 					"§cDe la Mort",
 					esthetique("§m", "§6","PVP activé"),
 					esthetique("§m", "§6","La bordure commence à se déplacer"),
@@ -40,7 +40,7 @@ public class TextLG {
 					esthetique("§m", "§6","Il reste moins de 10 joueurs, les Votes sont désactivés"),
 			/*10*/	"",
 					"\n§5Si l'un de vous meurt, l'autre le rejoindra par amour, de plus vous partagez 4 coeurs avec votre amant",
-					"",
+					esthetique("§m", "§6","Pas assez de personnes pour former un couple"),
 					esthetique("§6§m", "§4","Vous ne pouvez plus utiliser votre pouvoir aujourd'hui"),
 					esthetique("§2§m", "§6","C'est la nuit, enlever votre armure pour devenir invisible"),
 					"",
@@ -181,7 +181,7 @@ public class TextLG {
 			/*150*/	esthetique("§m", "§e","Final Heal !"),
 					esthetique("§m", "§2","Stuff de départ actualisé"),
 					esthetique("§m", "§2","Stuff de mort actualisé"),
-					"§6/adminlg config §9Pour configurer la partie\n§6/adminlg host §9Pour configurer l'host\n§6/adminlg start §9Pour lancer la partie\n§6/adminlg chat §9Pour activer/désactiver le chat\n§6/adminlg info §9Pour parler à tous les joueurs\n§6/adminlg groupe §9Pour faire respecter les groupes\n§6/adminlg fh §9Pour FinalHeal\n§6/adminlg inv §9Pour voir l'inventaire d'un joueur\n§6/adminlg killa §9Pour tuer un joueur offline\n§6/adminlg revive §9Pour ressusciter un joueur\n§6/adminlg role §9Pour voir le rôle d'un joueur\n§6/adminlg deco §9Pour voir les joueurs déco",
+					"§6/adminlg config §9Pour configurer la partie\n§6/adminlg host §9Pour configurer l'host\n§6/adminlg start §9Pour lancer la partie\n§6/adminlg chat §9Pour activer/désactiver le chat\n§6/adminlg info §9Pour parler à tous les joueurs\n§6/adminlg groupe §9Pour faire respecter les groupes\n§6/adminlg fh §9Pour FinalHeal\n§6/adminlg inv §9Pour voir l'inventaire d'un joueur\n§6/adminlg killa §9Pour tuer un joueur offline\n§6/adminlg revive §9Pour ressusciter un joueur\n§6/adminlg role §9Pour voir le rôle d'un joueur\n§6/adminlg deco §9Pour voir les joueurs déco\n§6/adminlg setgroupe nb§9 Pour configurer les groupes",
 					" a été ressuscité par un Administrateur",
 					esthetique("§6§m", "§4","Les morts ne peuvent pas voter"),
 					esthetique("§6§m", "§4","Les Votes ne sont pas encore activé"),
@@ -194,7 +194,7 @@ public class TextLG {
 					" est celui qui a recueillit §9le plus de vote§r : §e",
 					". Il perd 5 coeurs",
 					esthetique("§m", "§2","Toutes les caches ont été trouvées"),
-					"Les groupes passent à §6§m",
+					"Les groupes passent à §6",
 					" s'est déco il y a ",
 					"§4Désactiver ",
 					"§2Activer ",
@@ -217,7 +217,7 @@ public class TextLG {
 					esthetique("§6§m", "§4","Signalez les bugs en cliquant ici"),
 					"§e était ",
 					"§e il a volé un(e) ",
-					"Vous n'êtes pas",
+					"Vous n'êtes pas ",
 		/*190*/		"Nombre de paramètres requis en entrée ",
 					esthetique("§m", "§e","Aucun joueur n'a été voté plus d'une fois"),
 					esthetique("§6§m", "§e","En raison du trop faible nombre de joueur par rapport au nombre de couples la polygamie est activée"),
@@ -252,17 +252,23 @@ public void getTexttranslate(MainLG main, String filename) {
 			
 			for(int i=0;i<textload.getDefault()[0].length;i++) {
 				if(i<this.getDefault()[0].length) {
-					this.getDefault()[0][i]=textload.getDefault()[0][i];
+					if(!textload.getDefault()[0][i].equals("")){
+						this.getDefault()[0][i]=textload.getDefault()[0][i];
+					}
 				}
 			}	
 			for(int i=0;i<textload.getDefault()[1].length;i++) {
 				if(i<this.getDefault()[1].length) {
-					this.getDefault()[1][i]=textload.getDefault()[1][i];
+					if(!textload.getDefault()[1][i].equals("")){
+						this.getDefault()[1][i]=textload.getDefault()[1][i];
+					}
 				}
 			}	
 			for(int i=0;i<textload.getDefault()[2].length;i++) {
 				if(i<this.getDefault()[2].length) {
-					this.getDefault()[2][i]=textload.getDefault()[2][i];
+					if(!textload.getDefault()[2][i].equals("")){
+						this.getDefault()[2][i]=textload.getDefault()[2][i];
+					}
 				}
 			}	
 		}

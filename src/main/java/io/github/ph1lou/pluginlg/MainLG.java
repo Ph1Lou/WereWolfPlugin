@@ -77,7 +77,6 @@ public class MainLG extends JavaPlugin {
 		board= Bukkit.getScoreboardManager().getNewScoreboard();
 		boardlg = Bukkit.getScoreboardManager().getNewScoreboard();
 		boardlg.registerNewTeam("lgteam");
-		boardlg.getTeam("lgteam").setCanSeeFriendlyInvisibles(false);
 		boardlg.getTeam("lgteam").setPrefix("");
 		PluginManager pm =getServer().getPluginManager();
 		pm.registerEvents(new PlayerListeners(this),this);
@@ -433,6 +432,11 @@ public class MainLG extends JavaPlugin {
 			if (role.equals(RoleLG.ANGE_GARDIEN)) {
 				
 				soustitrevictoire=texte.getText(4)+texte.translaterole.get(RoleLG.ANGE_GARDIEN);
+				fin();
+			}
+			if (role.equals(RoleLG.ANGE)) {
+
+				soustitrevictoire=texte.getText(4)+texte.translaterole.get(RoleLG.ANGE);
 				fin();
 			}
 		}

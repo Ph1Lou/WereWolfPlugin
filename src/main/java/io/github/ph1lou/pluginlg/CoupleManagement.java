@@ -3,6 +3,7 @@ package io.github.ph1lou.pluginlg;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import io.github.ph1lou.pluginlg.enumlg.RoleLG;
 import io.github.ph1lou.pluginlg.enumlg.State;
@@ -30,10 +31,14 @@ public class CoupleManagement {
 				pcouple.add(p);
 			}
 		}
+		if(main.score.getPlayerSize()<2){
+			Bukkit.broadcastMessage(main.texte.getText(12));
+			return;
+		}
 		
 		Boolean polygamie =main.config.tool_switch.get(ToolLG.polygamie);
 		
-		if(!polygamie && (main.config.rolecount.get(RoleLG.COUPLE) + main.config.rolecount.get(RoleLG.CUPIDON))*2>=main.score.getPlayerSize()) {
+		if(!polygamie && (main.config.rolecount.get(RoleLG.COUPLE)==0 && main.config.rolecount.get(RoleLG.CUPIDON)*2>=main.score.getPlayerSize()) || (main.config.rolecount.get(RoleLG.COUPLE)!=0 && main.config.rolecount.get(RoleLG.CUPIDON)+main.config.rolecount.get(RoleLG.CUPIDON)*2>main.score.getPlayerSize())) {
 			polygamie=true;
 			Bukkit.broadcastMessage(main.texte.getText(192));
 		}
@@ -88,9 +93,9 @@ public class CoupleManagement {
 		}
 		for(int i=0; i< main.config.rolecount.get(RoleLG.COUPLE);i++) {
 			
-			j1 = pcouple.get((int) Math.floor(Math.random()*pcouple.size()));
+			j1 = pcouple.get((int) Math.floor(new Random(System.currentTimeMillis()).nextFloat()*pcouple.size()));
 			pcouple.remove(j1);
-			j2 = pcouple.get((int) Math.floor(Math.random()*pcouple.size()));
+			j2 = pcouple.get((int) Math.floor(new Random(System.currentTimeMillis()).nextFloat()*pcouple.size()));
 			pcouple.add(j1);
 			
 			if(!polygamie) {
@@ -114,23 +119,17 @@ public class CoupleManagement {
 		}
 	}
 	
-	
-	
-	
 	private void announcecouple() {
 		
 		for(int i=0;i<main.couplerange.size();i++) {
 			for(int j=0;j<main.couplerange.get(i).size();j++) {
 				String p=main.couplerange.get(i).get(j);
-				
-				
 				PlayerLG plg = main.playerlg.get(p);
 				plg.clearCouple();
 				for(int l=0;l<main.couplerange.get(i).size();l++) {
 					if(!main.couplerange.get(i).get(l).equals(p)) {
 						plg.addCouple(main.couplerange.get(i).get(l));
 					}
-					
 				}
 				if(Bukkit.getPlayer(p)!=null) {
 					
@@ -151,7 +150,6 @@ public class CoupleManagement {
 					
 					for(String c:plg.getCouple()) {
 						strb.append(c).append(" ");
-						
 					}
 					pj2.sendMessage(main.texte.esthetique("§m", "§d",main.texte.powerhasbeenuse.get(RoleLG.COUPLE)+strb.toString()+main.texte.getText(11)));
 					pj2.playSound(pj2.getLocation(), Sound.SHEEP_SHEAR,1,20);

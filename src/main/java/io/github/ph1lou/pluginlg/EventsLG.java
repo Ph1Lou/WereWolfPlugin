@@ -1,9 +1,6 @@
 package io.github.ph1lou.pluginlg;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import io.github.ph1lou.pluginlg.enumlg.Camp;
 import io.github.ph1lou.pluginlg.enumlg.State;
@@ -54,7 +51,7 @@ public class EventsLG {
 		
 		if (active && !threat.isEmpty()){
 			chest.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE,2));
-			String playername = threat.get((int) Math.floor(Math.random()*threat.size()));
+			String playername = threat.get((int) Math.floor(new Random(System.currentTimeMillis()).nextFloat()*threat.size()));
 			sign.setLine(1,playername);
 		}
 		else {

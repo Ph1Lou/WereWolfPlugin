@@ -13,6 +13,8 @@ import org.bukkit.potion.PotionEffectType;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
+import java.util.Random;
+
 
 public class DeathManagementLG {
 	
@@ -168,6 +170,9 @@ public class DeathManagementLG {
 		if(plg.isVoleur()) {
 			role=RoleLG.VOLEUR;
 		}
+		else if((plg.isRole(RoleLG.ANGE_GARDIEN) || plg.isRole(RoleLG.ANGE_DECHU)) && !plg.hasPower()) {
+			role=RoleLG.ANGE;
+		}
 		main.config.rolecount.put(role,main.config.rolecount.get(role)-1);
 		plg.setState(State.MORT);
 		main.score.removePlayerSize();
@@ -291,7 +296,7 @@ public class DeathManagementLG {
 			}
 			player.setHealth(player.getMaxHealth());
 		}	
-		main.eparpillement(playername, Math.random()*Bukkit.getOnlinePlayers().size(), main.texte.getText(31));
+		main.eparpillement(playername, new Random(System.currentTimeMillis()).nextFloat()*Bukkit.getOnlinePlayers().size(), main.texte.getText(31));
 		main.playerlg.get(playername).setState(State.VIVANT);
 		if(!main.isState(StateLG.FIN)) {
 			main.check_victory();

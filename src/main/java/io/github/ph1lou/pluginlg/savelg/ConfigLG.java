@@ -23,8 +23,9 @@ public class ConfigLG {
 	public Map<ToolLG, Boolean> tool_switch = new HashMap<>();
 	public Map<RoleLG,Integer> rolecount = new HashMap<>();
 	
-	private float strenghrate=(float) 1.5;
+	private float strenghrate=1.5f;
 	private int diamondlimit=17;
+	private int xpboost=5;
 
 	public void getconfig(MainLG main, int numero) {
 		
@@ -43,11 +44,8 @@ public class ConfigLG {
 			}
 		}
 		for(RoleLG role:RoleLG.values()) {
-			
-			if(!configload.rolecount.containsKey(role)) {
-				this.rolecount.put(role,0);
-			}
-			else this.rolecount.put(role,configload.rolecount.get(role));
+
+			this.rolecount.put(role, configload.rolecount.getOrDefault(role, 0));
 		}
 		
 		for(ToolLG tool:ToolLG.values()) {
@@ -97,9 +95,11 @@ public class ConfigLG {
 	public void setStrenghrate(float strenghrate) {
 		this.strenghrate = strenghrate;
 	}
-	
-	
-	
-	
+
+
+	public int getXpboost() {
+		return xpboost;
+	}
+
 	
 }

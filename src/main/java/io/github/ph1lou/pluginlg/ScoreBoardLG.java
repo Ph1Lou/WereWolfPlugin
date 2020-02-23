@@ -313,9 +313,13 @@ public class ScoreBoardLG {
 	
 	public void groupsizechange() {
 		
-		if(player<=groupsize*3 && groupsize>3) {
+		if(main.config.tool_switch.get(ToolLG.groupe_auto) && player<=groupsize*3 && groupsize>3) {
 			groupsize--;
 			Bukkit.broadcastMessage(main.texte.esthetique("§m", "§2",main.texte.getText(137)+groupsize));
+			for (Player player:Bukkit.getOnlinePlayers()) {
+				Title.sendTitle(player,20,60, 20,main.texte.getText(138), main.texte.getText(139)+main.score.getGroupe());
+
+			}
 		}
 	}
 
@@ -363,6 +367,7 @@ public class ScoreBoardLG {
 	}
 
 
-
-
+    public void setGroupe(int groupe) {
+		this.groupsize=groupe;
+    }
 }

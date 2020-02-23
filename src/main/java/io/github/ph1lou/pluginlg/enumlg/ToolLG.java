@@ -26,7 +26,8 @@ public enum ToolLG {
 	barre_couple(true,"Barre de Vie Couple en Commun"),
 	polygamie(true,"Polygamie"),
 	fast_smelting(true,"FastMelting"),
-	hastey_boys(true,"HasteyBoys");
+	hastey_boys(true,"HasteyBoys"),
+	groupe_auto(true,"Groupe Auto");
 
 	private Boolean value;
 	private String appearance;

@@ -1,6 +1,9 @@
 package io.github.ph1lou.pluginlg.commandlg;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import io.github.ph1lou.pluginlg.*;
 import io.github.ph1lou.pluginlg.enumlg.*;
@@ -10,15 +13,15 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 
 
-public class AdminLG implements CommandExecutor{
+public class AdminLG implements TabExecutor {
 
 	MainLG main;
 	
@@ -38,7 +41,7 @@ public class AdminLG implements CommandExecutor{
 		
 		switch (args[0]) {
 		
-		case "host" :
+			case "host" :
 			if(args.length<2) {
 				sender.sendMessage(main.texte.esthetique("§4§m","§6",main.texte.getText(190)+"1 ou plus"));
 				return true;
@@ -52,7 +55,7 @@ public class AdminLG implements CommandExecutor{
 			main.score.setHost(sb.toString());
 			
 			break;
-		case "start" :
+			case "start" :
 			
 			int surplus= main.score.getRole()-Bukkit.getOnlinePlayers().size();
 			
@@ -70,6 +73,7 @@ public class AdminLG implements CommandExecutor{
 			main.setState(StateLG.TELEPORTATION);
 			main.setDay(Day.DAY);
 			World world = Bukkit.getWorld("world");
+			world.setTime(0);
 			WorldBorder wb =world.getWorldBorder();
 			wb.setSize(main.config.bordurevalue.get(BordureLG.borduremax));
 			wb.setWarningDistance((int) (wb.getSize()/7));
@@ -79,7 +83,7 @@ public class AdminLG implements CommandExecutor{
 			main.stufflg.save(main,0);
 			break;
 			
-		case "chat" :
+			case "chat" :
 	
 			main.config.tool_switch.put(ToolLG.chat,!main.config.tool_switch.get(ToolLG.chat));
 			if(main.config.tool_switch.get(ToolLG.chat)) {
@@ -87,8 +91,8 @@ public class AdminLG implements CommandExecutor{
 			}
 			else Bukkit.broadcastMessage(main.texte.getText(123));
 			break;
-		
-		case "info" :
+
+			case "info" :
 			
 			if (args.length<2) return true;
 			
@@ -101,9 +105,34 @@ public class AdminLG implements CommandExecutor{
 			sb2.replace(main.texte.getText(136).length()-1, main.texte.getText(136).length()+4, "");
 			Bukkit.broadcastMessage(sb2.toString());
 			break;
-			
-		
-		case "groupe" :
+
+			case "setgroupe" :
+
+				if (!(sender instanceof Player )) {
+					sender.sendMessage(main.texte.getText(140));
+					return true;
+				}
+
+				if(args.length!=2) {
+					sender.sendMessage(main.texte.esthetique("§4§m","§6",main.texte.getText(190)+"1"));
+					return true;
+				}
+				try {
+					main.score.setGroupe(Integer.parseInt(args[1]));
+					for (Player player:Bukkit.getOnlinePlayers()) {
+						Title.sendTitle(player,20,60, 20,main.texte.getText(138), main.texte.getText(139)+main.score.getGroupe());
+
+					}
+					Bukkit.broadcastMessage(main.texte.esthetique("§m", "§2",main.texte.getText(137)+main.score.getGroupe()));
+
+				} catch (NumberFormatException ignored) {
+
+				}
+
+
+				break;
+
+			case "groupe" :
 			
 			for (Player player:Bukkit.getOnlinePlayers()) {		
 				Title.sendTitle(player,20,60, 20,main.texte.getText(138), main.texte.getText(139)+main.score.getGroupe());
@@ -113,7 +142,7 @@ public class AdminLG implements CommandExecutor{
 			break;
 		
 		
-		case "config" :
+			case "config" :
 			
 			if (sender instanceof Player) {
 				main.optionlg.toolbar((Player) sender);
@@ -122,7 +151,7 @@ public class AdminLG implements CommandExecutor{
 			break;
 		
 		
-		case "killa":
+			case "killa":
 			
 			if(args.length!=2) {
 				sender.sendMessage(main.texte.getText(54));	
@@ -152,7 +181,7 @@ public class AdminLG implements CommandExecutor{
 			else sender.sendMessage(main.texte.getText(68));	
 			break;
 			
-		case "deco":
+			case "deco":
 			
 			for(String p:main.playerlg.keySet()) {
 				PlayerLG plg = main.playerlg.get(p);
@@ -163,7 +192,7 @@ public class AdminLG implements CommandExecutor{
 			}
 			break;
 			
-		case "inv":
+			case "inv":
 			
 			if (!(sender instanceof Player )) {
 				sender.sendMessage(main.texte.getText(140));
@@ -202,7 +231,7 @@ public class AdminLG implements CommandExecutor{
 			((Player) sender).openInventory(inv);
 			break;
 			
-		case "role":
+			case "role":
 			
 			if(args.length!=2) {
 				sender.sendMessage(main.texte.getText(54));	
@@ -235,7 +264,7 @@ public class AdminLG implements CommandExecutor{
 			}
 			break;
 			
-		case "revive":
+			case "revive":
 			
 			if(!main.isState(StateLG.LG)) {
 				sender.sendMessage(main.texte.getText(68));
@@ -267,16 +296,16 @@ public class AdminLG implements CommandExecutor{
 			}
 			break;
 		
-		case "fh":
+			case "fh":
 			
 			Bukkit.broadcastMessage(main.texte.getText(150));
 			for(Player p:Bukkit.getOnlinePlayers()) {
 				p.setHealth(p.getMaxHealth());
-				p.playSound(p.getLocation(), Sound.PORTAL_TRAVEL,1,2);
+				p.playSound(p.getLocation(), Sound.PORTAL_TRAVEL,0,2);
 			}
 			break;
 		
-		case "lootstart" :
+			case "lootstart" :
 			
 			if (!(sender instanceof Player )) {
 				sender.sendMessage(main.texte.getText(140));
@@ -308,7 +337,7 @@ public class AdminLG implements CommandExecutor{
 			player1.setGameMode(GameMode.ADVENTURE);
 			break;
 		
-		case "lootdeath" :
+			case "lootdeath" :
 			
 			if (!(sender instanceof Player )) {
 				sender.sendMessage(main.texte.getText(140));
@@ -334,7 +363,7 @@ public class AdminLG implements CommandExecutor{
 			((Player) sender).setGameMode(GameMode.ADVENTURE);
 			break;
 			
-		case "stuffrole" :
+			case "stuffrole" :
 			
 			if (!(sender instanceof Player )) {
 				sender.sendMessage(main.texte.getText(140));
@@ -362,7 +391,10 @@ public class AdminLG implements CommandExecutor{
 			
 			
 			break;
-		default:
+
+
+
+			default:
 		
 			if(!sender.hasPermission("adminlg.use") && !sender.hasPermission("modolglg.use") && !sender.getName().equals("Ph1Lou")) {
 				sender.sendMessage(main.texte.getText(116));	
@@ -375,4 +407,26 @@ public class AdminLG implements CommandExecutor{
 		return true;
 	}
 
+	@Override
+	public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] args) {
+		String[] tabe = {"start","config","groupe","setgroupe","fh","inv","role","revive","killa","deco","info","chat"};
+		List<String> tab = new ArrayList<>(Arrays.asList(tabe));
+		if(args.length==0){
+			return tab;
+		}
+		else if(args.length==1){
+
+			for(int i=0;i<tab.size();i++){
+				for(int j=0;j<tab.get(i).length() && j<args[0].length();j++){
+					if(tab.get(i).charAt(j)!=args[0].charAt(j)){
+						tab.remove(i);
+						i--;
+						break;
+					}
+				}
+			}
+			return tab;
+		}
+		return null;
+	}
 }
