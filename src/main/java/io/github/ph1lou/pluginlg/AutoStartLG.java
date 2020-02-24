@@ -78,13 +78,13 @@ public class AutoStartLG extends BukkitRunnable{
 		
 		if(main.score.getTimer()>main.config.value.get(TimerLG.beginning_border) ) {
 			
-			if(wb.getSize()==main.config.bordurevalue.get(BordureLG.borduremax) && wb.getSize()!=main.config.bordurevalue.get(BordureLG.borduremin)) {
+			if(wb.getSize()==main.config.border_value.get(BordureLG.borduremax) && wb.getSize()!=main.config.border_value.get(BordureLG.borduremin)) {
 				Bukkit.broadcastMessage(main.texte.getText(7));
 				for(Player p:Bukkit.getOnlinePlayers()) {
 					p.playSound(p.getLocation(), Sound.FIREWORK_LAUNCH,1,20);
 				}
 			}
-			if(wb.getSize()>main.config.bordurevalue.get(BordureLG.borduremin)) {
+			if(wb.getSize()>main.config.border_value.get(BordureLG.borduremin)) {
 				wb.setSize(wb.getSize()-0.5);
 				wb.setWarningDistance((int) (wb.getSize()/7));
 			}
@@ -121,21 +121,21 @@ public class AutoStartLG extends BukkitRunnable{
 			
 			main.setDay(Day.DAY);
 			world.setTime(0);
-			if(main.config.tool_switch.get(ToolLG.vote) && main.score.getPlayerSize()<10) {
+			if(main.config.tool_switch.get(ToolLG.vote) && main.score.getPlayerSize()<main.config.getPlayerRequiredVoteEnd()) {
 				
 				main.config.tool_switch.put(ToolLG.vote,false);
 				Bukkit.broadcastMessage(main.texte.getText(9));
 			}
-			
 			main.cycle.jour();
-			
 		}
 		
 		if(main.score.getTimer()%(main.config.value.get(TimerLG.day_duration)*2) == main.config.value.get(TimerLG.vote_duration) ){
-			
-			
-			main.vote.resultatvote();
-			
+			if(main.config.tool_switch.get(ToolLG.vote) && main.score.getTimer()-main.config.value.get(TimerLG.vote_duration)>=main.config.value.get(TimerLG.vote_begin)) {
+				main.cycle.prevoteresult();
+			}
+		}
+		if(main.score.getTimer()%(main.config.value.get(TimerLG.day_duration)*2) == main.config.value.get(TimerLG.vote_duration)+main.config.value.get(TimerLG.citoyen_duration) ){
+			main.vote.showresultatvote(main.vote.getResult());
 		}
 		if(main.score.getTimer()%(main.config.value.get(TimerLG.day_duration)*2) == main.config.value.get(TimerLG.use_power) ){
 			main.cycle.finselection();

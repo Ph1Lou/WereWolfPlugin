@@ -10,6 +10,7 @@ public enum TimerLG {
 	couple_duration(240,"Durée pour le choix du Couple et révélation des couples"),
 	maitre_duration(240,"Durée pour le choix d'un maitre"),
 	ange_duration(240,"Durée pour le choix de l'Ange"),
+	citoyen_duration(60,"Durée pour le choix du Citoyen"),
 	day_duration(300,"Durée du Jour/Nuit"),
 	vote_duration(180,"Durée du Vote"),
 	use_power(240,"Durée d'utilisation des pouvoirs le Matin"),

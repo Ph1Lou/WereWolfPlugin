@@ -6,8 +6,6 @@ import io.github.ph1lou.pluginlg.TextLG;
 
 public class SerializerLG {
 
-
-
 	private Gson gson;
 
 	public SerializerLG() {
@@ -17,15 +15,13 @@ public class SerializerLG {
 				.serializeNulls()
 				.disableHtmlEscaping()
 				.create();
-
 	}
-
 
 	public String serialize(ConfigLG config) {
 		return this.gson.toJson(config);
 	}
 
-	public String serializetexte(TextLG config) {
+	public String serializeText(TextLG config) {
 		return this.gson.toJson(config);
 	}
 
@@ -34,7 +30,7 @@ public class SerializerLG {
 		return this.gson.fromJson(json, ConfigLG.class);
 	}
 
-	public TextLG deserializetext(String json) {
+	public TextLG deserializeText(String json) {
 		return this.gson.fromJson(json, TextLG.class);
 	}
 

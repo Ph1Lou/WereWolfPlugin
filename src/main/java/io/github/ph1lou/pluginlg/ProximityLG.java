@@ -56,8 +56,7 @@ public class ProximityLG {
 	public void renard_proximity() {
 		
 		for(String playername:main.playerlg.keySet()) {
-			
-			
+
 			if(main.playerlg.get(playername).isState(State.VIVANT) && main.playerlg.get(playername).isRole(RoleLG.RENARD) && !main.playerlg.get(playername).getAffectedPlayer().isEmpty()) {
 				String playerflairer = main.playerlg.get(playername).getAffectedPlayer().get(0);
 				
@@ -74,8 +73,7 @@ public class ProximityLG {
 						float temp=main.playerlg.get(playername).getFlair()+100f/(main.config.value.get(TimerLG.flair_renard)+1);
 	
 						main.playerlg.get(playername).setFlair(temp);
-						
-						
+
 						if(temp%10>0 && temp%10<=100f/(main.config.value.get(TimerLG.flair_renard)+1)) {
 							player.sendMessage(main.texte.esthetique("§m", "§e",main.texte.getText(39)+Math.floor(temp)+"%"));
 						}
@@ -94,8 +92,6 @@ public class ProximityLG {
 							main.playerlg.get(playername).setFlair(0f);
 						}			
 					}
-					
-					
 				}
 			}
 									

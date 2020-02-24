@@ -11,96 +11,92 @@ import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlg.enumlg.RoleLG;
 import org.bukkit.inventory.ItemStack;
 
-
-
 public class StuffLG {
 	
-	public Map<RoleLG,List<ItemStack>> rolestuff = new HashMap<>();
-	private List<ItemStack> deathloot =new ArrayList<ItemStack>() ;
-	private List<ItemStack>  startloot = new ArrayList<ItemStack>();
+	public Map<RoleLG,List<ItemStack>> role_stuff = new HashMap<>();
+	private List<ItemStack> death_loot = new ArrayList<>() ;
+	private List<ItemStack> start_loot = new ArrayList<>();
 	
 	
-	public List<ItemStack> getdeathloot() {
-		return this.deathloot;
+	public List<ItemStack> getDeathLoot() {
+		return this.death_loot;
 	}
 	
-	public List<ItemStack> getstartloot() {
-		return this.startloot;
+	public List<ItemStack> getStartLoot() {
+		return this.start_loot;
 	}
 	
-	public void cleardeathloot() {
-		deathloot.clear();
+	public void clearDeathLoot() {
+		death_loot.clear();
 	}
 	
-	public void clearstartloot() {
-		startloot.clear();
+	public void clearStartLoot() {
+		start_loot.clear();
 	}
 	
-	public void adddeathloot(ItemStack i) {
-		deathloot.add(i);
+	public void addDeathLoot(ItemStack i) {
+		death_loot.add(i);
 	}
 	
-	public void addstartloot(ItemStack i) {
-		startloot.add(i);
+	public void addStartLoot(ItemStack i) {
+		start_loot.add(i);
 	}
-	
-	
-	
-    public void save(MainLG main, int numero) {
+
+    public void save(MainLG main, int number) {
         
         int pos = 0;
         
         for(RoleLG role:RoleLG.values()) {
-        	for (ItemStack i : rolestuff.get(role)) {
-                main.getConfig().set("save"+numero +"."+role.toString()+ "." + pos , i);
+        	for (ItemStack i : role_stuff.get(role)) {
+                main.getConfig().set("save"+number +"."+role.toString()+ "." + pos , i);
                 pos++;
             }
         	pos = 0;
         }
-        for (ItemStack i : startloot) {
-            main.getConfig().set("save"+numero +".startloot." + pos , i);
+        for (ItemStack i : start_loot) {
+            main.getConfig().set("save"+number +".start_loot." + pos , i);
             pos++;
         }
     	pos = 0;
-    	for (ItemStack i : deathloot) {
-            main.getConfig().set("save"+numero +".deathloot." + pos , i);
+    	for (ItemStack i : death_loot) {
+            main.getConfig().set("save"+number +".death_loot." + pos , i);
             pos++;
         }
         main.saveConfig();
         
     }
      
-   public void load(MainLG main, int numero) {
+   public void load(MainLG main, int number) {
 	   
-	   	startloot.clear();
-	   	deathloot.clear();
-	   	rolestuff.clear();
+	   	start_loot.clear();
+	   	death_loot.clear();
+	   	role_stuff.clear();
 	   	
     	for(RoleLG role:RoleLG.values()) {
     		
-    		rolestuff.put(role,new ArrayList<ItemStack>());
-    		if(main.getConfig().getItemStack("save"+numero +"."+role.toString()+".0")!=null) {
-				Set<String> sl = main.getConfig().getConfigurationSection("save"+numero +"."+role.toString()+".").getKeys(false);
+    		role_stuff.put(role, new ArrayList<>());
+    		if(main.getConfig().getItemStack("save"+number +"."+role.toString()+".0")!=null) {
+				Set<String> sl = main.getConfig().getConfigurationSection("save"+number +"."+role.toString()+".").getKeys(false);
 				for (String s : sl) {
-    				rolestuff.get(role).add(main.getConfig().getItemStack("save"+numero +"."+role.toString()+ "." + s));
+    				role_stuff.get(role).add(main.getConfig().getItemStack("save"+number +"."+role.toString()+ "." + s));
  		        }
 			}
     	}
  
-    	if(main.getConfig().getItemStack("save"+numero +".startloot.0")!=null) {
-    		Set<String> sl = main.getConfig().getConfigurationSection("save"+numero +".startloot.").getKeys(false);
+    	if(main.getConfig().getItemStack("save"+number +".start_loot.0")!=null) {
+    		Set<String> sl = main.getConfig().getConfigurationSection("save"+number +".start_loot.").getKeys(false);
     
     		for (String s : sl) {
-    			startloot.add(main.getConfig().getItemStack("save"+numero +".startloot." + s));
+    			start_loot.add(main.getConfig().getItemStack("save"+number +".start_loot." + s));
     	    }
     	}
     	
   
     	
-    	if(main.getConfig().getItemStack("save"+numero +".deathloot.0")!=null) {
-    		Set<String> sl = main.getConfig().getConfigurationSection("save"+numero +".deathloot").getKeys(false);
+    	if(main.getConfig().getItemStack("save"+number +".death_loot.0")!=null) {
+    		Set<String> sl = main.getConfig().getConfigurationSection("save"+number +".death_loot").getKeys(false);
     		for (String s : sl) {
-    			deathloot.add(main.getConfig().getItemStack("save"+numero +".deathloot." + s));
+    			death_loot.add(main.getConfig().getItemStack("save"+number +".death_loot." + s));
     	    }
     	}
     	

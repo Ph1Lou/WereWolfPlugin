@@ -38,7 +38,7 @@ public class CoupleManagement {
 		
 		Boolean polygamie =main.config.tool_switch.get(ToolLG.polygamie);
 		
-		if(!polygamie && (main.config.rolecount.get(RoleLG.COUPLE)==0 && main.config.rolecount.get(RoleLG.CUPIDON)*2>=main.score.getPlayerSize()) || (main.config.rolecount.get(RoleLG.COUPLE)!=0 && main.config.rolecount.get(RoleLG.CUPIDON)+main.config.rolecount.get(RoleLG.CUPIDON)*2>main.score.getPlayerSize())) {
+		if(!polygamie && (main.config.role_count.get(RoleLG.COUPLE)==0 && main.config.role_count.get(RoleLG.CUPIDON)*2>=main.score.getPlayerSize()) || (main.config.role_count.get(RoleLG.COUPLE)!=0 && main.config.role_count.get(RoleLG.CUPIDON)+main.config.role_count.get(RoleLG.CUPIDON)*2>main.score.getPlayerSize())) {
 			polygamie=true;
 			Bukkit.broadcastMessage(main.texte.getText(192));
 		}
@@ -91,7 +91,7 @@ public class CoupleManagement {
 				}
 			}
 		}
-		for(int i=0; i< main.config.rolecount.get(RoleLG.COUPLE);i++) {
+		for(int i = 0; i< main.config.role_count.get(RoleLG.COUPLE); i++) {
 			
 			j1 = pcouple.get((int) Math.floor(new Random(System.currentTimeMillis()).nextFloat()*pcouple.size()));
 			pcouple.remove(j1);
@@ -135,7 +135,7 @@ public class CoupleManagement {
 					
 					Player pj2 = Bukkit.getPlayer(p);
 					
-					for(ItemStack k:main.stufflg.rolestuff.get(RoleLG.COUPLE)) {
+					for(ItemStack k:main.stufflg.role_stuff.get(RoleLG.COUPLE)) {
 						
 						if(pj2.getInventory().firstEmpty()==-1) {
 							pj2.getWorld().dropItem(pj2.getLocation(),k);
@@ -163,7 +163,7 @@ public class CoupleManagement {
 	private void range_couple() {
 		
 		List<String> allcouple = new ArrayList<>();
-		main.config.rolecount.put(RoleLG.COUPLE,0);
+		main.config.role_count.put(RoleLG.COUPLE,0);
 		
 		for(String playername:main.playerlg.keySet()) {
 			if(!main.playerlg.get(playername).getCouple().isEmpty()){
@@ -188,7 +188,7 @@ public class CoupleManagement {
 				}
 			}
 			main.couplerange.add(couplelie);
-			main.config.rolecount.put(RoleLG.COUPLE,main.config.rolecount.get(RoleLG.COUPLE)+1);	
+			main.config.role_count.put(RoleLG.COUPLE,main.config.role_count.get(RoleLG.COUPLE)+1);
 		}		
 	}
 

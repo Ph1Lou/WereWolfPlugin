@@ -14,27 +14,22 @@ import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
 
-
-
-
-
 public class EventsLG {
 	
 	MainLG main;
-	public Map<Location,Boolean> chesthasbeenopen = new HashMap<>();
-	public List<Location> chestlocation = new ArrayList<>();
+	public Map<Location,Boolean> chest_has_been_open = new HashMap<>();
+	public List<Location> chest_location = new ArrayList<>();
 	public EventsLG(MainLG main) {
 		this.main=main;
 	}
 	
 	private void create_target(Location location,Boolean active) {
-		
-		World world = location.getWorld();
+
 		Location location2 = location.clone();
 		location2.setY(location2.getY()+1);
-		List<String> threat = new ArrayList<>();
-		Block block1 = world.getBlockAt(location);
-		Block block2 = world.getBlockAt(location2);
+		List<String> danger = new ArrayList<>();
+		Block block1 = location.getBlock();
+		Block block2 = location2.getBlock();
 		
 		block1.setType(Material.CHEST);
 		block2.setType(Material.SIGN_POST);
@@ -44,14 +39,13 @@ public class EventsLG {
 		
 		for(String p:main.playerlg.keySet()) {
 			if(!main.playerlg.get(p).isCamp(Camp.VILLAGE) && main.playerlg.get(p).isState(State.VIVANT)) {
-				threat.add(p);
+				danger.add(p);
 			}
-		
 		}
 		
-		if (active && !threat.isEmpty()){
+		if (active && !danger.isEmpty()){
 			chest.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE,2));
-			String playername = threat.get((int) Math.floor(new Random(System.currentTimeMillis()).nextFloat()*threat.size()));
+			String playername = danger.get((int) Math.floor(new Random(System.currentTimeMillis()).nextFloat()*danger.size()));
 			sign.setLine(1,playername);
 		}
 		else {
@@ -83,8 +77,8 @@ public class EventsLG {
 			}
 			else create_target(location,false);
 			
-			chestlocation.add(location);
-			chesthasbeenopen.put(location,false);
+			chest_location.add(location);
+			chest_has_been_open.put(location,false);
 		}
 		Bukkit.broadcastMessage(main.texte.esthetique("§m", "§e",main.texte.getText(36)+nb_target+main.texte.getText(37)));
 		

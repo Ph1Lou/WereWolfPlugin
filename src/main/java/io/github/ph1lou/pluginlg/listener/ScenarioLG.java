@@ -9,10 +9,12 @@ import org.bukkit.block.Furnace;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.LeavesDecayEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.FurnaceBurnEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -21,7 +23,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.spigotmc.event.entity.EntityMountEvent;
-
 
 public class ScenarioLG implements Listener {
 
@@ -38,11 +39,9 @@ public class ScenarioLG implements Listener {
 	    }
 	}
 
-
-	
 	@EventHandler
     public void onLeaveDecay(LeavesDecayEvent event) {
-        if (main.config.tool_switch.get(ToolLG.apple) && new Random().nextInt(100) + 1 <= 15) {
+        if (main.config.tool_switch.get(ToolLG.apple) && Math.floor(new Random(System.currentTimeMillis()).nextFloat())<main.config.getApple_rate()) {
             event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(Material.APPLE));
         }
     }
@@ -247,15 +246,12 @@ public class ScenarioLG implements Listener {
     				break;
                }
            }
-            
         }
-        
     }
 	
 	@EventHandler
     public void onBurn(FurnaceBurnEvent event) {
         if (main.config.tool_switch.get(ToolLG.fast_smelting)) {
-      
             handleCookingTime((Furnace)event.getBlock().getState());
         }
     }
@@ -284,10 +280,10 @@ public class ScenarioLG implements Listener {
             }
         }
     }
-    
-    
-   
-
-    
-    
+    @EventHandler
+    public void onProjectileThrownEvent(ProjectileLaunchEvent event) {
+        if(event.getEntity() instanceof Snowball && !main.config.tool_switch.get(ToolLG.snowball)) {
+            event.setCancelled(true);
+        }
+    }
 }

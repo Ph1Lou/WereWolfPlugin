@@ -42,7 +42,7 @@ public class VoteLG {
 		else if (main.score.getTimer()%(main.config.value.get(TimerLG.day_duration)*2) >= main.config.value.get(TimerLG.vote_duration) ){
 			votant.sendMessage(main.texte.getText(158));
 		}	
-		else if (main.playerlg.get(votant.getName()).hasVote()) {
+		else if (!main.playerlg.get(votant.getName()).getVotedPlayer().equals("")) {
 			votant.sendMessage(main.texte.getText(159));	
 		}
 		else if (!main.playerlg.containsKey(cible) || main.playerlg.get(cible).isState(State.MORT)){
@@ -52,7 +52,7 @@ public class VoteLG {
 			votant.sendMessage(main.texte.getText(161));	
 		}
 		else {
-			main.playerlg.get(votant.getName()).setVote(true);
+			main.playerlg.get(votant.getName()).setVote(cible);
 			
 			if(main.playerlg.get(votant.getName()).isRole(RoleLG.CORBEAU)){
 				main.playerlg.get(cible).incVote();
@@ -67,28 +67,43 @@ public class VoteLG {
 	public void resetvote() {
 		for(String playername:main.playerlg.keySet()) {
 			main.playerlg.get(playername).resetVote();
-			main.playerlg.get(playername).setVote(false);
+			main.playerlg.get(playername).setVote("");
 		}
 	}
-		
-	public void resultatvote() {
-		
+
+	public void depouiller(Player player) {
+		player.sendMessage(main.texte.getText(95));
+		for(String playername:main.playerlg.keySet()) {
+			if(!main.playerlg.get(playername).getVotedPlayer().equals("")){
+				player.sendMessage(playername+main.texte.getText(96)+main.playerlg.get(playername).getVotedPlayer());
+			}
+		}
+	}
+
+	public String getResult(){
 		int maxvote=0;
 		String playermax="";
-		
+
 		for(String playername:main.playerlg.keySet()) {
-			
+
 			if (main.playerlg.get(playername).getVote()>maxvote)  {
 				maxvote = main.playerlg.get(playername).getVote();
 				playermax=playername;
-			}	
+			}
 		}
-		if(maxvote==0) return;
-		if(maxvote<=1) Bukkit.broadcastMessage(main.texte.getText(191));
+		if(maxvote==0) return "";
+		if(maxvote<=1) {
+			Bukkit.broadcastMessage(main.texte.getText(191));
+			return "";
+		}
+		return playermax;
+	}
 
-		else if(main.playerlg.get(playermax).isState(State.VIVANT)) {
+	public void showresultatvote(String playermax) {
+
+		if(main.playerlg.containsKey(playermax) && main.playerlg.get(playermax).isState(State.VIVANT)) {
 			templayer.add(playermax);
-			Bukkit.broadcastMessage(main.texte.esthetique("§m", "§e",playermax+main.texte.getText(163)+ maxvote +main.texte.getText(164)));
+			Bukkit.broadcastMessage(main.texte.esthetique("§m", "§e",playermax+main.texte.getText(163)+ main.playerlg.get(playermax).getVote() +main.texte.getText(164)));
 			if(Bukkit.getPlayer(playermax)!=null){
 				Player player =Bukkit.getPlayer(playermax);
 				double life =player.getMaxHealth();
@@ -100,6 +115,5 @@ public class VoteLG {
 			}			
 		}
 		resetvote();
-		
 	}
 }

@@ -87,8 +87,8 @@ public class ScoreBoardLG {
 		score[4]=score[4]+player;
 		score[5]=score[5]+groupsize;
 	
-		if(timer>main.config.value.get(TimerLG.beginning_border) && wb.getSize()>main.config.bordurevalue.get(BordureLG.borduremin)) {
-			score[6]=score[6]+Math.round(wb.getSize())+" -> "+main.config.bordurevalue.get(BordureLG.borduremin);
+		if(timer>main.config.value.get(TimerLG.beginning_border) && wb.getSize()>main.config.border_value.get(BordureLG.borduremin)) {
+			score[6]=score[6]+Math.round(wb.getSize())+" -> "+main.config.border_value.get(BordureLG.borduremin);
 		}
 		else score[6]=score[6]+Math.round(wb.getSize());
 		
@@ -119,19 +119,19 @@ public class ScoreBoardLG {
 		PlayerLG plg = main.playerlg.get(board.getPlayer().getName());
 		
 		for(RoleLG role:RoleLG.values()) {
-			if(main.config.rolecount.get(role)>0) {
+			if(main.config.role_count.get(role)>0) {
 				roles.add(role);
 			}
 		}
 		
 		if (plg.getCompoTime()>6) {
 			for (int i=0;i<roles.size()/2;i++) {
-				score[i]="§r"+main.config.rolecount.get(roles.get(i))+" "+main.texte.translaterole.get(roles.get(i));
+				score[i]="§r"+main.config.role_count.get(roles.get(i))+" "+main.texte.translaterole.get(roles.get(i));
 			}
 		}
 		else {
 			for (int i=roles.size()/2;i<roles.size();i++) {
-				score[i-roles.size()/2]="§r"+main.config.rolecount.get(roles.get(i))+" "+main.texte.translaterole.get(roles.get(i));
+				score[i-roles.size()/2]="§r"+main.config.role_count.get(roles.get(i))+" "+main.texte.translaterole.get(roles.get(i));
 			}
 		}
 		
@@ -210,24 +210,24 @@ public class ScoreBoardLG {
 		
 		StringBuilder stringbuilder=new StringBuilder();
 		
-		if (!main.eventslg.chesthasbeenopen.isEmpty()) {
+		if (!main.eventslg.chest_has_been_open.isEmpty()) {
 				
-			if(!main.eventslg.chesthasbeenopen.containsValue(false)) {
+			if(!main.eventslg.chest_has_been_open.containsValue(false)) {
 				
-				main.eventslg.chestlocation.clear();
-				main.eventslg.chesthasbeenopen.clear();
+				main.eventslg.chest_location.clear();
+				main.eventslg.chest_has_been_open.clear();
 				Bukkit.broadcastMessage(main.texte.getText(165));
 				main.config.tool_switch.put(ToolLG.event_voyante_death,true);
 			}
 			
 			else {
 				
-				for (int i=0;i<main.eventslg.chestlocation.size();i++) {
+				for (int i = 0; i<main.eventslg.chest_location.size(); i++) {
 					
-					if(!main.eventslg.chesthasbeenopen.get(main.eventslg.chestlocation.get(i))) {
-						stringbuilder.append("§a").append(updatearrow(player, main.eventslg.chestlocation.get(i))).append(" ");
+					if(!main.eventslg.chest_has_been_open.get(main.eventslg.chest_location.get(i))) {
+						stringbuilder.append("§a").append(updatearrow(player, main.eventslg.chest_location.get(i))).append(" ");
 					}
-					else stringbuilder.append("§6").append(updatearrow(player, main.eventslg.chestlocation.get(i))).append(" ");
+					else stringbuilder.append("§6").append(updatearrow(player, main.eventslg.chest_location.get(i))).append(" ");
 				}
 			}
 			
@@ -318,7 +318,6 @@ public class ScoreBoardLG {
 			Bukkit.broadcastMessage(main.texte.esthetique("§m", "§2",main.texte.getText(137)+groupsize));
 			for (Player player:Bukkit.getOnlinePlayers()) {
 				Title.sendTitle(player,20,60, 20,main.texte.getText(138), main.texte.getText(139)+main.score.getGroupe());
-
 			}
 		}
 	}

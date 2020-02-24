@@ -1,5 +1,5 @@
 save0:
-  startloot:
+  start_loot:
     '0':
       ==: org.bukkit.inventory.ItemStack
       type: IRON_PICKAXE
@@ -80,7 +80,7 @@ save0:
       ==: org.bukkit.inventory.ItemStack
       type: WORKBENCH
       amount: 16
-  deathloot:
+  death_loot:
     '0':
       ==: org.bukkit.inventory.ItemStack
       type: GOLDEN_APPLE

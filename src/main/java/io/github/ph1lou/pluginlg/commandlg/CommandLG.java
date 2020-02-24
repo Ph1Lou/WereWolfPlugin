@@ -43,8 +43,8 @@ public class CommandLG implements TabExecutor {
 					else {
 						StringBuilder str = new StringBuilder();
 						for(RoleLG role:RoleLG.values()) {
-							if(main.config.rolecount.get(role)>0) {
-								str.append("§r").append(main.config.rolecount.get(role)).append(" ").append(main.texte.translaterole.get(role)).append("\n");
+							if(main.config.role_count.get(role)>0) {
+								str.append("§r").append(main.config.role_count.get(role)).append(" ").append(main.texte.translaterole.get(role)).append("\n");
 							}
 						}
 						sender.sendMessage(str.toString());
@@ -258,6 +258,27 @@ public class CommandLG implements TabExecutor {
 					sender.sendMessage(RoleLG.ANGE.getPowerHasBeenUse()+RoleLG.ANGE_GARDIEN.getAppearance());
 				}
 				break;
+			case "depouiller":
+
+				if(main.cmdlg.chechCommand(false, true,true,0,RoleLG.CITOYEN , sender, args)) {
+					main.vote.depouiller((Player) sender);
+					main.playerlg.get(sender.getName()).setPower(false);
+				}
+				break;
+			case "cancelvote":
+
+				if(main.cmdlg.chechCommand(false, false,true,0,RoleLG.CITOYEN , sender, args)) {
+					PlayerLG plg =main.playerlg.get(sender.getName());
+					if(plg.getAffectedPlayer().isEmpty()){
+						String pvote=main.vote.getResult();
+						sender.sendMessage(main.texte.esthetique("§m","§6",RoleLG.CITOYEN.getPowerHasBeenUse()+pvote));
+						plg.addAffectedPlayer(pvote);
+						Bukkit.broadcastMessage(main.texte.getText(94));
+						main.vote.resetvote();
+					}
+					else sender.sendMessage(main.texte.getText(103));
+				}
+				break;
 			default:
 				sender.sendMessage(main.texte.getText(102));
 		}
@@ -466,7 +487,7 @@ public class CommandLG implements TabExecutor {
 
 	@Override
 	public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] args) {
-		String[] tabe = {"compo","regles","timer","vote","maudire","couple","flairer","slv","maitre","switch","voir","inspecter","role","lg","dechu","gardien"};
+		String[] tabe = {"compo","regles","timer","vote","maudire","couple","flairer","slv","maitre","switch","voir","inspecter","role","lg","dechu","gardien","depouillement","cancelvote"};
 		List<String> tab = new ArrayList<>(Arrays.asList(tabe));
 		if(args.length==0){
 			return tab;

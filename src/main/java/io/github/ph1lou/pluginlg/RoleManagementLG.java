@@ -30,9 +30,9 @@ public class RoleManagementLG {
 		List<String> joueurs = new ArrayList<>(main.playerlg.keySet());
 		List<RoleLG> config = new ArrayList<>();
 		main.config.tool_switch.put(ToolLG.chat,false);
-		main.config.rolecount.put(RoleLG.VILLAGEOIS,main.config.rolecount.get(RoleLG.VILLAGEOIS)+joueurs.size()-main.score.getRole());
+		main.config.role_count.put(RoleLG.VILLAGEOIS,main.config.role_count.get(RoleLG.VILLAGEOIS)+joueurs.size()-main.score.getRole());
 		for(RoleLG role:RoleLG.values()) {
-			for(int i=0;i<main.config.rolecount.get(role);i++) {
+			for(int i = 0; i<main.config.role_count.get(role); i++) {
 				if(!role.equals(RoleLG.COUPLE)) {
 					config.add(role);
 				}
@@ -75,7 +75,7 @@ public class RoleManagementLG {
 			player.addPotionEffect(new PotionEffect(p,Integer.MAX_VALUE,0,false,false));
 		}
 		
-		for(ItemStack i:main.stufflg.rolestuff.get(plg.getRole())) {
+		for(ItemStack i:main.stufflg.role_stuff.get(plg.getRole())) {
 			
 			if(player.getInventory().firstEmpty()==-1) {
 				player.getWorld().dropItem(player.getLocation(),i);

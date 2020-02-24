@@ -71,7 +71,9 @@ public class MainLG extends JavaPlugin {
 		
 		saveDefaultConfig();
 		setState(StateLG.LOBBY);
-		config.getconfig(this,0);
+		setDay(Day.DEFAULT);
+
+		config.getConfig(this,0);
 		stufflg.load(this, 0);
 		texte.getTexttranslate(this, "text.json");
 		board= Bukkit.getScoreboardManager().getNewScoreboard();
@@ -98,7 +100,7 @@ public class MainLG extends JavaPlugin {
             }
         });  
 		
-		setworld();
+		setWorld();
 		
 		for(Player player:Bukkit.getOnlinePlayers()) {
 			joinPlayer(player) ;	
@@ -111,49 +113,51 @@ public class MainLG extends JavaPlugin {
 	
 	
 	
-	private void setworld() {
-		
-		World world = Bukkit.getWorld("world");
-		world.setPVP(false);
-	 	world.setWeatherDuration(0);
-	 	world.setThunderDuration(0);
-	 	world.setTime(0);
-		world.setGameRuleValue("reducedDebugInfo", "true");
-		world.setGameRuleValue("keepInventory", "true");
-		world.setGameRuleValue("naturalRegeneration", "false");
-		world.getWorldBorder().reset();
-		
-		int x=(int) world.getSpawnLocation().getX();
-		int z=(int) world.getSpawnLocation().getZ();
-		
-		world.setSpawnLocation(x, 151,z);
-		
-		for(int i=-16;i<=16;i++) {
-			
-			for(int j=-16;j<=16;j++) {
-				
-				new Location(world, i+x, 150,j+z).getBlock().setType(Material.BARRIER);
-				new Location(world, i+x, 154,j+z).getBlock().setType(Material.BARRIER);
+	private void setWorld() {
+
+		try{
+			World world = Bukkit.getWorld("world");
+			world.setPVP(false);
+			world.setWeatherDuration(0);
+			world.setThunderDuration(0);
+			world.setTime(0);
+			world.setGameRuleValue("reducedDebugInfo", "true");
+			world.setGameRuleValue("keepInventory", "true");
+			world.setGameRuleValue("naturalRegeneration", "false");
+			world.getWorldBorder().reset();
+
+			int x=(int) world.getSpawnLocation().getX();
+			int z=(int) world.getSpawnLocation().getZ();
+
+			world.setSpawnLocation(x, 151,z);
+
+			for(int i=-16;i<=16;i++) {
+
+				for(int j=-16;j<=16;j++) {
+
+					new Location(world, i+x, 150,j+z).getBlock().setType(Material.BARRIER);
+					new Location(world, i+x, 154,j+z).getBlock().setType(Material.BARRIER);
+				}
+
+				new Location(world, i+x, 151,z-16).getBlock().setType(Material.BARRIER);
+				new Location(world, i+x, 152,z-16).getBlock().setType(Material.BARRIER);
+				new Location(world, i+x, 153,z-16).getBlock().setType(Material.BARRIER);
+				new Location(world, i+x, 151,z+16).getBlock().setType(Material.BARRIER);
+				new Location(world, i+x, 152,z+16).getBlock().setType(Material.BARRIER);
+				new Location(world, i+x, 153,z+16).getBlock().setType(Material.BARRIER);
+				new Location(world, x-16, 151,i+z).getBlock().setType(Material.BARRIER);
+				new Location(world, x-16, 152,i+z).getBlock().setType(Material.BARRIER);
+				new Location(world, x-16, 153,i+z).getBlock().setType(Material.BARRIER);
+				new Location(world, x+16, 151,i+z).getBlock().setType(Material.BARRIER);
+				new Location(world, x+16, 152,i+z).getBlock().setType(Material.BARRIER);
+				new Location(world, x+16, 153,i+z).getBlock().setType(Material.BARRIER);
 			}
-			
-			new Location(world, i+x, 151,z-16).getBlock().setType(Material.BARRIER);
-			new Location(world, i+x, 152,z-16).getBlock().setType(Material.BARRIER);
-			new Location(world, i+x, 153,z-16).getBlock().setType(Material.BARRIER);
-			new Location(world, i+x, 151,z+16).getBlock().setType(Material.BARRIER);
-			new Location(world, i+x, 152,z+16).getBlock().setType(Material.BARRIER);
-			new Location(world, i+x, 153,z+16).getBlock().setType(Material.BARRIER);
-			new Location(world, x-16, 151,i+z).getBlock().setType(Material.BARRIER);
-			new Location(world, x-16, 152,i+z).getBlock().setType(Material.BARRIER);
-			new Location(world, x-16, 153,i+z).getBlock().setType(Material.BARRIER);
-			new Location(world, x+16, 151,i+z).getBlock().setType(Material.BARRIER);
-			new Location(world, x+16, 152,i+z).getBlock().setType(Material.BARRIER);
-			new Location(world, x+16, 153,i+z).getBlock().setType(Material.BARRIER);
+
+		}catch(Exception e){
+			Bukkit.broadcastMessage(texte.getText(21));
 		}
-		
 	}
-	
-	
-	
+
 	public void joinPlayer(Player player) {
 		
 		String playername = player.getName();
@@ -204,15 +208,11 @@ public class MainLG extends JavaPlugin {
 			}
 			else if (isState(StateLG.LG) &&  !playerlg.get(playername).hasKit()) {
 				rolemanage.recover_rolepower(playername);
-				
 			}
 		} 
 		score.updateBoard();
 	}
-	
-	
-	
-	
+
 	public void eparpillement(String playername,double d,String message) {
 		
 		
@@ -473,14 +473,12 @@ public class MainLG extends JavaPlugin {
 		for(Player player:Bukkit.getOnlinePlayers()) {
 			Title.sendTitle(player,20,60, 20,texte.getText(3), soustitrevictoire);
 
-			TextComponent msgbug = new TextComponent(texte.getText(186));
-			msgbug.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,"https://discord.gg/GXXCVUA"));
-			player.spigot().sendMessage(msgbug);
+			TextComponent msg = new TextComponent(texte.getText(186));
+			msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,"https://discord.gg/GXXCVUA"));
+			player.spigot().sendMessage(msg);
 
 		}
-		
 	}
-		
 }
 		
 

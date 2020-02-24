@@ -38,8 +38,8 @@ public class WorldListener implements Listener {
 		if(event.getInventory().getType().equals(InventoryType.CHEST)) {
 			if(event.getInventory().getHolder() instanceof Chest) {
 	            Location cloc = ((Chest) event.getInventory().getHolder()).getLocation();
-	        	if(main.eventslg.chestlocation.contains(cloc)) {
-	        		 main.eventslg.chesthasbeenopen.put(cloc,true);
+	        	if(main.eventslg.chest_location.contains(cloc)) {
+	        		 main.eventslg.chest_has_been_open.put(cloc,true);
 	        	}
 	        }
 		}
@@ -54,10 +54,10 @@ public class WorldListener implements Listener {
 		
 		if(!main.playerlg.containsKey(player.getName())) return ;
 			
-		int xprate=1;
+		int xp_rate=1;
 		
 		if (main.config.tool_switch.get(ToolLG.xpboost) ) {
-				xprate=main.config.getXpboost();
+				xp_rate=main.config.getXp_boost();
 		}
 		
 		switch (Block.getType()){
@@ -67,7 +67,7 @@ public class WorldListener implements Listener {
 			if(!event.getPlayer().getItemInHand().getType().equals(Material.DIAMOND_PICKAXE) && !event.getPlayer().getItemInHand().getType().equals(Material.IRON_PICKAXE) && !event.getPlayer().getItemInHand().getType().equals(Material.STONE_PICKAXE)  && !event.getPlayer().getItemInHand().getType().equals(Material.GOLD_PICKAXE)  && !event.getPlayer().getItemInHand().getType().equals(Material.WOOD_PICKAXE)){
    				return;
    			}
-			Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop()*xprate);
+			Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop()*xp_rate);
 			if (main.config.tool_switch.get(ToolLG.cutclean) ) {
 				 Block.setType(Material.AIR);
 				 if(main.score.getTimer()<=main.config.value.get(TimerLG.minage)) {
@@ -81,8 +81,9 @@ public class WorldListener implements Listener {
 			case LAPIS_ORE:
 
 			case EMERALD_ORE:
-				if(main.score.getTimer()> main.config.value.get(TimerLG.minage)) Block.setType(Material.AIR) ;
-			Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop()*xprate);
+				if(main.score.getTimer()> main.config.value.get(TimerLG.minage))
+					Block.setType(Material.AIR) ;
+				Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop()*xp_rate);
 			break;
 
 			case DIAMOND_ORE:
@@ -95,7 +96,6 @@ public class WorldListener implements Listener {
 				if(main.playerlg.get(player.getName()).getDiamondLimit()>0) {
 					if(main.score.getTimer()<=main.config.value.get(TimerLG.minage)) main.playerlg.get(player.getName()).decDiamondLimit();
 					else Block.setType(Material.AIR) ;
-					
 				}
 				else {
 					if(main.score.getTimer()<=main.config.value.get(TimerLG.minage)) {
@@ -105,7 +105,7 @@ public class WorldListener implements Listener {
 				}
 			}
 			
-			Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop()*xprate);
+			Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop()*xp_rate);
 			break;
 			
 		case IRON_ORE:
@@ -117,9 +117,8 @@ public class WorldListener implements Listener {
            		Block.setType(Material.AIR);
            		if(main.score.getTimer()<=main.config.value.get(TimerLG.minage)) {
                     Block.getWorld().dropItem(loc, new ItemStack(Material.IRON_INGOT,1));
-
            		}
-                Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop()*xprate);
+				Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(xp_rate);
            	}
             break;
            
@@ -132,12 +131,12 @@ public class WorldListener implements Listener {
 				if(main.score.getTimer()<=main.config.value.get(TimerLG.minage)) {
 					Block.getWorld().dropItem(loc, new ItemStack(Material.GOLD_INGOT,1 ));
 				}
-                Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop()*xprate);
+                Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(xp_rate);
 			}
             break;
             
 		case GRAVEL :
-			if (main.config.tool_switch.get(ToolLG.cutclean) && new Random().nextInt(100) + 1 <= 15 ) {
+			if (main.config.tool_switch.get(ToolLG.cutclean) && Math.floor(new Random(System.currentTimeMillis()).nextFloat())<main.config.getFlint_rate() ) {
 				 Block.setType(Material.AIR);
 		         Block.getWorld().dropItem(loc, new ItemStack(Material.FLINT,1));
 			}
@@ -146,11 +145,8 @@ public class WorldListener implements Listener {
 		default:
 			break;	
 		}
-	           
-		  
 	}
-	
-	
+
 	@EventHandler
     public void onEntityDeath(final EntityDeathEvent event) {
 		
@@ -187,8 +183,14 @@ public class WorldListener implements Listener {
                     case RABBIT: 
                         loots.remove(i);
                         loots.add(new ItemStack(Material.COOKED_RABBIT));
-                        break;  
-                    default:
+                        break;
+					case ENDER_PEARL:
+						loots.remove(i);
+						if(Math.floor(new Random(System.currentTimeMillis()).nextFloat())<main.config.getPearl_rate()){
+							loots.add(new ItemStack(Material.ENDER_PEARL));
+						}
+						break;
+					default:
                     	
                 }
             }

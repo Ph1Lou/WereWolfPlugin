@@ -100,9 +100,7 @@ public class CycleLG {
 			
 			if(plg.isState(State.VIVANT) && Bukkit.getPlayer(playername)!=null){
 				
-				Player player = Bukkit.getPlayer(playername);	
-				
-				player.playSound(player.getLocation(), Sound.DOOR_OPEN,1,20);
+				Player player = Bukkit.getPlayer(playername);
 				
 				if(plg.isRole(RoleLG.LOUP_PERFIDE) || plg.isRole(RoleLG.PETITE_FILLE)){
 					player.sendMessage(main.texte.getText(197));
@@ -110,8 +108,26 @@ public class CycleLG {
 			}
 		}
 	}
-				
-				
+
+	public void prevoteresult() {
+
+
+		if(!main.isState(StateLG.LG)) return;
+
+		for(String playername:main.playerlg.keySet()) {
+
+			PlayerLG plg = main.playerlg.get(playername);
+
+			if(plg.isState(State.VIVANT) && Bukkit.getPlayer(playername)!=null){
+
+				Player player = Bukkit.getPlayer(playername);
+
+				if(plg.isRole(RoleLG.CITOYEN)){
+					player.sendMessage(main.texte.esthetique("§m", "§6",RoleLG.CITOYEN.getPowerUse()+main.conversion(main.config.value.get(TimerLG.citoyen_duration))));
+				}
+			}
+		}
+	}
 				
 				
 	public void jour() {

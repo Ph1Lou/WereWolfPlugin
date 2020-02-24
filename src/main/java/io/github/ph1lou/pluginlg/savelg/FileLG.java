@@ -12,14 +12,11 @@ public class FileLG {
 	public void createFile (File file) throws IOException {
 		
 		if(!file.exists()) {
-			
 			file.getParentFile().mkdirs();
 			file.createNewFile();
 		}
 	}
-	
-	
-	
+
 	public void save (File file, String text) {
 		
 		final FileWriter fw;
@@ -62,20 +59,6 @@ public class FileLG {
 			}
 		}
 		return "";
-		
-		
-		
-		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
 

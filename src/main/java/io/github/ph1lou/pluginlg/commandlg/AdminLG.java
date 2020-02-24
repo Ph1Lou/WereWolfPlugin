@@ -1,10 +1,8 @@
 package io.github.ph1lou.pluginlg.commandlg;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import io.github.ph1lou.pluginlg.*;
 import io.github.ph1lou.pluginlg.enumlg.*;
 import org.bukkit.Bukkit;
@@ -19,12 +17,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-
-
 public class AdminLG implements TabExecutor {
 
 	MainLG main;
-	
+
 	public AdminLG(MainLG main) {
 		this.main=main;
 	}
@@ -69,16 +65,19 @@ public class AdminLG implements TabExecutor {
 				return true;
 			}
 			
-			main.config.rolecount.put(RoleLG.VILLAGEOIS,-surplus + main.config.rolecount.get(RoleLG.VILLAGEOIS));
-			main.setState(StateLG.TELEPORTATION);
-			main.setDay(Day.DAY);
-			World world = Bukkit.getWorld("world");
-			world.setTime(0);
-			WorldBorder wb =world.getWorldBorder();
-			wb.setSize(main.config.bordurevalue.get(BordureLG.borduremax));
-			wb.setWarningDistance((int) (wb.getSize()/7));
-			wb.setCenter(world.getSpawnLocation().getX(), world.getSpawnLocation().getZ());	
-			File file = new File(main.getDataFolder(), "savelg0.json");
+			main.config.role_count.put(RoleLG.VILLAGEOIS,surplus + main.config.role_count.get(RoleLG.VILLAGEOIS));
+			try{
+				World world = Bukkit.getWorld("world");
+				main.setState(StateLG.TELEPORTATION);
+				world.setTime(0);
+				WorldBorder wb =world.getWorldBorder();
+				wb.setSize(main.config.border_value.get(BordureLG.borduremax));
+				wb.setWarningDistance((int) (wb.getSize()/7));
+				wb.setCenter(world.getSpawnLocation().getX(), world.getSpawnLocation().getZ());
+			}catch(Exception e){
+				sender.sendMessage(main.texte.getText(21));
+			}
+			File file = new File(main.getDataFolder(), "save0.json");
 			main.filelg.save(file, main.serialize.serialize(main.config));
 			main.stufflg.save(main,0);
 			break;
@@ -287,7 +286,7 @@ public class AdminLG implements TabExecutor {
 			}
 			
 			RoleLG role = main.playerlg.get(args[1]).getRole();
-			main.config.rolecount.put(role,main.config.rolecount.get(role)+1);
+			main.config.role_count.put(role,main.config.role_count.get(role)+1);
 			main.deathmanage.resurrection(args[1]);
 			main.score.addPlayerSize();
 			Bukkit.broadcastMessage(main.texte.esthetique("§m", "§e",args[1]+main.texte.getText(154)));
@@ -321,10 +320,10 @@ public class AdminLG implements TabExecutor {
 			
 			ItemStack[] stufflgs = player1.getInventory().getContents();
 			
-			main.stufflg.clearstartloot();
+			main.stufflg.clearStartLoot();
 			for(ItemStack i:stufflgs) {
 				if(i!=null) {
-					main.stufflg.addstartloot(i);
+					main.stufflg.addStartLoot(i);
 				}
 			}
 
@@ -352,10 +351,10 @@ public class AdminLG implements TabExecutor {
 			
 			ItemStack[] stufflgs1 = ((Player) sender).getInventory().getContents();	
 			
-			main.stufflg.cleardeathloot();
+			main.stufflg.clearDeathLoot();
 			for(ItemStack i:stufflgs1) {
 				if(i!=null) {
-					main.stufflg.adddeathloot(i);
+					main.stufflg.addDeathLoot(i);
 				}
 			}
 			sender.sendMessage(main.texte.getText(152));
@@ -376,10 +375,10 @@ public class AdminLG implements TabExecutor {
 				return true;
 			}
 			try {
-				main.stufflg.rolestuff.get(RoleLG.values()[Integer.parseInt(args[1])]).clear();
+				main.stufflg.role_stuff.get(RoleLG.values()[Integer.parseInt(args[1])]).clear();
 				for(ItemStack i:stufrole) {
 					if(i!=null) {
-						main.stufflg.rolestuff.get(RoleLG.values()[Integer.parseInt(args[1])]).add(i);
+						main.stufflg.role_stuff.get(RoleLG.values()[Integer.parseInt(args[1])]).add(i);
 					}
 				}
 				sender.sendMessage(main.texte.getText(199));

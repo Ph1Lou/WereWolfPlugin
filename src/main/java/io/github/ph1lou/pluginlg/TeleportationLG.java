@@ -50,7 +50,7 @@ public class TeleportationLG extends BukkitRunnable{
 					for(PotionEffect po:player.getActivePotionEffects()) {
 						player.removePotionEffect(po.getType());
 					}
-					for(ItemStack it:main.stufflg.getstartloot()) {
+					for(ItemStack it:main.stufflg.getStartLoot()) {
 						player.getInventory().addItem(it);	
 					}
 					main.eparpillement(playername,i,main.texte.getText(121));	

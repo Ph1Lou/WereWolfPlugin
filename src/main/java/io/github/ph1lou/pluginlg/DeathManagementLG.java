@@ -173,7 +173,7 @@ public class DeathManagementLG {
 		else if((plg.isRole(RoleLG.ANGE_GARDIEN) || plg.isRole(RoleLG.ANGE_DECHU)) && !plg.hasPower()) {
 			role=RoleLG.ANGE;
 		}
-		main.config.rolecount.put(role,main.config.rolecount.get(role)-1);
+		main.config.role_count.put(role,main.config.role_count.get(role)-1);
 		plg.setState(State.MORT);
 		main.score.removePlayerSize();
 		
@@ -282,7 +282,7 @@ public class DeathManagementLG {
 			}
 			else {
 				main.couplerange.remove(i);
-				main.config.rolecount.put(RoleLG.COUPLE,main.config.rolecount.get(RoleLG.COUPLE)-1);
+				main.config.role_count.put(RoleLG.COUPLE,main.config.role_count.get(RoleLG.COUPLE)-1);
 			}
 		}		
 	}

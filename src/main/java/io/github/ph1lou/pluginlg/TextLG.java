@@ -49,7 +49,7 @@ public class TextLG {
 					esthetique("§6§m", "§e","Vous redevenez visible"),
 					esthetique("§6§m", "§e","Vous n'êtes plus maudit"),
 			/*20*/	esthetique("§6§m", "§e","Vous n'avez plus la salvation"),
-					"",
+					esthetique("§6§m", "§4","Votre monde doit s'appeler world"),
 					"",
 					"",
 					"",
@@ -97,7 +97,7 @@ public class TextLG {
 					"",
 					esthetique("§6§m", "§4","Vous n'êtes pas dans la partie"),
 					esthetique("§6§m", "§4","La partie est déjà finie ou les rôles n'ont pas encore été annoncés"),
-					"Vous êtes dans le camp des §4Les Loups Garous §r, votre but ? décimer le §eVillage§r. Vous avez Force la nuit et 2min de speed et d'abso après chaque kill",
+					"Vous êtes dans le camp des §4Loups Garous §r, votre but ? décimer le §eVillage§r. Vous avez Force la nuit et 2min de speed et d'abso après chaque kill",
 			/*70*/	"Vous êtes dans le camp des §eVillageois§r. Votre but est d'éliminer les §4Loups Garous§r et autres dangers du §eVillage§r",
 					" sont dans le même camp",
 					" ne sont pas dans le même camp",
@@ -122,9 +122,9 @@ public class TextLG {
 					"",
 					"",
 					"",
-					"",
-					"",
-					"",
+					esthetique("§m", "§2","Un Citoyen a annulé le vote"),
+					"§6Dépouillement ",
+					" a voté pour ",
 					esthetique("§6§m", "§4","Vous n'êtes pas Vivant"),
 					esthetique("§6§m", "§4","Vous n'êtes pas un Loup Garou"),
 					esthetique("§6§m", "§4","La liste des Loups Garous n'est pas activée"),
@@ -181,7 +181,7 @@ public class TextLG {
 			/*150*/	esthetique("§m", "§e","Final Heal !"),
 					esthetique("§m", "§2","Stuff de départ actualisé"),
 					esthetique("§m", "§2","Stuff de mort actualisé"),
-					"§6/adminlg config §9Pour configurer la partie\n§6/adminlg host §9Pour configurer l'host\n§6/adminlg start §9Pour lancer la partie\n§6/adminlg chat §9Pour activer/désactiver le chat\n§6/adminlg info §9Pour parler à tous les joueurs\n§6/adminlg groupe §9Pour faire respecter les groupes\n§6/adminlg fh §9Pour FinalHeal\n§6/adminlg inv §9Pour voir l'inventaire d'un joueur\n§6/adminlg killa §9Pour tuer un joueur offline\n§6/adminlg revive §9Pour ressusciter un joueur\n§6/adminlg role §9Pour voir le rôle d'un joueur\n§6/adminlg deco §9Pour voir les joueurs déco\n§6/adminlg setgroupe nb§9 Pour configurer les groupes",
+					"§6/adminlg config §9Pour configurer la partie\n§6/adminlg host §9Pour configurer l'host\n§6/adminlg start §9Pour lancer la partie\n§6/adminlg chat §9Pour activer/désactiver le chat\n§6/adminlg info §9Pour parler à tous les joueurs\n§6/adminlg groupe §9Pour faire respecter les groupes\n§6/adminlg fh §9Pour FinalHeal\n§6/adminlg inv §9Pour voir l'inventaire d'un joueur\n§6/adminlg killa §9Pour tuer un joueur offline\n§6/adminlg revive §9Pour ressusciter un joueur\n§6/adminlg role §9Pour voir le rôle d'un joueur\n§6/adminlg deco §9Pour voir les joueurs déco\n§6/adminlg setgroupe§9 Pour configurer les groupes",
 					" a été ressuscité par un Administrateur",
 					esthetique("§6§m", "§4","Les morts ne peuvent pas voter"),
 					esthetique("§6§m", "§4","Les Votes ne sont pas encore activé"),
@@ -248,7 +248,7 @@ public void getTexttranslate(MainLG main, String filename) {
 		
 		if(filetext.exists()) {
 			
-			textload =main.serialize.deserializetext(main.filelg.loadContent(filetext));
+			textload =main.serialize.deserializeText(main.filelg.loadContent(filetext));
 			
 			for(int i=0;i<textload.getDefault()[0].length;i++) {
 				if(i<this.getDefault()[0].length) {
@@ -331,7 +331,7 @@ public void getTexttranslate(MainLG main, String filename) {
 		}	
 		
 		
-		main.filelg.save(filetext, main.serialize.serializetexte(main.texte));
+		main.filelg.save(filetext, main.serialize.serializeText(main.texte));
 	}
 	
 	public String getText(int i) {

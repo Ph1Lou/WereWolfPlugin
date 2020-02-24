@@ -1,9 +1,5 @@
 package io.github.ph1lou.pluginlg.listener;
 
-
-
-
-
 import io.github.ph1lou.pluginlg.*;
 import io.github.ph1lou.pluginlg.enumlg.*;
 import org.bukkit.Bukkit;
@@ -11,12 +7,10 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -36,10 +30,8 @@ public class PlayerListeners implements Listener {
 
 	private MainLG main;
 	
-	
 	public PlayerListeners(MainLG main) {
 		this.main=main;
-		
 	}
 	
 	@EventHandler
@@ -72,19 +64,10 @@ public class PlayerListeners implements Listener {
 			player.removePotionEffect(PotionEffectType.INVISIBILITY);
 			player.removePotionEffect(PotionEffectType.WEAKNESS);
 			main.playerlg.get(player.getName()).setPower(true);
-			
 		}
 	}
-	
-    @EventHandler
-    public void onProjectileThrownEvent(ProjectileLaunchEvent event) {
-      if(event.getEntity() instanceof Snowball && !main.config.tool_switch.get(ToolLG.snowball)) {
-        event.setCancelled(true);
-      }
-    }
     
 	@EventHandler
-	
 	private void onDropItem(PlayerDropItemEvent event) {
 		if(event.getPlayer().getGameMode().equals(GameMode.ADVENTURE)) event.setCancelled(true);
 	}
@@ -99,9 +82,9 @@ public class PlayerListeners implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-		 if (main.config.tool_switch.get(ToolLG.fireless) && (event.getCause() == EntityDamageEvent.DamageCause.LAVA || event.getCause() == EntityDamageEvent.DamageCause.FIRE || event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK)) {
-	    	   event.setCancelled(true);
-	       }
+		if (main.config.tool_switch.get(ToolLG.fireless) && (event.getCause() == EntityDamageEvent.DamageCause.LAVA || event.getCause() == EntityDamageEvent.DamageCause.FIRE || event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK)) {
+			event.setCancelled(true);
+		}
 		if (!main.playerlg.containsKey(playername)) return;
 		if ((main.playerlg.get(playername).isRole(RoleLG.CORBEAU) || main.playerlg.get(playername).hasSalvation() || main.isState(StateLG.TELEPORTATION) || main.config.tool_switch.get(ToolLG.nofall)) && event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
 			event.setCancelled(true);
@@ -118,11 +101,11 @@ public class PlayerListeners implements Listener {
 			if(!player.getItemInHand().getType().equals(Material.DIAMOND_SWORD) && !player.getItemInHand().getType().equals(Material.IRON_SWORD)){
 				return;
 			}
-			event.setDamage(event.getDamage()*main.config.getStrenghrate());
+			event.setDamage(event.getDamage()*main.config.getStrengthRate());
 		}
 		
 	}
-	
+
 	@EventHandler
 	private void onPlayerRespawn(PlayerRespawnEvent event) {
 		if(!main.playerlg.containsKey(event.getPlayer().getName())) return;
@@ -136,8 +119,7 @@ public class PlayerListeners implements Listener {
 		
 		Player player = event.getEntity();
 		String playername = player.getName();
-		
-		
+
 		if (main.isState(StateLG.LG)) {
 			
 			event.setDeathMessage(null);
@@ -152,7 +134,7 @@ public class PlayerListeners implements Listener {
 			plg.clearItemDeath();
 			plg.setItemDeath(player.getInventory().getContents().clone());
 			
-			for(ItemStack i:main.stufflg.getdeathloot()) {
+			for(ItemStack i:main.stufflg.getDeathLoot()) {
 				plg.addItemDeath(i);	
 			}
 			
@@ -227,7 +209,6 @@ public class PlayerListeners implements Listener {
         }
 	}
 	
-	
 	@EventHandler
 	private void onJoin(PlayerJoinEvent event) {
 		main.joinPlayer(event.getPlayer()) ;
@@ -236,14 +217,12 @@ public class PlayerListeners implements Listener {
 		}
 		else if(main.playerlg.containsKey(event.getPlayer().getName()) && main.playerlg.get(event.getPlayer().getName()).isState(State.VIVANT)) {
 			event.setJoinMessage("§6§l"+event.getPlayer().getName()+main.texte.getText(193));
-			
 		}
 	}	
 	
 	@EventHandler
 	private void onQuit(PlayerQuitEvent event) {
-		
-		
+
         Player player = event.getPlayer();
         FastBoard board = main.boards.remove(player.getUniqueId());
         if (board != null) {
@@ -253,17 +232,11 @@ public class PlayerListeners implements Listener {
         	main.score.removePlayerSize();
         	main.playerlg.remove(player.getName());
         	event.setQuitMessage("§c§l["+main.score.getPlayerSize()+"/"+main.score.getRole()+"] "+event.getPlayer().getName()+main.texte.getText(195));
-        	
         }
         else if(main.playerlg.containsKey(event.getPlayer().getName()) && main.playerlg.get(event.getPlayer().getName()).isState(State.VIVANT)) {
-        	
         	main.playerlg.get(event.getPlayer().getName()).setDeathTime(main.score.getTimer());
 			event.setQuitMessage("§4§l"+event.getPlayer().getName()+main.texte.getText(196));
         }	
         main.score.updateBoard();	
     }
-	
-
 }
-
-
