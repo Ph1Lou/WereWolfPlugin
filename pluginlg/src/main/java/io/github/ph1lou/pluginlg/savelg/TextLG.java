@@ -38,7 +38,7 @@ public class TextLG {
 					esthetique("§m", "§6","Minage Désactivé"),
 					esthetique("§m", "§6","En raison du nombre de joueurs, les Votes sont désactivés"),
 			/*10*/	"",
-					"\n§5Si l'un de vous meurt, l'autre le rejoindra par amour, de plus vous partagez 4 coeurs avec votre amant",
+					"\n§5Si l'un de vous meurt, l'autre le rejoindra par amour",
 					esthetique("§m", "§6","Pas assez de personnes pour former un couple"),
 					esthetique("§6§m", "§4","Vous ne pouvez plus utiliser votre pouvoir aujourd'hui"),
 					esthetique("§2§m", "§6","C'est la nuit, enlevez votre armure pour devenir invisible"),

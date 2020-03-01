@@ -20,7 +20,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import fr.mrmicky.fastboard.FastBoard;
-import org.bukkit.scoreboard.NameTagVisibility;
 
 
 public class PlayerListener implements Listener {
@@ -45,24 +44,19 @@ public class PlayerListener implements Listener {
 				player.sendMessage(main.text.getText(129));
 				player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE,0,false,false));
 				player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, Integer.MAX_VALUE,0,false,false));
-				if(main.playerlg.get(player.getName()).isCamp(Camp.LG)) {
-					player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-					main.board.getTeam(player.getName()).setNameTagVisibility(NameTagVisibility.NEVER);
-				}
 				main.playerlg.get(player.getName()).setPower(false);
+				main.optionlg.updateScenario();
 			}	
 		}
 		else if(!main.playerlg.get(player.getName()).hasPower()) {
 			player.sendMessage(main.text.getText(18));
 			if(main.playerlg.get(player.getName()).isCamp(Camp.LG) ) {
 				player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, -1,false,false));
-				if(!main.config.scenario.get(ScenarioLG.NO_NAME_TAG)){
-					main.board.getTeam(player.getName()).setNameTagVisibility(NameTagVisibility.ALWAYS);
-				}
 			}
 			player.removePotionEffect(PotionEffectType.INVISIBILITY);
 			player.removePotionEffect(PotionEffectType.WEAKNESS);
 			main.playerlg.get(player.getName()).setPower(true);
+			main.optionlg.updateScenario();
 		}
 	}
     

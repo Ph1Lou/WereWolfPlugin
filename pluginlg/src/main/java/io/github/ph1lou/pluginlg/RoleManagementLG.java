@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scoreboard.NameTagVisibility;
+
 
 
 public class RoleManagementLG {
@@ -280,12 +280,13 @@ public class RoleManagementLG {
 	}
 	
 	public void auto_master() {
-		
+
+		Random r= new Random(System.currentTimeMillis());
 		for(String playername:main.playerlg.keySet()) {
 
 			if (main.playerlg.get(playername).isState(State.VIVANT) && main.playerlg.get(playername).isRole(RoleLG.ENFANT_SAUVAGE) && main.playerlg.get(playername).hasPower()) {
 				
-				String mastername = autoSelec(playername);
+				String mastername = autoSelec(r.nextFloat(),playername);
 				main.playerlg.get(mastername).addDisciple(playername);
 				main.playerlg.get(playername).addAffectedPlayer(mastername);
 				main.playerlg.get(playername).setPower(false);
@@ -341,7 +342,7 @@ public class RoleManagementLG {
 				}
 				if (plg.isRole(RoleLG.ANGE_DECHU) || plg.isRole(RoleLG.ANGE_GARDIEN)) {
 
-					String targetname = autoSelec(playername);
+					String targetname = autoSelec(r.nextFloat(),playername);
 					plg.addAffectedPlayer(targetname);
 					main.playerlg.get(targetname).addTargetOf(playername);
 
@@ -358,7 +359,7 @@ public class RoleManagementLG {
 		}
 	}
 	
-	public String autoSelec(String playername) {
+	public String autoSelec(float f,String playername) {
 		
 		List<String> players = new ArrayList<>();
 		for(String p:main.playerlg.keySet()) {
@@ -369,7 +370,7 @@ public class RoleManagementLG {
 		if(players.isEmpty()) {
 			return playername;
 		}
-		return 	players.get((int) Math.floor(new Random(System.currentTimeMillis()).nextFloat()*players.size()));
+		return 	players.get((int) Math.floor(f*players.size()));
 	}
 	
 	

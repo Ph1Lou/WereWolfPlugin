@@ -159,7 +159,6 @@ public class MainLG extends JavaPlugin {
         });  
 		
 		if(isState(StateLG.LOBBY)) {
-
 			board.registerNewTeam(playername);
 			board.getTeam(playername).addEntry(playername);
 			player.setMaxHealth(20); 

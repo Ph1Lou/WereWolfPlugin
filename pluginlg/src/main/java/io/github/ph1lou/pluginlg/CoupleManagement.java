@@ -25,7 +25,8 @@ public class CoupleManagement {
 	}
 	
 	public void auto_couple() {
-		
+
+		Random r =new Random(System.currentTimeMillis());
 		List<String> pcouple =new ArrayList<>();
 		for(String p:main.playerlg.keySet()) {
 			if(main.playerlg.get(p).isState(State.VIVANT)) {
@@ -39,7 +40,7 @@ public class CoupleManagement {
 		
 		Boolean polygamie =main.config.tool_switch.get(ToolLG.POLYGAMY);
 		
-		if(!polygamie && (main.config.role_count.get(RoleLG.COUPLE)==0 && main.config.role_count.get(RoleLG.CUPIDON)*2>=main.score.getPlayerSize()) || (main.config.role_count.get(RoleLG.COUPLE)!=0 && main.config.role_count.get(RoleLG.CUPIDON)+main.config.role_count.get(RoleLG.CUPIDON)*2>main.score.getPlayerSize())) {
+		if(!polygamie && (main.config.role_count.get(RoleLG.COUPLE)==0 && main.config.role_count.get(RoleLG.CUPIDON)*2>=main.score.getPlayerSize()) || (main.config.role_count.get(RoleLG.COUPLE)!=0 && (main.config.role_count.get(RoleLG.CUPIDON)+main.config.role_count.get(RoleLG.COUPLE))*2>main.score.getPlayerSize())) {
 			polygamie=true;
 			Bukkit.broadcastMessage(main.text.getText(192));
 		}
@@ -54,16 +55,16 @@ public class CoupleManagement {
 					
 					if(pcouple.contains(playername)) {
 						pcouple.remove(playername);
-						j1 = pcouple.get((int) Math.floor(Math.random()*pcouple.size()));
+						j1 = pcouple.get((int) Math.floor(r.nextFloat()*pcouple.size()));
 						pcouple.remove(j1);
-						j2 = pcouple.get((int) Math.floor(Math.random()*pcouple.size()));
+						j2 = pcouple.get((int) Math.floor(r.nextFloat()*pcouple.size()));
 						pcouple.add(j1);
 						pcouple.add(playername);
 					}
 					else {
-						j1 = pcouple.get((int) Math.floor(Math.random()*pcouple.size()));
+						j1 = pcouple.get((int) Math.floor(r.nextFloat()*pcouple.size()));
 						pcouple.remove(j1);
-						j2 = pcouple.get((int) Math.floor(Math.random()*pcouple.size()));
+						j2 = pcouple.get((int) Math.floor(r.nextFloat()*pcouple.size()));
 						pcouple.add(j1);
 					}
 					
@@ -72,7 +73,7 @@ public class CoupleManagement {
 					main.playerlg.get(playername).addAffectedPlayer(j2);
 					main.playerlg.get(playername).setPower(false);	
 					if(Bukkit.getPlayer(playername)!=null) {
-						Bukkit.getPlayer(playername).sendMessage(main.text.getText(12)+j1+" et "+j2);
+						Bukkit.getPlayer(playername).sendMessage(RoleLG.CUPIDON.getPowerHasBeenUse()+j1+" et "+j2);
 					}	
 				}
 				else {
@@ -94,9 +95,9 @@ public class CoupleManagement {
 		}
 		for(int i = 0; i< main.config.role_count.get(RoleLG.COUPLE); i++) {
 			
-			j1 = pcouple.get((int) Math.floor(new Random(System.currentTimeMillis()).nextFloat()*pcouple.size()));
+			j1 = pcouple.get((int) Math.floor(r.nextFloat()*pcouple.size()));
 			pcouple.remove(j1);
-			j2 = pcouple.get((int) Math.floor(new Random(System.currentTimeMillis()).nextFloat()*pcouple.size()));
+			j2 = pcouple.get((int) Math.floor(r.nextFloat()*pcouple.size()));
 			pcouple.add(j1);
 			
 			if(!polygamie) {

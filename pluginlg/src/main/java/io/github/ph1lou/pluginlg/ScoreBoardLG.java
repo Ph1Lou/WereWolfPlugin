@@ -239,7 +239,13 @@ public class ScoreBoardLG {
 					stringbuilder.append("§d ").append(p).append(" ").append(updatearrow(player, Bukkit.getPlayer(p).getLocation()));
 				}
 			}
-			
+			if(main.playerlg.get(player.getName()).isRole(RoleLG.ANGE_GARDIEN)){
+				for (String p:main.playerlg.get(player.getName()).getAffectedPlayer()) {
+					if(main.playerlg.get(p).isState(State.VIVANT) && Bukkit.getPlayer(p)!=null) {
+						stringbuilder.append("§1 ").append(p).append(" ").append(updatearrow(player, Bukkit.getPlayer(p).getLocation()));
+					}
+				}
+			}
 		}
 		if(stringbuilder.length()>0) {
 			Title.sendActionBar(player, stringbuilder.toString());
@@ -254,7 +260,6 @@ public class ScoreBoardLG {
 				main.playerlg.get(board.getPlayer().getName()).setCompoTime(main.playerlg.get(board.getPlayer().getName()).getCompoTime()-1);
 				updateScoreBoardRole(board);
 			}
-
 			else if(main.isState(StateLG.LOBBY)) {
 				updateScoreBoard1(board);	
 			}
@@ -264,8 +269,7 @@ public class ScoreBoardLG {
 				actionBar(board.getPlayer());	
 			} 	
 			else 	
-			    main.score.updateScoreBoard3(board);	
-				
+			    main.score.updateScoreBoard3(board);
 		}
 
 	}

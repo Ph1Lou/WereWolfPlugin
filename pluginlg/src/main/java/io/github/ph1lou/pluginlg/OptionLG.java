@@ -335,27 +335,37 @@ public class OptionLG {
 	public void updateScenario() {
 
 		for(String playername : main.playerlg.keySet()) {
+
 			Scoreboard board = main.playerlg.get(playername).getScoreBoard();
+
 			if(!board.equals(main.board)){
+
 				for(String players : main.playerlg.keySet()) {
-					if(!board.getEntries().contains(playername)){
+
+					if(board.getTeam(players)==null){
 						board.registerNewTeam(players);
 						board.getTeam(players).addEntry(players);
 					}
 					if(main.config.scenario.get(ScenarioLG.NO_NAME_TAG)){
 						board.getTeam(players).setNameTagVisibility(NameTagVisibility.NEVER);
 					}
-					else board.getTeam(players).setNameTagVisibility(NameTagVisibility.ALWAYS);
+					else {
+						if(!main.playerlg.get(players).hasPower() && (main.playerlg.get(players).isRole(RoleLG.LOUP_PERFIDE) || main.playerlg.get(players).isRole(RoleLG.PETITE_FILLE))){
+							board.getTeam(players).setNameTagVisibility(NameTagVisibility.NEVER);
+						}
+						else board.getTeam(players).setNameTagVisibility(NameTagVisibility.ALWAYS);
+					}
 				}
 			}
-			else if(main.config.scenario.get(ScenarioLG.NO_NAME_TAG)){
+			if(main.config.scenario.get(ScenarioLG.NO_NAME_TAG)){
 				main.board.getTeam(playername).setNameTagVisibility(NameTagVisibility.NEVER);
 			}
 			else {
-				if(main.playerlg.get(playername).isRole(RoleLG.LOUP_PERFIDE) || (main.playerlg.get(playername).isRole(RoleLG.PETITE_FILLE) && main.playerlg.get(playername).isCamp(Camp.LG))){
-					if(main.playerlg.get(playername).hasPower()){
-						main.board.getTeam(playername).setNameTagVisibility(NameTagVisibility.ALWAYS);
-					}
+				if(!main.playerlg.get(playername).hasPower() && (main.playerlg.get(playername).isRole(RoleLG.LOUP_PERFIDE) || main.playerlg.get(playername).isRole(RoleLG.PETITE_FILLE))){
+					main.board.getTeam(playername).setNameTagVisibility(NameTagVisibility.NEVER);
+				}
+				else {
+					main.board.getTeam(playername).setNameTagVisibility(NameTagVisibility.ALWAYS);
 				}
 			}
 		}

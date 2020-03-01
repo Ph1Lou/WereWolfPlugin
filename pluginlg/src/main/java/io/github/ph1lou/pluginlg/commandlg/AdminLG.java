@@ -288,6 +288,9 @@ public class AdminLG implements TabExecutor {
 			main.config.role_count.put(role,main.config.role_count.get(role)+1);
 			main.death_manage.resurrection(args[1]);
 			main.score.addPlayerSize();
+			if(role.equals(RoleLG.PETITE_FILLE) || role.equals(RoleLG.LOUP_PERFIDE)){
+				main.playerlg.get(args[1]).setPower(true);
+			}
 			Bukkit.broadcastMessage(main.text.esthetique("§m", "§e",args[1]+main.text.getText(154)));
 			for(Player p:Bukkit.getOnlinePlayers()) {
 				p.playSound(p.getLocation(), Sound.AMBIENCE_THUNDER,1,20);
@@ -299,7 +302,7 @@ public class AdminLG implements TabExecutor {
 			Bukkit.broadcastMessage(main.text.getText(150));
 			for(Player p:Bukkit.getOnlinePlayers()) {
 				p.setHealth(p.getMaxHealth());
-				p.playSound(p.getLocation(), Sound.PORTAL_TRAVEL,0,2);
+				p.playSound(p.getLocation(), Sound.NOTE_STICKS,1,20);
 			}
 			break;
 		
