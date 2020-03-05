@@ -300,7 +300,7 @@ public class RoleManagementLG {
 		
 	}
 
-	public void frereLife() {
+	public void brotherLife() {
 
 		int nbok = 0;
 		double health = 0;

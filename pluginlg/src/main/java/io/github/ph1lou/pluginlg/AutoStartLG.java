@@ -35,7 +35,7 @@ public class AutoStartLG extends BukkitRunnable{
 		main.prox_lg.sister_proximity();
 		main.prox_lg.renard_proximity();
 		main.death_manage.deathtimer();
-		main.role_manage.frereLife();
+		main.role_manage.brotherLife();
 		
 		if (main.score.getTimer()==main.config.value.get(TimerLG.ROLE_DURATION)) {
 
@@ -59,14 +59,11 @@ public class AutoStartLG extends BukkitRunnable{
 
 		}
 		if(main.score.getTimer()==main.config.value.get(TimerLG.COUPLE_DURATION) + main.config.value.get(TimerLG.ROLE_DURATION)) {
-
 			main.couple_manage.auto_couple();
 
 		}
 		if(main.score.getTimer()==main.config.value.get(TimerLG.ANGE_DURATION) + main.config.value.get(TimerLG.ROLE_DURATION)) {
-
 			main.role_manage.auto_ange() ;
-
 		}
 		
 		if(main.config.tool_switch.get(ToolLG.LG_LIST) && main.score.getTimer()==main.config.value.get(TimerLG.LG_LIST)) {
@@ -77,17 +74,15 @@ public class AutoStartLG extends BukkitRunnable{
 		
 		
 		if(main.score.getTimer()>main.config.value.get(TimerLG.BORDER_BEGIN) ) {
-			
+
 			if(wb.getSize()==main.config.border_value.get(BorderLG.BORDER_MAX) && wb.getSize()!=main.config.border_value.get(BorderLG.BORDER_MIN)) {
 				Bukkit.broadcastMessage(main.text.getText(7));
 				for(Player p:Bukkit.getOnlinePlayers()) {
 					p.playSound(p.getLocation(), Sound.FIREWORK_LAUNCH,1,20);
 				}
 			}
-			if(wb.getSize()>main.config.border_value.get(BorderLG.BORDER_MIN)) {
-				wb.setSize(wb.getSize()-0.5);
-				wb.setWarningDistance((int) (wb.getSize()/7));
-			}
+
+			wb.setSize(main.config.border_value.get(BorderLG.BORDER_MIN),main.config.value.get(TimerLG.BORDER_DURATION)-main.score.getTimer()+main.config.value.get(TimerLG.BORDER_BEGIN));
 		}
 		
 		if(main.score.getTimer()==main.config.value.get(TimerLG.DIGGING)) {
@@ -122,7 +117,6 @@ public class AutoStartLG extends BukkitRunnable{
 			main.setDay(Day.DAY);
 			world.setTime(0);
 			if(main.config.tool_switch.get(ToolLG.VOTE) && main.score.getPlayerSize()<main.config.getPlayerRequiredVoteEnd()) {
-				
 				main.config.tool_switch.put(ToolLG.VOTE,false);
 				Bukkit.broadcastMessage(main.text.getText(9));
 			}

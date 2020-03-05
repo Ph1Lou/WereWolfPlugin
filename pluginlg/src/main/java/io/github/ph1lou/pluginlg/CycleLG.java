@@ -120,6 +120,8 @@ public class CycleLG {
 
 				Player player = Bukkit.getPlayer(playername);
 
+				Title.removeBar(player);
+
 				if(plg.isRole(RoleLG.CITOYEN)){
 					player.sendMessage(main.text.esthetique("§m", "§6",RoleLG.CITOYEN.getPowerUse()+main.conversion(main.config.value.get(TimerLG.CITIZEN_DURATION))));
 				}
@@ -135,10 +137,7 @@ public class CycleLG {
 		
 		if(!main.isState(StateLG.LG)) return;
 		
-		if(main.config.tool_switch.get(ToolLG.VOTE) && main.score.getTimer()>=main.config.value.get(TimerLG.VOTE_BEGIN)) {
-			Bukkit.broadcastMessage(main.text.esthetique("§m", "§6",main.text.getText(17)+main.conversion(main.config.value.get(TimerLG.VOTE_DURATION))));
 
-		}
 		for(String playername:main.playerlg.keySet()) {
 			
 			PlayerLG plg = main.playerlg.get(playername);
@@ -148,6 +147,12 @@ public class CycleLG {
 				Player player = Bukkit.getPlayer(playername);	
 				
 				player.playSound(player.getLocation(), Sound.DOOR_OPEN,1,20);
+
+				if(main.config.tool_switch.get(ToolLG.VOTE) && main.score.getTimer()>=main.config.value.get(TimerLG.VOTE_BEGIN)) {
+					player.sendMessage(main.text.esthetique("§m", "§6",main.text.getText(17)+main.conversion(main.config.value.get(TimerLG.VOTE_DURATION))));
+					Title.removeBar(player);
+					Title.sendBar(player, "Vote", 100);
+				}
 				
 				if(plg.isRole(RoleLG.MONTREUR_OURS)){
 					

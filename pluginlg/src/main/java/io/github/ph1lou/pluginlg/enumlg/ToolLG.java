@@ -13,7 +13,7 @@ public enum ToolLG {
 	EVENT_VOYANTE_DEATH(true,"Event à la mort d'une Voyante"),
 	AUTO_REZ_WITCH(false,"la Sorcière peut s'autorez"),
 	AUTO_REZ_INFECT(false,"L'infect peut s'infecter"),
-	POLYGAMY(true,"Polygamie"),
+	POLYGAMY(false,"Polygamie"),
 	AUTO_GROUP(true,"Groupe Auto");
 
 	private final Boolean value;

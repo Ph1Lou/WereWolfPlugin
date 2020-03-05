@@ -281,7 +281,7 @@ public class ScenarioListener implements Listener {
     }
     @EventHandler
     public void onProjectileThrownEvent(ProjectileLaunchEvent event) {
-        if(event.getEntity() instanceof Snowball && !main.config.scenario.get(ScenarioLG.SNOWBALL)) {
+        if(event.getEntity() instanceof Snowball && !main.config.scenario.get(ScenarioLG.NO_SNOWBALL)) {
             event.setCancelled(true);
         }
     }

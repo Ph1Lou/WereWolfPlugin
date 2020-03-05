@@ -66,11 +66,14 @@ public class PlayerListener implements Listener {
 			event.setCancelled(true);
 		}
 	}
-	
+
+
+
 	@EventHandler
 	private void onPlayerDamage(EntityDamageEvent event) {
 
 		if (!(event.getEntity() instanceof Player)) return;
+
 		Player player = (Player) event.getEntity();
 		String playername = player.getName();
 		if(player.getGameMode().equals(GameMode.ADVENTURE)) {
@@ -85,11 +88,17 @@ public class PlayerListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-		if(event.getCause().equals(EntityDamageEvent.DamageCause.POISON) && !main.config.scenario.get(ScenarioLG.POISON)) {
+		if(event.getCause().equals(EntityDamageEvent.DamageCause.POISON) && main.config.scenario.get(ScenarioLG.NO_POISON)) {
 			event.setCancelled(true);
 			return;
 		}
 		if (player.getKiller() == null) return;
+		if(main.config.scenario.get(ScenarioLG.SLOW_BOW) && event.getCause().equals(EntityDamageEvent.DamageCause.PROJECTILE )) {
+			player.removePotionEffect(PotionEffectType.SLOW);
+			player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100,0,false,false));
+			return;
+		}
+
 		String killername = player.getKiller().getName();
 		if (!main.playerlg.containsKey(killername)) return;
 		if ((main.playerlg.get(killername).isRole(RoleLG.ASSASSIN) && !main.isDay(Day.NIGHT)) || (main.playerlg.get(killername).isCamp(Camp.LG) && main.isDay(Day.NIGHT)) ) {

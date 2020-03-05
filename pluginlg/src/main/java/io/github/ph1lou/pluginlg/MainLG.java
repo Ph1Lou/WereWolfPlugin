@@ -50,10 +50,7 @@ public class MainLG extends JavaPlugin {
 	public final EndLG endlg = new EndLG(this);
 	public final FileLG filelg = new FileLG();
 	public final StuffLG stufflg = new StuffLG();
-	public final String loupid = "1Lou";
 
-
-	
 	
 	@Override
 	public void onEnable() {
@@ -144,11 +141,12 @@ public class MainLG extends JavaPlugin {
 	public void joinPlayer(Player player) {
 
 
+
 		String playername = player.getName();
 		FastBoard fastboard = new FastBoard(player);
 		fastboard.updateTitle(text.getText(125));
         boards.put(player.getUniqueId(), fastboard);
-		Title.sendTabTitle(player, text.getText(0), text.getText(184)+"P"+"h"+loupid);
+		Title.sendTabTitle(player, text.getText(0), text.getText(184));
 		new UpdateChecker(this, 73113).getVersion(version -> {
 			
 			ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();

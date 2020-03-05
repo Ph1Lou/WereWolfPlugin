@@ -3,7 +3,7 @@ package io.github.ph1lou.pluginlg.enumlg;
 public enum TimerLG {
 	ROLE_DURATION(1200,"Révélation des Rôles"),
 	LG_LIST(1800,"Révélation de la liste des Loups"),
-	PVP(2100,"PVP"),
+	PVP(1800,"PVP"),
 	VOTE_BEGIN(2400,"Début des Votes"),
 	BORDER_BEGIN(3600,"Début de la Bordure"),
 	DIGGING(4200,"Fin du Minage"),
@@ -14,6 +14,7 @@ public enum TimerLG {
 	DAY_DURATION(300,"Durée du Jour/Nuit"),
 	VOTE_DURATION(180,"Durée du Vote"),
 	POWER_DURATION(240,"Durée d'utilisation des pouvoirs le Matin"),
+	BORDER_DURATION(2700,"Durée de réduction de la bordure"),
 	RENARD_SMELL_DURATION(180,"Durée du Flair du Renard");
 
 	private final int value;

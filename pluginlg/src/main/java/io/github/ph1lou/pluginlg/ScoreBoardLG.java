@@ -268,8 +268,11 @@ public class ScoreBoardLG {
 				updateScoreBoard2(board);
 				actionBar(board.getPlayer());	
 			} 	
-			else 	
-			    main.score.updateScoreBoard3(board);
+			else main.score.updateScoreBoard3(board);
+
+			if(Title.hasBar(board.getPlayer())){
+				Title.teleportBar(board.getPlayer(),(-this.getTimer()%(main.config.value.get(TimerLG.DAY_DURATION)*2)/(float)main.config.value.get(TimerLG.VOTE_DURATION)+1)*100 ,"Vote");
+			}
 		}
 
 	}

@@ -129,7 +129,7 @@ public class TextLG {
 					esthetique("§6§m", "§4","La liste des Loups Garous n'est pas activée"),
 			/*100*/	esthetique("§6§m", "§4","La liste des Loups Garous n'est pas encore dévoilée"),
 					"§4Liste des Loups Garous :§r ",
-					"§6/lg timer §9Pour voir les timers\n§6/lg regles §9Pour voir les règles\n§6/lg compo §9Pour voir la compo\n§6/lg role §9Pour voir votre rôle",
+					"§6/lg timer §9Pour voir les timers\n§6/lg regles §9Pour voir les règles\n§6/lg compo §9Pour voir la compo\n§6/lg role §9Pour voir votre rôle\n§6/lg scenarios §9Pour voir les scenarios",
 					esthetique("§6§m", "§4","Votre pouvoir ne peut pas encore être utilisé ou a déja été utilisé"),
 					esthetique("§6§m", "§4","Vous devez sélectionner deux joueurs différents"),
 					esthetique("§6§m", "§4","Vous ne pouvez pas vous choisir vous même"),

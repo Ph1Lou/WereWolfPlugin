@@ -13,7 +13,6 @@ import org.bukkit.potion.PotionEffectType;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
-import java.util.Random;
 
 
 public class DeathManagementLG {
@@ -49,7 +48,6 @@ public class DeathManagementLG {
 					killer.setHealth(Math.min(killer.getHealth() + 4, killer.getMaxHealth()));
 				}
 				if(!klg.isCamp(Camp.VILLAGE)){
-	
 					killer.removePotionEffect(PotionEffectType.ABSORPTION);
 					killer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1200,0,false,false));
 					killer.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 1200,0,false,false));	
@@ -174,14 +172,11 @@ public class DeathManagementLG {
 		main.config.role_count.put(role,main.config.role_count.get(role)-1);
 		plg.setState(State.MORT);
 		main.score.removePlayerSize();
-		
-		
+
 		if(main.config.tool_switch.get(ToolLG.SHOW_ROLE_TO_DEATH)) {
 			Bukkit.broadcastMessage(main.text.esthetique("§m", "§4",playername+main.text.getText(28)+main.text.translaterole.get(role)));
 		}
 		else Bukkit.broadcastMessage(main.text.esthetique("§m", "§4",playername+main.text.getText(29)));
-	
-
 		
 		for(ItemStack i:plg.getItemDeath()) {
 			if(i!=null) {
@@ -222,17 +217,17 @@ public class DeathManagementLG {
 		}
 		
 		if (role.equals(RoleLG.TRUBLION)) {
-			trubliondeath();
+			trublionDeath();
 		}
 		if (!plg.getTargetOf().isEmpty()) {
-			cibledeath(playername);
+			targetDeath(playername);
 		}
 		if(!plg.getDisciple().isEmpty()) {
 			masterdeath(playername);
 		}
 
 		if(role.equals(RoleLG.SOEUR)) {
-			soeurdeath(playername) ;
+			sisterDeath(playername) ;
 		}
 		if(role.equals(RoleLG.FRERE_SIAMOIS)){
 			int siam=0;
@@ -322,14 +317,14 @@ public class DeathManagementLG {
 			}
 			player.setHealth(player.getMaxHealth());
 		}	
-		main.eparpillement(playername, new Random(System.currentTimeMillis()).nextFloat()*Bukkit.getOnlinePlayers().size(), main.text.getText(31));
+		main.eparpillement(playername, Math.random()*Bukkit.getOnlinePlayers().size(), main.text.getText(31));
 		main.playerlg.get(playername).setState(State.VIVANT);
 		if(!main.isState(StateLG.FIN)) {
 			main.endlg.check_victory();
 		}
 	}
 	
-	private void trubliondeath() {
+	private void trublionDeath() {
 		int i=0;
 		for (String p:main.playerlg.keySet()) {
 			if(main.playerlg.get(p).isState(State.VIVANT)) {
@@ -339,7 +334,7 @@ public class DeathManagementLG {
 		}
 	}
 	
-	private void soeurdeath(String playername) {
+	private void sisterDeath(String playername) {
 		
 		for(String soeurname:main.playerlg.keySet()) {
 			if(main.playerlg.get(soeurname).isState(State.VIVANT) && main.playerlg.get(soeurname).isRole(RoleLG.SOEUR) && Bukkit.getPlayer(soeurname)!=null) {
@@ -348,7 +343,7 @@ public class DeathManagementLG {
 		}
 	}
 	
-	private void cibledeath(String playername) {
+	private void targetDeath(String playername) {
 		
 		for(String angename:main.playerlg.get(playername).getTargetOf()) {
 			

@@ -65,6 +65,16 @@ public class CommandLG implements TabExecutor {
 					else sender.sendMessage(main.text.getText(168)+main.text.translatetool.get(tool));
 				}
 				break;
+			case "scenarios":
+
+				for(ScenarioLG scenario:ScenarioLG.values()) {
+
+					if(main.config.scenario.get(scenario)) {
+						sender.sendMessage(main.text.getText(169)+main.text.translatescenario.get(scenario));
+					}
+					else sender.sendMessage(main.text.getText(168)+main.text.translatescenario.get(scenario));
+				}
+				break;
 			case "timer":
 
 				for(TimerLG timer:TimerLG.values()) {
@@ -497,7 +507,7 @@ public class CommandLG implements TabExecutor {
 
 	@Override
 	public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] args) {
-		String[] tabe = {"compo","regles","timer","vote","maudire","couple","flairer","slv","maitre","switch","voir","inspecter","role","lg","dechu","gardien","depouillement","cancelvote"};
+		String[] tabe = {"compo","regles","timer","vote","scenarios","maudire","couple","flairer","slv","maitre","switch","voir","inspecter","role","lg","dechu","gardien","depouillement","cancelvote"};
 		List<String> tab = new ArrayList<>(Arrays.asList(tabe));
 		if(args.length==0){
 			return tab;
