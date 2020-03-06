@@ -1,8 +1,5 @@
 package io.github.ph1lou.pluginlg;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import io.github.ph1lou.pluginlg.enumlg.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -10,6 +7,9 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CycleLG {
 	
