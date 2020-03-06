@@ -46,7 +46,7 @@ public class OptionLG {
 		Inventory inv = Bukkit.createInventory(null, 45,main.text.getText(176));
 		inv.setItem(0, changeMeta(Material.COMPASS,main.text.getText(170),1));
 		inv.setItem(8, changeMeta(Material.BARRIER,main.text.getText(183),1));
-		updateselection(inv, 0);
+		updateselection(inv);
 		player.openInventory(inv);
 	}
 	
@@ -161,7 +161,7 @@ public class OptionLG {
 			}
 			main.config.role_count.put(RoleLG.values()[i],compt-1);
 			main.score.updateBoard();
-			updateselection(inv, i);
+			updateselection(inv);
 		}
 	}
 
@@ -173,7 +173,7 @@ public class OptionLG {
 			main.score.setRole(main.score.getRole()+1);
 		}
 		main.score.updateBoard();
-		updateselection(inv, i);
+		updateselection(inv);
 	}
 	
 	public void selectmoinsbordure(Inventory inv) {
@@ -246,10 +246,7 @@ public class OptionLG {
 		updateselectiontimer(inv,i);
 	}
 	
-	public void updateselection(Inventory inv,int j){
-		
-
-		inv.setItem(4, changeMeta(Material.BEACON,main.text.getText(200)+main.text.translaterole.get(RoleLG.values()[j]),1));
+	public void updateselection(Inventory inv){
 		
 		for (int i=0;i<RoleLG.values().length;i++) {
 
@@ -366,7 +363,7 @@ public class OptionLG {
 			main.config.role_count.put(RoleLG.values()[i],0);
 		}
 		main.score.setRole(0);
-		updateselection(inv, findSelect(inv));
+		updateselection(inv);
 		main.score.updateBoard();
 	}
 

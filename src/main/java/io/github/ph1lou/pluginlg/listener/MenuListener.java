@@ -120,13 +120,29 @@ public class MenuListener implements Listener{
 
 
 				if(current.getType()==Material.EMERALD || current.getType()==Material.REDSTONE){
+
+					if(event.getClick().isShiftClick()) {
+						player.setGameMode(GameMode.CREATIVE);
+						player.getInventory().clear();
+						int j = (event.getSlot()-9);
+						for(ItemStack i:main.stufflg.role_stuff.get(RoleLG.values()[j])) {
+							if(i!=null) {
+								player.getInventory().addItem(i);
+							}
+						}
+						TextComponent msgd = new TextComponent(main.text.getText(198));
+						msgd.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/adminlg stuffrole "+j));
+						player.spigot().sendMessage(msgd);
+						player.closeInventory();
+					}
 					if(event.getClick().isRightClick()){
 						main.optionlg.selectmoins(invent,(event.getSlot()-9));
 					}
 					else{
 						main.optionlg.selectplus(invent,(event.getSlot()-9));
 					}
-					main.optionlg.updateselection(invent, (event.getSlot()-9));
+
+					//main.optionlg.updateselection(invent);
 				}
 				if(current.getType()==Material.COMPASS) {
 					main.optionlg.toolbar(player);
@@ -134,22 +150,7 @@ public class MenuListener implements Listener{
 				if(current.getType()==Material.BARRIER) {
 					main.optionlg.resetrole(invent);
 				}
-				if(current.getType()==Material.BEACON) {
-					
-					player.setGameMode(GameMode.CREATIVE);
-					player.getInventory().clear();
-					
-					int j = main.optionlg.findSelect(invent);
-					for(ItemStack i:main.stufflg.role_stuff.get(RoleLG.values()[j])) {
-						if(i!=null) {
-							player.getInventory().addItem(i);
-						}		
-					}	
-					TextComponent msgd = new TextComponent(main.text.getText(198));
-					msgd.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/adminlg stuffrole "+j));
-					player.spigot().sendMessage(msgd);	
-					player.closeInventory();
-				}
+
 			}
 			else if(view.getTitle().equals(main.text.getText(179))) {
 

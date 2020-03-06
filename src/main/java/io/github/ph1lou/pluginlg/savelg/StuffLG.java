@@ -48,7 +48,7 @@ public class StuffLG {
         
         for(RoleLG role:RoleLG.values()) {
         	for (ItemStack i : role_stuff.get(role)) {
-                main.getConfig().set("save"+number + "" +role.toString()+ "." + pos , i);
+                main.getConfig().set("save"+number + "." +role.toString()+ "." + pos , i);
                 pos++;
             }
         	pos = 0;
@@ -75,10 +75,10 @@ public class StuffLG {
     	for(RoleLG role:RoleLG.values()) {
     		
     		role_stuff.put(role, new ArrayList<>());
-    		if(main.getConfig().getItemStack("save"+number + "" +role.toString()+".0")!=null) {
-				Set<String> sl = main.getConfig().getConfigurationSection("save"+number + "" +role.toString()+".").getKeys(false);
+    		if(main.getConfig().getItemStack("save"+number + "." +role.toString()+".0")!=null) {
+				Set<String> sl = main.getConfig().getConfigurationSection("save"+number + "." +role.toString()+".").getKeys(false);
 				for (String s : sl) {
-    				role_stuff.get(role).add(main.getConfig().getItemStack("save"+number + "" +role.toString()+ "." + s));
+    				role_stuff.get(role).add(main.getConfig().getItemStack("save"+number + "." +role.toString()+ "." + s));
  		        }
 			}
     	}
