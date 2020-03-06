@@ -152,9 +152,8 @@ public class OptionLG {
 		return (i-9);
 	}
 	
-	public void selectmoins(Inventory inv) {
-		
-		int i = findSelect(inv) ;
+	public void selectmoins(Inventory inv, int i) {
+
 		int compt = main.config.role_count.get(RoleLG.values()[i]);
 		if(compt>0) {
 			if(!RoleLG.values()[i].equals(RoleLG.COUPLE)) {
@@ -166,9 +165,8 @@ public class OptionLG {
 		}
 	}
 
-	public void selectplus(Inventory inv) {
-		
-		int i = findSelect(inv) ;
+	public void selectplus(Inventory inv, int i) {
+
 		int compt = main.config.role_count.get(RoleLG.values()[i]);
 		main.config.role_count.put(RoleLG.values()[i],compt+1);
 		if(!RoleLG.values()[i].equals(RoleLG.COUPLE)) {
@@ -254,15 +252,8 @@ public class OptionLG {
 		inv.setItem(4, changeMeta(Material.BEACON,main.text.getText(200)+main.text.translaterole.get(RoleLG.values()[j]),1));
 		
 		for (int i=0;i<RoleLG.values().length;i++) {
-			
-			if(i==j) {
-				if(main.config.role_count.get(RoleLG.values()[i])==0) {
-					inv.setItem(9+i, changeMeta(Material.FEATHER,main.text.translaterole.get(RoleLG.values()[i]),1));
-				}
-				else inv.setItem(9+i, changeMeta(Material.FEATHER,main.text.translaterole.get(RoleLG.values()[i]),main.config.role_count.get(RoleLG.values()[i])));
-			}
-			else if (main.config.role_count.get(RoleLG.values()[i])>0) {
-				
+
+			if (main.config.role_count.get(RoleLG.values()[i])>0) {
 				inv.setItem(9+i, changeMeta(Material.EMERALD,main.text.translaterole.get(RoleLG.values()[i]),main.config.role_count.get(RoleLG.values()[i])));
 			}
 			else inv.setItem(9+i, changeMeta(Material.REDSTONE,main.text.translaterole.get(RoleLG.values()[i]),1));

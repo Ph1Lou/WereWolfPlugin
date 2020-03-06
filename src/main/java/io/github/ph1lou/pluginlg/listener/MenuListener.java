@@ -118,13 +118,14 @@ public class MenuListener implements Listener{
 
 				event.setCancelled(true);
 
-				if(event.getClick().isRightClick()){
-					main.optionlg.selectmoins(invent);
-				}
-				else{
-					main.optionlg.selectplus(invent);
-				}
+
 				if(current.getType()==Material.EMERALD || current.getType()==Material.REDSTONE){
+					if(event.getClick().isRightClick()){
+						main.optionlg.selectmoins(invent,(event.getSlot()-9));
+					}
+					else{
+						main.optionlg.selectplus(invent,(event.getSlot()-9));
+					}
 					main.optionlg.updateselection(invent, (event.getSlot()-9));
 				}
 				if(current.getType()==Material.COMPASS) {

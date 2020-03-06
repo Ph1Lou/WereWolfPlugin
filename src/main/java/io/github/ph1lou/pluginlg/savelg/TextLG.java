@@ -358,7 +358,9 @@ public void getTextTranslate(MainLG main, String filename) {
 		message=colorentete+"§l[LG UHC]§r "+message;
 		int taille=64-message.length();
 
-		vide.append(" ".repeat(Math.max(0, taille / 2)));
+		for(int i=0;i<taille/2;i++) {
+			vide.append(" ");
+		}
 		message=vide+message;
 		
 		return(colortrait+"§l-+-----------------------------------------+-\n§f"+message+"\n§r"+colortrait+"§l-+-----------------------------------------+-");
