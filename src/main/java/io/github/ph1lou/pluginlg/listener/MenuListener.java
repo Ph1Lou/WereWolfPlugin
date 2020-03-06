@@ -177,22 +177,22 @@ public class MenuListener implements Listener{
 					main.optionlg.updateselectiontimer(invent, (event.getSlot()-9));
 				}
 				if(current.getType()==Material.STONE_BUTTON && event.getSlot()==1) {
-					main.optionlg.selectmoinsmoinsmoinstimer(invent);
+					main.optionlg.selectmoinstimer(invent,600);
 				}
 				if(current.getType()==Material.STONE_BUTTON && event.getSlot()==2) {
-					main.optionlg.selectmoinsmoinstimer(invent);
+					main.optionlg.selectmoinstimer(invent,60);
 				}
 				if(current.getType()==Material.STONE_BUTTON && event.getSlot()==3) {
-					main.optionlg.selectmoinstimer(invent);
+					main.optionlg.selectmoinstimer(invent,10);
 				}
 				if(current.getType()==Material.STONE_BUTTON && event.getSlot()==5) {
-					main.optionlg.selectplustimer(invent);
+					main.optionlg.selectplustimer(invent,10);
 				}
 				if(current.getType()==Material.STONE_BUTTON && event.getSlot()==6) {
-					main.optionlg.selectplusplustimer(invent);
+					main.optionlg.selectplustimer(invent,60);
 				}
 				if(current.getType()==Material.STONE_BUTTON && event.getSlot()==7) {
-					main.optionlg.selectplusplusplustimer(invent);
+					main.optionlg.selectplustimer(invent,600);
 				}
 				if(current.getType()==Material.COMPASS) {
 					main.optionlg.toolbar(player);
