@@ -19,7 +19,7 @@ public class CycleLG {
 		this.main=main;	
 	}
 	
-	public void nuit() {
+	public void night() {
 		
 		Bukkit.broadcastMessage(main.text.getText(124));
 		
@@ -56,7 +56,7 @@ public class CycleLG {
 		}
 	}
 	
-	public void finselection() {
+	public void selectionEnd() {
 		
 		if(!main.isState(StateLG.LG)) return;
 		
@@ -87,7 +87,7 @@ public class CycleLG {
 			}
 		}
 	}
-	public void prejour() {
+	public void preDay() {
 		
 	
 		if(!main.isState(StateLG.LG)) return;
@@ -107,7 +107,7 @@ public class CycleLG {
 		}
 	}
 
-	public void prevoteresult() {
+	public void preVoteResult() {
 
 
 		if(!main.isState(StateLG.LG)) return;
@@ -130,7 +130,7 @@ public class CycleLG {
 	}
 				
 				
-	public void jour() {
+	public void day() {
 		
 	
 		Bukkit.broadcastMessage(main.text.getText(16));

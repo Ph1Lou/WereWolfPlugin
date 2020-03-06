@@ -120,28 +120,28 @@ public class AutoStartLG extends BukkitRunnable{
 				main.config.tool_switch.put(ToolLG.VOTE,false);
 				Bukkit.broadcastMessage(main.text.getText(9));
 			}
-			main.cycle.jour();
+			main.cycle.day();
 		}
 		
 		if(main.score.getTimer()%(main.config.value.get(TimerLG.DAY_DURATION)*2) == main.config.value.get(TimerLG.VOTE_DURATION) ){
 			if(main.config.tool_switch.get(ToolLG.VOTE) && main.score.getTimer()-main.config.value.get(TimerLG.VOTE_DURATION)>=main.config.value.get(TimerLG.VOTE_BEGIN)) {
-				main.cycle.prevoteresult();
+				main.cycle.preVoteResult();
 			}
 		}
 		if(main.score.getTimer()%(main.config.value.get(TimerLG.DAY_DURATION)*2) == main.config.value.get(TimerLG.VOTE_DURATION)+main.config.value.get(TimerLG.CITIZEN_DURATION) ){
 			main.vote.showresultatvote(main.vote.getResult());
 		}
 		if(main.score.getTimer()%(main.config.value.get(TimerLG.DAY_DURATION)*2) == main.config.value.get(TimerLG.POWER_DURATION) ){
-			main.cycle.finselection();
+			main.cycle.selectionEnd();
 		}
 		if(main.score.getTimer()%(main.config.value.get(TimerLG.DAY_DURATION)*2) == main.config.value.get(TimerLG.DAY_DURATION)*2-30 ){
-			main.cycle.prejour();
+			main.cycle.preDay();
 		}
 
 		if (main.score.getTimer()%(main.config.value.get(TimerLG.DAY_DURATION)*2)==main.config.value.get(TimerLG.DAY_DURATION) && !main.isDay(Day.NIGHT)) {
 			main.setDay(Day.NIGHT);
 			world.setTime(12000);
-			main.cycle.nuit();
+			main.cycle.night();
 		}
 			
 		world.setTime((long) (time+20*(600f/main.config.value.get(TimerLG.DAY_DURATION)-1)));
