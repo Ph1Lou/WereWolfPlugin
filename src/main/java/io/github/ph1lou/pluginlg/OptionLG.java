@@ -26,46 +26,45 @@ public class OptionLG {
 		this.main=main;
 	}
 	
-	public void toolbar(Player player) {
+	public void toolBar(Player player) {
 
 		Inventory inv = Bukkit.createInventory(null, 18,main.text.getText(175));
 		inv.setItem(1, changeMeta(Material.BEACON,main.text.getText(176),1,null));
 		inv.setItem(3, changeMeta(Material.ANVIL,main.text.getText(177),1,null));
 		inv.setItem(5, changeMeta(Material.MAP,main.text.getText(178),1,null));
-		inv.setItem(7, changeMeta(Material.CHEST,main.text.getText(182),1,null));
+		inv.setItem(7, changeMeta(Material.CHEST,main.text.getText(77),1,null));
 		inv.setItem(10, changeMeta(Material.GLASS,main.text.getText(179),1,null));
 		inv.setItem(12, changeMeta(Material.ARMOR_STAND,main.text.getText(180),1,null));
 		inv.setItem(14, changeMeta(Material.PUMPKIN,main.text.getText(76),1,null));
-		inv.setItem(16, changeMeta(Material.CHEST,main.text.getText(181),1,null));
 		player.openInventory(inv);
 	}
 	
-	public void chooserole(Player player) {
+	public void chooseRole(Player player) {
 		
 		Inventory inv = Bukkit.createInventory(null, 45,main.text.getText(176));
 		inv.setItem(0, changeMeta(Material.COMPASS,main.text.getText(170),1,null));
 		inv.setItem(8, changeMeta(Material.BARRIER,main.text.getText(183),1,null));
-		updateselection(inv);
+		updateSelection(inv);
 		player.openInventory(inv);
 	}
 	
-	public void timertool(Player player) {
+	public void timerTool(Player player) {
 		
 		Inventory inv = Bukkit.createInventory(null, 27,main.text.getText(177));
 		inv.setItem(0, changeMeta(Material.COMPASS,main.text.getText(170),1,null));
-		updateselectiontimer(inv, 0);
+		updateSelectionTimer(inv, 0);
 		player.openInventory(inv);
 	}
 	
-	public void globaltool(Player player) {
+	public void globalTool(Player player) {
 		
 		Inventory inv = Bukkit.createInventory(null, 36,main.text.getText(178));
 		inv.setItem(0, changeMeta(Material.COMPASS,main.text.getText(170),1,null));
-		updateselectiontool(inv);
+		updateSelectionTool(inv);
 		player.openInventory(inv);
 	}
 
-	public void globalscenario(Player player) {
+	public void globalScenario(Player player) {
 
 		Inventory inv = Bukkit.createInventory(null, 36,main.text.getText(76));
 		inv.setItem(0, changeMeta(Material.COMPASS,main.text.getText(170),1,null));
@@ -74,23 +73,36 @@ public class OptionLG {
 	}
 
 	
-	public void borduretool(Player player) {
+	public void borderTool(Player player) {
 		
 		Inventory inv = Bukkit.createInventory(null, 18,main.text.getText(179));
 		inv.setItem(0, changeMeta(Material.COMPASS,main.text.getText(170),1,null));
-		updateselectionbordure(inv,0);
+		updateSelectionBorder(inv,0);
 		player.openInventory(inv);
 	}
 	
-	public void savetool(Player player) {
+	public void saveTool(Player player) {
 		
 		Inventory inv = Bukkit.createInventory(null, 18,main.text.getText(180));
 		inv.setItem(0, changeMeta(Material.COMPASS,main.text.getText(170),1,null));
-		updateselectionsave(inv, 1);
+		updateSelectionSave(inv, 1);
 		player.openInventory(inv);
 	}
 
-	public void updateselectionsave(Inventory inv, int j) {
+	public void stuffTool(Player player) {
+
+		Inventory inv = Bukkit.createInventory(null, 18,main.text.getText(77));
+		inv.setItem(0, changeMeta(Material.COMPASS,main.text.getText(170),1,null));
+		inv.setItem(2, changeMeta(Material.EGG,"Charger Stuff Role normal",1,null));
+		inv.setItem(4, changeMeta(Material.GOLD_SWORD,"Charger Stuff MeetUp",1,null));
+		inv.setItem(6, changeMeta(Material.JUKEBOX,"Charger Stuff Depart Chill",1,null));
+		inv.setItem(10, changeMeta(Material.BARRIER,"Clear le Stuff de Départ et Mort",1,null));
+		inv.setItem(13, changeMeta(Material.CHEST,main.text.getText(182),1,null));
+		inv.setItem(16, changeMeta(Material.ENDER_CHEST,main.text.getText(181),1,null));
+		player.openInventory(inv);
+	}
+
+	public void updateSelectionSave(Inventory inv, int j) {
 		
 		for(int i=1;i<9;i++) {
 			
@@ -115,25 +127,25 @@ public class OptionLG {
 		int j= findSelect(inv)+9;
 		main.config.getConfig(main, j);
 		main.stufflg.load(main, j);
-		updateselectionsave(inv, j);
+		updateSelectionSave(inv, j);
 	}
 	
-	public void saveorerase(Inventory inv) {
+	public void saveOrErase(Inventory inv) {
 		
 		int i= findSelect(inv)+9;
 		File file = new File(main.getDataFolder(), "save"+i+".json");
 		main.filelg.save(file, main.serialize.serialize(main.config));
 		main.stufflg.save(main, i);
-		updateselectionsave(inv, i);
+		updateSelectionSave(inv, i);
 	}
 
 	
 
-	public ItemStack changeMeta(Material m, String itemname, int i, List<String> lore) {
+	public ItemStack changeMeta(Material m, String item_name, int i, List<String> lore) {
 		
 		ItemStack item1 = new ItemStack(m,i);
 		ItemMeta meta1 = item1.getItemMeta();
-		meta1.setDisplayName(itemname);
+		meta1.setDisplayName(item_name);
 		meta1.setLore(lore);
 		item1.setItemMeta(meta1);
 		return item1;
@@ -152,67 +164,67 @@ public class OptionLG {
 		return (i-9);
 	}
 	
-	public void selectmoins(Inventory inv, int i) {
+	public void selectMoins(Inventory inv, int i) {
 
-		int compt = main.config.role_count.get(RoleLG.values()[i]);
-		if(compt>0) {
+		int j = main.config.role_count.get(RoleLG.values()[i]);
+		if(j>0) {
 			if(!RoleLG.values()[i].equals(RoleLG.COUPLE)) {
 				main.score.setRole(main.score.getRole()-1);
 			}
-			main.config.role_count.put(RoleLG.values()[i],compt-1);
+			main.config.role_count.put(RoleLG.values()[i],j-1);
 			main.score.updateBoard();
-			updateselection(inv);
+			updateSelection(inv);
 		}
 	}
 
-	public void selectplus(Inventory inv, int i) {
+	public void selectPlus(Inventory inv, int i) {
 
-		int compt = main.config.role_count.get(RoleLG.values()[i]);
-		main.config.role_count.put(RoleLG.values()[i],compt+1);
+		int j = main.config.role_count.get(RoleLG.values()[i]);
+		main.config.role_count.put(RoleLG.values()[i],j+1);
 		if(!RoleLG.values()[i].equals(RoleLG.COUPLE)) {
 			main.score.setRole(main.score.getRole()+1);
 		}
 		main.score.updateBoard();
-		updateselection(inv);
+		updateSelection(inv);
 	}
 	
-	public void selectmoinsbordure(Inventory inv) {
+	public void selectMoinsBorder(Inventory inv) {
 		
 		int i = findSelect(inv) ;
-		int compt = main.config.border_value.get(BorderLG.values()[i]);
-		if(compt>=100) {
-			main.config.border_value.put(BorderLG.values()[i],compt-100);
-			updateselectionbordure(inv, i);
+		int j = main.config.border_value.get(BorderLG.values()[i]);
+		if(j>=100) {
+			main.config.border_value.put(BorderLG.values()[i],j-100);
+			updateSelectionBorder(inv, i);
 		}
 	}
 
-	public void selectplusbordure(Inventory inv) {
+	public void selectPlusBorder(Inventory inv) {
 		
 		int i = findSelect(inv) ;
-		int compt = main.config.border_value.get(BorderLG.values()[i]);
-		main.config.border_value.put(BorderLG.values()[i],compt+100);
-		updateselectionbordure(inv, i);
+		int j = main.config.border_value.get(BorderLG.values()[i]);
+		main.config.border_value.put(BorderLG.values()[i],j+100);
+		updateSelectionBorder(inv, i);
 	}
 	
-	public void selectmoinstimer(Inventory inv,int v) {
+	public void SelectMoinsTimer(Inventory inv, int v) {
 		
 		int i = findSelect(inv);
-		int compt = main.config.value.get(TimerLG.values()[i]);
-		if(compt>=v) {
-			main.config.value.put(TimerLG.values()[i],compt-v);
-			updateselectiontimer(inv, i);
+		int j = main.config.value.get(TimerLG.values()[i]);
+		if(j>=v) {
+			main.config.value.put(TimerLG.values()[i],j-v);
+			updateSelectionTimer(inv, i);
 		}
 	}
 
-	public void selectplustimer(Inventory inv,int v) {
+	public void selectPlusTimer(Inventory inv, int v) {
 		int i = findSelect(inv);
 		main.config.value.put(TimerLG.values()[i],main.config.value.get(TimerLG.values()[i])+v);
-		updateselectiontimer(inv,i);
+		updateSelectionTimer(inv,i);
 	}
 	
 
 	
-	public void updateselection(Inventory inv){
+	public void updateSelection(Inventory inv){
 
 		List<String> lore = Arrays.asList("Clique-Gauche>>+", "Clique-Droit>>-", "Shift-Clique>>Stuff");
 		for (int i=0;i<RoleLG.values().length;i++) {
@@ -224,7 +236,7 @@ public class OptionLG {
 		}
 	}
 	
-	public void updateselectiontimer(Inventory inv,int j){
+	public void updateSelectionTimer(Inventory inv, int j){
 		
 		String c= main.conversion(main.config.value.get(TimerLG.values()[j]));
 		
@@ -244,7 +256,7 @@ public class OptionLG {
 		}
 	}
 	
-	public void updateselectionbordure(Inventory inv, int j) {
+	public void updateSelectionBorder(Inventory inv, int j) {
 		
 		inv.setItem(3, changeMeta(Material.STONE_BUTTON,"- ("+main.config.border_value.get(BorderLG.values()[j])+")",1,null));
 		inv.setItem(4, changeMeta(Material.BEACON,main.text.translatebordure.get(BorderLG.values()[j])+" ("+main.config.border_value.get(BorderLG.values()[j])+")",1,null));
@@ -261,7 +273,7 @@ public class OptionLG {
 		}
 		
 	}
-	public void updateselectiontool(Inventory inv){
+	public void updateSelectionTool(Inventory inv){
 		
 		for (int i = 0; i< ToolLG.values().length; i++) {
 			
@@ -330,7 +342,7 @@ public class OptionLG {
 			main.config.role_count.put(RoleLG.values()[i],0);
 		}
 		main.score.setRole(0);
-		updateselection(inv);
+		updateSelection(inv);
 		main.score.updateBoard();
 	}
 

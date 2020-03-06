@@ -104,7 +104,7 @@ public class TextLG {
 					"",
 					"",
 					"§8Configuration Scenarios",
-					"",
+					"§8Configuration Stuff",
 					"",
 					"",
 			/*80*/	"",

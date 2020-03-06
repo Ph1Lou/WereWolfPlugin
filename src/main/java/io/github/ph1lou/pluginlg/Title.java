@@ -76,7 +76,7 @@ public class Title {
         p.getHandle().playerConnection.sendPacket(ppoc);
     }
 
-    private static Map<String, EntityEnderDragon> dragons = new ConcurrentHashMap<>();
+    private static final Map<String, EntityEnderDragon> dragons = new ConcurrentHashMap<>();
 
 
 

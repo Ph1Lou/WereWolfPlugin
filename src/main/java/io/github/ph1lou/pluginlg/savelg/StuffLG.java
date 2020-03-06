@@ -68,41 +68,47 @@ public class StuffLG {
      
    public void load(MainLG main, int number) {
 	   
-	   	start_loot.clear();
-	   	death_loot.clear();
-	   	role_stuff.clear();
-	   	
-    	for(RoleLG role:RoleLG.values()) {
-    		
-    		role_stuff.put(role, new ArrayList<>());
-    		if(main.getConfig().getItemStack("save"+number + "." +role.toString()+".0")!=null) {
+	   	loadStuff(main,number);
+	   	loadStuffStartAndDeath(main,number);
+    }
+
+	public void loadStuff(MainLG main, int number){
+
+		role_stuff.clear();
+		if(main.getConfig().get("save"+number)==null){
+			number=-1;
+		}
+		for(RoleLG role:RoleLG.values()) {
+			role_stuff.put(role, new ArrayList<>());
+			if(main.getConfig().getItemStack("save"+number + "." +role.toString()+".0")!=null) {
 				Set<String> sl = main.getConfig().getConfigurationSection("save"+number + "." +role.toString()+".").getKeys(false);
 				for (String s : sl) {
-    				role_stuff.get(role).add(main.getConfig().getItemStack("save"+number + "." +role.toString()+ "." + s));
- 		        }
+					role_stuff.get(role).add(main.getConfig().getItemStack("save"+number + "." +role.toString()+ "." + s));
+				}
 			}
-    	}
- 
-    	if(main.getConfig().getItemStack("save"+number +".start_loot.0")!=null) {
-    		Set<String> sl = main.getConfig().getConfigurationSection("save"+number +".start_loot.").getKeys(false);
+		}
+	}
     
-    		for (String s : sl) {
-    			start_loot.add(main.getConfig().getItemStack("save"+number +".start_loot." + s));
-    	    }
-    	}
-    	
-  
-    	
-    	if(main.getConfig().getItemStack("save"+number +".death_loot.0")!=null) {
-    		Set<String> sl = main.getConfig().getConfigurationSection("save"+number +".death_loot").getKeys(false);
-    		for (String s : sl) {
-    			death_loot.add(main.getConfig().getItemStack("save"+number +".death_loot." + s));
-    	    }
-    	}
-    	
-    }
-    
+	public void loadStuffStartAndDeath(MainLG main, int number){
 
+		start_loot.clear();
+		death_loot.clear();
+
+		if(main.getConfig().getItemStack("save"+number +".start_loot.0")!=null) {
+			Set<String> sl = main.getConfig().getConfigurationSection("save"+number +".start_loot.").getKeys(false);
+
+			for (String s : sl) {
+				start_loot.add(main.getConfig().getItemStack("save"+number +".start_loot." + s));
+			}
+		}
+
+		if(main.getConfig().getItemStack("save"+number +".death_loot.0")!=null) {
+			Set<String> sl = main.getConfig().getConfigurationSection("save"+number +".death_loot").getKeys(false);
+			for (String s : sl) {
+				death_loot.add(main.getConfig().getItemStack("save"+number +".death_loot." + s));
+			}
+		}
+	}
 	
 	
 	

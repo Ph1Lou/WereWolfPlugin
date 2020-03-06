@@ -45,61 +45,39 @@ public class MenuListener implements Listener{
 
 				if(current.getType()==Material.BEACON) {
 					if(!main.isState(StateLG.LG)) {
-						main.optionlg.chooserole(player);	
+						main.optionlg.chooseRole(player);
 					}
 					else player.sendMessage(main.text.getText(126));
 				}
 				if(current.getType()==Material.ANVIL) {
-					main.optionlg.timertool(player);
+					main.optionlg.timerTool(player);
 				}
 				if(current.getType()==Material.MAP) {
-					main.optionlg.globaltool(player);
+					main.optionlg.globalTool(player);
 				}
 				if(current.getType()==Material.PUMPKIN) {
-					main.optionlg.globalscenario(player);
+					main.optionlg.globalScenario(player);
 				}
-				if(current.getType()==Material.CHEST  && event.getSlot()==7) {
-					
-					player.setGameMode(GameMode.CREATIVE);
-					player.getInventory().clear();
-					for(ItemStack i:main.stufflg.getStartLoot()) {
-						if(i!=null) {
-							player.getInventory().addItem(i);
-						}		
-					}
-					TextComponent msg = new TextComponent(main.text.getText(127));
-					msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/adminlg lootstart"));
-					player.spigot().sendMessage(msg);
-					player.closeInventory();
+				if(current.getType()==Material.CHEST ) {
+					main.optionlg.stuffTool(player);
+
 				}
-				if(current.getType()==Material.GLASS  && event.getSlot()==10) {
-					main.optionlg.borduretool(player);
+				if(current.getType()==Material.GLASS) {
+					main.optionlg.borderTool(player);
 				}
-				if(current.getType()==Material.ARMOR_STAND  && event.getSlot()==12) {
-					main.optionlg.savetool(player);
+				if(current.getType()==Material.ARMOR_STAND ) {
+					main.optionlg.saveTool(player);
 				}
-				if(current.getType()==Material.CHEST  && event.getSlot()==16) {
-					player.setGameMode(GameMode.CREATIVE);
-					player.getInventory().clear();
-					for(ItemStack i:main.stufflg.getDeathLoot()) {
-						if(i!=null) {
-							player.getInventory().addItem(i);
-						}		
-					}
-					TextComponent msgd = new TextComponent(main.text.getText(128));
-					msgd.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/adminlg lootdeath"));
-					player.spigot().sendMessage(msgd);	
-					player.closeInventory();
-				}
+
 			}		
 			else if(view.getTitle().equals(main.text.getText(178))){
 				event.setCancelled(true);
 				if(current.getType()==Material.EMERALD || current.getType()==Material.REDSTONE){
 					main.config.tool_switch.put(ToolLG.values()[(event.getSlot()-9)],!main.config.tool_switch.get(ToolLG.values()[(event.getSlot()-9)]));
-					main.optionlg.updateselectiontool(invent);
+					main.optionlg.updateSelectionTool(invent);
 				}	
 				if(current.getType()==Material.COMPASS) {
-					main.optionlg.toolbar(player);
+					main.optionlg.toolBar(player);
 				}
 			}
 
@@ -110,7 +88,7 @@ public class MenuListener implements Listener{
 					main.optionlg.updateSelectionScenario(invent);
 				}
 				if(current.getType()==Material.COMPASS) {
-					main.optionlg.toolbar(player);
+					main.optionlg.toolBar(player);
 				}
 			}
 			
@@ -135,17 +113,15 @@ public class MenuListener implements Listener{
 						player.spigot().sendMessage(msgd);
 						player.closeInventory();
 					}
-					if(event.getClick().isRightClick()){
-						main.optionlg.selectmoins(invent,(event.getSlot()-9));
+					else if(event.getClick().isRightClick()){
+						main.optionlg.selectMoins(invent,(event.getSlot()-9));
 					}
 					else{
-						main.optionlg.selectplus(invent,(event.getSlot()-9));
+						main.optionlg.selectPlus(invent,(event.getSlot()-9));
 					}
-
-					//main.optionlg.updateselection(invent);
 				}
 				if(current.getType()==Material.COMPASS) {
-					main.optionlg.toolbar(player);
+					main.optionlg.toolBar(player);
 				}
 				if(current.getType()==Material.BARRIER) {
 					main.optionlg.resetrole(invent);
@@ -157,16 +133,16 @@ public class MenuListener implements Listener{
 				event.setCancelled(true);
 
 				if(current.getType()==Material.STONE_BUTTON && event.getSlot()==3) {
-					main.optionlg.selectmoinsbordure(invent);
+					main.optionlg.selectMoinsBorder(invent);
 				}
 				if(current.getType()==Material.STONE_BUTTON && event.getSlot()==5) {
-					main.optionlg.selectplusbordure(invent);
+					main.optionlg.selectPlusBorder(invent);
 				}
 				if(current.getType()==Material.GLASS){
-					main.optionlg.updateselectionbordure(invent, (event.getSlot()-9));
+					main.optionlg.updateSelectionBorder(invent, (event.getSlot()-9));
 				}
 				if(current.getType()==Material.COMPASS) {
-					main.optionlg.toolbar(player);
+					main.optionlg.toolBar(player);
 				}
 			}
 			else if(view.getTitle().equals(main.text.getText(177))) {
@@ -174,28 +150,28 @@ public class MenuListener implements Listener{
 				event.setCancelled(true);
 
 				if(current.getType()==Material.ANVIL || current.getType()==Material.FEATHER){
-					main.optionlg.updateselectiontimer(invent, (event.getSlot()-9));
+					main.optionlg.updateSelectionTimer(invent, (event.getSlot()-9));
 				}
 				if(current.getType()==Material.STONE_BUTTON && event.getSlot()==1) {
-					main.optionlg.selectmoinstimer(invent,600);
+					main.optionlg.SelectMoinsTimer(invent,600);
 				}
 				if(current.getType()==Material.STONE_BUTTON && event.getSlot()==2) {
-					main.optionlg.selectmoinstimer(invent,60);
+					main.optionlg.SelectMoinsTimer(invent,60);
 				}
 				if(current.getType()==Material.STONE_BUTTON && event.getSlot()==3) {
-					main.optionlg.selectmoinstimer(invent,10);
+					main.optionlg.SelectMoinsTimer(invent,10);
 				}
 				if(current.getType()==Material.STONE_BUTTON && event.getSlot()==5) {
-					main.optionlg.selectplustimer(invent,10);
+					main.optionlg.selectPlusTimer(invent,10);
 				}
 				if(current.getType()==Material.STONE_BUTTON && event.getSlot()==6) {
-					main.optionlg.selectplustimer(invent,60);
+					main.optionlg.selectPlusTimer(invent,60);
 				}
 				if(current.getType()==Material.STONE_BUTTON && event.getSlot()==7) {
-					main.optionlg.selectplustimer(invent,600);
+					main.optionlg.selectPlusTimer(invent,600);
 				}
 				if(current.getType()==Material.COMPASS) {
-					main.optionlg.toolbar(player);
+					main.optionlg.toolBar(player);
 				}
 			}
 			else if(view.getTitle().equals(main.text.getText(180))) {
@@ -203,18 +179,66 @@ public class MenuListener implements Listener{
 				event.setCancelled(true);
 
 				if(current.getType()==Material.PAPER) {
-					main.optionlg.updateselectionsave(invent,event.getSlot());
+					main.optionlg.updateSelectionSave(invent,event.getSlot());
 				}
 				if(current.getType()==Material.EMERALD_BLOCK || current.getType()==Material.BARRIER) {
-					main.optionlg.saveorerase(invent);
+					main.optionlg.saveOrErase(invent);
 				}
 				if(current.getType()==Material.BED ){
 					main.optionlg.load(invent);
 				}
 				if(current.getType()==Material.COMPASS) {
-					main.optionlg.toolbar(player);
+					main.optionlg.toolBar(player);
 				}
-			}	
+			}
+			else if(view.getTitle().equals(main.text.getText(77))) {
+
+				event.setCancelled(true);
+
+				if(current.getType()==Material.COMPASS) {
+					main.optionlg.toolBar(player);
+				}
+
+				if(current.getType()==Material.CHEST) {
+					player.setGameMode(GameMode.CREATIVE);
+					player.getInventory().clear();
+					for(ItemStack i:main.stufflg.getStartLoot()) {
+						if(i!=null) {
+							player.getInventory().addItem(i);
+						}
+					}
+					TextComponent msg = new TextComponent(main.text.getText(127));
+					msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/adminlg lootstart"));
+					player.spigot().sendMessage(msg);
+					player.closeInventory();
+				}
+				if(current.getType()==Material.ENDER_CHEST) {
+					player.setGameMode(GameMode.CREATIVE);
+					player.getInventory().clear();
+					for(ItemStack i:main.stufflg.getDeathLoot()) {
+						if(i!=null) {
+							player.getInventory().addItem(i);
+						}
+					}
+					TextComponent msgd = new TextComponent(main.text.getText(128));
+					msgd.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/adminlg lootdeath"));
+					player.spigot().sendMessage(msgd);
+					player.closeInventory();
+				}
+				if(current.getType()==Material.EGG){
+					main.stufflg.loadStuff(main, -1);
+				}
+				if(current.getType()==Material.GOLD_SWORD){
+					main.stufflg.load(main, -2);
+				}
+				if(current.getType()==Material.JUKEBOX){
+					main.stufflg.loadStuffStartAndDeath(main, -3);
+				}
+				if(current.getType()==Material.BARRIER){
+					main.stufflg.loadStuffStartAndDeath(main, 666);
+				}
+
+			}
 		}
 	}
 	

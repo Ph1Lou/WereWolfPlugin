@@ -143,7 +143,7 @@ public class AdminLG implements TabExecutor {
 			case "config" :
 			
 			if (sender instanceof Player) {
-				main.optionlg.toolbar((Player) sender);
+				main.optionlg.toolBar((Player) sender);
 			}
 			else sender.sendMessage(main.text.getText(140));
 			break;

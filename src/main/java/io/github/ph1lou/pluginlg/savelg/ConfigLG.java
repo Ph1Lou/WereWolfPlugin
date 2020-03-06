@@ -15,11 +15,10 @@ public class ConfigLG {
 	public final Map<RoleLG,Integer> role_count = new HashMap<>();
 	public final Map<ScenarioLG,Boolean> scenario = new HashMap<>();
 
-	private float strength_rate =1.5f;
+	private float strength_rate =1.3f;
 	private float apple_rate =0.1f;
 	private float flint_rate =0.1f;
 	private float pearl_rate =0.3f;
-	private float spawn_rate =0.3f;
 	private int diamond_limit=17;
 	private int player_required_before_voting_ends=10;
 	private int xp_boost=5;
@@ -133,11 +132,5 @@ public class ConfigLG {
 		this.xp_boost = xp_boost;
 	}
 
-	public float getSpawn_rate() {
-		return spawn_rate;
-	}
 
-	public void setSpawn_rate(float spawn_rate) {
-		this.spawn_rate = spawn_rate;
-	}
 }

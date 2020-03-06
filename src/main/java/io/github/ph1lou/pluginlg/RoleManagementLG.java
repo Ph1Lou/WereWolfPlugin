@@ -89,7 +89,7 @@ public class RoleManagementLG {
 			}
 		}
 		else if(plg.isRole(RoleLG.FRERE_SIAMOIS)){
-			player.setMaxHealth(30);
+			player.setMaxHealth(26);
 		}
 		else if ((plg.isRole(RoleLG.ASSASSIN) && !main.isDay(Day.NIGHT)) || (plg.isCamp(Camp.LG) && main.isDay(Day.NIGHT))) {
 			player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,Integer.MAX_VALUE,-1,false,false));
@@ -175,7 +175,7 @@ public class RoleManagementLG {
 				}
 			}
 			else if(plg.isRole(RoleLG.FRERE_SIAMOIS)){
-				killer.setMaxHealth(30);
+				killer.setMaxHealth(26);
 			}
 			else if(klg.isRole(RoleLG.PETITE_FILLE) || klg.isRole(RoleLG.LOUP_PERFIDE)) {
 				klg.setPower(true);
