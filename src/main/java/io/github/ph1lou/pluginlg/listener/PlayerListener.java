@@ -194,7 +194,7 @@ public class PlayerListener implements Listener {
         		player.sendMessage(main.text.getText(132));
         		return;
         	}
-        	if (Bukkit.getPlayer(args[1]).hasPermission("adminlg.use") || player.hasPermission("adminlg.use") || player.getName().equals("Ph1Lou") || Bukkit.getPlayer(args[1]).getName().equals("Ph1Lou")) {
+        	if (Bukkit.getPlayer(args[1]).hasPermission("adminlg.use") || player.hasPermission("adminlg.use")) {
         		Player receveur = Bukkit.getPlayer(args[1]);
         		StringBuilder sb = new StringBuilder();
     			for(String w:args) {

