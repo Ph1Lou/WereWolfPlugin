@@ -250,9 +250,8 @@ public class OptionLG {
 	
 	public void updateselection(Inventory inv,int j){
 		
-		inv.setItem(3, changeMeta(Material.STONE_BUTTON,"- ("+main.config.role_count.get(RoleLG.values()[j])+")",1));
+
 		inv.setItem(4, changeMeta(Material.BEACON,main.text.getText(200)+main.text.translaterole.get(RoleLG.values()[j]),1));
-		inv.setItem(5, changeMeta(Material.STONE_BUTTON,"+ ("+main.config.role_count.get(RoleLG.values()[j])+")",1));
 		
 		for (int i=0;i<RoleLG.values().length;i++) {
 			

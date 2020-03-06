@@ -118,10 +118,10 @@ public class MenuListener implements Listener{
 
 				event.setCancelled(true);
 
-				if(current.getType()==Material.STONE_BUTTON && event.getSlot()==3) {
+				if(event.getClick().isRightClick()){
 					main.optionlg.selectmoins(invent);
 				}
-				if(current.getType()==Material.STONE_BUTTON && event.getSlot()==5) {
+				else{
 					main.optionlg.selectplus(invent);
 				}
 				if(current.getType()==Material.EMERALD || current.getType()==Material.REDSTONE){
