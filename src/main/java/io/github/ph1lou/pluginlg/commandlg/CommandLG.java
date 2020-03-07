@@ -60,9 +60,9 @@ public class CommandLG implements TabExecutor {
 				for(ToolLG tool:ToolLG.values()) {
 
 					if(main.config.tool_switch.get(tool)) {
-						sender.sendMessage(main.text.getText(169)+main.text.translatetool.get(tool));
+						sender.sendMessage(String.format(main.text.getText(169),main.text.translatetool.get(tool)));
 					}
-					else sender.sendMessage(main.text.getText(168)+main.text.translatetool.get(tool));
+					else sender.sendMessage(String.format(main.text.getText(168),main.text.translatetool.get(tool)));
 				}
 				break;
 			case "scenarios":
@@ -70,15 +70,15 @@ public class CommandLG implements TabExecutor {
 				for(ScenarioLG scenario:ScenarioLG.values()) {
 
 					if(main.config.scenario.get(scenario)) {
-						sender.sendMessage(main.text.getText(169)+main.text.translatescenario.get(scenario));
+						sender.sendMessage(String.format(main.text.getText(169),main.text.translatescenario.get(scenario)));
 					}
-					else sender.sendMessage(main.text.getText(168)+main.text.translatescenario.get(scenario));
+					else sender.sendMessage(String.format(main.text.getText(168),main.text.translatescenario.get(scenario)));
 				}
 				break;
 			case "timer":
 
 				for(TimerLG timer:TimerLG.values()) {
-					sender.sendMessage("§l"+main.text.translatetimer.get(timer)+" §2"+main.conversion(main.config.value.get(timer)));
+					sender.sendMessage(String.format(main.text.translatetimer.get(timer),main.conversion(main.config.value.get(timer))));
 				}
 				break;
 			case "vote":
@@ -101,14 +101,14 @@ public class CommandLG implements TabExecutor {
 					Player playermaudit=Bukkit.getPlayer(args[1]);
 					playermaudit.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,Integer.MAX_VALUE,1,false,false));
 					playermaudit.sendMessage(main.text.getText(55));
-					sender.sendMessage(main.text.esthetique("§m", "§e",main.text.powerhasbeenuse.get(RoleLG.CORBEAU)+args[1]));
+					sender.sendMessage(String.format(main.text.powerhasbeenuse.get(RoleLG.CORBEAU),args[1]));
 				}
 				break;
 
 			case "couple":
 
 				if(main.cmdlg.chechCommand(false, true,true,2, RoleLG.CUPIDON,  sender, args)) {
-					sender.sendMessage(main.text.esthetique("§m", "§e",main.text.powerhasbeenuse.get(RoleLG.CUPIDON)+args[1]+" et "+args[2]));
+					sender.sendMessage(String.format(main.text.powerhasbeenuse.get(RoleLG.CUPIDON),args[1],args[2]));
 				}
 				break;
 
@@ -121,7 +121,7 @@ public class CommandLG implements TabExecutor {
 						main.role_manage.newLG(args[1]);
 					}
 					main.playerlg.get(args[1]).setCanBeInfect(false);
-					sender.sendMessage(main.text.esthetique("§m", "§e",main.text.powerhasbeenuse.get(RoleLG.INFECT)+args[1]));
+					sender.sendMessage(String.format(main.text.powerhasbeenuse.get(RoleLG.INFECT),args[1]));
 
 					main.death_manage.resurrection(args[1]);
 				}
@@ -130,7 +130,7 @@ public class CommandLG implements TabExecutor {
 			case "flairer":
 
 				if(main.cmdlg.chechCommand(false,true,true,1, RoleLG.RENARD, sender, args)) {
-					sender.sendMessage(main.text.esthetique("§m", "§e",main.text.powerhasbeenuse.get(RoleLG.RENARD)+args[1]));
+					sender.sendMessage(String.format(main.text.powerhasbeenuse.get(RoleLG.RENARD),args[1]));
 					main.playerlg.get(sender.getName()).setFlair(0f);
 				}
 				break;
@@ -143,14 +143,14 @@ public class CommandLG implements TabExecutor {
 					playerslv.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,Integer.MAX_VALUE,0,false,false));
 					main.playerlg.get(args[1]).setSalvation(true);
 					playerslv.sendMessage(main.text.getText(61));
-					sender.sendMessage(main.text.esthetique("§m", "§e",main.text.powerhasbeenuse.get(RoleLG.SALVATEUR)+args[1]));
+					sender.sendMessage(String.format(main.text.powerhasbeenuse.get(RoleLG.SALVATEUR),args[1]));
 				}
 				break;
 			case "sauver":
 
 				if(main.cmdlg.chechCommand(false,true,true,1, RoleLG.SORCIERE, sender, args)) {
 					main.death_manage.resurrection(args[1]);
-					sender.sendMessage(main.text.esthetique("§m", "§e",main.text.powerhasbeenuse.get(RoleLG.SORCIERE)+args[1]));
+					sender.sendMessage(String.format(main.text.powerhasbeenuse.get(RoleLG.SORCIERE),args[1]));
 				}
 				break;
 
@@ -158,7 +158,7 @@ public class CommandLG implements TabExecutor {
 
 				if(main.cmdlg.chechCommand(false,true,true,1, RoleLG.ENFANT_SAUVAGE, sender, args)) {
 					main.playerlg.get(args[1]).addDisciple(sender.getName());
-					sender.sendMessage(main.text.powerhasbeenuse.get(RoleLG.ENFANT_SAUVAGE)+args[1]);
+					sender.sendMessage(String.format(main.text.powerhasbeenuse.get(RoleLG.ENFANT_SAUVAGE),args[1]));
 				}
 				break;
 
@@ -167,7 +167,7 @@ public class CommandLG implements TabExecutor {
 				if (main.cmdlg.chechCommand(true, true,true,1, RoleLG.TRUBLION, sender, args)) {
 
 					main.eparpillement(args[1], Math.random()*Bukkit.getOnlinePlayers().size(),main.text.getText(202));
-					sender.sendMessage(main.text.powerhasbeenuse.get(RoleLG.TRUBLION)+args[1]);
+					sender.sendMessage(String.format(main.text.powerhasbeenuse.get(RoleLG.TRUBLION),args[1]));
 				}
 				break;
 
@@ -184,7 +184,7 @@ public class CommandLG implements TabExecutor {
 			case "inspecter":
 
 				if(main.cmdlg.chechCommand(false, true,true,2, RoleLG.DETECTIVE, sender, args)) {
-					sender.sendMessage(main.text.esthetique("§m", "§2",args[1]+" et "+args[2]+main.text.getText(71)));
+					sender.sendMessage(String.format(main.text.getText(71),args[1],args[2]));
 				}
 				break;
 
@@ -194,38 +194,25 @@ public class CommandLG implements TabExecutor {
 				if(main.cmdlg.chechCommand(false, false,false,0,null , sender, args)) {
 
 					PlayerLG plg =main.playerlg.get(sender.getName());
-
-					sender.sendMessage(main.text.getText(42)+main.text.translaterole.get(plg.getRole()));
-
-					if(plg.isCamp(Camp.LG)) {
-
-						sender.sendMessage(main.text.getText(69));
-					}
-
-					else if(plg.isCamp(Camp.VILLAGE)) {
-						sender.sendMessage(main.text.getText(70));
-					}
-					sender.sendMessage(plg.getRole().getDescription());
+					sender.sendMessage(main.text.description.get(plg.getRole()));
 
 					if(plg.isRole(RoleLG.SOEUR)) {
 						StringBuilder strb =new StringBuilder();
-						strb.append("§2Liste des Soeurs : ");
 						for(String soeur:main.playerlg.keySet()) {
 							if(main.playerlg.get(soeur).isState(State.VIVANT) && main.playerlg.get(soeur).isRole(RoleLG.SOEUR)) {
 								strb.append(soeur).append(" ");
 							}
 						}
-						sender.sendMessage(strb.toString());
+						sender.sendMessage(String.format(main.text.getText(22),strb.toString()));
 					}
 					else if(plg.isRole(RoleLG.FRERE_SIAMOIS)) {
 						StringBuilder strb =new StringBuilder();
-						strb.append("§2Liste des Siamois: ");
 						for(String frere:main.playerlg.keySet()) {
 							if(main.playerlg.get(frere).isState(State.VIVANT) && main.playerlg.get(frere).isRole(RoleLG.FRERE_SIAMOIS)) {
 								strb.append(frere).append(" ");
 							}
 						}
-						sender.sendMessage(strb.toString());
+						sender.sendMessage(String.format(main.text.getText(23),strb.toString()));
 					}
 				}
 				break;
@@ -256,7 +243,7 @@ public class CommandLG implements TabExecutor {
 							strb.append(loup).append(" ");
 						}
 					}
-					sender.sendMessage(main.text.getText(101)+strb.toString());
+					sender.sendMessage(String.format(main.text.getText(101),strb.toString()));
 				}
 
 				break;
@@ -266,7 +253,7 @@ public class CommandLG implements TabExecutor {
 					PlayerLG plg =main.playerlg.get(sender.getName());
 					plg.setRole(RoleLG.ANGE_DECHU);
 					plg.setPower(false);
-					sender.sendMessage(RoleLG.ANGE.getPowerHasBeenUse()+RoleLG.ANGE_DECHU.getAppearance());
+					sender.sendMessage(String.format(main.text.powerhasbeenuse.get(RoleLG.ANGE),main.text.translaterole.get(RoleLG.ANGE_DECHU)));
 				}
 				break;
 			case "gardien":
@@ -275,7 +262,7 @@ public class CommandLG implements TabExecutor {
 					PlayerLG plg =main.playerlg.get(sender.getName());
 					plg.setRole(RoleLG.ANGE_GARDIEN);
 					plg.setPower(false);
-					sender.sendMessage(RoleLG.ANGE.getPowerHasBeenUse()+RoleLG.ANGE_GARDIEN.getAppearance());
+					sender.sendMessage(String.format(main.text.powerhasbeenuse.get(RoleLG.ANGE),main.text.translaterole.get(RoleLG.ANGE_GARDIEN)));
 				}
 				break;
 			case "depouiller":
@@ -291,7 +278,7 @@ public class CommandLG implements TabExecutor {
 					PlayerLG plg =main.playerlg.get(sender.getName());
 					if(plg.getAffectedPlayer().isEmpty()){
 						String pvote=main.vote.getResult();
-						sender.sendMessage(main.text.esthetique("§m","§6",RoleLG.CITOYEN.getPowerHasBeenUse()+pvote));
+						sender.sendMessage(String.format(main.text.powerhasbeenuse.get(RoleLG.CITOYEN),pvote));
 						plg.addAffectedPlayer(pvote);
 						Bukkit.broadcastMessage(main.text.getText(94));
 						main.vote.resetvote();
@@ -329,12 +316,12 @@ public class CommandLG implements TabExecutor {
 		}
 		
 		if (needrole && !plg.isRole(role)){
-			player.sendMessage(main.text.esthetique("§6", "§4",main.text.getText(189)+main.text.translaterole.get(role)));
+			player.sendMessage(String.format(main.text.getText(189),main.text.translaterole.get(role)));
 			return false;
 		}
 		
 		if (args.length!=nbargs+1) {
-			player.sendMessage(main.text.esthetique("§6", "§4",main.text.getText(190)+nbargs));
+			player.sendMessage(String.format(main.text.getText(190),nbargs));
 			return false;
 		}
 		
@@ -449,16 +436,16 @@ public class CommandLG implements TabExecutor {
 					return false;
 				}	
 				if((plg1.isRole(RoleLG.LOUP_FEUTRE) && plg1.isCampFeutre(Camp.LG)) || (!plg1.isRole(RoleLG.LOUP_FEUTRE) && plg1.isCamp(Camp.LG))) {
-					player.sendMessage(main.text.esthetique("§m", "§e",main.text.powerhasbeenuse.get(RoleLG.VOYANTE)+main.text.translaterole.get(RoleLG.LOUP_GAROU)));
+					player.sendMessage(String.format(main.text.powerhasbeenuse.get(RoleLG.VOYANTE),main.text.translaterole.get(RoleLG.LOUP_GAROU)));
 					if(role.equals(RoleLG.VOYANTE_BAVARDE)) {
-						Bukkit.broadcastMessage(main.text.esthetique("§m", "§e",main.text.powerhasbeenuse.get(RoleLG.VOYANTE_BAVARDE)+main.text.translaterole.get(RoleLG.LOUP_GAROU)));
+						Bukkit.broadcastMessage(String.format(main.text.powerhasbeenuse.get(RoleLG.VOYANTE_BAVARDE),main.text.translaterole.get(RoleLG.LOUP_GAROU)));
 					}
 					return true;
 				}
 				if((plg1.isRole(RoleLG.LOUP_FEUTRE) && plg1.isCampFeutre(Camp.NEUTRE)) || plg1.isCamp(Camp.NEUTRE)) {
-					player.sendMessage(main.text.esthetique("§m", "§e",main.text.powerhasbeenuse.get(RoleLG.VOYANTE)+main.text.getText(201)));
+					player.sendMessage(String.format(main.text.powerhasbeenuse.get(RoleLG.VOYANTE),main.text.getText(201)));
 					if(role.equals(RoleLG.VOYANTE_BAVARDE)) {
-						Bukkit.broadcastMessage(main.text.esthetique("§m", "§e",main.text.powerhasbeenuse.get(RoleLG.VOYANTE_BAVARDE)+main.text.getText(201)));
+						Bukkit.broadcastMessage(String.format(main.text.powerhasbeenuse.get(RoleLG.VOYANTE_BAVARDE),main.text.getText(201)));
 					}
 					return true;
 				}		
@@ -487,8 +474,7 @@ public class CommandLG implements TabExecutor {
 			plg.setPower(false);
 			
 			if(islg1!=islg2) {
-				player.sendMessage(main.text.esthetique("§m", "§e",args[2]+" et "+args[1]+main.text.getText(72)));
-				
+				player.sendMessage(String.format(main.text.getText(72),args[2],args[1]));
 				return false;
 			}
 			

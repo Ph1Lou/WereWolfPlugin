@@ -39,11 +39,9 @@
                     <relocations>
                         <relocation>
                             <pattern>fr.mrmicky.fastboard</pattern>
-                            <!-- Replace with the package of your plugin ! -->
                             <shadedPattern>io.github.ph1lou.pluginlg</shadedPattern>
                         </relocation>
                     </relocations>
-
                 </configuration>
             </plugin>
         </plugins>

@@ -107,18 +107,18 @@ public class OptionLG {
 		for(int i=1;i<9;i++) {
 			
 			if(i==j) {
-				inv.setItem(i, changeMeta(Material.FEATHER,main.text.getText(174)+i,1,null));
+				inv.setItem(i, changeMeta(Material.FEATHER,String.format(main.text.getText(174),i),1,null));
 			}
-			else inv.setItem(i, changeMeta(Material.PAPER,main.text.getText(174)+i,1,null));
+			else inv.setItem(i, changeMeta(Material.PAPER,String.format(main.text.getText(174),i),1,null));
 		}
 		
-		inv.setItem(12, changeMeta(Material.EMERALD_BLOCK,main.text.getText(173)+j,1,null));
+		inv.setItem(12, changeMeta(Material.EMERALD_BLOCK,String.format(main.text.getText(173),j),1,null));
 		
 		File file = new File(main.getDataFolder(), "save"+j+".json");
 		
 		if(file.exists()) {
-			inv.setItem(14, changeMeta(Material.BARRIER,main.text.getText(171)+j,1,null));
-			inv.setItem(12, changeMeta(Material.BED,main.text.getText(172)+j,1,null));
+			inv.setItem(14, changeMeta(Material.BARRIER,String.format(main.text.getText(171),j),1,null));
+			inv.setItem(12, changeMeta(Material.BED,String.format(main.text.getText(172),j),1,null));
 		}
 		else inv.setItem(14, null);
 	}
@@ -243,32 +243,32 @@ public class OptionLG {
 		inv.setItem(1, changeMeta(Material.STONE_BUTTON,"-10m ("+c+")",1,null));
 		inv.setItem(2, changeMeta(Material.STONE_BUTTON,"-1m ("+c+")",1,null));
 		inv.setItem(3, changeMeta(Material.STONE_BUTTON,"-10s ("+c+")",1,null));
-		inv.setItem(4, changeMeta(Material.BEACON,main.text.translatetimer.get(TimerLG.values()[j])+" ("+c+")",1,null));
+		inv.setItem(4, changeMeta(Material.BEACON,String.format(main.text.translatetimer.get(TimerLG.values()[j]),c),1,null));
 		inv.setItem(5, changeMeta(Material.STONE_BUTTON,"+10s ("+c+")",1,null));
 		inv.setItem(6, changeMeta(Material.STONE_BUTTON,"+1m ("+c+")",1,null));
 		inv.setItem(7, changeMeta(Material.STONE_BUTTON,"+10m ("+c+")",1,null));
 		
 		for (int i=0;i<TimerLG.values().length;i++) {
 			if(i==j) {
-				inv.setItem(9+i, changeMeta(Material.FEATHER,main.text.translatetimer.get(TimerLG.values()[i])+" ("+c+")",1,null));
+				inv.setItem(9+i, changeMeta(Material.FEATHER,String.format(main.text.translatetimer.get(TimerLG.values()[i]),c),1,null));
 			}
-			else inv.setItem(9+i, changeMeta(Material.ANVIL,main.text.translatetimer.get(TimerLG.values()[i])+" ("+main.conversion(main.config.value.get(TimerLG.values()[i]))+")",1,null));
+			else inv.setItem(9+i, changeMeta(Material.ANVIL,String.format(main.text.translatetimer.get(TimerLG.values()[i]),main.conversion(main.config.value.get(TimerLG.values()[i]))),1,null));
 		}
 	}
 	
 	public void updateSelectionBorder(Inventory inv, int j) {
 		
 		inv.setItem(3, changeMeta(Material.STONE_BUTTON,"- ("+main.config.border_value.get(BorderLG.values()[j])+")",1,null));
-		inv.setItem(4, changeMeta(Material.BEACON,main.text.translatebordure.get(BorderLG.values()[j])+" ("+main.config.border_value.get(BorderLG.values()[j])+")",1,null));
+		inv.setItem(4, changeMeta(Material.BEACON,String.format(main.text.translatebordure.get(BorderLG.values()[j]),main.config.border_value.get(BorderLG.values()[j])),1,null));
 		inv.setItem(5, changeMeta(Material.STONE_BUTTON,"+ ("+main.config.border_value.get(BorderLG.values()[j])+")",1,null));
 
 		for (int i = 0; i< BorderLG.values().length; i++) {
 			
 			if(i==j) {
-				inv.setItem(9+i, changeMeta(Material.FEATHER,main.text.translatebordure.get(BorderLG.values()[i])+" ("+main.config.border_value.get(BorderLG.values()[i])+")",1,null));
+				inv.setItem(9+i, changeMeta(Material.FEATHER,String.format(main.text.translatebordure.get(BorderLG.values()[i]),main.config.border_value.get(BorderLG.values()[i])),1,null));
 
 			}
-			else inv.setItem(9+i, changeMeta(Material.GLASS,main.text.translatebordure.get(BorderLG.values()[i])+" ("+main.config.border_value.get(BorderLG.values()[i])+")",1,null));
+			else inv.setItem(9+i, changeMeta(Material.GLASS,String.format(main.text.translatebordure.get(BorderLG.values()[i]),main.config.border_value.get(BorderLG.values()[i])),1,null));
 
 		}
 		
@@ -279,9 +279,9 @@ public class OptionLG {
 			
 			if (main.config.tool_switch.get(ToolLG.values()[i])) {
 				
-				inv.setItem(9+i, changeMeta(Material.EMERALD,main.text.getText(168)+main.text.translatetool.get(ToolLG.values()[i]),1,null));
+				inv.setItem(9+i, changeMeta(Material.EMERALD,String.format(main.text.getText(168),main.text.translatetool.get(ToolLG.values()[i])),1,null));
 			}
-			else inv.setItem(9+i, changeMeta(Material.REDSTONE,main.text.getText(169)+main.text.translatetool.get(ToolLG.values()[i]),1,null));
+			else inv.setItem(9+i, changeMeta(Material.REDSTONE,String.format(main.text.getText(169),main.text.translatetool.get(ToolLG.values()[i])),1,null));
 		}
 	}
 
@@ -291,9 +291,9 @@ public class OptionLG {
 
 			if (main.config.scenario.get(ScenarioLG.values()[i])) {
 
-				inv.setItem(9+i, changeMeta(Material.EMERALD,main.text.getText(168)+main.text.translatescenario.get(ScenarioLG.values()[i]),1,null));
+				inv.setItem(9+i, changeMeta(Material.EMERALD,String.format(main.text.getText(168),main.text.translatescenario.get(ScenarioLG.values()[i])),1,null));
 			}
-			else inv.setItem(9+i, changeMeta(Material.REDSTONE,main.text.getText(169)+main.text.translatescenario.get(ScenarioLG.values()[i]),1,null));
+			else inv.setItem(9+i, changeMeta(Material.REDSTONE,String.format(main.text.getText(169),main.text.translatescenario.get(ScenarioLG.values()[i])),1,null));
 		}
 		updateScenario();
 	}

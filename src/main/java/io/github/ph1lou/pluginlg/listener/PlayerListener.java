@@ -44,6 +44,9 @@ public class PlayerListener implements Listener {
 				player.sendMessage(main.text.getText(129));
 				player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE,0,false,false));
 				player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, Integer.MAX_VALUE,0,false,false));
+				if(main.playerlg.get(player.getName()).isCamp(Camp.LG) ) {
+					player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+				}
 				main.playerlg.get(player.getName()).setPower(false);
 				main.optionlg.updateScenario();
 			}	
@@ -95,7 +98,7 @@ public class PlayerListener implements Listener {
 		if (player.getKiller() == null) return;
 		if(main.config.scenario.get(ScenarioLG.SLOW_BOW) && event.getCause().equals(EntityDamageEvent.DamageCause.PROJECTILE )) {
 			player.removePotionEffect(PotionEffectType.SLOW);
-			player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100,0,false,false));
+			player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 160,0,false,false));
 			return;
 		}
 
@@ -201,8 +204,8 @@ public class PlayerListener implements Listener {
     				sb.append(w).append(" ");
     			}
     			sb.delete(0,args[0].length()+args[1].length()+2);
-        		receveur.sendMessage(main.text.getText(133)+player.getName()+"] "+sb.toString());
-        		player.sendMessage(main.text.getText(134)+args[1]+"] ---> "+sb.toString());
+        		receveur.sendMessage(String.format(main.text.getText(133),player.getName(),sb.toString()));
+        		player.sendMessage(String.format(main.text.getText(134),args[1],sb.toString()));
 				receveur.playSound(receveur.getLocation(),Sound.ANVIL_USE, 1, 20);
 				return;
         	}
@@ -214,10 +217,10 @@ public class PlayerListener implements Listener {
 	private void onJoin(PlayerJoinEvent event) {
 		main.joinPlayer(event.getPlayer()) ;
 		if(main.isState(StateLG.LOBBY)) {
-			event.setJoinMessage("§a§l["+Bukkit.getOnlinePlayers().size()+"/"+main.score.getRole()+"] "+event.getPlayer().getName()+main.text.getText(194));
+			event.setJoinMessage(String.format(main.text.getText(194),Bukkit.getOnlinePlayers().size(),main.score.getRole(),event.getPlayer().getName()));
 		}
 		else if(main.playerlg.containsKey(event.getPlayer().getName()) && main.playerlg.get(event.getPlayer().getName()).isState(State.VIVANT)) {
-			event.setJoinMessage("§6§l"+event.getPlayer().getName()+main.text.getText(193));
+			event.setJoinMessage(String.format(main.text.getText(193),event.getPlayer()));
 		}
 	}	
 	
@@ -233,11 +236,11 @@ public class PlayerListener implements Listener {
         	main.score.removePlayerSize();
 			main.board.getTeam(player.getName()).unregister();
         	main.playerlg.remove(player.getName());
-        	event.setQuitMessage("§c§l["+main.score.getPlayerSize()+"/"+main.score.getRole()+"] "+event.getPlayer().getName()+main.text.getText(195));
+        	event.setQuitMessage(String.format(main.text.getText(195),main.score.getPlayerSize(),main.score.getRole(),event.getPlayer().getName()));
         }
         else if(main.playerlg.containsKey(event.getPlayer().getName()) && main.playerlg.get(event.getPlayer().getName()).isState(State.VIVANT)) {
         	main.playerlg.get(event.getPlayer().getName()).setDeathTime(main.score.getTimer());
-			event.setQuitMessage("§4§l"+event.getPlayer().getName()+main.text.getText(196));
+			event.setQuitMessage(String.format(main.text.getText(196),event.getPlayer().getName()));
         }	
         main.score.updateBoard();	
     }

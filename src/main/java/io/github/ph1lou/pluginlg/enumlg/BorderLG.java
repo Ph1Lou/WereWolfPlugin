@@ -1,7 +1,8 @@
 package io.github.ph1lou.pluginlg.enumlg;
 
 public enum BorderLG {
-	BORDER_MAX(2000,"Taille Bordure Initial"), BORDER_MIN(300,"Taille Bordure Finale");
+	BORDER_MAX(2000,"Taille Bordure Initial (%s)"),
+	BORDER_MIN(300,"Taille Bordure Finale (%s)");
 
 	private final int value;
 	private final String appearance;
@@ -14,7 +15,7 @@ public enum BorderLG {
 	public int getValue() {
 		return this.value;
 	}
-	
+
 	public String getAppearance() {
 		return this.appearance;
 	}

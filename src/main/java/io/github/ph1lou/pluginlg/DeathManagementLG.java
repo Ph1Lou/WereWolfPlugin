@@ -93,7 +93,7 @@ public class DeathManagementLG {
 			for(String infectname:main.playerlg.keySet()) {
 				
 				if(main.playerlg.get(infectname).isState(State.VIVANT) && main.playerlg.get(infectname).isRole(RoleLG.INFECT) && !infectname.equals(playername) && main.playerlg.get(infectname).hasPower() && Bukkit.getPlayer(infectname)!=null) {
-					TextComponent msginfect = new TextComponent(main.text.esthetique("§m", "§6",playername+main.text.poweruse.get(RoleLG.INFECT)));
+					TextComponent msginfect = new TextComponent(String.format(main.text.poweruse.get(RoleLG.INFECT),playername));
 					msginfect.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/lg infecter "+playername));
 					Bukkit.getPlayer(infectname).spigot().sendMessage(msginfect);		
 				}
@@ -116,7 +116,7 @@ public class DeathManagementLG {
 		for(String sorcierename:main.playerlg.keySet()) {
 			
 			if(main.playerlg.get(sorcierename).isState(State.VIVANT) && main.playerlg.get(sorcierename).isRole(RoleLG.SORCIERE) && !sorcierename.equals(playername) && main.playerlg.get(sorcierename).hasPower() && Bukkit.getPlayer(sorcierename)!=null ) {
-				TextComponent msgsrc = new TextComponent(main.text.esthetique("§m", "§6",playername+main.text.poweruse.get(RoleLG.SORCIERE)));
+				TextComponent msgsrc = new TextComponent(String.format(main.text.poweruse.get(RoleLG.SORCIERE),playername));
 				msgsrc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/lg sauver "+playername));
 				Bukkit.getPlayer(sorcierename).spigot().sendMessage(msgsrc);		
 			}
@@ -174,9 +174,9 @@ public class DeathManagementLG {
 		main.score.removePlayerSize();
 
 		if(main.config.tool_switch.get(ToolLG.SHOW_ROLE_TO_DEATH)) {
-			Bukkit.broadcastMessage(main.text.esthetique("§m", "§4",playername+main.text.getText(28)+main.text.translaterole.get(role)));
+			Bukkit.broadcastMessage(String.format(main.text.getText(28),playername,main.text.translaterole.get(role)));
 		}
-		else Bukkit.broadcastMessage(main.text.esthetique("§m", "§4",playername+main.text.getText(29)));
+		else Bukkit.broadcastMessage(String.format(main.text.getText(29),playername));
 		
 		for(ItemStack i:plg.getItemDeath()) {
 			if(i!=null) {
@@ -286,7 +286,7 @@ public class DeathManagementLG {
 			if(!main.couple_manage.couple_range.get(i).isEmpty()) {
 				String c1=main.couple_manage.couple_range.get(i).get(0);
 				PlayerLG plc1 = main.playerlg.get(c1);
-				Bukkit.broadcastMessage(main.text.esthetique("§m", "§5",c1+main.text.getText(30)));
+				Bukkit.broadcastMessage(String.format(main.text.getText(30),c1));
 				if(Bukkit.getPlayer(c1)!=null) {
 					Player player = Bukkit.getPlayer(c1);
 					plc1.setSpawn(player.getLocation());
@@ -338,7 +338,7 @@ public class DeathManagementLG {
 		
 		for(String soeurname:main.playerlg.keySet()) {
 			if(main.playerlg.get(soeurname).isState(State.VIVANT) && main.playerlg.get(soeurname).isRole(RoleLG.SOEUR) && Bukkit.getPlayer(soeurname)!=null) {
-				Bukkit.getPlayer(soeurname).sendMessage(main.text.esthetique("§m", "§e",playername+main.text.getText(33)+main.playerlg.get(playername).getKiller()));
+				Bukkit.getPlayer(soeurname).sendMessage(String.format(main.text.powerhasbeenuse.get(RoleLG.SOEUR),playername,main.playerlg.get(playername).getKiller()));
 			}
 		}
 	}
@@ -354,12 +354,12 @@ public class DeathManagementLG {
 				if(main.playerlg.get(angename).isRole(RoleLG.ANGE_DECHU)) {
 					if(main.playerlg.get(playername).getKiller().equals(angename)) {
 						ange.setMaxHealth(ange.getMaxHealth()+6);
-						ange.sendMessage(main.text.getText(34));
+						ange.sendMessage(main.text.poweruse.get(RoleLG.ANGE_DECHU));
 					}	
 				}
 				else {
 					ange.setMaxHealth(ange.getMaxHealth()-4);
-					ange.sendMessage(main.text.getText(35));
+					ange.sendMessage(main.text.poweruse.get(RoleLG.ANGE_GARDIEN));
 				}
 			}	
 		}

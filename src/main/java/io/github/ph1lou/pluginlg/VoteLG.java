@@ -59,7 +59,7 @@ public class VoteLG {
 				
 			}
 			main.playerlg.get(cible).incVote();
-			votant.sendMessage(main.text.esthetique("§m", "§2",main.text.getText(162)+ cible));
+			votant.sendMessage(String.format(main.text.getText(162),cible));
 		}
 				
 	}
@@ -75,7 +75,7 @@ public class VoteLG {
 		player.sendMessage(main.text.getText(95));
 		for(String playername:main.playerlg.keySet()) {
 			if(!main.playerlg.get(playername).getVotedPlayer().equals("")){
-				player.sendMessage(playername+main.text.getText(96)+main.playerlg.get(playername).getVotedPlayer());
+				player.sendMessage(String.format(main.text.getText(96),playername,main.playerlg.get(playername).getVotedPlayer()));
 			}
 		}
 	}
@@ -103,7 +103,7 @@ public class VoteLG {
 
 		if(main.playerlg.containsKey(playermax) && main.playerlg.get(playermax).isState(State.VIVANT)) {
 			templayer.add(playermax);
-			Bukkit.broadcastMessage(main.text.esthetique("§m", "§e",playermax+main.text.getText(163)+ main.playerlg.get(playermax).getVote() +main.text.getText(164)));
+			Bukkit.broadcastMessage(String.format(main.text.getText(163),playermax, main.playerlg.get(playermax).getVote()));
 			if(Bukkit.getPlayer(playermax)!=null){
 				Player player =Bukkit.getPlayer(playermax);
 				double life =player.getMaxHealth();

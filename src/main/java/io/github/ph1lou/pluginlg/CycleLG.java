@@ -82,7 +82,7 @@ public class CycleLG {
 					String pc = playerv.get((int) Math.floor(Math.random()*playerv.size()));
 					plg.setCampFeutre(main.playerlg.get(pc).getCamp());
 					plg.setRoleFeutre(main.playerlg.get(pc).getRole());
-					player.sendMessage(main.text.esthetique("§m", "§e",main.text.getText(15)+main.text.translaterole.get(main.playerlg.get(pc).getRole())));
+					player.sendMessage(String.format(main.text.getText(15),main.text.translaterole.get(main.playerlg.get(pc).getRole())));
 				}
 			}
 		}
@@ -123,7 +123,7 @@ public class CycleLG {
 				Title.removeBar(player);
 
 				if(plg.isRole(RoleLG.CITOYEN)){
-					player.sendMessage(main.text.esthetique("§m", "§6",RoleLG.CITOYEN.getPowerUse()+main.conversion(main.config.value.get(TimerLG.CITIZEN_DURATION))));
+					player.sendMessage(String.format(main.text.poweruse.get(RoleLG.CITOYEN),main.conversion(main.config.value.get(TimerLG.CITIZEN_DURATION))));
 				}
 			}
 		}
@@ -149,7 +149,7 @@ public class CycleLG {
 				player.playSound(player.getLocation(), Sound.DOOR_OPEN,1,20);
 
 				if(main.config.tool_switch.get(ToolLG.VOTE) && main.score.getTimer()>=main.config.value.get(TimerLG.VOTE_BEGIN)) {
-					player.sendMessage(main.text.esthetique("§m", "§6",main.text.getText(17)+main.conversion(main.config.value.get(TimerLG.VOTE_DURATION))));
+					player.sendMessage(String.format(main.text.getText(17),main.conversion(main.config.value.get(TimerLG.VOTE_DURATION))));
 					Title.removeBar(player);
 					Title.sendBar(player, "Vote", 100);
 				}
@@ -179,7 +179,7 @@ public class CycleLG {
 						
 					}
 					if(ok) {
-						Bukkit.broadcastMessage(main.text.esthetique("§m", "§6", builder.toString()));
+						Bukkit.broadcastMessage(String.format(main.text.getText(11), builder.toString()));
 						for(Player pls:Bukkit.getOnlinePlayers()) {
 							pls.playSound(pls.getLocation(),Sound.WOLF_GROWL, 1, 20);
 						}
@@ -219,15 +219,15 @@ public class CycleLG {
 				}
 				if(plg.isRole(RoleLG.CORBEAU)) {
 					plg.setPower(true);
-					player.sendMessage(main.text.esthetique("§2§m", "§e",main.text.poweruse.get(RoleLG.CORBEAU)+main.conversion(main.config.value.get(TimerLG.POWER_DURATION))));
+					player.sendMessage(String.format(main.text.poweruse.get(RoleLG.CORBEAU),main.conversion(main.config.value.get(TimerLG.POWER_DURATION))));
 				}
 				if(plg.isRole(RoleLG.SALVATEUR)) {
 					plg.setPower(true);
-					player.sendMessage(main.text.esthetique("§2§m", "§e",main.text.poweruse.get(RoleLG.SALVATEUR)+main.conversion(main.config.value.get(TimerLG.POWER_DURATION))));
+					player.sendMessage(String.format(main.text.poweruse.get(RoleLG.SALVATEUR),main.conversion(main.config.value.get(TimerLG.POWER_DURATION))));
 				}
 				if(plg.isRole(RoleLG.DETECTIVE)) {
 					plg.setPower(true);
-					player.sendMessage(main.text.esthetique("§2§m", "§e",main.text.poweruse.get(RoleLG.DETECTIVE)+main.conversion(main.config.value.get(TimerLG.POWER_DURATION))));
+					player.sendMessage(String.format(main.text.poweruse.get(RoleLG.DETECTIVE),main.conversion(main.config.value.get(TimerLG.POWER_DURATION))));
 				}
 				if(plg.isRole(RoleLG.RENARD)) {
 					plg.setPower(true);
@@ -235,7 +235,7 @@ public class CycleLG {
 				}
 				if(plg.isRole(RoleLG.VOYANTE) || plg.isRole(RoleLG.VOYANTE_BAVARDE)) {
 					plg.setPower(true);
-					player.sendMessage(main.text.esthetique("§2§m", "§e",main.text.poweruse.get(RoleLG.VOYANTE)+main.conversion(main.config.value.get(TimerLG.POWER_DURATION))));
+					player.sendMessage(String.format(main.text.poweruse.get(RoleLG.VOYANTE),main.conversion(main.config.value.get(TimerLG.POWER_DURATION))));
 				}
 			}
 		}	

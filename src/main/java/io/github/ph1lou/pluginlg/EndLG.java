@@ -40,7 +40,7 @@ public class EndLG {
                 }
             }
             if(player ==team.size()) {
-                subtitles_victory =main.text.getText(4)+main.text.translaterole.get(RoleLG.COUPLE);
+                subtitles_victory =String.format(main.text.getText(4),main.text.translaterole.get(RoleLG.COUPLE));
                 fin();
                 return;
             }
@@ -51,7 +51,7 @@ public class EndLG {
         }
 
         if(!getAngeTeam().isEmpty() && getAngeTeam().get(0).size()>1 && getAngeTeam().get(0).size()==main.score.getPlayerSize()) {
-            subtitles_victory =main.text.getText(4)+main.text.translaterole.get(RoleLG.ANGE_GARDIEN);
+            subtitles_victory =String.format(main.text.getText(4),main.text.translaterole.get(RoleLG.ANGE_GARDIEN));
             fin();
             return;
         }
@@ -77,13 +77,13 @@ public class EndLG {
             return;
         }
         if(camp.equals(Camp.LG)) {
-            subtitles_victory =main.text.getText(4)+main.text.translaterole.get(RoleLG.LOUP_GAROU);
+            subtitles_victory =String.format(main.text.getText(4),main.text.translaterole.get(RoleLG.LOUP_GAROU));
             fin();
             return;
 
         }
         if(camp.equals(Camp.VILLAGE)) {
-            subtitles_victory =main.text.getText(4)+main.text.translaterole.get(RoleLG.VILLAGEOIS);
+            subtitles_victory =String.format(main.text.getText(4),main.text.translaterole.get(RoleLG.VILLAGEOIS));
             fin();
             return;
         }
@@ -110,7 +110,7 @@ public class EndLG {
             if(role == null){
                 return;
             }
-            subtitles_victory =main.text.getText(4)+main.text.translaterole.get(role);
+            subtitles_victory =String.format(main.text.getText(4),main.text.translaterole.get(role));
             fin();
         }
     }
@@ -119,27 +119,27 @@ public class EndLG {
 
         main.setState(StateLG.FIN);
         main.score.getKillCounter();
-        Bukkit.broadcastMessage(main.text.esthetique("§m", "§6",main.text.getText(3)+ subtitles_victory));
+        Bukkit.broadcastMessage(String.format(main.text.getText(3), subtitles_victory));
         main.config.tool_switch.put(ToolLG.CHAT,true);
 
         for(String p:main.playerlg.keySet()) {
 
             if(main.playerlg.get(p).isState(State.MORT)) {
                 if(main.playerlg.get(p).isVoleur()) {
-                    Bukkit.broadcastMessage("§m§l"+p+main.text.getText(187)+main.text.translaterole.get(RoleLG.VOLEUR)+main.text.getText(188)+main.text.translaterole.get(main.playerlg.get(p).getRole()));
+                    Bukkit.broadcastMessage(String.format(main.text.getText(187),p,main.text.translaterole.get(RoleLG.VOLEUR))+String.format(main.text.getText(188),main.text.translaterole.get(main.playerlg.get(p).getRole())));
                 }
-                else Bukkit.broadcastMessage("§m§l"+p+main.text.getText(187)+main.text.translaterole.get(main.playerlg.get(p).getRole()));
+                else Bukkit.broadcastMessage(String.format(main.text.getText(187),p,main.text.translaterole.get(main.playerlg.get(p).getRole())));
             }
             else {
                 if(main.playerlg.get(p).isVoleur()) {
-                    Bukkit.broadcastMessage("§e§l"+p+main.text.getText(187)+main.text.translaterole.get(RoleLG.VOLEUR)+main.text.getText(188)+main.text.translaterole.get(main.playerlg.get(p).getRole()));
+                    Bukkit.broadcastMessage(String.format(main.text.getText(10),p,main.text.translaterole.get(RoleLG.VOLEUR))+String.format(main.text.getText(188),main.text.translaterole.get(main.playerlg.get(p).getRole())));
                 }
-                else Bukkit.broadcastMessage("§e§l"+p+main.text.getText(187)+main.text.translaterole.get(main.playerlg.get(p).getRole()));
+                else Bukkit.broadcastMessage(String.format(main.text.getText(10),p,main.text.translaterole.get(main.playerlg.get(p).getRole())));
             }
             main.score.updateBoard();
         }
         for(Player player:Bukkit.getOnlinePlayers()) {
-            Title.sendTitle(player,20,60, 20,main.text.getText(3), subtitles_victory);
+            Title.sendTitle(player,20,60, 20,main.text.getText(15), subtitles_victory);
 
             TextComponent msg = new TextComponent(main.text.getText(186));
             msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,"https://discord.gg/GXXCVUA"));

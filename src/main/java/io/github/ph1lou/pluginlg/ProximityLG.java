@@ -78,7 +78,7 @@ public class ProximityLG {
 						plg.setFlair(temp);
 
 						if(temp%10>0 && temp%10<=100f/(main.config.value.get(TimerLG.RENARD_SMELL_DURATION)+1)) {
-							player.sendMessage(main.text.esthetique("§m", "§e",main.text.getText(39)+Math.floor(temp)+"%"));
+							player.sendMessage(String.format(main.text.getText(39),Math.floor(temp)));
 						}
 						
 						if(temp>=100) {
@@ -86,13 +86,13 @@ public class ProximityLG {
 							PlayerLG plf = main.playerlg.get(playerflairer);
 
 							if(plf.isRole(RoleLG.LOUP_FEUTRE) && (!plf.isCampFeutre(Camp.LG) && !plf.isRoleFeutre(RoleLG.LOUP_GAROU_BLANC))) {
-								player.sendMessage(main.text.esthetique("§m", "§e",playerflairer + main.text.getText(40)));
+								player.sendMessage(String.format(main.text.getText(40),playerflairer));
 							}
 							else if (plf.isCamp(Camp.LG) || plf.isRole(RoleLG.LOUP_GAROU_BLANC)) {
-							player.sendMessage(main.text.esthetique("§m", "§e",playerflairer + main.text.getText(41)));
+							player.sendMessage(String.format(main.text.getText(41),playerflairer));
 							}
 							else {
-							player.sendMessage(main.text.esthetique("§m", "§e",playerflairer + main.text.getText(40)));
+							player.sendMessage(String.format(main.text.getText(40),playerflairer));
 							}
 							plg.clearAffectedPlayer();
 							plg.setFlair(0f);

@@ -1,21 +1,21 @@
 package io.github.ph1lou.pluginlg.enumlg;
 
 public enum TimerLG {
-	ROLE_DURATION(1200,"Révélation des Rôles"),
-	LG_LIST(1800,"Révélation de la liste des Loups"),
-	PVP(1800,"PVP"),
-	VOTE_BEGIN(2400,"Début des Votes"),
-	BORDER_BEGIN(3600,"Début de la Bordure"),
-	DIGGING(4200,"Fin du Minage"),
-	COUPLE_DURATION(240,"Durée pour le choix du Couple et révélation des couples"),
-	MASTER_DURATION(240,"Durée pour le choix d'un maitre"),
-	ANGE_DURATION(240,"Durée pour le choix de l'Ange"),
-	CITIZEN_DURATION(60,"Durée pour le choix du Citoyen"),
-	DAY_DURATION(300,"Durée du Jour/Nuit"),
-	VOTE_DURATION(180,"Durée du Vote"),
-	POWER_DURATION(240,"Durée d'utilisation des pouvoirs le Matin"),
-	BORDER_DURATION(2700,"Durée de réduction de la bordure"),
-	RENARD_SMELL_DURATION(180,"Durée du Flair du Renard");
+	ROLE_DURATION(1200,"Révélation des Rôles (%s)"),
+	LG_LIST(1800,"Révélation de la liste des Loups (%s)"),
+	PVP(1800,"PVP (%s)"),
+	VOTE_BEGIN(2400,"Début des Votes (%s)"),
+	BORDER_BEGIN(3600,"Début de la Bordure (%s)"),
+	DIGGING(4200,"Fin du Minage (%s)"),
+	COUPLE_DURATION(240,"Durée pour le choix du Couple et révélation des couples (%s)"),
+	MASTER_DURATION(240,"Durée pour le choix d'un maitre (%s)"),
+	ANGE_DURATION(240,"Durée pour le choix de l'Ange (%s)"),
+	CITIZEN_DURATION(60,"Durée pour le choix du Citoyen (%s)"),
+	DAY_DURATION(300,"Durée du Jour/Nuit (%s)"),
+	VOTE_DURATION(180,"Durée du Vote (%s)"),
+	POWER_DURATION(240,"Durée d'utilisation des pouvoirs le Matin (%s)"),
+	BORDER_DURATION(2700,"Durée de réduction de la bordure (%s)"),
+	RENARD_SMELL_DURATION(180,"Durée du Flair du Renard (%s)");
 
 	private final int value;
 	private final String appearance;
@@ -28,7 +28,7 @@ public enum TimerLG {
 	public int getValue() {
 		return this.value;
 	}
-	
+
 	public String getAppearance() {
 		return this.appearance;
 	}

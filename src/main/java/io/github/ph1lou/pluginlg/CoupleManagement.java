@@ -33,7 +33,7 @@ public class CoupleManagement {
 				pcouple.add(p);
 			}
 		}
-		if(main.score.getPlayerSize()<2){
+		if(main.score.getPlayerSize()<2 && main.config.role_count.get(RoleLG.CUPIDON)+main.config.role_count.get(RoleLG.COUPLE)>0){
 			Bukkit.broadcastMessage(main.text.getText(12));
 			return;
 		}
@@ -73,7 +73,7 @@ public class CoupleManagement {
 					main.playerlg.get(playername).addAffectedPlayer(j2);
 					main.playerlg.get(playername).setPower(false);	
 					if(Bukkit.getPlayer(playername)!=null) {
-						Bukkit.getPlayer(playername).sendMessage(RoleLG.CUPIDON.getPowerHasBeenUse()+j1+" et "+j2);
+						Bukkit.getPlayer(playername).sendMessage(String.format(main.text.powerhasbeenuse.get(RoleLG.CUPIDON),j1,j2));
 					}	
 				}
 				else {
@@ -152,7 +152,7 @@ public class CoupleManagement {
 					for (String c : plg.getCouple()) {
 						strb.append(c).append(" ");
 					}
-					pj2.sendMessage(main.text.esthetique("§m", "§d", main.text.powerhasbeenuse.get(RoleLG.COUPLE) + strb.toString() + main.text.getText(11)));
+					pj2.sendMessage(String.format(main.text.powerhasbeenuse.get(RoleLG.COUPLE),strb.toString()));
 					pj2.playSound(pj2.getLocation(), Sound.SHEEP_SHEAR, 1, 20);
 				}
 			}

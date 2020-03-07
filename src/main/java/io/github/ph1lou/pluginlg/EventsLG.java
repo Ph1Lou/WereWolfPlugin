@@ -80,7 +80,7 @@ public class EventsLG {
 			chest_location.add(location);
 			chest_has_been_open.put(location,false);
 		}
-		Bukkit.broadcastMessage(main.text.esthetique("§m", "§e",main.text.getText(36)+nb_target+main.text.getText(37)));
+		Bukkit.broadcastMessage(String.format(main.text.getText(36),nb_target));
 		
 	}
 	

@@ -26,7 +26,6 @@ public class AutoStartLG extends BukkitRunnable{
 	@Override
 	public void run() {
 
-		
 		World world = Bukkit.getWorld("world");
 		WorldBorder wb = world.getWorldBorder();
 		long time = world.getTime();
@@ -69,7 +68,6 @@ public class AutoStartLG extends BukkitRunnable{
 		if(main.config.tool_switch.get(ToolLG.LG_LIST) && main.score.getTimer()==main.config.value.get(TimerLG.LG_LIST)) {
 			
 			main.role_manage.lgList();
-			
 		}
 		
 		

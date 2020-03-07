@@ -126,12 +126,12 @@ public class ScoreBoardLG {
 		
 		if (plg.getCompoTime()>6) {
 			for (int i=0;i<roles.size()/2;i++) {
-				score[i]="§r"+main.config.role_count.get(roles.get(i))+" "+main.text.translaterole.get(roles.get(i));
+				score[i]=main.config.role_count.get(roles.get(i))+" "+main.text.translaterole.get(roles.get(i));
 			}
 		}
 		else {
 			for (int i=roles.size()/2;i<roles.size();i++) {
-				score[i-roles.size()/2]="§r"+main.config.role_count.get(roles.get(i))+" "+main.text.translaterole.get(roles.get(i));
+				score[i-roles.size()/2]=main.config.role_count.get(roles.get(i))+" "+main.text.translaterole.get(roles.get(i));
 			}
 		}
 		
@@ -323,9 +323,9 @@ public class ScoreBoardLG {
 		
 		if(main.config.tool_switch.get(ToolLG.AUTO_GROUP) && player<=groupsize*3 && groupsize>3) {
 			groupsize--;
-			Bukkit.broadcastMessage(main.text.esthetique("§m", "§2",main.text.getText(137)+groupsize));
+			Bukkit.broadcastMessage(String.format(main.text.getText(137),groupsize));
 			for (Player player:Bukkit.getOnlinePlayers()) {
-				Title.sendTitle(player,20,60, 20,main.text.getText(138), main.text.getText(139)+main.score.getGroupe());
+				Title.sendTitle(player,20,60, 20,main.text.getText(138),String.format( main.text.getText(139),main.score.getGroupe()));
 			}
 		}
 	}
