@@ -220,7 +220,7 @@ public class PlayerListener implements Listener {
 			event.setJoinMessage(String.format(main.text.getText(194),Bukkit.getOnlinePlayers().size(),main.score.getRole(),event.getPlayer().getName()));
 		}
 		else if(main.playerlg.containsKey(event.getPlayer().getName()) && main.playerlg.get(event.getPlayer().getName()).isState(State.VIVANT)) {
-			event.setJoinMessage(String.format(main.text.getText(193),event.getPlayer()));
+			event.setJoinMessage(String.format(main.text.getText(193),event.getPlayer().getName()));
 		}
 	}	
 	
