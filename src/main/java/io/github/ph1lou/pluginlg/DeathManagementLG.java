@@ -288,15 +288,16 @@ public class DeathManagementLG {
 				PlayerLG plc1 = main.playerlg.get(c1);
 				Bukkit.broadcastMessage(String.format(main.text.getText(30),c1));
 				if(Bukkit.getPlayer(c1)!=null) {
-					Player player = Bukkit.getPlayer(c1);
-					plc1.setSpawn(player.getLocation());
-					plc1.clearItemDeath();
-					plc1.setItemDeath(player.getInventory().getContents());
-					plc1.addItemDeath(player.getInventory().getHelmet());
-					plc1.addItemDeath(player.getInventory().getChestplate());
-					plc1.addItemDeath(player.getInventory().getBoots());
-					plc1.addItemDeath(player.getInventory().getLeggings());
-					player.setGameMode(GameMode.SPECTATOR);
+					if(plc1.isState(State.VIVANT)){
+						Player player = Bukkit.getPlayer(c1);
+						plc1.setSpawn(player.getLocation());
+						plc1.clearItemDeath();
+						plc1.setItemDeath(player.getInventory().getContents());
+						plc1.addItemDeath(player.getInventory().getHelmet());
+						plc1.addItemDeath(player.getInventory().getChestplate());
+						plc1.addItemDeath(player.getInventory().getBoots());
+						plc1.addItemDeath(player.getInventory().getLeggings());
+					}
 				}
 				main.playerlg.get(playername).setKiller("§dLove");
 				mortdefinitive(c1);

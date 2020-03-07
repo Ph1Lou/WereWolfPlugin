@@ -37,7 +37,7 @@ public class TextLG {
 					esthetique("§m", "§6","La bordure commence à se déplacer"),
 					esthetique("§m", "§6","Minage Désactivé"),
 					esthetique("§m", "§6","En raison du nombre de joueurs, les Votes sont désactivés"),
-			/*10*/	esthetique("§6§m", "§e","§e%s était %s"),
+			/*10*/	"§e%s était %s",
 					esthetique("§6§m", "§e","Ours : %s"),
 					esthetique("§6§m", "§4","Pas assez de personnes pour former un couple"),
 					esthetique("§6§m", "§4","Vous ne pouvez plus utiliser votre pouvoir aujourd'hui"),
