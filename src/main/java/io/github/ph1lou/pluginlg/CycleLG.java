@@ -82,7 +82,7 @@ public class CycleLG {
 					String pc = playerv.get((int) Math.floor(Math.random()*playerv.size()));
 					plg.setCampFeutre(main.playerlg.get(pc).getCamp());
 					plg.setRoleFeutre(main.playerlg.get(pc).getRole());
-					player.sendMessage(String.format(main.text.getText(15),main.text.translaterole.get(main.playerlg.get(pc).getRole())));
+					player.sendMessage(String.format(main.text.poweruse.get(RoleLG.LOUP_FEUTRE),main.text.translaterole.get(main.playerlg.get(pc).getRole())));
 				}
 			}
 		}

@@ -51,7 +51,7 @@ public class TextLG {
 					esthetique("§6§m", "§4","Pas assez de personnes pour former un couple"),
 					esthetique("§6§m", "§4","Vous ne pouvez plus utiliser votre pouvoir aujourd'hui"),
 					esthetique("§2§m", "§6","C'est la nuit, enlevez votre armure pour devenir invisible"),
-					"Victoire",
+					"Victoire %s",
 					esthetique("§m", "§6","C'est le Jour"),
 					esthetique("§2§m", "§6","C'est l'heure de voter §6/lg vote§r Vous avez %s"),
 					esthetique("§6§m", "§e","Vous redevenez visible"),
