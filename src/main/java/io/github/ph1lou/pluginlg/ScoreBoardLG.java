@@ -3,10 +3,7 @@ package io.github.ph1lou.pluginlg;
 import java.util.ArrayList;
 import java.util.List;
 import io.github.ph1lou.pluginlg.enumlg.*;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.WorldBorder;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 import fr.mrmicky.fastboard.FastBoard;
@@ -36,8 +33,8 @@ public class ScoreBoardLG {
 		
 		String[] score =main.text.getScoreBoard(0).clone();
 		
-		score[1]=score[1]+host;
-		score[5]=score[5] +Bukkit.getOnlinePlayers().size()+"/"+role;
+		score[5]=String.format(score[5],host);
+		score[3]=String.format(score[3],Bukkit.getOnlinePlayers().size(),role);
 		
 		for(int i=0;i<score.length;i++) {
 			StringBuilder sb = new StringBuilder();
@@ -55,48 +52,45 @@ public class ScoreBoardLG {
 	
 	
 	public void updateScoreBoard2(FastBoard board) {
-		
-	
-		
+
 		String playername = board.getPlayer().getName();
 		World world = board.getPlayer().getWorld();
 		WorldBorder wb = world.getWorldBorder();
 		String[] score = main.text.getScoreBoard(1).clone();
-		
-		score[0]=score[0]+host;
-		
-		
-		if(main.playerlg.containsKey(playername)) {
+
+		if(main.isState(StateLG.TELEPORTATION)) {
+			score[1]="Téléportation";
+		}
+		else if(main.playerlg.containsKey(playername)) {
 			
 			if(!main.playerlg.get(playername).isState(State.MORT)) {
 				
 				if(!main.isState(StateLG.LG)) {
-					score[1]="§6Rôle "+main.conversion(main.config.value.get(TimerLG.ROLE_DURATION)-timer);
+					score[1]=String.format(score[1], main.conversion(main.config.value.get(TimerLG.ROLE_DURATION)-timer));
 				}
 				else score[1]=main.text.translaterole.get(main.playerlg.get(playername).getRole());
 			}
-			else score[1]="§6Vous êtes Mort";
+			else score[1]="Mort";
 		}
-		else score[1]="§6Mode Spectateur";
-		if(main.isState(StateLG.TELEPORTATION)) {
-			score[2]="§eTéléportation en Cours";
+		else score[1]="Spectateur";
+
+		score[3]=String.format(score[3],main.conversion(timer));
+		score[4]=String.format(score[4],timer/main.config.value.get(TimerLG.DAY_DURATION)/2);
+		score[5]=String.format(score[5],player);
+		score[6]=String.format(score[6],groupsize);
+
+		if(timer<main.config.value.get(TimerLG.BORDER_BEGIN)){
+			score[8]=String.format(score[8],main.conversion(main.config.value.get(TimerLG.BORDER_BEGIN)-timer));
 		}
-		else score[2]=score[2]+main.conversion(timer);
-		
-		score[3]=score[3]+timer/main.config.value.get(TimerLG.DAY_DURATION)/2;
-		score[4]=score[4]+player;
-		score[5]=score[5]+groupsize;
-	
-		if(timer>main.config.value.get(TimerLG.BORDER_BEGIN) && wb.getSize()>main.config.border_value.get(BorderLG.BORDER_MIN)) {
-			score[6]=score[6]+Math.round(wb.getSize())+" -> "+main.config.border_value.get(BorderLG.BORDER_MIN);
+		else {
+			score[8]=String.format(score[8],""+Math.round(wb.getSize()));
+			if(wb.getSize()>main.config.border_value.get(BorderLG.BORDER_MIN)){
+				score[8]=score[8]+" > "+main.config.border_value.get(BorderLG.BORDER_MIN);
+			}
 		}
-		else score[6]=score[6]+Math.round(wb.getSize());
-		
-		if(main.config.tool_switch.get(ToolLG.MIDDLE_DISTANCE)) {
-			score[7]=score[7]+middistance(board.getPlayer());
-		}
-		score[8]=score[8]+Math.floor(board.getPlayer().getLocation().getY());
-		
+
+		score[10]=String.format(score[10],host);
+
 		for(int i=0;i<score.length;i++) {
 			StringBuilder sb = new StringBuilder();
 			sb.append(score[i]);
@@ -209,7 +203,8 @@ public class ScoreBoardLG {
 		
 		
 		StringBuilder stringbuilder=new StringBuilder();
-		
+		stringbuilder.append("§eCentre ").append(middistance(player)).append(" | §6Y ");
+		stringbuilder.append(Math.floor(player.getLocation().getY()));
 		if (!main.eventslg.chest_has_been_open.isEmpty()) {
 				
 			if(!main.eventslg.chest_has_been_open.containsValue(false)) {

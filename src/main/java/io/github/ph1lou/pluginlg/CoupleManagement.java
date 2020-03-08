@@ -152,7 +152,7 @@ public class CoupleManagement {
 					for (String c : plg.getCouple()) {
 						strb.append(c).append(" ");
 					}
-					pj2.sendMessage(String.format(main.text.powerhasbeenuse.get(RoleLG.COUPLE),strb.toString()));
+					pj2.sendMessage(String.format(main.text.description.get(RoleLG.COUPLE),strb.toString()));
 					pj2.playSound(pj2.getLocation(), Sound.SHEEP_SHEAR, 1, 20);
 				}
 			}

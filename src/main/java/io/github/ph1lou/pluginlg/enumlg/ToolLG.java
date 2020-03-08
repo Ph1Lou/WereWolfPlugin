@@ -8,7 +8,6 @@ public enum ToolLG {
 	SHOW_ROLE_TO_DEATH(true,"Affiche le Rôle à la Mort"),
 	COMPO_VISIBLE(true,"Composition Visible"),
 	VOTE(true,"Vote"),
-	MIDDLE_DISTANCE(true,"Distance au Centre"),
 	LG_LIST(true,"Liste des LG"),
 	EVENT_VOYANTE_DEATH(true,"Event à la mort d'une Voyante"),
 	AUTO_REZ_WITCH(false,"la Sorcière peut s'autorez"),

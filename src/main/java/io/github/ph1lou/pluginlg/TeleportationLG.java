@@ -60,7 +60,7 @@ public class TeleportationLG extends BukkitRunnable{
 					for(ItemStack it:main.stufflg.getStartLoot()) {
 						player.getInventory().addItem(it);	
 					}
-					Bukkit.broadcastMessage("yo");
+
 					if(main.config.scenario.get(ScenarioLG.CAT_EYES)){
 						player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0,false,false));
 					}

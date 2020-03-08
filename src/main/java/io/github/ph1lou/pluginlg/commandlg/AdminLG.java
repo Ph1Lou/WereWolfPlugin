@@ -114,7 +114,7 @@ public class AdminLG implements TabExecutor {
 				try {
 					main.score.setGroupe(Integer.parseInt(args[1]));
 					for (Player player:Bukkit.getOnlinePlayers()) {
-						Title.sendTitle(player,20,60, 20,main.text.getText(138), main.text.getText(139)+main.score.getGroupe());
+						Title.sendTitle(player,20,60, 20,main.text.getText(138), String.format(main.text.getText(139),main.score.getGroupe()));
 
 					}
 					Bukkit.broadcastMessage(String.format(main.text.getText(137),main.score.getGroupe()));
@@ -129,7 +129,7 @@ public class AdminLG implements TabExecutor {
 			case "groupe" :
 
 				for (Player player:Bukkit.getOnlinePlayers()) {
-					Title.sendTitle(player,20,60, 20,main.text.getText(138), String.format(main.text.getText(137),main.score.getGroupe()));
+					Title.sendTitle(player,20,60, 20,main.text.getText(138), String.format(main.text.getText(139),main.score.getGroupe()));
 
 				}
 				Bukkit.broadcastMessage(String.format(main.text.getText(137),main.score.getGroupe()));
