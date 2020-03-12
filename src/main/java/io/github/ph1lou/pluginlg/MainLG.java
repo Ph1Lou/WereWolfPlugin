@@ -19,6 +19,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
+import org.bukkit.block.Biome;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -51,10 +52,17 @@ public class MainLG extends JavaPlugin {
 	public final FileLG filelg = new FileLG();
 	public final StuffLG stufflg = new StuffLG();
 
-	
 	@Override
 	public void onEnable() {
-		
+		Bukkit.getScheduler().runTask(this, this::enable);
+	}
+
+	@Override
+	public void onLoad(){
+		WorldUtils.patchBiomes();
+	}
+
+	public void enable() {
 		saveDefaultConfig();
 		setState(StateLG.LOBBY);
 		setDay(Day.DEFAULT);
@@ -107,10 +115,9 @@ public class MainLG extends JavaPlugin {
 			world.setGameRuleValue("keepInventory", "true");
 			world.setGameRuleValue("naturalRegeneration", "false");
 			world.getWorldBorder().reset();
-
-			int x=(int) world.getSpawnLocation().getX();
-			int z=(int) world.getSpawnLocation().getZ();
-
+			Location biome = WorldUtils.findBiome(Biome.ROOFED_FOREST, world, 1000);
+			int x=(int) biome.getX();
+			int z=(int) biome.getZ();
 			world.setSpawnLocation(x, 151,z);
 			for(int i=-16;i<=16;i++) {
 
