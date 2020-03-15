@@ -26,7 +26,6 @@ public class AutoStartLG extends BukkitRunnable{
 
 		if(compteur%4!=0) return;
 
-
 		World world = Bukkit.getWorld("world");
 		WorldBorder wb = world.getWorldBorder();
 		long time = world.getTime();
@@ -48,7 +47,6 @@ public class AutoStartLG extends BukkitRunnable{
 		}
 		else main.config.value.put(TimerLG.ROLE_DURATION,main.config.value.get(TimerLG.ROLE_DURATION)-1);
 
-
 		if (main.config.value.get(TimerLG.PVP)==0) {
 			world.setPVP(true);
 			Bukkit.broadcastMessage(main.text.getText(6));
@@ -66,11 +64,13 @@ public class AutoStartLG extends BukkitRunnable{
 				main.config.value.put(TimerLG.MASTER_DURATION,-1);
 			}
 			else main.config.value.put(TimerLG.MASTER_DURATION,main.config.value.get(TimerLG.MASTER_DURATION)-1);
+
 			if(main.config.value.get(TimerLG.COUPLE_DURATION)==0) {
 				main.couple_manage.auto_couple();
 				main.config.value.put(TimerLG.COUPLE_DURATION,-1);
 			}
 			else main.config.value.put(TimerLG.COUPLE_DURATION,main.config.value.get(TimerLG.COUPLE_DURATION)-1);
+
 			if(main.config.value.get(TimerLG.ANGE_DURATION)==0) {
 				main.role_manage.auto_ange();
 				main.config.value.put(TimerLG.ANGE_DURATION,-1);
@@ -146,10 +146,8 @@ public class AutoStartLG extends BukkitRunnable{
 		}
 
 		if(main.score.getTimer()%(main.config.value.get(TimerLG.DAY_DURATION)*2) == main.config.value.get(TimerLG.VOTE_DURATION) ){
-			if(main.config.tool_switch.get(ToolLG.VOTE)) {
-				if(!main.vote.templayer.isEmpty()){
-					main.cycle.preVoteResult();
-				}
+			if(main.config.tool_switch.get(ToolLG.VOTE) && main.vote.getResult().length()!=0) {
+				main.cycle.preVoteResult();
 			}
 		}
 		if(main.score.getTimer()%(main.config.value.get(TimerLG.DAY_DURATION)*2) == main.config.value.get(TimerLG.VOTE_DURATION)+main.config.value.get(TimerLG.CITIZEN_DURATION) ){

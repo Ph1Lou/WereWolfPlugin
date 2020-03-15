@@ -88,8 +88,7 @@ public class CycleLG {
 		}
 	}
 	public void preDay() {
-		
-	
+
 		if(!main.isState(StateLG.LG)) return;
 		
 		for(String playername:main.playerlg.keySet()) {
@@ -136,7 +135,6 @@ public class CycleLG {
 		Bukkit.broadcastMessage(main.text.getText(16));
 		
 		if(!main.isState(StateLG.LG)) return;
-		
 
 		for(String playername:main.playerlg.keySet()) {
 			

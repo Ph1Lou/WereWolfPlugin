@@ -93,12 +93,9 @@ public class MainLG extends JavaPlugin {
 		for(Player player:Bukkit.getOnlinePlayers()) {
 			joinPlayer(player) ;	
 		}
-		
 		TeleportationLG start = new TeleportationLG(this);
 		start.runTaskTimer(this, 0, 20);
 	}
-	
-	
 	
 	private void setWorld() {
 
@@ -116,7 +113,7 @@ public class MainLG extends JavaPlugin {
 			int x=(int) world.getSpawnLocation().getX();
 			int z=(int)  world.getSpawnLocation().getZ();
 
-			if(config.tool_switch.get(ToolLG.ROOFED_AUTO) &&  !world.getBiome(x, z).equals(Biome.ROOFED_FOREST)){
+			if(!world.getBiome(x, z).equals(Biome.ROOFED_FOREST)){
 				Location biome = WorldUtils.findBiome(Biome.ROOFED_FOREST, world, 1000);
 				x=(int) biome.getX();
 				z=(int) biome.getZ();
@@ -130,18 +127,12 @@ public class MainLG extends JavaPlugin {
 					new Location(world, i+x, 150,j+z).getBlock().setType(Material.BARRIER);
 					new Location(world, i+x, 154,j+z).getBlock().setType(Material.BARRIER);
 				}
-				new Location(world, i+x, 151,z-16).getBlock().setType(Material.BARRIER);
-				new Location(world, i+x, 152,z-16).getBlock().setType(Material.BARRIER);
-				new Location(world, i+x, 153,z-16).getBlock().setType(Material.BARRIER);
-				new Location(world, i+x, 151,z+16).getBlock().setType(Material.BARRIER);
-				new Location(world, i+x, 152,z+16).getBlock().setType(Material.BARRIER);
-				new Location(world, i+x, 153,z+16).getBlock().setType(Material.BARRIER);
-				new Location(world, x-16, 151,i+z).getBlock().setType(Material.BARRIER);
-				new Location(world, x-16, 152,i+z).getBlock().setType(Material.BARRIER);
-				new Location(world, x-16, 153,i+z).getBlock().setType(Material.BARRIER);
-				new Location(world, x+16, 151,i+z).getBlock().setType(Material.BARRIER);
-				new Location(world, x+16, 152,i+z).getBlock().setType(Material.BARRIER);
-				new Location(world, x+16, 153,i+z).getBlock().setType(Material.BARRIER);
+				for(int j=151;j<154;j++){
+					new Location(world, i+x, j,z-16).getBlock().setType(Material.BARRIER);
+					new Location(world, i+x, j,z+16).getBlock().setType(Material.BARRIER);
+					new Location(world, x-16, j,i+z).getBlock().setType(Material.BARRIER);
+					new Location(world, x+16, j,i+z).getBlock().setType(Material.BARRIER);
+				}
 			}
 
 		}catch(Exception e){
@@ -259,7 +250,9 @@ public class MainLG extends JavaPlugin {
 	public String conversion(int timer) {
 		
 		String valeur;
-		
+		float sign=Math.signum(timer);
+		timer=Math.abs(timer);
+
 		if(timer%60>9) {
 			valeur=timer%60+"s";
 		}
@@ -276,7 +269,8 @@ public class MainLG extends JavaPlugin {
 		else if (timer/60>0){
 			valeur = timer/60+"m"+valeur;
 		}
-		
+		if(sign<0) valeur="-"+valeur;
+
 		return valeur;
 	}
 	

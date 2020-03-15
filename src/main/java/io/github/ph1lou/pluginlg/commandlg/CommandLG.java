@@ -488,7 +488,7 @@ public class CommandLG implements TabExecutor {
 
 	@Override
 	public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] args) {
-		String[] tabe = {"compo","regles","timer","vote","scenarios","maudire","couple","flairer","slv","maitre","switch","voir","inspecter","role","lg","dechu","gardien","depouillement","cancelvote"};
+		String[] tabe = {"compo","regles","timer","vote","scenarios","maudire","couple","flairer","slv","maitre","switch","voir","inspecter","role","lg","dechu","gardien","depouiller","cancelvote"};
 		List<String> tab = new ArrayList<>(Arrays.asList(tabe));
 		if(args.length==0){
 			return tab;

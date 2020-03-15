@@ -27,10 +27,10 @@ public class CoupleManagement {
 	public void auto_couple() {
 
 		Random r =new Random(System.currentTimeMillis());
-		List<String> pcouple =new ArrayList<>();
+		List<String> couples =new ArrayList<>();
 		for(String p:main.playerlg.keySet()) {
 			if(main.playerlg.get(p).isState(State.VIVANT)) {
-				pcouple.add(p);
+				couples.add(p);
 			}
 		}
 		if(main.score.getPlayerSize()<2 && main.config.role_count.get(RoleLG.CUPIDON)+main.config.role_count.get(RoleLG.COUPLE)>0){
@@ -53,19 +53,19 @@ public class CoupleManagement {
 				
 				if (main.playerlg.get(playername).hasPower() || !main.playerlg.get(main.playerlg.get(playername).getAffectedPlayer().get(0)).isState(State.VIVANT) || !main.playerlg.get(main.playerlg.get(playername).getAffectedPlayer().get(1)).isState(State.VIVANT)) {
 					
-					if(pcouple.contains(playername)) {
-						pcouple.remove(playername);
-						j1 = pcouple.get((int) Math.floor(r.nextFloat()*pcouple.size()));
-						pcouple.remove(j1);
-						j2 = pcouple.get((int) Math.floor(r.nextFloat()*pcouple.size()));
-						pcouple.add(j1);
-						pcouple.add(playername);
+					if(couples.contains(playername)) {
+						couples.remove(playername);
+						j1 = couples.get((int) Math.floor(r.nextFloat()*couples.size()));
+						couples.remove(j1);
+						j2 = couples.get((int) Math.floor(r.nextFloat()*couples.size()));
+						couples.add(j1);
+						couples.add(playername);
 					}
 					else {
-						j1 = pcouple.get((int) Math.floor(r.nextFloat()*pcouple.size()));
-						pcouple.remove(j1);
-						j2 = pcouple.get((int) Math.floor(r.nextFloat()*pcouple.size()));
-						pcouple.add(j1);
+						j1 = couples.get((int) Math.floor(r.nextFloat()*couples.size()));
+						couples.remove(j1);
+						j2 = couples.get((int) Math.floor(r.nextFloat()*couples.size()));
+						couples.add(j1);
 					}
 					
 					main.playerlg.get(playername).clearAffectedPlayer();
@@ -81,8 +81,8 @@ public class CoupleManagement {
 					j2 = main.playerlg.get(playername).getAffectedPlayer().get(1);
 				}	
 				if(!polygamie) {
-					pcouple.remove(j1);
-					pcouple.remove(j2);
+					couples.remove(j1);
+					couples.remove(j2);
 				}
 				if(!main.playerlg.get(j1).getCouple().contains(j2)) {
 					main.playerlg.get(j1).addCouple(j2);
@@ -95,14 +95,14 @@ public class CoupleManagement {
 		}
 		for(int i = 0; i< main.config.role_count.get(RoleLG.COUPLE); i++) {
 			
-			j1 = pcouple.get((int) Math.floor(r.nextFloat()*pcouple.size()));
-			pcouple.remove(j1);
-			j2 = pcouple.get((int) Math.floor(r.nextFloat()*pcouple.size()));
-			pcouple.add(j1);
+			j1 = couples.get((int) Math.floor(r.nextFloat()*couples.size()));
+			couples.remove(j1);
+			j2 = couples.get((int) Math.floor(r.nextFloat()*couples.size()));
+			couples.add(j1);
 			
 			if(!polygamie) {
-				pcouple.remove(j1);
-				pcouple.remove(j2);
+				couples.remove(j1);
+				couples.remove(j2);
 			}
 			if(!main.playerlg.get(j1).getCouple().contains(j2)) {
 				main.playerlg.get(j1).addCouple(j2);

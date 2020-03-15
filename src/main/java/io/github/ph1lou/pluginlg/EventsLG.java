@@ -50,7 +50,7 @@ public class EventsLG {
 		}
 		else {
 			chest.getInventory().addItem(new ItemStack(Material.BONE,8));
-			sign.setLine(1,"Bon toutou");
+			sign.setLine(1,main.text.getText(82));
 		}
 		sign.update();
 		location.getBlock().setType(chest.getType());
@@ -81,7 +81,5 @@ public class EventsLG {
 			chest_has_been_open.put(location,false);
 		}
 		Bukkit.broadcastMessage(String.format(main.text.getText(36),nb_target));
-		
 	}
-	
 }
