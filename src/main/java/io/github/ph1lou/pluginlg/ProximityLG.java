@@ -46,6 +46,8 @@ public class ProximityLG {
 				if (Bukkit.getPlayer(sisters.get(i)) != null && Bukkit.getPlayer(sisters.get(j)) != null && sisters_location.get(sisters.get(i)).distance(sisters_location.get(sisters.get(j)))<=20) {
 					Player sister1 = Bukkit.getPlayer(sisters.get(i));
 					Player sister2 = Bukkit.getPlayer(sisters.get(j));
+					sister1.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+					sister2.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
 					sister1.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,100,0,false,false));
 					sister2.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,100,0,false,false));
 				}

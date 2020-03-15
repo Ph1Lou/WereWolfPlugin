@@ -17,89 +17,103 @@ import java.util.List;
 
 
 public class OptionLG {
-	
-	
+
+
+	private Inventory invtool;
+	private Inventory invrole;
+	public Inventory invtimer;
+	public Inventory invborder;
+	private Inventory invscenario;
+	private Inventory invstuff;
+	private Inventory invsave;
+	private Inventory invconfig;
 	
 	private final MainLG main;
 	
 	public OptionLG(MainLG main) {
 		this.main=main;
+
+	}
+
+	public void initInv(){
+		invtool = Bukkit.createInventory(null, 18,main.text.getText(175));
+		invrole = Bukkit.createInventory(null, 45,main.text.getText(176));
+		invtimer = Bukkit.createInventory(null, 27,main.text.getText(177));
+		invconfig = Bukkit.createInventory(null, 36,main.text.getText(178));
+		invscenario = Bukkit.createInventory(null, 36,main.text.getText(76));
+		invborder = Bukkit.createInventory(null, 18,main.text.getText(179));
+		invsave = Bukkit.createInventory(null, 18,main.text.getText(180));
+		invstuff = Bukkit.createInventory(null, 18,main.text.getText(77));
 	}
 	
 	public void toolBar(Player player) {
 
-		Inventory inv = Bukkit.createInventory(null, 18,main.text.getText(175));
-		inv.setItem(1, changeMeta(Material.BEACON,main.text.getText(176),1,null));
-		inv.setItem(3, changeMeta(Material.ANVIL,main.text.getText(177),1,null));
-		inv.setItem(5, changeMeta(Material.MAP,main.text.getText(178),1,null));
-		inv.setItem(7, changeMeta(Material.CHEST,main.text.getText(77),1,null));
-		inv.setItem(10, changeMeta(Material.GLASS,main.text.getText(179),1,null));
-		inv.setItem(12, changeMeta(Material.ARMOR_STAND,main.text.getText(180),1,null));
-		inv.setItem(14, changeMeta(Material.PUMPKIN,main.text.getText(76),1,null));
-		player.openInventory(inv);
+
+		invtool.setItem(1, changeMeta(Material.BEACON,main.text.getText(176),1,null));
+		invtool.setItem(3, changeMeta(Material.ANVIL,main.text.getText(177),1,null));
+		invtool.setItem(5, changeMeta(Material.MAP,main.text.getText(178),1,null));
+		invtool.setItem(7, changeMeta(Material.CHEST,main.text.getText(77),1,null));
+		invtool.setItem(10, changeMeta(Material.GLASS,main.text.getText(179),1,null));
+		invtool.setItem(12, changeMeta(Material.ARMOR_STAND,main.text.getText(180),1,null));
+		invtool.setItem(14, changeMeta(Material.PUMPKIN,main.text.getText(76),1,null));
+		player.openInventory(invtool);
 	}
 	
 	public void chooseRole(Player player) {
 		
-		Inventory inv = Bukkit.createInventory(null, 45,main.text.getText(176));
-		inv.setItem(0, changeMeta(Material.COMPASS,main.text.getText(170),1,null));
-		inv.setItem(8, changeMeta(Material.BARRIER,main.text.getText(183),1,null));
-		updateSelection(inv);
-		player.openInventory(inv);
+
+		invrole.setItem(0, changeMeta(Material.COMPASS,main.text.getText(170),1,null));
+		invrole.setItem(8, changeMeta(Material.BARRIER,main.text.getText(183),1,null));
+		updateSelection(invrole);
+		player.openInventory(invrole);
 	}
 	
 	public void timerTool(Player player) {
-		
-		Inventory inv = Bukkit.createInventory(null, 27,main.text.getText(177));
-		inv.setItem(0, changeMeta(Material.COMPASS,main.text.getText(170),1,null));
-		updateSelectionTimer(inv, 0);
-		player.openInventory(inv);
+
+		invtimer.setItem(0, changeMeta(Material.COMPASS,main.text.getText(170),1,null));
+		updateSelectionTimer(invtimer, 0);
+		player.openInventory(invtimer);
 	}
 	
 	public void globalTool(Player player) {
-		
-		Inventory inv = Bukkit.createInventory(null, 36,main.text.getText(178));
-		inv.setItem(0, changeMeta(Material.COMPASS,main.text.getText(170),1,null));
-		updateSelectionTool(inv);
-		player.openInventory(inv);
+
+		invconfig.setItem(0, changeMeta(Material.COMPASS,main.text.getText(170),1,null));
+		updateSelectionTool(invconfig);
+		player.openInventory(invconfig);
 	}
 
 	public void globalScenario(Player player) {
 
-		Inventory inv = Bukkit.createInventory(null, 36,main.text.getText(76));
-		inv.setItem(0, changeMeta(Material.COMPASS,main.text.getText(170),1,null));
-		updateSelectionScenario(inv);
-		player.openInventory(inv);
+		invscenario.setItem(0, changeMeta(Material.COMPASS,main.text.getText(170),1,null));
+		updateSelectionScenario(invscenario);
+		player.openInventory(invscenario);
 	}
 
 	
 	public void borderTool(Player player) {
-		
-		Inventory inv = Bukkit.createInventory(null, 18,main.text.getText(179));
-		inv.setItem(0, changeMeta(Material.COMPASS,main.text.getText(170),1,null));
-		updateSelectionBorder(inv,0);
-		player.openInventory(inv);
+
+		invborder.setItem(0, changeMeta(Material.COMPASS,main.text.getText(170),1,null));
+		updateSelectionBorder(invborder,0);
+		player.openInventory(invborder);
 	}
 	
 	public void saveTool(Player player) {
-		
-		Inventory inv = Bukkit.createInventory(null, 18,main.text.getText(180));
-		inv.setItem(0, changeMeta(Material.COMPASS,main.text.getText(170),1,null));
-		updateSelectionSave(inv, 1);
-		player.openInventory(inv);
+
+		invsave.setItem(0, changeMeta(Material.COMPASS,main.text.getText(170),1,null));
+		updateSelectionSave(invsave, 1);
+		player.openInventory(invsave);
 	}
 
 	public void stuffTool(Player player) {
 
-		Inventory inv = Bukkit.createInventory(null, 18,main.text.getText(77));
-		inv.setItem(0, changeMeta(Material.COMPASS,main.text.getText(170),1,null));
-		inv.setItem(2, changeMeta(Material.EGG,"Charger Stuff Role normal",1,null));
-		inv.setItem(4, changeMeta(Material.GOLD_SWORD,"Charger Stuff MeetUp",1,null));
-		inv.setItem(6, changeMeta(Material.JUKEBOX,"Charger Stuff Depart Chill",1,null));
-		inv.setItem(10, changeMeta(Material.BARRIER,"Clear le Stuff de Départ et Mort",1,null));
-		inv.setItem(13, changeMeta(Material.CHEST,main.text.getText(182),1,null));
-		inv.setItem(16, changeMeta(Material.ENDER_CHEST,main.text.getText(181),1,null));
-		player.openInventory(inv);
+		invstuff.setItem(0, changeMeta(Material.COMPASS,main.text.getText(170),1,null));
+		invstuff.setItem(2, changeMeta(Material.EGG,"Charger Stuff Role normal",1,null));
+		invstuff.setItem(4, changeMeta(Material.GOLD_SWORD,"Charger Stuff MeetUp",1,null));
+		invstuff.setItem(6, changeMeta(Material.JUKEBOX,"Charger Stuff Depart Chill",1,null));
+		invstuff.setItem(10, changeMeta(Material.BARRIER,"Clear le Stuff de Départ et Mort",1,null));
+		invstuff.setItem(13, changeMeta(Material.CHEST,main.text.getText(182),1,null));
+		invstuff.setItem(16, changeMeta(Material.ENDER_CHEST,main.text.getText(181),1,null));
+		player.openInventory(invstuff);
 	}
 
 	public void updateSelectionSave(Inventory inv, int j) {
@@ -160,6 +174,9 @@ public class OptionLG {
 				find=true;
 			}
 			else i++;
+		}
+		if(!find){
+			i=9;
 		}
 		return (i-9);
 	}

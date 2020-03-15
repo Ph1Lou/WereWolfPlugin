@@ -39,7 +39,6 @@ public class PlayerLG{
 	private int lostheart=0;
 	private int nbkill=0;
 	private float progflair = 0;
-	private int timecompo = 0;
 	private String killer="";
 	private String avote="";
 
@@ -269,14 +268,6 @@ public class PlayerLG{
 	
 	public int getDeathTime() {
 		return(this.deathtime);
-	}
-	
-	public void setCompoTime(Integer compotime) {
-		this.timecompo=compotime;
-	}
-	
-	public int getCompoTime() {
-		return(this.timecompo);
 	}
 	
 	public void decDiamondLimit() {

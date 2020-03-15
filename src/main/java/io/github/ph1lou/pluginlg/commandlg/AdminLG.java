@@ -25,14 +25,13 @@ public class AdminLG implements TabExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		
 		if(args.length==0) return false;
-		
+
 		if(!sender.hasPermission("adminlg.use")) {
 			sender.sendMessage(main.text.getText(116));
 			return true;
 		}
-		
 		switch (args[0]) {
-		
+
 			case "host" :
 				if(args.length<2) {
 					sender.sendMessage(String.format(main.text.getText(190),1));
@@ -45,7 +44,6 @@ public class AdminLG implements TabExecutor {
 				}
 				sb.delete(0,args[0].length()+1);
 				main.score.setHost(sb.toString());
-			
 			break;
 				case "start" :
 
@@ -55,18 +53,16 @@ public class AdminLG implements TabExecutor {
 					sender.sendMessage(main.text.getText(119));
 					return true;
 				}
-
 				if(surplus>0) {
 					sender.sendMessage(main.text.getText(120));
 					return true;
 				}
-
 				try{
 					World world = Bukkit.getWorld("world");
 					main.setState(StateLG.TELEPORTATION);
 					world.setTime(0);
 					WorldBorder wb = world.getWorldBorder();
-					wb.setCenter(world.getSpawnLocation().getX(), world.getSpawnLocation().getZ());
+					wb.setCenter(world.getSpawnLocation().getX(),world.getSpawnLocation().getZ());
 					wb.setSize(main.config.border_value.get(BorderLG.BORDER_MAX));
 					wb.setWarningDistance((int) (wb.getSize()/7));
 				}catch(Exception e){
@@ -112,27 +108,24 @@ public class AdminLG implements TabExecutor {
 					return true;
 				}
 				try {
-					main.score.setGroupe(Integer.parseInt(args[1]));
+					main.score.setGroup(Integer.parseInt(args[1]));
 					for (Player player:Bukkit.getOnlinePlayers()) {
-						Title.sendTitle(player,20,60, 20,main.text.getText(138), String.format(main.text.getText(139),main.score.getGroupe()));
+						Title.sendTitle(player,20,60, 20,main.text.getText(138), String.format(main.text.getText(139),main.score.getGroup()));
 
 					}
-					Bukkit.broadcastMessage(String.format(main.text.getText(137),main.score.getGroupe()));
+					Bukkit.broadcastMessage(String.format(main.text.getText(137),main.score.getGroup()));
 
 				} catch (NumberFormatException ignored) {
 
 				}
-
-
 				break;
 
 			case "groupe" :
 
 				for (Player player:Bukkit.getOnlinePlayers()) {
-					Title.sendTitle(player,20,60, 20,main.text.getText(138), String.format(main.text.getText(139),main.score.getGroupe()));
-
+					Title.sendTitle(player,20,60, 20,main.text.getText(138), String.format(main.text.getText(139),main.score.getGroup()));
 				}
-				Bukkit.broadcastMessage(String.format(main.text.getText(137),main.score.getGroupe()));
+				Bukkit.broadcastMessage(String.format(main.text.getText(137),main.score.getGroup()));
 				break;
 		
 		
@@ -246,7 +239,7 @@ public class AdminLG implements TabExecutor {
 					return true;
 				}
 				int d=20;
-				int size = main.score.getGroupe();
+				int size = main.score.getGroup();
 				double r= Math.random()*Bukkit.getOnlinePlayers().size();
 				Player player = Bukkit.getPlayer(args[1]);
 				Location location = player.getLocation();

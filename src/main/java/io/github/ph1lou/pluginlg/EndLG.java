@@ -139,7 +139,7 @@ public class EndLG {
             main.score.updateBoard();
         }
         for(Player player:Bukkit.getOnlinePlayers()) {
-            Title.sendTitle(player,20,60, 20,main.text.getText(15), subtitles_victory);
+            Title.sendTitle(player,20,60, 20,String.format(main.text.getText(15),""), subtitles_victory);
 
             TextComponent msg = new TextComponent(main.text.getText(186));
             msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,"https://discord.gg/GXXCVUA"));

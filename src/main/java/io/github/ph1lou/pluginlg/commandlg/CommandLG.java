@@ -33,22 +33,18 @@ public class CommandLG implements TabExecutor {
 		
 		
 		switch(args[0]) {
+
 			case "compo":
 
 				if(main.config.tool_switch.get(ToolLG.COMPO_VISIBLE)){
 
-					if(main.playerlg.containsKey(sender.getName())) {
-						main.playerlg.get(sender.getName()).setCompoTime(12);
-					}
-					else {
-						StringBuilder str = new StringBuilder();
-						for(RoleLG role:RoleLG.values()) {
-							if(main.config.role_count.get(role)>0) {
-								str.append("§r").append(main.config.role_count.get(role)).append(" ").append(main.text.translaterole.get(role)).append("\n");
-							}
+					StringBuilder sb = new StringBuilder();
+					for(RoleLG role:RoleLG.values()) {
+						if(main.config.role_count.get(role)>0) {
+							sb.append("§3").append(main.config.role_count.get(role)).append("§r ").append(main.text.translaterole.get(role)).append("\n");
 						}
-						sender.sendMessage(str.toString());
 					}
+					sender.sendMessage(sb.toString());
 
 				}
 				else {
@@ -231,7 +227,7 @@ public class CommandLG implements TabExecutor {
 						sender.sendMessage(main.text.getText(99));
 						return true;
 					}
-					if(main.score.getTimer()<=main.config.value.get(TimerLG.LG_LIST)) {
+					if(main.config.value.get(TimerLG.LG_LIST)>0) {
 						sender.sendMessage(main.text.getText(100));
 						return true;
 					}
@@ -394,7 +390,6 @@ public class CommandLG implements TabExecutor {
 			}
 			
 			if (plg1.canBeInfect()) {
-				player.sendMessage(main.text.getText(110));
 				return false;
 			}
 		}

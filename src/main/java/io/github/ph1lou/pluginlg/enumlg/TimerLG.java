@@ -14,8 +14,8 @@ public enum TimerLG {
 	DAY_DURATION(300,"Durée du Jour/Nuit (%s)"),
 	VOTE_DURATION(180,"Durée du Vote (%s)"),
 	POWER_DURATION(240,"Durée d'utilisation des pouvoirs le Matin (%s)"),
-	BORDER_DURATION(2700,"Durée de réduction de la bordure (%s)"),
-	RENARD_SMELL_DURATION(180,"Durée du Flair du Renard (%s)");
+	BORDER_DURATION(280,"Durée de réduction de 100 blocs de la bordure (%s)"),
+	RENARD_SMELL_DURATION(120,"Durée du Flair du Renard (%s)");
 
 	private final int value;
 	private final String appearance;

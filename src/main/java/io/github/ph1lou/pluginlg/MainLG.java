@@ -8,10 +8,7 @@ import fr.mrmicky.fastboard.FastBoard;
 import io.github.ph1lou.pluginlg.commandlg.AdminLG;
 import io.github.ph1lou.pluginlg.commandlg.CommandLG;
 import io.github.ph1lou.pluginlg.enumlg.*;
-import io.github.ph1lou.pluginlg.listener.MenuListener;
-import io.github.ph1lou.pluginlg.listener.PlayerListener;
-import io.github.ph1lou.pluginlg.listener.ScenarioListener;
-import io.github.ph1lou.pluginlg.listener.WorldListener;
+import io.github.ph1lou.pluginlg.listener.*;
 import io.github.ph1lou.pluginlg.savelg.*;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -66,7 +63,7 @@ public class MainLG extends JavaPlugin {
 		saveDefaultConfig();
 		setState(StateLG.LOBBY);
 		setDay(Day.DEFAULT);
-
+		optionlg.initInv();
 		config.getConfig(this,0);
 		stufflg.load(this, 0);
 		text.getTextTranslate(this, "text.json");
@@ -115,10 +112,17 @@ public class MainLG extends JavaPlugin {
 			world.setGameRuleValue("keepInventory", "true");
 			world.setGameRuleValue("naturalRegeneration", "false");
 			world.getWorldBorder().reset();
-			Location biome = WorldUtils.findBiome(Biome.ROOFED_FOREST, world, 1000);
-			int x=(int) biome.getX();
-			int z=(int) biome.getZ();
+
+			int x=(int) world.getSpawnLocation().getX();
+			int z=(int)  world.getSpawnLocation().getZ();
+
+			if(config.tool_switch.get(ToolLG.ROOFED_AUTO) &&  !world.getBiome(x, z).equals(Biome.ROOFED_FOREST)){
+				Location biome = WorldUtils.findBiome(Biome.ROOFED_FOREST, world, 1000);
+				x=(int) biome.getX();
+				z=(int) biome.getZ();
+			}
 			world.setSpawnLocation(x, 151,z);
+
 			for(int i=-16;i<=16;i++) {
 
 				for(int j=-16;j<=16;j++) {
@@ -147,13 +151,11 @@ public class MainLG extends JavaPlugin {
 
 	public void joinPlayer(Player player) {
 
-
-
 		String playername = player.getName();
 		FastBoard fastboard = new FastBoard(player);
 		fastboard.updateTitle(text.getText(125));
         boards.put(player.getUniqueId(), fastboard);
-		Title.sendTabTitle(player, text.getText(0), text.getText(184));
+		Title.sendTabTitle(player, text.getText(125), text.getText(184));
 		new UpdateChecker(this, 73113).getVersion(version -> {
 			
 			ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
@@ -197,6 +199,9 @@ public class MainLG extends JavaPlugin {
 		else if (isState(StateLG.LG) &&  !playerlg.get(playername).hasKit()) {
 			role_manage.recoverRolePower(playername);
 		}
+		else if(isState(StateLG.FIN)){
+			fastboard.updateLines(score.scoreboard3);
+		}
 		player.setScoreboard(playerlg.get(playername).getScoreBoard());
 		optionlg.updateScenario();
 	}
@@ -219,7 +224,11 @@ public class MainLG extends JavaPlugin {
 			player.setFoodLevel(20);
 			player.setSaturation(20);
 			player.setRemainingAir(300);
-			player.setCompassTarget(spawnp);
+			if(!config.tool_switch.get(ToolLG.COMPASS_MIDDLE)){
+				player.setCompassTarget(spawnp);
+			}
+			else player.setCompassTarget(world.getSpawnLocation());
+
 			player.setGameMode(GameMode.SURVIVAL);
 			player.sendMessage(message);
 			player.teleport(spawnp);

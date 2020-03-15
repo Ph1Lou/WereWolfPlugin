@@ -105,7 +105,7 @@ public class PlayerListener implements Listener {
 		String killername = player.getKiller().getName();
 		if (!main.playerlg.containsKey(killername)) return;
 		if ((main.playerlg.get(killername).isRole(RoleLG.ASSASSIN) && !main.isDay(Day.NIGHT)) || (main.playerlg.get(killername).isCamp(Camp.LG) && main.isDay(Day.NIGHT)) ) {
-			if(!player.getItemInHand().getType().equals(Material.DIAMOND_SWORD) && !player.getItemInHand().getType().equals(Material.IRON_SWORD)){
+			if(!player.getKiller().getItemInHand().getType().equals(Material.DIAMOND_SWORD) && !player.getKiller().getItemInHand().getType().equals(Material.IRON_SWORD)){
 				return;
 			}
 			event.setDamage(event.getDamage()*main.config.getStrengthRate());

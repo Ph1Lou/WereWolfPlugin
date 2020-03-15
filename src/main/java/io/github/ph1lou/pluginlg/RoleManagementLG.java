@@ -186,7 +186,7 @@ public class RoleManagementLG {
 			if (klg.isRole(RoleLG.ENFANT_SAUVAGE)) {
 				
 				if(klg.hasPower()) {
-					killer.sendMessage(String.format(main.text.poweruse.get(RoleLG.ENFANT_SAUVAGE),main.conversion(main.config.value.get(TimerLG.MASTER_DURATION)-main.score.getTimer()+main.config.value.get(TimerLG.ROLE_DURATION))));
+					killer.sendMessage(String.format(main.text.poweruse.get(RoleLG.ENFANT_SAUVAGE),main.conversion(main.config.value.get(TimerLG.MASTER_DURATION))));
 				}
 				else {
 					String mastername = plg.getAffectedPlayer().get(0);
@@ -205,7 +205,7 @@ public class RoleManagementLG {
 			if (klg.isRole(RoleLG.CUPIDON)) {
 				
 				if(klg.hasPower()) {
-					killer.sendMessage(String.format(main.text.poweruse.get(RoleLG.CUPIDON),main.conversion(main.config.value.get(TimerLG.COUPLE_DURATION)-main.score.getTimer()+main.config.value.get(TimerLG.ROLE_DURATION))));
+					killer.sendMessage(String.format(main.text.poweruse.get(RoleLG.CUPIDON),main.conversion(main.config.value.get(TimerLG.COUPLE_DURATION))));
 				}
 				else {
 					klg.addAffectedPlayer(plg.getAffectedPlayer().get(0));
@@ -224,7 +224,7 @@ public class RoleManagementLG {
 				killer.sendMessage(String.format(main.text.getText(15),main.text.translaterole.get(klg.getRole())));
 			}
 			if (klg.isRole(RoleLG.ANGE)) {
-				killer.sendMessage(String.format(main.text.poweruse.get(RoleLG.ANGE),main.conversion(main.config.value.get(TimerLG.ANGE_DURATION)-main.score.getTimer()+main.config.value.get(TimerLG.ROLE_DURATION))));
+				killer.sendMessage(String.format(main.text.poweruse.get(RoleLG.ANGE),main.conversion(main.config.value.get(TimerLG.ANGE_DURATION))));
 				killer.setMaxHealth(24);
 			}
 			if (klg.isRole(RoleLG.TUEUR_EN_SERIE)) {
@@ -379,7 +379,7 @@ public class RoleManagementLG {
 	
 	public void newLG(String playername) {
 		
-		if(main.config.tool_switch.get(ToolLG.LG_LIST) && main.score.getTimer()>main.config.value.get(TimerLG.LG_LIST)) {
+		if(main.config.tool_switch.get(ToolLG.LG_LIST) && main.config.value.get(TimerLG.LG_LIST)<0) {
 
 			main.board.getTeam(playername).setPrefix("§4");
 			main.playerlg.get(playername).setScoreBoard(main.board);

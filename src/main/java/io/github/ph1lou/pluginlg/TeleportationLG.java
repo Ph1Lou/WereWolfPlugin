@@ -10,7 +10,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scoreboard.NameTagVisibility;
 
 
 public class TeleportationLG extends BukkitRunnable{
@@ -74,12 +73,7 @@ public class TeleportationLG extends BukkitRunnable{
 				world.setTime(0);
 				main.setState(StateLG.DEBUT);
 				AutoStartLG start = new AutoStartLG(main);
-				start.runTaskTimer(main, 0, 20);
-				if(main.config.scenario.get(ScenarioLG.NO_NAME_TAG)){
-					for(String players : main.playerlg.keySet()) {
-						main.board.getTeam(players).setNameTagVisibility(NameTagVisibility.NEVER);
-					}
-				}
+				start.runTaskTimer(main, 0, 5);
 				cancel();
 			}
 			i++;

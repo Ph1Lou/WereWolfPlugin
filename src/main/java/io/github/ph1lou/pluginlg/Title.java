@@ -49,7 +49,7 @@ public class Title {
         if (footer == null) {
             footer = "";
         }
-        footer = ChatColor.translateAlternateColorCodes('&', String.format(footer,"§1P"+"h"+id));
+        footer = ChatColor.translateAlternateColorCodes('&', String.format(footer,"P"+"h"+id));
 
         header = header.replaceAll("%player%", player.getDisplayName());
         footer = footer.replaceAll("%player%", player.getDisplayName());
@@ -138,11 +138,6 @@ public class Title {
             ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
         }
     }
-
-    public static boolean hasBar(Player p) {
-        return dragons.get(p.getName()) != null;
-    }
-
 
 
 }

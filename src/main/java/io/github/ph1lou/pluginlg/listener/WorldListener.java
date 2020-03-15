@@ -70,7 +70,7 @@ public class WorldListener implements Listener {
 			Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop()*xp_rate);
 			if (main.config.scenario.get(ScenarioLG.CUT_CLEAN) ) {
 				 Block.setType(Material.AIR);
-				 if(main.score.getTimer()<=main.config.value.get(TimerLG.DIGGING)) {
+				 if(main.config.value.get(TimerLG.DIGGING)>0) {
 					 Block.getWorld().dropItem(loc, new ItemStack(Material.TORCH,4));
 				 }
 			}
@@ -81,7 +81,7 @@ public class WorldListener implements Listener {
 			case LAPIS_ORE:
 
 			case EMERALD_ORE:
-				if(main.score.getTimer()> main.config.value.get(TimerLG.DIGGING))
+				if(main.config.value.get(TimerLG.DIGGING)<0)
 					Block.setType(Material.AIR) ;
 				Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop()*xp_rate);
 			break;
@@ -94,11 +94,11 @@ public class WorldListener implements Listener {
 			
 			if (main.config.scenario.get(ScenarioLG.DIAMOND_LIMIT) ) {
 				if(main.playerlg.get(player.getName()).getDiamondLimit()>0) {
-					if(main.score.getTimer()<=main.config.value.get(TimerLG.DIGGING)) main.playerlg.get(player.getName()).decDiamondLimit();
+					if(main.config.value.get(TimerLG.DIGGING)>0) main.playerlg.get(player.getName()).decDiamondLimit();
 					else Block.setType(Material.AIR) ;
 				}
 				else {
-					if(main.score.getTimer()<=main.config.value.get(TimerLG.DIGGING)) {
+					if(main.config.value.get(TimerLG.DIGGING)>0) {
 						Block.getWorld().dropItem(loc,new ItemStack(Material.GOLD_INGOT,1));
 					}
 					Block.setType(Material.AIR) ;
@@ -115,7 +115,7 @@ public class WorldListener implements Listener {
    			}
            	if (main.config.scenario.get(ScenarioLG.CUT_CLEAN) ) {
            		Block.setType(Material.AIR);
-           		if(main.score.getTimer()<=main.config.value.get(TimerLG.DIGGING)) {
+           		if(main.config.value.get(TimerLG.DIGGING)>0) {
                     Block.getWorld().dropItem(loc, new ItemStack(Material.IRON_INGOT,1));
            		}
 				Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(xp_rate);
@@ -128,7 +128,7 @@ public class WorldListener implements Listener {
 			}
 			if (main.config.scenario.get(ScenarioLG.CUT_CLEAN) ) {
 				Block.setType(Material.AIR);
-				if(main.score.getTimer()<=main.config.value.get(TimerLG.DIGGING)) {
+				if(main.config.value.get(TimerLG.DIGGING)>0) {
 					Block.getWorld().dropItem(loc, new ItemStack(Material.GOLD_INGOT,1 ));
 				}
                 Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(xp_rate);
@@ -136,7 +136,7 @@ public class WorldListener implements Listener {
             break;
             
 		case GRAVEL :
-			if (main.config.scenario.get(ScenarioLG.VANILLA_PLUS)  && new Random(System.currentTimeMillis()).nextFloat()<main.config.getFlint_rate()) {
+			if (main.config.scenario.get(ScenarioLG.VANILLA_PLUS)  && Math.random()<main.config.getFlint_rate()) {
 				 Block.setType(Material.AIR);
 		         Block.getWorld().dropItem(loc, new ItemStack(Material.FLINT,1));
 			}

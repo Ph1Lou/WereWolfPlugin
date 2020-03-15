@@ -13,6 +13,9 @@ public enum ToolLG {
 	AUTO_REZ_WITCH(false,"la Sorcière peut s'autorez"),
 	AUTO_REZ_INFECT(false,"L'infect peut s'infecter"),
 	POLYGAMY(false,"Polygamie"),
+	COMPASS_MIDDLE(false,"La boussole pointe vers le centre"),
+	ROOFED_AUTO(true,"Roofed Forest au centre"),
+	TARGET_AUTO(false,"Flèches guidées automatique"),
 	AUTO_GROUP(true,"Groupe Auto");
 
 	private final Boolean value;

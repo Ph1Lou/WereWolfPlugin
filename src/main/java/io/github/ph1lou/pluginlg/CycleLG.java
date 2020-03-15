@@ -25,7 +25,7 @@ public class CycleLG {
 		
 		if(!main.isState(StateLG.LG)) return;
 			
-		main.score.groupsizechange() ;
+		main.score.groupSizeChange() ;
 		
 		for(String playername:main.playerlg.keySet()) {
 			
@@ -148,10 +148,8 @@ public class CycleLG {
 				
 				player.playSound(player.getLocation(), Sound.DOOR_OPEN,1,20);
 
-				if(main.config.tool_switch.get(ToolLG.VOTE) && main.score.getTimer()>=main.config.value.get(TimerLG.VOTE_BEGIN)) {
+				if(main.config.tool_switch.get(ToolLG.VOTE) && main.config.value.get(TimerLG.VOTE_BEGIN)<0) {
 					player.sendMessage(String.format(main.text.getText(17),main.conversion(main.config.value.get(TimerLG.VOTE_DURATION))));
-					Title.removeBar(player);
-					Title.sendBar(player, "Vote", 100);
 				}
 				
 				if(plg.isRole(RoleLG.MONTREUR_OURS)){
@@ -170,7 +168,7 @@ public class CycleLG {
 							if (!plgf.isRole(RoleLG.LOUP_FEUTRE) || plgf.isCampFeutre(Camp.LG)) {
 								if((plgf.isCamp(Camp.LG) || plgf.isRole(RoleLG.LOUP_GAROU_BLANC)) && plgf.isState(State.VIVANT)) {
 									if(ourslocation.distance(pls.getLocation())<50) {
-										builder.append("Grrrr ");
+										builder.append(main.text.powerhasbeenuse.get(RoleLG.MONTREUR_OURS));
 										ok=true;
 									}
 								}
@@ -179,7 +177,7 @@ public class CycleLG {
 						
 					}
 					if(ok) {
-						Bukkit.broadcastMessage(String.format(main.text.getText(11), builder.toString()));
+						Bukkit.broadcastMessage(String.format(main.text.poweruse.get(RoleLG.MONTREUR_OURS), builder.toString()));
 						for(Player pls:Bukkit.getOnlinePlayers()) {
 							pls.playSound(pls.getLocation(),Sound.WOLF_GROWL, 1, 20);
 						}

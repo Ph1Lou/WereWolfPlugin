@@ -12,7 +12,7 @@ public class WorldUtils {
 
     public static void patchBiomes() {
 
-        Field biomesField = null;
+        Field biomesField;
         try {
             biomesField = BiomeBase.class.getDeclaredField("biomes");
             biomesField.setAccessible(true);

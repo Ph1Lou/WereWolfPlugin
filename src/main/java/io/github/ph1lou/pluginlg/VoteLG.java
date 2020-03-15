@@ -33,7 +33,7 @@ public class VoteLG {
 		else if(!main.playerlg.get(votant.getName()).isState(State.VIVANT)) {
 			votant.sendMessage(main.text.getText(155));
 		}
-		else if(main.score.getTimer()<main.config.value.get(TimerLG.VOTE_BEGIN)) {
+		else if(main.config.value.get(TimerLG.VOTE_BEGIN)>0) {
 			votant.sendMessage(main.text.getText(156));
 		}	
 		else if(!main.config.tool_switch.get(ToolLG.VOTE)) {
@@ -45,8 +45,11 @@ public class VoteLG {
 		else if (!main.playerlg.get(votant.getName()).getVotedPlayer().equals("")) {
 			votant.sendMessage(main.text.getText(159));
 		}
-		else if (!main.playerlg.containsKey(cible) || main.playerlg.get(cible).isState(State.MORT)){
-			votant.sendMessage(main.text.getText(160));
+		else if (!main.playerlg.containsKey(cible)){
+			votant.sendMessage(main.text.getText(132));
+		}
+		else if (main.playerlg.get(cible).isState(State.MORT)){
+			votant.sendMessage(main.text.getText(132));
 		}
 		else if (templayer.contains(cible)){
 			votant.sendMessage(main.text.getText(161));

@@ -28,7 +28,9 @@ public class MenuListener implements Listener{
 	public MenuListener(MainLG main) {
 		this.main=main;
 	}
-	
+
+
+
 	@EventHandler
     private void onSousMenu(InventoryClickEvent event) {
 		
