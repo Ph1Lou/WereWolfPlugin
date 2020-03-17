@@ -149,7 +149,7 @@ public class OptionLG {
 		return item1;
 	}
 
-	public int findSelect(Inventory inv) {
+	private int findSelect(Inventory inv) {
 		int i=0;
 		boolean find = false;
 		while (i<inv.getSize() && !find) {
@@ -165,25 +165,31 @@ public class OptionLG {
 	}
 
 	public void selectMinus(int i) {
-		int j = main.config.role_count.get(RoleLG.values()[i]);
-		if(j>0) {
-			if(!RoleLG.values()[i].equals(RoleLG.COUPLE)) {
-				main.score.setRole(main.score.getRole()-1);
+
+		if(!main.isState(StateLG.LG)) {
+			int j = main.config.role_count.get(RoleLG.values()[i]);
+			if(j>0) {
+				if(!RoleLG.values()[i].equals(RoleLG.COUPLE)) {
+					main.score.setRole(main.score.getRole()-1);
+				}
+				main.config.role_count.put(RoleLG.values()[i],j-1);
+				main.score.updateBoard();
+				updateSelection();
 			}
-			main.config.role_count.put(RoleLG.values()[i],j-1);
-			main.score.updateBoard();
-			updateSelection();
 		}
 	}
 
 	public void selectPlus(int i) {
-		int j = main.config.role_count.get(RoleLG.values()[i]);
-		main.config.role_count.put(RoleLG.values()[i],j+1);
-		if(!RoleLG.values()[i].equals(RoleLG.COUPLE)) {
-			main.score.setRole(main.score.getRole()+1);
+
+		if(!main.isState(StateLG.LG)) {
+			int j = main.config.role_count.get(RoleLG.values()[i]);
+			main.config.role_count.put(RoleLG.values()[i],j+1);
+			if(!RoleLG.values()[i].equals(RoleLG.COUPLE)) {
+				main.score.setRole(main.score.getRole()+1);
+			}
+			main.score.updateBoard();
+			updateSelection();
 		}
-		main.score.updateBoard();
-		updateSelection();
 	}
 
 	public void selectMinusBorder() {
@@ -239,13 +245,13 @@ public class OptionLG {
 
 		String c= main.score.conversion(main.config.value.get(TimerLG.values()[j]));
 
-		invTimer.setItem(1, changeMeta(Material.STONE_BUTTON,"-10m ("+c+")",1,null));
-		invTimer.setItem(2, changeMeta(Material.STONE_BUTTON,"-1m ("+c+")",1,null));
-		invTimer.setItem(3, changeMeta(Material.STONE_BUTTON,"-10s ("+c+")",1,null));
+		invTimer.setItem(1, changeMeta(Material.STONE_BUTTON,String.format(main.text.getText(88),"-10m",c),1,null));
+		invTimer.setItem(2, changeMeta(Material.STONE_BUTTON,String.format(main.text.getText(88),"-1m",c),1,null));
+		invTimer.setItem(3, changeMeta(Material.STONE_BUTTON,String.format(main.text.getText(88),"-10s",c),1,null));
 		invTimer.setItem(4, changeMeta(Material.BEACON,String.format(main.text.translatetimer.get(TimerLG.values()[j]),c),1,null));
-		invTimer.setItem(5, changeMeta(Material.STONE_BUTTON,"+10s ("+c+")",1,null));
-		invTimer.setItem(6, changeMeta(Material.STONE_BUTTON,"+1m ("+c+")",1,null));
-		invTimer.setItem(7, changeMeta(Material.STONE_BUTTON,"+10m ("+c+")",1,null));
+		invTimer.setItem(5, changeMeta(Material.STONE_BUTTON,String.format(main.text.getText(88),"+10s",c),1,null));
+		invTimer.setItem(6, changeMeta(Material.STONE_BUTTON,String.format(main.text.getText(88),"+1m",c),1,null));
+		invTimer.setItem(7, changeMeta(Material.STONE_BUTTON,String.format(main.text.getText(88),"+10m",c),1,null));
 
 		for (int i=0;i<TimerLG.values().length;i++) {
 			if(i==j) {
@@ -256,13 +262,13 @@ public class OptionLG {
 	}
 
 	public void updateSelectionBorder(){
-		updateSelectionTimer(findSelect(invBorder));
+		updateSelectionBorder(findSelect(invBorder));
 	}
 
 	public void updateSelectionBorder(int j) {
-		invBorder.setItem(3, changeMeta(Material.STONE_BUTTON,"- ("+main.config.border_value.get(BorderLG.values()[j])+")",1,null));
+		invBorder.setItem(3, changeMeta(Material.STONE_BUTTON,"- (§3"+main.config.border_value.get(BorderLG.values()[j])+"§r)",1,null));
 		invBorder.setItem(4, changeMeta(Material.BEACON,String.format(main.text.translatebordure.get(BorderLG.values()[j]),main.config.border_value.get(BorderLG.values()[j])),1,null));
-		invBorder.setItem(5, changeMeta(Material.STONE_BUTTON,"+ ("+main.config.border_value.get(BorderLG.values()[j])+")",1,null));
+		invBorder.setItem(5, changeMeta(Material.STONE_BUTTON,"+ (§3"+main.config.border_value.get(BorderLG.values()[j])+"§r)",1,null));
 		for (int i = 0; i< BorderLG.values().length; i++) {
 			if(i==j) {
 				invBorder.setItem(9+i, changeMeta(Material.FEATHER,String.format(main.text.translatebordure.get(BorderLG.values()[i]),main.config.border_value.get(BorderLG.values()[i])),1,null));

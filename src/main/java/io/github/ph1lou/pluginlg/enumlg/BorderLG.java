@@ -1,8 +1,8 @@
 package io.github.ph1lou.pluginlg.enumlg;
 
 public enum BorderLG {
-	BORDER_MAX(2000,"Taille Bordure Actuelle (%s)"),
-	BORDER_MIN(300,"Taille Bordure Finale (%s)");
+	BORDER_MAX(2000,"Taille Bordure Actuelle (§3%s§r)"),
+	BORDER_MIN(300,"Taille Bordure Finale (§3%s§r)");
 
 	private final int value;
 	private final String appearance;

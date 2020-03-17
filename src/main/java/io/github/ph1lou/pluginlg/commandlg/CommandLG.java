@@ -74,7 +74,10 @@ public class CommandLG implements TabExecutor {
 			case "timer":
 
 				for(TimerLG timer:TimerLG.values()) {
-					sender.sendMessage(String.format(main.text.translatetimer.get(timer),main.score.conversion(main.config.value.get(timer))));
+					String time =main.score.conversion(main.config.value.get(timer));
+					if(time.charAt(0)!='-'){
+						sender.sendMessage(String.format(main.text.translatetimer.get(timer),time));
+					}
 				}
 				break;
 			case "vote":

@@ -4,7 +4,6 @@ package io.github.ph1lou.pluginlg.listener;
 import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlg.enumlg.RoleLG;
 import io.github.ph1lou.pluginlg.enumlg.ScenarioLG;
-import io.github.ph1lou.pluginlg.enumlg.StateLG;
 import io.github.ph1lou.pluginlg.enumlg.ToolLG;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -41,10 +40,7 @@ public class MenuListener implements Listener{
 				event.setCancelled(true);
 
 				if(current.getType()==Material.BEACON) {
-					if(!main.isState(StateLG.LG)) {
-						main.optionlg.chooseRole(player);
-					}
-					else player.sendMessage(main.text.getText(126));
+					main.optionlg.chooseRole(player);
 				}
 				if(current.getType()==Material.ANVIL) {
 					main.optionlg.timerTool(player);

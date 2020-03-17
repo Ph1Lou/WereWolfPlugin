@@ -130,7 +130,7 @@ public class TextLG {
 					"Charger Stuff Depart Chill",
 					"Clear le Stuff de Départ et de Mort",
 					"Clique-Gauche>>\nClique-Droit>>-\nShift-Clique>>Stuff",
-					"",
+					"%s (§3%s§r)",
 					"",
 			/*90*/	"",
 					"\n§6§lPouvoir : %b",

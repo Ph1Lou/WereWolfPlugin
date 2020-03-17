@@ -66,7 +66,7 @@ public class WorldLoader implements Runnable {
                     chunk.unload(true, true);
                     ++this.loaded;
                     if (this.loaded % 100 == 0) {
-                       sender.sendMessage(this.loaded + "/" + this.area + " chunks | Free Memory: " + Runtime.getRuntime().freeMemory() / 1024L + " MB | X: " + this.x + " | Z: " + this.z);
+                       sender.sendMessage(this.loaded + "/" + this.area + " chunks | X: " + this.x + " | Z: " + this.z);
                     }
 
                     if (this.loaded % 5000 == 0) {
@@ -79,7 +79,6 @@ public class WorldLoader implements Runnable {
                             }
                         }
                         catch (Exception ignored) {}
-
                     }
                     this.x += 16;
                 }
