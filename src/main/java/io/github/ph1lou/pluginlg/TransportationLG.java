@@ -42,7 +42,7 @@ public class TransportationLG extends BukkitRunnable{
 			if(i==-1){
 				loadChunk();
 			}
-			if(i<main.playerlg.size()) {
+			else if(i<main.playerlg.size()) {
 				
 				String playername = (String) main.playerlg.keySet().toArray()[i];
 				
