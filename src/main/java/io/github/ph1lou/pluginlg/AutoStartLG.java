@@ -10,7 +10,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class AutoStartLG extends BukkitRunnable{
 	
 	private final MainLG main;
-	int compteur=0;
+	int counter =0;
 	
 	public AutoStartLG(MainLG main) {
 		this.main=main;
@@ -19,22 +19,22 @@ public class AutoStartLG extends BukkitRunnable{
 	@Override
 	public void run() {
 
-		compteur++;
+		counter++;
 		for(Player p:Bukkit.getOnlinePlayers()){
 			main.score.actionBar(p);
 		}
 
-		if(compteur%4!=0) return;
+		if(counter %4!=0) return;
 
 		World world = Bukkit.getWorld("world");
 		WorldBorder wb = world.getWorldBorder();
 		long time = world.getTime();
-		main.optionlg.updateSelectionTimer(main.optionlg.invtimer,main.optionlg.findSelect(main.optionlg.invtimer));
-		main.optionlg.updateSelectionBorder(main.optionlg.invborder,main.optionlg.findSelect(main.optionlg.invborder));
+		main.optionlg.updateSelectionTimer();
+		main.optionlg.updateSelectionBorder();
 		main.score.updateBoard();
 		main.prox_lg.sister_proximity();
 		main.prox_lg.renard_proximity();
-		main.death_manage.deathtimer();
+		main.death_manage.deathTimer();
 		main.role_manage.brotherLife();
 		
 		if (main.config.value.get(TimerLG.ROLE_DURATION)==0) {
@@ -115,9 +115,9 @@ public class AutoStartLG extends BukkitRunnable{
 		
 		if(main.isDay(Day.NIGHT)) {
 			for(Player p:Bukkit.getOnlinePlayers()) {
-				if(main.playerlg.containsKey(p.getName())  && main.playerlg.get(p.getName()).isState(State.VIVANT) && !main.playerlg.get(p.getName()).hasPower() && (main.playerlg.get(p.getName()).isRole(RoleLG.LOUP_PERFIDE) || main.playerlg.get(p.getName()).isRole(RoleLG.PETITE_FILLE) )) {
+				if(main.playerlg.containsKey(p.getName())  && main.playerlg.get(p.getName()).isState(State.LIVING) && !main.playerlg.get(p.getName()).hasPower() && (main.playerlg.get(p.getName()).isRole(RoleLG.LOUP_PERFIDE) || main.playerlg.get(p.getName()).isRole(RoleLG.PETITE_FILLE) )) {
 					for(Player p2:Bukkit.getOnlinePlayers()) {
-						if(main.playerlg.containsKey(p2.getName())  && main.playerlg.get(p2.getName()).isState(State.VIVANT) && !main.playerlg.get(p2.getName()).hasPower() && !p.equals(p2) && (main.playerlg.get(p2.getName()).isRole(RoleLG.LOUP_PERFIDE) || main.playerlg.get(p2.getName()).isRole(RoleLG.PETITE_FILLE)) ) {
+						if(main.playerlg.containsKey(p2.getName())  && main.playerlg.get(p2.getName()).isState(State.LIVING) && !main.playerlg.get(p2.getName()).hasPower() && !p.equals(p2) && (main.playerlg.get(p2.getName()).isRole(RoleLG.LOUP_PERFIDE) || main.playerlg.get(p2.getName()).isRole(RoleLG.PETITE_FILLE)) ) {
 							
 							if(main.playerlg.get(p2.getName()).isRole(RoleLG.LOUP_PERFIDE) ) {
 								p.playEffect(p2.getLocation(),Effect.STEP_SOUND,Material.REDSTONE_BLOCK);
@@ -130,10 +130,7 @@ public class AutoStartLG extends BukkitRunnable{
 				}
 			}
 		}
-		if (main.config.value.get(TimerLG.VOTE_BEGIN)==0) {
-			main.config.value.put(TimerLG.VOTE_BEGIN,-1);
-		}
-		else main.config.value.put(TimerLG.VOTE_BEGIN,main.config.value.get(TimerLG.VOTE_BEGIN)-1);
+		main.config.value.put(TimerLG.VOTE_BEGIN,main.config.value.get(TimerLG.VOTE_BEGIN)-1);
 		
 		if (main.score.getTimer()%(main.config.value.get(TimerLG.DAY_DURATION)*2)==0  && !main.isDay(Day.DAY)) {
 			
@@ -146,17 +143,17 @@ public class AutoStartLG extends BukkitRunnable{
 		}
 
 		if(main.score.getTimer()%(main.config.value.get(TimerLG.DAY_DURATION)*2) == main.config.value.get(TimerLG.VOTE_DURATION) ){
-			if(main.config.tool_switch.get(ToolLG.VOTE) && main.vote.getResult().length()!=0) {
+			if(main.config.tool_switch.get(ToolLG.VOTE) && main.config.value.get(TimerLG.VOTE_DURATION)+main.config.value.get(TimerLG.VOTE_BEGIN)<0) {
 				main.cycle.preVoteResult();
 			}
 		}
 		if(main.score.getTimer()%(main.config.value.get(TimerLG.DAY_DURATION)*2) == main.config.value.get(TimerLG.VOTE_DURATION)+main.config.value.get(TimerLG.CITIZEN_DURATION) ){
-			main.vote.showresultatvote(main.vote.getResult());
+			main.vote.showResultVote(main.vote.getResult());
 		}
-		if(main.score.getTimer()%(main.config.value.get(TimerLG.DAY_DURATION)*2) == main.config.value.get(TimerLG.POWER_DURATION) ){
+		if(main.score.getTimer()%(main.config.value.get(TimerLG.DAY_DURATION)*2)==main.config.value.get(TimerLG.POWER_DURATION) ){
 			main.cycle.selectionEnd();
 		}
-		if(main.score.getTimer()%(main.config.value.get(TimerLG.DAY_DURATION)*2) == main.config.value.get(TimerLG.DAY_DURATION)*2-30 ){
+		if(main.score.getTimer()%(main.config.value.get(TimerLG.DAY_DURATION)*2)==main.config.value.get(TimerLG.DAY_DURATION)*2-30 ){
 			main.cycle.preDay();
 		}
 

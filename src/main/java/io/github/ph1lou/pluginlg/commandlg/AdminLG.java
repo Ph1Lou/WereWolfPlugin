@@ -1,9 +1,8 @@
 package io.github.ph1lou.pluginlg.commandlg;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import io.github.ph1lou.pluginlg.*;
+
+import io.github.ph1lou.pluginlg.MainLG;
+import io.github.ph1lou.pluginlg.PlayerLG;
+import io.github.ph1lou.pluginlg.Title;
 import io.github.ph1lou.pluginlg.enumlg.*;
 import org.bukkit.*;
 import org.bukkit.command.Command;
@@ -12,6 +11,11 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class AdminLG implements TabExecutor {
 
@@ -59,7 +63,7 @@ public class AdminLG implements TabExecutor {
 				}
 				try{
 					World world = Bukkit.getWorld("world");
-					main.setState(StateLG.TELEPORTATION);
+					main.setState(StateLG.TRANSPORTATION);
 					world.setTime(0);
 					WorldBorder wb = world.getWorldBorder();
 					wb.setCenter(world.getSpawnLocation().getX(),world.getSpawnLocation().getZ());
@@ -148,7 +152,7 @@ public class AdminLG implements TabExecutor {
 					sender.sendMessage(main.text.getText(132));
 					return true;
 				}
-				if(!main.playerlg.get(args[1]).isState(State.VIVANT)) {
+				if(!main.playerlg.get(args[1]).isState(State.LIVING)) {
 					sender.sendMessage(main.text.getText(141));
 					return true;
 				}
@@ -163,7 +167,7 @@ public class AdminLG implements TabExecutor {
 					return true;
 				}
 				if(main.isState(StateLG.LG)) {
-					main.death_manage.mortdefinitive(args[1]);
+					main.death_manage.death(args[1]);
 				}
 				else sender.sendMessage(main.text.getText(68));
 				break;
@@ -173,8 +177,8 @@ public class AdminLG implements TabExecutor {
 				for(String p:main.playerlg.keySet()) {
 					PlayerLG plg = main.playerlg.get(p);
 
-					if(plg.isState(State.VIVANT) && Bukkit.getPlayer(p)==null) {
-						sender.sendMessage(String.format(main.text.getText(167),p,main.conversion(main.score.getTimer()-plg.getDeathTime())));
+					if(plg.isState(State.LIVING) && Bukkit.getPlayer(p)==null) {
+						sender.sendMessage(String.format(main.text.getText(167),p,main.score.conversion(main.score.getTimer()-plg.getDeathTime())));
 					}
 				}
 				break;
@@ -235,7 +239,7 @@ public class AdminLG implements TabExecutor {
 					return true;
 				}
 
-				if(!main.playerlg.get(args[1]).isState(State.VIVANT)){
+				if(!main.playerlg.get(args[1]).isState(State.LIVING)){
 					return true;
 				}
 				int d=20;
@@ -251,10 +255,10 @@ public class AdminLG implements TabExecutor {
 				} catch (NumberFormatException ignored) {
 				}
 				for (Player p:Bukkit.getOnlinePlayers()) {
-					if(size>0 && main.playerlg.containsKey(p.getName()) && main.playerlg.get(p.getName()).isState(State.VIVANT)) {
+					if(size>0 && main.playerlg.containsKey(p.getName()) && main.playerlg.get(p.getName()).isState(State.LIVING)) {
 						if(p.getLocation().distance(location)<=d){
 							size--;
-							main.eparpillement(p.getName(),r,main.text.getText(93));
+							main.death_manage.transportation(p.getName(),r,main.text.getText(93));
 						}
 					}
 				}
@@ -276,7 +280,7 @@ public class AdminLG implements TabExecutor {
 					sender.sendMessage(main.text.getText(144));
 					return true;
 				}
-				if(main.playerlg.containsKey(sender.getName()) && main.playerlg.get(sender.getName()).isState(State.VIVANT)) {
+				if(main.playerlg.containsKey(sender.getName()) && main.playerlg.get(sender.getName()).isState(State.LIVING)) {
 					sender.sendMessage(main.text.getText(145));
 					return true;
 				}

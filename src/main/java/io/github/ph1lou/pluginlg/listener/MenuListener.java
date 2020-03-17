@@ -1,25 +1,21 @@
 package io.github.ph1lou.pluginlg.listener;
 
 
-
-
 import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlg.enumlg.RoleLG;
 import io.github.ph1lou.pluginlg.enumlg.ScenarioLG;
 import io.github.ph1lou.pluginlg.enumlg.StateLG;
 import io.github.ph1lou.pluginlg.enumlg.ToolLG;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
-
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
 
 public class MenuListener implements Listener{
 
@@ -35,7 +31,6 @@ public class MenuListener implements Listener{
     private void onSousMenu(InventoryClickEvent event) {
 		
 		InventoryView view = event.getView();
-		Inventory invent = event.getInventory();
 		Player player =(Player) event.getWhoClicked();
 		ItemStack current = event.getCurrentItem();
 		
@@ -76,7 +71,7 @@ public class MenuListener implements Listener{
 				event.setCancelled(true);
 				if(current.getType()==Material.EMERALD || current.getType()==Material.REDSTONE){
 					main.config.tool_switch.put(ToolLG.values()[(event.getSlot()-9)],!main.config.tool_switch.get(ToolLG.values()[(event.getSlot()-9)]));
-					main.optionlg.updateSelectionTool(invent);
+					main.optionlg.updateSelectionTool();
 				}	
 				if(current.getType()==Material.COMPASS) {
 					main.optionlg.toolBar(player);
@@ -87,7 +82,7 @@ public class MenuListener implements Listener{
 				event.setCancelled(true);
 				if(current.getType()==Material.EMERALD || current.getType()==Material.REDSTONE){
 					main.config.scenario.put(ScenarioLG.values()[(event.getSlot()-9)],!main.config.scenario.get(ScenarioLG.values()[(event.getSlot()-9)]));
-					main.optionlg.updateSelectionScenario(invent);
+					main.optionlg.updateSelectionScenario();
 				}
 				if(current.getType()==Material.COMPASS) {
 					main.optionlg.toolBar(player);
@@ -110,23 +105,23 @@ public class MenuListener implements Listener{
 								player.getInventory().addItem(i);
 							}
 						}
-						TextComponent msgd = new TextComponent(main.text.getText(198));
-						msgd.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/adminlg stuffrole "+j));
-						player.spigot().sendMessage(msgd);
+						TextComponent msg = new TextComponent(main.text.getText(198));
+						msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/adminlg stuffrole "+j));
+						player.spigot().sendMessage(msg);
 						player.closeInventory();
 					}
 					else if(event.getClick().isRightClick()){
-						main.optionlg.selectMoins(invent,(event.getSlot()-9));
+						main.optionlg.selectMinus(event.getSlot()-9);
 					}
 					else{
-						main.optionlg.selectPlus(invent,(event.getSlot()-9));
+						main.optionlg.selectPlus(event.getSlot()-9);
 					}
 				}
 				if(current.getType()==Material.COMPASS) {
 					main.optionlg.toolBar(player);
 				}
 				if(current.getType()==Material.BARRIER) {
-					main.optionlg.resetrole(invent);
+					main.optionlg.resetRole();
 				}
 
 			}
@@ -135,13 +130,13 @@ public class MenuListener implements Listener{
 				event.setCancelled(true);
 
 				if(current.getType()==Material.STONE_BUTTON && event.getSlot()==3) {
-					main.optionlg.selectMoinsBorder(invent);
+					main.optionlg.selectMinusBorder();
 				}
 				if(current.getType()==Material.STONE_BUTTON && event.getSlot()==5) {
-					main.optionlg.selectPlusBorder(invent);
+					main.optionlg.selectPlusBorder();
 				}
 				if(current.getType()==Material.GLASS){
-					main.optionlg.updateSelectionBorder(invent, (event.getSlot()-9));
+					main.optionlg.updateSelectionBorder(event.getSlot()-9);
 				}
 				if(current.getType()==Material.COMPASS) {
 					main.optionlg.toolBar(player);
@@ -152,25 +147,25 @@ public class MenuListener implements Listener{
 				event.setCancelled(true);
 
 				if(current.getType()==Material.ANVIL || current.getType()==Material.FEATHER){
-					main.optionlg.updateSelectionTimer(invent, (event.getSlot()-9));
+					main.optionlg.updateSelectionTimer(event.getSlot()-9);
 				}
 				if(current.getType()==Material.STONE_BUTTON && event.getSlot()==1) {
-					main.optionlg.SelectMoinsTimer(invent,600);
+					main.optionlg.SelectMinusTimer(600);
 				}
 				if(current.getType()==Material.STONE_BUTTON && event.getSlot()==2) {
-					main.optionlg.SelectMoinsTimer(invent,60);
+					main.optionlg.SelectMinusTimer(60);
 				}
 				if(current.getType()==Material.STONE_BUTTON && event.getSlot()==3) {
-					main.optionlg.SelectMoinsTimer(invent,10);
+					main.optionlg.SelectMinusTimer(10);
 				}
 				if(current.getType()==Material.STONE_BUTTON && event.getSlot()==5) {
-					main.optionlg.selectPlusTimer(invent,10);
+					main.optionlg.selectPlusTimer(10);
 				}
 				if(current.getType()==Material.STONE_BUTTON && event.getSlot()==6) {
-					main.optionlg.selectPlusTimer(invent,60);
+					main.optionlg.selectPlusTimer(60);
 				}
 				if(current.getType()==Material.STONE_BUTTON && event.getSlot()==7) {
-					main.optionlg.selectPlusTimer(invent,600);
+					main.optionlg.selectPlusTimer(600);
 				}
 				if(current.getType()==Material.COMPASS) {
 					main.optionlg.toolBar(player);
@@ -181,13 +176,13 @@ public class MenuListener implements Listener{
 				event.setCancelled(true);
 
 				if(current.getType()==Material.PAPER) {
-					main.optionlg.updateSelectionSave(invent,event.getSlot());
+					main.optionlg.updateSelectionSave(event.getSlot());
 				}
 				if(current.getType()==Material.EMERALD_BLOCK || current.getType()==Material.BARRIER) {
-					main.optionlg.saveOrErase(invent);
+					main.optionlg.saveOrErase();
 				}
 				if(current.getType()==Material.BED ){
-					main.optionlg.load(invent);
+					main.optionlg.load();
 				}
 				if(current.getType()==Material.COMPASS) {
 					main.optionlg.toolBar(player);
@@ -222,9 +217,9 @@ public class MenuListener implements Listener{
 							player.getInventory().addItem(i);
 						}
 					}
-					TextComponent msgd = new TextComponent(main.text.getText(128));
-					msgd.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/adminlg lootdeath"));
-					player.spigot().sendMessage(msgd);
+					TextComponent msg = new TextComponent(main.text.getText(128));
+					msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/adminlg lootdeath"));
+					player.spigot().sendMessage(msg);
 					player.closeInventory();
 				}
 				if(current.getType()==Material.EGG){

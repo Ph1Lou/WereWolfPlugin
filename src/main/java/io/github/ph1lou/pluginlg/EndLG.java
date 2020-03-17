@@ -6,7 +6,10 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class EndLG {
 
@@ -26,8 +29,8 @@ public class EndLG {
             Set<String> team = new HashSet<>(main.couple_manage.couple_range.get(0));
 
             for(String p:main.playerlg.keySet()) {
-                if(main.playerlg.get(p).isState(State.JUGEMENT)) return;
-                if (main.playerlg.get(p).isState(State.VIVANT) && main.playerlg.get(p).isRole(RoleLG.CUPIDON) && main.couple_manage.couple_range.get(0).contains(main.playerlg.get(p).getAffectedPlayer().get(0))){
+                if(main.playerlg.get(p).isState(State.JUDGEMENT)) return;
+                if (main.playerlg.get(p).isState(State.LIVING) && main.playerlg.get(p).isRole(RoleLG.CUPIDON) && main.couple_manage.couple_range.get(0).contains(main.playerlg.get(p).getAffectedPlayer().get(0))){
                     team.add(p);
                 }
             }
@@ -59,9 +62,9 @@ public class EndLG {
         Camp camp = null;
 
         for(String p:main.playerlg.keySet()) {
-            if(main.playerlg.get(p).isState(State.JUGEMENT)) return;
+            if(main.playerlg.get(p).isState(State.JUDGEMENT)) return;
             PlayerLG plg = main.playerlg.get(p);
-            if(plg.isState(State.VIVANT)) {
+            if(plg.isState(State.LIVING)) {
                 if(camp==null) {
                     camp=plg.getCamp();
                 }
@@ -88,7 +91,7 @@ public class EndLG {
             return;
         }
 
-        if(camp.equals(Camp.NEUTRE)) {
+        if(camp.equals(Camp.NEUTRAL)) {
 
             if(!main.config.tool_switch.get(ToolLG.VICTORY_NEUTRAL) && player !=1 ) {
                 return;
@@ -98,7 +101,7 @@ public class EndLG {
             for(String p:main.playerlg.keySet()) {
 
                 PlayerLG plg = main.playerlg.get(p);
-                if(plg.isState(State.VIVANT)) {
+                if(plg.isState(State.LIVING)) {
                     if(role==null) {
                         role=plg.getRole();
                     }
@@ -125,13 +128,13 @@ public class EndLG {
         for(String p:main.playerlg.keySet()) {
 
             if(main.playerlg.get(p).isState(State.MORT)) {
-                if(main.playerlg.get(p).isVoleur()) {
+                if(main.playerlg.get(p).isThief()) {
                     Bukkit.broadcastMessage(String.format(main.text.getText(187),p,main.text.translaterole.get(RoleLG.VOLEUR))+String.format(main.text.getText(188),main.text.translaterole.get(main.playerlg.get(p).getRole())));
                 }
                 else Bukkit.broadcastMessage(String.format(main.text.getText(187),p,main.text.translaterole.get(main.playerlg.get(p).getRole())));
             }
             else {
-                if(main.playerlg.get(p).isVoleur()) {
+                if(main.playerlg.get(p).isThief()) {
                     Bukkit.broadcastMessage(String.format(main.text.getText(10),p,main.text.translaterole.get(RoleLG.VOLEUR))+String.format(main.text.getText(188),main.text.translaterole.get(main.playerlg.get(p).getRole())));
                 }
                 else Bukkit.broadcastMessage(String.format(main.text.getText(10),p,main.text.translaterole.get(main.playerlg.get(p).getRole())));
@@ -155,17 +158,17 @@ public class EndLG {
 
         for(String p1:main.playerlg.keySet()) {
 
-            if(main.playerlg.get(p1).isState(State.VIVANT)) {
+            if(main.playerlg.get(p1).isState(State.LIVING)) {
                 List<String> teamange= new ArrayList<>();
                 teamange.add(p1);
-                if(main.playerlg.get(p1).isRole(RoleLG.ANGE_GARDIEN) && !main.playerlg.get(p1).getAffectedPlayer().isEmpty() && main.playerlg.get(main.playerlg.get(p1).getAffectedPlayer().get(0)).isState(State.VIVANT)){
+                if(main.playerlg.get(p1).isRole(RoleLG.ANGE_GARDIEN) && !main.playerlg.get(p1).getAffectedPlayer().isEmpty() && main.playerlg.get(main.playerlg.get(p1).getAffectedPlayer().get(0)).isState(State.LIVING)){
                     teamange.add(main.playerlg.get(p1).getAffectedPlayer().get(0));
                 }
 
                 for (int i=0;i< teamange.size();i++) {
                     if (!main.playerlg.get(teamange.get(i)).getTargetOf().isEmpty()) {
                         for (String p2 : main.playerlg.get(teamange.get(i)).getTargetOf()) {
-                            if (main.playerlg.get(p2).isRole(RoleLG.ANGE_GARDIEN) && main.playerlg.get(p2).isState(State.VIVANT)) {
+                            if (main.playerlg.get(p2).isRole(RoleLG.ANGE_GARDIEN) && main.playerlg.get(p2).isState(State.LIVING)) {
                                 if(!teamange.contains(p2)){
                                     teamange.add(p2);
                                 }

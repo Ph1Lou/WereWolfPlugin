@@ -1,49 +1,68 @@
 package io.github.ph1lou.pluginlg;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import io.github.ph1lou.pluginlg.enumlg.Camp;
 import io.github.ph1lou.pluginlg.enumlg.RoleLG;
 import io.github.ph1lou.pluginlg.enumlg.State;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scoreboard.Scoreboard;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class PlayerLG{
 
-	private State state = State.VIVANT;
+	private State state = State.LIVING;
 	private Camp camp = Camp.VILLAGE;
-	private Camp campfeutre = Camp.LG;
+	private Camp posterCamp = Camp.LG;
 	private RoleLG role=RoleLG.VILLAGEOIS;
-	private RoleLG rolefeutre=RoleLG.LOUP_FEUTRE;
+	private RoleLG posterRole =RoleLG.LOUP_FEUTRE;
 	private Boolean power=true;
-	private Boolean canbeinfect=false;
-	private Boolean maudit=false;
-	private Boolean salvationner=false;
-	private Boolean hasbeenstolen=false;
-	private Boolean voleur=false;
+	private Boolean canBeInfect =false;
+	private Boolean damn =false;
+	private Boolean salvation =false;
+	private Boolean hasBeenStolen =false;
+	private Boolean thief =false;
 	private	Boolean kit=false;
 	Scoreboard board;
-	private final List<String> affected_player = new ArrayList<>();
+	private final List<String> affectedPlayer = new ArrayList<>();
 	private final List<String> disciple = new ArrayList<>();
-	private final List<String> cibleof = new ArrayList<>();
+	private final List<String> targetOf = new ArrayList<>();
 	private final List<String> couple = new ArrayList<>();
-	private final List<ItemStack> itemsdeath= new ArrayList<>();
+	private final List<ItemStack> itemsDeath = new ArrayList<>();
 	private Location spawn;
-	private int deathtime=0;
+	private int deathTime =0;
 	private int vote=0;
-	private int diamondlimit=17;
-	private int lostheart=0;
-	private int nbkill=0;
-	private float progflair = 0;
+	private int diamondLimit =17;
+	private int lostHeart =0;
+	private int kill =0;
+	private float flair = 0;
 	private String killer="";
-	private String avote="";
+	private String playerVote ="";
 
-	public PlayerLG() {
+	public PlayerLG(Player player) {
 		board = Bukkit.getScoreboardManager().getNewScoreboard();
+		clearPlayer(player);
+	}
+
+	public void clearPlayer(Player player){
+		player.setMaxHealth(20);
+		player.setHealth(20);
+		player.setExp(0);
+		player.setLevel(0);
+		player.getInventory().clear();
+		player.getInventory().setHelmet(null);
+		player.getInventory().setChestplate(null);
+		player.getInventory().setLeggings(null);
+		player.getInventory().setBoots(null);
+		for(PotionEffect po:player.getActivePotionEffects()) {
+			player.removePotionEffect(po.getType());
+		}
 	}
 
 	public Scoreboard getScoreBoard(){
@@ -54,20 +73,20 @@ public class PlayerLG{
 		this.board=board;
 	}
 
-	public void setItemDeath(ItemStack[] itemsdeath) {
-		this.itemsdeath.addAll(Arrays.asList(itemsdeath));
+	public void setItemDeath(ItemStack[] itemsDeath) {
+		this.itemsDeath.addAll(Arrays.asList(itemsDeath));
 	}
 
 	public List<ItemStack> getItemDeath() {
-		return this.itemsdeath;
+		return this.itemsDeath;
 	}
 
-	public void addItemDeath(ItemStack itemsdeath) {
-		this.itemsdeath.add(itemsdeath);
+	public void addItemDeath(ItemStack itemsDeath) {
+		this.itemsDeath.add(itemsDeath);
 	}
 
 	public void clearItemDeath() {
-		this.itemsdeath.clear();
+		this.itemsDeath.clear();
 	}
 	
 	public void setState(State state) {
@@ -91,27 +110,27 @@ public class PlayerLG{
 	}
 	
 	public void addOneKill() {
-		this.nbkill+=1;
+		this.kill +=1;
 	}
 
 	public int getNbKill() {
-		return(this.nbkill);
+		return(this.kill);
 	}
 	
 	public void addKLostHeart(int k) {
-		this.lostheart+=k;
+		this.lostHeart +=k;
 	}
 
 	public int getLostHeart() {
-		return(this.lostheart);
+		return(this.lostHeart);
 	}
 	
 	public void setVote(String vote) {
-		this.avote=vote;
+		this.playerVote =vote;
 	}
 	
 	public String getVotedPlayer() {
-		return(this.avote);
+		return(this.playerVote);
 	}
 	
 	public void setKit(Boolean kit) {
@@ -122,16 +141,16 @@ public class PlayerLG{
 		return(this.kit);
 	}
 	
-	public void setCampFeutre(Camp camp) {
-		this.campfeutre=camp;
+	public void setPosterCamp(Camp camp) {
+		this.posterCamp =camp;
 	}
 
-	public boolean isCampFeutre(Camp camp) {
-		return(this.campfeutre.equals(camp));
+	public boolean isPosterCamp(Camp camp) {
+		return(this.posterCamp.equals(camp));
 	}
 	
-	public Camp getCampFeutre() {
-		return(this.campfeutre);
+	public Camp getPosterCamp() {
+		return(this.posterCamp);
 	}
 	
 	public void incVote() {
@@ -146,12 +165,12 @@ public class PlayerLG{
 		return(this.vote);
 	}
 
-	public void setStolen(Boolean hasbeenstolen) {
-		this.hasbeenstolen=hasbeenstolen;
+	public void setStolen(Boolean stolen) {
+		this.hasBeenStolen =stolen;
 	}
 	
 	public Boolean hasBeenStolen() {
-		return(this.hasbeenstolen);
+		return(this.hasBeenStolen);
 	}
 
 	public void setRole(RoleLG role) {
@@ -159,11 +178,11 @@ public class PlayerLG{
 	}
 
 	public void setFlair(Float flair) {
-		this.progflair=flair;
+		this.flair =flair;
 	}
 
 	public float getFlair() {
-		return(this.progflair);
+		return(this.flair);
 	}
 
 	public RoleLG getRole() {
@@ -174,8 +193,8 @@ public class PlayerLG{
 		return(this.role.equals(role));
 	}
 
-	public Boolean isRoleFeutre(RoleLG role) {
-		return(this.rolefeutre.equals(role));
+	public Boolean isPosterRole(RoleLG role) {
+		return(this.posterRole.equals(role));
 	}
 
 	public void setPower(Boolean power) {
@@ -192,47 +211,47 @@ public class PlayerLG{
 	public Location getSpawn() {
 		return(this.spawn);
 	}
-	public void setMaudit(Boolean maudit) {
-		this.maudit= maudit;
+	public void setDamn(Boolean damn) {
+		this.damn = damn;
 	}
 
-	public Boolean hasMaudit() {
-		return(this.maudit);
+	public Boolean hasDamn() {
+		return(this.damn);
 	}
 	public void setSalvation(Boolean salvation) {
-		this.salvationner= salvation;
+		this.salvation = salvation;
 	}
 	
 	public Boolean hasSalvation() {
-		return(this.salvationner);
+		return(this.salvation);
 	}
 
-	public void setVoleur(Boolean voleur) {
-		this.voleur= voleur;
+	public void setThief(Boolean thief) {
+		this.thief = thief;
 	}
 	
-	public Boolean isVoleur() {
-		return(this.voleur);
+	public Boolean isThief() {
+		return(this.thief);
 	}
 	
 	public void addAffectedPlayer(String player) {
-		this.affected_player.add(player);
+		this.affectedPlayer.add(player);
 	}
 	
 	public void clearAffectedPlayer() {
-		this.affected_player.clear();
+		this.affectedPlayer.clear();
 	}
 	
 	public List<String> getAffectedPlayer() {
-		return(this.affected_player);
+		return(this.affectedPlayer);
 	}
 	
 	public void addTargetOf(String player) {
-		this.cibleof.add(player);
+		this.targetOf.add(player);
 	}
 	
 	public List<String> getTargetOf() {
-		return(this.cibleof);
+		return(this.targetOf);
 	}
 	
 	public void addCouple(String c) {
@@ -254,39 +273,39 @@ public class PlayerLG{
 		return(this.killer);
 	}
 
-	public void setRoleFeutre(RoleLG roleLG) {
-		this.rolefeutre=roleLG;
+	public void setPosterRole(RoleLG roleLG) {
+		this.posterRole =roleLG;
 	}
 	
-	public RoleLG getRoleFeutre() {
-		return(this.rolefeutre);
+	public RoleLG getPosterRole() {
+		return(this.posterRole);
 	}
 	
-	public void setDeathTime(Integer deathtime) {
-		this.deathtime=deathtime;
+	public void setDeathTime(Integer deathTime) {
+		this.deathTime =deathTime;
 	}
 	
 	public int getDeathTime() {
-		return(this.deathtime);
+		return(this.deathTime);
 	}
 	
 	public void decDiamondLimit() {
-		this.diamondlimit-=1;
+		this.diamondLimit -=1;
 	}
 	
 	public int getDiamondLimit() {
-		return(this.diamondlimit);
+		return(this.diamondLimit);
 	}
 	public void setDiamondLimit(int diamond) {
-		this.diamondlimit=diamond;
+		this.diamondLimit =diamond;
 	}
 
 	public void setCanBeInfect(Boolean b) {
-		this.canbeinfect=b;
+		this.canBeInfect =b;
 	}
 	
 	public Boolean canBeInfect() {
-		return(this.canbeinfect);
+		return(this.canBeInfect);
 	}
 	public void addDisciple(String disciple) {
 		this.disciple.add(disciple);
@@ -301,11 +320,11 @@ public class PlayerLG{
 	}
 
 	public void removeAffectedPlayer(String playername) {
-		this.affected_player.remove(playername);
+		this.affectedPlayer.remove(playername);
 	}
 
 	public void clearLostHeart() {
-		this.lostheart=0;
+		this.lostHeart =0;
 	}
 
 	public void removeCouple(String playername) {

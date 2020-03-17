@@ -1,9 +1,6 @@
 package io.github.ph1lou.pluginlg.listener;
 
 
-import java.util.List;
-import java.util.Random;
-
 import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlg.enumlg.ScenarioLG;
 import io.github.ph1lou.pluginlg.enumlg.TimerLG;
@@ -22,6 +19,9 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
+import java.util.Random;
+
 
 
 public class WorldListener implements Listener {
@@ -37,9 +37,9 @@ public class WorldListener implements Listener {
 		if(!event.getPlayer().getGameMode().equals(GameMode.SURVIVAL)) return;
 		if(event.getInventory().getType().equals(InventoryType.CHEST)) {
 			if(event.getInventory().getHolder() instanceof Chest) {
-	            Location cloc = ((Chest) event.getInventory().getHolder()).getLocation();
-	        	if(main.eventslg.chest_location.contains(cloc)) {
-	        		 main.eventslg.chest_has_been_open.put(cloc,true);
+	            Location location = ((Chest) event.getInventory().getHolder()).getLocation();
+	        	if(main.eventslg.chest_location.contains(location)) {
+	        		 main.eventslg.chest_has_been_open.put(location,true);
 	        	}
 	        }
 		}
@@ -61,90 +61,90 @@ public class WorldListener implements Listener {
 		}
 		
 		switch (Block.getType()){
-		
-		case COAL_ORE :
-			
-			if(!event.getPlayer().getItemInHand().getType().equals(Material.DIAMOND_PICKAXE) && !event.getPlayer().getItemInHand().getType().equals(Material.IRON_PICKAXE) && !event.getPlayer().getItemInHand().getType().equals(Material.STONE_PICKAXE)  && !event.getPlayer().getItemInHand().getType().equals(Material.GOLD_PICKAXE)  && !event.getPlayer().getItemInHand().getType().equals(Material.WOOD_PICKAXE)){
-   				return;
-   			}
-			Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop()*xp_rate);
-			if (main.config.scenario.get(ScenarioLG.CUT_CLEAN) ) {
-				 Block.setType(Material.AIR);
-				 if(main.config.value.get(TimerLG.DIGGING)>0) {
-					 Block.getWorld().dropItem(loc, new ItemStack(Material.TORCH,4));
-				 }
-			}
-            break;
-		
-		case REDSTONE_ORE:
 
-			case LAPIS_ORE:
+			case COAL_ORE :
 
-			case EMERALD_ORE:
-				if(main.config.value.get(TimerLG.DIGGING)<0)
-					Block.setType(Material.AIR) ;
+				if(!event.getPlayer().getItemInHand().getType().equals(Material.DIAMOND_PICKAXE) && !event.getPlayer().getItemInHand().getType().equals(Material.IRON_PICKAXE) && !event.getPlayer().getItemInHand().getType().equals(Material.STONE_PICKAXE)  && !event.getPlayer().getItemInHand().getType().equals(Material.GOLD_PICKAXE)  && !event.getPlayer().getItemInHand().getType().equals(Material.WOOD_PICKAXE)){
+					return;
+				}
 				Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop()*xp_rate);
-			break;
+				if (main.config.scenario.get(ScenarioLG.CUT_CLEAN) ) {
+					 Block.setType(Material.AIR);
+					 if(main.config.value.get(TimerLG.DIGGING)>0) {
+						 Block.getWorld().dropItem(loc, new ItemStack(Material.TORCH,4));
+					 }
+				}
+				break;
 
-			case DIAMOND_ORE:
-			
-			if(!event.getPlayer().getItemInHand().getType().equals(Material.DIAMOND_PICKAXE) && !event.getPlayer().getItemInHand().getType().equals(Material.IRON_PICKAXE)){
-				return;
-			}
-			
-			if (main.config.scenario.get(ScenarioLG.DIAMOND_LIMIT) ) {
-				if(main.playerlg.get(player.getName()).getDiamondLimit()>0) {
-					if(main.config.value.get(TimerLG.DIGGING)>0) main.playerlg.get(player.getName()).decDiamondLimit();
-					else Block.setType(Material.AIR) ;
+			case REDSTONE_ORE:
+
+				case LAPIS_ORE:
+
+				case EMERALD_ORE:
+					if(main.config.value.get(TimerLG.DIGGING)<0)
+						Block.setType(Material.AIR) ;
+					Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop()*xp_rate);
+				break;
+
+				case DIAMOND_ORE:
+
+				if(!event.getPlayer().getItemInHand().getType().equals(Material.DIAMOND_PICKAXE) && !event.getPlayer().getItemInHand().getType().equals(Material.IRON_PICKAXE)){
+					return;
 				}
-				else {
-					if(main.config.value.get(TimerLG.DIGGING)>0) {
-						Block.getWorld().dropItem(loc,new ItemStack(Material.GOLD_INGOT,1));
+
+				if (main.config.scenario.get(ScenarioLG.DIAMOND_LIMIT) ) {
+					if(main.playerlg.get(player.getName()).getDiamondLimit()>0) {
+						if(main.config.value.get(TimerLG.DIGGING)>0) main.playerlg.get(player.getName()).decDiamondLimit();
+						else Block.setType(Material.AIR) ;
 					}
-					Block.setType(Material.AIR) ;
+					else {
+						if(main.config.value.get(TimerLG.DIGGING)>0) {
+							Block.getWorld().dropItem(loc,new ItemStack(Material.GOLD_INGOT,1));
+						}
+						Block.setType(Material.AIR) ;
+					}
 				}
-			}
-			
-			Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop()*xp_rate);
-			break;
-			
-		case IRON_ORE:
-       
-           	if(!event.getPlayer().getItemInHand().getType().equals(Material.DIAMOND_PICKAXE) && !event.getPlayer().getItemInHand().getType().equals(Material.IRON_PICKAXE) && !event.getPlayer().getItemInHand().getType().equals(Material.STONE_PICKAXE)){
-   				return;
-   			}
-           	if (main.config.scenario.get(ScenarioLG.CUT_CLEAN) ) {
-           		Block.setType(Material.AIR);
-           		if(main.config.value.get(TimerLG.DIGGING)>0) {
-                    Block.getWorld().dropItem(loc, new ItemStack(Material.IRON_INGOT,1));
-           		}
-				Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(xp_rate);
-           	}
-            break;
-           
-		case GOLD_ORE:
-			if(!event.getPlayer().getItemInHand().getType().equals(Material.DIAMOND_PICKAXE) && !event.getPlayer().getItemInHand().getType().equals(Material.IRON_PICKAXE)){
-				return;
-			}
-			if (main.config.scenario.get(ScenarioLG.CUT_CLEAN) ) {
-				Block.setType(Material.AIR);
-				if(main.config.value.get(TimerLG.DIGGING)>0) {
-					Block.getWorld().dropItem(loc, new ItemStack(Material.GOLD_INGOT,1 ));
+
+				Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop()*xp_rate);
+				break;
+
+			case IRON_ORE:
+
+				if(!event.getPlayer().getItemInHand().getType().equals(Material.DIAMOND_PICKAXE) && !event.getPlayer().getItemInHand().getType().equals(Material.IRON_PICKAXE) && !event.getPlayer().getItemInHand().getType().equals(Material.STONE_PICKAXE)){
+					return;
 				}
-                Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(xp_rate);
+				if (main.config.scenario.get(ScenarioLG.CUT_CLEAN) ) {
+					Block.setType(Material.AIR);
+					if(main.config.value.get(TimerLG.DIGGING)>0) {
+						Block.getWorld().dropItem(loc, new ItemStack(Material.IRON_INGOT,1));
+					}
+					Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(xp_rate);
+				}
+				break;
+
+			case GOLD_ORE:
+				if(!event.getPlayer().getItemInHand().getType().equals(Material.DIAMOND_PICKAXE) && !event.getPlayer().getItemInHand().getType().equals(Material.IRON_PICKAXE)){
+					return;
+				}
+				if (main.config.scenario.get(ScenarioLG.CUT_CLEAN) ) {
+					Block.setType(Material.AIR);
+					if(main.config.value.get(TimerLG.DIGGING)>0) {
+						Block.getWorld().dropItem(loc, new ItemStack(Material.GOLD_INGOT,1 ));
+					}
+					Block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(xp_rate);
+				}
+				break;
+
+			case GRAVEL :
+				if (main.config.scenario.get(ScenarioLG.VANILLA_PLUS)  && Math.random()<main.config.getFlint_rate()) {
+					 Block.setType(Material.AIR);
+					 Block.getWorld().dropItem(loc, new ItemStack(Material.FLINT,1));
+				}
+				break;
+
+			default:
+				break;
 			}
-            break;
-            
-		case GRAVEL :
-			if (main.config.scenario.get(ScenarioLG.VANILLA_PLUS)  && Math.random()<main.config.getFlint_rate()) {
-				 Block.setType(Material.AIR);
-		         Block.getWorld().dropItem(loc, new ItemStack(Material.FLINT,1));
-			}
-            break;
-            
-		default:
-			break;	
-		}
 	}
 
 	@EventHandler

@@ -1,18 +1,14 @@
 package io.github.ph1lou.pluginlg;
 
-import java.util.*;
-
 import io.github.ph1lou.pluginlg.enumlg.Camp;
 import io.github.ph1lou.pluginlg.enumlg.State;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.WorldBorder;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.*;
 
 public class EventsLG {
 	
@@ -23,7 +19,7 @@ public class EventsLG {
 		this.main=main;
 	}
 	
-	private void create_target(Location location,Boolean active) {
+	private void createTarget(Location location, Boolean active) {
 
 		Location location2 = location.clone();
 		location2.setY(location2.getY()+1);
@@ -38,7 +34,7 @@ public class EventsLG {
 		Sign sign = (Sign) block2.getState();
 		
 		for(String p:main.playerlg.keySet()) {
-			if(!main.playerlg.get(p).isCamp(Camp.VILLAGE) && main.playerlg.get(p).isState(State.VIVANT)) {
+			if(!main.playerlg.get(p).isCamp(Camp.VILLAGE) && main.playerlg.get(p).isState(State.LIVING)) {
 				danger.add(p);
 			}
 		}
@@ -73,9 +69,9 @@ public class EventsLG {
 			Location location=new Location(world,x,world.getHighestBlockYAt(x,z),z);
 			
 			if (i==0) {
-				create_target(location,true);
+				createTarget(location,true);
 			}
-			else create_target(location,false);
+			else createTarget(location,false);
 			
 			chest_location.add(location);
 			chest_has_been_open.put(location,false);

@@ -1,21 +1,18 @@
 package io.github.ph1lou.pluginlg;
 
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 import fr.mrmicky.fastboard.FastBoard;
 import io.github.ph1lou.pluginlg.commandlg.AdminLG;
 import io.github.ph1lou.pluginlg.commandlg.CommandLG;
-import io.github.ph1lou.pluginlg.enumlg.*;
-import io.github.ph1lou.pluginlg.listener.*;
+import io.github.ph1lou.pluginlg.enumlg.Day;
+import io.github.ph1lou.pluginlg.enumlg.State;
+import io.github.ph1lou.pluginlg.enumlg.StateLG;
+import io.github.ph1lou.pluginlg.listener.MenuListener;
+import io.github.ph1lou.pluginlg.listener.PlayerListener;
+import io.github.ph1lou.pluginlg.listener.ScenarioListener;
+import io.github.ph1lou.pluginlg.listener.WorldListener;
 import io.github.ph1lou.pluginlg.savelg.*;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.WorldBorder;
+import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -24,6 +21,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class MainLG extends JavaPlugin {
 
@@ -93,7 +94,7 @@ public class MainLG extends JavaPlugin {
 		for(Player player:Bukkit.getOnlinePlayers()) {
 			joinPlayer(player) ;	
 		}
-		TeleportationLG start = new TeleportationLG(this);
+		TransportationLG start = new TransportationLG(this);
 		start.runTaskTimer(this, 0, 20);
 	}
 	
@@ -134,6 +135,8 @@ public class MainLG extends JavaPlugin {
 					new Location(world, x+16, j,i+z).getBlock().setType(Material.BARRIER);
 				}
 			}
+			WorldLoader worldloader = new WorldLoader(world, 1000, 1000);
+			Bukkit.getScheduler().scheduleSyncRepeatingTask(this, worldloader, 0L, 145L);
 
 		}catch(Exception e){
 			Bukkit.broadcastMessage(text.getText(21));
@@ -159,25 +162,12 @@ public class MainLG extends JavaPlugin {
 		if(isState(StateLG.LOBBY)) {
 			board.registerNewTeam(playername);
 			board.getTeam(playername).addEntry(playername);
-			player.setMaxHealth(20); 
-			player.setHealth(20);
-			player.setExp(0);
-			player.setLevel(0);
-			player.getInventory().clear();
-	        player.getInventory().setHelmet(null);
-	        player.getInventory().setChestplate(null);
-	        player.getInventory().setLeggings(null);
-	        player.getInventory().setBoots(null);
-	        player.teleport(player.getWorld().getSpawnLocation());
 			player.setGameMode(GameMode.ADVENTURE);
 			player.sendMessage(text.getText(1));
-			playerlg.put(playername, new PlayerLG());
+			player.teleport(player.getWorld().getSpawnLocation());
+			playerlg.put(playername, new PlayerLG(player));
 			score.addPlayerSize();
-			for(PotionEffect po:player.getActivePotionEffects()) {
-				player.removePotionEffect(po.getType());
-			}
 			player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 0,false,false));
-			
 		}
 		else if (!playerlg.containsKey(playername)) {
 			player.setGameMode(GameMode.SPECTATOR);
@@ -194,86 +184,28 @@ public class MainLG extends JavaPlugin {
 			fastboard.updateLines(score.scoreboard3);
 		}
 		player.setScoreboard(playerlg.get(playername).getScoreBoard());
-		optionlg.updateScenario();
+		optionlg.updateNameTag();
 	}
-
-	public void eparpillement(String playername,double d,String message) {
-
-		if(Bukkit.getPlayer(playername)!=null) {
-			
-			Player player = Bukkit.getPlayer(playername);
-			World world = player.getWorld();
-			WorldBorder wb = world.getWorldBorder();
-			double a = d*2*Math.PI/Bukkit.getOnlinePlayers().size();
-			int x = (int) (Math.round(wb.getSize()/3*Math.cos(a)+world.getSpawnLocation().getX()));
-			int z = (int) (Math.round(wb.getSize()/3*Math.sin(a)+world.getSpawnLocation().getZ()));
-			Location spawnp = new Location(world,x,world.getHighestBlockYAt(x,z)+1,z);
-			playerlg.get(playername).setSpawn(spawnp.clone());
-			if(isState(StateLG.TELEPORTATION)) {
-				spawnp.setY(spawnp.getY()+100);
-			}
-			player.setFoodLevel(20);
-			player.setSaturation(20);
-			player.setRemainingAir(300);
-			if(!config.tool_switch.get(ToolLG.COMPASS_MIDDLE)){
-				player.setCompassTarget(spawnp);
-			}
-			else player.setCompassTarget(world.getSpawnLocation());
-
-			player.setGameMode(GameMode.SURVIVAL);
-			player.sendMessage(message);
-			player.teleport(spawnp);
-		}
-	}
-
 
 	public void setState(StateLG state) {
 		this.state=state;
 	}
-	
+
 
 	public boolean isState(StateLG state) {
 		return this.state==state;
 	}
-	
-	
-	public void setDay(Day daystate) {
-		this.daystate=daystate;
-	}
-	
 
-	public boolean isDay(Day daystate) {
-		return this.daystate==daystate;
+
+	public void setDay(Day day) {
+		this.daystate=day;
 	}
 
 
-	public String conversion(int timer) {
-		
-		String valeur;
-		float sign=Math.signum(timer);
-		timer=Math.abs(timer);
-
-		if(timer%60>9) {
-			valeur=timer%60+"s";
-		}
-		else valeur="0"+timer%60+"s";
-		
-		if(timer/3600>0) {
-			
-			if(timer%3600/60>9) {
-				valeur = timer/3600+"h"+timer%3600/60+"m"+valeur;
-			}
-			else valeur = timer/3600+"h0"+timer%3600/60+"m"+valeur;
-		}
-		
-		else if (timer/60>0){
-			valeur = timer/60+"m"+valeur;
-		}
-		if(sign<0) valeur="-"+valeur;
-
-		return valeur;
+	public boolean isDay(Day day) {
+		return this.daystate==day;
 	}
-	
+
 
 }
 		

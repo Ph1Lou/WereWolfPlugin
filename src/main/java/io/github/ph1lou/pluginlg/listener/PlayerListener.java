@@ -1,25 +1,24 @@
 package io.github.ph1lou.pluginlg.listener;
 
-import io.github.ph1lou.pluginlg.*;
+import fr.mrmicky.fastboard.FastBoard;
+import io.github.ph1lou.pluginlg.MainLG;
+import io.github.ph1lou.pluginlg.PlayerLG;
 import io.github.ph1lou.pluginlg.enumlg.*;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import fr.mrmicky.fastboard.FastBoard;
 
 
 public class PlayerListener implements Listener {
@@ -48,7 +47,7 @@ public class PlayerListener implements Listener {
 					player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
 				}
 				main.playerlg.get(player.getName()).setPower(false);
-				main.optionlg.updateScenario();
+				main.optionlg.updateNameTag();
 			}	
 		}
 		else if(!main.playerlg.get(player.getName()).hasPower()) {
@@ -59,7 +58,7 @@ public class PlayerListener implements Listener {
 			player.removePotionEffect(PotionEffectType.INVISIBILITY);
 			player.removePotionEffect(PotionEffectType.WEAKNESS);
 			main.playerlg.get(player.getName()).setPower(true);
-			main.optionlg.updateScenario();
+			main.optionlg.updateNameTag();
 		}
 	}
     
@@ -87,7 +86,7 @@ public class PlayerListener implements Listener {
 			event.setCancelled(true);
 		}
 		if (!main.playerlg.containsKey(playername)) return;
-		if ((main.playerlg.get(playername).isRole(RoleLG.CORBEAU) || main.playerlg.get(playername).hasSalvation() || main.isState(StateLG.TELEPORTATION) || main.config.scenario.get(ScenarioLG.NO_FALL)) && event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
+		if ((main.playerlg.get(playername).isRole(RoleLG.CORBEAU) || main.playerlg.get(playername).hasSalvation() || main.isState(StateLG.TRANSPORTATION) || main.config.scenario.get(ScenarioLG.NO_FALL)) && event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
 			event.setCancelled(true);
 			return;
 		}
@@ -116,7 +115,7 @@ public class PlayerListener implements Listener {
 	@EventHandler
 	private void onPlayerRespawn(PlayerRespawnEvent event) {
 		if(!main.playerlg.containsKey(event.getPlayer().getName())) return;
-		if(main.isState(StateLG.DEBUT) || main.isState(StateLG.TELEPORTATION)) event.setRespawnLocation(main.playerlg.get(event.getPlayer().getName()).getSpawn());
+		if(main.isState(StateLG.DEBUT) || main.isState(StateLG.TRANSPORTATION)) event.setRespawnLocation(main.playerlg.get(event.getPlayer().getName()).getSpawn());
 		else if(main.isState(StateLG.LOBBY)) Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 0,false,false)), 20L);
 	}
 	
@@ -134,7 +133,7 @@ public class PlayerListener implements Listener {
 			
 			PlayerLG plg = main.playerlg.get(playername);
 			
-			if(!plg.isState(State.VIVANT)) return;
+			if(!plg.isState(State.LIVING)) return;
 			plg.setSpawn(player.getLocation());
 			plg.clearItemDeath();
 			plg.setItemDeath(player.getInventory().getContents().clone());
@@ -161,10 +160,10 @@ public class PlayerListener implements Listener {
 			
 			if(player.getKiller()!=null) {
 				String killername = player.getKiller().getName();
-				main.death_manage.deathstep1(killername,playername);
+				main.death_manage.deathStep1(killername,playername);
 			}
 			else{
-				main.death_manage.deathstep1("§2PVE",playername);
+				main.death_manage.deathStep1(main.text.getText(81),playername);
 			}
 		}
 		
@@ -198,15 +197,15 @@ public class PlayerListener implements Listener {
         		return;
         	}
         	if (Bukkit.getPlayer(args[1]).hasPermission("adminlg.use") || player.hasPermission("adminlg.use")) {
-        		Player receveur = Bukkit.getPlayer(args[1]);
+        		Player recipient = Bukkit.getPlayer(args[1]);
         		StringBuilder sb = new StringBuilder();
     			for(String w:args) {
     				sb.append(w).append(" ");
     			}
     			sb.delete(0,args[0].length()+args[1].length()+2);
-        		receveur.sendMessage(String.format(main.text.getText(133),player.getName(),sb.toString()));
+        		recipient.sendMessage(String.format(main.text.getText(133),player.getName(),sb.toString()));
         		player.sendMessage(String.format(main.text.getText(134),args[1],sb.toString()));
-				receveur.playSound(receveur.getLocation(),Sound.ANVIL_USE, 1, 20);
+				recipient.playSound(recipient.getLocation(),Sound.ANVIL_USE, 1, 20);
 				return;
         	}
         	player.sendMessage(main.text.getText(131));
@@ -219,7 +218,7 @@ public class PlayerListener implements Listener {
 		if(main.isState(StateLG.LOBBY)) {
 			event.setJoinMessage(String.format(main.text.getText(194),Bukkit.getOnlinePlayers().size(),main.score.getRole(),event.getPlayer().getName()));
 		}
-		else if(main.playerlg.containsKey(event.getPlayer().getName()) && main.playerlg.get(event.getPlayer().getName()).isState(State.VIVANT)) {
+		else if(main.playerlg.containsKey(event.getPlayer().getName()) && main.playerlg.get(event.getPlayer().getName()).isState(State.LIVING)) {
 			event.setJoinMessage(String.format(main.text.getText(193),event.getPlayer().getName()));
 		}
 	}	
@@ -238,7 +237,7 @@ public class PlayerListener implements Listener {
         	main.playerlg.remove(player.getName());
         	event.setQuitMessage(String.format(main.text.getText(195),main.score.getPlayerSize(),main.score.getRole(),event.getPlayer().getName()));
         }
-        else if(main.playerlg.containsKey(event.getPlayer().getName()) && main.playerlg.get(event.getPlayer().getName()).isState(State.VIVANT)) {
+        else if(main.playerlg.containsKey(event.getPlayer().getName()) && main.playerlg.get(event.getPlayer().getName()).isState(State.LIVING)) {
         	main.playerlg.get(event.getPlayer().getName()).setDeathTime(main.score.getTimer());
 			event.setQuitMessage(String.format(main.text.getText(196),event.getPlayer().getName()));
         }	

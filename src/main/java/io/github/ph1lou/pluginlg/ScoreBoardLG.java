@@ -56,7 +56,7 @@ public class ScoreBoardLG {
 			if(!main.playerlg.get(playername).isState(State.MORT)) {
 				
 				if(!main.isState(StateLG.LG)) {
-					score[1]=String.format(score[1], main.conversion(main.config.value.get(TimerLG.ROLE_DURATION)));
+					score[1]=String.format(score[1], conversion(main.config.value.get(TimerLG.ROLE_DURATION)));
 				}
 				else score[1]=main.text.translaterole.get(main.playerlg.get(playername).getRole());
 			}
@@ -72,7 +72,7 @@ public class ScoreBoardLG {
 
 		WorldBorder wb = Bukkit.getWorld("world").getWorldBorder();
 		String[] score = main.text.getScoreBoard(1).clone();
-		score[3]=String.format(score[3],main.conversion(timer));
+		score[3]=String.format(score[3],conversion(timer));
 		score[4]=String.format(score[4],timer/main.config.value.get(TimerLG.DAY_DURATION)/2);
 		score[5]=String.format(score[5],player);
 		score[6]=String.format(score[6], group_size);
@@ -80,10 +80,10 @@ public class ScoreBoardLG {
 		score[11]=String.format(score[11],host);
 
 		if(main.config.value.get(TimerLG.BORDER_BEGIN)>0) {
-			score[8] = String.format(score[8], main.conversion(main.config.value.get(TimerLG.BORDER_BEGIN)));
+			score[8] = String.format(score[8], conversion(main.config.value.get(TimerLG.BORDER_BEGIN)));
 		}
 		else {
-			score[8] = String.format(score[8], "§2ON");
+			score[8] = String.format(score[8],main.text.getText(80));
 			if(wb.getSize()>main.config.border_value.get(BorderLG.BORDER_MIN)){
 				score[9]=score[9]+" > "+main.config.border_value.get(BorderLG.BORDER_MIN);
 			}
@@ -176,7 +176,7 @@ public class ScoreBoardLG {
 				}
 			}
 		}
-		if(main.playerlg.containsKey(player.getName()) && main.playerlg.get(player.getName()).isState(State.VIVANT)) {
+		if(main.playerlg.containsKey(player.getName()) && main.playerlg.get(player.getName()).isState(State.LIVING)) {
 			
 			for (String p:main.playerlg.get(player.getName()).getCouple()) {
 				if(Bukkit.getPlayer(p)!=null) {
@@ -185,7 +185,7 @@ public class ScoreBoardLG {
 			}
 			if(main.playerlg.get(player.getName()).isRole(RoleLG.ANGE_GARDIEN)){
 				for (String p:main.playerlg.get(player.getName()).getAffectedPlayer()) {
-					if(main.playerlg.get(p).isState(State.VIVANT) && Bukkit.getPlayer(p)!=null) {
+					if(main.playerlg.get(p).isState(State.LIVING) && Bukkit.getPlayer(p)!=null) {
 						stringbuilder.append("§1 ").append(p).append(" ").append(updateArrow(player, Bukkit.getPlayer(p).getLocation()));
 					}
 				}
@@ -224,13 +224,13 @@ public class ScoreBoardLG {
 
 	}
 
-	private String updateArrow(Player player, Location cible) {
+	private String updateArrow(Player player, Location target) {
 
 		Location location = player.getLocation();
 		String arrow ;
-		location.setY(cible.getY());
-		Vector dirToMiddle = cible.toVector().subtract(player.getEyeLocation().toVector()).normalize();
-		Integer distance = (int) Math.round(cible.distance(location));
+		location.setY(target.getY());
+		Vector dirToMiddle = target.toVector().subtract(player.getEyeLocation().toVector()).normalize();
+		Integer distance = (int) Math.round(target.distance(location));
 		Vector playerDirection = player.getEyeLocation().getDirection();
 		double angle = dirToMiddle.angle(playerDirection);
 		double det=dirToMiddle.getX()*playerDirection.getZ()-dirToMiddle.getZ()*playerDirection.getX();
@@ -262,7 +262,35 @@ public class ScoreBoardLG {
 			
 			return distance+" §l"+arrow;
 	}
-	
+
+	public String conversion(int timer) {
+
+		String valeur;
+		float sign=Math.signum(timer);
+		timer=Math.abs(timer);
+
+		if(timer%60>9) {
+			valeur=timer%60+"s";
+		}
+		else valeur="0"+timer%60+"s";
+
+		if(timer/3600>0) {
+
+			if(timer%3600/60>9) {
+				valeur = timer/3600+"h"+timer%3600/60+"m"+valeur;
+			}
+			else valeur = timer/3600+"h0"+timer%3600/60+"m"+valeur;
+		}
+
+		else if (timer/60>0){
+			valeur = timer/60+"m"+valeur;
+		}
+		if(sign<0) valeur="-"+valeur;
+
+		return valeur;
+	}
+
+
 	public void groupSizeChange() {
 		
 		if(main.config.tool_switch.get(ToolLG.AUTO_GROUP) && player<= group_size *3 && group_size >3) {

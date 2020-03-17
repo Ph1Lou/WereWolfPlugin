@@ -1,10 +1,6 @@
 package io.github.ph1lou.pluginlg;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import io.github.ph1lou.pluginlg.enumlg.RoleLG;
 import io.github.ph1lou.pluginlg.enumlg.State;
 import io.github.ph1lou.pluginlg.enumlg.StateLG;
@@ -13,6 +9,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 
 public class CoupleManagement {
@@ -29,7 +29,7 @@ public class CoupleManagement {
 		Random r =new Random(System.currentTimeMillis());
 		List<String> couples =new ArrayList<>();
 		for(String p:main.playerlg.keySet()) {
-			if(main.playerlg.get(p).isState(State.VIVANT)) {
+			if(main.playerlg.get(p).isState(State.LIVING)) {
 				couples.add(p);
 			}
 		}
@@ -38,10 +38,10 @@ public class CoupleManagement {
 			return;
 		}
 		
-		Boolean polygamie =main.config.tool_switch.get(ToolLG.POLYGAMY);
+		Boolean polygamy =main.config.tool_switch.get(ToolLG.POLYGAMY);
 		
-		if(!polygamie && (main.config.role_count.get(RoleLG.COUPLE)==0 && main.config.role_count.get(RoleLG.CUPIDON)*2>=main.score.getPlayerSize()) || (main.config.role_count.get(RoleLG.COUPLE)!=0 && (main.config.role_count.get(RoleLG.CUPIDON)+main.config.role_count.get(RoleLG.COUPLE))*2>main.score.getPlayerSize())) {
-			polygamie=true;
+		if(!polygamy && (main.config.role_count.get(RoleLG.COUPLE)==0 && main.config.role_count.get(RoleLG.CUPIDON)*2>=main.score.getPlayerSize()) || (main.config.role_count.get(RoleLG.COUPLE)!=0 && (main.config.role_count.get(RoleLG.CUPIDON)+main.config.role_count.get(RoleLG.COUPLE))*2>main.score.getPlayerSize())) {
+			polygamy=true;
 			Bukkit.broadcastMessage(main.text.getText(192));
 		}
 		String j1;
@@ -51,7 +51,7 @@ public class CoupleManagement {
 			
 			if(main.playerlg.get(playername).isRole(RoleLG.CUPIDON)) {
 				
-				if (main.playerlg.get(playername).hasPower() || !main.playerlg.get(main.playerlg.get(playername).getAffectedPlayer().get(0)).isState(State.VIVANT) || !main.playerlg.get(main.playerlg.get(playername).getAffectedPlayer().get(1)).isState(State.VIVANT)) {
+				if (main.playerlg.get(playername).hasPower() || !main.playerlg.get(main.playerlg.get(playername).getAffectedPlayer().get(0)).isState(State.LIVING) || !main.playerlg.get(main.playerlg.get(playername).getAffectedPlayer().get(1)).isState(State.LIVING)) {
 					
 					if(couples.contains(playername)) {
 						couples.remove(playername);
@@ -80,7 +80,7 @@ public class CoupleManagement {
 					j1 = main.playerlg.get(playername).getAffectedPlayer().get(0);
 					j2 = main.playerlg.get(playername).getAffectedPlayer().get(1);
 				}	
-				if(!polygamie) {
+				if(!polygamy) {
 					couples.remove(j1);
 					couples.remove(j2);
 				}
@@ -100,7 +100,7 @@ public class CoupleManagement {
 			j2 = couples.get((int) Math.floor(r.nextFloat()*couples.size()));
 			couples.add(j1);
 			
-			if(!polygamie) {
+			if(!polygamy) {
 				couples.remove(j1);
 				couples.remove(j2);
 			}
@@ -147,12 +147,12 @@ public class CoupleManagement {
 						}
 					}
 
-					StringBuilder strb = new StringBuilder();
+					StringBuilder couple = new StringBuilder();
 
 					for (String c : plg.getCouple()) {
-						strb.append(c).append(" ");
+						couple.append(c).append(" ");
 					}
-					pj2.sendMessage(String.format(main.text.description.get(RoleLG.COUPLE),strb.toString()));
+					pj2.sendMessage(String.format(main.text.description.get(RoleLG.COUPLE),couple.toString()));
 					pj2.playSound(pj2.getLocation(), Sound.SHEEP_SHEAR, 1, 20);
 				}
 			}
@@ -163,39 +163,39 @@ public class CoupleManagement {
 	
 	private void range_couple() {
 		
-		List<String> allcouple = new ArrayList<>();
+		List<String> couples = new ArrayList<>();
 		main.config.role_count.put(RoleLG.COUPLE,0);
 		
 		for(String playername:main.playerlg.keySet()) {
 			if(!main.playerlg.get(playername).getCouple().isEmpty()){
-				allcouple.add(playername);
+				couples.add(playername);
 			}
 		}
 		
-		while(!allcouple.isEmpty()) {
+		while(!couples.isEmpty()) {
 			
-			List<String> couplelie= new ArrayList<>();
-			couplelie.add(allcouple.get(0));
-			allcouple.remove(0);
+			List<String> linkCouple= new ArrayList<>();
+			linkCouple.add(couples.get(0));
+			couples.remove(0);
 			
-			for(int j=0;j<couplelie.size();j++) {
+			for(int j=0;j<linkCouple.size();j++) {
 				for(String playername:main.playerlg.keySet()) {
-					if(main.playerlg.get(playername).getCouple().contains(couplelie.get(j))) {
-						if(!couplelie.contains(playername)) {
-							couplelie.add(playername);
-							allcouple.remove(playername);
+					if(main.playerlg.get(playername).getCouple().contains(linkCouple.get(j))) {
+						if(!linkCouple.contains(playername)) {
+							linkCouple.add(playername);
+							couples.remove(playername);
 						}
 					}		
 				}
 			}
-			couple_range.add(couplelie);
+			couple_range.add(linkCouple);
 			main.config.role_count.put(RoleLG.COUPLE,main.config.role_count.get(RoleLG.COUPLE)+1);
 		}		
 	}
 
 
 
-	public void thief_couplerange(String killername, String playername) {
+	public void thiefCoupleRange(String killername, String playername) {
 		
 		int cp=-1; 
 		int ck=-1;

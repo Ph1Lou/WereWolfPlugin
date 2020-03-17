@@ -1,13 +1,13 @@
 package io.github.ph1lou.pluginlg.listener;
 
-import java.util.Random;
-
 import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlg.enumlg.ScenarioLG;
 import org.bukkit.Material;
 import org.bukkit.block.Furnace;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Horse;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -21,6 +21,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.spigotmc.event.entity.EntityMountEvent;
+
+import java.util.Random;
 
 public class ScenarioListener implements Listener {
 
@@ -206,10 +208,10 @@ public class ScenarioListener implements Listener {
                    }
                    case DIAMOND_PICKAXE: {
                        ItemStack FlnHej1 = new ItemStack(Material.DIAMOND_PICKAXE);
-                       ItemMeta FnleHNj1M = FlnHej1.getItemMeta();
-                       FnleHNj1M.addEnchant(Enchantment.DIG_SPEED, 3, true);
-                       FnleHNj1M.addEnchant(Enchantment.DURABILITY, 3, true);
-                       FlnHej1.setItemMeta(FnleHNj1M);
+                       ItemMeta FaceHNj1M = FlnHej1.getItemMeta();
+                       FaceHNj1M.addEnchant(Enchantment.DIG_SPEED, 3, true);
+                       FaceHNj1M.addEnchant(Enchantment.DURABILITY, 3, true);
+                       FlnHej1.setItemMeta(FaceHNj1M);
                        event.getInventory().setResult(FlnHej1);
                        break;
                    }

@@ -31,7 +31,7 @@ public class CycleLG {
 			
 			PlayerLG plg = main.playerlg.get(playername);
 			
-			if(plg.isState(State.VIVANT) && Bukkit.getPlayer(playername)!=null){
+			if(plg.isState(State.LIVING) && Bukkit.getPlayer(playername)!=null){
 				
 				Player player = Bukkit.getPlayer(playername);	
 				
@@ -64,7 +64,7 @@ public class CycleLG {
 			
 			PlayerLG plg = main.playerlg.get(playername);
 			
-			if(plg.isState(State.VIVANT) && Bukkit.getPlayer(playername)!=null){
+			if(plg.isState(State.LIVING) && Bukkit.getPlayer(playername)!=null){
 				
 				Player player = Bukkit.getPlayer(playername);
 				
@@ -73,15 +73,15 @@ public class CycleLG {
 					player.sendMessage(main.text.getText(13));
 				}
 				if(plg.isRole(RoleLG.LOUP_FEUTRE)) {
-					List <String> playerv = new ArrayList<>();
+					List <String> players = new ArrayList<>();
 					for(String p:main.playerlg.keySet()) {
-						if(main.playerlg.get(p).isState(State.VIVANT) && !p.equals(playername)) {
-							playerv.add(p);
+						if(main.playerlg.get(p).isState(State.LIVING) && !p.equals(playername)) {
+							players.add(p);
 						}
 					}
-					String pc = playerv.get((int) Math.floor(Math.random()*playerv.size()));
-					plg.setCampFeutre(main.playerlg.get(pc).getCamp());
-					plg.setRoleFeutre(main.playerlg.get(pc).getRole());
+					String pc = players.get((int) Math.floor(Math.random()*players.size()));
+					plg.setPosterCamp(main.playerlg.get(pc).getCamp());
+					plg.setPosterRole(main.playerlg.get(pc).getRole());
 					player.sendMessage(String.format(main.text.poweruse.get(RoleLG.LOUP_FEUTRE),main.text.translaterole.get(main.playerlg.get(pc).getRole())));
 				}
 			}
@@ -95,7 +95,7 @@ public class CycleLG {
 			
 			PlayerLG plg = main.playerlg.get(playername);
 			
-			if(plg.isState(State.VIVANT) && Bukkit.getPlayer(playername)!=null){
+			if(plg.isState(State.LIVING) && Bukkit.getPlayer(playername)!=null){
 				
 				Player player = Bukkit.getPlayer(playername);
 				
@@ -115,14 +115,14 @@ public class CycleLG {
 
 			PlayerLG plg = main.playerlg.get(playername);
 
-			if(plg.isState(State.VIVANT) && Bukkit.getPlayer(playername)!=null){
+			if(plg.isState(State.LIVING) && Bukkit.getPlayer(playername)!=null){
 
 				Player player = Bukkit.getPlayer(playername);
 
 				Title.removeBar(player);
 
 				if(plg.isRole(RoleLG.CITOYEN)){
-					player.sendMessage(String.format(main.text.poweruse.get(RoleLG.CITOYEN),main.conversion(main.config.value.get(TimerLG.CITIZEN_DURATION))));
+					player.sendMessage(String.format(main.text.poweruse.get(RoleLG.CITOYEN),main.score.conversion(main.config.value.get(TimerLG.CITIZEN_DURATION))));
 				}
 			}
 		}
@@ -140,14 +140,14 @@ public class CycleLG {
 			
 			PlayerLG plg = main.playerlg.get(playername);
 			
-			if(plg.isState(State.VIVANT) && Bukkit.getPlayer(playername)!=null){
+			if(plg.isState(State.LIVING) && Bukkit.getPlayer(playername)!=null){
 				
 				Player player = Bukkit.getPlayer(playername);	
 				
 				player.playSound(player.getLocation(), Sound.DOOR_OPEN,1,20);
 
 				if(main.config.tool_switch.get(ToolLG.VOTE) && main.config.value.get(TimerLG.VOTE_BEGIN)<0) {
-					player.sendMessage(String.format(main.text.getText(17),main.conversion(main.config.value.get(TimerLG.VOTE_DURATION))));
+					player.sendMessage(String.format(main.text.getText(17),main.score.conversion(main.config.value.get(TimerLG.VOTE_DURATION))));
 				}
 				
 				if(plg.isRole(RoleLG.MONTREUR_OURS)){
@@ -155,17 +155,17 @@ public class CycleLG {
 					StringBuilder builder=new StringBuilder();
 					boolean ok=false;
 					
-					Location ourslocation = Bukkit.getPlayer(playername).getLocation();	
+					Location oursLocation = Bukkit.getPlayer(playername).getLocation();
 					
 					for(Player pls:Bukkit.getOnlinePlayers()) {
 						
 						if(main.playerlg.containsKey(pls.getName())) {
 							
-							PlayerLG plgf = main.playerlg.get(pls.getName());
+							PlayerLG plo = main.playerlg.get(pls.getName());
 
-							if (!plgf.isRole(RoleLG.LOUP_FEUTRE) || plgf.isCampFeutre(Camp.LG)) {
-								if((plgf.isCamp(Camp.LG) || plgf.isRole(RoleLG.LOUP_GAROU_BLANC)) && plgf.isState(State.VIVANT)) {
-									if(ourslocation.distance(pls.getLocation())<50) {
+							if (!plo.isRole(RoleLG.LOUP_FEUTRE) || plo.isPosterCamp(Camp.LG)) {
+								if((plo.isCamp(Camp.LG) || plo.isRole(RoleLG.LOUP_GAROU_BLANC)) && plo.isState(State.LIVING)) {
+									if(oursLocation.distance(pls.getLocation())<50) {
 										builder.append(main.text.powerhasbeenuse.get(RoleLG.MONTREUR_OURS));
 										ok=true;
 									}
@@ -199,10 +199,10 @@ public class CycleLG {
 					player.removePotionEffect(PotionEffectType.WEAKNESS);
 					plg.setPower(true);
 					player.sendMessage(main.text.getText(18));
-					main.optionlg.updateScenario();
+					main.optionlg.updateNameTag();
 				}
-				if(plg.hasMaudit()) {
-					plg.setMaudit(false);
+				if(plg.hasDamn()) {
+					plg.setDamn(false);
 					player.removePotionEffect(PotionEffectType.JUMP);
 					player.sendMessage(main.text.getText(19));
 				}
@@ -215,15 +215,15 @@ public class CycleLG {
 				}
 				if(plg.isRole(RoleLG.CORBEAU)) {
 					plg.setPower(true);
-					player.sendMessage(String.format(main.text.poweruse.get(RoleLG.CORBEAU),main.conversion(main.config.value.get(TimerLG.POWER_DURATION))));
+					player.sendMessage(String.format(main.text.poweruse.get(RoleLG.CORBEAU),main.score.conversion(main.config.value.get(TimerLG.POWER_DURATION))));
 				}
 				if(plg.isRole(RoleLG.SALVATEUR)) {
 					plg.setPower(true);
-					player.sendMessage(String.format(main.text.poweruse.get(RoleLG.SALVATEUR),main.conversion(main.config.value.get(TimerLG.POWER_DURATION))));
+					player.sendMessage(String.format(main.text.poweruse.get(RoleLG.SALVATEUR),main.score.conversion(main.config.value.get(TimerLG.POWER_DURATION))));
 				}
 				if(plg.isRole(RoleLG.DETECTIVE)) {
 					plg.setPower(true);
-					player.sendMessage(String.format(main.text.poweruse.get(RoleLG.DETECTIVE),main.conversion(main.config.value.get(TimerLG.POWER_DURATION))));
+					player.sendMessage(String.format(main.text.poweruse.get(RoleLG.DETECTIVE),main.score.conversion(main.config.value.get(TimerLG.POWER_DURATION))));
 				}
 				if(plg.isRole(RoleLG.RENARD)) {
 					plg.setPower(true);
@@ -231,7 +231,7 @@ public class CycleLG {
 				}
 				if(plg.isRole(RoleLG.VOYANTE) || plg.isRole(RoleLG.VOYANTE_BAVARDE)) {
 					plg.setPower(true);
-					player.sendMessage(String.format(main.text.poweruse.get(RoleLG.VOYANTE),main.conversion(main.config.value.get(TimerLG.POWER_DURATION))));
+					player.sendMessage(String.format(main.text.poweruse.get(RoleLG.VOYANTE),main.score.conversion(main.config.value.get(TimerLG.POWER_DURATION))));
 				}
 			}
 		}	
