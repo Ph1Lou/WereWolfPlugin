@@ -58,6 +58,7 @@ public class TransportationLG extends BukkitRunnable{
 					Player player = Bukkit.getPlayer(playername);
 					World world = player.getWorld();
 					WorldBorder wb = world.getWorldBorder();
+					player.setGameMode(GameMode.SURVIVAL);
 					main.playerlg.get(playername).clearPlayer(player);
 			        player.sendMessage(main.text.getText(121));
 
