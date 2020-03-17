@@ -5,8 +5,6 @@ import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.command.ConsoleCommandSender;
 
-import java.util.ResourceBundle;
-
 public class WorldLoader implements Runnable {
 
     final ConsoleCommandSender sender = Bukkit.getConsoleSender();
@@ -82,19 +80,6 @@ public class WorldLoader implements Runnable {
                         }
                         catch (Exception ignored) {}
 
-                        float ramPercent;
-                        while ((ramPercent = Runtime.getRuntime().freeMemory() / (float)Runtime.getRuntime().maxMemory()) > 0.4f) {
-                            try {
-                                ResourceBundle.clearCache();
-                            }
-                            catch (Exception ignored) {}
-                            System.gc();
-                            sender.sendMessage("Memory usage is too high at " + ramPercent + "%! Clearing Memory");
-                            try {
-                                Thread.sleep(5000L);
-                            }
-                            catch (Exception ignored) {}
-                        }
                     }
                     this.x += 16;
                 }
