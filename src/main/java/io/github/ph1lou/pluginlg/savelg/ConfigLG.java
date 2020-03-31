@@ -1,8 +1,7 @@
 package io.github.ph1lou.pluginlg.savelg;
 
-import io.github.ph1lou.pluginlg.enumlg.*;
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.PlayerLG;
+import io.github.ph1lou.pluginlg.enumlg.*;
 
 import java.io.File;
 import java.util.HashMap;
@@ -15,24 +14,31 @@ public class ConfigLG {
 	public final Map<RoleLG,Integer> role_count = new HashMap<>();
 	public final Map<ScenarioLG,Boolean> scenario = new HashMap<>();
 
-	private float strength_rate =1.3f;
-	private float apple_rate =0.1f;
-	private float flint_rate =0.1f;
-	private float pearl_rate =0.3f;
-	private int diamond_limit=17;
+	private int strength_rate =130;
+	private int apple_rate =10;
+	private int flint_rate =10;
+	private int pearl_rate =30;
+	private int xp_boost=500;
 	private int player_required_before_voting_ends=10;
-	private int xp_boost=5;
+	private int diamond_limit=17;
+	private int limitProtectionIron=3;
+	private int limitProtectionDiamond=2;
+	private int limitSharpnessDiamond=3;
+	private int limitSharpnessIron=4;
+	private int limitPowerBow=3;
+	private int limitPunch=1;
+	private int limitKnockBack=1;
+	private int useOfFlair=4;
+	private int useOfSeer=6;
 
-	public void getConfig(MainLG main, int number) {
+	public void getConfig(MainLG main,String configName) {
 
 		ConfigLG config_load=this;
 		
-		File file = new File(main.getDataFolder(), "save"+number+".json");
-		
+		File file = new File(main.getDataFolder()+"/configs/", configName+".json");
+
 		if(file.exists()) {
-
 			config_load=main.serialize.deserialize(main.filelg.loadContent(file));
-
 			this.setDiamondLimit(config_load.getDiamondLimit());
 			this.setStrengthRate(config_load.getStrengthRate());
 			this.setPlayerRequiredVoteEnd(config_load.getPlayerRequiredVoteEnd());
@@ -40,10 +46,14 @@ public class ConfigLG {
 			this.setFlint_rate(config_load.getFlint_rate());
 			this.setPearl_rate(config_load.getPearl_rate());
 			this.setXp_boost(config_load.getXp_boost());
-
-			for(PlayerLG plg:main.playerlg.values()) {
-				plg.setDiamondLimit(this.getDiamondLimit());
-			}
+			this.setLimitPowerBow(config_load.getLimitPowerBow());
+			this.setLimitSharpnessIron(config_load.getLimitSharpnessIron());
+			this.setLimitSharpnessDiamond(config_load.getLimitSharpnessDiamond());
+			this.setLimitProtectionDiamond(config_load.getLimitProtectionDiamond());
+			this.setLimitProtectionIron(config_load.getLimitProtectionIron());
+			this.setLimitKnockBack(config_load.getLimitKnockBack());
+			this.setLimitPunch(config_load.getLimitPunch());
+			this.setUseOfFlair(config_load.getUseOfFlair());
 		}
 		for(RoleLG role:RoleLG.values()) {
 			this.role_count.put(role, config_load.role_count.getOrDefault(role, 0));
@@ -84,11 +94,11 @@ public class ConfigLG {
 		this.diamond_limit = diamond_limit;
 	}
 
-	public float getStrengthRate() {
+	public int getStrengthRate() {
 		return this.strength_rate;
 	}
 
-	public void setStrengthRate(float strength_rate) {
+	public void setStrengthRate(int strength_rate) {
 		this.strength_rate = strength_rate;
 	}
 
@@ -100,27 +110,27 @@ public class ConfigLG {
 		this.player_required_before_voting_ends = player_required_before_voting_ends;
 	}
 
-	public float getPearl_rate() {
+	public int getPearl_rate() {
 		return pearl_rate;
 	}
 
-	public void setPearl_rate(float pearl_rate) {
+	public void setPearl_rate(int pearl_rate) {
 		this.pearl_rate = pearl_rate;
 	}
 
-	public float getFlint_rate() {
+	public int getFlint_rate() {
 		return flint_rate;
 	}
 
-	public void setFlint_rate(float flint_rate) {
+	public void setFlint_rate(int flint_rate) {
 		this.flint_rate = flint_rate;
 	}
 
-	public float getApple_rate() {
+	public int getApple_rate() {
 		return apple_rate;
 	}
 
-	public void setApple_rate(float apple_rate) {
+	public void setApple_rate(int apple_rate) {
 		this.apple_rate = apple_rate;
 	}
 
@@ -132,5 +142,67 @@ public class ConfigLG {
 		this.xp_boost = xp_boost;
 	}
 
+	public int getLimitProtectionIron() {
+		return limitProtectionIron;
+	}
 
+	public void setLimitProtectionIron(int limitProtectionIron) {
+		this.limitProtectionIron = limitProtectionIron;
+	}
+
+	public int getLimitProtectionDiamond() {
+		return limitProtectionDiamond;
+	}
+
+	public void setLimitProtectionDiamond(int limitProtectionDiamond) {
+		this.limitProtectionDiamond = limitProtectionDiamond;
+	}
+
+	public int getLimitSharpnessDiamond() {
+		return limitSharpnessDiamond;
+	}
+
+	public void setLimitSharpnessDiamond(int limitSharpnessDiamond) {
+		this.limitSharpnessDiamond = limitSharpnessDiamond;
+	}
+
+	public int getLimitSharpnessIron() {
+		return limitSharpnessIron;
+	}
+
+	public void setLimitSharpnessIron(int limitSharpnessIron) {
+		this.limitSharpnessIron = limitSharpnessIron;
+	}
+
+	public int getLimitPowerBow() {
+		return limitPowerBow;
+	}
+
+	public void setLimitPowerBow(int limitPowerBow) {
+		this.limitPowerBow = limitPowerBow;
+	}
+
+	public int getLimitKnockBack() {
+		return limitKnockBack;
+	}
+
+	public void setLimitKnockBack(int limitKnockBack) {
+		this.limitKnockBack = limitKnockBack;
+	}
+
+	public int getLimitPunch() {
+		return limitPunch;
+	}
+
+	public void setLimitPunch(int limitPunch) {
+		this.limitPunch = limitPunch;
+	}
+
+	public int getUseOfFlair() {
+		return useOfFlair;
+	}
+
+	public void setUseOfFlair(int useOfFlair) {
+		this.useOfFlair = useOfFlair;
+	}
 }

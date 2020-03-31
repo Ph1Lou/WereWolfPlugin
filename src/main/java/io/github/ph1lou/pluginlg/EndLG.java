@@ -28,9 +28,9 @@ public class EndLG {
 
             Set<String> team = new HashSet<>(main.couple_manage.couple_range.get(0));
 
-            for(String p:main.playerlg.keySet()) {
-                if(main.playerlg.get(p).isState(State.JUDGEMENT)) return;
-                if (main.playerlg.get(p).isState(State.LIVING) && main.playerlg.get(p).isRole(RoleLG.CUPIDON) && main.couple_manage.couple_range.get(0).contains(main.playerlg.get(p).getAffectedPlayer().get(0))){
+            for(String p:main.playerLG.keySet()) {
+                if(main.playerLG.get(p).isState(State.JUDGEMENT)) return;
+                if (main.playerLG.get(p).isState(State.LIVING) && main.playerLG.get(p).isRole(RoleLG.CUPIDON) && main.couple_manage.couple_range.get(0).contains(main.playerLG.get(p).getAffectedPlayer().get(0))){
                     team.add(p);
                 }
             }
@@ -43,7 +43,7 @@ public class EndLG {
                 }
             }
             if(player ==team.size()) {
-                subtitles_victory =String.format(main.text.getText(4),main.text.translaterole.get(RoleLG.COUPLE));
+                subtitles_victory =String.format(main.text.getText(4),main.text.translateRole.get(RoleLG.COUPLE));
                 fin();
                 return;
             }
@@ -54,16 +54,16 @@ public class EndLG {
         }
 
         if(!getAngeTeam().isEmpty() && getAngeTeam().get(0).size()>1 && getAngeTeam().get(0).size()==main.score.getPlayerSize()) {
-            subtitles_victory =String.format(main.text.getText(4),main.text.translaterole.get(RoleLG.ANGE_GARDIEN));
+            subtitles_victory =String.format(main.text.getText(4),main.text.translateRole.get(RoleLG.ANGE_GARDIEN));
             fin();
             return;
         }
 
         Camp camp = null;
 
-        for(String p:main.playerlg.keySet()) {
-            if(main.playerlg.get(p).isState(State.JUDGEMENT)) return;
-            PlayerLG plg = main.playerlg.get(p);
+        for(String p:main.playerLG.keySet()) {
+            if(main.playerLG.get(p).isState(State.JUDGEMENT)) return;
+            PlayerLG plg = main.playerLG.get(p);
             if(plg.isState(State.LIVING)) {
                 if(camp==null) {
                     camp=plg.getCamp();
@@ -80,13 +80,13 @@ public class EndLG {
             return;
         }
         if(camp.equals(Camp.LG)) {
-            subtitles_victory =String.format(main.text.getText(4),main.text.translaterole.get(RoleLG.LOUP_GAROU));
+            subtitles_victory =String.format(main.text.getText(4),main.text.translateRole.get(RoleLG.LOUP_GAROU));
             fin();
             return;
 
         }
         if(camp.equals(Camp.VILLAGE)) {
-            subtitles_victory =String.format(main.text.getText(4),main.text.translaterole.get(RoleLG.VILLAGEOIS));
+            subtitles_victory =String.format(main.text.getText(4),main.text.translateRole.get(RoleLG.VILLAGEOIS));
             fin();
             return;
         }
@@ -98,9 +98,9 @@ public class EndLG {
             }
             RoleLG role=null;
 
-            for(String p:main.playerlg.keySet()) {
+            for(String p:main.playerLG.keySet()) {
 
-                PlayerLG plg = main.playerlg.get(p);
+                PlayerLG plg = main.playerLG.get(p);
                 if(plg.isState(State.LIVING)) {
                     if(role==null) {
                         role=plg.getRole();
@@ -113,7 +113,7 @@ public class EndLG {
             if(role == null){
                 return;
             }
-            subtitles_victory =String.format(main.text.getText(4),main.text.translaterole.get(role));
+            subtitles_victory =String.format(main.text.getText(4),main.text.translateRole.get(role));
             fin();
         }
     }
@@ -125,19 +125,19 @@ public class EndLG {
         Bukkit.broadcastMessage(String.format(main.text.getText(3), subtitles_victory));
         main.config.tool_switch.put(ToolLG.CHAT,true);
 
-        for(String p:main.playerlg.keySet()) {
+        for(String p:main.playerLG.keySet()) {
 
-            if(main.playerlg.get(p).isState(State.MORT)) {
-                if(main.playerlg.get(p).isThief()) {
-                    Bukkit.broadcastMessage(String.format(main.text.getText(187),p,main.text.translaterole.get(RoleLG.VOLEUR))+String.format(main.text.getText(188),main.text.translaterole.get(main.playerlg.get(p).getRole())));
+            if(main.playerLG.get(p).isState(State.MORT)) {
+                if(main.playerLG.get(p).isThief()) {
+                    Bukkit.broadcastMessage(String.format(main.text.getText(187),p,main.text.translateRole.get(RoleLG.VOLEUR))+String.format(main.text.getText(188),main.text.translateRole.get(main.playerLG.get(p).getRole())));
                 }
-                else Bukkit.broadcastMessage(String.format(main.text.getText(187),p,main.text.translaterole.get(main.playerlg.get(p).getRole())));
+                else Bukkit.broadcastMessage(String.format(main.text.getText(187),p,main.text.translateRole.get(main.playerLG.get(p).getRole())));
             }
             else {
-                if(main.playerlg.get(p).isThief()) {
-                    Bukkit.broadcastMessage(String.format(main.text.getText(10),p,main.text.translaterole.get(RoleLG.VOLEUR))+String.format(main.text.getText(188),main.text.translaterole.get(main.playerlg.get(p).getRole())));
+                if(main.playerLG.get(p).isThief()) {
+                    Bukkit.broadcastMessage(String.format(main.text.getText(10),p,main.text.translateRole.get(RoleLG.VOLEUR))+String.format(main.text.getText(188),main.text.translateRole.get(main.playerLG.get(p).getRole())));
                 }
-                else Bukkit.broadcastMessage(String.format(main.text.getText(10),p,main.text.translaterole.get(main.playerlg.get(p).getRole())));
+                else Bukkit.broadcastMessage(String.format(main.text.getText(10),p,main.text.translateRole.get(main.playerLG.get(p).getRole())));
             }
             main.score.updateBoard();
         }
@@ -156,19 +156,19 @@ public class EndLG {
 
         List<Set<String>> temp= new ArrayList<>();
 
-        for(String p1:main.playerlg.keySet()) {
+        for(String p1:main.playerLG.keySet()) {
 
-            if(main.playerlg.get(p1).isState(State.LIVING)) {
+            if(main.playerLG.get(p1).isState(State.LIVING)) {
                 List<String> teamange= new ArrayList<>();
                 teamange.add(p1);
-                if(main.playerlg.get(p1).isRole(RoleLG.ANGE_GARDIEN) && !main.playerlg.get(p1).getAffectedPlayer().isEmpty() && main.playerlg.get(main.playerlg.get(p1).getAffectedPlayer().get(0)).isState(State.LIVING)){
-                    teamange.add(main.playerlg.get(p1).getAffectedPlayer().get(0));
+                if(main.playerLG.get(p1).isRole(RoleLG.ANGE_GARDIEN) && !main.playerLG.get(p1).getAffectedPlayer().isEmpty() && main.playerLG.get(main.playerLG.get(p1).getAffectedPlayer().get(0)).isState(State.LIVING)){
+                    teamange.add(main.playerLG.get(p1).getAffectedPlayer().get(0));
                 }
 
                 for (int i=0;i< teamange.size();i++) {
-                    if (!main.playerlg.get(teamange.get(i)).getTargetOf().isEmpty()) {
-                        for (String p2 : main.playerlg.get(teamange.get(i)).getTargetOf()) {
-                            if (main.playerlg.get(p2).isRole(RoleLG.ANGE_GARDIEN) && main.playerlg.get(p2).isState(State.LIVING)) {
+                    if (!main.playerLG.get(teamange.get(i)).getTargetOf().isEmpty()) {
+                        for (String p2 : main.playerLG.get(teamange.get(i)).getTargetOf()) {
+                            if (main.playerLG.get(p2).isRole(RoleLG.ANGE_GARDIEN) && main.playerLG.get(p2).isState(State.LIVING)) {
                                 if(!teamange.contains(p2)){
                                     teamange.add(p2);
                                 }

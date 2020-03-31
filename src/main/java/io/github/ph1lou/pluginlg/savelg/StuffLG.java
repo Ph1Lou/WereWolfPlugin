@@ -1,23 +1,27 @@
 package io.github.ph1lou.pluginlg.savelg;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-
 import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlg.enumlg.RoleLG;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 public class StuffLG {
 	
 	public final Map<RoleLG,List<ItemStack>> role_stuff = new HashMap<>();
 	private final List<ItemStack> death_loot = new ArrayList<>() ;
 	private final List<ItemStack> start_loot = new ArrayList<>();
-	
-	
+	final MainLG main;
+
+	public StuffLG(MainLG main) {
+		this.main=main;
+	}
+
 	public List<ItemStack> getDeathLoot() {
 		return this.death_loot;
 	}
@@ -42,76 +46,121 @@ public class StuffLG {
 		start_loot.add(i);
 	}
 
-    public void save(MainLG main, int number) {
-        
+    public void save(String configName)  {
+
         int pos = 0;
-        
+		FileConfiguration config = getOrCreateCustomConfig(configName);
+		if(config==null){
+			System.out.println("[pluginLG] backup error");
+			return;
+		}
         for(RoleLG role:RoleLG.values()) {
         	for (ItemStack i : role_stuff.get(role)) {
-                main.getConfig().set("save"+number + "." +role.toString()+ "." + pos , i);
+				config.set(role.toString()+ "." + pos , i);
                 pos++;
             }
         	pos = 0;
         }
         for (ItemStack i : start_loot) {
-            main.getConfig().set("save"+number +".start_loot." + pos , i);
+			config.set("start_loot." + pos , i);
             pos++;
         }
     	pos = 0;
     	for (ItemStack i : death_loot) {
-            main.getConfig().set("save"+number +".death_loot." + pos , i);
+			config.set("death_loot." + pos , i);
             pos++;
         }
-        main.saveConfig();
-        
-    }
-     
-   public void load(MainLG main, int number) {
-	   
-	   	loadStuff(main,number);
-	   	loadStuffStartAndDeath(main,number);
-    }
+    	File file = new File(main.getDataFolder()+"/stuffs/",configName+".yml");
+		try {
+			config.save(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-	public void loadStuff(MainLG main, int number){
+	}
+     
+   public void load(String configName) {
+		loadStuff(configName);
+		loadStuffStartAndDeath(configName);
+	}
+
+
+	public void loadStuff(String configName){
 
 		role_stuff.clear();
-		if(main.getConfig().get("save"+number)==null){
-			number=-1;
+		if(!(new File(main.getDataFolder()+"/stuffs/", configName+".yml")).exists()){
+			main.filelg.copy(main.getClass().getResourceAsStream("/stuffRole.yml"),main.getDataFolder()+"/stuffs/"+configName+".yml");
 		}
+		FileConfiguration config = getOrCreateCustomConfig(configName);
 		for(RoleLG role:RoleLG.values()) {
 			role_stuff.put(role, new ArrayList<>());
-			if(main.getConfig().getItemStack("save"+number + "." +role.toString()+".0")!=null) {
-				Set<String> sl = main.getConfig().getConfigurationSection("save"+number + "." +role.toString()+".").getKeys(false);
+			if(config.getItemStack(role.toString()+".0")!=null) {
+				Set<String> sl = config.getConfigurationSection(role.toString()+".").getKeys(false);
 				for (String s : sl) {
-					role_stuff.get(role).add(main.getConfig().getItemStack("save"+number + "." +role.toString()+ "." + s));
+					role_stuff.get(role).add(config.getItemStack(role.toString()+ "." + s));
 				}
 			}
 		}
 	}
     
-	public void loadStuffStartAndDeath(MainLG main, int number){
+	public void loadStuffStartAndDeath(String configName){
 
 		start_loot.clear();
 		death_loot.clear();
+		FileConfiguration config = getOrCreateCustomConfig(configName);
 
-		if(main.getConfig().getItemStack("save"+number +".start_loot.0")!=null) {
-			Set<String> sl = main.getConfig().getConfigurationSection("save"+number +".start_loot.").getKeys(false);
+		if(config.getItemStack("start_loot.0")!=null) {
+			Set<String> sl = config.getConfigurationSection("start_loot.").getKeys(false);
 
 			for (String s : sl) {
-				start_loot.add(main.getConfig().getItemStack("save"+number +".start_loot." + s));
+				start_loot.add(config.getItemStack("start_loot." + s));
+			}
+		}
+		if(config.getItemStack("death_loot.0")!=null) {
+			Set<String> sl = config.getConfigurationSection("death_loot").getKeys(false);
+			for (String s : sl) {
+				death_loot.add(config.getItemStack("death_loot." + s));
 			}
 		}
 
-		if(main.getConfig().getItemStack("save"+number +".death_loot.0")!=null) {
-			Set<String> sl = main.getConfig().getConfigurationSection("save"+number +".death_loot").getKeys(false);
-			for (String s : sl) {
-				death_loot.add(main.getConfig().getItemStack("save"+number +".death_loot." + s));
-			}
-		}
 	}
-	
-	
-	
-	
+
+	public void loadStuffDefault(){
+		main.filelg.copy(main.getClass().getResourceAsStream("/stuffRole.yml"),main.getDataFolder()+"/stuffs/stuffRole.yml");
+		loadStuff("stuffRole");
+	}
+
+	public void loadStuffMeetUP(){
+		main.filelg.copy(main.getClass().getResourceAsStream("/stuffMeetUp.yml"),main.getDataFolder()+"/stuffs/stuffMeetUp.yml");
+		load("stuffMeetUp");
+	}
+
+	public void loadStuffChill(){
+		main.filelg.copy(main.getClass().getResourceAsStream("/stuffChill.yml"),main.getDataFolder()+"/stuffs/stuffChill.yml");
+		loadStuffStartAndDeath("stuffChill");
+	}
+
+	public FileConfiguration getOrCreateCustomConfig(String configName) {
+
+		File customConfigFile = new File(main.getDataFolder()+"/stuffs/", configName+".yml");
+		FileConfiguration customConfig = null;
+		if (!customConfigFile.exists()) {
+			try {
+				main.filelg.createFile(customConfigFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		try {
+			customConfig= new YamlConfiguration();
+			customConfig.load(customConfigFile);
+
+		} catch (IOException | InvalidConfigurationException e) {
+			e.printStackTrace();
+		}
+		return customConfig;
+	}
+
+
 
 }

@@ -1,0 +1,204 @@
+start_loot:
+  '0':
+    ==: org.bukkit.inventory.ItemStack
+    type: DIAMOND_SWORD
+    meta:
+      ==: ItemMeta
+      meta-type: UNSPECIFIC
+      enchants:
+        DAMAGE_ALL: 3
+  '1':
+    ==: org.bukkit.inventory.ItemStack
+    type: BOW
+    meta:
+      ==: ItemMeta
+      meta-type: UNSPECIFIC
+      enchants:
+        ARROW_DAMAGE: 3
+  '2':
+    ==: org.bukkit.inventory.ItemStack
+    type: DIAMOND_PICKAXE
+    meta:
+      ==: ItemMeta
+      meta-type: UNSPECIFIC
+      enchants:
+        DIG_SPEED: 3
+        DURABILITY: 3
+  '3':
+    ==: org.bukkit.inventory.ItemStack
+    type: GOLDEN_APPLE
+    amount: 10
+  '4':
+    ==: org.bukkit.inventory.ItemStack
+    type: WATER_BUCKET
+  '5':
+    ==: org.bukkit.inventory.ItemStack
+    type: LOG
+    amount: 64
+  '6':
+    ==: org.bukkit.inventory.ItemStack
+    type: WATER_BUCKET
+  '7':
+    ==: org.bukkit.inventory.ItemStack
+    type: IRON_HELMET
+    meta:
+      ==: ItemMeta
+      meta-type: UNSPECIFIC
+      enchants:
+        PROTECTION_ENVIRONMENTAL: 3
+  '8':
+    ==: org.bukkit.inventory.ItemStack
+    type: DIAMOND_CHESTPLATE
+    meta:
+      ==: ItemMeta
+      meta-type: UNSPECIFIC
+      enchants:
+        PROTECTION_ENVIRONMENTAL: 2
+  '9':
+    ==: org.bukkit.inventory.ItemStack
+    type: IRON_LEGGINGS
+    meta:
+      ==: ItemMeta
+      meta-type: UNSPECIFIC
+      enchants:
+        PROTECTION_ENVIRONMENTAL: 3
+  '10':
+    ==: org.bukkit.inventory.ItemStack
+    type: DIAMOND_BOOTS
+    meta:
+      ==: ItemMeta
+      meta-type: UNSPECIFIC
+      enchants:
+        PROTECTION_ENVIRONMENTAL: 2
+  '11':
+    ==: org.bukkit.inventory.ItemStack
+    type: ARROW
+    amount: 64
+  '12':
+    ==: org.bukkit.inventory.ItemStack
+    type: LOG
+    amount: 64
+  '13':
+    ==: org.bukkit.inventory.ItemStack
+    type: LOG
+    amount: 64
+  '14':
+    ==: org.bukkit.inventory.ItemStack
+    type: COOKED_BEEF
+    amount: 64
+  '15':
+    ==: org.bukkit.inventory.ItemStack
+    type: ANVIL
+  '16':
+    ==: org.bukkit.inventory.ItemStack
+    type: EXP_BOTTLE
+    amount: 64
+  '17':
+    ==: org.bukkit.inventory.ItemStack
+    type: EXP_BOTTLE
+    amount: 64
+  '18':
+    ==: org.bukkit.inventory.ItemStack
+    type: EXP_BOTTLE
+    amount: 64
+  '19':
+    ==: org.bukkit.inventory.ItemStack
+    type: COMPASS
+death_loot:
+  '0':
+    ==: org.bukkit.inventory.ItemStack
+    type: GOLDEN_APPLE
+    amount: 2
+CUPIDON:
+  '0':
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      repair-cost: 1
+      stored-enchants:
+        ARROW_DAMAGE: 1
+        ARROW_KNOCKBACK: 1
+LOUP_PERFIDE:
+  '0':
+    ==: org.bukkit.inventory.ItemStack
+    type: TNT
+    amount: 5
+SORCIERE:
+  '0':
+    ==: org.bukkit.inventory.ItemStack
+    type: POTION
+    damage: 16389
+    amount: 3
+  '1':
+    ==: org.bukkit.inventory.ItemStack
+    type: POTION
+    damage: 16396
+    amount: 3
+  '2':
+    ==: org.bukkit.inventory.ItemStack
+    type: POTION
+    damage: 16385
+PETITE_FILLE:
+  '0':
+    ==: org.bukkit.inventory.ItemStack
+    type: TNT
+    amount: 5
+SALVATEUR:
+  '0':
+    ==: org.bukkit.inventory.ItemStack
+    type: POTION
+    damage: 16389
+    amount: 3
+
+ASSASSIN:
+  '0':
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        DAMAGE_ALL: 3
+  '1':
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        PROTECTION_ENVIRONMENTAL: 3
+  '2':
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        ARROW_DAMAGE: 3
+TUEUR_EN_SERIE:
+  '0':
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        DAMAGE_ALL: 3
+  '1':
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        PROTECTION_ENVIRONMENTAL: 3
+  '2':
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        ARROW_DAMAGE: 3

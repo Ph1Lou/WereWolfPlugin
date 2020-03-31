@@ -1,10 +1,10 @@
 package io.github.ph1lou.pluginlg.savelg;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 
 public class FileLG {
@@ -14,6 +14,7 @@ public class FileLG {
 		if(!file.exists()) {
 			file.getParentFile().mkdirs();
 			file.createNewFile();
+			System.out.println("[pluginLG] Create "+file.getName());
 		}
 	}
 
@@ -23,9 +24,7 @@ public class FileLG {
 		
 		try {
 			createFile(file);
-			
 			fw = new FileWriter(file);
-			
 			fw.write(text);
 			
 			fw.flush();
@@ -35,14 +34,32 @@ public class FileLG {
 			e.printStackTrace();
 		}
 	}
+
+	public void copy(InputStream source , String destination) {
+
+		System.out.println("[pluginLG] Copying ->" + source + "\n\tto ->" + destination);
+		try {
+			createFile(new File(destination));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		if(source!=null){
+			try {
+				Files.copy(source, Paths.get(destination), StandardCopyOption.REPLACE_EXISTING);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 	
 	public String loadContent(File file) {
 		
 		if(file.exists()) {
 			
 			try {
-				
-				final BufferedReader reader = new BufferedReader(new FileReader(file));
+
+				final BufferedReader reader = new BufferedReader(new InputStreamReader(
+						new FileInputStream(file), StandardCharsets.UTF_8));
 				final StringBuilder text = new StringBuilder();
 				String line;
 				
@@ -52,8 +69,8 @@ public class FileLG {
 				reader.close();
 				
 				return text.toString();
-				
-				
+
+
 			}catch(IOException e) {
 				e.printStackTrace();
 			}

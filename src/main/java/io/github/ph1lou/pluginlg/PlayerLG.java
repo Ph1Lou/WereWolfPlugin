@@ -37,8 +37,9 @@ public class PlayerLG{
 	private final List<ItemStack> itemsDeath = new ArrayList<>();
 	private Location spawn;
 	private int deathTime =0;
+	private int use=0;
 	private int vote=0;
-	private int diamondLimit =17;
+	private int diamondLimit =0;
 	private int lostHeart =0;
 	private int kill =0;
 	private float flair = 0;
@@ -48,6 +49,7 @@ public class PlayerLG{
 	public PlayerLG(Player player) {
 		board = Bukkit.getScoreboardManager().getNewScoreboard();
 		clearPlayer(player);
+		this.spawn=player.getWorld().getSpawnLocation();
 	}
 
 	public void clearPlayer(Player player){
@@ -55,6 +57,7 @@ public class PlayerLG{
 		player.setHealth(20);
 		player.setExp(0);
 		player.setLevel(0);
+		player.getInventory().clear();
 		player.getInventory().clear();
 		player.getInventory().setHelmet(null);
 		player.getInventory().setChestplate(null);
@@ -289,15 +292,12 @@ public class PlayerLG{
 		return(this.deathTime);
 	}
 	
-	public void decDiamondLimit() {
-		this.diamondLimit -=1;
+	public void incDiamondLimit() {
+		this.diamondLimit +=1;
 	}
 	
 	public int getDiamondLimit() {
 		return(this.diamondLimit);
-	}
-	public void setDiamondLimit(int diamond) {
-		this.diamondLimit =diamond;
 	}
 
 	public void setCanBeInfect(Boolean b) {
@@ -329,6 +329,14 @@ public class PlayerLG{
 
 	public void removeCouple(String playername) {
 		this.couple.remove(playername);
+	}
+
+	public int getUse() {
+		return use;
+	}
+
+	public void setUse(int use) {
+		this.use = use;
 	}
 }
 

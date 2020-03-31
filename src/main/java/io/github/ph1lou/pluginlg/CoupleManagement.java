@@ -28,8 +28,8 @@ public class CoupleManagement {
 
 		Random r =new Random(System.currentTimeMillis());
 		List<String> couples =new ArrayList<>();
-		for(String p:main.playerlg.keySet()) {
-			if(main.playerlg.get(p).isState(State.LIVING)) {
+		for(String p:main.playerLG.keySet()) {
+			if(main.playerLG.get(p).isState(State.LIVING)) {
 				couples.add(p);
 			}
 		}
@@ -47,11 +47,11 @@ public class CoupleManagement {
 		String j1;
 		String j2;
 		
-		for(String playername:main.playerlg.keySet()) {
+		for(String playername:main.playerLG.keySet()) {
 			
-			if(main.playerlg.get(playername).isRole(RoleLG.CUPIDON)) {
+			if(main.playerLG.get(playername).isRole(RoleLG.CUPIDON)) {
 				
-				if (main.playerlg.get(playername).hasPower() || !main.playerlg.get(main.playerlg.get(playername).getAffectedPlayer().get(0)).isState(State.LIVING) || !main.playerlg.get(main.playerlg.get(playername).getAffectedPlayer().get(1)).isState(State.LIVING)) {
+				if (main.playerLG.get(playername).hasPower() || !main.playerLG.get(main.playerLG.get(playername).getAffectedPlayer().get(0)).isState(State.LIVING) || !main.playerLG.get(main.playerLG.get(playername).getAffectedPlayer().get(1)).isState(State.LIVING)) {
 					
 					if(couples.contains(playername)) {
 						couples.remove(playername);
@@ -68,28 +68,28 @@ public class CoupleManagement {
 						couples.add(j1);
 					}
 					
-					main.playerlg.get(playername).clearAffectedPlayer();
-					main.playerlg.get(playername).addAffectedPlayer(j1);
-					main.playerlg.get(playername).addAffectedPlayer(j2);
-					main.playerlg.get(playername).setPower(false);	
+					main.playerLG.get(playername).clearAffectedPlayer();
+					main.playerLG.get(playername).addAffectedPlayer(j1);
+					main.playerLG.get(playername).addAffectedPlayer(j2);
+					main.playerLG.get(playername).setPower(false);
 					if(Bukkit.getPlayer(playername)!=null) {
-						Bukkit.getPlayer(playername).sendMessage(String.format(main.text.powerhasbeenuse.get(RoleLG.CUPIDON),j1,j2));
+						Bukkit.getPlayer(playername).sendMessage(String.format(main.text.powerHasBeenUse.get(RoleLG.CUPIDON),j1,j2));
 					}	
 				}
 				else {
-					j1 = main.playerlg.get(playername).getAffectedPlayer().get(0);
-					j2 = main.playerlg.get(playername).getAffectedPlayer().get(1);
+					j1 = main.playerLG.get(playername).getAffectedPlayer().get(0);
+					j2 = main.playerLG.get(playername).getAffectedPlayer().get(1);
 				}	
 				if(!polygamy) {
 					couples.remove(j1);
 					couples.remove(j2);
 				}
-				if(!main.playerlg.get(j1).getCouple().contains(j2)) {
-					main.playerlg.get(j1).addCouple(j2);
+				if(!main.playerLG.get(j1).getCouple().contains(j2)) {
+					main.playerLG.get(j1).addCouple(j2);
 				}
 				
-				if(!main.playerlg.get(j2).getCouple().contains(j1)) {
-					main.playerlg.get(j2).addCouple(j1);
+				if(!main.playerLG.get(j2).getCouple().contains(j1)) {
+					main.playerLG.get(j2).addCouple(j1);
 				}
 			}
 		}
@@ -104,12 +104,12 @@ public class CoupleManagement {
 				couples.remove(j1);
 				couples.remove(j2);
 			}
-			if(!main.playerlg.get(j1).getCouple().contains(j2)) {
-				main.playerlg.get(j1).addCouple(j2);
+			if(!main.playerLG.get(j1).getCouple().contains(j2)) {
+				main.playerLG.get(j1).addCouple(j2);
 			}
 			
-			if(!main.playerlg.get(j2).getCouple().contains(j1)) {
-				main.playerlg.get(j2).addCouple(j1);
+			if(!main.playerLG.get(j2).getCouple().contains(j1)) {
+				main.playerLG.get(j2).addCouple(j1);
 			}
 		}
 		
@@ -126,7 +126,7 @@ public class CoupleManagement {
 		for (List<String> strings : couple_range) {
 			for (int j = 0; j < strings.size(); j++) {
 				String p = strings.get(j);
-				PlayerLG plg = main.playerlg.get(p);
+				PlayerLG plg = main.playerLG.get(p);
 				plg.clearCouple();
 				for (String string : strings) {
 					if (!string.equals(p)) {
@@ -166,8 +166,8 @@ public class CoupleManagement {
 		List<String> couples = new ArrayList<>();
 		main.config.role_count.put(RoleLG.COUPLE,0);
 		
-		for(String playername:main.playerlg.keySet()) {
-			if(!main.playerlg.get(playername).getCouple().isEmpty()){
+		for(String playername:main.playerLG.keySet()) {
+			if(!main.playerLG.get(playername).getCouple().isEmpty()){
 				couples.add(playername);
 			}
 		}
@@ -179,8 +179,8 @@ public class CoupleManagement {
 			couples.remove(0);
 			
 			for(int j=0;j<linkCouple.size();j++) {
-				for(String playername:main.playerlg.keySet()) {
-					if(main.playerlg.get(playername).getCouple().contains(linkCouple.get(j))) {
+				for(String playername:main.playerLG.keySet()) {
+					if(main.playerLG.get(playername).getCouple().contains(linkCouple.get(j))) {
 						if(!linkCouple.contains(playername)) {
 							linkCouple.add(playername);
 							couples.remove(playername);

@@ -1,6 +1,7 @@
 package io.github.ph1lou.pluginlg;
 
 import net.minecraft.server.v1_8_R3.BiomeBase;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
@@ -49,6 +50,8 @@ public class WorldUtils {
                 }
             }
         }
+        System.out.println("No roofed found, delete the world folder and restart");
+        Bukkit.shutdown();
         throw new Exception("No roofed found");
     }
 }

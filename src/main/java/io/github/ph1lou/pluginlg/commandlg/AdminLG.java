@@ -3,6 +3,7 @@ package io.github.ph1lou.pluginlg.commandlg;
 import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlg.PlayerLG;
 import io.github.ph1lou.pluginlg.Title;
+import io.github.ph1lou.pluginlg.WorldLoader;
 import io.github.ph1lou.pluginlg.enumlg.*;
 import org.bukkit.*;
 import org.bukkit.command.Command;
@@ -34,6 +35,7 @@ public class AdminLG implements TabExecutor {
 			sender.sendMessage(main.text.getText(116));
 			return true;
 		}
+
 		switch (args[0]) {
 
 			case "host" :
@@ -48,8 +50,8 @@ public class AdminLG implements TabExecutor {
 				}
 				sb.delete(0,args[0].length()+1);
 				main.score.setHost(sb.toString());
-			break;
-				case "start" :
+				break;
+			case "start" :
 
 				int surplus= main.score.getRole()-Bukkit.getOnlinePlayers().size();
 
@@ -72,9 +74,9 @@ public class AdminLG implements TabExecutor {
 				}catch(Exception e){
 					sender.sendMessage(main.text.getText(21));
 				}
-				File file = new File(main.getDataFolder(), "save0.json");
+				File file = new File(main.getDataFolder()+"/configs/", "saveCurrent.json");
 				main.filelg.save(file, main.serialize.serialize(main.config));
-				main.stufflg.save(main,0);
+				main.stufflg.save("saveCurrent");
 				break;
 
 			case "chat" :
@@ -91,16 +93,19 @@ public class AdminLG implements TabExecutor {
 				if (args.length<2) return true;
 
 				StringBuilder sb2 = new StringBuilder();
-				sb2.append(main.text.getText(136));
 
 				for(String w:args) {
 					sb2.append(w).append(" ");
 				}
-				sb2.replace(main.text.getText(136).length()-1, main.text.getText(136).length()+4, "");
-				Bukkit.broadcastMessage(sb2.toString());
+				sb2.replace(0, 4, "");
+				Bukkit.broadcastMessage(String.format(main.text.getText(136),sb2.toString()));
 				break;
-
-			case "setgroupe" :
+			case "pregen" :
+				World world = Bukkit.getWorld("world");
+				WorldLoader worldloader = new WorldLoader(world, main.config.border_value.get(BorderLG.BORDER_MAX)/2,main);
+				Bukkit.getScheduler().scheduleSyncRepeatingTask(main, worldloader, 0L, 145L);
+				break;
+			case "setgroup" :
 
 				if (!(sender instanceof Player )) {
 					sender.sendMessage(main.text.getText(140));
@@ -124,7 +129,7 @@ public class AdminLG implements TabExecutor {
 				}
 				break;
 
-			case "groupe" :
+			case "group" :
 
 				for (Player player:Bukkit.getOnlinePlayers()) {
 					Title.sendTitle(player,20,60, 20,main.text.getText(138), String.format(main.text.getText(139),main.score.getGroup()));
@@ -148,11 +153,11 @@ public class AdminLG implements TabExecutor {
 					sender.sendMessage(main.text.getText(54));
 					return true;
 				}
-				if(!main.playerlg.containsKey(args[1])) {
+				if(!main.playerLG.containsKey(args[1])) {
 					sender.sendMessage(main.text.getText(132));
 					return true;
 				}
-				if(!main.playerlg.get(args[1]).isState(State.LIVING)) {
+				if(!main.playerLG.get(args[1]).isState(State.LIVING)) {
 					sender.sendMessage(main.text.getText(141));
 					return true;
 				}
@@ -162,7 +167,7 @@ public class AdminLG implements TabExecutor {
 				}
 				if(main.isState(StateLG.DEBUT)) {
 					main.score.removePlayerSize();
-					main.playerlg.remove(args[1]);
+					main.playerLG.remove(args[1]);
 					sender.sendMessage(main.text.getText(143));
 					return true;
 				}
@@ -172,10 +177,10 @@ public class AdminLG implements TabExecutor {
 				else sender.sendMessage(main.text.getText(68));
 				break;
 
-				case "deco":
+				case "disc":
 
-				for(String p:main.playerlg.keySet()) {
-					PlayerLG plg = main.playerlg.get(p);
+				for(String p:main.playerLG.keySet()) {
+					PlayerLG plg = main.playerLG.get(p);
 
 					if(plg.isState(State.LIVING) && Bukkit.getPlayer(p)==null) {
 						sender.sendMessage(String.format(main.text.getText(167),p,main.score.conversion(main.score.getTimer()-plg.getDeathTime())));
@@ -222,14 +227,14 @@ public class AdminLG implements TabExecutor {
 				((Player) sender).openInventory(inv);
 				break;
 
-			case "tpgroupe" :
+			case "tpgroup" :
 
 				if(args.length!=2 && args.length!=3) {
 					sender.sendMessage(main.text.getText(54));
 					return true;
 				}
 
-				if(!main.playerlg.containsKey(args[1]) || Bukkit.getPlayer(args[1])==null) {
+				if(!main.playerLG.containsKey(args[1]) || Bukkit.getPlayer(args[1])==null) {
 					sender.sendMessage(main.text.getText(132));
 					return true;
 				}
@@ -239,7 +244,7 @@ public class AdminLG implements TabExecutor {
 					return true;
 				}
 
-				if(!main.playerlg.get(args[1]).isState(State.LIVING)){
+				if(!main.playerLG.get(args[1]).isState(State.LIVING)){
 					return true;
 				}
 				int d=20;
@@ -255,7 +260,7 @@ public class AdminLG implements TabExecutor {
 				} catch (NumberFormatException ignored) {
 				}
 				for (Player p:Bukkit.getOnlinePlayers()) {
-					if(size>0 && main.playerlg.containsKey(p.getName()) && main.playerlg.get(p.getName()).isState(State.LIVING)) {
+					if(size>0 && main.playerLG.containsKey(p.getName()) && main.playerLG.get(p.getName()).isState(State.LIVING)) {
 						if(p.getLocation().distance(location)<=d){
 							size--;
 							main.death_manage.transportation(p.getName(),r,main.text.getText(93));
@@ -271,7 +276,7 @@ public class AdminLG implements TabExecutor {
 					return true;
 				}
 
-				if(!main.playerlg.containsKey(args[1])) {
+				if(!main.playerLG.containsKey(args[1])) {
 					sender.sendMessage(main.text.getText(132));
 					return true;
 				}
@@ -280,19 +285,19 @@ public class AdminLG implements TabExecutor {
 					sender.sendMessage(main.text.getText(144));
 					return true;
 				}
-				if(main.playerlg.containsKey(sender.getName()) && main.playerlg.get(sender.getName()).isState(State.LIVING)) {
+				if(main.playerLG.containsKey(sender.getName()) && main.playerLG.get(sender.getName()).isState(State.LIVING)) {
 					sender.sendMessage(main.text.getText(145));
 					return true;
 				}
-				sender.sendMessage(String.format(main.text.getText(92),args[1],main.text.translaterole.get(main.playerlg.get(args[1]).getRole()))+ String.format(main.text.getText(91),main.playerlg.get(args[1]).hasPower()));
-				for(String p:main.playerlg.get(args[1]).getCouple()) {
+				sender.sendMessage(String.format(main.text.getText(92),args[1],main.text.translateRole.get(main.playerLG.get(args[1]).getRole()))+ String.format(main.text.getText(91),main.playerLG.get(args[1]).hasPower()));
+				for(String p:main.playerLG.get(args[1]).getCouple()) {
 					sender.sendMessage(String.format(main.text.getText(146),p));
 				}
-				for(String p:main.playerlg.get(args[1]).getAffectedPlayer()) {
+				for(String p:main.playerLG.get(args[1]).getAffectedPlayer()) {
 					sender.sendMessage(String.format(main.text.getText(147),p));
 				}
-				if(!main.playerlg.get(args[1]).getKiller().equals("")) {
-					sender.sendMessage(String.format(main.text.getText(148),main.playerlg.get(args[1]).getKiller()));
+				if(!main.playerLG.get(args[1]).getKiller().equals("")) {
+					sender.sendMessage(String.format(main.text.getText(148),main.playerLG.get(args[1]).getKiller()));
 
 				}
 			break;
@@ -309,22 +314,22 @@ public class AdminLG implements TabExecutor {
 					return true;
 				}
 
-				if(!main.playerlg.containsKey(args[1])) {
+				if(!main.playerLG.containsKey(args[1])) {
 					sender.sendMessage(main.text.getText(132));
 					return true;
 				}
 
-				if(!main.playerlg.get(args[1]).isState(State.MORT)) {
+				if(!main.playerLG.get(args[1]).isState(State.MORT)) {
 					sender.sendMessage(main.text.getText(149));
 					return true;
 				}
 
-				RoleLG role = main.playerlg.get(args[1]).getRole();
+				RoleLG role = main.playerLG.get(args[1]).getRole();
 				main.config.role_count.put(role,main.config.role_count.get(role)+1);
 				main.death_manage.resurrection(args[1]);
 				main.score.addPlayerSize();
 				if(role.equals(RoleLG.PETITE_FILLE) || role.equals(RoleLG.LOUP_PERFIDE)){
-					main.playerlg.get(args[1]).setPower(true);
+					main.playerLG.get(args[1]).setPower(true);
 				}
 				Bukkit.broadcastMessage(String.format(main.text.getText(154),args[1]));
 				for(Player p:Bukkit.getOnlinePlayers()) {
@@ -422,7 +427,7 @@ public class AdminLG implements TabExecutor {
 
 	@Override
 	public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] args) {
-		String[] tabe = {"start","tpgroupe","config","host","groupe","setgroupe","fh","inv","role","revive","killa","deco","info","chat"};
+		String[] tabe = {"pregen","start","tpgroup","config","host","group","setgroup","fh","inv","role","revive","killa","disc","info","chat"};
 		List<String> tab = new ArrayList<>(Arrays.asList(tabe));
 		if(args.length==0){
 			return tab;

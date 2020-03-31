@@ -27,10 +27,10 @@ public class VoteLG {
 	
 	public void setUnVote(Player elector,String vote){
 		
-		if(!main.playerlg.containsKey(elector.getName())) {
+		if(!main.playerLG.containsKey(elector.getName())) {
 			elector.sendMessage(main.text.getText(67));
 		}
-		else if(!main.playerlg.get(elector.getName()).isState(State.LIVING)) {
+		else if(!main.playerLG.get(elector.getName()).isState(State.LIVING)) {
 			elector.sendMessage(main.text.getText(155));
 		}
 		else if(main.config.value.get(TimerLG.VOTE_BEGIN)>0) {
@@ -42,43 +42,43 @@ public class VoteLG {
 		else if (main.score.getTimer()%(main.config.value.get(TimerLG.DAY_DURATION)*2) >= main.config.value.get(TimerLG.VOTE_DURATION) ){
 			elector.sendMessage(main.text.getText(158));
 		}	
-		else if (!main.playerlg.get(elector.getName()).getVotedPlayer().equals("")) {
+		else if (!main.playerLG.get(elector.getName()).getVotedPlayer().equals("")) {
 			elector.sendMessage(main.text.getText(159));
 		}
-		else if (!main.playerlg.containsKey(vote)){
+		else if (!main.playerLG.containsKey(vote)){
 			elector.sendMessage(main.text.getText(132));
 		}
-		else if (main.playerlg.get(vote).isState(State.MORT)){
+		else if (main.playerLG.get(vote).isState(State.MORT)){
 			elector.sendMessage(main.text.getText(132));
 		}
 		else if (tempPlayer.contains(vote)){
 			elector.sendMessage(main.text.getText(161));
 		}
 		else {
-			main.playerlg.get(elector.getName()).setVote(vote);
+			main.playerLG.get(elector.getName()).setVote(vote);
 			
-			if(main.playerlg.get(elector.getName()).isRole(RoleLG.CORBEAU)){
-				main.playerlg.get(vote).incVote();
+			if(main.playerLG.get(elector.getName()).isRole(RoleLG.CORBEAU)){
+				main.playerLG.get(vote).incVote();
 				
 			}
-			main.playerlg.get(vote).incVote();
+			main.playerLG.get(vote).incVote();
 			elector.sendMessage(String.format(main.text.getText(162),vote));
 		}
 				
 	}
 		
 	public void resetVote() {
-		for(String playername:main.playerlg.keySet()) {
-			main.playerlg.get(playername).resetVote();
-			main.playerlg.get(playername).setVote("");
+		for(String playername:main.playerLG.keySet()) {
+			main.playerLG.get(playername).resetVote();
+			main.playerLG.get(playername).setVote("");
 		}
 	}
 
 	public void seeVote(Player player) {
 		player.sendMessage(main.text.getText(95));
-		for(String playername:main.playerlg.keySet()) {
-			if(!main.playerlg.get(playername).getVotedPlayer().equals("")){
-				player.sendMessage(String.format(main.text.getText(96),playername,main.playerlg.get(playername).getVotedPlayer()));
+		for(String playername:main.playerLG.keySet()) {
+			if(!main.playerLG.get(playername).getVotedPlayer().equals("")){
+				player.sendMessage(String.format(main.text.getText(96),playername,main.playerLG.get(playername).getVotedPlayer()));
 			}
 		}
 	}
@@ -87,10 +87,10 @@ public class VoteLG {
 		int maxVote=0;
 		String playerVote="";
 
-		for(String playername:main.playerlg.keySet()) {
+		for(String playername:main.playerLG.keySet()) {
 
-			if (main.playerlg.get(playername).getVote()>maxVote)  {
-				maxVote = main.playerlg.get(playername).getVote();
+			if (main.playerLG.get(playername).getVote()>maxVote)  {
+				maxVote = main.playerLG.get(playername).getVote();
 				playerVote=playername;
 			}
 		}
@@ -104,9 +104,8 @@ public class VoteLG {
 
 	public void showResultVote(String playerVote) {
 
-		if(main.playerlg.containsKey(playerVote) && main.playerlg.get(playerVote).isState(State.LIVING)) {
+		if(main.playerLG.containsKey(playerVote) && main.playerLG.get(playerVote).isState(State.LIVING)) {
 			tempPlayer.add(playerVote);
-			Bukkit.broadcastMessage(String.format(main.text.getText(163),playerVote, main.playerlg.get(playerVote).getVote()));
 			if(Bukkit.getPlayer(playerVote)!=null){
 				Player player =Bukkit.getPlayer(playerVote);
 				double life =player.getMaxHealth();
@@ -114,7 +113,8 @@ public class VoteLG {
 				if(player.getHealth()>player.getMaxHealth()) {
 					player.setHealth(life-10);
 				}
-				main.playerlg.get(playerVote).addKLostHeart(10);
+				Bukkit.broadcastMessage(String.format(main.text.getText(163),playerVote, main.playerLG.get(playerVote).getVote()));
+				main.playerLG.get(playerVote).addKLostHeart(10);
 			}			
 		}
 		resetVote();

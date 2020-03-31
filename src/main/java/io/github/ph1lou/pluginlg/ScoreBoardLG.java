@@ -22,8 +22,8 @@ public class ScoreBoardLG {
 	private int timer=0;
 	private String host="";
 	private int role=0;
-	private String[] scoreboard1;
-	private String[] scoreboard2;
+	private List<String> scoreboard1;
+	private List<String> scoreboard2;
 	public final List<String> scoreboard3=new ArrayList<>();
 	private List<String> roles = new ArrayList<>();
 	private final List<String> kill_score = new ArrayList<>();
@@ -33,68 +33,66 @@ public class ScoreBoardLG {
 	}
 	
 	public void updateScoreBoard1() {
+
+		scoreboard1 = new ArrayList<>(main.text.getScoreBoard1());
+		scoreboard1.set(5,String.format(scoreboard1.get(5),host));
+		scoreboard1.set(3,String.format(scoreboard1.get(3),Bukkit.getOnlinePlayers().size(),role));
 		
-		String[] score =main.text.getScoreBoard(0).clone();
-		score[5]=String.format(score[5],host);
-		score[3]=String.format(score[3],Bukkit.getOnlinePlayers().size(),role);
-		
-		for(int i=0;i<score.length;i++) {
+		for(int i=0;i<scoreboard1.size();i++) {
 			StringBuilder sb = new StringBuilder();
-			sb.append(score[i]);
-			score[i]=sb.toString().substring(0,Math.min(30,sb.length()));
+			sb.append(scoreboard1.get(i));
+			scoreboard1.set(i,sb.toString().substring(0,Math.min(30,sb.length())));
 		}
-		scoreboard1=score;
 	}
 	
 	public void updateScoreBoard2(FastBoard board) {
 
 		String playername = board.getPlayer().getName();
-		String[] score = scoreboard2.clone();
-
-		if(main.playerlg.containsKey(playername)) {
+		List<String> score = new ArrayList<>(scoreboard2);
+		
+		if(main.playerLG.containsKey(playername)) {
 			
-			if(!main.playerlg.get(playername).isState(State.MORT)) {
+			if(!main.playerLG.get(playername).isState(State.MORT)) {
 				
 				if(!main.isState(StateLG.LG)) {
-					score[1]=String.format(score[1], conversion(main.config.value.get(TimerLG.ROLE_DURATION)));
+					score.set(1,String.format(score.get(1), conversion(main.config.value.get(TimerLG.ROLE_DURATION))));
 				}
-				else score[1]=main.text.translaterole.get(main.playerlg.get(playername).getRole());
+				else score.set(1,main.text.translateRole.get(main.playerLG.get(playername).getRole()));
 			}
-			else score[1]=main.text.getText(45);
+			else score.set(1,main.text.getText(45));
 		}
-		else score[1]=main.text.getText(46);
-		StringBuilder sb = new StringBuilder(score[1]);
-		score[1]=sb.toString().substring(0,Math.min(30,sb.length()));
+		else score.set(1,main.text.getText(46));
+		StringBuilder sb = new StringBuilder(score.get(1));
+		score.set(1,sb.toString().substring(0,Math.min(30,sb.length())));
 		board.updateLines(score);
 	}
 
 	private void updateGlobalScoreBoard2(){
 
 		WorldBorder wb = Bukkit.getWorld("world").getWorldBorder();
-		String[] score = main.text.getScoreBoard(1).clone();
-		score[3]=String.format(score[3],conversion(timer));
-		score[4]=String.format(score[4],timer/main.config.value.get(TimerLG.DAY_DURATION)/2);
-		score[5]=String.format(score[5],player);
-		score[6]=String.format(score[6], group_size);
-		score[9]=String.format(score[9],Math.round(wb.getSize()));
-		score[11]=String.format(score[11],host);
+		scoreboard2 = new ArrayList<>(main.text.getScoreBoard2());
+		scoreboard2.set(3,String.format(scoreboard2.get(3),conversion(timer)));
+		scoreboard2.set(4,String.format(scoreboard2.get(4),timer/main.config.value.get(TimerLG.DAY_DURATION)/2));
+		scoreboard2.set(5,String.format(scoreboard2.get(5),player));
+		scoreboard2.set(6,String.format(scoreboard2.get(6), group_size));
+		scoreboard2.set(9,String.format(scoreboard2.get(9),Math.round(wb.getSize())));
+		scoreboard2.set(11,String.format(scoreboard2.get(11),host));
 
 		if(main.config.value.get(TimerLG.BORDER_BEGIN)>0) {
-			score[8] = String.format(score[8], conversion(main.config.value.get(TimerLG.BORDER_BEGIN)));
+			scoreboard2.set(8,String.format(scoreboard2.get(8), conversion(main.config.value.get(TimerLG.BORDER_BEGIN))));
 		}
 		else {
-			score[8] = String.format(score[8],main.text.getText(80));
+			scoreboard2.set(8,String.format(scoreboard2.get(8),main.text.getText(80)));
 			if(wb.getSize()>main.config.border_value.get(BorderLG.BORDER_MIN)){
-				score[9]=score[9]+" > "+main.config.border_value.get(BorderLG.BORDER_MIN);
+				scoreboard2.set(9,scoreboard2.get(9)+" > "+main.config.border_value.get(BorderLG.BORDER_MIN));
 			}
 		}
 
-		for(int i=0;i<score.length;i++) {
+		for(int i=0;i<scoreboard2.size();i++) {
 			StringBuilder sb = new StringBuilder();
-			sb.append(score[i]);
-			score[i]=sb.toString().substring(0,Math.min(30,sb.length()));
+			sb.append(scoreboard2.get(i));
+			scoreboard2.set(i,sb.toString().substring(0,Math.min(30,sb.length())));
 		}
-		scoreboard2=score;
 	}
 
 	private void updateScoreBoardRole(){
@@ -103,7 +101,7 @@ public class ScoreBoardLG {
 		for(RoleLG role:RoleLG.values()) {
 			if(main.config.role_count.get(role)>0) {
 				StringBuilder sb = new StringBuilder();
-				sb.append("§3").append(main.config.role_count.get(role)).append("§r ").append(main.text.translaterole.get(role));
+				sb.append("§3").append(main.config.role_count.get(role)).append("§r ").append(main.text.translateRole.get(role));
 				roles.add(sb.toString().substring(0,Math.min(30,sb.length())));
 			}
 		}
@@ -128,17 +126,17 @@ public class ScoreBoardLG {
 	
 	public void getKillCounter() {
 		
-		for(String p:main.playerlg.keySet()) {
+		for(String p:main.playerLG.keySet()) {
 			int i =0;
-			while(i< kill_score.size() && main.playerlg.get(p).getNbKill()<main.playerlg.get(kill_score.get(i)).getNbKill()) {
+			while(i< kill_score.size() && main.playerLG.get(p).getNbKill()<main.playerLG.get(kill_score.get(i)).getNbKill()) {
 				i++;
 			}
 			kill_score.add(i, p);
 		}
 		scoreboard3.clear();
 		scoreboard3.add(main.text.getText(26).substring(0,Math.min(30,main.text.getText(26).length())));
-		for(int i=0;i<Math.min(main.playerlg.size(),10);i++) {
-			scoreboard3.add(kill_score.get(i) +"§3 "+main.playerlg.get(kill_score.get(i)).getNbKill());
+		for(int i = 0; i<Math.min(main.playerLG.size(),10); i++) {
+			scoreboard3.add(kill_score.get(i) +"§3 "+main.playerLG.get(kill_score.get(i)).getNbKill());
 		}
 	}
 		
@@ -164,7 +162,7 @@ public class ScoreBoardLG {
 				main.eventslg.chest_location.clear();
 				main.eventslg.chest_has_been_open.clear();
 				Bukkit.broadcastMessage(main.text.getText(165));
-				main.config.tool_switch.put(ToolLG.EVENT_VOYANTE_DEATH,true);
+				main.config.tool_switch.put(ToolLG.EVENT_SEER_DEATH,true);
 			}
 			else {
 				for (int i = 0; i<main.eventslg.chest_location.size(); i++) {
@@ -172,20 +170,20 @@ public class ScoreBoardLG {
 						stringbuilder.append("§a");
 					}
 					else stringbuilder.append("§6");
-					stringbuilder.append(updateArrow(player, main.eventslg.chest_location.get(i))).append(" ");
+					stringbuilder.append(" ").append(updateArrow(player, main.eventslg.chest_location.get(i)));
 				}
 			}
 		}
-		if(main.playerlg.containsKey(player.getName()) && main.playerlg.get(player.getName()).isState(State.LIVING)) {
+		if(main.playerLG.containsKey(player.getName()) && main.playerLG.get(player.getName()).isState(State.LIVING)) {
 			
-			for (String p:main.playerlg.get(player.getName()).getCouple()) {
+			for (String p:main.playerLG.get(player.getName()).getCouple()) {
 				if(Bukkit.getPlayer(p)!=null) {
 					stringbuilder.append("§d ").append(p).append(" ").append(updateArrow(player, Bukkit.getPlayer(p).getLocation()));
 				}
 			}
-			if(main.playerlg.get(player.getName()).isRole(RoleLG.ANGE_GARDIEN)){
-				for (String p:main.playerlg.get(player.getName()).getAffectedPlayer()) {
-					if(main.playerlg.get(p).isState(State.LIVING) && Bukkit.getPlayer(p)!=null) {
+			if(main.playerLG.get(player.getName()).isRole(RoleLG.ANGE_GARDIEN)){
+				for (String p:main.playerLG.get(player.getName()).getAffectedPlayer()) {
+					if(main.playerLG.get(p).isState(State.LIVING) && Bukkit.getPlayer(p)!=null) {
 						stringbuilder.append("§1 ").append(p).append(" ").append(updateArrow(player, Bukkit.getPlayer(p).getLocation()));
 					}
 				}
@@ -265,29 +263,29 @@ public class ScoreBoardLG {
 
 	public String conversion(int timer) {
 
-		String valeur;
+		String value;
 		float sign=Math.signum(timer);
 		timer=Math.abs(timer);
 
 		if(timer%60>9) {
-			valeur=timer%60+"s";
+			value=timer%60+"s";
 		}
-		else valeur="0"+timer%60+"s";
+		else value="0"+timer%60+"s";
 
 		if(timer/3600>0) {
 
 			if(timer%3600/60>9) {
-				valeur = timer/3600+"h"+timer%3600/60+"m"+valeur;
+				value = timer/3600+"h"+timer%3600/60+"m"+value;
 			}
-			else valeur = timer/3600+"h0"+timer%3600/60+"m"+valeur;
+			else value = timer/3600+"h0"+timer%3600/60+"m"+value;
 		}
 
 		else if (timer/60>0){
-			valeur = timer/60+"m"+valeur;
+			value = timer/60+"m"+value;
 		}
-		if(sign<0) valeur="-"+valeur;
+		if(sign<0) value="-"+value;
 
-		return valeur;
+		return value;
 	}
 
 
@@ -338,7 +336,7 @@ public class ScoreBoardLG {
 		return this.group_size;
 	}
 
-    public void setGroup(int groupe) {
-		this.group_size =groupe;
+    public void setGroup(int group) {
+		this.group_size =group;
     }
 }

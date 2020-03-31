@@ -2,6 +2,7 @@ package io.github.ph1lou.pluginlg.listener;
 
 import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlg.enumlg.ScenarioLG;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Furnace;
 import org.bukkit.enchantments.Enchantment;
@@ -16,13 +17,14 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.FurnaceBurnEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.spigotmc.event.entity.EntityMountEvent;
-
-import java.util.Random;
 
 public class ScenarioListener implements Listener {
 
@@ -41,8 +43,11 @@ public class ScenarioListener implements Listener {
 
 	@EventHandler
     public void onLeaveDecay(LeavesDecayEvent event) {
-        if (main.config.scenario.get(ScenarioLG.VANILLA_PLUS) && new Random(System.currentTimeMillis()).nextFloat()<main.config.getApple_rate()) {
-            event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(Material.APPLE));
+        if (main.config.scenario.get(ScenarioLG.VANILLA_PLUS)) {
+            event.getBlock().setType(Material.AIR);
+            if(Math.random()*100<main.config.getApple_rate()){
+                event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(Material.APPLE));
+            }
         }
     }
 	
@@ -55,10 +60,10 @@ public class ScenarioListener implements Listener {
             if (inv.getResult().getType() == Material.GOLDEN_APPLE && inv.getResult().getDurability()== 1) {
                 inv.setResult(AIR);
             }
-            if (main.config.scenario.get(ScenarioLG.ROD_LESS) && inv.getResult().getType() == Material.FISHING_ROD) {
+            else if (main.config.scenario.get(ScenarioLG.ROD_LESS) && inv.getResult().getType() == Material.FISHING_ROD) {
                 inv.setResult(AIR);
             }
-            if (main.config.scenario.get(ScenarioLG.HASTEY_BOYS)) {
+            else if (main.config.scenario.get(ScenarioLG.HASTEY_BOYS)) {
             	
                 Material itemType = event.getInventory().getResult().getType();
                 switch (itemType) {
@@ -248,7 +253,8 @@ public class ScenarioListener implements Listener {
            }
         }
     }
-	
+
+
 	@EventHandler
     public void onBurn(FurnaceBurnEvent event) {
         if (main.config.scenario.get(ScenarioLG.FAST_SMELTING)) {
@@ -280,6 +286,32 @@ public class ScenarioListener implements Listener {
             }
         }
     }
+
+    @EventHandler
+    public void onAppleEat(PlayerItemConsumeEvent event) {
+
+        if(event.getItem().getType().equals(Material.GOLDEN_APPLE)){
+            if(event.getItem().getDurability()==1){
+                event.setCancelled(true);
+            }
+            Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
+                if(event.getItem().getDurability()==1){
+                    event.getPlayer().getInventory().remove(event.getItem());
+                    return;
+                }
+                if (event.getPlayer().hasPotionEffect(PotionEffectType.ABSORPTION)) {
+                    event.getPlayer().removePotionEffect(PotionEffectType.ABSORPTION);
+                    event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 2400, 0,false,false));
+                }
+                if (event.getPlayer().hasPotionEffect(PotionEffectType.REGENERATION)) {
+                    event.getPlayer().removePotionEffect(PotionEffectType.REGENERATION);
+                    event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100, 0,false,false));
+                }
+
+            }, 1L);
+        }
+    }
+
     @EventHandler
     public void onProjectileThrownEvent(ProjectileLaunchEvent event) {
         if(event.getEntity() instanceof Snowball && !main.config.scenario.get(ScenarioLG.NO_SNOWBALL)) {

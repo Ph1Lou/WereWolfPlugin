@@ -1,0 +1,129 @@
+CUPIDON:
+  '0':
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        ARROW_KNOCKBACK: 1
+        ARROW_DAMAGE: 1
+LOUP_PERFIDE:
+  '0':
+    ==: org.bukkit.inventory.ItemStack
+    type: TNT
+    amount: 5
+SORCIERE:
+  '0':
+    ==: org.bukkit.inventory.ItemStack
+    type: POTION
+    damage: 16389
+    amount: 3
+  '1':
+    ==: org.bukkit.inventory.ItemStack
+    type: POTION
+    damage: 16396
+    amount: 3
+  '2':
+    ==: org.bukkit.inventory.ItemStack
+    type: POTION
+    damage: 16385
+PETITE_FILLE:
+  '0':
+    ==: org.bukkit.inventory.ItemStack
+    type: TNT
+    amount: 5
+SALVATEUR:
+  '0':
+    ==: org.bukkit.inventory.ItemStack
+    type: POTION
+    damage: 16389
+    amount: 3
+VOYANTE_BAVARDE:
+  '0':
+    ==: org.bukkit.inventory.ItemStack
+    type: BOOKSHELF
+    amount: 4
+  '1':
+    ==: org.bukkit.inventory.ItemStack
+    type: OBSIDIAN
+    amount: 4
+VOYANTE:
+  '0':
+    ==: org.bukkit.inventory.ItemStack
+    type: BOOKSHELF
+    amount: 4
+  '1':
+    ==: org.bukkit.inventory.ItemStack
+    type: OBSIDIAN
+    amount: 4
+
+CORBEAU:
+  '0':
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        PROTECTION_FALL: 3
+ASSASSIN:
+  '0':
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        DAMAGE_ALL: 3
+  '1':
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        PROTECTION_ENVIRONMENTAL: 3
+  '2':
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        ARROW_DAMAGE: 3
+TUEUR_EN_SERIE:
+  '0':
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        DAMAGE_ALL: 3
+  '1':
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        PROTECTION_ENVIRONMENTAL: 3
+  '2':
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        ARROW_DAMAGE: 3
+MINEUR:
+  '0':
+    ==: org.bukkit.inventory.ItemStack
+    type: DIAMOND_PICKAXE
+    meta:
+      ==: ItemMeta
+      meta-type: UNSPECIFIC
+      enchants:
+        DIG_SPEED: 3
+        DURABILITY: 3

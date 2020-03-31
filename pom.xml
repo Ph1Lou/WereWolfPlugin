@@ -71,6 +71,11 @@
             <version>1.1.0</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.WesJD.AnvilGUI</groupId>
+            <artifactId>anvilgui</artifactId>
+            <version>99a504a3bb</version>
+        </dependency>
 
     </dependencies>
 

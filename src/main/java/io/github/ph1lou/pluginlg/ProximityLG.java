@@ -32,8 +32,8 @@ public class ProximityLG {
 		Map<String,Location> sisters_location = new HashMap<>();
 		List<String> sisters = new ArrayList<>();
 		
-		for(String sister_name:main.playerlg.keySet()) {
-			if(main.playerlg.get(sister_name).isRole(RoleLG.SOEUR) && main.playerlg.get(sister_name).isState(State.LIVING) && Bukkit.getPlayer(sister_name) != null){
+		for(String sister_name:main.playerLG.keySet()) {
+			if(main.playerLG.get(sister_name).isRole(RoleLG.SOEUR) && main.playerLG.get(sister_name).isState(State.LIVING) && Bukkit.getPlayer(sister_name) != null){
 				Player sister = Bukkit.getPlayer(sister_name);
 				Location loc= sister.getLocation();
 				sisters_location.put(sister_name,loc);
@@ -55,9 +55,9 @@ public class ProximityLG {
 
 	public void renard_proximity() {
 		
-		for(String playername:main.playerlg.keySet()) {
+		for(String playername:main.playerLG.keySet()) {
 
-			PlayerLG plg = main.playerlg.get(playername);
+			PlayerLG plg = main.playerLG.get(playername);
 
 			if(plg.isState(State.LIVING) && plg.isRole(RoleLG.RENARD) && !plg.getAffectedPlayer().isEmpty()) {
 
@@ -83,7 +83,7 @@ public class ProximityLG {
 						
 						if(temp>=100) {
 
-							PlayerLG plf = main.playerlg.get(playerSmell);
+							PlayerLG plf = main.playerLG.get(playerSmell);
 
 							if(plf.isRole(RoleLG.LOUP_FEUTRE) && (!plf.isPosterCamp(Camp.LG) && !plf.isPosterRole(RoleLG.LOUP_GAROU_BLANC))) {
 								player.sendMessage(String.format(main.text.getText(40),playerSmell));

@@ -11,6 +11,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -36,28 +37,28 @@ public class PlayerListener implements Listener {
 		Inventory invent = player.getInventory();
 		if(!main.isState(StateLG.LG)) return;
 		if(!main.isDay(Day.NIGHT)) return;
-		if(!main.playerlg.containsKey(player.getName()) || (!main.playerlg.get(player.getName()).isRole(RoleLG.PETITE_FILLE) && !main.playerlg.get(player.getName()).isRole(RoleLG.LOUP_PERFIDE))) return;
+		if(!main.playerLG.containsKey(player.getName()) || (!main.playerLG.get(player.getName()).isRole(RoleLG.PETITE_FILLE) && !main.playerLG.get(player.getName()).isRole(RoleLG.LOUP_PERFIDE))) return;
 
 		if(invent.getItem(36)==null && invent.getItem(37)==null && invent.getItem(38)==null && invent.getItem(39)==null) {
-			if(main.playerlg.get(player.getName()).hasPower()) {
+			if(main.playerLG.get(player.getName()).hasPower()) {
 				player.sendMessage(main.text.getText(129));
 				player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE,0,false,false));
 				player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, Integer.MAX_VALUE,0,false,false));
-				if(main.playerlg.get(player.getName()).isCamp(Camp.LG) ) {
+				if(main.playerLG.get(player.getName()).isCamp(Camp.LG) ) {
 					player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
 				}
-				main.playerlg.get(player.getName()).setPower(false);
+				main.playerLG.get(player.getName()).setPower(false);
 				main.optionlg.updateNameTag();
 			}	
 		}
-		else if(!main.playerlg.get(player.getName()).hasPower()) {
+		else if(!main.playerLG.get(player.getName()).hasPower()) {
 			player.sendMessage(main.text.getText(18));
-			if(main.playerlg.get(player.getName()).isCamp(Camp.LG) ) {
+			if(main.playerLG.get(player.getName()).isCamp(Camp.LG) ) {
 				player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, -1,false,false));
 			}
 			player.removePotionEffect(PotionEffectType.INVISIBILITY);
 			player.removePotionEffect(PotionEffectType.WEAKNESS);
-			main.playerlg.get(player.getName()).setPower(true);
+			main.playerLG.get(player.getName()).setPower(true);
 			main.optionlg.updateNameTag();
 		}
 	}
@@ -66,6 +67,21 @@ public class PlayerListener implements Listener {
 	private void onDropItem(PlayerDropItemEvent event) {
 		if(event.getPlayer().getGameMode().equals(GameMode.ADVENTURE) || event.getPlayer().getGameMode().equals(GameMode.SPECTATOR)) {
 			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler
+	private void onPlayerDamage(EntityDamageByEntityEvent event) {
+
+		if(!(event.getEntity() instanceof Player)) return;
+		if(!(event.getDamager() instanceof Player)) return;
+		Player damager = (Player) event.getDamager();
+		for(PotionEffect p:damager.getActivePotionEffects()){
+			if(p.getType().equals(PotionEffectType.INCREASE_DAMAGE)){
+				if(damager.getItemInHand().getType().equals(Material.DIAMOND_SWORD) || damager.getItemInHand().getType().equals(Material.IRON_SWORD)){
+					event.setDamage(event.getDamage()*main.config.getStrengthRate()/100f);
+				}
+			}
 		}
 	}
 
@@ -78,44 +94,29 @@ public class PlayerListener implements Listener {
 
 		Player player = (Player) event.getEntity();
 		String playername = player.getName();
-		if(player.getGameMode().equals(GameMode.ADVENTURE)) {
-			event.setCancelled(true);
-			return;
-		}
-		if (main.config.scenario.get(ScenarioLG.FIRE_LESS) && (event.getCause() == EntityDamageEvent.DamageCause.LAVA || event.getCause() == EntityDamageEvent.DamageCause.FIRE || event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK)) {
+		if(player.getGameMode().equals(GameMode.ADVENTURE) || main.config.value.get(TimerLG.INVULNERABILITY)>0) {
 			event.setCancelled(true);
 		}
-		if (!main.playerlg.containsKey(playername)) return;
-		if ((main.playerlg.get(playername).isRole(RoleLG.CORBEAU) || main.playerlg.get(playername).hasSalvation() || main.isState(StateLG.TRANSPORTATION) || main.config.scenario.get(ScenarioLG.NO_FALL)) && event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
+		else if (main.config.scenario.get(ScenarioLG.FIRE_LESS) && (event.getCause() == EntityDamageEvent.DamageCause.LAVA || event.getCause() == EntityDamageEvent.DamageCause.FIRE || event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK)) {
 			event.setCancelled(true);
-			return;
 		}
-		if(event.getCause().equals(EntityDamageEvent.DamageCause.POISON) && main.config.scenario.get(ScenarioLG.NO_POISON)) {
+		else if (main.playerLG.containsKey(playername) && (main.playerLG.get(playername).isRole(RoleLG.CORBEAU) || main.playerLG.get(playername).hasSalvation() || main.config.scenario.get(ScenarioLG.NO_FALL)) && event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
 			event.setCancelled(true);
-			return;
 		}
-		if (player.getKiller() == null) return;
-		if(main.config.scenario.get(ScenarioLG.SLOW_BOW) && event.getCause().equals(EntityDamageEvent.DamageCause.PROJECTILE )) {
+		else if(event.getCause().equals(EntityDamageEvent.DamageCause.POISON) && main.config.scenario.get(ScenarioLG.NO_POISON)) {
+			event.setCancelled(true);
+		}
+		else if(main.config.scenario.get(ScenarioLG.SLOW_BOW) && event.getCause().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
 			player.removePotionEffect(PotionEffectType.SLOW);
 			player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 160,0,false,false));
-			return;
 		}
 
-		String killername = player.getKiller().getName();
-		if (!main.playerlg.containsKey(killername)) return;
-		if ((main.playerlg.get(killername).isRole(RoleLG.ASSASSIN) && !main.isDay(Day.NIGHT)) || (main.playerlg.get(killername).isCamp(Camp.LG) && main.isDay(Day.NIGHT)) ) {
-			if(!player.getKiller().getItemInHand().getType().equals(Material.DIAMOND_SWORD) && !player.getKiller().getItemInHand().getType().equals(Material.IRON_SWORD)){
-				return;
-			}
-			event.setDamage(event.getDamage()*main.config.getStrengthRate());
-		}
-		
 	}
 
 	@EventHandler
 	private void onPlayerRespawn(PlayerRespawnEvent event) {
-		if(!main.playerlg.containsKey(event.getPlayer().getName())) return;
-		if(main.isState(StateLG.DEBUT) || main.isState(StateLG.TRANSPORTATION)) event.setRespawnLocation(main.playerlg.get(event.getPlayer().getName()).getSpawn());
+		if(!main.playerLG.containsKey(event.getPlayer().getName())) return;
+		if(main.isState(StateLG.DEBUT) || main.isState(StateLG.TRANSPORTATION)) event.setRespawnLocation(main.playerLG.get(event.getPlayer().getName()).getSpawn());
 		else if(main.isState(StateLG.LOBBY)) Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 0,false,false)), 20L);
 	}
 	
@@ -129,9 +130,9 @@ public class PlayerListener implements Listener {
 			event.setDeathMessage(null);
 			event.setKeepInventory(true);
 			event.setKeepLevel(true);
-			if(!main.playerlg.containsKey(playername)) return;
+			if(!main.playerLG.containsKey(playername)) return;
 			
-			PlayerLG plg = main.playerlg.get(playername);
+			PlayerLG plg = main.playerLG.get(playername);
 			
 			if(!plg.isState(State.LIVING)) return;
 			plg.setSpawn(player.getLocation());
@@ -218,7 +219,7 @@ public class PlayerListener implements Listener {
 		if(main.isState(StateLG.LOBBY)) {
 			event.setJoinMessage(String.format(main.text.getText(194),Bukkit.getOnlinePlayers().size(),main.score.getRole(),event.getPlayer().getName()));
 		}
-		else if(main.playerlg.containsKey(event.getPlayer().getName()) && main.playerlg.get(event.getPlayer().getName()).isState(State.LIVING)) {
+		else if(main.playerLG.containsKey(event.getPlayer().getName()) && main.playerLG.get(event.getPlayer().getName()).isState(State.LIVING)) {
 			event.setJoinMessage(String.format(main.text.getText(193),event.getPlayer().getName()));
 		}
 	}	
@@ -234,11 +235,11 @@ public class PlayerListener implements Listener {
         if(main.isState(StateLG.LOBBY)) {
         	main.score.removePlayerSize();
 			main.board.getTeam(player.getName()).unregister();
-        	main.playerlg.remove(player.getName());
+        	main.playerLG.remove(player.getName());
         	event.setQuitMessage(String.format(main.text.getText(195),main.score.getPlayerSize(),main.score.getRole(),event.getPlayer().getName()));
         }
-        else if(main.playerlg.containsKey(event.getPlayer().getName()) && main.playerlg.get(event.getPlayer().getName()).isState(State.LIVING)) {
-        	main.playerlg.get(event.getPlayer().getName()).setDeathTime(main.score.getTimer());
+        else if(main.playerLG.containsKey(event.getPlayer().getName()) && main.playerLG.get(event.getPlayer().getName()).isState(State.LIVING)) {
+        	main.playerLG.get(event.getPlayer().getName()).setDeathTime(main.score.getTimer());
 			event.setQuitMessage(String.format(main.text.getText(196),event.getPlayer().getName()));
         }	
         main.score.updateBoard();	

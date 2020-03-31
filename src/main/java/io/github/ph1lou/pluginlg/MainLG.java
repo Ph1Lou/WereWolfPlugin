@@ -7,10 +7,7 @@ import io.github.ph1lou.pluginlg.commandlg.CommandLG;
 import io.github.ph1lou.pluginlg.enumlg.Day;
 import io.github.ph1lou.pluginlg.enumlg.State;
 import io.github.ph1lou.pluginlg.enumlg.StateLG;
-import io.github.ph1lou.pluginlg.listener.MenuListener;
-import io.github.ph1lou.pluginlg.listener.PlayerListener;
-import io.github.ph1lou.pluginlg.listener.ScenarioListener;
-import io.github.ph1lou.pluginlg.listener.WorldListener;
+import io.github.ph1lou.pluginlg.listener.*;
 import io.github.ph1lou.pluginlg.savelg.*;
 import org.bukkit.*;
 import org.bukkit.block.Biome;
@@ -30,25 +27,25 @@ public class MainLG extends JavaPlugin {
 
 	public Scoreboard board;
 	public final Map<UUID, FastBoard> boards = new HashMap<>();
-	public final Map<String, PlayerLG> playerlg = new HashMap<>();
+	public final Map<String, PlayerLG> playerLG = new HashMap<>();
 	private StateLG state;
-	private Day daystate;
+	private Day dayState;
 	public final CycleLG cycle = new CycleLG(this);
-	public final CommandLG cmdlg = new CommandLG(this);
 	public final DeathManagementLG death_manage = new DeathManagementLG(this);
 	public final VoteLG vote = new VoteLG(this);
 	public final ScoreBoardLG score = new ScoreBoardLG(this);
 	public final EventsLG eventslg = new EventsLG(this);
 	public final OptionLG optionlg = new OptionLG(this);
-	public final ProximityLG prox_lg = new ProximityLG(this);
+	public final ProximityLG proximity = new ProximityLG(this);
 	public final RoleManagementLG role_manage = new RoleManagementLG(this);
 	public final CoupleManagement couple_manage = new CoupleManagement(this);
 	public final SerializerLG serialize = new SerializerLG();
 	public final ConfigLG config = new ConfigLG();
-	public final TextLG text = new TextLG();
+	public TextLG text = new TextLG();
 	public final EndLG endlg = new EndLG(this);
 	public final FileLG filelg = new FileLG();
-	public final StuffLG stufflg = new StuffLG();
+	public final StuffLG stufflg = new StuffLG(this);
+	public final LangLG lang = new LangLG(this);
 
 	@Override
 	public void onEnable() {
@@ -64,20 +61,22 @@ public class MainLG extends JavaPlugin {
 		saveDefaultConfig();
 		setState(StateLG.LOBBY);
 		setDay(Day.DEFAULT);
+		lang.initLanguage();
 		optionlg.initInv();
-		config.getConfig(this,0);
-		stufflg.load(this, 0);
-		text.getTextTranslate(this, "text.json");
+		config.getConfig(this,"saveCurrent");
+		stufflg.load("saveCurrent");
 		board = Bukkit.getScoreboardManager().getNewScoreboard();
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new PlayerListener(this),this);
 		pm.registerEvents(new WorldListener(this),this);
 		pm.registerEvents(new MenuListener(this),this);
 		pm.registerEvents(new ScenarioListener(this),this);
+		pm.registerEvents(new EnchantmentListener(this),this);
+
 		getCommand("lg").setExecutor(new CommandLG(this));
 		getCommand("adminlg").setExecutor(new AdminLG(this));
-		
-		
+
+
 		new UpdateChecker(this, 73113).getVersion(version -> {
 			
 			ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
@@ -104,7 +103,7 @@ public class MainLG extends JavaPlugin {
 			World world = Bukkit.getWorld("world");
 			world.setPVP(false);
 			world.setWeatherDuration(0);
-			world.setThunderDuration(0);
+			world.setThundering(false);
 			world.setTime(0);
 			world.setGameRuleValue("reducedDebugInfo", "true");
 			world.setGameRuleValue("keepInventory", "true");
@@ -114,8 +113,8 @@ public class MainLG extends JavaPlugin {
 			int x=(int) world.getSpawnLocation().getX();
 			int z=(int)  world.getSpawnLocation().getZ();
 
-			if(!world.getBiome(x, z).equals(Biome.ROOFED_FOREST)){
-				Location biome = WorldUtils.findBiome(Biome.ROOFED_FOREST, world, 1000);
+			if(getConfig().getBoolean("autoRoofedMiddle")){
+				Location biome = WorldUtils.findBiome(Biome.ROOFED_FOREST, world, 2000);
 				x=(int) biome.getX();
 				z=(int) biome.getZ();
 			}
@@ -135,8 +134,6 @@ public class MainLG extends JavaPlugin {
 					new Location(world, x+16, j,i+z).getBlock().setType(Material.BARRIER);
 				}
 			}
-			WorldLoader worldloader = new WorldLoader(world, 1000, 1000);
-			Bukkit.getScheduler().scheduleSyncRepeatingTask(this, worldloader, 0L, 145L);
 
 		}catch(Exception e){
 			Bukkit.broadcastMessage(text.getText(21));
@@ -151,11 +148,8 @@ public class MainLG extends JavaPlugin {
         boards.put(player.getUniqueId(), fastboard);
 		Title.sendTabTitle(player, text.getText(125), text.getText(184));
 		new UpdateChecker(this, 73113).getVersion(version -> {
-			
-			ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-			
             if (!this.getDescription().getVersion().equalsIgnoreCase(version)) {
-            	console.sendMessage(text.getText(185));
+				Bukkit.getServer().getConsoleSender().sendMessage(text.getText(185));
             }
         });  
 		
@@ -165,26 +159,29 @@ public class MainLG extends JavaPlugin {
 			player.setGameMode(GameMode.ADVENTURE);
 			player.sendMessage(text.getText(1));
 			player.teleport(player.getWorld().getSpawnLocation());
-			playerlg.put(playername, new PlayerLG(player));
+			playerLG.put(playername, new PlayerLG(player));
+			player.setScoreboard(playerLG.get(playername).getScoreBoard());
 			score.addPlayerSize();
 			player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 0,false,false));
 		}
-		else if (!playerlg.containsKey(playername)) {
+		else if (!playerLG.containsKey(playername)) {
 			player.setGameMode(GameMode.SPECTATOR);
 			player.sendMessage(text.getText(38));
-			return;
 		}
-		else if(playerlg.get(playername).isState(State.MORT)) {
-			player.setGameMode(GameMode.SPECTATOR);
+		else {
+			player.setScoreboard(playerLG.get(playername).getScoreBoard());
+			if(playerLG.get(playername).isState(State.MORT)) {
+				player.setGameMode(GameMode.SPECTATOR);
+			}
+			else if (isState(StateLG.LG) &&  !playerLG.get(playername).hasKit()) {
+				role_manage.recoverRolePower(playername);
+			}
 		}
-		else if (isState(StateLG.LG) &&  !playerlg.get(playername).hasKit()) {
-			role_manage.recoverRolePower(playername);
-		}
-		else if(isState(StateLG.FIN)){
+		if(isState(StateLG.FIN)){
 			fastboard.updateLines(score.scoreboard3);
 		}
-		player.setScoreboard(playerlg.get(playername).getScoreBoard());
 		optionlg.updateNameTag();
+		optionlg.updateCompass();
 	}
 
 	public void setState(StateLG state) {
@@ -198,12 +195,12 @@ public class MainLG extends JavaPlugin {
 
 
 	public void setDay(Day day) {
-		this.daystate=day;
+		this.dayState =day;
 	}
 
 
 	public boolean isDay(Day day) {
-		return this.daystate==day;
+		return this.dayState ==day;
 	}
 
 

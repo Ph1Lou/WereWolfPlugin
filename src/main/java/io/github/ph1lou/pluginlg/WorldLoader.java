@@ -3,95 +3,55 @@ package io.github.ph1lou.pluginlg;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.World;
-import org.bukkit.command.ConsoleCommandSender;
 
 public class WorldLoader implements Runnable {
 
-    final ConsoleCommandSender sender = Bukkit.getConsoleSender();
+    final MainLG main;
     private final World world;
-    private final int width;
-    private final int depth;
+    private final int size;
     private int x;
     private int z;
     private int loaded;
     private final int area;
     private long sprint;
-    private final int offset;
-    private boolean pause;
 
-    public WorldLoader(final World world, final int width, final int depth) {
-        this(world, width, depth, 0);
-    }
-
-    public WorldLoader(final World world, final int width, final int depth, final int offset) {
-        this.pause = false;
+    public WorldLoader(World world,int size, MainLG main) {
         this.world = world;
-        this.width = width;
-        this.depth = depth;
-        this.x = (int) (-this.width+world.getSpawnLocation().getX());
-        this.z = (int) (-this.depth + +world.getSpawnLocation().getZ());
+        this.size=size;
+        this.x = (int) (-this.size+world.getSpawnLocation().getX());
+        this.z = (int) (-this.size + +world.getSpawnLocation().getZ());
         this.loaded = 0;
         this.sprint = System.currentTimeMillis();
-        this.area = (this.width >> 4) * 2 * ((this.depth >> 4) * 2);
-        this.offset = offset;
+        this.area = (size*size) >> 6;
+        this.main=main;
     }
 
     @Override
     public void run() {
 
-        Thread thread;
-        (thread = new Thread()).start();
-        try {
-            thread.join();
-        }
-        catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        synchronized (thread) {
-            this.sprint = System.currentTimeMillis();
-            this.setPause(false);
-            while (this.z < this.depth+world.getSpawnLocation().getZ()) {
-                this.x = (int) (-this.width+world.getSpawnLocation().getX());
-                while (this.x < this.width +world.getSpawnLocation().getX()) {
-                    if (System.currentTimeMillis() - this.sprint > 8000L) {
-                        this.setPause(true);
-                    }
-                    if (this.isPause()) {
+        synchronized (this) {
+            sprint = System.currentTimeMillis();
+            while (z < size+world.getSpawnLocation().getZ()) {
+               x = (int) (-size+world.getSpawnLocation().getX());
+                while (x < size +world.getSpawnLocation().getX()) {
+                    if (System.currentTimeMillis() - sprint > 8000L) {
                         return;
                     }
-
-                    final Chunk chunk = this.world.getChunkAt(this.offset + this.x >> 4, this.z >> 4);
+                    Chunk chunk = world.getChunkAt(x , z);
                     chunk.load(true);
-                    chunk.unload(true, true);
-                    ++this.loaded;
-                    if (this.loaded % 100 == 0) {
-                       sender.sendMessage(this.loaded + "/" + this.area + " chunks | X: " + this.x + " | Z: " + this.z);
+                    chunk.unload(true,true);
+                    loaded++;
+                    if (loaded % 100 == 0) {
+                        System.out.println("[pluginLG] PreGeneration "+loaded + "/" + area + " chunks | X: " + x + " | Z: " + z);
                     }
-
-                    if (this.loaded % 5000 == 0) {
-                        try {
-                            this.world.save();
-                            Chunk[] chunks;
-                            for (int j = (chunks = this.world.getLoadedChunks()).length, i = 0; i < j; ++i) {
-                                final Chunk c = chunks[i];
-                                c.unload(true, true);
-                            }
-                        }
-                        catch (Exception ignored) {}
+                    if (loaded % 1000 == 0) {
+                        Bukkit.broadcastMessage(String.format(main.text.getText(222),loaded/(float) area*100 ));
                     }
-                    this.x += 16;
+                   x += 16;
                 }
-                this.z += 16;
+                z += 16;
             }
         }
     }
 
-    public boolean isPause() {
-        return this.pause;
-    }
-
-    public void setPause(final boolean pause) {
-        this.pause = pause;
-    }
 }

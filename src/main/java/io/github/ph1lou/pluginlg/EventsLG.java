@@ -33,8 +33,8 @@ public class EventsLG {
 		Chest chest = (Chest) block1.getState();
 		Sign sign = (Sign) block2.getState();
 		
-		for(String p:main.playerlg.keySet()) {
-			if(!main.playerlg.get(p).isCamp(Camp.VILLAGE) && main.playerlg.get(p).isState(State.LIVING)) {
+		for(String p:main.playerLG.keySet()) {
+			if(!main.playerLG.get(p).isCamp(Camp.VILLAGE) && main.playerLG.get(p).isState(State.LIVING)) {
 				danger.add(p);
 			}
 		}

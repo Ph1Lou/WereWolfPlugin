@@ -1,39 +1,35 @@
 package io.github.ph1lou.pluginlg.enumlg;
 
 public enum ScenarioLG {
-    VANILLA_PLUS(true,"Vanilla+"),
-    ROD_LESS(true,"RodLess"),
-    HORSE_LESS(true,"HorseLess"),
-    FIRE_LESS(true,"FireLess"),
-    CUT_CLEAN(true,"CutClean"),
-    DIAMOND_LIMIT(true,"DiamondLimit"),
-    FAST_SMELTING(true,"FastMelting"),
-    HASTEY_BOYS(true,"HasteyBoys"),
-    NO_FALL(false,"NoFall"),
-    NO_SNOWBALL(true,"NoSnowBall"),
-    NO_POISON(true,"NoPoison"),
-    XP_BOOST(true,"XPBoost"),
-    COMPASS_TARGET_LAST_DEATH(true,"La boussole pointe sur le lieu de la dernière mort"),
-    NO_CLEAN_UP(true,"NoCleanUp"),
-    NO_NAME_TAG(false,"NoNameTag"),
-    CAT_EYES(true,"CatEyes"),
-    SLOW_BOW(false,"SlowBow");
+    VANILLA_PLUS(true),
+    ROD_LESS(true),
+    HORSE_LESS(true),
+    FIRE_LESS(true),
+    CUT_CLEAN(true),
+    DIAMOND_LIMIT(true),
+    FAST_SMELTING(true),
+    HASTEY_BOYS(true),
+    NO_FALL(false),
+    NO_SNOWBALL(true),
+    NO_POISON(true),
+    XP_BOOST(true),
+    COMPASS_TARGET_LAST_DEATH(false),
+    NO_CLEAN_UP(true),
+    NO_NAME_TAG(false),
+    CAT_EYES(true),
+    SLOW_BOW(false);
 
     private final Boolean value;
-    private final String appearance;
 
-    ScenarioLG(Boolean value, String appearance) {
+
+    ScenarioLG(Boolean value) {
         this.value=value;
-        this.appearance=appearance;
     }
 
     public Boolean getValue() {
         return this.value;
     }
 
-    public String getAppearance() {
-        return this.appearance;
-    }
 }
 
 
