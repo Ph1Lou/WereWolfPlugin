@@ -71,7 +71,7 @@ public class PlayerListener implements Listener {
 	}
 
 	@EventHandler
-	private void onPlayerDamage(EntityDamageByEntityEvent event) {
+	private void onPlayerDamageByEntity(EntityDamageByEntityEvent event) {
 
 		if(!(event.getEntity() instanceof Player)) return;
 		if(!(event.getDamager() instanceof Player)) return;
@@ -122,7 +122,13 @@ public class PlayerListener implements Listener {
 	@EventHandler
 	private void onPlayerRespawn(PlayerRespawnEvent event) {
 		if(!main.playerLG.containsKey(event.getPlayer().getName())) return;
-		if(main.isState(StateLG.DEBUT) || main.isState(StateLG.TRANSPORTATION)) event.setRespawnLocation(main.playerLG.get(event.getPlayer().getName()).getSpawn());
+		if(main.isState(StateLG.DEBUT) || main.isState(StateLG.TRANSPORTATION)) {
+			event.setRespawnLocation(main.playerLG.get(event.getPlayer().getName()).getSpawn());
+			Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
+				event.getPlayer().removePotionEffect(PotionEffectType.WITHER);
+				event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 400, -1, false, false));
+			},1L);
+		}
 		else if(main.isState(StateLG.LOBBY)) Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 0,false,false)), 20L);
 	}
 	

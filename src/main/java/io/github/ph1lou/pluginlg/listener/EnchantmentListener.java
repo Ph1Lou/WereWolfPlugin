@@ -52,12 +52,14 @@ public class EnchantmentListener implements Listener {
     private ItemStack checkEnchant(Map<Enchantment,Integer> enchant, Player player, ItemStack item){
 
         Map<Enchantment,Integer> tempEnchant = new HashMap<>();
-        ItemStack result = new ItemStack(item.getType());
+        ItemStack result = new ItemStack(item);
         String playername = player.getName();
         if(!main.playerLG.containsKey(playername)) return item;
         PlayerLG plg = main.playerLG.get(playername);
 
         for(Enchantment e:enchant.keySet()){
+
+            result.removeEnchantment(e);
 
             if(Arrays.asList(Enchantment.ARROW_FIRE,Enchantment.FIRE_ASPECT).contains(e)){
                 if(!main.config.scenario.get(ScenarioLG.FIRE_LESS)){

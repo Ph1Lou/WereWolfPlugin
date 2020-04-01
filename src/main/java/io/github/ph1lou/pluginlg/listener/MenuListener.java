@@ -383,6 +383,13 @@ public class MenuListener implements Listener{
 					else if(main.config.getUseOfFlair()>0) main.config.setUseOfFlair(main.config.getUseOfFlair()-1);
 					main.optionlg.advancedTool(player);
 				}
+				else if(current.getType().equals(Material.GOLD_NUGGET)){
+					if (event.getClick().isLeftClick()) {
+						main.config.setGoldenAppleParticles((main.config.getGoldenAppleParticles()+1)%3);
+					}
+					else main.config.setGoldenAppleParticles((main.config.getGoldenAppleParticles()+2)%3);
+					main.optionlg.advancedTool(player);
+				}
 			}
 			else if(view.getTitle().equals(main.text.getText(74))) {
 

@@ -49,7 +49,7 @@ public class OptionLG {
 		invSave = Bukkit.createInventory(null, 18,main.text.getText(180));
 		invStuff = Bukkit.createInventory(null, 18,main.text.getText(77));
 		invEnchant = Bukkit.createInventory(null, 18,main.text.getText(79));
-		invAdvancedTool = Bukkit.createInventory(null, 18,main.text.getText(75));
+		invAdvancedTool = Bukkit.createInventory(null, 27,main.text.getText(75));
 		invLanguage = Bukkit.createInventory(null, 9,main.text.getText(74));
 	}
 
@@ -159,6 +159,7 @@ public class OptionLG {
 		invAdvancedTool.setItem(12, changeMeta(Material.DIAMOND,String.format(main.text.getText(228),main.config.getDiamondLimit()),1,lore));
 		invAdvancedTool.setItem(14, changeMeta(Material.EXP_BOTTLE,String.format(main.text.getText(229),main.config.getXp_boost()),1,lore));
 		invAdvancedTool.setItem(16, changeMeta(new ItemStack(Material.SKULL_ITEM,1,(short) 3),String.format(main.text.getText(227),main.config.getPlayerRequiredVoteEnd()),lore));
+		invAdvancedTool.setItem(18, changeMeta(Material.GOLD_NUGGET,main.text.getText(261),1, Collections.singletonList(main.text.getText(262 + main.config.getGoldenAppleParticles()))));
 		player.openInventory(invAdvancedTool);
 	}
 

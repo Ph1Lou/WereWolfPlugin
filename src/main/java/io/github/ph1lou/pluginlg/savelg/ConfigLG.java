@@ -29,7 +29,7 @@ public class ConfigLG {
 	private int limitPunch=1;
 	private int limitKnockBack=1;
 	private int useOfFlair=4;
-	private int useOfSeer=6;
+	private int goldenAppleParticles=1;
 
 	public void getConfig(MainLG main,String configName) {
 
@@ -54,6 +54,7 @@ public class ConfigLG {
 			this.setLimitKnockBack(config_load.getLimitKnockBack());
 			this.setLimitPunch(config_load.getLimitPunch());
 			this.setUseOfFlair(config_load.getUseOfFlair());
+			this.setGoldenAppleParticles(config_load.getGoldenAppleParticles());
 		}
 		for(RoleLG role:RoleLG.values()) {
 			this.role_count.put(role, config_load.role_count.getOrDefault(role, 0));
@@ -204,5 +205,13 @@ public class ConfigLG {
 
 	public void setUseOfFlair(int useOfFlair) {
 		this.useOfFlair = useOfFlair;
+	}
+
+	public int getGoldenAppleParticles() {
+		return goldenAppleParticles;
+	}
+
+	public void setGoldenAppleParticles(int goldenAppleParticles) {
+		this.goldenAppleParticles = goldenAppleParticles;
 	}
 }

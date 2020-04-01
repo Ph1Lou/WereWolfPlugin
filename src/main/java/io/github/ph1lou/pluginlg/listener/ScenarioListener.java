@@ -1,6 +1,7 @@
 package io.github.ph1lou.pluginlg.listener;
 
 import io.github.ph1lou.pluginlg.MainLG;
+import io.github.ph1lou.pluginlg.enumlg.RoleLG;
 import io.github.ph1lou.pluginlg.enumlg.ScenarioLG;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -299,6 +300,17 @@ public class ScenarioListener implements Listener {
                     event.getPlayer().getInventory().remove(event.getItem());
                     return;
                 }
+                if(main.config.getGoldenAppleParticles()==3){
+                    return;
+                }
+                if(main.config.getGoldenAppleParticles()==1){
+                    String playername = event.getPlayer().getName();
+
+                    if(main.playerLG.containsKey(playername) && main.playerLG.get(playername).hasPower() && !main.playerLG.get(playername).isRole(RoleLG.PETITE_FILLE) && !main.playerLG.get(playername).isRole(RoleLG.LOUP_PERFIDE)){
+                        return;
+                    }
+                }
+
                 if (event.getPlayer().hasPotionEffect(PotionEffectType.ABSORPTION)) {
                     event.getPlayer().removePotionEffect(PotionEffectType.ABSORPTION);
                     event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 2400, 0,false,false));
