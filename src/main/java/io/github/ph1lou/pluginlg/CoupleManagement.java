@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+
 
 
 public class CoupleManagement {
@@ -26,7 +26,6 @@ public class CoupleManagement {
 	
 	public void auto_couple() {
 
-		Random r =new Random(System.currentTimeMillis());
 		List<String> couples =new ArrayList<>();
 		for(String p:main.playerLG.keySet()) {
 			if(main.playerLG.get(p).isState(State.LIVING)) {
@@ -55,16 +54,16 @@ public class CoupleManagement {
 					
 					if(couples.contains(playername)) {
 						couples.remove(playername);
-						j1 = couples.get((int) Math.floor(r.nextFloat()*couples.size()));
+						j1 = couples.get((int) Math.floor(main.role_manage.r.nextFloat()*couples.size()));
 						couples.remove(j1);
-						j2 = couples.get((int) Math.floor(r.nextFloat()*couples.size()));
+						j2 = couples.get((int) Math.floor(main.role_manage.r.nextFloat()*couples.size()));
 						couples.add(j1);
 						couples.add(playername);
 					}
 					else {
-						j1 = couples.get((int) Math.floor(r.nextFloat()*couples.size()));
+						j1 = couples.get((int) Math.floor(main.role_manage.r.nextFloat()*couples.size()));
 						couples.remove(j1);
-						j2 = couples.get((int) Math.floor(r.nextFloat()*couples.size()));
+						j2 = couples.get((int) Math.floor(main.role_manage.r.nextFloat()*couples.size()));
 						couples.add(j1);
 					}
 					
@@ -95,9 +94,9 @@ public class CoupleManagement {
 		}
 		for(int i = 0; i< main.config.role_count.get(RoleLG.COUPLE); i++) {
 			
-			j1 = couples.get((int) Math.floor(r.nextFloat()*couples.size()));
+			j1 = couples.get((int) Math.floor(main.role_manage.r.nextFloat()*couples.size()));
 			couples.remove(j1);
-			j2 = couples.get((int) Math.floor(r.nextFloat()*couples.size()));
+			j2 = couples.get((int) Math.floor(main.role_manage.r.nextFloat()*couples.size()));
 			couples.add(j1);
 			
 			if(!polygamy) {

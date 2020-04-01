@@ -373,8 +373,9 @@ public class DeathManagementLG {
 			player.setSaturation(20);
 			player.setGameMode(GameMode.SURVIVAL);
 			player.sendMessage(message);
-			player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100,0,false,false));
-			player.teleport(new Location(world,x,world.getHighestBlockYAt(x,z)+1,z));
+			player.removePotionEffect(PotionEffectType.WITHER);
+			player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 400,-1,false,false));
+			player.teleport(new Location(world,x,world.getHighestBlockYAt(x,z)+100,z));
 		}
 	}
 

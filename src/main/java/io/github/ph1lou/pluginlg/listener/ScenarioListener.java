@@ -305,7 +305,7 @@ public class ScenarioListener implements Listener {
                 }
                 if (event.getPlayer().hasPotionEffect(PotionEffectType.REGENERATION)) {
                     event.getPlayer().removePotionEffect(PotionEffectType.REGENERATION);
-                    event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100, 0,false,false));
+                    event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 180, 0,false,false));
                 }
 
             }, 1L);

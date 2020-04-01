@@ -120,9 +120,9 @@ public class CycleLG {
 				Player player = Bukkit.getPlayer(playername);
 
 				Title.removeBar(player);
-				int cancelVote=plg.hasPower()?1:0;
+
 				if(plg.isRole(RoleLG.CITOYEN) && (plg.getUse()<2 || plg.hasPower())){
-					player.sendMessage(String.format(main.text.powerUse.get(RoleLG.CITOYEN),2-plg.getUse(),cancelVote,main.score.conversion(main.config.value.get(TimerLG.CITIZEN_DURATION))));
+					player.sendMessage(String.format(main.text.powerUse.get(RoleLG.CITOYEN),2-plg.getUse(),plg.hasPower()?1:0,main.score.conversion(main.config.value.get(TimerLG.CITIZEN_DURATION))));
 				}
 			}
 		}

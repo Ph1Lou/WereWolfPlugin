@@ -161,14 +161,14 @@ public class AdminLG implements TabExecutor {
 					sender.sendMessage(main.text.getText(141));
 					return true;
 				}
-				if(Bukkit.getPlayer(args[1])!=null) {
-					sender.sendMessage(main.text.getText(142));
-					return true;
-				}
 				if(main.isState(StateLG.DEBUT)) {
 					main.score.removePlayerSize();
 					main.playerLG.remove(args[1]);
 					sender.sendMessage(main.text.getText(143));
+					return true;
+				}
+				if(Bukkit.getPlayer(args[1])!=null) {
+					sender.sendMessage(main.text.getText(142));
 					return true;
 				}
 				if(main.isState(StateLG.LG)) {
@@ -177,7 +177,7 @@ public class AdminLG implements TabExecutor {
 				else sender.sendMessage(main.text.getText(68));
 				break;
 
-				case "disc":
+			case "disc":
 
 				for(String p:main.playerLG.keySet()) {
 					PlayerLG plg = main.playerLG.get(p);
@@ -187,7 +187,7 @@ public class AdminLG implements TabExecutor {
 					}
 				}
 				break;
-			
+
 			case "inv":
 			
 				if (!(sender instanceof Player )) {

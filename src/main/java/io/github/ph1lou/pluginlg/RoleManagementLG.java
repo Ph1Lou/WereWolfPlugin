@@ -17,7 +17,8 @@ import java.util.Random;
 public class RoleManagementLG {
 	
 	private final MainLG main;
-	
+	Random r = new Random(System.currentTimeMillis());
+
 	public RoleManagementLG(MainLG main) {
 		this.main=main;	
 	}
@@ -36,8 +37,6 @@ public class RoleManagementLG {
 				}
 			}
 		}
-	
-		Random r = new Random(System.currentTimeMillis());
 
 		while(!players.isEmpty()) {
 			
@@ -249,7 +248,8 @@ public class RoleManagementLG {
 			if(!plg.getCouple().isEmpty()) {
 				
 				for(String c:plg.getCouple()) {
-					
+
+
 					if(!klg.getCouple().contains(c)) {
 						
 						klg.addCouple(c);
@@ -264,7 +264,9 @@ public class RoleManagementLG {
 						killer.playSound(killer.getLocation(), Sound.SHEEP_SHEAR,1,20);
 					}
 				}
-				plg.clearCouple();
+				if(!klg.getCouple().contains(killername)){
+					plg.clearCouple();
+				}
 				
 				for(String cup:main.playerLG.keySet()) {
 					if(main.playerLG.get(cup).isRole(RoleLG.CUPIDON) && main.playerLG.get(cup).getAffectedPlayer().contains(playername)) {
@@ -280,7 +282,7 @@ public class RoleManagementLG {
 	
 	public void auto_master() {
 
-		Random r= new Random(System.currentTimeMillis());
+
 		for(String playername:main.playerLG.keySet()) {
 
 			if (main.playerLG.get(playername).isState(State.LIVING) && main.playerLG.get(playername).isRole(RoleLG.ENFANT_SAUVAGE) && main.playerLG.get(playername).hasPower()) {
@@ -325,8 +327,6 @@ public class RoleManagementLG {
 	}
 	
 	public void auto_ange() {
-
-		Random r = new Random(System.currentTimeMillis());
 
 		for(String playername:main.playerLG.keySet()) {
 			

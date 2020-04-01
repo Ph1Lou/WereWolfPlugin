@@ -79,7 +79,7 @@ public class PlayerListener implements Listener {
 		for(PotionEffect p:damager.getActivePotionEffects()){
 			if(p.getType().equals(PotionEffectType.INCREASE_DAMAGE)){
 				if(damager.getItemInHand().getType().equals(Material.DIAMOND_SWORD) || damager.getItemInHand().getType().equals(Material.IRON_SWORD)){
-					event.setDamage(event.getDamage()*main.config.getStrengthRate()/100f);
+					event.setDamage(event.getDamage()*(main.config.getStrengthRate()/100f));
 				}
 			}
 		}
@@ -94,6 +94,12 @@ public class PlayerListener implements Listener {
 
 		Player player = (Player) event.getEntity();
 		String playername = player.getName();
+		for(PotionEffect p:player.getActivePotionEffects()){
+			if(p.getType().equals(PotionEffectType.WITHER)){
+				event.setCancelled(true);
+				return;
+			}
+		}
 		if(player.getGameMode().equals(GameMode.ADVENTURE) || main.config.value.get(TimerLG.INVULNERABILITY)>0) {
 			event.setCancelled(true);
 		}

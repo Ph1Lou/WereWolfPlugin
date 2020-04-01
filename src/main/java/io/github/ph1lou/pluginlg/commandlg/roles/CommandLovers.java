@@ -7,6 +7,7 @@ import io.github.ph1lou.pluginlg.enumlg.State;
 import io.github.ph1lou.pluginlg.enumlg.StateLG;
 import io.github.ph1lou.pluginlg.enumlg.ToolLG;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -64,7 +65,7 @@ public class CommandLovers extends Commands {
             player.sendMessage(main.text.getText(254));
             return;
         }
-        if (life<heart) {
+        if (life<=heart) {
             player.sendMessage(main.text.getText(255));
             return;
         }
@@ -80,9 +81,12 @@ public class CommandLovers extends Commands {
             for(String p:plg.getCouple()){
                 if(Bukkit.getPlayer(p)!=null){
                     Player playerCouple=Bukkit.getPlayer(p);
-                    if(playerCouple.getMaxHealth()-playerCouple.getHealth()>=heart/plg.getCouple().size()){
-                        playerCouple.setHealth(playerCouple.getHealth()+heart/plg.getCouple().size());
-                        heart-=heart/plg.getCouple().size();
+                    int don=heart/plg.getCouple().size();
+                    if(playerCouple.getMaxHealth()-playerCouple.getHealth()>=don){
+                        playerCouple.setHealth(playerCouple.getHealth()+don);
+                        playerCouple.sendMessage(String.format(main.text.getText(260),don,playername));
+                        playerCouple.playSound(playerCouple.getLocation(), Sound.PORTAL, 1, 20);
+                        heart-=don;
                     }
                 }
             }
