@@ -179,12 +179,12 @@ public class PlayerListener implements Listener {
 				main.death_manage.deathStep1(main.text.getText(81),playername);
 			}
 		}
-		
+
 	}
 	
 	@EventHandler
 	private void onChat(AsyncPlayerChatEvent event) {
-		
+
 		if (!main.config.tool_switch.get(ToolLG.CHAT)) {
 			event.setCancelled(true);
 			event.getPlayer().sendMessage(main.text.getText(123));

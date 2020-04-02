@@ -316,6 +316,10 @@ public class ScoreBoardLG {
 		this.host = host;
 	}
 
+	public String getHost() {
+		return this.host;
+	}
+
 	public void addTimer() {
 		this.timer++;
 	}

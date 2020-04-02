@@ -46,10 +46,16 @@ public class MainLG extends JavaPlugin {
 	public final FileLG filelg = new FileLG();
 	public final StuffLG stufflg = new StuffLG(this);
 	public final LangLG lang = new LangLG(this);
+	/*public final HostLG host = new HostLG(this);*/
 
 	@Override
 	public void onEnable() {
 		Bukkit.getScheduler().runTask(this, this::enable);
+	}
+
+	@Override
+	public void onDisable() {
+		/*host.jda.shutdown();*/
 	}
 
 	@Override
@@ -72,6 +78,7 @@ public class MainLG extends JavaPlugin {
 		pm.registerEvents(new MenuListener(this),this);
 		pm.registerEvents(new ScenarioListener(this),this);
 		pm.registerEvents(new EnchantmentListener(this),this);
+		pm.registerEvents(new ServerListener(this),this);
 
 		getCommand("lg").setExecutor(new CommandLG(this));
 		getCommand("adminlg").setExecutor(new AdminLG(this));

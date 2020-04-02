@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 
 public class CommandScenarios extends Commands {
 
-    MainLG main;
+    final MainLG main;
 
     public CommandScenarios(MainLG main, String name) {
         super(name);

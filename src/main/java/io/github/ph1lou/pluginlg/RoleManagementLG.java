@@ -17,7 +17,7 @@ import java.util.Random;
 public class RoleManagementLG {
 	
 	private final MainLG main;
-	Random r = new Random(System.currentTimeMillis());
+	final Random r = new Random(System.currentTimeMillis());
 
 	public RoleManagementLG(MainLG main) {
 		this.main=main;	

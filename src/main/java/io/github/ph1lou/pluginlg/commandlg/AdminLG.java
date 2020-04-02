@@ -74,7 +74,7 @@ public class AdminLG implements TabExecutor {
 				}catch(Exception e){
 					sender.sendMessage(main.text.getText(21));
 				}
-				File file = new File(main.getDataFolder()+"/configs/", "saveCurrent.json");
+				File file = new File(main.getDataFolder()+File.separator+"configs"+File.separator, "saveCurrent.json");
 				main.filelg.save(file, main.serialize.serialize(main.config));
 				main.stufflg.save("saveCurrent");
 				break;
@@ -187,7 +187,23 @@ public class AdminLG implements TabExecutor {
 					}
 				}
 				break;
+			/*case "sendHost":
 
+				if (!(sender instanceof Player )) {
+					sender.sendMessage(main.text.getText(140));
+					return true;
+				}
+
+				if(args.length!=2) {
+					sender.sendMessage(String.format(main.text.getText(190),2));
+					return true;
+				}
+				if(main.score.getHost().equals("")) {
+					sender.sendMessage("Configure Host");
+					return true;
+				}
+				main.host.sendHostToDiscord(sender.getName(),args[1]);
+				break;*/
 			case "inv":
 			
 				if (!(sender instanceof Player )) {
