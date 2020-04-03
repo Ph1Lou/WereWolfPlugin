@@ -22,7 +22,8 @@ public class LangLG {
 
     public void initLanguage(){
         for(String lang:languages){
-            main.filelg.copy(main.getClass().getResourceAsStream("/"+lang+".json"),main.getDataFolder()+"/languages/"+lang+".json");
+            System.out.println("");
+            main.filelg.copy(main.getClass().getResourceAsStream("/" + lang+".json"),main.getDataFolder()+File.separator+"languages"+File.separator+lang+".json");
         }
         getLanguage();
     }
@@ -32,14 +33,14 @@ public class LangLG {
         String langName = main.getConfig().getString("lang");
 
         if(languages.contains(langName)){
-            File default_text = new File(main.getDataFolder()+"/languages/", langName+".json");
+            File default_text = new File(main.getDataFolder()+ File.separator +"languages"+ File.separator, langName+".json");
             main.text=main.serialize.deserializeText(main.filelg.loadContent(default_text));
         }
         else {
-            File default_text = new File(main.getDataFolder() + "/languages/", "custom.json");
+            File default_text = new File(main.getDataFolder() + File.separator +"languages"+ File.separator, "custom.json");
             if (!default_text.exists()) {
-                main.filelg.copy(main.getClass().getResourceAsStream("/en.json"), main.getDataFolder() + "/languages/custom.json");
-                default_text = new File(main.getDataFolder() + "/languages/", "en.json");
+                main.filelg.copy(main.getClass().getResourceAsStream(  "/en.json"), main.getDataFolder() +  File.separator +"languages"+ File.separator +"custom.json");
+                default_text = new File(main.getDataFolder() +  File.separator +"languages" + File.separator, "en.json");
                 main.text = main.serialize.deserializeText(main.filelg.loadContent(default_text));
             }
             else {

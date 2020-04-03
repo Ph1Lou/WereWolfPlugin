@@ -35,7 +35,7 @@ public class ConfigLG {
 
 		ConfigLG config_load=this;
 		
-		File file = new File(main.getDataFolder()+"/configs/", configName+".json");
+		File file = new File(main.getDataFolder()+File.separator+"configs"+File.separator, configName+".json");
 
 		if(file.exists()) {
 			config_load=main.serialize.deserialize(main.filelg.loadContent(file));
