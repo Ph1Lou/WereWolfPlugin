@@ -61,7 +61,7 @@ public class TextLG {
 		for(ScenarioLG scenario:ScenarioLG.values()) {
 			this.translateScenario.put(scenario,this.translateScenario.getOrDefault(scenario,text_load.translateScenario.get(scenario)));
 		}
-		main.filelg.save(new File(main.getDataFolder(),"/languages/custom.json"), main.serialize.serializeText(this));
+		main.filelg.save(new File(main.getDataFolder(),"/languages/custom.json"), main.serialize.serialize(this));
 	}
 	
 	public String getText(int i) {

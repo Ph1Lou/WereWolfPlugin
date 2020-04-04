@@ -314,6 +314,7 @@ public class ScoreBoardLG {
 
 	public void setHost(String host) {
 		this.host = host;
+		main.spark.updateDiscord();
 	}
 
 	public String getHost() {
@@ -329,11 +330,12 @@ public class ScoreBoardLG {
 	}
 
 	public void removePlayerSize() {
-		this.player = this.player-1;
+		this.player = this.player - 1;
+		main.spark.updateDiscord();
 	}
-	
 	public void addPlayerSize() {
 		this.player = this.player+1;
+		main.spark.updateDiscord();
 	}
 	
 	public int getGroup() {
@@ -342,5 +344,6 @@ public class ScoreBoardLG {
 
     public void setGroup(int group) {
 		this.group_size =group;
+
     }
 }

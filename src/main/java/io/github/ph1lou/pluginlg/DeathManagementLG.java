@@ -238,8 +238,8 @@ public class DeathManagementLG {
 		if(!main.isState(StateLG.FIN)) {
 			main.endlg.check_victory();
 		}
-		
-		
+		else return;
+
 		if(main.config.tool_switch.get(ToolLG.EVENT_SEER_DEATH) && (role.equals(RoleLG.VOYANTE) || role.equals(RoleLG.VOYANTE_BAVARDE))) {
 			main.eventslg.event1();
 			main.config.tool_switch.put(ToolLG.EVENT_SEER_DEATH,false);

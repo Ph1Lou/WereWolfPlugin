@@ -28,14 +28,14 @@ public class PlayerLG{
 	private Boolean salvation =false;
 	private Boolean hasBeenStolen =false;
 	private Boolean thief =false;
-	private	Boolean kit=false;
-	Scoreboard board;
+	private Boolean kit=false;
+	private transient Scoreboard board;
 	private final List<String> affectedPlayer = new ArrayList<>();
 	private final List<String> disciple = new ArrayList<>();
 	private final List<String> targetOf = new ArrayList<>();
 	private final List<String> couple = new ArrayList<>();
 	private final List<ItemStack> itemsDeath = new ArrayList<>();
-	private Location spawn;
+	private transient Location spawn;
 	private int deathTime =0;
 	private int use=0;
 	private int vote=0;

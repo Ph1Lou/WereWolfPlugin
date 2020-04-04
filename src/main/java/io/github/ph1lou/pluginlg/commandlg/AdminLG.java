@@ -3,7 +3,6 @@ package io.github.ph1lou.pluginlg.commandlg;
 import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlg.PlayerLG;
 import io.github.ph1lou.pluginlg.Title;
-import io.github.ph1lou.pluginlg.WorldLoader;
 import io.github.ph1lou.pluginlg.enumlg.*;
 import org.bukkit.*;
 import org.bukkit.command.Command;
@@ -66,6 +65,7 @@ public class AdminLG implements TabExecutor {
 				try{
 					World world = Bukkit.getWorld("world");
 					main.setState(StateLG.TRANSPORTATION);
+					main.spark.updateDiscord();
 					world.setTime(0);
 					WorldBorder wb = world.getWorldBorder();
 					wb.setCenter(world.getSpawnLocation().getX(),world.getSpawnLocation().getZ());
@@ -101,9 +101,15 @@ public class AdminLG implements TabExecutor {
 				Bukkit.broadcastMessage(String.format(main.text.getText(136),sb2.toString()));
 				break;
 			case "pregen" :
-				World world = Bukkit.getWorld("world");
-				WorldLoader worldloader = new WorldLoader(world, main.config.border_value.get(BorderLG.BORDER_MAX)/2,main);
-				Bukkit.getScheduler().scheduleSyncRepeatingTask(main, worldloader, 0L, 145L);
+
+				if(!Bukkit.dispatchCommand(sender, "wb shape square")){
+					sender.sendMessage(main.text.getText(11));
+				}
+				else{
+					Bukkit.dispatchCommand(sender, String.format("wb set %d %d", main.config.border_value.get(BorderLG.BORDER_MAX), main.config.border_value.get(BorderLG.BORDER_MAX)));
+					Bukkit.dispatchCommand(sender, "wb fill");
+					Bukkit.dispatchCommand(sender, "wb fill confirm");
+				}
 				break;
 			case "setgroup" :
 
@@ -187,7 +193,7 @@ public class AdminLG implements TabExecutor {
 					}
 				}
 				break;
-			/*case "sendHost":
+			case "send":
 
 				if (!(sender instanceof Player )) {
 					sender.sendMessage(main.text.getText(140));
@@ -195,15 +201,15 @@ public class AdminLG implements TabExecutor {
 				}
 
 				if(args.length!=2) {
-					sender.sendMessage(String.format(main.text.getText(190),2));
+					sender.sendMessage(String.format(main.text.getText(190),1));
 					return true;
 				}
 				if(main.score.getHost().equals("")) {
 					sender.sendMessage("Configure Host");
 					return true;
 				}
-				main.host.sendHostToDiscord(sender.getName(),args[1]);
-				break;*/
+				main.spark.setHost(sender.getName(),args[1]);
+				break;
 			case "inv":
 			
 				if (!(sender instanceof Player )) {
@@ -219,25 +225,25 @@ public class AdminLG implements TabExecutor {
 					sender.sendMessage(main.text.getText(132));
 					return true;
 				}
-				Player pinv = Bukkit.getPlayer(args[1]);
+				Player pInv = Bukkit.getPlayer(args[1]);
 				Inventory inv = Bukkit.createInventory(null, 45,args[1]);
 
-				for(ItemStack i:pinv.getInventory()) {
+				for(ItemStack i:pInv.getInventory()) {
 					if(i!=null) {
 						inv.addItem(i);
 					}
 				}
-				if(pinv.getInventory().getHelmet()!=null) {
-					inv.addItem(pinv.getInventory().getHelmet());
+				if(pInv.getInventory().getHelmet()!=null) {
+					inv.addItem(pInv.getInventory().getHelmet());
 				}
-				if(pinv.getInventory().getChestplate()!=null) {
-					inv.addItem(pinv.getInventory().getChestplate());
+				if(pInv.getInventory().getChestplate()!=null) {
+					inv.addItem(pInv.getInventory().getChestplate());
 				}
-				if(pinv.getInventory().getLeggings()!=null) {
-					inv.addItem(pinv.getInventory().getLeggings());
+				if(pInv.getInventory().getLeggings()!=null) {
+					inv.addItem(pInv.getInventory().getLeggings());
 				}
-				if(pinv.getInventory().getBoots()!=null) {
-					inv.addItem(pinv.getInventory().getBoots());
+				if(pInv.getInventory().getBoots()!=null) {
+					inv.addItem(pInv.getInventory().getBoots());
 				}
 
 				((Player) sender).openInventory(inv);

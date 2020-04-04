@@ -3,6 +3,7 @@ version: 1.3
 author: Ph1Lou
 main: io.github.ph1lou.pluginlg.MainLG
 api-version: 1.8
+load: STARTUP
 commands:
 
   lg:

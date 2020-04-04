@@ -21,16 +21,14 @@ public class FileLG {
 	public void save (File file, String text) {
 		
 		final FileWriter fw;
-		
 		try {
 			createFile(file);
 			fw = new FileWriter(file);
 			fw.write(text);
-			
 			fw.flush();
-			
 			fw.close();
-		} catch(IOException e) {
+		}
+		catch(IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -40,22 +38,19 @@ public class FileLG {
 		System.out.println("[pluginLG] Copying ->" + source + "\n\tto ->" + destination);
 		try {
 			createFile(new File(destination));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		if(source!=null){
-			try {
+			if(source!=null) {
 				Files.copy(source, Paths.get(destination), StandardCopyOption.REPLACE_EXISTING);
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
+		}
+		catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	
 	public String loadContent(File file) {
 		
 		if(file.exists()) {
-			
+
 			try {
 
 				final BufferedReader reader = new BufferedReader(new InputStreamReader(
@@ -69,8 +64,6 @@ public class FileLG {
 				reader.close();
 				
 				return text.toString();
-
-
 			}catch(IOException e) {
 				e.printStackTrace();
 			}

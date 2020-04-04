@@ -55,21 +55,27 @@ public class TransportationLG extends BukkitRunnable{
 
 				if (i < main.playerLG.size()) {
 
-					String playername = (String) main.playerLG.keySet().toArray()[i];
-
 					for (Player p : Bukkit.getOnlinePlayers()) {
-						p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1, 20);
+						p.playSound(p.getLocation(), Sound.DIG_GRASS, 1, 20);
+						Title.sendActionBar(p, String.format("Creation des points de TP : §b%d§r/§b%d§r",i+1,main.playerLG.size()));
 					}
+
+					String playername = (String) main.playerLG.keySet().toArray()[i];
 
 					double a = i * 2 * Math.PI / Bukkit.getOnlinePlayers().size();
 					int x = (int) (Math.round(wb.getSize() / 3 * Math.cos(a) + world.getSpawnLocation().getX()));
 					int z = (int) (Math.round(wb.getSize() / 3 * Math.sin(a) + world.getSpawnLocation().getZ()));
 					Location spawn = new Location(world, x, world.getHighestBlockYAt(x, z) + 100, z);
-					world.getChunkAt(x,z).load();
+					world.getChunkAt(x,z).load(true);
 					createStructure(Material.BARRIER, spawn);
 					main.playerLG.get(playername).setSpawn(spawn.clone());
 				}
 				else if(i<2*main.playerLG.size()){
+
+					for (Player p : Bukkit.getOnlinePlayers()) {
+						p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1, 20);
+						Title.sendActionBar(p, String.format("Teleportation : §b%d§r/§b%d§r",i-main.playerLG.size()+1,main.playerLG.size()));
+					}
 
 					String playername = (String) main.playerLG.keySet().toArray()[i-main.playerLG.size()];
 

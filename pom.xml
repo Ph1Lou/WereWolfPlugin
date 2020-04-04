@@ -55,11 +55,7 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
-        <repository>
-            <id>jcenter</id>
-            <name>jcenter-bintray</name>
-            <url>https://jcenter.bintray.com</url>
-        </repository>
+
     </repositories>
 
     <dependencies>
@@ -70,9 +66,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>net.dv8tion</groupId>
-            <artifactId>JDA</artifactId>
-            <version>4.1.1_127</version>
+            <groupId>com.sparkjava</groupId>
+            <artifactId>spark-core</artifactId>
+            <version>2.5.4</version>
         </dependency>
         <dependency>
             <groupId>fr.mrmicky</groupId>

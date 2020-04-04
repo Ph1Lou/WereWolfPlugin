@@ -46,17 +46,14 @@ public class MainLG extends JavaPlugin {
 	public final FileLG filelg = new FileLG();
 	public final StuffLG stufflg = new StuffLG(this);
 	public final LangLG lang = new LangLG(this);
-	/*public final HostLG host = new HostLG(this);*/
+	public final SparkLG spark = new SparkLG(this);
+
 
 	@Override
 	public void onEnable() {
 		Bukkit.getScheduler().runTask(this, this::enable);
 	}
 
-	@Override
-	public void onDisable() {
-		/*host.jda.shutdown();*/
-	}
 
 	@Override
 	public void onLoad(){
@@ -65,6 +62,7 @@ public class MainLG extends JavaPlugin {
 
 	public void enable() {
 		saveDefaultConfig();
+
 		setState(StateLG.LOBBY);
 		setDay(Day.DEFAULT);
 		lang.initLanguage();
@@ -195,6 +193,7 @@ public class MainLG extends JavaPlugin {
 		this.state=state;
 	}
 
+	public StateLG getState() {return this.state;}
 
 	public boolean isState(StateLG state) {
 		return this.state==state;
@@ -211,6 +210,7 @@ public class MainLG extends JavaPlugin {
 	}
 
 
+	public Day getDay() { return this.dayState;}
 }
 		
 

@@ -121,6 +121,7 @@ public class EndLG {
     public void fin() {
 
         main.setState(StateLG.FIN);
+        main.spark.updateDiscord();
         main.score.getKillCounter();
         Bukkit.broadcastMessage(String.format(main.text.getText(3), subtitles_victory));
         main.config.tool_switch.put(ToolLG.CHAT,true);
@@ -189,5 +190,9 @@ public class EndLG {
             }
         }
         return temp;
+    }
+
+    public String getVictoryTeam(){
+        return this.subtitles_victory;
     }
 }
