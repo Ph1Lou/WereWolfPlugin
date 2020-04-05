@@ -4,6 +4,7 @@ import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlg.PlayerLG;
 import io.github.ph1lou.pluginlg.Title;
 import io.github.ph1lou.pluginlg.enumlg.*;
+import io.github.ph1lou.pluginlg.worldloader.WorldFillTask;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -101,16 +102,15 @@ public class AdminLG implements TabExecutor {
 				Bukkit.broadcastMessage(String.format(main.text.getText(136),sb2.toString()));
 				break;
 			case "pregen" :
-
-				if(!Bukkit.dispatchCommand(sender, "wb shape square")){
-					sender.sendMessage(main.text.getText(11));
+				int fillFrequency = 40;
+				if(main.wft==null){
+					main.wft =new WorldFillTask("world", fillFrequency / 20,main.config.border_value.get(BorderLG.BORDER_MAX));
+					main.wft.setTaskID(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(main, main.wft, 1, 1));
+					sender.sendMessage("§e§l[LG UHC]§r WorldBorder map generation task for world \"" + "world"+ "\" started.");
 				}
-				else{
-					Bukkit.dispatchCommand(sender, String.format("wb set %d %d", main.config.border_value.get(BorderLG.BORDER_MAX), main.config.border_value.get(BorderLG.BORDER_MAX)));
-					Bukkit.dispatchCommand(sender, "wb fill");
-					Bukkit.dispatchCommand(sender, "wb fill confirm");
-				}
+				else sender.sendMessage(main.text.getText(11));
 				break;
+
 			case "setgroup" :
 
 				if (!(sender instanceof Player )) {

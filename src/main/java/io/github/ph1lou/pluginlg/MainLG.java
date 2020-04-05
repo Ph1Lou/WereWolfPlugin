@@ -9,6 +9,7 @@ import io.github.ph1lou.pluginlg.enumlg.State;
 import io.github.ph1lou.pluginlg.enumlg.StateLG;
 import io.github.ph1lou.pluginlg.listener.*;
 import io.github.ph1lou.pluginlg.savelg.*;
+import io.github.ph1lou.pluginlg.worldloader.WorldFillTask;
 import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.command.ConsoleCommandSender;
@@ -47,6 +48,7 @@ public class MainLG extends JavaPlugin {
 	public final StuffLG stufflg = new StuffLG(this);
 	public final LangLG lang = new LangLG(this);
 	public final SparkLG spark = new SparkLG(this);
+	public WorldFillTask wft;
 
 
 	@Override
@@ -80,6 +82,7 @@ public class MainLG extends JavaPlugin {
 
 		getCommand("lg").setExecutor(new CommandLG(this));
 		getCommand("adminlg").setExecutor(new AdminLG(this));
+		//Chunk per tick
 
 
 		new UpdateChecker(this, 73113).getVersion(version -> {
