@@ -22,8 +22,7 @@ public class LangLG {
 
     public void initLanguage(){
         for(String lang:languages){
-            System.out.println("");
-            main.filelg.copy(main.getClass().getResourceAsStream("/" + lang+".json"),main.getDataFolder()+File.separator+"languages"+File.separator+lang+".json");
+            main.filelg.copy(main.getResource(lang+".json"),main.getDataFolder()+File.separator+"languages"+File.separator+lang+".json");
         }
         getLanguage();
     }
@@ -39,7 +38,7 @@ public class LangLG {
         else {
             File default_text = new File(main.getDataFolder() + File.separator +"languages"+ File.separator, "custom.json");
             if (!default_text.exists()) {
-                main.filelg.copy(main.getClass().getResourceAsStream(  "/en.json"), main.getDataFolder() +  File.separator +"languages"+ File.separator +"custom.json");
+                main.filelg.copy(main.getResource(  "en.json"), main.getDataFolder() +  File.separator +"languages"+ File.separator +"custom.json");
                 default_text = new File(main.getDataFolder() +  File.separator +"languages" + File.separator, "en.json");
                 main.text = main.serialize.deserializeText(main.filelg.loadContent(default_text));
             }

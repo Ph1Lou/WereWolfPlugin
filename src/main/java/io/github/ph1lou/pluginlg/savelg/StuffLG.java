@@ -89,7 +89,7 @@ public class StuffLG {
 
         role_stuff.clear();
         if (!(new File(main.getDataFolder() + File.separator + "stuffs" + File.separator, configName + ".yml")).exists()) {
-            main.filelg.copy(main.getClass().getResourceAsStream("/stuffRole.yml"), main.getDataFolder() + File.separator + "stuffs" + File.separator + configName + ".yml");
+            main.filelg.copy(main.getResource("stuffRole.yml"), main.getDataFolder() + File.separator + "stuffs" + File.separator + configName + ".yml");
         }
         FileConfiguration config = getOrCreateCustomConfig(configName);
         for (RoleLG role : RoleLG.values()) {
@@ -126,17 +126,17 @@ public class StuffLG {
     }
 
     public void loadStuffDefault() {
-        main.filelg.copy(main.getClass().getResourceAsStream("/stuffRole.yml"), main.getDataFolder() + File.separator + "stuffs" + File.separator + "stuffRole.yml");
+        main.filelg.copy(main.getResource("stuffRole.yml"), main.getDataFolder() + File.separator + "stuffs" + File.separator + "stuffRole.yml");
         loadStuff("stuffRole");
     }
 
     public void loadStuffMeetUP() {
-        main.filelg.copy(main.getClass().getResourceAsStream( "/stuffMeetUp.yml"), main.getDataFolder() + File.separator + "stuffs" + File.separator + "stuffMeetUp.yml");
+        main.filelg.copy(main.getResource( "stuffMeetUp.yml"), main.getDataFolder() + File.separator + "stuffs" + File.separator + "stuffMeetUp.yml");
         load("stuffMeetUp");
     }
 
     public void loadStuffChill() {
-        main.filelg.copy(main.getClass().getResourceAsStream("/stuffChill.yml"), main.getDataFolder() + File.separator + "stuffs" + File.separator + "stuffChill.yml");
+        main.filelg.copy(main.getResource("stuffChill.yml"), main.getDataFolder() + File.separator + "stuffs" + File.separator + "stuffChill.yml");
         loadStuffStartAndDeath("stuffChill");
     }
 

@@ -101,7 +101,6 @@ public class AdminLG implements TabExecutor {
 				Bukkit.broadcastMessage(String.format(main.text.getText(136),sb2.toString()));
 				break;
 			case "pregen" :
-
 				if(!Bukkit.dispatchCommand(sender, "wb shape square")){
 					sender.sendMessage(main.text.getText(11));
 				}
