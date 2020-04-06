@@ -10,20 +10,18 @@ import java.util.Set;
 
 
 
-public class WorldFillTask implements Runnable
-{
+public class WorldFillTask implements Runnable {
 	// general task-related reference data
-	private Server server ;
-	private World world ;
+	private Server server;
+	private World world;
 	private BorderData border;
-	private WorldFileData worldData = null;
+	private WorldFileData worldData;
 	private boolean readyToGo = false;
 	private boolean paused = false;
 	private boolean pausedForMemory = false;
 	private int taskID = -1;
 	private int chunksPerRun;
 	private boolean continueNotice = false;
-	
 
 
 	// values for the spiral pattern check which fills out the map to the border
@@ -197,8 +195,8 @@ public class WorldFillTask implements Runnable
 	}
 
 	// step through chunks in spiral pattern from center; returns false if we're done, otherwise returns true
-	public boolean moveToNext()
-	{
+	public boolean moveToNext() {
+
 		if (paused || pausedForMemory)
 			return false;
 
@@ -231,20 +229,19 @@ public class WorldFillTask implements Runnable
 			x += (isNeg) ? -1 : 1;
 
 		// if we've been around one full loop (4 legs)...
-		if (isZLeg && isNeg && current == 0)
-		{	// see if we've been outside the border for the whole loop
-			if (!insideBorder)
-			{	// and finish if so
+		if (isZLeg && isNeg && current == 0) {    // see if we've been outside the border for the whole loop
+
+			if (!insideBorder) {    // and finish if so
 				finish();
 				return false;
-			}	// otherwise, reset the "inside border" flag
+			}    // otherwise, reset the "inside border" flag
 			else
 				insideBorder = false;
 		}
 		return true;
 
-	/* reference diagram used, should move in this pattern:
-	 *  8 [>][>][>][>][>] etc.
+		/* reference diagram used, should move in this pattern:
+		 *  8 [>][>][>][>][>] etc.
 	 * [^][6][>][>][>][>][>][6]
 	 * [^][^][4][>][>][>][4][v]
 	 * [^][^][^][2][>][2][v][v]
@@ -257,8 +254,7 @@ public class WorldFillTask implements Runnable
 	}
 
 	// for successful completion
-	public void finish()
-	{
+	public void finish() {
 		this.paused = true;
 		reportProgress();
 		world.save();
@@ -269,8 +265,7 @@ public class WorldFillTask implements Runnable
 	// for cancelling prematurely
 
 	// we're done, whether finished or cancelled
-	private void stop()
-	{
+	private void stop() {
 		if (server == null)
 			return;
 
@@ -280,8 +275,7 @@ public class WorldFillTask implements Runnable
 		server = null;
 
 		// go ahead and unload any chunks we still have loaded
-		while(!storedChunks.isEmpty())
-		{
+		while (!storedChunks.isEmpty()) {
 			CoordXZ coord = storedChunks.remove(0);
 			if (!originalChunks.contains(coord))
 				world.unloadChunkRequest(coord.x, coord.z);
@@ -294,8 +288,7 @@ public class WorldFillTask implements Runnable
 
 
 	// let the user know how things are coming along
-	private void reportProgress()
-	{
+	private void reportProgress() {
 		lastReport = System.currentTimeMillis();
 		double perc = getPercentageCompleted();
 		if (perc > 100) perc = 100;
@@ -304,8 +297,8 @@ public class WorldFillTask implements Runnable
 		reportNum = 0;
 
 		// go ahead and save world to disk every 30 seconds or so by default, just in case; can take a couple of seconds or more, so we don't want to run it too often
-		int fillAutoSaveFrequency=30;
-		if (lastAutosave + (fillAutoSaveFrequency* 1000) < lastReport)
+		int fillAutoSaveFrequency = 30;
+		if (lastAutosave + (fillAutoSaveFrequency * 1000) < lastReport)
 		{
 			lastAutosave = lastReport;
 			sendMessage("Saving the world to disk, just to be on the safe side.");
@@ -348,7 +341,7 @@ public class WorldFillTask implements Runnable
 	 * @return Percentage
 	 */
 	public double getPercentageCompleted() {
-		return ((double) (reportTotal + reportNum) / (double) reportTarget) * 100;
+		return Math.min(100, ((double) (reportTotal + reportNum) / (double) reportTarget) * 100);
 	}
 
 

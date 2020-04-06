@@ -91,13 +91,16 @@ public class EnchantmentListener implements Listener {
                 }
             }
             else if(Enchantment.DAMAGE_ALL.equals(e)){
-                if(item.getType().equals(Material.DIAMOND_SWORD)){
-                    if (!plg.isRole(RoleLG.TUEUR_EN_SERIE) && !plg.isRole(RoleLG.ASSASSIN)){
-                        tempEnchant.put(e,Math.min(enchant.get(e),main.config.getLimitSharpnessDiamond()));
-                    }
-                    else tempEnchant.put(e,Math.min(enchant.get(e),main.config.getLimitSharpnessDiamond()+1));
+                if (item.getType().equals(Material.DIAMOND_SWORD)) {
+                    if (!plg.isRole(RoleLG.TUEUR_EN_SERIE) && !plg.isRole(RoleLG.ASSASSIN)) {
+                        tempEnchant.put(e, Math.min(enchant.get(e), main.config.getLimitSharpnessDiamond()));
+                    } else tempEnchant.put(e, Math.min(enchant.get(e), main.config.getLimitSharpnessDiamond() + 1));
+                } else {
+                    if (!plg.isRole(RoleLG.TUEUR_EN_SERIE) && !plg.isRole(RoleLG.ASSASSIN)) {
+                        tempEnchant.put(e, Math.min(enchant.get(e), main.config.getLimitSharpnessIron()));
+                    } else
+                        tempEnchant.put(e, Math.min(enchant.get(e), Math.min(4, main.config.getLimitSharpnessIron() + 1)));
                 }
-                else tempEnchant.put(e,Math.min(enchant.get(e),main.config.getLimitSharpnessIron()));
             }
             else if(Enchantment.ARROW_KNOCKBACK.equals(e)){
                 if(main.config.getLimitPunch()==2){

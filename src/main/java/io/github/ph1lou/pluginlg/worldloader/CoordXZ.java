@@ -16,7 +16,6 @@ public class CoordXZ
 	{	// 1 chunk is 16x16 blocks
 		return blockVal >> 4;   // ">>4" == "/16"
 	}
-
 	public static int chunkToRegion(int chunkVal)
 	{	// 1 region is 32x32 chunks
 		return chunkVal >> 5;   // ">>5" == "/32"

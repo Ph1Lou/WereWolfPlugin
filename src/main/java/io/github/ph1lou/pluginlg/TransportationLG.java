@@ -2,6 +2,7 @@ package io.github.ph1lou.pluginlg;
 
 import io.github.ph1lou.pluginlg.enumlg.ScenarioLG;
 import io.github.ph1lou.pluginlg.enumlg.StateLG;
+import io.github.ph1lou.pluginlg.enumlg.TimerLG;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -9,14 +10,16 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.text.DecimalFormat;
 
-public class TransportationLG extends BukkitRunnable{
-	
+
+public class TransportationLG extends BukkitRunnable {
+
 	private final MainLG main;
-	private int i=0;
-	
+	private int i = 0;
+
 	public TransportationLG(MainLG main) {
-		this.main=main;
+		this.main = main;
 	}
 
 
@@ -99,8 +102,8 @@ public class TransportationLG extends BukkitRunnable{
 					for (Player p : Bukkit.getOnlinePlayers()) {
 						Title.sendTitle(p, 20, 20, 20, main.text.getText(89), main.text.getText(90));
 						p.playSound(p.getLocation(), Sound.NOTE_BASS, 1, 20);
-						p.sendMessage(main.text.getText(121));
 					}
+					Bukkit.broadcastMessage(String.format(main.text.getText(121), main.config.value.get(TimerLG.INVULNERABILITY)));
 					world.setTime(0);
 					main.optionlg.updateCompass();
 					main.optionlg.updateNameTag();
@@ -108,14 +111,23 @@ public class TransportationLG extends BukkitRunnable{
 					AutoStartLG start = new AutoStartLG(main);
 					start.runTaskTimer(main, 0, 5);
 					cancel();
-				}
-				else {
+				} else {
 					for (Player p : Bukkit.getOnlinePlayers()) {
-						Title.sendTitle(p, 25, 20, 25, "Start", "§b" + (10 - i + 2*main.playerLG.size()));
+						Title.sendTitle(p, 25, 20, 25, "Start", "§b" + (10 - i + 2 * main.playerLG.size()));
 						p.playSound(p.getLocation(), Sound.NOTE_PIANO, 1, 20);
 					}
 				}
 				i++;
+			} else {
+				for (Player p : Bukkit.getOnlinePlayers()) {
+					if (main.wft == null) {
+						if (p.isOp() || p.hasPermission("adminlg.use")) {
+							Title.sendActionBar(p, main.text.getText(164));
+						}
+					} else {
+						Title.sendActionBar(p, String.format(main.text.getText(222), new DecimalFormat("0.0").format(main.wft.getPercentageCompleted())));
+					}
+				}
 			}
 		}catch(Exception e){
 			Bukkit.broadcastMessage(main.text.getText(21));

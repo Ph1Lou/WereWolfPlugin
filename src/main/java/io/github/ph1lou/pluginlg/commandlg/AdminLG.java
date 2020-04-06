@@ -63,16 +63,16 @@ public class AdminLG implements TabExecutor {
 					sender.sendMessage(main.text.getText(120));
 					return true;
 				}
-				try{
+				try {
 					World world = Bukkit.getWorld("world");
 					main.setState(StateLG.TRANSPORTATION);
 					main.spark.updateDiscord();
 					world.setTime(0);
 					WorldBorder wb = world.getWorldBorder();
-					wb.setCenter(world.getSpawnLocation().getX(),world.getSpawnLocation().getZ());
+					wb.setCenter(world.getSpawnLocation().getX(), world.getSpawnLocation().getZ());
 					wb.setSize(main.config.border_value.get(BorderLG.BORDER_MAX));
-					wb.setWarningDistance((int) (wb.getSize()/7));
-				}catch(Exception e){
+					wb.setWarningDistance((int) (wb.getSize() / 7));
+				} catch (Exception e) {
 					sender.sendMessage(main.text.getText(21));
 				}
 				File file = new File(main.getDataFolder()+File.separator+"configs"+File.separator, "saveCurrent.json");
@@ -95,23 +95,22 @@ public class AdminLG implements TabExecutor {
 
 				StringBuilder sb2 = new StringBuilder();
 
-				for(String w:args) {
+				for (String w : args) {
 					sb2.append(w).append(" ");
 				}
 				sb2.replace(0, 4, "");
-				Bukkit.broadcastMessage(String.format(main.text.getText(136),sb2.toString()));
+				Bukkit.broadcastMessage(String.format(main.text.getText(136), sb2.toString()));
 				break;
-			case "pregen" :
-				int fillFrequency = 40;
-				if(main.wft==null){
-					main.wft =new WorldFillTask("world", fillFrequency / 20,main.config.border_value.get(BorderLG.BORDER_MAX));
+			case "pregen":
+				int chunksPerRun = 20;
+				if (main.wft == null) {
+					main.wft = new WorldFillTask("world", chunksPerRun, main.config.border_value.get(BorderLG.BORDER_MAX) / 2);
 					main.wft.setTaskID(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(main, main.wft, 1, 1));
-					sender.sendMessage("§e§l[LG UHC]§r WorldBorder map generation task for world \"" + "world"+ "\" started.");
-				}
-				else sender.sendMessage(main.text.getText(11));
+					sender.sendMessage("§e§l[LG UHC]§r WorldBorder map generation task for world \"" + "world" + "\" started.");
+				} else sender.sendMessage(main.text.getText(11));
 				break;
 
-			case "setgroup" :
+			case "setgroup":
 
 				if (!(sender instanceof Player )) {
 					sender.sendMessage(main.text.getText(140));
