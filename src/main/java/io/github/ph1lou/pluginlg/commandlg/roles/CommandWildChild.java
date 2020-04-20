@@ -14,9 +14,8 @@ public class CommandWildChild extends Commands {
 
     final MainLG main;
 
-    public CommandWildChild(MainLG main, String name) {
-        super(name);
-        this.main=main;
+    public CommandWildChild(MainLG main) {
+        this.main = main;
     }
 
     @Override

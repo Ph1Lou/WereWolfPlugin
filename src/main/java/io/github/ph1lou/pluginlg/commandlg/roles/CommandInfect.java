@@ -12,9 +12,8 @@ public class CommandInfect extends Commands {
 
     final MainLG main;
 
-    public CommandInfect(MainLG main, String name) {
-        super(name);
-        this.main=main;
+    public CommandInfect(MainLG main) {
+        this.main = main;
     }
 
     @Override
@@ -60,7 +59,7 @@ public class CommandInfect extends Commands {
             return;
         }
 
-        if (!main.config.tool_switch.get(ToolLG.AUTO_REZ_INFECT) && args[0].equals(playername) ) {
+        if (!main.config.configValues.get(ToolLG.AUTO_REZ_INFECT) && args[0].equals(playername)) {
             player.sendMessage(main.text.getText(105));
             return;
         }
@@ -85,7 +84,7 @@ public class CommandInfect extends Commands {
         plg.setPower(false);
 
         if(!plg1.isCamp(Camp.LG)) {
-            main.role_manage.newLG(args[0]);
+            main.roleManage.newLG(args[0]);
         }
         plg1.setCanBeInfect(false);
         player.sendMessage(String.format(main.text.powerHasBeenUse.get(RoleLG.INFECT),args[0]));

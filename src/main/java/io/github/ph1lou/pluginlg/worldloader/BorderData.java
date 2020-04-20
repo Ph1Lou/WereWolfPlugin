@@ -2,19 +2,18 @@ package io.github.ph1lou.pluginlg.worldloader;
 
 import java.text.DecimalFormat;
 
-public class BorderData
-{
-	// the main data interacted with
-	private double x ;
-	private double z ;
-	private int radiusX = 0;
-	private int radiusZ = 0;
+public class BorderData {
+    // the main data interacted with
+    private final double x;
+    private final double z;
+    private int radiusX = 0;
+    private int radiusZ = 0;
 
-	// some extra data kept handy for faster border checks
-	private double maxX;
-	private double minX;
-	private double maxZ;
-	private double minZ;
+    // some extra data kept handy for faster border checks
+    private double maxX;
+    private double minX;
+    private double maxZ;
+    private double minZ;
 
 
 

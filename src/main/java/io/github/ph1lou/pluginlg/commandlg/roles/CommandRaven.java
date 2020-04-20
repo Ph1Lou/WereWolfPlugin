@@ -16,9 +16,8 @@ public class CommandRaven extends Commands {
 
     final MainLG main;
 
-    public CommandRaven(MainLG main, String name) {
-        super(name);
-        this.main=main;
+    public CommandRaven(MainLG main) {
+        this.main = main;
     }
 
     @Override

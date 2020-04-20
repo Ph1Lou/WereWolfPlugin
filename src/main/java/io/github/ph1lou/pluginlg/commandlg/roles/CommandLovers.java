@@ -15,9 +15,8 @@ public class CommandLovers extends Commands {
 
     final MainLG main;
 
-    public CommandLovers(MainLG main, String name) {
-        super(name);
-        this.main=main;
+    public CommandLovers(MainLG main) {
+        this.main = main;
     }
 
     @Override
@@ -41,26 +40,26 @@ public class CommandLovers extends Commands {
             player.sendMessage(main.text.getText(68));
             return;
         }
-        if(!plg.isState(State.LIVING)){
+        if (!plg.isState(State.LIVING)) {
             player.sendMessage(main.text.getText(97));
             return;
         }
-        if(!main.config.tool_switch.get(ToolLG.DON_LOVERS)){
+        if (!main.config.configValues.get(ToolLG.DON_LOVERS)) {
             player.sendMessage(main.text.getText(259));
             return;
         }
-        if(plg.getCouple().isEmpty()){
-            player.sendMessage("§4§L[LG UHC]§r Vous n'ëtes pas en couple");
+        if (plg.getLovers().isEmpty()) {
+            player.sendMessage(main.text.getText(27));
             return;
         }
-        if (args.length!=1 && args.length!=2) {
-            player.sendMessage(String.format(main.text.getText(190),1));
+        if (args.length != 1 && args.length != 2) {
+            player.sendMessage(String.format(main.text.getText(190), 1));
             return;
         }
         int heart;
-        double life =player.getHealth();
+        double life = player.getHealth();
         try {
-            heart= Integer.parseInt(args[0]);
+            heart = Integer.parseInt(args[0]);
         } catch (NumberFormatException ignored) {
             player.sendMessage(main.text.getText(254));
             return;
@@ -72,32 +71,32 @@ public class CommandLovers extends Commands {
 
         if(args.length==1){
 
-            if(plg.getCouple().size()>heart){
+            if (plg.getLovers().size() > heart) {
                 player.sendMessage(main.text.getText(256));
                 return;
             }
 
             player.setHealth(life-heart);
-            for(String p:plg.getCouple()){
-                if(Bukkit.getPlayer(p)!=null){
-                    Player playerCouple=Bukkit.getPlayer(p);
-                    int don=heart/plg.getCouple().size();
-                    if(playerCouple.getMaxHealth()-playerCouple.getHealth()>=don){
-                        playerCouple.setHealth(playerCouple.getHealth()+don);
-                        playerCouple.sendMessage(String.format(main.text.getText(260),don,playername));
+            for (String p : plg.getLovers()) {
+                if (Bukkit.getPlayer(p) != null) {
+                    Player playerCouple = Bukkit.getPlayer(p);
+                    int don = heart / plg.getLovers().size();
+                    if (playerCouple.getMaxHealth() - playerCouple.getHealth() >= don) {
+                        playerCouple.setHealth(playerCouple.getHealth() + don);
+                        playerCouple.sendMessage(String.format(main.text.getText(260), don, playername));
                         playerCouple.playSound(playerCouple.getLocation(), Sound.PORTAL, 1, 20);
-                        heart-=don;
+                        heart -= don;
                     }
                 }
             }
             player.setHealth(player.getHealth()+heart);
         }
         else {
-            if(args[0].equals(playername)) {
+            if (args[1].equals(playername)) {
                 player.sendMessage(main.text.getText(105));
                 return;
             }
-            if(!plg.getCouple().contains(args[1])){
+            if (!plg.getLovers().contains(args[1])) {
                 player.sendMessage(main.text.getText(257));
                 return;
             }
@@ -107,9 +106,10 @@ public class CommandLovers extends Commands {
                 player.sendMessage(main.text.getText(106));
                 return;
             }
-            Player playerCouple=Bukkit.getPlayer(args[1]);
+            Player playerCouple = Bukkit.getPlayer(args[1]);
             if(playerCouple.getMaxHealth()-playerCouple.getHealth()>=heart){
-                playerCouple.setHealth(playerCouple.getHealth()+heart);
+                playerCouple.setHealth(playerCouple.getHealth() + heart);
+                playerCouple.sendMessage(String.format(main.text.getText(260), heart, playername));
             }
         }
     }

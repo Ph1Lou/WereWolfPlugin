@@ -15,9 +15,8 @@ public class CommandWitch extends Commands {
 
     final MainLG main;
 
-    public CommandWitch(MainLG main, String name) {
-        super(name);
-        this.main=main;
+    public CommandWitch(MainLG main) {
+        this.main = main;
     }
 
     @Override
@@ -62,7 +61,7 @@ public class CommandWitch extends Commands {
             return;
         }
 
-        if (!main.config.tool_switch.get(ToolLG.AUTO_REZ_WITCH) && args[0].equals(playername) ) {
+        if (!main.config.configValues.get(ToolLG.AUTO_REZ_WITCH) && args[0].equals(playername)) {
             player.sendMessage(main.text.getText(105));
             return;
         }

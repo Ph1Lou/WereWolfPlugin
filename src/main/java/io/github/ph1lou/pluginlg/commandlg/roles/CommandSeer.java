@@ -15,9 +15,8 @@ public class CommandSeer extends Commands {
 
     final MainLG main;
 
-    public CommandSeer(MainLG main, String name) {
-        super(name);
-        this.main=main;
+    public CommandSeer(MainLG main) {
+        this.main = main;
     }
 
     @Override

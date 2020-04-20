@@ -9,15 +9,14 @@ public class CommandTimer extends Commands {
 
     final MainLG main;
 
-    public CommandTimer(MainLG main, String name) {
-        super(name);
-        this.main=main;
+    public CommandTimer(MainLG main) {
+        this.main = main;
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
         for (TimerLG timer : TimerLG.values()) {
-            String time = main.score.conversion(main.config.value.get(timer));
+            String time = main.score.conversion(main.config.timerValues.get(timer));
             if (time.charAt(0) != '-') {
                 sender.sendMessage(String.format(main.text.translateTimer.get(timer), time));
             }

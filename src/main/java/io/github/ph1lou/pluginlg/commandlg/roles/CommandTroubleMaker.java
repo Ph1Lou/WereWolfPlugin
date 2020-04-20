@@ -13,9 +13,8 @@ import org.bukkit.entity.Player;
 public class CommandTroubleMaker extends Commands {
 
     final MainLG main;
-    public CommandTroubleMaker(MainLG main, String name) {
-        super(name);
-        this.main=main;
+    public CommandTroubleMaker(MainLG main) {
+        this.main = main;
     }
 
     @Override

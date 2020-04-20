@@ -8,9 +8,8 @@ public class CommandHelp extends Commands {
 
     final MainLG main;
 
-    public CommandHelp(MainLG main, String name) {
-        super(name);
-        this.main=main;
+    public CommandHelp(MainLG main) {
+        this.main = main;
     }
 
     @Override

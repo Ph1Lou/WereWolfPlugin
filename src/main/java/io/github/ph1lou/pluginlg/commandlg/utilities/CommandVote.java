@@ -9,9 +9,8 @@ public class CommandVote extends Commands {
 
     final MainLG main;
 
-    public CommandVote(MainLG main, String name) {
-        super(name);
-        this.main=main;
+    public CommandVote(MainLG main) {
+        this.main = main;
     }
 
     @Override

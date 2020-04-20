@@ -30,26 +30,20 @@ public class VoteLG {
 		if(!main.playerLG.containsKey(elector.getName())) {
 			elector.sendMessage(main.text.getText(67));
 		}
-		else if(!main.playerLG.get(elector.getName()).isState(State.LIVING)) {
-			elector.sendMessage(main.text.getText(155));
-		}
-		else if(main.config.value.get(TimerLG.VOTE_BEGIN)>0) {
-			elector.sendMessage(main.text.getText(156));
-		}	
-		else if(!main.config.tool_switch.get(ToolLG.VOTE)) {
-			elector.sendMessage(main.text.getText(157));
-		}
-		else if (main.score.getTimer()%(main.config.value.get(TimerLG.DAY_DURATION)*2) >= main.config.value.get(TimerLG.VOTE_DURATION) ){
-			elector.sendMessage(main.text.getText(158));
-		}	
-		else if (!main.playerLG.get(elector.getName()).getVotedPlayer().equals("")) {
-			elector.sendMessage(main.text.getText(159));
-		}
-		else if (!main.playerLG.containsKey(vote)){
-			elector.sendMessage(main.text.getText(132));
-		}
-		else if (main.playerLG.get(vote).isState(State.MORT)){
-			elector.sendMessage(main.text.getText(132));
+		else if (!main.playerLG.get(elector.getName()).isState(State.LIVING)) {
+            elector.sendMessage(main.text.getText(155));
+        } else if (main.config.timerValues.get(TimerLG.VOTE_BEGIN) > 0) {
+            elector.sendMessage(main.text.getText(156));
+        } else if (!main.config.configValues.get(ToolLG.VOTE)) {
+            elector.sendMessage(main.text.getText(157));
+        } else if (main.score.getTimer() % (main.config.timerValues.get(TimerLG.DAY_DURATION) * 2) >= main.config.timerValues.get(TimerLG.VOTE_DURATION)) {
+            elector.sendMessage(main.text.getText(158));
+        } else if (!main.playerLG.get(elector.getName()).getVotedPlayer().equals("")) {
+            elector.sendMessage(main.text.getText(159));
+        } else if (!main.playerLG.containsKey(vote)) {
+            elector.sendMessage(main.text.getText(132));
+        } else if (main.playerLG.get(vote).isState(State.MORT)) {
+            elector.sendMessage(main.text.getText(132));
 		}
 		else if (tempPlayer.contains(vote)){
 			elector.sendMessage(main.text.getText(161));

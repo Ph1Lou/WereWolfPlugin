@@ -62,19 +62,16 @@ public class EventsLG {
 			nb_target=2;
 		}
 		for (int i =0;i<nb_target;i++) {
-			
-			double a = Math.random()*2*Math.PI;
-			int x = (int) (Math.round(wb.getSize()/3*Math.cos(a)+world.getSpawnLocation().getX()));
-			int z = (int) (Math.round(wb.getSize()/3*Math.sin(a)+world.getSpawnLocation().getBlockZ()));
-			Location location=new Location(world,x,world.getHighestBlockYAt(x,z),z);
-			
-			if (i==0) {
-				createTarget(location,true);
-			}
-			else createTarget(location,false);
-			
+
+			double a = Math.random() * 2 * Math.PI;
+			int x = (int) (Math.round(wb.getSize() / 3 * Math.cos(a) + world.getSpawnLocation().getX()));
+			int z = (int) (Math.round(wb.getSize() / 3 * Math.sin(a) + world.getSpawnLocation().getBlockZ()));
+			Location location = new Location(world, x, world.getHighestBlockYAt(x, z), z);
+
+			createTarget(location, i == 0);
+
 			chest_location.add(location);
-			chest_has_been_open.put(location,false);
+			chest_has_been_open.put(location, false);
 		}
 		Bukkit.broadcastMessage(String.format(main.text.getText(36),nb_target));
 	}

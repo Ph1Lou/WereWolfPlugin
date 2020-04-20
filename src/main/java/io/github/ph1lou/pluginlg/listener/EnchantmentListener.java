@@ -62,8 +62,8 @@ public class EnchantmentListener implements Listener {
             result.removeEnchantment(e);
 
             if(Arrays.asList(Enchantment.ARROW_FIRE,Enchantment.FIRE_ASPECT).contains(e)){
-                if(!main.config.scenario.get(ScenarioLG.FIRE_LESS)){
-                    tempEnchant.put(e,enchant.get(e));
+                if (!main.config.scenarioValues.get(ScenarioLG.NO_FIRE_WEAPONS)) {
+                    tempEnchant.put(e, enchant.get(e));
                 }
             }
             else if(Enchantment.KNOCKBACK.equals(e)){

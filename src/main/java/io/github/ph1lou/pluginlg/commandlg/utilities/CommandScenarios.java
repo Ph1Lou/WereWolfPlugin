@@ -9,19 +9,17 @@ public class CommandScenarios extends Commands {
 
     final MainLG main;
 
-    public CommandScenarios(MainLG main, String name) {
-        super(name);
-        this.main=main;
+    public CommandScenarios(MainLG main) {
+        this.main = main;
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
 
         for (ScenarioLG scenario : ScenarioLG.values()) {
-            if (main.config.scenario.get(scenario)) {
+            if (main.config.scenarioValues.get(scenario)) {
                 sender.sendMessage(String.format(main.text.getText(169), main.text.translateScenario.get(scenario)));
-            }
-            else sender.sendMessage(String.format(main.text.getText(168), main.text.translateScenario.get(scenario)));
+            } else sender.sendMessage(String.format(main.text.getText(168), main.text.translateScenario.get(scenario)));
         }
     }
 }

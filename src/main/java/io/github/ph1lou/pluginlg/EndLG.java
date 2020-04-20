@@ -22,21 +22,25 @@ public class EndLG {
 
     public void check_victory() {
 
-        int player=main.score.getPlayerSize();
+        int player = main.score.getPlayerSize();
 
-        if(main.couple_manage.couple_range.size()==1) {
+        if (!main.loversManage.cursedLoversRange.isEmpty()) {
+            return;
+        }
 
-            Set<String> team = new HashSet<>(main.couple_manage.couple_range.get(0));
+        if (main.loversManage.loversRange.size() == 1) {
 
-            for(String p:main.playerLG.keySet()) {
-                if(main.playerLG.get(p).isState(State.JUDGEMENT)) return;
-                if (main.playerLG.get(p).isState(State.LIVING) && main.playerLG.get(p).isRole(RoleLG.CUPIDON) && main.couple_manage.couple_range.get(0).contains(main.playerLG.get(p).getAffectedPlayer().get(0))){
+            Set<String> team = new HashSet<>(main.loversManage.loversRange.get(0));
+
+            for (String p : main.playerLG.keySet()) {
+                if (main.playerLG.get(p).isState(State.JUDGEMENT)) return;
+                if (main.playerLG.get(p).isState(State.LIVING) && main.playerLG.get(p).isRole(RoleLG.CUPIDON) && main.loversManage.loversRange.get(0).contains(main.playerLG.get(p).getAffectedPlayer().get(0))) {
                     team.add(p);
                 }
             }
-            for(Set<String> teamange:getAngeTeam()){
-                for(String t:teamange){
-                    if(team.contains(t)){
+            for (Set<String> teamange : getAngeTeam()) {
+                for (String t : teamange) {
+                    if (team.contains(t)) {
                         team.addAll(teamange);
                         break;
                     }
@@ -49,7 +53,7 @@ public class EndLG {
             }
         }
 
-        if(main.config.tool_switch.get(ToolLG.VICTORY_COUPLE) && !main.couple_manage.couple_range.isEmpty()) {
+        if (main.config.configValues.get(ToolLG.VICTORY_COUPLE) && !main.loversManage.loversRange.isEmpty()) {
             return;
         }
 
@@ -93,7 +97,7 @@ public class EndLG {
 
         if(camp.equals(Camp.NEUTRAL)) {
 
-            if(!main.config.tool_switch.get(ToolLG.VICTORY_NEUTRAL) && player !=1 ) {
+            if (!main.config.configValues.get(ToolLG.VICTORY_NEUTRAL) && player != 1) {
                 return;
             }
             RoleLG role=null;
@@ -123,8 +127,9 @@ public class EndLG {
         main.setState(StateLG.FIN);
         main.spark.updateDiscord();
         main.score.getKillCounter();
+        main.score.updateBoard();
         Bukkit.broadcastMessage(String.format(main.text.getText(3), subtitles_victory));
-        main.config.tool_switch.put(ToolLG.CHAT,true);
+        main.config.configValues.put(ToolLG.CHAT, true);
 
         for(String p:main.playerLG.keySet()) {
 
@@ -140,16 +145,15 @@ public class EndLG {
                 }
                 else Bukkit.broadcastMessage(String.format(main.text.getText(10),p,main.text.translateRole.get(main.playerLG.get(p).getRole())));
             }
-            main.score.updateBoard();
         }
+
         for(Player player:Bukkit.getOnlinePlayers()) {
             Title.sendTitle(player,20,60, 20,String.format(main.text.getText(15),""), subtitles_victory);
-
             TextComponent msg = new TextComponent(main.text.getText(186));
             msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,"https://discord.gg/GXXCVUA"));
             player.spigot().sendMessage(msg);
-
         }
+
     }
 
 

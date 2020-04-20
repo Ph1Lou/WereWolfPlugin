@@ -16,9 +16,8 @@ public class CommandProtector extends Commands {
 
     final MainLG main;
 
-    public CommandProtector(MainLG main, String name) {
-        super(name);
-        this.main=main;
+    public CommandProtector(MainLG main) {
+        this.main = main;
     }
 
     @Override

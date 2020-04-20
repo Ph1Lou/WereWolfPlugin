@@ -74,9 +74,9 @@ public class MenuListener implements Listener{
 			else if(view.getTitle().equals(main.text.getText(178))){
 				event.setCancelled(true);
 				if(current.getType()==Material.STAINED_CLAY){
-					main.config.tool_switch.put(ToolLG.values()[(event.getSlot()-9)],!main.config.tool_switch.get(ToolLG.values()[(event.getSlot()-9)]));
-					main.optionlg.updateSelectionTool();
-				}	
+                    main.config.configValues.put(ToolLG.values()[(event.getSlot() - 9)], !main.config.configValues.get(ToolLG.values()[(event.getSlot() - 9)]));
+                    main.optionlg.updateSelectionTool();
+                }
 				else if(current.getType()==Material.COMPASS) {
 					main.optionlg.toolBar(player);
 				}
@@ -84,10 +84,10 @@ public class MenuListener implements Listener{
 
 			else if(view.getTitle().equals(main.text.getText(76))){
 				event.setCancelled(true);
-				if(current.getType()==Material.STAINED_CLAY){
-					main.config.scenario.put(ScenarioLG.values()[(event.getSlot()-9)],!main.config.scenario.get(ScenarioLG.values()[(event.getSlot()-9)]));
-					main.optionlg.updateSelectionScenario();
-				}
+				if(current.getType()==Material.STAINED_CLAY) {
+                    main.config.scenarioValues.put(ScenarioLG.values()[(event.getSlot() - 9)], !main.config.scenarioValues.get(ScenarioLG.values()[(event.getSlot() - 9)]));
+                    main.optionlg.updateSelectionScenario();
+                }
 				else if(current.getType()==Material.COMPASS) {
 					main.optionlg.toolBar(player);
 				}
@@ -101,19 +101,19 @@ public class MenuListener implements Listener{
 				if(current.getType()==Material.STAINED_CLAY){
 
 					if(event.getClick().isShiftClick()) {
-						player.setGameMode(GameMode.CREATIVE);
-						player.getInventory().clear();
-						int j = (event.getSlot()-9);
-						for(ItemStack i:main.stufflg.role_stuff.get(RoleLG.values()[j])) {
-							if(i!=null) {
-								player.getInventory().addItem(i);
-							}
-						}
-						TextComponent msg = new TextComponent(main.text.getText(198));
-						msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/adminlg stuffrole "+j));
-						player.spigot().sendMessage(msg);
-						player.closeInventory();
-					}
+                        player.setGameMode(GameMode.CREATIVE);
+                        player.getInventory().clear();
+                        int j = (event.getSlot() - 9);
+                        for (ItemStack i : main.stufflg.role_stuff.get(RoleLG.values()[j])) {
+                            if (i != null) {
+                                player.getInventory().addItem(i);
+                            }
+                        }
+                        TextComponent msg = new TextComponent(main.text.getText(198));
+                        msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/adminLG stuffRole " + j));
+                        player.spigot().sendMessage(msg);
+                        player.closeInventory();
+                    }
 					else if(event.getClick().isRightClick()){
 						main.optionlg.selectMinus(event.getSlot()-9);
 					}
@@ -218,31 +218,31 @@ public class MenuListener implements Listener{
 					main.optionlg.toolBar(player);
 				}
 				else if(current.getType()==Material.CHEST) {
-					player.setGameMode(GameMode.CREATIVE);
-					player.getInventory().clear();
-					for(ItemStack i:main.stufflg.getStartLoot()) {
-						if(i!=null) {
-							player.getInventory().addItem(i);
-						}
-					}
-					TextComponent msg = new TextComponent(main.text.getText(127));
-					msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/adminlg lootstart"));
-					player.spigot().sendMessage(msg);
-					player.closeInventory();
-				}
+                    player.setGameMode(GameMode.CREATIVE);
+                    player.getInventory().clear();
+                    for (ItemStack i : main.stufflg.getStartLoot()) {
+                        if (i != null) {
+                            player.getInventory().addItem(i);
+                        }
+                    }
+                    TextComponent msg = new TextComponent(main.text.getText(127));
+                    msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/adminLG lootStart"));
+                    player.spigot().sendMessage(msg);
+                    player.closeInventory();
+                }
 				else if(current.getType()==Material.ENDER_CHEST) {
-					player.setGameMode(GameMode.CREATIVE);
-					player.getInventory().clear();
-					for(ItemStack i:main.stufflg.getDeathLoot()) {
-						if(i!=null) {
-							player.getInventory().addItem(i);
-						}
-					}
-					TextComponent msg = new TextComponent(main.text.getText(128));
-					msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/adminlg lootdeath"));
-					player.spigot().sendMessage(msg);
-					player.closeInventory();
-				}
+                    player.setGameMode(GameMode.CREATIVE);
+                    player.getInventory().clear();
+                    for (ItemStack i : main.stufflg.getDeathLoot()) {
+                        if (i != null) {
+                            player.getInventory().addItem(i);
+                        }
+                    }
+                    TextComponent msg = new TextComponent(main.text.getText(128));
+                    msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/adminLG lootDeath"));
+                    player.spigot().sendMessage(msg);
+                    player.closeInventory();
+                }
 				else if(current.getType()==Material.EGG){
 					main.stufflg.loadStuffDefault();
 				}
@@ -328,45 +328,53 @@ public class MenuListener implements Listener{
 
 					main.optionlg.advancedTool(player);
 				}
-				else if(current.getType().equals(Material.POTION)){
-					if (event.getClick().isLeftClick()) {
-						main.config.setStrengthRate(main.config.getStrengthRate()+10);
-					}
-					else if(main.config.getStrengthRate()-10>=0) main.config.setStrengthRate(main.config.getStrengthRate()-10);
-					main.optionlg.advancedTool(player);
-				}
+				else if(current.getType().equals(Material.POTION)) {
+
+                    if (current.getDurability() == 8201) {
+                        if (event.getClick().isLeftClick()) {
+                            main.config.setStrengthRate(main.config.getStrengthRate() + 10);
+                        } else if (main.config.getStrengthRate() - 10 >= 0)
+                            main.config.setStrengthRate(main.config.getStrengthRate() - 10);
+                    } else if (current.getDurability() == 8227) {
+                        if (event.getClick().isLeftClick()) {
+                            main.config.setResistanceRate(main.config.getResistanceRate() + 2);
+                        } else if (main.config.getResistanceRate() - 2 >= 0)
+                            main.config.setResistanceRate(main.config.getResistanceRate() - 2);
+                    }
+                    main.optionlg.advancedTool(player);
+                }
 				else if(current.getType().equals(Material.EXP_BOTTLE)){
-					if (event.getClick().isLeftClick()) {
-						main.config.setXp_boost(main.config.getXp_boost()+10);
-					}
-					else if(main.config.getXp_boost()-10>=0) main.config.setXp_boost(main.config.getXp_boost()-10);
+                    if (event.getClick().isLeftClick()) {
+                        main.config.setXpBoost(main.config.getXpBoost() + 10);
+                    } else if (main.config.getXpBoost() - 10 >= 0)
+                        main.config.setXpBoost(main.config.getXpBoost() - 10);
 					main.optionlg.advancedTool(player);
 				}
 				else if(current.getType().equals(Material.APPLE)){
-					if (event.getClick().isLeftClick()) {
-						if(main.config.getApple_rate()+5<=100){
-							main.config.setApple_rate(main.config.getApple_rate()+5);
-						}
-					}
-					else if(main.config.getApple_rate()-5>=0) main.config.setApple_rate(main.config.getApple_rate()-5);
+                    if (event.getClick().isLeftClick()) {
+                        if (main.config.getAppleRate() + 5 <= 100) {
+                            main.config.setAppleRate(main.config.getAppleRate() + 5);
+                        }
+                    } else if (main.config.getAppleRate() - 5 >= 0)
+                        main.config.setAppleRate(main.config.getAppleRate() - 5);
 					main.optionlg.advancedTool(player);
 				}
 				else if(current.getType().equals(Material.FLINT)){
-					if (event.getClick().isLeftClick()) {
-						if(main.config.getFlint_rate()+5<=100){
-							main.config.setFlint_rate(main.config.getFlint_rate()+5);
-						}
-					}
-					else if(main.config.getFlint_rate()-5>=0) main.config.setFlint_rate(main.config.getFlint_rate()-5);
+                    if (event.getClick().isLeftClick()) {
+                        if (main.config.getFlintRate() + 5 <= 100) {
+                            main.config.setFlintRate(main.config.getFlintRate() + 5);
+                        }
+                    } else if (main.config.getFlintRate() - 5 >= 0)
+                        main.config.setFlintRate(main.config.getFlintRate() - 5);
 					main.optionlg.advancedTool(player);
 				}
 				else if(current.getType().equals(Material.ENDER_PEARL)){
-					if (event.getClick().isLeftClick()) {
-						if(main.config.getPearl_rate()+5<=100){
-							main.config.setPearl_rate(main.config.getPearl_rate()+5);
-						}
-					}
-					else if(main.config.getPearl_rate()-5>=0) main.config.setPearl_rate(main.config.getPearl_rate()-5);
+                    if (event.getClick().isLeftClick()) {
+                        if (main.config.getPearlRate() + 5 <= 100) {
+                            main.config.setPearlRate(main.config.getPearlRate() + 5);
+                        }
+                    } else if (main.config.getPearlRate() - 5 >= 0)
+                        main.config.setPearlRate(main.config.getPearlRate() - 5);
 					main.optionlg.advancedTool(player);
 				}
 				else if(current.getType().equals(Material.SKULL_ITEM)){
@@ -382,14 +390,29 @@ public class MenuListener implements Listener{
 					}
 					else if(main.config.getUseOfFlair()>0) main.config.setUseOfFlair(main.config.getUseOfFlair()-1);
 					main.optionlg.advancedTool(player);
-				}
-				else if(current.getType().equals(Material.GOLD_NUGGET)){
-					if (event.getClick().isLeftClick()) {
-						main.config.setGoldenAppleParticles((main.config.getGoldenAppleParticles()+1)%3);
-					}
-					else main.config.setGoldenAppleParticles((main.config.getGoldenAppleParticles()+2)%3);
-					main.optionlg.advancedTool(player);
-				}
+				} else if (current.getType().equals(Material.GOLD_NUGGET)) {
+                    if (event.getClick().isLeftClick()) {
+                        main.config.setGoldenAppleParticles((main.config.getGoldenAppleParticles() + 1) % 3);
+                    } else main.config.setGoldenAppleParticles((main.config.getGoldenAppleParticles() + 2) % 3);
+                    main.optionlg.advancedTool(player);
+                } else if (current.getType().equals(Material.WOOL)) {
+
+                    if (current.getDurability() == 1) {
+                        if (event.getClick().isLeftClick()) {
+                            main.config.setDistanceFox((main.config.getDistanceFox() + 5));
+                        } else if (main.config.getDistanceFox() - 5 > 0)
+                            main.config.setDistanceFox(main.config.getDistanceFox() - 5);
+                    } else if (current.getDurability() == 12) {
+                        if (event.getClick().isLeftClick()) {
+                            main.config.setDistanceBearTrainer((main.config.getDistanceBearTrainer() + 5));
+                        } else if (main.config.getDistanceBearTrainer() - 5 > 0)
+                            main.config.setDistanceBearTrainer(main.config.getDistanceBearTrainer() - 5);
+                    }
+                    main.optionlg.advancedTool(player);
+                } else if (current.getType().equals(Material.BREAD)) {
+                    main.config.setTrollSV(!main.config.isTrollSV());
+                    main.optionlg.advancedTool(player);
+                }
 			}
 			else if(view.getTitle().equals(main.text.getText(74))) {
 

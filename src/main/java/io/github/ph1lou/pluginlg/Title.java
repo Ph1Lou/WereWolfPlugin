@@ -8,8 +8,6 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class Title {
 
@@ -72,18 +70,4 @@ public class Title {
         IChatBaseComponent cbc = ChatSerializer.a("{\"text\": \"" + message + "\"}");
         p.getHandle().playerConnection.sendPacket(new PacketPlayOutChat(cbc,(byte) 2));
     }
-
-    private static final Map<String, EntityEnderDragon> dragons = new ConcurrentHashMap<>();
-
-
-    public static void removeBar(Player p) {
-
-        if(dragons.containsKey(p.getName())) {
-            PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(dragons.get(p.getName()).getId());
-            dragons.remove(p.getName());
-            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
-        }
-    }
-
-
 }

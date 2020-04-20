@@ -13,9 +13,8 @@ public class CommandRole extends Commands {
 
     final MainLG main;
 
-    public CommandRole(MainLG main, String name) {
-        super(name);
-        this.main=main;
+    public CommandRole(MainLG main) {
+        this.main = main;
     }
 
     @Override

@@ -7,14 +7,14 @@ import io.github.ph1lou.pluginlg.commandlg.CommandLG;
 import io.github.ph1lou.pluginlg.enumlg.Day;
 import io.github.ph1lou.pluginlg.enumlg.State;
 import io.github.ph1lou.pluginlg.enumlg.StateLG;
-import io.github.ph1lou.pluginlg.listener.*;
+import io.github.ph1lou.pluginlg.listener.ScenariosLG;
 import io.github.ph1lou.pluginlg.savelg.*;
+import io.github.ph1lou.pluginlg.tasks.LobbyTask;
 import io.github.ph1lou.pluginlg.worldloader.WorldFillTask;
 import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -28,82 +28,74 @@ public class MainLG extends JavaPlugin {
 
 	public Scoreboard board;
 	public final Map<UUID, FastBoard> boards = new HashMap<>();
-	public final Map<String, PlayerLG> playerLG = new HashMap<>();
-	private StateLG state;
-	private Day dayState;
-	public final CycleLG cycle = new CycleLG(this);
-	public final DeathManagementLG death_manage = new DeathManagementLG(this);
-	public final VoteLG vote = new VoteLG(this);
-	public final ScoreBoardLG score = new ScoreBoardLG(this);
-	public final EventsLG eventslg = new EventsLG(this);
-	public final OptionLG optionlg = new OptionLG(this);
-	public final ProximityLG proximity = new ProximityLG(this);
-	public final RoleManagementLG role_manage = new RoleManagementLG(this);
-	public final CoupleManagement couple_manage = new CoupleManagement(this);
-	public final SerializerLG serialize = new SerializerLG();
-	public final ConfigLG config = new ConfigLG();
-	public TextLG text = new TextLG();
-	public final EndLG endlg = new EndLG(this);
-	public final FileLG filelg = new FileLG();
-	public final StuffLG stufflg = new StuffLG(this);
-	public final LangLG lang = new LangLG(this);
-	public final SparkLG spark = new SparkLG(this);
-	public WorldFillTask wft;
+    public final Map<String, PlayerLG> playerLG = new HashMap<>();
+    private StateLG state;
+    private Day dayState;
+    public final CycleLG cycle = new CycleLG(this);
+    public final DeathManagementLG death_manage = new DeathManagementLG(this);
+    public final VoteLG vote = new VoteLG(this);
+    public final ScoreBoardLG score = new ScoreBoardLG(this);
+    public final EventsLG eventslg = new EventsLG(this);
+    public final OptionLG optionlg = new OptionLG(this);
+    public final ProximityLG proximity = new ProximityLG(this);
+    public final RoleManagementLG roleManage = new RoleManagementLG(this);
+    public final LoversManagement loversManage = new LoversManagement(this);
+    public final SerializerLG serialize = new SerializerLG();
+    public final ConfigLG config = new ConfigLG();
+    public TextLG text = new TextLG();
+    public final EndLG endlg = new EndLG(this);
+    public final FileLG filelg = new FileLG();
+    public final StuffLG stufflg = new StuffLG(this);
+    public final LangLG lang = new LangLG(this);
+    public final SparkLG spark = new SparkLG(this);
+    public final ScenariosLG scenarios = new ScenariosLG(this);
+    public WorldFillTask wft;
 
 
-	@Override
-	public void onEnable() {
-		Bukkit.getScheduler().runTask(this, this::enable);
-	}
+    @Override
+    public void onEnable() {
+        Bukkit.getScheduler().runTask(this, this::enable);
+    }
 
 
-	@Override
+    @Override
 	public void onLoad(){
 		WorldUtils.patchBiomes();
 	}
 
 	public void enable() {
-		saveDefaultConfig();
+        saveDefaultConfig();
 
-		setState(StateLG.LOBBY);
-		setDay(Day.DEFAULT);
-		lang.initLanguage();
-		optionlg.initInv();
-		config.getConfig(this,"saveCurrent");
-		stufflg.load("saveCurrent");
-		board = Bukkit.getScoreboardManager().getNewScoreboard();
-		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(new PlayerListener(this),this);
-		pm.registerEvents(new WorldListener(this),this);
-		pm.registerEvents(new MenuListener(this),this);
-		pm.registerEvents(new ScenarioListener(this),this);
-		pm.registerEvents(new EnchantmentListener(this),this);
-		pm.registerEvents(new ServerListener(this),this);
+        setState(StateLG.LOBBY);
+        setDay(Day.DEFAULT);
+        lang.initLanguage();
+        optionlg.initInv();
+        config.getConfig(this, "saveCurrent");
+        stufflg.load("saveCurrent");
+        board = Bukkit.getScoreboardManager().getNewScoreboard();
+        scenarios.init();
+        getCommand("lg").setExecutor(new CommandLG(this));
+        getCommand("adminLG").setExecutor(new AdminLG(this));
 
-		getCommand("lg").setExecutor(new CommandLG(this));
-		getCommand("adminlg").setExecutor(new AdminLG(this));
-		//Chunk per tick
+        new UpdateChecker(this, 73113).getVersion(version -> {
 
+            ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 
-		new UpdateChecker(this, 73113).getVersion(version -> {
-			
-			ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-			
             if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
-            	console.sendMessage(text.getText(2));
+                console.sendMessage(text.getText(2));
             } else {
-            	console.sendMessage(text.getText(185));
+                console.sendMessage(text.getText(185));
             }
-        });  
-		
-		setWorld();
-		
-		for(Player player:Bukkit.getOnlinePlayers()) {
-			joinPlayer(player) ;	
-		}
-		TransportationLG start = new TransportationLG(this);
-		start.runTaskTimer(this, 0, 20);
-	}
+        });
+
+        setWorld();
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            joinPlayer(player);
+        }
+        LobbyTask start = new LobbyTask(this);
+        start.runTaskTimer(this, 0, 20);
+    }
 	
 	private void setWorld() {
 
@@ -150,40 +142,46 @@ public class MainLG extends JavaPlugin {
 
 	public void joinPlayer(Player player) {
 
-		String playername = player.getName();
-		FastBoard fastboard = new FastBoard(player);
-		fastboard.updateTitle(text.getText(125));
+        String playerName = player.getName();
+        FastBoard fastboard = new FastBoard(player);
+        fastboard.updateTitle(text.getText(125));
         boards.put(player.getUniqueId(), fastboard);
-		Title.sendTabTitle(player, text.getText(125), text.getText(184));
-		new UpdateChecker(this, 73113).getVersion(version -> {
+        Title.sendTabTitle(player, text.getText(125), text.getText(184));
+        new UpdateChecker(this, 73113).getVersion(version -> {
             if (!this.getDescription().getVersion().equalsIgnoreCase(version)) {
-				Bukkit.getServer().getConsoleSender().sendMessage(text.getText(185));
+                player.sendMessage(text.getText(185));
             }
         });  
 		
 		if(isState(StateLG.LOBBY)) {
-			board.registerNewTeam(playername);
-			board.getTeam(playername).addEntry(playername);
-			player.setGameMode(GameMode.ADVENTURE);
-			player.sendMessage(text.getText(1));
-			player.teleport(player.getWorld().getSpawnLocation());
-			playerLG.put(playername, new PlayerLG(player));
-			player.setScoreboard(playerLG.get(playername).getScoreBoard());
-			score.addPlayerSize();
-			player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 0,false,false));
-		}
-		else if (!playerLG.containsKey(playername)) {
-			player.setGameMode(GameMode.SPECTATOR);
-			player.sendMessage(text.getText(38));
-		}
-		else {
-			player.setScoreboard(playerLG.get(playername).getScoreBoard());
-			if(playerLG.get(playername).isState(State.MORT)) {
-				player.setGameMode(GameMode.SPECTATOR);
-			}
-			else if (isState(StateLG.LG) &&  !playerLG.get(playername).hasKit()) {
-				role_manage.recoverRolePower(playername);
-			}
+            board.registerNewTeam(playerName);
+            board.getTeam(playerName).addEntry(playerName);
+            player.setGameMode(GameMode.ADVENTURE);
+            player.sendMessage(text.getText(1));
+            player.teleport(player.getWorld().getSpawnLocation());
+            playerLG.put(playerName, new PlayerLG(player));
+            player.setScoreboard(playerLG.get(playerName).getScoreBoard());
+            score.addPlayerSize();
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 0, false, false));
+        } else if (!playerLG.containsKey(playerName)) {
+            player.setGameMode(GameMode.SPECTATOR);
+            player.sendMessage(text.getText(38));
+        } else {
+            PlayerLG plg = playerLG.get(playerName);
+            player.setScoreboard(playerLG.get(playerName).getScoreBoard());
+            if (plg.isState(State.MORT)) {
+                player.setGameMode(GameMode.SPECTATOR);
+            } else if (isState(StateLG.LG)) {
+                if (!plg.hasKit()) {
+                    roleManage.recoverRolePower(playerName);
+                }
+                if (plg.getAnnounceCursedLoversAFK()) {
+                    loversManage.announceCursedLovers(player);
+                }
+                if (plg.getAnnounceLoversAFK()) {
+                    loversManage.announceLovers(player);
+                }
+            }
 		}
 		if(isState(StateLG.FIN)){
 			fastboard.updateLines(score.scoreboard3);

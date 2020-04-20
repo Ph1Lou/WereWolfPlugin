@@ -14,9 +14,8 @@ public class CommandFallenAngel extends Commands {
 
     final MainLG main;
 
-    public CommandFallenAngel(MainLG main, String name) {
-        super(name);
-        this.main=main;
+    public CommandFallenAngel(MainLG main) {
+        this.main = main;
     }
 
     @Override

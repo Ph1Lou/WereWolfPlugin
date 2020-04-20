@@ -15,9 +15,8 @@ public class CommandDetective extends Commands {
 
     final MainLG main;
 
-    public CommandDetective(MainLG main, String name) {
-        super(name);
-        this.main=main;
+    public CommandDetective(MainLG main) {
+        this.main = main;
     }
 
     @Override

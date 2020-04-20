@@ -8,10 +8,12 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -20,31 +22,34 @@ public class PlayerLG{
 	private State state = State.LIVING;
 	private Camp camp = Camp.VILLAGE;
 	private Camp posterCamp = Camp.LG;
-	private RoleLG role=RoleLG.VILLAGEOIS;
-	private RoleLG posterRole =RoleLG.LOUP_FEUTRE;
-	private Boolean power=true;
-	private Boolean canBeInfect =false;
-	private Boolean damn =false;
-	private Boolean salvation =false;
-	private Boolean hasBeenStolen =false;
-	private Boolean thief =false;
-	private Boolean kit=false;
+	private RoleLG role = RoleLG.VILLAGEOIS;
+	private RoleLG posterRole = RoleLG.LOUP_FEUTRE;
+	private Boolean power = true;
+	private Boolean canBeInfect = false;
+	private Boolean damn = false;
+	private Boolean salvation = false;
+	private Boolean hasBeenStolen = false;
+	private final List<String> lovers = new ArrayList<>();
+	private final List<PotionEffectType> comedianEffects = new ArrayList<>(Collections.singletonList(PotionEffectType.BLINDNESS));
+	private Boolean thief = false;
+	private Boolean kit = false;
 	private transient Scoreboard board;
 	private final List<String> affectedPlayer = new ArrayList<>();
 	private final List<String> disciple = new ArrayList<>();
 	private final List<String> targetOf = new ArrayList<>();
-	private final List<String> couple = new ArrayList<>();
+	private Boolean announceCursedLoversAFK = false;
+	private Boolean announceLoversAFK = false;
 	private final List<ItemStack> itemsDeath = new ArrayList<>();
+	private String cursedLovers = "";
 	private transient Location spawn;
-	private int deathTime =0;
-	private int use=0;
-	private int vote=0;
-	private int diamondLimit =0;
-	private int lostHeart =0;
-	private int kill =0;
+	private int deathTime = 0;
+	private int use = 0;
+	private int vote = 0;
+	private int lostHeart = 0;
+	private int kill = 0;
 	private float flair = 0;
-	private String killer="";
-	private String playerVote ="";
+	private String killer = "";
+	private String playerVote = "";
 
 	public PlayerLG(Player player) {
 		board = Bukkit.getScoreboardManager().getNewScoreboard();
@@ -57,7 +62,6 @@ public class PlayerLG{
 		player.setHealth(20);
 		player.setExp(0);
 		player.setLevel(0);
-		player.getInventory().clear();
 		player.getInventory().clear();
 		player.getInventory().setHelmet(null);
 		player.getInventory().setChestplate(null);
@@ -248,32 +252,33 @@ public class PlayerLG{
 	public List<String> getAffectedPlayer() {
 		return(this.affectedPlayer);
 	}
-	
+
 	public void addTargetOf(String player) {
 		this.targetOf.add(player);
 	}
-	
+
 	public List<String> getTargetOf() {
-		return(this.targetOf);
-	}
-	
-	public void addCouple(String c) {
-		this.couple.add(c);
+		return (this.targetOf);
 	}
 
-	public void clearCouple() {
-		this.couple.clear();
+	public void addLover(String c) {
+		this.lovers.add(c);
 	}
-	
-	public List<String> getCouple() {
-		return(this.couple);
+
+	public void clearLovers() {
+		this.lovers.clear();
 	}
+
+	public List<String> getLovers() {
+		return (this.lovers);
+	}
+
 	public void setKiller(String killer) {
-		this.killer=killer;
+		this.killer = killer;
 	}
-	
+
 	public String getKiller() {
-		return(this.killer);
+		return (this.killer);
 	}
 
 	public void setPosterRole(RoleLG roleLG) {
@@ -291,14 +296,6 @@ public class PlayerLG{
 	public int getDeathTime() {
 		return(this.deathTime);
 	}
-	
-	public void incDiamondLimit() {
-		this.diamondLimit +=1;
-	}
-	
-	public int getDiamondLimit() {
-		return(this.diamondLimit);
-	}
 
 	public void setCanBeInfect(Boolean b) {
 		this.canBeInfect =b;
@@ -307,6 +304,7 @@ public class PlayerLG{
 	public Boolean canBeInfect() {
 		return(this.canBeInfect);
 	}
+
 	public void addDisciple(String disciple) {
 		this.disciple.add(disciple);
 	}
@@ -324,11 +322,11 @@ public class PlayerLG{
 	}
 
 	public void clearLostHeart() {
-		this.lostHeart =0;
+		this.lostHeart = 0;
 	}
 
-	public void removeCouple(String playername) {
-		this.couple.remove(playername);
+	public void removeLover(String playername) {
+		this.lovers.remove(playername);
 	}
 
 	public int getUse() {
@@ -337,6 +335,47 @@ public class PlayerLG{
 
 	public void setUse(int use) {
 		this.use = use;
+	}
+
+	public List<PotionEffectType> getPotionEffects() {
+		return comedianEffects;
+	}
+
+	public PotionEffectType getLastPotionEffect() {
+		return comedianEffects.get(comedianEffects.size() - 1);
+	}
+
+	public void addPotionEffect(PotionEffectType comedianEffect) {
+		this.comedianEffects.add(comedianEffect);
+	}
+
+	public String getCursedLovers() {
+		return cursedLovers;
+	}
+
+	public void setCursedLover(String c) {
+		this.cursedLovers = c;
+	}
+
+	public void clearCursedLovers() {
+		this.cursedLovers = "";
+	}
+
+
+	public Boolean getAnnounceCursedLoversAFK() {
+		return announceCursedLoversAFK;
+	}
+
+	public void setAnnounceCursedLoversAFK(Boolean announceCursedLoversAFK) {
+		this.announceCursedLoversAFK = announceCursedLoversAFK;
+	}
+
+	public Boolean getAnnounceLoversAFK() {
+		return announceLoversAFK;
+	}
+
+	public void setAnnounceLoversAFK(Boolean announceLoversAFK) {
+		this.announceLoversAFK = announceLoversAFK;
 	}
 }
 

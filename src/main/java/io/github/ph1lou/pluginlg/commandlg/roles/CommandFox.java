@@ -15,9 +15,8 @@ public class CommandFox extends Commands {
 
     final MainLG main;
 
-    public CommandFox(MainLG main, String name) {
-        super(name);
-        this.main=main;
+    public CommandFox(MainLG main) {
+        this.main = main;
     }
 
     @Override
@@ -75,11 +74,10 @@ public class CommandFox extends Commands {
         Location location = player.getLocation();
         Location locationTarget = Bukkit.getPlayer(args[0]).getLocation();
 
-        if(location.distance(locationTarget)>20) {
+        if (location.distance(locationTarget) > main.config.getDistanceFox()) {
             player.sendMessage(main.text.getText(111));
             return;
-        }
-        else if (plg.getUse()>=main.config.getUseOfFlair()){
+        } else if (plg.getUse() >= main.config.getUseOfFlair()) {
             player.sendMessage(main.text.getText(103));
             return;
         }

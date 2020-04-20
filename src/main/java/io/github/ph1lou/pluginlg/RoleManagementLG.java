@@ -24,21 +24,21 @@ public class RoleManagementLG {
 	}
 	
 	public void repartitionRolesLG() {
-		
+
 		List<String> players = new ArrayList<>(main.playerLG.keySet());
 		List<RoleLG> config = new ArrayList<>();
-		main.config.tool_switch.put(ToolLG.CHAT,false);
-		main.config.role_count.put(RoleLG.VILLAGEOIS,main.config.role_count.get(RoleLG.VILLAGEOIS)+players.size()-main.score.getRole());
+		main.config.configValues.put(ToolLG.CHAT, false);
+		main.config.roleCount.put(RoleLG.VILLAGEOIS, main.config.roleCount.get(RoleLG.VILLAGEOIS) + players.size() - main.score.getRole());
 
-		for(RoleLG role:RoleLG.values()) {
-			for(int i = 0; i<main.config.role_count.get(role); i++) {
-				if(!role.equals(RoleLG.COUPLE)) {
+		for (RoleLG role : RoleLG.values()) {
+			for (int i = 0; i < main.config.roleCount.get(role); i++) {
+				if (!role.equals(RoleLG.COUPLE) && !role.equals(RoleLG.COUPLE_MAUDIT)) {
 					config.add(role);
 				}
 			}
 		}
 
-		while(!players.isEmpty()) {
+		while (!players.isEmpty()) {
 			
 			int n =(int) Math.floor(r.nextFloat()*players.size());
 			String playername = players.get(n);
@@ -94,13 +94,13 @@ public class RoleManagementLG {
 			player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,Integer.MAX_VALUE,-1,false,false));
 		}	
 		else if (plg.isRole(RoleLG.ENFANT_SAUVAGE)) {
-			player.sendMessage(String.format(main.text.powerUse.get(RoleLG.ENFANT_SAUVAGE),main.score.conversion(main.config.value.get(TimerLG.MASTER_DURATION))));
+			player.sendMessage(String.format(main.text.powerUse.get(RoleLG.ENFANT_SAUVAGE), main.score.conversion(main.config.timerValues.get(TimerLG.MASTER_DURATION))));
 		}
 		else if (plg.isRole(RoleLG.CUPIDON)) {
-			player.sendMessage(String.format(main.text.powerUse.get(RoleLG.CUPIDON),main.score.conversion(main.config.value.get(TimerLG.COUPLE_DURATION))));
+			player.sendMessage(String.format(main.text.powerUse.get(RoleLG.CUPIDON), main.score.conversion(main.config.timerValues.get(TimerLG.COUPLE_DURATION))));
 		}
 		else if (plg.isRole(RoleLG.ANGE)) {
-			player.sendMessage(String.format(main.text.powerUse.get(RoleLG.ANGE),main.score.conversion(main.config.value.get(TimerLG.ANGE_DURATION))));
+			player.sendMessage(String.format(main.text.powerUse.get(RoleLG.ANGE), main.score.conversion(main.config.timerValues.get(TimerLG.ANGE_DURATION))));
 		}
 		if(plg.isRole(RoleLG.ANGE_DECHU) || plg.isRole(RoleLG.ANGE_GARDIEN) || plg.isRole(RoleLG.ANGE)) {
 			player.setMaxHealth(24);
@@ -116,16 +116,16 @@ public class RoleManagementLG {
 		if (main.playerLG.get(playername).isRole(RoleLG.VOYANTE) || main.playerLG.get(playername).isRole(RoleLG.VOYANTE_BAVARDE) || main.playerLG.get(playername).isRole(RoleLG.PETITE_FILLE) || main.playerLG.get(playername).isCamp(Camp.LG)) {
 			effect.add(PotionEffectType.NIGHT_VISION);
 		}
-		if((main.playerLG.get(playername).isRole(RoleLG.VOLEUR) || (main.playerLG.get(playername).isRole(RoleLG.ANCIEN))  && main.playerLG.get(playername).hasPower())){
+		if ((main.playerLG.get(playername).isRole(RoleLG.VOLEUR) || (main.playerLG.get(playername).isRole(RoleLG.ANCIEN)) && main.playerLG.get(playername).hasPower())) {
 			effect.add(PotionEffectType.DAMAGE_RESISTANCE);
 		}
-		if(main.playerLG.get(playername).isRole(RoleLG.MINEUR)){
+		if (main.playerLG.get(playername).isRole(RoleLG.MINEUR)) {
 			effect.add(PotionEffectType.FAST_DIGGING);
 		}
 		if (main.playerLG.get(playername).isRole(RoleLG.RENARD) || main.playerLG.get(playername).isRole(RoleLG.VILAIN_PETIT_LOUP)) {
 			effect.add(PotionEffectType.SPEED);
 		}
-		if(main.config.scenario.get(ScenarioLG.CAT_EYES)){
+		if (main.config.scenarioValues.get(ScenarioLG.CAT_EYES)) {
 			effect.add(PotionEffectType.NIGHT_VISION);
 		}
 		return effect;
@@ -151,19 +151,22 @@ public class RoleManagementLG {
 		}
 		
 		if (Bukkit.getPlayer(killername)!=null) {
-			
+
 			Player killer = Bukkit.getPlayer(killername);
-			
-			killer.sendMessage(String.format(main.text.powerHasBeenUse.get(RoleLG.VOLEUR),main.text.translateRole.get(role)));
+
+			killer.sendMessage(String.format(main.text.powerHasBeenUse.get(RoleLG.VOLEUR), main.text.translateRole.get(role)));
 			killer.sendMessage(main.text.getText(43));
-			killer.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-			
+			if (!klg.hasSalvation()) {
+				killer.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+			}
+
+
 			if (klg.isRole(RoleLG.VILAIN_PETIT_LOUP) || klg.isRole(RoleLG.RENARD)) {
 				killer.removePotionEffect(PotionEffectType.SPEED);
 			}
-			
-			for(PotionEffectType p:effect_recover(killername)) {
-				killer.addPotionEffect(new PotionEffect(p,Integer.MAX_VALUE,0,false,false));
+
+			for (PotionEffectType p : effect_recover(killername)) {
+				killer.addPotionEffect(new PotionEffect(p, Integer.MAX_VALUE, 0, false, false));
 			}
 			
 			if (klg.isRole(RoleLG.LOUP_GAROU_BLANC)) {
@@ -182,7 +185,7 @@ public class RoleManagementLG {
 			if (klg.isRole(RoleLG.ENFANT_SAUVAGE)) {
 				
 				if(klg.hasPower()) {
-					killer.sendMessage(String.format(main.text.powerUse.get(RoleLG.ENFANT_SAUVAGE),main.score.conversion(main.config.value.get(TimerLG.MASTER_DURATION))));
+					killer.sendMessage(String.format(main.text.powerUse.get(RoleLG.ENFANT_SAUVAGE), main.score.conversion(main.config.timerValues.get(TimerLG.MASTER_DURATION))));
 				}
 				else {
 					String mastername = plg.getAffectedPlayer().get(0);
@@ -193,7 +196,7 @@ public class RoleManagementLG {
 					main.playerLG.get(mastername).removeDisciple(playername);
 					
 					if(mastername.equals(killername)) {
-						main.role_manage.newLG(killername);
+						main.roleManage.newLG(killername);
 					}
 					else killer.sendMessage(String.format(main.text.powerHasBeenUse.get(RoleLG.ENFANT_SAUVAGE),mastername));
 				}
@@ -201,7 +204,7 @@ public class RoleManagementLG {
 			if (klg.isRole(RoleLG.CUPIDON)) {
 				
 				if(klg.hasPower()) {
-					killer.sendMessage(String.format(main.text.powerUse.get(RoleLG.CUPIDON),main.score.conversion(main.config.value.get(TimerLG.COUPLE_DURATION))));
+					killer.sendMessage(String.format(main.text.powerUse.get(RoleLG.CUPIDON), main.score.conversion(main.config.timerValues.get(TimerLG.COUPLE_DURATION))));
 				}
 				else {
 					klg.addAffectedPlayer(plg.getAffectedPlayer().get(0));
@@ -220,7 +223,7 @@ public class RoleManagementLG {
 				killer.sendMessage(String.format(main.text.getText(15),main.text.translateRole.get(klg.getRole())));
 			}
 			if (klg.isRole(RoleLG.ANGE)) {
-				killer.sendMessage(String.format(main.text.powerUse.get(RoleLG.ANGE),main.score.conversion(main.config.value.get(TimerLG.ANGE_DURATION))));
+				killer.sendMessage(String.format(main.text.powerUse.get(RoleLG.ANGE), main.score.conversion(main.config.timerValues.get(TimerLG.ANGE_DURATION))));
 				killer.setMaxHealth(24);
 			}
 			if (klg.isRole(RoleLG.TUEUR_EN_SERIE)) {
@@ -235,46 +238,69 @@ public class RoleManagementLG {
 				plg.clearAffectedPlayer();
 				
 				if(main.playerLG.get(klg.getAffectedPlayer().get(0)).isState(State.MORT) || klg.getAffectedPlayer().get(0).equals(killername)) {
-					if(klg.isRole(RoleLG.ANGE_DECHU)) {
+					if (klg.isRole(RoleLG.ANGE_DECHU)) {
 						killer.setMaxHealth(30);
 					}
-				}
-				else {
+				} else {
 					killer.setMaxHealth(24);
 				}
-				killer.sendMessage(String.format(main.text.powerHasBeenUse.get(klg.getRole()),klg.getAffectedPlayer().get(0)));
+				killer.sendMessage(String.format(main.text.powerHasBeenUse.get(klg.getRole()), klg.getAffectedPlayer().get(0)));
 
 			}
-			if(!plg.getCouple().isEmpty()) {
-				
-				for(String c:plg.getCouple()) {
+			if (!plg.getLovers().isEmpty()) {
 
+				for (String c : plg.getLovers()) {
 
-					if(!klg.getCouple().contains(c)) {
-						
-						klg.addCouple(c);
-						main.playerLG.get(c).addCouple(killername);
-						main.playerLG.get(c).removeCouple(playername);
-						if(Bukkit.getPlayer(c)!=null) {
+					if (!klg.getLovers().contains(c)) {
+
+						klg.addLover(c);
+						main.playerLG.get(c).addLover(killername);
+						main.playerLG.get(c).removeLover(playername);
+						if (Bukkit.getPlayer(c) != null) {
 							Player pc = Bukkit.getPlayer(c);
-							pc.sendMessage(String.format(main.text.description.get(RoleLG.COUPLE),killername));
-							pc.playSound(pc.getLocation(), Sound.SHEEP_SHEAR,1,20);
+							pc.sendMessage(String.format(main.text.description.get(RoleLG.COUPLE), killername));
+							pc.playSound(pc.getLocation(), Sound.SHEEP_SHEAR, 1, 20);
 						}
-						killer.sendMessage(String.format(main.text.description.get(RoleLG.COUPLE),c));
-						killer.playSound(killer.getLocation(), Sound.SHEEP_SHEAR,1,20);
+						killer.sendMessage(String.format(main.text.description.get(RoleLG.COUPLE), c));
+						killer.playSound(killer.getLocation(), Sound.SHEEP_SHEAR, 1, 20);
 					}
 				}
-				if(!klg.getCouple().contains(killername)){
-					plg.clearCouple();
+				if (!klg.getLovers().contains(killername)) {
+					plg.clearLovers();
 				}
-				
-				for(String cup:main.playerLG.keySet()) {
-					if(main.playerLG.get(cup).isRole(RoleLG.CUPIDON) && main.playerLG.get(cup).getAffectedPlayer().contains(playername)) {
+
+				for (String cup : main.playerLG.keySet()) {
+					if (main.playerLG.get(cup).isRole(RoleLG.CUPIDON) && main.playerLG.get(cup).getAffectedPlayer().contains(playername)) {
 						main.playerLG.get(cup).addAffectedPlayer(killername);
 						main.playerLG.get(cup).removeAffectedPlayer(playername);
 					}
 				}
-				main.couple_manage.thiefCoupleRange(killername,playername);
+				main.loversManage.thiefLoversRange(killername, playername);
+			}
+			//Si le voleur est déjà en couple maudit, il ne le vole pas
+
+			if (!plg.getCursedLovers().isEmpty() && klg.getCursedLovers().isEmpty()) {
+				String c = plg.getCursedLovers();
+
+				klg.setCursedLover(c);
+				main.playerLG.get(c).setCursedLover(killername);
+				if (Bukkit.getPlayer(c) != null) {
+					Player pc = Bukkit.getPlayer(c);
+					pc.sendMessage(String.format(main.text.description.get(RoleLG.COUPLE_MAUDIT), killername));
+					pc.playSound(pc.getLocation(), Sound.SHEEP_SHEAR, 1, 20);
+				}
+				killer.sendMessage(String.format(main.text.description.get(RoleLG.COUPLE_MAUDIT), c));
+				killer.playSound(killer.getLocation(), Sound.SHEEP_SHEAR, 1, 20);
+				killer.setMaxHealth(killer.getMaxHealth() + 1);
+
+				for (int i = 0; i < main.loversManage.cursedLoversRange.size(); i++) {
+					if (main.loversManage.cursedLoversRange.get(i).contains(playername)) {
+						main.loversManage.cursedLoversRange.get(i).add(killername);
+						main.loversManage.cursedLoversRange.get(i).remove(playername);
+						break;
+					}
+				}
+
 			}
 		}
 		main.death_manage.death(playername);
@@ -375,18 +401,18 @@ public class RoleManagementLG {
 	
 	
 	public void newLG(String playername) {
-		
-		if(main.config.tool_switch.get(ToolLG.LG_LIST) && main.config.value.get(TimerLG.LG_LIST)<0) {
+
+		if (main.config.configValues.get(ToolLG.LG_LIST) && main.config.timerValues.get(TimerLG.LG_LIST) < 0) {
 
 			main.board.getTeam(playername).setPrefix("§4");
 			main.playerLG.get(playername).setScoreBoard(main.board);
 
-			for(String lgName : main.playerLG.keySet()) {
-			
-				if((main.playerLG.get(lgName).isCamp(Camp.LG) || main.playerLG.get(lgName).isRole(RoleLG.LOUP_GAROU_BLANC) )&& main.playerLG.get(lgName).isState(State.LIVING) && Bukkit.getPlayer(lgName)!=null ) {
+			for (String lgName : main.playerLG.keySet()) {
+
+				if ((main.playerLG.get(lgName).isCamp(Camp.LG) || main.playerLG.get(lgName).isRole(RoleLG.LOUP_GAROU_BLANC)) && main.playerLG.get(lgName).isState(State.LIVING) && Bukkit.getPlayer(lgName) != null) {
 					Player lg1 = Bukkit.getPlayer(lgName);
 					lg1.sendMessage(main.text.getText(50));
-					lg1.playSound(lg1.getLocation(),Sound.WOLF_HOWL, 1, 20);
+					lg1.playSound(lg1.getLocation(), Sound.WOLF_HOWL, 1, 20);
 				}
 			}
 		}
@@ -416,13 +442,15 @@ public class RoleManagementLG {
 
 			if((lg.isCamp(Camp.LG) || lg.isRole(RoleLG.LOUP_GAROU_BLANC)) && lg.isState(State.LIVING)) {
 
-				main.board.getTeam(lgName).setPrefix("§4");
+				if (main.config.configValues.get(ToolLG.RED_NAME_TAG)) {
+					main.board.getTeam(lgName).setPrefix("§4");
+				}
 				lg.setScoreBoard(main.board);
 
-				if(Bukkit.getPlayer(lgName)!=null) {
+				if (Bukkit.getPlayer(lgName) != null) {
 					Player player = Bukkit.getPlayer(lgName);
 					player.sendMessage(main.text.getText(52));
-					player.playSound(player.getLocation(),Sound.WOLF_HOWL, 1, 20);
+					player.playSound(player.getLocation(), Sound.WOLF_HOWL, 1, 20);
 					player.setScoreboard(main.board);
 				}
 			}	

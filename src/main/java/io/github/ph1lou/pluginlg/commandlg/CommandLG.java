@@ -7,77 +7,68 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 
 public class CommandLG implements TabExecutor {
-	
-	final MainLG main;
-	private final List<Commands> listCommands=new ArrayList<>();
-	private final List<String> tab = new ArrayList<>();
 
-	public CommandLG(MainLG main) {
-		this.main=main;
-		listCommands.add(new CommandSeer(main,main.text.getText(230)));
-		listCommands.add(new CommandCupid(main,main.text.getText(231)));
-		listCommands.add(new CommandDetective(main,main.text.getText(232)));
-		listCommands.add(new CommandFallenAngel(main,main.text.getText(233)));
-		listCommands.add(new CommandFox(main,main.text.getText(234)));
-		listCommands.add(new CommandGuardianAngel(main,main.text.getText(235)));
-		listCommands.add(new CommandInfect(main,main.text.getText(236)));
-		listCommands.add(new CommandLovers(main,main.text.getText(237)));
-		listCommands.add(new CommandProtector(main,main.text.getText(238)));
-		listCommands.add(new CommandRaven(main,main.text.getText(239)));
-		listCommands.add(new CommandCitizenCancelVote(main,main.text.getText(240)));
-		listCommands.add(new CommandCitizenSeeVote(main,main.text.getText(241)));
-		listCommands.add(new CommandTroubleMaker(main,main.text.getText(242)));
-		listCommands.add(new CommandWereWolf(main,main.text.getText(243)));
-		listCommands.add(new CommandWildChild(main,main.text.getText(244)));
-		listCommands.add(new CommandCompo(main,main.text.getText(245)));
-		listCommands.add(new CommandHelp(main,main.text.getText(246)));
-		listCommands.add(new CommandRole(main,main.text.getText(247)));
-		listCommands.add(new CommandRules(main,main.text.getText(248)));
-		listCommands.add(new CommandScenarios(main,main.text.getText(249)));
-		listCommands.add(new CommandStuff(main,main.text.getText(250)));
-		listCommands.add(new CommandTimer(main,main.text.getText(251)));
-		listCommands.add(new CommandVote(main,main.text.getText(252)));
-		listCommands.add(new CommandWitch(main,main.text.getText(253)));
-		for(Commands c:listCommands){
-			tab.add(c.getName());
-		}
-	}
+    final MainLG main;
+    private final Map<String, Commands> listCommands = new HashMap<>();
+
+
+    public CommandLG(MainLG main) {
+        this.main = main;
+        listCommands.put(main.text.getText(230), new CommandSeer(main));
+        listCommands.put(main.text.getText(231), new CommandCupid(main));
+        listCommands.put(main.text.getText(232), new CommandDetective(main));
+        listCommands.put(main.text.getText(233), new CommandFallenAngel(main));
+        listCommands.put(main.text.getText(234), new CommandFox(main));
+        listCommands.put(main.text.getText(235), new CommandGuardianAngel(main));
+        listCommands.put(main.text.getText(236), new CommandInfect(main));
+        listCommands.put(main.text.getText(237), new CommandLovers(main));
+        listCommands.put(main.text.getText(238), new CommandProtector(main));
+        listCommands.put(main.text.getText(239), new CommandRaven(main));
+        listCommands.put(main.text.getText(240), new CommandCitizenCancelVote(main));
+        listCommands.put(main.text.getText(241), new CommandCitizenSeeVote(main));
+        listCommands.put(main.text.getText(242), new CommandTroubleMaker(main));
+        listCommands.put(main.text.getText(243), new CommandWereWolf(main));
+        listCommands.put(main.text.getText(244), new CommandWildChild(main));
+        listCommands.put(main.text.getText(245), new CommandCompo(main));
+        listCommands.put(main.text.getText(246), new CommandComedian(main));
+        listCommands.put("h", new CommandHelp(main));
+        listCommands.put(main.text.getText(247), new CommandRole(main));
+        listCommands.put(main.text.getText(248), new CommandRules(main));
+        listCommands.put(main.text.getText(249), new CommandScenarios(main));
+        listCommands.put(main.text.getText(250), new CommandStuff(main));
+        listCommands.put(main.text.getText(251), new CommandTimer(main));
+        listCommands.put(main.text.getText(252), new CommandVote(main));
+        listCommands.put(main.text.getText(253), new CommandWitch(main));
+        listCommands.put(main.text.getText(160), new CommandTrapper(main));
+        listCommands.put(main.text.getText(110), new CommandAngelRegen(main));
+    }
 
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-		if(args.length==0) return true;
-		
-		for(Commands c:listCommands){
-			if(c.getName().equals(args[0])){
-				c.execute(sender,Arrays.copyOfRange(args,1,args.length));
-				return true;
-			}
-		}
-		return false;
-	}
+        if (args.length == 0) return true;
+        this.listCommands.getOrDefault(args[0], this.listCommands.get("h")).execute(sender, Arrays.copyOfRange(args, 1, args.length));
+        return true;
+    }
 
 	@Override
 	public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] args) {
 
-		List<String> temp = new ArrayList<>(tab);
-		
-		if(args.length==0){
-			return temp;
-		}
-		else if(args.length==1){
+        List<String> temp = new ArrayList<>(this.listCommands.keySet());
 
-			for(int i=0;i<temp.size();i++){
-				for(int j=0;j<temp.get(i).length() && j<args[0].length();j++){
-					if(temp.get(i).charAt(j)!=args[0].charAt(j)){
-						temp.remove(i);
+        if (args.length == 0) {
+            return temp;
+        } else if (args.length == 1) {
+
+            for (int i = 0; i < temp.size(); i++) {
+                for (int j = 0; j < temp.get(i).length() && j < args[0].length(); j++) {
+                    if (temp.get(i).charAt(j) != args[0].charAt(j)) {
+                        temp.remove(i);
 						i--;
 						break;
 					}

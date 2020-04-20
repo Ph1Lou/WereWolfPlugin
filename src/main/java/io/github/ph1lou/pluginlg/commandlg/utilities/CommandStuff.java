@@ -8,9 +8,8 @@ public class CommandStuff extends Commands {
 
     final MainLG main;
 
-    public CommandStuff(MainLG main,String name) {
-        super(name);
-        this.main=main;
+    public CommandStuff(MainLG main) {
+        this.main = main;
     }
 
     @Override

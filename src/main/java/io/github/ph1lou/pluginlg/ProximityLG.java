@@ -61,35 +61,33 @@ public class ProximityLG {
 
 			if(plg.isState(State.LIVING) && plg.isRole(RoleLG.RENARD) && !plg.getAffectedPlayer().isEmpty()) {
 
-				String playerSmell = plg.getAffectedPlayer().get(0);
-				
-				if(Bukkit.getPlayer(playerSmell)!=null && Bukkit.getPlayer(playername)!=null) {
-					
-					Player flair=Bukkit.getPlayer(playerSmell);
-					Player player=Bukkit.getPlayer(playername);
-					
-					Location renardLocation = player.getLocation();
-					Location playerLocation = flair.getLocation();
-						
-					if(renardLocation.distance(playerLocation)<=20) {
-						
-						float temp=plg.getFlair()+100f/(main.config.value.get(TimerLG.RENARD_SMELL_DURATION)+1);
+                String playerSmell = plg.getAffectedPlayer().get(0);
+                PlayerLG plf = main.playerLG.get(playerSmell);
 
-						plg.setFlair(temp);
+                if (plf.isState(State.LIVING) && Bukkit.getPlayer(playerSmell) != null && Bukkit.getPlayer(playername) != null) {
 
-						if(temp%10>0 && temp%10<=100f/(main.config.value.get(TimerLG.RENARD_SMELL_DURATION)+1)) {
-							player.sendMessage(String.format(main.text.getText(39),Math.floor(temp)));
-						}
-						
-						if(temp>=100) {
+                    Player flair = Bukkit.getPlayer(playerSmell);
+                    Player player = Bukkit.getPlayer(playername);
 
-							PlayerLG plf = main.playerLG.get(playerSmell);
+                    Location renardLocation = player.getLocation();
+                    Location playerLocation = flair.getLocation();
 
-							if(plf.isRole(RoleLG.LOUP_FEUTRE) && (!plf.isPosterCamp(Camp.LG) && !plf.isPosterRole(RoleLG.LOUP_GAROU_BLANC))) {
-								player.sendMessage(String.format(main.text.getText(40),playerSmell));
-							}
-							else if (plf.isCamp(Camp.LG) || plf.isRole(RoleLG.LOUP_GAROU_BLANC)) {
-							player.sendMessage(String.format(main.text.getText(41),playerSmell));
+                    if (renardLocation.distance(playerLocation) <= main.config.getDistanceFox()) {
+
+                        float temp = plg.getFlair() + 100f / (main.config.timerValues.get(TimerLG.RENARD_SMELL_DURATION) + 1);
+
+                        plg.setFlair(temp);
+
+                        if (temp % 10 > 0 && temp % 10 <= 100f / (main.config.timerValues.get(TimerLG.RENARD_SMELL_DURATION) + 1)) {
+                            player.sendMessage(String.format(main.text.getText(39), Math.floor(temp)));
+                        }
+
+                        if (temp >= 100) {
+
+                            if (plf.isRole(RoleLG.LOUP_FEUTRE) && (!plf.isPosterCamp(Camp.LG) && !plf.isPosterRole(RoleLG.LOUP_GAROU_BLANC))) {
+                                player.sendMessage(String.format(main.text.getText(40), playerSmell));
+                            } else if (plf.isCamp(Camp.LG) || plf.isRole(RoleLG.LOUP_GAROU_BLANC)) {
+                                player.sendMessage(String.format(main.text.getText(41), playerSmell));
 							}
 							else {
 							player.sendMessage(String.format(main.text.getText(40),playerSmell));

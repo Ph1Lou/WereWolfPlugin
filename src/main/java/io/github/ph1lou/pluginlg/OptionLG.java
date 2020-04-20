@@ -40,17 +40,17 @@ public class OptionLG {
 	}
 
 	public void initInv(){
-		invTool = Bukkit.createInventory(null, 54,main.text.getText(175));
-		invRole = Bukkit.createInventory(null, 45,main.text.getText(176));
-		invTimer = Bukkit.createInventory(null, 27,main.text.getText(177));
-		invConfig = Bukkit.createInventory(null, 27,main.text.getText(178));
-		invScenario = Bukkit.createInventory(null, 27,main.text.getText(76));
-		invBorder = Bukkit.createInventory(null, 18,main.text.getText(179));
-		invSave = Bukkit.createInventory(null, 18,main.text.getText(180));
-		invStuff = Bukkit.createInventory(null, 18,main.text.getText(77));
-		invEnchant = Bukkit.createInventory(null, 18,main.text.getText(79));
-		invAdvancedTool = Bukkit.createInventory(null, 27,main.text.getText(75));
-		invLanguage = Bukkit.createInventory(null, 9,main.text.getText(74));
+		invTool = Bukkit.createInventory(null, 54, main.text.getText(175));
+		invRole = Bukkit.createInventory(null, 45, main.text.getText(176));
+		invTimer = Bukkit.createInventory(null, 27, main.text.getText(177));
+		invConfig = Bukkit.createInventory(null, 27, main.text.getText(178));
+		invScenario = Bukkit.createInventory(null, 36, main.text.getText(76));
+		invBorder = Bukkit.createInventory(null, 18, main.text.getText(179));
+		invSave = Bukkit.createInventory(null, 18, main.text.getText(180));
+		invStuff = Bukkit.createInventory(null, 18, main.text.getText(77));
+		invEnchant = Bukkit.createInventory(null, 18, main.text.getText(79));
+		invAdvancedTool = Bukkit.createInventory(null, 27, main.text.getText(75));
+		invLanguage = Bukkit.createInventory(null, 9, main.text.getText(74));
 	}
 
 	public void toolBar(Player player) {
@@ -148,18 +148,22 @@ public class OptionLG {
 		player.openInventory(invStuff);
 	}
 
-	public void advancedTool(Player player){
+	public void advancedTool(Player player) {
 		List<String> lore = Arrays.asList(main.text.getText(203), main.text.getText(204));
-		invAdvancedTool.setItem(0, changeMeta(Material.COMPASS,main.text.getText(170),1,null));
-		invAdvancedTool.setItem(2, changeMeta(Material.APPLE,String.format(main.text.getText(223),main.config.getApple_rate()),1,lore));
-		invAdvancedTool.setItem(4, changeMeta(Material.FLINT,String.format(main.text.getText(224),main.config.getFlint_rate()),1,lore));
-		invAdvancedTool.setItem(6, changeMeta(Material.ENDER_PEARL,String.format(main.text.getText(226),main.config.getPearl_rate()),1,lore));
-		invAdvancedTool.setItem(8, changeMeta(Material.CARROT_ITEM,String.format(main.text.getText(258),main.config.getUseOfFlair()),1,lore));
-		invAdvancedTool.setItem(10, changeMeta(Material.POTION,String.format(main.text.getText(225),main.config.getStrengthRate()),1,lore));
-		invAdvancedTool.setItem(12, changeMeta(Material.DIAMOND,String.format(main.text.getText(228),main.config.getDiamondLimit()),1,lore));
-		invAdvancedTool.setItem(14, changeMeta(Material.EXP_BOTTLE,String.format(main.text.getText(229),main.config.getXp_boost()),1,lore));
-		invAdvancedTool.setItem(16, changeMeta(new ItemStack(Material.SKULL_ITEM,1,(short) 3),String.format(main.text.getText(227),main.config.getPlayerRequiredVoteEnd()),lore));
-		invAdvancedTool.setItem(18, changeMeta(Material.GOLD_NUGGET,main.text.getText(261),1, Collections.singletonList(main.text.getText(262 + main.config.getGoldenAppleParticles()))));
+		invAdvancedTool.setItem(0, changeMeta(Material.COMPASS, main.text.getText(170), 1, null));
+		invAdvancedTool.setItem(2, changeMeta(Material.APPLE, String.format(main.text.getText(223), main.config.getAppleRate()), 1, lore));
+		invAdvancedTool.setItem(4, changeMeta(Material.FLINT, String.format(main.text.getText(224), main.config.getFlintRate()), 1, lore));
+		invAdvancedTool.setItem(6, changeMeta(Material.ENDER_PEARL, String.format(main.text.getText(226), main.config.getPearlRate()), 1, lore));
+		invAdvancedTool.setItem(8, changeMeta(Material.CARROT_ITEM, String.format(main.text.getText(258), main.config.getUseOfFlair()), 1, lore));
+		invAdvancedTool.setItem(10, changeMeta(new ItemStack(Material.POTION, 1, (short) 8201), String.format(main.text.getText(225), main.config.getStrengthRate()), lore));
+		invAdvancedTool.setItem(12, changeMeta(Material.DIAMOND, String.format(main.text.getText(228), main.config.getDiamondLimit()), 1, lore));
+		invAdvancedTool.setItem(14, changeMeta(Material.EXP_BOTTLE, String.format(main.text.getText(229), main.config.getXpBoost()), 1, lore));
+		invAdvancedTool.setItem(16, changeMeta(new ItemStack(Material.SKULL_ITEM, 1, (short) 3), String.format(main.text.getText(227), main.config.getPlayerRequiredVoteEnd()), lore));
+		invAdvancedTool.setItem(18, changeMeta(Material.GOLD_NUGGET, main.text.getText(261), 1, Collections.singletonList(main.text.getText(262 + main.config.getGoldenAppleParticles()))));
+		invAdvancedTool.setItem(20, changeMeta(new ItemStack(Material.WOOL, 1, (short) 1), String.format(main.text.getText(270), main.config.getDistanceFox()), null));
+		invAdvancedTool.setItem(22, changeMeta(new ItemStack(Material.WOOL, 1, (short) 12), String.format(main.text.getText(271), main.config.getDistanceBearTrainer()), null));
+		invAdvancedTool.setItem(24, changeMeta(new ItemStack(Material.POTION, 1, (short) 8227), String.format(main.text.getText(115), main.config.getResistanceRate()), null));
+		invAdvancedTool.setItem(26, changeMeta(new ItemStack(Material.BREAD, 1), String.format(main.config.isTrollSV() ? main.text.getText(169) : main.text.getText(168), main.text.getText(73)), null));
 		player.openInventory(invAdvancedTool);
 	}
 
@@ -302,12 +306,12 @@ public class OptionLG {
 	public void selectMinus(int i) {
 
 		if(!main.isState(StateLG.LG)) {
-			int j = main.config.role_count.get(RoleLG.values()[i]);
-			if(j>0) {
-				if(!RoleLG.values()[i].equals(RoleLG.COUPLE)) {
-					main.score.setRole(main.score.getRole()-1);
+			int j = main.config.roleCount.get(RoleLG.values()[i]);
+			if (j > 0) {
+				if (RoleLG.values()[i].getCamp() != null) {
+					main.score.setRole(main.score.getRole() - 1);
 				}
-				main.config.role_count.put(RoleLG.values()[i],j-1);
+				main.config.roleCount.put(RoleLG.values()[i], j - 1);
 				main.score.updateBoard();
 				updateSelection();
 			}
@@ -317,10 +321,10 @@ public class OptionLG {
 	public void selectPlus(int i) {
 
 		if(!main.isState(StateLG.LG)) {
-			int j = main.config.role_count.get(RoleLG.values()[i]);
-			main.config.role_count.put(RoleLG.values()[i],j+1);
-			if(!RoleLG.values()[i].equals(RoleLG.COUPLE)) {
-				main.score.setRole(main.score.getRole()+1);
+			int j = main.config.roleCount.get(RoleLG.values()[i]);
+			main.config.roleCount.put(RoleLG.values()[i], j + 1);
+			if (RoleLG.values()[i].getCamp() != null) {
+				main.score.setRole(main.score.getRole() + 1);
 			}
 			main.score.updateBoard();
 			updateSelection();
@@ -328,33 +332,33 @@ public class OptionLG {
 	}
 
 	public void selectMinusBorder() {
-		int i = Math.max(findSelect(invBorder)-9,0) ;
-		int j = main.config.border_value.get(BorderLG.values()[i]);
-		if(j>=100) {
-			main.config.border_value.put(BorderLG.values()[i],j-100);
+		int i = Math.max(findSelect(invBorder) - 9, 0);
+		int j = main.config.borderValues.get(BorderLG.values()[i]);
+		if (j >= 100) {
+			main.config.borderValues.put(BorderLG.values()[i], j - 100);
 			updateSelectionBorder(i);
 		}
 	}
 
 	public void selectPlusBorder() {
-		int i =  Math.max(findSelect(invBorder)-9,0) ;
-		int j = main.config.border_value.get(BorderLG.values()[i]);
-		main.config.border_value.put(BorderLG.values()[i],j+100);
+		int i = Math.max(findSelect(invBorder) - 9, 0);
+		int j = main.config.borderValues.get(BorderLG.values()[i]);
+		main.config.borderValues.put(BorderLG.values()[i], j + 100);
 		updateSelectionBorder(i);
 	}
 
 	public void SelectMinusTimer(int v) {
-		int i =  Math.max(findSelect(invTimer)-9,0);
-		int j = main.config.value.get(TimerLG.values()[i]);
-		if(j>=v) {
-			main.config.value.put(TimerLG.values()[i],j-v);
+		int i = Math.max(findSelect(invTimer) - 9, 0);
+		int j = main.config.timerValues.get(TimerLG.values()[i]);
+		if (j >= v) {
+			main.config.timerValues.put(TimerLG.values()[i], j - v);
 			updateSelectionTimer(i);
 		}
 	}
 
 	public void selectPlusTimer(int v) {
-		int i =  Math.max(findSelect(invTimer)-9,0);
-		main.config.value.put(TimerLG.values()[i],main.config.value.get(TimerLG.values()[i])+v);
+		int i = Math.max(findSelect(invTimer) - 9, 0);
+		main.config.timerValues.put(TimerLG.values()[i], main.config.timerValues.get(TimerLG.values()[i]) + v);
 		updateSelectionTimer(i);
 	}
 
@@ -365,10 +369,10 @@ public class OptionLG {
 		List<String> lore = Arrays.asList(main.text.getText(203), main.text.getText(204), main.text.getText(205));
 		for (int i=0;i<RoleLG.values().length;i++) {
 
-			if (main.config.role_count.get(RoleLG.values()[i])>0) {
-				invRole.setItem(9+i, changeMeta(new ItemStack(Material.STAINED_CLAY, main.config.role_count.get(RoleLG.values()[i]), (short)5),main.text.translateRole.get(RoleLG.values()[i]),lore));
-			}
-			else invRole.setItem(9+i, changeMeta(new ItemStack(Material.STAINED_CLAY,1, (short)6),main.text.translateRole.get(RoleLG.values()[i]),lore));
+			if (main.config.roleCount.get(RoleLG.values()[i]) > 0) {
+				invRole.setItem(9 + i, changeMeta(new ItemStack(Material.STAINED_CLAY, main.config.roleCount.get(RoleLG.values()[i]), (short) 5), main.text.translateRole.get(RoleLG.values()[i]), lore));
+			} else
+				invRole.setItem(9 + i, changeMeta(new ItemStack(Material.STAINED_CLAY, 1, (short) 6), main.text.translateRole.get(RoleLG.values()[i]), lore));
 		}
 	}
 
@@ -376,23 +380,23 @@ public class OptionLG {
 		updateSelectionTimer( Math.max(findSelect(invTimer)-9,0));
 	}
 
-	public void updateSelectionTimer(int j){
+	public void updateSelectionTimer(int j) {
 
-		String c= main.score.conversion(main.config.value.get(TimerLG.values()[j]));
+		String c = main.score.conversion(main.config.timerValues.get(TimerLG.values()[j]));
 
-		invTimer.setItem(1, changeMeta(Material.STONE_BUTTON,String.format(main.text.getText(88),"-10m",c),1,null));
-		invTimer.setItem(2, changeMeta(Material.STONE_BUTTON,String.format(main.text.getText(88),"-1m",c),1,null));
-		invTimer.setItem(3, changeMeta(Material.STONE_BUTTON,String.format(main.text.getText(88),"-10s",c),1,null));
-		invTimer.setItem(4, changeMeta(Material.BEACON,String.format(main.text.translateTimer.get(TimerLG.values()[j]),c),1,null));
-		invTimer.setItem(5, changeMeta(Material.STONE_BUTTON,String.format(main.text.getText(88),"+10s",c),1,null));
-		invTimer.setItem(6, changeMeta(Material.STONE_BUTTON,String.format(main.text.getText(88),"+1m",c),1,null));
-		invTimer.setItem(7, changeMeta(Material.STONE_BUTTON,String.format(main.text.getText(88),"+10m",c),1,null));
+		invTimer.setItem(1, changeMeta(Material.STONE_BUTTON, String.format(main.text.getText(88), "-10m", c), 1, null));
+		invTimer.setItem(2, changeMeta(Material.STONE_BUTTON, String.format(main.text.getText(88), "-1m", c), 1, null));
+		invTimer.setItem(3, changeMeta(Material.STONE_BUTTON, String.format(main.text.getText(88), "-10s", c), 1, null));
+		invTimer.setItem(4, changeMeta(Material.BEACON, String.format(main.text.translateTimer.get(TimerLG.values()[j]), c), 1, null));
+		invTimer.setItem(5, changeMeta(Material.STONE_BUTTON, String.format(main.text.getText(88), "+10s", c), 1, null));
+		invTimer.setItem(6, changeMeta(Material.STONE_BUTTON, String.format(main.text.getText(88), "+1m", c), 1, null));
+		invTimer.setItem(7, changeMeta(Material.STONE_BUTTON, String.format(main.text.getText(88), "+10m", c), 1, null));
 
-		for (int i=0;i<TimerLG.values().length;i++) {
-			if(i==j) {
-				invTimer.setItem(9+i, changeMeta(Material.FEATHER,String.format(main.text.translateTimer.get(TimerLG.values()[i]),c),1,null));
-			}
-			else invTimer.setItem(9+i, changeMeta(Material.ANVIL,String.format(main.text.translateTimer.get(TimerLG.values()[i]),main.score.conversion(main.config.value.get(TimerLG.values()[i]))),1,null));
+		for (int i = 0; i < TimerLG.values().length; i++) {
+			if (i == j) {
+				invTimer.setItem(9 + i, changeMeta(Material.FEATHER, String.format(main.text.translateTimer.get(TimerLG.values()[i]), c), 1, null));
+			} else
+				invTimer.setItem(9 + i, changeMeta(Material.ANVIL, String.format(main.text.translateTimer.get(TimerLG.values()[i]), main.score.conversion(main.config.timerValues.get(TimerLG.values()[i]))), 1, null));
 		}
 	}
 
@@ -401,43 +405,43 @@ public class OptionLG {
 	}
 
 	public void updateSelectionBorder(int j) {
-		invBorder.setItem(3, changeMeta(Material.STONE_BUTTON,String.format(main.text.getText(88),"-",main.config.border_value.get(BorderLG.values()[j])),1,null));
-		invBorder.setItem(4, changeMeta(Material.BEACON,String.format(main.text.translateBorder.get(BorderLG.values()[j]),main.config.border_value.get(BorderLG.values()[j])),1,null));
-		invBorder.setItem(5, changeMeta(Material.STONE_BUTTON,String.format(main.text.getText(88),"+",main.config.border_value.get(BorderLG.values()[j])),1,null));
-		for (int i = 0; i< BorderLG.values().length; i++) {
-			if(i==j) {
-				invBorder.setItem(9+i, changeMeta(Material.FEATHER,String.format(main.text.translateBorder.get(BorderLG.values()[i]),main.config.border_value.get(BorderLG.values()[i])),1,null));
-			}
-			else invBorder.setItem(9+i, changeMeta(Material.GLASS,String.format(main.text.translateBorder.get(BorderLG.values()[i]),main.config.border_value.get(BorderLG.values()[i])),1,null));
+		invBorder.setItem(3, changeMeta(Material.STONE_BUTTON, String.format(main.text.getText(88), "-", main.config.borderValues.get(BorderLG.values()[j])), 1, null));
+		invBorder.setItem(4, changeMeta(Material.BEACON, String.format(main.text.translateBorder.get(BorderLG.values()[j]), main.config.borderValues.get(BorderLG.values()[j])), 1, null));
+		invBorder.setItem(5, changeMeta(Material.STONE_BUTTON, String.format(main.text.getText(88), "+", main.config.borderValues.get(BorderLG.values()[j])), 1, null));
+		for (int i = 0; i < BorderLG.values().length; i++) {
+			if (i == j) {
+				invBorder.setItem(9 + i, changeMeta(Material.FEATHER, String.format(main.text.translateBorder.get(BorderLG.values()[i]), main.config.borderValues.get(BorderLG.values()[i])), 1, null));
+			} else
+				invBorder.setItem(9 + i, changeMeta(Material.GLASS, String.format(main.text.translateBorder.get(BorderLG.values()[i]), main.config.borderValues.get(BorderLG.values()[i])), 1, null));
 		}
 	}
 
 	public void updateSelectionTool(){
 		for (int i = 0; i< ToolLG.values().length; i++) {
-			if (main.config.tool_switch.get(ToolLG.values()[i])) {
-				invConfig.setItem(9+i, changeMeta(new ItemStack(Material.STAINED_CLAY,1, (short)5),main.text.translateTool.get(ToolLG.values()[i]), Collections.singletonList(String.format(main.text.getText(169), ""))));
-			}
-			else invConfig.setItem(9+i, changeMeta(new ItemStack(Material.STAINED_CLAY,1, (short)6),main.text.translateTool.get(ToolLG.values()[i]),Collections.singletonList(String.format(main.text.getText(168), ""))));
+			if (main.config.configValues.get(ToolLG.values()[i])) {
+				invConfig.setItem(9 + i, changeMeta(new ItemStack(Material.STAINED_CLAY, 1, (short) 5), main.text.translateTool.get(ToolLG.values()[i]), Collections.singletonList(String.format(main.text.getText(169), ""))));
+			} else
+				invConfig.setItem(9 + i, changeMeta(new ItemStack(Material.STAINED_CLAY, 1, (short) 6), main.text.translateTool.get(ToolLG.values()[i]), Collections.singletonList(String.format(main.text.getText(168), ""))));
 		}
 		updateCompass();
 	}
 
 	public void updateSelectionScenario() {
-		for (int i = 0; i< ScenarioLG.values().length; i++) {
-			if (main.config.scenario.get(ScenarioLG.values()[i])) {
-				invScenario.setItem(9+i, changeMeta(new ItemStack(Material.STAINED_CLAY,1, (short)5),main.text.translateScenario.get(ScenarioLG.values()[i]), Collections.singletonList(String.format(main.text.getText(169), ""))));
-			}
-			else invScenario.setItem(9+i, changeMeta(new ItemStack(Material.STAINED_CLAY,1, (short)6),main.text.translateScenario.get(ScenarioLG.values()[i]), Collections.singletonList(String.format(main.text.getText(168), ""))));
+		for (int i = 0; i < ScenarioLG.values().length; i++) {
+			if (main.config.scenarioValues.get(ScenarioLG.values()[i])) {
+				invScenario.setItem(9 + i, changeMeta(new ItemStack(Material.STAINED_CLAY, 1, (short) 5), main.text.translateScenario.get(ScenarioLG.values()[i]), Collections.singletonList(String.format(main.text.getText(169), ""))));
+			} else
+				invScenario.setItem(9 + i, changeMeta(new ItemStack(Material.STAINED_CLAY, 1, (short) 6), main.text.translateScenario.get(ScenarioLG.values()[i]), Collections.singletonList(String.format(main.text.getText(168), ""))));
 		}
 		updateNameTag();
+		main.scenarios.update();
 	}
 	public void updateCompass(){
 
-		for(Player player:Bukkit.getOnlinePlayers()){
-			if(main.config.tool_switch.get(ToolLG.COMPASS_MIDDLE)){
+		for(Player player:Bukkit.getOnlinePlayers()) {
+			if (main.config.configValues.get(ToolLG.COMPASS_MIDDLE)) {
 				player.setCompassTarget(player.getWorld().getSpawnLocation());
-			}
-			else if(main.playerLG.containsKey(player.getName())){
+			} else if (main.playerLG.containsKey(player.getName())) {
 				player.setCompassTarget(main.playerLG.get(player.getName()).getSpawn());
 			}
 		}
@@ -445,38 +449,41 @@ public class OptionLG {
 
 	public void updateNameTag() {
 
-		for(String playername : main.playerLG.keySet()) {
+		for (String playerName : main.playerLG.keySet()) {
 
-			Scoreboard board = main.playerLG.get(playername).getScoreBoard();
+			Scoreboard board = main.playerLG.get(playerName).getScoreBoard();
 
-			if(!board.equals(main.board)){
+			if (!board.equals(main.board)) {
 
-				for(String players : main.playerLG.keySet()) {
+				for (String players : main.playerLG.keySet()) {
 
-					if(board.getTeam(players)==null){
+					if (board.getTeam(players) == null) {
 						board.registerNewTeam(players);
 						board.getTeam(players).addEntry(players);
 					}
-					if(main.config.scenario.get(ScenarioLG.NO_NAME_TAG)){
+					if (main.config.scenarioValues.get(ScenarioLG.NO_NAME_TAG)) {
 						board.getTeam(players).setNameTagVisibility(NameTagVisibility.NEVER);
-					}
-					else {
-						if(!main.playerLG.get(players).hasPower() && (main.playerLG.get(players).isRole(RoleLG.LOUP_PERFIDE) || main.playerLG.get(players).isRole(RoleLG.PETITE_FILLE))){
+					} else {
+						if (!main.playerLG.get(players).hasPower() && (main.playerLG.get(players).isRole(RoleLG.LOUP_PERFIDE) || main.playerLG.get(players).isRole(RoleLG.PETITE_FILLE))) {
 							board.getTeam(players).setNameTagVisibility(NameTagVisibility.NEVER);
-						}
-						else board.getTeam(players).setNameTagVisibility(NameTagVisibility.ALWAYS);
+						} else board.getTeam(players).setNameTagVisibility(NameTagVisibility.ALWAYS);
 					}
 				}
 			}
-			if(main.config.scenario.get(ScenarioLG.NO_NAME_TAG)){
-				main.board.getTeam(playername).setNameTagVisibility(NameTagVisibility.NEVER);
+			if (main.config.configValues.get(ToolLG.LG_LIST) && main.config.timerValues.get(TimerLG.LG_LIST) < 0 && main.playerLG.get(playerName).isCamp(Camp.LG)) {
+				if (main.config.configValues.get(ToolLG.RED_NAME_TAG)) {
+					main.board.getTeam(playerName).setPrefix("§4");
+				} else main.board.getTeam(playerName).setPrefix("");
 			}
-			else {
-				if(!main.playerLG.get(playername).hasPower() && (main.playerLG.get(playername).isRole(RoleLG.LOUP_PERFIDE) || main.playerLG.get(playername).isRole(RoleLG.PETITE_FILLE))){
-					main.board.getTeam(playername).setNameTagVisibility(NameTagVisibility.NEVER);
-				}
-				else {
-					main.board.getTeam(playername).setNameTagVisibility(NameTagVisibility.ALWAYS);
+
+
+			if (main.config.scenarioValues.get(ScenarioLG.NO_NAME_TAG)) {
+				main.board.getTeam(playerName).setNameTagVisibility(NameTagVisibility.NEVER);
+			} else {
+				if (!main.playerLG.get(playerName).hasPower() && (main.playerLG.get(playerName).isRole(RoleLG.LOUP_PERFIDE) || main.playerLG.get(playerName).isRole(RoleLG.PETITE_FILLE))) {
+					main.board.getTeam(playerName).setNameTagVisibility(NameTagVisibility.NEVER);
+				} else {
+					main.board.getTeam(playerName).setNameTagVisibility(NameTagVisibility.ALWAYS);
 				}
 			}
 		}
@@ -484,7 +491,7 @@ public class OptionLG {
 
 	public void resetRole() {
 		for (int i=0;i<RoleLG.values().length;i++) {
-			main.config.role_count.put(RoleLG.values()[i],0);
+			main.config.roleCount.put(RoleLG.values()[i], 0);
 		}
 		main.score.setRole(0);
 		updateSelection();

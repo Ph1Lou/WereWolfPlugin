@@ -11,9 +11,8 @@ public class CommandCitizenSeeVote extends Commands {
 
     final MainLG main;
 
-    public CommandCitizenSeeVote(MainLG main, String name) {
-        super(name);
-        this.main=main;
+    public CommandCitizenSeeVote(MainLG main) {
+        this.main = main;
     }
 
     @Override
@@ -58,15 +57,15 @@ public class CommandCitizenSeeVote extends Commands {
             return;
         }
 
-        if(main.score.getTimer()%(main.config.value.get(TimerLG.DAY_DURATION)*2) <main.config.value.get(TimerLG.VOTE_DURATION) ){
+        if (main.score.getTimer() % (main.config.timerValues.get(TimerLG.DAY_DURATION) * 2) < main.config.timerValues.get(TimerLG.VOTE_DURATION)) {
             main.text.getText(103);
             return;
         }
-        if(!main.config.tool_switch.get(ToolLG.VOTE) || main.config.value.get(TimerLG.VOTE_DURATION)+main.config.value.get(TimerLG.VOTE_BEGIN)>0) {
+        if (!main.config.configValues.get(ToolLG.VOTE) || main.config.timerValues.get(TimerLG.VOTE_DURATION) + main.config.timerValues.get(TimerLG.VOTE_BEGIN) > 0) {
             main.text.getText(103);
             return;
         }
-        if(main.score.getTimer()%(main.config.value.get(TimerLG.DAY_DURATION)*2) > main.config.value.get(TimerLG.VOTE_DURATION)+main.config.value.get(TimerLG.CITIZEN_DURATION) ){
+        if (main.score.getTimer() % (main.config.timerValues.get(TimerLG.DAY_DURATION) * 2) > main.config.timerValues.get(TimerLG.VOTE_DURATION) + main.config.timerValues.get(TimerLG.CITIZEN_DURATION)) {
             main.text.getText(103);
             return;
         }

@@ -18,16 +18,10 @@ public class SerializerLG {
 				.disableHtmlEscaping()
 				.create();
 	}
-	public String serialize(StuffLG config) {
-		return this.gson.toJson(config);
-	}
-	public String serialize(LangLG config) {
-		return this.gson.toJson(config);
-	}
-	public String serialize(ConfigLG config) {
-		return this.gson.toJson(config);
-	}
 
+    public String serialize(ConfigLG config) {
+		return this.gson.toJson(config);
+	}
 	public String serialize(TextLG config) {
 		return this.gson.toJson(config);
 	}

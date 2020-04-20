@@ -1,238 +1,163 @@
 package io.github.ph1lou.pluginlg;
 
 import io.github.ph1lou.pluginlg.enumlg.*;
+import io.github.ph1lou.pluginlg.listener.roleslisteners.ListenerRoles;
+import io.github.ph1lou.pluginlg.listener.roleslisteners.ListenerRolesDefault;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CycleLG {
-	
-	final MainLG main;
-	
-	public CycleLG(MainLG main) {
-		this.main=main;	
-	}
+
+    final MainLG main;
+    public final Map<RoleLG, ListenerRoles> rolesListener = new HashMap<>();
+    private final ListenerRoles defaultListener = new ListenerRolesDefault();
+
+    public CycleLG(MainLG main) {
+        this.main = main;
+        for (RoleLG role : RoleLG.values()) {
+            try {
+                ListenerRoles listener;
+                Class<? extends ListenerRoles> listenerClass = role.getListener();
+
+                if (listenerClass != null) {
+                    listener = listenerClass.getDeclaredConstructor().newInstance();
+                    listener.init(main);
+                    rolesListener.put(role, listener);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
 	
 	public void night() {
-		
-		Bukkit.broadcastMessage(main.text.getText(124));
-		
-		if(!main.isState(StateLG.LG)) return;
-			
-		main.score.groupSizeChange() ;
-		
-		for(String playername:main.playerLG.keySet()) {
-			
-			PlayerLG plg = main.playerLG.get(playername);
-			
-			if(plg.isState(State.LIVING) && Bukkit.getPlayer(playername)!=null){
-				
-				Player player = Bukkit.getPlayer(playername);	
-				
-				player.playSound(player.getLocation(), Sound.DOOR_CLOSE,1,20);
-				
-				if(plg.isRole(RoleLG.ASSASSIN)){
-					player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);	
-				}
-				if(plg.isCamp(Camp.LG)){
-					player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE,-1,false,false));
-				}
-				if(plg.isRole(RoleLG.PETITE_FILLE)){
-					player.sendMessage(main.text.getText(14));
-				}
-				if(plg.isRole(RoleLG.LOUP_PERFIDE)){
-					player.sendMessage(main.text.getText(14));
-				}
-				if(plg.isRole(RoleLG.LOUP_GAROU_BLANC)){
-					player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE,-1,false,false));
-				}
-			}	
-		}
-	}
-	
-	public void selectionEnd() {
-		
-		if(!main.isState(StateLG.LG)) return;
-		
-		for(String playername:main.playerLG.keySet()) {
-			
-			PlayerLG plg = main.playerLG.get(playername);
-			
-			if(plg.isState(State.LIVING) && Bukkit.getPlayer(playername)!=null){
-				
-				Player player = Bukkit.getPlayer(playername);
-				
-				if((plg.isRole(RoleLG.CORBEAU) || plg.isRole(RoleLG.SALVATEUR) || plg.isRole(RoleLG.DETECTIVE) || plg.isRole(RoleLG.VOYANTE) || plg.isRole(RoleLG.VOYANTE_BAVARDE)) && plg.hasPower()) {
-					plg.setPower(false);
-					player.sendMessage(main.text.getText(13));
-				}
-				if(plg.isRole(RoleLG.LOUP_FEUTRE)) {
-					List <String> players = new ArrayList<>();
-					for(String p:main.playerLG.keySet()) {
-						if(main.playerLG.get(p).isState(State.LIVING) && !p.equals(playername)) {
-							players.add(p);
-						}
-					}
-					String pc = players.get((int) Math.floor(Math.random()*players.size()));
-					plg.setPosterCamp(main.playerLG.get(pc).getCamp());
-					plg.setPosterRole(main.playerLG.get(pc).getRole());
-					player.sendMessage(String.format(main.text.powerUse.get(RoleLG.LOUP_FEUTRE),main.text.translateRole.get(main.playerLG.get(pc).getRole())));
-				}
-			}
-		}
-	}
+
+        Bukkit.broadcastMessage(String.format(main.text.getText(124), main.score.getTimer() / main.config.timerValues.get(TimerLG.DAY_DURATION) / 2 + 1));
+
+        if (!main.isState(StateLG.LG)) return;
+
+        main.score.groupSizeChange();
+
+        for (Player p : Bukkit.getOnlinePlayers()) {
+
+            if (main.playerLG.containsKey(p.getName())) {
+
+                PlayerLG plg = main.playerLG.get(p.getName());
+
+                if (plg.isState(State.LIVING)) {
+
+                    p.playSound(p.getLocation(), Sound.DOOR_CLOSE, 1, 20);
+                    if (plg.isCamp(Camp.LG)) {
+                        p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, -1, false, false));
+                    }
+                    this.rolesListener.getOrDefault(plg.getRole(), defaultListener).onNight(p);
+                }
+            }
+        }
+    }
+
+
+    public void selectionEnd() {
+
+        if (!main.isState(StateLG.LG)) return;
+
+        for (Player p : Bukkit.getOnlinePlayers()) {
+
+            if (main.playerLG.containsKey(p.getName())) {
+
+                PlayerLG plg = main.playerLG.get(p.getName());
+
+                if (plg.isState(State.LIVING)) {
+                    this.rolesListener.getOrDefault(plg.getRole(), defaultListener).onSelectionEnd(p, plg);
+                }
+            }
+        }
+    }
 	public void preDay() {
 
-		if(!main.isState(StateLG.LG)) return;
-		
-		for(String playername:main.playerLG.keySet()) {
-			
-			PlayerLG plg = main.playerLG.get(playername);
-			
-			if(plg.isState(State.LIVING) && Bukkit.getPlayer(playername)!=null){
-				
-				Player player = Bukkit.getPlayer(playername);
-				
-				if(plg.isRole(RoleLG.LOUP_PERFIDE) || plg.isRole(RoleLG.PETITE_FILLE)){
-					player.sendMessage(main.text.getText(197));
-				}
-			}
-		}
-	}
+        if (!main.isState(StateLG.LG)) return;
+
+        for (Player p : Bukkit.getOnlinePlayers()) {
+
+            if (main.playerLG.containsKey(p.getName())) {
+
+                PlayerLG plg = main.playerLG.get(p.getName());
+
+                if (plg.isState(State.LIVING)) {
+                    this.rolesListener.getOrDefault(plg.getRole(), defaultListener).onDayWillCome(p);
+                }
+            }
+        }
+    }
 
 	public void preVoteResult() {
 
 
-		if(!main.isState(StateLG.LG)) return;
+        if (!main.isState(StateLG.LG)) return;
 
-		for(String playername:main.playerLG.keySet()) {
+        for (Player p : Bukkit.getOnlinePlayers()) {
 
-			PlayerLG plg = main.playerLG.get(playername);
+            if (main.playerLG.containsKey(p.getName())) {
 
-			if(plg.isState(State.LIVING) && Bukkit.getPlayer(playername)!=null){
+                PlayerLG plg = main.playerLG.get(p.getName());
 
-				Player player = Bukkit.getPlayer(playername);
-
-				Title.removeBar(player);
-
-				if(plg.isRole(RoleLG.CITOYEN) && (plg.getUse()<2 || plg.hasPower())){
-					player.sendMessage(String.format(main.text.powerUse.get(RoleLG.CITOYEN),2-plg.getUse(),plg.hasPower()?1:0,main.score.conversion(main.config.value.get(TimerLG.CITIZEN_DURATION))));
-				}
-			}
-		}
+                if (plg.isState(State.LIVING)) {
+                    this.rolesListener.getOrDefault(plg.getRole(), defaultListener).onVoteEnd(p, plg);
+                }
+            }
+        }
 	}
 				
 				
 	public void day() {
-		
-	
-		Bukkit.broadcastMessage(main.text.getText(16));
-		
-		if(!main.isState(StateLG.LG)) return;
 
-		for(String playername:main.playerLG.keySet()) {
-			
-			PlayerLG plg = main.playerLG.get(playername);
-			
-			if(plg.isState(State.LIVING) && Bukkit.getPlayer(playername)!=null){
-				
-				Player player = Bukkit.getPlayer(playername);	
-				
-				player.playSound(player.getLocation(), Sound.DOOR_OPEN,1,20);
+        Bukkit.broadcastMessage(String.format(main.text.getText(16), main.score.getTimer() / main.config.timerValues.get(TimerLG.DAY_DURATION) / 2 + 1));
 
-				if(main.config.tool_switch.get(ToolLG.VOTE) && main.config.value.get(TimerLG.VOTE_BEGIN)<0) {
-					player.sendMessage(String.format(main.text.getText(17),main.score.conversion(main.config.value.get(TimerLG.VOTE_DURATION))));
-				}
-				
-				if(plg.isRole(RoleLG.MONTREUR_OURS)){
-					
-					StringBuilder builder=new StringBuilder();
-					boolean ok=false;
-					
-					Location oursLocation = Bukkit.getPlayer(playername).getLocation();
-					
-					for(Player pls:Bukkit.getOnlinePlayers()) {
-						
-						if(main.playerLG.containsKey(pls.getName())) {
-							
-							PlayerLG plo = main.playerLG.get(pls.getName());
+        if (!main.isState(StateLG.LG)) return;
 
-							if (!plo.isRole(RoleLG.LOUP_FEUTRE) || plo.isPosterCamp(Camp.LG)) {
-								if((plo.isCamp(Camp.LG) || plo.isRole(RoleLG.LOUP_GAROU_BLANC)) && plo.isState(State.LIVING)) {
-									if(oursLocation.distance(pls.getLocation())<50) {
-										builder.append(main.text.powerHasBeenUse.get(RoleLG.MONTREUR_OURS));
-										ok=true;
-									}
-								}
-							}
-						}
-						
-					}
-					if(ok) {
-						Bukkit.broadcastMessage(String.format(main.text.powerUse.get(RoleLG.MONTREUR_OURS), builder.toString()));
-						for(Player pls:Bukkit.getOnlinePlayers()) {
-							pls.playSound(pls.getLocation(),Sound.WOLF_GROWL, 1, 20);
-						}
-					}
-				}
-				if(plg.getLostHeart()>0){
-					player.setMaxHealth(player.getMaxHealth()+plg.getLostHeart());
-					plg.clearLostHeart();
-				}
-				if(plg.isCamp(Camp.LG)){
-					player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-				}
-				if(plg.isRole(RoleLG.LOUP_GAROU_BLANC)){
-					player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);	
-				}
-				if(plg.isRole(RoleLG.ASSASSIN)){
-					player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE,-1,false,false));
-				}
-				if((plg.isRole(RoleLG.LOUP_PERFIDE) || plg.isRole(RoleLG.PETITE_FILLE)) && !plg.hasPower()) {
-					player.removePotionEffect(PotionEffectType.INVISIBILITY);
-					player.removePotionEffect(PotionEffectType.WEAKNESS);
-					plg.setPower(true);
-					player.sendMessage(main.text.getText(18));
-					main.optionlg.updateNameTag();
-				}
-				if(plg.hasDamn()) {
-					plg.setDamn(false);
-					player.removePotionEffect(PotionEffectType.JUMP);
-					player.sendMessage(main.text.getText(19));
-				}
-				if(plg.hasSalvation()) {
-					plg.setSalvation(false);
-					if (!((plg.isRole(RoleLG.ANCIEN) || plg.isRole(RoleLG.VOLEUR) ) && plg.hasPower())) {	
-						player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-					}
-					player.sendMessage(main.text.getText(20));
-				}
-				if(plg.isRole(RoleLG.CORBEAU)) {
-					plg.setPower(true);
-					player.sendMessage(String.format(main.text.powerUse.get(RoleLG.CORBEAU),main.score.conversion(main.config.value.get(TimerLG.POWER_DURATION))));
-				}
-				if(plg.isRole(RoleLG.SALVATEUR)) {
-					plg.setPower(true);
-					player.sendMessage(String.format(main.text.powerUse.get(RoleLG.SALVATEUR),main.score.conversion(main.config.value.get(TimerLG.POWER_DURATION))));
-				}
-				if(plg.isRole(RoleLG.DETECTIVE)) {
-					plg.setPower(true);
-					player.sendMessage(String.format(main.text.powerUse.get(RoleLG.DETECTIVE),main.score.conversion(main.config.value.get(TimerLG.POWER_DURATION))));
-				}
-				if(plg.isRole(RoleLG.RENARD)) {
-					plg.setPower(true);
-					player.sendMessage(String.format(main.text.powerUse.get(RoleLG.RENARD),main.config.getUseOfFlair()-plg.getUse()));
-				}
-				if(plg.isRole(RoleLG.VOYANTE) || plg.isRole(RoleLG.VOYANTE_BAVARDE) && (!main.config.tool_switch.get(ToolLG.SEER_EVERY_OTHER_DAY) || ((-main.config.value.get(TimerLG.ROLE_DURATION))/main.config.value.get(TimerLG.DAY_DURATION)/2)%2==0)) {
-					plg.setPower(true);
-					player.sendMessage(String.format(main.text.powerUse.get(RoleLG.VOYANTE),main.score.conversion(main.config.value.get(TimerLG.POWER_DURATION))));
-				}
+        for (Player p : Bukkit.getOnlinePlayers()) {
+
+            if (main.playerLG.containsKey(p.getName())) {
+
+                PlayerLG plg = main.playerLG.get(p.getName());
+
+                if (plg.isState(State.LIVING)) {
+
+                    p.playSound(p.getLocation(), Sound.DOOR_OPEN, 1, 20);
+
+                    if (main.config.configValues.get(ToolLG.VOTE) && main.config.timerValues.get(TimerLG.VOTE_BEGIN) < 0) {
+                        p.sendMessage(String.format(main.text.getText(17), main.score.conversion(main.config.timerValues.get(TimerLG.VOTE_DURATION))));
+                    }
+
+                    if (plg.isCamp(Camp.LG)) {
+                        p.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+                    }
+
+                    if (plg.getLostHeart() > 0) {
+                        p.setMaxHealth(p.getMaxHealth() + plg.getLostHeart());
+                        plg.clearLostHeart();
+                    }
+
+                    if (plg.hasDamn()) {
+                        plg.setDamn(false);
+                        p.removePotionEffect(PotionEffectType.JUMP);
+                        p.sendMessage(main.text.getText(19));
+                    }
+                    if (plg.hasSalvation()) {
+                        plg.setSalvation(false);
+                        if (!((plg.isRole(RoleLG.ANCIEN) || plg.isRole(RoleLG.VOLEUR)) && plg.hasPower())) {
+                            p.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+                        }
+                        p.sendMessage(main.text.getText(20));
+                    }
+                    this.rolesListener.getOrDefault(plg.getRole(), defaultListener).onDay(p, plg);
+                }
 			}
 		}	
 	}

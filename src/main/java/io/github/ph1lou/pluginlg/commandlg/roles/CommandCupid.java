@@ -13,9 +13,8 @@ import org.bukkit.entity.Player;
 public class CommandCupid extends Commands {
     final MainLG main;
 
-    public CommandCupid(MainLG main, String name) {
-        super(name);
-        this.main=main;
+    public CommandCupid(MainLG main) {
+        this.main = main;
     }
 
     @Override

@@ -11,9 +11,8 @@ public class CommandWereWolf extends Commands {
 
     final MainLG main;
 
-    public CommandWereWolf(MainLG main, String name) {
-        super(name);
-        this.main=main;
+    public CommandWereWolf(MainLG main) {
+        this.main = main;
     }
 
     @Override
@@ -48,15 +47,15 @@ public class CommandWereWolf extends Commands {
             return;
         }
 
-        if(!plg.isCamp(Camp.LG) && !plg.isRole(RoleLG.LOUP_GAROU_BLANC)) {
+        if (!plg.isCamp(Camp.LG) && !plg.isRole(RoleLG.LOUP_GAROU_BLANC)) {
             sender.sendMessage(main.text.getText(98));
             return;
         }
-        if(!main.config.tool_switch.get(ToolLG.LG_LIST)){
+        if (!main.config.configValues.get(ToolLG.LG_LIST)) {
             sender.sendMessage(main.text.getText(99));
             return;
         }
-        if(main.config.value.get(TimerLG.LG_LIST)>0) {
+        if (main.config.timerValues.get(TimerLG.LG_LIST) > 0) {
             sender.sendMessage(main.text.getText(100));
             return;
         }

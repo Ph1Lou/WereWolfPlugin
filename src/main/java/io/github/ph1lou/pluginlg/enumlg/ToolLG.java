@@ -15,15 +15,16 @@ public enum ToolLG {
 	POLYGAMY(false),
 	COMPASS_MIDDLE(false),
 	SEER_EVERY_OTHER_DAY(false),
+	RED_NAME_TAG(true),
 	DON_LOVERS(false),
 	AUTO_GROUP(true);
 
 	private final Boolean value;
-	
+
 	ToolLG(Boolean value) {
-		this.value=value;
+		this.value = value;
 	}
-	
+
 	public Boolean getValue() {
 		return this.value;
 	}

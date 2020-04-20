@@ -12,9 +12,8 @@ import org.bukkit.entity.Player;
 public class CommandGuardianAngel extends Commands {
     final MainLG main;
 
-    public CommandGuardianAngel(MainLG main, String name) {
-        super(name);
-        this.main=main;
+    public CommandGuardianAngel(MainLG main) {
+        this.main = main;
     }
 
     @Override

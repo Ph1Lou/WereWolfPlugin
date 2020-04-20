@@ -9,16 +9,15 @@ public class CommandRules extends Commands {
 
     final MainLG main;
 
-    public CommandRules(MainLG main, String name) {
-        super(name);
-        this.main=main;
+    public CommandRules(MainLG main) {
+        this.main = main;
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
         for (ToolLG tool : ToolLG.values()) {
 
-            if (main.config.tool_switch.get(tool)) {
+            if (main.config.configValues.get(tool)) {
                 sender.sendMessage(String.format(main.text.getText(169), main.text.translateTool.get(tool)));
             } else sender.sendMessage(String.format(main.text.getText(168), main.text.translateTool.get(tool)));
         }

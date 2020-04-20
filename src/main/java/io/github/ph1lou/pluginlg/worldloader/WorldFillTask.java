@@ -13,15 +13,14 @@ import java.util.Set;
 public class WorldFillTask implements Runnable {
 	// general task-related reference data
 	private Server server;
-	private World world;
-	private BorderData border;
-	private WorldFileData worldData;
+	private final World world;
+	private final BorderData border;
+	private final WorldFileData worldData;
 	private boolean readyToGo = false;
 	private boolean paused = false;
 	private boolean pausedForMemory = false;
 	private int taskID = -1;
-	private int chunksPerRun;
-	private boolean continueNotice = false;
+	private final int chunksPerRun;
 
 
 	// values for the spiral pattern check which fills out the map to the border
@@ -32,9 +31,9 @@ public class WorldFillTask implements Runnable {
 	private int length = -1;
 	private int current = 0;
 	private boolean insideBorder = true;
-	private List<CoordXZ> storedChunks = new LinkedList<>();
-	private Set<CoordXZ> originalChunks = new HashSet<>();
-	private CoordXZ lastChunk = new CoordXZ(0, 0);
+	private final List<CordXZ> storedChunks = new LinkedList<>();
+	private final Set<CordXZ> originalChunks = new HashSet<>();
+	private final CordXZ lastChunk = new CordXZ(0, 0);
 
 	// for reporting progress back to user occasionally
 	private long lastReport = System.currentTimeMillis();
@@ -42,9 +41,10 @@ public class WorldFillTask implements Runnable {
 	private int reportTarget = 0;
 	private int reportTotal = 0;
 	private int reportNum = 0;
+	private boolean finish = false;
 
 
-	public WorldFillTask( String worldName, int chunksPerRun, int radius) {
+	public WorldFillTask(String worldName, int chunksPerRun, int radius) {
 
 		this.server = Bukkit.getServer();
 		this.chunksPerRun = chunksPerRun;
@@ -61,11 +61,11 @@ public class WorldFillTask implements Runnable {
 			return;
 		}
 
-		this.x = CoordXZ.blockToChunk((int)border.getX());
-		this.z = CoordXZ.blockToChunk((int)border.getZ());
+		this.x = CordXZ.blockToChunk((int) border.getX());
+		this.z = CordXZ.blockToChunk((int) border.getZ());
 
-		int chunkWidthX = (int) Math.ceil((double)((border.getRadiusX() + 16) * 2) / 16);
-		int chunkWidthZ = (int) Math.ceil((double)((border.getRadiusZ() + 16) * 2) / 16);
+		int chunkWidthX = (int) Math.ceil((double) ((border.getRadiusX() + 16) * 2) / 16);
+		int chunkWidthZ = (int) Math.ceil((double) ((border.getRadiusZ() + 16) * 2) / 16);
 		int biggerWidth = Math.max(chunkWidthX, chunkWidthZ); //We need to calculate the reportTarget with the bigger width, since the spiral will only stop if it has a size of biggerWidth x biggerWidth
 		this.reportTarget = (biggerWidth * biggerWidth) + biggerWidth + 1;
 
@@ -76,9 +76,8 @@ public class WorldFillTask implements Runnable {
 
 		// keep track of the chunks which are already loaded when the task starts, to not unload them
 		Chunk[] originals = world.getLoadedChunks();
-		for (Chunk original : originals)
-		{
-			originalChunks.add(new CoordXZ(original.getX(), original.getZ()));
+		for (Chunk original : originals) {
+			originalChunks.add(new CordXZ(original.getX(), original.getZ()));
 		}
 
 		this.readyToGo = true;
@@ -86,26 +85,17 @@ public class WorldFillTask implements Runnable {
 	}
 
 
-
-	public void setTaskID(int ID)
-	{	
+	public void setTaskID(int ID) {
 		if (ID == -1) this.stop();
 		this.taskID = ID;
 	}
 
 
 	@Override
-	public void run()
-	{
-		if (continueNotice)
-		{	// notify user that task has continued automatically
-			continueNotice = false;
-			sendMessage("World map generation task automatically continuing.");
-			sendMessage("Reminder: you can cancel at any time with \"wb fill cancel\", or pause/unpause with \"wb fill pause\".");
-		}
+	public void run() {
 
-		if (pausedForMemory)
-		{	// if available memory gets too low, we automatically pause, so handle that
+		if (pausedForMemory) {    // if available memory gets too low, we automatically pause, so handle that
+
 			if (AvailableMemoryTooLow())
 				return;
 
@@ -122,8 +112,7 @@ public class WorldFillTask implements Runnable {
 		// and this is tracked to keep one iteration from dragging on too long and possibly choking the system if the user specified a really high frequency
 		long loopStartTime = System.currentTimeMillis();
 
-		for (int loop = 0; loop < chunksPerRun; loop++)
-		{
+		for (int loop = 0; loop < chunksPerRun; loop++) {
 			// in case the task has been paused while we're repeating...
 			if (paused || pausedForMemory)
 				return;
@@ -135,24 +124,21 @@ public class WorldFillTask implements Runnable {
 				reportProgress();
 
 			// if this iteration has been running for 45ms (almost 1 tick) or more, stop to take a breather
-			if (now > loopStartTime + 45)
-			{
+			if (now > loopStartTime + 45) {
 				readyToGo = true;
 				return;
 			}
 
 			// if we've made it at least partly outside the border, skip past any such chunks
-			while (!border.insideBorder(CoordXZ.chunkToBlock(x) + 8, CoordXZ.chunkToBlock(z) + 8))
-			{
-				if (!moveToNext())
+			while (!border.insideBorder(CordXZ.chunkToBlock(x) + 8, CordXZ.chunkToBlock(z) + 8)) {
+				if (cannotMoveToNext())
 					return;
 			}
 			insideBorder = true;
 
-			while (worldData.isChunkFullyGenerated(x, z))
-			{
+			while (worldData.isChunkFullyGenerated(x, z)) {
 				insideBorder = true;
-				if (!moveToNext())
+				if (cannotMoveToNext())
 					return;
 			}
 
@@ -167,26 +153,24 @@ public class WorldFillTask implements Runnable {
 			world.loadChunk(popX, popZ, false);
 
 			// make sure the previous chunk in our spiral is loaded as well (might have already existed and been skipped over)
-			if (!storedChunks.contains(lastChunk) && !originalChunks.contains(lastChunk))
-			{
+			if (!storedChunks.contains(lastChunk) && !originalChunks.contains(lastChunk)) {
 				world.loadChunk(lastChunk.x, lastChunk.z, false);
-				storedChunks.add(new CoordXZ(lastChunk.x, lastChunk.z));
+				storedChunks.add(new CordXZ(lastChunk.x, lastChunk.z));
 			}
 
 			// Store the coordinates of these latest 2 chunks we just loaded, so we can unload them after a bit...
-			storedChunks.add(new CoordXZ(popX, popZ));
-			storedChunks.add(new CoordXZ(x, z));
+			storedChunks.add(new CordXZ(popX, popZ));
+			storedChunks.add(new CordXZ(x, z));
 
 			// If enough stored chunks are buffered in, go ahead and unload the oldest to free up memory
-			while (storedChunks.size() > 8)
-			{
-				CoordXZ coord = storedChunks.remove(0);
-				if (!originalChunks.contains(coord))
-					world.unloadChunkRequest(coord.x, coord.z);
+			while (storedChunks.size() > 8) {
+				CordXZ cord = storedChunks.remove(0);
+				if (!originalChunks.contains(cord))
+					world.unloadChunkRequest(cord.x, cord.z);
 			}
 
 			// move on to next chunk
-			if (!moveToNext())
+			if (cannotMoveToNext())
 				return;
 		}
 
@@ -195,10 +179,10 @@ public class WorldFillTask implements Runnable {
 	}
 
 	// step through chunks in spiral pattern from center; returns false if we're done, otherwise returns true
-	public boolean moveToNext() {
+	public boolean cannotMoveToNext() {
 
 		if (paused || pausedForMemory)
-			return false;
+			return true;
 
 		reportNum++;
 
@@ -207,12 +191,11 @@ public class WorldFillTask implements Runnable {
 		// make sure of the direction we're moving (X or Z? negative or positive?)
 		if (current < length)
 			current++;
-		else
-		{	// one leg/side of the spiral down...
+		else {    // one leg/side of the spiral down...
+
 			current = 0;
 			isZLeg ^= true;
-			if (isZLeg)
-			{	// every second leg (between X and Z legs, negative or positive), length increases
+			if (isZLeg) {    // every second leg (between X and Z legs, negative or positive), length increases
 				isNeg ^= true;
 				length++;
 			}
@@ -233,22 +216,22 @@ public class WorldFillTask implements Runnable {
 
 			if (!insideBorder) {    // and finish if so
 				finish();
-				return false;
+				return true;
 			}    // otherwise, reset the "inside border" flag
 			else
 				insideBorder = false;
 		}
-		return true;
+		return false;
 
 		/* reference diagram used, should move in this pattern:
 		 *  8 [>][>][>][>][>] etc.
-	 * [^][6][>][>][>][>][>][6]
-	 * [^][^][4][>][>][>][4][v]
-	 * [^][^][^][2][>][2][v][v]
-	 * [^][^][^][^][0][v][v][v]
-	 * [^][^][^][1][1][v][v][v]
-	 * [^][^][3][<][<][3][v][v]
-	 * [^][5][<][<][<][<][5][v]
+		 * [^][6][>][>][>][>][>][6]
+		 * [^][^][4][>][>][>][4][v]
+		 * [^][^][^][2][>][2][v][v]
+		 * [^][^][^][^][0][v][v][v]
+		 * [^][^][^][1][1][v][v][v]
+		 * [^][^][3][<][<][3][v][v]
+		 * [^][5][<][<][<][<][5][v]
 	 * [7][<][<][<][<][<][<][7]
 	 */
 	}
@@ -256,6 +239,7 @@ public class WorldFillTask implements Runnable {
 	// for successful completion
 	public void finish() {
 		this.paused = true;
+		this.finish = true;
 		reportProgress();
 		world.save();
 		sendMessage("task successfully completed for world \"" + refWorld() + "\"!");
@@ -276,30 +260,26 @@ public class WorldFillTask implements Runnable {
 
 		// go ahead and unload any chunks we still have loaded
 		while (!storedChunks.isEmpty()) {
-			CoordXZ coord = storedChunks.remove(0);
-			if (!originalChunks.contains(coord))
-				world.unloadChunkRequest(coord.x, coord.z);
+			CordXZ cord = storedChunks.remove(0);
+			if (!originalChunks.contains(cord))
+				world.unloadChunkRequest(cord.x, cord.z);
 		}
 	}
 
 	// is this task still valid/workable?
 
-	// handle pausing/unpausing the task
-
-
 	// let the user know how things are coming along
 	private void reportProgress() {
 		lastReport = System.currentTimeMillis();
-		double perc = getPercentageCompleted();
-		if (perc > 100) perc = 100;
-		sendMessage(reportNum + " more chunks processed (" + (reportTotal + reportNum) + " total, ~" + new DecimalFormat("0.0").format(perc) + "%" + ")");
+		double percentage = getPercentageCompleted();
+		if (percentage > 100) percentage = 100;
+		sendMessage(reportNum + " more chunks processed (" + (reportTotal + reportNum) + " total, ~" + new DecimalFormat("0.0").format(percentage) + "%" + ")");
 		reportTotal += reportNum;
 		reportNum = 0;
 
 		// go ahead and save world to disk every 30 seconds or so by default, just in case; can take a couple of seconds or more, so we don't want to run it too often
 		int fillAutoSaveFrequency = 30;
-		if (lastAutosave + (fillAutoSaveFrequency * 1000) < lastReport)
-		{
+		if (lastAutosave + (fillAutoSaveFrequency * 1000) < lastReport) {
 			lastAutosave = lastReport;
 			sendMessage("Saving the world to disk, just to be on the safe side.");
 			world.save();
@@ -307,16 +287,15 @@ public class WorldFillTask implements Runnable {
 	}
 
 	// send a message to the server console/log and possibly to an in-game player
-	private void sendMessage(String text)
-	{
+	private void sendMessage(String text) {
 		// Due to chunk generation eating up memory and Java being too slow about GC, we need to track memory availability
 		int availMem = AvailableMemory();
 
 		System.out.println("[Fill] " + text + " (free mem: " + availMem + " MB)");
 
 
-		if (availMem < 200)
-		{	// running low on memory, auto-pause
+		if (availMem < 200) {    // running low on memory, auto-pause
+
 			pausedForMemory = true;
 			text = "Available memory is very low, task is pausing. A cleanup will be attempted now, and the task will automatically continue if/when sufficient memory is freed up.\n Alternatively, if you restart the server, this task will automatically continue once the server is back up.";
 			System.out.println("[Fill] " + text);
@@ -337,22 +316,21 @@ public class WorldFillTask implements Runnable {
 	
 	/**
 	 * Get the percentage completed for the fill task.
-	 * 
+	 *
 	 * @return Percentage
 	 */
 	public double getPercentageCompleted() {
+		if (finish) return 100;
 		return Math.min(100, ((double) (reportTotal + reportNum) / (double) reportTarget) * 100);
 	}
 
 
-	public int AvailableMemory()
-	{
+	public int AvailableMemory() {
 		Runtime rt = Runtime.getRuntime();
-		return (int)((rt.maxMemory() - rt.totalMemory() + rt.freeMemory()) / 1048576);  // 1024*1024 = 1048576 (bytes in 1 MB)
+		return (int) ((rt.maxMemory() - rt.totalMemory() + rt.freeMemory()) / 1048576);  // 1024*1024 = 1048576 (bytes in 1 MB)
 	}
 
-	public boolean AvailableMemoryTooLow()
-	{
+	public boolean AvailableMemoryTooLow() {
 		return AvailableMemory() < 500;
 	}
 }

@@ -24,7 +24,7 @@ public class FileLG {
         }
 
 
-        try (final FileWriter fw = new FileWriter(file);) {
+        try (final FileWriter fw = new FileWriter(file)) {
             fw.write(text);
 
             fw.flush();

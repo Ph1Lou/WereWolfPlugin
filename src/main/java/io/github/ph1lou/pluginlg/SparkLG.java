@@ -6,43 +6,52 @@ import spark.Spark;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class SparkLG {
     private int port= 4567;
     private String ip;
     private String name ="";
     private String hour;
-    private Boolean host=false;
+    private String token = "";
+    private Boolean host = false;
     final List<String> temp = new ArrayList<>(Collections.singletonList("HostBot"));
     final MainLG main;
 
-    public SparkLG(MainLG main){
+    public SparkLG(MainLG main) {
 
-        this.main=main;
-        if(!main.getConfig().getBoolean("sendInfoToBotEnable")) return;
+        this.main = main;
+        if (!main.getConfig().getBoolean("sendInfoToBotEnable")) return;
 
-        if(main.getConfig().getString("port")!=null){
-            this.port=main.getConfig().getInt("port");
+        if (main.getConfig().getString("port") != null) {
+            this.port = main.getConfig().getInt("port");
             Spark.port(this.port);
         }
-
-        if(main.getConfig().getString("ip")==null){
-            ip=Bukkit.getIp();
+        if (main.getConfig().getString("token") != null) {
+            this.token = main.getConfig().getString("token");
         }
-        else ip=main.getConfig().getString("ip");
 
-        Spark.get("/host", (req, res)->main.score.getHost());
-        Spark.get("/player", (req, res)->main.score.getPlayerSize());
-        Spark.get("/role", (req, res)->main.score.getRole());
-        Spark.get("/ad", (req, res)->this.host);
-        Spark.get("/win", (req, res)->main.endlg.getVictoryTeam());
-        Spark.get("/state", (req, res)-> main.getState().ordinal());
-        Spark.get("/day", (req, res)-> main.getDay().ordinal());
-        Spark.get("/name", (req, res)->this.name);
-        Spark.get("/hour", (req, res)->this.hour);
+        if (main.getConfig().getString("ip") == null) {
+            ip = Bukkit.getIp();
+        } else ip = main.getConfig().getString("ip");
+
+        Spark.get("/status", (req, res) -> {
+            Map<String, String> status = new HashMap<>();
+            status.put("ad", String.valueOf(this.host));
+            status.put("day", String.valueOf(main.getDay().ordinal()));
+            status.put("host", main.score.getHost());
+            status.put("hour", this.hour);
+            status.put("lang", main.getConfig().getString("lang"));
+            status.put("name", this.name);
+            status.put("playerSize", String.valueOf(main.score.getPlayerSize()));
+            status.put("roleSize", String.valueOf(main.score.getRole()));
+            status.put("state", String.valueOf(main.getState().ordinal()));
+            status.put("timer", String.valueOf(main.score.getTimer()));
+
+            status.put("win", main.endlg.getVictoryTeam());
+            return new Gson().toJson(status);
+        });
+
         Spark.get("/config", (request, response) -> {
             response.type("application/json");
             return main.serialize.serialize(main.config);
@@ -51,18 +60,7 @@ public class SparkLG {
             response.type("application/json");
             return main.serialize.serialize(main.playerLG);
         });
-        Spark.get("/stuffs", (request, response) -> {
-            response.type("application/json");
-            return main.serialize.serialize(main.stufflg);
-        });
-        Spark.get("/lang", (request, response) -> {
-            response.type("application/json");
-            return main.serialize.serialize(main.lang);
-        });
-        Spark.get("/lovers", (request, response) -> {
-            response.type("application/json");
-            return new Gson().toJson(main.couple_manage.couple_range);
-        });
+
         Spark.get("/emote/:name", (request, response) -> {
             String name=request.params(":name");
             if(!temp.contains(name)){
@@ -79,20 +77,31 @@ public class SparkLG {
     }
 
 
-    public void setHost(String name,String hour)  {
-        this.host=true;
-        this.name=name;
-        this.hour=hour;
+    public void setHost(String name, String hour) {
+        this.host = true;
+        this.name = name;
+        this.hour = hour;
         updateDiscord();
+    }
+
+    public void pingBot() {
+
+        try {
+
+            URL url = new URL("https://pluginlg.ph1lou.fr/hostbot/ping/" + ip + "/" + port + "/" + token);
+            url.openStream();
+        } catch (IOException ignored) {
+        }
     }
 
     public void updateDiscord() {
 
-        if(!main.getConfig().getBoolean("sendInfoToBotEnable")) return;
+        if (!main.getConfig().getBoolean("sendInfoToBotEnable")) return;
         try {
-            URL url = new URL("http://62.210.45.7:4567/hostbot/"+ip+"/"+port);
+
+            URL url = new URL("https://pluginlg.ph1lou.fr/hostbot/" + ip + "/" + port + "/" + token);
             url.openStream();
-        }catch(IOException ignored){
+        } catch (IOException ignored) {
         }
     }
 }

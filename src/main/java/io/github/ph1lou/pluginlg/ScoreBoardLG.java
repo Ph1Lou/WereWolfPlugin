@@ -55,7 +55,10 @@ public class ScoreBoardLG {
 			if(!main.playerLG.get(playername).isState(State.MORT)) {
 				
 				if(!main.isState(StateLG.LG)) {
-					score.set(1,String.format(score.get(1), conversion(main.config.value.get(TimerLG.ROLE_DURATION))));
+					if (main.config.isTrollSV()) {
+						score.set(1, String.format(score.get(1), conversion(main.config.timerValues.get(TimerLG.ROLE_DURATION) - 120)));
+					} else
+						score.set(1, String.format(score.get(1), conversion(main.config.timerValues.get(TimerLG.ROLE_DURATION))));
 				}
 				else score.set(1,main.text.translateRole.get(main.playerLG.get(playername).getRole()));
 			}
@@ -67,28 +70,27 @@ public class ScoreBoardLG {
 		board.updateLines(score);
 	}
 
-	private void updateGlobalScoreBoard2(){
+	private void updateGlobalScoreBoard2() {
 
 		WorldBorder wb = Bukkit.getWorld("world").getWorldBorder();
 		scoreboard2 = new ArrayList<>(main.text.getScoreBoard2());
-		scoreboard2.set(3,String.format(scoreboard2.get(3),conversion(timer)));
-		scoreboard2.set(4,String.format(scoreboard2.get(4),timer/main.config.value.get(TimerLG.DAY_DURATION)/2));
-		scoreboard2.set(5,String.format(scoreboard2.get(5),player));
-		scoreboard2.set(6,String.format(scoreboard2.get(6), group_size));
-		scoreboard2.set(9,String.format(scoreboard2.get(9),Math.round(wb.getSize())));
-		scoreboard2.set(11,String.format(scoreboard2.get(11),host));
+		scoreboard2.set(3, String.format(scoreboard2.get(3), conversion(timer)));
+		scoreboard2.set(4, String.format(scoreboard2.get(4), timer / main.config.timerValues.get(TimerLG.DAY_DURATION) / 2 + 1));
+		scoreboard2.set(5, String.format(scoreboard2.get(5), player));
+		scoreboard2.set(6, String.format(scoreboard2.get(6), group_size));
+		scoreboard2.set(9, String.format(scoreboard2.get(9), Math.round(wb.getSize())));
+		scoreboard2.set(11, String.format(scoreboard2.get(11), host));
 
-		if(main.config.value.get(TimerLG.BORDER_BEGIN)>0) {
-			scoreboard2.set(8,String.format(scoreboard2.get(8), conversion(main.config.value.get(TimerLG.BORDER_BEGIN))));
-		}
-		else {
-			scoreboard2.set(8,String.format(scoreboard2.get(8),main.text.getText(80)));
-			if(wb.getSize()>main.config.border_value.get(BorderLG.BORDER_MIN)){
-				scoreboard2.set(9,scoreboard2.get(9)+" > "+main.config.border_value.get(BorderLG.BORDER_MIN));
+		if (main.config.timerValues.get(TimerLG.BORDER_BEGIN) > 0) {
+			scoreboard2.set(8, String.format(scoreboard2.get(8), conversion(main.config.timerValues.get(TimerLG.BORDER_BEGIN))));
+		} else {
+			scoreboard2.set(8, String.format(scoreboard2.get(8), main.text.getText(80)));
+			if (wb.getSize() > main.config.borderValues.get(BorderLG.BORDER_MIN)) {
+				scoreboard2.set(9, scoreboard2.get(9) + " > " + main.config.borderValues.get(BorderLG.BORDER_MIN));
 			}
 		}
 
-		for(int i=0;i<scoreboard2.size();i++) {
+		for (int i = 0; i < scoreboard2.size(); i++) {
 			StringBuilder sb = new StringBuilder();
 			sb.append(scoreboard2.get(i));
 			scoreboard2.set(i,sb.toString().substring(0,Math.min(30,sb.length())));
@@ -99,10 +101,10 @@ public class ScoreBoardLG {
 
 		roles.clear();
 		for(RoleLG role:RoleLG.values()) {
-			if(main.config.role_count.get(role)>0) {
+			if (main.config.roleCount.get(role) > 0) {
 				StringBuilder sb = new StringBuilder();
-				sb.append("§3").append(main.config.role_count.get(role)).append("§r ").append(main.text.translateRole.get(role));
-				roles.add(sb.toString().substring(0,Math.min(30,sb.length())));
+				sb.append("§3").append(main.config.roleCount.get(role)).append("§r ").append(main.text.translateRole.get(role));
+				roles.add(sb.toString().substring(0, Math.min(30, sb.length())));
 			}
 		}
 		if(!roles.isEmpty()){
@@ -139,70 +141,71 @@ public class ScoreBoardLG {
 			scoreboard3.add(kill_score.get(i) +"§3 "+main.playerLG.get(kill_score.get(i)).getNbKill());
 		}
 	}
-		
+
 	public int midDistance(Player player) {
-		
+
 		World world = player.getWorld();
 		Location location = player.getLocation();
 		location.setY(world.getSpawnLocation().getY());
-		int distance= (int) location.distance(world.getSpawnLocation());
-		
-		return distance/300*300;
-	}
-	
-	void actionBar(Player player) {
+		int distance = (int) location.distance(world.getSpawnLocation());
 
-		StringBuilder stringbuilder=new StringBuilder();
+		return distance / 300 * 300;
+	}
+
+	public void actionBar(Player player) {
+
+		StringBuilder stringbuilder = new StringBuilder();
 		int d = midDistance(player);
-		stringbuilder.append(String.format(main.text.getText(78),d,d+300,(int) Math.floor(player.getLocation().getY())));
+		stringbuilder.append(String.format(main.text.getText(78), d, d + 300, (int) Math.floor(player.getLocation().getY())));
 
 		if (!main.eventslg.chest_has_been_open.isEmpty()) {
-				
-			if(!main.eventslg.chest_has_been_open.containsValue(false)) {
+
+			if (!main.eventslg.chest_has_been_open.containsValue(false)) {
 				main.eventslg.chest_location.clear();
 				main.eventslg.chest_has_been_open.clear();
 				Bukkit.broadcastMessage(main.text.getText(165));
-				main.config.tool_switch.put(ToolLG.EVENT_SEER_DEATH,true);
-			}
-			else {
-				for (int i = 0; i<main.eventslg.chest_location.size(); i++) {
-					if(!main.eventslg.chest_has_been_open.get(main.eventslg.chest_location.get(i))) {
+				main.config.configValues.put(ToolLG.EVENT_SEER_DEATH, true);
+			} else {
+				for (int i = 0; i < main.eventslg.chest_location.size(); i++) {
+					if (!main.eventslg.chest_has_been_open.get(main.eventslg.chest_location.get(i))) {
 						stringbuilder.append("§a");
-					}
-					else stringbuilder.append("§6");
+					} else stringbuilder.append("§6");
 					stringbuilder.append(" ").append(updateArrow(player, main.eventslg.chest_location.get(i)));
 				}
 			}
 		}
-		if(main.playerLG.containsKey(player.getName()) && main.playerLG.get(player.getName()).isState(State.LIVING)) {
-			
-			for (String p:main.playerLG.get(player.getName()).getCouple()) {
-				if(Bukkit.getPlayer(p)!=null) {
-					stringbuilder.append("§d ").append(p).append(" ").append(updateArrow(player, Bukkit.getPlayer(p).getLocation()));
+		if (main.playerLG.containsKey(player.getName())) {
+
+			PlayerLG plg = main.playerLG.get(player.getName());
+
+			if (plg.isState(State.LIVING)) {
+				for (String p : plg.getLovers()) {
+					if (Bukkit.getPlayer(p) != null) {
+						stringbuilder.append("§d ").append(p).append(" ").append(updateArrow(player, Bukkit.getPlayer(p).getLocation()));
+					}
 				}
-			}
-			if(main.playerLG.get(player.getName()).isRole(RoleLG.ANGE_GARDIEN)){
-				for (String p:main.playerLG.get(player.getName()).getAffectedPlayer()) {
-					if(main.playerLG.get(p).isState(State.LIVING) && Bukkit.getPlayer(p)!=null) {
-						stringbuilder.append("§1 ").append(p).append(" ").append(updateArrow(player, Bukkit.getPlayer(p).getLocation()));
+				if (plg.isRole(RoleLG.ANGE_GARDIEN) || (plg.isRole(RoleLG.TRAPPEUR) && !plg.hasPower())) {
+					for (String p : plg.getAffectedPlayer()) {
+						if (main.playerLG.get(p).isState(State.LIVING) && Bukkit.getPlayer(p) != null) {
+							stringbuilder.append("§b ").append(p).append(" ").append(updateArrow(player, Bukkit.getPlayer(p).getLocation()));
+						}
 					}
 				}
 			}
 		}
-		if(stringbuilder.length()>0) {
+		if (stringbuilder.length() > 0) {
 			Title.sendActionBar(player, stringbuilder.toString());
 		}
 	}
 		
 	public void updateBoard() {
 
-		if(main.config.tool_switch.get(ToolLG.COMPO_VISIBLE)  && TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())%60>=30){
+		if (main.config.configValues.get(ToolLG.COMPO_VISIBLE) && TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) % 60 >= 30) {
 			updateScoreBoardRole();
-		}
-		else roles.clear();
+		} else roles.clear();
 
-		if(roles.isEmpty()){
-			if(main.isState(StateLG.LOBBY)) updateScoreBoard1();
+		if (roles.isEmpty()) {
+			if (main.isState(StateLG.LOBBY)) updateScoreBoard1();
 			else updateGlobalScoreBoard2();
 		}
 
@@ -290,12 +293,12 @@ public class ScoreBoardLG {
 
 
 	public void groupSizeChange() {
-		
-		if(main.config.tool_switch.get(ToolLG.AUTO_GROUP) && player<= group_size *3 && group_size >3) {
+
+		if (main.config.configValues.get(ToolLG.AUTO_GROUP) && player <= group_size * 3 && group_size > 3) {
 			group_size--;
 			Bukkit.broadcastMessage(String.format(main.text.getText(137), group_size));
-			for (Player player:Bukkit.getOnlinePlayers()) {
-				Title.sendTitle(player,20,60, 20,main.text.getText(138),String.format( main.text.getText(139),main.score.getGroup()));
+			for (Player player : Bukkit.getOnlinePlayers()) {
+				Title.sendTitle(player, 20, 60, 20, main.text.getText(138), String.format(main.text.getText(139), main.score.getGroup()));
 			}
 		}
 	}
