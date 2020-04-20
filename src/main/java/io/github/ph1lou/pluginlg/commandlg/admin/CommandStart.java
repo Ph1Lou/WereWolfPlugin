@@ -44,10 +44,9 @@ public class CommandStart extends Commands {
             main.spark.updateDiscord();
         } catch (Exception e) {
             sender.sendMessage(main.text.getText(21));
-        } finally {
-            File file = new File(main.getDataFolder() + File.separator + "configs" + File.separator, "saveCurrent.json");
-            main.filelg.save(file, main.serialize.serialize(main.config));
-            main.stufflg.save("saveCurrent");
         }
+        File file = new File(main.getDataFolder() + File.separator + "configs" + File.separator, "saveCurrent.json");
+        main.filelg.save(file, main.serialize.serialize(main.config));
+        main.stufflg.save("saveCurrent");
     }
 }

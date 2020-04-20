@@ -246,18 +246,15 @@ public class DeathManagementLG {
 
             main.loversManage.cursedLoversRange.get(i).remove(playerName);
 
-            String killerName = main.playerLG.get(playerName).getKiller();
+            String cursedLover = main.loversManage.cursedLoversRange.get(i).get(0);
 
-            if (Bukkit.getPlayer(killerName) != null) {
-                Player killer = Bukkit.getPlayer(killerName);
+            if (Bukkit.getPlayer(cursedLover) != null) {
+                Player killer = Bukkit.getPlayer(cursedLover);
                 killer.sendMessage(main.text.getText(44));
                 killer.setMaxHealth(Math.max(killer.getMaxHealth() - 2, 1));
             }
-
-            if (main.loversManage.cursedLoversRange.get(i).size() == 1) {
-                main.loversManage.cursedLoversRange.remove(i);
-                main.config.roleCount.put(RoleLG.COUPLE_MAUDIT, main.config.roleCount.get(RoleLG.COUPLE_MAUDIT) - 1);
-            }
+            main.loversManage.cursedLoversRange.remove(i);
+            main.config.roleCount.put(RoleLG.COUPLE_MAUDIT, main.config.roleCount.get(RoleLG.COUPLE_MAUDIT) - 1);
         }
     }
 

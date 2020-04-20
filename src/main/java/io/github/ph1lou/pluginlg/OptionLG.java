@@ -417,13 +417,22 @@ public class OptionLG {
 	}
 
 	public void updateSelectionTool(){
-		for (int i = 0; i< ToolLG.values().length; i++) {
+		for (int i = 0; i < ToolLG.values().length; i++) {
 			if (main.config.configValues.get(ToolLG.values()[i])) {
 				invConfig.setItem(9 + i, changeMeta(new ItemStack(Material.STAINED_CLAY, 1, (short) 5), main.text.translateTool.get(ToolLG.values()[i]), Collections.singletonList(String.format(main.text.getText(169), ""))));
 			} else
 				invConfig.setItem(9 + i, changeMeta(new ItemStack(Material.STAINED_CLAY, 1, (short) 6), main.text.translateTool.get(ToolLG.values()[i]), Collections.singletonList(String.format(main.text.getText(168), ""))));
 		}
 		updateCompass();
+		if (main.config.configValues.get(ToolLG.LG_LIST) && main.config.timerValues.get(TimerLG.LG_LIST) < 0) {
+			for (String playerName : main.playerLG.keySet()) {
+				if (main.playerLG.get(playerName).isCamp(Camp.LG) || main.playerLG.get(playerName).isRole(RoleLG.LOUP_GAROU_BLANC)) {
+					if (main.config.configValues.get(ToolLG.RED_NAME_TAG)) {
+						main.board.getTeam(playerName).setPrefix("§4");
+					} else main.board.getTeam(playerName).setPrefix("");
+				}
+			}
+		}
 	}
 
 	public void updateSelectionScenario() {
@@ -470,12 +479,6 @@ public class OptionLG {
 					}
 				}
 			}
-			if (main.config.configValues.get(ToolLG.LG_LIST) && main.config.timerValues.get(TimerLG.LG_LIST) < 0 && main.playerLG.get(playerName).isCamp(Camp.LG)) {
-				if (main.config.configValues.get(ToolLG.RED_NAME_TAG)) {
-					main.board.getTeam(playerName).setPrefix("§4");
-				} else main.board.getTeam(playerName).setPrefix("");
-			}
-
 
 			if (main.config.scenarioValues.get(ScenarioLG.NO_NAME_TAG)) {
 				main.board.getTeam(playerName).setNameTagVisibility(NameTagVisibility.NEVER);

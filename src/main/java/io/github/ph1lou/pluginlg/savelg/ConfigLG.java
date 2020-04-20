@@ -62,6 +62,7 @@ public class ConfigLG {
             this.setDistanceBearTrainer(config_load.getDistanceBearTrainer());
             this.setDistanceFox(config_load.getDistanceFox());
             this.setResistanceRate(config_load.getResistanceRate());
+            this.setTrollSV(config_load.isTrollSV());
         }
 		for(RoleLG role:RoleLG.values()) {
             this.roleCount.put(role, config_load.roleCount.getOrDefault(role, 0));
