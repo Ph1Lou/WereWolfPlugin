@@ -7,9 +7,12 @@ load: STARTUP
 commands:
 
   lg:
-    description: commande des joueurs
+    description: commandes des joueurs
     usage: /<command> h
-  adminlg:
-    description: commande des admins
+  ww:
+    description: commands for players
+    usage: /<command> h
+  adminWW:
+    description: admin commands
     usage: /<command> h
 

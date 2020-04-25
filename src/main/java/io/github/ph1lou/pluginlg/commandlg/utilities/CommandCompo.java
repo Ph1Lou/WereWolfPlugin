@@ -4,27 +4,47 @@ import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.enumlg.RoleLG;
 import io.github.ph1lou.pluginlg.enumlg.ToolLG;
+import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlg.savelg.TextLG;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class CommandCompo extends Commands {
 
-    final MainLG main;
 
     public CommandCompo(MainLG main) {
-        this.main = main;
+        super(main);
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
 
-        if (main.config.configValues.get(ToolLG.COMPO_VISIBLE)) {
+        if(!(sender instanceof Player)) return;
+
+        GameManager game=null;
+        Player player =(Player) sender;
+
+        for(GameManager gameManager:main.listGames.values()){
+            if(gameManager.getWorld().equals(player.getWorld())){
+                game=gameManager;
+                break;
+            }
+        }
+
+        if(game==null){
+            return;
+        }
+
+        TextLG text = game.text;
+
+        if (game.config.configValues.get(ToolLG.COMPO_VISIBLE)) {
             StringBuilder sb = new StringBuilder();
             for (RoleLG role : RoleLG.values()) {
-                if (main.config.roleCount.get(role) > 0) {
-                    sb.append("§3").append(main.config.roleCount.get(role)).append("§r ").append(main.text.translateRole.get(role)).append("\n");
+                if (game.config.roleCount.get(role) > 0) {
+                    sb.append("§3").append(game.config.roleCount.get(role)).append("§r ").append(text.translateRole.get(role)).append("\n");
                 }
             }
             sender.sendMessage(sb.toString());
-        } else sender.sendMessage(main.text.getText(53));
+        } else sender.sendMessage(text.getText(53));
     }
 }

@@ -11,6 +11,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="pluginbungee" target="1.8" />
+      <module name="pluginlgapi" target="8" />
       <module name="pluginrank" target="1.5" />
       <module name="rankplugin" target="8" />
       <module name="workspace" target="8" />

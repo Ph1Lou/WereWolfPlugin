@@ -1,7 +1,7 @@
 package io.github.ph1lou.pluginlg.savelg;
 
-import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlg.enumlg.RoleLG;
+import io.github.ph1lou.pluginlg.game.GameManager;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -16,10 +16,10 @@ public class StuffLG {
     public final Map<RoleLG, List<ItemStack>> role_stuff = new HashMap<>();
     private final List<ItemStack> death_loot = new ArrayList<>();
     private final List<ItemStack> start_loot = new ArrayList<>();
-    final MainLG main;
+    final GameManager game;
 
-    public StuffLG(MainLG main) {
-        this.main = main;
+    public StuffLG(GameManager game) {
+        this.game = game;
     }
 
     public List<ItemStack> getDeathLoot() {
@@ -70,7 +70,7 @@ public class StuffLG {
             config.set("death_loot." + pos, i);
             pos++;
         }
-        File file = new File(main.getDataFolder() + File.separator + "stuffs" + File.separator, configName + ".yml");
+        File file = new File(game.getDataFolder() + File.separator + "stuffs" + File.separator, configName + ".yml");
         try {
             config.save(file);
         } catch (IOException e) {
@@ -88,8 +88,8 @@ public class StuffLG {
     public void loadStuff(String configName) {
 
         role_stuff.clear();
-        if (!(new File(main.getDataFolder() + File.separator + "stuffs" + File.separator, configName + ".yml")).exists()) {
-            main.filelg.copy(main.getResource("stuffRole.yml"), main.getDataFolder() + File.separator + "stuffs" + File.separator + configName + ".yml");
+        if (!(new File(game.getDataFolder() + File.separator + "stuffs" + File.separator, configName + ".yml")).exists()) {
+            FileLG.copy(game.getResource("stuffRole.yml"), game.getDataFolder() + File.separator + "stuffs" + File.separator + configName + ".yml");
         }
         FileConfiguration config = getOrCreateCustomConfig(configName);
         for (RoleLG role : RoleLG.values()) {
@@ -126,27 +126,27 @@ public class StuffLG {
     }
 
     public void loadStuffDefault() {
-        main.filelg.copy(main.getResource("stuffRole.yml"), main.getDataFolder() + File.separator + "stuffs" + File.separator + "stuffRole.yml");
+        FileLG.copy(game.getResource("stuffRole.yml"), game.getDataFolder() + File.separator + "stuffs" + File.separator + "stuffRole.yml");
         loadStuff("stuffRole");
     }
 
     public void loadStuffMeetUP() {
-        main.filelg.copy(main.getResource( "stuffMeetUp.yml"), main.getDataFolder() + File.separator + "stuffs" + File.separator + "stuffMeetUp.yml");
+        FileLG.copy(game.getResource( "stuffMeetUp.yml"), game.getDataFolder() + File.separator + "stuffs" + File.separator + "stuffMeetUp.yml");
         load("stuffMeetUp");
     }
 
     public void loadStuffChill() {
-        main.filelg.copy(main.getResource("stuffChill.yml"), main.getDataFolder() + File.separator + "stuffs" + File.separator + "stuffChill.yml");
+        FileLG.copy(game.getResource("stuffChill.yml"), game.getDataFolder() + File.separator + "stuffs" + File.separator + "stuffChill.yml");
         loadStuffStartAndDeath("stuffChill");
     }
 
     public FileConfiguration getOrCreateCustomConfig(String configName) {
 
-        File customConfigFile = new File(main.getDataFolder() + File.separator + "stuffs" + File.separator, configName + ".yml");
+        File customConfigFile = new File(game.getDataFolder() + File.separator + "stuffs" + File.separator, configName + ".yml");
         FileConfiguration customConfig = null;
         if (!customConfigFile.exists()) {
             try {
-                main.filelg.createFile(customConfigFile);
+                FileLG.createFile(customConfigFile);
             } catch (IOException e) {
                 e.printStackTrace();
             }

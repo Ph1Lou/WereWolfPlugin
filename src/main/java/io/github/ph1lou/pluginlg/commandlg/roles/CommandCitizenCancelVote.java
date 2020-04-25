@@ -1,19 +1,20 @@
 package io.github.ph1lou.pluginlg.commandlg.roles;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.PlayerLG;
 import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.enumlg.*;
+import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlg.game.PlayerLG;
+import io.github.ph1lou.pluginlg.savelg.TextLG;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class CommandCitizenCancelVote extends Commands {
 
-    final MainLG main;
 
     public CommandCitizenCancelVote(MainLG main) {
-        this.main = main;
+        super(main);
     }
 
     @Override
@@ -23,59 +24,78 @@ public class CommandCitizenCancelVote extends Commands {
             return;
         }
 
+        GameManager game=null;
         Player player =(Player) sender;
-        String playername = player.getName();
 
-        if(!main.playerLG.containsKey(playername)) {
-            player.sendMessage(main.text.getText(67));
+        for(GameManager gameManager:main.listGames.values()){
+            if(gameManager.getWorld().equals(player.getWorld())){
+                game=gameManager;
+                break;
+            }
+        }
+
+        if(game==null){
             return;
         }
 
-        PlayerLG plg = main.playerLG.get(playername);
+        TextLG text = game.text;
+        String playername = player.getName();
 
-        if(!main.isState(StateLG.LG)) {
-            player.sendMessage(main.text.getText(68));
+        if(!game.playerLG.containsKey(playername)) {
+            player.sendMessage(text.getText(67));
+            return;
+        }
+
+        PlayerLG plg = game.playerLG.get(playername);
+
+
+        if(!game.isState(StateLG.LG)) {
+            player.sendMessage(text.getText(68));
             return;
         }
 
         if (!plg.isRole(RoleLG.CITOYEN)){
-            player.sendMessage(String.format(main.text.getText(189),main.text.translateRole.get(RoleLG.CITOYEN)));
+            player.sendMessage(String.format(text.getText(189),text.translateRole.get(RoleLG.CITOYEN)));
             return;
         }
 
         if (args.length!=0) {
-            player.sendMessage(String.format(main.text.getText(190),0));
+            player.sendMessage(String.format(text.getText(190),0));
             return;
         }
 
         if(!plg.isState(State.LIVING)){
-            player.sendMessage(main.text.getText(97));
+            player.sendMessage(text.getText(97));
             return;
         }
 
         if(!plg.hasPower()) {
-            player.sendMessage(main.text.getText(103));
+            player.sendMessage(text.getText(103));
             return;
         }
 
-        if (main.score.getTimer() % (main.config.timerValues.get(TimerLG.DAY_DURATION) * 2) < main.config.timerValues.get(TimerLG.VOTE_DURATION)) {
-            main.text.getText(103);
+        if (game.score.getTimer() % (game.config.timerValues.get(TimerLG.DAY_DURATION) * 2) < game.config.timerValues.get(TimerLG.VOTE_DURATION)) {
+            text.getText(103);
             return;
         }
-        if (!main.config.configValues.get(ToolLG.VOTE) || main.config.timerValues.get(TimerLG.VOTE_DURATION) + main.config.timerValues.get(TimerLG.VOTE_BEGIN) > 0) {
-            main.text.getText(103);
+        if (!game.config.configValues.get(ToolLG.VOTE) || game.config.timerValues.get(TimerLG.VOTE_DURATION) + game.config.timerValues.get(TimerLG.VOTE_BEGIN) > 0) {
+            text.getText(103);
             return;
         }
-        if (main.score.getTimer() % (main.config.timerValues.get(TimerLG.DAY_DURATION) * 2) > main.config.timerValues.get(TimerLG.VOTE_DURATION) + main.config.timerValues.get(TimerLG.CITIZEN_DURATION)) {
-            main.text.getText(103);
+        if (game.score.getTimer() % (game.config.timerValues.get(TimerLG.DAY_DURATION) * 2) > game.config.timerValues.get(TimerLG.VOTE_DURATION) + game.config.timerValues.get(TimerLG.CITIZEN_DURATION)) {
+            text.getText(103);
             return;
         }
 
         plg.setPower(false);
-        String vote=main.vote.getResult();
-        sender.sendMessage(String.format(main.text.powerHasBeenUse.get(RoleLG.CITOYEN),vote));
+        String vote=game.vote.getResult();
+        sender.sendMessage(String.format(text.powerHasBeenUse.get(RoleLG.CITOYEN),vote));
         plg.addAffectedPlayer(vote);
-        Bukkit.broadcastMessage(main.text.getText(94));
-        main.vote.resetVote();
+        for(Player p:Bukkit.getOnlinePlayers()){
+            if(game.playerLG.containsKey(p.getName())){
+                p.sendMessage(text.getText(94));
+            }
+        }
+        game.vote.resetVote();
     }
 }

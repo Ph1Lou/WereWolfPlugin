@@ -6,7 +6,7 @@ import java.nio.charset.StandardCharsets;
 
 public class FileLG {
 
-    public void createFile(File file) throws IOException {
+    public static void createFile(File file) throws IOException {
 
         if (!file.exists()) {
             file.getParentFile().mkdirs();
@@ -15,7 +15,7 @@ public class FileLG {
         }
     }
 
-    public void save(File file, String text) {
+    public static void save(File file, String text) {
 
         try {
             createFile(file);
@@ -34,7 +34,7 @@ public class FileLG {
         }
     }
 
-    public void copy(InputStream source, String destination) {
+    public static void copy(InputStream source, String destination) {
         System.out.println("[pluginLG] Copying ->" + source + "\n\tto ->" + destination);
         File file = new File(destination);
         try {
@@ -62,7 +62,7 @@ public class FileLG {
         }
     }
 
-    public String loadContent(File file) {
+    public static String loadContent(File file) {
 
         if (file.exists()) {
 

@@ -1,10 +1,7 @@
 package io.github.ph1lou.pluginlg.savelg;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.Title;
-import io.github.ph1lou.pluginlg.commandlg.CommandLG;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import io.github.ph1lou.pluginlg.game.GameManager;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -14,46 +11,51 @@ import java.util.List;
 public class LangLG {
 
     final MainLG main;
+
     private final List<String> languages = new ArrayList<>(Arrays.asList("fr", "en"));
 
     public LangLG(MainLG main) {
         this.main = main;
     }
 
-    public void initLanguage(){
+    public void init(MainLG main){
         for(String lang:languages){
-            main.filelg.copy(main.getResource(lang+".json"),main.getDataFolder()+File.separator+"languages"+File.separator+lang+".json");
+            FileLG.copy(main.getResource(lang+".json"),main.getDataFolder()+File.separator+"languages"+File.separator+lang+".json");
         }
-        getLanguage();
+        main.textEN=SerializerLG.deserializeText(FileLG.loadContent(new File(main.getDataFolder() + File.separator + "languages" + File.separator, "en.json")));
+        main.textFR=SerializerLG.deserializeText(FileLG.loadContent(new File(main.getDataFolder() + File.separator + "languages" + File.separator, "fr.json")));
+        main.textEN.getTextTranslate(main);
+
+        String defaultLang = main.getConfig().getString("lang");
+
+        if(defaultLang.equals("fr")){
+            main.defaultLanguage=main.textFR;
+        }
+        else main.defaultLanguage=main.textEN;
     }
 
-    public void getLanguage(){
 
-        String langName = main.getConfig().getString("lang");
 
-        if(languages.contains(langName)){
-            File default_text = new File(main.getDataFolder()+ File.separator +"languages"+ File.separator, langName+".json");
-            main.text=main.serialize.deserializeText(main.filelg.loadContent(default_text));
+
+    public void changeLanguage(GameManager game){
+
+        String langName = game.getLang();
+        TextLG text;
+        if(langName.equals("fr")){
+            game.setText(main.textFR);
         }
-        else {
-            File default_text = new File(main.getDataFolder() + File.separator +"languages"+ File.separator, "custom.json");
+        else if(langName.equals("en")){
+            game.setText(main.textEN);
+        }
+        else{
+            File default_text = new File(main.getDataFolder() + File.separator + "languages" + File.separator, "custom.json");
             if (!default_text.exists()) {
-                main.filelg.copy(main.getResource(  "en.json"), main.getDataFolder() +  File.separator +"languages"+ File.separator +"custom.json");
-                default_text = new File(main.getDataFolder() +  File.separator +"languages" + File.separator, "en.json");
-                main.text = main.serialize.deserializeText(main.filelg.loadContent(default_text));
+                FileLG.copy(main.getResource(  "fr.json"), main.getDataFolder() +  File.separator +"languages"+ File.separator +"custom.json");
             }
-            else {
-                main.text = main.serialize.deserializeText(main.filelg.loadContent(default_text));
-                main.text.getTextTranslate(main);
-            }
+            text=SerializerLG.deserializeText(FileLG.loadContent(default_text));
+            text.getTextTranslate(main);
+            game.setText(text);
         }
-        for(Player p: Bukkit.getOnlinePlayers()){
-            if(main.playerLG.containsKey(p.getName())){
-                main.boards.get(p.getUniqueId()).updateTitle(main.text.getText(125));
-                Title.sendTabTitle(p, main.text.getText(125), main.text.getText(184));
-            }
-        }
-        main.getCommand("lg").setExecutor(new CommandLG(main));
-        main.optionlg.initInv();
+        game.optionlg.initInv();
     }
 }

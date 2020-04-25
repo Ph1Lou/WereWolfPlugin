@@ -15,6 +15,7 @@
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/pluginlgapi/pom.xml" />
         <option value="$PROJECT_DIR$/rankplugin/pom.xml" />
       </set>
     </option>

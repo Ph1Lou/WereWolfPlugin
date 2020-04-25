@@ -11,21 +11,22 @@ import java.util.*;
 // by the way, this region file handler was created based on the divulged region file format: http://mojang.com/2011/02/16/minecraft-save-file-format-in-beta-1-3/
 
 public class WorldFileData {
-    private final transient World world;
-    private transient File regionFolder = null;
-    private transient File[] regionFiles = null;
-    private final transient Map<CordXZ, List<Boolean>> regionChunkExistence = Collections.synchronizedMap(new HashMap<>());
+    private final World world;
+    private File regionFolder = null;
+    private File[] regionFiles = null;
+    private final Map<CoordXZ, List<Boolean>> regionChunkExistence = Collections.synchronizedMap(new HashMap<>());
 
     // Use this static method to create a new instance of this class. If null is returned, there was a problem so any process relying on this should be cancelled.
     public static WorldFileData create(World world) {
 
         WorldFileData newData = new WorldFileData(world);
-
         newData.regionFolder = new File(newData.world.getWorldFolder(), "region");
+
         if (!newData.regionFolder.exists() || !newData.regionFolder.isDirectory()) {
 
             // check for region folder inside a DIM* folder (DIM-1 for nether, DIM1 for end, DIMwhatever for custom world types)
             File[] possibleDimFolders = newData.world.getWorldFolder().listFiles(new DimFolderFileFilter());
+
             for (File possibleDimFolder : Objects.requireNonNull(possibleDimFolders)) {
 
                 File possible = new File(newData.world.getWorldFolder(), possibleDimFolder.getName() + File.separator + "region");
@@ -35,6 +36,7 @@ public class WorldFileData {
                     break;
                 }
             }
+
             if (!newData.regionFolder.exists() || !newData.regionFolder.isDirectory()) {
 
 				newData.sendMessage("Could not validate folder for world's region files. Looked in "+newData.world.getWorldFolder().getPath()+" for valid DIM* folder with a region folder in it.");
@@ -73,7 +75,7 @@ public class WorldFileData {
 	}
 
     // get the X and Z world coordinates of the region from the filename
-    public CordXZ regionFileCoordinates(int index) {
+    public CoordXZ regionFileCoordinates(int index) {
 
         File regionFile = this.regionFile(index);
         String[] cords = regionFile.getName().split("\\.");
@@ -81,7 +83,7 @@ public class WorldFileData {
         try {
             x = Integer.parseInt(cords[1]);
             z = Integer.parseInt(cords[2]);
-            return new CordXZ(x, z);
+            return new CoordXZ(x, z);
         } catch (Exception ex) {
             sendMessage("Error! Region file found with abnormal name: " + regionFile.getName());
             return null;
@@ -91,7 +93,7 @@ public class WorldFileData {
 
 	// Find out if the chunk at the given coordinates exists.
 	public boolean doesChunkNotExist(int x, int z) {
-        CordXZ region = new CordXZ(CordXZ.chunkToRegion(x), CordXZ.chunkToRegion(z));
+        CoordXZ region = new CoordXZ(CoordXZ.chunkToRegion(x), CoordXZ.chunkToRegion(z));
         List<Boolean> regionChunks = this.getRegionData(region);
         return !regionChunks.get(coordToRegionOffset(x, z));
     }
@@ -111,7 +113,7 @@ public class WorldFileData {
 
 	// Method to let us know a chunk has been generated, to update our region map.
 	public void chunkExistsNow(int x, int z) {
-        CordXZ region = new CordXZ(CordXZ.chunkToRegion(x), CordXZ.chunkToRegion(z));
+        CoordXZ region = new CoordXZ(CoordXZ.chunkToRegion(x), CoordXZ.chunkToRegion(z));
         List<Boolean> regionChunks = this.getRegionData(region);
         regionChunks.set(coordToRegionOffset(x, z), true);
     }
@@ -131,7 +133,7 @@ public class WorldFileData {
         return (x + (z * 32));
     }
 
-    private List<Boolean> getRegionData(CordXZ region) {
+    private List<Boolean> getRegionData(CoordXZ region) {
         List<Boolean> data = regionChunkExistence.get(region);
         if (data != null)
             return data;
@@ -143,7 +145,7 @@ public class WorldFileData {
         }
 
 		for (int i = 0; i < regionFiles.length; i++) {
-            CordXZ coord = regionFileCoordinates(i);
+            CoordXZ coord = regionFileCoordinates(i);
             // is this region file the one we're looking for?
             if (!coord.equals(region))
                 continue;

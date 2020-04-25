@@ -4,57 +4,56 @@ package io.github.ph1lou.pluginlg;
 import fr.mrmicky.fastboard.FastBoard;
 import io.github.ph1lou.pluginlg.commandlg.AdminLG;
 import io.github.ph1lou.pluginlg.commandlg.CommandLG;
-import io.github.ph1lou.pluginlg.enumlg.Day;
-import io.github.ph1lou.pluginlg.enumlg.State;
-import io.github.ph1lou.pluginlg.enumlg.StateLG;
-import io.github.ph1lou.pluginlg.listener.ScenariosLG;
-import io.github.ph1lou.pluginlg.savelg.*;
-import io.github.ph1lou.pluginlg.tasks.LobbyTask;
-import io.github.ph1lou.pluginlg.worldloader.WorldFillTask;
-import org.bukkit.*;
-import org.bukkit.block.Biome;
-import org.bukkit.command.ConsoleCommandSender;
+import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlg.listener.ServerListener;
+import io.github.ph1lou.pluginlg.savelg.LangLG;
+import io.github.ph1lou.pluginlg.savelg.TextLG;
+import io.github.ph1lou.pluginlg.tasks.HubTask;
+import io.github.ph1lou.pluginlg.utils.WorldUtils;
+import io.github.ph1lou.pluginlgapi.GetWereWolfAPI;
+import io.github.ph1lou.pluginlgapi.WereWolfAPI;
+import org.apache.commons.io.FileUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scoreboard.Scoreboard;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class MainLG extends JavaPlugin {
+public class MainLG extends JavaPlugin implements GetWereWolfAPI {
 
-	public Scoreboard board;
-	public final Map<UUID, FastBoard> boards = new HashMap<>();
-    public final Map<String, PlayerLG> playerLG = new HashMap<>();
-    private StateLG state;
-    private Day dayState;
-    public final CycleLG cycle = new CycleLG(this);
-    public final DeathManagementLG death_manage = new DeathManagementLG(this);
-    public final VoteLG vote = new VoteLG(this);
-    public final ScoreBoardLG score = new ScoreBoardLG(this);
-    public final EventsLG eventslg = new EventsLG(this);
-    public final OptionLG optionlg = new OptionLG(this);
-    public final ProximityLG proximity = new ProximityLG(this);
-    public final RoleManagementLG roleManage = new RoleManagementLG(this);
-    public final LoversManagement loversManage = new LoversManagement(this);
-    public final SerializerLG serialize = new SerializerLG();
-    public final ConfigLG config = new ConfigLG();
-    public TextLG text = new TextLG();
-    public final EndLG endlg = new EndLG(this);
-    public final FileLG filelg = new FileLG();
-    public final StuffLG stufflg = new StuffLG(this);
+
     public final LangLG lang = new LangLG(this);
-    public final SparkLG spark = new SparkLG(this);
-    public final ScenariosLG scenarios = new ScenariosLG(this);
-    public WorldFillTask wft;
-
+    public TextLG textEN;
+    public TextLG textFR;
+    public TextLG defaultLanguage;
+    public final Map<UUID, GameManager> listGames = new HashMap<>();
+    public Map<UUID, FastBoard> boards= new HashMap<>();
+    public Inventory hubTool;
+    public WereWolfApiImpl wereWolfApi = new WereWolfApiImpl(this);
+    public HubTask hubTask;
 
     @Override
     public void onEnable() {
         Bukkit.getScheduler().runTask(this, this::enable);
+    }
+
+    @Override
+    public void onDisable() {
+        List<World> worlds = Bukkit.getWorlds().subList(1,Bukkit.getWorlds().size());
+        try {
+            for(World world: worlds){
+                FileUtils.deleteDirectory(new File(Bukkit.getWorldContainer() + File.separator + world.getName()));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -63,155 +62,31 @@ public class MainLG extends JavaPlugin {
 		WorldUtils.patchBiomes();
 	}
 
+
 	public void enable() {
+
         saveDefaultConfig();
 
-        setState(StateLG.LOBBY);
-        setDay(Day.DEFAULT);
-        lang.initLanguage();
-        optionlg.initInv();
-        config.getConfig(this, "saveCurrent");
-        stufflg.load("saveCurrent");
-        board = Bukkit.getScoreboardManager().getNewScoreboard();
-        scenarios.init();
-        getCommand("lg").setExecutor(new CommandLG(this));
-        getCommand("adminLG").setExecutor(new AdminLG(this));
+        lang.init(this);
+        hubTool= Bukkit.createInventory(null, 54, defaultLanguage.getText(308));
+        getCommand("lg").setExecutor(new CommandLG(this,textFR));
+        getCommand("adminWW").setExecutor(new AdminLG(this));
+        getCommand("ww").setExecutor(new CommandLG(this,textEN));
+        Bukkit.getPluginManager().registerEvents(new ServerListener(this), this);
 
-        new UpdateChecker(this, 73113).getVersion(version -> {
-
-            ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-
-            if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
-                console.sendMessage(text.getText(2));
-            } else {
-                console.sendMessage(text.getText(185));
-            }
-        });
-
-        setWorld();
-
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            joinPlayer(player);
+        for(Player p:Bukkit.getOnlinePlayers()){
+            p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
         }
-        LobbyTask start = new LobbyTask(this);
-        start.runTaskTimer(this, 0, 20);
+
+        hubTask = new HubTask(this);
+        hubTask.runTaskTimer(this, 0, 20);
     }
-	
-	private void setWorld() {
-
-		try{
-			World world = Bukkit.getWorld("world");
-			world.setPVP(false);
-			world.setWeatherDuration(0);
-			world.setThundering(false);
-			world.setTime(0);
-			world.setGameRuleValue("reducedDebugInfo", "true");
-			world.setGameRuleValue("keepInventory", "true");
-			world.setGameRuleValue("naturalRegeneration", "false");
-			world.getWorldBorder().reset();
-
-			int x=(int) world.getSpawnLocation().getX();
-			int z=(int)  world.getSpawnLocation().getZ();
-
-			if(getConfig().getBoolean("autoRoofedMiddle")){
-				Location biome = WorldUtils.findBiome(Biome.ROOFED_FOREST, world, 2000);
-				x=(int) biome.getX();
-				z=(int) biome.getZ();
-			}
-			world.setSpawnLocation(x, 151,z);
-
-			for(int i=-16;i<=16;i++) {
-
-				for(int j=-16;j<=16;j++) {
-
-					new Location(world, i+x, 150,j+z).getBlock().setType(Material.BARRIER);
-					new Location(world, i+x, 154,j+z).getBlock().setType(Material.BARRIER);
-				}
-				for(int j=151;j<154;j++){
-					new Location(world, i+x, j,z-16).getBlock().setType(Material.BARRIER);
-					new Location(world, i+x, j,z+16).getBlock().setType(Material.BARRIER);
-					new Location(world, x-16, j,i+z).getBlock().setType(Material.BARRIER);
-					new Location(world, x+16, j,i+z).getBlock().setType(Material.BARRIER);
-				}
-			}
-
-		}catch(Exception e){
-			Bukkit.broadcastMessage(text.getText(21));
-		}
-	}
-
-	public void joinPlayer(Player player) {
-
-        String playerName = player.getName();
-        FastBoard fastboard = new FastBoard(player);
-        fastboard.updateTitle(text.getText(125));
-        boards.put(player.getUniqueId(), fastboard);
-        Title.sendTabTitle(player, text.getText(125), text.getText(184));
-        new UpdateChecker(this, 73113).getVersion(version -> {
-            if (!this.getDescription().getVersion().equalsIgnoreCase(version)) {
-                player.sendMessage(text.getText(185));
-            }
-        });  
-		
-		if(isState(StateLG.LOBBY)) {
-            board.registerNewTeam(playerName);
-            board.getTeam(playerName).addEntry(playerName);
-            player.setGameMode(GameMode.ADVENTURE);
-            player.sendMessage(text.getText(1));
-            player.teleport(player.getWorld().getSpawnLocation());
-            playerLG.put(playerName, new PlayerLG(player));
-            player.setScoreboard(playerLG.get(playerName).getScoreBoard());
-            score.addPlayerSize();
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 0, false, false));
-        } else if (!playerLG.containsKey(playerName)) {
-            player.setGameMode(GameMode.SPECTATOR);
-            player.sendMessage(text.getText(38));
-        } else {
-            PlayerLG plg = playerLG.get(playerName);
-            player.setScoreboard(playerLG.get(playerName).getScoreBoard());
-            if (plg.isState(State.MORT)) {
-                player.setGameMode(GameMode.SPECTATOR);
-            } else if (isState(StateLG.LG)) {
-                if (!plg.hasKit()) {
-                    roleManage.recoverRolePower(playerName);
-                }
-                if (plg.getAnnounceCursedLoversAFK()) {
-                    loversManage.announceCursedLovers(player);
-                }
-                if (plg.getAnnounceLoversAFK()) {
-                    loversManage.announceLovers(player);
-                }
-            }
-		}
-		if(isState(StateLG.FIN)){
-			fastboard.updateLines(score.scoreboard3);
-		}
-		optionlg.updateNameTag();
-		optionlg.updateCompass();
-	}
-
-	public void setState(StateLG state) {
-		this.state=state;
-	}
-
-	public StateLG getState() {return this.state;}
-
-	public boolean isState(StateLG state) {
-		return this.state==state;
-	}
 
 
-	public void setDay(Day day) {
-		this.dayState =day;
-	}
-
-
-	public boolean isDay(Day day) {
-		return this.dayState ==day;
-	}
-
-
-	public Day getDay() { return this.dayState;}
+    @Override
+    public WereWolfAPI getWereWolfAPI() {
+        return wereWolfApi;
+    }
 }
 		
 

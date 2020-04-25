@@ -1,5 +1,6 @@
 package io.github.ph1lou.pluginlg.worldloader;
 
+import io.github.ph1lou.pluginlg.game.GameManager;
 import org.bukkit.*;
 
 import java.text.DecimalFormat;
@@ -31,9 +32,9 @@ public class WorldFillTask implements Runnable {
 	private int length = -1;
 	private int current = 0;
 	private boolean insideBorder = true;
-	private final List<CordXZ> storedChunks = new LinkedList<>();
-	private final Set<CordXZ> originalChunks = new HashSet<>();
-	private final CordXZ lastChunk = new CordXZ(0, 0);
+	private final List<CoordXZ> storedChunks = new LinkedList<>();
+	private final Set<CoordXZ> originalChunks = new HashSet<>();
+	private final CoordXZ lastChunk = new CoordXZ(0, 0);
 
 	// for reporting progress back to user occasionally
 	private long lastReport = System.currentTimeMillis();
@@ -44,14 +45,14 @@ public class WorldFillTask implements Runnable {
 	private boolean finish = false;
 
 
-	public WorldFillTask(String worldName, int chunksPerRun, int radius) {
+	public WorldFillTask(GameManager game, int chunksPerRun, int radius) {
 
 		this.server = Bukkit.getServer();
 		this.chunksPerRun = chunksPerRun;
 
-		this.world = server.getWorld(worldName);
+		this.world = game.getWorld();
 
-		Location spawn = Bukkit.getWorld("world").getSpawnLocation();
+		Location spawn = world.getSpawnLocation();
 		this.border = new BorderData(spawn.getX(), spawn.getZ(), radius, radius);
 
 		// load up a new WorldFileData for the world in question, used to scan region files for which chunks are already fully generated and such
@@ -61,8 +62,8 @@ public class WorldFillTask implements Runnable {
 			return;
 		}
 
-		this.x = CordXZ.blockToChunk((int) border.getX());
-		this.z = CordXZ.blockToChunk((int) border.getZ());
+		this.x = CoordXZ.blockToChunk((int) border.getX());
+		this.z = CoordXZ.blockToChunk((int) border.getZ());
 
 		int chunkWidthX = (int) Math.ceil((double) ((border.getRadiusX() + 16) * 2) / 16);
 		int chunkWidthZ = (int) Math.ceil((double) ((border.getRadiusZ() + 16) * 2) / 16);
@@ -77,7 +78,7 @@ public class WorldFillTask implements Runnable {
 		// keep track of the chunks which are already loaded when the task starts, to not unload them
 		Chunk[] originals = world.getLoadedChunks();
 		for (Chunk original : originals) {
-			originalChunks.add(new CordXZ(original.getX(), original.getZ()));
+			originalChunks.add(new CoordXZ(original.getX(), original.getZ()));
 		}
 
 		this.readyToGo = true;
@@ -130,7 +131,7 @@ public class WorldFillTask implements Runnable {
 			}
 
 			// if we've made it at least partly outside the border, skip past any such chunks
-			while (!border.insideBorder(CordXZ.chunkToBlock(x) + 8, CordXZ.chunkToBlock(z) + 8)) {
+			while (!border.insideBorder(CoordXZ.chunkToBlock(x) + 8, CoordXZ.chunkToBlock(z) + 8)) {
 				if (cannotMoveToNext())
 					return;
 			}
@@ -155,16 +156,16 @@ public class WorldFillTask implements Runnable {
 			// make sure the previous chunk in our spiral is loaded as well (might have already existed and been skipped over)
 			if (!storedChunks.contains(lastChunk) && !originalChunks.contains(lastChunk)) {
 				world.loadChunk(lastChunk.x, lastChunk.z, false);
-				storedChunks.add(new CordXZ(lastChunk.x, lastChunk.z));
+				storedChunks.add(new CoordXZ(lastChunk.x, lastChunk.z));
 			}
 
 			// Store the coordinates of these latest 2 chunks we just loaded, so we can unload them after a bit...
-			storedChunks.add(new CordXZ(popX, popZ));
-			storedChunks.add(new CordXZ(x, z));
+			storedChunks.add(new CoordXZ(popX, popZ));
+			storedChunks.add(new CoordXZ(x, z));
 
 			// If enough stored chunks are buffered in, go ahead and unload the oldest to free up memory
 			while (storedChunks.size() > 8) {
-				CordXZ cord = storedChunks.remove(0);
+				CoordXZ cord = storedChunks.remove(0);
 				if (!originalChunks.contains(cord))
 					world.unloadChunkRequest(cord.x, cord.z);
 			}
@@ -260,7 +261,7 @@ public class WorldFillTask implements Runnable {
 
 		// go ahead and unload any chunks we still have loaded
 		while (!storedChunks.isEmpty()) {
-			CordXZ cord = storedChunks.remove(0);
+			CoordXZ cord = storedChunks.remove(0);
 			if (!originalChunks.contains(cord))
 				world.unloadChunkRequest(cord.x, cord.z);
 		}

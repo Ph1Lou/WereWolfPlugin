@@ -1,6 +1,6 @@
 package io.github.ph1lou.pluginlg.enumlg;
 
-import io.github.ph1lou.pluginlg.listener.scenarioslistener.*;
+import io.github.ph1lou.pluginlg.listener.gamelisteners.scenarioslisteners.*;
 
 public enum ScenarioLG {
     VANILLA_PLUS(true, VanillaPlus.class),

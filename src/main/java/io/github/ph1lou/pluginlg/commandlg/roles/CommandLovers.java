@@ -1,11 +1,13 @@
 package io.github.ph1lou.pluginlg.commandlg.roles;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.PlayerLG;
 import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.enumlg.State;
 import io.github.ph1lou.pluginlg.enumlg.StateLG;
 import io.github.ph1lou.pluginlg.enumlg.ToolLG;
+import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlg.game.PlayerLG;
+import io.github.ph1lou.pluginlg.savelg.TextLG;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
@@ -13,10 +15,9 @@ import org.bukkit.entity.Player;
 
 public class CommandLovers extends Commands {
 
-    final MainLG main;
 
     public CommandLovers(MainLG main) {
-        this.main = main;
+        super(main);
     }
 
     @Override
@@ -26,34 +27,48 @@ public class CommandLovers extends Commands {
             return;
         }
 
+        GameManager game=null;
         Player player =(Player) sender;
-        String playername = player.getName();
 
-        if(!main.playerLG.containsKey(playername)) {
-            player.sendMessage(main.text.getText(67));
+        for(GameManager gameManager:main.listGames.values()){
+            if(gameManager.getWorld().equals(player.getWorld())){
+                game=gameManager;
+                break;
+            }
+        }
+
+        if(game==null){
             return;
         }
 
-        PlayerLG plg = main.playerLG.get(playername);
+        TextLG text = game.text;
+        String playername = player.getName();
 
-        if(!main.isState(StateLG.LG)) {
-            player.sendMessage(main.text.getText(68));
+        if(!game.playerLG.containsKey(playername)) {
+            player.sendMessage(text.getText(67));
+            return;
+        }
+
+        PlayerLG plg = game.playerLG.get(playername);
+
+        if(!game.isState(StateLG.LG)) {
+            player.sendMessage(text.getText(68));
             return;
         }
         if (!plg.isState(State.LIVING)) {
-            player.sendMessage(main.text.getText(97));
+            player.sendMessage(text.getText(97));
             return;
         }
-        if (!main.config.configValues.get(ToolLG.DON_LOVERS)) {
-            player.sendMessage(main.text.getText(259));
+        if (!game.config.configValues.get(ToolLG.DON_LOVERS)) {
+            player.sendMessage(text.getText(259));
             return;
         }
         if (plg.getLovers().isEmpty()) {
-            player.sendMessage(main.text.getText(27));
+            player.sendMessage(text.getText(27));
             return;
         }
         if (args.length != 1 && args.length != 2) {
-            player.sendMessage(String.format(main.text.getText(190), 1));
+            player.sendMessage(String.format(text.getText(190), 1));
             return;
         }
         int heart;
@@ -61,55 +76,64 @@ public class CommandLovers extends Commands {
         try {
             heart = Integer.parseInt(args[0]);
         } catch (NumberFormatException ignored) {
-            player.sendMessage(main.text.getText(254));
+            player.sendMessage(text.getText(254));
             return;
         }
         if (life<=heart) {
-            player.sendMessage(main.text.getText(255));
+            player.sendMessage(text.getText(255));
             return;
         }
 
         if(args.length==1){
 
             if (plg.getLovers().size() > heart) {
-                player.sendMessage(main.text.getText(256));
+                player.sendMessage(text.getText(256));
                 return;
             }
 
             player.setHealth(life-heart);
+            int temp=heart;
             for (String p : plg.getLovers()) {
                 if (Bukkit.getPlayer(p) != null) {
                     Player playerCouple = Bukkit.getPlayer(p);
                     int don = heart / plg.getLovers().size();
                     if (playerCouple.getMaxHealth() - playerCouple.getHealth() >= don) {
                         playerCouple.setHealth(playerCouple.getHealth() + don);
-                        playerCouple.sendMessage(String.format(main.text.getText(260), don, playername));
+                        playerCouple.sendMessage(String.format(text.getText(260), don, playername));
                         playerCouple.playSound(playerCouple.getLocation(), Sound.PORTAL, 1, 20);
                         heart -= don;
                     }
                 }
             }
+            if(temp==heart){
+                player.sendMessage("Vous ne pouvez pas envoyer autant de coeurs");
+            }
             player.setHealth(player.getHealth()+heart);
         }
         else {
             if (args[1].equals(playername)) {
-                player.sendMessage(main.text.getText(105));
+                player.sendMessage(text.getText(105));
                 return;
             }
             if (!plg.getLovers().contains(args[1])) {
-                player.sendMessage(main.text.getText(257));
+                player.sendMessage(text.getText(257));
                 return;
             }
             player.setHealth(life-heart);
 
             if(Bukkit.getPlayer(args[1])==null){
-                player.sendMessage(main.text.getText(106));
+                player.sendMessage(text.getText(106));
                 return;
             }
             Player playerCouple = Bukkit.getPlayer(args[1]);
+
             if(playerCouple.getMaxHealth()-playerCouple.getHealth()>=heart){
                 playerCouple.setHealth(playerCouple.getHealth() + heart);
-                playerCouple.sendMessage(String.format(main.text.getText(260), heart, playername));
+                playerCouple.sendMessage(String.format(text.getText(260), heart, playername));
+            }
+            else{
+                player.sendMessage("Vous ne pouvez pas envoyer autant de coeurs");
+                player.setHealth(player.getHealth()+heart);
             }
         }
     }

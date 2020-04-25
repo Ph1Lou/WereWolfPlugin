@@ -1,7 +1,9 @@
 package io.github.ph1lou.pluginlg.commandlg;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.commandlg.admin.*;
+import io.github.ph1lou.pluginlg.commandlg.admin.CommandCreate;
+import io.github.ph1lou.pluginlg.commandlg.admin.CommandStop;
+import io.github.ph1lou.pluginlg.commandlg.admin.ingame.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -10,12 +12,11 @@ import java.util.*;
 
 public class AdminLG implements TabExecutor {
 
-    final MainLG main;
     private final Map<String, Commands> listAdminCommands = new HashMap<>();
 
     public AdminLG(MainLG main) {
-        this.main = main;
-        listAdminCommands.put("host", new CommandHost(main));
+
+        listAdminCommands.put("setGameName", new CommandSetGameName(main));
         listAdminCommands.put("start", new CommandStart(main));
         listAdminCommands.put("chat", new CommandChat(main));
         listAdminCommands.put("info", new CommandInfo(main));
@@ -25,7 +26,6 @@ public class AdminLG implements TabExecutor {
         listAdminCommands.put("config", new CommandConfig(main));
         listAdminCommands.put("kill", new CommandKill(main));
         listAdminCommands.put("disc", new CommandDisconnected(main));
-        listAdminCommands.put("send", new CommandSend(main));
         listAdminCommands.put("inv", new CommandInventory(main));
         listAdminCommands.put("tpGroup", new CommandTPGroup(main));
         listAdminCommands.put("role", new CommandRole(main));
@@ -35,7 +35,14 @@ public class AdminLG implements TabExecutor {
         listAdminCommands.put("lootDeath", new CommandLootDeath(main));
         listAdminCommands.put("stuffRole", new CommandStuffRole(main));
         listAdminCommands.put("h", new CommandAdminHelp(main));
-        listAdminCommands.put("ping", new CommandPing(main));
+        listAdminCommands.put("stop", new CommandStop(main));
+        listAdminCommands.put("create", new CommandCreate(main));
+        listAdminCommands.put("whitelist", new CommandWhitelist(main));
+        listAdminCommands.put("kick", new CommandKick(main));
+        listAdminCommands.put("moderator", new CommandModerator(main));
+        listAdminCommands.put("host", new CommandHost(main));
+        listAdminCommands.put("gamemode", new CommandGamemode(main));
+        listAdminCommands.put("tp", new CommandTP(main));
     }
 	
 	@Override

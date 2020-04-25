@@ -2,28 +2,49 @@ package io.github.ph1lou.pluginlg.commandlg.utilities;
 
 import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlg.commandlg.Commands;
+import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlg.savelg.TextLG;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class CommandVote extends Commands {
 
-    final MainLG main;
 
     public CommandVote(MainLG main) {
-        this.main = main;
+        super(main);
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
 
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player)){
             return;
         }
 
-        if (args.length != 1) {
-            sender.sendMessage(main.text.getText(54));
+        GameManager game=null;
+        Player player =(Player) sender;
+
+        for(GameManager gameManager:main.listGames.values()){
+            if(gameManager.getWorld().equals(player.getWorld())){
+                game=gameManager;
+                break;
+            }
+        }
+
+        if(game==null){
             return;
         }
-        main.vote.setUnVote((Player) sender, args[0]);
+
+        TextLG text = game.text;
+
+        if (args.length != 1) {
+            sender.sendMessage(text.getText(54));
+            return;
+        }
+        if(!game.playerLG.containsKey(sender.getName())) {
+            sender.sendMessage(text.getText(67));
+            return;
+        }
+        game.vote.setUnVote((Player) sender, args[0]);
     }
 }

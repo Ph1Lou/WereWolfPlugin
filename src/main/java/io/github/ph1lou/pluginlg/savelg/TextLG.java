@@ -28,7 +28,7 @@ public class TextLG {
 	public void getTextTranslate(MainLG main) {
 
 		File file_text = new File(main.getDataFolder(),"languages/fr.json");
-		TextLG text_load =main.serialize.deserializeText(main.filelg.loadContent(file_text));
+		TextLG text_load =SerializerLG.deserializeText(FileLG.loadContent(file_text));
 
 		for(int k=0;k<text_load.DEFAULT.size();k++){
 			for(int i=0;i<text_load.DEFAULT.get(k).size();i++) {
@@ -61,28 +61,35 @@ public class TextLG {
 		for(ScenarioLG scenario:ScenarioLG.values()) {
 			this.translateScenario.put(scenario,this.translateScenario.getOrDefault(scenario,text_load.translateScenario.get(scenario)));
 		}
-		main.filelg.save(new File(main.getDataFolder(),"/languages/custom.json"), main.serialize.serialize(this));
+		FileLG.save(new File(main.getDataFolder(),"/languages/custom.json"), SerializerLG.serialize(this));
 	}
 	
 	public String getText(int i) {
 		if(DEFAULT.size()<3){
 			return "Error";
 		}
-	return (DEFAULT.get(2).get(i));
+	return (DEFAULT.get(3).get(i));
 	}
 
-	public List<String> getScoreBoard1() {
+	public List<String> getScoreBoard0() {
 		if (DEFAULT.isEmpty()){
 			return new ArrayList<>(10);
 		}
 		return DEFAULT.get(0);
 	}
 
+	public List<String> getScoreBoard1() {
+		if (DEFAULT.isEmpty()){
+			return new ArrayList<>(10);
+		}
+		return DEFAULT.get(1);
+	}
+
 	public List<String> getScoreBoard2() {
 		if (DEFAULT.size()<2){
 			return new ArrayList<>(10);
 		}
-		return DEFAULT.get(1);
+		return DEFAULT.get(2);
 	}
 
 }

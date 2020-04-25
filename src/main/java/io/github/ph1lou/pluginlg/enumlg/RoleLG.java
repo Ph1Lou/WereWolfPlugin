@@ -1,7 +1,7 @@
 package io.github.ph1lou.pluginlg.enumlg;
 
 
-import io.github.ph1lou.pluginlg.listener.roleslisteners.*;
+import io.github.ph1lou.pluginlg.listener.gamelisteners.roleslisteners.*;
 
 public enum RoleLG {
 

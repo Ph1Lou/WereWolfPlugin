@@ -3,22 +3,45 @@ package io.github.ph1lou.pluginlg.commandlg.utilities;
 import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.enumlg.TimerLG;
+import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlg.savelg.TextLG;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class CommandTimer extends Commands {
 
-    final MainLG main;
 
     public CommandTimer(MainLG main) {
-        this.main = main;
+        super(main);
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
+
+        if (!(sender instanceof Player)){
+            return;
+        }
+
+        GameManager game=null;
+        Player player =(Player) sender;
+
+        for(GameManager gameManager:main.listGames.values()){
+            if(gameManager.getWorld().equals(player.getWorld())){
+                game=gameManager;
+                break;
+            }
+        }
+
+        if(game==null){
+            return;
+        }
+
+        TextLG text = game.text;
+
         for (TimerLG timer : TimerLG.values()) {
-            String time = main.score.conversion(main.config.timerValues.get(timer));
+            String time = game.score.conversion(game.config.timerValues.get(timer));
             if (time.charAt(0) != '-') {
-                sender.sendMessage(String.format(main.text.translateTimer.get(timer), time));
+                sender.sendMessage(String.format(text.translateTimer.get(timer), time));
             }
         }
     }

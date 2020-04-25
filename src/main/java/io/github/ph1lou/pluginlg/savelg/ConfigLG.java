@@ -1,7 +1,7 @@
 package io.github.ph1lou.pluginlg.savelg;
 
-import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlg.enumlg.*;
+import io.github.ph1lou.pluginlg.game.GameManager;
 
 import java.io.File;
 import java.util.HashMap;
@@ -35,14 +35,14 @@ public class ConfigLG {
     private int distanceFox = 20;
     private boolean trollSV = false;
 
-    public void getConfig(MainLG main, String configName) {
+    public void getConfig(GameManager game, String configName) {
 
         ConfigLG config_load = this;
 
-        File file = new File(main.getDataFolder() + File.separator + "configs" + File.separator, configName + ".json");
+        File file = new File(game.getDataFolder() + File.separator + "configs" + File.separator, configName + ".json");
 
         if (file.exists()) {
-            config_load = main.serialize.deserialize(main.filelg.loadContent(file));
+            config_load = SerializerLG.deserialize(FileLG.loadContent(file));
             this.setDiamondLimit(config_load.getDiamondLimit());
             this.setStrengthRate(config_load.getStrengthRate());
             this.setPlayerRequiredVoteEnd(config_load.getPlayerRequiredVoteEnd());
@@ -84,13 +84,13 @@ public class ConfigLG {
             this.scenarioValues.put(scenarios, config_load.scenarioValues.getOrDefault(scenarios, scenarios.getValue()));
         }
 
-		main.filelg.save(file, main.serialize.serialize(this));
+		FileLG.save(file, SerializerLG.serialize(this));
 		
-		main.score.setRole(0);
+		game.score.setRole(0);
 		
 		for (RoleLG role:RoleLG.values()) {
             if (role.getCamp() != null) {
-                main.score.setRole(main.score.getRole() + this.roleCount.get(role));
+                game.score.setRole(game.score.getRole() + this.roleCount.get(role));
             }
         }
 	}
