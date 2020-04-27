@@ -34,9 +34,9 @@ public class MainLG extends JavaPlugin implements GetWereWolfAPI {
     public TextLG textFR;
     public TextLG defaultLanguage;
     public final Map<UUID, GameManager> listGames = new HashMap<>();
-    public Map<UUID, FastBoard> boards= new HashMap<>();
+    public final Map<UUID, FastBoard> boards = new HashMap<>();
     public Inventory hubTool;
-    public WereWolfApiImpl wereWolfApi = new WereWolfApiImpl(this);
+    public final WereWolfApiImpl wereWolfApi = new WereWolfApiImpl(this);
     public HubTask hubTask;
     public Scoreboard board;
 

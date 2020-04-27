@@ -44,7 +44,7 @@ public class CycleLG {
 
         for (Player p : Bukkit.getOnlinePlayers()) {
 
-            if (game.getWorld().equals(p.getWorld())) {
+            if (game.playerLG.containsKey(p.getName())) {
 
                 PlayerLG plg = game.playerLG.get(p.getName());
 

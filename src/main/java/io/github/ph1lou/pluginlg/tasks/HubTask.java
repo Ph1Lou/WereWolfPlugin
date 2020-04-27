@@ -68,16 +68,18 @@ public class HubTask extends BukkitRunnable {
 				lore.add(main.defaultLanguage.getText(64));
 				lore.add(main.defaultLanguage.getText(309 + game.getSpectatorMode()));
 				item = new ItemStack(Material.EMERALD_BLOCK);
-			} else {
+				main.hubTool.setItem(SlotHost[i], changeMeta(item, game.getGameName(), lore));
+			} else if (game.score.getScoreboard2() != null) {
 				lore.add(game.score.getScoreboard2().get(3));
 				lore.add(game.score.getScoreboard2().get(4));
 				lore.add(game.score.getScoreboard2().get(5));
 				lore.add(main.defaultLanguage.getText(64));
 				lore.add(main.defaultLanguage.getText(309 + game.getSpectatorMode()));
 				item = new ItemStack(Material.REDSTONE_BLOCK);
+				main.hubTool.setItem(SlotHost[i], changeMeta(item, game.getGameName(), lore));
 			}
 
-			main.hubTool.setItem(SlotHost[i], changeMeta(item, game.getGameName(), lore));
+
 		}
 	}
 

@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public class WereWolfApiImpl implements WereWolfAPI {
 
-    MainLG main;
+    final MainLG main;
 
     public WereWolfApiImpl(MainLG main){
         this.main=main;

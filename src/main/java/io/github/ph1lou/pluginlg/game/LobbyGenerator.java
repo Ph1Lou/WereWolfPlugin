@@ -11,8 +11,8 @@ import java.io.File;
 
 public class LobbyGenerator {
 
-    MainLG main;
-    GameManager game;
+    final MainLG main;
+    final GameManager game;
 
     LobbyGenerator(MainLG main, GameManager game) {
 
