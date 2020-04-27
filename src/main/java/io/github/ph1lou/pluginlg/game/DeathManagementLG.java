@@ -314,7 +314,7 @@ public class DeathManagementLG {
                         game.roleManage.newLG(markerName);
                     }
                 } else if (plg.isRole(RoleLG.SUCCUBUS)) {
-                    if (plg.getUse() < game.config.getUseOfCharmed()) {
+                    if (plg.getUse() < game.config.getUseOfCharmed() && !plg.hasPower()) {
                         plg.clearAffectedPlayer();
                         plg.setPower(true);
                         marker.sendMessage(game.text.powerUse.get(RoleLG.SUCCUBUS));

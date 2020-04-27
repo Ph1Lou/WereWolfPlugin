@@ -196,8 +196,11 @@ public class PlayerListener implements Listener {
 							target.damage(10000);
 							target.sendMessage(game.text.getText(266));
 						}
-						plg.clearAffectedPlayer();
-						plg.setPower(true);
+						if (plg.getUse() < game.config.getUseOfCharmed()) {
+							plg.clearAffectedPlayer();
+							plg.setPower(true);
+							player.sendMessage(game.text.powerUse.get(RoleLG.SUCCUBUS));
+						}
 						Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> game.death_manage.resurrection(playername), 20L);
 						return;
 					}
