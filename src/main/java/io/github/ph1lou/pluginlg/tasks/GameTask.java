@@ -37,12 +37,13 @@ public class GameTask extends BukkitRunnable {
 		game.score.updateBoard();
 		game.proximity.sister_proximity();
 		game.proximity.renard_proximity();
+		game.proximity.succubusProximity();
 		game.death_manage.deathTimer();
 		game.roleManage.brotherLife();
 
 		if (game.config.timerValues.get(TimerLG.INVULNERABILITY) == 0) {
 			for (Player p : Bukkit.getOnlinePlayers()) {
-				if (game.playerLG.containsKey(p.getName())) {
+				if (game.getWorld().equals(p.getWorld())) {
 					p.sendMessage(game.text.getText(117));
 					p.playSound(p.getLocation(), Sound.GLASS, 1, 20);
 				}
@@ -70,7 +71,7 @@ public class GameTask extends BukkitRunnable {
 			game.setState(StateLG.LG);
 
 			for (Player p : Bukkit.getOnlinePlayers()) {
-				if (game.playerLG.containsKey(p.getName())) {
+				if (game.getWorld().equals(p.getWorld())) {
 					p.sendMessage(game.text.description.get(RoleLG.VILLAGEOIS));
 					p.playSound(p.getLocation(), Sound.EXPLODE, 1, 20);
 				}
@@ -81,7 +82,7 @@ public class GameTask extends BukkitRunnable {
 		if (game.config.timerValues.get(TimerLG.PVP) == 0) {
 			world.setPVP(true);
 			for (Player p : Bukkit.getOnlinePlayers()) {
-				if (game.playerLG.containsKey(p.getName())) {
+				if (game.getWorld().equals(p.getWorld())) {
 					p.sendMessage(game.text.getText(6));
 					p.playSound(p.getLocation(), Sound.DONKEY_ANGRY, 1, 20);
 				}
@@ -105,6 +106,7 @@ public class GameTask extends BukkitRunnable {
 				game.roleManage.auto_ange();
 			}
 			game.config.timerValues.put(TimerLG.ANGE_DURATION, game.config.timerValues.get(TimerLG.ANGE_DURATION) - 1);
+
 		}
 
 		if (game.config.timerValues.get(TimerLG.LG_LIST) == 0 && game.config.configValues.get(ToolLG.LG_LIST)) {
@@ -116,7 +118,7 @@ public class GameTask extends BukkitRunnable {
 
 			if (wb.getSize() != game.config.borderValues.get(BorderLG.BORDER_MIN)) {
 				for (Player p : Bukkit.getOnlinePlayers()) {
-					if (game.playerLG.containsKey(p.getName())) {
+					if (game.getWorld().equals(p.getWorld())) {
 						p.sendMessage(game.text.getText(7));
 						p.playSound(p.getLocation(), Sound.FIREWORK_LAUNCH, 1, 20);
 					}
@@ -130,7 +132,7 @@ public class GameTask extends BukkitRunnable {
 
 		if (game.config.timerValues.get(TimerLG.DIGGING) == 0) {
 			for (Player p : Bukkit.getOnlinePlayers()) {
-				if (game.playerLG.containsKey(p.getName())) {
+				if (game.getWorld().equals(p.getWorld())) {
 					p.sendMessage(game.text.getText(8));
 					p.playSound(p.getLocation(), Sound.ANVIL_BREAK, 1, 20);
 				}
@@ -163,7 +165,7 @@ public class GameTask extends BukkitRunnable {
 			if (game.config.configValues.get(ToolLG.VOTE) && game.score.getPlayerSize() < game.config.getPlayerRequiredVoteEnd()) {
 				game.config.configValues.put(ToolLG.VOTE, false);
 				for (Player p : Bukkit.getOnlinePlayers()) {
-					if (game.playerLG.containsKey(p.getName())) {
+					if (game.getWorld().equals(p.getWorld())) {
 						p.sendMessage(game.text.getText(9));
 					}
 				}

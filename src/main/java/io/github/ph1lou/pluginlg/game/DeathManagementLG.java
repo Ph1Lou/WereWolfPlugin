@@ -139,7 +139,7 @@ public class DeathManagementLG {
 		}
 		
 		for(Player p:Bukkit.getOnlinePlayers()) {
-            if(game.playerLG.containsKey(p.getName())){
+            if (game.getWorld().equals(p.getWorld())) {
                 p.playSound(p.getLocation(), Sound.AMBIENCE_THUNDER, 1, 20);
                 if (game.config.configValues.get(ToolLG.SHOW_ROLE_TO_DEATH)) {
                     p.sendMessage(String.format(game.text.getText(28), playerName, game.text.translateRole.get(role)));
@@ -149,7 +149,7 @@ public class DeathManagementLG {
                     TextComponent msg = new TextComponent(game.text.getText(186));
                     msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/GXXCVUA"));
                     p.spigot().sendMessage(msg);
-                    if(game.getSpectatorMode()==0){
+                    if (game.getSpectatorMode() == 0) {
                         p.performCommand("lg quit");
                     }
                 }
@@ -173,9 +173,6 @@ public class DeathManagementLG {
         }
         if (!plg.getTargetOf().isEmpty()) {
             targetDeath(playerName);
-        }
-        if (!plg.getDisciple().isEmpty()) {
-            masterDeath(playerName);
         }
         if (role.equals(RoleLG.SOEUR)) {
             sisterDeath(playerName);
@@ -217,7 +214,7 @@ public class DeathManagementLG {
                 String c1 = game.loversManage.loversRange.get(i).get(0);
                 PlayerLG plc1 = game.playerLG.get(c1);
                 for(Player p:Bukkit.getOnlinePlayers()){
-                    if(game.playerLG.containsKey(p.getName())){
+                    if (game.getWorld().equals(p.getWorld())) {
                         p.sendMessage(String.format(game.text.getText(30), c1));
                     }
                 }
@@ -304,37 +301,39 @@ public class DeathManagementLG {
 
     private void targetDeath(String playerName) {
 
-        for (String angel_name : game.playerLG.get(playerName).getTargetOf()) {
+        for (String markerName : game.playerLG.get(playerName).getTargetOf()) {
 
-            PlayerLG plg = game.playerLG.get(angel_name);
+            PlayerLG plg = game.playerLG.get(markerName);
 
-            if (plg.isState(State.LIVING) && Bukkit.getPlayer(angel_name) != null) {
+            if (plg.isState(State.LIVING) && Bukkit.getPlayer(markerName) != null) {
 
-                Player ange = Bukkit.getPlayer(angel_name);
+                Player marker = Bukkit.getPlayer(markerName);
 
-                if (plg.isRole(RoleLG.ANGE_DECHU)) {
-                    if (game.playerLG.get(playerName).getKiller().equals(angel_name)) {
-                        ange.setMaxHealth(ange.getMaxHealth() + 6);
-                        ange.sendMessage(game.text.powerUse.get(RoleLG.ANGE_DECHU));
+                if (plg.isRole(RoleLG.ENFANT_SAUVAGE)) {
+                    if (!plg.isCamp(Camp.LG)) {
+                        game.roleManage.newLG(markerName);
                     }
-                } else {
-                    ange.setMaxHealth(ange.getMaxHealth() - 4);
-                    ange.sendMessage(game.text.powerUse.get(RoleLG.ANGE_GARDIEN));
-                    game.playerLG.get(angel_name).setCamp(Camp.VILLAGE);
+                } else if (plg.isRole(RoleLG.SUCCUBUS)) {
+                    if (plg.getUse() < game.config.getUseOfCharmed()) {
+                        plg.clearAffectedPlayer();
+                        plg.setPower(true);
+                        marker.sendMessage(game.text.powerUse.get(RoleLG.SUCCUBUS));
+                    }
+                } else if (plg.isRole(RoleLG.ANGE_DECHU)) {
+                    if (game.playerLG.get(playerName).getKiller().equals(markerName)) {
+                        marker.setMaxHealth(marker.getMaxHealth() + 6);
+                        marker.sendMessage(game.text.powerUse.get(RoleLG.ANGE_DECHU));
+                    }
+                } else if (plg.isRole(RoleLG.ANGE_GARDIEN)) {
+                    marker.setMaxHealth(marker.getMaxHealth() - 4);
+                    marker.sendMessage(game.text.powerUse.get(RoleLG.ANGE_GARDIEN));
+                    if (!plg.isCamp(Camp.LG)) {
+                        plg.setCamp(Camp.VILLAGE);
+                    }
                 }
             }
         }
 
-    }
-
-    private void masterDeath(String playerName) {
-
-        for (String savage_name : game.playerLG.get(playerName).getDisciple()) {
-
-            if (game.playerLG.get(savage_name).isState(State.LIVING) && !game.playerLG.get(savage_name).isCamp(Camp.LG)) {
-                game.roleManage.newLG(savage_name);
-            }
-        }
     }
 
     public void transportation(String playerName, double d, String message) {

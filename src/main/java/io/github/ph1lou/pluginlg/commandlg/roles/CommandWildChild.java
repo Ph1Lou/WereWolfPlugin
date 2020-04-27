@@ -87,7 +87,7 @@ public class CommandWildChild extends Commands {
 
         plg.addAffectedPlayer(args[0]);
         plg.setPower(false);
-        game.playerLG.get(args[0]).addDisciple(playername);
-        player.sendMessage(String.format(text.powerHasBeenUse.get(RoleLG.ENFANT_SAUVAGE),args[0]));
+        game.playerLG.get(args[0]).addTargetOf(playername);
+        player.sendMessage(String.format(text.powerHasBeenUse.get(RoleLG.ENFANT_SAUVAGE), args[0]));
     }
 }

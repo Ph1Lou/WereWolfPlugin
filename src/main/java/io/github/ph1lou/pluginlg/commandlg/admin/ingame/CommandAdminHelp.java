@@ -37,7 +37,7 @@ public class CommandAdminHelp extends Commands {
 
         TextLG text = game.text;
 
-        if (!sender.hasPermission("adminLG.use") && !sender.hasPermission("adminLG.help.use")) {
+        if (!sender.hasPermission("adminLG.use") && !sender.hasPermission("adminLG.help.use") && !game.getModerators().contains(((Player) sender).getUniqueId()) && !game.getHosts().contains(((Player) sender).getUniqueId())) {
             sender.sendMessage(text.getText(116));
             return;
         }

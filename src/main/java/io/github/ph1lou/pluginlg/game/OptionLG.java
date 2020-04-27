@@ -53,13 +53,12 @@ public class OptionLG {
 		invSave = Bukkit.createInventory(null, 18, game.text.getText(180));
 		invStuff = Bukkit.createInventory(null, 18, game.text.getText(77));
 		invEnchant = Bukkit.createInventory(null, 18, game.text.getText(79));
-		invAdvancedTool = Bukkit.createInventory(null, 27, game.text.getText(75));
+		invAdvancedTool = Bukkit.createInventory(null, 36, game.text.getText(75));
 		invLanguage = Bukkit.createInventory(null, 9, game.text.getText(74));
-		invWhiteList = Bukkit.createInventory(null, 18,game.text.getText(70) );
+		invWhiteList = Bukkit.createInventory(null, 18, game.text.getText(70));
 	}
 
 	public void toolBar(Player player) {
-
 
 		invTool.setItem(0, changeMeta(new ItemStack(Material.SKULL_ITEM, 1, (short) 3), game.text.getText(70), null));
 
@@ -96,10 +95,10 @@ public class OptionLG {
 
 	public void whiteListTool(Player player) {
 
-		invWhiteList.setItem(0, changeMeta(Material.COMPASS,game.text.getText(170),1,null));
-		invWhiteList.setItem(2, changeMeta(new ItemStack(Material.EMPTY_MAP, 1),game.text.getText(63) , Collections.singletonList(String.format(game.text.getText(game.isWhiteList() ? 169 : 168),""))));
+		invWhiteList.setItem(0, changeMeta(Material.COMPASS, game.text.getText(170), 1, null));
+		invWhiteList.setItem(2, changeMeta(new ItemStack(Material.EMPTY_MAP, 1), game.text.getText(63), Collections.singletonList(String.format(game.text.getText(game.isWhiteList() ? 312 : 313), ""))));
 		invWhiteList.setItem(10, changeMeta(new ItemStack(Material.SKULL_ITEM, 1), game.text.getText(64), Collections.singletonList(game.text.getText(309 + game.getSpectatorMode()))));
-		invWhiteList.setItem(12, changeMeta(new ItemStack(Material.SKULL_ITEM, 1, (short) 3), String.format(game.text.getText(69),game.getPlayerMax()), null));
+		invWhiteList.setItem(12, changeMeta(new ItemStack(Material.SKULL_ITEM, 1, (short) 3), String.format(game.text.getText(69), game.getPlayerMax()), null));
 		player.openInventory(invWhiteList);
 
 	}
@@ -180,10 +179,12 @@ public class OptionLG {
 		invAdvancedTool.setItem(14, changeMeta(Material.EXP_BOTTLE, String.format(game.text.getText(229), game.config.getXpBoost()), 1, lore));
 		invAdvancedTool.setItem(16, changeMeta(new ItemStack(Material.SKULL_ITEM, 1, (short) 3), String.format(game.text.getText(227), game.config.getPlayerRequiredVoteEnd()), lore));
 		invAdvancedTool.setItem(18, changeMeta(Material.GOLD_NUGGET, game.text.getText(261), 1, Collections.singletonList(game.text.getText(262 + game.config.getGoldenAppleParticles()))));
-		invAdvancedTool.setItem(20, changeMeta(new ItemStack(Material.WOOL, 1, (short) 1), String.format(game.text.getText(270), game.config.getDistanceFox()), null));
-		invAdvancedTool.setItem(22, changeMeta(new ItemStack(Material.WOOL, 1, (short) 12), String.format(game.text.getText(271), game.config.getDistanceBearTrainer()), null));
-		invAdvancedTool.setItem(24, changeMeta(new ItemStack(Material.POTION, 1, (short) 8227), String.format(game.text.getText(115), game.config.getResistanceRate()), null));
+		invAdvancedTool.setItem(20, changeMeta(new ItemStack(Material.WOOL, 1, (short) 1), String.format(game.text.getText(270), game.config.getDistanceFox()), lore));
+		invAdvancedTool.setItem(22, changeMeta(new ItemStack(Material.WOOL, 1, (short) 12), String.format(game.text.getText(271), game.config.getDistanceBearTrainer()), lore));
+		invAdvancedTool.setItem(24, changeMeta(new ItemStack(Material.POTION, 1, (short) 8227), String.format(game.text.getText(115), game.config.getResistanceRate()), lore));
 		invAdvancedTool.setItem(26, changeMeta(new ItemStack(Material.BREAD, 1), String.format(game.config.isTrollSV() ? game.text.getText(169) : game.text.getText(168), game.text.getText(73)), null));
+		invAdvancedTool.setItem(28, changeMeta(new ItemStack(Material.PUMPKIN), String.format(game.text.getText(317), game.config.getUseOfCharmed()), lore));
+		invAdvancedTool.setItem(30, changeMeta(new ItemStack(Material.WOOL, 1, (short) 6), String.format(game.text.getText(316), game.config.getDistanceSuccubus()), lore));
 		player.openInventory(invAdvancedTool);
 	}
 

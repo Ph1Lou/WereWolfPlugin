@@ -75,7 +75,7 @@ public class CommandRevive extends Commands {
             game.playerLG.get(args[0]).setPower(true);
         }
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (game.playerLG.containsKey(p.getName())) {
+            if (game.getWorld().equals(p.getWorld())) {
                 p.sendMessage(String.format(text.getText(154), args[0]));
                 p.playSound(p.getLocation(), Sound.AMBIENCE_THUNDER, 1, 20);
             }

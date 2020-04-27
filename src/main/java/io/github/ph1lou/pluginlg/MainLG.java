@@ -15,9 +15,9 @@ import io.github.ph1lou.pluginlgapi.WereWolfAPI;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.Scoreboard;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,6 +38,7 @@ public class MainLG extends JavaPlugin implements GetWereWolfAPI {
     public Inventory hubTool;
     public WereWolfApiImpl wereWolfApi = new WereWolfApiImpl(this);
     public HubTask hubTask;
+    public Scoreboard board;
 
     @Override
     public void onEnable() {
@@ -68,17 +69,16 @@ public class MainLG extends JavaPlugin implements GetWereWolfAPI {
         saveDefaultConfig();
 
         lang.init(this);
-        hubTool= Bukkit.createInventory(null, 54, defaultLanguage.getText(308));
+
+
         getCommand("lg").setExecutor(new CommandLG(this,textFR));
         getCommand("adminWW").setExecutor(new AdminLG(this));
         getCommand("ww").setExecutor(new CommandLG(this,textEN));
         Bukkit.getPluginManager().registerEvents(new ServerListener(this), this);
 
-        for(Player p:Bukkit.getOnlinePlayers()){
-            p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
-        }
-
+        board = Bukkit.getScoreboardManager().getNewScoreboard();
         hubTask = new HubTask(this);
+        hubTask.initInventory();
         hubTask.runTaskTimer(this, 0, 20);
     }
 

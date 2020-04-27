@@ -91,10 +91,10 @@ public class VoteLG {
 		if(maxVote==0) return "";
 		if(maxVote<=1) {
 			for(Player p:Bukkit.getOnlinePlayers()){
-				if(game.playerLG.containsKey(p.getName())){
-					p.sendMessage(game.text.getText(191));
-				}
-			}
+                if (game.getWorld().equals(p.getWorld())) {
+                    p.sendMessage(game.text.getText(191));
+                }
+            }
 			return "";
 		}
 		return playerVote;
@@ -111,11 +111,11 @@ public class VoteLG {
 				if(player.getHealth()>player.getMaxHealth()) {
 					player.setHealth(life-10);
 				}
-				for(Player p:Bukkit.getOnlinePlayers()){
-					if(game.playerLG.containsKey(p.getName())){
-						p.sendMessage(String.format(game.text.getText(163),playerVote, game.playerLG.get(playerVote).getVote()));
-					}
-				}
+				for(Player p:Bukkit.getOnlinePlayers()) {
+                    if (game.getWorld().equals(p.getWorld())) {
+                        p.sendMessage(String.format(game.text.getText(163), playerVote, game.playerLG.get(playerVote).getVote()));
+                    }
+                }
 				game.playerLG.get(playerVote).addKLostHeart(10);
 			}			
 		}

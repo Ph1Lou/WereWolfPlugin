@@ -1,24 +1,24 @@
 package io.github.ph1lou.pluginlg.game;
 
 import io.github.ph1lou.pluginlg.enumlg.*;
+import io.github.ph1lou.pluginlg.events.WinEvent;
 import io.github.ph1lou.pluginlg.utils.Title;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class EndLG {
 
-    private String subtitles_victory ="";
+
+    private RoleLG winner = null;
+
     private final GameManager game;
 
     public EndLG(GameManager game) {
-        this.game=game;
+        this.game = game;
     }
 
     public void check_victory() {
@@ -28,6 +28,8 @@ public class EndLG {
         if (!game.loversManage.cursedLoversRange.isEmpty()) {
             return;
         }
+        List<Set<String>> teamsAngel = getAngeTeam();
+        List<Set<String>> teamsSuccubus = getSuccubusTeam();
 
         if (game.loversManage.loversRange.size() == 1) {
 
@@ -39,7 +41,7 @@ public class EndLG {
                     team.add(p);
                 }
             }
-            for (Set<String> teamange : getAngeTeam()) {
+            for (Set<String> teamange : teamsAngel) {
                 for (String t : teamange) {
                     if (team.contains(t)) {
                         team.addAll(teamange);
@@ -47,8 +49,17 @@ public class EndLG {
                     }
                 }
             }
-            if(player ==team.size()) {
-                subtitles_victory =String.format(game.text.getText(4),game.text.translateRole.get(RoleLG.COUPLE));
+            for (Set<String> teamSuccubus : teamsSuccubus) {
+                for (String t : teamSuccubus) {
+                    if (team.contains(t)) {
+                        team.addAll(teamSuccubus);
+                        break;
+                    }
+                }
+            }
+
+            if (player == team.size()) {
+                winner = RoleLG.COUPLE;
                 fin();
                 return;
             }
@@ -58,18 +69,24 @@ public class EndLG {
             return;
         }
 
-        if(!getAngeTeam().isEmpty() && getAngeTeam().get(0).size()>1 && getAngeTeam().get(0).size()==game.score.getPlayerSize()) {
-            subtitles_victory =String.format(game.text.getText(4),game.text.translateRole.get(RoleLG.ANGE_GARDIEN));
+        if (!teamsAngel.isEmpty() && teamsAngel.get(0).size() > 1 && teamsAngel.get(0).size() == game.score.getPlayerSize()) {
+            winner = RoleLG.ANGE_GARDIEN;
+            fin();
+            return;
+        }
+
+        if (!teamsSuccubus.isEmpty() && teamsSuccubus.get(0).size() > 1 && teamsSuccubus.get(0).size() == game.score.getPlayerSize()) {
+            winner = RoleLG.SUCCUBUS;
             fin();
             return;
         }
 
         Camp camp = null;
 
-        for(String p:game.playerLG.keySet()) {
-            if(game.playerLG.get(p).isState(State.JUDGEMENT)) return;
+        for (String p : game.playerLG.keySet()) {
+            if (game.playerLG.get(p).isState(State.JUDGEMENT)) return;
             PlayerLG plg = game.playerLG.get(p);
-            if(plg.isState(State.LIVING)) {
+            if (plg.isState(State.LIVING)) {
                 if(camp==null) {
                     camp=plg.getCamp();
                 }
@@ -79,19 +96,17 @@ public class EndLG {
             }
         }
         if(camp==null) {
-
-            subtitles_victory =game.text.getText(5);
             fin();
             return;
         }
         if(camp.equals(Camp.LG)) {
-            subtitles_victory =String.format(game.text.getText(4),game.text.translateRole.get(RoleLG.LOUP_GAROU));
+            winner = RoleLG.LOUP_GAROU;
             fin();
             return;
 
         }
         if(camp.equals(Camp.VILLAGE)) {
-            subtitles_victory =String.format(game.text.getText(4),game.text.translateRole.get(RoleLG.VILLAGEOIS));
+            winner = RoleLG.VILLAGEOIS;
             fin();
             return;
         }
@@ -118,13 +133,23 @@ public class EndLG {
             if(role == null){
                 return;
             }
-            subtitles_victory =String.format(game.text.getText(4),game.text.translateRole.get(role));
+            winner = role;
             fin();
         }
     }
 
     public void fin() {
 
+        String subtitles_victory = winner == null ? game.text.getText(5) : String.format(game.text.getText(4), game.text.translateRole.get(winner));
+        List<UUID> players = new ArrayList<>();
+        for (String playerName : game.playerLG.keySet()) {
+            if (game.playerLG.get(playerName).isState(State.LIVING)) {
+                if (Bukkit.getPlayer(playerName) != null) {
+                    players.add(Bukkit.getPlayer(playerName).getUniqueId());
+                }
+            }
+        }
+        Bukkit.getPluginManager().callEvent(new WinEvent(winner, players));
         game.setState(StateLG.FIN);
         game.score.getKillCounter();
         game.score.updateBoard();
@@ -132,9 +157,9 @@ public class EndLG {
 
         StringBuilder sb = new StringBuilder();
 
-        for(String p:game.playerLG.keySet()) {
+        for (String p : game.playerLG.keySet()) {
 
-            if(game.playerLG.get(p).isState(State.MORT)) {
+            if (game.playerLG.get(p).isState(State.MORT)) {
                 if(game.playerLG.get(p).isThief()) {
                     sb.append(String.format(game.text.getText(187), p, game.text.translateRole.get(RoleLG.VOLEUR))).append(String.format(game.text.getText(188), game.text.translateRole.get(game.playerLG.get(p).getRole()))).append("\n");
                 }
@@ -149,12 +174,12 @@ public class EndLG {
         }
 
         for(Player p:Bukkit.getOnlinePlayers()) {
-            if(game.playerLG.containsKey(p.getName())){
+            if (game.getWorld().equals(p.getWorld())) {
                 p.sendMessage(String.format(game.text.getText(3), subtitles_victory));
                 p.sendMessage(sb.toString());
-                Title.sendTitle(p,20,60, 20,String.format(game.text.getText(15),""), subtitles_victory);
+                Title.sendTitle(p, 20, 60, 20, String.format(game.text.getText(15), ""), subtitles_victory);
                 TextComponent msg = new TextComponent(game.text.getText(186));
-                msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,"https://discord.gg/GXXCVUA"));
+                msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/GXXCVUA"));
                 p.spigot().sendMessage(msg);
                 TextComponent msg2 = new TextComponent(game.text.getText(292));
                 msg2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/lg leave"));
@@ -178,33 +203,69 @@ public class EndLG {
                     teamange.add(game.playerLG.get(p1).getAffectedPlayer().get(0));
                 }
 
-                for (int i=0;i< teamange.size();i++) {
-                    if (!game.playerLG.get(teamange.get(i)).getTargetOf().isEmpty()) {
-                        for (String p2 : game.playerLG.get(teamange.get(i)).getTargetOf()) {
-                            if (game.playerLG.get(p2).isRole(RoleLG.ANGE_GARDIEN) && game.playerLG.get(p2).isState(State.LIVING)) {
-                                if(!teamange.contains(p2)){
-                                    teamange.add(p2);
-                                }
+                for (int i=0; i< teamange.size(); i++) {
+                    for (String p2 : game.playerLG.get(teamange.get(i)).getTargetOf()) {
+                        if (game.playerLG.get(p2).isRole(RoleLG.ANGE_GARDIEN) && game.playerLG.get(p2).isState(State.LIVING)) {
+                            if (!teamange.contains(p2)) {
+                                teamange.add(p2);
                             }
                         }
                     }
                 }
                 int i;
-                for(i=0;i<temp.size();i++){
-                    if(temp.get(i).size()<teamange.size()){
-                        temp.add(i,new HashSet<>(teamange));
+                for(i=0; i<temp.size(); i++){
+                    if (temp.get(i).size() < teamange.size()) {
+                        temp.add(i, new HashSet<>(teamange));
                         break;
                     }
                 }
-                if(i==temp.size()){
+                if (i == temp.size()) {
                     temp.add(new HashSet<>(teamange));
+                }
+            }
+        }
+
+        return temp;
+    }
+
+    private List<Set<String>> getSuccubusTeam() {
+
+        List<Set<String>> temp = new ArrayList<>();
+
+        for (String p1 : game.playerLG.keySet()) {
+
+            if (game.playerLG.get(p1).isState(State.LIVING)) {
+                List<String> teamSuccubus = new ArrayList<>();
+                teamSuccubus.add(p1);
+                PlayerLG plg = game.playerLG.get(p1);
+
+                if (plg.isRole(RoleLG.SUCCUBUS) && !plg.getAffectedPlayer().isEmpty() && !plg.hasPower() && game.playerLG.get(plg.getAffectedPlayer().get(0)).isState(State.LIVING)) {
+                    teamSuccubus.add(game.playerLG.get(p1).getAffectedPlayer().get(0));
+                }
+
+                for (int i = 0; i < teamSuccubus.size(); i++) {
+                    for (String p2 : game.playerLG.get(teamSuccubus.get(i)).getTargetOf()) {
+                        PlayerLG plg2 = game.playerLG.get(p2);
+                        if (plg2.isRole(RoleLG.SUCCUBUS) && plg2.isState(State.LIVING) && !plg2.hasPower()) {
+                            if (!teamSuccubus.contains(p2)) {
+                                teamSuccubus.add(p2);
+                            }
+                        }
+                    }
+                }
+                int i;
+                for (i = 0; i < temp.size(); i++) {
+                    if (temp.get(i).size() < teamSuccubus.size()) {
+                        temp.add(i, new HashSet<>(teamSuccubus));
+                        break;
+                    }
+                }
+                if (i == temp.size()) {
+                    temp.add(new HashSet<>(teamSuccubus));
                 }
             }
         }
         return temp;
     }
 
-    public String getVictoryTeam(){
-        return this.subtitles_victory;
-    }
 }

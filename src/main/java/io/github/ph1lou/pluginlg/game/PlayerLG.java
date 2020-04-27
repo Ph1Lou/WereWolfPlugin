@@ -34,7 +34,6 @@ public class PlayerLG{
 	private Boolean kit = false;
 	private transient Scoreboard board;
 	private final List<String> affectedPlayer = new ArrayList<>();
-	private final List<String> disciple = new ArrayList<>();
 	private final List<String> targetOf = new ArrayList<>();
 	private Boolean announceCursedLoversAFK = false;
 	private Boolean announceLoversAFK = false;
@@ -46,17 +45,17 @@ public class PlayerLG{
 	private int vote = 0;
 	private int lostHeart = 0;
 	private int kill = 0;
-	private float flair = 0;
+	private float progress = 0;
 	private String killer = "";
 	private String playerVote = "";
 
 	public PlayerLG(Player player) {
 
 		board = Bukkit.getScoreboardManager().getNewScoreboard();
-		this.spawn=player.getWorld().getSpawnLocation();
+		this.spawn = player.getWorld().getSpawnLocation();
 	}
 
-	public Scoreboard getScoreBoard(){
+	public Scoreboard getScoreBoard() {
 		return this.board;
 	}
 
@@ -159,29 +158,29 @@ public class PlayerLG{
 	public void setStolen(Boolean stolen) {
 		this.hasBeenStolen =stolen;
 	}
-	
+
 	public Boolean hasBeenStolen() {
-		return(this.hasBeenStolen);
+		return (this.hasBeenStolen);
 	}
 
 	public void setRole(RoleLG role) {
-		this.role=role;
+		this.role = role;
 	}
 
-	public void setFlair(Float flair) {
-		this.flair =flair;
+	public float getProgress() {
+		return (this.progress);
 	}
 
-	public float getFlair() {
-		return(this.flair);
+	public void setProgress(Float progress) {
+		this.progress = progress;
 	}
 
 	public RoleLG getRole() {
-		return(this.role);
+		return (this.role);
 	}
 
 	public Boolean isRole(RoleLG role) {
-		return(this.role.equals(role));
+		return (this.role.equals(role));
 	}
 
 	public Boolean isPosterRole(RoleLG role) {
@@ -228,13 +227,17 @@ public class PlayerLG{
 	public void addAffectedPlayer(String player) {
 		this.affectedPlayer.add(player);
 	}
-	
+
 	public void clearAffectedPlayer() {
 		this.affectedPlayer.clear();
 	}
-	
+
 	public List<String> getAffectedPlayer() {
-		return(this.affectedPlayer);
+		return (this.affectedPlayer);
+	}
+
+	public void removeTargetOf(String player) {
+		this.targetOf.remove(player);
 	}
 
 	public void addTargetOf(String player) {
@@ -287,18 +290,6 @@ public class PlayerLG{
 	
 	public Boolean canBeInfect() {
 		return(this.canBeInfect);
-	}
-
-	public void addDisciple(String disciple) {
-		this.disciple.add(disciple);
-	}
-	
-	public void removeDisciple(String disciple) {
-		this.disciple.remove(disciple);
-	}
-	
-	public List<String> getDisciple() {
-		return(this.disciple);
 	}
 
 	public void removeAffectedPlayer(String playername) {

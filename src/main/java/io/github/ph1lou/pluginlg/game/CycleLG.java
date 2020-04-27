@@ -44,10 +44,10 @@ public class CycleLG {
 
         for (Player p : Bukkit.getOnlinePlayers()) {
 
-            if (game.playerLG.containsKey(p.getName())) { 
-                
+            if (game.getWorld().equals(p.getWorld())) {
+
                 PlayerLG plg = game.playerLG.get(p.getName());
-                
+
                 p.sendMessage(String.format(game.text.getText(124), game.score.getTimer() / game.config.timerValues.get(TimerLG.DAY_DURATION) / 2 + 1));
 
 

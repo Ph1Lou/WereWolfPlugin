@@ -34,7 +34,8 @@
     "LOUP_PERFIDE": "Loup Perfide",
     "ANCIEN": "Ancien",
     "COMEDIEN": "Comedien",
-    "TRAPPEUR": "Trappeur"
+    "TRAPPEUR": "Trappeur",
+    "SUCCUBUS": "Succube"
   },
   "description": {
     "TUEUR_EN_SERIE": "§6LOUP-GAROU §7➽§9  Vous êtes §1Tueur en Série§9. Votre objectif est de gagner seul.\nPour ce faire, vous possédez 3 livres qui sont : livre Sharpness III, livre Protection III et livre Power III.\nLorsque vous faites un kill, vous gagnez un coeur supplémentaire.",
@@ -71,7 +72,8 @@
     "LOUP_PERFIDE": "§6LOUP-GAROU §7➽§9 Vous êtes §1Loup Perfide§9. Votre objectif est de tuer les Villageois. \nContrairement aux Loups Garous, vous disposez d’un effet d’invisibilité et de faiblesse la nuit lorsque vous enlevez votre armure.\nVous laissez des particules rouges derrière vous et vous pouvez repérer les Petites Filles par leurs particules bleues. Après chaque kill vous aurez l'effet Vitesse et 2 coeurs d’absorption pendant 2 minutes.\nFaites §b/lg lg§9 pour voir la liste des Loups-Garous.",
     "ANCIEN": "§6LOUP-GAROU §7➽ §9Vous êtes §1Ancien§9. Votre objectif est d’éliminer les Loups-Garous.\nPour cela, vous possédez l’effet Résistance et une seconde vie.\nVous perdrez votre Résistance à votre première mort, mais attention, si c’est un Villageois qui vous tue, vous perdrez également 1/3 de votre vie.",
     "COMEDIEN": "§6LOUP-GAROU §7➽ §9Vous êtes §1Comedien§9. Votre objectif est d’éliminer les Loups-Garous.\nPour cela, vous possédez trois masques, un de force, un de résistance et un de Vitesse. Chaque matin, vous pouvez choisir (ou non) d'en mettre un pour la journée.\nAttention, ces masques sont à usage unique. Un masque, une fois utilisé, ne pourra pas être réutilisé.",
-    "TRAPPEUR": "§6LOUP-GAROU §7➽ §9Vous êtes §1Trappeur§9. Votre objectif est d’éliminer les Loups-Garous.\nPour cela, vous possédez un traqueur. \nChaque matin, vous pourrez traquer la position d'un joueur."
+    "TRAPPEUR": "§6LOUP-GAROU §7➽ §9Vous êtes §1Trappeur§9. Votre objectif est d’éliminer les Loups-Garous.\nPour cela, vous possédez un traqueur. \nChaque matin, vous pourrez traquer la position d'un joueur.",
+    "SUCCUBUS": "§6LOUP-GAROU §7➽ §9Vous êtes §1Succube§9. Votre objectif est de gagner seule avec la personne que vous aurez charmé.\nVous pouvez charmer un joueur avec §b/lg charmer§9. \nSi vous mourrez, votre personne charmée mourra à votre place."
   },
   "powerUse": {
     "TUEUR_EN_SERIE": "",
@@ -108,7 +110,8 @@
     "LOUP_PERFIDE": "",
     "ANCIEN": "",
     "COMEDIEN": "§e§l[LG UHC]§r Vous pouvez mettre choisir de mettre un masque pour la journée.\n Faites /lg masque 1, 2 ou 3 (respectivememt  Résistance, Vitesse et Force). Vous avez §b%s",
-    "TRAPPEUR": "§e§l[LG UHC]§r Vous pouvez tracker une nouvelle personne §6/lg traquer"
+    "TRAPPEUR": "§e§l[LG UHC]§r Vous pouvez tracker une nouvelle personne §6/lg traquer",
+    "SUCCUBUS": "§e§l[LG UHC]§r Vous pouvez désigner une personne a charmer §6/lg charmer"
   },
   "powerHasBeenUse": {
     "TUEUR_EN_SERIE": "",
@@ -145,7 +148,8 @@
     "LOUP_PERFIDE": "",
     "ANCIEN": "",
     "COMEDIEN": "§e§l[LG UHC]§r Vous venez de mettre le masque de §b%s",
-    "TRAPPEUR": "§e§l[LG UHC]§r Vous commencé à tracker §b%s"
+    "TRAPPEUR": "§e§l[LG UHC]§r Vous commencé à tracker §b%s",
+    "SUCCUBUS": "§e§l[LG UHC]§r Vous commencé à charmer §b%s"
   },
   "translateTool": {
     "VICTORY_COUPLE": "Les Couples ne peuvent gagner qu'en Couple",
@@ -181,7 +185,8 @@
     "ANGE_DURATION": "Durée pour le choix de l'Ange (§b%s§r)",
     "POWER_DURATION": "Durée d'utilisation des pouvoirs le Matin (§b%s§r)",
     "VOTE_BEGIN": "Début des Votes (§b%s§r)",
-    "INVULNERABILITY": "Invulnérabilité (§b%s§r)"
+    "INVULNERABILITY": "Invulnérabilité (§b%s§r)",
+    "SUCCUBUS_DURATION": "Durée d'utilisation des pouvoirs du Succube (§b%s§r)"
   },
   "translateBorder": {
     "BORDER_MAX": "Taille Bordure Actuelle (§b%s§r)",
@@ -311,7 +316,7 @@
       "§4§l[LG UHC]§r Votre protégé n'est pas connecté actuellement",
       "§fWhiteList",
       "§fMode Spectateur :",
-      "",
+      "charmer",
       "§4§l[LG UHC]§r La partie est remplie pour le moment, vous venez d'être ajouté à la file d'attente",
       "§4§l[LG UHC]§r Vous n'êtes pas dans la partie",
       "§4§l[LG UHC]§r La partie est déjà finie ou les rôles n'ont pas encore été annoncés",
@@ -357,7 +362,7 @@
       "§4§l[LG UHC]§r Le joueur n'est pas dans le couloir de la mort",
       "§4§l[LG UHC]§r Le joueur ne peut pas (plus) être infecté",
       "regen",
-      "§4§l[LG UHC]§r Vous devez être à moins de 20 blocs de votre cible",
+      "§4§l[LG UHC]§r Vous n'êtes pas assez proche de votre cible",
       "§4§l[LG UHC]§r Vous n'avez plus assez de vie pour espionner un joueur",
       "§4§l[LG UHC]§r Vous venez d'espionner un membre du Village vous perdez 3 coeurs jusqu'au prochain matin",
       "§4§l[LG UHC]§r Au moins un de ces joueurs a déjà été enquêté",
@@ -511,8 +516,8 @@
       "§4Off",
       "§6Off pour la Petite Fille et le Loup Perfide",
       "§2On",
-      "",
-      "",
+      "§e§l[LG UHC]§r La Succube §b%s§r vous a charmé, vous devez maintenant gagner avec elle.\nSi la Succube vient à mourir, vous mourrez à sa place.",
+      "§e§l[LG UHC]§r Vous êtes libéré de votre Succube, mais à quel prix...",
       "§6§l[LG UHC]§r §b%s§r a réagit à l'annonce",
       "§4§l[LG UHC]§r Configurez l'Host /adminww host [Nom de l'Host]",
       "§e§l[LG UHC]§r La Génération du monde a commencé",
@@ -557,7 +562,13 @@
       "Hub Partie",
       "§4Désactivé§r pour tous",
       "§fPour les Morts §6uniquement",
-      "§2Activé§r pour tous"
+      "§2Activé§r pour tous",
+      "%s §4fermée",
+      "%s §2ouverte",
+      "§2§l[LG UHC]§r §b%s§r est totalement charmé, si vous mourrez il mourra à votre place",
+      "§4§l[LG UHC]§r Vous n'êtes pas Vivant",
+      "Champ d'action du Succube §b%s",
+      "Nombre d'utilisation du Succube §b%s"
     ]
   ]
 }

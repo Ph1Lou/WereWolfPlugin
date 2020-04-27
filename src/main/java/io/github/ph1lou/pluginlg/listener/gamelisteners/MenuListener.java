@@ -412,16 +412,27 @@ public class MenuListener implements Listener{
                         } else if (game.config.getDistanceFox() - 5 > 0)
                             game.config.setDistanceFox(game.config.getDistanceFox() - 5);
                     } else if (current.getDurability() == 12) {
-                        if (event.getClick().isLeftClick()) {
-                            game.config.setDistanceBearTrainer((game.config.getDistanceBearTrainer() + 5));
-                        } else if (game.config.getDistanceBearTrainer() - 5 > 0)
-                            game.config.setDistanceBearTrainer(game.config.getDistanceBearTrainer() - 5);
-                    }
+						if (event.getClick().isLeftClick()) {
+							game.config.setDistanceBearTrainer((game.config.getDistanceBearTrainer() + 5));
+						} else if (game.config.getDistanceBearTrainer() - 5 > 0)
+							game.config.setDistanceBearTrainer(game.config.getDistanceBearTrainer() - 5);
+					} else if (current.getDurability() == 6) {
+						if (event.getClick().isLeftClick()) {
+							game.config.setDistanceSuccubus((game.config.getDistanceSuccubus() + 5));
+						} else if (game.config.getDistanceSuccubus() - 5 > 0)
+							game.config.setDistanceSuccubus(game.config.getDistanceSuccubus() - 5);
+					}
                     game.optionlg.advancedTool(player);
                 } else if (current.getType().equals(Material.BREAD)) {
-                    game.config.setTrollSV(!game.config.isTrollSV());
-                    game.optionlg.advancedTool(player);
-                }
+					game.config.setTrollSV(!game.config.isTrollSV());
+					game.optionlg.advancedTool(player);
+				} else if (current.getType().equals(Material.PUMPKIN)) {
+					if (event.getClick().isLeftClick()) {
+						game.config.setUseOfCharmed(game.config.getUseOfCharmed() + 1);
+					} else if (game.config.getUseOfCharmed() > 0)
+						game.config.setUseOfCharmed(game.config.getUseOfCharmed() - 1);
+					game.optionlg.advancedTool(player);
+				}
 			}
 			else if(view.getTitle().equals(game.text.getText(74))) {
 

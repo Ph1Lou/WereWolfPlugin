@@ -38,7 +38,7 @@ public class LoversManagement {
 
 		if (cursedLovers.size() < 2 && game.config.roleCount.get(RoleLG.COUPLE_MAUDIT) > 0) {
 			for(Player p:Bukkit.getOnlinePlayers()){
-				if(game.playerLG.containsKey(p.getName())){
+				if (game.getWorld().equals(p.getWorld())) {
 					p.sendMessage(game.text.getText(42));
 				}
 			}
@@ -94,8 +94,8 @@ public class LoversManagement {
 			}
 		}
 		if (lovers.size() < 2 && game.config.roleCount.get(RoleLG.CUPIDON) + game.config.roleCount.get(RoleLG.COUPLE) > 0) {
-			for(Player p:Bukkit.getOnlinePlayers()){
-				if(game.playerLG.containsKey(p.getName())){
+			for(Player p:Bukkit.getOnlinePlayers()) {
+				if (game.getWorld().equals(p.getWorld())) {
 					p.sendMessage(game.text.getText(12));
 				}
 			}
@@ -106,8 +106,8 @@ public class LoversManagement {
 
 		if (!polygamy && (game.config.roleCount.get(RoleLG.COUPLE) == 0 && game.config.roleCount.get(RoleLG.CUPIDON) * 2 >= game.score.getPlayerSize()) || (game.config.roleCount.get(RoleLG.COUPLE) != 0 && (game.config.roleCount.get(RoleLG.CUPIDON) + game.config.roleCount.get(RoleLG.COUPLE)) * 2 > game.score.getPlayerSize())) {
 			polygamy = true;
-			for(Player p:Bukkit.getOnlinePlayers()){
-				if(game.playerLG.containsKey(p.getName())){
+			for(Player p:Bukkit.getOnlinePlayers()) {
+				if (game.getWorld().equals(p.getWorld())) {
 					p.sendMessage(game.text.getText(192));
 				}
 			}

@@ -46,7 +46,7 @@ public class CommandChat extends Commands {
 
         game.config.configValues.put(ToolLG.CHAT, !game.config.configValues.get(ToolLG.CHAT));
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if(game.playerLG.containsKey(p.getName())){
+            if (game.getWorld().equals(p.getWorld())) {
                 if (game.config.configValues.get(ToolLG.CHAT)) {
                     p.sendMessage(text.getText(122));
                 } else p.sendMessage(text.getText(123));

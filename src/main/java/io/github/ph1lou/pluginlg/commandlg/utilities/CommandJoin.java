@@ -49,7 +49,7 @@ public class CommandJoin extends Commands {
 
             game = main.listGames.get(UUID.fromString(args[0]));
 
-            if (playerName.equals(args[0]) || game.getModerators().contains(((Player) sender).getUniqueId()) || game.getHosts().contains(((Player) sender).getUniqueId())) {
+            if (game.getModerators().contains(((Player) sender).getUniqueId()) || game.getHosts().contains(((Player) sender).getUniqueId())) {
                 game.join(player);
                 return;
             }

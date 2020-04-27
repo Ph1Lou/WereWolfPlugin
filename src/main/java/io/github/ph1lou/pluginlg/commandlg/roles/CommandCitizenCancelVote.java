@@ -92,7 +92,7 @@ public class CommandCitizenCancelVote extends Commands {
         sender.sendMessage(String.format(text.powerHasBeenUse.get(RoleLG.CITOYEN),vote));
         plg.addAffectedPlayer(vote);
         for(Player p:Bukkit.getOnlinePlayers()){
-            if(game.playerLG.containsKey(p.getName())){
+            if (game.getWorld().equals(p.getWorld())) {
                 p.sendMessage(text.getText(94));
             }
         }

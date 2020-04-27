@@ -99,8 +99,8 @@ public class CommandSeer extends Commands {
                 player.sendMessage(text.getText(113));
                 if(plg.isRole(RoleLG.VOYANTE_BAVARDE)){
                     for (Player p : Bukkit.getOnlinePlayers()) {
-                        if (game.playerLG.containsKey(p.getName())) {
-                            p.sendMessage(String.format(text.powerHasBeenUse.get(RoleLG.VOYANTE_BAVARDE),text.translateRole.get(RoleLG.VILLAGEOIS)));
+                        if (game.getWorld().equals(p.getWorld())) {
+                            p.sendMessage(String.format(text.powerHasBeenUse.get(RoleLG.VOYANTE_BAVARDE), text.translateRole.get(RoleLG.VILLAGEOIS)));
                         }
                     }
                 }
@@ -110,8 +110,8 @@ public class CommandSeer extends Commands {
                 player.sendMessage(String.format(text.powerHasBeenUse.get(RoleLG.VOYANTE),text.translateRole.get(RoleLG.LOUP_GAROU)));
                 if(plg.isRole(RoleLG.VOYANTE_BAVARDE)){
                     for (Player p : Bukkit.getOnlinePlayers()) {
-                        if (game.playerLG.containsKey(p.getName())) {
-                            p.sendMessage(String.format(text.powerHasBeenUse.get(RoleLG.VOYANTE_BAVARDE),text.translateRole.get(RoleLG.LOUP_GAROU)));
+                        if (game.getWorld().equals(p.getWorld())) {
+                            p.sendMessage(String.format(text.powerHasBeenUse.get(RoleLG.VOYANTE_BAVARDE), text.translateRole.get(RoleLG.LOUP_GAROU)));
                         }
                     }
                 }
@@ -120,8 +120,8 @@ public class CommandSeer extends Commands {
                 player.sendMessage(String.format(text.powerHasBeenUse.get(RoleLG.VOYANTE),text.getText(201)));
                 if(plg.isRole(RoleLG.VOYANTE_BAVARDE)){
                     for (Player p : Bukkit.getOnlinePlayers()) {
-                        if (game.playerLG.containsKey(p.getName())) {
-                            p.sendMessage(String.format(text.powerHasBeenUse.get(RoleLG.VOYANTE_BAVARDE),text.getText(201)));
+                        if (game.getWorld().equals(p.getWorld())) {
+                            p.sendMessage(String.format(text.powerHasBeenUse.get(RoleLG.VOYANTE_BAVARDE), text.getText(201)));
                         }
                     }
                 }

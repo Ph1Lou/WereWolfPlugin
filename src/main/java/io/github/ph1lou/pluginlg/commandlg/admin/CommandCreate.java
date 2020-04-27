@@ -43,5 +43,6 @@ public class CommandCreate extends Commands {
         }
         sender.sendMessage(main.defaultLanguage.getText(290));
         ((Player) sender).performCommand("lg join "+new GameManager(main, playerName,uuid).getGameUUID());
+
     }
 }

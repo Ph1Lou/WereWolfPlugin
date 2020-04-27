@@ -44,7 +44,7 @@ public class ListenerRolesBearTrainer extends ListenerRoles {
         }
         if (ok) {
             for (Player p : Bukkit.getOnlinePlayers()) {
-                if (game.playerLG.containsKey(p.getName())) {
+                if (game.getWorld().equals(p.getWorld())) {
                     p.sendMessage(String.format(game.text.powerUse.get(RoleLG.MONTREUR_OURS), builder.toString()));
                     p.playSound(p.getLocation(), Sound.WOLF_GROWL, 1, 20);
                 }

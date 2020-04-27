@@ -60,8 +60,8 @@ public class CommandLeave extends Commands {
                 game.playerLG.remove(playerName);
                 game.checkQueue();
                 for(Player p:Bukkit.getOnlinePlayers()){
-                    if(game.playerLG.containsKey(p.getName())){
-                        p.sendMessage(String.format(game.text.getText(195),game.score.getPlayerSize(),game.score.getRole(),player.getName()));
+                    if (game.getWorld().equals(p.getWorld())) {
+                        p.sendMessage(String.format(game.text.getText(195), game.score.getPlayerSize(), game.score.getRole(), player.getName()));
                     }
                 }
             }

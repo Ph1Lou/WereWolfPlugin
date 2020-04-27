@@ -33,7 +33,7 @@ public class LobbyTask extends BukkitRunnable {
         game.score.updateBoard();
 
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if(game.playerLG.containsKey(p.getName())){
+            if (game.getWorld().equals(p.getWorld())) {
                 if (game.wft == null) {
                     if (p.isOp() || p.hasPermission("adminLG.use") || p.hasPermission("adminLG.generation.use")) {
                         Title.sendActionBar(p, game.text.getText(164));

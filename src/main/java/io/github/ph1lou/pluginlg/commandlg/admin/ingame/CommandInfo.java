@@ -50,7 +50,7 @@ public class CommandInfo extends Commands {
             sb2.append(w).append(" ");
         }
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (game.playerLG.containsKey(p.getName())) {
+            if (game.getWorld().equals(p.getWorld())) {
                 p.sendMessage(String.format(text.getText(136), sb2.toString()));
             }
         }

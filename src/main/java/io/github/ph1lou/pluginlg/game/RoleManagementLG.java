@@ -95,11 +95,11 @@ public class RoleManagementLG {
 		}	
 		else if (plg.isRole(RoleLG.ENFANT_SAUVAGE)) {
 			player.sendMessage(String.format(game.text.powerUse.get(RoleLG.ENFANT_SAUVAGE), game.score.conversion(game.config.timerValues.get(TimerLG.MASTER_DURATION))));
-		}
-		else if (plg.isRole(RoleLG.CUPIDON)) {
+		} else if (plg.isRole(RoleLG.SUCCUBUS)) {
+			player.sendMessage(game.text.powerUse.get(RoleLG.SUCCUBUS));
+		} else if (plg.isRole(RoleLG.CUPIDON)) {
 			player.sendMessage(String.format(game.text.powerUse.get(RoleLG.CUPIDON), game.score.conversion(game.config.timerValues.get(TimerLG.COUPLE_DURATION))));
-		}
-		else if (plg.isRole(RoleLG.ANGE)) {
+		} else if (plg.isRole(RoleLG.ANGE)) {
 			player.sendMessage(String.format(game.text.powerUse.get(RoleLG.ANGE), game.score.conversion(game.config.timerValues.get(TimerLG.ANGE_DURATION))));
 		}
 		if(plg.isRole(RoleLG.ANGE_DECHU) || plg.isRole(RoleLG.ANGE_GARDIEN) || plg.isRole(RoleLG.ANGE)) {
@@ -192,25 +192,33 @@ public class RoleManagementLG {
 					klg.clearAffectedPlayer();
 					plg.clearAffectedPlayer();
 					klg.addAffectedPlayer(mastername);
-					game.playerLG.get(mastername).addDisciple(killername);
-					game.playerLG.get(mastername).removeDisciple(playername);
-					
-					if(mastername.equals(killername)) {
+					game.playerLG.get(mastername).addTargetOf(killername);
+					game.playerLG.get(mastername).removeTargetOf(playername);
+
+					if (mastername.equals(killername)) {
 						game.roleManage.newLG(killername);
+					} else
+						killer.sendMessage(String.format(game.text.powerHasBeenUse.get(RoleLG.ENFANT_SAUVAGE), mastername));
+				}
+			} else if (plg.isRole(RoleLG.SUCCUBUS)) {
+				if (klg.hasPower()) {
+					killer.sendMessage(game.text.powerUse.get(RoleLG.SUCCUBUS));
+				} else {
+					if (!plg.getAffectedPlayer().isEmpty()) {
+						klg.addAffectedPlayer(plg.getAffectedPlayer().get(0));
+						plg.clearAffectedPlayer();
+						killer.sendMessage(String.format(game.getText(314), klg.getAffectedPlayer().get(0)));
 					}
-					else killer.sendMessage(String.format(game.text.powerHasBeenUse.get(RoleLG.ENFANT_SAUVAGE),mastername));
 				}
-			}
-			if (klg.isRole(RoleLG.CUPIDON)) {
-				
-				if(klg.hasPower()) {
+			} else if (klg.isRole(RoleLG.CUPIDON)) {
+
+				if (klg.hasPower()) {
 					killer.sendMessage(String.format(game.text.powerUse.get(RoleLG.CUPIDON), game.score.conversion(game.config.timerValues.get(TimerLG.COUPLE_DURATION))));
-				}
-				else {
+				} else {
 					klg.addAffectedPlayer(plg.getAffectedPlayer().get(0));
 					klg.addAffectedPlayer(plg.getAffectedPlayer().get(1));
 					plg.clearAffectedPlayer();
-					killer.sendMessage(String.format(game.text.powerHasBeenUse.get(RoleLG.CUPIDON),klg.getAffectedPlayer().get(0),klg.getAffectedPlayer().get(1)));
+					killer.sendMessage(String.format(game.text.powerHasBeenUse.get(RoleLG.CUPIDON), klg.getAffectedPlayer().get(0), klg.getAffectedPlayer().get(1)));
 				}
 			}
 			if ((klg.isRole(RoleLG.ASSASSIN) && !game.isDay(Day.NIGHT)) || (klg.isCamp(Camp.LG) && game.isDay(Day.NIGHT) )) {	
@@ -277,30 +285,30 @@ public class RoleManagementLG {
 				}
 				game.loversManage.thiefLoversRange(killername, playername);
 			}
-			//Si le voleur est déjà en couple maudit, il ne le vole pas
+			//Si le voleur est déjà en couple (maudit ou normal), il ne le vole pas
 
 			if (!plg.getCursedLovers().isEmpty() && klg.getCursedLovers().isEmpty()) {
 				String c = plg.getCursedLovers();
+				if (!klg.getLovers().contains(c)) {
+					klg.setCursedLover(c);
+					game.playerLG.get(c).setCursedLover(killername);
+					if (Bukkit.getPlayer(c) != null) {
+						Player pc = Bukkit.getPlayer(c);
+						pc.sendMessage(String.format(game.text.description.get(RoleLG.COUPLE_MAUDIT), killername));
+						pc.playSound(pc.getLocation(), Sound.SHEEP_SHEAR, 1, 20);
+					}
+					killer.sendMessage(String.format(game.text.description.get(RoleLG.COUPLE_MAUDIT), c));
+					killer.playSound(killer.getLocation(), Sound.SHEEP_SHEAR, 1, 20);
+					killer.setMaxHealth(killer.getMaxHealth() + 1);
 
-				klg.setCursedLover(c);
-				game.playerLG.get(c).setCursedLover(killername);
-				if (Bukkit.getPlayer(c) != null) {
-					Player pc = Bukkit.getPlayer(c);
-					pc.sendMessage(String.format(game.text.description.get(RoleLG.COUPLE_MAUDIT), killername));
-					pc.playSound(pc.getLocation(), Sound.SHEEP_SHEAR, 1, 20);
-				}
-				killer.sendMessage(String.format(game.text.description.get(RoleLG.COUPLE_MAUDIT), c));
-				killer.playSound(killer.getLocation(), Sound.SHEEP_SHEAR, 1, 20);
-				killer.setMaxHealth(killer.getMaxHealth() + 1);
-
-				for (int i = 0; i < game.loversManage.cursedLoversRange.size(); i++) {
-					if (game.loversManage.cursedLoversRange.get(i).contains(playername)) {
-						game.loversManage.cursedLoversRange.get(i).add(killername);
-						game.loversManage.cursedLoversRange.get(i).remove(playername);
-						break;
+					for (int i = 0; i < game.loversManage.cursedLoversRange.size(); i++) {
+						if (game.loversManage.cursedLoversRange.get(i).contains(playername)) {
+							game.loversManage.cursedLoversRange.get(i).add(killername);
+							game.loversManage.cursedLoversRange.get(i).remove(playername);
+							break;
+						}
 					}
 				}
-
 			}
 		}
 		game.death_manage.death(playername);
@@ -314,15 +322,15 @@ public class RoleManagementLG {
 			PlayerLG plg = game.playerLG.get(playername);
 
 			if (plg.isState(State.LIVING) && plg.isRole(RoleLG.ENFANT_SAUVAGE) && plg.hasPower()) {
-				
-				String mastername = autoSelect(r.nextFloat(),playername);
-				game.playerLG.get(mastername).addDisciple(playername);
+
+				String mastername = autoSelect(r.nextFloat(), playername);
+				game.playerLG.get(mastername).addTargetOf(playername);
 				plg.addAffectedPlayer(mastername);
 				plg.setPower(false);
-				if(Bukkit.getPlayer(playername) != null){
+				if (Bukkit.getPlayer(playername) != null) {
 					Player player = Bukkit.getPlayer(playername);
-					player.sendMessage(String.format(game.text.getText(47),mastername));
-					player.playSound(player.getLocation(), Sound.BAT_IDLE,1,20);
+					player.sendMessage(String.format(game.text.getText(47), mastername));
+					player.playSound(player.getLocation(), Sound.BAT_IDLE, 1, 20);
 				}
 			}
 		}
@@ -385,7 +393,8 @@ public class RoleManagementLG {
 			game.endlg.check_victory();
 		}
 	}
-	
+
+
 	public String autoSelect(float f, String playername) {
 		
 		List<String> players = new ArrayList<>();

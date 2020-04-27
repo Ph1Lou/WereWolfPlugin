@@ -49,6 +49,7 @@ public class CommandLG implements TabExecutor {
         listCommands.put("join", new CommandJoin(main));
         listCommands.put("leave", new CommandLeave(main));
         listCommands.put("find", new CommandFind(main));
+        listCommands.put(text.getText(65), new CommandSuccubus(main));
     }
 
 

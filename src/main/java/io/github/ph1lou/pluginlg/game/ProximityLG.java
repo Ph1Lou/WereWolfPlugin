@@ -6,6 +6,7 @@ import io.github.ph1lou.pluginlg.enumlg.State;
 import io.github.ph1lou.pluginlg.enumlg.TimerLG;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -55,29 +56,29 @@ public class ProximityLG {
 	}
 
 	public void renard_proximity() {
-		
-		for(String playername:game.playerLG.keySet()) {
 
-			PlayerLG plg = game.playerLG.get(playername);
+		for (String playerName : game.playerLG.keySet()) {
 
-			if(plg.isState(State.LIVING) && plg.isRole(RoleLG.RENARD) && !plg.getAffectedPlayer().isEmpty()) {
+			PlayerLG plg = game.playerLG.get(playerName);
 
-                String playerSmell = plg.getAffectedPlayer().get(0);
-                PlayerLG plf = game.playerLG.get(playerSmell);
+			if (plg.isState(State.LIVING) && plg.isRole(RoleLG.RENARD) && !plg.getAffectedPlayer().isEmpty()) {
 
-                if (plf.isState(State.LIVING) && Bukkit.getPlayer(playerSmell) != null && Bukkit.getPlayer(playername) != null) {
+				String playerSmell = plg.getAffectedPlayer().get(0);
+				PlayerLG plf = game.playerLG.get(playerSmell);
 
-                    Player flair = Bukkit.getPlayer(playerSmell);
-                    Player player = Bukkit.getPlayer(playername);
+				if (plf.isState(State.LIVING) && Bukkit.getPlayer(playerSmell) != null && Bukkit.getPlayer(playerName) != null) {
 
-                    Location renardLocation = player.getLocation();
-                    Location playerLocation = flair.getLocation();
+					Player flair = Bukkit.getPlayer(playerSmell);
+					Player player = Bukkit.getPlayer(playerName);
 
-                    if (renardLocation.distance(playerLocation) <= game.config.getDistanceFox()) {
+					Location renardLocation = player.getLocation();
+					Location playerLocation = flair.getLocation();
 
-                        float temp = plg.getFlair() + 100f / (game.config.timerValues.get(TimerLG.RENARD_SMELL_DURATION) + 1);
+					if (renardLocation.distance(playerLocation) <= game.config.getDistanceFox()) {
 
-                        plg.setFlair(temp);
+						float temp = plg.getProgress() + 100f / (game.config.timerValues.get(TimerLG.RENARD_SMELL_DURATION) + 1);
+
+						plg.setProgress(temp);
 
                         if (temp % 10 > 0 && temp % 10 <= 100f / (game.config.timerValues.get(TimerLG.RENARD_SMELL_DURATION) + 1)) {
                             player.sendMessage(String.format(game.text.getText(39), Math.floor(temp)));
@@ -85,21 +86,65 @@ public class ProximityLG {
 
                         if (temp >= 100) {
 
-                            if (plf.isRole(RoleLG.LOUP_FEUTRE) && (!plf.isPosterCamp(Camp.LG) && !plf.isPosterRole(RoleLG.LOUP_GAROU_BLANC))) {
-                                player.sendMessage(String.format(game.text.getText(40), playerSmell));
-                            } else if (plf.isCamp(Camp.LG) || plf.isRole(RoleLG.LOUP_GAROU_BLANC)) {
-                                player.sendMessage(String.format(game.text.getText(41), playerSmell));
-							}
-							else {
-							player.sendMessage(String.format(game.text.getText(40),playerSmell));
+							if (plf.isRole(RoleLG.LOUP_FEUTRE) && (!plf.isPosterCamp(Camp.LG) && !plf.isPosterRole(RoleLG.LOUP_GAROU_BLANC))) {
+								player.sendMessage(String.format(game.text.getText(40), playerSmell));
+							} else if (plf.isCamp(Camp.LG) || plf.isRole(RoleLG.LOUP_GAROU_BLANC)) {
+								player.sendMessage(String.format(game.text.getText(41), playerSmell));
+							} else {
+								player.sendMessage(String.format(game.text.getText(40), playerSmell));
 							}
 							plg.clearAffectedPlayer();
-							plg.setFlair(0f);
-						}			
+							plg.setProgress(0f);
+						}
 					}
 				}
 			}
-									
+
 		}
-	}	
+	}
+
+	public void succubusProximity() {
+
+		for (String playerName : game.playerLG.keySet()) {
+
+			PlayerLG plg = game.playerLG.get(playerName);
+
+			if (plg.isState(State.LIVING) && plg.isRole(RoleLG.SUCCUBUS) && !plg.getAffectedPlayer().isEmpty() && plg.hasPower()) {
+
+				String playerCharmed = plg.getAffectedPlayer().get(0);
+				PlayerLG plc = game.playerLG.get(playerCharmed);
+
+				if (plc.isState(State.LIVING) && Bukkit.getPlayer(playerCharmed) != null && Bukkit.getPlayer(playerName) != null) {
+
+					Player charmed = Bukkit.getPlayer(playerCharmed);
+					Player player = Bukkit.getPlayer(playerName);
+
+					Location succubusLocation = player.getLocation();
+					Location playerLocation = charmed.getLocation();
+
+					if (succubusLocation.distance(playerLocation) <= game.config.getDistanceSuccubus()) {
+
+						float temp = plg.getProgress() + 100f / (game.config.timerValues.get(TimerLG.SUCCUBUS_DURATION) + 1);
+
+						plg.setProgress(temp);
+
+						if (temp % 10 > 0 && temp % 10 <= 100f / (game.config.timerValues.get(TimerLG.SUCCUBUS_DURATION) + 1)) {
+							player.sendMessage(String.format(game.getText(39), Math.floor(temp)));
+						}
+
+						if (temp >= 100) {
+
+							charmed.playSound(charmed.getLocation(), Sound.PORTAL_TRAVEL, 1, 20);
+							charmed.sendMessage(String.format(game.getText(265), playerName));
+							player.sendMessage(String.format(game.getText(314), playerCharmed));
+							plg.setProgress(0f);
+							plg.setPower(false);
+							plg.setUse(plg.getUse() + 1);
+						}
+					}
+				}
+			}
+
+		}
+	}
 }

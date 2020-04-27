@@ -44,7 +44,7 @@ public class CommandGroup extends Commands {
             return;
         }
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if(game.playerLG.containsKey(p.getName())){
+            if (game.getWorld().equals(p.getWorld())) {
                 Title.sendTitle(p, 20, 60, 20, text.getText(138), String.format(text.getText(139), game.score.getGroup()));
                 p.sendMessage(String.format(text.getText(137), game.score.getGroup()));
             }

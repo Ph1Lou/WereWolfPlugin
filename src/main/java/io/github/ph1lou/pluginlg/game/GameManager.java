@@ -49,7 +49,8 @@ public class GameManager {
     public final EndLG endlg;
     public final StuffLG stufflg;
     public final ScenariosLG scenarios;
-    public WorldFillTask wft=null;
+    public WorldFillTask wft = null;
+    public LobbyGenerator lobbyGenerator;
     public TextLG text;
     private String lang;
     private final World world;
@@ -90,6 +91,7 @@ public class GameManager {
         proximity = new ProximityLG(this);
         roleManage = new RoleManagementLG(this);
         loversManage = new LoversManagement(this);
+
         endlg = new EndLG(this);
         stufflg = new StuffLG(this);
         scenarios = new ScenariosLG(main,this);
@@ -102,7 +104,6 @@ public class GameManager {
         setState(StateLG.LOBBY);
         setDay(Day.DEFAULT);
         setWorld();
-
         LobbyTask start = new LobbyTask(main,this);
         start.runTaskTimer(main, 0, 20);
     }
@@ -148,30 +149,36 @@ public class GameManager {
             world.setGameRuleValue("doFireTick", "false");
             world.getWorldBorder().reset();
             world.save();
-            int x=(int) world.getSpawnLocation().getX();
-            int z=(int)  world.getSpawnLocation().getZ();
+            int x = (int) world.getSpawnLocation().getX();
+            int z = (int) world.getSpawnLocation().getZ();
 
-            if(main.getConfig().getBoolean("autoRoofedMiddle")){
-                Location biome = WorldUtils.findBiome(this,Biome.ROOFED_FOREST, world, 2000);
-                x=(int) biome.getX();
-                z=(int) biome.getZ();
+            if (main.getConfig().getBoolean("autoRoofedMiddle")) {
+                Location biome = WorldUtils.findBiome(this, Biome.ROOFED_FOREST, world, 2000);
+                x = (int) biome.getX();
+                z = (int) biome.getZ();
             }
-            world.setSpawnLocation(x, 151,z);
+            world.setSpawnLocation(x, 151, z);
 
-            for(int i=-16;i<=16;i++) {
+            File file = new File(main.getDataFolder(), File.separator + "schematics" + File.separator + "ww.schematic");
 
-                for(int j=-16;j<=16;j++) {
+            if (Bukkit.getPluginManager().getPlugin("WorldEdit") == null || !file.exists()) {
 
-                    new Location(world, i+x, 150,j+z).getBlock().setType(Material.BARRIER);
-                    new Location(world, i+x, 154,j+z).getBlock().setType(Material.BARRIER);
+                file.getParentFile().mkdirs();
+                for (int i = -16; i <= 16; i++) {
+
+                    for (int j = -16; j <= 16; j++) {
+
+                        new Location(world, i + x, 150, j + z).getBlock().setType(Material.BARRIER);
+                        new Location(world, i + x, 154, j + z).getBlock().setType(Material.BARRIER);
+                    }
+                    for (int j = 151; j < 154; j++) {
+                        new Location(world, i + x, j, z - 16).getBlock().setType(Material.BARRIER);
+                        new Location(world, i + x, j, z + 16).getBlock().setType(Material.BARRIER);
+                        new Location(world, x - 16, j, i + z).getBlock().setType(Material.BARRIER);
+                        new Location(world, x + 16, j, i + z).getBlock().setType(Material.BARRIER);
+                    }
                 }
-                for(int j=151;j<154;j++){
-                    new Location(world, i+x, j,z-16).getBlock().setType(Material.BARRIER);
-                    new Location(world, i+x, j,z+16).getBlock().setType(Material.BARRIER);
-                    new Location(world, x-16, j,i+z).getBlock().setType(Material.BARRIER);
-                    new Location(world, x+16, j,i+z).getBlock().setType(Material.BARRIER);
-                }
-            }
+            } else lobbyGenerator = new LobbyGenerator(main, this);
 
         }catch(Exception e){
             Bukkit.getConsoleSender().sendMessage(text.getText(21));
@@ -300,7 +307,7 @@ public class GameManager {
 
     public void sendMessage(Player player) {
 
-        TextComponent msg = new TextComponent(String.format(text.getText(293),world.getName()));
+        TextComponent msg = new TextComponent(String.format(text.getText(293), getGameName()));
         msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/lg join " + world.getName()));
         player.spigot().sendMessage(msg);
     }
@@ -376,11 +383,15 @@ public class GameManager {
         this.moderators.remove(moderator);
     }
 
-    public List<UUID> getQueue(){
+    public List<UUID> getQueue() {
         return this.queue;
     }
 
-    public void addPlayerInQueue(UUID uuid){
+    public void addPlayerInQueue(UUID uuid) {
         this.queue.add(uuid);
+    }
+
+    public String getText(int i) {
+        return text.getText(i);
     }
 }

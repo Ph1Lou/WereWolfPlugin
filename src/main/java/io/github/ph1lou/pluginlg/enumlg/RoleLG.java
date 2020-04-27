@@ -39,7 +39,8 @@ public enum RoleLG {
     LOUP_AMNESIQUE(Camp.NEUTRAL, true, null),
     LOUP_GAROU_BLANC(Camp.NEUTRAL, true, ListenerRolesWhiteWerewolf.class),
     ASSASSIN(Camp.NEUTRAL, true, ListenerRolesAssassin.class),
-    TUEUR_EN_SERIE(Camp.NEUTRAL, true, null);
+    TUEUR_EN_SERIE(Camp.NEUTRAL, true, null),
+    SUCCUBUS(Camp.NEUTRAL, true, null);
 
     private final Camp camp;
     private final Boolean power;

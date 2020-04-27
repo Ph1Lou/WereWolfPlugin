@@ -169,7 +169,7 @@ public class ScoreBoardLG {
 				game.eventslg.chest_location.clear();
 				game.eventslg.chest_has_been_open.clear();
 				for(Player p:Bukkit.getOnlinePlayers()){
-					if(game.playerLG.containsKey(p.getName())){
+					if (game.getWorld().equals(p.getWorld())) {
 						p.sendMessage(game.text.getText(165));
 					}
 				}
@@ -307,7 +307,7 @@ public class ScoreBoardLG {
 			group_size--;
 
 			for (Player p : Bukkit.getOnlinePlayers()) {
-				if(game.playerLG.containsKey(p.getName())){
+				if (game.getWorld().equals(p.getWorld())) {
 					p.sendMessage(String.format(game.text.getText(137), group_size));
 					Title.sendTitle(p, 20, 60, 20, game.text.getText(138), String.format(game.text.getText(139), game.score.getGroup()));
 				}
@@ -347,17 +347,17 @@ public class ScoreBoardLG {
 		return this.group_size;
 	}
 
-    public void setGroup(int group) {
-		this.group_size =group;
+	public void setGroup(int group) {
+		this.group_size = group;
 
-    }
+	}
 
-    public List<String> getScoreboard1(){
+	public List<String> getScoreboard1() {
 		return scoreboard1;
 	}
 
-	public List<String> getScoreboard3(){
-		return scoreboard3;
+	public List<String> getScoreboard2() {
+		return scoreboard2;
 	}
 
 }

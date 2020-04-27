@@ -37,7 +37,7 @@ public class ServerListener implements Listener {
 
         Player player = event.getPlayer();
         String[] args = event.getMessage().split(" ");
-        if (args[0].equalsIgnoreCase("/rl")) {
+        if (args[0].equalsIgnoreCase("/rl") || args[0].equalsIgnoreCase("/stop") || args[0].equalsIgnoreCase("/bukkit:rl") || args[0].equalsIgnoreCase("/bukkit:reload")) {
             event.setCancelled(true);
             player.sendMessage(main.defaultLanguage.getText(274));
         }
@@ -82,7 +82,6 @@ public class ServerListener implements Listener {
             fastboard.delete();
         }
     }
-
 
     @EventHandler
     private void onJoin(PlayerJoinEvent event) {
@@ -192,8 +191,8 @@ public class ServerListener implements Listener {
 
                 event.setCancelled(true);
                 List<Integer> slotHost = Arrays.asList(21, 22, 23, 30, 31, 32);
-                if (current.getType() == Material.DIAMOND_BLOCK) {
-                    player.performCommand("lg join "+((GameManager) main.listGames.values().toArray()[slotHost.indexOf(event.getSlot())]).getGameUUID());
+                if (current.getType() == Material.EMERALD_BLOCK || current.getType() == Material.REDSTONE_BLOCK) {
+                    player.performCommand("lg join " + ((GameManager) main.listGames.values().toArray()[slotHost.indexOf(event.getSlot())]).getGameUUID());
                 }
 
             }

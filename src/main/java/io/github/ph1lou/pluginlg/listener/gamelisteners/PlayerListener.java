@@ -184,6 +184,26 @@ public class PlayerListener implements Listener {
 				}
 			} else plg.setKiller(game.text.getText(81));
 
+			if (plg.isRole(RoleLG.SUCCUBUS) && !plg.getAffectedPlayer().isEmpty() && !plg.hasPower()) {
+				String targetName = plg.getAffectedPlayer().get(0);
+				if (game.playerLG.containsKey(targetName)) {
+					PlayerLG trg = game.playerLG.get(targetName);
+					if (trg.isState(State.LIVING)) {
+						if (Bukkit.getPlayer(targetName) == null) {
+							game.death_manage.death(targetName);
+						} else {
+							Player target = Bukkit.getPlayer(targetName);
+							target.damage(10000);
+							target.sendMessage(game.text.getText(266));
+						}
+						plg.clearAffectedPlayer();
+						plg.setPower(true);
+						Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> game.death_manage.resurrection(playername), 20L);
+						return;
+					}
+				}
+			}
+
 			Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> game.death_manage.deathStep1(playername), 20L);
 		}
 	}
@@ -212,8 +232,8 @@ public class PlayerListener implements Listener {
 
 				event.setJoinMessage(null);
 
-				for(Player p:Bukkit.getOnlinePlayers()){
-					if(game.playerLG.containsKey(p.getName())){
+				for(Player p:Bukkit.getOnlinePlayers()) {
+					if (game.getWorld().equals(p.getWorld())) {
 						p.sendMessage(String.format(game.text.getText(193), playerName));
 					}
 				}
@@ -280,9 +300,9 @@ public class PlayerListener implements Listener {
 				game.board.getTeam(playerName).unregister();
 				game.playerLG.remove(playerName);
 				game.checkQueue();
-				for(Player p:Bukkit.getOnlinePlayers()){
-					if(game.playerLG.containsKey(p.getName())){
-						p.sendMessage(String.format(game.text.getText(195),game.score.getPlayerSize(),game.score.getRole(),player.getName()));
+				for(Player p:Bukkit.getOnlinePlayers()) {
+					if (game.getWorld().equals(p.getWorld())) {
+						p.sendMessage(String.format(game.text.getText(195), game.score.getPlayerSize(), game.score.getRole(), player.getName()));
 					}
 				}
 				player.setGameMode(GameMode.ADVENTURE);
@@ -298,7 +318,7 @@ public class PlayerListener implements Listener {
 				event.setQuitMessage(null);
 				plg.setDeathTime(game.score.getTimer());
 				for (Player p : Bukkit.getOnlinePlayers()) {
-					if (game.playerLG.containsKey(p.getName())) {
+					if (game.getWorld().equals(p.getWorld())) {
 						p.sendMessage(String.format(game.text.getText(196), event.getPlayer().getName()));
 					}
 				}

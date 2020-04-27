@@ -75,8 +75,8 @@ public class EventsLG {
 			chest_has_been_open.put(location, false);
 		}
 		for(Player p:Bukkit.getOnlinePlayers()){
-			if(game.playerLG.containsKey(p.getName())){
-				p.sendMessage(String.format(game.text.getText(36),nb_target));
+			if (game.getWorld().equals(p.getWorld())) {
+				p.sendMessage(String.format(game.text.getText(36), nb_target));
 			}
 		}
 	}
