@@ -9,7 +9,7 @@ import io.github.ph1lou.pluginlg.game.PlayerLG;
 import io.github.ph1lou.pluginlg.utils.Title;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -56,10 +56,9 @@ public class TransportationTask extends BukkitRunnable {
 
 
         if (game.isState(StateLG.FIN)) {
-            game.deleteGame();
             cancel();
+            return;
         }
-
         game.score.updateBoard();
         World world = game.getWorld();
         WorldBorder wb = world.getWorldBorder();
@@ -67,10 +66,8 @@ public class TransportationTask extends BukkitRunnable {
         if (i < game.playerLG.size()) {
 
             for (Player p : Bukkit.getOnlinePlayers()) {
-                if(game.playerLG.containsKey(p.getName())){
-                    p.playSound(p.getLocation(), Sound.DIG_GRASS, 1, 20);
-                    Title.sendActionBar(p, String.format(game.text.getText(33), i + 1, game.playerLG.size()));
-                }
+                p.playSound(p.getLocation(), Sound.DIG_GRASS, 1, 20);
+                Title.sendActionBar(p, String.format(game.text.getText(33), i + 1, game.playerLG.size()));
             }
 
             String playername = (String) game.playerLG.keySet().toArray()[i];
@@ -85,10 +82,8 @@ public class TransportationTask extends BukkitRunnable {
         } else if (i < 2 * game.playerLG.size()) {
 
             for (Player p : Bukkit.getOnlinePlayers()) {
-                if(game.playerLG.containsKey(p.getName())){
-                    p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1, 20);
-                    Title.sendActionBar(p, String.format(game.text.getText(34), i - game.playerLG.size() + 1, game.playerLG.size()));
-                }
+                p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1, 20);
+                Title.sendActionBar(p, String.format(game.text.getText(34), i - game.playerLG.size() + 1, game.playerLG.size()));
             }
 
             String playername = (String) game.playerLG.keySet().toArray()[i - game.playerLG.size()];
@@ -97,8 +92,11 @@ public class TransportationTask extends BukkitRunnable {
                 Player player = Bukkit.getPlayer(playername);
                 player.setGameMode(GameMode.ADVENTURE);
                 game.clearPlayer(player);
-                for (ItemStack it : game.stufflg.getStartLoot()) {
-                    player.getInventory().addItem(it);
+                Inventory inventory = player.getInventory();
+                inventory.clear();
+
+                for (int j = 0; j < 40; j++) {
+                    inventory.setItem(j, game.stufflg.getStartLoot().getItem(j));
                 }
                 if (game.config.scenarioValues.get(ScenarioLG.CAT_EYES)) {
                     player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0, false, false));
@@ -112,23 +110,22 @@ public class TransportationTask extends BukkitRunnable {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (game.playerLG.containsKey(p.getName())) {
                     p.setGameMode(GameMode.SURVIVAL);
-                    Title.sendTitle(p, 20, 20, 20, game.text.getText(89), game.text.getText(90));
-                    p.playSound(p.getLocation(), Sound.NOTE_BASS, 1, 20);
                     p.sendMessage(String.format(game.text.getText(121), game.config.timerValues.get(TimerLG.INVULNERABILITY)));
-                }
+                } else p.teleport(game.getWorld().getSpawnLocation());
+
+                Title.sendTitle(p, 20, 20, 20, game.text.getText(89), game.text.getText(90));
+                p.playSound(p.getLocation(), Sound.NOTE_BASS, 1, 20);
             }
             world.setTime(0);
             game.optionlg.updateCompass();
             game.setState(StateLG.DEBUT);
-            GameTask start = new GameTask(game, main);
+            GameTask start = new GameTask(game);
             start.runTaskTimer(main, 0, 5);
             cancel();
         } else if (i % 5 == 0) {
             for (Player p : Bukkit.getOnlinePlayers()) {
-                if(game.playerLG.containsKey(p.getName())){
-                    Title.sendTitle(p, 25, 20, 25, "Start", "§b" + (10 - j));
-                    p.playSound(p.getLocation(), Sound.NOTE_PIANO, 1, 20);
-                }
+                Title.sendTitle(p, 25, 20, 25, "Start", "§b" + (10 - j));
+                p.playSound(p.getLocation(), Sound.NOTE_PIANO, 1, 20);
             }
             j++;
         }

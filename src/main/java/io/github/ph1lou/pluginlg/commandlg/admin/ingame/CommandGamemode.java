@@ -23,39 +23,26 @@ public class CommandGamemode extends Commands {
             return;
         }
 
-        GameManager game=null;
-        Player player =(Player) sender;
-
-        for(GameManager gameManager:main.listGames.values()){
-            if(gameManager.getWorld().equals(player.getWorld())){
-                game=gameManager;
-                break;
-            }
-        }
-
-        if(game==null){
-            return;
-        }
-
+        GameManager game = main.currentGame;
+        Player player = (Player) sender;
         TextLG text = game.text;
 
-        if (!sender.hasPermission("adminLG.use") && !sender.hasPermission("adminLG.gamemode.use") && !game.getModerators().contains(((Player) sender).getUniqueId()) && !game.getHosts().contains(((Player) sender).getUniqueId())) {
+        if (!sender.hasPermission("a.use") && !sender.hasPermission("a.gamemode.use") && !game.getModerators().contains(((Player) sender).getUniqueId()) && !game.getHosts().contains(((Player) sender).getUniqueId())) {
             sender.sendMessage(text.getText(116));
             return;
         }
 
-        if(args.length!=1) return;
+        if (args.length != 1) return;
 
-        try{
-            int i=Integer.parseInt(args[0]);
-            if(i==0){
-                i=1;
-            }
-            else if(i==1){
-                i=0;
+        try {
+            int i = Integer.parseInt(args[0]);
+            if (i == 0) {
+                i = 1;
+            } else if (i == 1) {
+                i = 0;
             }
             player.setGameMode(GameMode.values()[i]);
-            Bukkit.getConsoleSender().sendMessage(String.format(game.text.getText(307),sender.getName(),i));
+            Bukkit.getConsoleSender().sendMessage(String.format(game.text.getText(307), sender.getName(), i));
         }
         catch (NumberFormatException ignored){
         }

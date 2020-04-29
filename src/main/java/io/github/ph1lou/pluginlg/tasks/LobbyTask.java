@@ -26,21 +26,19 @@ public class LobbyTask extends BukkitRunnable {
     public void run() {
 
         if (game.isState(StateLG.FIN)) {
-            game.deleteGame();
             cancel();
+            return;
         }
 
         game.score.updateBoard();
 
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (game.getWorld().equals(p.getWorld())) {
-                if (game.wft == null) {
-                    if (p.isOp() || p.hasPermission("adminLG.use") || p.hasPermission("adminLG.generation.use")) {
-                        Title.sendActionBar(p, game.text.getText(164));
-                    }
-                } else {
-                    Title.sendActionBar(p, String.format(game.text.getText(222), new DecimalFormat("0.0").format(game.wft.getPercentageCompleted())));
+            if (game.wft == null) {
+                if (p.isOp() || p.hasPermission("a.use") || p.hasPermission("a.generation.use")) {
+                    Title.sendActionBar(p, game.text.getText(164));
                 }
+            } else if (game.wft.getPercentageCompleted() < 100) {
+                Title.sendActionBar(p, String.format(game.text.getText(222), new DecimalFormat("0.0").format(game.wft.getPercentageCompleted())));
             }
         }
 
@@ -49,6 +47,5 @@ public class LobbyTask extends BukkitRunnable {
             transportationTask.runTaskTimer(main, 0, 4);
             cancel();
         }
-
     }
 }

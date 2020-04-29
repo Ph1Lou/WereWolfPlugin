@@ -22,35 +22,22 @@ public class CommandTP extends Commands {
             return;
         }
 
-        GameManager game=null;
-        Player player =(Player) sender;
-
-        for(GameManager gameManager:main.listGames.values()){
-            if(gameManager.getWorld().equals(player.getWorld())){
-                game=gameManager;
-                break;
-            }
-        }
-
-        if(game==null){
-            return;
-        }
-
+        GameManager game = main.currentGame;
+        Player player = (Player) sender;
         TextLG text = game.text;
 
-        if (!sender.hasPermission("adminLG.use") && !sender.hasPermission("adminLG.gamemode.use") && !game.getModerators().contains(((Player) sender).getUniqueId()) && !game.getHosts().contains(((Player) sender).getUniqueId())) {
+        if (!sender.hasPermission("a.use") && !sender.hasPermission("a.gamemode.use") && !game.getModerators().contains(((Player) sender).getUniqueId()) && !game.getHosts().contains(((Player) sender).getUniqueId())) {
             sender.sendMessage(text.getText(116));
             return;
         }
 
-        if(args.length==1) {
-            try{
-                if(player.getWorld().equals(Bukkit.getPlayer(args[0]).getWorld())){
+        if (args.length == 1) {
+            try {
+                if (player.getWorld().equals(Bukkit.getPlayer(args[0]).getWorld())) {
                     player.teleport(Bukkit.getPlayer(args[0]));
-                    Bukkit.getConsoleSender().sendMessage(String.format(game.text.getText(306),sender.getName(),args[0]));
+                    Bukkit.getConsoleSender().sendMessage(String.format(game.text.getText(306), sender.getName(), args[0]));
                 }
-            }
-            catch (Exception ignored){
+            } catch (Exception ignored) {
             }
         }
 

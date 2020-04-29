@@ -8,7 +8,6 @@ public enum ToolLG {
 	SHOW_ROLE_TO_DEATH(true),
 	COMPO_VISIBLE(true),
 	VOTE(true),
-	LG_LIST(true),
 	EVENT_SEER_DEATH(true),
 	AUTO_REZ_WITCH(false),
 	AUTO_REZ_INFECT(false),

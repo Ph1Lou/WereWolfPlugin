@@ -1,30 +1,24 @@
 package io.github.ph1lou.pluginlg;
 
 
-import fr.mrmicky.fastboard.FastBoard;
 import io.github.ph1lou.pluginlg.commandlg.AdminLG;
 import io.github.ph1lou.pluginlg.commandlg.CommandLG;
 import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlg.listener.ServerListener;
+import io.github.ph1lou.pluginlg.game.LobbyGenerator;
 import io.github.ph1lou.pluginlg.savelg.LangLG;
 import io.github.ph1lou.pluginlg.savelg.TextLG;
-import io.github.ph1lou.pluginlg.tasks.HubTask;
 import io.github.ph1lou.pluginlg.utils.WorldUtils;
 import io.github.ph1lou.pluginlgapi.GetWereWolfAPI;
 import io.github.ph1lou.pluginlgapi.WereWolfAPI;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scoreboard.Scoreboard;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 public class MainLG extends JavaPlugin implements GetWereWolfAPI {
 
@@ -33,12 +27,8 @@ public class MainLG extends JavaPlugin implements GetWereWolfAPI {
     public TextLG textEN;
     public TextLG textFR;
     public TextLG defaultLanguage;
-    public final Map<UUID, GameManager> listGames = new HashMap<>();
-    public final Map<UUID, FastBoard> boards = new HashMap<>();
-    public Inventory hubTool;
+    public GameManager currentGame;
     public final WereWolfApiImpl wereWolfApi = new WereWolfApiImpl(this);
-    public HubTask hubTask;
-    public Scoreboard board;
 
     @Override
     public void onEnable() {
@@ -47,11 +37,8 @@ public class MainLG extends JavaPlugin implements GetWereWolfAPI {
 
     @Override
     public void onDisable() {
-        List<World> worlds = Bukkit.getWorlds().subList(1,Bukkit.getWorlds().size());
         try {
-            for(World world: worlds){
-                FileUtils.deleteDirectory(new File(Bukkit.getWorldContainer() + File.separator + world.getName()));
-            }
+            FileUtils.deleteDirectory(new File(Bukkit.getWorldContainer() + File.separator + currentGame.getWorld().getName()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,25 +54,52 @@ public class MainLG extends JavaPlugin implements GetWereWolfAPI {
 	public void enable() {
 
         saveDefaultConfig();
-
+        setWorld();
         lang.init(this);
-
-
-        getCommand("lg").setExecutor(new CommandLG(this,textFR));
-        getCommand("adminWW").setExecutor(new AdminLG(this));
-        getCommand("ww").setExecutor(new CommandLG(this,textEN));
-        Bukkit.getPluginManager().registerEvents(new ServerListener(this), this);
-
-        board = Bukkit.getScoreboardManager().getNewScoreboard();
-        hubTask = new HubTask(this);
-        hubTask.initInventory();
-        hubTask.runTaskTimer(this, 0, 20);
+        getCommand("lg").setExecutor(new CommandLG(this, textFR));
+        getCommand("a").setExecutor(new AdminLG(this));
+        getCommand("ww").setExecutor(new CommandLG(this, textEN));
+        currentGame = new GameManager(this);
     }
 
 
     @Override
     public WereWolfAPI getWereWolfAPI() {
         return wereWolfApi;
+    }
+
+    public void setWorld() {
+
+        World world = Bukkit.getWorlds().get(0);
+        world.setWeatherDuration(0);
+        world.setThundering(false);
+        world.setGameRuleValue("doFireTick", "false");
+        int x = (int) world.getSpawnLocation().getX();
+        int z = (int) world.getSpawnLocation().getZ();
+
+        File file = new File(getDataFolder(), File.separator + "schematics" + File.separator + "ww.schematic");
+
+        world.setSpawnLocation(x, 151, z);
+
+        if (Bukkit.getPluginManager().getPlugin("WorldEdit") != null && file.exists()) {
+
+            new LobbyGenerator(this, world);
+        } else {
+            for (int i = -16; i <= 16; i++) {
+
+                for (int j = -16; j <= 16; j++) {
+
+                    new Location(world, i + x, 150, j + z).getBlock().setType(Material.BARRIER);
+                    new Location(world, i + x, 154, j + z).getBlock().setType(Material.BARRIER);
+                }
+                for (int j = 151; j < 154; j++) {
+                    new Location(world, i + x, j, z - 16).getBlock().setType(Material.BARRIER);
+                    new Location(world, i + x, j, z + 16).getBlock().setType(Material.BARRIER);
+                    new Location(world, x - 16, j, i + z).getBlock().setType(Material.BARRIER);
+                    new Location(world, x + 16, j, i + z).getBlock().setType(Material.BARRIER);
+                }
+            }
+        }
     }
 }
 		

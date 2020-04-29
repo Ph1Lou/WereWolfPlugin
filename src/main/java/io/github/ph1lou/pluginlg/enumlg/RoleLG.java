@@ -1,7 +1,7 @@
 package io.github.ph1lou.pluginlg.enumlg;
 
 
-import io.github.ph1lou.pluginlg.listener.gamelisteners.roleslisteners.*;
+import io.github.ph1lou.pluginlg.listener.roleslisteners.*;
 
 public enum RoleLG {
 
@@ -36,7 +36,7 @@ public enum RoleLG {
     ANGE(Camp.NEUTRAL, true, null),
     ANGE_GARDIEN(Camp.NEUTRAL, true, null),
     ANGE_DECHU(Camp.NEUTRAL, true, null),
-    LOUP_AMNESIQUE(Camp.NEUTRAL, true, null),
+    LOUP_AMNESIQUE(Camp.NEUTRAL, true, ListenerRolesAmnesicWerewolf.class),
     LOUP_GAROU_BLANC(Camp.NEUTRAL, true, ListenerRolesWhiteWerewolf.class),
     ASSASSIN(Camp.NEUTRAL, true, ListenerRolesAssassin.class),
     TUEUR_EN_SERIE(Camp.NEUTRAL, true, null),

@@ -22,28 +22,16 @@ public class CommandFallenAngel extends Commands {
     @Override
     public void execute(CommandSender sender, String[] args) {
 
-        if (!(sender instanceof Player)){
+        if (!(sender instanceof Player)) {
             return;
         }
 
-        GameManager game=null;
-        Player player =(Player) sender;
-
-        for(GameManager gameManager:main.listGames.values()){
-            if(gameManager.getWorld().equals(player.getWorld())){
-                game=gameManager;
-                break;
-            }
-        }
-
-        if(game==null){
-            return;
-        }
-
+        GameManager game = main.currentGame;
+        Player player = (Player) sender;
         TextLG text = game.text;
         String playername = player.getName();
 
-        if(!game.playerLG.containsKey(playername)) {
+        if (!game.playerLG.containsKey(playername)) {
             player.sendMessage(text.getText(67));
             return;
         }

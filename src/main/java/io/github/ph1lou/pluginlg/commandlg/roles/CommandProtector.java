@@ -28,21 +28,10 @@ public class CommandProtector extends Commands {
             return;
         }
 
-        GameManager game=null;
-        Player player =(Player) sender;
-
-        for(GameManager gameManager:main.listGames.values()){
-            if(gameManager.getWorld().equals(player.getWorld())){
-                game=gameManager;
-                break;
-            }
-        }
-
-        if(game==null){
-            return;
-        }
+        GameManager game = main.currentGame;
 
         TextLG text = game.text;
+        Player player = (Player) sender;
         String playername = player.getName();
 
         if(!game.playerLG.containsKey(playername)) {

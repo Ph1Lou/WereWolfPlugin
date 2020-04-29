@@ -2,9 +2,11 @@ package io.github.ph1lou.pluginlg.savelg;
 
 import io.github.ph1lou.pluginlg.enumlg.RoleLG;
 import io.github.ph1lou.pluginlg.game.GameManager;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
@@ -15,7 +17,7 @@ public class StuffLG {
 
     public final Map<RoleLG, List<ItemStack>> role_stuff = new HashMap<>();
     private final List<ItemStack> death_loot = new ArrayList<>();
-    private final List<ItemStack> start_loot = new ArrayList<>();
+    private final Inventory start_loot = Bukkit.createInventory(null, 45);
     final GameManager game;
 
     public StuffLG(GameManager game) {
@@ -26,7 +28,7 @@ public class StuffLG {
         return this.death_loot;
     }
 
-    public List<ItemStack> getStartLoot() {
+    public Inventory getStartLoot() {
         return this.start_loot;
     }
 
@@ -40,10 +42,6 @@ public class StuffLG {
 
     public void addDeathLoot(ItemStack i) {
         death_loot.add(i);
-    }
-
-    public void addStartLoot(ItemStack i) {
-        start_loot.add(i);
     }
 
     public void save(String configName) {
@@ -113,7 +111,7 @@ public class StuffLG {
             Set<String> sl = config.getConfigurationSection("start_loot.").getKeys(false);
 
             for (String s : sl) {
-                start_loot.add(config.getItemStack("start_loot." + s));
+                start_loot.addItem(config.getItemStack("start_loot." + s));
             }
         }
         if (config.getItemStack("death_loot.0") != null) {

@@ -168,11 +168,7 @@ public class ScoreBoardLG {
 			if (!game.eventslg.chest_has_been_open.containsValue(false)) {
 				game.eventslg.chest_location.clear();
 				game.eventslg.chest_has_been_open.clear();
-				for(Player p:Bukkit.getOnlinePlayers()){
-					if (game.getWorld().equals(p.getWorld())) {
-						p.sendMessage(game.text.getText(165));
-					}
-				}
+				Bukkit.broadcastMessage(game.getText(165));
 				game.config.configValues.put(ToolLG.EVENT_SEER_DEATH, true);
 			} else {
 				for (int i = 0; i < game.eventslg.chest_location.size(); i++) {
@@ -307,10 +303,8 @@ public class ScoreBoardLG {
 			group_size--;
 
 			for (Player p : Bukkit.getOnlinePlayers()) {
-				if (game.getWorld().equals(p.getWorld())) {
-					p.sendMessage(String.format(game.text.getText(137), group_size));
-					Title.sendTitle(p, 20, 60, 20, game.text.getText(138), String.format(game.text.getText(139), game.score.getGroup()));
-				}
+				p.sendMessage(String.format(game.text.getText(137), group_size));
+				Title.sendTitle(p, 20, 60, 20, game.text.getText(138), String.format(game.text.getText(139), game.score.getGroup()));
 			}
 		}
 	}
@@ -360,4 +354,7 @@ public class ScoreBoardLG {
 		return scoreboard2;
 	}
 
+	public List<String> getScoreboard3() {
+		return scoreboard3;
+	}
 }

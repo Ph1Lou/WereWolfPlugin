@@ -21,19 +21,7 @@ public class CommandCompo extends Commands {
 
         if(!(sender instanceof Player)) return;
 
-        GameManager game=null;
-        Player player =(Player) sender;
-
-        for(GameManager gameManager:main.listGames.values()){
-            if(gameManager.getWorld().equals(player.getWorld())){
-                game=gameManager;
-                break;
-            }
-        }
-
-        if(game==null){
-            return;
-        }
+        GameManager game = main.currentGame;
 
         TextLG text = game.text;
 

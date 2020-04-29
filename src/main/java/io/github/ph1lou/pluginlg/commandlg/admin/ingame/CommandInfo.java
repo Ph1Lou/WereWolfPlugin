@@ -22,14 +22,8 @@ public class CommandInfo extends Commands {
             return;
         }
 
-        GameManager game = null;
-        Player player = (Player) sender;
+        GameManager game = main.currentGame;
 
-        for (GameManager gameManager : main.listGames.values()) {
-            if (gameManager.getWorld().equals(player.getWorld())) {
-                game = gameManager;
-            }
-        }
 
         if (game == null) {
             return;
@@ -37,7 +31,7 @@ public class CommandInfo extends Commands {
 
         TextLG text = game.text;
 
-        if (!sender.hasPermission("adminLG.use") && !sender.hasPermission("adminLG.info.use") && !game.getModerators().contains(((Player) sender).getUniqueId()) && !game.getHosts().contains(((Player) sender).getUniqueId())) {
+        if (!sender.hasPermission("a.use") && !sender.hasPermission("a.info.use") && !game.getModerators().contains(((Player) sender).getUniqueId()) && !game.getHosts().contains(((Player) sender).getUniqueId())) {
             sender.sendMessage(text.getText(116));
             return;
         }
@@ -49,10 +43,6 @@ public class CommandInfo extends Commands {
         for (String w : args) {
             sb2.append(w).append(" ");
         }
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            if (game.getWorld().equals(p.getWorld())) {
-                p.sendMessage(String.format(text.getText(136), sb2.toString()));
-            }
-        }
+        Bukkit.broadcastMessage(String.format(text.getText(136), sb2.toString()));
     }
 }

@@ -6,7 +6,6 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
@@ -74,10 +73,6 @@ public class EventsLG {
 			chest_location.add(location);
 			chest_has_been_open.put(location, false);
 		}
-		for(Player p:Bukkit.getOnlinePlayers()){
-			if (game.getWorld().equals(p.getWorld())) {
-				p.sendMessage(String.format(game.text.getText(36), nb_target));
-			}
-		}
+		Bukkit.broadcastMessage(String.format(game.text.getText(36), nb_target));
 	}
 }

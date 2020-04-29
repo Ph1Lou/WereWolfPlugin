@@ -349,5 +349,8 @@ public class PlayerLG{
 		this.announceLoversAFK = announceLoversAFK;
 	}
 
+	public void clearTargetOf() {
+		this.targetOf.clear();
+	}
 }
 

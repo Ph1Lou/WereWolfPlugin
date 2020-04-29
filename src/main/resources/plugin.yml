@@ -12,7 +12,7 @@ commands:
   ww:
     description: commands for players
     usage: /<command> h
-  adminWW:
+  a:
     description: admin commands
     usage: /<command> h
 

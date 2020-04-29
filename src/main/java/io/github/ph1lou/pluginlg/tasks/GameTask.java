@@ -1,7 +1,6 @@
 package io.github.ph1lou.pluginlg.tasks;
 
 
-import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlg.enumlg.*;
 import io.github.ph1lou.pluginlg.game.GameManager;
 import org.bukkit.*;
@@ -11,17 +10,20 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class GameTask extends BukkitRunnable {
 
-	private final MainLG main;
 	private final GameManager game;
 	int counter = 0;
 
-	public GameTask(GameManager game, MainLG main) {
+	public GameTask(GameManager game) {
 		this.game = game;
-		this.main=main;
 	}
 
 	@Override
 	public void run() {
+
+		if (game.isState(StateLG.FIN)) {
+			cancel();
+			return;
+		}
 
 		counter++;
 		for (Player p : Bukkit.getOnlinePlayers()) {
@@ -43,10 +45,8 @@ public class GameTask extends BukkitRunnable {
 
 		if (game.config.timerValues.get(TimerLG.INVULNERABILITY) == 0) {
 			for (Player p : Bukkit.getOnlinePlayers()) {
-				if (game.getWorld().equals(p.getWorld())) {
-					p.sendMessage(game.text.getText(117));
-					p.playSound(p.getLocation(), Sound.GLASS, 1, 20);
-				}
+				p.sendMessage(game.text.getText(117));
+				p.playSound(p.getLocation(), Sound.GLASS, 1, 20);
 			}
 
 		}
@@ -71,7 +71,7 @@ public class GameTask extends BukkitRunnable {
 			game.setState(StateLG.LG);
 
 			for (Player p : Bukkit.getOnlinePlayers()) {
-				if (game.getWorld().equals(p.getWorld())) {
+				if (game.playerLG.containsKey(p.getName())) {
 					p.sendMessage(game.text.description.get(RoleLG.VILLAGEOIS));
 					p.playSound(p.getLocation(), Sound.EXPLODE, 1, 20);
 				}
@@ -82,10 +82,8 @@ public class GameTask extends BukkitRunnable {
 		if (game.config.timerValues.get(TimerLG.PVP) == 0) {
 			world.setPVP(true);
 			for (Player p : Bukkit.getOnlinePlayers()) {
-				if (game.getWorld().equals(p.getWorld())) {
-					p.sendMessage(game.text.getText(6));
-					p.playSound(p.getLocation(), Sound.DONKEY_ANGRY, 1, 20);
-				}
+				p.sendMessage(game.text.getText(6));
+				p.playSound(p.getLocation(), Sound.DONKEY_ANGRY, 1, 20);
 			}
 		}
 		game.config.timerValues.put(TimerLG.PVP, game.config.timerValues.get(TimerLG.PVP) - 1);
@@ -109,7 +107,7 @@ public class GameTask extends BukkitRunnable {
 
 		}
 
-		if (game.config.timerValues.get(TimerLG.LG_LIST) == 0 && game.config.configValues.get(ToolLG.LG_LIST)) {
+		if (game.config.timerValues.get(TimerLG.LG_LIST) == 0) {
 			game.roleManage.lgList();
 		}
 		game.config.timerValues.put(TimerLG.LG_LIST, game.config.timerValues.get(TimerLG.LG_LIST) - 1);
@@ -118,10 +116,8 @@ public class GameTask extends BukkitRunnable {
 
 			if (wb.getSize() != game.config.borderValues.get(BorderLG.BORDER_MIN)) {
 				for (Player p : Bukkit.getOnlinePlayers()) {
-					if (game.getWorld().equals(p.getWorld())) {
-						p.sendMessage(game.text.getText(7));
-						p.playSound(p.getLocation(), Sound.FIREWORK_LAUNCH, 1, 20);
-					}
+					p.sendMessage(game.text.getText(7));
+					p.playSound(p.getLocation(), Sound.FIREWORK_LAUNCH, 1, 20);
 				}
 			}
 		} else if (game.config.timerValues.get(TimerLG.BORDER_BEGIN) < 0) {
@@ -132,10 +128,8 @@ public class GameTask extends BukkitRunnable {
 
 		if (game.config.timerValues.get(TimerLG.DIGGING) == 0) {
 			for (Player p : Bukkit.getOnlinePlayers()) {
-				if (game.getWorld().equals(p.getWorld())) {
-					p.sendMessage(game.text.getText(8));
-					p.playSound(p.getLocation(), Sound.ANVIL_BREAK, 1, 20);
-				}
+				p.sendMessage(game.text.getText(8));
+				p.playSound(p.getLocation(), Sound.ANVIL_BREAK, 1, 20);
 			}
 		}
 		game.config.timerValues.put(TimerLG.DIGGING, game.config.timerValues.get(TimerLG.DIGGING) - 1);
@@ -164,11 +158,7 @@ public class GameTask extends BukkitRunnable {
 			game.setDay(Day.DAY);
 			if (game.config.configValues.get(ToolLG.VOTE) && game.score.getPlayerSize() < game.config.getPlayerRequiredVoteEnd()) {
 				game.config.configValues.put(ToolLG.VOTE, false);
-				for (Player p : Bukkit.getOnlinePlayers()) {
-					if (game.getWorld().equals(p.getWorld())) {
-						p.sendMessage(game.text.getText(9));
-					}
-				}
+				Bukkit.broadcastMessage(game.getText(9));
 			}
 			game.cycle.day();
 		}
@@ -194,11 +184,6 @@ public class GameTask extends BukkitRunnable {
 		}
 
 		world.setTime((long) (time + 20 * (600f / game.config.timerValues.get(TimerLG.DAY_DURATION) - 1)));
-
-		if (game.isState(StateLG.FIN)) {
-			Bukkit.getScheduler().scheduleSyncDelayedTask(main, game::deleteGame,1200);
-			cancel();
-		}
 
 		game.score.addTimer();
 	}

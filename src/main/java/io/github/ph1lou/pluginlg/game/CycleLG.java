@@ -1,8 +1,8 @@
 package io.github.ph1lou.pluginlg.game;
 
 import io.github.ph1lou.pluginlg.enumlg.*;
-import io.github.ph1lou.pluginlg.listener.gamelisteners.roleslisteners.ListenerRoles;
-import io.github.ph1lou.pluginlg.listener.gamelisteners.roleslisteners.ListenerRolesDefault;
+import io.github.ph1lou.pluginlg.listener.roleslisteners.ListenerRoles;
+import io.github.ph1lou.pluginlg.listener.roleslisteners.ListenerRolesDefault;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -46,18 +46,17 @@ public class CycleLG {
 
             if (game.playerLG.containsKey(p.getName())) {
 
-                PlayerLG plg = game.playerLG.get(p.getName());
-
                 p.sendMessage(String.format(game.text.getText(124), game.score.getTimer() / game.config.timerValues.get(TimerLG.DAY_DURATION) / 2 + 1));
+                p.playSound(p.getLocation(), Sound.DOOR_CLOSE, 1, 20);
 
+                PlayerLG plg = game.playerLG.get(p.getName());
 
                 if (plg.isState(State.LIVING)) {
 
-                    p.playSound(p.getLocation(), Sound.DOOR_CLOSE, 1, 20);
+                    this.rolesListener.getOrDefault(plg.getRole(), defaultListener).onNight(p);
                     if (plg.isCamp(Camp.LG)) {
                         p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, -1, false, false));
                     }
-                    this.rolesListener.getOrDefault(plg.getRole(), defaultListener).onNight(p);
                 }
             }
         }
@@ -122,19 +121,18 @@ public class CycleLG {
 
         for (Player p : Bukkit.getOnlinePlayers()) {
 
+            p.sendMessage(String.format(game.text.getText(16), game.score.getTimer() / game.config.timerValues.get(TimerLG.DAY_DURATION) / 2 + 1));
+            p.playSound(p.getLocation(), Sound.DOOR_OPEN, 1, 20);
+
+            if (game.config.configValues.get(ToolLG.VOTE) && game.config.timerValues.get(TimerLG.VOTE_BEGIN) < 0) {
+                p.sendMessage(String.format(game.text.getText(17), game.score.conversion(game.config.timerValues.get(TimerLG.VOTE_DURATION))));
+            }
+
             if (game.playerLG.containsKey(p.getName())) {
 
                 PlayerLG plg = game.playerLG.get(p.getName());
 
-                p.sendMessage(String.format(game.text.getText(16), game.score.getTimer() / game.config.timerValues.get(TimerLG.DAY_DURATION) / 2 + 1));
-
                 if (plg.isState(State.LIVING)) {
-
-                    p.playSound(p.getLocation(), Sound.DOOR_OPEN, 1, 20);
-
-                    if (game.config.configValues.get(ToolLG.VOTE) && game.config.timerValues.get(TimerLG.VOTE_BEGIN) < 0) {
-                        p.sendMessage(String.format(game.text.getText(17), game.score.conversion(game.config.timerValues.get(TimerLG.VOTE_DURATION))));
-                    }
 
                     if (plg.isCamp(Camp.LG)) {
                         p.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
@@ -159,7 +157,7 @@ public class CycleLG {
                     }
                     this.rolesListener.getOrDefault(plg.getRole(), defaultListener).onDay(p, plg);
                 }
-			}
+            }
 		}	
 	}
 

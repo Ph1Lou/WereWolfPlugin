@@ -4,16 +4,15 @@ import fr.mrmicky.fastboard.FastBoard;
 import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlg.enumlg.Day;
 import io.github.ph1lou.pluginlg.enumlg.StateLG;
-import io.github.ph1lou.pluginlg.listener.gamelisteners.ScenariosLG;
+import io.github.ph1lou.pluginlg.listener.ScenariosLG;
 import io.github.ph1lou.pluginlg.savelg.ConfigLG;
 import io.github.ph1lou.pluginlg.savelg.StuffLG;
 import io.github.ph1lou.pluginlg.savelg.TextLG;
 import io.github.ph1lou.pluginlg.tasks.LobbyTask;
 import io.github.ph1lou.pluginlg.utils.Title;
+import io.github.ph1lou.pluginlg.utils.UpdateChecker;
 import io.github.ph1lou.pluginlg.utils.WorldUtils;
 import io.github.ph1lou.pluginlg.worldloader.WorldFillTask;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
 import org.bukkit.block.Biome;
@@ -50,37 +49,27 @@ public class GameManager {
     public final StuffLG stufflg;
     public final ScenariosLG scenarios;
     public WorldFillTask wft = null;
-    public LobbyGenerator lobbyGenerator;
     public TextLG text;
     private String lang;
-    private final World world;
+    private World world;
     private final List<UUID> queue = new ArrayList<>();
-    private final List<String> whiteListedPlayers;
-    private final List<UUID> hosts;
-    private final List<UUID> moderators;
+    private List<UUID> whiteListedPlayers = new ArrayList<>();
+    private List<UUID> hosts = new ArrayList<>();
+    private List<UUID> moderators = new ArrayList<>();
     private int spectatorMode = 2;  // 0 no Spectators, 1 allowed for death players, 2 for all players;
-    private boolean whiteList=true;
-    private int playerMax;
-    private final UUID gameUUID;
-    private String gameName;
+    private boolean whiteList = true;
+    private int playerMax = 30;
+    private String gameName = "/a setGameName";
 
 
-    public GameManager(MainLG main, String name, List<UUID> hostsUUIDs, List<UUID> moderatorsUUIDs, List<String> whiteListedPlayers, int playerMax){
+    public GameManager(MainLG main) {
 
-        this.main=main;
-        this.gameName= name;
-        this.hosts=hostsUUIDs;
-        this.moderators=moderatorsUUIDs;
-        this.whiteListedPlayers=whiteListedPlayers;
-        this.playerMax=playerMax;
-        gameUUID= UUID.randomUUID();
-        main.listGames.put(gameUUID,this);
-
-        WorldCreator wc = new WorldCreator(gameUUID.toString());
+        this.main = main;
+        WorldCreator wc = new WorldCreator(String.valueOf(UUID.randomUUID()));
         wc.environment(World.Environment.NORMAL);
         wc.type(WorldType.NORMAL);
-        this.world=wc.createWorld();
-        lang=getConfig().getString("lang");
+        this.world = wc.createWorld();
+        lang = getConfig().getString("lang");
         cycle = new CycleLG(this);
         death_manage = new DeathManagementLG(this);
         vote = new VoteLG(this);
@@ -91,8 +80,7 @@ public class GameManager {
         proximity = new ProximityLG(this);
         roleManage = new RoleManagementLG(this);
         loversManage = new LoversManagement(this);
-
-        endlg = new EndLG(this);
+        endlg = new EndLG(main, this);
         stufflg = new StuffLG(this);
         scenarios = new ScenariosLG(main,this);
         config.getConfig(this, "saveCurrent");
@@ -104,13 +92,9 @@ public class GameManager {
         setState(StateLG.LOBBY);
         setDay(Day.DEFAULT);
         setWorld();
+
         LobbyTask start = new LobbyTask(main,this);
         start.runTaskTimer(main, 0, 20);
-    }
-
-
-    public GameManager(MainLG main, String name, UUID hostUUID){
-        this(main,"Partie de "+name,new ArrayList<>(Collections.singleton(hostUUID)),new ArrayList<>(),new ArrayList<>(), 30);
     }
 
     public void setState(StateLG state) {
@@ -139,7 +123,6 @@ public class GameManager {
 
         try{
             World world = this.world;
-            world.setPVP(false);
             world.setWeatherDuration(0);
             world.setThundering(false);
             world.setTime(0);
@@ -159,27 +142,20 @@ public class GameManager {
             }
             world.setSpawnLocation(x, 151, z);
 
-            File file = new File(main.getDataFolder(), File.separator + "schematics" + File.separator + "ww.schematic");
+            for (int i = -16; i <= 16; i++) {
 
-            if (Bukkit.getPluginManager().getPlugin("WorldEdit") == null || !file.exists()) {
+                for (int j = -16; j <= 16; j++) {
 
-                file.getParentFile().mkdirs();
-                for (int i = -16; i <= 16; i++) {
-
-                    for (int j = -16; j <= 16; j++) {
-
-                        new Location(world, i + x, 150, j + z).getBlock().setType(Material.BARRIER);
-                        new Location(world, i + x, 154, j + z).getBlock().setType(Material.BARRIER);
-                    }
-                    for (int j = 151; j < 154; j++) {
-                        new Location(world, i + x, j, z - 16).getBlock().setType(Material.BARRIER);
-                        new Location(world, i + x, j, z + 16).getBlock().setType(Material.BARRIER);
-                        new Location(world, x - 16, j, i + z).getBlock().setType(Material.BARRIER);
-                        new Location(world, x + 16, j, i + z).getBlock().setType(Material.BARRIER);
-                    }
+                    new Location(world, i + x, 150, j + z).getBlock().setType(Material.BARRIER);
+                    new Location(world, i + x, 154, j + z).getBlock().setType(Material.BARRIER);
                 }
-            } else lobbyGenerator = new LobbyGenerator(main, this);
-
+                for (int j = 151; j < 154; j++) {
+                    new Location(world, i + x, j, z - 16).getBlock().setType(Material.BARRIER);
+                    new Location(world, i + x, j, z + 16).getBlock().setType(Material.BARRIER);
+                    new Location(world, x - 16, j, i + z).getBlock().setType(Material.BARRIER);
+                    new Location(world, x + 16, j, i + z).getBlock().setType(Material.BARRIER);
+                }
+            }
         }catch(Exception e){
             Bukkit.getConsoleSender().sendMessage(text.getText(21));
         }
@@ -211,18 +187,29 @@ public class GameManager {
 
     public void deleteGame() {
 
-        for(Player p:Bukkit.getOnlinePlayers()){
-            if(p.getWorld().equals(this.getWorld())){
-                p.performCommand("lg leave");
-            }
+        if (world == null) return;
+
+        scenarios.delete();
+        main.currentGame = new GameManager(main);
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+
+            player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+            FastBoard fastboard = new FastBoard(player);
+            fastboard.updateTitle(getText(125));
+            main.currentGame.boards.put(player.getUniqueId(), fastboard);
+            Title.sendTabTitle(player, main.currentGame.getText(125), main.currentGame.getText(184));
+            player.setGameMode(GameMode.ADVENTURE);
+            main.currentGame.join(player);
         }
-        main.listGames.remove(gameUUID);
-        Bukkit.unloadWorld(world,false);
+
+        Bukkit.unloadWorld(world, false);
         try {
             FileUtils.deleteDirectory(new File(Bukkit.getWorldContainer() + File.separator + world.getName()));
         } catch (IOException e) {
             e.printStackTrace();
         }
+        this.world = null;
     }
 
     public World getWorld() {
@@ -248,71 +235,68 @@ public class GameManager {
 
     public void join(Player player) {
 
-        FastBoard fastboard = main.boards.remove(player.getUniqueId());
-        if (fastboard != null) {
-            fastboard.delete();
-        }
-        fastboard = new FastBoard(player);
-        fastboard.updateTitle(text.getText(125));
-        boards.put(player.getUniqueId(), fastboard);
-        Title.sendTabTitle(player, text.getText(125), text.getText(184));
+        String playerName = player.getName();
+        UUID uuid = player.getUniqueId();
 
-        clearPlayer(player);
-
-        if(moderators.contains(player.getUniqueId())){
-            player.sendMessage(text.getText(294));
-            player.setGameMode(GameMode.SPECTATOR);
-            player.setScoreboard(board);
-        }
-        else if(isState(StateLG.LOBBY)) {
-
-            String playerName = player.getName();
-            score.addPlayerSize();
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                if (playerLG.containsKey(p.getName())) {
-                    p.sendMessage(String.format(text.getText(194), score.getPlayerSize(), score.getRole(), playerName));
-                }
-            }
-            board.registerNewTeam(playerName);
-            board.getTeam(playerName).addEntry(playerName);
-            player.setGameMode(GameMode.ADVENTURE);
-            player.sendMessage(text.getText(1));
-            playerLG.put(playerName, new PlayerLG(player));
-            player.setScoreboard(playerLG.get(playerName).getScoreBoard());
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 0, false, false));
+        if (playerLG.size() >= getPlayerMax()) {
+            addQueue(player);
         } else {
-            player.setGameMode(GameMode.SPECTATOR);
-            player.sendMessage(text.getText(38));
-        }
-        if(isState(StateLG.FIN)){
-            score.updateBoard();
-        }
-        optionlg.updateNameTag();
-        optionlg.updateCompass();
-        player.teleport(getWorld().getSpawnLocation());
-    }
+            if (isWhiteList() && !getWhiteListedPlayers().contains(uuid)) {
+                player.sendMessage(getText(278));
+                addQueue(player);
+            } else {
+                queue.remove(uuid);
+                score.addPlayerSize();
+                Bukkit.broadcastMessage(String.format(text.getText(194), score.getPlayerSize(), score.getRole(), playerName));
+                clearPlayer(player);
+                board.registerNewTeam(playerName);
+                board.getTeam(playerName).addEntry(playerName);
+                player.setGameMode(GameMode.ADVENTURE);
+                player.sendMessage(text.getText(1));
+                playerLG.put(playerName, new PlayerLG(player));
+                player.setScoreboard(playerLG.get(playerName).getScoreBoard());
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 0, false, false));
+                player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+                new UpdateChecker(main, 73113).getVersion(version -> {
 
-    public void checkQueue(){
-
-        while(!queue.isEmpty() && getPlayerMax()>playerLG.size()){
-            if (Bukkit.getPlayer(queue.get(0)) != null) {
-                Player player = Bukkit.getPlayer(queue.get(0));
-                if (player.getWorld().equals(Bukkit.getWorlds().get(0))) {
-                    join(player);
-                }
+                    if (main.getDescription().getVersion().equalsIgnoreCase(version)) {
+                        player.sendMessage(main.defaultLanguage.getText(2));
+                    } else {
+                        player.sendMessage(main.defaultLanguage.getText(185));
+                    }
+                });
             }
-            queue.remove(0);
         }
     }
 
-    public void sendMessage(Player player) {
+    public void checkQueue() {
 
-        TextComponent msg = new TextComponent(String.format(text.getText(293), getGameName()));
-        msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/lg join " + world.getName()));
-        player.spigot().sendMessage(msg);
+        if (!isState(StateLG.LOBBY)) return;
+
+        List<UUID> temp = new ArrayList<>(queue);
+        int i = 0;
+        while (!temp.isEmpty() && getPlayerMax() > playerLG.size()) {
+            if (Bukkit.getPlayer(temp.get(0)) != null) {
+                Player player = Bukkit.getPlayer(temp.get(0));
+                queue.remove(i);
+                join(player);
+            } else i++;
+            temp.remove(0);
+        }
     }
 
-    public void clearPlayer(Player player){
+    public void addQueue(Player player) {
+
+        UUID uuid = player.getUniqueId();
+
+        if (!getQueue().contains(uuid)) {
+            queue.add(uuid);
+            Bukkit.broadcastMessage(String.format(getText(279), player.getName()));
+        }
+    }
+
+
+    public void clearPlayer(Player player) {
         player.setMaxHealth(20);
         player.setHealth(20);
         player.setExp(0);
@@ -322,7 +306,7 @@ public class GameManager {
         player.getInventory().setChestplate(null);
         player.getInventory().setLeggings(null);
         player.getInventory().setBoots(null);
-        for(PotionEffect po:player.getActivePotionEffects()) {
+        for (PotionEffect po : player.getActivePotionEffects()) {
             player.removePotionEffect(po.getType());
         }
     }
@@ -335,10 +319,6 @@ public class GameManager {
         this.spectatorMode = spectatorMode;
     }
 
-    public UUID getGameUUID() {
-        return gameUUID;
-    }
-
     public String getGameName() {
         return gameName;
     }
@@ -347,15 +327,15 @@ public class GameManager {
         this.gameName = gameName;
     }
 
-    public List<String> getWhiteListedPlayers() {
+    public List<UUID> getWhiteListedPlayers() {
         return whiteListedPlayers;
     }
 
-    public void addWhiteListedPlayer(String whiteListedPlayer) {
+    public void addWhiteListedPlayer(UUID whiteListedPlayer) {
         this.whiteListedPlayers.add(whiteListedPlayer);
     }
 
-    public void removeWhiteListedPlayer(String whiteListedPlayer) {
+    public void removeWhiteListedPlayer(UUID whiteListedPlayer) {
         this.whiteListedPlayers.remove(whiteListedPlayer);
     }
 
@@ -387,11 +367,19 @@ public class GameManager {
         return this.queue;
     }
 
-    public void addPlayerInQueue(UUID uuid) {
-        this.queue.add(uuid);
-    }
-
     public String getText(int i) {
         return text.getText(i);
+    }
+
+    public void setWhiteListedPlayer(List<UUID> whiteListedPlayers) {
+        this.whiteListedPlayers = whiteListedPlayers;
+    }
+
+    public void setModerators(List<UUID> moderatorsUUIDs) {
+        this.moderators = moderatorsUUIDs;
+    }
+
+    public void setHosts(List<UUID> hostsUUIDs) {
+        this.hosts = hostsUUIDs;
     }
 }

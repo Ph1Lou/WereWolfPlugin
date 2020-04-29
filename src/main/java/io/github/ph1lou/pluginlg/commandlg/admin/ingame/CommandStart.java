@@ -30,23 +30,11 @@ public class CommandStart extends Commands {
             return;
         }
 
-        GameManager game=null;
-        Player player =(Player) sender;
-
-        for(GameManager gameManager:main.listGames.values()){
-            if(gameManager.getWorld().equals(player.getWorld())){
-                game=gameManager;
-                break;
-            }
-        }
-
-        if(game==null){
-            return;
-        }
+     GameManager game = main.currentGame;
 
         TextLG text = game.text;
 
-        if (!sender.hasPermission("adminLG.use") && !sender.hasPermission("adminLG.start.use") && !game.getHosts().contains(((Player) sender).getUniqueId())) {
+        if (!sender.hasPermission("a.use") && !sender.hasPermission("a.start.use") && !game.getHosts().contains(((Player) sender).getUniqueId())) {
             sender.sendMessage(text.getText(116));
             return;
         }

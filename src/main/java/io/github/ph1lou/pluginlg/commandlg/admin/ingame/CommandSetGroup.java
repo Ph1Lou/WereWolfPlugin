@@ -23,23 +23,11 @@ public class CommandSetGroup extends Commands {
             return;
         }
 
-        GameManager game=null;
-        Player player =(Player) sender;
-
-        for(GameManager gameManager:main.listGames.values()){
-            if(gameManager.getWorld().equals(player.getWorld())){
-                game=gameManager;
-                break;
-            }
-        }
-
-        if(game==null){
-            return;
-        }
+     GameManager game = main.currentGame;
 
         TextLG text = game.text;
 
-        if (!sender.hasPermission("adminLG.use") && !sender.hasPermission("adminLG.setGroup.use") && !game.getModerators().contains(((Player) sender).getUniqueId()) && !game.getHosts().contains(((Player) sender).getUniqueId())) {
+        if (!sender.hasPermission("a.use") && !sender.hasPermission("a.setGroup.use") && !game.getModerators().contains(((Player) sender).getUniqueId()) && !game.getHosts().contains(((Player) sender).getUniqueId())) {
             sender.sendMessage(text.getText(116));
             return;
         }
@@ -52,10 +40,8 @@ public class CommandSetGroup extends Commands {
         try {
             game.score.setGroup(Integer.parseInt(args[0]));
             for (Player p : Bukkit.getOnlinePlayers()) {
-                if (game.getWorld().equals(p.getWorld())) {
-                    Title.sendTitle(p, 20, 60, 20, text.getText(138), String.format(text.getText(139), game.score.getGroup()));
-                    p.sendMessage(String.format(text.getText(137), game.score.getGroup()));
-                }
+                Title.sendTitle(p, 20, 60, 20, text.getText(138), String.format(text.getText(139), game.score.getGroup()));
+                p.sendMessage(String.format(text.getText(137), game.score.getGroup()));
             }
 
         } catch (NumberFormatException ignored) {

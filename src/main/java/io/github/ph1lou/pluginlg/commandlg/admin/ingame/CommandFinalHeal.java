@@ -23,34 +23,19 @@ public class CommandFinalHeal extends Commands {
             return;
         }
 
-        GameManager game=null;
-        Player player =(Player) sender;
-
-        for(GameManager gameManager:main.listGames.values()){
-            if(gameManager.getWorld().equals(player.getWorld())){
-                game=gameManager;
-                break;
-            }
-        }
-
-        if(game==null){
-            return;
-        }
+     GameManager game = main.currentGame;
 
         TextLG text = game.text;
 
-        if (!sender.hasPermission("adminLG.use") && !sender.hasPermission("adminLG.fh.use") && !game.getModerators().contains(((Player) sender).getUniqueId()) && !game.getHosts().contains(((Player) sender).getUniqueId())) {
+        if (!sender.hasPermission("a.use") && !sender.hasPermission("a.fh.use") && !game.getModerators().contains(((Player) sender).getUniqueId()) && !game.getHosts().contains(((Player) sender).getUniqueId())) {
             sender.sendMessage(text.getText(116));
             return;
         }
 
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if(game.playerLG.containsKey(p.getName())){
-                p.setHealth(p.getMaxHealth());
-                p.playSound(p.getLocation(), Sound.NOTE_STICKS, 1, 20);
-                p.sendMessage(text.getText(150));
-            }
-
+            p.setHealth(p.getMaxHealth());
+            p.playSound(p.getLocation(), Sound.NOTE_STICKS, 1, 20);
+            p.sendMessage(text.getText(150));
         }
     }
 }

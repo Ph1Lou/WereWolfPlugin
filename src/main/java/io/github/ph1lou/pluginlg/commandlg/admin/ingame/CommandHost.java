@@ -22,23 +22,11 @@ public class CommandHost extends Commands {
             return;
         }
 
-        GameManager game=null;
-        Player player =(Player) sender;
-
-        for(GameManager gameManager:main.listGames.values()){
-            if(gameManager.getWorld().equals(player.getWorld())){
-                game=gameManager;
-                break;
-            }
-        }
-
-        if(game==null){
-            return;
-        }
+        GameManager game = main.currentGame;
 
         TextLG text = game.text;
 
-        if (!sender.hasPermission("adminLG.use") && !sender.hasPermission("adminLG.host.use") && !game.getHosts().contains(((Player) sender).getUniqueId())) {
+        if (!sender.hasPermission("a.use") && !sender.hasPermission("a.host.use") && !game.getHosts().contains(((Player) sender).getUniqueId())) {
             sender.sendMessage(text.getText(116));
             return;
         }
@@ -56,18 +44,12 @@ public class CommandHost extends Commands {
         }
 
         if(game.getHosts().contains(host.getUniqueId())){
-            sender.sendMessage(String.format(game.text.getText(302),args[0]));
+            Bukkit.broadcastMessage(String.format(game.text.getText(302), args[0]));
             game.getHosts().remove(host.getUniqueId());
             return;
         }
 
-        if(!host.getWorld().equals(game.getWorld())){
-            sender.sendMessage(game.text.getText(303));
-            return;
-        }
-
         game.getHosts().add(host.getUniqueId());
-        sender.sendMessage(String.format(game.text.getText(304),args[0]));
-        host.sendMessage(game.text.getText(305));
+        Bukkit.broadcastMessage(String.format(game.text.getText(304), args[0]));
     }
 }

@@ -8,7 +8,7 @@ import io.github.ph1lou.pluginlg.savelg.TextLG;
 import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 public class CommandLootStart extends Commands {
 
@@ -24,23 +24,11 @@ public class CommandLootStart extends Commands {
             return;
         }
 
-        GameManager game=null;
-        Player player =(Player) sender;
-
-        for(GameManager gameManager:main.listGames.values()){
-            if(gameManager.getWorld().equals(player.getWorld())){
-                game=gameManager;
-                break;
-            }
-        }
-
-        if(game==null){
-            return;
-        }
+        GameManager game = main.currentGame;
 
         TextLG text = game.text;
 
-        if (!sender.hasPermission("adminLG.use") && !sender.hasPermission("adminLG.lootStart.use") && !game.getHosts().contains(((Player) sender).getUniqueId())) {
+        if (!sender.hasPermission("a.use") && !sender.hasPermission("a.lootStart.use") && !game.getHosts().contains(((Player) sender).getUniqueId())) {
             sender.sendMessage(text.getText(116));
             return;
         }
@@ -49,16 +37,17 @@ public class CommandLootStart extends Commands {
             sender.sendMessage(text.getText(119));
             return;
         }
+        Player player = (Player) sender;
+        PlayerInventory inventory = player.getInventory();
 
         game.stufflg.clearStartLoot();
-        for (ItemStack i : ((Player) sender).getInventory().getContents()) {
-            if (i != null) {
-                game.stufflg.addStartLoot(i);
-            }
+
+        for (int j = 0; j < 40; j++) {
+            game.stufflg.getStartLoot().setItem(j, inventory.getItem(j));
+            inventory.setItem(j, null);
         }
 
         sender.sendMessage(text.getText(151));
-        ((Player) sender).getInventory().clear();
         ((Player) sender).setGameMode(GameMode.ADVENTURE);
     }
 }

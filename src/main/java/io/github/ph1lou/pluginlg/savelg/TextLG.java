@@ -65,31 +65,24 @@ public class TextLG {
 	}
 	
 	public String getText(int i) {
-		if(DEFAULT.size()<3){
+		if (DEFAULT.size() < 3) {
 			return "Error";
 		}
-	return (DEFAULT.get(3).get(i));
+		return (DEFAULT.get(2).get(i));
 	}
 
-	public List<String> getScoreBoard0() {
-		if (DEFAULT.isEmpty()){
+	public List<String> getScoreBoard1() {
+		if (DEFAULT.isEmpty()) {
 			return new ArrayList<>(10);
 		}
 		return DEFAULT.get(0);
 	}
 
-	public List<String> getScoreBoard1() {
-		if (DEFAULT.isEmpty()){
+	public List<String> getScoreBoard2() {
+		if (DEFAULT.size() < 2) {
 			return new ArrayList<>(10);
 		}
 		return DEFAULT.get(1);
-	}
-
-	public List<String> getScoreBoard2() {
-		if (DEFAULT.size()<2){
-			return new ArrayList<>(10);
-		}
-		return DEFAULT.get(2);
 	}
 
 }

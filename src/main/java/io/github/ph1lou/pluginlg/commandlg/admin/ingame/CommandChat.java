@@ -23,35 +23,18 @@ public class CommandChat extends Commands {
             return;
         }
 
-        GameManager game=null;
-        Player player =(Player) sender;
-
-        for(GameManager gameManager:main.listGames.values()){
-            if(gameManager.getWorld().equals(player.getWorld())){
-                game=gameManager;
-                break;
-            }
-        }
-
-        if(game==null){
-            return;
-        }
+        GameManager game = main.currentGame;
 
         TextLG text = game.text;
 
-        if (!sender.hasPermission("adminLG.use") && !sender.hasPermission("adminLG.chat.use") && !game.getModerators().contains(((Player) sender).getUniqueId()) && !game.getHosts().contains(((Player) sender).getUniqueId())) {
+        if (!sender.hasPermission("a.use") && !game.getModerators().contains(((Player) sender).getUniqueId()) && !game.getHosts().contains(((Player) sender).getUniqueId())) {
             sender.sendMessage(text.getText(116));
             return;
         }
 
         game.config.configValues.put(ToolLG.CHAT, !game.config.configValues.get(ToolLG.CHAT));
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            if (game.getWorld().equals(p.getWorld())) {
-                if (game.config.configValues.get(ToolLG.CHAT)) {
-                    p.sendMessage(text.getText(122));
-                } else p.sendMessage(text.getText(123));
-            }
-        }
+
+        Bukkit.broadcastMessage(game.getText(game.config.configValues.get(ToolLG.CHAT) ? 122 : 123));
 
     }
 }

@@ -160,6 +160,30 @@ public class RoleManagementLG {
 				killer.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
 			}
 
+			for (String pName : plg.getTargetOf()) {
+
+				PlayerLG tlg = game.playerLG.get(pName);
+				klg.addTargetOf(pName);
+				tlg.clearAffectedPlayer();
+				tlg.addAffectedPlayer(killername);
+
+				if (tlg.isState(State.LIVING) && Bukkit.getPlayer(pName) != null) {
+
+					Player marker = Bukkit.getPlayer(pName);
+
+					if (tlg.isRole(RoleLG.ENFANT_SAUVAGE)) {
+						marker.sendMessage(String.format("§6§l[LG UHC]§r Votre maitre est maintenant §b%s", killername));
+					} else if (tlg.isRole(RoleLG.SUCCUBUS)) {
+						marker.sendMessage(String.format("§6§l[LG UHC]§r Votre charmée est maintenant §b%s", killername));
+						killer.sendMessage(String.format("§6§l[LG UHC]§r Vous ëtes charmé par §b%s", pName));
+					} else if (tlg.isRole(RoleLG.ANGE_DECHU)) {
+						marker.sendMessage(String.format("§6§l[LG UHC]§r Votre cible est maintenant §b%s", killername));
+					} else if (tlg.isRole(RoleLG.ANGE_GARDIEN)) {
+						marker.sendMessage(String.format("§6§l[LG UHC]§r Votre protégé est maintenant §b%s", killername));
+					}
+				}
+			}
+			plg.clearTargetOf();
 
 			if (klg.isRole(RoleLG.VILAIN_PETIT_LOUP) || klg.isRole(RoleLG.RENARD)) {
 				killer.removePotionEffect(PotionEffectType.SPEED);
@@ -168,7 +192,7 @@ public class RoleManagementLG {
 			for (PotionEffectType p : effect_recover(killername)) {
 				killer.addPotionEffect(new PotionEffect(p, Integer.MAX_VALUE, 0, false, false));
 			}
-			
+
 			if (klg.isRole(RoleLG.LOUP_GAROU_BLANC)) {
 				killer.setMaxHealth(30);
 				if(game.isDay(Day.NIGHT)) {
@@ -329,7 +353,7 @@ public class RoleManagementLG {
 				plg.setPower(false);
 				if (Bukkit.getPlayer(playername) != null) {
 					Player player = Bukkit.getPlayer(playername);
-					player.sendMessage(String.format(game.text.getText(47), mastername));
+					player.sendMessage(String.format(game.text.powerHasBeenUse.get(RoleLG.ENFANT_SAUVAGE), mastername));
 					player.playSound(player.getLocation(), Sound.BAT_IDLE, 1, 20);
 				}
 			}
@@ -415,16 +439,16 @@ public class RoleManagementLG {
 
 		PlayerLG plg = game.playerLG.get(playername);
 
-		if (game.config.configValues.get(ToolLG.LG_LIST) && game.config.timerValues.get(TimerLG.LG_LIST) < 0) {
+		if (game.config.timerValues.get(TimerLG.LG_LIST) < 0) {
 
-			if(game.config.configValues.get(ToolLG.RED_NAME_TAG)){
+			if (game.config.configValues.get(ToolLG.RED_NAME_TAG)) {
 				game.board.getTeam(playername).setPrefix("§4");
 			}
 			plg.setScoreBoard(game.board);
 
 			for (String lgName : game.playerLG.keySet()) {
 
-				PlayerLG lg=game.playerLG.get(lgName);
+				PlayerLG lg = game.playerLG.get(lgName);
 				if ((lg.isCamp(Camp.LG) || lg.isRole(RoleLG.LOUP_GAROU_BLANC)) && lg.isState(State.LIVING) && Bukkit.getPlayer(lgName) != null) {
 					Player lg1 = Bukkit.getPlayer(lgName);
 					lg1.sendMessage(game.text.getText(50));

@@ -1,5 +1,6 @@
 package io.github.ph1lou.pluginlg.game;
 
+import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlg.enumlg.*;
 import io.github.ph1lou.pluginlg.events.WinEvent;
 import io.github.ph1lou.pluginlg.utils.Title;
@@ -14,11 +15,12 @@ public class EndLG {
 
 
     private RoleLG winner = null;
-
+    private final MainLG main;
     private final GameManager game;
 
-    public EndLG(GameManager game) {
+    public EndLG(MainLG main, GameManager game) {
         this.game = game;
+        this.main = main;
     }
 
     public void check_victory() {
@@ -162,31 +164,27 @@ public class EndLG {
             if (game.playerLG.get(p).isState(State.MORT)) {
                 if(game.playerLG.get(p).isThief()) {
                     sb.append(String.format(game.text.getText(187), p, game.text.translateRole.get(RoleLG.VOLEUR))).append(String.format(game.text.getText(188), game.text.translateRole.get(game.playerLG.get(p).getRole()))).append("\n");
-                }
-                else sb.append(String.format(game.text.getText(187),p,game.text.translateRole.get(game.playerLG.get(p).getRole()))).append("\n");
-            }
-            else {
-                if(game.playerLG.get(p).isThief()) {
+                } else
+                    sb.append(String.format(game.text.getText(187), p, game.text.translateRole.get(game.playerLG.get(p).getRole()))).append("\n");
+            } else {
+                if (game.playerLG.get(p).isThief()) {
                     sb.append(String.format(game.text.getText(10), p, game.text.translateRole.get(RoleLG.VOLEUR))).append(String.format(game.text.getText(188), game.text.translateRole.get(game.playerLG.get(p).getRole()))).append("\n");
-                }
-                else sb.append(String.format(game.text.getText(10),p,game.text.translateRole.get(game.playerLG.get(p).getRole()))).append("\n");
+                } else
+                    sb.append(String.format(game.text.getText(10), p, game.text.translateRole.get(game.playerLG.get(p).getRole()))).append("\n");
             }
         }
 
-        for(Player p:Bukkit.getOnlinePlayers()) {
-            if (game.getWorld().equals(p.getWorld())) {
-                p.sendMessage(String.format(game.text.getText(3), subtitles_victory));
-                p.sendMessage(sb.toString());
-                Title.sendTitle(p, 20, 60, 20, String.format(game.text.getText(15), ""), subtitles_victory);
-                TextComponent msg = new TextComponent(game.text.getText(186));
-                msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/GXXCVUA"));
-                p.spigot().sendMessage(msg);
-                TextComponent msg2 = new TextComponent(game.text.getText(292));
-                msg2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/lg leave"));
-                p.spigot().sendMessage(msg2);
-            }
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            p.sendMessage(String.format(game.text.getText(3), subtitles_victory));
+            p.sendMessage(sb.toString());
+            Title.sendTitle(p, 20, 60, 20, String.format(game.text.getText(15), ""), subtitles_victory);
+            TextComponent msg = new TextComponent(game.text.getText(186));
+            msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/GXXCVUA"));
+            p.spigot().sendMessage(msg);
         }
 
+        Bukkit.getScheduler().scheduleSyncDelayedTask(main, game::deleteGame, 600);
+        Bukkit.broadcastMessage(game.getText(0));
     }
 
 

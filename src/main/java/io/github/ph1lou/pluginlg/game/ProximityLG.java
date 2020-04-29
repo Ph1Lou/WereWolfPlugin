@@ -139,7 +139,7 @@ public class ProximityLG {
 							player.sendMessage(String.format(game.getText(314), playerCharmed));
 							plg.setProgress(0f);
 							plg.setPower(false);
-							plg.setUse(plg.getUse() + 1);
+							game.endlg.check_victory();
 						}
 					}
 				}

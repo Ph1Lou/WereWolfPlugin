@@ -28,19 +28,9 @@ public class CommandSuccubus extends Commands {
             return;
         }
 
-        GameManager game = null;
+        GameManager game = main.currentGame;
         Player player = (Player) sender;
 
-        for (GameManager gameManager : main.listGames.values()) {
-            if (gameManager.getWorld().equals(player.getWorld())) {
-                game = gameManager;
-                break;
-            }
-        }
-
-        if (game == null) {
-            return;
-        }
 
         TextLG text = game.text;
         String playername = player.getName();
@@ -51,7 +41,6 @@ public class CommandSuccubus extends Commands {
         }
 
         PlayerLG plg = game.playerLG.get(playername);
-
 
         if (!game.isState(StateLG.LG)) {
             player.sendMessage(text.getText(68));
@@ -83,6 +72,11 @@ public class CommandSuccubus extends Commands {
             return;
         }
 
+        if (!plg.hasPower()) {
+            player.sendMessage(text.getText(103));
+            return;
+        }
+
         if (Bukkit.getPlayer(args[0]) == null || !game.playerLG.containsKey(args[0]) || game.playerLG.get(args[0]).isState(State.MORT)) {
             player.sendMessage(text.getText(106));
             return;
@@ -93,10 +87,6 @@ public class CommandSuccubus extends Commands {
 
         if (location.distance(locationTarget) > game.config.getDistanceSuccubus()) {
             player.sendMessage(text.getText(111));
-            return;
-        }
-        if (plg.getUse() >= game.config.getUseOfCharmed()) {
-            player.sendMessage(text.getText(103));
             return;
         }
 

@@ -6,6 +6,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -136,32 +137,35 @@ public class DeathManagementLG {
                 }
                 world.dropItem(plg.getSpawn(), i);
             }
-		}
-		
-		for(Player p:Bukkit.getOnlinePlayers()) {
-            if (game.getWorld().equals(p.getWorld())) {
-                p.playSound(p.getLocation(), Sound.AMBIENCE_THUNDER, 1, 20);
-                if (game.config.configValues.get(ToolLG.SHOW_ROLE_TO_DEATH)) {
-                    p.sendMessage(String.format(game.text.getText(28), playerName, game.text.translateRole.get(role)));
-                } else p.sendMessage(String.format(game.text.getText(29), playerName));
-                if (p.getName().equals(playerName)) {
-                    p.setGameMode(GameMode.SPECTATOR);
-                    TextComponent msg = new TextComponent(game.text.getText(186));
-                    msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/GXXCVUA"));
-                    p.spigot().sendMessage(msg);
-                    if (game.getSpectatorMode() == 0) {
-                        p.performCommand("lg quit");
-                    }
+        }
+        for (ItemStack i : game.stufflg.getDeathLoot()) {
+            if (i != null) {
+                world.dropItem(plg.getSpawn(), i);
+            }
+        }
+
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            p.playSound(p.getLocation(), Sound.AMBIENCE_THUNDER, 1, 20);
+            if (game.config.configValues.get(ToolLG.SHOW_ROLE_TO_DEATH)) {
+                p.sendMessage(String.format(game.text.getText(28), playerName, game.text.translateRole.get(role)));
+            } else p.sendMessage(String.format(game.text.getText(29), playerName));
+            if (p.getName().equals(playerName)) {
+                p.setGameMode(GameMode.SPECTATOR);
+                TextComponent msg = new TextComponent(game.text.getText(186));
+                msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/GXXCVUA"));
+                p.spigot().sendMessage(msg);
+                if (game.getSpectatorMode() == 0) {
+                    p.kickPlayer(game.getText(276));
                 }
             }
         }
 
-		if(game.playerLG.containsKey(plg.getKiller()) && plg.isCamp(Camp.VILLAGE) && game.playerLG.get(plg.getKiller()).isRole(RoleLG.LOUP_AMNESIQUE)  && game.playerLG.get(plg.getKiller()).hasPower()) {
+        if (game.playerLG.containsKey(plg.getKiller()) && plg.isCamp(Camp.VILLAGE) && game.playerLG.get(plg.getKiller()).isRole(RoleLG.LOUP_AMNESIQUE) && game.playerLG.get(plg.getKiller()).hasPower()) {
             game.roleManage.newLG(plg.getKiller());
             game.playerLG.get(plg.getKiller()).setPower(false);
         }
 
-		if(game.playerLG.containsKey(plg.getKiller()) && game.playerLG.get(plg.getKiller()).isRole(RoleLG.TUEUR_EN_SERIE)){
+        if (game.playerLG.containsKey(plg.getKiller()) && game.playerLG.get(plg.getKiller()).isRole(RoleLG.TUEUR_EN_SERIE)) {
 			if(Bukkit.getPlayer(plg.getKiller())!=null){
 				Player killer = Bukkit.getPlayer(plg.getKiller());
 				killer.setMaxHealth(killer.getMaxHealth()+2);
@@ -213,24 +217,22 @@ public class DeathManagementLG {
             if (!game.loversManage.loversRange.get(i).isEmpty()) {
                 String c1 = game.loversManage.loversRange.get(i).get(0);
                 PlayerLG plc1 = game.playerLG.get(c1);
-                for(Player p:Bukkit.getOnlinePlayers()){
-                    if (game.getWorld().equals(p.getWorld())) {
-                        p.sendMessage(String.format(game.text.getText(30), c1));
-                    }
-                }
+                Bukkit.broadcastMessage(String.format(game.text.getText(30), c1));
                 if (Bukkit.getPlayer(c1) != null) {
                     if (plc1.isState(State.LIVING)) {
                         Player player = Bukkit.getPlayer(c1);
                         plc1.setSpawn(player.getLocation());
                         plc1.clearItemDeath();
-                        plc1.setItemDeath(player.getInventory().getContents());
-                        plc1.addItemDeath(player.getInventory().getHelmet());
-                        plc1.addItemDeath(player.getInventory().getChestplate());
-                        plc1.addItemDeath(player.getInventory().getBoots());
-                        plc1.addItemDeath(player.getInventory().getLeggings());
+
+                        Inventory inv = Bukkit.createInventory(null, 45, c1);
+
+                        for (int j = 0; j < 40; j++) {
+                            inv.setItem(j, player.getInventory().getItem(j));
+                        }
+                        plc1.setItemDeath(inv.getContents());
                     }
                 }
-                game.playerLG.get(playerName).setKiller("§dLove");
+                plc1.setKiller("§dLove");
                 death(c1);
             } else {
                 game.loversManage.loversRange.remove(i);
@@ -314,11 +316,10 @@ public class DeathManagementLG {
                         game.roleManage.newLG(markerName);
                     }
                 } else if (plg.isRole(RoleLG.SUCCUBUS)) {
-                    if (plg.getUse() < game.config.getUseOfCharmed() && !plg.hasPower()) {
-                        plg.clearAffectedPlayer();
-                        plg.setPower(true);
-                        marker.sendMessage(game.text.powerUse.get(RoleLG.SUCCUBUS));
-                    }
+                    plg.clearAffectedPlayer();
+                    plg.setPower(true);
+                    plg.setProgress(0f);
+                    marker.sendMessage(game.text.powerUse.get(RoleLG.SUCCUBUS));
                 } else if (plg.isRole(RoleLG.ANGE_DECHU)) {
                     if (game.playerLG.get(playerName).getKiller().equals(markerName)) {
                         marker.setMaxHealth(marker.getMaxHealth() + 6);

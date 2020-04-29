@@ -1,6 +1,6 @@
 package io.github.ph1lou.pluginlg.enumlg;
 
-import io.github.ph1lou.pluginlg.listener.gamelisteners.scenarioslisteners.*;
+import io.github.ph1lou.pluginlg.listener.scenarioslisteners.*;
 
 public enum ScenarioLG {
     VANILLA_PLUS(true, VanillaPlus.class),
@@ -12,7 +12,7 @@ public enum ScenarioLG {
     FAST_SMELTING(true, FastSmelting.class),
     HASTEY_BOYS(true, HasteyBoys.class),
     NO_FALL(false, NoFall.class),
-    NO_SNOWBALL(true, NoSnowBall.class),
+    NO_SNOWBALL(true, NoEggSnowBall.class),
     NO_POISON(true, NoPoison.class),
     XP_BOOST(true, XpBoost.class),
     COMPASS_TARGET_LAST_DEATH(false, CompassTargetLastDeath.class),

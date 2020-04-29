@@ -137,7 +137,6 @@
   },
   "translateTool": {
     "VICTORY_COUPLE": "Lovers can only win with their lover",
-    "LG_LIST": "Werwolves' list",
     "EVENT_SEER_DEATH": "Event when a Seer dies",
     "CHAT": "Chat",
     "COMPASS_MIDDLE": "The compass targets the center of the map",
@@ -317,7 +316,7 @@
       "§b%s voted for §b%s",
       "§4§l[WW UHC]§r You are not Alive",
       "§4§l[WW UHC]§r You are not a Werewolf",
-      "§4§l[WW UHC]§r Viewing of the Werewolf's list is not enabled",
+      "",
       "§4§l[WW UHC]§r The Werewolf's list has not been revealed",
       "Werewolves' List :§b%s",
       "§6/ww timer §9To see the timers\n§6/ww rules §9To see the rules\n§6/ww role §9To see your role\n§6/ww scenarios §9To see the scenarios\n§6/ww compo §9To see the game's role's composition",
@@ -371,7 +370,7 @@
       "§e§l[WW UHC]§r Final Heal !",
       "§2§l[WW UHC]§r Starting inventory updated",
       "§2§l[WW UHC]§r Death loot updated",
-      "§6/adminww config §9To configurate the game\n§6/adminww host §9To configurate the host\n§6/adminww start §9To start the game\n§6/adminww chat §9To enable/disable the chat\n§6/adminww info §9To give information to every player\n§6/adminww group §9To reming players about the group limits\n§6/adminww fh §9To use FinalHeal\n§6/adminww inv §9To look at a player's inventory\n§6/adminww kill §9To kill an offline player\n§6/adminww revive §9To resuscitate a player\n§6/adminww role §9To look at a player's role\n§6/adminww disc §9To look at the list of players offline\n§6/adminww setGroup§9 To change the group's limit\n§6/adminww tpGroup§9 To teleport a group of players",
+      "§6/a config §9To configurate the game\n§6/a host §9To configurate the host\n§6/a start §9To start the game\n§6/a chat §9To enable/disable the chat\n§6/a info §9To give information to every player\n§6/a group §9To reming players about the group limits\n§6/a fh §9To use FinalHeal\n§6/a inv §9To look at a player's inventory\n§6/a kill §9To kill an offline player\n§6/a revive §9To resuscitate a player\n§6/a role §9To look at a player's role\n§6/a disc §9To look at the list of players offline\n§6/a setGroup§9 To change the group's limit\n§6/a tpGroup§9 To teleport a group of players",
       "§e§l[WW UHC]§r %s has been resuscitated by an Administrator",
       "§4§l[WW UHC]§r Deads cannot vote",
       "§4§l[WW UHC]§r Votes are not active yet",
@@ -382,7 +381,7 @@
       "§4§l[WW UHC]§r This player has already been voted",
       "§e§l[WW UHC]§r You voted for §b%s",
       "§b§m§l-+-----------------------------------------+-\n§f§e§l[WW UHC]§r §b%s§r is the one who received §9the most vote§r : §b%s§r. He looses 5 hearts\n§r§b§m§l-+-----------------------------------------+-",
-      "§4Non generated§r map §b/adminww generation",
+      "§4Non generated§r map §b/a generation",
       "§2§l[WW UHC]§r All of the chests have been found",
       "§6§l[WW UHC]§r Groups are now of §b%s",
       "%s has been disconnected since §b%s",
@@ -486,7 +485,7 @@
       "§2§l[WW UHC]§r Waiting for players",
       "§6§l[WW UHC]§r Game in progress",
       "§6§l[WW UHC]§r §b%s§r reacted to the announcement",
-      "§4§l[WW UHC]§r Configure the Host /adminww host [Host name]",
+      "§4§l[WW UHC]§r Configure the Game's Name /a setGameName [Host name]",
       "§e§l[WW UHC]§r Map Generation task started"
     ]
   ]

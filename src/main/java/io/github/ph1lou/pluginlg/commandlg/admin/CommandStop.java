@@ -5,9 +5,6 @@ import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.enumlg.StateLG;
 import io.github.ph1lou.pluginlg.game.GameManager;
 import io.github.ph1lou.pluginlg.savelg.TextLG;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -25,39 +22,15 @@ public class CommandStop extends Commands {
             return;
         }
 
-        GameManager game=null;
-        Player player =(Player) sender;
-
-        for(GameManager gameManager:main.listGames.values()){
-            if(gameManager.getWorld().equals(player.getWorld())){
-                game=gameManager;
-                break;
-            }
-        }
-
-        if(game==null){
-            return;
-        }
+        GameManager game = main.currentGame;
 
         TextLG text = game.text;
 
-        if (!sender.hasPermission("adminLG.use") && !sender.hasPermission("adminLG.stop.use") && !game.getHosts().contains(player.getUniqueId())) {
+        if (!sender.hasPermission("a.use") && !sender.hasPermission("a.stop.use") && !game.getHosts().contains(((Player) sender).getUniqueId())) {
             sender.sendMessage(text.getText(116));
             return;
         }
-
-        if(game.isState(StateLG.FIN)){
-            return;
-        }
-
-        for(Player p: Bukkit.getOnlinePlayers()){
-            if(p.getWorld().equals(game.getWorld())){
-                p.sendMessage(game.text.getText(291));
-                TextComponent msg = new TextComponent(game.text.getText(292));
-                msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/lg leave"));
-                p.spigot().sendMessage(msg);
-            }
-        }
         game.setState(StateLG.FIN);
+        game.deleteGame();
     }
 }

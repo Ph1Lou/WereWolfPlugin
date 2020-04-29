@@ -30,7 +30,6 @@ public class ConfigLG {
     private int limitPunch = 1;
     private int limitKnockBack = 1;
     private int useOfFlair = 4;
-    private int useOfCharmed = 1;
     private int goldenAppleParticles = 1;
     private int distanceBearTrainer = 50;
     private int distanceSuccubus = 20;
@@ -66,7 +65,6 @@ public class ConfigLG {
             this.setResistanceRate(config_load.getResistanceRate());
             this.setTrollSV(config_load.isTrollSV());
             this.setDistanceSuccubus(config_load.getDistanceSuccubus());
-            this.setUseOfCharmed(config_load.getUseOfCharmed());
         }
 		for(RoleLG role:RoleLG.values()) {
             this.roleCount.put(role, config_load.roleCount.getOrDefault(role, 0));
@@ -267,11 +265,4 @@ public class ConfigLG {
         this.distanceSuccubus = distanceSuccubus;
     }
 
-    public int getUseOfCharmed() {
-        return useOfCharmed;
-    }
-
-    public void setUseOfCharmed(int useOfCharmed) {
-        this.useOfCharmed = useOfCharmed;
-    }
 }

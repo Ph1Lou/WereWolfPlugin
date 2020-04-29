@@ -11,15 +11,8 @@ import java.io.File;
 
 public class LobbyGenerator {
 
-    final MainLG main;
-    final GameManager game;
 
-    LobbyGenerator(MainLG main, GameManager game) {
-
-        this.main = main;
-        this.game = game;
-        World world = game.getWorld();
-
+    public LobbyGenerator(MainLG main, World world) {
 
         try {
             File dir = new File(main.getDataFolder(), File.separator + "schematics" + File.separator + "ww.schematic");

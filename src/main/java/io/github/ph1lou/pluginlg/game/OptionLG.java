@@ -183,8 +183,7 @@ public class OptionLG {
 		invAdvancedTool.setItem(22, changeMeta(new ItemStack(Material.WOOL, 1, (short) 12), String.format(game.text.getText(271), game.config.getDistanceBearTrainer()), lore));
 		invAdvancedTool.setItem(24, changeMeta(new ItemStack(Material.POTION, 1, (short) 8227), String.format(game.text.getText(115), game.config.getResistanceRate()), lore));
 		invAdvancedTool.setItem(26, changeMeta(new ItemStack(Material.BREAD, 1), String.format(game.config.isTrollSV() ? game.text.getText(169) : game.text.getText(168), game.text.getText(73)), null));
-		invAdvancedTool.setItem(28, changeMeta(new ItemStack(Material.PUMPKIN), String.format(game.text.getText(317), game.config.getUseOfCharmed()), lore));
-		invAdvancedTool.setItem(30, changeMeta(new ItemStack(Material.WOOL, 1, (short) 6), String.format(game.text.getText(316), game.config.getDistanceSuccubus()), lore));
+		invAdvancedTool.setItem(28, changeMeta(new ItemStack(Material.WOOL, 1, (short) 6), String.format(game.text.getText(316), game.config.getDistanceSuccubus()), lore));
 		player.openInventory(invAdvancedTool);
 	}
 
@@ -437,7 +436,7 @@ public class OptionLG {
 		}
 	}
 
-	public void updateSelectionTool(){
+	public void updateSelectionTool() {
 		for (int i = 0; i < ToolLG.values().length; i++) {
 			if (game.config.configValues.get(ToolLG.values()[i])) {
 				invConfig.setItem(9 + i, changeMeta(new ItemStack(Material.STAINED_CLAY, 1, (short) 5), game.text.translateTool.get(ToolLG.values()[i]), Collections.singletonList(String.format(game.text.getText(169), ""))));
@@ -445,7 +444,7 @@ public class OptionLG {
 				invConfig.setItem(9 + i, changeMeta(new ItemStack(Material.STAINED_CLAY, 1, (short) 6), game.text.translateTool.get(ToolLG.values()[i]), Collections.singletonList(String.format(game.text.getText(168), ""))));
 		}
 		updateCompass();
-		if (game.config.configValues.get(ToolLG.LG_LIST) && game.config.timerValues.get(TimerLG.LG_LIST) < 0) {
+		if (game.config.timerValues.get(TimerLG.LG_LIST) < 0) {
 			for (String playerName : game.playerLG.keySet()) {
 				if (game.playerLG.get(playerName).isCamp(Camp.LG) || game.playerLG.get(playerName).isRole(RoleLG.LOUP_GAROU_BLANC)) {
 					if (game.config.configValues.get(ToolLG.RED_NAME_TAG)) {

@@ -20,28 +20,16 @@ public class CommandCitizenCancelVote extends Commands {
     @Override
     public void execute(CommandSender sender, String[] args) {
 
-        if (!(sender instanceof Player)){
+        if (!(sender instanceof Player)) {
             return;
         }
 
-        GameManager game=null;
-        Player player =(Player) sender;
-
-        for(GameManager gameManager:main.listGames.values()){
-            if(gameManager.getWorld().equals(player.getWorld())){
-                game=gameManager;
-                break;
-            }
-        }
-
-        if(game==null){
-            return;
-        }
-
+        GameManager game = main.currentGame;
+        Player player = (Player) sender;
         TextLG text = game.text;
         String playername = player.getName();
 
-        if(!game.playerLG.containsKey(playername)) {
+        if (!game.playerLG.containsKey(playername)) {
             player.sendMessage(text.getText(67));
             return;
         }
@@ -91,11 +79,7 @@ public class CommandCitizenCancelVote extends Commands {
         String vote=game.vote.getResult();
         sender.sendMessage(String.format(text.powerHasBeenUse.get(RoleLG.CITOYEN),vote));
         plg.addAffectedPlayer(vote);
-        for(Player p:Bukkit.getOnlinePlayers()){
-            if (game.getWorld().equals(p.getWorld())) {
-                p.sendMessage(text.getText(94));
-            }
-        }
+        Bukkit.broadcastMessage(text.getText(94));
         game.vote.resetVote();
     }
 }
