@@ -1,9 +1,13 @@
 package io.github.ph1lou.pluginlg.listener;
 
-import io.github.ph1lou.pluginlg.enumlg.RoleLG;
-import io.github.ph1lou.pluginlg.enumlg.ScenarioLG;
+import io.github.ph1lou.pluginlg.classesroles.neutralroles.Assassin;
+import io.github.ph1lou.pluginlg.classesroles.neutralroles.SerialKiller;
+import io.github.ph1lou.pluginlg.classesroles.villageroles.Cupid;
+import io.github.ph1lou.pluginlg.classesroles.villageroles.LittleGirl;
+import io.github.ph1lou.pluginlg.classesroles.werewolfroles.MischievousWereWolf;
 import io.github.ph1lou.pluginlg.game.GameManager;
 import io.github.ph1lou.pluginlg.game.PlayerLG;
+import io.github.ph1lou.pluginlgapi.enumlg.ScenarioLG;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -18,6 +22,7 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class EnchantmentListener implements Listener {
 
@@ -54,16 +59,17 @@ public class EnchantmentListener implements Listener {
 
         Map<Enchantment,Integer> tempEnchant = new HashMap<>();
         ItemStack result = new ItemStack(item);
-        String playername = player.getName();
-        if(!game.playerLG.containsKey(playername)) return item;
-        PlayerLG plg = game.playerLG.get(playername);
+        UUID uuid = player.getUniqueId();
+
+        if(!game.playerLG.containsKey(uuid)) return item;
+        PlayerLG plg = game.playerLG.get(uuid);
 
         for(Enchantment e:enchant.keySet()){
 
             result.removeEnchantment(e);
 
             if(Arrays.asList(Enchantment.ARROW_FIRE,Enchantment.FIRE_ASPECT).contains(e)){
-                if (!game.config.scenarioValues.get(ScenarioLG.NO_FIRE_WEAPONS)) {
+                if (!game.config.getScenarioValues().get(ScenarioLG.NO_FIRE_WEAPONS)) {
                     tempEnchant.put(e, enchant.get(e));
                 }
             }
@@ -71,7 +77,7 @@ public class EnchantmentListener implements Listener {
                 if(game.config.getLimitKnockBack()==2){
                     tempEnchant.put(e,enchant.get(e));
                 }
-                else if(game.config.getLimitKnockBack()==1 && (plg.isRole(RoleLG.PETITE_FILLE) || plg.isRole(RoleLG.LOUP_PERFIDE))){
+                else if(game.config.getLimitKnockBack()==1 && (plg.getRole() instanceof LittleGirl  || plg.getRole() instanceof MischievousWereWolf)){
                     tempEnchant.put(e,enchant.get(e));
                 }
             }
@@ -79,13 +85,13 @@ public class EnchantmentListener implements Listener {
 
                 if (item.getType().equals(Material.DIAMOND_BOOTS) || item.getType().equals(Material.DIAMOND_LEGGINGS) ||  item.getType().equals(Material.DIAMOND_HELMET) ||  item.getType().equals(Material.DIAMOND_CHESTPLATE)){
 
-                    if (!plg.isRole(RoleLG.TUEUR_EN_SERIE) && !plg.isRole(RoleLG.ASSASSIN)){
+                    if (!(plg.getRole() instanceof SerialKiller) && !(plg.getRole() instanceof Assassin)){
                         tempEnchant.put(e,Math.min(enchant.get(e),game.config.getLimitProtectionDiamond()));
                     }
                     else tempEnchant.put(e,Math.min(enchant.get(e),game.config.getLimitProtectionDiamond()+1));
                 }
                 else {
-                    if (!plg.isRole(RoleLG.TUEUR_EN_SERIE) && !plg.isRole(RoleLG.ASSASSIN)){
+                    if (!(plg.getRole() instanceof SerialKiller) && !(plg.getRole() instanceof Assassin)){
                         tempEnchant.put(e,Math.min(enchant.get(e),game.config.getLimitProtectionIron()));
                     }
                     else tempEnchant.put(e,Math.min(enchant.get(e),game.config.getLimitProtectionIron()+1));
@@ -93,11 +99,11 @@ public class EnchantmentListener implements Listener {
             }
             else if(Enchantment.DAMAGE_ALL.equals(e)){
                 if (item.getType().equals(Material.DIAMOND_SWORD)) {
-                    if (!plg.isRole(RoleLG.TUEUR_EN_SERIE) && !plg.isRole(RoleLG.ASSASSIN)) {
+                    if (!(plg.getRole() instanceof SerialKiller) && !(plg.getRole() instanceof Assassin)){
                         tempEnchant.put(e, Math.min(enchant.get(e), game.config.getLimitSharpnessDiamond()));
                     } else tempEnchant.put(e, Math.min(enchant.get(e), game.config.getLimitSharpnessDiamond() + 1));
                 } else {
-                    if (!plg.isRole(RoleLG.TUEUR_EN_SERIE) && !plg.isRole(RoleLG.ASSASSIN)) {
+                    if (!(plg.getRole() instanceof SerialKiller) && !(plg.getRole() instanceof Assassin)){
                         tempEnchant.put(e, Math.min(enchant.get(e), game.config.getLimitSharpnessIron()));
                     } else
                         tempEnchant.put(e, Math.min(enchant.get(e), Math.min(4, game.config.getLimitSharpnessIron() + 1)));
@@ -107,12 +113,12 @@ public class EnchantmentListener implements Listener {
                 if(game.config.getLimitPunch()==2){
                     tempEnchant.put(e,enchant.get(e));
                 }
-                else if(game.config.getLimitPunch()==1 && plg.isRole(RoleLG.CUPIDON)){
+                else if(game.config.getLimitPunch()==1 && plg.getRole() instanceof Cupid){
                     tempEnchant.put(e,enchant.get(e));
                 }
             }
             else if(Enchantment.ARROW_DAMAGE.equals(e)){
-                if (!plg.isRole(RoleLG.TUEUR_EN_SERIE) && !plg.isRole(RoleLG.ASSASSIN) && !plg.isRole(RoleLG.CUPIDON)){
+                if (!(plg.getRole() instanceof SerialKiller) && !(plg.getRole() instanceof Assassin)  && !(plg.getRole() instanceof Cupid)){
                     tempEnchant.put(e,Math.min(enchant.get(e),game.config.getLimitPowerBow()));
                 }
                 else tempEnchant.put(e,Math.min(enchant.get(e),game.config.getLimitPowerBow()+1));

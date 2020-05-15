@@ -1,17 +1,18 @@
 package io.github.ph1lou.pluginlg.commandlg.roles;
 
 import io.github.ph1lou.pluginlg.MainLG;
+import io.github.ph1lou.pluginlg.classesroles.villageroles.Witch;
 import io.github.ph1lou.pluginlg.commandlg.Commands;
-import io.github.ph1lou.pluginlg.enumlg.RoleLG;
-import io.github.ph1lou.pluginlg.enumlg.State;
-import io.github.ph1lou.pluginlg.enumlg.StateLG;
-import io.github.ph1lou.pluginlg.enumlg.ToolLG;
 import io.github.ph1lou.pluginlg.game.GameManager;
 import io.github.ph1lou.pluginlg.game.PlayerLG;
-import io.github.ph1lou.pluginlg.savelg.TextLG;
+import io.github.ph1lou.pluginlgapi.enumlg.State;
+import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
+import io.github.ph1lou.pluginlgapi.enumlg.ToolLG;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public class CommandWitch extends Commands {
 
@@ -23,71 +24,81 @@ public class CommandWitch extends Commands {
     @Override
     public void execute(CommandSender sender, String[] args) {
 
-        if (!(sender instanceof Player)){
+        GameManager game = main.currentGame;
+
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(game.translate("werewolf.check.console"));
             return;
         }
 
-     GameManager game = main.currentGame;
-
-        TextLG text = game.text;
         Player player = (Player) sender;
         String playername = player.getName();
+        UUID uuid = player.getUniqueId();
 
-        if(!game.playerLG.containsKey(playername)) {
-            player.sendMessage(text.getText(67));
+        if(!game.playerLG.containsKey(uuid)) {
+            player.sendMessage(game.translate("werewolf.check.not_in_game"));
             return;
         }
 
-        PlayerLG plg = game.playerLG.get(playername);
+        PlayerLG plg = game.playerLG.get(uuid);
 
-        if(!game.isState(StateLG.LG)) {
-            player.sendMessage(text.getText(68));
+
+        if (!game.isState(StateLG.GAME)) {
+            player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
             return;
         }
 
-        if (!plg.isRole(RoleLG.SORCIERE)){
-            player.sendMessage(String.format(text.getText(189),text.translateRole.get(RoleLG.SORCIERE)));
+        if (!(plg.getRole() instanceof Witch)){
+            player.sendMessage(game.translate("werewolf.check.role", game.translate("werewolf.role.witch.display")));
             return;
         }
+
+        Witch witch = (Witch) plg.getRole();
 
         if (args.length!=1) {
-            player.sendMessage(text.getText(54));
+            player.sendMessage(game.translate("werewolf.check.player_input"));
             return;
         }
 
-        if(!plg.isState(State.LIVING)){
-            player.sendMessage(text.getText(97));
+        if(!plg.isState(State.ALIVE)){
+            player.sendMessage(game.translate("werewolf.check.death"));
             return;
         }
 
-        if(!plg.hasPower()) {
-            player.sendMessage(text.getText(103));
+        if(!witch.hasPower()) {
+            player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
 
-        if (!game.config.configValues.get(ToolLG.AUTO_REZ_WITCH) && args[0].equals(playername)) {
-            player.sendMessage(text.getText(105));
+        if (!game.config.getConfigValues().get(ToolLG.AUTO_REZ_WITCH) && args[0].equals(playername)) {
+            player.sendMessage(game.translate("werewolf.check.not_yourself"));
             return;
         }
 
-        if(Bukkit.getPlayer(args[0])==null || !game.playerLG.containsKey(args[0]) || game.playerLG.get(args[0]).isState(State.MORT)){
-            player.sendMessage(text.getText(106));
+        if(Bukkit.getPlayer(UUID.fromString(args[0]))==null){
+            player.sendMessage(game.translate("werewolf.check.offline_player"));
+            return;
+        }
+        UUID argUUID = UUID.fromString(args[0]);
+
+        if(!game.playerLG.containsKey(argUUID)){
+            player.sendMessage(game.translate("werewolf.check.player_not_found"));
             return;
         }
 
-        PlayerLG plg1 = game.playerLG.get(args[0]);
+        PlayerLG plg1 = game.playerLG.get(argUUID);
 
         if (!plg1.isState(State.JUDGEMENT)) {
-            player.sendMessage(text.getText(108));
+            player.sendMessage(game.translate("werewolf.check.not_in_judgement"));
             return;
         }
 
         if (plg1.canBeInfect()) {
             return;
         }
-        plg.addAffectedPlayer(args[0]);
-        plg.setPower(false);
-        game.death_manage.resurrection(args[0]);
-        sender.sendMessage(String.format(text.powerHasBeenUse.get(RoleLG.SORCIERE),args[0]));
+        witch.addAffectedPlayer(argUUID);
+        witch.setPower(false);
+        game.death_manage.resurrection(argUUID);
+        sender.sendMessage(game.translate("werewolf.role.witch.resuscitation_perform",plg1.getName()));
     }
 }

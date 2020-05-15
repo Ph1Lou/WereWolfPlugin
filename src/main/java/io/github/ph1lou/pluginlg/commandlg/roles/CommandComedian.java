@@ -1,17 +1,18 @@
 package io.github.ph1lou.pluginlg.commandlg.roles;
 
 import io.github.ph1lou.pluginlg.MainLG;
+import io.github.ph1lou.pluginlg.classesroles.villageroles.Comedian;
 import io.github.ph1lou.pluginlg.commandlg.Commands;
-import io.github.ph1lou.pluginlg.enumlg.RoleLG;
-import io.github.ph1lou.pluginlg.enumlg.State;
-import io.github.ph1lou.pluginlg.enumlg.StateLG;
 import io.github.ph1lou.pluginlg.game.GameManager;
 import io.github.ph1lou.pluginlg.game.PlayerLG;
-import io.github.ph1lou.pluginlg.savelg.TextLG;
+import io.github.ph1lou.pluginlgapi.enumlg.State;
+import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import java.util.UUID;
 
 public class CommandComedian extends Commands {
 
@@ -23,65 +24,68 @@ public class CommandComedian extends Commands {
     @Override
     public void execute(CommandSender sender, String[] args) {
 
-        if (!(sender instanceof Player)) {
-            return;
-        }
-
         GameManager game = main.currentGame;
 
-        TextLG text = game.text;
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(game.translate("werewolf.check.console"));
+            return;
+        }
+
         Player player = (Player) sender;
-        String playername = player.getName();
+        UUID uuid = player.getUniqueId();
 
 
-        if(!game.playerLG.containsKey(playername)) {
-            player.sendMessage(text.getText(67));
+        if(!game.playerLG.containsKey(uuid)) {
+            player.sendMessage(game.translate("werewolf.check.not_in_game"));
             return;
         }
 
-        PlayerLG plg = game.playerLG.get(playername);
+        PlayerLG plg = game.playerLG.get(uuid);
 
 
-        if (!game.isState(StateLG.LG)) {
-            player.sendMessage(text.getText(68));
+        if (!game.isState(StateLG.GAME)) {
+            player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
             return;
         }
 
-        if (!plg.isRole(RoleLG.COMEDIEN)) {
-            player.sendMessage(String.format(text.getText(189), text.translateRole.get(RoleLG.COMEDIEN)));
+
+        if (!(plg.getRole() instanceof Comedian)) {
+            player.sendMessage(game.translate("werewolf.check.role", game.translate("werewolf.role.comedian.display")));
             return;
         }
+
+        Comedian comedian = (Comedian) plg.getRole();
 
         if (args.length != 1) {
-            player.sendMessage(String.format(text.getText(190), 1));
+            player.sendMessage(game.translate("werewolf.check.parameters",1));
             return;
         }
 
-        if (!plg.isState(State.LIVING)) {
-            player.sendMessage(text.getText(97));
+        if (!plg.isState(State.ALIVE)) {
+            player.sendMessage(game.translate("werewolf.check.death"));
             return;
         }
 
-        if (!plg.hasPower()) {
-            player.sendMessage(text.getText(103));
+        if (!comedian.hasPower()) {
+            player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
         PotionEffectType[] potionsType = {PotionEffectType.DAMAGE_RESISTANCE, PotionEffectType.SPEED, PotionEffectType.INCREASE_DAMAGE};
-        String[] maskName = {text.getText(47), text.getText(48), text.getText(49)};
+        String[] maskName = {game.translate("werewolf.role.comedian.1"), game.translate("werewolf.role.comedian.2"), game.translate("werewolf.role.comedian.3")};
         try {
             int i = Integer.parseInt(args[0]) - 1;
             if (i < 0 || i > 2) {
-                player.sendMessage(text.getText(37));
+                player.sendMessage(game.translate("werewolf.role.comedian.mask_unknown"));
                 return;
             }
 
-            if (plg.getPotionEffects().contains(potionsType[i])) {
-                player.sendMessage(text.getText(35));
+            if (comedian.getPotionEffects().contains(potionsType[i])) {
+                player.sendMessage(game.translate("werewolf.role.comedian.used_mask"));
                 return;
             }
-            plg.setPower(false);
-            plg.addPotionEffect(potionsType[i]);
-            player.sendMessage(String.format(text.powerHasBeenUse.get(RoleLG.COMEDIEN), maskName[i]));
+            comedian.setPower(false);
+            comedian.addPotionEffect(potionsType[i]);
+            player.sendMessage(game.translate("werewolf.role.comedian.wear_mask_perform", maskName[i]));
             player.removePotionEffect(potionsType[i]);
             player.addPotionEffect(new PotionEffect(potionsType[i], Integer.MAX_VALUE, i == 2 ? -1 : 0, false, false));
 

@@ -3,7 +3,6 @@ package io.github.ph1lou.pluginlg.commandlg.admin.ingame;
 import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlg.savelg.TextLG;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -17,16 +16,15 @@ public class CommandConfig extends Commands {
     @Override
     public void execute(CommandSender sender, String[] args) {
 
+        GameManager game = main.currentGame;
+
         if (!(sender instanceof Player)) {
+            sender.sendMessage(game.translate("werewolf.check.console"));
             return;
         }
 
-     GameManager game = main.currentGame;
-
-        TextLG text = game.text;
-
         if (!sender.hasPermission("a.use") && !sender.hasPermission("a.config.use") && !game.getHosts().contains(((Player) sender).getUniqueId())) {
-            sender.sendMessage(text.getText(116));
+            sender.sendMessage(game.translate("werewolf.check.permission_denied"));
             return;
         }
 

@@ -1,114 +1,111 @@
 package io.github.ph1lou.pluginlg.game;
 
 
-import io.github.ph1lou.pluginlg.enumlg.RoleLG;
-import io.github.ph1lou.pluginlg.enumlg.State;
-import io.github.ph1lou.pluginlg.enumlg.TimerLG;
-import io.github.ph1lou.pluginlg.enumlg.ToolLG;
+import io.github.ph1lou.pluginlg.events.VoteEvent;
+import io.github.ph1lou.pluginlgapi.enumlg.State;
+import io.github.ph1lou.pluginlgapi.enumlg.TimerLG;
+import io.github.ph1lou.pluginlgapi.enumlg.ToolLG;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
-
+import java.util.UUID;
 
 
 public class VoteLG {
 	
 	
 	private final GameManager game;
-	public final List<String> tempPlayer = new ArrayList<>();
+	public final List<UUID> tempPlayer = new ArrayList<>();
 	
 	public VoteLG(GameManager game) {
 		this.game=game;
 	}
 	
-	public void setUnVote(Player elector,String vote){
+	public void setUnVote(Player elector,UUID vote){
 		
-		PlayerLG plg = game.playerLG.get(elector.getName());
+		PlayerLG plg = game.playerLG.get(elector.getUniqueId());
 		
-		if (!plg.isState(State.LIVING)) {
-            elector.sendMessage(game.text.getText(155));
-        } else if (game.config.timerValues.get(TimerLG.VOTE_BEGIN) > 0) {
-            elector.sendMessage(game.text.getText(156));
-        } else if (!game.config.configValues.get(ToolLG.VOTE)) {
-            elector.sendMessage(game.text.getText(157));
-        } else if (game.score.getTimer() % (game.config.timerValues.get(TimerLG.DAY_DURATION) * 2) >= game.config.timerValues.get(TimerLG.VOTE_DURATION)) {
-            elector.sendMessage(game.text.getText(158));
-        } else if (!game.playerLG.get(elector.getName()).getVotedPlayer().equals("")) {
-            elector.sendMessage(game.text.getText(159));
+		if (!plg.isState(State.ALIVE)) {
+            elector.sendMessage(game.translate("werewolf.vote.death"));
+        } else if (game.config.getTimerValues().get(TimerLG.VOTE_BEGIN) > 0) {
+            elector.sendMessage(game.translate("werewolf.vote.vote_not_yet_activated"));
+        } else if (!game.config.getConfigValues().get(ToolLG.VOTE)) {
+            elector.sendMessage(game.translate("werewolf.vote.vote_disable"));
+        } else if (game.score.getTimer() % (game.config.getTimerValues().get(TimerLG.DAY_DURATION) * 2) >= game.config.getTimerValues().get(TimerLG.VOTE_DURATION)) {
+            elector.sendMessage(game.translate("werewolf.vote.not_vote_time"));
+        } else if (plg.getVotedPlayer()!=null) {
+            elector.sendMessage(game.translate("werewolf.vote.already_voted"));
         } else if (!game.playerLG.containsKey(vote)) {
-            elector.sendMessage(game.text.getText(132));
-        } else if (game.playerLG.get(vote).isState(State.MORT)) {
-            elector.sendMessage(game.text.getText(132));
+            elector.sendMessage(game.translate("werewolf.check.player_not_found"));
+        } else if (game.playerLG.get(vote).isState(State.DEATH)) {
+            elector.sendMessage(game.translate("werewolf.check.player_not_found"));
 		}
 		else if (tempPlayer.contains(vote)){
-			elector.sendMessage(game.text.getText(161));
+			elector.sendMessage(game.translate("werewolf.vote.player_already_voted"));
 		}
 		else {
-			game.playerLG.get(elector.getName()).setVote(vote);
-			
-			if(game.playerLG.get(elector.getName()).isRole(RoleLG.CORBEAU)){
-				game.playerLG.get(vote).incVote();
-				
-			}
+			plg.setVote(vote);
 			game.playerLG.get(vote).incVote();
-			elector.sendMessage(String.format(game.text.getText(162),vote));
+			Bukkit.getPluginManager().callEvent(new VoteEvent(elector.getUniqueId(),vote));
+			elector.sendMessage(game.translate("werewolf.vote.perform_vote",game.playerLG.get(vote).getName()));
 		}
 				
 	}
 		
 	public void resetVote() {
-		for(String playername:game.playerLG.keySet()) {
-			game.playerLG.get(playername).resetVote();
-			game.playerLG.get(playername).setVote("");
+		for(UUID uuid:game.playerLG.keySet()) {
+			game.playerLG.get(uuid).resetVote();
+			game.playerLG.get(uuid).setVote(null);
 		}
 	}
 
 	public void seeVote(Player player) {
 
-		player.sendMessage(game.text.getText(95));
-		for(String playername:game.playerLG.keySet()) {
-			if(!game.playerLG.get(playername).getVotedPlayer().equals("")){
-				player.sendMessage(String.format(game.text.getText(96),playername,game.playerLG.get(playername).getVotedPlayer()));
+		player.sendMessage(game.translate("werewolf.role.citizen.count_votes"));
+		for(UUID uuid:game.playerLG.keySet()) {
+			PlayerLG plg=game.playerLG.get(uuid);
+			if(plg.getVotedPlayer()!=null){
+				player.sendMessage(game.translate("werewolf.role.citizen.see_vote",plg.getName(),game.playerLG.get(plg.getVotedPlayer()).getName()));
 			}
 		}
 	}
 
-	public String getResult(){
+	public UUID getResult(){
 		int maxVote=0;
-		String playerVote="";
+		UUID playerVote=null;
 
-		for(String playername:game.playerLG.keySet()) {
+		for(UUID uuid:game.playerLG.keySet()) {
 
-			if (game.playerLG.get(playername).getVote()>maxVote)  {
-				maxVote = game.playerLG.get(playername).getVote();
-				playerVote=playername;
+			if (game.playerLG.get(uuid).getVote()>maxVote)  {
+				maxVote = game.playerLG.get(uuid).getVote();
+				playerVote=uuid;
 			}
 		}
-		if(maxVote==0) return "";
 		if(maxVote<=1) {
-			Bukkit.broadcastMessage(game.getText(191));
-			return "";
+			Bukkit.broadcastMessage(game.translate("werewolf.vote.no_result"));
+			return null;
 		}
 		return playerVote;
 	}
 
-	public void showResultVote(String playerVote) {
+	public void showResultVote(UUID playerVote) {
 
-		if(game.playerLG.containsKey(playerVote) && game.playerLG.get(playerVote).isState(State.LIVING)) {
-			tempPlayer.add(playerVote);
-			if (Bukkit.getPlayer(playerVote) != null) {
-				Player player = Bukkit.getPlayer(playerVote);
-				double life = player.getMaxHealth();
-				player.setMaxHealth(life - 10);
-				if (player.getHealth() > player.getMaxHealth()) {
-					player.setHealth(life - 10);
+		if(game.playerLG.containsKey(playerVote)) {
+			PlayerLG plg = game.playerLG.get(playerVote);
+			if(plg.isState(State.ALIVE)){
+				tempPlayer.add(playerVote);
+				if (Bukkit.getPlayer(playerVote) != null) {
+					Player player = Bukkit.getPlayer(playerVote);
+					double life = player.getMaxHealth();
+					player.setMaxHealth(life - 10);
+					if (player.getHealth() > player.getMaxHealth()) {
+						player.setHealth(life - 10);
+					}
+					Bukkit.broadcastMessage(game.translate("werewolf.vote.vote_result", plg.getName(), plg.getVote()));
+					plg.addKLostHeart(10);
 				}
-				Bukkit.broadcastMessage(String.format(game.text.getText(163), playerVote, game.playerLG.get(playerVote).getVote()));
-				game.playerLG.get(playerVote).addKLostHeart(10);
 			}
 		}
 		resetVote();

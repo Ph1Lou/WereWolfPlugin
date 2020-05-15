@@ -1,5 +1,8 @@
 package io.github.ph1lou.pluginlg.listener.scenarioslisteners;
 
+import io.github.ph1lou.pluginlg.MainLG;
+import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlgapi.enumlg.ScenarioLG;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
@@ -8,6 +11,10 @@ import org.bukkit.inventory.ItemStack;
 
 public class HasteyBoys extends Scenarios {
 
+
+    public HasteyBoys(MainLG main, GameManager game, ScenarioLG hasteyBoys) {
+        super(main, game,hasteyBoys);
+    }
 
     @EventHandler
     public void onCraft(PrepareItemCraftEvent event) {

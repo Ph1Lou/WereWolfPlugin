@@ -1,14 +1,19 @@
 package io.github.ph1lou.pluginlg.commandlg.roles;
 
 import io.github.ph1lou.pluginlg.MainLG;
+import io.github.ph1lou.pluginlg.classesroles.villageroles.Citizen;
 import io.github.ph1lou.pluginlg.commandlg.Commands;
-import io.github.ph1lou.pluginlg.enumlg.*;
 import io.github.ph1lou.pluginlg.game.GameManager;
 import io.github.ph1lou.pluginlg.game.PlayerLG;
-import io.github.ph1lou.pluginlg.savelg.TextLG;
+import io.github.ph1lou.pluginlgapi.enumlg.State;
+import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
+import io.github.ph1lou.pluginlgapi.enumlg.TimerLG;
+import io.github.ph1lou.pluginlgapi.enumlg.ToolLG;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public class CommandCitizenCancelVote extends Commands {
 
@@ -20,66 +25,65 @@ public class CommandCitizenCancelVote extends Commands {
     @Override
     public void execute(CommandSender sender, String[] args) {
 
-        if (!(sender instanceof Player)) {
-            return;
-        }
-
         GameManager game = main.currentGame;
+
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(game.translate("werewolf.check.console"));
+            return;
+        }
+
         Player player = (Player) sender;
-        TextLG text = game.text;
-        String playername = player.getName();
+        UUID uuid = player.getUniqueId();
 
-        if (!game.playerLG.containsKey(playername)) {
-            player.sendMessage(text.getText(67));
+        if(!game.playerLG.containsKey(uuid)) {
+            player.sendMessage(game.translate("werewolf.check.not_in_game"));
             return;
         }
 
-        PlayerLG plg = game.playerLG.get(playername);
+        PlayerLG plg = game.playerLG.get(uuid);
 
 
-        if(!game.isState(StateLG.LG)) {
-            player.sendMessage(text.getText(68));
+        if (!game.isState(StateLG.GAME)) {
+            player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
             return;
         }
 
-        if (!plg.isRole(RoleLG.CITOYEN)){
-            player.sendMessage(String.format(text.getText(189),text.translateRole.get(RoleLG.CITOYEN)));
+        if (!(plg.getRole() instanceof Citizen)){
+            player.sendMessage(game.translate("werewolf.check.role",game.translate("werewolf.role.citizen.display")));
             return;
         }
 
-        if (args.length!=0) {
-            player.sendMessage(String.format(text.getText(190),0));
+        Citizen citizen = (Citizen) plg.getRole();
+
+
+        if(!plg.isState(State.ALIVE)){
+            player.sendMessage(game.translate("werewolf.check.death"));
             return;
         }
 
-        if(!plg.isState(State.LIVING)){
-            player.sendMessage(text.getText(97));
+        if(!citizen.hasPower()) {
+            player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
 
-        if(!plg.hasPower()) {
-            player.sendMessage(text.getText(103));
+        if (game.score.getTimer() % (game.config.getTimerValues().get(TimerLG.DAY_DURATION) * 2) < game.config.getTimerValues().get(TimerLG.VOTE_DURATION)) {
+            player.sendMessage(game.translate("werewolf.check.power"));
+            return;
+        }
+        if (!game.config.getConfigValues().get(ToolLG.VOTE) || game.config.getTimerValues().get(TimerLG.VOTE_DURATION) + game.config.getTimerValues().get(TimerLG.VOTE_BEGIN) > 0) {
+            player.sendMessage(game.translate("werewolf.check.power"));
+            return;
+        }
+        if (game.score.getTimer() % (game.config.getTimerValues().get(TimerLG.DAY_DURATION) * 2) > game.config.getTimerValues().get(TimerLG.VOTE_DURATION) + game.config.getTimerValues().get(TimerLG.CITIZEN_DURATION)) {
+            player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
 
-        if (game.score.getTimer() % (game.config.timerValues.get(TimerLG.DAY_DURATION) * 2) < game.config.timerValues.get(TimerLG.VOTE_DURATION)) {
-            text.getText(103);
-            return;
-        }
-        if (!game.config.configValues.get(ToolLG.VOTE) || game.config.timerValues.get(TimerLG.VOTE_DURATION) + game.config.timerValues.get(TimerLG.VOTE_BEGIN) > 0) {
-            text.getText(103);
-            return;
-        }
-        if (game.score.getTimer() % (game.config.timerValues.get(TimerLG.DAY_DURATION) * 2) > game.config.timerValues.get(TimerLG.VOTE_DURATION) + game.config.timerValues.get(TimerLG.CITIZEN_DURATION)) {
-            text.getText(103);
-            return;
-        }
-
-        plg.setPower(false);
-        String vote=game.vote.getResult();
-        sender.sendMessage(String.format(text.powerHasBeenUse.get(RoleLG.CITOYEN),vote));
-        plg.addAffectedPlayer(vote);
-        Bukkit.broadcastMessage(text.getText(94));
+        citizen.setPower(false);
+        UUID vote=game.vote.getResult();
+        sender.sendMessage(game.translate("werewolf.role.citizen.cancelling_vote_perform",game.playerLG.get(vote).getName()));
+        citizen.addAffectedPlayer(vote);
+        Bukkit.broadcastMessage(game.translate("werewolf.role.citizen.cancelling_broadcast"));
         game.vote.resetVote();
     }
 }

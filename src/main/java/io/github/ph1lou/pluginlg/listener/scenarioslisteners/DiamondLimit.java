@@ -1,7 +1,10 @@
 package io.github.ph1lou.pluginlg.listener.scenarioslisteners;
 
-import io.github.ph1lou.pluginlg.enumlg.StateLG;
-import io.github.ph1lou.pluginlg.enumlg.TimerLG;
+import io.github.ph1lou.pluginlg.MainLG;
+import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlgapi.enumlg.ScenarioLG;
+import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
+import io.github.ph1lou.pluginlgapi.enumlg.TimerLG;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -17,6 +20,10 @@ public class DiamondLimit extends Scenarios {
 
     final Map<String, Integer> diamondPerPlayer = new HashMap<>();
 
+    public DiamondLimit(MainLG main, GameManager game, ScenarioLG diamondLimit) {
+        super(main, game,diamondLimit);
+    }
+
 
     @EventHandler
     private void onBlockBreak(BlockBreakEvent event) {
@@ -30,7 +37,7 @@ public class DiamondLimit extends Scenarios {
 
         final Location loc = new Location(block.getWorld(), block.getLocation().getBlockX() + 0.5, block.getLocation().getBlockY() + 0.5, block.getLocation().getBlockZ() + 0.5);
 
-        if (game.config.timerValues.get(TimerLG.DIGGING) < 0) {
+        if (game.config.getTimerValues().get(TimerLG.DIGGING) < 0) {
             block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop());
             block.setType(Material.AIR);
             return;

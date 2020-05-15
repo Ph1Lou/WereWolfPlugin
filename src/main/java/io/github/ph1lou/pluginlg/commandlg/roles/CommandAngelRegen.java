@@ -1,18 +1,21 @@
 package io.github.ph1lou.pluginlg.commandlg.roles;
 
 import io.github.ph1lou.pluginlg.MainLG;
+import io.github.ph1lou.pluginlg.classesroles.neutralroles.Angel;
+import io.github.ph1lou.pluginlg.classesroles.neutralroles.GuardianAngel;
 import io.github.ph1lou.pluginlg.commandlg.Commands;
-import io.github.ph1lou.pluginlg.enumlg.RoleLG;
-import io.github.ph1lou.pluginlg.enumlg.State;
-import io.github.ph1lou.pluginlg.enumlg.StateLG;
 import io.github.ph1lou.pluginlg.game.GameManager;
 import io.github.ph1lou.pluginlg.game.PlayerLG;
-import io.github.ph1lou.pluginlg.savelg.TextLG;
+import io.github.ph1lou.pluginlgapi.enumlg.RoleLG;
+import io.github.ph1lou.pluginlgapi.enumlg.State;
+import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import java.util.UUID;
 
 public class CommandAngelRegen extends Commands {
 
@@ -24,60 +27,61 @@ public class CommandAngelRegen extends Commands {
     @Override
     public void execute(CommandSender sender, String[] args) {
 
+        GameManager game = main.currentGame;
+
         if (!(sender instanceof Player)) {
+            sender.sendMessage(game.translate("werewolf.check.console"));
             return;
         }
 
-     GameManager game = main.currentGame;
-
-        TextLG text = game.text;
         Player player = (Player) sender;
-        String playername = player.getName();
+        UUID uuid = player.getUniqueId();
 
-        if(!game.playerLG.containsKey(playername)) {
-            player.sendMessage(text.getText(67));
+        if(!game.playerLG.containsKey(uuid)) {
+            player.sendMessage(game.translate("werewolf.check.not_in_game"));
             return;
         }
 
-        PlayerLG plg = game.playerLG.get(playername);
+        PlayerLG plg = game.playerLG.get(uuid);
 
 
-        if (!game.isState(StateLG.LG)) {
-            player.sendMessage(text.getText(68));
+        if (!game.isState(StateLG.GAME)) {
+            player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
             return;
         }
 
-        if (!plg.isRole(RoleLG.ANGE_GARDIEN)) {
-            player.sendMessage(String.format(text.getText(189), text.translateRole.get(RoleLG.ANGE_GARDIEN)));
+        if (!(plg.getRole() instanceof Angel) || !((Angel) plg.getRole()).getChoice().equals(RoleLG.GUARDIAN_ANGEL)) {
+            player.sendMessage(game.translate("werewolf.check.role",game.translate("werewolf.role.guardian_angel.display")));
             return;
         }
 
-        if (!plg.isState(State.LIVING)) {
-            player.sendMessage(text.getText(97));
+        GuardianAngel guardianAngel = (GuardianAngel) plg.getRole();
+
+        if (!plg.isState(State.ALIVE)) {
+            player.sendMessage(game.translate("werewolf.check.death"));
             return;
         }
 
-        if (plg.getUse() > 0) {
-            player.sendMessage(text.getText(103));
+        if (guardianAngel.getUse() >= 3) {
+            player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
 
-        if (plg.getAffectedPlayer().isEmpty()) {
-            player.sendMessage(text.getText(59));
+        if (guardianAngel.getAffectedPlayers().isEmpty()) {
+            player.sendMessage(game.translate("werewolf.role.guardian_angel.no_protege"));
             return;
         }
 
-        if (Bukkit.getPlayer(plg.getAffectedPlayer().get(0)) == null) {
-            player.sendMessage(text.getText(55));
+        if (Bukkit.getPlayer(guardianAngel.getAffectedPlayers().get(0)) == null) {
+            player.sendMessage(game.translate("werewolf.role.guardian_angel.disconnected_protege"));
             return;
         }
 
-        plg.setUse(1);
+        guardianAngel.setUse(guardianAngel.getUse()+1);
 
-        Player playerProtected = Bukkit.getPlayer(plg.getAffectedPlayer().get(0));
+        Player playerProtected = Bukkit.getPlayer(guardianAngel.getAffectedPlayers().get(0));
         playerProtected.removePotionEffect(PotionEffectType.REGENERATION);
-        playerProtected.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 1200, 0, false, false));
-        playerProtected.sendMessage(text.getText(60));
-
+        playerProtected.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 400, 0, false, false));
+        playerProtected.sendMessage(game.translate("werewolf.role.guardian_angel.get_regeneration"));
     }
 }

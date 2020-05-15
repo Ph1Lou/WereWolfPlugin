@@ -57,7 +57,7 @@ public class WorldUtils {
             if(Bukkit.getPlayer(uuid)!=null){
                 Player player = Bukkit.getPlayer(uuid);
                 player.sendMessage("§4§l[LG UHC]§r Roofed non trouvé refaites /a create");
-                game.deleteGame();
+                game.stopGame();
             }
         }
         throw new Exception("No roofed found");

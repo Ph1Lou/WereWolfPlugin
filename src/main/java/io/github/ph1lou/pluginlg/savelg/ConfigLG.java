@@ -1,18 +1,22 @@
 package io.github.ph1lou.pluginlg.savelg;
 
-import io.github.ph1lou.pluginlg.enumlg.*;
 import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlgapi.ConfigWereWolfAPI;
+import io.github.ph1lou.pluginlgapi.enumlg.RoleLG;
+import io.github.ph1lou.pluginlgapi.enumlg.ScenarioLG;
+import io.github.ph1lou.pluginlgapi.enumlg.TimerLG;
+import io.github.ph1lou.pluginlgapi.enumlg.ToolLG;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ConfigLG {
-    public final Map<TimerLG, Integer> timerValues = new HashMap<>();
-    public final Map<BorderLG, Integer> borderValues = new HashMap<>();
-    public final Map<ToolLG, Boolean> configValues = new HashMap<>();
-    public final Map<RoleLG, Integer> roleCount = new HashMap<>();
-    public final Map<ScenarioLG, Boolean> scenarioValues = new HashMap<>();
+public class ConfigLG implements ConfigWereWolfAPI {
+
+    private final Map<TimerLG, Integer> timerValues = new HashMap<>();
+    private final Map<ToolLG, Boolean> configValues = new HashMap<>();
+    private final Map<RoleLG, Integer> roleCount = new HashMap<>();
+    private final Map<ScenarioLG, Boolean> scenarioValues = new HashMap<>();
 
     private int strengthRate = 130;
     private int resistanceRate = 20;
@@ -33,69 +37,74 @@ public class ConfigLG {
     private int goldenAppleParticles = 1;
     private int distanceBearTrainer = 50;
     private int distanceSuccubus = 20;
+    private int distanceAmnesiacLovers = 15;
     private int distanceFox = 20;
     private boolean trollSV = false;
+    private int BorderMax =2000;
+    private int BorderMin =300;
 
     public void getConfig(GameManager game, String configName) {
 
-        ConfigLG config_load = this;
+        ConfigLG this_load = this;
 
         File file = new File(game.getDataFolder() + File.separator + "configs" + File.separator, configName + ".json");
 
         if (file.exists()) {
-            config_load = SerializerLG.deserialize(FileLG.loadContent(file));
-            this.setDiamondLimit(config_load.getDiamondLimit());
-            this.setStrengthRate(config_load.getStrengthRate());
-            this.setPlayerRequiredVoteEnd(config_load.getPlayerRequiredVoteEnd());
-            this.setAppleRate(config_load.getAppleRate());
-            this.setFlintRate(config_load.getFlintRate());
-            this.setPearlRate(config_load.getPearlRate());
-            this.setXpBoost(config_load.getXpBoost());
-            this.setLimitPowerBow(config_load.getLimitPowerBow());
-            this.setLimitSharpnessIron(config_load.getLimitSharpnessIron());
-            this.setLimitSharpnessDiamond(config_load.getLimitSharpnessDiamond());
-            this.setLimitProtectionDiamond(config_load.getLimitProtectionDiamond());
-            this.setLimitProtectionIron(config_load.getLimitProtectionIron());
-            this.setLimitKnockBack(config_load.getLimitKnockBack());
-            this.setLimitPunch(config_load.getLimitPunch());
-            this.setUseOfFlair(config_load.getUseOfFlair());
-            this.setGoldenAppleParticles(config_load.getGoldenAppleParticles());
-            this.setDistanceBearTrainer(config_load.getDistanceBearTrainer());
-            this.setDistanceFox(config_load.getDistanceFox());
-            this.setResistanceRate(config_load.getResistanceRate());
-            this.setTrollSV(config_load.isTrollSV());
-            this.setDistanceSuccubus(config_load.getDistanceSuccubus());
-        }
-		for(RoleLG role:RoleLG.values()) {
-            this.roleCount.put(role, config_load.roleCount.getOrDefault(role, 0));
-        }
-		
-		for(ToolLG tool:ToolLG.values()) {
-            this.configValues.put(tool, config_load.configValues.getOrDefault(tool, tool.getValue()));
-        }
-		
-		for(TimerLG timer:TimerLG.values()) {
-            this.timerValues.put(timer, config_load.timerValues.getOrDefault(timer, timer.getValue()));
-        }
-		
-		for(BorderLG border: BorderLG.values()) {
-            this.borderValues.put(border, config_load.borderValues.getOrDefault(border, border.getValue()));
+            this_load = SerializerLG.deserialize(FileLG.loadContent(file));
+            this.setDiamondLimit(this_load.getDiamondLimit());
+            this.setStrengthRate(this_load.getStrengthRate());
+            this.setPlayerRequiredVoteEnd(this_load.getPlayerRequiredVoteEnd());
+            this.setAppleRate(this_load.getAppleRate());
+            this.setFlintRate(this_load.getFlintRate());
+            this.setPearlRate(this_load.getPearlRate());
+            this.setXpBoost(this_load.getXpBoost());
+            this.setLimitPowerBow(this_load.getLimitPowerBow());
+            this.setLimitSharpnessIron(this_load.getLimitSharpnessIron());
+            this.setLimitSharpnessDiamond(this_load.getLimitSharpnessDiamond());
+            this.setLimitProtectionDiamond(this_load.getLimitProtectionDiamond());
+            this.setLimitProtectionIron(this_load.getLimitProtectionIron());
+            this.setLimitKnockBack(this_load.getLimitKnockBack());
+            this.setLimitPunch(this_load.getLimitPunch());
+            this.setUseOfFlair(this_load.getUseOfFlair());
+            this.setGoldenAppleParticles(this_load.getGoldenAppleParticles());
+            this.setDistanceBearTrainer(this_load.getDistanceBearTrainer());
+            this.setDistanceFox(this_load.getDistanceFox());
+            this.setResistanceRate(this_load.getResistanceRate());
+            this.setTrollSV(this_load.isTrollSV());
+            this.setDistanceSuccubus(this_load.getDistanceSuccubus());
+            this.setBorderMax(this_load.getBorderMax());
+            this.setBorderMin(this_load.getBorderMin());
+            this.setDistanceAmnesiacLovers(this_load.getDistanceAmnesiacLovers());
         }
 
-		for(ScenarioLG scenarios:ScenarioLG.values()) {
-            this.scenarioValues.put(scenarios, config_load.scenarioValues.getOrDefault(scenarios, scenarios.getValue()));
+
+        for(RoleLG role:RoleLG.values()) {
+            this.roleCount.put(role, this_load.roleCount.getOrDefault(role, 0));
         }
 
-		FileLG.save(file, SerializerLG.serialize(this));
-		
-		game.score.setRole(0);
-		
-		for (RoleLG role:RoleLG.values()) {
-            if (role.getCamp() != null) {
+        for(ToolLG tool:ToolLG.values()) {
+            this.configValues.put(tool, this_load.configValues.getOrDefault(tool, tool.getValue()));
+        }
+
+        for(TimerLG timer:TimerLG.values()) {
+            this.timerValues.put(timer, this_load.timerValues.getOrDefault(timer, timer.getValue()));
+        }
+
+
+        for(ScenarioLG scenarios:ScenarioLG.values()) {
+            this.scenarioValues.put(scenarios, this_load.scenarioValues.getOrDefault(scenarios, scenarios.getValue()));
+        }
+
+        FileLG.save(file, SerializerLG.serialize(this));
+
+        game.score.setRole(0);
+
+        for (RoleLG role:RoleLG.values()) {
+            if (!role.equals(RoleLG.CURSED_LOVER) && !role.equals(RoleLG.LOVER) && !role.equals(RoleLG.AMNESIAC_LOVER)) {
                 game.score.setRole(game.score.getRole() + this.roleCount.get(role));
             }
         }
-	}
+    }
 
 	public int getDiamondLimit() {
         return this.diamondLimit;
@@ -265,4 +274,43 @@ public class ConfigLG {
         this.distanceSuccubus = distanceSuccubus;
     }
 
+    public int getBorderMax() {
+        return BorderMax;
+    }
+
+    public void setBorderMax(int borderMax) {
+        this.BorderMax = borderMax;
+    }
+
+    public int getBorderMin() {
+        return BorderMin;
+    }
+
+    public void setBorderMin(int borderMin) {
+        this.BorderMin = borderMin;
+    }
+
+    public int getDistanceAmnesiacLovers() {
+        return distanceAmnesiacLovers;
+    }
+
+    public void setDistanceAmnesiacLovers(int distanceAmnesiacLovers) {
+        this.distanceAmnesiacLovers = distanceAmnesiacLovers;
+    }
+
+    public Map<TimerLG, Integer> getTimerValues() {
+        return timerValues;
+    }
+
+    public Map<ToolLG, Boolean> getConfigValues() {
+        return configValues;
+    }
+
+    public Map<RoleLG, Integer> getRoleCount() {
+        return roleCount;
+    }
+
+    public Map<ScenarioLG, Boolean> getScenarioValues() {
+        return scenarioValues;
+    }
 }

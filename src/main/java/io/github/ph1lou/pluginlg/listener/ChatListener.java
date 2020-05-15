@@ -1,7 +1,8 @@
 package io.github.ph1lou.pluginlg.listener;
 
-import io.github.ph1lou.pluginlg.enumlg.ToolLG;
+
 import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlgapi.enumlg.ToolLG;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -9,6 +10,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+
+import java.util.UUID;
 
 public class ChatListener implements Listener {
 
@@ -26,16 +29,17 @@ public class ChatListener implements Listener {
 
         if (args[0].equalsIgnoreCase("/rl") || args[0].equalsIgnoreCase("/reload") || args[0].equalsIgnoreCase("/bukkit:rl") || args[0].equalsIgnoreCase("/bukkit:reload")) {
             event.setCancelled(true);
-            player.sendMessage(game.getText(274));
+            player.sendMessage(game.translate("werewolf.check.disabled_command"));
         } else if (args[0].equalsIgnoreCase("/me") || args[0].equalsIgnoreCase("/minecraft:me")) {
             event.setCancelled(true);
-            player.sendMessage(game.text.getText(131));
+            player.sendMessage(game.translate("werewolf.check.disabled_command"));
         } else if (args[0].equalsIgnoreCase("/tellRaw") || args[0].equalsIgnoreCase("/msg") || args[0].equalsIgnoreCase("/tell") || args[0].equalsIgnoreCase("/minecraft:tell")) {
 
             event.setCancelled(true);
             if (args.length <= 2) return;
             if (Bukkit.getPlayer(args[1]) == null) {
-                player.sendMessage(game.text.getText(132));
+                player.sendMessage(game.
+                        translate("werewolf.check.offline_player"));
                 return;
             }
 
@@ -45,7 +49,7 @@ public class ChatListener implements Listener {
 
                 if (!game.getHosts().contains(recipient.getUniqueId()) && !game.getHosts().contains(player.getUniqueId())) {
                     if (!game.getModerators().contains(recipient.getUniqueId()) && !game.getModerators().contains(player.getUniqueId())) {
-                        player.sendMessage(game.text.getText(131));
+                        player.sendMessage(game.translate("werewolf.check.permission_denied"));
                         return;
                     }
                 }
@@ -56,8 +60,8 @@ public class ChatListener implements Listener {
                 sb.append(w).append(" ");
             }
             sb.delete(0, args[0].length() + args[1].length() + 2);
-            recipient.sendMessage(String.format(game.text.getText(133), player.getName(), sb.toString()));
-            player.sendMessage(String.format(game.text.getText(134), args[1], sb.toString()));
+            recipient.sendMessage(game.translate("werewolf.commands.message.received", player.getName(), sb.toString()));
+            player.sendMessage(game.translate("werewolf.commands.message.send", args[1], sb.toString()));
             recipient.playSound(recipient.getLocation(), Sound.ANVIL_USE, 1, 20);
         }
 
@@ -67,10 +71,26 @@ public class ChatListener implements Listener {
     @EventHandler
     private void onChat(AsyncPlayerChatEvent event) {
 
-        if (!game.config.configValues.get(ToolLG.CHAT)) {
+        if (!game.config.getConfigValues().get(ToolLG.CHAT)) {
             event.setCancelled(true);
-            event.getPlayer().sendMessage(game.text.getText(123));
+            event.getPlayer().sendMessage(game.translate("werewolf.commands.admin.chat.off"));
         }
+        UUID uuid = event.getPlayer().getUniqueId();
+
+        String format;
+
+        if(event.getPlayer().getName().equals("Ph1Lou")){
+            format=game.translate("werewolf.commands.admin.chat.template","§5%s§r","%s");
+        }
+        else format=game.translate("werewolf.commands.admin.chat.template","%s","%s");
+
+        if(game.getHosts().contains(uuid)){
+            event.setFormat(game.translate("werewolf.commands.admin.host.tag")+format);
+        }
+        else if(game.getModerators().contains(uuid)){
+            event.setFormat(game.translate("werewolf.commands.admin.moderator.tag")+format);
+        }
+        else event.setFormat(format);
 
     }
 

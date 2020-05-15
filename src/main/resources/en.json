@@ -157,7 +157,7 @@
     "CITIZEN_DURATION": "Duration for the Citizen's choice (§b%s§r)",
     "BORDER_DURATION": "Time for borders to reduce by 100 blocks (§b%s§r)",
     "BORDER_BEGIN": "Start Border (§b%s§r)",
-    "MASTER_DURATION": "Duration for the choice of a master (§b%s§r)",
+    "MODEL_DURATION": "Duration for the choice of a master (§b%s§r)",
     "RENARD_SMELL_DURATION": "Duration of the Fox's Smell (§b%s§r)",
     "LG_LIST": "Werewolf's List Reveal (§b%s§r)",
     "COUPLE_DURATION": "Duration for the Lovers' choice and lovers' reveal (§b%s§r)",

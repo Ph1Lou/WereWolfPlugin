@@ -1,17 +1,21 @@
 package io.github.ph1lou.pluginlg.commandlg.roles;
 
 import io.github.ph1lou.pluginlg.MainLG;
+import io.github.ph1lou.pluginlg.classesroles.RolesImpl;
+import io.github.ph1lou.pluginlg.classesroles.villageroles.ChattySeer;
+import io.github.ph1lou.pluginlg.classesroles.villageroles.Seer;
+import io.github.ph1lou.pluginlg.classesroles.werewolfroles.FalsifierWereWolf;
 import io.github.ph1lou.pluginlg.commandlg.Commands;
-import io.github.ph1lou.pluginlg.enumlg.Camp;
-import io.github.ph1lou.pluginlg.enumlg.RoleLG;
-import io.github.ph1lou.pluginlg.enumlg.State;
-import io.github.ph1lou.pluginlg.enumlg.StateLG;
 import io.github.ph1lou.pluginlg.game.GameManager;
 import io.github.ph1lou.pluginlg.game.PlayerLG;
-import io.github.ph1lou.pluginlg.savelg.TextLG;
+import io.github.ph1lou.pluginlgapi.enumlg.Camp;
+import io.github.ph1lou.pluginlgapi.enumlg.State;
+import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public class CommandSeer extends Commands {
 
@@ -23,83 +27,95 @@ public class CommandSeer extends Commands {
     @Override
     public void execute(CommandSender sender, String[] args) {
 
-        if (!(sender instanceof Player)) {
-            return;
-        }
-
         GameManager game = main.currentGame;
+
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(game.translate("werewolf.check.console"));
+            return;
+        }
+
+
         Player player = (Player) sender;
-        TextLG text = game.text;
-        String playername = player.getName();
+        UUID uuid = player.getUniqueId();
 
-        if (!game.playerLG.containsKey(playername)) {
-            player.sendMessage(text.getText(67));
+        if(!game.playerLG.containsKey(uuid)) {
+            player.sendMessage(game.translate("werewolf.check.not_in_game"));
             return;
         }
 
-        PlayerLG plg = game.playerLG.get(playername);
+        PlayerLG plg = game.playerLG.get(uuid);
 
-        if(!game.isState(StateLG.LG)) {
-            player.sendMessage(text.getText(68));
+
+        if (!game.isState(StateLG.GAME)) {
+            player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
             return;
         }
 
-        if (!plg.isRole(RoleLG.VOYANTE) && !plg.isRole(RoleLG.VOYANTE_BAVARDE)){
-            player.sendMessage(String.format(text.getText(189),text.translateRole.get(RoleLG.VOYANTE)));
+        if (!(plg.getRole() instanceof Seer)){
+            player.sendMessage(game.translate("werewolf.check.role", game.translate("werewolf.role.seer.display")));
             return;
         }
+
+        Seer seer = (Seer) plg.getRole();
 
         if (args.length!=1) {
-            player.sendMessage(text.getText(54));
+            player.sendMessage(game.translate("werewolf.check.player_input"));
             return;
         }
 
-        if(!plg.isState(State.LIVING)){
-            player.sendMessage(text.getText(97));
+        if(!plg.isState(State.ALIVE)){
+            player.sendMessage(game.translate("werewolf.check.death"));
             return;
         }
 
-        if(!plg.hasPower()) {
-            player.sendMessage(text.getText(103));
+        if(!seer.hasPower()) {
+            player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
 
-        if(Bukkit.getPlayer(args[0])==null || !game.playerLG.containsKey(args[0]) || game.playerLG.get(args[0]).isState(State.MORT)){
-            player.sendMessage(text.getText(106));
+        if(Bukkit.getPlayer(args[0])==null){
+            player.sendMessage(game.translate("werewolf.check.offline_player"));
+            return;
+        }
+        UUID argUUID = Bukkit.getPlayer(args[0]).getUniqueId();
+
+        if(!game.playerLG.containsKey(argUUID) || !game.playerLG.get(argUUID).isState(State.ALIVE)){
+            player.sendMessage(game.translate("werewolf.check.player_not_found"));
             return;
         }
 
         double life =player.getMaxHealth();
 
         if (life<7) {
-            player.sendMessage(text.getText(112));
+            player.sendMessage(game.translate("werewolf.role.seer.not_enough_life"));
         }
         else {
-            PlayerLG plg1 = game.playerLG.get(args[0]);
-            plg.setPower(false);
-            plg.addAffectedPlayer(args[0]);
+            PlayerLG plg1 = game.playerLG.get(argUUID);
+            RolesImpl role1 = plg1.getRole();
+            seer.setPower(false);
+            seer.addAffectedPlayer(argUUID);
 
-            if((plg1.isRole(RoleLG.LOUP_FEUTRE) && plg1.isPosterCamp(Camp.VILLAGE)) || plg1.isCamp(Camp.VILLAGE)) {
+            if((role1 instanceof FalsifierWereWolf && ((FalsifierWereWolf) role1).isPosterCamp(Camp.VILLAGER)) || role1.isCamp(Camp.VILLAGER)) {
                 player.setMaxHealth(life-6);
                 if(player.getHealth()>life-6) {
                     player.setHealth(life-6);
                 }
-                player.sendMessage(text.getText(113));
-                if(plg.isRole(RoleLG.VOYANTE_BAVARDE)){
-                    Bukkit.broadcastMessage(String.format(text.powerHasBeenUse.get(RoleLG.VOYANTE_BAVARDE), text.translateRole.get(RoleLG.VILLAGEOIS)));
+                player.sendMessage(game.translate("werewolf.role.seer.see_villager"));
+                if(seer instanceof ChattySeer){
+                    Bukkit.broadcastMessage(game.translate("werewolf.role.chatty_seer.see_perform", game.translate("werewolf.role.villager.display")));
                 }
                 plg.addKLostHeart(6);
             }
-            else if((plg1.isRole(RoleLG.LOUP_FEUTRE) && plg1.isPosterCamp(Camp.LG)) || (!plg1.isRole(RoleLG.LOUP_FEUTRE) && plg1.isCamp(Camp.LG))) {
-                player.sendMessage(String.format(text.powerHasBeenUse.get(RoleLG.VOYANTE),text.translateRole.get(RoleLG.LOUP_GAROU)));
-                if(plg.isRole(RoleLG.VOYANTE_BAVARDE)){
-                    Bukkit.broadcastMessage(String.format(text.powerHasBeenUse.get(RoleLG.VOYANTE_BAVARDE), text.translateRole.get(RoleLG.LOUP_GAROU)));
+            else if((role1 instanceof FalsifierWereWolf && ((FalsifierWereWolf) role1).isPosterCamp(Camp.WEREWOLF)) || (!(role1 instanceof FalsifierWereWolf) && role1.isCamp(Camp.WEREWOLF))) {
+                player.sendMessage(game.translate("werewolf.role.seer.see_perform",game.translate("werewolf.role.werewolf.display")));
+                if(seer instanceof ChattySeer){
+                    Bukkit.broadcastMessage(game.translate("werewolf.role.chatty_seer.see_perform", game.translate("werewolf.role.werewolf.display")));
                 }
             }
-            else if((plg1.isRole(RoleLG.LOUP_FEUTRE) && plg1.isPosterCamp(Camp.NEUTRAL)) || plg1.isCamp(Camp.NEUTRAL)) {
-                player.sendMessage(String.format(text.powerHasBeenUse.get(RoleLG.VOYANTE),text.getText(201)));
-                if(plg.isRole(RoleLG.VOYANTE_BAVARDE)){
-                    Bukkit.broadcastMessage(String.format(text.powerHasBeenUse.get(RoleLG.VOYANTE_BAVARDE), text.getText(201)));
+            else if((role1 instanceof FalsifierWereWolf && ((FalsifierWereWolf) role1).isPosterCamp(Camp.NEUTRAL)) || role1.isCamp(Camp.NEUTRAL)) {
+                player.sendMessage(game.translate("werewolf.role.seer.see_perform",game.translate("werewolf.role.seer.neutral")));
+                if(seer instanceof ChattySeer){
+                    Bukkit.broadcastMessage(game.translate("werewolf.role.chatty_seer.see_perform", game.translate("werewolf.role.seer.neutral")));
                 }
             }
         }

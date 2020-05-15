@@ -1,8 +1,11 @@
 package io.github.ph1lou.pluginlg.game;
 
-import io.github.ph1lou.pluginlg.enumlg.*;
+import io.github.ph1lou.pluginlg.classesroles.InvisibleState;
+import io.github.ph1lou.pluginlg.classesroles.villageroles.LittleGirl;
+import io.github.ph1lou.pluginlg.classesroles.werewolfroles.MischievousWereWolf;
 import io.github.ph1lou.pluginlg.savelg.FileLG;
 import io.github.ph1lou.pluginlg.savelg.SerializerLG;
+import io.github.ph1lou.pluginlgapi.enumlg.*;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -16,67 +19,67 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class OptionLG {
 
-	private Inventory invTool;
-	private Inventory invRole;
-	private Inventory invTimer;
-	private Inventory invBorder;
-	private Inventory invScenario;
-	private Inventory invStuff;
-	private Inventory invSave;
-	private Inventory invConfig;
-	private Inventory invEnchant;
-	private Inventory invAdvancedTool;
-	private Inventory invLanguage;
-	private Inventory invWhiteList;
+	private final Inventory invTool;
+	private final Inventory invRole;
+	private final Inventory invTimer;
+	private final Inventory invBorder;
+	private final Inventory invScenario;
+	private final Inventory invStuff;
+	private final Inventory invSave;
+	private final Inventory invConfig;
+	private final Inventory invEnchant;
+	private final Inventory invAdvancedTool;
+	private final Inventory invLanguage;
+	private final Inventory invWhiteList;
 	private final GameManager game;
 
 	public OptionLG(GameManager game) {
 		this.game=game;
+		invTool = Bukkit.createInventory(null, 54, game.translate("werewolf.menu.name"));
+		invRole = Bukkit.createInventory(null, 54, game.translate("werewolf.menu.roles.name"));
+		invTimer = Bukkit.createInventory(null, 27, game.translate("werewolf.menu.timers.name"));
+		invConfig = Bukkit.createInventory(null, 27, game.translate("werewolf.menu.global.name"));
+		invScenario = Bukkit.createInventory(null, 36, game.translate("werewolf.menu.scenarios.name"));
+		invBorder = Bukkit.createInventory(null, 18, game.translate("werewolf.menu.border.name"));
+		invSave = Bukkit.createInventory(null, 18, game.translate("werewolf.menu.save.name"));
+		invStuff = Bukkit.createInventory(null, 18, game.translate("werewolf.menu.stuff.name"));
+		invEnchant = Bukkit.createInventory(null, 18, game.translate("werewolf.menu.enchantments.name"));
+		invAdvancedTool = Bukkit.createInventory(null, 36, game.translate("werewolf.menu.advanced_tool.name"));
+		invLanguage = Bukkit.createInventory(null, 9, game.translate("werewolf.menu.languages.name"));
+		invWhiteList = Bukkit.createInventory(null, 18, game.translate("werewolf.menu.whitelist.name"));
 	}
 
-	public void initInv(){
-		invTool = Bukkit.createInventory(null, 54, game.text.getText(175));
-		invRole = Bukkit.createInventory(null, 45, game.text.getText(176));
-		invTimer = Bukkit.createInventory(null, 27, game.text.getText(177));
-		invConfig = Bukkit.createInventory(null, 27, game.text.getText(178));
-		invScenario = Bukkit.createInventory(null, 36, game.text.getText(76));
-		invBorder = Bukkit.createInventory(null, 18, game.text.getText(179));
-		invSave = Bukkit.createInventory(null, 18, game.text.getText(180));
-		invStuff = Bukkit.createInventory(null, 18, game.text.getText(77));
-		invEnchant = Bukkit.createInventory(null, 18, game.text.getText(79));
-		invAdvancedTool = Bukkit.createInventory(null, 36, game.text.getText(75));
-		invLanguage = Bukkit.createInventory(null, 9, game.text.getText(74));
-		invWhiteList = Bukkit.createInventory(null, 18, game.text.getText(70));
+	public boolean isConfigInventory(Inventory inventory){
+		List<Inventory> inventoryList= new ArrayList<>(Arrays.asList(invTool,invRole,invTimer,invConfig,invScenario,invBorder,invSave,invStuff,invEnchant,invAdvancedTool,invLanguage,invWhiteList));
+		return inventoryList.contains(inventory);
 	}
 
 	public void toolBar(Player player) {
 
-		invTool.setItem(0, changeMeta(new ItemStack(Material.SKULL_ITEM, 1, (short) 3), game.text.getText(70), null));
+		invTool.setItem(0, changeMeta(new ItemStack(Material.SKULL_ITEM, 1, (short) 3), game.translate("werewolf.menu.whitelist.name"), null));
 
-		invTool.setItem(13, changeMeta(Material.BEACON,game.text.getText(176),1,null));
-		invTool.setItem(22, changeMeta(Material.ANVIL,game.text.getText(177),1,null));
-		invTool.setItem(30, changeMeta(Material.MAP,game.text.getText(178),1,null));
-		invTool.setItem(31, changeMeta(Material.CHEST,game.text.getText(77),1,null));
-		invTool.setItem(32, changeMeta(Material.GLASS,game.text.getText(179),1,null));
-		invTool.setItem(48, changeMeta(Material.ARMOR_STAND,game.text.getText(180),1,null));
-		invTool.setItem(29, changeMeta(Material.PUMPKIN,game.text.getText(76),1,null));
-		invTool.setItem(33, changeMeta(Material.ENCHANTMENT_TABLE,game.text.getText(79),1,null));
+		invTool.setItem(13, changeMeta(Material.BEACON,game.translate("werewolf.menu.roles.name"),1,null));
+		invTool.setItem(22, changeMeta(Material.ANVIL,game.translate("werewolf.menu.timers.name"),1,null));
+		invTool.setItem(30, changeMeta(Material.MAP,game.translate("werewolf.menu.global.name"),1,null));
+		invTool.setItem(31, changeMeta(Material.CHEST,game.translate("werewolf.menu.stuff.name"),1,null));
+		invTool.setItem(32, changeMeta(Material.GLASS,game.translate("werewolf.menu.border.name"),1,null));
+		invTool.setItem(48, changeMeta(Material.ARMOR_STAND,game.translate("werewolf.menu.save.name"),1,null));
+		invTool.setItem(29, changeMeta(Material.PUMPKIN,game.translate("werewolf.menu.scenarios.name"),1,null));
+		invTool.setItem(33, changeMeta(Material.ENCHANTMENT_TABLE,game.translate("werewolf.menu.enchantments.name"),1,null));
 		ItemStack custom = new ItemStack(Material.BANNER, 1);
 		BannerMeta customMeta = (BannerMeta) custom.getItemMeta();
 		customMeta.addPattern(new Pattern(DyeColor.WHITE, PatternType.BASE));
 		customMeta.addPattern(new Pattern(DyeColor.CYAN, PatternType.STRAIGHT_CROSS));
 		custom.setItemMeta(customMeta);
-		invTool.setItem(45, changeMeta(custom,game.text.getText(74),null));
-		invTool.setItem(50, changeMeta(Material.WORKBENCH,game.text.getText(75),1,null));
+		invTool.setItem(45, changeMeta(custom,game.translate("werewolf.menu.languages.name"),null));
+		invTool.setItem(50, changeMeta(Material.WORKBENCH,game.translate("werewolf.menu.advanced_tool.name"),1,null));
 		ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
 		SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
 		skullMeta.setOwner("Ph1Lou");
@@ -95,100 +98,100 @@ public class OptionLG {
 
 	public void whiteListTool(Player player) {
 
-		invWhiteList.setItem(0, changeMeta(Material.COMPASS, game.text.getText(170), 1, null));
-		invWhiteList.setItem(2, changeMeta(new ItemStack(Material.EMPTY_MAP, 1), game.text.getText(63), Collections.singletonList(String.format(game.text.getText(game.isWhiteList() ? 312 : 313), ""))));
-		invWhiteList.setItem(10, changeMeta(new ItemStack(Material.SKULL_ITEM, 1), game.text.getText(64), Collections.singletonList(game.text.getText(309 + game.getSpectatorMode()))));
-		invWhiteList.setItem(12, changeMeta(new ItemStack(Material.SKULL_ITEM, 1, (short) 3), String.format(game.text.getText(69), game.getPlayerMax()), null));
+		invWhiteList.setItem(0, changeMeta(Material.COMPASS, game.translate("werewolf.menu.return"), 1, null));
+		invWhiteList.setItem(2, changeMeta(new ItemStack(Material.EMPTY_MAP, 1), game.isWhiteList()?game.translate("werewolf.menu.whitelist.close"):game.translate("werewolf.menu.whitelist.open"), null));
+		invWhiteList.setItem(10, changeMeta(new ItemStack(Material.SKULL_ITEM, 1), game.translate("werewolf.menu.whitelist.spectator_mode"), Collections.singletonList(Arrays.asList(game.translate("werewolf.menu.whitelist.disable"),game.translate("werewolf.menu.whitelist.death_only"),game.translate("werewolf.menu.whitelist.enable")).get(game.getSpectatorMode()))));
+		invWhiteList.setItem(12, changeMeta(new ItemStack(Material.SKULL_ITEM, 1, (short) 3), game.translate("werewolf.menu.whitelist.max", game.getPlayerMax()), null));
 		player.openInventory(invWhiteList);
 
 	}
 
 
 	public void chooseRole(Player player) {
-		invRole.setItem(0, changeMeta(Material.COMPASS,game.text.getText(170),1,null));
-		invRole.setItem(8, changeMeta(Material.BARRIER,game.text.getText(183),1,null));
+		invRole.setItem(0, changeMeta(Material.COMPASS,game.translate("werewolf.menu.return"),1,null));
+		invRole.setItem(8, changeMeta(Material.BARRIER,game.translate("werewolf.menu.roles.zero"),1,null));
 		updateSelection();
 		player.openInventory(invRole);
 	}
 
 	public void timerTool(Player player) {
-		invTimer.setItem(0, changeMeta(Material.COMPASS,game.text.getText(170),1,null));
+		invTimer.setItem(0, changeMeta(Material.COMPASS,game.translate("werewolf.menu.return"),1,null));
 		updateSelectionTimer( Math.max(findSelect(invBorder)-9,0));
 		player.openInventory(invTimer);
 	}
 
 	public void globalTool(Player player) {
-		invConfig.setItem(0, changeMeta(Material.COMPASS,game.text.getText(170),1,null));
+		invConfig.setItem(0, changeMeta(Material.COMPASS,game.translate("werewolf.menu.return"),1,null));
 		updateSelectionTool();
 		player.openInventory(invConfig);
 	}
 
 	public void scenarioTool(Player player) {
-		invScenario.setItem(0, changeMeta(Material.COMPASS,game.text.getText(170),1,null));
+		invScenario.setItem(0, changeMeta(Material.COMPASS,game.translate("werewolf.menu.return"),1,null));
 		updateSelectionScenario();
 		player.openInventory(invScenario);
 	}
 
 	public void borderTool(Player player) {
-		invBorder.setItem(0, changeMeta(Material.COMPASS,game.text.getText(170),1,null));
-		updateSelectionBorder( Math.max(findSelect(invBorder)-9,0));
+		invBorder.setItem(0, changeMeta(Material.COMPASS,game.translate("werewolf.menu.return"),1,null));
+		updateSelectionBorder();
 		player.openInventory(invBorder);
 	}
 
 	public void saveTool(Player player) {
 
-		invSave.setItem(0, changeMeta(Material.COMPASS,game.text.getText(170),1,null));
+		invSave.setItem(0, changeMeta(Material.COMPASS,game.translate("werewolf.menu.return"),1,null));
 		updateSelectionSave(findSelect(invSave));
 		player.openInventory(invSave);
 	}
 
 	public void enchantmentTool(Player player) {
-		List<String> lore = Arrays.asList(game.text.getText(203), game.text.getText(204));
-		invEnchant.setItem(0, changeMeta(Material.COMPASS,game.text.getText(170),1,null));
-		invEnchant.setItem(2,changeMeta(Material.IRON_CHESTPLATE,String.format(game.text.getText(206),game.config.getLimitProtectionIron()),1,lore));
-		invEnchant.setItem(4,changeMeta(Material.DIAMOND_CHESTPLATE,String.format(game.text.getText(207),game.config.getLimitProtectionDiamond()),1,lore));
-		invEnchant.setItem(6,changeMeta(Material.BOW,String.format(game.text.getText(208),game.config.getLimitPowerBow()),1,lore));
-		invEnchant.setItem(11,changeMeta(Material.IRON_SWORD,String.format(game.text.getText(209),game.config.getLimitSharpnessIron()),1,lore));
-		invEnchant.setItem(13,changeMeta(Material.DIAMOND_SWORD,String.format(game.text.getText(210),game.config.getLimitSharpnessDiamond()),1,lore));
-		invEnchant.setItem(8,changeMeta(Material.STICK,game.text.getText(211+game.config.getLimitKnockBack()),1,null));
-		invEnchant.setItem(15,changeMeta(Material.ARROW,game.text.getText(214+game.config.getLimitPunch()),1,null));
+		List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"), game.translate("werewolf.menu.right"));
+		invEnchant.setItem(0, changeMeta(Material.COMPASS,game.translate("werewolf.menu.return"),1,null));
+		invEnchant.setItem(2,changeMeta(Material.IRON_CHESTPLATE,game.translate("werewolf.menu.enchantments.iron_protection",game.config.getLimitProtectionIron()),1,lore));
+		invEnchant.setItem(4,changeMeta(Material.DIAMOND_CHESTPLATE,game.translate("werewolf.menu.enchantments.diamond_protection",game.config.getLimitProtectionDiamond()),1,lore));
+		invEnchant.setItem(6,changeMeta(Material.BOW,game.translate("werewolf.menu.enchantments.power",game.config.getLimitPowerBow()),1,lore));
+		invEnchant.setItem(11,changeMeta(Material.IRON_SWORD,game.translate("werewolf.menu.enchantments.sharpness_iron",game.config.getLimitSharpnessIron()),1,lore));
+		invEnchant.setItem(13,changeMeta(Material.DIAMOND_SWORD,game.translate("werewolf.menu.enchantments.sharpness_diamond",game.config.getLimitSharpnessDiamond()),1,lore));
+		invEnchant.setItem(8,changeMeta(Material.STICK,Arrays.asList(game.translate("werewolf.menu.enchantments.knock_back_disable"),game.translate("werewolf.menu.enchantments.knock_back_invisible"),game.translate("werewolf.menu.enchantments.knock_back_enable")).get(game.config.getLimitKnockBack()),1,null));
+		invEnchant.setItem(15,changeMeta(Material.ARROW,Arrays.asList(game.translate("werewolf.menu.enchantments.punch_disable"),game.translate("werewolf.menu.enchantments.punch_cupid"),game.translate("werewolf.menu.enchantments.punch_enable")).get(game.config.getLimitPunch()),1,null));
 
 		player.openInventory(invEnchant);
 	}
 
 	public void stuffTool(Player player) {
-		invStuff.setItem(0, changeMeta(Material.COMPASS,game.text.getText(170),1,null));
-		invStuff.setItem(2, changeMeta(Material.EGG,game.text.getText(83),1,null));
-		invStuff.setItem(4, changeMeta(Material.GOLD_SWORD,game.text.getText(84),1,null));
-		invStuff.setItem(6, changeMeta(Material.JUKEBOX,game.text.getText(85),1,null));
-		invStuff.setItem(10, changeMeta(Material.BARRIER,game.text.getText(86),1,null));
-		invStuff.setItem(13, changeMeta(Material.CHEST,game.text.getText(182),1,null));
-		invStuff.setItem(16, changeMeta(Material.ENDER_CHEST,game.text.getText(181),1,null));
+		invStuff.setItem(0, changeMeta(Material.COMPASS,game.translate("werewolf.menu.return"),1,null));
+		invStuff.setItem(2, changeMeta(Material.EGG,game.translate("werewolf.menu.stuff.normal"),1,null));
+		invStuff.setItem(4, changeMeta(Material.GOLD_SWORD,game.translate("werewolf.menu.stuff.meet_up"),1,null));
+		invStuff.setItem(6, changeMeta(Material.JUKEBOX,game.translate("werewolf.menu.stuff.chill"),1,null));
+		invStuff.setItem(10, changeMeta(Material.BARRIER,game.translate("werewolf.menu.stuff.delete"),1,null));
+		invStuff.setItem(13, changeMeta(Material.CHEST,game.translate("werewolf.menu.stuff.start"),1,null));
+		invStuff.setItem(16, changeMeta(Material.ENDER_CHEST,game.translate("werewolf.menu.stuff.death"),1,null));
 		player.openInventory(invStuff);
 	}
 
 	public void advancedTool(Player player) {
-		List<String> lore = Arrays.asList(game.text.getText(203), game.text.getText(204));
-		invAdvancedTool.setItem(0, changeMeta(Material.COMPASS, game.text.getText(170), 1, null));
-		invAdvancedTool.setItem(2, changeMeta(Material.APPLE, String.format(game.text.getText(223), game.config.getAppleRate()), 1, lore));
-		invAdvancedTool.setItem(4, changeMeta(Material.FLINT, String.format(game.text.getText(224), game.config.getFlintRate()), 1, lore));
-		invAdvancedTool.setItem(6, changeMeta(Material.ENDER_PEARL, String.format(game.text.getText(226), game.config.getPearlRate()), 1, lore));
-		invAdvancedTool.setItem(8, changeMeta(Material.CARROT_ITEM, String.format(game.text.getText(258), game.config.getUseOfFlair()), 1, lore));
-		invAdvancedTool.setItem(10, changeMeta(new ItemStack(Material.POTION, 1, (short) 8201), String.format(game.text.getText(225), game.config.getStrengthRate()), lore));
-		invAdvancedTool.setItem(12, changeMeta(Material.DIAMOND, String.format(game.text.getText(228), game.config.getDiamondLimit()), 1, lore));
-		invAdvancedTool.setItem(14, changeMeta(Material.EXP_BOTTLE, String.format(game.text.getText(229), game.config.getXpBoost()), 1, lore));
-		invAdvancedTool.setItem(16, changeMeta(new ItemStack(Material.SKULL_ITEM, 1, (short) 3), String.format(game.text.getText(227), game.config.getPlayerRequiredVoteEnd()), lore));
-		invAdvancedTool.setItem(18, changeMeta(Material.GOLD_NUGGET, game.text.getText(261), 1, Collections.singletonList(game.text.getText(262 + game.config.getGoldenAppleParticles()))));
-		invAdvancedTool.setItem(20, changeMeta(new ItemStack(Material.WOOL, 1, (short) 1), String.format(game.text.getText(270), game.config.getDistanceFox()), lore));
-		invAdvancedTool.setItem(22, changeMeta(new ItemStack(Material.WOOL, 1, (short) 12), String.format(game.text.getText(271), game.config.getDistanceBearTrainer()), lore));
-		invAdvancedTool.setItem(24, changeMeta(new ItemStack(Material.POTION, 1, (short) 8227), String.format(game.text.getText(115), game.config.getResistanceRate()), lore));
-		invAdvancedTool.setItem(26, changeMeta(new ItemStack(Material.BREAD, 1), String.format(game.config.isTrollSV() ? game.text.getText(169) : game.text.getText(168), game.text.getText(73)), null));
-		invAdvancedTool.setItem(28, changeMeta(new ItemStack(Material.WOOL, 1, (short) 6), String.format(game.text.getText(316), game.config.getDistanceSuccubus()), lore));
+		List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"), game.translate("werewolf.menu.right"));
+		invAdvancedTool.setItem(0, changeMeta(Material.COMPASS, game.translate("werewolf.menu.return"), 1, null));
+		invAdvancedTool.setItem(2, changeMeta(Material.APPLE, game.translate("werewolf.menu.advanced_tool.apple", game.config.getAppleRate()), 1, lore));
+		invAdvancedTool.setItem(4, changeMeta(Material.FLINT, game.translate("werewolf.menu.advanced_tool.flint", game.config.getFlintRate()), 1, lore));
+		invAdvancedTool.setItem(6, changeMeta(Material.ENDER_PEARL, game.translate("werewolf.menu.advanced_tool.ender_pearl", game.config.getPearlRate()), 1, lore));
+		invAdvancedTool.setItem(8, changeMeta(Material.CARROT_ITEM, game.translate("werewolf.menu.advanced_tool.fox_smell_number", game.config.getUseOfFlair()), 1, lore));
+		invAdvancedTool.setItem(10, changeMeta(new ItemStack(Material.POTION, 1, (short) 8201), game.translate("werewolf.menu.advanced_tool.strength", game.config.getStrengthRate()), lore));
+		invAdvancedTool.setItem(12, changeMeta(Material.DIAMOND, game.translate("werewolf.menu.advanced_tool.diamond", game.config.getDiamondLimit()), 1, lore));
+		invAdvancedTool.setItem(14, changeMeta(Material.EXP_BOTTLE, game.translate("werewolf.menu.advanced_tool.xp", game.config.getXpBoost()), 1, lore));
+		invAdvancedTool.setItem(16, changeMeta(new ItemStack(Material.SKULL_ITEM, 1, (short) 3), game.translate("werewolf.menu.advanced_tool.vote", game.config.getPlayerRequiredVoteEnd()), lore));
+		invAdvancedTool.setItem(18, changeMeta(Material.GOLD_NUGGET, game.translate("werewolf.menu.advanced_tool.particles"), 1, Collections.singletonList(Arrays.asList(game.translate("werewolf.menu.advanced_tool.particles_off"),game.translate("werewolf.menu.advanced_tool.exception"),game.translate("werewolf.menu.advanced_tool.particles_on")).get(game.config.getGoldenAppleParticles()))));
+		invAdvancedTool.setItem(20, changeMeta(new ItemStack(Material.WOOL, 1, (short) 1), game.translate("werewolf.menu.advanced_tool.fox", game.config.getDistanceFox()), lore));
+		invAdvancedTool.setItem(22, changeMeta(new ItemStack(Material.WOOL, 1, (short) 12), game.translate("werewolf.menu.advanced_tool.bear_trainer", game.config.getDistanceBearTrainer()), lore));
+		invAdvancedTool.setItem(24, changeMeta(new ItemStack(Material.POTION, 1, (short) 8227), game.translate("werewolf.menu.advanced_tool.resistance", game.config.getResistanceRate()), lore));
+		invAdvancedTool.setItem(26, changeMeta(new ItemStack(Material.BREAD, 1), game.translate(game.config.isTrollSV() ?"werewolf.menu.advanced_tool.troll_on" : "werewolf.menu.advanced_tool.troll_off"), null));
+		invAdvancedTool.setItem(28, changeMeta(new ItemStack(Material.WOOL, 1, (short) 6), game.translate("werewolf.menu.advanced_tool.succubus", game.config.getDistanceSuccubus()), lore));
 		player.openInventory(invAdvancedTool);
 	}
 
 	public void languageTool(Player player){
-		invLanguage.setItem(0, changeMeta(Material.COMPASS,game.text.getText(170),1,null));
+		invLanguage.setItem(0, changeMeta(Material.COMPASS,game.translate("werewolf.menu.return"),1,null));
 		ItemStack fr = new ItemStack(Material.BANNER, 1);
 		BannerMeta frMeta = (BannerMeta) fr.getItemMeta();
 		frMeta.addPattern(new Pattern(DyeColor.BLUE, PatternType.STRIPE_LEFT));
@@ -236,15 +239,15 @@ public class OptionLG {
 				invSave.setItem(i+1,null);
 			}
 			else if(i==j) {
-				invSave.setItem(i+1, changeMeta(Material.FEATHER,String.format(game.text.getText(174),files[i].getName()),1,null));
+				invSave.setItem(i+1, changeMeta(Material.FEATHER,game.translate("werewolf.menu.save.configuration",files[i].getName()),1,null));
 			}
-			else invSave.setItem(i+1, changeMeta(Material.PAPER,String.format(game.text.getText(174),files[i].getName()),1,null));
+			else invSave.setItem(i+1, changeMeta(Material.PAPER,game.translate("werewolf.menu.save.configuration",files[i].getName()),1,null));
 		}
 
-		invSave.setItem(9, changeMeta(Material.EMERALD_BLOCK,game.text.getText(173),1,null));
+		invSave.setItem(9, changeMeta(Material.EMERALD_BLOCK,game.translate("werewolf.menu.save.new"),1,null));
 		if(files.length!=0){
-			invSave.setItem(14, changeMeta(Material.BARRIER,String.format(game.text.getText(171),files[j].getName()),1,null));
-			invSave.setItem(12, changeMeta(Material.BED,String.format(game.text.getText(172),files[j].getName()),1,null));
+			invSave.setItem(14, changeMeta(Material.BARRIER,game.translate("werewolf.menu.save.delete",files[j].getName()),1,null));
+			invSave.setItem(12, changeMeta(Material.BED, game.translate("werewolf.menu.save.load",files[j].getName()),1,null));
 		}
 		else {
 			invSave.setItem(12,null);
@@ -271,10 +274,10 @@ public class OptionLG {
 		if(files==null || files.length<8){
 			FileLG.save(file, SerializerLG.serialize(game.config));
 			game.stufflg.save(saveName);
-			player.sendMessage(game.text.getText(56));
+			player.sendMessage(game.translate("werewolf.menu.save.success"));
 			updateSelectionSave(findSelect(invSave));
 		}
-		else player.sendMessage(game.text.getText(57));
+		else player.sendMessage(game.translate("werewolf.menu.save.failure"));
 	}
 
 	public void erase()  {
@@ -286,11 +289,11 @@ public class OptionLG {
 
 		File file = new File(game.getDataFolder()+"/configs/", files[i].getName());
 		if(!file.delete()){
-			Bukkit.getConsoleSender().sendMessage(String.format(game.text.getText(58),files[i].getName()));
+			Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.menu.save.delete_failed",files[i].getName()));
 		}
 		file = new File(game.getDataFolder()+"/stuffs/", files[i].getName().replaceFirst(".json",".yml"));
 		if(!file.delete()){
-			Bukkit.getConsoleSender().sendMessage(String.format(game.text.getText(58),files[i].getName().replaceFirst(".json",".yml")));
+			Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.menu.save.delete_failed",files[i].getName().replaceFirst(".json",".yml")));
 		}
 		updateSelectionSave(findSelect(invSave));
 	}
@@ -325,13 +328,13 @@ public class OptionLG {
 
 	public void selectMinus(int i) {
 
-		if(!game.isState(StateLG.LG)) {
-			int j = game.config.roleCount.get(RoleLG.values()[i]);
+		if(!game.isState(StateLG.GAME)) {
+			int j = game.config.getRoleCount().get(RoleLG.values()[i]);
 			if (j > 0) {
-				if (RoleLG.values()[i].getCamp() != null) {
+				if (!RoleLG.values()[i].equals(RoleLG.CURSED_LOVER) && !RoleLG.values()[i].equals(RoleLG.LOVER) && !RoleLG.values()[i].equals(RoleLG.AMNESIAC_LOVER)) {
 					game.score.setRole(game.score.getRole() - 1);
 				}
-				game.config.roleCount.put(RoleLG.values()[i], j - 1);
+				game.config.getRoleCount().put(RoleLG.values()[i], j - 1);
 				game.score.updateBoard();
 				updateSelection();
 			}
@@ -340,10 +343,10 @@ public class OptionLG {
 
 	public void selectPlus(int i) {
 
-		if(!game.isState(StateLG.LG)) {
-			int j = game.config.roleCount.get(RoleLG.values()[i]);
-			game.config.roleCount.put(RoleLG.values()[i], j + 1);
-			if (RoleLG.values()[i].getCamp() != null) {
+		if(!game.isState(StateLG.GAME)) {
+			int j = game.config.getRoleCount().get(RoleLG.values()[i]);
+			game.config.getRoleCount().put(RoleLG.values()[i], j + 1);
+			if (!RoleLG.values()[i].equals(RoleLG.CURSED_LOVER) && !RoleLG.values()[i].equals(RoleLG.LOVER) && !RoleLG.values()[i].equals(RoleLG.AMNESIAC_LOVER)) {
 				game.score.setRole(game.score.getRole() + 1);
 			}
 			game.score.updateBoard();
@@ -351,34 +354,18 @@ public class OptionLG {
 		}
 	}
 
-	public void selectMinusBorder() {
-		int i = Math.max(findSelect(invBorder) - 9, 0);
-		int j = game.config.borderValues.get(BorderLG.values()[i]);
-		if (j >= 100) {
-			game.config.borderValues.put(BorderLG.values()[i], j - 100);
-			updateSelectionBorder(i);
-		}
-	}
-
-	public void selectPlusBorder() {
-		int i = Math.max(findSelect(invBorder) - 9, 0);
-		int j = game.config.borderValues.get(BorderLG.values()[i]);
-		game.config.borderValues.put(BorderLG.values()[i], j + 100);
-		updateSelectionBorder(i);
-	}
-
 	public void SelectMinusTimer(int v) {
 		int i = Math.max(findSelect(invTimer) - 9, 0);
-		int j = game.config.timerValues.get(TimerLG.values()[i]);
+		int j = game.config.getTimerValues().get(TimerLG.values()[i]);
 		if (j >= v) {
-			game.config.timerValues.put(TimerLG.values()[i], j - v);
+			game.config.getTimerValues().put(TimerLG.values()[i], j - v);
 			updateSelectionTimer(i);
 		}
 	}
 
 	public void selectPlusTimer(int v) {
 		int i = Math.max(findSelect(invTimer) - 9, 0);
-		game.config.timerValues.put(TimerLG.values()[i], game.config.timerValues.get(TimerLG.values()[i]) + v);
+		game.config.getTimerValues().put(TimerLG.values()[i], game.config.getTimerValues().get(TimerLG.values()[i]) + v);
 		updateSelectionTimer(i);
 	}
 
@@ -386,13 +373,13 @@ public class OptionLG {
 
 	public void updateSelection(){
 
-		List<String> lore = Arrays.asList(game.text.getText(203), game.text.getText(204), game.text.getText(205));
+		List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"), game.translate("werewolf.menu.right"),game.translate("werewolf.menu.shift"));
 		for (int i=0;i<RoleLG.values().length;i++) {
 
-			if (game.config.roleCount.get(RoleLG.values()[i]) > 0) {
-				invRole.setItem(9 + i, changeMeta(new ItemStack(Material.STAINED_CLAY, game.config.roleCount.get(RoleLG.values()[i]), (short) 5), game.text.translateRole.get(RoleLG.values()[i]), lore));
+			if (game.config.getRoleCount().get(RoleLG.values()[i]) > 0) {
+				invRole.setItem(9 + i, changeMeta(new ItemStack(Material.STAINED_CLAY, game.config.getRoleCount().get(RoleLG.values()[i]), (short) 5), game.translate(RoleLG.values()[i].getKey()), lore));
 			} else
-				invRole.setItem(9 + i, changeMeta(new ItemStack(Material.STAINED_CLAY, 1, (short) 6), game.text.translateRole.get(RoleLG.values()[i]), lore));
+				invRole.setItem(9 + i, changeMeta(new ItemStack(Material.STAINED_CLAY, 1, (short) 6), game.translate(RoleLG.values()[i].getKey()), lore));
 		}
 	}
 
@@ -402,54 +389,40 @@ public class OptionLG {
 
 	public void updateSelectionTimer(int j) {
 
-		String c = game.score.conversion(game.config.timerValues.get(TimerLG.values()[j]));
+		String c = game.score.conversion(game.config.getTimerValues().get(TimerLG.values()[j]));
 
-		invTimer.setItem(1, changeMeta(Material.STONE_BUTTON, String.format(game.text.getText(88), "-10m", c), 1, null));
-		invTimer.setItem(2, changeMeta(Material.STONE_BUTTON, String.format(game.text.getText(88), "-1m", c), 1, null));
-		invTimer.setItem(3, changeMeta(Material.STONE_BUTTON, String.format(game.text.getText(88), "-10s", c), 1, null));
-		invTimer.setItem(4, changeMeta(Material.BEACON, String.format(game.text.translateTimer.get(TimerLG.values()[j]), c), 1, null));
-		invTimer.setItem(5, changeMeta(Material.STONE_BUTTON, String.format(game.text.getText(88), "+10s", c), 1, null));
-		invTimer.setItem(6, changeMeta(Material.STONE_BUTTON, String.format(game.text.getText(88), "+1m", c), 1, null));
-		invTimer.setItem(7, changeMeta(Material.STONE_BUTTON, String.format(game.text.getText(88), "+10m", c), 1, null));
+		invTimer.setItem(1, changeMeta(Material.STONE_BUTTON, game.translate("werewolf.utils.display", "-10m", c), 1, null));
+		invTimer.setItem(2, changeMeta(Material.STONE_BUTTON, game.translate("werewolf.utils.display", "-1m", c), 1, null));
+		invTimer.setItem(3, changeMeta(Material.STONE_BUTTON, game.translate("werewolf.utils.display", "-10s", c), 1, null));
+		invTimer.setItem(4, changeMeta(Material.BEACON, game.translate(TimerLG.values()[j].getKey(), c), 1, null));
+		invTimer.setItem(5, changeMeta(Material.STONE_BUTTON, game.translate("werewolf.utils.display", "+10s", c), 1, null));
+		invTimer.setItem(6, changeMeta(Material.STONE_BUTTON, game.translate("werewolf.utils.display", "+1m", c), 1, null));
+		invTimer.setItem(7, changeMeta(Material.STONE_BUTTON, game.translate("werewolf.utils.display", "+10m", c), 1, null));
 
 		for (int i = 0; i < TimerLG.values().length; i++) {
 			if (i == j) {
-				invTimer.setItem(9 + i, changeMeta(Material.FEATHER, String.format(game.text.translateTimer.get(TimerLG.values()[i]), c), 1, null));
+				invTimer.setItem(9 + i, changeMeta(Material.FEATHER, game.translate(TimerLG.values()[i].getKey(), c), 1, null));
 			} else
-				invTimer.setItem(9 + i, changeMeta(Material.ANVIL, String.format(game.text.translateTimer.get(TimerLG.values()[i]), game.score.conversion(game.config.timerValues.get(TimerLG.values()[i]))), 1, null));
+				invTimer.setItem(9 + i, changeMeta(Material.ANVIL, game.translate(TimerLG.values()[i].getKey(), game.score.conversion(game.config.getTimerValues().get(TimerLG.values()[i]))), 1, null));
 		}
 	}
 
-	public void updateSelectionBorder(){
-		updateSelectionBorder( Math.max(findSelect(invBorder)-9,0));
-	}
-
-	public void updateSelectionBorder(int j) {
-		invBorder.setItem(3, changeMeta(Material.STONE_BUTTON, String.format(game.text.getText(88), "-", game.config.borderValues.get(BorderLG.values()[j])), 1, null));
-		invBorder.setItem(4, changeMeta(Material.BEACON, String.format(game.text.translateBorder.get(BorderLG.values()[j]), game.config.borderValues.get(BorderLG.values()[j])), 1, null));
-		invBorder.setItem(5, changeMeta(Material.STONE_BUTTON, String.format(game.text.getText(88), "+", game.config.borderValues.get(BorderLG.values()[j])), 1, null));
-		for (int i = 0; i < BorderLG.values().length; i++) {
-			if (i == j) {
-				invBorder.setItem(9 + i, changeMeta(Material.FEATHER, String.format(game.text.translateBorder.get(BorderLG.values()[i]), game.config.borderValues.get(BorderLG.values()[i])), 1, null));
-			} else
-				invBorder.setItem(9 + i, changeMeta(Material.GLASS, String.format(game.text.translateBorder.get(BorderLG.values()[i]), game.config.borderValues.get(BorderLG.values()[i])), 1, null));
-		}
-	}
 
 	public void updateSelectionTool() {
 		for (int i = 0; i < ToolLG.values().length; i++) {
-			if (game.config.configValues.get(ToolLG.values()[i])) {
-				invConfig.setItem(9 + i, changeMeta(new ItemStack(Material.STAINED_CLAY, 1, (short) 5), game.text.translateTool.get(ToolLG.values()[i]), Collections.singletonList(String.format(game.text.getText(169), ""))));
+			if (game.config.getConfigValues().get(ToolLG.values()[i])) {
+				invConfig.setItem(9 + i, changeMeta(new ItemStack(Material.STAINED_CLAY, 1, (short) 5), game.translate(ToolLG.values()[i].getKey()), Collections.singletonList(game.translate("werewolf.utils.enable", ""))));
 			} else
-				invConfig.setItem(9 + i, changeMeta(new ItemStack(Material.STAINED_CLAY, 1, (short) 6), game.text.translateTool.get(ToolLG.values()[i]), Collections.singletonList(String.format(game.text.getText(168), ""))));
+				invConfig.setItem(9 + i, changeMeta(new ItemStack(Material.STAINED_CLAY, 1, (short) 6), game.translate(ToolLG.values()[i].getKey()), Collections.singletonList(game.translate("werewolf.utils.disable", ""))));
 		}
 		updateCompass();
-		if (game.config.timerValues.get(TimerLG.LG_LIST) < 0) {
-			for (String playerName : game.playerLG.keySet()) {
-				if (game.playerLG.get(playerName).isCamp(Camp.LG) || game.playerLG.get(playerName).isRole(RoleLG.LOUP_GAROU_BLANC)) {
-					if (game.config.configValues.get(ToolLG.RED_NAME_TAG)) {
-						game.board.getTeam(playerName).setPrefix("§4");
-					} else game.board.getTeam(playerName).setPrefix("");
+		if (game.config.getTimerValues().get(TimerLG.WEREWOLF_LIST) < 0) {
+			for (UUID uuid : game.playerLG.keySet()) {
+				PlayerLG plg = game.playerLG.get(uuid);
+				if (game.roleManage.isWereWolf(plg)) {
+					if (game.config.getConfigValues().get(ToolLG.RED_NAME_TAG)) {
+						game.board.getTeam(plg.getName()).setPrefix("§4");
+					} else game.board.getTeam(plg.getName()).setPrefix("");
 				}
 			}
 		}
@@ -457,10 +430,10 @@ public class OptionLG {
 
 	public void updateSelectionScenario() {
 		for (int i = 0; i < ScenarioLG.values().length; i++) {
-			if (game.config.scenarioValues.get(ScenarioLG.values()[i])) {
-				invScenario.setItem(9 + i, changeMeta(new ItemStack(Material.STAINED_CLAY, 1, (short) 5), game.text.translateScenario.get(ScenarioLG.values()[i]), Collections.singletonList(String.format(game.text.getText(169), ""))));
+			if (game.config.getScenarioValues().get(ScenarioLG.values()[i])) {
+				invScenario.setItem(9 + i, changeMeta(new ItemStack(Material.STAINED_CLAY, 1, (short) 5), game.translate(ScenarioLG.values()[i].getKey()), Collections.singletonList(game.translate("werewolf.utils.enable", ""))));
 			} else
-				invScenario.setItem(9 + i, changeMeta(new ItemStack(Material.STAINED_CLAY, 1, (short) 6), game.text.translateScenario.get(ScenarioLG.values()[i]), Collections.singletonList(String.format(game.text.getText(168), ""))));
+				invScenario.setItem(9 + i, changeMeta(new ItemStack(Material.STAINED_CLAY, 1, (short) 6), game.translate(ScenarioLG.values()[i].getKey()), Collections.singletonList(game.translate("werewolf.utils.disable", ""))));
 		}
 		updateNameTag();
 		game.scenarios.update();
@@ -468,11 +441,11 @@ public class OptionLG {
 	public void updateCompass(){
 
 		for(Player player:Bukkit.getOnlinePlayers()) {
-			if(game.playerLG.containsKey(player.getName())){
-				if (game.config.configValues.get(ToolLG.COMPASS_MIDDLE)) {
+			if(game.playerLG.containsKey(player.getUniqueId())){
+				if (game.config.getConfigValues().get(ToolLG.COMPASS_MIDDLE)) {
 					player.setCompassTarget(player.getWorld().getSpawnLocation());
 				} else {
-					player.setCompassTarget(game.playerLG.get(player.getName()).getSpawn());
+					player.setCompassTarget(game.playerLG.get(player.getUniqueId()).getSpawn());
 				}
 			}
 		}
@@ -480,70 +453,116 @@ public class OptionLG {
 
 	public void updateNameTag() {
 
-		for (String playerName : game.playerLG.keySet()) {
+		for (UUID playerUUID : game.playerLG.keySet()) {
 
-			Scoreboard board = game.playerLG.get(playerName).getScoreBoard();
+			PlayerLG plg = game.playerLG.get(playerUUID);
+			Scoreboard board = plg.getScoreBoard();
+			String name = plg.getName();
+			if(game.board.getTeam(name)==null){
+				game.board.registerNewTeam(name);
+				game.board.getTeam(name).addEntry(name);
+			}
+			Team team = game.board.getTeam(name);
 
 			if (!board.equals(game.board)) {
 
-				if (board.getTeam("moderators") == null) {
-					board.registerNewTeam("moderators");
-					board.getTeam("moderators").setPrefix("§1[Modo]§r ");
-				}
-				for (String players : game.playerLG.keySet()) {
+				for (UUID uuid2 : game.playerLG.keySet()) {
 
-					if (board.getTeam(players) == null) {
-						board.registerNewTeam(players);
-						board.getTeam(players).addEntry(players);
+					PlayerLG plg2 = game.playerLG.get(uuid2);
+					String name2 =plg2.getName();
+
+					if (board.getTeam(name2) == null) {
+						board.registerNewTeam(name2);
+						board.getTeam(name2).addEntry(name2);
 					}
-					if (game.config.scenarioValues.get(ScenarioLG.NO_NAME_TAG)) {
-						board.getTeam(players).setNameTagVisibility(NameTagVisibility.NEVER);
+
+					Team team2 = board.getTeam(name2);
+
+					if (game.config.getScenarioValues().get(ScenarioLG.NO_NAME_TAG)) {
+						team2.setNameTagVisibility(NameTagVisibility.NEVER);
 					} else {
-						if (!game.playerLG.get(players).hasPower() && (game.playerLG.get(players).isRole(RoleLG.LOUP_PERFIDE) || game.playerLG.get(players).isRole(RoleLG.PETITE_FILLE))) {
-							board.getTeam(players).setNameTagVisibility(NameTagVisibility.NEVER);
-						} else board.getTeam(players).setNameTagVisibility(NameTagVisibility.ALWAYS);
-					}
-					if(board.getTeam("moderators").hasEntry(players)){
-						board.getTeam("moderators").removeEntry(players);
+						if ((plg2.getRole() instanceof MischievousWereWolf || plg2.getRole() instanceof LittleGirl) && ((InvisibleState)plg2.getRole()).isInvisible()) {
+							team2.setNameTagVisibility(NameTagVisibility.NEVER);
+						} else team2.setNameTagVisibility(NameTagVisibility.ALWAYS);
 					}
 				}
+
 				for (UUID uuid: game.getModerators()) {
 					if(Bukkit.getPlayer(uuid)!=null){
-						String players = Bukkit.getPlayer(uuid).getName();
-						if(!board.getTeam("moderators").hasEntry(players)){
-							board.getTeam("moderators").addEntry(players);
+						String name3 = Bukkit.getPlayer(uuid).getName();
+						if(board.getTeam(name3)==null){
+							board.registerNewTeam(name3);
+							board.getTeam(name3).addEntry(name3);
 						}
 					}
 				}
 
-			}
+				for(Team t:board.getTeams()){
 
-			if (game.config.scenarioValues.get(ScenarioLG.NO_NAME_TAG)) {
-				game.board.getTeam(playerName).setNameTagVisibility(NameTagVisibility.NEVER);
-			} else {
-				if (!game.playerLG.get(playerName).hasPower() && (game.playerLG.get(playerName).isRole(RoleLG.LOUP_PERFIDE) || game.playerLG.get(playerName).isRole(RoleLG.PETITE_FILLE))) {
-					game.board.getTeam(playerName).setNameTagVisibility(NameTagVisibility.NEVER);
-				} else {
-					game.board.getTeam(playerName).setNameTagVisibility(NameTagVisibility.ALWAYS);
+					for(String e:t.getEntries()){
+						if(Bukkit.getPlayer(e)!=null){
+							UUID uuid=Bukkit.getPlayer(e).getUniqueId();
+							if(game.getHosts().contains(uuid)){
+								t.setPrefix(game.translate("werewolf.commands.admin.host.tag"));
+							}
+							else if (game.getModerators().contains(uuid)){
+								t.setPrefix(game.translate("werewolf.commands.admin.moderator.tag"));
+							}
+							else t.setPrefix("");
+						}
+					}
 				}
 			}
-			if(game.board.getTeam("moderators").hasEntry(playerName)){
-				game.board.getTeam("moderators").removeEntry(playerName);
+
+			if (game.config.getScenarioValues().get(ScenarioLG.NO_NAME_TAG)) {
+				team.setNameTagVisibility(NameTagVisibility.NEVER);
+			} else {
+				if ((plg.getRole() instanceof MischievousWereWolf || plg.getRole() instanceof LittleGirl) && ((InvisibleState)plg.getRole()).isInvisible()) {
+					team.setNameTagVisibility(NameTagVisibility.NEVER);
+				} else {
+					team.setNameTagVisibility(NameTagVisibility.ALWAYS);
+				}
 			}
 		}
+
 		for (UUID uuid: game.getModerators()) {
 			if(Bukkit.getPlayer(uuid)!=null){
-				String players = Bukkit.getPlayer(uuid).getName();
-				if(!game.board.getTeam("moderators").hasEntry(players)){
-					game.board.getTeam("moderators").addEntry(players);
+				String name3 = Bukkit.getPlayer(uuid).getName();
+				if(game.board.getTeam(name3)==null){
+					game.board.registerNewTeam(name3);
+					game.board.getTeam(name3).addEntry(name3);
+				}
+			}
+		}
+
+		for(Team t:game.board.getTeams()){
+
+			for(String e:t.getEntries()){
+				if(Bukkit.getPlayer(e)!=null){
+					UUID uuid=Bukkit.getPlayer(e).getUniqueId();
+					if(game.getHosts().contains(uuid)){
+						if(game.roleManage.isWereWolf(uuid) && game.config.getTimerValues().get(TimerLG.WEREWOLF_LIST) < 0 && game.config.getConfigValues().get(ToolLG.RED_NAME_TAG)){
+							t.setPrefix(game.translate("werewolf.commands.admin.host.tag")+"§4");
+						}
+						else t.setPrefix(game.translate("werewolf.commands.admin.host.tag"));
+					}
+					else if (game.getModerators().contains(uuid)){
+						t.setPrefix(game.translate("werewolf.commands.admin.moderator.tag"));
+					}
+					else if(game.roleManage.isWereWolf(uuid) && game.config.getTimerValues().get(TimerLG.WEREWOLF_LIST) < 0 && game.config.getConfigValues().get(ToolLG.RED_NAME_TAG)){
+						t.setPrefix("§4");
+					}
+					else t.setPrefix("");
 				}
 			}
 		}
 	}
 
+
+
 	public void resetRole() {
 		for (int i=0;i<RoleLG.values().length;i++) {
-			game.config.roleCount.put(RoleLG.values()[i], 0);
+			game.config.getRoleCount().put(RoleLG.values()[i], 0);
 		}
 		game.score.setRole(0);
 		updateSelection();
@@ -551,5 +570,13 @@ public class OptionLG {
 	}
 
 
+	public void updateSelectionBorder() {
+		invBorder.setItem(3, changeMeta(Material.STONE_BUTTON, game.translate("werewolf.utils.display", "-", game.config.getBorderMax()), 1, null));
+		invBorder.setItem(4, changeMeta(Material.GLASS,game.translate("werewolf.menu.border.radius_border_max",game.config.getBorderMax()), 1, null));
+		invBorder.setItem(5, changeMeta(Material.STONE_BUTTON, game.translate("werewolf.utils.display", "+", game.config.getBorderMax()), 1, null));
+		invBorder.setItem(12, changeMeta(Material.STONE_BUTTON, game.translate("werewolf.utils.display", "-", game.config.getBorderMin()), 1, null));
+		invBorder.setItem(13, changeMeta(Material.GLASS,game.translate("werewolf.menu.border.radius_border_min",game.config.getBorderMin()), 1, null));
+		invBorder.setItem(14, changeMeta(Material.STONE_BUTTON, game.translate("werewolf.utils.display", "+", game.config.getBorderMin()), 1, null));
+	}
 }
 

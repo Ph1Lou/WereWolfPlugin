@@ -1,22 +1,22 @@
 package io.github.ph1lou.pluginlg.listener;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.enumlg.ScenarioLG;
 import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlg.listener.scenarioslisteners.Scenarios;
+import io.github.ph1lou.pluginlg.listener.scenarioslisteners.*;
+import io.github.ph1lou.pluginlgapi.enumlg.ScenarioLG;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredListener;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ScenariosLG {
 
     final MainLG main;
     final GameManager game;
-    final Map<ScenarioLG, Scenarios> scenarios = new HashMap<>();
+    final List<Scenarios> scenariosRegister = new ArrayList<>();
 
     public ScenariosLG(MainLG main, GameManager game) {
         this.main = main;
@@ -33,26 +33,27 @@ public class ScenariosLG {
         pm.registerEvents(new ArmorDetectionListener(game), main);
         pm.registerEvents(new ChatListener(game), main);
         pm.registerEvents(new PatchPotions(game), main);
-        for (ScenarioLG scenario : ScenarioLG.values()) {
-            try {
-                Scenarios s;
-                Class<? extends Scenarios> scenarioClass = scenario.getScenario();
-
-                if (scenarioClass != null) {
-                    s = scenarioClass.getDeclaredConstructor().newInstance();
-                    s.init(main, game);
-                    scenarios.put(scenario, s);
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
+        pm.registerEvents(new CycleListener(main,game), main);
+        scenariosRegister.add(new VanillaPlus(main,game,ScenarioLG.VANILLA_PLUS));
+        scenariosRegister.add(new RodLess(main,game,ScenarioLG.ROD_LESS));
+        scenariosRegister.add(new CompassTargetLastDeath(main,game,ScenarioLG.COMPASS_TARGET_LAST_DEATH));
+        scenariosRegister.add(new CutClean(main,game,ScenarioLG.CUT_CLEAN));
+        scenariosRegister.add(new DiamondLimit(main,game, ScenarioLG.DIAMOND_LIMIT));
+        scenariosRegister.add(new FastSmelting(main,game,ScenarioLG.FAST_SMELTING));
+        scenariosRegister.add(new FireLess(main,game,ScenarioLG.FIRE_LESS));
+        scenariosRegister.add(new HasteyBoys(main,game,ScenarioLG.HASTEY_BOYS));
+        scenariosRegister.add(new HorseLess(main,game,ScenarioLG.HORSE_LESS));
+        scenariosRegister.add(new NoCleanUp(main,game,ScenarioLG.NO_CLEAN_UP));
+        scenariosRegister.add(new NoFall(main,game,ScenarioLG.NO_FALL));
+        scenariosRegister.add(new NoPoison(main,game,ScenarioLG.NO_POISON));
+        scenariosRegister.add(new NoEggSnowBall(main,game,ScenarioLG.NO_EGG_SNOWBALL));
+        scenariosRegister.add(new SlowBow(main,game,ScenarioLG.SLOW_BOW));
+        scenariosRegister.add(new Timber(main,game,ScenarioLG.TIMBER));
+        scenariosRegister.add(new XpBoost(main,game,ScenarioLG.XP_BOOST));
         update();
     }
 
     public void delete() {
-        PluginManager pm = Bukkit.getPluginManager();
-
 
         for (RegisteredListener event : HandlerList.getRegisteredListeners(main)) {
             HandlerList.unregisterAll(event.getListener());
@@ -61,8 +62,8 @@ public class ScenariosLG {
     }
 
     public void update() {
-        for (ScenarioLG scenario : this.scenarios.keySet()) {
-            scenarios.get(scenario).register(scenario);
+        for (Scenarios scenario : this.scenariosRegister) {
+            scenario.register();
         }
     }
 }

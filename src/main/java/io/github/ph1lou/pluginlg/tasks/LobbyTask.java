@@ -1,9 +1,9 @@
 package io.github.ph1lou.pluginlg.tasks;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.enumlg.StateLG;
 import io.github.ph1lou.pluginlg.game.GameManager;
 import io.github.ph1lou.pluginlg.utils.Title;
+import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -21,11 +21,10 @@ public class LobbyTask extends BukkitRunnable {
         this.game=game;
     }
 
-
     @Override
     public void run() {
 
-        if (game.isState(StateLG.FIN)) {
+        if (game.isState(StateLG.END)) {
             cancel();
             return;
         }
@@ -35,10 +34,13 @@ public class LobbyTask extends BukkitRunnable {
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (game.wft == null) {
                 if (p.isOp() || p.hasPermission("a.use") || p.hasPermission("a.generation.use")) {
-                    Title.sendActionBar(p, game.text.getText(164));
+                    Title.sendActionBar(p, game.translate("werewolf.action_bar.generation"));
                 }
-            } else if (game.wft.getPercentageCompleted() < 100) {
-                Title.sendActionBar(p, String.format(game.text.getText(222), new DecimalFormat("0.0").format(game.wft.getPercentageCompleted())));
+            } else if(game.wft.getPercentageCompleted()<100){
+                Title.sendActionBar(p, game.translate("werewolf.action_bar.progress", new DecimalFormat("0.0").format(game.wft.getPercentageCompleted())));
+            }
+            else{
+                Title.sendActionBar(p, game.translate("werewolf.action_bar.complete"));
             }
         }
 

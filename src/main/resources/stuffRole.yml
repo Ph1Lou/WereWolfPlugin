@@ -1,4 +1,4 @@
-CUPIDON:
+CUPID:
   '0':
     ==: org.bukkit.inventory.ItemStack
     type: ENCHANTED_BOOK
@@ -8,12 +8,12 @@ CUPIDON:
       stored-enchants:
         ARROW_KNOCKBACK: 1
         ARROW_DAMAGE: 1
-LOUP_PERFIDE:
+MISCHIEVOUS_WEREWOLF:
   '0':
     ==: org.bukkit.inventory.ItemStack
     type: TNT
     amount: 5
-SORCIERE:
+WITCH:
   '0':
     ==: org.bukkit.inventory.ItemStack
     type: POTION
@@ -28,18 +28,18 @@ SORCIERE:
     ==: org.bukkit.inventory.ItemStack
     type: POTION
     damage: 16385
-PETITE_FILLE:
+LITTLE_GIRL:
   '0':
     ==: org.bukkit.inventory.ItemStack
     type: TNT
     amount: 5
-SALVATEUR:
+PROTECTOR:
   '0':
     ==: org.bukkit.inventory.ItemStack
     type: POTION
     damage: 16389
     amount: 3
-VOYANTE_BAVARDE:
+CHATTY_SEER:
   '0':
     ==: org.bukkit.inventory.ItemStack
     type: BOOKSHELF
@@ -48,7 +48,7 @@ VOYANTE_BAVARDE:
     ==: org.bukkit.inventory.ItemStack
     type: OBSIDIAN
     amount: 4
-VOYANTE:
+SEER:
   '0':
     ==: org.bukkit.inventory.ItemStack
     type: BOOKSHELF
@@ -58,7 +58,7 @@ VOYANTE:
     type: OBSIDIAN
     amount: 4
 
-CORBEAU:
+RAVEN:
   '0':
     ==: org.bukkit.inventory.ItemStack
     type: ENCHANTED_BOOK
@@ -92,7 +92,7 @@ ASSASSIN:
       meta-type: ENCHANTED
       stored-enchants:
         ARROW_DAMAGE: 3
-TUEUR_EN_SERIE:
+SERIAL_KILLER:
   '0':
     ==: org.bukkit.inventory.ItemStack
     type: ENCHANTED_BOOK
@@ -117,7 +117,7 @@ TUEUR_EN_SERIE:
       meta-type: ENCHANTED
       stored-enchants:
         ARROW_DAMAGE: 3
-MINEUR:
+MINER:
   '0':
     ==: org.bukkit.inventory.ItemStack
     type: DIAMOND_PICKAXE

@@ -1,7 +1,6 @@
 package io.github.ph1lou.pluginlg.game;
-
-import io.github.ph1lou.pluginlg.enumlg.Camp;
-import io.github.ph1lou.pluginlg.enumlg.State;
+import io.github.ph1lou.pluginlgapi.enumlg.Camp;
+import io.github.ph1lou.pluginlgapi.enumlg.State;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -23,7 +22,7 @@ public class EventsLG {
 
 		Location location2 = location.clone();
 		location2.setY(location2.getY()+1);
-		List<String> danger = new ArrayList<>();
+		List<PlayerLG> danger = new ArrayList<>();
 		Block block1 = location.getBlock();
 		Block block2 = location2.getBlock();
 		
@@ -33,20 +32,20 @@ public class EventsLG {
 		Chest chest = (Chest) block1.getState();
 		Sign sign = (Sign) block2.getState();
 		
-		for(String p:game.playerLG.keySet()) {
-			if(!game.playerLG.get(p).isCamp(Camp.VILLAGE) && game.playerLG.get(p).isState(State.LIVING)) {
-				danger.add(p);
+		for(PlayerLG plg:game.playerLG.values()) {
+			if(!plg.getRole().isCamp(Camp.VILLAGER) && plg.isState(State.ALIVE)) {
+				danger.add(plg);
 			}
 		}
 		
 		if (active && !danger.isEmpty()){
 			chest.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE,2));
-			String playername = danger.get((int) Math.floor(new Random(System.currentTimeMillis()).nextFloat()*danger.size()));
-			sign.setLine(1,playername);
+			PlayerLG plg = danger.get((int) Math.floor(new Random(System.currentTimeMillis()).nextFloat()*danger.size()));
+			sign.setLine(1,plg.getName());
 		}
 		else {
 			chest.getInventory().addItem(new ItemStack(Material.BONE,8));
-			sign.setLine(1,game.text.getText(82));
+			sign.setLine(1,game.translate("werewolf.event.on_sign"));
 		}
 		sign.update();
 		location.getBlock().setType(chest.getType());
@@ -73,6 +72,6 @@ public class EventsLG {
 			chest_location.add(location);
 			chest_has_been_open.put(location, false);
 		}
-		Bukkit.broadcastMessage(String.format(game.text.getText(36), nb_target));
+		Bukkit.broadcastMessage(game.translate("werewolf.event.seer_death", nb_target));
 	}
 }

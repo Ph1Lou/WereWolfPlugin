@@ -1,5 +1,8 @@
 package io.github.ph1lou.pluginlg.listener.scenarioslisteners;
 
+import io.github.ph1lou.pluginlg.MainLG;
+import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlgapi.enumlg.ScenarioLG;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -13,6 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Timber extends Scenarios {
+
+    public Timber(MainLG main, GameManager game, ScenarioLG timber) {
+        super(main, game,timber);
+    }
 
     @EventHandler
     public void onBreak(final BlockBreakEvent event) {

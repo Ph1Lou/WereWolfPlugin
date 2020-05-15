@@ -1,17 +1,19 @@
 package io.github.ph1lou.pluginlg.commandlg.roles;
 
 import io.github.ph1lou.pluginlg.MainLG;
+import io.github.ph1lou.pluginlg.classesroles.villageroles.Detective;
+import io.github.ph1lou.pluginlg.classesroles.werewolfroles.FalsifierWereWolf;
 import io.github.ph1lou.pluginlg.commandlg.Commands;
-import io.github.ph1lou.pluginlg.enumlg.Camp;
-import io.github.ph1lou.pluginlg.enumlg.RoleLG;
-import io.github.ph1lou.pluginlg.enumlg.State;
-import io.github.ph1lou.pluginlg.enumlg.StateLG;
 import io.github.ph1lou.pluginlg.game.GameManager;
 import io.github.ph1lou.pluginlg.game.PlayerLG;
-import io.github.ph1lou.pluginlg.savelg.TextLG;
+import io.github.ph1lou.pluginlgapi.enumlg.Camp;
+import io.github.ph1lou.pluginlgapi.enumlg.State;
+import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public class CommandDetective extends Commands {
 
@@ -23,88 +25,100 @@ public class CommandDetective extends Commands {
     @Override
     public void execute(CommandSender sender, String[] args) {
 
-        if (!(sender instanceof Player)) {
-            return;
-        }
         GameManager game = main.currentGame;
+
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(game.translate("werewolf.check.console"));
+            return;
+        }
+
         Player player = (Player) sender;
+        UUID uuid = player.getUniqueId();
 
-        TextLG text = game.text;
-        String playername = player.getName();
-
-        if (!game.playerLG.containsKey(playername)) {
-            player.sendMessage(text.getText(67));
+        if(!game.playerLG.containsKey(uuid)) {
+            player.sendMessage(game.translate("werewolf.check.not_in_game"));
             return;
         }
 
-        PlayerLG plg = game.playerLG.get(playername);
+        PlayerLG plg = game.playerLG.get(uuid);
 
-        if(!game.isState(StateLG.LG)) {
-            player.sendMessage(text.getText(68));
+
+        if (!game.isState(StateLG.GAME)) {
+            player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
             return;
         }
 
-        if (!plg.isRole(RoleLG.DETECTIVE)){
-            player.sendMessage(String.format(text.getText(189),text.translateRole.get(RoleLG.DETECTIVE)));
+        if (!(plg.getRole() instanceof Detective)){
+            player.sendMessage(game.translate("werewolf.check.role", game.translate("werewolf.role.detective.display")));
             return;
         }
+
+        Detective detective = (Detective) plg.getRole();
 
         if (args.length!=2) {
-            player.sendMessage(String.format(text.getText(190),2));
+            player.sendMessage(game.translate("werewolf.check.parameters",2));
             return;
         }
 
-        if(!plg.isState(State.LIVING)){
-            player.sendMessage(text.getText(97));
+        if(!plg.isState(State.ALIVE)){
+            player.sendMessage(game.translate("werewolf.check.death"));
             return;
         }
 
-        if(!plg.hasPower()) {
-            player.sendMessage(text.getText(103));
+        if(!detective.hasPower()) {
+            player.sendMessage(game.translate("werewolf.check.power"));
+            return;
+        }
+
+        if(args[0].equals(args[1])) {
+            player.sendMessage(game.translate("werewolf.check.two_distinct_player"));
             return;
         }
 
         for(String p:args) {
-            if(p.equals(playername)) {
-                player.sendMessage(text.getText(105));
+            if(p.equals(plg.getName())) {
+                player.sendMessage(game.translate("werewolf.check.not_yourself"));
                 return;
             }
         }
 
         for(String p:args) {
-
-            if(Bukkit.getPlayer(p)==null || !game.playerLG.containsKey(p) || game.playerLG.get(p).isState(State.MORT)){
-                player.sendMessage(text.getText(106));
-                return;
+            if(Bukkit.getPlayer(p)==null){
+                UUID playerUUID = Bukkit.getPlayer(p).getUniqueId();
+                if(!game.playerLG.containsKey(playerUUID) || game.playerLG.get(playerUUID).isState(State.DEATH)){
+                    player.sendMessage(game.translate("werewolf.check.player_not_found"));
+                    return;
+                }
             }
         }
 
+        UUID uuid1 = Bukkit.getPlayer(args[0]).getUniqueId();
+        UUID uuid2 = Bukkit.getPlayer(args[1]).getUniqueId();
 
-
-        if(plg.getAffectedPlayer().contains(args[0]) || plg.getAffectedPlayer().contains(args[1])){
-            player.sendMessage(text.getText(114));
+        if(detective.getAffectedPlayers().contains(uuid1) || detective.getAffectedPlayers().contains(uuid2)){
+            player.sendMessage(game.translate("werewolf.role.detective.already_inspect"));
             return;
         }
 
-        PlayerLG plg1 = game.playerLG.get(args[0]);
-        PlayerLG plg2 = game.playerLG.get(args[1]);
+        PlayerLG plg1 = game.playerLG.get(uuid1);
+        PlayerLG plg2 = game.playerLG.get(uuid2);
 
-        plg.addAffectedPlayer(args[0]);
-        plg.addAffectedPlayer(args[1]);
-        plg.setPower(false);
-        Camp isLG1=plg2.getCamp();
-        Camp isLG2=plg1.getCamp();
+        detective.addAffectedPlayer(uuid1);
+        detective.addAffectedPlayer(uuid2);
+        detective.setPower(false);
+        Camp isLG1=plg2.getRole().getCamp();
+        Camp isLG2=plg1.getRole().getCamp();
 
-        if(plg1.isRole(RoleLG.LOUP_FEUTRE)) {
-            isLG2=plg1.getPosterCamp();
+        if(plg1.getRole() instanceof FalsifierWereWolf) {
+            isLG2= ((FalsifierWereWolf) plg1.getRole()).getPosterCamp();
         }
-        if(plg2.isRole(RoleLG.LOUP_FEUTRE)) {
-            isLG1=plg2.getPosterCamp();
+        if(plg2.getRole() instanceof FalsifierWereWolf) {
+            isLG1= ((FalsifierWereWolf) plg2.getRole()).getPosterCamp();
         }
 
         if(isLG1!=isLG2) {
-            player.sendMessage(String.format(text.getText(72),args[0],args[1]));
+            player.sendMessage(game.translate("werewolf.role.detective.opposing_camp",args[0],args[1]));
         }
-        else player.sendMessage(String.format(text.getText(71),args[0],args[1]));
+        else player.sendMessage(game.translate("werewolf.role.detective.same_camp",args[0],args[1]));
     }
 }

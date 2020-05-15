@@ -1,9 +1,12 @@
 package io.github.ph1lou.pluginlg.listener;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.enumlg.Day;
-import io.github.ph1lou.pluginlg.enumlg.RoleLG;
+import io.github.ph1lou.pluginlg.classesroles.InvisibleState;
+import io.github.ph1lou.pluginlg.classesroles.villageroles.LittleGirl;
+import io.github.ph1lou.pluginlg.classesroles.werewolfroles.MischievousWereWolf;
 import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlg.game.PlayerLG;
+import io.github.ph1lou.pluginlgapi.enumlg.Day;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -22,6 +25,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
+import java.util.UUID;
 
 public class SmallFeaturesListener implements Listener {
 
@@ -88,9 +92,19 @@ public class SmallFeaturesListener implements Listener {
                 }
 
                 if (game.isDay(Day.NIGHT) && game.config.getGoldenAppleParticles() == 1) {
-                    String playername = event.getPlayer().getName();
-                    if (game.playerLG.containsKey(playername) && game.playerLG.get(playername).hasPower() && !game.playerLG.get(playername).isRole(RoleLG.PETITE_FILLE) && !game.playerLG.get(playername).isRole(RoleLG.LOUP_PERFIDE)) {
-                        return;
+
+                    UUID uuid = event.getPlayer().getUniqueId();
+                    if (game.playerLG.containsKey(uuid)) {
+                        PlayerLG plg = game.playerLG.get(uuid);
+
+                        if(plg.getRole() instanceof LittleGirl || plg.getRole() instanceof MischievousWereWolf){
+
+                             InvisibleState invisibleState = (InvisibleState) plg.getRole();
+
+                            if(!invisibleState.isInvisible()){
+                                return;
+                            }
+                        }
                     }
                 }
 

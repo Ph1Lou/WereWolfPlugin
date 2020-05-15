@@ -2,19 +2,23 @@ package io.github.ph1lou.pluginlg.listener;
 
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.enumlg.RoleLG;
-import io.github.ph1lou.pluginlg.enumlg.ScenarioLG;
-import io.github.ph1lou.pluginlg.enumlg.ToolLG;
 import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlgapi.UpdateConfigEvent;
+import io.github.ph1lou.pluginlgapi.enumlg.RoleLG;
+import io.github.ph1lou.pluginlgapi.enumlg.ScenarioLG;
+import io.github.ph1lou.pluginlgapi.enumlg.ToolLG;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.wesjd.anvilgui.AnvilGUI;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -31,6 +35,16 @@ public class MenuListener implements Listener{
 	}
 
 	@EventHandler
+	private void onConfigClose(InventoryCloseEvent event) {
+		Inventory inventory=event.getInventory();
+
+		if(game.optionlg.isConfigInventory(inventory)){
+			Bukkit.getPluginManager().callEvent(new UpdateConfigEvent(event.getPlayer().getUniqueId()));
+		}
+	}
+
+
+	@EventHandler
     private void onSousMenu(InventoryClickEvent event) {
 
 		InventoryView view = event.getView();
@@ -39,7 +53,7 @@ public class MenuListener implements Listener{
 
 		if (current != null) {
 
-			if (view.getTitle().equalsIgnoreCase(game.text.getText(175))) {
+			if (view.getTitle().equalsIgnoreCase(game.translate("werewolf.menu.name"))) {
 
 				event.setCancelled(true);
 
@@ -75,10 +89,10 @@ public class MenuListener implements Listener{
 				}
 
 			}		
-			else if(view.getTitle().equals(game.text.getText(178))){
+			else if(view.getTitle().equals(game.translate("werewolf.menu.global.name"))){
 				event.setCancelled(true);
 				if(current.getType()==Material.STAINED_CLAY){
-                    game.config.configValues.put(ToolLG.values()[(event.getSlot() - 9)], !game.config.configValues.get(ToolLG.values()[(event.getSlot() - 9)]));
+                    game.config.getConfigValues().put(ToolLG.values()[(event.getSlot() - 9)], !game.config.getConfigValues().get(ToolLG.values()[(event.getSlot() - 9)]));
                     game.optionlg.updateSelectionTool();
                 }
 				else if(current.getType()==Material.COMPASS) {
@@ -86,10 +100,10 @@ public class MenuListener implements Listener{
 				}
 			}
 
-			else if(view.getTitle().equals(game.text.getText(76))){
+			else if(view.getTitle().equals(game.translate("werewolf.menu.scenarios.name"))){
 				event.setCancelled(true);
 				if(current.getType()==Material.STAINED_CLAY) {
-                    game.config.scenarioValues.put(ScenarioLG.values()[(event.getSlot() - 9)], !game.config.scenarioValues.get(ScenarioLG.values()[(event.getSlot() - 9)]));
+                    game.config.getScenarioValues().put(ScenarioLG.values()[(event.getSlot() - 9)], !game.config.getScenarioValues().get(ScenarioLG.values()[(event.getSlot() - 9)]));
                     game.optionlg.updateSelectionScenario();
                 }
 				else if(current.getType()==Material.COMPASS) {
@@ -97,7 +111,7 @@ public class MenuListener implements Listener{
 				}
 			}
 			
-			else if(view.getTitle().equals(game.text.getText(176))) {
+			else if(view.getTitle().equals(game.translate("werewolf.menu.roles.name"))) {
 
 				event.setCancelled(true);
 
@@ -113,7 +127,7 @@ public class MenuListener implements Listener{
                                 player.getInventory().addItem(i);
                             }
                         }
-                        TextComponent msg = new TextComponent(game.text.getText(198));
+                        TextComponent msg = new TextComponent(game.translate("werewolf.commands.admin.loot_role.valid"));
 						msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/a stuffRole " + j));
 						player.spigot().sendMessage(msg);
                         player.closeInventory();
@@ -133,26 +147,34 @@ public class MenuListener implements Listener{
 				}
 
 			}
-			else if(view.getTitle().equals(game.text.getText(179))) {
+			else if(view.getTitle().equals(game.translate("werewolf.menu.border.name"))) {
 
 				event.setCancelled(true);
 
 				if(current.getType()==Material.STONE_BUTTON) {
 					if(event.getSlot()==3){
-						game.optionlg.selectMinusBorder();
+						if(game.config.getBorderMax()>=100){
+							game.config.setBorderMax(game.config.getBorderMax()-100);
+						}
 					}
 					else if(event.getSlot()==5) {
-						game.optionlg.selectPlusBorder();
+						game.config.setBorderMax(game.config.getBorderMax()+100);
 					}
-				}
-				else if(current.getType()==Material.GLASS){
-					game.optionlg.updateSelectionBorder(event.getSlot()-9);
+					else if(event.getSlot()==12) {
+						if(game.config.getBorderMin()>=100){
+							game.config.setBorderMin(game.config.getBorderMin()-100);
+						}
+					}
+					else if(event.getSlot()==14) {
+						game.config.setBorderMin(game.config.getBorderMin()+100);
+					}
+					game.optionlg.updateSelectionBorder();
 				}
 				else if(current.getType()==Material.COMPASS) {
 					game.optionlg.toolBar(player);
 				}
 			}
-			else if(view.getTitle().equals(game.text.getText(177))) {
+			else if(view.getTitle().equals(game.translate("werewolf.menu.timers.name"))) {
 
 				event.setCancelled(true);
 
@@ -183,7 +205,7 @@ public class MenuListener implements Listener{
 					game.optionlg.toolBar(player);
 				}
 			}
-			else if(view.getTitle().equals(game.text.getText(180))) {
+			else if(view.getTitle().equals(game.translate("werewolf.menu.save.name"))) {
 
 				event.setCancelled(true);
 
@@ -214,7 +236,7 @@ public class MenuListener implements Listener{
 					game.optionlg.toolBar(player);
 				}
 			}
-			else if(view.getTitle().equals(game.text.getText(77))) {
+			else if(view.getTitle().equals(game.translate("werewolf.menu.stuff.name"))) {
 
 				event.setCancelled(true);
 
@@ -229,7 +251,7 @@ public class MenuListener implements Listener{
 						inventory.setItem(j, game.stufflg.getStartLoot().getItem(j));
 					}
 
-					TextComponent msg = new TextComponent(game.text.getText(127));
+					TextComponent msg = new TextComponent(game.translate("werewolf.commands.admin.stuff_start.valid"));
 					msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/a lootStart"));
 					player.spigot().sendMessage(msg);
 					player.closeInventory();
@@ -246,7 +268,7 @@ public class MenuListener implements Listener{
 						}
 					}
 
-					TextComponent msg = new TextComponent(game.text.getText(128));
+					TextComponent msg = new TextComponent(game.translate("werewolf.commands.admin.loot_death.valid"));
 					msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/a lootDeath"));
 					player.spigot().sendMessage(msg);
                     player.closeInventory();
@@ -266,7 +288,7 @@ public class MenuListener implements Listener{
 				}
 
 			}
-			else if(view.getTitle().equals(game.text.getText(79))) {
+			else if(view.getTitle().equals(game.translate("werewolf.menu.enchantments.name"))) {
 				event.setCancelled(true);
 
 				if(current.getType()==Material.COMPASS) {
@@ -322,7 +344,7 @@ public class MenuListener implements Listener{
 					game.optionlg.enchantmentTool(player);
 				}
 			}
-			else if(view.getTitle().equals(game.text.getText(75))) {
+			else if(view.getTitle().equals(game.translate("werewolf.menu.advanced_tool.name"))) {
 				event.setCancelled(true);
 
 				if(current.getType()==Material.COMPASS) {
@@ -427,7 +449,7 @@ public class MenuListener implements Listener{
 					game.optionlg.advancedTool(player);
 				}
 			}
-			else if(view.getTitle().equals(game.text.getText(74))) {
+			else if(view.getTitle().equals(game.translate("werewolf.menu.languages.name"))) {
 
 				event.setCancelled(true);
 
@@ -435,20 +457,22 @@ public class MenuListener implements Listener{
 					game.optionlg.toolBar(player);
 				}
 				else if(current.getType()==Material.BANNER){
-					if(event.getSlot()==2){
-						game.setLang("en");
+					if(event.getSlot()==4){
+						main.getConfig().set("lang","fr");
 					}
-					else if(event.getSlot()==4){
-						game.setLang("fr");
+					/*
+					else if(event.getSlot()==2){
+						main.getConfig().set("lang","en");
 					}
 					else if(event.getSlot()==6){
-						game.setLang("custom");
+						main.getConfig().set("lang","custom");
+
 					}
-					main.lang.changeLanguage(game);
-					player.closeInventory();
+					player.closeInventory();*/
+
 				}
 			}
-			else if(view.getTitle().equals(game.text.getText(70))) {
+			else if(view.getTitle().equals(game.translate("werewolf.menu.whitelist.name"))) {
 				event.setCancelled(true);
 
 				if(current.getType()==Material.COMPASS) {

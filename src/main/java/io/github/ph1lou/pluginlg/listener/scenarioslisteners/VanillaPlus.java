@@ -1,5 +1,8 @@
 package io.github.ph1lou.pluginlg.listener.scenarioslisteners;
 
+import io.github.ph1lou.pluginlg.MainLG;
+import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlgapi.enumlg.ScenarioLG;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -10,6 +13,10 @@ import org.bukkit.inventory.ItemStack;
 
 public class VanillaPlus extends Scenarios {
 
+
+    public VanillaPlus(MainLG main, GameManager game, ScenarioLG scenario) {
+        super(main, game, scenario);
+    }
 
     @EventHandler
     private void onGravelBreak(BlockBreakEvent event) {

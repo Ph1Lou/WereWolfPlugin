@@ -1,16 +1,17 @@
 package io.github.ph1lou.pluginlg.commandlg.roles;
 
 import io.github.ph1lou.pluginlg.MainLG;
+import io.github.ph1lou.pluginlg.classesroles.villageroles.Cupid;
 import io.github.ph1lou.pluginlg.commandlg.Commands;
-import io.github.ph1lou.pluginlg.enumlg.RoleLG;
-import io.github.ph1lou.pluginlg.enumlg.State;
-import io.github.ph1lou.pluginlg.enumlg.StateLG;
 import io.github.ph1lou.pluginlg.game.GameManager;
 import io.github.ph1lou.pluginlg.game.PlayerLG;
-import io.github.ph1lou.pluginlg.savelg.TextLG;
+import io.github.ph1lou.pluginlgapi.enumlg.State;
+import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public class CommandCupid extends Commands {
 
@@ -22,72 +23,79 @@ public class CommandCupid extends Commands {
     @Override
     public void execute(CommandSender sender, String[] args) {
 
-        if (!(sender instanceof Player)){
+        GameManager game = main.currentGame;
+
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(game.translate("werewolf.check.console"));
             return;
         }
 
-     GameManager game = main.currentGame;
-
-        TextLG text = game.text;
         Player player = (Player) sender;
         String playername = player.getName();
+        UUID uuid = player.getUniqueId();
 
-        if(!game.playerLG.containsKey(playername)) {
-            player.sendMessage(text.getText(67));
+        if(!game.playerLG.containsKey(uuid)) {
+            player.sendMessage(game.translate("werewolf.check.not_in_game"));
             return;
         }
 
-        PlayerLG plg = game.playerLG.get(playername);
+        PlayerLG plg = game.playerLG.get(uuid);
 
-        if(!game.isState(StateLG.LG)) {
-            player.sendMessage(text.getText(68));
+
+        if (!game.isState(StateLG.GAME)) {
+            player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
             return;
         }
 
-        if (!plg.isRole(RoleLG.CUPIDON)){
-            player.sendMessage(String.format(text.getText(189),text.translateRole.get(RoleLG.CUPIDON)));
+        if (!(plg.getRole() instanceof Cupid)){
+            player.sendMessage(game.translate("werewolf.check.role", game.translate("werewolf.role.cupid.display")));
             return;
         }
+
+        Cupid cupid = (Cupid) plg.getRole();
 
         if (args.length!=2) {
-            player.sendMessage(String.format(text.getText(190),2));
+            player.sendMessage(game.translate("werewolf.check.parameters",2));
             return;
         }
 
-        if(!plg.isState(State.LIVING)){
-            player.sendMessage(text.getText(97));
+        if(!plg.isState(State.ALIVE)){
+            player.sendMessage(game.translate("werewolf.check.death"));
             return;
         }
 
-        if(!plg.hasPower()) {
-            player.sendMessage(text.getText(103));
+        if(!cupid.hasPower()) {
+            player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
 
         if(args[0].equals(args[1])) {
-            player.sendMessage(text.getText(104));
+            player.sendMessage(game.translate("werewolf.check.two_distinct_player"));
             return;
         }
 
         for(String p:args) {
             if(p.equals(playername)) {
-                player.sendMessage(text.getText(105));
+                player.sendMessage(game.translate("werewolf.check.not_yourself"));
                 return;
             }
         }
 
         for(String p:args) {
-            if(Bukkit.getPlayer(p)==null || !game.playerLG.containsKey(p) || game.playerLG.get(p).isState(State.MORT)) {
-                player.sendMessage(text.getText(106));
-                return;
+            if(Bukkit.getPlayer(p)==null){
+                UUID playerUUID = Bukkit.getPlayer(p).getUniqueId();
+                if(!game.playerLG.containsKey(playerUUID) || game.playerLG.get(playerUUID).isState(State.DEATH)){
+                    player.sendMessage(game.translate("werewolf.check.player_not_found"));
+                    return;
+                }
             }
         }
 
         for(String p:args) {
-            plg.addAffectedPlayer(p);
+            cupid.addAffectedPlayer(Bukkit.getPlayer(p).getUniqueId());
         }
-        plg.setPower(false);
+        cupid.setPower(false);
 
-        sender.sendMessage(String.format(text.powerHasBeenUse.get(RoleLG.CUPIDON),args[0],args[1]));
+        sender.sendMessage(game.translate("werewolf.role.cupid.designation_perform",args[0],args[1]));
     }
 }

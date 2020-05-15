@@ -4,7 +4,7 @@ package io.github.ph1lou.pluginlg.commandlg;
 import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlg.commandlg.roles.*;
 import io.github.ph1lou.pluginlg.commandlg.utilities.*;
-import io.github.ph1lou.pluginlg.savelg.TextLG;
+import io.github.ph1lou.pluginlg.game.GameManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -16,37 +16,36 @@ public class CommandLG implements TabExecutor {
     
     private final Map<String, Commands> listCommands = new HashMap<>();
 
-    public CommandLG(MainLG main, TextLG text) {
-        
-        
-        listCommands.put(text.getText(230), new CommandSeer(main));
-        listCommands.put(text.getText(231), new CommandCupid(main));
-        listCommands.put(text.getText(232), new CommandDetective(main));
-        listCommands.put(text.getText(233), new CommandFallenAngel(main));
-        listCommands.put(text.getText(234), new CommandFox(main));
-        listCommands.put(text.getText(235), new CommandGuardianAngel(main));
-        listCommands.put(text.getText(236), new CommandInfect(main));
-        listCommands.put(text.getText(237), new CommandLovers(main));
-        listCommands.put(text.getText(238), new CommandProtector(main));
-        listCommands.put(text.getText(239), new CommandRaven(main));
-        listCommands.put(text.getText(240), new CommandCitizenCancelVote(main));
-        listCommands.put(text.getText(241), new CommandCitizenSeeVote(main));
-        listCommands.put(text.getText(242), new CommandTroubleMaker(main));
-        listCommands.put(text.getText(243), new CommandWereWolf(main));
-        listCommands.put(text.getText(244), new CommandWildChild(main));
-        listCommands.put(text.getText(245), new CommandCompo(main));
-        listCommands.put(text.getText(246), new CommandComedian(main));
+    public CommandLG(MainLG main,GameManager game) {
+
+        listCommands.put(game.translate("werewolf.role.seer.command"), new CommandSeer(main));
+        listCommands.put(game.translate("werewolf.role.cupid.command"), new CommandCupid(main));
+        listCommands.put(game.translate("werewolf.role.detective.command"), new CommandDetective(main));
+        listCommands.put(game.translate("werewolf.role.angel.command_2"), new CommandFallenAngel(main));
+        listCommands.put(game.translate("werewolf.role.fox.command"), new CommandFox(main));
+        listCommands.put(game.translate("werewolf.role.angel.command_1"), new CommandGuardianAngel(main));
+        listCommands.put(game.translate("werewolf.role.infect_father_of_the_wolves.command"), new CommandInfect(main));
+        listCommands.put(game.translate("werewolf.role.lover.command"), new CommandLovers(main));
+        listCommands.put(game.translate("werewolf.role.protector.command"), new CommandProtector(main));
+        listCommands.put(game.translate("werewolf.role.raven.command"), new CommandRaven(main));
+        listCommands.put(game.translate("werewolf.role.citizen.command_2"), new CommandCitizenCancelVote(main));
+        listCommands.put(game.translate("werewolf.role.citizen.command_1"), new CommandCitizenSeeVote(main));
+        listCommands.put(game.translate("werewolf.role.troublemaker.command"), new CommandTroubleMaker(main));
+        listCommands.put(game.translate("werewolf.role.werewolf.command"), new CommandWereWolf(main));
+        listCommands.put(game.translate("werewolf.role.wild_child.command"), new CommandWildChild(main));
+        listCommands.put(game.translate("werewolf.menu.roles.command_2"), new CommandCompo(main));
+        listCommands.put(game.translate("werewolf.role.comedian.command"), new CommandComedian(main));
         listCommands.put("h", new CommandHelp(main));
-        listCommands.put(text.getText(247), new CommandRole(main));
-        listCommands.put(text.getText(248), new CommandRules(main));
-        listCommands.put(text.getText(249), new CommandScenarios(main));
-        listCommands.put(text.getText(250), new CommandStuff(main));
-        listCommands.put(text.getText(251), new CommandTimer(main));
-        listCommands.put(text.getText(252), new CommandVote(main));
-        listCommands.put(text.getText(253), new CommandWitch(main));
-        listCommands.put(text.getText(160), new CommandTrapper(main));
-        listCommands.put(text.getText(110), new CommandAngelRegen(main));
-        listCommands.put(text.getText(65), new CommandSuccubus(main));
+        listCommands.put(game.translate("werewolf.menu.roles.command_1"), new CommandRole(main));
+        listCommands.put(game.translate("werewolf.menu.global.command"), new CommandRules(main));
+        listCommands.put(game.translate("werewolf.menu.scenarios.command"), new CommandScenarios(main));
+        listCommands.put(game.translate("werewolf.menu.enchantments.command"), new CommandEnchantment(main));
+        listCommands.put(game.translate("werewolf.menu.timers.command"), new CommandTimer(main));
+        listCommands.put(game.translate("werewolf.vote.command"), new CommandVote(main));
+        listCommands.put(game.translate("werewolf.role.witch.command"), new CommandWitch(main));
+        listCommands.put(game.translate("werewolf.role.trapper.command"), new CommandTrapper(main));
+        listCommands.put(game.translate("werewolf.role.guardian_angel.command"), new CommandAngelRegen(main));
+        listCommands.put(game.translate("werewolf.role.succubus.command"), new CommandSuccubus(main));
     }
 
 

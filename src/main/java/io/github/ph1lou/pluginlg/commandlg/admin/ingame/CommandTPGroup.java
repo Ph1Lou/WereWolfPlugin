@@ -2,14 +2,15 @@ package io.github.ph1lou.pluginlg.commandlg.admin.ingame;
 
 import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlg.commandlg.Commands;
-import io.github.ph1lou.pluginlg.enumlg.State;
-import io.github.ph1lou.pluginlg.enumlg.StateLG;
 import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlg.savelg.TextLG;
+import io.github.ph1lou.pluginlgapi.enumlg.State;
+import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public class CommandTPGroup extends Commands {
 
@@ -21,36 +22,37 @@ public class CommandTPGroup extends Commands {
     @Override
     public void execute(CommandSender sender, String[] args) {
 
-        if (!(sender instanceof Player)) {
-            return;
-        }
 
-     GameManager game = main.currentGame;
+        GameManager game = main.currentGame;
 
-        TextLG text = game.text;
 
         if (!sender.hasPermission("a.use") && !sender.hasPermission("a.tpGroup.use") && !game.getModerators().contains(((Player) sender).getUniqueId()) && !game.getHosts().contains(((Player) sender).getUniqueId())) {
-            sender.sendMessage(text.getText(116));
+            sender.sendMessage(game.translate("werewolf.check.permission_denied"));
             return;
         }
         
 
         if (args.length != 1 && args.length != 2) {
-            sender.sendMessage(text.getText(54));
+            sender.sendMessage(game.translate("werewolf.check.player_input"));
+            return;
+        }
+        if(Bukkit.getPlayer(args[0])==null){
+            sender.sendMessage(game.translate("werewolf.check.offline_player"));
+            return;
+        }
+        UUID argUUID = Bukkit.getPlayer(args[0]).getUniqueId();
+
+        if (!game.playerLG.containsKey(argUUID)) {
+            sender.sendMessage(game.translate("werewolf.check.player_not_found"));
             return;
         }
 
-        if (!game.playerLG.containsKey(args[0]) || Bukkit.getPlayer(args[0]) == null) {
-            sender.sendMessage(text.getText(132));
+        if (!game.isState(StateLG.GAME)) {
+            sender.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
             return;
         }
 
-        if (!game.isState(StateLG.LG)) {
-            sender.sendMessage(text.getText(144));
-            return;
-        }
-
-        if (!game.playerLG.get(args[0]).isState(State.LIVING)) {
+        if (!game.playerLG.get(argUUID).isState(State.ALIVE)) {
             return;
         }
         int d = 20;
@@ -58,7 +60,7 @@ public class CommandTPGroup extends Commands {
         double r = Math.random() * Bukkit.getOnlinePlayers().size();
         Player target = Bukkit.getPlayer(args[0]);
         Location location = target.getLocation();
-
+        StringBuilder sb = new StringBuilder();
         try {
             if (args.length == 2) {
                 d = Integer.parseInt(args[1]);
@@ -66,12 +68,15 @@ public class CommandTPGroup extends Commands {
         } catch (NumberFormatException ignored) {
         }
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (size > 0 && game.playerLG.containsKey(p.getName()) && game.playerLG.get(p.getName()).isState(State.LIVING)) {
+            UUID uuid = p.getUniqueId();
+            if (size > 0 && game.playerLG.containsKey(uuid) && game.playerLG.get(uuid).isState(State.ALIVE)) {
                 if (p.getLocation().distance(location) <= d) {
                     size--;
-                    game.death_manage.transportation(p.getName(), r, text.getText(93));
+                    sb.append(p.getName()).append(" ");
+                    game.death_manage.transportation(uuid, r, game.translate("werewolf.commands.admin.tp_group.perform"));
                 }
             }
         }
+        Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.tp_group.broadcast",sb.toString()));
     }
 }

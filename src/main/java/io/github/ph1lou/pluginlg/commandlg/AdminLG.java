@@ -1,6 +1,7 @@
 package io.github.ph1lou.pluginlg.commandlg;
 
 import io.github.ph1lou.pluginlg.MainLG;
+import io.github.ph1lou.pluginlg.commandlg.admin.CommandGeneration;
 import io.github.ph1lou.pluginlg.commandlg.admin.CommandStop;
 import io.github.ph1lou.pluginlg.commandlg.admin.ingame.*;
 import org.bukkit.command.Command;
@@ -15,7 +16,7 @@ public class AdminLG implements TabExecutor {
 
     public AdminLG(MainLG main) {
 
-        listAdminCommands.put("setGameName", new CommandSetGameName(main));
+        listAdminCommands.put("name", new CommandName(main));
         listAdminCommands.put("start", new CommandStart(main));
         listAdminCommands.put("chat", new CommandChat(main));
         listAdminCommands.put("info", new CommandInfo(main));

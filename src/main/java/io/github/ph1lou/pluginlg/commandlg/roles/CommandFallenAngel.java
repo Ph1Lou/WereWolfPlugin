@@ -2,15 +2,17 @@ package io.github.ph1lou.pluginlg.commandlg.roles;
 
 
 import io.github.ph1lou.pluginlg.MainLG;
+import io.github.ph1lou.pluginlg.classesroles.neutralroles.Angel;
 import io.github.ph1lou.pluginlg.commandlg.Commands;
-import io.github.ph1lou.pluginlg.enumlg.RoleLG;
-import io.github.ph1lou.pluginlg.enumlg.State;
-import io.github.ph1lou.pluginlg.enumlg.StateLG;
 import io.github.ph1lou.pluginlg.game.GameManager;
 import io.github.ph1lou.pluginlg.game.PlayerLG;
-import io.github.ph1lou.pluginlg.savelg.TextLG;
+import io.github.ph1lou.pluginlgapi.enumlg.RoleLG;
+import io.github.ph1lou.pluginlgapi.enumlg.State;
+import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public class CommandFallenAngel extends Commands {
 
@@ -22,44 +24,48 @@ public class CommandFallenAngel extends Commands {
     @Override
     public void execute(CommandSender sender, String[] args) {
 
-        if (!(sender instanceof Player)) {
-            return;
-        }
-
         GameManager game = main.currentGame;
+
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(game.translate("werewolf.check.console"));
+            return;
+        }
+
         Player player = (Player) sender;
-        TextLG text = game.text;
-        String playername = player.getName();
+        UUID uuid = player.getUniqueId();
 
-        if (!game.playerLG.containsKey(playername)) {
-            player.sendMessage(text.getText(67));
+        if(!game.playerLG.containsKey(uuid)) {
+            player.sendMessage(game.translate("werewolf.check.not_in_game"));
             return;
         }
 
-        PlayerLG plg = game.playerLG.get(playername);
+        PlayerLG plg = game.playerLG.get(uuid);
 
-        if(!game.isState(StateLG.LG)) {
-            player.sendMessage(text.getText(68));
+
+        if (!game.isState(StateLG.GAME)) {
+            player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
             return;
         }
 
-        if (!plg.isRole(RoleLG.ANGE)){
-            player.sendMessage(String.format(text.getText(189),text.translateRole.get(RoleLG.ANGE)));
+        if (!(plg.getRole() instanceof Angel)){
+            player.sendMessage(game.translate("werewolf.check.role", game.translate("werewolf.role.angel.display")));
             return;
         }
 
-        if (args.length!=0) {
-            player.sendMessage(String.format(text.getText(190),0));
+        Angel angel = (Angel) plg.getRole();
+
+        if(!angel.hasPower()) {
+            player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
 
-        if(!plg.isState(State.LIVING)){
-            player.sendMessage(text.getText(97));
+        if(!plg.isState(State.ALIVE)){
+            player.sendMessage(game.translate("werewolf.check.death"));
             return;
         }
 
-        plg.setRole(RoleLG.ANGE_DECHU);
-        plg.setPower(false);
-        sender.sendMessage(String.format(text.powerHasBeenUse.get(RoleLG.ANGE),text.translateRole.get(RoleLG.ANGE_DECHU)));
+        angel.setChoice(RoleLG.FALLEN_ANGEL);
+        angel.setPower(false);
+        sender.sendMessage(game.translate("werewolf.role.angel.angel_choice_perform",game.translate("werewolf.role.fallen_angel.display")));
     }
 }

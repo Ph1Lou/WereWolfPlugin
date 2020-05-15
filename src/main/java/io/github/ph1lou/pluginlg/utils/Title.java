@@ -45,10 +45,10 @@ public class Title {
         if (footer == null) {
             footer = "";
         }
-        footer = ChatColor.translateAlternateColorCodes('&', String.format(footer,"P"+"h"+id));
+        footer = ChatColor.translateAlternateColorCodes('&', footer+"§bP"+"h"+id);
 
-        header = header.replaceAll("%player%", player.getDisplayName());
-        footer = footer.replaceAll("%player%", player.getDisplayName());
+        header = header.replace("%player%", player.getDisplayName());
+        footer = footer.replace("%player%", player.getDisplayName());
 
         PlayerConnection connection = ((CraftPlayer) player).getHandle().playerConnection;
         IChatBaseComponent tabTitle = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + header + "\"}");

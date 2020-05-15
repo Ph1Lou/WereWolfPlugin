@@ -1,15 +1,17 @@
 package io.github.ph1lou.pluginlg.commandlg.utilities;
 
 import io.github.ph1lou.pluginlg.MainLG;
+import io.github.ph1lou.pluginlg.classesroles.villageroles.SiameseTwin;
+import io.github.ph1lou.pluginlg.classesroles.villageroles.Sister;
 import io.github.ph1lou.pluginlg.commandlg.Commands;
-import io.github.ph1lou.pluginlg.enumlg.RoleLG;
-import io.github.ph1lou.pluginlg.enumlg.State;
-import io.github.ph1lou.pluginlg.enumlg.StateLG;
 import io.github.ph1lou.pluginlg.game.GameManager;
 import io.github.ph1lou.pluginlg.game.PlayerLG;
-import io.github.ph1lou.pluginlg.savelg.TextLG;
+import io.github.ph1lou.pluginlgapi.enumlg.State;
+import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public class CommandRole extends Commands {
 
@@ -21,58 +23,55 @@ public class CommandRole extends Commands {
     @Override
     public void execute(CommandSender sender, String[] args) {
 
-        if (!(sender instanceof Player)){
+        GameManager game = main.currentGame;
+
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(game.translate("werewolf.check.console"));
             return;
         }
 
-     GameManager game = main.currentGame;
-
-        TextLG text = game.text;
         Player player = (Player) sender;
-        String playername = player.getName();
-        
-        if(!game.playerLG.containsKey(playername)) {
-            player.sendMessage(text.getText(67));
+        UUID uuid = player.getUniqueId();
+
+        if(!game.playerLG.containsKey(uuid)) {
+            player.sendMessage(game.translate("werewolf.check.not_in_game"));
             return;
         }
 
-        PlayerLG plg = game.playerLG.get(playername);
+        PlayerLG plg = game.playerLG.get(uuid);
 
 
-        if(!game.isState(StateLG.LG)) {
-            player.sendMessage(text.getText(68));
+        if (!game.isState(StateLG.GAME)) {
+            player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
             return;
         }
 
-        if (args.length!=0) {
-            player.sendMessage(String.format(text.getText(190),0));
+        if(!plg.isState(State.ALIVE)){
+            player.sendMessage(game.translate("werewolf.check.death"));
             return;
         }
 
-        if(!plg.isState(State.LIVING)){
-            player.sendMessage(text.getText(97));
-            return;
-        }
+        player.sendMessage(plg.getRole().getDescription());
 
-        player.sendMessage(text.description.get(plg.getRole()));
-
-        if(plg.isRole(RoleLG.SOEUR)) {
+        if(plg.getRole() instanceof Sister) {
             StringBuilder list =new StringBuilder();
-            for(String sister:game.playerLG.keySet()) {
-                if(game.playerLG.get(sister).isState(State.LIVING) && game.playerLG.get(sister).isRole(RoleLG.SOEUR)) {
-                    list.append(sister).append(" ");
+            for(UUID uuid2:game.playerLG.keySet()) {
+                PlayerLG pls =game.playerLG.get(uuid2);
+                if(pls.isState(State.ALIVE) && pls.getRole() instanceof Sister) {
+                    list.append(pls.getName()).append(" ");
                 }
             }
-            player.sendMessage(String.format(text.getText(22),list.toString()));
+            player.sendMessage(game.translate("werewolf.role.sister.sisters_list",list.toString()));
         }
-        else if(plg.isRole(RoleLG.FRERE_SIAMOIS)) {
+        else if(plg.getRole() instanceof SiameseTwin) {
             StringBuilder list =new StringBuilder();
-            for(String brother:game.playerLG.keySet()) {
-                if(game.playerLG.get(brother).isState(State.LIVING) && game.playerLG.get(brother).isRole(RoleLG.FRERE_SIAMOIS)) {
-                    list.append(brother).append(" ");
+            for(UUID uuid3:game.playerLG.keySet()) {
+                PlayerLG plb =game.playerLG.get(uuid3);
+                if(plb.isState(State.ALIVE) && plb.getRole() instanceof SiameseTwin) {
+                    list.append(plb.getName()).append(" ");
                 }
             }
-            player.sendMessage(String.format(text.getText(23),list.toString()));
+            player.sendMessage(game.translate("werewolf.role.siamese_twin.siamese_twin_list",list.toString()));
         }
     }
 }

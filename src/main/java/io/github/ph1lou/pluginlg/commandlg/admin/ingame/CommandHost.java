@@ -3,10 +3,11 @@ package io.github.ph1lou.pluginlg.commandlg.admin.ingame;
 import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlg.savelg.TextLG;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public class CommandHost extends Commands {
 
@@ -18,38 +19,37 @@ public class CommandHost extends Commands {
     @Override
     public void execute(CommandSender sender, String[] args) {
 
-        if (!(sender instanceof Player)) {
+        GameManager game = main.currentGame;
+
+        if (!sender.hasPermission("a.use") && !sender.hasPermission("a.host.use") && !game.getHosts().contains(((Player) sender).getUniqueId())) {
+            sender.sendMessage(game.translate("werewolf.check.permission_denied"));
             return;
         }
 
-        GameManager game = main.currentGame;
-
-        TextLG text = game.text;
-
-        if (!sender.hasPermission("a.use") && !sender.hasPermission("a.host.use") && !game.getHosts().contains(((Player) sender).getUniqueId())) {
-            sender.sendMessage(text.getText(116));
+        if (args.length == 0) {
+            sender.sendMessage(game.translate("werewolf.check.player_input"));
             return;
         }
 
         if(Bukkit.getPlayer(args[0])==null){
-            sender.sendMessage(game.text.getText(132));
+            sender.sendMessage(game.translate("werewolf.check.offline_player"));
             return;
         }
-
         Player host = Bukkit.getPlayer(args[0]);
+        UUID uuid = host.getUniqueId();
 
-        if(game.getHosts().size()==1){
-            sender.sendMessage(game.text.getText(301));
-            return;
-        }
-
-        if(game.getHosts().contains(host.getUniqueId())){
-            Bukkit.broadcastMessage(String.format(game.text.getText(302), args[0]));
+        if(game.getHosts().contains(uuid)){
+            Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.host.remove", args[0]));
             game.getHosts().remove(host.getUniqueId());
-            return;
         }
-
-        game.getHosts().add(host.getUniqueId());
-        Bukkit.broadcastMessage(String.format(game.text.getText(304), args[0]));
+        else{
+            if(!game.playerLG.containsKey(uuid)){
+                sender.sendMessage(game.translate("werewolf.check.not_in_game_player"));
+                return;
+            }
+            game.getHosts().add(uuid);
+            Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.host.add", args[0]));
+        }
+        game.optionlg.updateNameTag();
     }
 }

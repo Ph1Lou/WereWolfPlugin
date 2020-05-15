@@ -2,9 +2,8 @@ package io.github.ph1lou.pluginlg.commandlg.admin.ingame;
 
 import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlg.commandlg.Commands;
-import io.github.ph1lou.pluginlg.enumlg.StateLG;
 import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlg.savelg.TextLG;
+import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
 import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -20,21 +19,21 @@ public class CommandLootDeath extends Commands {
     @Override
     public void execute(CommandSender sender, String[] args) {
 
+        GameManager game = main.currentGame;
+
         if (!(sender instanceof Player)) {
+            sender.sendMessage(game.translate("werewolf.check.console"));
             return;
         }
 
-     GameManager game = main.currentGame;
-
-        TextLG text = game.text;
 
         if (!sender.hasPermission("a.use") && !sender.hasPermission("a.lootDeath.use") && !game.getHosts().contains(((Player) sender).getUniqueId())) {
-            sender.sendMessage(text.getText(116));
+            sender.sendMessage(game.translate("werewolf.check.permission_denied"));
             return;
         }
 
         if (!game.isState(StateLG.LOBBY)) {
-            sender.sendMessage(text.getText(119));
+            sender.sendMessage(game.translate("werewolf.check.already_begin"));
             return;
         }
         game.stufflg.clearDeathLoot();
@@ -43,7 +42,7 @@ public class CommandLootDeath extends Commands {
                 game.stufflg.addDeathLoot(i);
             }
         }
-        sender.sendMessage(text.getText(152));
+        sender.sendMessage(game.translate("werewolf.commands.admin.loot_death.perform"));
         ((Player) sender).getInventory().clear();
         ((Player) sender).setGameMode(GameMode.ADVENTURE);
     }

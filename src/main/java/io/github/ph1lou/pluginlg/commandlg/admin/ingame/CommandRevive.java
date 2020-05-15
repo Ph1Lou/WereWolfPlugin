@@ -1,16 +1,21 @@
 package io.github.ph1lou.pluginlg.commandlg.admin.ingame;
 
 import io.github.ph1lou.pluginlg.MainLG;
+import io.github.ph1lou.pluginlg.classesroles.InvisibleState;
+import io.github.ph1lou.pluginlg.classesroles.RolesImpl;
+import io.github.ph1lou.pluginlg.classesroles.villageroles.LittleGirl;
+import io.github.ph1lou.pluginlg.classesroles.werewolfroles.MischievousWereWolf;
 import io.github.ph1lou.pluginlg.commandlg.Commands;
-import io.github.ph1lou.pluginlg.enumlg.RoleLG;
-import io.github.ph1lou.pluginlg.enumlg.State;
-import io.github.ph1lou.pluginlg.enumlg.StateLG;
 import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlg.savelg.TextLG;
+import io.github.ph1lou.pluginlg.game.PlayerLG;
+import io.github.ph1lou.pluginlgapi.enumlg.State;
+import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public class CommandRevive extends Commands {
 
@@ -22,49 +27,52 @@ public class CommandRevive extends Commands {
     @Override
     public void execute(CommandSender sender, String[] args) {
 
-        if (!(sender instanceof Player)) {
-            return;
-        }
-
-     GameManager game = main.currentGame;
-
-        TextLG text = game.text;
+        GameManager game = main.currentGame;
 
         if (!sender.hasPermission("a.use") && !sender.hasPermission("a.revive.use") && !game.getModerators().contains(((Player) sender).getUniqueId()) && !game.getHosts().contains(((Player) sender).getUniqueId())) {
-            sender.sendMessage(text.getText(116));
+            sender.sendMessage(game.translate("werewolf.check.permission_denied"));
             return;
         }
         
         if (args.length != 1) {
-            sender.sendMessage(text.getText(54));
+            sender.sendMessage(game.translate("werewolf.check.player_input"));
             return;
         }
 
-        if (!game.isState(StateLG.LG)) {
-            sender.sendMessage(text.getText(68));
+        if (!game.isState(StateLG.GAME)) {
+            sender.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
             return;
         }
 
-        if (!game.playerLG.containsKey(args[0])) {
-            sender.sendMessage(text.getText(132));
+        if(Bukkit.getPlayer(args[0])==null){
+            sender.sendMessage(game.translate("werewolf.check.offline_player"));
             return;
         }
 
-        if (!game.playerLG.get(args[0]).isState(State.MORT)) {
-            sender.sendMessage(text.getText(149));
+        UUID uuid = Bukkit.getPlayer(args[0]).getUniqueId();
+
+        if (!game.playerLG.containsKey(uuid)) {
+            sender.sendMessage(game.translate("werewolf.check.not_in_game_player"));
             return;
         }
 
-        RoleLG role = game.playerLG.get(args[0]).getRole();
-        game.config.roleCount.put(role, game.config.roleCount.get(role) + 1);
+        PlayerLG plg = game.playerLG.get(uuid);
+
+        if (!plg.isState(State.DEATH)) {
+            sender.sendMessage(game.translate("werewolf.commands.admin.revive.not_death"));
+            return;
+        }
+
+        RolesImpl role = plg.getRole();
+        game.config.getRoleCount().put(role.getRoleEnum(), game.config.getRoleCount().get(role.getRoleEnum()) + 1);
         game.score.addPlayerSize();
-        game.death_manage.resurrection(args[0]);
+        game.death_manage.resurrection(uuid);
 
-        if (role.equals(RoleLG.PETITE_FILLE) || role.equals(RoleLG.LOUP_PERFIDE)) {
-            game.playerLG.get(args[0]).setPower(true);
+        if (role instanceof LittleGirl || role instanceof MischievousWereWolf) {
+            ((InvisibleState) role).setInvisible(false);
         }
         for (Player p : Bukkit.getOnlinePlayers()) {
-            p.sendMessage(String.format(text.getText(154), args[0]));
+            p.sendMessage(game.translate("werewolf.commands.admin.revive.perform", args[0]));
             p.playSound(p.getLocation(), Sound.AMBIENCE_THUNDER, 1, 20);
         }
 

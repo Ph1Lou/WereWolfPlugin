@@ -1,5 +1,8 @@
 package io.github.ph1lou.pluginlg.savelg;
 
+import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.WriterConfig;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
@@ -26,7 +29,24 @@ public class FileLG {
 
         try (final FileWriter fw = new FileWriter(file)) {
             fw.write(text);
+            fw.flush();
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void saveJson(File file, JsonObject jsonObject) {
+        try {
+            createFile(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        try (final Writer fw = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8)) {
+
+            jsonObject.writeTo(fw, WriterConfig.PRETTY_PRINT);
             fw.flush();
 
         } catch (IOException e) {

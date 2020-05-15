@@ -6,9 +6,7 @@ api-version: 1.8
 load: STARTUP
 commands:
 
-  lg:
-    description: commandes des joueurs
-    usage: /<command> h
+
   ww:
     description: commands for players
     usage: /<command> h

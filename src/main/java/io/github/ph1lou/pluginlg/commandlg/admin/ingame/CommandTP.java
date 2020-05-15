@@ -3,7 +3,6 @@ package io.github.ph1lou.pluginlg.commandlg.admin.ingame;
 import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlg.savelg.TextLG;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -18,16 +17,17 @@ public class CommandTP extends Commands {
     @Override
     public void execute(CommandSender sender, String[] args) {
 
+        GameManager game = main.currentGame;
+
         if (!(sender instanceof Player)) {
+            sender.sendMessage(game.translate("werewolf.check.console"));
             return;
         }
 
-        GameManager game = main.currentGame;
         Player player = (Player) sender;
-        TextLG text = game.text;
 
         if (!sender.hasPermission("a.use") && !sender.hasPermission("a.gamemode.use") && !game.getModerators().contains(((Player) sender).getUniqueId()) && !game.getHosts().contains(((Player) sender).getUniqueId())) {
-            sender.sendMessage(text.getText(116));
+            sender.sendMessage(game.translate("werewolf.check.permission_denied"));
             return;
         }
 
@@ -35,7 +35,7 @@ public class CommandTP extends Commands {
             try {
                 if (player.getWorld().equals(Bukkit.getPlayer(args[0]).getWorld())) {
                     player.teleport(Bukkit.getPlayer(args[0]));
-                    Bukkit.getConsoleSender().sendMessage(String.format(game.text.getText(306), sender.getName(), args[0]));
+                    Bukkit.getConsoleSender().sendMessage(game.translate(game.translate("werewolf.commands.admin.teleportation", sender.getName(), args[0])));
                 }
             } catch (Exception ignored) {
             }
@@ -48,7 +48,7 @@ public class CommandTP extends Commands {
         try{
             if(Bukkit.getPlayer(args[1]).getWorld().equals(Bukkit.getPlayer(args[0]).getWorld())){
                 Bukkit.getPlayer(args[0]).teleport(Bukkit.getPlayer(args[1]));
-                Bukkit.getConsoleSender().sendMessage(String.format(game.text.getText(306),args[0],args[1]));
+                Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.commands.admin.teleportation",args[0],args[1]));
             }
         }
         catch (Exception ignored) {
