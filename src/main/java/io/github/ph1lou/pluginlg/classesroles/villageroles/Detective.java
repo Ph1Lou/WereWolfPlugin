@@ -1,13 +1,13 @@
 package io.github.ph1lou.pluginlg.classesroles.villageroles;
 
 
-
-import io.github.ph1lou.pluginlg.classesroles.AffectedPlayers;
-import io.github.ph1lou.pluginlg.events.DayEvent;
-import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlgapi.enumlg.RoleLG;
+import io.github.ph1lou.pluginlgapi.GetWereWolfAPI;
+import io.github.ph1lou.pluginlgapi.WereWolfAPI;
 import io.github.ph1lou.pluginlgapi.enumlg.State;
 import io.github.ph1lou.pluginlgapi.enumlg.TimerLG;
+import io.github.ph1lou.pluginlgapi.events.DayEvent;
+import io.github.ph1lou.pluginlgapi.rolesattributs.AffectedPlayers;
+import io.github.ph1lou.pluginlgapi.rolesattributs.RolesWithLimitedSelectionDuration;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,8 +22,8 @@ public class Detective extends RolesWithLimitedSelectionDuration implements Affe
     private final List<UUID> affectedPlayer = new ArrayList<>();
 
 
-    public Detective(GameManager game, UUID uuid) {
-        super(game,uuid);
+    public Detective(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
+        super(main,game,uuid);
         setPower(false);
     }
 
@@ -51,11 +51,7 @@ public class Detective extends RolesWithLimitedSelectionDuration implements Affe
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if(!event.getUuid().equals(game.getGameUUID())){
-            return;
-        }
-
-        if(!game.playerLG.get(getPlayerUUID()).isState(State.ALIVE)){
+        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
             return;
         }
 
@@ -66,14 +62,9 @@ public class Detective extends RolesWithLimitedSelectionDuration implements Affe
         }
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        player.sendMessage(game.translate("werewolf.role.detective.inspection_message", game.score.conversion(game.config.getTimerValues().get(TimerLG.POWER_DURATION))));
+        player.sendMessage(game.translate("werewolf.role.detective.inspection_message", game.conversion(game.getConfig().getTimerValues().get(TimerLG.POWER_DURATION))));
     }
 
-
-    @Override
-    public RoleLG getRoleEnum() {
-        return RoleLG.DETECTIVE;
-    }
 
     @Override
     public String getDescription() {
@@ -82,6 +73,6 @@ public class Detective extends RolesWithLimitedSelectionDuration implements Affe
 
     @Override
     public String getDisplay() {
-        return game.translate("werewolf.role.detective.display");
+        return "werewolf.role.detective.display";
     }
 }

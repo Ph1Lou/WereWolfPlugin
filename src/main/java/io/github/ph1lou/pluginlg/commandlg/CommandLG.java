@@ -5,6 +5,7 @@ import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlg.commandlg.roles.*;
 import io.github.ph1lou.pluginlg.commandlg.utilities.*;
 import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlgapi.Commands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -46,13 +47,18 @@ public class CommandLG implements TabExecutor {
         listCommands.put(game.translate("werewolf.role.trapper.command"), new CommandTrapper(main));
         listCommands.put(game.translate("werewolf.role.guardian_angel.command"), new CommandAngelRegen(main));
         listCommands.put(game.translate("werewolf.role.succubus.command"), new CommandSuccubus(main));
+        listCommands.put(game.translate("werewolf.role.flute_player.command"), new CommandFlutePlayer(main));
+        listCommands.put(game.translate("werewolf.role.librarian.command"), new CommandLibrarian(main));
+        listCommands.put(game.translate("werewolf.role.librarian.request_command"), new CommandSendToLibrarian(main));
+        listCommands.putAll(main.getListCommands());
     }
+
 
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-        if (args.length == 0) return true;
+        if (args.length == 0) return false;
         this.listCommands.getOrDefault(args[0], this.listCommands.get("h")).execute(sender, Arrays.copyOfRange(args, 1, args.length));
         return true;
     }

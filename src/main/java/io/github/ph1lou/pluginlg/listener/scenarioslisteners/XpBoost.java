@@ -16,6 +16,6 @@ public class XpBoost extends Scenarios {
     @EventHandler
     public void onXp(BlockExpEvent event) {
 
-        event.setExpToDrop((int) (event.getExpToDrop() * game.config.getXpBoost() / 100f));
+        event.setExpToDrop((int) (event.getExpToDrop() * game.getConfig().getXpBoost() / 100f));
     }
 }

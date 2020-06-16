@@ -1,12 +1,15 @@
 package io.github.ph1lou.pluginlg.commandlg.roles;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.classesroles.villageroles.Raven;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlg.game.PlayerLG;
+import io.github.ph1lou.pluginlgapi.Commands;
+import io.github.ph1lou.pluginlgapi.PlayerWW;
 import io.github.ph1lou.pluginlgapi.enumlg.State;
 import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
+import io.github.ph1lou.pluginlgapi.events.CurseEvent;
+import io.github.ph1lou.pluginlgapi.rolesattributs.AffectedPlayers;
+import io.github.ph1lou.pluginlgapi.rolesattributs.Power;
+import io.github.ph1lou.pluginlgapi.rolesattributs.Roles;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -15,11 +18,13 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.UUID;
 
-public class CommandRaven extends Commands {
+public class CommandRaven implements Commands {
 
+
+    private final MainLG main;
 
     public CommandRaven(MainLG main) {
-        super(main);
+        this.main = main;
     }
 
     @Override
@@ -40,7 +45,7 @@ public class CommandRaven extends Commands {
             return;
         }
 
-        PlayerLG plg = game.playerLG.get(uuid);
+        PlayerWW plg = game.playerLG.get(uuid);
 
 
         if (!game.isState(StateLG.GAME)) {
@@ -48,12 +53,12 @@ public class CommandRaven extends Commands {
             return;
         }
 
-        if (!(plg.getRole() instanceof Raven)){
+        if (!(plg.getRole().isDisplay("werewolf.role.raven.display"))){
             player.sendMessage(game.translate("werewolf.check.role", game.translate("werewolf.role.raven.display")));
             return;
         }
 
-        Raven raven = (Raven) plg.getRole();
+        Roles raven = plg.getRole();
 
         if (args.length!=1) {
             player.sendMessage(game.translate("werewolf.check.player_input"));
@@ -65,7 +70,7 @@ public class CommandRaven extends Commands {
             return;
         }
 
-        if(!raven.hasPower()) {
+        if(!((Power)raven).hasPower()) {
             player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
@@ -80,14 +85,23 @@ public class CommandRaven extends Commands {
             return;
         }
 
-        if(raven.getAffectedPlayers().contains(argUUID)){
+        if(((AffectedPlayers)raven).getAffectedPlayers().contains(argUUID)){
             player.sendMessage(game.translate("werewolf.check.already_get_power"));
             return;
         }
 
-        raven.clearAffectedPlayer();
-        raven.addAffectedPlayer(argUUID);
-        raven.setPower(false);
+        CurseEvent curseEvent=new CurseEvent(uuid,argUUID);
+
+        Bukkit.getPluginManager().callEvent(curseEvent);
+
+        if(curseEvent.isCancelled()){
+            player.sendMessage(game.translate("werewolf.check.cancel"));
+            return;
+        }
+
+        ((AffectedPlayers) raven).clearAffectedPlayer();
+        ((Power) raven).setPower(false);
+        ((AffectedPlayers) raven).addAffectedPlayer(argUUID);
         game.playerLG.get(argUUID).setDamn(true);
         Player playerDamned=Bukkit.getPlayer(args[0]);
         playerDamned.removePotionEffect(PotionEffectType.JUMP);

@@ -1,9 +1,12 @@
 package io.github.ph1lou.pluginlg.commandlg;
 
 import io.github.ph1lou.pluginlg.MainLG;
+import io.github.ph1lou.pluginlg.commandlg.admin.CommandChange;
 import io.github.ph1lou.pluginlg.commandlg.admin.CommandGeneration;
+import io.github.ph1lou.pluginlg.commandlg.admin.CommandSize;
 import io.github.ph1lou.pluginlg.commandlg.admin.CommandStop;
 import io.github.ph1lou.pluginlg.commandlg.admin.ingame.*;
+import io.github.ph1lou.pluginlgapi.Commands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -41,15 +44,19 @@ public class AdminLG implements TabExecutor {
         listAdminCommands.put("host", new CommandHost(main));
         listAdminCommands.put("gamemode", new CommandGamemode(main));
         listAdminCommands.put("tp", new CommandTP(main));
+        listAdminCommands.put("size", new CommandSize(main));
+        listAdminCommands.put("change", new CommandChange(main));
+        listAdminCommands.putAll(main.getListAdminCommands());
     }
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-        if (args.length == 0) return true;
+        if (args.length == 0) return false;
         this.listAdminCommands.getOrDefault(args[0], this.listAdminCommands.get("h")).execute(sender, Arrays.copyOfRange(args, 1, args.length));
         return true;
     }
+
 
 	@Override
 	public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] args) {

@@ -1,16 +1,18 @@
 package io.github.ph1lou.pluginlg.commandlg.utilities;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlgapi.Commands;
 import io.github.ph1lou.pluginlgapi.enumlg.ToolLG;
 import org.bukkit.command.CommandSender;
 
-public class CommandRules extends Commands {
+public class CommandRules implements Commands {
 
+
+    private final MainLG main;
 
     public CommandRules(MainLG main) {
-        super(main);
+        this.main = main;
     }
 
     @Override
@@ -20,7 +22,7 @@ public class CommandRules extends Commands {
         
         for (ToolLG tool : ToolLG.values()) {
 
-            if (game.config.getConfigValues().get(tool)) {
+            if (game.getConfig().getConfigValues().get(tool)) {
                 sender.sendMessage(game.translate("werewolf.utils.enable", game.translate(tool.getKey())));
             } else sender.sendMessage(game.translate("werewolf.utils.disable", game.translate(tool.getKey())));
         }

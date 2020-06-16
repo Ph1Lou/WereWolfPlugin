@@ -8,8 +8,8 @@
       },
       "guardian_angel": {
         "display": "Ange Gardien",
-        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Ange Gardien§9. Vous devez protéger une personne choisie aléatoirement et gagner avec elle. Si celle-ci meurt, vous repassez à 10 coeurs et §ldevez gagner avec le Village§r§9.\nVous pourrez, trois fois au cours de la partie, lui donner Régeneration pendant 20 secondes §b/ww regen",
-        "protege_death": "[§eLG UHC§r] Votre protégé a été tué, vous perdez 2 coeurs et devez maintenant gagner avec le Village",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Ange Gardien§9. Vous avez 15 coeurs et devez protéger une personne choisie aléatoirement et gagner avec elle. Si celle-ci meurt, vous passez à 12 coeurs et §ldevez gagner avec le Village§r§9.\nVous pouvez, trois fois au cours de la partie, lui donner Régeneration pendant 20 secondes §b/ww regen",
+        "protege_death": "[§eLG UHC§r] Votre protégé a été tué, vous perdez 3 coeurs et devez maintenant gagner avec le Village",
         "reveal_protege": "[§eLG UHC§r] Votre protégé est §b%s",
         "get_regeneration": "[§aLG UHC§r] Vous obtenez Regeneration de la part de votre Ange Gardien pendant 20 secondes",
         "no_protege": "[§cLG UHC§r] Vous n'avez pas encore de protégé",
@@ -82,7 +82,7 @@
       },
       "angel": {
         "display": "Ange",
-        "description":  "§6LOUP-GAROU §7➽§9 Vous êtes §1Ange§9. Votre objectif est de gagner seul. \nEn début de partie, vous pouvez faire un choix. Si vous choisissez §1Ange Gardien§9, vous devrez protéger une personne choisie aléatoirement et gagner avec elle (ou seul). Si celle-ci meurt, vous repasserez à 10 coeurs et devrez gagnez avec le Village. Si vous choisissez §1Ange Déchu§9, une cible vous sera assignée aléatoirement si vous la tuez, vous passerez à 15 coeurs jusqu'à la fin de la partie.",
+        "description":  "§6LOUP-GAROU §7➽§9 Vous êtes §1Ange§9. Votre objectif est de gagner seul. \nEn début de partie, vous pouvez faire un choix. Si vous choisissez §1Ange Gardien§9, vous obtiendrez 15 coeurs et devrez protéger une personne choisie aléatoirement et gagner avec elle. Si celle-ci meurt, vous repasserez à 12 coeurs et devrez gagnez avec le Village. Si vous choisissez §1Ange Déchu§9 vous obtiendrez 12 coeurs, une cible vous sera assignée aléatoirement si vous la tuez, vous passerez à 15 coeurs jusqu'à la fin de la partie.",
         "angel_choice": "[§eLG UHC§r] Vous pouvez décider d'être sois Ange Déchu §6/ww dechu§r sois Ange Gardien §6/ww gardien§r, vous avez §b%s",
         "angel_choice_perform": "[§eLG UHC§r] Vous venez de choisir §b%s",
         "command_1": "gardien",
@@ -214,9 +214,11 @@
         "not_enough_heart_send": "[§cLG UHC§r] Vous n'avez pas envoyé assez de coeurs",
         "polygamy": "[§6LG UHC§r] En raison du trop faible nombre de joueur par rapport au nombre de couples la polygamie est activée",
         "not_enough_heart": "[§cLG UHC§r] Vous n'avez pas assez de coeurs",
-        "received": "[§eLG UHC§r] Vous recevez §b%d§r demi-coeurs de §b%s",
+        "received": "[§eLG UHC§r] Vous recevez §b%d§r demi-coeur(s) de §b%s",
         "disconnected": "[§cLG UHC§r] Votre amant n'est pas connecté",
-        "command": "don"
+        "complete": "[§aLG UHC§r] Vous venez d'envoyer §b%s§r demi-coeur(s) à §b%s",
+        "command": "don",
+        "too_many_heart": "[§cLG UHC§r] Vous ne pouvez pas envoyer autant de coeurs à §b%s"
       },
       "cursed_lover": {
         "display": "Couple Maudit",
@@ -235,6 +237,31 @@
       "elder": {
         "display": "Ancien",
         "description":   "§6LOUP-GAROU §7➽ §9Vous êtes §1Ancien§9. Votre objectif est d’éliminer les Loups-Garous.\nPour cela, vous possédez l’effet Résistance et une seconde vie.\nVous perdrez votre Résistance à votre première mort, mais attention, si c’est un Villageois qui vous tue, vous perdrez également 1/3 de votre vie."
+      },
+      "flute_player": {
+        "display": "Joueur de Flûte",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Joueur de Flûte§9. Vous devez gagner seul. Chaque Jour, vous pourrez enchanter 2 personnes se trouvant à moins de 100 blocs de vous. Si vous enchantez tous les vivants, vous avez gagné.\nLes personnes enchantées se connaissent entre elles",
+        "list": "[§eLG UHC§r] Liste des Personnes Enchantées : §b",
+        "power": "[§eLG UHC§r] Enchantez deux joueurs §6/ww enchanter§r vous avez §b%s",
+        "already_enchant": "[§eLG UHC§r] Vous avez déjà enchanté §b%s",
+        "distance": "[§cLG UHC§r] Vous êtes à plus de 100 blocs de §b%s",
+        "enchanted": "[§eLG UHC§r] Vous venez d'être enchanté par le joueur de Flüte",
+        "perform": "[§eLG UHC§r] Vous venez d'enchanter §b%s§r",
+        "command": "enchanter"
+      },
+      "librarian": {
+        "display": "Bibliothécaire",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Bibliothécaire§9. Votre objectif est d’éliminer les Loups-Garous.\n Vous pouvez trois fois au cours de la partie, demander à une personnes d'écrire dans votre livre §b/ww livre§9. \nQuand vous mourrez, votre livre est publié",
+        "perform": "[§eLG UHC§r] Vous venez d'envoyer un livre à §b%s",
+        "message": "[§eLG UHC§r] Le §bBibliothécaire§r souhaite que vous contribuez à son livre. Faites §b/ww contribuer§r suivie de votre message",
+        "contribute": "[§aLG UHC§r] Vous venez de contribuer",
+        "contribution": "[§aLG UHC§r] §b%s§r vient de vous envoyer §b%s",
+        "prohibit": "[§cLG UHC§r] Vous n'êtes pas autorisé à contribuer",
+        "waiting": "[§cLG UHC§r] Vous êtes déjà en attente du livre de cette personne",
+        "request_command" : "contribuer",
+        "death" : "[§eLG UHC§r] Un §bBibliothécaire§r vient de mourir, il révèle son livre :",
+        "book": "[§eLG UHC§r] Page §b%d§r : %s",
+        "command": "livre"
       },
       "comedian": {
         "display": "Comédien",
@@ -259,7 +286,7 @@
       "succubus": {
         "display": "Succube",
         "description":   "§6LOUP-GAROU §7➽ §9Vous êtes §1Succube§9. Votre objectif est de gagner seul avec la personne que vous aurez charmé.\nVous pouvez charmer un joueur avec §b/ww charmer§9. \nSi vous mourrez, votre personne charmée mourra à votre place.",
-        "charming_message": "[§eLG UHC§r] Vous pouvez désigner une personne a charmer §6/ww charmer",
+        "charming_message": "[§eLG UHC§r] Vous pouvez désigner une personne à charmer §6/ww charmer",
         "charming_beginning": "[§eLG UHC§r] Vous commencez à charmer §b%s",
         "charming_perform": "[§aLG UHC§r] §b%s§r est totalement charmé, si vous mourrez il mourra à votre place",
         "get_charmed": "[§eLG UHC§r] Le Succube §b%s§r vous a charmé, vous devez maintenant gagner avec lui.\nSi le Succube vient à mourir, vous mourrez à sa place.",
@@ -317,7 +344,6 @@
       "reveal_death": "§e§m%s était %s",
       "transform": " (transformé) ",
       "reveal": "§e%s était %s",
-      "team": "Equipe §b%s",
       "model": " modèle (%s) ",
       "death": "§cDe la Mort",
       "lover": " en couple avec (%s)",
@@ -371,7 +397,12 @@
         "generation": {
           "already_start": "[§cLG UHC§r] La Génération est déjà lancée",
           "perform": "[§eLG UHC§r] La Génération du monde a commencé",
-          "not_generated": "[§cLG UHC§r] Carte non générée. Faites /a generation"
+          "not_generated": "[§cLG UHC§r] Carte non générée. Faites §b/a generation",
+          "not_finished": "[§cLG UHC§r] Attendez la fin de génération de la carte (§b%s%%§r)"
+        },
+        "change": {
+          "in_progress" : "[§eLG UHC§r] Changement de la Map en cours",
+          "finished": "[§aLG UHC§r] Nouvelle Map crée"
         },
         "tp_group": {
           "broadcast": "[§eLG UHC§r] §b%s§r ont été téléporté par un administrateur",
@@ -381,6 +412,11 @@
         "revive": {
           "perform": "[§eLG UHC§r] §b%s§r a été ressuscité par un Administrateur",
           "not_death": "[§cLG UHC§r] Le joueur n'est pas Mort"
+        },
+        "size": {
+          "begin": "[§eLG UHC§r] Début du Calcul de la surface du Biome central",
+          "result": "[§aLG UHC§r] Le Biome central occupe §b%s§r blocs.",
+          "change": "[§eLG UHC§r] Cliquez ici pour changer de Map"
         },
         "host": {
           "add": "[§aLG UHC§r] §b%s§r est à présent Host",
@@ -401,7 +437,7 @@
         },
         "gamemode": "[§eLG UHC§r] §b%s§r s'est mis en gamemode §b%d",
         "teleportation": "[§eLG UHC§r] Téléportation de §b%s§r vers §b%s",
-        "help": "§6/a config §9Pour configurer la partie\n§6/a host §9Pour configurer l'host\n§6/a start §9Pour lancer la partie\n§6/a chat §9Pour activer/désactiver le chat\n§6/a info §9Pour parler à tous les joueurs\n§6/a group §9Pour faire respecter les groupes\n§6/a fh §9Pour FinalHeal\n§6/a inv §9Pour voir l'inventaire d'un joueur\n§6/a kill §9Pour tuer un joueur offline\n§6/a revive §9Pour ressusciter un joueur\n§6/a role §9Pour voir le rôle d'un joueur\n§6/a disc §9Pour voir les joueurs déco\n§6/a setGroup§9 Pour configurer les groupes\n§6/a tpGroup§9 Pour téléporter un groupes\n§6/a generation§9 Pour générer la map"
+        "help": "§6/a config §9Pour configurer la partie\n§6/a host §9Pour configurer l'host\n§6/a start §9Pour lancer la partie\n§6/a chat §9Pour activer/désactiver le chat\n§6/a info §9Pour parler à tous les joueurs\n§6/a group §9Pour faire respecter les groupes\n§6/a fh §9Pour FinalHeal\n§6/a inv §9Pour voir l'inventaire d'un joueur\n§6/a kill §9Pour tuer un joueur offline\n§6/a revive §9Pour ressusciter un joueur\n§6/a role §9Pour voir le rôle d'un joueur\n§6/a disc §9Pour voir les joueurs déco\n§6/a setGroup§9 Pour configurer les groupes\n§6/a tpGroup§9 Pour téléporter un groupe\n§6/a generation§9 Pour générer la map\n§6/a size§9 Pour obtenir la taille du biome central"
       },
       "message": {
         "send": "[Message envoyé à §b%s§r] » §b%s",
@@ -481,7 +517,8 @@
         "rod_less": "RodLess",
         "slow_bow": "SlowBow",
         "no_fire_weapons": "NoFireWeapons",
-        "timber": "Timber"
+        "timber": "Timber",
+        "double_jump": "Double Jump"
       },
       "enchantments": {
         "command": "enchantement",
@@ -611,6 +648,7 @@
     "check": {
       "death": "[§cLG UHC§r] Vous n'êtes pas Vivant",
       "game_not_in_progress": "[§cLG UHC§r] La partie est déjà finie ou les rôles n'ont pas encore été annoncés",
+      "game_in_progress": "[§cLG UHC§r] La partie est en cours",
       "player_input": "[§cLG UHC§r] La commande prend un joueur en entrée",
       "end_selection": "[§cLG UHC§r] Vous ne pouvez plus utiliser votre pouvoir aujourd'hui",
       "not_in_game": "[§cLG UHC§r] Vous n'êtes pas dans la partie",
@@ -632,7 +670,10 @@
       "disabled_command": "[§cLG UHC§r] Commande désactivée",
       "spectator_disabled": "[§cLG UHC§r] Les spectateurs extérieurs sont désactivés durant cette partie",
       "console": "[§cLG UHC§r] Cette commande n'est pas accessible via la console",
-      "full": "[§cLG UHC§r] La partie est pleine"
+      "full": "[§cLG UHC§r] La partie est pleine",
+      "cancel": "[§cLG UHC§r] Votre pouvoir a été annulé",
+      "transformation": "[§cLG UHC§r] Votre transformation a été annulé",
+      "invalid_key": "[§cLG UHC§r] Clef invalide"
     },
     "update": {
       "up_to_date": "[§aLG UHC§r] Le plugin LG UHC est à jour",
@@ -650,6 +691,12 @@
       "display": "%s (§b%s§r)",
       "pve": "§bPVE",
       "on": "§bON"
+    },
+    "categories": {
+      "villager": "Villageois",
+      "werewolf": "Loups Garous",
+      "neutral": "Neutres",
+      "addons": "Rôles Addons"
     }
   }
 

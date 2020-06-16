@@ -1,13 +1,14 @@
 package io.github.ph1lou.pluginlg.classesroles.villageroles;
 
-import io.github.ph1lou.pluginlg.classesroles.AffectedPlayers;
-import io.github.ph1lou.pluginlg.classesroles.LimitedUse;
-import io.github.ph1lou.pluginlg.classesroles.Power;
-import io.github.ph1lou.pluginlg.events.VoteEndEvent;
-import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlgapi.enumlg.RoleLG;
+import io.github.ph1lou.pluginlgapi.GetWereWolfAPI;
+import io.github.ph1lou.pluginlgapi.WereWolfAPI;
 import io.github.ph1lou.pluginlgapi.enumlg.State;
 import io.github.ph1lou.pluginlgapi.enumlg.TimerLG;
+import io.github.ph1lou.pluginlgapi.events.VoteEndEvent;
+import io.github.ph1lou.pluginlgapi.rolesattributs.AffectedPlayers;
+import io.github.ph1lou.pluginlgapi.rolesattributs.LimitedUse;
+import io.github.ph1lou.pluginlgapi.rolesattributs.Power;
+import io.github.ph1lou.pluginlgapi.rolesattributs.RolesVillage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,13 +17,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Citizen extends RolesVillage implements LimitedUse, AffectedPlayers , Power {
+public class Citizen extends RolesVillage implements LimitedUse, AffectedPlayers, Power {
 
     private int use = 0;
     private final List<UUID> affectedPlayer = new ArrayList<>();
 
-    public Citizen(GameManager game, UUID uuid) {
-        super(game,uuid);
+    public Citizen(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
+        super(main,game,uuid);
     }
 
     private boolean power=true;
@@ -70,7 +71,7 @@ public class Citizen extends RolesVillage implements LimitedUse, AffectedPlayers
     @EventHandler
     public void onVoteEnd(VoteEndEvent event) {
 
-        if(!game.playerLG.get(getPlayerUUID()).isState(State.ALIVE)){
+        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
             return;
         }
         if(Bukkit.getPlayer(getPlayerUUID())==null){
@@ -79,14 +80,8 @@ public class Citizen extends RolesVillage implements LimitedUse, AffectedPlayers
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
         if (getUse() < 2 || hasPower()) {
-            player.sendMessage(game.translate("werewolf.role.citizen.affect_votes",hasPower() ? 1 : 0, 2 - getUse(), game.score.conversion(game.config.getTimerValues().get(TimerLG.CITIZEN_DURATION))));
+            player.sendMessage(game.translate("werewolf.role.citizen.affect_votes",hasPower() ? 1 : 0, 2 - getUse(), game.conversion(game.getConfig().getTimerValues().get(TimerLG.CITIZEN_DURATION))));
         }
-    }
-
-
-    @Override
-    public RoleLG getRoleEnum() {
-        return RoleLG.CITIZEN;
     }
 
     @Override
@@ -96,6 +91,6 @@ public class Citizen extends RolesVillage implements LimitedUse, AffectedPlayers
 
     @Override
     public String getDisplay() {
-        return game.translate("werewolf.role.citizen.display");
+        return "werewolf.role.citizen.display";
     }
 }

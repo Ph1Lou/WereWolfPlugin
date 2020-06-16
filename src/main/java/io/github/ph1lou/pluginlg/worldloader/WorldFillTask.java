@@ -1,6 +1,8 @@
 package io.github.ph1lou.pluginlg.worldloader;
 
 import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlgapi.events.GenerationStartEvent;
+import io.github.ph1lou.pluginlgapi.events.GenerationStopEvent;
 import org.bukkit.*;
 
 import java.text.DecimalFormat;
@@ -47,6 +49,7 @@ public class WorldFillTask implements Runnable {
 
 	public WorldFillTask(GameManager game, int chunksPerRun, int radius) {
 
+		Bukkit.getPluginManager().callEvent(new GenerationStartEvent());
 		this.server = Bukkit.getServer();
 		this.chunksPerRun = chunksPerRun;
 
@@ -250,7 +253,10 @@ public class WorldFillTask implements Runnable {
 	// for cancelling prematurely
 
 	// we're done, whether finished or cancelled
-	private void stop() {
+	public void stop() {
+
+		Bukkit.getPluginManager().callEvent(new GenerationStopEvent());
+
 		if (server == null)
 			return;
 

@@ -1,12 +1,14 @@
 package io.github.ph1lou.pluginlg.classesroles.villageroles;
 
 
-import io.github.ph1lou.pluginlg.classesroles.AffectedPlayers;
-import io.github.ph1lou.pluginlg.classesroles.Power;
-import io.github.ph1lou.pluginlg.events.DayEvent;
-import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlgapi.enumlg.RoleLG;
+import io.github.ph1lou.pluginlgapi.GetWereWolfAPI;
+import io.github.ph1lou.pluginlgapi.WereWolfAPI;
 import io.github.ph1lou.pluginlgapi.enumlg.State;
+import io.github.ph1lou.pluginlgapi.events.ActionBarEvent;
+import io.github.ph1lou.pluginlgapi.events.DayEvent;
+import io.github.ph1lou.pluginlgapi.rolesattributs.AffectedPlayers;
+import io.github.ph1lou.pluginlgapi.rolesattributs.Power;
+import io.github.ph1lou.pluginlgapi.rolesattributs.RolesVillage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,9 +21,9 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
 
     private final List<UUID> affectedPlayer = new ArrayList<>();
 
-    public Trapper(GameManager game, UUID uuid) {
+    public Trapper(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
 
-        super(game,uuid);
+        super(main,game,uuid);
         setPower(false);
     }
 
@@ -59,11 +61,8 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if(!event.getUuid().equals(game.getGameUUID())){
-            return;
-        }
 
-        if(!game.playerLG.get(getPlayerUUID()).isState(State.ALIVE)){
+        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
             return;
         }
 
@@ -79,17 +78,36 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
 
 
     @Override
-    public RoleLG getRoleEnum() {
-        return RoleLG.TRAPPER;
-    }
-
-    @Override
     public String getDescription() {
         return game.translate("werewolf.role.trapper.description");
     }
 
     @Override
     public String getDisplay() {
-        return game.translate("werewolf.role.trapper.display");
+        return "werewolf.role.trapper.display";
+    }
+
+    @EventHandler
+    public void onActionBarRequest(ActionBarEvent event){
+
+        if(!getPlayerUUID().equals(event.getPlayerUUID())) return;
+
+        StringBuilder stringBuilder=new StringBuilder(event.getActionBar());
+
+        if(Bukkit.getPlayer(event.getPlayerUUID())==null) return;
+
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) return;
+
+        Player player = Bukkit.getPlayer(event.getPlayerUUID());
+
+        if(hasPower()) return;
+
+        for (UUID uuid : getAffectedPlayers()) {
+            if (game.getPlayersWW().get(uuid).isState(State.ALIVE) && Bukkit.getPlayer(uuid) != null) {
+                stringBuilder.append("§b ").append(game.getPlayersWW().get(uuid).getName()).append(" ").append(game.updateArrow(player, Bukkit.getPlayer(uuid).getLocation()));
+            }
+        }
+
+        event.setActionBar(stringBuilder.toString());
     }
 }

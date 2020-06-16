@@ -1,18 +1,20 @@
 package io.github.ph1lou.pluginlg.commandlg.admin.ingame;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlgapi.Commands;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CommandFinalHeal extends Commands {
+public class CommandFinalHeal implements Commands {
 
+
+    private final MainLG main;
 
     public CommandFinalHeal(MainLG main) {
-        super(main);
+        this.main = main;
     }
 
     @Override

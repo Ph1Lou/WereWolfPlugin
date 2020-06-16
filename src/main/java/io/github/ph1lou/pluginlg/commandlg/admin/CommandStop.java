@@ -1,18 +1,20 @@
 package io.github.ph1lou.pluginlg.commandlg.admin;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlgapi.Commands;
 import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CommandStop extends Commands {
+public class CommandStop implements Commands {
 
+
+    private final MainLG main;
 
     public CommandStop(MainLG main) {
-        super(main);
+        this.main = main;
     }
 
     @Override
@@ -24,8 +26,11 @@ public class CommandStop extends Commands {
             sender.sendMessage(game.translate("werewolf.check.permission_denied"));
             return;
         }
-        game.setState(StateLG.END);
+        if(game.isState(StateLG.LOBBY)) return;
+
         Bukkit.broadcastMessage(game.translate("werewolf.announcement.stop",sender.getName()));
+
         game.stopGame();
+
     }
 }

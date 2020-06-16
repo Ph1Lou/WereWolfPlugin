@@ -71,7 +71,7 @@ public class ChatListener implements Listener {
     @EventHandler
     private void onChat(AsyncPlayerChatEvent event) {
 
-        if (!game.config.getConfigValues().get(ToolLG.CHAT)) {
+        if (!game.getConfig().getConfigValues().get(ToolLG.CHAT)) {
             event.setCancelled(true);
             event.getPlayer().sendMessage(game.translate("werewolf.commands.admin.chat.off"));
         }

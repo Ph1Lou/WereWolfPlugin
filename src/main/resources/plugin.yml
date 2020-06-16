@@ -1,11 +1,10 @@
 name: pluginLG
-version: 1.4
+version: "1.4"
 author: Ph1Lou
 main: io.github.ph1lou.pluginlg.MainLG
-api-version: 1.8
+api-version: "1.8"
 load: STARTUP
 commands:
-
 
   ww:
     description: commands for players

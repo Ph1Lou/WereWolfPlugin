@@ -1,10 +1,12 @@
 package io.github.ph1lou.pluginlg.classesroles.villageroles;
 
-import io.github.ph1lou.pluginlg.events.DayEvent;
-import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlgapi.enumlg.RoleLG;
+import io.github.ph1lou.pluginlgapi.GetWereWolfAPI;
+import io.github.ph1lou.pluginlgapi.WereWolfAPI;
 import io.github.ph1lou.pluginlgapi.enumlg.State;
 import io.github.ph1lou.pluginlgapi.enumlg.TimerLG;
+import io.github.ph1lou.pluginlgapi.events.DayEvent;
+import io.github.ph1lou.pluginlgapi.rolesattributs.PotionEffects;
+import io.github.ph1lou.pluginlgapi.rolesattributs.RolesWithLimitedSelectionDuration;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,36 +17,41 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public class Comedian extends RolesWithLimitedSelectionDuration {
+public class Comedian extends RolesWithLimitedSelectionDuration implements PotionEffects {
 
     private final List<PotionEffectType> comedianEffects = new ArrayList<>(Collections.singletonList(PotionEffectType.BLINDNESS));
 
-    public Comedian(GameManager game, UUID uuid) {
-        super(game,uuid);
+    public Comedian(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
+        super(main,game,uuid);
         setPower(false);
     }
 
+
+    @Override
     public List<PotionEffectType> getPotionEffects() {
         return comedianEffects;
     }
 
+    @Override
     public PotionEffectType getLastPotionEffect() {
         return comedianEffects.get(comedianEffects.size() - 1);
     }
 
+    @Override
     public void addPotionEffect(PotionEffectType comedianEffect) {
         this.comedianEffects.add(comedianEffect);
+    }
+
+    @Override
+    public void removePotionEffect(PotionEffectType potionEffectType) {
+        this.comedianEffects.remove(potionEffectType);
     }
 
 
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if(!event.getUuid().equals(game.getGameUUID())){
-            return;
-        }
-
-        if(!game.playerLG.get(getPlayerUUID()).isState(State.ALIVE)){
+        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
             return;
         }
         setPower(true);
@@ -56,13 +63,8 @@ public class Comedian extends RolesWithLimitedSelectionDuration {
 
         player.removePotionEffect(getLastPotionEffect());
         if (getPotionEffects().size() < 4) {
-            player.sendMessage(game.translate("werewolf.role.comedian.wear_mask_message", game.score.conversion(game.config.getTimerValues().get(TimerLG.POWER_DURATION))));
+            player.sendMessage(game.translate("werewolf.role.comedian.wear_mask_message", game.conversion(game.getConfig().getTimerValues().get(TimerLG.POWER_DURATION))));
         }
-    }
-
-    @Override
-    public RoleLG getRoleEnum() {
-        return RoleLG.COMEDIAN;
     }
 
     @Override
@@ -72,6 +74,6 @@ public class Comedian extends RolesWithLimitedSelectionDuration {
 
     @Override
     public String getDisplay() {
-        return game.translate("werewolf.role.comedian.display");
+        return "werewolf.role.comedian.display";
     }
 }

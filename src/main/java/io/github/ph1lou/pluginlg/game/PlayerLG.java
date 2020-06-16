@@ -1,14 +1,12 @@
 package io.github.ph1lou.pluginlg.game;
 
-import io.github.ph1lou.pluginlg.classesroles.PlayerLGI;
-import io.github.ph1lou.pluginlg.classesroles.RolesImpl;
-import io.github.ph1lou.pluginlg.classesroles.neutralroles.SerialKiller;
-import io.github.ph1lou.pluginlg.classesroles.neutralroles.Thief;
-import io.github.ph1lou.pluginlg.classesroles.villageroles.Elder;
+
+import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlg.classesroles.villageroles.Villager;
-import io.github.ph1lou.pluginlg.events.DayEvent;
-import io.github.ph1lou.pluginlg.events.NightEvent;
+import io.github.ph1lou.pluginlgapi.PlayerWW;
 import io.github.ph1lou.pluginlgapi.enumlg.State;
+import io.github.ph1lou.pluginlgapi.events.DayEvent;
+import io.github.ph1lou.pluginlgapi.rolesattributs.Roles;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -16,7 +14,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
 
@@ -26,10 +23,10 @@ import java.util.List;
 import java.util.UUID;
 
 
-public class PlayerLG implements Listener, PlayerLGI, PlayerWW {
+public class PlayerLG implements Listener, PlayerWW {
 
 	private State state = State.ALIVE;
-	private RolesImpl role ;
+	private Roles role ;
 	private Boolean canBeInfect = false;
 	private Boolean damn = false;
 	private Boolean salvation = false;
@@ -46,21 +43,19 @@ public class PlayerLG implements Listener, PlayerLGI, PlayerWW {
 	private transient Location spawn;
 	private final transient GameManager game;
 	private int deathTime = 0;
-	private int vote = 0;
 	private int lostHeart = 0;
 	private int kill = 0;
 	private final List<UUID> killer = new ArrayList<>();
-	private UUID playerVote = null;
 	private String name;
 	private final UUID playerUUID;
-	private Boolean infected = false;
 
 
-	public PlayerLG(Player player, GameManager game) {
+
+	public PlayerLG(MainLG main, GameManager game, Player player) {
 		this.spawn = player.getWorld().getSpawnLocation();
 		this.playerUUID=player.getUniqueId();
 		this.game=game;
-		this.role=new Villager(game,this.playerUUID);
+		this.role=new Villager(main,game,this.playerUUID);
 		this.name=player.getName();
 	}
 
@@ -68,10 +63,6 @@ public class PlayerLG implements Listener, PlayerLGI, PlayerWW {
 	public void onDay(DayEvent event) {
 
 		if (!isState(State.ALIVE)) return;
-
-		if(!event.getUuid().equals(game.getGameUUID())){
-			return;
-		}
 
 		if(Bukkit.getPlayer(playerUUID)==null){
 			return;
@@ -91,44 +82,17 @@ public class PlayerLG implements Listener, PlayerLGI, PlayerWW {
 		}
 		if (hasSalvation()) {
 			setSalvation(false);
-			if (!(getRole() instanceof Thief || (getRole() instanceof Elder) && ((Elder) getRole()).hasPower())) {
-				player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-			}
+			player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
 			player.sendMessage(game.translate("werewolf.role.protector.no_longer_protected"));
 		}
-		if (getInfected() && !(getRole() instanceof SerialKiller && ((SerialKiller) getRole()).hasPower())) {
-			player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-		}
-
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onInfectedNight(NightEvent event) {
-
-		if(!event.getUuid().equals(game.getGameUUID())){
-			return;
-		}
-
-		if(!isState(State.ALIVE)){
-			return;
-		}
-
-		if (!getInfected()) {
-			return;
-		}
-
-		if(Bukkit.getPlayer(playerUUID)==null){
-			return;
-		}
-		Player player = Bukkit.getPlayer(playerUUID);
-
-		player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, -1, false, false));
-	}
-
+	@Override
 	public Scoreboard getScoreBoard() {
 		return this.board;
 	}
 
+	@Override
 	public void setScoreBoard(Scoreboard board){
 		this.board=board;
 	}
@@ -178,15 +142,6 @@ public class PlayerLG implements Listener, PlayerLGI, PlayerWW {
 		return(this.lostHeart);
 	}
 
-	@Override
-	public void setVote(UUID vote) {
-		this.playerVote =vote;
-	}
-
-	@Override
-	public UUID getVotedPlayer() {
-		return(this.playerVote);
-	}
 
 	@Override
 	public void setKit(Boolean kit) {
@@ -198,33 +153,19 @@ public class PlayerLG implements Listener, PlayerLGI, PlayerWW {
 		return(this.kit);
 	}
 
-	@Override
-	public void incVote() {
-		this.vote+=1;
-	}
 
 	@Override
-	public void resetVote() {
-		this.vote=0;
-	}
-
-	@Override
-	public int getVote() {
-		return(this.vote);
-	}
-
-	@Override
-	public void setRole(RolesImpl role) {
+	public void setRole(Roles role) {
 		this.role = role;
 	}
 
 	@Override
-	public RolesImpl getRole() {
+	public Roles getRole() {
 		return (this.role);
 	}
 
 	@Override
-	public Boolean isRole(RolesImpl role) {
+	public Boolean isRole(Roles role) {
 		return (this.role.equals(role));
 	}
 
@@ -388,14 +329,5 @@ public class PlayerLG implements Listener, PlayerLGI, PlayerWW {
 		this.revealAmnesiacLover = revealAmnesiacLover;
 	}
 
-	@Override
-	public Boolean getInfected() {
-		return infected;
-	}
-
-	@Override
-	public void setInfected(Boolean infected) {
-		this.infected = infected;
-	}
 }
 

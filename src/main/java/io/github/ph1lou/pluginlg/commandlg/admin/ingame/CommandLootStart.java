@@ -1,19 +1,21 @@
 package io.github.ph1lou.pluginlg.commandlg.admin.ingame;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlgapi.Commands;
 import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
 import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 
-public class CommandLootStart extends Commands {
+public class CommandLootStart implements Commands {
 
+
+    private final MainLG main;
 
     public CommandLootStart(MainLG main) {
-        super(main);
+        this.main = main;
     }
 
     @Override
@@ -38,10 +40,10 @@ public class CommandLootStart extends Commands {
         Player player = (Player) sender;
         PlayerInventory inventory = player.getInventory();
 
-        game.stufflg.clearStartLoot();
+        game.getStuffs().clearStartLoot();
 
         for (int j = 0; j < 40; j++) {
-            game.stufflg.getStartLoot().setItem(j, inventory.getItem(j));
+            game.getStuffs().getStartLoot().setItem(j, inventory.getItem(j));
             inventory.setItem(j, null);
         }
 

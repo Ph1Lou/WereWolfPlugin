@@ -1,24 +1,23 @@
 package io.github.ph1lou.pluginlg.classesroles.neutralroles;
 
 
-import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlgapi.enumlg.RoleLG;
+import io.github.ph1lou.pluginlgapi.GetWereWolfAPI;
+import io.github.ph1lou.pluginlgapi.WereWolfAPI;
+import io.github.ph1lou.pluginlgapi.enumlg.AngelForm;
+import io.github.ph1lou.pluginlgapi.events.AngelChoiceEvent;
+import org.bukkit.Bukkit;
 
 import java.util.UUID;
 
 public class FallenAngel extends Angel {
 
-    public FallenAngel(GameManager game, UUID uuid) {
-        super(game,uuid);
-        setChoice(RoleLG.FALLEN_ANGEL);
-        setPower(false);
+    public FallenAngel(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
+        super(main,game,uuid);
+        setChoice(AngelForm.FALLEN_ANGEL);
+        Bukkit.getPluginManager().callEvent(new AngelChoiceEvent(getPlayerUUID(),AngelForm.FALLEN_ANGEL));
     }
 
 
-    @Override
-    public RoleLG getRoleEnum() {
-        return RoleLG.FALLEN_ANGEL;
-    }
 
     @Override
     public String getDescription() {
@@ -27,6 +26,6 @@ public class FallenAngel extends Angel {
 
     @Override
     public String getDisplay() {
-        return game.translate("werewolf.role.fallen_angel.display");
+        return "werewolf.role.fallen_angel.display";
     }
 }

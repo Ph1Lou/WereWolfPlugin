@@ -1,25 +1,31 @@
 package io.github.ph1lou.pluginlg.commandlg.roles;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.classesroles.villageroles.Detective;
-import io.github.ph1lou.pluginlg.classesroles.werewolfroles.FalsifierWereWolf;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlg.game.PlayerLG;
+import io.github.ph1lou.pluginlgapi.Commands;
+import io.github.ph1lou.pluginlgapi.PlayerWW;
 import io.github.ph1lou.pluginlgapi.enumlg.Camp;
 import io.github.ph1lou.pluginlgapi.enumlg.State;
 import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
+import io.github.ph1lou.pluginlgapi.events.InvestigateEvent;
+import io.github.ph1lou.pluginlgapi.rolesattributs.AffectedPlayers;
+import io.github.ph1lou.pluginlgapi.rolesattributs.Display;
+import io.github.ph1lou.pluginlgapi.rolesattributs.Power;
+import io.github.ph1lou.pluginlgapi.rolesattributs.Roles;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.UUID;
 
-public class CommandDetective extends Commands {
+public class CommandDetective implements Commands {
 
+
+    private final MainLG main;
 
     public CommandDetective(MainLG main) {
-        super(main);
+        this.main = main;
     }
 
     @Override
@@ -40,7 +46,7 @@ public class CommandDetective extends Commands {
             return;
         }
 
-        PlayerLG plg = game.playerLG.get(uuid);
+        PlayerWW plg = game.playerLG.get(uuid);
 
 
         if (!game.isState(StateLG.GAME)) {
@@ -48,12 +54,12 @@ public class CommandDetective extends Commands {
             return;
         }
 
-        if (!(plg.getRole() instanceof Detective)){
+        if (!(plg.getRole().isDisplay("werewolf.role.detective.display"))){
             player.sendMessage(game.translate("werewolf.check.role", game.translate("werewolf.role.detective.display")));
             return;
         }
 
-        Detective detective = (Detective) plg.getRole();
+        Roles detective = plg.getRole();
 
         if (args.length!=2) {
             player.sendMessage(game.translate("werewolf.check.parameters",2));
@@ -65,56 +71,67 @@ public class CommandDetective extends Commands {
             return;
         }
 
-        if(!detective.hasPower()) {
+        if(!((Power)detective).hasPower()) {
             player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
 
-        if(args[0].equals(args[1])) {
+        if(args[0].toLowerCase().equals(args[1].toLowerCase())) {
             player.sendMessage(game.translate("werewolf.check.two_distinct_player"));
             return;
         }
 
         for(String p:args) {
-            if(p.equals(plg.getName())) {
+
+            if(Bukkit.getPlayer(p)==null){
+                player.sendMessage(game.translate("werewolf.check.offline_player"));
+                return;
+            }
+            UUID uuid1=Bukkit.getPlayer(p).getUniqueId();
+
+            if(!game.playerLG.containsKey(uuid1) || game.playerLG.get(uuid).isState(State.DEATH)) {
+                player.sendMessage(game.translate("werewolf.check.player_not_found"));
+                return;
+            }
+
+            if(uuid.equals(uuid1)) {
                 player.sendMessage(game.translate("werewolf.check.not_yourself"));
+                return;
+            }
+
+            if(((AffectedPlayers)detective).getAffectedPlayers().contains(uuid1)){
+                player.sendMessage(game.translate("werewolf.role.detective.already_inspect"));
                 return;
             }
         }
 
-        for(String p:args) {
-            if(Bukkit.getPlayer(p)==null){
-                UUID playerUUID = Bukkit.getPlayer(p).getUniqueId();
-                if(!game.playerLG.containsKey(playerUUID) || game.playerLG.get(playerUUID).isState(State.DEATH)){
-                    player.sendMessage(game.translate("werewolf.check.player_not_found"));
-                    return;
-                }
-            }
-        }
+        UUID uuid1=Bukkit.getPlayer(args[0]).getUniqueId();
+        UUID uuid2=Bukkit.getPlayer(args[1]).getUniqueId();
 
-        UUID uuid1 = Bukkit.getPlayer(args[0]).getUniqueId();
-        UUID uuid2 = Bukkit.getPlayer(args[1]).getUniqueId();
+        PlayerWW plg1 = game.playerLG.get(uuid1);
+        PlayerWW plg2 = game.playerLG.get(uuid2);
 
-        if(detective.getAffectedPlayers().contains(uuid1) || detective.getAffectedPlayers().contains(uuid2)){
-            player.sendMessage(game.translate("werewolf.role.detective.already_inspect"));
-            return;
-        }
-
-        PlayerLG plg1 = game.playerLG.get(uuid1);
-        PlayerLG plg2 = game.playerLG.get(uuid2);
-
-        detective.addAffectedPlayer(uuid1);
-        detective.addAffectedPlayer(uuid2);
-        detective.setPower(false);
         Camp isLG1=plg2.getRole().getCamp();
         Camp isLG2=plg1.getRole().getCamp();
 
-        if(plg1.getRole() instanceof FalsifierWereWolf) {
-            isLG2= ((FalsifierWereWolf) plg1.getRole()).getPosterCamp();
+        if(plg1.getRole() instanceof Display) {
+            isLG2= ((Display) plg1.getRole()).getDisplayCamp();
         }
-        if(plg2.getRole() instanceof FalsifierWereWolf) {
-            isLG1= ((FalsifierWereWolf) plg2.getRole()).getPosterCamp();
+        if(plg2.getRole() instanceof Display) {
+            isLG1= ((Display) plg2.getRole()).getDisplayCamp();
         }
+
+        InvestigateEvent event=new InvestigateEvent(uuid, Arrays.asList(uuid1,uuid2),isLG1==isLG2);
+        Bukkit.getPluginManager().callEvent(event);
+
+        if(event.isCancelled()) {
+            player.sendMessage(game.translate("werewolf.check.cancel"));
+            return;
+        }
+
+        ((Power) detective).setPower(false);
+        ((AffectedPlayers) detective).addAffectedPlayer(uuid1);
+        ((AffectedPlayers) detective).addAffectedPlayer(uuid2);
 
         if(isLG1!=isLG2) {
             player.sendMessage(game.translate("werewolf.role.detective.opposing_camp",args[0],args[1]));

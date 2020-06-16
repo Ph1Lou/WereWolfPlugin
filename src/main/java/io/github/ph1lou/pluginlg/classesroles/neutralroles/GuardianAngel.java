@@ -1,35 +1,23 @@
 package io.github.ph1lou.pluginlg.classesroles.neutralroles;
 
 
-import io.github.ph1lou.pluginlg.classesroles.LimitedUse;
-import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlgapi.enumlg.RoleLG;
+import io.github.ph1lou.pluginlgapi.GetWereWolfAPI;
+import io.github.ph1lou.pluginlgapi.WereWolfAPI;
+import io.github.ph1lou.pluginlgapi.enumlg.AngelForm;
+import io.github.ph1lou.pluginlgapi.events.AngelChoiceEvent;
+import org.bukkit.Bukkit;
 
 import java.util.UUID;
 
-public class GuardianAngel extends Angel implements LimitedUse {
+public class GuardianAngel extends Angel  {
 
-    private int use = 0;
 
-    public GuardianAngel(GameManager game, UUID uuid) {
-        super(game,uuid);
-        setChoice(RoleLG.GUARDIAN_ANGEL);
-        setPower(false);
-    }
-    @Override
-    public int getUse() {
-        return use;
+    public GuardianAngel(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
+        super(main,game,uuid);
+        setChoice(AngelForm.GUARDIAN_ANGEL);
+        Bukkit.getPluginManager().callEvent(new AngelChoiceEvent(getPlayerUUID(),AngelForm.GUARDIAN_ANGEL));
     }
 
-    @Override
-    public void setUse(int use) {
-        this.use = use;
-    }
-
-    @Override
-    public RoleLG getRoleEnum() {
-        return RoleLG.GUARDIAN_ANGEL;
-    }
 
     @Override
     public String getDescription() {
@@ -38,7 +26,7 @@ public class GuardianAngel extends Angel implements LimitedUse {
 
     @Override
     public String getDisplay() {
-        return game.translate("werewolf.role.guardian_angel.display");
+        return "werewolf.role.guardian_angel.display";
     }
 
 }

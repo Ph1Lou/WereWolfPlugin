@@ -1,23 +1,28 @@
 package io.github.ph1lou.pluginlg.commandlg.roles;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.classesroles.villageroles.Troublemaker;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlg.game.PlayerLG;
+import io.github.ph1lou.pluginlgapi.Commands;
+import io.github.ph1lou.pluginlgapi.PlayerWW;
 import io.github.ph1lou.pluginlgapi.enumlg.State;
 import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
+import io.github.ph1lou.pluginlgapi.events.TroubleMakerEvent;
+import io.github.ph1lou.pluginlgapi.rolesattributs.AffectedPlayers;
+import io.github.ph1lou.pluginlgapi.rolesattributs.Power;
+import io.github.ph1lou.pluginlgapi.rolesattributs.Roles;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandTroubleMaker extends Commands {
+public class CommandTroubleMaker implements Commands {
 
+
+    private final MainLG main;
 
     public CommandTroubleMaker(MainLG main) {
-        super(main);
+        this.main = main;
     }
 
     @Override
@@ -38,7 +43,7 @@ public class CommandTroubleMaker extends Commands {
             return;
         }
 
-        PlayerLG plg = game.playerLG.get(uuid);
+        PlayerWW plg = game.playerLG.get(uuid);
 
 
         if (!game.isState(StateLG.GAME)) {
@@ -46,12 +51,12 @@ public class CommandTroubleMaker extends Commands {
             return;
         }
 
-        if (!(plg.getRole() instanceof Troublemaker)){
+        if (!(plg.getRole().isDisplay("werewolf.role.troublemaker.display"))){
             player.sendMessage(game.translate("werewolf.check.role", game.translate("werewolf.role.troublemaker.display")));
             return;
         }
 
-        Troublemaker troublemaker = (Troublemaker) plg.getRole();
+        Roles troublemaker = plg.getRole();
 
         if (args.length!=1) {
             player.sendMessage(game.translate("werewolf.check.player_input"));
@@ -63,7 +68,7 @@ public class CommandTroubleMaker extends Commands {
             return;
         }
 
-        if(!troublemaker.hasPower()) {
+        if(!((Power)troublemaker).hasPower()) {
             player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
@@ -79,9 +84,18 @@ public class CommandTroubleMaker extends Commands {
             return;
         }
 
-        troublemaker.addAffectedPlayer(argUUID);
-        troublemaker.setPower(false);
-        game.death_manage.transportation(argUUID, Math.random()* Bukkit.getOnlinePlayers().size(),game.translate("werewolf.role.troublemaker.get_switch"));
+        TroubleMakerEvent troubleMakerEvent = new TroubleMakerEvent(uuid,argUUID);
+
+        Bukkit.getPluginManager().callEvent(troubleMakerEvent);
+
+        if(troubleMakerEvent.isCancelled()){
+            player.sendMessage(game.translate("werewolf.check.cancel"));
+            return;
+        }
+
+        ((AffectedPlayers)troublemaker).addAffectedPlayer(argUUID);
+        ((Power)troublemaker).setPower(false);
+        game.transportation(argUUID, Math.random()* Bukkit.getOnlinePlayers().size(),game.translate("werewolf.role.troublemaker.get_switch"));
         player.sendMessage(game.translate("werewolf.role.troublemaker.troublemaker_perform",args[0]));
     }
 }

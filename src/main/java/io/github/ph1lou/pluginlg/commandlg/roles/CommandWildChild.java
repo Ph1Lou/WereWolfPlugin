@@ -1,23 +1,28 @@
 package io.github.ph1lou.pluginlg.commandlg.roles;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.classesroles.villageroles.WildChild;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlg.game.PlayerLG;
+import io.github.ph1lou.pluginlgapi.Commands;
+import io.github.ph1lou.pluginlgapi.PlayerWW;
 import io.github.ph1lou.pluginlgapi.enumlg.State;
 import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
+import io.github.ph1lou.pluginlgapi.events.ModelEvent;
+import io.github.ph1lou.pluginlgapi.rolesattributs.AffectedPlayers;
+import io.github.ph1lou.pluginlgapi.rolesattributs.Power;
+import io.github.ph1lou.pluginlgapi.rolesattributs.Roles;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandWildChild extends Commands {
+public class CommandWildChild implements Commands {
 
+
+    private final MainLG main;
 
     public CommandWildChild(MainLG main) {
-        super(main);
+        this.main = main;
     }
 
     @Override
@@ -39,7 +44,7 @@ public class CommandWildChild extends Commands {
             return;
         }
 
-        PlayerLG plg = game.playerLG.get(uuid);
+        PlayerWW plg = game.playerLG.get(uuid);
 
 
         if (!game.isState(StateLG.GAME)) {
@@ -47,12 +52,12 @@ public class CommandWildChild extends Commands {
             return;
         }
 
-        if (!(plg.getRole() instanceof  WildChild)){
+        if (!(plg.getRole().isDisplay("werewolf.role.wild_child.display"))){
             player.sendMessage(game.translate("werewolf.check.role", game.translate("werewolf.role.wild_child.display")));
             return;
         }
 
-        WildChild wildChild = (WildChild) plg.getRole();
+        Roles wildChild = plg.getRole();
 
         if (args.length!=1) {
             player.sendMessage(game.translate("werewolf.check.player_input"));
@@ -64,7 +69,7 @@ public class CommandWildChild extends Commands {
             return;
         }
 
-        if(!wildChild.hasPower()) {
+        if(!((Power)wildChild).hasPower()) {
             player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
@@ -80,13 +85,14 @@ public class CommandWildChild extends Commands {
             return;
         }
 
-        if(args[0].equals(playername)) {
+        if(args[0].toLowerCase().equals(playername.toLowerCase())) {
             player.sendMessage(game.translate("werewolf.check.not_yourself"));
             return;
         }
 
-        wildChild.addAffectedPlayer(argUUID);
-        wildChild.setPower(false);
+        ((AffectedPlayers)wildChild).addAffectedPlayer(argUUID);
+        ((Power) wildChild).setPower(false);
+        Bukkit.getPluginManager().callEvent(new ModelEvent(uuid,argUUID));
         player.sendMessage(game.translate("werewolf.role.wild_child.reveal_model", args[0]));
     }
 }

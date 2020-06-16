@@ -37,7 +37,7 @@ public class DiamondLimit extends Scenarios {
 
         final Location loc = new Location(block.getWorld(), block.getLocation().getBlockX() + 0.5, block.getLocation().getBlockY() + 0.5, block.getLocation().getBlockZ() + 0.5);
 
-        if (game.config.getTimerValues().get(TimerLG.DIGGING) < 0) {
+        if (game.getConfig().getTimerValues().get(TimerLG.DIGGING) < 0) {
             block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop());
             block.setType(Material.AIR);
             return;
@@ -46,7 +46,7 @@ public class DiamondLimit extends Scenarios {
         if (!event.getPlayer().getItemInHand().getType().equals(Material.DIAMOND_PICKAXE) && !event.getPlayer().getItemInHand().getType().equals(Material.IRON_PICKAXE)) {
             return;
         }
-        if (diamondPerPlayer.getOrDefault(playerName, 0) >= game.config.getDiamondLimit()) {
+        if (diamondPerPlayer.getOrDefault(playerName, 0) >= game.getConfig().getDiamondLimit()) {
             block.getWorld().dropItem(loc, new ItemStack(Material.GOLD_INGOT, 1));
             block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop());
             block.setType(Material.AIR);

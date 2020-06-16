@@ -1,24 +1,29 @@
 package io.github.ph1lou.pluginlg.commandlg.roles;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.classesroles.villageroles.Witch;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlg.game.PlayerLG;
+import io.github.ph1lou.pluginlgapi.Commands;
+import io.github.ph1lou.pluginlgapi.PlayerWW;
 import io.github.ph1lou.pluginlgapi.enumlg.State;
 import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
 import io.github.ph1lou.pluginlgapi.enumlg.ToolLG;
+import io.github.ph1lou.pluginlgapi.events.WitchResurrectionEvent;
+import io.github.ph1lou.pluginlgapi.rolesattributs.AffectedPlayers;
+import io.github.ph1lou.pluginlgapi.rolesattributs.Power;
+import io.github.ph1lou.pluginlgapi.rolesattributs.Roles;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandWitch extends Commands {
+public class CommandWitch implements Commands {
 
+
+    private final MainLG main;
 
     public CommandWitch(MainLG main) {
-        super(main);
+        this.main = main;
     }
 
     @Override
@@ -32,7 +37,6 @@ public class CommandWitch extends Commands {
         }
 
         Player player = (Player) sender;
-        String playername = player.getName();
         UUID uuid = player.getUniqueId();
 
         if(!game.playerLG.containsKey(uuid)) {
@@ -40,7 +44,7 @@ public class CommandWitch extends Commands {
             return;
         }
 
-        PlayerLG plg = game.playerLG.get(uuid);
+        PlayerWW plg = game.playerLG.get(uuid);
 
 
         if (!game.isState(StateLG.GAME)) {
@@ -48,12 +52,12 @@ public class CommandWitch extends Commands {
             return;
         }
 
-        if (!(plg.getRole() instanceof Witch)){
+        if (!(plg.getRole().isDisplay("werewolf.role.witch.display"))){
             player.sendMessage(game.translate("werewolf.check.role", game.translate("werewolf.role.witch.display")));
             return;
         }
 
-        Witch witch = (Witch) plg.getRole();
+        Roles witch = plg.getRole();
 
         if (args.length!=1) {
             player.sendMessage(game.translate("werewolf.check.player_input"));
@@ -65,13 +69,8 @@ public class CommandWitch extends Commands {
             return;
         }
 
-        if(!witch.hasPower()) {
+        if(!((Power)witch).hasPower()) {
             player.sendMessage(game.translate("werewolf.check.power"));
-            return;
-        }
-
-        if (!game.config.getConfigValues().get(ToolLG.AUTO_REZ_WITCH) && args[0].equals(playername)) {
-            player.sendMessage(game.translate("werewolf.check.not_yourself"));
             return;
         }
 
@@ -81,12 +80,17 @@ public class CommandWitch extends Commands {
         }
         UUID argUUID = UUID.fromString(args[0]);
 
+        if (!game.getConfig().getConfigValues().get(ToolLG.AUTO_REZ_WITCH) && argUUID.equals(uuid)) {
+            player.sendMessage(game.translate("werewolf.check.not_yourself"));
+            return;
+        }
+
         if(!game.playerLG.containsKey(argUUID)){
             player.sendMessage(game.translate("werewolf.check.player_not_found"));
             return;
         }
 
-        PlayerLG plg1 = game.playerLG.get(argUUID);
+        PlayerWW plg1 = game.playerLG.get(argUUID);
 
         if (!plg1.isState(State.JUDGEMENT)) {
             player.sendMessage(game.translate("werewolf.check.not_in_judgement"));
@@ -96,8 +100,16 @@ public class CommandWitch extends Commands {
         if (plg1.canBeInfect()) {
             return;
         }
-        witch.addAffectedPlayer(argUUID);
-        witch.setPower(false);
+        WitchResurrectionEvent witchResurrectionEvent=new WitchResurrectionEvent(uuid,argUUID);
+        Bukkit.getPluginManager().callEvent(witchResurrectionEvent);
+
+        if(witchResurrectionEvent.isCancelled()){
+            player.sendMessage(game.translate("werewolf.check.cancel"));
+            return;
+        }
+
+        ((AffectedPlayers)witch).addAffectedPlayer(argUUID);
+        ((Power) witch).setPower(false);
         game.death_manage.resurrection(argUUID);
         sender.sendMessage(game.translate("werewolf.role.witch.resuscitation_perform",plg1.getName()));
     }

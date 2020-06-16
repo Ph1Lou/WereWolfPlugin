@@ -1,23 +1,28 @@
 package io.github.ph1lou.pluginlg.commandlg.admin.ingame;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
 import io.github.ph1lou.pluginlg.savelg.FileLG;
 import io.github.ph1lou.pluginlg.savelg.SerializerLG;
+import io.github.ph1lou.pluginlgapi.Commands;
 import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
+import io.github.ph1lou.pluginlgapi.events.StartEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.text.DecimalFormat;
 
-public class CommandStart extends Commands {
+public class CommandStart implements Commands {
 
+
+    private final MainLG main;
 
     public CommandStart(MainLG main) {
-        super(main);
+        this.main = main;
     }
 
     @Override
@@ -41,19 +46,25 @@ public class CommandStart extends Commands {
             return;
         }
 
-        if(game.getWorld()==null){
+        if(game.wft == null){
             sender.sendMessage(game.translate("werewolf.commands.admin.generation.not_generated"));
+            return;
+        }
+
+        if(game.wft.getPercentageCompleted()<100){
+            sender.sendMessage(game.translate("werewolf.commands.admin.generation.not_finished",new DecimalFormat("0.0").format(game.wft.getPercentageCompleted())));
             return;
         }
 
         World world = game.getWorld();
         WorldBorder wb = world.getWorldBorder();
         wb.setCenter(world.getSpawnLocation().getX(), world.getSpawnLocation().getZ());
-        wb.setSize(game.config.getBorderMax());
+        wb.setSize(game.getConfig().getBorderMax());
         wb.setWarningDistance((int) (wb.getSize() / 7));
         game.setState(StateLG.TRANSPORTATION);
-        File file = new File(game.getDataFolder() + File.separator + "configs" + File.separator, "saveCurrent.json");
-        FileLG.save(file, SerializerLG.serialize(game.config));
-        game.stufflg.save("saveCurrent");
+        File file = new File(main.getDataFolder() + File.separator + "configs" + File.separator, "saveCurrent.json");
+        FileLG.save(file, SerializerLG.serialize(game.getConfig()));
+        game.getStuffs().save("saveCurrent");
+        Bukkit.getPluginManager().callEvent(new StartEvent(game));
     }
 }

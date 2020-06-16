@@ -26,11 +26,10 @@ public class ScenariosLG {
     public void init() {
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new PlayerListener(main,game), main);
-        pm.registerEvents(new EventListener(game), main);
+        pm.registerEvents(game.eventslg,main);
         pm.registerEvents(new MenuListener(main,game), main);
         pm.registerEvents(new SmallFeaturesListener(main,game), main);
         pm.registerEvents(new EnchantmentListener(game), main);
-        pm.registerEvents(new ArmorDetectionListener(game), main);
         pm.registerEvents(new ChatListener(game), main);
         pm.registerEvents(new PatchPotions(game), main);
         pm.registerEvents(new CycleListener(main,game), main);
@@ -38,6 +37,7 @@ public class ScenariosLG {
         scenariosRegister.add(new RodLess(main,game,ScenarioLG.ROD_LESS));
         scenariosRegister.add(new CompassTargetLastDeath(main,game,ScenarioLG.COMPASS_TARGET_LAST_DEATH));
         scenariosRegister.add(new CutClean(main,game,ScenarioLG.CUT_CLEAN));
+        scenariosRegister.add(new NoFireWeapon(main,game,ScenarioLG.NO_FIRE_WEAPONS));
         scenariosRegister.add(new DiamondLimit(main,game, ScenarioLG.DIAMOND_LIMIT));
         scenariosRegister.add(new FastSmelting(main,game,ScenarioLG.FAST_SMELTING));
         scenariosRegister.add(new FireLess(main,game,ScenarioLG.FIRE_LESS));
@@ -50,6 +50,7 @@ public class ScenariosLG {
         scenariosRegister.add(new SlowBow(main,game,ScenarioLG.SLOW_BOW));
         scenariosRegister.add(new Timber(main,game,ScenarioLG.TIMBER));
         scenariosRegister.add(new XpBoost(main,game,ScenarioLG.XP_BOOST));
+        scenariosRegister.add(new DoubleJump(main,game,ScenarioLG.DOUBLE_JUMP));
         update();
     }
 

@@ -1,12 +1,15 @@
 package io.github.ph1lou.pluginlg.commandlg.roles;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.classesroles.villageroles.Protector;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlg.game.PlayerLG;
+import io.github.ph1lou.pluginlgapi.Commands;
+import io.github.ph1lou.pluginlgapi.PlayerWW;
 import io.github.ph1lou.pluginlgapi.enumlg.State;
 import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
+import io.github.ph1lou.pluginlgapi.events.ProtectionEvent;
+import io.github.ph1lou.pluginlgapi.rolesattributs.AffectedPlayers;
+import io.github.ph1lou.pluginlgapi.rolesattributs.Power;
+import io.github.ph1lou.pluginlgapi.rolesattributs.Roles;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -15,11 +18,13 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.UUID;
 
-public class CommandProtector extends Commands {
+public class CommandProtector implements Commands {
 
+
+    private final MainLG main;
 
     public CommandProtector(MainLG main) {
-        super(main);
+        this.main = main;
     }
 
     @Override
@@ -41,7 +46,7 @@ public class CommandProtector extends Commands {
             return;
         }
 
-        PlayerLG plg = game.playerLG.get(uuid);
+        PlayerWW plg = game.playerLG.get(uuid);
 
 
         if (!game.isState(StateLG.GAME)) {
@@ -49,12 +54,12 @@ public class CommandProtector extends Commands {
             return;
         }
 
-        if (!(plg.getRole() instanceof Protector)){
+        if (!(plg.getRole().isDisplay("werewolf.role.protector.display"))){
             player.sendMessage(game.translate("werewolf.check.role", game.translate("werewolf.role.protector.display")));
             return;
         }
 
-        Protector protector = (Protector) plg.getRole();
+        Roles protector = plg.getRole();
 
         if (args.length!=1) {
             player.sendMessage(game.translate("werewolf.check.player_input"));
@@ -66,7 +71,7 @@ public class CommandProtector extends Commands {
             return;
         }
 
-        if(!protector.hasPower()) {
+        if(!((Power)protector).hasPower()) {
             player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
@@ -82,14 +87,23 @@ public class CommandProtector extends Commands {
             return;
         }
 
-        if(protector.getAffectedPlayers().contains(argUUID)){
+        if(((AffectedPlayers)protector).getAffectedPlayers().contains(argUUID)){
             player.sendMessage(game.translate("werewolf.check.already_get_power"));
             return;
         }
 
-        protector.clearAffectedPlayer();
-        protector.addAffectedPlayer(argUUID);
-        protector.setPower(false);
+        ProtectionEvent protectionEvent=new ProtectionEvent(uuid,argUUID);
+
+        Bukkit.getPluginManager().callEvent(protectionEvent);
+
+        if(protectionEvent.isCancelled()){
+            player.sendMessage(game.translate("werewolf.check.cancel"));
+            return;
+        }
+
+        ((AffectedPlayers) protector).clearAffectedPlayer();
+        ((Power) protector).setPower(false);
+        ((AffectedPlayers) protector).addAffectedPlayer(argUUID);
 
         Player playerProtected = Bukkit.getPlayer(args[0]);
         playerProtected.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);

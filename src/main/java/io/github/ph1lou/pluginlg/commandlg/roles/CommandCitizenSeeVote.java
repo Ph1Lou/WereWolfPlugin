@@ -2,24 +2,25 @@ package io.github.ph1lou.pluginlg.commandlg.roles;
 
 import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlg.classesroles.villageroles.Citizen;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlg.game.PlayerLG;
+import io.github.ph1lou.pluginlgapi.Commands;
+import io.github.ph1lou.pluginlgapi.PlayerWW;
 import io.github.ph1lou.pluginlgapi.enumlg.State;
 import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
-import io.github.ph1lou.pluginlgapi.enumlg.TimerLG;
-import io.github.ph1lou.pluginlgapi.enumlg.ToolLG;
+import io.github.ph1lou.pluginlgapi.enumlg.VoteStatus;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandCitizenSeeVote extends Commands {
+public class CommandCitizenSeeVote implements Commands {
 
+    private final MainLG main;
 
     public CommandCitizenSeeVote(MainLG main) {
-        super(main);
+        this.main = main;
     }
+
 
     @Override
     public void execute(CommandSender sender, String[] args) {
@@ -39,7 +40,7 @@ public class CommandCitizenSeeVote extends Commands {
             return;
         }
 
-        PlayerLG plg = game.playerLG.get(uuid);
+        PlayerWW plg = game.playerLG.get(uuid);
 
 
         if (!game.isState(StateLG.GAME)) {
@@ -47,7 +48,7 @@ public class CommandCitizenSeeVote extends Commands {
             return;
         }
 
-        if (!(plg.getRole() instanceof Citizen)){
+        if (!(plg.getRole().isDisplay("werewolf.role.citizen.display"))){
             player.sendMessage(game.translate("werewolf.check.role",game.translate("werewolf.role.citizen.display")));
             return;
         }
@@ -63,20 +64,12 @@ public class CommandCitizenSeeVote extends Commands {
             return;
         }
 
-        if (game.score.getTimer() % (game.config.getTimerValues().get(TimerLG.DAY_DURATION) * 2) < game.config.getTimerValues().get(TimerLG.VOTE_DURATION)) {
-            player.sendMessage(game.translate("werewolf.check.power"));
-            return;
-        }
-        if (!game.config.getConfigValues().get(ToolLG.VOTE) || game.config.getTimerValues().get(TimerLG.VOTE_DURATION) + game.config.getTimerValues().get(TimerLG.VOTE_BEGIN) > 0) {
-            player.sendMessage(game.translate("werewolf.check.power"));
-            return;
-        }
-        if (game.score.getTimer() % (game.config.getTimerValues().get(TimerLG.DAY_DURATION) * 2) > game.config.getTimerValues().get(TimerLG.VOTE_DURATION) + game.config.getTimerValues().get(TimerLG.CITIZEN_DURATION)) {
+        if (!game.getVote().isStatus(VoteStatus.WAITING_CITIZEN)) {
             player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
 
         citizen.setUse(citizen.getUse()+1);
-        game.vote.seeVote((Player) sender);
+        game.getVote().seeVote((Player) sender);
     }
 }

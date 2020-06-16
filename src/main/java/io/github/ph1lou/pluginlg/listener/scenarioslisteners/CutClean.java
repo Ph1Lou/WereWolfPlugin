@@ -29,7 +29,7 @@ public class CutClean extends Scenarios {
         Block block = event.getBlock();
         final Location loc = new Location(block.getWorld(), block.getLocation().getBlockX() + 0.5, block.getLocation().getBlockY() + 0.5, block.getLocation().getBlockZ() + 0.5);
 
-        if (game.config.getTimerValues().get(TimerLG.DIGGING) < 0) {
+        if (game.getConfig().getTimerValues().get(TimerLG.DIGGING) < 0) {
             List<Material> m = Arrays.asList(Material.REDSTONE_ORE, Material.EMERALD_ORE, Material.LAPIS_ORE, Material.COAL_ORE, Material.IRON_ORE, Material.GOLD_ORE, Material.DIAMOND_ORE);
 
             if (m.contains(block.getType())) {
@@ -59,7 +59,7 @@ public class CutClean extends Scenarios {
                 if (!currentItemType.equals(Material.DIAMOND_PICKAXE) && !currentItemType.equals(Material.IRON_PICKAXE) && !currentItemType.equals(Material.STONE_PICKAXE)) {
                     return;
                 }
-                block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(game.config.getScenarioValues().get(ScenarioLG.XP_BOOST) ? game.config.getXpBoost() / 100 : 1);
+                block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(game.getConfig().getScenarioValues().get(ScenarioLG.XP_BOOST) ? game.getConfig().getXpBoost() / 100 : 1);
                 block.setType(Material.AIR);
                 block.getWorld().dropItem(loc, new ItemStack(Material.IRON_INGOT, 1));
                 break;
@@ -68,7 +68,7 @@ public class CutClean extends Scenarios {
                 if (!currentItemType.equals(Material.DIAMOND_PICKAXE) && !currentItemType.equals(Material.IRON_PICKAXE)) {
                     return;
                 }
-                block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(game.config.getScenarioValues().get(ScenarioLG.XP_BOOST) ? game.config.getXpBoost() / 100 : 1);
+                block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(game.getConfig().getScenarioValues().get(ScenarioLG.XP_BOOST) ? game.getConfig().getXpBoost() / 100 : 1);
                 block.setType(Material.AIR);
                 block.getWorld().dropItem(loc, new ItemStack(Material.GOLD_INGOT, 1));
                 break;

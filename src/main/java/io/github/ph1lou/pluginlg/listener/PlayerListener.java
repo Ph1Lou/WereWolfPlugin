@@ -2,18 +2,16 @@ package io.github.ph1lou.pluginlg.listener;
 
 import fr.mrmicky.fastboard.FastBoard;
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.classesroles.neutralroles.Succubus;
-import io.github.ph1lou.pluginlg.classesroles.neutralroles.Thief;
-import io.github.ph1lou.pluginlg.classesroles.villageroles.Raven;
 import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlg.game.PlayerLG;
 import io.github.ph1lou.pluginlg.utils.Title;
-import io.github.ph1lou.pluginlgapi.enumlg.Camp;
+import io.github.ph1lou.pluginlgapi.PlayerWW;
 import io.github.ph1lou.pluginlgapi.enumlg.State;
 import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
 import io.github.ph1lou.pluginlgapi.enumlg.TimerLG;
+import io.github.ph1lou.pluginlgapi.events.FirstDeathEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -30,6 +28,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 
 public class PlayerListener implements Listener {
@@ -47,11 +46,8 @@ public class PlayerListener implements Listener {
 	private void onDropItem(PlayerDropItemEvent event) {
 
 		Player player = event.getPlayer();
-		UUID uuid = player.getUniqueId();
 
-		if (!game.playerLG.containsKey(uuid)) return;
-
-		if (!game.playerLG.get(uuid).isState(State.ALIVE) && !player.hasPermission("a.use") && !game.getHosts().contains(uuid) && !game.getModerators().contains(uuid)) {
+		if (player.getGameMode().equals(GameMode.SPECTATOR)) {
 			event.setCancelled(true);
 		}
 	}
@@ -72,11 +68,6 @@ public class PlayerListener implements Listener {
 			if (!player.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE) || !damager.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)) {
 				event.setCancelled(true);
 			}
-			return;
-		}
-
-		if (game.config.getTimerValues().get(TimerLG.PVP) > 0) {
-			event.setCancelled(true);
 		}
 	}
 
@@ -84,20 +75,22 @@ public class PlayerListener implements Listener {
 	@EventHandler
 	private void onPlayerDamage(EntityDamageEvent event) {
 
-		if (!(event.getEntity() instanceof Player)) return;
 
+		if (!(event.getEntity() instanceof Player)) return;
 		Player player = (Player) event.getEntity();
 		UUID uuid = player.getUniqueId();
+		World world =player.getWorld();
 
 		//Wither effect = NO_FALL
-		if (player.getWorld().equals(game.getWorld()) && game.config.getTimerValues().get(TimerLG.INVULNERABILITY) > 0) {
+
+		if (world.equals(game.getWorld()) && game.getConfig().getTimerValues().get(TimerLG.INVULNERABILITY) > 0) {
 			event.setCancelled(true);
 			return;
 		}
 
 		if (!game.playerLG.containsKey(uuid)) return;
 
-		PlayerLG plg = game.playerLG.get(uuid);
+		PlayerWW plg = game.playerLG.get(uuid);
 
 		if (plg.isState(State.JUDGEMENT)) {
 			event.setCancelled(true);
@@ -114,11 +107,11 @@ public class PlayerListener implements Listener {
 				event.setCancelled(true);
 				return;
 			}
-			if (plg.getRole() instanceof Raven || plg.hasSalvation()) {
+			if (plg.hasSalvation()) {
 				event.setCancelled(true);
 				return;
 			}
-			for (List<UUID> loversCursed : game.loversManage.cursedLoversRange) {
+			for (List<UUID> loversCursed : game.getCursedLoversRange()) {
 				if (loversCursed.contains(uuid)) {
 					event.setCancelled(true);
 					break;
@@ -135,7 +128,7 @@ public class PlayerListener implements Listener {
 			Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 0, false, false)), 20L);
 		} else if (!game.playerLG.containsKey(event.getPlayer().getUniqueId())) {
 			event.setRespawnLocation(game.getWorld().getSpawnLocation());
-		} else if (game.isState(StateLG.START) || game.isState(StateLG.TRANSPORTATION) || (game.isState(StateLG.GAME) && game.config.isTrollSV())) {
+		} else if (game.isState(StateLG.START) || game.isState(StateLG.TRANSPORTATION) || (game.isState(StateLG.GAME) && game.getConfig().isTrollSV())) {
 			event.setRespawnLocation(game.playerLG.get(event.getPlayer().getUniqueId()).getSpawn());
 			Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
 				event.getPlayer().removePotionEffect(PotionEffectType.WITHER);
@@ -143,7 +136,8 @@ public class PlayerListener implements Listener {
 			}, 1L);
 		} else event.setRespawnLocation(game.getWorld().getSpawnLocation());
 	}
-	
+
+
 	@EventHandler
 	private void onPlayerDeath(PlayerDeathEvent event) {
 
@@ -152,14 +146,14 @@ public class PlayerListener implements Listener {
 		Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> player.spigot().respawn(), 10L);
 		event.setKeepInventory(true);
 
-		if (game.isState(StateLG.GAME) && !game.config.isTrollSV()) {
+		if (game.isState(StateLG.GAME) && !game.getConfig().isTrollSV()) {
 
 			event.setDeathMessage(null);
 			event.setKeepLevel(true);
 
 			if (!game.playerLG.containsKey(uuid)) return;
 
-			PlayerLG plg = game.playerLG.get(uuid);
+			PlayerWW plg = game.playerLG.get(uuid);
 
 			if (!plg.isState(State.ALIVE)) return;
 
@@ -186,71 +180,31 @@ public class PlayerListener implements Listener {
 
 				if (game.playerLG.containsKey(killerUUID)) {
 
-					PlayerLG klg = game.playerLG.get(killerUUID);
+					PlayerWW klg = game.playerLG.get(killerUUID);
 
 					klg.addOneKill();
-
-					if (!klg.getRole().isCamp(Camp.VILLAGER)) {
-						killer.removePotionEffect(PotionEffectType.ABSORPTION);
-						killer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1200, 0, false, false));
-						killer.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 1200, 0, false, false));
-					}
-
-					if (klg.getRole() instanceof Thief) {
-						Thief thief = (Thief) klg.getRole();
-						if(thief.hasPower()){
-							thief.setPower(false);
-							Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
-								if (klg.isState(State.ALIVE)) {
-									game.roleManage.thief_recover_role(killerUUID, uuid);
-								} else {
-									game.death_manage.deathStep1(uuid);
-								}
-							},7*20);
-							return;
-						}
-					}
-					if (plg.getRole() instanceof Succubus){
-
-						Succubus succubus = (Succubus) plg.getRole();
-
-						if(!succubus.getAffectedPlayers().isEmpty() && !succubus.hasPower()) {
-
-							UUID targetUUID = succubus.getAffectedPlayers().get(0);
-
-							PlayerLG trg = game.playerLG.get(targetUUID);
-
-							if (trg.isState(State.ALIVE)) {
-
-								succubus.clearAffectedPlayer();
-
-								if (Bukkit.getPlayer(targetUUID) == null) {
-									game.death_manage.death(targetUUID);
-								} else {
-									Player target = Bukkit.getPlayer(targetUUID);
-									target.damage(10000);
-									target.sendMessage(game.translate("werewolf.role.succubus.free_of_succubus"));
-								}
-								Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> game.death_manage.resurrection(uuid), 20L);
-
-								return;
-							}
-
-						}
-					}
 				}
 			} else plg.addKiller(null);
 
+			Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
 
-			Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> game.death_manage.deathStep1(uuid), 20L);
+				FirstDeathEvent firstDeathEvent = new FirstDeathEvent(uuid);
+				Bukkit.getPluginManager().callEvent(firstDeathEvent);
+
+				if(firstDeathEvent.isCancelled()) return;
+
+				game.death_manage.deathStep1(uuid);
+			}, 20L);
 		}
 	}
+
 
 	
 	@EventHandler
 	private void onJoin(PlayerJoinEvent event) {
 
 		Player player = event.getPlayer();
+
 		String playerName = player.getName();
 		UUID uuid = player.getUniqueId();
 
@@ -272,7 +226,7 @@ public class PlayerListener implements Listener {
 			}
 		} else if (game.playerLG.containsKey(uuid)) {
 
-			PlayerLG plg = game.playerLG.get(uuid);
+			PlayerWW plg = game.playerLG.get(uuid);
 			if(!plg.getName().equals(playerName)){
 				plg.setName(playerName);
 			}
@@ -322,7 +276,7 @@ public class PlayerListener implements Listener {
 		if (game.isState(StateLG.END)) {
 			fastboard.updateLines(game.score.getScoreboard3());
 		}
-		game.optionlg.updateNameTag();
+		game.updateNameTag();
 		game.optionlg.updateCompass();
 	}	
 	
@@ -340,7 +294,7 @@ public class PlayerListener implements Listener {
 
         if(game.playerLG.containsKey(uuid)) {
 
-			PlayerLG plg = game.playerLG.get(uuid);
+			PlayerWW plg = game.playerLG.get(uuid);
 
 			if (game.isState(StateLG.LOBBY)) {
 				game.score.removePlayerSize();
@@ -355,7 +309,7 @@ public class PlayerListener implements Listener {
 				event.setQuitMessage(game.translate("werewolf.announcement.leave_in_spec",playerName));
 			} else {
 				event.setQuitMessage(game.translate("werewolf.announcement.leave_in_game", playerName));
-				plg.setDeathTime(game.score.getTimer());
+				plg.setDeathTime((int) TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()));
 			}
 		}
     }

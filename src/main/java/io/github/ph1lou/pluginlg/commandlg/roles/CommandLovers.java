@@ -1,11 +1,12 @@
 package io.github.ph1lou.pluginlg.commandlg.roles;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlg.game.PlayerLG;
+import io.github.ph1lou.pluginlgapi.Commands;
+import io.github.ph1lou.pluginlgapi.PlayerWW;
 import io.github.ph1lou.pluginlgapi.enumlg.State;
 import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
+import io.github.ph1lou.pluginlgapi.events.DonEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
@@ -13,11 +14,13 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandLovers extends Commands {
+public class CommandLovers implements Commands {
 
+
+    private final MainLG main;
 
     public CommandLovers(MainLG main) {
-        super(main);
+        this.main = main;
     }
 
     @Override
@@ -39,7 +42,7 @@ public class CommandLovers extends Commands {
             return;
         }
 
-        PlayerLG plg = game.playerLG.get(uuid);
+        PlayerWW plg = game.playerLG.get(uuid);
 
 
         if (!game.isState(StateLG.GAME)) {
@@ -82,32 +85,46 @@ public class CommandLovers extends Commands {
 
             player.setHealth(life-heart);
             int temp=heart;
-            for (UUID uuid1 : plg.getLovers()) {
-                if (Bukkit.getPlayer(uuid1) != null) {
-                    Player playerCouple = Bukkit.getPlayer(uuid1);
-                    int don = heart / plg.getLovers().size();
-                    if (playerCouple.getMaxHealth() - playerCouple.getHealth() >= don) {
-                        playerCouple.setHealth(playerCouple.getHealth() + don);
-                        playerCouple.sendMessage(game.translate("werewolf.role.lover.received", don, playername));
-                        playerCouple.playSound(playerCouple.getLocation(), Sound.PORTAL, 1, 20);
-                        heart -= don;
+            if(!plg.getLovers().isEmpty()){
+
+                int don = heart / plg.getLovers().size();
+                for (UUID uuid1 : plg.getLovers()) {
+                    if(game.playerLG.get(uuid1).isState(State.ALIVE)){
+                        if (Bukkit.getPlayer(uuid1) != null) {
+                            Player playerCouple = Bukkit.getPlayer(uuid1);
+
+                            if (playerCouple.getMaxHealth() - playerCouple.getHealth() >= don) {
+                                playerCouple.setHealth(playerCouple.getHealth() + don);
+                                playerCouple.sendMessage(game.translate("werewolf.role.lover.received", don, playername));
+                                player.sendMessage((game.translate("werewolf.role.lover.complete",don,playerCouple.getName())));
+                                playerCouple.playSound(playerCouple.getLocation(), Sound.PORTAL, 1, 20);
+                                Bukkit.getPluginManager().callEvent(new DonEvent(uuid,uuid1,don));
+                                temp -= don;
+                            }
+                            else player.sendMessage(game.translate("werewolf.role.lover.too_many_heart",playerCouple.getName()));
+                        }
                     }
                 }
             }
-            if (plg.getAmnesiacLoverUUID()!=null && Bukkit.getPlayer(plg.getAmnesiacLoverUUID()) != null) {
-                Player playerCouple = Bukkit.getPlayer(plg.getAmnesiacLoverUUID());
-                int don = heart ;
-                if (playerCouple.getMaxHealth() - playerCouple.getHealth() >= don) {
-                    playerCouple.setHealth(playerCouple.getHealth() + don);
-                    playerCouple.sendMessage(game.translate("werewolf.role.lover.received", don, playername));
-                    playerCouple.playSound(playerCouple.getLocation(), Sound.PORTAL, 1, 20);
-                    heart -= don;
+            else {
+                if (plg.getAmnesiacLoverUUID()!=null && Bukkit.getPlayer(plg.getAmnesiacLoverUUID()) != null) {
+                    Player playerCouple = Bukkit.getPlayer(plg.getAmnesiacLoverUUID());
+                    if(game.playerLG.get(plg.getAmnesiacLoverUUID()).isState(State.ALIVE)){
+                        if (playerCouple.getMaxHealth() - playerCouple.getHealth() >= heart) {
+                            playerCouple.setHealth(playerCouple.getHealth() + heart);
+                            playerCouple.sendMessage(game.translate("werewolf.role.lover.received", heart, playername));
+                            player.sendMessage((game.translate("werewolf.role.lover.complete",heart,playerCouple.getName())));
+                            playerCouple.playSound(playerCouple.getLocation(), Sound.PORTAL, 1, 20);
+                            temp -= heart;
+                            Bukkit.getPluginManager().callEvent(new DonEvent(uuid,plg.getAmnesiacLoverUUID(),heart));
+                        }
+                        else player.sendMessage(game.translate("werewolf.role.lover.too_many_heart",playerCouple.getName()));
+                    }
+                    else player.sendMessage(game.translate("werewolf.check.offline_player"));
                 }
             }
-            if(temp==heart){
-                player.sendMessage("Vous ne pouvez pas envoyer autant de coeurs");
-            }
-            player.setHealth(player.getHealth()+heart);
+
+            player.setHealth(player.getHealth()+temp);
         }
         else {
             if (args[1].equals(playername)) {
@@ -119,22 +136,28 @@ public class CommandLovers extends Commands {
                 return;
             }
 
-            UUID argUUID = Bukkit.getPlayer(args[0]).getUniqueId();
+            Player playerCouple = Bukkit.getPlayer(args[1]);
+            UUID argUUID = playerCouple.getUniqueId();
 
-            if (!plg.getLovers().contains(argUUID)) {
+            if(!game.playerLG.get(argUUID).isState(State.ALIVE)){
+                player.sendMessage(game.translate("werewolf.check.offline_player"));
+                return;
+            }
+
+            if (!plg.getLovers().contains(argUUID) && (plg.getAmnesiacLoverUUID()==null || !plg.getAmnesiacLoverUUID().equals(argUUID) || !plg.getRevealAmnesiacLover())) {
                 player.sendMessage(game.translate("werewolf.role.lover.not_lover"));
                 return;
             }
             player.setHealth(life-heart);
 
-            Player playerCouple = Bukkit.getPlayer(args[1]);
-
             if(playerCouple.getMaxHealth()-playerCouple.getHealth()>=heart){
                 playerCouple.setHealth(playerCouple.getHealth() + heart);
                 playerCouple.sendMessage(game.translate("werewolf.role.lover.received", heart, playername));
+                player.sendMessage((game.translate("werewolf.role.lover.complete",heart,args[1])));
+                Bukkit.getPluginManager().callEvent(new DonEvent(uuid,argUUID,heart));
             }
             else{
-                player.sendMessage("Vous ne pouvez pas envoyer autant de coeurs");
+                player.sendMessage(game.translate("werewolf.role.lover.too_many_heart",args[1]));
                 player.setHealth(player.getHealth()+heart);
             }
         }

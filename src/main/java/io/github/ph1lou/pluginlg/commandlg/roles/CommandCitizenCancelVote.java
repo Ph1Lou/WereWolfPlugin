@@ -2,24 +2,26 @@ package io.github.ph1lou.pluginlg.commandlg.roles;
 
 import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlg.classesroles.villageroles.Citizen;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlg.game.PlayerLG;
+import io.github.ph1lou.pluginlgapi.Commands;
+import io.github.ph1lou.pluginlgapi.PlayerWW;
 import io.github.ph1lou.pluginlgapi.enumlg.State;
 import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
-import io.github.ph1lou.pluginlgapi.enumlg.TimerLG;
-import io.github.ph1lou.pluginlgapi.enumlg.ToolLG;
+import io.github.ph1lou.pluginlgapi.enumlg.VoteStatus;
+import io.github.ph1lou.pluginlgapi.events.CancelVoteEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandCitizenCancelVote extends Commands {
+public class CommandCitizenCancelVote implements Commands {
 
+
+    private final MainLG main;
 
     public CommandCitizenCancelVote(MainLG main) {
-        super(main);
+        this.main = main;
     }
 
     @Override
@@ -40,7 +42,7 @@ public class CommandCitizenCancelVote extends Commands {
             return;
         }
 
-        PlayerLG plg = game.playerLG.get(uuid);
+        PlayerWW plg = game.playerLG.get(uuid);
 
 
         if (!game.isState(StateLG.GAME)) {
@@ -48,7 +50,7 @@ public class CommandCitizenCancelVote extends Commands {
             return;
         }
 
-        if (!(plg.getRole() instanceof Citizen)){
+        if (!(plg.getRole().isDisplay("werewolf.role.citizen.display"))){
             player.sendMessage(game.translate("werewolf.check.role",game.translate("werewolf.role.citizen.display")));
             return;
         }
@@ -66,24 +68,17 @@ public class CommandCitizenCancelVote extends Commands {
             return;
         }
 
-        if (game.score.getTimer() % (game.config.getTimerValues().get(TimerLG.DAY_DURATION) * 2) < game.config.getTimerValues().get(TimerLG.VOTE_DURATION)) {
-            player.sendMessage(game.translate("werewolf.check.power"));
-            return;
-        }
-        if (!game.config.getConfigValues().get(ToolLG.VOTE) || game.config.getTimerValues().get(TimerLG.VOTE_DURATION) + game.config.getTimerValues().get(TimerLG.VOTE_BEGIN) > 0) {
-            player.sendMessage(game.translate("werewolf.check.power"));
-            return;
-        }
-        if (game.score.getTimer() % (game.config.getTimerValues().get(TimerLG.DAY_DURATION) * 2) > game.config.getTimerValues().get(TimerLG.VOTE_DURATION) + game.config.getTimerValues().get(TimerLG.CITIZEN_DURATION)) {
+        if (!game.getVote().isStatus(VoteStatus.WAITING_CITIZEN)) {
             player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
 
         citizen.setPower(false);
-        UUID vote=game.vote.getResult();
+        UUID vote=game.getVote().getResult();
+        Bukkit.getPluginManager().callEvent(new CancelVoteEvent(uuid,vote));
+        game.getVote().resetVote();
         sender.sendMessage(game.translate("werewolf.role.citizen.cancelling_vote_perform",game.playerLG.get(vote).getName()));
         citizen.addAffectedPlayer(vote);
         Bukkit.broadcastMessage(game.translate("werewolf.role.citizen.cancelling_broadcast"));
-        game.vote.resetVote();
     }
 }

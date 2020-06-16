@@ -1,23 +1,20 @@
 package io.github.ph1lou.pluginlg.classesroles.villageroles;
 
 
-import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlgapi.enumlg.RoleLG;
+import io.github.ph1lou.pluginlgapi.GetWereWolfAPI;
+import io.github.ph1lou.pluginlgapi.WereWolfAPI;
+import io.github.ph1lou.pluginlgapi.rolesattributs.RolesVillage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class SiameseTwin extends RolesVillage{
+public class SiameseTwin extends RolesVillage {
 
-    public SiameseTwin(GameManager game, UUID uuid) {
-        super(game,uuid);
+    public SiameseTwin(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
+        super(main,game,uuid);
     }
 
-    @Override
-    public RoleLG getRoleEnum() {
-        return RoleLG.SIAMESE_TWIN;
-    }
 
     @Override
     public String getDescription() {
@@ -26,7 +23,7 @@ public class SiameseTwin extends RolesVillage{
 
     @Override
     public String getDisplay() {
-        return game.translate("werewolf.role.siamese_twin.display");
+        return "werewolf.role.siamese_twin.display";
     }
 
 

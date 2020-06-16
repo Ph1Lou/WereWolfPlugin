@@ -109,7 +109,7 @@ death_loot:
     ==: org.bukkit.inventory.ItemStack
     type: GOLDEN_APPLE
     amount: 2
-CUPID:
+"werewolf.role.cupid.display":
   '0':
     ==: org.bukkit.inventory.ItemStack
     type: ENCHANTED_BOOK
@@ -120,12 +120,12 @@ CUPID:
       stored-enchants:
         ARROW_DAMAGE: 1
         ARROW_KNOCKBACK: 1
-MISCHIEVOUS_WEREWOLF:
+"werewolf.role.mischievous_werewolf.display":
   '0':
     ==: org.bukkit.inventory.ItemStack
     type: TNT
     amount: 5
-WITCH:
+"werewolf.role.witch.display":
   '0':
     ==: org.bukkit.inventory.ItemStack
     type: POTION
@@ -140,19 +140,19 @@ WITCH:
     ==: org.bukkit.inventory.ItemStack
     type: POTION
     damage: 16385
-LITTLE_GIRL:
+"werewolf.role.little_girl.display":
   '0':
     ==: org.bukkit.inventory.ItemStack
     type: TNT
     amount: 5
-PROTECTOR:
+"werewolf.role.protector.display":
   '0':
     ==: org.bukkit.inventory.ItemStack
     type: POTION
     damage: 16389
     amount: 3
 
-ASSASSIN:
+"werewolf.role.assassin.display":
   '0':
     ==: org.bukkit.inventory.ItemStack
     type: ENCHANTED_BOOK
@@ -177,7 +177,7 @@ ASSASSIN:
       meta-type: ENCHANTED
       stored-enchants:
         ARROW_DAMAGE: 3
-SERIAL_KILLER:
+"werewolf.role.serial_killer.display":
   '0':
     ==: org.bukkit.inventory.ItemStack
     type: ENCHANTED_BOOK

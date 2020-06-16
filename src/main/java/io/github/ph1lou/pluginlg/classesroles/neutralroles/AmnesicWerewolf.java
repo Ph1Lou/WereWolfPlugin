@@ -1,15 +1,17 @@
 package io.github.ph1lou.pluginlg.classesroles.neutralroles;
 
-import io.github.ph1lou.pluginlg.classesroles.Transformed;
-import io.github.ph1lou.pluginlg.events.DayEvent;
-import io.github.ph1lou.pluginlg.events.NightEvent;
-import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlgapi.GetWereWolfAPI;
+import io.github.ph1lou.pluginlgapi.PlayerWW;
+import io.github.ph1lou.pluginlgapi.WereWolfAPI;
 import io.github.ph1lou.pluginlgapi.enumlg.Day;
-import io.github.ph1lou.pluginlgapi.enumlg.RoleLG;
 import io.github.ph1lou.pluginlgapi.enumlg.State;
+import io.github.ph1lou.pluginlgapi.events.*;
+import io.github.ph1lou.pluginlgapi.rolesattributs.RolesNeutral;
+import io.github.ph1lou.pluginlgapi.rolesattributs.Transformed;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -18,8 +20,8 @@ import java.util.UUID;
 public class AmnesicWerewolf extends RolesNeutral implements Transformed {
 
 
-    public AmnesicWerewolf(GameManager game, UUID uuid) {
-        super(game,uuid);
+    public AmnesicWerewolf(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
+        super(main,game,uuid);
     }
 
     private Boolean transformed=false;
@@ -27,11 +29,8 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
     @EventHandler
     public void onNight(NightEvent event) {
 
-        if(!event.getUuid().equals(game.getGameUUID())){
-            return;
-        }
 
-        if(!game.playerLG.get(getPlayerUUID()).isState(State.ALIVE)){
+        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
             return;
         }
 
@@ -45,11 +44,8 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if(!event.getUuid().equals(game.getGameUUID())){
-            return;
-        }
 
-        if(!game.playerLG.get(getPlayerUUID()).isState(State.ALIVE)){
+        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
             return;
         }
         if(Bukkit.getPlayer(getPlayerUUID())==null){
@@ -57,6 +53,41 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
         }
         Player player = Bukkit.getPlayer(getPlayerUUID());
         player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+    }
+
+    @EventHandler
+    public void onFinalDeath(FinalDeathEvent event) {
+
+        UUID uuid = event.getUuid();
+
+        PlayerWW target = game.getPlayersWW().get(uuid);
+
+        if(target.getLastKiller()==null) return;
+
+        if(!target.getLastKiller().equals(getPlayerUUID())) return;
+
+        if(transformed) return;
+
+        AmnesiacTransformationEvent amnesiacTransformationEvent=new AmnesiacTransformationEvent(getPlayerUUID(),uuid);
+        Bukkit.getPluginManager().callEvent(amnesiacTransformationEvent);
+
+        if(amnesiacTransformationEvent.isCancelled()){
+            if(Bukkit.getPlayer(getPlayerUUID())!=null){
+                Bukkit.getPlayer(getPlayerUUID()).sendMessage(game.translate("werewolf.check.transformation"));
+            }
+            return;
+        }
+
+        NewWereWolfEvent newWereWolfEvent = new NewWereWolfEvent(getPlayerUUID());
+        Bukkit.getPluginManager().callEvent(newWereWolfEvent);
+
+        if(newWereWolfEvent.isCancelled()){
+            if(Bukkit.getPlayer(getPlayerUUID())!=null){
+                Bukkit.getPlayer(getPlayerUUID()).sendMessage(game.translate("werewolf.check.transformation"));
+            }
+        }
+        else setTransformed(true);
+
     }
 
     @Override
@@ -67,12 +98,6 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
         player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,Integer.MAX_VALUE,-1,false,false));
     }
 
-
-    @Override
-    public RoleLG getRoleEnum() {
-        return RoleLG.AMNESIAC_WEREWOLF;
-    }
-
     @Override
     public String getDescription() {
         return game.translate("werewolf.role.amnesiac_werewolf.description");
@@ -80,12 +105,23 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
 
     @Override
     public String getDisplay() {
-        return game.translate("werewolf.role.amnesiac_werewolf.display");
+        return "werewolf.role.amnesiac_werewolf.display";
     }
 
     @Override
     public boolean getTransformed() {
         return this.transformed;
+    }
+
+    @EventHandler
+    public void onEndPlayerMessage(EndPlayerMessageEvent event){
+
+        if(!event.getPlayerUUID().equals(getPlayerUUID())) return;
+
+        StringBuilder sb = event.getEndMessage();
+        if(transformed){
+            sb.append(game.translate("werewolf.end.transform"));
+        }
     }
 
     @Override
@@ -95,6 +131,21 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
 
     @Override
     public boolean isWereWolf() {
-        return this.transformed;
+        return this.transformed || super.isWereWolf();
+    }
+
+    @EventHandler
+    private void onPlayerDeath(PlayerDeathEvent event) {
+
+        if(!transformed) return;
+        if(event.getEntity() == null) return;
+        if(event.getEntity().getKiller()==null) return;
+        Player killer = event.getEntity().getKiller();
+
+        if(!killer.getUniqueId().equals(getPlayerUUID())) return;
+
+        killer.removePotionEffect(PotionEffectType.ABSORPTION);
+        killer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1200, 0, false, false));
+        killer.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 1200, 0, false, false));
     }
 }

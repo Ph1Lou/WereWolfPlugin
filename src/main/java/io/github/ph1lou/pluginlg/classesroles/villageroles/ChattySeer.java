@@ -1,15 +1,15 @@
 package io.github.ph1lou.pluginlg.classesroles.villageroles;
 
 
-import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlgapi.enumlg.RoleLG;
+import io.github.ph1lou.pluginlgapi.GetWereWolfAPI;
+import io.github.ph1lou.pluginlgapi.WereWolfAPI;
 
 import java.util.UUID;
 
 public class ChattySeer extends Seer {
 
-    public ChattySeer(GameManager game, UUID uuid) {
-        super(game,uuid);
+    public ChattySeer(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
+        super(main,game,uuid);
     }
 
     @Override
@@ -19,11 +19,7 @@ public class ChattySeer extends Seer {
 
     @Override
     public String getDisplay() {
-        return game.translate("werewolf.role.chatty_seer.display");
+        return "werewolf.role.chatty_seer.display";
     }
 
-    @Override
-    public RoleLG getRoleEnum() {
-        return RoleLG.CHATTY_SEER;
-    }
 }

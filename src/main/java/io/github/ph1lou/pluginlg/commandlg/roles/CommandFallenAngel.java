@@ -2,23 +2,27 @@ package io.github.ph1lou.pluginlg.commandlg.roles;
 
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.classesroles.neutralroles.Angel;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlg.game.PlayerLG;
-import io.github.ph1lou.pluginlgapi.enumlg.RoleLG;
+import io.github.ph1lou.pluginlgapi.Commands;
+import io.github.ph1lou.pluginlgapi.PlayerWW;
+import io.github.ph1lou.pluginlgapi.enumlg.AngelForm;
 import io.github.ph1lou.pluginlgapi.enumlg.State;
 import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
+import io.github.ph1lou.pluginlgapi.events.AngelChoiceEvent;
+import io.github.ph1lou.pluginlgapi.rolesattributs.AngelRole;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandFallenAngel extends Commands {
+public class CommandFallenAngel implements Commands {
 
+
+    private final MainLG main;
 
     public CommandFallenAngel(MainLG main) {
-        super(main);
+        this.main = main;
     }
 
     @Override
@@ -39,7 +43,7 @@ public class CommandFallenAngel extends Commands {
             return;
         }
 
-        PlayerLG plg = game.playerLG.get(uuid);
+        PlayerWW plg = game.playerLG.get(uuid);
 
 
         if (!game.isState(StateLG.GAME)) {
@@ -47,14 +51,14 @@ public class CommandFallenAngel extends Commands {
             return;
         }
 
-        if (!(plg.getRole() instanceof Angel)){
+        if (!(plg.getRole() instanceof AngelRole)){
             player.sendMessage(game.translate("werewolf.check.role", game.translate("werewolf.role.angel.display")));
             return;
         }
 
-        Angel angel = (Angel) plg.getRole();
+        AngelRole role = (AngelRole) plg.getRole();
 
-        if(!angel.hasPower()) {
+        if(!(role.isChoice(AngelForm.ANGEL))) {
             player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
@@ -64,8 +68,8 @@ public class CommandFallenAngel extends Commands {
             return;
         }
 
-        angel.setChoice(RoleLG.FALLEN_ANGEL);
-        angel.setPower(false);
+        role.setChoice(AngelForm.FALLEN_ANGEL);
+        Bukkit.getPluginManager().callEvent(new AngelChoiceEvent(uuid,AngelForm.FALLEN_ANGEL));
         sender.sendMessage(game.translate("werewolf.role.angel.angel_choice_perform",game.translate("werewolf.role.fallen_angel.display")));
     }
 }

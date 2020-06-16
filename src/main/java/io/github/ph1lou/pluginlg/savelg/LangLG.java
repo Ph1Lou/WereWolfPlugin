@@ -9,6 +9,9 @@ import io.github.ph1lou.pluginlg.commandlg.AdminLG;
 import io.github.ph1lou.pluginlg.commandlg.CommandLG;
 import io.github.ph1lou.pluginlg.game.GameManager;
 import io.github.ph1lou.pluginlg.game.OptionLG;
+import io.github.ph1lou.pluginlg.utils.Title;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.util.HashMap;
@@ -51,19 +54,25 @@ public class LangLG {
     }
 
 
+
     public void init(){
 
         FileLG.copy(main.getResource("fr.json"),main.getDataFolder()+File.separator+"languages"+File.separator+"fr.json");
+        FileLG.copy(main.getResource("en.json"),main.getDataFolder()+File.separator+"languages"+File.separator+"en.json");
 
     }
 
     public void updateLanguage(GameManager game){
+
         String lang_select = main.getConfig().getString("lang");
         File file = new File(main.getDataFolder() + File.separator + "languages" + File.separator, lang_select+".json");
         File fileFR = new File(main.getDataFolder() + File.separator + "languages" + File.separator, "fr.json");
 
         if (!file.exists()){
-            game.language=loadTranslations(FileLG.loadContent(fileFR));
+            String content = FileLG.loadContent(fileFR);
+            FileLG.save(file,content);
+            game.getLanguage().clear();
+            game.getLanguage().putAll(loadTranslations(content));
         }
         else {
             Map<String,String> fr =loadTranslations(FileLG.loadContent(fileFR));
@@ -85,18 +94,24 @@ public class LangLG {
                         temp=temp.get(strings[i]).asObject();
                     }
                     temp.set(strings[strings.length-1],fr.get(string));
-
                 }
             }
-
             FileLG.saveJson(file,jsonObject);
-            game.language=loadTranslations(FileLG.loadContent(file));
+            game.getLanguage().clear();
+            game.getLanguage().putAll(loadTranslations(FileLG.loadContent(file)));
         }
 
-        game.optionlg=new OptionLG(game);
+
+        for(Player player:Bukkit.getOnlinePlayers()){
+            Title.sendTabTitle(player, game.translate("werewolf.tab.top"), game.translate("werewolf.tab.bot"));
+            if(game.boards.containsKey(player.getUniqueId())){
+                game.boards.get(player.getUniqueId()).updateTitle(game.translate("werewolf.score_board.title"));
+            }
+
+            player.closeInventory();
+        }
+        game.optionlg=new OptionLG(main,game);
         main.getCommand("a").setExecutor(new AdminLG(main));
         main.getCommand("ww").setExecutor(new CommandLG(main,game));
     }
-
-
 }

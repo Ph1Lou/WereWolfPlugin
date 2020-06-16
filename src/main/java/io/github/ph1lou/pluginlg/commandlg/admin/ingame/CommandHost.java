@@ -1,19 +1,21 @@
 package io.github.ph1lou.pluginlg.commandlg.admin.ingame;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlgapi.Commands;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandHost extends Commands {
+public class CommandHost implements Commands {
 
+
+    private final MainLG main;
 
     public CommandHost(MainLG main) {
-        super(main);
+        this.main = main;
     }
 
     @Override
@@ -43,13 +45,12 @@ public class CommandHost extends Commands {
             game.getHosts().remove(host.getUniqueId());
         }
         else{
-            if(!game.playerLG.containsKey(uuid)){
-                sender.sendMessage(game.translate("werewolf.check.not_in_game_player"));
-                return;
-            }
             game.getHosts().add(uuid);
+            if(!game.playerLG.containsKey(uuid)){
+                host.setScoreboard(game.board);
+            }
             Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.host.add", args[0]));
         }
-        game.optionlg.updateNameTag();
+        game.updateNameTag();
     }
 }

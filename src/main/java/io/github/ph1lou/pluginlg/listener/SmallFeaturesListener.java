@@ -1,12 +1,8 @@
 package io.github.ph1lou.pluginlg.listener;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.classesroles.InvisibleState;
-import io.github.ph1lou.pluginlg.classesroles.villageroles.LittleGirl;
-import io.github.ph1lou.pluginlg.classesroles.werewolfroles.MischievousWereWolf;
 import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlg.game.PlayerLG;
-import io.github.ph1lou.pluginlgapi.enumlg.Day;
+import io.github.ph1lou.pluginlgapi.events.GoldenAppleParticleEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -25,7 +21,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
-import java.util.UUID;
 
 public class SmallFeaturesListener implements Listener {
 
@@ -87,26 +82,14 @@ public class SmallFeaturesListener implements Listener {
                     event.getPlayer().getInventory().remove(event.getItem());
                     return;
                 }
-                if (game.config.getGoldenAppleParticles() == 2) {
+                if (game.getConfig().getGoldenAppleParticles() == 2) {
                     return;
                 }
+                GoldenAppleParticleEvent goldenAppleParticleEvent = new GoldenAppleParticleEvent(event.getPlayer().getUniqueId());
 
-                if (game.isDay(Day.NIGHT) && game.config.getGoldenAppleParticles() == 1) {
+                Bukkit.getPluginManager().callEvent(goldenAppleParticleEvent);
 
-                    UUID uuid = event.getPlayer().getUniqueId();
-                    if (game.playerLG.containsKey(uuid)) {
-                        PlayerLG plg = game.playerLG.get(uuid);
-
-                        if(plg.getRole() instanceof LittleGirl || plg.getRole() instanceof MischievousWereWolf){
-
-                             InvisibleState invisibleState = (InvisibleState) plg.getRole();
-
-                            if(!invisibleState.isInvisible()){
-                                return;
-                            }
-                        }
-                    }
-                }
+                if(!goldenAppleParticleEvent.isCancelled()) return;
 
                 if (event.getPlayer().hasPotionEffect(PotionEffectType.ABSORPTION)) {
                     event.getPlayer().removePotionEffect(PotionEffectType.ABSORPTION);
@@ -138,7 +121,7 @@ public class SmallFeaturesListener implements Listener {
 
         loots.clear();
 
-        if (Math.random() * 100 < game.config.getPearlRate()) {
+        if (Math.random() * 100 < game.getConfig().getPearlRate()) {
             loots.add(new ItemStack(Material.ENDER_PEARL));
         }
     }

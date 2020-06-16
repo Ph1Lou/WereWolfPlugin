@@ -2,10 +2,6 @@ package io.github.ph1lou.pluginlg.game;
 
 import fr.mrmicky.fastboard.FastBoard;
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.classesroles.RolesImpl;
-import io.github.ph1lou.pluginlg.classesroles.neutralroles.*;
-import io.github.ph1lou.pluginlg.classesroles.villageroles.*;
-import io.github.ph1lou.pluginlg.classesroles.werewolfroles.*;
 import io.github.ph1lou.pluginlg.listener.ScenariosLG;
 import io.github.ph1lou.pluginlg.savelg.ConfigLG;
 import io.github.ph1lou.pluginlg.savelg.StuffLG;
@@ -13,153 +9,111 @@ import io.github.ph1lou.pluginlg.tasks.LobbyTask;
 import io.github.ph1lou.pluginlg.utils.UpdateChecker;
 import io.github.ph1lou.pluginlg.utils.WorldUtils;
 import io.github.ph1lou.pluginlg.worldloader.WorldFillTask;
-import io.github.ph1lou.pluginlgapi.ConfigWereWolfAPI;
-import io.github.ph1lou.pluginlgapi.WereWolfAPI;
-import io.github.ph1lou.pluginlgapi.enumlg.Day;
-import io.github.ph1lou.pluginlgapi.enumlg.RoleLG;
-import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
+import io.github.ph1lou.pluginlgapi.*;
+import io.github.ph1lou.pluginlgapi.enumlg.*;
+import io.github.ph1lou.pluginlgapi.events.StopEvent;
+import io.github.ph1lou.pluginlgapi.rolesattributs.InvisibleState;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Constructor;
 import java.util.*;
 
 public class GameManager implements WereWolfAPI {
 
-    final MainLG main;
+    private final MainLG main;
     public final Scoreboard board;
     public final Map<UUID, FastBoard> boards = new HashMap<>();
-    public final Map<UUID, PlayerLG> playerLG = new HashMap<>();
+    public final Map<UUID, PlayerWW> playerLG = new HashMap<>();
     private StateLG state;
     private Day dayState;
     public final DeathManagementLG death_manage;
-    public final VoteLG vote ;
-    public final ScoreBoardLG score;
-    public final EventsLG eventslg;
+    private final VoteLG vote = new VoteLG(this);
+    public final ScoreBoardLG score = new ScoreBoardLG(this);
+    public final EventsLG eventslg = new EventsLG(this);
     public OptionLG optionlg;
     public final RoleManagementLG roleManage;
-    public final LoversManagement loversManage;
-    public final ConfigLG config = new ConfigLG();
-    public final EndLG endlg;
-    public final StuffLG stufflg;
-    public final ScenariosLG scenarios;
+    public final LoversManagement loversManage = new LoversManagement(this);
+    private final ConfigLG config = new ConfigLG();
+    private final EndLG endlg;
+    private final StuffLG stufflg;
+    private final ScenariosLG scenarios;
     private final Random r = new Random(System.currentTimeMillis());
     public WorldFillTask wft = null;
-    public Map<String,String> language;
+    private final Map<String, String> language = new HashMap<>();
     private World world;
     private final List<UUID> queue = new ArrayList<>();
-    private List<UUID> whiteListedPlayers = new ArrayList<>();
-    private List<UUID> hosts = new ArrayList<>();
-    private List<UUID> moderators = new ArrayList<>();
+    private final List<UUID> whiteListedPlayers = new ArrayList<>();
+    private final List<UUID> hosts = new ArrayList<>();
+    private final List<UUID> moderators = new ArrayList<>();
     private int spectatorMode = 2;  // 0 no Spectators, 1 allowed for death players, 2 for all players;
     private boolean whiteList = false;
     private int playerMax = 30;
     private String gameName = "/a name";
-    private final UUID uuid =UUID.randomUUID();
-    public final Map<RoleLG, Constructor<? extends RolesImpl>> rolesRegister = new HashMap<>();
+    private final UUID uuid = UUID.randomUUID();
+
 
     public GameManager(MainLG main) {
 
         this.main = main;
-        death_manage = new DeathManagementLG(main,this);
-        vote = new VoteLG(this);
-        score = new ScoreBoardLG(this);
-        eventslg = new EventsLG(this);
-        main.lang.updateLanguage(this);
-        roleManage = new RoleManagementLG(main,this);
-        loversManage = new LoversManagement(this);
+
         endlg = new EndLG(main, this);
-        stufflg = new StuffLG(this);
-        scenarios = new ScenariosLG(main,this);
+        death_manage = new DeathManagementLG(main, this);
+        main.lang.updateLanguage(this);
+        roleManage = new RoleManagementLG(main, this);
+        stufflg = new StuffLG(main, this);
+        scenarios = new ScenariosLG(main, this);
         config.getConfig(this, "saveCurrent");
         stufflg.load("saveCurrent");
         board = Bukkit.getScoreboardManager().getNewScoreboard();
+        Bukkit.getPluginManager().registerEvents(vote,main);
         scenarios.init();
         setState(StateLG.LOBBY);
         setDay(Day.DAY);
-        registerRole();
-        LobbyTask start = new LobbyTask(main,this);
+        LobbyTask start = new LobbyTask(main, this);
         start.runTaskTimer(main, 0, 20);
     }
 
-    private void registerRole() {
-        try {
-            rolesRegister.put(RoleLG.WILD_CHILD, WildChild.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.WEREWOLF, WereWolf.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.SUCCUBUS, Succubus.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.ELDER, Elder.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.ANGEL, Angel.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.FALLEN_ANGEL, FallenAngel.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.GUARDIAN_ANGEL, GuardianAngel.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.ASSASSIN, Assassin.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.CITIZEN, Citizen.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.COMEDIAN, Comedian.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.RAVEN, Raven.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.CUPID, Cupid.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.DETECTIVE, Detective.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.SIAMESE_TWIN, SiameseTwin.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.INFECT, InfectFatherOfTheWolves.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.AMNESIAC_WEREWOLF, AmnesicWerewolf.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.FALSIFIER_WEREWOLF, FalsifierWereWolf.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.WHITE_WEREWOLF, WhiteWereWolf.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.MISCHIEVOUS_WEREWOLF, MischievousWereWolf.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.MINER, Miner.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.BEAR_TRAINER, BearTrainer.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.LITTLE_GIRL, LittleGirl.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.FOX, Fox.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.PROTECTOR, Protector.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.SISTER, Sister.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.WITCH, Witch.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.TRAPPER, Trapper.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.TROUBLEMAKER, Troublemaker.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.SERIAL_KILLER, SerialKiller.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.NAUGHTY_LITTLE_WOLF, NaughtyLittleWolf.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.THIEF, Thief.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.SEER, Seer.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.CHATTY_SEER, ChattySeer.class.getConstructor(GameManager.class,UUID.class));
-            rolesRegister.put(RoleLG.VILLAGER, Villager.class.getConstructor(GameManager.class,UUID.class));
-
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     public void setState(StateLG state) {
-        this.state=state;
+        this.state = state;
     }
+
 
     @Override
     public boolean isState(StateLG state) {
-        return this.state==state;
+        return this.state == state;
     }
 
     public void setDay(Day day) {
-        this.dayState =day;
+        this.dayState = day;
     }
 
     @Override
     public boolean isDay(Day day) {
-        return this.dayState ==day;
+        return this.dayState == day;
     }
 
 
     public void setWorld(World world) {
 
-        try{
-            this.world=world;
+        try {
+            this.world = world;
             world.setWeatherDuration(0);
             world.setThundering(false);
             world.setTime(0);
+            world.setPVP(false);
             world.setGameRuleValue("reducedDebugInfo", "true");
             world.setGameRuleValue("keepInventory", "true");
             world.setGameRuleValue("naturalRegeneration", "false");
@@ -190,17 +144,8 @@ public class GameManager implements WereWolfAPI {
                     new Location(world, x + 16, j, i + z).getBlock().setType(Material.BARRIER);
                 }
             }
-        }catch(Exception ignored){
+        } catch (Exception ignored) {
         }
-    }
-
-
-    public File getDataFolder(){
-        return main.getDataFolder();
-    }
-
-    public InputStream getResource(String filename){
-        return main.getResource(filename);
     }
 
 
@@ -211,6 +156,11 @@ public class GameManager implements WereWolfAPI {
     @Override
     public boolean isWhiteList() {
         return whiteList;
+    }
+
+    @Override
+    public Map<String,String> getLanguage(){
+        return this.language;
     }
 
     @Override
@@ -227,7 +177,6 @@ public class GameManager implements WereWolfAPI {
     public void setPlayerMax(int playerMax) {
         this.playerMax = playerMax;
     }
-
 
 
     public void join(Player player) {
@@ -248,9 +197,9 @@ public class GameManager implements WereWolfAPI {
                 Bukkit.broadcastMessage(translate("werewolf.announcement.join", score.getPlayerSize(), score.getRole(), playerName));
                 clearPlayer(player);
                 player.setGameMode(GameMode.ADVENTURE);
-                PlayerLG plg =new PlayerLG(player,this);
-                playerLG.put(uuid,plg );
-                Bukkit.getPluginManager().registerEvents(plg,main);
+                PlayerWW plg = new PlayerLG(main, this, player);
+                playerLG.put(uuid, plg);
+                Bukkit.getPluginManager().registerEvents((Listener) plg, main);
                 player.setScoreboard(playerLG.get(uuid).getScoreBoard());
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 0, false, false));
                 player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
@@ -262,7 +211,7 @@ public class GameManager implements WereWolfAPI {
                         player.sendMessage(translate("werewolf.update.out_of_date"));
                     }
                 });
-                optionlg.updateNameTag();
+                updateNameTag();
             }
         }
     }
@@ -289,7 +238,7 @@ public class GameManager implements WereWolfAPI {
 
         if (!getQueue().contains(uuid)) {
             queue.add(uuid);
-            Bukkit.broadcastMessage(translate("werewolf.announcement.queue" ,player.getName()));
+            Bukkit.broadcastMessage(translate("werewolf.announcement.queue", player.getName()));
         }
     }
 
@@ -376,42 +325,99 @@ public class GameManager implements WereWolfAPI {
 
     public void generateMap(CommandSender sender, int mapRadius) {
 
-        if(getWorld()==null){
-            WorldCreator wc = new WorldCreator("werewolf");
-            wc.environment(World.Environment.NORMAL);
-            wc.type(WorldType.NORMAL);
-            setWorld(wc.createWorld());
+        if (getWorld() == null) {
+            createMap();
         }
         int chunksPerRun = 20;
-        if (wft == null || wft.getPercentageCompleted()==100) {
+        if (wft == null || wft.getPercentageCompleted() == 100) {
             wft = new WorldFillTask(this, chunksPerRun, mapRadius);
             wft.setTaskID(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(main, wft, 1, 1));
             sender.sendMessage(translate("werewolf.commands.admin.generation.perform"));
         } else sender.sendMessage(translate("werewolf.commands.admin.generation.already_start"));
     }
 
+    public void createMap() {
+        WorldCreator wc = new WorldCreator("werewolf");
+        wc.environment(World.Environment.NORMAL);
+        wc.type(WorldType.NORMAL);
+        setWorld(wc.createWorld());
+    }
+
+    @Override
+    public void checkVictory() {
+        endlg.check_victory();
+    }
+
+    @Override
+    public void resurrection(UUID uuid) {
+        death_manage.resurrection(uuid);
+    }
+
+    @Override
+    public void transportation(UUID playerUUID, double d, String message) {
+
+        if (Bukkit.getPlayer(playerUUID) != null) {
+
+            Player player = Bukkit.getPlayer(playerUUID);
+            World world = player.getWorld();
+            WorldBorder wb = world.getWorldBorder();
+            double a = d * 2 * Math.PI / Bukkit.getOnlinePlayers().size();
+            int x = (int) (Math.round(wb.getSize() / 3 * Math.cos(a) + world.getSpawnLocation().getX()));
+            int z = (int) (Math.round(wb.getSize() / 3 * Math.sin(a) + world.getSpawnLocation().getZ()));
+            player.setFoodLevel(20);
+            player.setSaturation(20);
+            player.setGameMode(GameMode.SURVIVAL);
+            player.sendMessage(message);
+            player.removePotionEffect(PotionEffectType.WITHER);
+            player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 400, -1, false, false));
+            player.teleport(new Location(world, x, world.getHighestBlockYAt(x, z) + 100, z));
+        }
+    }
+
     @Override
     public void generateMap(int mapRadius) {
-        generateMap(Bukkit.getConsoleSender(),mapRadius);
+        generateMap(Bukkit.getConsoleSender(), mapRadius);
     }
 
     @Override
     public void stopGame() {
 
+        setState(StateLG.END);
+
         if (world == null) return;
 
+        Bukkit.getPluginManager().callEvent(new StopEvent(this));
         scenarios.delete();
         main.currentGame = new GameManager(main);
 
         for (Player player : Bukkit.getOnlinePlayers()) {
-            player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
             FastBoard fastboard = new FastBoard(player);
-            fastboard.updateTitle(translate("werewolf.score_board.title"));
+            fastboard.updateTitle(main.currentGame.translate("werewolf.score_board.title"));
             main.currentGame.boards.put(player.getUniqueId(), fastboard);
             player.setGameMode(GameMode.ADVENTURE);
             main.currentGame.join(player);
         }
+        deleteMap();
 
+
+    }
+
+    @Override
+    public Scoreboard getWereWolfScoreBoard() {
+        return this.board;
+    }
+
+    @Override
+    public Map<UUID, PlayerWW> getPlayersWW() {
+        return this.playerLG;
+    }
+
+    @Override
+    public void deleteMap() {
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+        }
         try {
             Bukkit.unloadWorld(world, false);
             FileUtils.deleteDirectory(new File(Bukkit.getWorldContainer() + File.separator + world.getName()));
@@ -419,6 +425,16 @@ public class GameManager implements WereWolfAPI {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String conversion(int timer){
+        return score.conversion(timer);
+    }
+
+    @Override
+    public String updateArrow(Player player, Location target){
+        return score.updateArrow(player,target);
     }
 
     @Override
@@ -431,11 +447,16 @@ public class GameManager implements WereWolfAPI {
         return this.queue;
     }
 
+    @Override
     public String translate(String key, Object... args) {
-        if(!this.language.containsKey(key.toLowerCase())){
-            return "(Message error)";
+        final String translation;
+        if(!main.getExtraTexts().containsKey(key.toLowerCase())){
+            if(!this.language.containsKey(key.toLowerCase())){
+                return "(Message error)";
+            }
+            translation = this.language.get(key.toLowerCase());
         }
-        final String translation = this.language.get(key.toLowerCase());
+        else translation = main.getExtraTexts().get(key.toLowerCase());
         try {
             return String.format(translation, args);
         } catch (IllegalFormatException e) {
@@ -446,17 +467,20 @@ public class GameManager implements WereWolfAPI {
 
     @Override
     public void setModerators(List<UUID> moderatorsUUIDs) {
-        this.moderators = moderatorsUUIDs;
+        this.moderators.clear();
+        this.moderators.addAll(moderatorsUUIDs);
     }
 
     @Override
     public void setWhiteListedPlayers(List<UUID> whiteListedPlayers) {
-        this.whiteListedPlayers = whiteListedPlayers;
+        this.whiteListedPlayers.clear();
+        this.whiteListedPlayers.addAll(whiteListedPlayers);
     }
 
     @Override
     public void setHosts(List<UUID> hostsUUIDs) {
-        this.hosts = hostsUUIDs;
+        this.hosts.clear();
+        this.hosts.addAll(hostsUUIDs);
     }
 
     @Override
@@ -464,7 +488,206 @@ public class GameManager implements WereWolfAPI {
         return uuid;
     }
 
+    @Override
     public Random getRandom() {
         return r;
+    }
+
+    @Override
+    public UUID autoSelect(UUID playerUUID) {
+        return roleManage.autoSelect(playerUUID);
+    }
+
+    public List<RoleRegister> getRolesRegister() {
+        return main.rolesRegister;
+    }
+
+    @Override
+    public Vote getVote(){
+        return this.vote;
+    }
+
+    @Override
+    public void death(UUID uuid) {
+
+        if (Bukkit.getPlayer(uuid) != null) {
+
+            PlayerWW playerWW = playerLG.get(uuid);
+
+            if (playerWW.isState(State.ALIVE)) {
+                Player player = Bukkit.getPlayer(uuid);
+                playerWW.setSpawn(player.getLocation());
+                playerWW.clearItemDeath();
+
+                Inventory inv = Bukkit.createInventory(null, 45);
+
+                for (int j = 0; j < 40; j++) {
+                    inv.setItem(j, player.getInventory().getItem(j));
+                }
+                playerWW.setItemDeath(inv.getContents());
+            }
+        }
+
+        death_manage.death(uuid);
+    }
+    @Override
+    public List<List<UUID>> getLoversRange(){
+        return loversManage.getLoversRange();
+    }
+    @Override
+    public List<List<UUID>> getAmnesiacLoversRange(){
+        return loversManage.getAmnesiacLoversRange();
+    }
+    @Override
+    public List<List<UUID>> getCursedLoversRange(){
+        return loversManage.getCursedLoversRange();
+    }
+
+    public void updateNameTag() {
+
+        for (UUID playerUUID : playerLG.keySet()) {
+
+            PlayerWW plg = playerLG.get(playerUUID);
+            Scoreboard board2 = plg.getScoreBoard();
+            String name = plg.getName();
+            if(board.getTeam(name)==null){
+                board.registerNewTeam(name);
+                board.getTeam(name).addEntry(name);
+            }
+            Team team = board.getTeam(name);
+
+            if (!board2.equals(board)) {
+
+                for (UUID uuid2 : playerLG.keySet()) {
+
+                    PlayerWW plg2 = playerLG.get(uuid2);
+                    String name2 =plg2.getName();
+
+                    if (board2.getTeam(name2) == null) {
+                        board2.registerNewTeam(name2);
+                        board2.getTeam(name2).addEntry(name2);
+                    }
+
+                    Team team2 = board2.getTeam(name2);
+
+                    if (config.getScenarioValues().get(ScenarioLG.NO_NAME_TAG)) {
+                        team2.setNameTagVisibility(NameTagVisibility.NEVER);
+                    } else {
+                        if ((plg2.getRole() instanceof InvisibleState) && ((InvisibleState)plg2.getRole()).isInvisible()) {
+                            team2.setNameTagVisibility(NameTagVisibility.NEVER);
+                        } else team2.setNameTagVisibility(NameTagVisibility.ALWAYS);
+                    }
+                }
+
+                for (UUID uuid: this.getModerators()) {
+                    if(Bukkit.getPlayer(uuid)!=null){
+                        String name3 = Bukkit.getPlayer(uuid).getName();
+                        if(board2.getTeam(name3)==null){
+                            board2.registerNewTeam(name3);
+                            board2.getTeam(name3).addEntry(name3);
+                        }
+                    }
+                }
+
+                for (UUID uuid: this.getHosts()) {
+                    if(Bukkit.getPlayer(uuid)!=null){
+                        String name3 = Bukkit.getPlayer(uuid).getName();
+                        if(board2.getTeam(name3)==null){
+                            board2.registerNewTeam(name3);
+                            board2.getTeam(name3).addEntry(name3);
+                        }
+                    }
+                }
+
+                for(Team t:board2.getTeams()){
+
+                    for(String e:t.getEntries()){
+                        if(Bukkit.getPlayer(e)!=null){
+                            UUID uuid=Bukkit.getPlayer(e).getUniqueId();
+                            if(this.getHosts().contains(uuid)){
+                                t.setPrefix(this.translate("werewolf.commands.admin.host.tag"));
+                            }
+                            else if (this.getModerators().contains(uuid)){
+                                t.setPrefix(this.translate("werewolf.commands.admin.moderator.tag"));
+                            }
+                            else t.setPrefix("");
+                        }
+                    }
+                }
+            }
+
+            if (this.config.getScenarioValues().get(ScenarioLG.NO_NAME_TAG)) {
+                team.setNameTagVisibility(NameTagVisibility.NEVER);
+            } else {
+                if ((plg.getRole() instanceof InvisibleState) && ((InvisibleState)plg.getRole()).isInvisible()) {
+                    team.setNameTagVisibility(NameTagVisibility.NEVER);
+                } else {
+                    team.setNameTagVisibility(NameTagVisibility.ALWAYS);
+                }
+            }
+        }
+
+        for (UUID uuid: this.getModerators()) {
+            if(Bukkit.getPlayer(uuid)!=null){
+                String name3 = Bukkit.getPlayer(uuid).getName();
+                if(this.board.getTeam(name3)==null){
+                    this.board.registerNewTeam(name3);
+                    this.board.getTeam(name3).addEntry(name3);
+                }
+            }
+        }
+
+        for (UUID uuid: this.getHosts()) {
+            if(Bukkit.getPlayer(uuid)!=null){
+                String name3 = Bukkit.getPlayer(uuid).getName();
+                if(this.board.getTeam(name3)==null){
+                    this.board.registerNewTeam(name3);
+                    this.board.getTeam(name3).addEntry(name3);
+                }
+            }
+        }
+
+        for(Team t:this.board.getTeams()){
+
+            for(String e:t.getEntries()){
+                if(Bukkit.getPlayer(e)!=null){
+                    UUID uuid=Bukkit.getPlayer(e).getUniqueId();
+                    if(this.getHosts().contains(uuid)){
+                        if(this.roleManage.isWereWolf(uuid) && this.config.getTimerValues().get(TimerLG.WEREWOLF_LIST) < 0 && this.config.getConfigValues().get(ToolLG.RED_NAME_TAG)){
+                            t.setPrefix(this.translate("werewolf.commands.admin.host.tag")+"§4");
+                        }
+                        else t.setPrefix(this.translate("werewolf.commands.admin.host.tag"));
+                    }
+                    else if (this.getModerators().contains(uuid)){
+                        t.setPrefix(this.translate("werewolf.commands.admin.moderator.tag"));
+                    }
+                    else if(this.roleManage.isWereWolf(uuid) && this.config.getTimerValues().get(TimerLG.WEREWOLF_LIST) < 0 && this.config.getConfigValues().get(ToolLG.RED_NAME_TAG)){
+                        t.setPrefix("§4");
+                    }
+                    else t.setPrefix("");
+                }
+            }
+        }
+    }
+
+
+    @Override
+    public int getRoleSize(){
+        return score.getRole();
+    }
+
+    @Override
+    public void setRoleSize(int roleSize){
+        score.setRole(roleSize);
+    }
+
+
+    public void updateScenarios() {
+        scenarios.update();
+    }
+
+    @Override
+    public StuffManager getStuffs() {
+        return stufflg;
     }
 }

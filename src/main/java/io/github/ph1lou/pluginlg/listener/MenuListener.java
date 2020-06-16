@@ -3,10 +3,10 @@ package io.github.ph1lou.pluginlg.listener;
 
 import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlgapi.UpdateConfigEvent;
-import io.github.ph1lou.pluginlgapi.enumlg.RoleLG;
+import io.github.ph1lou.pluginlgapi.enumlg.Category;
 import io.github.ph1lou.pluginlgapi.enumlg.ScenarioLG;
 import io.github.ph1lou.pluginlgapi.enumlg.ToolLG;
+import io.github.ph1lou.pluginlgapi.events.UpdateConfigEvent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.wesjd.anvilgui.AnvilGUI;
@@ -22,6 +22,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+
+import java.util.List;
 
 
 public class MenuListener implements Listener{
@@ -92,7 +94,7 @@ public class MenuListener implements Listener{
 			else if(view.getTitle().equals(game.translate("werewolf.menu.global.name"))){
 				event.setCancelled(true);
 				if(current.getType()==Material.STAINED_CLAY){
-                    game.config.getConfigValues().put(ToolLG.values()[(event.getSlot() - 9)], !game.config.getConfigValues().get(ToolLG.values()[(event.getSlot() - 9)]));
+                    game.getConfig().getConfigValues().put(ToolLG.values()[(event.getSlot() - 9)], !game.getConfig().getConfigValues().get(ToolLG.values()[(event.getSlot() - 9)]));
                     game.optionlg.updateSelectionTool();
                 }
 				else if(current.getType()==Material.COMPASS) {
@@ -103,7 +105,7 @@ public class MenuListener implements Listener{
 			else if(view.getTitle().equals(game.translate("werewolf.menu.scenarios.name"))){
 				event.setCancelled(true);
 				if(current.getType()==Material.STAINED_CLAY) {
-                    game.config.getScenarioValues().put(ScenarioLG.values()[(event.getSlot() - 9)], !game.config.getScenarioValues().get(ScenarioLG.values()[(event.getSlot() - 9)]));
+                    game.getConfig().getScenarioValues().put(ScenarioLG.values()[(event.getSlot() - 9)], !game.getConfig().getScenarioValues().get(ScenarioLG.values()[(event.getSlot() - 9)]));
                     game.optionlg.updateSelectionScenario();
                 }
 				else if(current.getType()==Material.COMPASS) {
@@ -115,29 +117,57 @@ public class MenuListener implements Listener{
 
 				event.setCancelled(true);
 
-
 				if(current.getType()==Material.STAINED_CLAY){
 
 					if(event.getClick().isShiftClick()) {
                         player.setGameMode(GameMode.CREATIVE);
                         player.getInventory().clear();
-                        int j = (event.getSlot() - 9);
-                        for (ItemStack i : game.stufflg.role_stuff.get(RoleLG.values()[j])) {
+
+						List<String> lore = current.getItemMeta().getLore();
+						String key = lore.get(lore.size()-1);
+
+                        for (ItemStack i : game.getStuffs().getStuffRoles().get(key)) {
                             if (i != null) {
                                 player.getInventory().addItem(i);
                             }
                         }
                         TextComponent msg = new TextComponent(game.translate("werewolf.commands.admin.loot_role.valid"));
-						msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/a stuffRole " + j));
+						msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/a stuffRole " + key));
 						player.spigot().sendMessage(msg);
                         player.closeInventory();
                     }
 					else if(event.getClick().isRightClick()){
-						game.optionlg.selectMinus(event.getSlot()-9);
+						if(event.getSlot()==2){
+							if(game.getConfig().getLoverSize()>0){
+								game.getConfig().setLoverSize(game.getConfig().getLoverSize()-1);
+							}
+						}
+						else if(event.getSlot()==4){
+							if(game.getConfig().getAmnesiacLoverSize()>0){
+								game.getConfig().setAmnesiacLoverSize(game.getConfig().getAmnesiacLoverSize()-1);
+							}
+						}
+						else if(event.getSlot()==6){
+							if(game.getConfig().getCursedLoverSize()>0){
+								game.getConfig().setCursedLoverSize(game.getConfig().getCursedLoverSize()-1);
+							}
+						}
+						else game.optionlg.selectMinus(event.getSlot());
 					}
 					else{
-						game.optionlg.selectPlus(event.getSlot()-9);
+						if(event.getSlot()==2){
+							game.getConfig().setLoverSize(game.getConfig().getLoverSize()+1);
+						}
+						else if(event.getSlot()==4){
+							game.getConfig().setAmnesiacLoverSize(game.getConfig().getAmnesiacLoverSize()+1);
+						}
+						else if(event.getSlot()==6){
+							game.getConfig().setCursedLoverSize(game.getConfig().getCursedLoverSize()+1);
+						}
+						else game.optionlg.selectPlus(event.getSlot());
+
 					}
+					game.optionlg.updateSelection();
 				}
 				else if(current.getType()==Material.COMPASS) {
 					game.optionlg.toolBar(player);
@@ -145,7 +175,10 @@ public class MenuListener implements Listener{
 				else if(current.getType()==Material.BARRIER) {
 					game.optionlg.resetRole();
 				}
-
+				else if(current.getType()==Material.REDSTONE_BLOCK){
+					game.optionlg.setCategory(Category.values()[(event.getSlot()-46)/2]);
+					game.optionlg.updateSelection();
+				}
 			}
 			else if(view.getTitle().equals(game.translate("werewolf.menu.border.name"))) {
 
@@ -153,20 +186,20 @@ public class MenuListener implements Listener{
 
 				if(current.getType()==Material.STONE_BUTTON) {
 					if(event.getSlot()==3){
-						if(game.config.getBorderMax()>=100){
-							game.config.setBorderMax(game.config.getBorderMax()-100);
+						if(game.getConfig().getBorderMax()>=100){
+							game.getConfig().setBorderMax(game.getConfig().getBorderMax()-100);
 						}
 					}
 					else if(event.getSlot()==5) {
-						game.config.setBorderMax(game.config.getBorderMax()+100);
+						game.getConfig().setBorderMax(game.getConfig().getBorderMax()+100);
 					}
 					else if(event.getSlot()==12) {
-						if(game.config.getBorderMin()>=100){
-							game.config.setBorderMin(game.config.getBorderMin()-100);
+						if(game.getConfig().getBorderMin()>=100){
+							game.getConfig().setBorderMin(game.getConfig().getBorderMin()-100);
 						}
 					}
 					else if(event.getSlot()==14) {
-						game.config.setBorderMin(game.config.getBorderMin()+100);
+						game.getConfig().setBorderMin(game.getConfig().getBorderMin()+100);
 					}
 					game.optionlg.updateSelectionBorder();
 				}
@@ -248,7 +281,7 @@ public class MenuListener implements Listener{
 					PlayerInventory inventory = player.getInventory();
 
 					for (int j = 0; j < 40; j++) {
-						inventory.setItem(j, game.stufflg.getStartLoot().getItem(j));
+						inventory.setItem(j, game.getStuffs().getStartLoot().getItem(j));
 					}
 
 					TextComponent msg = new TextComponent(game.translate("werewolf.commands.admin.stuff_start.valid"));
@@ -262,7 +295,7 @@ public class MenuListener implements Listener{
 					PlayerInventory inventory = player.getInventory();
 					inventory.clear();
 
-					for (ItemStack i : game.stufflg.getDeathLoot()) {
+					for (ItemStack i : game.getStuffs().getDeathLoot()) {
 						if (i != null) {
 							inventory.addItem(i);
 						}
@@ -274,17 +307,17 @@ public class MenuListener implements Listener{
                     player.closeInventory();
                 }
 				else if(current.getType()==Material.EGG){
-					game.stufflg.loadStuffDefault();
+					game.getStuffs().loadAllStuffDefault();
 				}
 				else if(current.getType()==Material.GOLD_SWORD){
-					game.stufflg.loadStuffMeetUP();
+					game.getStuffs().loadAllStuffMeetUP();
 				}
 				else if(current.getType()==Material.JUKEBOX){
-					game.stufflg.loadStuffChill();
+					game.getStuffs().loadStuffChill();
 				}
 				else if(current.getType()==Material.BARRIER){
-					game.stufflg.clearStartLoot();
-					game.stufflg.clearDeathLoot();
+					game.getStuffs().clearStartLoot();
+					game.getStuffs().clearDeathLoot();
 				}
 
 			}
@@ -296,51 +329,51 @@ public class MenuListener implements Listener{
 				}
 				else if(current.getType()==Material.IRON_SWORD) {
 					if (event.getClick().isLeftClick()) {
-						game.config.setLimitSharpnessIron(game.config.getLimitSharpnessIron()+1);
+						game.getConfig().setLimitSharpnessIron(game.getConfig().getLimitSharpnessIron()+1);
 					}
-					else if(game.config.getLimitSharpnessIron()>0) game.config.setLimitSharpnessIron(game.config.getLimitSharpnessIron()-1);
+					else if(game.getConfig().getLimitSharpnessIron()>0) game.getConfig().setLimitSharpnessIron(game.getConfig().getLimitSharpnessIron()-1);
 					game.optionlg.enchantmentTool(player);
 				}
 				else if(current.getType()==Material.DIAMOND_SWORD) {
 					if (event.getClick().isLeftClick()) {
-						game.config.setLimitSharpnessDiamond(game.config.getLimitSharpnessDiamond()+1);
+						game.getConfig().setLimitSharpnessDiamond(game.getConfig().getLimitSharpnessDiamond()+1);
 					}
-					else if(game.config.getLimitSharpnessDiamond()>0) game.config.setLimitSharpnessDiamond(game.config.getLimitSharpnessDiamond()-1);
+					else if(game.getConfig().getLimitSharpnessDiamond()>0) game.getConfig().setLimitSharpnessDiamond(game.getConfig().getLimitSharpnessDiamond()-1);
 					game.optionlg.enchantmentTool(player);
 				}
 				else if(current.getType()==Material.DIAMOND_CHESTPLATE) {
 					if (event.getClick().isLeftClick()) {
-						game.config.setLimitProtectionDiamond(game.config.getLimitProtectionDiamond()+1);
+						game.getConfig().setLimitProtectionDiamond(game.getConfig().getLimitProtectionDiamond()+1);
 					}
-					else if(game.config.getLimitProtectionDiamond()>0) game.config.setLimitProtectionDiamond(game.config.getLimitProtectionDiamond()-1);
+					else if(game.getConfig().getLimitProtectionDiamond()>0) game.getConfig().setLimitProtectionDiamond(game.getConfig().getLimitProtectionDiamond()-1);
 					game.optionlg.enchantmentTool(player);
 				}
 				else if(current.getType()==Material.IRON_CHESTPLATE) {
 					if (event.getClick().isLeftClick()) {
-						game.config.setLimitProtectionIron(game.config.getLimitProtectionIron()+1);
+						game.getConfig().setLimitProtectionIron(game.getConfig().getLimitProtectionIron()+1);
 					}
-					else if(game.config.getLimitProtectionIron()>0) game.config.setLimitProtectionIron(game.config.getLimitProtectionIron()-1);
+					else if(game.getConfig().getLimitProtectionIron()>0) game.getConfig().setLimitProtectionIron(game.getConfig().getLimitProtectionIron()-1);
 					game.optionlg.enchantmentTool(player);
 				}
 				else if(current.getType()==Material.BOW) {
 					if (event.getClick().isLeftClick()) {
-						game.config.setLimitPowerBow(game.config.getLimitPowerBow()+1);
+						game.getConfig().setLimitPowerBow(game.getConfig().getLimitPowerBow()+1);
 					}
-					else if(game.config.getLimitPowerBow()>0) game.config.setLimitPowerBow(game.config.getLimitPowerBow()-1);
+					else if(game.getConfig().getLimitPowerBow()>0) game.getConfig().setLimitPowerBow(game.getConfig().getLimitPowerBow()-1);
 					game.optionlg.enchantmentTool(player);
 				}
 				else if(current.getType()==Material.STICK) {
 					if (event.getClick().isLeftClick()) {
-						game.config.setLimitKnockBack((game.config.getLimitKnockBack()+1)%3);
+						game.getConfig().setLimitKnockBack((game.getConfig().getLimitKnockBack()+1)%3);
 					}
-					else game.config.setLimitKnockBack((game.config.getLimitKnockBack()+2)%3);
+					else game.getConfig().setLimitKnockBack((game.getConfig().getLimitKnockBack()+2)%3);
 					game.optionlg.enchantmentTool(player);
 				}
 				else if(current.getType()==Material.ARROW) {
 					if (event.getClick().isLeftClick()) {
-						game.config.setLimitPunch((game.config.getLimitPunch()+1)%3);
+						game.getConfig().setLimitPunch((game.getConfig().getLimitPunch()+1)%3);
 					}
-					else game.config.setLimitPunch((game.config.getLimitPunch()+2)%3);
+					else game.getConfig().setLimitPunch((game.getConfig().getLimitPunch()+2)%3);
 					game.optionlg.enchantmentTool(player);
 				}
 			}
@@ -352,9 +385,9 @@ public class MenuListener implements Listener{
 				}
 				else if(current.getType().equals(Material.DIAMOND)){
 					if (event.getClick().isLeftClick()) {
-						game.config.setDiamondLimit(game.config.getDiamondLimit()+1);
+						game.getConfig().setDiamondLimit(game.getConfig().getDiamondLimit()+1);
 					}
-					else if(game.config.getDiamondLimit()>0) game.config.setDiamondLimit(game.config.getDiamondLimit()-1);
+					else if(game.getConfig().getDiamondLimit()>0) game.getConfig().setDiamondLimit(game.getConfig().getDiamondLimit()-1);
 
 					game.optionlg.advancedTool(player);
 				}
@@ -362,90 +395,90 @@ public class MenuListener implements Listener{
 
                     if (current.getDurability() == 8201) {
                         if (event.getClick().isLeftClick()) {
-                            game.config.setStrengthRate(game.config.getStrengthRate() + 10);
-                        } else if (game.config.getStrengthRate() - 10 >= 0)
-                            game.config.setStrengthRate(game.config.getStrengthRate() - 10);
+                            game.getConfig().setStrengthRate(game.getConfig().getStrengthRate() + 10);
+                        } else if (game.getConfig().getStrengthRate() - 10 >= 0)
+                            game.getConfig().setStrengthRate(game.getConfig().getStrengthRate() - 10);
                     } else if (current.getDurability() == 8227) {
                         if (event.getClick().isLeftClick()) {
-                            game.config.setResistanceRate(game.config.getResistanceRate() + 2);
-                        } else if (game.config.getResistanceRate() - 2 >= 0)
-                            game.config.setResistanceRate(game.config.getResistanceRate() - 2);
+                            game.getConfig().setResistanceRate(game.getConfig().getResistanceRate() + 2);
+                        } else if (game.getConfig().getResistanceRate() - 2 >= 0)
+                            game.getConfig().setResistanceRate(game.getConfig().getResistanceRate() - 2);
                     }
                     game.optionlg.advancedTool(player);
                 }
 				else if(current.getType().equals(Material.EXP_BOTTLE)){
                     if (event.getClick().isLeftClick()) {
-                        game.config.setXpBoost(game.config.getXpBoost() + 10);
-                    } else if (game.config.getXpBoost() - 10 >= 0)
-                        game.config.setXpBoost(game.config.getXpBoost() - 10);
+                        game.getConfig().setXpBoost(game.getConfig().getXpBoost() + 10);
+                    } else if (game.getConfig().getXpBoost() - 10 >= 0)
+                        game.getConfig().setXpBoost(game.getConfig().getXpBoost() - 10);
 					game.optionlg.advancedTool(player);
 				}
 				else if(current.getType().equals(Material.APPLE)){
                     if (event.getClick().isLeftClick()) {
-                        if (game.config.getAppleRate() + 5 <= 100) {
-                            game.config.setAppleRate(game.config.getAppleRate() + 5);
+                        if (game.getConfig().getAppleRate() + 5 <= 100) {
+                            game.getConfig().setAppleRate(game.getConfig().getAppleRate() + 5);
                         }
-                    } else if (game.config.getAppleRate() - 5 >= 0)
-                        game.config.setAppleRate(game.config.getAppleRate() - 5);
+                    } else if (game.getConfig().getAppleRate() - 5 >= 0)
+                        game.getConfig().setAppleRate(game.getConfig().getAppleRate() - 5);
 					game.optionlg.advancedTool(player);
 				}
 				else if(current.getType().equals(Material.FLINT)){
                     if (event.getClick().isLeftClick()) {
-                        if (game.config.getFlintRate() + 5 <= 100) {
-                            game.config.setFlintRate(game.config.getFlintRate() + 5);
+                        if (game.getConfig().getFlintRate() + 5 <= 100) {
+                            game.getConfig().setFlintRate(game.getConfig().getFlintRate() + 5);
                         }
-                    } else if (game.config.getFlintRate() - 5 >= 0)
-                        game.config.setFlintRate(game.config.getFlintRate() - 5);
+                    } else if (game.getConfig().getFlintRate() - 5 >= 0)
+                        game.getConfig().setFlintRate(game.getConfig().getFlintRate() - 5);
 					game.optionlg.advancedTool(player);
 				}
 				else if(current.getType().equals(Material.ENDER_PEARL)){
                     if (event.getClick().isLeftClick()) {
-                        if (game.config.getPearlRate() + 5 <= 100) {
-                            game.config.setPearlRate(game.config.getPearlRate() + 5);
+                        if (game.getConfig().getPearlRate() + 5 <= 100) {
+                            game.getConfig().setPearlRate(game.getConfig().getPearlRate() + 5);
                         }
-                    } else if (game.config.getPearlRate() - 5 >= 0)
-                        game.config.setPearlRate(game.config.getPearlRate() - 5);
+                    } else if (game.getConfig().getPearlRate() - 5 >= 0)
+                        game.getConfig().setPearlRate(game.getConfig().getPearlRate() - 5);
 					game.optionlg.advancedTool(player);
 				}
 				else if(current.getType().equals(Material.SKULL_ITEM)){
 					if (event.getClick().isLeftClick()) {
-						game.config.setPlayerRequiredVoteEnd(game.config.getPlayerRequiredVoteEnd()+1);
+						game.getConfig().setPlayerRequiredVoteEnd(game.getConfig().getPlayerRequiredVoteEnd()+1);
 					}
-					else if(game.config.getPlayerRequiredVoteEnd()>0) game.config.setPlayerRequiredVoteEnd(game.config.getPlayerRequiredVoteEnd()-1);
+					else if(game.getConfig().getPlayerRequiredVoteEnd()>0) game.getConfig().setPlayerRequiredVoteEnd(game.getConfig().getPlayerRequiredVoteEnd()-1);
 					game.optionlg.advancedTool(player);
 				}
 				else if(current.getType().equals(Material.CARROT_ITEM)){
 					if (event.getClick().isLeftClick()) {
-						game.config.setUseOfFlair(game.config.getUseOfFlair()+1);
+						game.getConfig().setUseOfFlair(game.getConfig().getUseOfFlair()+1);
 					}
-					else if(game.config.getUseOfFlair()>0) game.config.setUseOfFlair(game.config.getUseOfFlair()-1);
+					else if(game.getConfig().getUseOfFlair()>0) game.getConfig().setUseOfFlair(game.getConfig().getUseOfFlair()-1);
 					game.optionlg.advancedTool(player);
 				} else if (current.getType().equals(Material.GOLD_NUGGET)) {
                     if (event.getClick().isLeftClick()) {
-                        game.config.setGoldenAppleParticles((game.config.getGoldenAppleParticles() + 1) % 3);
-                    } else game.config.setGoldenAppleParticles((game.config.getGoldenAppleParticles() + 2) % 3);
+                        game.getConfig().setGoldenAppleParticles((game.getConfig().getGoldenAppleParticles() + 1) % 3);
+                    } else game.getConfig().setGoldenAppleParticles((game.getConfig().getGoldenAppleParticles() + 2) % 3);
                     game.optionlg.advancedTool(player);
                 } else if (current.getType().equals(Material.WOOL)) {
 
                     if (current.getDurability() == 1) {
                         if (event.getClick().isLeftClick()) {
-                            game.config.setDistanceFox((game.config.getDistanceFox() + 5));
-                        } else if (game.config.getDistanceFox() - 5 > 0)
-                            game.config.setDistanceFox(game.config.getDistanceFox() - 5);
+                            game.getConfig().setDistanceFox((game.getConfig().getDistanceFox() + 5));
+                        } else if (game.getConfig().getDistanceFox() - 5 > 0)
+                            game.getConfig().setDistanceFox(game.getConfig().getDistanceFox() - 5);
                     } else if (current.getDurability() == 12) {
 						if (event.getClick().isLeftClick()) {
-							game.config.setDistanceBearTrainer((game.config.getDistanceBearTrainer() + 5));
-						} else if (game.config.getDistanceBearTrainer() - 5 > 0)
-							game.config.setDistanceBearTrainer(game.config.getDistanceBearTrainer() - 5);
+							game.getConfig().setDistanceBearTrainer((game.getConfig().getDistanceBearTrainer() + 5));
+						} else if (game.getConfig().getDistanceBearTrainer() - 5 > 0)
+							game.getConfig().setDistanceBearTrainer(game.getConfig().getDistanceBearTrainer() - 5);
 					} else if (current.getDurability() == 6) {
 						if (event.getClick().isLeftClick()) {
-							game.config.setDistanceSuccubus((game.config.getDistanceSuccubus() + 5));
-						} else if (game.config.getDistanceSuccubus() - 5 > 0)
-							game.config.setDistanceSuccubus(game.config.getDistanceSuccubus() - 5);
+							game.getConfig().setDistanceSuccubus((game.getConfig().getDistanceSuccubus() + 5));
+						} else if (game.getConfig().getDistanceSuccubus() - 5 > 0)
+							game.getConfig().setDistanceSuccubus(game.getConfig().getDistanceSuccubus() - 5);
 					}
                     game.optionlg.advancedTool(player);
                 } else if (current.getType().equals(Material.BREAD)) {
-					game.config.setTrollSV(!game.config.isTrollSV());
+					game.getConfig().setTrollSV(!game.getConfig().isTrollSV());
 					game.optionlg.advancedTool(player);
 				}
 			}
@@ -457,18 +490,15 @@ public class MenuListener implements Listener{
 					game.optionlg.toolBar(player);
 				}
 				else if(current.getType()==Material.BANNER){
+
 					if(event.getSlot()==4){
 						main.getConfig().set("lang","fr");
 					}
-					/*
 					else if(event.getSlot()==2){
 						main.getConfig().set("lang","en");
 					}
-					else if(event.getSlot()==6){
-						main.getConfig().set("lang","custom");
 
-					}
-					player.closeInventory();*/
+					main.lang.updateLanguage(game);
 
 				}
 			}

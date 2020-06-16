@@ -2,6 +2,7 @@ package io.github.ph1lou.pluginlg.savelg;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import io.github.ph1lou.pluginlgapi.ConfigWereWolfAPI;
 
 public class SerializerLG {
 
@@ -14,7 +15,7 @@ public class SerializerLG {
 				.create();
 	}
 
-    public static String serialize(ConfigLG config) {
+    public static String serialize(ConfigWereWolfAPI config) {
 		return gson().toJson(config);
 	}
 

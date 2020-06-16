@@ -1,17 +1,18 @@
 package io.github.ph1lou.pluginlg.classesroles.villageroles;
 
 
-
-import io.github.ph1lou.pluginlg.classesroles.AffectedPlayers;
-import io.github.ph1lou.pluginlg.events.DayEvent;
-import io.github.ph1lou.pluginlg.events.VoteEvent;
-import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlgapi.enumlg.RoleLG;
+import io.github.ph1lou.pluginlgapi.GetWereWolfAPI;
+import io.github.ph1lou.pluginlgapi.WereWolfAPI;
 import io.github.ph1lou.pluginlgapi.enumlg.State;
 import io.github.ph1lou.pluginlgapi.enumlg.TimerLG;
+import io.github.ph1lou.pluginlgapi.events.DayEvent;
+import io.github.ph1lou.pluginlgapi.events.VoteEvent;
+import io.github.ph1lou.pluginlgapi.rolesattributs.AffectedPlayers;
+import io.github.ph1lou.pluginlgapi.rolesattributs.RolesWithLimitedSelectionDuration;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +22,9 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
 
     private final List<UUID> affectedPlayer = new ArrayList<>();
 
-    public Raven(GameManager game, UUID uuid) {
+    public Raven(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
 
-        super(game,uuid);
+        super(main,game,uuid);
         setPower(false);
     }
 
@@ -50,11 +51,8 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if(!event.getUuid().equals(game.getGameUUID())){
-            return;
-        }
 
-        if(!game.playerLG.get(getPlayerUUID()).isState(State.ALIVE)){
+        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
             return;
         }
 
@@ -65,14 +63,9 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
         }
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        player.sendMessage(game.translate("werewolf.role.raven.curse_message", game.score.conversion(game.config.getTimerValues().get(TimerLG.POWER_DURATION))));
+        player.sendMessage(game.translate("werewolf.role.raven.curse_message", game.conversion(game.getConfig().getTimerValues().get(TimerLG.POWER_DURATION))));
     }
 
-
-    @Override
-    public RoleLG getRoleEnum() {
-        return RoleLG.RAVEN;
-    }
 
     @Override
     public String getDescription() {
@@ -81,7 +74,7 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
 
     @Override
     public String getDisplay() {
-        return game.translate("werewolf.role.raven.display");
+        return "werewolf.role.raven.display";
     }
 
 
@@ -89,7 +82,24 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
     public void onVoteEvent(VoteEvent event){
 
         if(!event.getVoterUUID().equals(getPlayerUUID())) return;
+        game.getVote().getVotes().put(event.getVoteUUID(),game.getVote().getVotes().get(event.getVoteUUID())+1);
+    }
 
-        game.playerLG.get(event.getVoteUUID()).incVote();
+    @EventHandler
+    private void onPlayerDamage(EntityDamageEvent event) {
+
+
+        if (!(event.getEntity() instanceof Player)) return;
+
+        Player player = (Player) event.getEntity();
+        UUID uuid = player.getUniqueId();
+
+
+        if (!getPlayerUUID().equals(uuid)) return;
+
+
+        if (event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
+            event.setCancelled(true);
+        }
     }
 }

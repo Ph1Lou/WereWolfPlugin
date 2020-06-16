@@ -1,8 +1,8 @@
 package io.github.ph1lou.pluginlg.commandlg.admin.ingame;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlgapi.Commands;
 import io.github.ph1lou.pluginlgapi.enumlg.State;
 import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
 import org.bukkit.Bukkit;
@@ -12,11 +12,13 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandModerator extends Commands {
+public class CommandModerator implements Commands {
 
+
+    private final MainLG main;
 
     public CommandModerator(MainLG main) {
-        super(main);
+        this.main = main;
     }
 
     @Override
@@ -53,7 +55,7 @@ public class CommandModerator extends Commands {
             else moderator.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
             if (game.isState(StateLG.LOBBY)) {
                 game.join(moderator);
-                game.optionlg.updateNameTag();
+                game.updateNameTag();
             }
             return;
         }
@@ -75,7 +77,7 @@ public class CommandModerator extends Commands {
         game.getModerators().add(argUUID);
         moderator.setScoreboard(game.board);
         Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.moderator.add", args[0]));
-        game.optionlg.updateNameTag();
+        game.updateNameTag();
         game.checkQueue();
     }
 }

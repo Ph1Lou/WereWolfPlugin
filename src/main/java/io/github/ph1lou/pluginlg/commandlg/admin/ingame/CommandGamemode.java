@@ -1,18 +1,20 @@
 package io.github.ph1lou.pluginlg.commandlg.admin.ingame;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlgapi.Commands;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CommandGamemode extends Commands {
+public class CommandGamemode implements Commands {
 
+
+    private final MainLG main;
 
     public CommandGamemode(MainLG main) {
-        super(main);
+        this.main = main;
     }
 
     @Override

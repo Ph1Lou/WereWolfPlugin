@@ -1,11 +1,13 @@
 package io.github.ph1lou.pluginlg.savelg;
 
-import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlg.MainLG;
 import io.github.ph1lou.pluginlgapi.ConfigWereWolfAPI;
-import io.github.ph1lou.pluginlgapi.enumlg.RoleLG;
+import io.github.ph1lou.pluginlgapi.RoleRegister;
+import io.github.ph1lou.pluginlgapi.WereWolfAPI;
 import io.github.ph1lou.pluginlgapi.enumlg.ScenarioLG;
 import io.github.ph1lou.pluginlgapi.enumlg.TimerLG;
 import io.github.ph1lou.pluginlgapi.enumlg.ToolLG;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.HashMap;
@@ -15,7 +17,7 @@ public class ConfigLG implements ConfigWereWolfAPI {
 
     private final Map<TimerLG, Integer> timerValues = new HashMap<>();
     private final Map<ToolLG, Boolean> configValues = new HashMap<>();
-    private final Map<RoleLG, Integer> roleCount = new HashMap<>();
+    private final Map<String, Integer> roleCount = new HashMap<>();
     private final Map<ScenarioLG, Boolean> scenarioValues = new HashMap<>();
 
     private int strengthRate = 130;
@@ -42,12 +44,18 @@ public class ConfigLG implements ConfigWereWolfAPI {
     private boolean trollSV = false;
     private int BorderMax =2000;
     private int BorderMin =300;
+    private int loverSize=0;
+    private int amnesiacLoverSize=0;
+    private int cursedLoverSize=0;
 
-    public void getConfig(GameManager game, String configName) {
+    @Override
+    public void getConfig(WereWolfAPI api, String configName) {
 
         ConfigLG this_load = this;
 
-        File file = new File(game.getDataFolder() + File.separator + "configs" + File.separator, configName + ".json");
+        MainLG main = JavaPlugin.getPlugin(MainLG.class);
+
+        File file = new File(main.getDataFolder() + File.separator + "configs" + File.separator, configName + ".json");
 
         if (file.exists()) {
             this_load = SerializerLG.deserialize(FileLG.loadContent(file));
@@ -75,11 +83,16 @@ public class ConfigLG implements ConfigWereWolfAPI {
             this.setBorderMax(this_load.getBorderMax());
             this.setBorderMin(this_load.getBorderMin());
             this.setDistanceAmnesiacLovers(this_load.getDistanceAmnesiacLovers());
+            this.setLoverSize(this_load.getLoverSize());
+            this.setAmnesiacLoverSize(this_load.getAmnesiacLoverSize());
+            this.setCursedLoverSize(this_load.getCursedLoverSize());
         }
 
+        api.setRoleSize(0);
 
-        for(RoleLG role:RoleLG.values()) {
-            this.roleCount.put(role, this_load.roleCount.getOrDefault(role, 0));
+        for (RoleRegister roleRegister:main.getRegisterRoles()) {
+            this.roleCount.put(roleRegister.getKey(), this_load.roleCount.getOrDefault(roleRegister.getKey(), 0));
+            api.setRoleSize(api.getRoleSize() + this.roleCount.get(roleRegister.getKey()));
         }
 
         for(ToolLG tool:ToolLG.values()) {
@@ -97,220 +110,295 @@ public class ConfigLG implements ConfigWereWolfAPI {
 
         FileLG.save(file, SerializerLG.serialize(this));
 
-        game.score.setRole(0);
 
-        for (RoleLG role:RoleLG.values()) {
-            if (!role.equals(RoleLG.CURSED_LOVER) && !role.equals(RoleLG.LOVER) && !role.equals(RoleLG.AMNESIAC_LOVER)) {
-                game.score.setRole(game.score.getRole() + this.roleCount.get(role));
-            }
-        }
     }
-
+    @Override
 	public int getDiamondLimit() {
         return this.diamondLimit;
     }
 
+    @Override
 	public void setDiamondLimit(int diamond_limit) {
         this.diamondLimit = diamond_limit;
     }
 
+    @Override
 	public int getStrengthRate() {
         return this.strengthRate;
     }
 
+    @Override
 	public void setStrengthRate(int strength_rate) {
         this.strengthRate = strength_rate;
     }
 
+    @Override
     public int getPlayerRequiredVoteEnd() {
         return this.playerRequiredBeforeVotingEnds;
     }
 
+    @Override
     public void setPlayerRequiredVoteEnd(int player_required_before_voting_ends) {
         this.playerRequiredBeforeVotingEnds = player_required_before_voting_ends;
     }
 
+    @Override
     public int getPearlRate() {
         return pearlRate;
     }
 
+    @Override
     public void setPearlRate(int pearlRate) {
         this.pearlRate = pearlRate;
     }
 
+    @Override
     public int getFlintRate() {
         return flintRate;
     }
 
+    @Override
     public void setFlintRate(int flintRate) {
         this.flintRate = flintRate;
     }
 
+    @Override
     public int getAppleRate() {
         return appleRate;
     }
 
+    @Override
     public void setAppleRate(int appleRate) {
         this.appleRate = appleRate;
     }
 
+    @Override
     public int getXpBoost() {
         return xpBoost;
     }
 
+    @Override
     public void setXpBoost(int xpBoost) {
         this.xpBoost = xpBoost;
     }
 
+    @Override
     public int getLimitProtectionIron() {
         return limitProtectionIron;
     }
 
+    @Override
     public void setLimitProtectionIron(int limitProtectionIron) {
         this.limitProtectionIron = limitProtectionIron;
     }
 
+    @Override
 	public int getLimitProtectionDiamond() {
 		return limitProtectionDiamond;
 	}
 
+    @Override
 	public void setLimitProtectionDiamond(int limitProtectionDiamond) {
 		this.limitProtectionDiamond = limitProtectionDiamond;
 	}
 
+    @Override
 	public int getLimitSharpnessDiamond() {
 		return limitSharpnessDiamond;
 	}
 
+    @Override
 	public void setLimitSharpnessDiamond(int limitSharpnessDiamond) {
 		this.limitSharpnessDiamond = limitSharpnessDiamond;
 	}
 
+    @Override
 	public int getLimitSharpnessIron() {
 		return limitSharpnessIron;
 	}
 
+    @Override
 	public void setLimitSharpnessIron(int limitSharpnessIron) {
 		this.limitSharpnessIron = limitSharpnessIron;
 	}
 
+    @Override
 	public int getLimitPowerBow() {
 		return limitPowerBow;
 	}
 
+    @Override
 	public void setLimitPowerBow(int limitPowerBow) {
 		this.limitPowerBow = limitPowerBow;
 	}
 
+    @Override
 	public int getLimitKnockBack() {
 		return limitKnockBack;
 	}
 
+    @Override
 	public void setLimitKnockBack(int limitKnockBack) {
 		this.limitKnockBack = limitKnockBack;
 	}
 
+    @Override
 	public int getLimitPunch() {
 		return limitPunch;
 	}
 
+    @Override
 	public void setLimitPunch(int limitPunch) {
 		this.limitPunch = limitPunch;
 	}
 
+    @Override
 	public int getUseOfFlair() {
 		return useOfFlair;
 	}
 
+    @Override
 	public void setUseOfFlair(int useOfFlair) {
         this.useOfFlair = useOfFlair;
     }
 
+    @Override
     public int getGoldenAppleParticles() {
         return goldenAppleParticles;
     }
 
+    @Override
     public void setGoldenAppleParticles(int goldenAppleParticles) {
         this.goldenAppleParticles = goldenAppleParticles;
     }
 
+    @Override
     public int getDistanceBearTrainer() {
         return distanceBearTrainer;
     }
 
+    @Override
     public void setDistanceBearTrainer(int distanceBearTrainer) {
         this.distanceBearTrainer = distanceBearTrainer;
     }
 
+    @Override
     public int getDistanceFox() {
         return distanceFox;
     }
 
+    @Override
     public void setDistanceFox(int distanceFox) {
         this.distanceFox = distanceFox;
     }
 
+    @Override
     public int getResistanceRate() {
         return resistanceRate;
     }
 
+    @Override
     public void setResistanceRate(int resistanceRate) {
         this.resistanceRate = resistanceRate;
     }
 
+    @Override
     public boolean isTrollSV() {
         return trollSV;
     }
 
+    @Override
     public void setTrollSV(boolean trollSV) {
         this.trollSV = trollSV;
     }
 
+    @Override
     public int getDistanceSuccubus() {
         return distanceSuccubus;
     }
 
+    @Override
     public void setDistanceSuccubus(int distanceSuccubus) {
         this.distanceSuccubus = distanceSuccubus;
     }
 
+    @Override
     public int getBorderMax() {
         return BorderMax;
     }
 
+    @Override
     public void setBorderMax(int borderMax) {
         this.BorderMax = borderMax;
     }
 
+    @Override
     public int getBorderMin() {
         return BorderMin;
     }
 
+    @Override
     public void setBorderMin(int borderMin) {
         this.BorderMin = borderMin;
     }
 
+    @Override
     public int getDistanceAmnesiacLovers() {
         return distanceAmnesiacLovers;
     }
 
+    @Override
     public void setDistanceAmnesiacLovers(int distanceAmnesiacLovers) {
         this.distanceAmnesiacLovers = distanceAmnesiacLovers;
     }
 
+    @Override
     public Map<TimerLG, Integer> getTimerValues() {
         return timerValues;
     }
 
+    @Override
     public Map<ToolLG, Boolean> getConfigValues() {
         return configValues;
     }
 
-    public Map<RoleLG, Integer> getRoleCount() {
+    @Override
+    public Map<String, Integer> getRoleCount() {
         return roleCount;
     }
 
+    @Override
     public Map<ScenarioLG, Boolean> getScenarioValues() {
         return scenarioValues;
+    }
+
+    @Override
+    public int getLoverSize() {
+        return loverSize;
+    }
+
+    @Override
+    public void setLoverSize(int loverSize) {
+        this.loverSize = loverSize;
+    }
+
+    @Override
+    public int getAmnesiacLoverSize() {
+        return amnesiacLoverSize;
+    }
+
+    @Override
+    public void setAmnesiacLoverSize(int amnesiacLoverSize) {
+        this.amnesiacLoverSize = amnesiacLoverSize;
+    }
+
+    @Override
+    public int getCursedLoverSize() {
+        return cursedLoverSize;
+    }
+
+    @Override
+    public void setCursedLoverSize(int cursedLoverSize) {
+        this.cursedLoverSize = cursedLoverSize;
     }
 }

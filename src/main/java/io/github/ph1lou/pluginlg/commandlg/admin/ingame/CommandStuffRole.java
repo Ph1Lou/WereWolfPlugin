@@ -1,19 +1,20 @@
 package io.github.ph1lou.pluginlg.commandlg.admin.ingame;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlgapi.enumlg.RoleLG;
+import io.github.ph1lou.pluginlgapi.Commands;
 import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class CommandStuffRole extends Commands {
+public class CommandStuffRole implements Commands {
 
+
+    private final MainLG main;
 
     public CommandStuffRole(MainLG main) {
-        super(main);
+        this.main = main;
     }
 
     @Override
@@ -35,18 +36,19 @@ public class CommandStuffRole extends Commands {
             sender.sendMessage(game.translate("werewolf.check.number_required"));
             return;
         }
-        try {
-            int j = Integer.parseInt(args[0]);
-            game.stufflg.role_stuff.get(RoleLG.values()[j]).clear();
-            for (ItemStack i : ((Player) sender).getInventory().getContents()) {
-                if (i != null) {
-                    game.stufflg.role_stuff.get(RoleLG.values()[j]).add(i);
-                }
-            }
-            sender.sendMessage(game.translate("werewolf.commands.admin.loot_role.perform"));
-            ((Player) sender).getInventory().clear();
-            ((Player) sender).setGameMode(GameMode.ADVENTURE);
-        } catch (NumberFormatException ignored) {
+        if(!game.getStuffs().getStuffRoles().containsKey(args[0])){
+            sender.sendMessage(game.translate("werewolf.check.invalid_key"));
+            return;
         }
+        
+        game.getStuffs().getStuffRoles().get(args[0]).clear();
+        for (ItemStack i : ((Player) sender).getInventory().getContents()) {
+            if (i != null) {
+                game.getStuffs().getStuffRoles().get(args[0]).add(i);
+            }
+        }
+        sender.sendMessage(game.translate("werewolf.commands.admin.loot_role.perform"));
+        ((Player) sender).getInventory().clear();
+        ((Player) sender).setGameMode(GameMode.ADVENTURE);
     }
 }

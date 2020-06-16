@@ -1,14 +1,16 @@
 package io.github.ph1lou.pluginlg.commandlg.roles;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.classesroles.neutralroles.Angel;
-import io.github.ph1lou.pluginlg.classesroles.neutralroles.GuardianAngel;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlg.game.PlayerLG;
-import io.github.ph1lou.pluginlgapi.enumlg.RoleLG;
+import io.github.ph1lou.pluginlgapi.Commands;
+import io.github.ph1lou.pluginlgapi.PlayerWW;
+import io.github.ph1lou.pluginlgapi.enumlg.AngelForm;
 import io.github.ph1lou.pluginlgapi.enumlg.State;
 import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
+import io.github.ph1lou.pluginlgapi.rolesattributs.AffectedPlayers;
+import io.github.ph1lou.pluginlgapi.rolesattributs.AngelRole;
+import io.github.ph1lou.pluginlgapi.rolesattributs.LimitedUse;
+import io.github.ph1lou.pluginlgapi.rolesattributs.Roles;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -17,12 +19,14 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.UUID;
 
-public class CommandAngelRegen extends Commands {
+public class CommandAngelRegen implements Commands {
 
+    private final MainLG main;
 
     public CommandAngelRegen(MainLG main) {
-        super(main);
+        this.main = main;
     }
+
 
     @Override
     public void execute(CommandSender sender, String[] args) {
@@ -42,7 +46,7 @@ public class CommandAngelRegen extends Commands {
             return;
         }
 
-        PlayerLG plg = game.playerLG.get(uuid);
+        PlayerWW plg = game.playerLG.get(uuid);
 
 
         if (!game.isState(StateLG.GAME)) {
@@ -50,36 +54,36 @@ public class CommandAngelRegen extends Commands {
             return;
         }
 
-        if (!(plg.getRole() instanceof Angel) || !((Angel) plg.getRole()).getChoice().equals(RoleLG.GUARDIAN_ANGEL)) {
+        if (!(plg.getRole() instanceof AngelRole) || !((AngelRole) plg.getRole()).getChoice().equals(AngelForm.GUARDIAN_ANGEL)) {
             player.sendMessage(game.translate("werewolf.check.role",game.translate("werewolf.role.guardian_angel.display")));
             return;
         }
 
-        GuardianAngel guardianAngel = (GuardianAngel) plg.getRole();
+        Roles guardianAngel = plg.getRole();
 
         if (!plg.isState(State.ALIVE)) {
             player.sendMessage(game.translate("werewolf.check.death"));
             return;
         }
 
-        if (guardianAngel.getUse() >= 3) {
+        if (((LimitedUse)guardianAngel).getUse() >= 3) {
             player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
 
-        if (guardianAngel.getAffectedPlayers().isEmpty()) {
+        if (((AffectedPlayers)guardianAngel).getAffectedPlayers().isEmpty()) {
             player.sendMessage(game.translate("werewolf.role.guardian_angel.no_protege"));
             return;
         }
 
-        if (Bukkit.getPlayer(guardianAngel.getAffectedPlayers().get(0)) == null) {
+        if (Bukkit.getPlayer(((AffectedPlayers) guardianAngel).getAffectedPlayers().get(0)) == null) {
             player.sendMessage(game.translate("werewolf.role.guardian_angel.disconnected_protege"));
             return;
         }
 
-        guardianAngel.setUse(guardianAngel.getUse()+1);
+        ((LimitedUse) guardianAngel).setUse(((LimitedUse) guardianAngel).getUse()+1);
 
-        Player playerProtected = Bukkit.getPlayer(guardianAngel.getAffectedPlayers().get(0));
+        Player playerProtected = Bukkit.getPlayer(((AffectedPlayers) guardianAngel).getAffectedPlayers().get(0));
         playerProtected.removePotionEffect(PotionEffectType.REGENERATION);
         playerProtected.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 400, 0, false, false));
         playerProtected.sendMessage(game.translate("werewolf.role.guardian_angel.get_regeneration"));

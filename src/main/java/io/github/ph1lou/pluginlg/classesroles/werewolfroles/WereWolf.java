@@ -1,22 +1,18 @@
 package io.github.ph1lou.pluginlg.classesroles.werewolfroles;
 
 
-import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlgapi.enumlg.RoleLG;
+import io.github.ph1lou.pluginlgapi.GetWereWolfAPI;
+import io.github.ph1lou.pluginlgapi.WereWolfAPI;
+import io.github.ph1lou.pluginlgapi.rolesattributs.RolesWereWolf;
 
 import java.util.UUID;
 
 public class WereWolf extends RolesWereWolf {
 
-    public WereWolf(GameManager game, UUID uuid) {
-        super(game,uuid);
+    public WereWolf(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
+        super(main,game,uuid);
     }
 
-
-    @Override
-    public RoleLG getRoleEnum() {
-        return RoleLG.WEREWOLF;
-    }
 
     @Override
     public String getDescription() {
@@ -25,7 +21,7 @@ public class WereWolf extends RolesWereWolf {
 
     @Override
     public String getDisplay() {
-        return game.translate("werewolf.role.werewolf.display");
+        return "werewolf.role.werewolf.display";
     }
 
 

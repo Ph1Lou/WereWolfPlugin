@@ -26,7 +26,7 @@ public class VanillaPlus extends Scenarios {
 
         if (block.getType().equals(Material.GRAVEL)) {
             block.setType(Material.AIR);
-            if (Math.random() * 100 < game.config.getFlintRate()) {
+            if (Math.random() * 100 < game.getConfig().getFlintRate()) {
                 block.getWorld().dropItem(loc, new ItemStack(Material.FLINT, 1));
             } else
                 event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(Material.GRAVEL));
@@ -37,7 +37,7 @@ public class VanillaPlus extends Scenarios {
     public void onLeaveDecay(LeavesDecayEvent event) {
 
         event.getBlock().setType(Material.AIR);
-        if (Math.random() * 100 < game.config.getAppleRate()) {
+        if (Math.random() * 100 < game.getConfig().getAppleRate()) {
             event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(Material.APPLE));
         }
     }

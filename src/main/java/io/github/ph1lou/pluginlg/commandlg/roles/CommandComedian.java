@@ -1,12 +1,16 @@
 package io.github.ph1lou.pluginlg.commandlg.roles;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.classesroles.villageroles.Comedian;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlg.game.PlayerLG;
+import io.github.ph1lou.pluginlgapi.Commands;
+import io.github.ph1lou.pluginlgapi.PlayerWW;
 import io.github.ph1lou.pluginlgapi.enumlg.State;
 import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
+import io.github.ph1lou.pluginlgapi.events.UseMaskEvent;
+import io.github.ph1lou.pluginlgapi.rolesattributs.PotionEffects;
+import io.github.ph1lou.pluginlgapi.rolesattributs.Power;
+import io.github.ph1lou.pluginlgapi.rolesattributs.Roles;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -14,11 +18,13 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.UUID;
 
-public class CommandComedian extends Commands {
+public class CommandComedian implements Commands {
 
+
+    private final MainLG main;
 
     public CommandComedian(MainLG main) {
-        super(main);
+        this.main = main;
     }
 
     @Override
@@ -40,7 +46,7 @@ public class CommandComedian extends Commands {
             return;
         }
 
-        PlayerLG plg = game.playerLG.get(uuid);
+        PlayerWW plg = game.playerLG.get(uuid);
 
 
         if (!game.isState(StateLG.GAME)) {
@@ -49,12 +55,12 @@ public class CommandComedian extends Commands {
         }
 
 
-        if (!(plg.getRole() instanceof Comedian)) {
+        if (!(plg.getRole().isDisplay("werewolf.role.comedian.display"))) {
             player.sendMessage(game.translate("werewolf.check.role", game.translate("werewolf.role.comedian.display")));
             return;
         }
 
-        Comedian comedian = (Comedian) plg.getRole();
+        Roles comedian = plg.getRole();
 
         if (args.length != 1) {
             player.sendMessage(game.translate("werewolf.check.parameters",1));
@@ -66,7 +72,7 @@ public class CommandComedian extends Commands {
             return;
         }
 
-        if (!comedian.hasPower()) {
+        if (!((Power)comedian).hasPower()) {
             player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
@@ -79,16 +85,16 @@ public class CommandComedian extends Commands {
                 return;
             }
 
-            if (comedian.getPotionEffects().contains(potionsType[i])) {
+            if (((PotionEffects)comedian).getPotionEffects().contains(potionsType[i])) {
                 player.sendMessage(game.translate("werewolf.role.comedian.used_mask"));
                 return;
             }
-            comedian.setPower(false);
-            comedian.addPotionEffect(potionsType[i]);
+            ((Power) comedian).setPower(false);
+            ((PotionEffects) comedian).addPotionEffect(potionsType[i]);
             player.sendMessage(game.translate("werewolf.role.comedian.wear_mask_perform", maskName[i]));
             player.removePotionEffect(potionsType[i]);
             player.addPotionEffect(new PotionEffect(potionsType[i], Integer.MAX_VALUE, i == 2 ? -1 : 0, false, false));
-
+            Bukkit.getPluginManager().callEvent(new UseMaskEvent(uuid,i));
         } catch (NumberFormatException ignored) {
         }
     }

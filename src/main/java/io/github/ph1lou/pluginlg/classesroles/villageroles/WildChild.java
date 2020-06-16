@@ -1,20 +1,21 @@
 package io.github.ph1lou.pluginlg.classesroles.villageroles;
 
 
-import io.github.ph1lou.pluginlg.classesroles.AffectedPlayers;
-import io.github.ph1lou.pluginlg.classesroles.Power;
-import io.github.ph1lou.pluginlg.classesroles.Transformed;
-import io.github.ph1lou.pluginlg.events.*;
-import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlg.game.PlayerLG;
-import io.github.ph1lou.pluginlgapi.enumlg.Camp;
-import io.github.ph1lou.pluginlgapi.enumlg.RoleLG;
+import io.github.ph1lou.pluginlgapi.GetWereWolfAPI;
+import io.github.ph1lou.pluginlgapi.PlayerWW;
+import io.github.ph1lou.pluginlgapi.WereWolfAPI;
 import io.github.ph1lou.pluginlgapi.enumlg.State;
 import io.github.ph1lou.pluginlgapi.enumlg.TimerLG;
+import io.github.ph1lou.pluginlgapi.events.*;
+import io.github.ph1lou.pluginlgapi.rolesattributs.AffectedPlayers;
+import io.github.ph1lou.pluginlgapi.rolesattributs.Power;
+import io.github.ph1lou.pluginlgapi.rolesattributs.RolesVillage;
+import io.github.ph1lou.pluginlgapi.rolesattributs.Transformed;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -27,8 +28,8 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     boolean transformed=false;
     private final List<UUID> affectedPlayer = new ArrayList<>();
 
-    public WildChild(GameManager game, UUID uuid) {
-        super(game,uuid);
+    public WildChild(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
+        super(main,game,uuid);
     }
 
     private boolean power=true;
@@ -75,11 +76,8 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     @EventHandler
     public void onNight(NightEvent event) {
 
-        if(!event.getUuid().equals(game.getGameUUID())){
-            return;
-        }
 
-        if(!game.playerLG.get(getPlayerUUID()).isState(State.ALIVE)){
+        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
             return;
         }
 
@@ -98,11 +96,8 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if(!event.getUuid().equals(game.getGameUUID())){
-            return;
-        }
 
-        if(!game.playerLG.get(getPlayerUUID()).isState(State.ALIVE)){
+        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
             return;
         }
 
@@ -122,24 +117,22 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     @EventHandler
     public void onAutoModel(AutoModelEvent event){
 
-        if(!event.getUuid().equals(game.getGameUUID())){
-            return;
-        }
 
         if(!hasPower()){
             return;
         }
 
-        UUID modelUUID = game.roleManage.autoSelect(getPlayerUUID());
-        PlayerLG model = game.playerLG.get(modelUUID);
+        UUID modelUUID = game.autoSelect(getPlayerUUID());
+        PlayerWW model = game.getPlayersWW().get(modelUUID);
         addAffectedPlayer(modelUUID);
         setPower(false);
+        Bukkit.getPluginManager().callEvent(new ModelEvent(getPlayerUUID(),modelUUID));
 
         if (Bukkit.getPlayer(getPlayerUUID()) == null) {
             return;
         }
 
-        if (!game.playerLG.get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
             return;
         }
 
@@ -149,18 +142,13 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     }
 
     @Override
-    public RoleLG getRoleEnum() {
-        return RoleLG.WILD_CHILD;
-    }
-
-    @Override
     public String getDescription() {
         return game.translate("werewolf.role.wild_child.description");
     }
 
     @Override
     public String getDisplay() {
-        return game.translate("werewolf.role.wild_child.display");
+        return "werewolf.role.wild_child.display";
     }
 
     @Override
@@ -173,14 +161,31 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
         if(!transformed) {
-            player.sendMessage(game.translate("werewolf.role.wild_child.design_model", game.score.conversion(game.config.getTimerValues().get(TimerLG.MODEL_DURATION))));
+            player.sendMessage(game.translate("werewolf.role.wild_child.design_model", game.conversion(game.getConfig().getTimerValues().get(TimerLG.MODEL_DURATION))));
         }
         else {
             UUID modelUUID = getAffectedPlayers().get(0);
-            PlayerLG model = game.playerLG.get(modelUUID);
+            PlayerWW model = game.getPlayersWW().get(modelUUID);
 
-            if (modelUUID.equals(getPlayerUUID()) && !model.getInfected()) {
-                Bukkit.getPluginManager().callEvent(new NewWereWolfEvent(uuid));
+            if (modelUUID.equals(getPlayerUUID()) && !getInfected()) {
+
+                WildChildTransformationEvent wildChildTransformationEvent = new WildChildTransformationEvent(getPlayerUUID(),getPlayerUUID());
+
+                Bukkit.getPluginManager().callEvent(wildChildTransformationEvent);
+
+                if(wildChildTransformationEvent.isCancelled()){
+                    player.sendMessage(game.translate("werewolf.check.transformation"));
+                    return;
+                }
+
+                NewWereWolfEvent newWereWolfEvent = new NewWereWolfEvent(getPlayerUUID());
+                Bukkit.getPluginManager().callEvent(newWereWolfEvent);
+
+                if(newWereWolfEvent.isCancelled()){
+                    player.sendMessage(game.translate("werewolf.check.transformation"));
+                }
+                else setTransformed(true);
+
             } else
                 player.sendMessage(game.translate("werewolf.role.wild_child.reveal_model", model.getName()));
         }
@@ -194,37 +199,63 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
 
     @Override
     public void recoverPower(Player player) {
-        player.sendMessage(game.translate("werewolf.role.wild_child.design_model", game.score.conversion(game.config.getTimerValues().get(TimerLG.MODEL_DURATION))));
+        player.sendMessage(game.translate("werewolf.role.wild_child.design_model", game.conversion(game.getConfig().getTimerValues().get(TimerLG.MODEL_DURATION))));
     }
 
     @Override
     public boolean isWereWolf() {
-        return this.transformed;
+        return this.transformed || super.isWereWolf();
     }
 
     @EventHandler
-    public void onTargetDeath(TargetDeathEvent event) {
+    private void onPlayerDeath(PlayerDeathEvent event) {
+
+        if(!transformed) return;
+        if(event.getEntity() == null) return;
+        if(event.getEntity().getKiller()==null) return;
+        Player killer = event.getEntity().getKiller();
+
+        if(!killer.getUniqueId().equals(getPlayerUUID())) return;
+
+        killer.removePotionEffect(PotionEffectType.ABSORPTION);
+        killer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1200, 0, false, false));
+        killer.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 1200, 0, false, false));
+    }
+
+    @EventHandler
+    public void onFinalDeath(FinalDeathEvent event) {
 
         UUID uuid = event.getUuid();
 
-        PlayerLG plg = game.playerLG.get(getPlayerUUID());
-
         if(!getAffectedPlayers().contains(uuid)) return;
 
-        setTransformed(true);
+        if(transformed) return;
 
-        if (!plg.getRole().isCamp(Camp.WEREWOLF)) {
-            Bukkit.getPluginManager().callEvent(new NewWereWolfEvent(uuid));
+        WildChildTransformationEvent wildChildTransformationEvent = new WildChildTransformationEvent(getPlayerUUID(),getPlayerUUID());
+
+        Bukkit.getPluginManager().callEvent(wildChildTransformationEvent);
+
+        if(wildChildTransformationEvent.isCancelled()){
+            if(Bukkit.getPlayer(getPlayerUUID())!=null){
+                Bukkit.getPlayer(getPlayerUUID()).sendMessage(game.translate("werewolf.check.transformation"));
+            }
+            return;
+        }
+        NewWereWolfEvent newWereWolfEvent = new NewWereWolfEvent(getPlayerUUID());
+        Bukkit.getPluginManager().callEvent(newWereWolfEvent);
+
+        if(!newWereWolfEvent.isCancelled()){
+            setTransformed(true);
         }
 
     }
 
     @EventHandler
-    public void onTargetIsStolen(TargetStealEvent event){
+    public void onTargetIsStolen(StealEvent event){
 
         UUID newUUID = event.getNewUUID();
         UUID oldUUID = event.getOldUUID();
-        PlayerLG plg = game.playerLG.get(getPlayerUUID());
+        PlayerWW plg = game.getPlayersWW().get(getPlayerUUID());
 
         if(!getAffectedPlayers().contains(oldUUID)) return;
 
@@ -233,13 +264,22 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
 
         if(!plg.isState(State.ALIVE)) return;
 
-        if(Bukkit.getPlayer(newUUID)!=null){
-            Player player = Bukkit.getPlayer(newUUID);
-            player.sendMessage(game.translate("werewolf.role.succubus.get_charmed", plg.getName()));
-        }
         if(Bukkit.getPlayer(getPlayerUUID())!=null) {
             Player player = Bukkit.getPlayer(getPlayerUUID());
-            player.sendMessage(game.translate("werewolf.role.succubus.change",game.playerLG.get(newUUID).getName()));
+            player.sendMessage(game.translate("werewolf.role.wild_child.change",game.getPlayersWW().get(newUUID).getName()));
         }
+    }
+
+    @EventHandler
+    public void onEndPlayerMessage(EndPlayerMessageEvent event){
+
+        if(!event.getPlayerUUID().equals(getPlayerUUID())) return;
+
+        StringBuilder sb = event.getEndMessage();
+
+        if(!getAffectedPlayers().isEmpty()){
+            sb.append(game.translate("werewolf.end.model",game.getPlayersWW().get(getAffectedPlayers().get(0)).getName()));
+        }
+        sb.append(game.translate("werewolf.end.transform"));
     }
 }

@@ -1,18 +1,20 @@
 package io.github.ph1lou.pluginlg.commandlg.admin.ingame;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
 import io.github.ph1lou.pluginlg.utils.Title;
+import io.github.ph1lou.pluginlgapi.Commands;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CommandGroup extends Commands {
+public class CommandGroup implements Commands {
 
+
+    private final MainLG main;
 
     public CommandGroup(MainLG main) {
-        super(main);
+        this.main = main;
     }
 
     @Override

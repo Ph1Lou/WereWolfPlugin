@@ -1,19 +1,21 @@
 package io.github.ph1lou.pluginlg.commandlg.admin.ingame;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlgapi.Commands;
 import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
 import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class CommandLootDeath extends Commands {
+public class CommandLootDeath implements Commands {
 
+
+    private final MainLG main;
 
     public CommandLootDeath(MainLG main) {
-        super(main);
+        this.main = main;
     }
 
     @Override
@@ -36,10 +38,10 @@ public class CommandLootDeath extends Commands {
             sender.sendMessage(game.translate("werewolf.check.already_begin"));
             return;
         }
-        game.stufflg.clearDeathLoot();
+        game.getStuffs().clearDeathLoot();
         for (ItemStack i : ((Player) sender).getInventory().getContents()) {
             if (i != null) {
-                game.stufflg.addDeathLoot(i);
+                game.getStuffs().addDeathLoot(i);
             }
         }
         sender.sendMessage(game.translate("werewolf.commands.admin.loot_death.perform"));

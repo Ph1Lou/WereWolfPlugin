@@ -1,13 +1,13 @@
 package io.github.ph1lou.pluginlg.tasks;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.events.DayEvent;
 import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlg.game.PlayerLG;
 import io.github.ph1lou.pluginlg.utils.Title;
+import io.github.ph1lou.pluginlgapi.PlayerWW;
 import io.github.ph1lou.pluginlgapi.enumlg.ScenarioLG;
 import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
 import io.github.ph1lou.pluginlgapi.enumlg.TimerLG;
+import io.github.ph1lou.pluginlgapi.events.DayEvent;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -15,6 +15,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -95,21 +97,31 @@ public class TransportationTask extends BukkitRunnable {
                 inventory.clear();
 
                 for (int j = 0; j < 40; j++) {
-                    inventory.setItem(j, game.stufflg.getStartLoot().getItem(j));
+                    inventory.setItem(j, game.getStuffs().getStartLoot().getItem(j));
                 }
-                if (game.config.getScenarioValues().get(ScenarioLG.CAT_EYES)) {
+                if (game.getConfig().getScenarioValues().get(ScenarioLG.CAT_EYES)) {
                     player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0, false, false));
                 }
                 player.teleport(game.playerLG.get(uuid).getSpawn());
             }
         } else if (i % 5 == 0 && j == 10) {
-            for (PlayerLG plg : game.playerLG.values()) {
-                createStructure(Material.AIR, plg.getSpawn());
-            }
+
+            List<PlayerWW> temp = new ArrayList<>(game.playerLG.values());
+            Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(main, () -> {
+                if(!temp.isEmpty()){
+                    createStructure(Material.AIR, temp.get(0).getSpawn());
+                    temp.remove(0);
+                }
+                else {
+                    Bukkit.getScheduler().cancelTask(getTaskId());
+                }
+
+            }, 1, temp.size());
+
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (game.playerLG.containsKey(p.getUniqueId())) {
                     p.setGameMode(GameMode.SURVIVAL);
-                    p.sendMessage(game.translate("werewolf.announcement.start.message",game.score.conversion(game.config.getTimerValues().get(TimerLG.INVULNERABILITY))));
+                    p.sendMessage(game.translate("werewolf.announcement.start.message",game.score.conversion(game.getConfig().getTimerValues().get(TimerLG.INVULNERABILITY))));
                 } else {
                     p.teleport(game.getWorld().getSpawnLocation());
                     p.setGameMode(GameMode.SPECTATOR);
@@ -124,7 +136,7 @@ public class TransportationTask extends BukkitRunnable {
             game.setState(StateLG.START);
             GameTask start = new GameTask(game);
             start.runTaskTimer(main, 0, 5);
-            Bukkit.getPluginManager().callEvent(new DayEvent(game.getGameUUID(),1));
+            Bukkit.getPluginManager().callEvent(new DayEvent(1));
             cancel();
         } else if (i % 5 == 0) {
             for (Player p : Bukkit.getOnlinePlayers()) {

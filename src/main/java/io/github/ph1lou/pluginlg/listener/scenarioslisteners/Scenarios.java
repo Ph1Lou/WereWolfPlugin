@@ -21,7 +21,7 @@ public abstract class Scenarios implements Listener {
 
 
     public void register() {
-        if (game.config.getScenarioValues().get(scenario)) {
+        if (game.getConfig().getScenarioValues().get(scenario)) {
             if (!register) {
                 Bukkit.getPluginManager().registerEvents(this, main);
                 register = true;

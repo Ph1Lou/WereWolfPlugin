@@ -1,10 +1,17 @@
 package io.github.ph1lou.pluginlg.classesroles.villageroles;
 
 
-import io.github.ph1lou.pluginlg.classesroles.AffectedPlayers;
-import io.github.ph1lou.pluginlg.classesroles.Power;
-import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlgapi.enumlg.RoleLG;
+import io.github.ph1lou.pluginlgapi.GetWereWolfAPI;
+import io.github.ph1lou.pluginlgapi.PlayerWW;
+import io.github.ph1lou.pluginlgapi.WereWolfAPI;
+import io.github.ph1lou.pluginlgapi.enumlg.State;
+import io.github.ph1lou.pluginlgapi.events.FinalDeathEvent;
+import io.github.ph1lou.pluginlgapi.events.TroubleMakerDeathEvent;
+import io.github.ph1lou.pluginlgapi.rolesattributs.AffectedPlayers;
+import io.github.ph1lou.pluginlgapi.rolesattributs.Power;
+import io.github.ph1lou.pluginlgapi.rolesattributs.RolesVillage;
+import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +21,24 @@ public class Troublemaker extends RolesVillage implements AffectedPlayers, Power
 
     private final List<UUID> affectedPlayer = new ArrayList<>();
 
-    public Troublemaker(GameManager game, UUID uuid) {
-        super(game,uuid);
+    public Troublemaker(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
+        super(main,game,uuid);
+    }
+
+    @EventHandler
+    public void onFinalDeath(FinalDeathEvent event) {
+
+        if(!event.getUuid().equals(getPlayerUUID())) return;
+
+        Bukkit.getPluginManager().callEvent(new TroubleMakerDeathEvent(getPlayerUUID()));
+        int i = 0;
+        for (UUID uuid : game.getPlayersWW().keySet()) {
+            PlayerWW plg = game.getPlayersWW().get(uuid);
+            if (plg.isState(State.ALIVE)) {
+                game.transportation(uuid, i, game.translate("werewolf.role.troublemaker.troublemaker_death"));
+                i++;
+            }
+        }
     }
 
     private boolean power=true;
@@ -49,10 +72,6 @@ public class Troublemaker extends RolesVillage implements AffectedPlayers, Power
         return (this.affectedPlayer);
     }
 
-    @Override
-    public RoleLG getRoleEnum() {
-        return RoleLG.TROUBLEMAKER;
-    }
 
     @Override
     public String getDescription() {
@@ -61,6 +80,6 @@ public class Troublemaker extends RolesVillage implements AffectedPlayers, Power
 
     @Override
     public String getDisplay() {
-        return game.translate("werewolf.role.troublemaker.display");
+        return "werewolf.role.troublemaker.display";
     }
 }

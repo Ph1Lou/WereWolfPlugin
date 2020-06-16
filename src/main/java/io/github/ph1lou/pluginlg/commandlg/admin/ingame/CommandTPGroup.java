@@ -1,8 +1,8 @@
 package io.github.ph1lou.pluginlg.commandlg.admin.ingame;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlgapi.Commands;
 import io.github.ph1lou.pluginlgapi.enumlg.State;
 import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
 import org.bukkit.Bukkit;
@@ -12,11 +12,13 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandTPGroup extends Commands {
+public class CommandTPGroup implements Commands {
 
+
+    private final MainLG main;
 
     public CommandTPGroup(MainLG main) {
-        super(main);
+        this.main = main;
     }
 
     @Override
@@ -73,10 +75,10 @@ public class CommandTPGroup extends Commands {
                 if (p.getLocation().distance(location) <= d) {
                     size--;
                     sb.append(p.getName()).append(" ");
-                    game.death_manage.transportation(uuid, r, game.translate("werewolf.commands.admin.tp_group.perform"));
+                    game.transportation(uuid, r, game.translate("werewolf.commands.admin.tp_group.perform"));
                 }
             }
         }
-        Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.tp_group.broadcast",sb.toString()));
+        Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.commands.admin.tp_group.broadcast",sb.toString()));
     }
 }

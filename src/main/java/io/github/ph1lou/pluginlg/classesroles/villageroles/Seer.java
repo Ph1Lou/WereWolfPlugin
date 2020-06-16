@@ -1,15 +1,16 @@
 package io.github.ph1lou.pluginlg.classesroles.villageroles;
 
 
-
-
-import io.github.ph1lou.pluginlg.classesroles.AffectedPlayers;
-import io.github.ph1lou.pluginlg.events.DayEvent;
-import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlgapi.enumlg.RoleLG;
+import io.github.ph1lou.pluginlgapi.GetWereWolfAPI;
+import io.github.ph1lou.pluginlgapi.WereWolfAPI;
 import io.github.ph1lou.pluginlgapi.enumlg.State;
 import io.github.ph1lou.pluginlgapi.enumlg.TimerLG;
 import io.github.ph1lou.pluginlgapi.enumlg.ToolLG;
+import io.github.ph1lou.pluginlgapi.events.ChestEvent;
+import io.github.ph1lou.pluginlgapi.events.DayEvent;
+import io.github.ph1lou.pluginlgapi.events.FinalDeathEvent;
+import io.github.ph1lou.pluginlgapi.rolesattributs.AffectedPlayers;
+import io.github.ph1lou.pluginlgapi.rolesattributs.RolesWithLimitedSelectionDuration;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,9 +26,9 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
     private int dayNumber=-8;
     private final List<UUID> affectedPlayer = new ArrayList<>();
 
-    public Seer(GameManager game, UUID uuid) {
+    public Seer(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
 
-        super(game,uuid);
+        super(main,game,uuid);
         setPower(false);
     }
 
@@ -54,15 +55,11 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if(!event.getUuid().equals(game.getGameUUID())){
+        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
             return;
         }
 
-        if(!game.playerLG.get(getPlayerUUID()).isState(State.ALIVE)){
-            return;
-        }
-
-        if (game.config.getConfigValues().get(ToolLG.SEER_EVERY_OTHER_DAY) && event.getNumber()==dayNumber+1) {
+        if (game.getConfig().getConfigValues().get(ToolLG.SEER_EVERY_OTHER_DAY) && event.getNumber()==dayNumber+1) {
             return;
         }
 
@@ -73,13 +70,9 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
         }
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        player.sendMessage(game.translate("werewolf.role.seer.see_camp_message", game.score.conversion(game.config.getTimerValues().get(TimerLG.POWER_DURATION))));
+        player.sendMessage(game.translate("werewolf.role.seer.see_camp_message", game.conversion(game.getConfig().getTimerValues().get(TimerLG.POWER_DURATION))));
     }
 
-    @Override
-    public RoleLG getRoleEnum() {
-        return RoleLG.SEER;
-    }
 
     @Override
     public String getDescription() {
@@ -88,7 +81,7 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
 
     @Override
     public String getDisplay() {
-        return game.translate("werewolf.role.seer.display");
+        return "werewolf.role.seer.display";
     }
 
     @Override
@@ -96,4 +89,18 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
         super.recoverPotionEffect(player);
         player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION,Integer.MAX_VALUE,0,false,false));
     }
+
+    @EventHandler
+    public void onFinalDeath(FinalDeathEvent event) {
+
+        UUID uuid = event.getUuid();
+        if (!game.getConfig().getConfigValues().get(ToolLG.EVENT_SEER_DEATH)) return;
+
+        if(!uuid.equals(getPlayerUUID())) return;
+
+        Bukkit.getPluginManager().callEvent(new ChestEvent());
+        game.getConfig().getConfigValues().put(ToolLG.EVENT_SEER_DEATH, false);
+    }
+
+
 }

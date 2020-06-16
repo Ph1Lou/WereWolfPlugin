@@ -1,19 +1,21 @@
 package io.github.ph1lou.pluginlg.commandlg.utilities;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlgapi.Commands;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandVote extends Commands {
+public class CommandVote implements Commands {
 
+
+    private final MainLG main;
 
     public CommandVote(MainLG main) {
-        super(main);
+        this.main = main;
     }
 
     @Override
@@ -39,6 +41,6 @@ public class CommandVote extends Commands {
             return;
         }
         UUID argUUID = Bukkit.getPlayer(args[0]).getUniqueId();
-        game.vote.setUnVote((Player) sender, argUUID);
+        game.getVote().setUnVote(((Player) sender).getUniqueId(), argUUID);
     }
 }

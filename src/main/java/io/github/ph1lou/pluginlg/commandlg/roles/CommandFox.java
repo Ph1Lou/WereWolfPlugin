@@ -1,12 +1,13 @@
 package io.github.ph1lou.pluginlg.commandlg.roles;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.classesroles.villageroles.Fox;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlg.game.PlayerLG;
+import io.github.ph1lou.pluginlgapi.Commands;
+import io.github.ph1lou.pluginlgapi.PlayerWW;
 import io.github.ph1lou.pluginlgapi.enumlg.State;
 import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
+import io.github.ph1lou.pluginlgapi.events.BeginSniffEvent;
+import io.github.ph1lou.pluginlgapi.rolesattributs.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -14,11 +15,13 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandFox extends Commands {
+public class CommandFox implements Commands {
 
+
+    private final MainLG main;
 
     public CommandFox(MainLG main) {
-        super(main);
+        this.main = main;
     }
 
     @Override
@@ -40,7 +43,7 @@ public class CommandFox extends Commands {
             return;
         }
 
-        PlayerLG plg = game.playerLG.get(uuid);
+        PlayerWW plg = game.playerLG.get(uuid);
 
 
         if (!game.isState(StateLG.GAME)) {
@@ -48,12 +51,12 @@ public class CommandFox extends Commands {
             return;
         }
 
-        if (!(plg.getRole() instanceof Fox)){
+        if (!(plg.getRole().isDisplay("werewolf.role.fox.display"))){
             player.sendMessage(game.translate("werewolf.check.role", game.translate("werewolf.role.fox.display")));
             return;
         }
 
-        Fox fox = (Fox) plg.getRole();
+        Roles fox = plg.getRole();
 
         if (args.length!=1) {
             player.sendMessage(game.translate("werewolf.check.player_input"));
@@ -65,12 +68,12 @@ public class CommandFox extends Commands {
             return;
         }
 
-        if(!fox.hasPower()) {
+        if(!((Power)fox).hasPower()) {
             player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
 
-        if(args[0].equals(playername)) {
+        if(args[0].toLowerCase().equals(playername.toLowerCase())) {
             player.sendMessage(game.translate("werewolf.check.not_yourself"));
             return;
         }
@@ -89,19 +92,28 @@ public class CommandFox extends Commands {
         Location location = player.getLocation();
         Location locationTarget = Bukkit.getPlayer(args[0]).getLocation();
 
-        if (location.distance(locationTarget) > game.config.getDistanceFox()) {
+        if (location.distance(locationTarget) > game.getConfig().getDistanceFox()) {
             player.sendMessage(game.translate("werewolf.role.fox.not_enough_near"));
             return;
-        } else if (fox.getUse() >= game.config.getUseOfFlair()) {
+        } else if (((LimitedUse)fox).getUse() >= game.getConfig().getUseOfFlair()) {
             player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
 
-        fox.clearAffectedPlayer();
-        fox.addAffectedPlayer(argUUID);
-        fox.setUse(fox.getUse()+1);
-        fox.setPower(false);
-        fox.setProgress(0f);
+        BeginSniffEvent beginSniffEvent=new BeginSniffEvent(uuid,argUUID);
+        Bukkit.getPluginManager().callEvent(beginSniffEvent);
+
+        if(beginSniffEvent.isCancelled()){
+            player.sendMessage(game.translate("werewolf.check.cancel"));
+            return;
+        }
+
+        ((AffectedPlayers)fox).clearAffectedPlayer();
+        ((Power) fox).setPower(false);
+        ((LimitedUse) fox).setUse(((LimitedUse) fox).getUse()+1);
+        ((AffectedPlayers) fox).addAffectedPlayer(argUUID);
+        ((Progress)fox).setProgress(0f);
+
         player.sendMessage(game.translate("werewolf.role.fox.smell_beginning", args[0]));
     }
 }

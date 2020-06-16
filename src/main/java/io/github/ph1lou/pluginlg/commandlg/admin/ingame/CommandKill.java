@@ -1,8 +1,8 @@
 package io.github.ph1lou.pluginlg.commandlg.admin.ingame;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlgapi.Commands;
 import io.github.ph1lou.pluginlgapi.enumlg.State;
 import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
 import org.bukkit.Bukkit;
@@ -11,11 +11,13 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandKill extends Commands {
+public class CommandKill implements Commands {
 
+
+    private final MainLG main;
 
     public CommandKill(MainLG main) {
-        super(main);
+        this.main = main;
     }
 
     @Override

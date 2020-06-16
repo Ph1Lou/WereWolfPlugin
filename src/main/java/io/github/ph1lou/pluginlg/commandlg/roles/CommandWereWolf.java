@@ -1,9 +1,9 @@
 package io.github.ph1lou.pluginlg.commandlg.roles;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlg.game.PlayerLG;
+import io.github.ph1lou.pluginlgapi.Commands;
+import io.github.ph1lou.pluginlgapi.PlayerWW;
 import io.github.ph1lou.pluginlgapi.enumlg.State;
 import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
 import io.github.ph1lou.pluginlgapi.enumlg.TimerLG;
@@ -12,11 +12,13 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandWereWolf extends Commands {
+public class CommandWereWolf implements Commands {
 
+
+    private final MainLG main;
 
     public CommandWereWolf(MainLG main) {
-        super(main);
+        this.main = main;
     }
 
     @Override
@@ -38,7 +40,7 @@ public class CommandWereWolf extends Commands {
             return;
         }
 
-        PlayerLG plg = game.playerLG.get(uuid);
+        PlayerWW plg = game.playerLG.get(uuid);
 
 
         if (!game.isState(StateLG.GAME)) {
@@ -51,12 +53,12 @@ public class CommandWereWolf extends Commands {
             return;
         }
 
-        if (!game.roleManage.isWereWolf(plg)) {
+        if (!plg.getRole().isWereWolf()) {
             sender.sendMessage(game.translate("werewolf.role.werewolf.not_werewolf"));
             return;
         }
 
-        if (game.config.getTimerValues().get(TimerLG.WEREWOLF_LIST) > 0) {
+        if (game.getConfig().getTimerValues().get(TimerLG.WEREWOLF_LIST) > 0) {
             sender.sendMessage(game.translate("werewolf.role.werewolf.list_not_revealed"));
             return;
         }
@@ -65,9 +67,9 @@ public class CommandWereWolf extends Commands {
 
         for (UUID playerUUID : game.playerLG.keySet()) {
 
-            PlayerLG lg = game.playerLG.get(playerUUID);
+            PlayerWW lg = game.playerLG.get(playerUUID);
 
-            if (lg.isState(State.ALIVE) && game.roleManage.isWereWolf(lg)) {
+            if (lg.isState(State.ALIVE) && lg.getRole().isWereWolf()) {
                 list.append(lg.getName()).append(" ");
             }
         }

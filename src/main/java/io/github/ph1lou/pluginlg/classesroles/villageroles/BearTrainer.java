@@ -1,12 +1,13 @@
 package io.github.ph1lou.pluginlg.classesroles.villageroles;
 
-import io.github.ph1lou.pluginlg.classesroles.werewolfroles.FalsifierWereWolf;
-import io.github.ph1lou.pluginlg.events.DayEvent;
-import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlg.game.PlayerLG;
+import io.github.ph1lou.pluginlgapi.GetWereWolfAPI;
+import io.github.ph1lou.pluginlgapi.PlayerWW;
+import io.github.ph1lou.pluginlgapi.WereWolfAPI;
 import io.github.ph1lou.pluginlgapi.enumlg.Camp;
-import io.github.ph1lou.pluginlgapi.enumlg.RoleLG;
 import io.github.ph1lou.pluginlgapi.enumlg.State;
+import io.github.ph1lou.pluginlgapi.events.DayEvent;
+import io.github.ph1lou.pluginlgapi.rolesattributs.Display;
+import io.github.ph1lou.pluginlgapi.rolesattributs.RolesVillage;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -17,18 +18,15 @@ import java.util.UUID;
 
 public class BearTrainer extends RolesVillage {
 
-    public BearTrainer(GameManager game, UUID uuid) {
-        super(game,uuid);
+    public BearTrainer(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
+        super(main,game,uuid);
     }
 
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if(!event.getUuid().equals(game.getGameUUID())){
-            return;
-        }
 
-        if(!game.playerLG.get(getPlayerUUID()).isState(State.ALIVE)){
+        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
             return;
         }
         if(Bukkit.getPlayer(getPlayerUUID())==null){
@@ -41,13 +39,13 @@ public class BearTrainer extends RolesVillage {
 
         for (Player pls : Bukkit.getOnlinePlayers()) {
 
-            if (game.playerLG.containsKey(pls.getUniqueId())) {
+            if (game.getPlayersWW().containsKey(pls.getUniqueId())) {
 
-                PlayerLG plo = game.playerLG.get(pls.getUniqueId());
+                PlayerWW plo = game.getPlayersWW().get(pls.getUniqueId());
 
-                if (!(plo.getRole() instanceof FalsifierWereWolf) || ((FalsifierWereWolf) plo.getRole()).isPosterCamp(Camp.WEREWOLF)) {
-                    if (game.roleManage.isWereWolf(plo) && plo.isState(State.ALIVE)) {
-                        if (oursLocation.distance(pls.getLocation()) < game.config.getDistanceBearTrainer()) {
+                if (!(plo.getRole() instanceof Display) || ((Display) plo.getRole()).isDisplayCamp(Camp.WEREWOLF)) {
+                    if (plo.getRole().isWereWolf() && plo.isState(State.ALIVE)) {
+                        if (oursLocation.distance(pls.getLocation()) < game.getConfig().getDistanceBearTrainer()) {
                             builder.append(game.translate("werewolf.role.bear_trainer.growling"));
                             ok = true;
                         }
@@ -65,17 +63,12 @@ public class BearTrainer extends RolesVillage {
     }
 
     @Override
-    public RoleLG getRoleEnum() {
-        return RoleLG.BEAR_TRAINER;
-    }
-
-    @Override
     public String getDescription() {
         return game.translate("werewolf.role.bear_trainer.description");
     }
 
     @Override
     public String getDisplay() {
-        return game.translate("werewolf.role.bear_trainer.display");
+        return "werewolf.role.bear_trainer.display";
     }
 }

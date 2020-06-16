@@ -1,11 +1,9 @@
 package io.github.ph1lou.pluginlg.commandlg.utilities;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.classesroles.villageroles.SiameseTwin;
-import io.github.ph1lou.pluginlg.classesroles.villageroles.Sister;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlg.game.PlayerLG;
+import io.github.ph1lou.pluginlgapi.Commands;
+import io.github.ph1lou.pluginlgapi.PlayerWW;
 import io.github.ph1lou.pluginlgapi.enumlg.State;
 import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
 import org.bukkit.command.CommandSender;
@@ -13,11 +11,13 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandRole extends Commands {
+public class CommandRole implements Commands {
 
+
+    private final MainLG main;
 
     public CommandRole(MainLG main) {
-        super(main);
+        this.main = main;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class CommandRole extends Commands {
             return;
         }
 
-        PlayerLG plg = game.playerLG.get(uuid);
+        PlayerWW plg = game.playerLG.get(uuid);
 
 
         if (!game.isState(StateLG.GAME)) {
@@ -53,21 +53,21 @@ public class CommandRole extends Commands {
 
         player.sendMessage(plg.getRole().getDescription());
 
-        if(plg.getRole() instanceof Sister) {
+        if(plg.getRole().isDisplay("werewolf.role.sister.display")) {
             StringBuilder list =new StringBuilder();
             for(UUID uuid2:game.playerLG.keySet()) {
-                PlayerLG pls =game.playerLG.get(uuid2);
-                if(pls.isState(State.ALIVE) && pls.getRole() instanceof Sister) {
+                PlayerWW pls =game.playerLG.get(uuid2);
+                if(pls.isState(State.ALIVE) && pls.getRole().isDisplay("werewolf.role.sister.display")) {
                     list.append(pls.getName()).append(" ");
                 }
             }
             player.sendMessage(game.translate("werewolf.role.sister.sisters_list",list.toString()));
         }
-        else if(plg.getRole() instanceof SiameseTwin) {
+        else if(plg.getRole().isDisplay("werewolf.role.siamese_twin.display")) {
             StringBuilder list =new StringBuilder();
             for(UUID uuid3:game.playerLG.keySet()) {
-                PlayerLG plb =game.playerLG.get(uuid3);
-                if(plb.isState(State.ALIVE) && plb.getRole() instanceof SiameseTwin) {
+                PlayerWW plb =game.playerLG.get(uuid3);
+                if(plb.isState(State.ALIVE) && plb.getRole().isDisplay("werewolf.role.siamese_twin.display")) {
                     list.append(plb.getName()).append(" ");
                 }
             }

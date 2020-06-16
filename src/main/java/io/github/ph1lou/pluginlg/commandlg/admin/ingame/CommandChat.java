@@ -1,18 +1,20 @@
 package io.github.ph1lou.pluginlg.commandlg.admin.ingame;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlgapi.Commands;
 import io.github.ph1lou.pluginlgapi.enumlg.ToolLG;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CommandChat extends Commands {
+public class CommandChat implements Commands {
 
+
+    private final MainLG main;
 
     public CommandChat(MainLG main) {
-        super(main);
+        this.main = main;
     }
 
     @Override
@@ -25,8 +27,8 @@ public class CommandChat extends Commands {
             return;
         }
 
-        game.config.getConfigValues().put(ToolLG.CHAT, !game.config.getConfigValues().get(ToolLG.CHAT));
+        game.getConfig().getConfigValues().put(ToolLG.CHAT, !game.getConfig().getConfigValues().get(ToolLG.CHAT));
 
-        Bukkit.broadcastMessage(game.config.getConfigValues().get(ToolLG.CHAT) ? game.translate("werewolf.commands.admin.chat.on") : game.translate("werewolf.commands.admin.chat.off"));
+        Bukkit.broadcastMessage(game.getConfig().getConfigValues().get(ToolLG.CHAT) ? game.translate("werewolf.commands.admin.chat.on") : game.translate("werewolf.commands.admin.chat.off"));
     }
 }

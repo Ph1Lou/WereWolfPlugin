@@ -1,13 +1,11 @@
 package io.github.ph1lou.pluginlg.tasks;
 
 
-import io.github.ph1lou.pluginlg.events.AutoAngelEvent;
-import io.github.ph1lou.pluginlg.events.AutoModelEvent;
-import io.github.ph1lou.pluginlg.events.UpdateEvent;
-import io.github.ph1lou.pluginlg.events.WereWolfListEvent;
 import io.github.ph1lou.pluginlg.game.GameManager;
 import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
 import io.github.ph1lou.pluginlgapi.enumlg.TimerLG;
+import io.github.ph1lou.pluginlgapi.enumlg.ToolLG;
+import io.github.ph1lou.pluginlgapi.events.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -42,40 +40,40 @@ public class GameTask extends BukkitRunnable {
 		World world = game.getWorld();
 		WorldBorder wb = world.getWorldBorder();
 		long time = world.getTime();
-		Bukkit.getPluginManager().callEvent(new UpdateEvent(game.getGameUUID()));
+		Bukkit.getPluginManager().callEvent(new UpdateEvent());
 		game.optionlg.updateSelectionTimer();
 		game.optionlg.updateSelectionBorder();
 		game.score.updateBoard();
 		game.loversManage.detectionAmnesiacLover();
 		game.roleManage.brotherLife();
 
-		if (game.config.getTimerValues().get(TimerLG.INVULNERABILITY) == 0) {
+		if (game.getConfig().getTimerValues().get(TimerLG.INVULNERABILITY) == 0) {
 			for (Player p : Bukkit.getOnlinePlayers()) {
 				p.sendMessage(game.translate("werewolf.announcement.invulnerability"));
 				p.playSound(p.getLocation(), Sound.GLASS, 1, 20);
 			}
 
 		}
-		game.config.getTimerValues().put(TimerLG.INVULNERABILITY, game.config.getTimerValues().get(TimerLG.INVULNERABILITY) - 1);
+		game.getConfig().getTimerValues().put(TimerLG.INVULNERABILITY, game.getConfig().getTimerValues().get(TimerLG.INVULNERABILITY) - 1);
 
-		if (game.config.getTimerValues().get(TimerLG.ROLE_DURATION) == 0) {
+		if (game.getConfig().getTimerValues().get(TimerLG.ROLE_DURATION) == 0) {
 
 			game.setState(StateLG.GAME);
 
 			for (Player p : Bukkit.getOnlinePlayers()) {
-				if (game.config.isTrollSV() && game.playerLG.containsKey(p.getUniqueId())) {
+				if (game.getConfig().isTrollSV() && game.playerLG.containsKey(p.getUniqueId())) {
 					p.playSound(p.getLocation(), Sound.PORTAL_TRIGGER, 1, 20);
 					p.sendMessage(game.translate("werewolf.announcement.troll"));
 				} else p.playSound(p.getLocation(), Sound.EXPLODE, 1, 20);
 			}
-			game.config.setTrollSV(false);
+			game.getConfig().setTrollSV(false);
 			game.roleManage.repartitionRolesLG();
 		}
 
-		if (game.config.getTimerValues().get(TimerLG.ROLE_DURATION) - 120 == 0 && game.config.isTrollSV()) {
+		if (game.getConfig().getTimerValues().get(TimerLG.ROLE_DURATION) - 120 == 0 && game.getConfig().isTrollSV()) {
 
 			game.setState(StateLG.GAME);
-
+			game.getConfig().getConfigValues().put(ToolLG.CHAT,false);
 			for (Player p : Bukkit.getOnlinePlayers()) {
 				if (game.playerLG.containsKey(p.getUniqueId())) {
 					p.sendMessage(game.translate("werewolf.role.villager.description"));
@@ -83,68 +81,74 @@ public class GameTask extends BukkitRunnable {
 				}
 			}
 		}
-		game.config.getTimerValues().put(TimerLG.ROLE_DURATION, game.config.getTimerValues().get(TimerLG.ROLE_DURATION) - 1);
+		game.getConfig().getTimerValues().put(TimerLG.ROLE_DURATION, game.getConfig().getTimerValues().get(TimerLG.ROLE_DURATION) - 1);
 
-		if (game.config.getTimerValues().get(TimerLG.PVP) == 0) {
+		if (game.getConfig().getTimerValues().get(TimerLG.PVP) == 0) {
 			world.setPVP(true);
 			for (Player p : Bukkit.getOnlinePlayers()) {
 				p.sendMessage(game.translate("werewolf.announcement.pvp"));
 				p.playSound(p.getLocation(), Sound.DONKEY_ANGRY, 1, 20);
 			}
 		}
-		game.config.getTimerValues().put(TimerLG.PVP, game.config.getTimerValues().get(TimerLG.PVP) - 1);
+		game.getConfig().getTimerValues().put(TimerLG.PVP, game.getConfig().getTimerValues().get(TimerLG.PVP) - 1);
 
-		if (game.config.getTimerValues().get(TimerLG.ROLE_DURATION) < 0) {
+		if (game.getConfig().getTimerValues().get(TimerLG.ROLE_DURATION) < 0) {
 
-			if (game.config.getTimerValues().get(TimerLG.MODEL_DURATION) == 0) {
-				Bukkit.getPluginManager().callEvent(new AutoModelEvent(game.getGameUUID()));
+			if (game.getConfig().getTimerValues().get(TimerLG.MODEL_DURATION) == 0) {
+				Bukkit.getPluginManager().callEvent(new AutoModelEvent());
 			}
-			game.config.getTimerValues().put(TimerLG.MODEL_DURATION, game.config.getTimerValues().get(TimerLG.MODEL_DURATION) - 1);
+			game.getConfig().getTimerValues().put(TimerLG.MODEL_DURATION, game.getConfig().getTimerValues().get(TimerLG.MODEL_DURATION) - 1);
 
-			if (game.config.getTimerValues().get(TimerLG.LOVER_DURATION) == 0) {
+			if (game.getConfig().getTimerValues().get(TimerLG.LOVER_DURATION) == 0) {
+				Bukkit.getPluginManager().callEvent(new LoversRepartitionEvent());
 				game.loversManage.autoLovers();
 			}
-			game.config.getTimerValues().put(TimerLG.LOVER_DURATION, game.config.getTimerValues().get(TimerLG.LOVER_DURATION) - 1);
+			game.getConfig().getTimerValues().put(TimerLG.LOVER_DURATION, game.getConfig().getTimerValues().get(TimerLG.LOVER_DURATION) - 1);
 
-			if (game.config.getTimerValues().get(TimerLG.ANGEL_DURATION) == 0) {
-				Bukkit.getPluginManager().callEvent(new AutoAngelEvent(game.getGameUUID()));
+			if (game.getConfig().getTimerValues().get(TimerLG.ANGEL_DURATION) == 0) {
+				Bukkit.getPluginManager().callEvent(new AutoAngelEvent());
 			}
-			game.config.getTimerValues().put(TimerLG.ANGEL_DURATION, game.config.getTimerValues().get(TimerLG.ANGEL_DURATION) - 1);
+			game.getConfig().getTimerValues().put(TimerLG.ANGEL_DURATION, game.getConfig().getTimerValues().get(TimerLG.ANGEL_DURATION) - 1);
 
-			if (game.config.getTimerValues().get(TimerLG.WEREWOLF_LIST) == 0) {
-				Bukkit.getPluginManager().callEvent(new WereWolfListEvent(game.getGameUUID()));
+			if (game.getConfig().getTimerValues().get(TimerLG.WEREWOLF_LIST) == 0) {
+				Bukkit.getPluginManager().callEvent(new WereWolfListEvent());
 			}
-			game.config.getTimerValues().put(TimerLG.WEREWOLF_LIST, game.config.getTimerValues().get(TimerLG.WEREWOLF_LIST) - 1);
+			game.getConfig().getTimerValues().put(TimerLG.WEREWOLF_LIST, game.getConfig().getTimerValues().get(TimerLG.WEREWOLF_LIST) - 1);
 		}
 
 
-		if (game.config.getTimerValues().get(TimerLG.BORDER_BEGIN) == 0) {
+		if (game.getConfig().getTimerValues().get(TimerLG.BORDER_BEGIN) == 0) {
 
-			if (wb.getSize() != game.config.getBorderMin()) {
+			if (wb.getSize() != game.getConfig().getBorderMin()) {
+				Bukkit.getPluginManager().callEvent(new BorderStartEvent());
 				for (Player p : Bukkit.getOnlinePlayers()) {
 					p.sendMessage(game.translate("werewolf.announcement.border"));
 					p.playSound(p.getLocation(), Sound.FIREWORK_LAUNCH, 1, 20);
 				}
 			}
-		} else if (game.config.getTimerValues().get(TimerLG.BORDER_BEGIN) < 0) {
-			game.config.setBorderMax((int) (wb.getSize()));
-			wb.setSize(game.config.getBorderMin(), (long) (wb.getSize() - game.config.getBorderMin())* game.config.getTimerValues().get(TimerLG.BORDER_DURATION) / 100);
+		} else if (game.getConfig().getTimerValues().get(TimerLG.BORDER_BEGIN) < 0) {
+			game.getConfig().setBorderMax((int) (wb.getSize()));
+			if(game.getConfig().getBorderMax()==game.getConfig().getBorderMin()){
+				Bukkit.getPluginManager().callEvent(new BorderStopEvent());
+			}
+			else wb.setSize(game.getConfig().getBorderMin(), (long) Math.abs(wb.getSize() - game.getConfig().getBorderMin())* game.getConfig().getTimerValues().get(TimerLG.BORDER_DURATION) / 100);
 		}
-		game.config.getTimerValues().put(TimerLG.BORDER_BEGIN, game.config.getTimerValues().get(TimerLG.BORDER_BEGIN) - 1);
+		game.getConfig().getTimerValues().put(TimerLG.BORDER_BEGIN, game.getConfig().getTimerValues().get(TimerLG.BORDER_BEGIN) - 1);
 
-		if (game.config.getTimerValues().get(TimerLG.DIGGING) == 0) {
+		if (game.getConfig().getTimerValues().get(TimerLG.DIGGING) == 0) {
+			Bukkit.getPluginManager().callEvent(new DiggingEndEvent());
 			for (Player p : Bukkit.getOnlinePlayers()) {
 				p.sendMessage(game.translate("werewolf.announcement.mining"));
 				p.playSound(p.getLocation(), Sound.ANVIL_BREAK, 1, 20);
 			}
 		}
-		game.config.getTimerValues().put(TimerLG.DIGGING, game.config.getTimerValues().get(TimerLG.DIGGING) - 1);
+		game.getConfig().getTimerValues().put(TimerLG.DIGGING, game.getConfig().getTimerValues().get(TimerLG.DIGGING) - 1);
 
 
-		game.config.getTimerValues().put(TimerLG.VOTE_BEGIN, game.config.getTimerValues().get(TimerLG.VOTE_BEGIN) - 1);
+		game.getConfig().getTimerValues().put(TimerLG.VOTE_BEGIN, game.getConfig().getTimerValues().get(TimerLG.VOTE_BEGIN) - 1);
 
 
-		world.setTime((long) (time + 20 * (600f / game.config.getTimerValues().get(TimerLG.DAY_DURATION) - 1)));
+		world.setTime((long) (time + 20 * (600f / game.getConfig().getTimerValues().get(TimerLG.DAY_DURATION) - 1)));
 
 		game.score.addTimer();
 	}

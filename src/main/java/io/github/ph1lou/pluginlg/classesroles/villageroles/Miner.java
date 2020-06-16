@@ -1,24 +1,21 @@
 package io.github.ph1lou.pluginlg.classesroles.villageroles;
 
 
-import io.github.ph1lou.pluginlg.game.GameManager;
-import io.github.ph1lou.pluginlgapi.enumlg.RoleLG;
+import io.github.ph1lou.pluginlgapi.GetWereWolfAPI;
+import io.github.ph1lou.pluginlgapi.WereWolfAPI;
+import io.github.ph1lou.pluginlgapi.rolesattributs.RolesVillage;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.UUID;
 
-public class Miner extends RolesVillage{
+public class Miner extends RolesVillage {
 
-    public Miner(GameManager game, UUID uuid) {
-        super(game,uuid);
+    public Miner(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
+        super(main,game,uuid);
     }
 
-    @Override
-    public RoleLG getRoleEnum() {
-        return RoleLG.MINER;
-    }
 
     @Override
     public String getDescription() {
@@ -27,7 +24,7 @@ public class Miner extends RolesVillage{
 
     @Override
     public String getDisplay() {
-        return game.translate("werewolf.role.miner.display");
+        return "werewolf.role.miner.display";
     }
 
     @Override

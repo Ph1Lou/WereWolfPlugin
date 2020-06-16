@@ -1,15 +1,17 @@
 package io.github.ph1lou.pluginlg.commandlg.utilities;
 
 import io.github.ph1lou.pluginlg.MainLG;
-import io.github.ph1lou.pluginlg.commandlg.Commands;
 import io.github.ph1lou.pluginlg.game.GameManager;
+import io.github.ph1lou.pluginlgapi.Commands;
 import org.bukkit.command.CommandSender;
 
-public class CommandHelp extends Commands {
+public class CommandHelp implements Commands {
 
+
+    private final MainLG main;
 
     public CommandHelp(MainLG main) {
-        super(main);
+        this.main = main;
     }
 
     @Override
