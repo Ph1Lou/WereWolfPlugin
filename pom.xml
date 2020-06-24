@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.ph1lou</groupId>
-    <artifactId>pluginlg</artifactId>
+    <artifactId>werewolfplugin</artifactId>
     <version>1.4</version>
 
     <properties>
@@ -36,14 +36,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <relocations>
-                        <relocation>
-                            <pattern>fr.mrmicky.fastboard</pattern>
-                            <shadedPattern>io.github.ph1lou.pluginlg</shadedPattern>
-                        </relocation>
-                    </relocations>
-                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -56,16 +48,6 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
-        <repository>
-            <id>enginehub-maven</id>
-            <url>http://maven.enginehub.org/repo/</url>
-        </repository>
-        <repository>
-            <id>fawe-repo</id>
-            <url>http://ci.athion.net/job/FastAsyncWorldEdit/ws/mvn/</url>
-        </repository>
-
-
     </repositories>
 
     <dependencies>
@@ -84,13 +66,13 @@
         <dependency>
             <groupId>fr.mrmicky</groupId>
             <artifactId>FastBoard</artifactId>
-            <version>1.1.0</version>
+            <version>eb91b72c78</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.github.WesJD.AnvilGUI</groupId>
             <artifactId>anvilgui</artifactId>
-            <version>99a504a3bb</version>
+            <version>61aa6d8080</version>
         </dependency>
         <dependency>
             <groupId>io.github.ph1lou</groupId>

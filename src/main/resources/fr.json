@@ -15,6 +15,7 @@
         "no_protege": "[§cLG UHC§r] Vous n'avez pas encore de protégé",
         "disconnected_protege": "[§cLG UHC§r] Votre protégé n'est pas connecté actuellement",
         "command": "regen",
+        "perform": "[§aLG UHC§r] Votre protégé reçoit regénération, il vous reste §b%s§r regénération(s)",
         "new_protege": "[§6LG UHC§r] Votre protégé est maintenant §b%s"
       },
       "amnesiac_werewolf": {
@@ -86,7 +87,8 @@
         "angel_choice": "[§eLG UHC§r] Vous pouvez décider d'être sois Ange Déchu §6/ww dechu§r sois Ange Gardien §6/ww gardien§r, vous avez §b%s",
         "angel_choice_perform": "[§eLG UHC§r] Vous venez de choisir §b%s",
         "command_1": "gardien",
-        "command_2": "dechu"
+        "command_2": "dechu",
+        "choice" : "il a choisi %s"
       },
       "fox": {
         "display": "Renard",
@@ -113,7 +115,7 @@
         "command": "maudire"
       },
       "villager": {
-        "display": "Villageois",
+        "display": "Simple Villageois",
         "description":  "§6LOUP-GAROU §7➽§9 Vous êtes §1Simple Villageois§9. Votre objectif est d’éliminer les Loups-Garous.\nVous n'avez aucun pouvoir"
       },
       "assassin": {
@@ -201,7 +203,7 @@
       },
       "siamese_twin": {
         "display": "Frère Siamois",
-        "description":  "§6LOUP-GAROU §7➽§9 Vous êtes §1Frère Siamois§9. Votre objectif est d’éliminer les Loups-Garous. \nVous avez été séparé de votre frère à la naissance, cependant vous avez gardé un lien très fort avec lui. En plus de disposez de 3 coeurs supplémentaires, vos coeurs au dela du cinquième sont liées.",
+        "description":  "§6LOUP-GAROU §7➽§9 Vous êtes §1Frère Siamois§9. Votre objectif est d’éliminer les Loups-Garous. \nVous avez été séparé de votre frère à la naissance, cependant vous avez gardé un lien très fort avec lui. En plus de disposez de 2 coeurs supplémentaires, vos coeurs au dela du cinquième sont liées.",
         "siamese_twin_list": "Liste des Frères Siamois: §b%s"
       },
       "lover": {
@@ -316,7 +318,7 @@
       "pvp": "[§6LG UHC§r] PVP activé",
       "border": "[§6LG UHC§r] La bordure commence à se déplacer",
       "mining": "[§6LG UHC§r] Minage Désactivé",
-      "day": "[§6LG UHC§r] C'est le Jour §b%s§r ☀ ",
+      "day": "[§6LG UHC§r] C'est le Jour §b%s§r ✸ ",
       "death_message_with_role": "§b§m§l-+-----------------------------------------+-\n§f        [§cLG UHC§r] §b%s§r est mort, il était §b%s§r\n§r§b§m§l-+-----------------------------------------+-",
       "death_message": "§b§m§l-+-----------------------------------------+-\n§f                 [§cLG UHC§r] §b%s§r est mort\n§r§b§m§l-+-----------------------------------------+-",
       "review_role": "[§eLG UHC§r] Pour revoir la description §6/ww role",
@@ -340,14 +342,14 @@
     },
     "end": {
       "thief": "§e il a volé un(e) %s",
-      "infect": " (infecté) ",
+      "infect": " infecté(e) ",
       "reveal_death": "§e§m%s était %s",
-      "transform": " (transformé) ",
+      "transform": "transformé ",
       "reveal": "§e%s était %s",
-      "model": " modèle (%s) ",
+      "model": " modèle %s ",
       "death": "§cDe la Mort",
-      "lover": " en couple avec (%s)",
-      "cursed_lover": " en couple maudit avec (%s)",
+      "lover": " en couple avec %s",
+      "cursed_lover": " en couple maudit avec %s",
       "victory": "Victoire",
       "message": "§m§l-+-----------------------------------------+-\n§f                   [§6LG UHC§r] Victoire %s\n§r§m§l-+-----------------------------------------+-"
     },
@@ -589,7 +591,8 @@
         "vote": "Vote",
         "hide_composition": "Composition Cachée",
         "red_name_tag": "Pseudo des Loups Garous en rouge",
-        "seer_every_other_day": "Voyante tous les deux jours"
+        "seer_every_other_day": "Voyante tous les deux jours",
+        "proximity_chat": "Chat de Proximité"
       },
       "border": {
         "name":"Configuration §bBordure",

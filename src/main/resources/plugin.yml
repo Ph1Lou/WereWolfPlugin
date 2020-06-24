@@ -1,7 +1,7 @@
-name: pluginLG
+name: WereWolfPlugin
 version: "1.4"
 author: Ph1Lou
-main: io.github.ph1lou.pluginlg.MainLG
+main: io.github.ph1lou.werewolfplugin.Main
 api-version: "1.8"
 load: STARTUP
 commands:
