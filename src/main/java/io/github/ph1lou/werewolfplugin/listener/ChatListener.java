@@ -1,7 +1,7 @@
 package io.github.ph1lou.werewolfplugin.listener;
 
 
-import io.github.ph1lou.pluginlgapi.enumlg.ToolLG;
+import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;

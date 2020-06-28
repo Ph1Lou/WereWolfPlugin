@@ -1,16 +1,16 @@
 package io.github.ph1lou.werewolfplugin.game;
 
 
-import io.github.ph1lou.pluginlgapi.PlayerWW;
-import io.github.ph1lou.pluginlgapi.Vote;
-import io.github.ph1lou.pluginlgapi.enumlg.State;
-import io.github.ph1lou.pluginlgapi.enumlg.TimerLG;
-import io.github.ph1lou.pluginlgapi.enumlg.ToolLG;
-import io.github.ph1lou.pluginlgapi.enumlg.VoteStatus;
-import io.github.ph1lou.pluginlgapi.events.SeeVoteEvent;
-import io.github.ph1lou.pluginlgapi.events.VoteEndEvent;
-import io.github.ph1lou.pluginlgapi.events.VoteEvent;
-import io.github.ph1lou.pluginlgapi.events.VoteResultEvent;
+import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.VoteAPI;
+import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
+import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
+import io.github.ph1lou.werewolfapi.enumlg.VoteStatus;
+import io.github.ph1lou.werewolfapi.events.SeeVoteEvent;
+import io.github.ph1lou.werewolfapi.events.VoteEndEvent;
+import io.github.ph1lou.werewolfapi.events.VoteEvent;
+import io.github.ph1lou.werewolfapi.events.VoteResultEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,7 +20,7 @@ import org.bukkit.event.Listener;
 import java.util.*;
 
 
-public class VoteLG implements Listener, Vote {
+public class Vote implements Listener, VoteAPI {
 	
 	
 	private final GameManager game;
@@ -29,7 +29,7 @@ public class VoteLG implements Listener, Vote {
 	private final Map<UUID,UUID> voters = new HashMap<>();
 	private VoteStatus currentStatus = VoteStatus.NOT_BEGIN;
 
-	public VoteLG(GameManager game) {
+	public Vote(GameManager game) {
 		this.game=game;
 	}
 

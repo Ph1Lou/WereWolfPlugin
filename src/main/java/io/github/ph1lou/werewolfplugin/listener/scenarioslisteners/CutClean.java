@@ -1,9 +1,9 @@
 package io.github.ph1lou.werewolfplugin.listener.scenarioslisteners;
 
-import io.github.ph1lou.pluginlgapi.enumlg.ScenarioLG;
-import io.github.ph1lou.pluginlgapi.enumlg.TimerLG;
-import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
+import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
+import io.github.ph1lou.werewolfapi.Scenarios;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -19,8 +19,8 @@ import java.util.List;
 public class CutClean extends Scenarios {
 
 
-    public CutClean(Main main, GameManager game, ScenarioLG cutClean) {
-        super(main, game,cutClean);
+    public CutClean(GetWereWolfAPI main, WereWolfAPI game, String key) {
+        super(main, game,key);
     }
 
     @EventHandler
@@ -59,7 +59,7 @@ public class CutClean extends Scenarios {
                 if (!currentItemType.equals(Material.DIAMOND_PICKAXE) && !currentItemType.equals(Material.IRON_PICKAXE) && !currentItemType.equals(Material.STONE_PICKAXE)) {
                     return;
                 }
-                block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(game.getConfig().getScenarioValues().get(ScenarioLG.XP_BOOST) ? game.getConfig().getXpBoost() / 100 : 1);
+                block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(1);
                 block.setType(Material.AIR);
                 block.getWorld().dropItem(loc, new ItemStack(Material.IRON_INGOT, 1));
                 break;
@@ -68,7 +68,7 @@ public class CutClean extends Scenarios {
                 if (!currentItemType.equals(Material.DIAMOND_PICKAXE) && !currentItemType.equals(Material.IRON_PICKAXE)) {
                     return;
                 }
-                block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(game.getConfig().getScenarioValues().get(ScenarioLG.XP_BOOST) ? game.getConfig().getXpBoost() / 100 : 1);
+                block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(1);
                 block.setType(Material.AIR);
                 block.getWorld().dropItem(loc, new ItemStack(Material.GOLD_INGOT, 1));
                 break;

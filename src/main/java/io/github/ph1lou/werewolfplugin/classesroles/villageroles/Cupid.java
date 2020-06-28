@@ -1,13 +1,13 @@
 package io.github.ph1lou.werewolfplugin.classesroles.villageroles;
 
 
-import io.github.ph1lou.pluginlgapi.GetWereWolfAPI;
-import io.github.ph1lou.pluginlgapi.WereWolfAPI;
-import io.github.ph1lou.pluginlgapi.enumlg.TimerLG;
-import io.github.ph1lou.pluginlgapi.events.EnchantmentEvent;
-import io.github.ph1lou.pluginlgapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.pluginlgapi.rolesattributs.Power;
-import io.github.ph1lou.pluginlgapi.rolesattributs.RolesVillage;
+import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
+import io.github.ph1lou.werewolfapi.events.EnchantmentEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.Power;
+import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;

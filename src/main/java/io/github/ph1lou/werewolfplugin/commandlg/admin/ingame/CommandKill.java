@@ -1,8 +1,8 @@
 package io.github.ph1lou.werewolfplugin.commandlg.admin.ingame;
 
-import io.github.ph1lou.pluginlgapi.Commands;
-import io.github.ph1lou.pluginlgapi.enumlg.State;
-import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
@@ -70,6 +70,6 @@ public class CommandKill implements Commands {
             return;
         }
 
-        game.death_manage.death(argUUID);
+        game.death(argUUID);
     }
 }

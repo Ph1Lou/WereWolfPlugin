@@ -1,7 +1,7 @@
-package io.github.ph1lou.werewolfplugin.savelg;
+package io.github.ph1lou.werewolfplugin.save;
 
-import io.github.ph1lou.pluginlgapi.RoleRegister;
-import io.github.ph1lou.pluginlgapi.StuffManager;
+import io.github.ph1lou.werewolfapi.RoleRegister;
+import io.github.ph1lou.werewolfapi.StuffManager;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
@@ -12,11 +12,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-public class StuffLG implements StuffManager {
+public class Stuff implements StuffManager {
 
     private final Map<String, List<ItemStack>> stuffRoles = new HashMap<>();
     private final List<ItemStack> death_loot = new ArrayList<>();
@@ -24,7 +23,7 @@ public class StuffLG implements StuffManager {
     private final GameManager game;
     private final Main main;
 
-    public StuffLG(Main main, GameManager game) {
+    public Stuff(Main main, GameManager game) {
         this.main = main;
         this.game = game;
     }
@@ -89,7 +88,7 @@ public class StuffLG implements StuffManager {
                     }
                 }
 
-                File file = new File(plugin.getDataFolder() + File.separator + "stuffs" + File.separator, configName + ".yml");
+                java.io.File file = new java.io.File(plugin.getDataFolder() + java.io.File.separator + "stuffs" + java.io.File.separator, configName + ".yml");
                 try {
                     config.save(file);
                 } catch (IOException e) {
@@ -112,8 +111,8 @@ public class StuffLG implements StuffManager {
 
         Map<String, List<ItemStack>> temp = new HashMap<>();
 
-        if (!(new File(plugin.getDataFolder() + File.separator + "stuffs" + File.separator, configName + ".yml")).exists()) {
-            FileLG.copy(plugin.getResource("stuffRole.yml"), plugin.getDataFolder() + File.separator + "stuffs" + File.separator + configName + ".yml");
+        if (!(new java.io.File(plugin.getDataFolder() + java.io.File.separator + "stuffs" + java.io.File.separator, configName + ".yml")).exists()) {
+            FileUtils.copy(plugin.getResource("stuffRole.yml"), plugin.getDataFolder() + java.io.File.separator + "stuffs" + java.io.File.separator + configName + ".yml");
         }
         FileConfiguration config = getOrCreateCustomConfig(plugin, configName);
 
@@ -156,17 +155,17 @@ public class StuffLG implements StuffManager {
 
     @Override
     public void loadStuffChill() {
-        FileLG.copy(main.getResource("stuffChill.yml"), main.getDataFolder() + File.separator + "stuffs" + File.separator + "stuffChill.yml");
+        FileUtils.copy(main.getResource("stuffChill.yml"), main.getDataFolder() + java.io.File.separator + "stuffs" + java.io.File.separator + "stuffChill.yml");
         loadStuffStartAndDeath("stuffChill");
     }
 
     public FileConfiguration getOrCreateCustomConfig(Plugin plugin, String configName) {
 
-        File customConfigFile = new File(plugin.getDataFolder() + File.separator + "stuffs" + File.separator, configName + ".yml");
+        java.io.File customConfigFile = new java.io.File(plugin.getDataFolder() + java.io.File.separator + "stuffs" + java.io.File.separator, configName + ".yml");
         FileConfiguration customConfig = null;
         if (!customConfigFile.exists()) {
             try {
-                FileLG.createFile(customConfigFile);
+                FileUtils.createFile(customConfigFile);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -195,7 +194,7 @@ public class StuffLG implements StuffManager {
     }
 
     public void loadAllStuffMeetUP() {
-        FileLG.copy(main.getResource("stuffMeetUp.yml"), main.getDataFolder() + File.separator + "stuffs" + File.separator + "stuffMeetUp.yml");
+        FileUtils.copy(main.getResource("stuffMeetUp.yml"), main.getDataFolder() + java.io.File.separator + "stuffs" + java.io.File.separator + "stuffMeetUp.yml");
         loadStuff("stuffMeetUp");
         loadStuffStartAndDeath("stuffMeetUp");
     }

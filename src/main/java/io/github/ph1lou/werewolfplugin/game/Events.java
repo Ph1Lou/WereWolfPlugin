@@ -1,10 +1,10 @@
 package io.github.ph1lou.werewolfplugin.game;
-import io.github.ph1lou.pluginlgapi.PlayerWW;
-import io.github.ph1lou.pluginlgapi.enumlg.Camp;
-import io.github.ph1lou.pluginlgapi.enumlg.State;
-import io.github.ph1lou.pluginlgapi.enumlg.ToolLG;
-import io.github.ph1lou.pluginlgapi.events.ActionBarEvent;
-import io.github.ph1lou.pluginlgapi.events.ChestEvent;
+import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.enumlg.Camp;
+import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
+import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
+import io.github.ph1lou.werewolfapi.events.ChestEvent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -18,12 +18,12 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
-public class EventsLG implements Listener {
+public class Events implements Listener {
 	
 	final GameManager game;
 	public final Map<Location,Boolean> chest_has_been_open = new HashMap<>();
 	public final List<Location> chest_location = new ArrayList<>();
-	public EventsLG(GameManager game) {
+	public Events(GameManager game) {
 		this.game=game;
 	}
 	
@@ -66,17 +66,17 @@ public class EventsLG implements Listener {
 
 		StringBuilder stringBuilder=new StringBuilder(event.getActionBar());
 
-		if (game.eventslg.chest_has_been_open.isEmpty()) return;
+		if (game.events.chest_has_been_open.isEmpty()) return;
 
 		if(Bukkit.getPlayer(event.getPlayerUUID())==null) return;
 
 		Player player = Bukkit.getPlayer(event.getPlayerUUID());
 
-		for (int i = 0; i < game.eventslg.chest_location.size(); i++) {
-			if (!game.eventslg.chest_has_been_open.get(game.eventslg.chest_location.get(i))) {
+		for (int i = 0; i < game.events.chest_location.size(); i++) {
+			if (!game.events.chest_has_been_open.get(game.events.chest_location.get(i))) {
 				stringBuilder.append("§a");
 			} else stringBuilder.append("§6");
-			stringBuilder.append(" ").append(game.score.updateArrow(player, game.eventslg.chest_location.get(i)));
+			stringBuilder.append(" ").append(game.score.updateArrow(player, game.events.chest_location.get(i)));
 		}
 		event.setActionBar(stringBuilder.toString());
 	}
@@ -112,11 +112,11 @@ public class EventsLG implements Listener {
 		if (event.getInventory().getType().equals(InventoryType.CHEST)) {
 			if (event.getInventory().getHolder() instanceof Chest) {
 				Location location = ((Chest) event.getInventory().getHolder()).getLocation();
-				if (game.eventslg.chest_location.contains(location)) {
-					game.eventslg.chest_has_been_open.put(location, true);
-					if (!game.eventslg.chest_has_been_open.containsValue(false)) {
-						game.eventslg.chest_location.clear();
-						game.eventslg.chest_has_been_open.clear();
+				if (game.events.chest_location.contains(location)) {
+					game.events.chest_has_been_open.put(location, true);
+					if (!game.events.chest_has_been_open.containsValue(false)) {
+						game.events.chest_location.clear();
+						game.events.chest_has_been_open.clear();
 						Bukkit.broadcastMessage(game.translate("werewolf.event.all_chest_find"));
 						game.getConfig().getConfigValues().put(ToolLG.EVENT_SEER_DEATH, true);
 					}

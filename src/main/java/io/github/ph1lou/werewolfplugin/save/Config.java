@@ -1,24 +1,23 @@
-package io.github.ph1lou.werewolfplugin.savelg;
+package io.github.ph1lou.werewolfplugin.save;
 
-import io.github.ph1lou.pluginlgapi.ConfigWereWolfAPI;
-import io.github.ph1lou.pluginlgapi.RoleRegister;
-import io.github.ph1lou.pluginlgapi.WereWolfAPI;
-import io.github.ph1lou.pluginlgapi.enumlg.ScenarioLG;
-import io.github.ph1lou.pluginlgapi.enumlg.TimerLG;
-import io.github.ph1lou.pluginlgapi.enumlg.ToolLG;
+import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
+import io.github.ph1lou.werewolfapi.RoleRegister;
+import io.github.ph1lou.werewolfapi.ScenarioRegister;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
+import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ConfigLG implements ConfigWereWolfAPI {
+public class Config implements ConfigWereWolfAPI {
 
     private final Map<TimerLG, Integer> timerValues = new HashMap<>();
     private final Map<ToolLG, Boolean> configValues = new HashMap<>();
     private final Map<String, Integer> roleCount = new HashMap<>();
-    private final Map<ScenarioLG, Boolean> scenarioValues = new HashMap<>();
+    private final Map<String, Boolean> scenarioValues = new HashMap<>();
 
     private int strengthRate = 130;
     private int resistanceRate = 20;
@@ -51,14 +50,14 @@ public class ConfigLG implements ConfigWereWolfAPI {
     @Override
     public void getConfig(WereWolfAPI api, String configName) {
 
-        ConfigLG this_load = this;
+        Config this_load = this;
 
         Main main = JavaPlugin.getPlugin(Main.class);
 
-        File file = new File(main.getDataFolder() + File.separator + "configs" + File.separator, configName + ".json");
+        java.io.File file = new java.io.File(main.getDataFolder() + java.io.File.separator + "configs" + java.io.File.separator, configName + ".json");
 
         if (file.exists()) {
-            this_load = SerializerLG.deserialize(FileLG.loadContent(file));
+            this_load = Serializer.deserialize(FileUtils.loadContent(file));
             this.setDiamondLimit(this_load.getDiamondLimit());
             this.setStrengthRate(this_load.getStrengthRate());
             this.setPlayerRequiredVoteEnd(this_load.getPlayerRequiredVoteEnd());
@@ -104,11 +103,11 @@ public class ConfigLG implements ConfigWereWolfAPI {
         }
 
 
-        for(ScenarioLG scenarios:ScenarioLG.values()) {
-            this.scenarioValues.put(scenarios, this_load.scenarioValues.getOrDefault(scenarios, scenarios.getValue()));
+        for(ScenarioRegister scenarioRegister:main.getRegisterScenarios()) {
+            this.scenarioValues.put(scenarioRegister.getKey(), this_load.scenarioValues.getOrDefault(scenarioRegister.getKey(), scenarioRegister.getDefaultValue()));
         }
 
-        FileLG.save(file, SerializerLG.serialize(this));
+        FileUtils.save(file, Serializer.serialize(this));
 
 
     }
@@ -368,7 +367,7 @@ public class ConfigLG implements ConfigWereWolfAPI {
     }
 
     @Override
-    public Map<ScenarioLG, Boolean> getScenarioValues() {
+    public Map<String, Boolean> getScenarioValues() {
         return scenarioValues;
     }
 

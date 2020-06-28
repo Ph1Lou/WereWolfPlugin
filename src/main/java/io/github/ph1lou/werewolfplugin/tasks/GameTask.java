@@ -1,10 +1,10 @@
 package io.github.ph1lou.werewolfplugin.tasks;
 
 
-import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
-import io.github.ph1lou.pluginlgapi.enumlg.TimerLG;
-import io.github.ph1lou.pluginlgapi.enumlg.ToolLG;
-import io.github.ph1lou.pluginlgapi.events.*;
+import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
+import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
+import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -41,8 +41,8 @@ public class GameTask extends BukkitRunnable {
 		WorldBorder wb = world.getWorldBorder();
 		long time = world.getTime();
 		Bukkit.getPluginManager().callEvent(new UpdateEvent());
-		game.optionlg.updateSelectionTimer();
-		game.optionlg.updateSelectionBorder();
+		game.option.updateSelectionTimer();
+		game.option.updateSelectionBorder();
 		game.score.updateBoard();
 		game.loversManage.detectionAmnesiacLover();
 		game.roleManage.brotherLife();

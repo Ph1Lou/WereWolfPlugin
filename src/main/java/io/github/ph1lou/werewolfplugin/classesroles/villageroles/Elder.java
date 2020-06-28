@@ -1,16 +1,16 @@
 package io.github.ph1lou.werewolfplugin.classesroles.villageroles;
 
 
-import io.github.ph1lou.pluginlgapi.GetWereWolfAPI;
-import io.github.ph1lou.pluginlgapi.WereWolfAPI;
-import io.github.ph1lou.pluginlgapi.enumlg.Camp;
-import io.github.ph1lou.pluginlgapi.enumlg.State;
-import io.github.ph1lou.pluginlgapi.events.DayEvent;
-import io.github.ph1lou.pluginlgapi.events.ElderResurrectionEvent;
-import io.github.ph1lou.pluginlgapi.events.NightEvent;
-import io.github.ph1lou.pluginlgapi.events.SecondDeathEvent;
-import io.github.ph1lou.pluginlgapi.rolesattributs.Power;
-import io.github.ph1lou.pluginlgapi.rolesattributs.RolesVillage;
+import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.Camp;
+import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.events.DayEvent;
+import io.github.ph1lou.werewolfapi.events.ElderResurrectionEvent;
+import io.github.ph1lou.werewolfapi.events.NightEvent;
+import io.github.ph1lou.werewolfapi.events.SecondDeathEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.Power;
+import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

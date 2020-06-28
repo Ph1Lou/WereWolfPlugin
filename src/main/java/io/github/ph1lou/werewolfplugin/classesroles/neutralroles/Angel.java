@@ -1,14 +1,14 @@
 package io.github.ph1lou.werewolfplugin.classesroles.neutralroles;
 
 
-import io.github.ph1lou.pluginlgapi.GetWereWolfAPI;
-import io.github.ph1lou.pluginlgapi.PlayerWW;
-import io.github.ph1lou.pluginlgapi.WereWolfAPI;
-import io.github.ph1lou.pluginlgapi.enumlg.AngelForm;
-import io.github.ph1lou.pluginlgapi.enumlg.State;
-import io.github.ph1lou.pluginlgapi.enumlg.TimerLG;
-import io.github.ph1lou.pluginlgapi.events.*;
-import io.github.ph1lou.pluginlgapi.rolesattributs.*;
+import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
+import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.AngelForm;
+import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
+import io.github.ph1lou.werewolfapi.events.*;
+import io.github.ph1lou.werewolfapi.rolesattributs.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;

@@ -1,13 +1,13 @@
 package io.github.ph1lou.werewolfplugin.game;
 
-import io.github.ph1lou.pluginlgapi.PlayerWW;
-import io.github.ph1lou.pluginlgapi.enumlg.*;
-import io.github.ph1lou.pluginlgapi.events.EndPlayerMessageEvent;
-import io.github.ph1lou.pluginlgapi.events.WinConditionsCheckEvent;
-import io.github.ph1lou.pluginlgapi.events.WinEvent;
-import io.github.ph1lou.pluginlgapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.pluginlgapi.rolesattributs.AngelRole;
-import io.github.ph1lou.pluginlgapi.rolesattributs.Roles;
+import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.enumlg.*;
+import io.github.ph1lou.werewolfapi.events.EndPlayerMessageEvent;
+import io.github.ph1lou.werewolfapi.events.WinConditionsCheckEvent;
+import io.github.ph1lou.werewolfapi.events.WinEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.AngelRole;
+import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.classesroles.neutralroles.Succubus;
 import io.github.ph1lou.werewolfplugin.classesroles.villageroles.Cupid;
@@ -19,14 +19,14 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
-public class EndLG {
+public class End {
 
 
     private String winner = null;
     private final Main main;
     private final GameManager game;
 
-    public EndLG(Main main, GameManager game) {
+    public End(Main main, GameManager game) {
         this.game = game;
         this.main = main;
     }

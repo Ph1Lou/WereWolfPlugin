@@ -1,10 +1,14 @@
 package io.github.ph1lou.werewolfplugin.game;
 
-import io.github.ph1lou.pluginlgapi.RoleRegister;
-import io.github.ph1lou.pluginlgapi.enumlg.*;
+import io.github.ph1lou.werewolfapi.RoleRegister;
+import io.github.ph1lou.werewolfapi.ScenarioRegister;
+import io.github.ph1lou.werewolfapi.enumlg.Category;
+import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
+import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.savelg.FileLG;
-import io.github.ph1lou.werewolfplugin.savelg.SerializerLG;
+import io.github.ph1lou.werewolfplugin.save.FileUtils;
+import io.github.ph1lou.werewolfplugin.save.Serializer;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -17,13 +21,12 @@ import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class OptionLG {
+public class Option {
 
 	private final Inventory invTool;
 	private final Inventory invRole;
@@ -46,14 +49,14 @@ public class OptionLG {
 
 	private Category category = Category.VILLAGER;
 
-	public OptionLG(Main main, GameManager game) {
+	public Option(Main main, GameManager game) {
 		this.main=main;
 		this.game=game;
 		invTool = Bukkit.createInventory(null, 54, game.translate("werewolf.menu.name"));
 		invRole = Bukkit.createInventory(null, 54, game.translate("werewolf.menu.roles.name"));
 		invTimer = Bukkit.createInventory(null, 27, game.translate("werewolf.menu.timers.name"));
 		invConfig = Bukkit.createInventory(null, 27, game.translate("werewolf.menu.global.name"));
-		invScenario = Bukkit.createInventory(null, 36, game.translate("werewolf.menu.scenarios.name"));
+		invScenario = Bukkit.createInventory(null, Math.min(54,(main.getRegisterScenarios().size()/9+2)*9), game.translate("werewolf.menu.scenarios.name"));
 		invBorder = Bukkit.createInventory(null, 18, game.translate("werewolf.menu.border.name"));
 		invSave = Bukkit.createInventory(null, 18, game.translate("werewolf.menu.save.name"));
 		invStuff = Bukkit.createInventory(null, 18, game.translate("werewolf.menu.stuff.name"));
@@ -224,8 +227,8 @@ public class OptionLG {
 
 	public void updateSelectionSave(int j) {
 
-		File repertoire = new File(main.getDataFolder()+"/configs/");
-		File[] files=repertoire.listFiles();
+		java.io.File repertoire = new java.io.File(main.getDataFolder()+"/configs/");
+		java.io.File[] files=repertoire.listFiles();
 		if (files==null) return;
 		j--;
 		if(j>=files.length ){
@@ -259,8 +262,8 @@ public class OptionLG {
 
 	public void load() {
 		int j= findSelect(invSave)-1;
-		File repertoire = new File(main.getDataFolder()+"/configs/");
-		File[] files=repertoire.listFiles();
+		java.io.File repertoire = new java.io.File(main.getDataFolder()+"/configs/");
+		java.io.File[] files=repertoire.listFiles();
 		if (files==null) return;
 		if(j<0 || j>=files.length) return;
 		game.getConfig().getConfig(game,files[j].getName().replace(".json",""));
@@ -269,11 +272,11 @@ public class OptionLG {
 	}
 
 	public void save(String saveName, Player player)  {
-		File file = new File(main.getDataFolder()+"/configs/", saveName+".json");
-		File repertoire = new File(main.getDataFolder()+"/configs/");
-		File[] files=repertoire.listFiles();
+		java.io.File file = new java.io.File(main.getDataFolder()+"/configs/", saveName+".json");
+		java.io.File repertoire = new java.io.File(main.getDataFolder()+"/configs/");
+		java.io.File[] files=repertoire.listFiles();
 		if(files==null || files.length<8){
-			FileLG.save(file, SerializerLG.serialize(game.getConfig()));
+			FileUtils.save(file, Serializer.serialize(game.getConfig()));
 			game.getStuffs().save(saveName);
 			player.sendMessage(game.translate("werewolf.menu.save.success"));
 			updateSelectionSave(findSelect(invSave));
@@ -282,17 +285,17 @@ public class OptionLG {
 	}
 
 	public void erase()  {
-		File repertoire = new File(main.getDataFolder()+"/configs/");
-		File[] files=repertoire.listFiles();
+		java.io.File repertoire = new java.io.File(main.getDataFolder()+"/configs/");
+		java.io.File[] files=repertoire.listFiles();
 		if(files==null) return;
 		int i=findSelect(invSave)-1;
 		if(i<0 || i>=files.length) return;
 
-		File file = new File(main.getDataFolder()+"/configs/", files[i].getName());
+		java.io.File file = new java.io.File(main.getDataFolder()+"/configs/", files[i].getName());
 		if(!file.delete()){
 			Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.menu.save.delete_failed",files[i].getName()));
 		}
-		file = new File(main.getDataFolder()+"/stuffs/", files[i].getName().replaceFirst(".json",".yml"));
+		file = new java.io.File(main.getDataFolder()+"/stuffs/", files[i].getName().replaceFirst(".json",".yml"));
 		if(!file.delete()){
 			Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.menu.save.delete_failed",files[i].getName().replaceFirst(".json",".yml")));
 		}
@@ -462,11 +465,21 @@ public class OptionLG {
 	}
 
 	public void updateSelectionScenario() {
-		for (int i = 0; i < ScenarioLG.values().length; i++) {
-			if (game.getConfig().getScenarioValues().get(ScenarioLG.values()[i])) {
-				invScenario.setItem(9 + i, changeMeta(new ItemStack(Material.STAINED_CLAY, 1, (short) 5), game.translate(ScenarioLG.values()[i].getKey()), Collections.singletonList(game.translate("werewolf.utils.enable", ""))));
-			} else
-				invScenario.setItem(9 + i, changeMeta(new ItemStack(Material.STAINED_CLAY, 1, (short) 6), game.translate(ScenarioLG.values()[i].getKey()), Collections.singletonList(game.translate("werewolf.utils.disable", ""))));
+		int i=0;
+		for (ScenarioRegister scenarioRegister:main.getRegisterScenarios()) {
+
+			List<String> lore = new ArrayList<>();
+			short clay=6;
+
+			if (game.getConfig().getScenarioValues().get(scenarioRegister.getKey())) {
+				clay=5;
+				lore.add(0,game.translate("werewolf.utils.enable", ""));
+			}
+			else lore.add(0,game.translate("werewolf.utils.disable", ""));
+			lore.addAll(scenarioRegister.getLore());
+			lore.add(scenarioRegister.getKey());
+			invScenario.setItem(9 + i, changeMeta(new ItemStack(Material.STAINED_CLAY, 1, clay), game.translate(scenarioRegister.getKey()), lore));
+			i++;
 		}
 		game.updateNameTag();
 		game.updateScenarios();

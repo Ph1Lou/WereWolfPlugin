@@ -1,20 +1,23 @@
-package io.github.ph1lou.werewolfplugin.savelg;
+package io.github.ph1lou.werewolfplugin.save;
 
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.WriterConfig;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.stream.Collectors;
 
 
-public class FileLG {
+public class FileUtils {
 
     public static void createFile(File file) throws IOException {
 
         if (!file.exists()) {
-            file.getParentFile().mkdirs();
-            file.createNewFile();
-            System.out.println("[WereWolfPlugin] Create " + file.getName());
+            if(file.getParentFile().mkdirs()){
+                if(file.createNewFile()){
+                    System.out.println("[WereWolfPlugin] Create " + file.getName());
+                }
+            }
         }
     }
 
@@ -80,6 +83,18 @@ public class FileLG {
                 }
             }
         }
+    }
+
+    public static String convert(InputStream inputStream) {
+
+        try {
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+                return br.lines().collect(Collectors.joining(System.lineSeparator()));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static String loadContent(File file) {

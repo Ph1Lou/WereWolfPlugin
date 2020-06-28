@@ -1,16 +1,16 @@
 package io.github.ph1lou.werewolfplugin.classesroles.werewolfroles;
 
 
-import io.github.ph1lou.pluginlgapi.GetWereWolfAPI;
-import io.github.ph1lou.pluginlgapi.PlayerWW;
-import io.github.ph1lou.pluginlgapi.WereWolfAPI;
-import io.github.ph1lou.pluginlgapi.enumlg.Camp;
-import io.github.ph1lou.pluginlgapi.enumlg.Day;
-import io.github.ph1lou.pluginlgapi.enumlg.State;
-import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
-import io.github.ph1lou.pluginlgapi.events.*;
-import io.github.ph1lou.pluginlgapi.rolesattributs.InvisibleState;
-import io.github.ph1lou.pluginlgapi.rolesattributs.RolesWereWolf;
+import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
+import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.Camp;
+import io.github.ph1lou.werewolfapi.enumlg.Day;
+import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.events.*;
+import io.github.ph1lou.werewolfapi.rolesattributs.InvisibleState;
+import io.github.ph1lou.werewolfapi.rolesattributs.RolesWereWolf;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Material;

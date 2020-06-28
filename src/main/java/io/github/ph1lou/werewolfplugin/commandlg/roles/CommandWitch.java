@@ -1,14 +1,14 @@
 package io.github.ph1lou.werewolfplugin.commandlg.roles;
 
-import io.github.ph1lou.pluginlgapi.Commands;
-import io.github.ph1lou.pluginlgapi.PlayerWW;
-import io.github.ph1lou.pluginlgapi.enumlg.State;
-import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
-import io.github.ph1lou.pluginlgapi.enumlg.ToolLG;
-import io.github.ph1lou.pluginlgapi.events.WitchResurrectionEvent;
-import io.github.ph1lou.pluginlgapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.pluginlgapi.rolesattributs.Power;
-import io.github.ph1lou.pluginlgapi.rolesattributs.Roles;
+import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
+import io.github.ph1lou.werewolfapi.events.WitchResurrectionEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.Power;
+import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
@@ -110,7 +110,7 @@ public class CommandWitch implements Commands {
 
         ((AffectedPlayers)witch).addAffectedPlayer(argUUID);
         ((Power) witch).setPower(false);
-        game.death_manage.resurrection(argUUID);
+        game.resurrection(argUUID);
         sender.sendMessage(game.translate("werewolf.role.witch.resuscitation_perform",plg1.getName()));
     }
 }

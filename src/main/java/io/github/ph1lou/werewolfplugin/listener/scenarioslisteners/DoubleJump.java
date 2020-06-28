@@ -1,8 +1,8 @@
 package io.github.ph1lou.werewolfplugin.listener.scenarioslisteners;
 
-import io.github.ph1lou.pluginlgapi.enumlg.ScenarioLG;
-import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
+import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
+import io.github.ph1lou.werewolfapi.Scenarios;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -14,22 +14,23 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
+import org.bukkit.plugin.Plugin;
 
 import java.util.HashMap;
 import java.util.UUID;
 
-public class DoubleJump extends Scenarios  {
+public class DoubleJump extends Scenarios {
 
     private final HashMap<UUID, Long> jumpTime = new HashMap<>();
 
 
-    public DoubleJump(Main main, GameManager game, ScenarioLG scenario) {
-        super(main, game, scenario);
+    public DoubleJump(GetWereWolfAPI main, WereWolfAPI game, String key) {
+        super(main, game, key);
     }
 
     @EventHandler
-    private void onDamage(final EntityDamageEvent e) {
-        Entity entity = e.getEntity();
+    private void onDamage(EntityDamageEvent event) {
+        Entity entity = event.getEntity();
 
         if (entity instanceof Player) {
 
@@ -40,24 +41,24 @@ public class DoubleJump extends Scenarios  {
                 if (secs > 15L) {
                     this.jumpTime.remove(uuid);
                 }
-                else if (e.getCause() == EntityDamageEvent.DamageCause.FALL) {
-                    e.setCancelled(true);
+                else if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
+                    event.setCancelled(true);
                 }
             }
         }
     }
 
     @EventHandler
-    private void onPlayerToggleFlight(final PlayerToggleFlightEvent e) {
+    private void onPlayerToggleFlight(PlayerToggleFlightEvent event) {
 
-        Player player = e.getPlayer();
+        Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
 
         if (player.getGameMode().equals(GameMode.CREATIVE)) {
             return;
         }
 
-        e.setCancelled(true);
+        event.setCancelled(true);
         player.setAllowFlight(false);
         player.setFlying(false);
 
@@ -65,7 +66,7 @@ public class DoubleJump extends Scenarios  {
         player.setVelocity(player.getLocation().getDirection().multiply(vel).setY(1));
 
         this.jumpTime.put(uuid, System.currentTimeMillis());
-        Bukkit.getScheduler().runTaskLater(main, () -> {
+        Bukkit.getScheduler().runTaskLater((Plugin) main, () -> {
             if (player.isFlying()) {
                 player.setAllowFlight(false);
             }
@@ -82,9 +83,9 @@ public class DoubleJump extends Scenarios  {
     }
 
     public void register() {
-        if (game.getConfig().getScenarioValues().get(scenario)) {
+        if (game.getConfig().getScenarioValues().get(scenarioID)) {
             if (!register) {
-                Bukkit.getPluginManager().registerEvents(this, main);
+                Bukkit.getPluginManager().registerEvents(this,(Plugin) main);
                 register = true;
             }
         } else {

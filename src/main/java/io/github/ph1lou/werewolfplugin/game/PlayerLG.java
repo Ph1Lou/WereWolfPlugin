@@ -1,10 +1,10 @@
 package io.github.ph1lou.werewolfplugin.game;
 
 
-import io.github.ph1lou.pluginlgapi.PlayerWW;
-import io.github.ph1lou.pluginlgapi.enumlg.State;
-import io.github.ph1lou.pluginlgapi.events.DayEvent;
-import io.github.ph1lou.pluginlgapi.rolesattributs.Roles;
+import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.events.DayEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.classesroles.villageroles.Villager;
 import org.bukkit.Bukkit;

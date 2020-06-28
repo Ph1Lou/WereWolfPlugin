@@ -1,16 +1,16 @@
 package io.github.ph1lou.werewolfplugin.commandlg.roles;
 
-import io.github.ph1lou.pluginlgapi.Commands;
-import io.github.ph1lou.pluginlgapi.PlayerWW;
-import io.github.ph1lou.pluginlgapi.enumlg.Camp;
-import io.github.ph1lou.pluginlgapi.enumlg.State;
-import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
-import io.github.ph1lou.pluginlgapi.enumlg.ToolLG;
-import io.github.ph1lou.pluginlgapi.events.InfectionEvent;
-import io.github.ph1lou.pluginlgapi.events.NewWereWolfEvent;
-import io.github.ph1lou.pluginlgapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.pluginlgapi.rolesattributs.Power;
-import io.github.ph1lou.pluginlgapi.rolesattributs.Roles;
+import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.enumlg.Camp;
+import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
+import io.github.ph1lou.werewolfapi.events.InfectionEvent;
+import io.github.ph1lou.werewolfapi.events.NewWereWolfEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.Power;
+import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
@@ -115,7 +115,7 @@ public class CommandInfect implements Commands {
         ((AffectedPlayers)infect).addAffectedPlayer(argUUID);
         ((Power) infect).setPower(false);
         player.sendMessage(game.translate("werewolf.role.infect_father_of_the_wolves.infection_perform",plg1.getName()));
-        game.death_manage.resurrection(argUUID);
+        game.resurrection(argUUID);
 
         if(!plg1.getRole().isCamp(Camp.WEREWOLF)) {
             NewWereWolfEvent newWereWolfEvent = new NewWereWolfEvent(argUUID);

@@ -1,7 +1,7 @@
 package io.github.ph1lou.werewolfplugin.worldloader;
 
-import io.github.ph1lou.pluginlgapi.events.GenerationStartEvent;
-import io.github.ph1lou.pluginlgapi.events.GenerationStopEvent;
+import io.github.ph1lou.werewolfapi.events.GenerationStartEvent;
+import io.github.ph1lou.werewolfapi.events.GenerationStopEvent;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.*;
 

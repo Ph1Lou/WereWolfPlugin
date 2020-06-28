@@ -1,11 +1,11 @@
 package io.github.ph1lou.werewolfplugin.listener;
 
 import fr.mrmicky.fastboard.FastBoard;
-import io.github.ph1lou.pluginlgapi.PlayerWW;
-import io.github.ph1lou.pluginlgapi.enumlg.State;
-import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
-import io.github.ph1lou.pluginlgapi.enumlg.TimerLG;
-import io.github.ph1lou.pluginlgapi.events.FirstDeathEvent;
+import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
+import io.github.ph1lou.werewolfapi.events.FirstDeathEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import io.github.ph1lou.werewolfplugin.utils.Title;
@@ -193,7 +193,7 @@ public class PlayerListener implements Listener {
 
 				if(firstDeathEvent.isCancelled()) return;
 
-				game.death_manage.deathStep1(uuid);
+				game.deathStep1(uuid);
 			}, 20L);
 		}
 	}

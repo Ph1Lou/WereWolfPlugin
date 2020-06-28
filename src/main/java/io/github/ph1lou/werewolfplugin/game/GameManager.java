@@ -1,15 +1,15 @@
 package io.github.ph1lou.werewolfplugin.game;
 
 import fr.mrmicky.fastboard.FastBoard;
-import io.github.ph1lou.pluginlgapi.*;
-import io.github.ph1lou.pluginlgapi.enumlg.*;
-import io.github.ph1lou.pluginlgapi.events.StopEvent;
-import io.github.ph1lou.pluginlgapi.rolesattributs.InvisibleState;
-import io.github.ph1lou.pluginlgapi.rolesattributs.Roles;
+import io.github.ph1lou.werewolfapi.*;
+import io.github.ph1lou.werewolfapi.enumlg.*;
+import io.github.ph1lou.werewolfapi.events.StopEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.InvisibleState;
+import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.listener.ScenariosLG;
-import io.github.ph1lou.werewolfplugin.savelg.ConfigLG;
-import io.github.ph1lou.werewolfplugin.savelg.StuffLG;
+import io.github.ph1lou.werewolfplugin.listener.ScenariosLoader;
+import io.github.ph1lou.werewolfplugin.save.Config;
+import io.github.ph1lou.werewolfplugin.save.Stuff;
 import io.github.ph1lou.werewolfplugin.tasks.LobbyTask;
 import io.github.ph1lou.werewolfplugin.utils.UpdateChecker;
 import io.github.ph1lou.werewolfplugin.utils.WorldUtils;
@@ -38,17 +38,17 @@ public class GameManager implements WereWolfAPI {
     private final Map<UUID, PlayerWW> playerLG = new HashMap<>();
     private StateLG state;
     private Day dayState;
-    public final DeathManagementLG death_manage;
-    private final VoteLG vote = new VoteLG(this);
-    public final ScoreBoardLG score = new ScoreBoardLG(this);
-    public final EventsLG eventslg = new EventsLG(this);
-    public OptionLG optionlg;
-    public final RoleManagementLG roleManage;
+    private final DeathManagement deathManage;
+    private final Vote vote = new Vote(this);
+    public final ScoreBoard score = new ScoreBoard(this);
+    public final Events events = new Events(this);
+    public Option option;
+    public final RoleManagement roleManage;
     public final LoversManagement loversManage = new LoversManagement(this);
-    private final ConfigLG config = new ConfigLG();
-    private final EndLG endlg;
-    private final StuffLG stufflg;
-    private final ScenariosLG scenarios;
+    private final Config config = new Config();
+    private final End end;
+    private final Stuff stuff;
+    private final ScenariosLoader scenarios;
     private final Random r = new Random(System.currentTimeMillis());
     public WorldFillTask wft = null;
     private final Map<String, String> language = new HashMap<>();
@@ -68,14 +68,14 @@ public class GameManager implements WereWolfAPI {
 
         this.main = main;
 
-        endlg = new EndLG(main, this);
-        death_manage = new DeathManagementLG(main, this);
+        end = new End(main, this);
+        deathManage = new DeathManagement(main, this);
         main.lang.updateLanguage(this);
-        roleManage = new RoleManagementLG(main, this);
-        stufflg = new StuffLG(main, this);
-        scenarios = new ScenariosLG(main, this);
+        roleManage = new RoleManagement(main, this);
+        stuff = new Stuff(main, this);
+        scenarios = new ScenariosLoader(main, this);
         config.getConfig(this, "saveCurrent");
-        stufflg.load("saveCurrent");
+        stuff.load("saveCurrent");
         Bukkit.getPluginManager().registerEvents(vote,main);
         scenarios.init();
         setState(StateLG.LOBBY);
@@ -345,12 +345,12 @@ public class GameManager implements WereWolfAPI {
 
     @Override
     public void checkVictory() {
-        endlg.check_victory();
+        end.check_victory();
     }
 
     @Override
     public void resurrection(UUID uuid) {
-        death_manage.resurrection(uuid);
+        deathManage.resurrection(uuid);
     }
 
     @Override
@@ -398,8 +398,6 @@ public class GameManager implements WereWolfAPI {
             main.currentGame.join(player);
         }
         deleteMap();
-
-
     }
 
     @Override
@@ -447,7 +445,7 @@ public class GameManager implements WereWolfAPI {
         final String translation;
         if(!main.getExtraTexts().containsKey(key.toLowerCase())){
             if(!this.language.containsKey(key.toLowerCase())){
-                return "(Message error)";
+                return String.format("Message error (%s) ", key.toLowerCase());
             }
             translation = this.language.get(key.toLowerCase());
         }
@@ -494,12 +492,16 @@ public class GameManager implements WereWolfAPI {
     }
 
     public List<RoleRegister> getRolesRegister() {
-        return main.rolesRegister;
+        return main.getRegisterRoles();
     }
 
     @Override
-    public Vote getVote(){
+    public VoteAPI getVote(){
         return this.vote;
+    }
+
+    public void deathStep1(UUID uuid){
+        deathManage.deathStep1(uuid);
     }
 
     @Override
@@ -523,7 +525,7 @@ public class GameManager implements WereWolfAPI {
             }
         }
 
-        death_manage.death(uuid);
+        deathManage.death(uuid);
     }
     @Override
     public List<List<UUID>> getLoversRange(){
@@ -557,14 +559,16 @@ public class GameManager implements WereWolfAPI {
                 }
 
                 Team team = scoreBoard.getTeam(name);
-
-                if (config.getScenarioValues().get(ScenarioLG.NO_NAME_TAG)) {
-                    team.setNameTagVisibility(NameTagVisibility.NEVER);
-                } else {
-                    if ((playerWW2.getRole() instanceof InvisibleState) && ((InvisibleState)playerWW2.getRole()).isInvisible()) {
+                try{
+                    if (config.getScenarioValues().get("werewolf.menu.scenarios.no_name_tag")) {
+                        team.setNameTagVisibility(NameTagVisibility.NEVER);
+                    } else if ((playerWW2.getRole() instanceof InvisibleState) && ((InvisibleState)playerWW2.getRole()).isInvisible()) {
                         team.setNameTagVisibility(NameTagVisibility.NEVER);
                     } else team.setNameTagVisibility(NameTagVisibility.ALWAYS);
+                }catch(Exception ignored){
+
                 }
+
             }
 
             for (UUID uuid: this.getModerators()) {
@@ -614,22 +618,54 @@ public class GameManager implements WereWolfAPI {
                 }
             }
         }
-        Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-        Team hosts = scoreboard.registerNewTeam("hosts");
+
+        Scoreboard scoreboardModerator = Bukkit.getScoreboardManager().getNewScoreboard();
+        Team hosts = scoreboardModerator.registerNewTeam("hostsSpectator");
         hosts.setPrefix(this.translate("werewolf.commands.admin.host.tag"));
-        Team moderators = scoreboard.registerNewTeam("moderators");
+        Team hostsWW = scoreboardModerator.registerNewTeam("hostsWW");
+        hostsWW.setPrefix(this.translate("werewolf.commands.admin.host.tag")+ChatColor.DARK_RED);
+        Team moderators = scoreboardModerator.registerNewTeam("moderators");
         moderators.setPrefix(this.translate("werewolf.commands.admin.moderator.tag"));
+        Team ww = scoreboardModerator.registerNewTeam("ww");
+        ww.setPrefix(String.valueOf(ChatColor.DARK_RED));
+
+        Scoreboard scoreboardSpectator = Bukkit.getScoreboardManager().getNewScoreboard();
+        Team hostsSpectator = scoreboardSpectator.registerNewTeam("hostsSpectator");
+        hostsSpectator.setPrefix(this.translate("werewolf.commands.admin.host.tag"));
+        Team moderatorsSpectator = scoreboardSpectator.registerNewTeam("moderators");
+        moderatorsSpectator.setPrefix(this.translate("werewolf.commands.admin.moderator.tag"));
+
+
         for(Player player:Bukkit.getOnlinePlayers()){
-            if(getHosts().contains(player.getUniqueId())){
-                hosts.addEntry(player.getName());
+
+            UUID uuid=player.getUniqueId();
+            String playerName = player.getName();
+
+            if(getHosts().contains(uuid)){
+                if(getPlayersWW().containsKey(uuid) && getPlayersWW().get(uuid).getRole().isWereWolf()){
+                    hostsWW.addEntry(playerName);
+                }
+                else hosts.addEntry(playerName);
+                hostsSpectator.addEntry(playerName);
             }
-            else if(getModerators().contains(player.getUniqueId())){
-                moderators.addEntry(player.getName());
+            else if(getModerators().contains(uuid)){
+                moderators.addEntry(playerName);
+                moderatorsSpectator.addEntry(playerName);
+            }
+            else if(getPlayersWW().containsKey(uuid) && getPlayersWW().get(uuid).getRole().isWereWolf()){
+                ww.addEntry(playerName);
             }
         }
+
+
+
+
         for(Player player:Bukkit.getOnlinePlayers()){
-            if(!getPlayersWW().containsKey(player.getUniqueId()) && player.getScoreboard()==null){
-                player.setScoreboard(scoreboard);
+            if(getModerators().contains(player.getUniqueId())){
+                player.setScoreboard(scoreboardModerator);
+            }
+            else if(!getPlayersWW().containsKey(player.getUniqueId())){
+                player.setScoreboard(scoreboardSpectator);
             }
         }
     }
@@ -651,7 +687,7 @@ public class GameManager implements WereWolfAPI {
 
     @Override
     public StuffManager getStuffs() {
-        return stufflg;
+        return stuff;
     }
 
     public void updateCompass(){

@@ -1,8 +1,8 @@
 package io.github.ph1lou.werewolfplugin.classesroles.villageroles;
 
 
-import io.github.ph1lou.pluginlgapi.GetWereWolfAPI;
-import io.github.ph1lou.pluginlgapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 
 import java.util.UUID;
 

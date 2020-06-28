@@ -1,7 +1,7 @@
 package io.github.ph1lou.werewolfplugin.commandlg.utilities;
 
-import io.github.ph1lou.pluginlgapi.Commands;
-import io.github.ph1lou.pluginlgapi.enumlg.ToolLG;
+import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.command.CommandSender;

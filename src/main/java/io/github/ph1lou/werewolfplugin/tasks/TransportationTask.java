@@ -1,18 +1,15 @@
 package io.github.ph1lou.werewolfplugin.tasks;
 
-import io.github.ph1lou.pluginlgapi.PlayerWW;
-import io.github.ph1lou.pluginlgapi.enumlg.ScenarioLG;
-import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
-import io.github.ph1lou.pluginlgapi.enumlg.TimerLG;
-import io.github.ph1lou.pluginlgapi.events.DayEvent;
+import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
+import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import io.github.ph1lou.werewolfplugin.utils.Title;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -99,9 +96,7 @@ public class TransportationTask extends BukkitRunnable {
                 for (int j = 0; j < 40; j++) {
                     inventory.setItem(j, game.getStuffs().getStartLoot().getItem(j));
                 }
-                if (game.getConfig().getScenarioValues().get(ScenarioLG.CAT_EYES)) {
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0, false, false));
-                }
+
                 player.teleport(game.getPlayersWW().get(uuid).getSpawn());
             }
         } else if (i % 5 == 0 && j == 10) {

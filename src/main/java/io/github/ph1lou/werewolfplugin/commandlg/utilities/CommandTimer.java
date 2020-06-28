@@ -1,7 +1,7 @@
 package io.github.ph1lou.werewolfplugin.commandlg.utilities;
 
-import io.github.ph1lou.pluginlgapi.Commands;
-import io.github.ph1lou.pluginlgapi.enumlg.TimerLG;
+import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.command.CommandSender;
@@ -26,7 +26,10 @@ public class CommandTimer implements Commands {
             if (time.charAt(0) != '-') {
                 if(timer.equals(TimerLG.ROLE_DURATION)){
                     if(game.getConfig().isTrollSV()){
-                        sender.sendMessage(game.translate(timer.getKey(), game.score.conversion(game.getConfig().getTimerValues().get(timer)-120)));
+                        time =game.score.conversion(game.getConfig().getTimerValues().get(timer)-120);
+                        if(time.charAt(0) != '-'){
+                            sender.sendMessage(game.translate(timer.getKey(),time));
+                        }
                     }
                     else sender.sendMessage(game.translate(timer.getKey(), time));
                 }

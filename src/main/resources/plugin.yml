@@ -8,8 +8,6 @@ commands:
 
   ww:
     description: commands for players
-    usage: /<command> h
   a:
     description: admin commands
-    usage: /<command> h
 

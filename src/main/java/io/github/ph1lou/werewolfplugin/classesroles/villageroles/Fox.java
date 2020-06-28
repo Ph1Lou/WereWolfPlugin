@@ -1,16 +1,16 @@
 package io.github.ph1lou.werewolfplugin.classesroles.villageroles;
 
 
-import io.github.ph1lou.pluginlgapi.GetWereWolfAPI;
-import io.github.ph1lou.pluginlgapi.PlayerWW;
-import io.github.ph1lou.pluginlgapi.WereWolfAPI;
-import io.github.ph1lou.pluginlgapi.enumlg.Camp;
-import io.github.ph1lou.pluginlgapi.enumlg.State;
-import io.github.ph1lou.pluginlgapi.enumlg.TimerLG;
-import io.github.ph1lou.pluginlgapi.events.DayEvent;
-import io.github.ph1lou.pluginlgapi.events.SniffEvent;
-import io.github.ph1lou.pluginlgapi.events.UpdateEvent;
-import io.github.ph1lou.pluginlgapi.rolesattributs.*;
+import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
+import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.Camp;
+import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
+import io.github.ph1lou.werewolfapi.events.DayEvent;
+import io.github.ph1lou.werewolfapi.events.SniffEvent;
+import io.github.ph1lou.werewolfapi.events.UpdateEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

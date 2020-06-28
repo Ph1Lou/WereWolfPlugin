@@ -1,8 +1,8 @@
 package io.github.ph1lou.werewolfplugin.listener.scenarioslisteners;
 
-import io.github.ph1lou.pluginlgapi.enumlg.ScenarioLG;
-import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
+import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
+import io.github.ph1lou.werewolfapi.Scenarios;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -17,8 +18,8 @@ import java.util.List;
 
 public class Timber extends Scenarios {
 
-    public Timber(Main main, GameManager game, ScenarioLG timber) {
-        super(main, game,timber);
+    public Timber(GetWereWolfAPI main, WereWolfAPI game, String key) {
+        super(main, game,key);
     }
 
     @EventHandler
@@ -56,7 +57,7 @@ public class Timber extends Scenarios {
                         this.cancel();
                     }
                 }
-            }.runTaskTimer(main, 1L, 1L);
+            }.runTaskTimer((Plugin) main, 1L, 1L);
         }
     }
 }

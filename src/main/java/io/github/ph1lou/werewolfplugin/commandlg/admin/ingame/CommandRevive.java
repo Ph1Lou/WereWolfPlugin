@@ -1,10 +1,10 @@
 package io.github.ph1lou.werewolfplugin.commandlg.admin.ingame;
 
-import io.github.ph1lou.pluginlgapi.Commands;
-import io.github.ph1lou.pluginlgapi.PlayerWW;
-import io.github.ph1lou.pluginlgapi.enumlg.State;
-import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
-import io.github.ph1lou.pluginlgapi.rolesattributs.Roles;
+import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
@@ -65,7 +65,7 @@ public class CommandRevive implements Commands {
         Roles role = plg.getRole();
         game.getConfig().getRoleCount().put(role.getDisplay(), game.getConfig().getRoleCount().get(role.getDisplay()) + 1);
         game.score.addPlayerSize();
-        game.death_manage.resurrection(uuid);
+        game.resurrection(uuid);
 
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.sendMessage(game.translate("werewolf.commands.admin.revive.perform", args[0]));

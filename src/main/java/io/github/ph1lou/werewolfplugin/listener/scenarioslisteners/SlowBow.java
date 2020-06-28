@@ -1,8 +1,8 @@
 package io.github.ph1lou.werewolfplugin.listener.scenarioslisteners;
 
-import io.github.ph1lou.pluginlgapi.enumlg.ScenarioLG;
-import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
+import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
+import io.github.ph1lou.werewolfapi.Scenarios;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,8 +13,8 @@ import org.bukkit.potion.PotionEffectType;
 public class SlowBow extends Scenarios {
 
 
-    public SlowBow(Main main, GameManager game, ScenarioLG slowBow) {
-        super(main, game,slowBow);
+    public SlowBow(GetWereWolfAPI main, WereWolfAPI game, String key) {
+        super(main, game,key);
     }
 
     @EventHandler

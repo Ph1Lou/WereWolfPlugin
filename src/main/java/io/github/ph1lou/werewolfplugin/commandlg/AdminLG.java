@@ -1,6 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commandlg;
 
-import io.github.ph1lou.pluginlgapi.Commands;
+import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.commandlg.admin.CommandChange;
 import io.github.ph1lou.werewolfplugin.commandlg.admin.CommandGeneration;
@@ -52,8 +52,10 @@ public class AdminLG implements TabExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-        if (args.length == 0) return false;
-        this.listAdminCommands.getOrDefault(args[0], this.listAdminCommands.get("h")).execute(sender, Arrays.copyOfRange(args, 1, args.length));
+        if (args.length == 0){
+            this.listAdminCommands.get("h").execute(sender, null);
+        }
+        else this.listAdminCommands.getOrDefault(args[0], this.listAdminCommands.get("h")).execute(sender, Arrays.copyOfRange(args, 1, args.length));
         return true;
     }
 

@@ -24,7 +24,7 @@ public class WorldFileData {
 
         if (!newData.regionFolder.exists() || !newData.regionFolder.isDirectory()) {
 
-            // check for region folder inside a DIM* folder (DIM-1 for nether, DIM1 for end, DIMwhatever for custom world types)
+            // check for region folder inside a DIM* folder (DIM-1 for nether, DIM1 for end, DIM whatever for custom world types)
             File[] possibleDimFolders = newData.world.getWorldFolder().listFiles(new DimFolderFileFilter());
 
             for (File possibleDimFolder : Objects.requireNonNull(possibleDimFolders)) {

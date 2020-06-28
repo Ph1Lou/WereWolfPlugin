@@ -1,8 +1,8 @@
 package io.github.ph1lou.werewolfplugin.listener.scenarioslisteners;
 
-import io.github.ph1lou.pluginlgapi.enumlg.ScenarioLG;
-import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
+import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
+import io.github.ph1lou.werewolfapi.Scenarios;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -10,8 +10,8 @@ import org.bukkit.event.entity.EntityDamageEvent;
 public class NoPoison extends Scenarios {
 
 
-    public NoPoison(Main main, GameManager game, ScenarioLG noPoison) {
-        super(main, game,noPoison);
+    public NoPoison(GetWereWolfAPI main, WereWolfAPI game, String key) {
+        super(main, game,key);
     }
 
     @EventHandler

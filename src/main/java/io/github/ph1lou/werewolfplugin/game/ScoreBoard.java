@@ -1,13 +1,13 @@
 package io.github.ph1lou.werewolfplugin.game;
 
 import fr.mrmicky.fastboard.FastBoard;
-import io.github.ph1lou.pluginlgapi.PlayerWW;
-import io.github.ph1lou.pluginlgapi.RoleRegister;
-import io.github.ph1lou.pluginlgapi.enumlg.State;
-import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
-import io.github.ph1lou.pluginlgapi.enumlg.TimerLG;
-import io.github.ph1lou.pluginlgapi.enumlg.ToolLG;
-import io.github.ph1lou.pluginlgapi.events.ActionBarEvent;
+import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.RoleRegister;
+import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
+import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
+import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
 import io.github.ph1lou.werewolfplugin.utils.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -22,7 +22,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 
-public class ScoreBoardLG {
+public class ScoreBoard {
 
 	private final GameManager game;
 	private int group_size =5;
@@ -35,7 +35,7 @@ public class ScoreBoardLG {
 	private List<String> roles = new ArrayList<>();
 	private final List<UUID> kill_score = new ArrayList<>();
 	
-	public ScoreBoardLG(GameManager game) {
+	public ScoreBoard(GameManager game) {
 		this.game=game;
 	}
 	

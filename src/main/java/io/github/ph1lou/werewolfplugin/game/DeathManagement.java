@@ -1,12 +1,12 @@
 package io.github.ph1lou.werewolfplugin.game;
 
-import io.github.ph1lou.pluginlgapi.PlayerWW;
-import io.github.ph1lou.pluginlgapi.enumlg.State;
-import io.github.ph1lou.pluginlgapi.enumlg.ToolLG;
-import io.github.ph1lou.pluginlgapi.events.FinalDeathEvent;
-import io.github.ph1lou.pluginlgapi.events.ResurrectionEvent;
-import io.github.ph1lou.pluginlgapi.events.SecondDeathEvent;
-import io.github.ph1lou.pluginlgapi.events.ThirdDeathEvent;
+import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
+import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.ResurrectionEvent;
+import io.github.ph1lou.werewolfapi.events.SecondDeathEvent;
+import io.github.ph1lou.werewolfapi.events.ThirdDeathEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -23,12 +23,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
-public class DeathManagementLG {
+public class DeathManagement {
 
     private final GameManager game;
     private final Main main;
 
-    public DeathManagementLG(Main main, GameManager game) {
+    public DeathManagement(Main main, GameManager game) {
         this.main=main;
         this.game = game;
     }
@@ -81,7 +81,7 @@ public class DeathManagementLG {
         game.score.removePlayerSize();
         Bukkit.getPluginManager().callEvent(new FinalDeathEvent(playerUUID));
 
-        for (ItemStack i : Stream.concat(plg.getItemDeath().stream(), game.getStuffs().getDeathLoot().stream()) .collect(Collectors.toList())) {
+        for (ItemStack i : Stream.concat(plg.getItemDeath().stream(), game.getStuffs().getDeathLoot().stream()).collect(Collectors.toList())) {
             if (i != null) {
                 world.dropItem(plg.getSpawn(), i);
             }
@@ -128,7 +128,7 @@ public class DeathManagementLG {
         }
         game.transportation(playerUUID, Math.random() * Bukkit.getOnlinePlayers().size(),game.translate("werewolf.announcement.resurrection"));
         plg.setState(State.ALIVE);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(main, game::updateNameTag, 10L);
+
         game.checkVictory();
     }
 

@@ -1,10 +1,10 @@
 package io.github.ph1lou.werewolfplugin.classesroles.neutralroles;
 
 
-import io.github.ph1lou.pluginlgapi.GetWereWolfAPI;
-import io.github.ph1lou.pluginlgapi.WereWolfAPI;
-import io.github.ph1lou.pluginlgapi.enumlg.AngelForm;
-import io.github.ph1lou.pluginlgapi.events.AngelChoiceEvent;
+import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.AngelForm;
+import io.github.ph1lou.werewolfapi.events.AngelChoiceEvent;
 import org.bukkit.Bukkit;
 
 import java.util.UUID;

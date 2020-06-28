@@ -1,10 +1,10 @@
-package io.github.ph1lou.werewolfplugin.savelg;
+package io.github.ph1lou.werewolfplugin.save;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import io.github.ph1lou.pluginlgapi.ConfigWereWolfAPI;
+import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
 
-public class SerializerLG {
+public class Serializer {
 
 
 	public static Gson gson(){
@@ -19,8 +19,8 @@ public class SerializerLG {
 		return gson().toJson(config);
 	}
 
-	public static ConfigLG deserialize(String json) {
-		return gson().fromJson(json, ConfigLG.class);
+	public static Config deserialize(String json) {
+		return gson().fromJson(json, Config.class);
 	}
 
 }

@@ -1,12 +1,12 @@
 package io.github.ph1lou.werewolfplugin.classesroles.villageroles;
 
-import io.github.ph1lou.pluginlgapi.GetWereWolfAPI;
-import io.github.ph1lou.pluginlgapi.WereWolfAPI;
-import io.github.ph1lou.pluginlgapi.events.FinalDeathEvent;
-import io.github.ph1lou.pluginlgapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.pluginlgapi.rolesattributs.LimitedUse;
-import io.github.ph1lou.pluginlgapi.rolesattributs.RolesVillage;
-import io.github.ph1lou.pluginlgapi.rolesattributs.Storage;
+import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.LimitedUse;
+import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
+import io.github.ph1lou.werewolfapi.rolesattributs.Storage;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 

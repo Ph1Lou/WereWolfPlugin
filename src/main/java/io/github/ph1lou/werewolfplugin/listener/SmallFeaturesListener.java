@@ -1,6 +1,6 @@
 package io.github.ph1lou.werewolfplugin.listener;
 
-import io.github.ph1lou.pluginlgapi.events.GoldenAppleParticleEvent;
+import io.github.ph1lou.werewolfapi.events.GoldenAppleParticleEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;

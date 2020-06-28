@@ -1,12 +1,12 @@
 package io.github.ph1lou.werewolfplugin.game;
 
 
-import io.github.ph1lou.pluginlgapi.PlayerWW;
-import io.github.ph1lou.pluginlgapi.enumlg.State;
-import io.github.ph1lou.pluginlgapi.enumlg.ToolLG;
-import io.github.ph1lou.pluginlgapi.events.CupidLoversEvent;
-import io.github.ph1lou.pluginlgapi.events.RevealAmnesiacLoversEvent;
-import io.github.ph1lou.pluginlgapi.events.RevealLoversEvent;
+import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
+import io.github.ph1lou.werewolfapi.events.CupidLoversEvent;
+import io.github.ph1lou.werewolfapi.events.RevealAmnesiacLoversEvent;
+import io.github.ph1lou.werewolfapi.events.RevealLoversEvent;
 import io.github.ph1lou.werewolfplugin.classesroles.villageroles.Cupid;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;

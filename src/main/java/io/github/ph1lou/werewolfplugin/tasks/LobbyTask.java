@@ -1,6 +1,6 @@
 package io.github.ph1lou.werewolfplugin.tasks;
 
-import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import io.github.ph1lou.werewolfplugin.utils.Title;
@@ -33,7 +33,7 @@ public class LobbyTask extends BukkitRunnable {
 
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (game.wft == null) {
-                if (p.isOp() || p.hasPermission("a.use") || p.hasPermission("a.generation.use")) {
+                if (p.isOp() || p.hasPermission("a.use") || p.hasPermission("a.generation.use") || game.getHosts().contains(p.getUniqueId())) {
                     Title.sendActionBar(p, game.translate("werewolf.action_bar.generation"));
                 }
             } else if(game.wft.getPercentageCompleted()<100){

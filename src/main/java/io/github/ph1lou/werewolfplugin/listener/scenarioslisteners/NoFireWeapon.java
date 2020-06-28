@@ -1,16 +1,16 @@
 package io.github.ph1lou.werewolfplugin.listener.scenarioslisteners;
 
-import io.github.ph1lou.pluginlgapi.enumlg.ScenarioLG;
-import io.github.ph1lou.pluginlgapi.events.EnchantmentEvent;
-import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
+import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
+import io.github.ph1lou.werewolfapi.Scenarios;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.events.EnchantmentEvent;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 
 public class NoFireWeapon extends Scenarios {
 
-    public NoFireWeapon(Main main, GameManager game, ScenarioLG scenario) {
-        super(main, game, scenario);
+    public NoFireWeapon(GetWereWolfAPI main, WereWolfAPI game, String key) {
+        super(main, game, key);
     }
 
     @EventHandler

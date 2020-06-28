@@ -1,10 +1,10 @@
 package io.github.ph1lou.werewolfplugin.listener.scenarioslisteners;
 
-import io.github.ph1lou.pluginlgapi.enumlg.ScenarioLG;
-import io.github.ph1lou.pluginlgapi.enumlg.StateLG;
-import io.github.ph1lou.pluginlgapi.enumlg.TimerLG;
-import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
+import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
+import io.github.ph1lou.werewolfapi.Scenarios;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -20,8 +20,8 @@ public class DiamondLimit extends Scenarios {
 
     final Map<String, Integer> diamondPerPlayer = new HashMap<>();
 
-    public DiamondLimit(Main main, GameManager game, ScenarioLG diamondLimit) {
-        super(main, game,diamondLimit);
+    public DiamondLimit(GetWereWolfAPI main, WereWolfAPI game, String key) {
+        super(main, game,key);
     }
 
 

@@ -1,14 +1,14 @@
 package io.github.ph1lou.werewolfplugin.classesroles.werewolfroles;
 
-import io.github.ph1lou.pluginlgapi.GetWereWolfAPI;
-import io.github.ph1lou.pluginlgapi.WereWolfAPI;
-import io.github.ph1lou.pluginlgapi.enumlg.Camp;
-import io.github.ph1lou.pluginlgapi.enumlg.State;
-import io.github.ph1lou.pluginlgapi.events.NewDisplayRole;
-import io.github.ph1lou.pluginlgapi.events.SelectionEndEvent;
-import io.github.ph1lou.pluginlgapi.rolesattributs.Display;
-import io.github.ph1lou.pluginlgapi.rolesattributs.Roles;
-import io.github.ph1lou.pluginlgapi.rolesattributs.RolesWereWolf;
+import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.Camp;
+import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.events.NewDisplayRole;
+import io.github.ph1lou.werewolfapi.events.SelectionEndEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.Display;
+import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
+import io.github.ph1lou.werewolfapi.rolesattributs.RolesWereWolf;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

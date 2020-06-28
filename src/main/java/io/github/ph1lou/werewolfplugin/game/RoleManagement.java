@@ -1,10 +1,10 @@
 package io.github.ph1lou.werewolfplugin.game;
 
-import io.github.ph1lou.pluginlgapi.PlayerWW;
-import io.github.ph1lou.pluginlgapi.RoleRegister;
-import io.github.ph1lou.pluginlgapi.enumlg.State;
-import io.github.ph1lou.pluginlgapi.enumlg.ToolLG;
-import io.github.ph1lou.pluginlgapi.rolesattributs.Roles;
+import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.RoleRegister;
+import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
+import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -17,12 +17,12 @@ import java.util.List;
 import java.util.UUID;
 
 
-public class RoleManagementLG {
+public class RoleManagement {
 	
 	private final GameManager game;
 	private final Main main;
 
-	public RoleManagementLG(Main main, GameManager game) {
+	public RoleManagement(Main main, GameManager game) {
 		this.game=game;
 		this.main=main;
 	}
@@ -112,18 +112,4 @@ public class RoleManagementLG {
 		}
 		return 	players.get((int) Math.floor(game.getRandom().nextFloat()*players.size()));
 	}
-	
-	
-	
-
-	public boolean isWereWolf(UUID uuid){
-		if(game.getPlayersWW().containsKey(uuid)){
-			PlayerWW plg = game.getPlayersWW().get(uuid);
-			return(plg.getRole()!=null && plg.getRole().isWereWolf());
-		}
-		return false;
-	}
-
-	
-
 }

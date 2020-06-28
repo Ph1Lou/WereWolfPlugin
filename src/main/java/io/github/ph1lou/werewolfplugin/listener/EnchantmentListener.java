@@ -1,6 +1,6 @@
 package io.github.ph1lou.werewolfplugin.listener;
 
-import io.github.ph1lou.pluginlgapi.events.EnchantmentEvent;
+import io.github.ph1lou.werewolfapi.events.EnchantmentEvent;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

@@ -1,8 +1,8 @@
 package io.github.ph1lou.werewolfplugin.listener.scenarioslisteners;
 
-import io.github.ph1lou.pluginlgapi.enumlg.ScenarioLG;
-import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
+import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
+import io.github.ph1lou.werewolfapi.Scenarios;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -14,8 +14,8 @@ import org.bukkit.inventory.ItemStack;
 public class VanillaPlus extends Scenarios {
 
 
-    public VanillaPlus(Main main, GameManager game, ScenarioLG scenario) {
-        super(main, game, scenario);
+    public VanillaPlus(GetWereWolfAPI main, WereWolfAPI game, String key) {
+        super(main, game, key);
     }
 
     @EventHandler

@@ -1,14 +1,13 @@
-package io.github.ph1lou.werewolfplugin.savelg;
+package io.github.ph1lou.werewolfplugin.save;
 
 
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.commandlg.AdminLG;
 import io.github.ph1lou.werewolfplugin.commandlg.CommandLG;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
-import io.github.ph1lou.werewolfplugin.game.OptionLG;
+import io.github.ph1lou.werewolfplugin.game.Option;
 import io.github.ph1lou.werewolfplugin.utils.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -17,11 +16,11 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LangLG {
+public class Lang {
 
     final Main main;
 
-    public LangLG(Main main) {
+    public Lang(Main main) {
         this.main = main;
     }
 
@@ -54,30 +53,25 @@ public class LangLG {
     }
 
 
-
-    public void init(){
-
-        FileLG.copy(main.getResource("fr.json"),main.getDataFolder()+File.separator+"languages"+File.separator+"fr.json");
-        FileLG.copy(main.getResource("en.json"),main.getDataFolder()+File.separator+"languages"+File.separator+"en.json");
-
-    }
-
     public void updateLanguage(GameManager game){
 
-        String lang_select = main.getConfig().getString("lang");
-        File file = new File(main.getDataFolder() + File.separator + "languages" + File.separator, lang_select+".json");
-        File fileFR = new File(main.getDataFolder() + File.separator + "languages" + File.separator, "fr.json");
+        String langSelect = main.getConfig().getString("lang");
+        File file = new File(main.getDataFolder() + File.separator + "languages" + File.separator, langSelect+".json");
+        String defaultText = FileUtils.convert(main.getResource("fr.json"));
 
         if (!file.exists()){
-            String content = FileLG.loadContent(fileFR);
-            FileLG.save(file,content);
+            FileUtils.copy(main.getResource(langSelect+".json"),main.getDataFolder()+ File.separator+"languages"+ File.separator+langSelect+".json");
+        }
+        if(!file.exists()){
+            assert defaultText != null;
+            FileUtils.saveJson(file,Json.parse(defaultText).asObject());
             game.getLanguage().clear();
-            game.getLanguage().putAll(loadTranslations(content));
+            game.getLanguage().putAll(loadTranslations(defaultText));
         }
         else {
-            Map<String,String> fr =loadTranslations(FileLG.loadContent(fileFR));
-            Map<String,String> custom =loadTranslations(FileLG.loadContent(file));
-            final JsonObject jsonObject = Json.parse(FileLG.loadContent(file)).asObject();
+            Map<String,String> fr =loadTranslations(defaultText);
+            Map<String,String> custom =loadTranslations(FileUtils.loadContent(file));
+            final JsonObject jsonObject = Json.parse(FileUtils.loadContent(file)).asObject();
 
             for(String string:fr.keySet()){
                 if(!custom.containsKey(string)){
@@ -96,9 +90,9 @@ public class LangLG {
                     temp.set(strings[strings.length-1],fr.get(string));
                 }
             }
-            FileLG.saveJson(file,jsonObject);
+            FileUtils.saveJson(file,jsonObject);
             game.getLanguage().clear();
-            game.getLanguage().putAll(loadTranslations(FileLG.loadContent(file)));
+            game.getLanguage().putAll(loadTranslations(FileUtils.loadContent(file)));
         }
 
 
@@ -110,8 +104,7 @@ public class LangLG {
 
             player.closeInventory();
         }
-        game.optionlg=new OptionLG(main,game);
-        main.getCommand("a").setExecutor(new AdminLG(main));
+        game.option =new Option(main,game);
         main.getCommand("ww").setExecutor(new CommandLG(main,game));
     }
 }

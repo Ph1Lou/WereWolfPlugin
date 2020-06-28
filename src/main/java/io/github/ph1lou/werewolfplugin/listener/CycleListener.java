@@ -1,7 +1,7 @@
 package io.github.ph1lou.werewolfplugin.listener;
 
-import io.github.ph1lou.pluginlgapi.enumlg.*;
-import io.github.ph1lou.pluginlgapi.events.*;
+import io.github.ph1lou.werewolfapi.enumlg.*;
+import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
@@ -21,7 +21,6 @@ public class CycleListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onDay(DayEvent event){
-
 
         game.setDay(Day.DAY);
 
