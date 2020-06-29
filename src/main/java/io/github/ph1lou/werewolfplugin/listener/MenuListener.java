@@ -507,14 +507,13 @@ public class MenuListener implements Listener {
 				}
 				else if(current.getType()==Material.BANNER){
 
-					if(event.getSlot()==4){
-						main.getConfig().set("lang","fr");
-					}
-					else if(event.getSlot()==2){
-						main.getConfig().set("lang","en");
+					if (event.getSlot() == 4) {
+						main.getConfig().set("lang", "fr");
+					} else if (event.getSlot() == 2) {
+						main.getConfig().set("lang", "en");
 					}
 
-					main.lang.updateLanguage(game);
+					main.getLang().updateLanguage(game);
 
 				}
 			}

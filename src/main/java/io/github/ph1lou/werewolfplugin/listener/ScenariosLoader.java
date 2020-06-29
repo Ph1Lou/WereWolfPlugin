@@ -15,9 +15,9 @@ import java.util.List;
 
 public class ScenariosLoader {
 
-    final Main main;
-    final GameManager game;
-    final List<Scenarios> scenariosRegister = new ArrayList<>();
+    private final Main main;
+    private final GameManager game;
+    private final List<Scenarios> scenariosRegister = new ArrayList<>();
 
     public ScenariosLoader(Main main, GameManager game) {
         this.main = main;
@@ -27,7 +27,7 @@ public class ScenariosLoader {
 
     public void init() {
         PluginManager pm = Bukkit.getPluginManager();
-        pm.registerEvents(new PlayerListener(main,game), main);
+        pm.registerEvents(new PlayerListener(main, game), main);
         pm.registerEvents(game.events,main);
         pm.registerEvents(new MenuListener(main,game), main);
         pm.registerEvents(new SmallFeaturesListener(main,game), main);

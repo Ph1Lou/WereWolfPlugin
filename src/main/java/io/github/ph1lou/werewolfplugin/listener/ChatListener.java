@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public class ChatListener implements Listener {
 
-    final GameManager game;
+    private final GameManager game;
 
     public ChatListener(GameManager game) {
         this.game = game;

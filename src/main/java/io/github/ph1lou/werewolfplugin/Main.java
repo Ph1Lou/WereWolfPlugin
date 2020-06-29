@@ -4,13 +4,13 @@ package io.github.ph1lou.werewolfplugin;
 import io.github.ph1lou.werewolfapi.*;
 import io.github.ph1lou.werewolfapi.enumlg.Category;
 import io.github.ph1lou.werewolfapi.events.UpdateLanguageEvent;
-import io.github.ph1lou.werewolfplugin.classesroles.neutralroles.*;
-import io.github.ph1lou.werewolfplugin.classesroles.villageroles.*;
-import io.github.ph1lou.werewolfplugin.classesroles.werewolfroles.*;
-import io.github.ph1lou.werewolfplugin.commandlg.AdminLG;
-import io.github.ph1lou.werewolfplugin.commandlg.CommandLG;
+import io.github.ph1lou.werewolfplugin.commands.Admin;
+import io.github.ph1lou.werewolfplugin.commands.Command;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import io.github.ph1lou.werewolfplugin.listener.scenarioslisteners.*;
+import io.github.ph1lou.werewolfplugin.roles.neutrals.*;
+import io.github.ph1lou.werewolfplugin.roles.villagers.*;
+import io.github.ph1lou.werewolfplugin.roles.werewolfs.*;
 import io.github.ph1lou.werewolfplugin.save.FileUtils;
 import io.github.ph1lou.werewolfplugin.save.Lang;
 import io.github.ph1lou.werewolfplugin.utils.WorldUtils;
@@ -33,9 +33,8 @@ import java.util.Map;
 public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
 
 
-    public final Lang lang = new Lang(this);
-
-    public GameManager currentGame;
+    private final Lang lang = new Lang(this);
+    private GameManager currentGame;
     private final List<RoleRegister> rolesRegister = new ArrayList<>();
     private final Map<String, String> extraTexts = new HashMap<>();
     private final Map<Plugin, String> defaultLanguages = new HashMap<>();
@@ -44,6 +43,14 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
     private final Map<String, Commands> listAdminCommands = new HashMap<>();
     private final List<ScenarioRegister> scenariosRegister = new ArrayList<>();
 
+
+    public GameManager getCurrentGame() {
+        return currentGame;
+    }
+
+    public void setCurrentGame(GameManager currentGame) {
+        this.currentGame = currentGame;
+    }
 
     @Override
     public Map<String, Commands> getListCommands() {
@@ -71,9 +78,9 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
         currentGame = new GameManager(this);
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
             setWorld();
-            currentGame.init();
-            currentGame.createMap();
-            getCommand("a").setExecutor(new AdminLG(this));
+            getCurrentGame().init();
+            getCurrentGame().createMap();
+            getCommand("a").setExecutor(new Admin(this));
         }, 60);
     }
 
@@ -85,7 +92,7 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
 
     @Override
     public WereWolfAPI getWereWolfAPI() {
-        return currentGame;
+        return getCurrentGame();
     }
 
     @EventHandler
@@ -93,7 +100,7 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
 
         Player player = event.getPlayer();
 
-        if (currentGame.isState(null)) {
+        if (getCurrentGame().isState(null)) {
             player.kickPlayer("Waiting Addons");
         }
     }
@@ -105,7 +112,7 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
 
     @EventHandler
     public void onLanguageChange(UpdateLanguageEvent event) {
-        getCommand("ww").setExecutor(new CommandLG(this, currentGame));
+        getCommand("ww").setExecutor(new Command(this, getCurrentGame()));
     }
 
     @Override
@@ -235,18 +242,22 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
             new ScenarioRegister(this,this,"werewolf.menu.scenarios.no_fire_weapons").registerScenario(NoFireWeapon.class).setDefaultValue(true).create();
             new ScenarioRegister(this,this,"werewolf.menu.scenarios.no_name_tag").registerScenario(NoNameTag.class).create();
             new ScenarioRegister(this,this,"werewolf.menu.scenarios.no_poison").registerScenario(NoPoison.class).setDefaultValue(true).create();
-            new ScenarioRegister(this,this,"werewolf.menu.scenarios.rod_less").registerScenario(RodLess.class).setDefaultValue(true).create();
-            new ScenarioRegister(this,this,"werewolf.menu.scenarios.slow_bow").registerScenario(SlowBow.class).create();
-            new ScenarioRegister(this,this,"werewolf.menu.scenarios.timber").registerScenario(Timber.class).create();
-            new ScenarioRegister(this,this,"werewolf.menu.scenarios.xp_boost").registerScenario(XpBoost.class).setDefaultValue(true).create();
-            new ScenarioRegister(this,this,"werewolf.menu.scenarios.vanilla_plus").registerScenario(VanillaPlus.class).setDefaultValue(true).create();
+            new ScenarioRegister(this, this, "werewolf.menu.scenarios.rod_less").registerScenario(RodLess.class).setDefaultValue(true).create();
+            new ScenarioRegister(this, this, "werewolf.menu.scenarios.slow_bow").registerScenario(SlowBow.class).create();
+            new ScenarioRegister(this, this, "werewolf.menu.scenarios.timber").registerScenario(Timber.class).create();
+            new ScenarioRegister(this, this, "werewolf.menu.scenarios.xp_boost").registerScenario(XpBoost.class).setDefaultValue(true).create();
+            new ScenarioRegister(this, this, "werewolf.menu.scenarios.vanilla_plus").registerScenario(VanillaPlus.class).setDefaultValue(true).create();
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
 
     }
 
-    
+
+    public Lang getLang() {
+        return lang;
+    }
+
     @Override
     public List<ScenarioRegister> getRegisterScenarios() {
         return this.scenariosRegister;

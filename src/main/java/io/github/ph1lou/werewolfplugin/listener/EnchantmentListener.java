@@ -20,7 +20,7 @@ import java.util.UUID;
 
 public class EnchantmentListener implements Listener {
 
-    final GameManager game;
+    private final GameManager game;
 
 
     public EnchantmentListener(GameManager game) {

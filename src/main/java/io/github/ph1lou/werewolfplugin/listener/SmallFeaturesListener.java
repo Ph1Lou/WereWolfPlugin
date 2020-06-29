@@ -24,18 +24,18 @@ import java.util.List;
 
 public class SmallFeaturesListener implements Listener {
 
-    final Main main;
-    final GameManager game;
-    
+    private final Main main;
+    private final GameManager game;
+
     public SmallFeaturesListener(Main main, GameManager game) {
         this.main = main;
-        this.game=game;
+        this.game = game;
     }
 
     @EventHandler
-    private void onPlayerTeleport(PlayerTeleportEvent event){
+    private void onPlayerTeleport(PlayerTeleportEvent event) {
 
-        if(event.getCause().equals(PlayerTeleportEvent.TeleportCause.NETHER_PORTAL)){
+        if (event.getCause().equals(PlayerTeleportEvent.TeleportCause.NETHER_PORTAL)) {
             event.setCancelled(true);
         }
         else if(event.getCause().equals(PlayerTeleportEvent.TeleportCause.END_PORTAL)){

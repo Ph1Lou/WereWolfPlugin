@@ -7,7 +7,7 @@ import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
 import io.github.ph1lou.werewolfapi.events.CupidLoversEvent;
 import io.github.ph1lou.werewolfapi.events.RevealAmnesiacLoversEvent;
 import io.github.ph1lou.werewolfapi.events.RevealLoversEvent;
-import io.github.ph1lou.werewolfplugin.classesroles.villageroles.Cupid;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Cupid;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;

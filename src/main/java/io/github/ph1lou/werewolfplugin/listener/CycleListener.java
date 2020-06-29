@@ -11,16 +11,16 @@ import org.bukkit.event.Listener;
 
 public class CycleListener implements Listener {
 
-    final Main main;
-    final GameManager game;
+    private final Main main;
+    private final GameManager game;
 
-    public CycleListener(Main main, GameManager game){
-        this.main=main;
-        this.game=game;
+    public CycleListener(Main main, GameManager game) {
+        this.main = main;
+        this.game = game;
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onDay(DayEvent event){
+    public void onDay(DayEvent event) {
 
         game.setDay(Day.DAY);
 

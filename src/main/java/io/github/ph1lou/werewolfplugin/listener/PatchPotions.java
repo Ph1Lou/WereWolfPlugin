@@ -9,7 +9,7 @@ import org.bukkit.potion.PotionEffectType;
 
 public class PatchPotions implements Listener {
 
-    final GameManager game;
+    private final GameManager game;
 
     public PatchPotions(GameManager game) {
         this.game = game;

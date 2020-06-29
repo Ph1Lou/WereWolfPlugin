@@ -70,7 +70,7 @@ public class GameManager implements WereWolfAPI {
     }
 
     public void init() {
-        main.lang.updateLanguage(this);
+        main.getLang().updateLanguage(this);
         end = new End(main, this);
         deathManage = new DeathManagement(main, this);
         roleManage = new RoleManagement(main, this);
@@ -396,15 +396,15 @@ public class GameManager implements WereWolfAPI {
 
         Bukkit.getPluginManager().callEvent(new StopEvent(this));
         scenarios.delete();
-        main.currentGame = new GameManager(main);
-        main.currentGame.init();
+        main.setCurrentGame(new GameManager(main));
+        main.getCurrentGame().init();
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             FastBoard fastboard = new FastBoard(player);
-            fastboard.updateTitle(main.currentGame.translate("werewolf.score_board.title"));
-            main.currentGame.boards.put(player.getUniqueId(), fastboard);
+            fastboard.updateTitle(main.getCurrentGame().translate("werewolf.score_board.title"));
+            main.getCurrentGame().boards.put(player.getUniqueId(), fastboard);
             player.setGameMode(GameMode.ADVENTURE);
-            main.currentGame.join(player);
+            main.getCurrentGame().join(player);
         }
         deleteMap();
     }

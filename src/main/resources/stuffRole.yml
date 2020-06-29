@@ -39,6 +39,11 @@
     type: POTION
     damage: 16389
     amount: 3
+"werewolf.role.librarian":
+  '0':
+    ==: org.bukkit.inventory.ItemStack
+    type: BOOKSHELF
+    amount: 4
 "werewolf.role.chatty_seer.display":
   '0':
     ==: org.bukkit.inventory.ItemStack

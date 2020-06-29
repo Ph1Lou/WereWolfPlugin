@@ -253,15 +253,15 @@
       },
       "librarian": {
         "display": "Bibliothécaire",
-        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Bibliothécaire§9. Votre objectif est d’éliminer les Loups-Garous.\n Vous pouvez trois fois au cours de la partie, demander à une personnes d'écrire dans votre livre §b/ww livre§9. \nQuand vous mourrez, votre livre est publié",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Bibliothécaire§9. Votre objectif est d’éliminer les Loups-Garous.\nVous obtenez 4 bibliothèques.\n Vous pouvez trois fois au cours de la partie, demander à une personne d'écrire dans votre livre §b/ww livre§9. \nQuand vous mourrez, votre livre est publié",
         "perform": "[§eLG UHC§r] Vous venez d'envoyer un livre à §b%s",
         "message": "[§eLG UHC§r] Le §bBibliothécaire§r souhaite que vous contribuez à son livre. Faites §b/ww contribuer§r suivie de votre message",
         "contribute": "[§aLG UHC§r] Vous venez de contribuer",
         "contribution": "[§aLG UHC§r] §b%s§r vient de vous envoyer §b%s",
         "prohibit": "[§cLG UHC§r] Vous n'êtes pas autorisé à contribuer",
         "waiting": "[§cLG UHC§r] Vous êtes déjà en attente du livre de cette personne",
-        "request_command" : "contribuer",
-        "death" : "[§eLG UHC§r] Un §bBibliothécaire§r vient de mourir, il révèle son livre :",
+        "request_command": "contribuer",
+        "death": "[§eLG UHC§r] Un §bBibliothécaire§r vient de mourir, il révèle son livre :",
         "book": "[§eLG UHC§r] Page §b%d§r : %s",
         "command": "livre"
       },
