@@ -59,7 +59,7 @@ public class CommandTPGroup implements Commands {
         }
         int d = 20;
         int size = game.score.getGroup();
-        double r = Math.random() * Bukkit.getOnlinePlayers().size();
+        double r = Math.random() * 2 * Math.PI;
         Player target = Bukkit.getPlayer(args[0]);
         Location location = target.getLocation();
         StringBuilder sb = new StringBuilder();

@@ -1,13 +1,14 @@
 package io.github.ph1lou.werewolfplugin;
 
 
-import com.eclipsesource.json.Json;
 import io.github.ph1lou.werewolfapi.*;
 import io.github.ph1lou.werewolfapi.enumlg.Category;
+import io.github.ph1lou.werewolfapi.events.UpdateLanguageEvent;
 import io.github.ph1lou.werewolfplugin.classesroles.neutralroles.*;
 import io.github.ph1lou.werewolfplugin.classesroles.villageroles.*;
 import io.github.ph1lou.werewolfplugin.classesroles.werewolfroles.*;
 import io.github.ph1lou.werewolfplugin.commandlg.AdminLG;
+import io.github.ph1lou.werewolfplugin.commandlg.CommandLG;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import io.github.ph1lou.werewolfplugin.listener.scenarioslisteners.*;
 import io.github.ph1lou.werewolfplugin.save.FileUtils;
@@ -24,7 +25,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +37,8 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
 
     public GameManager currentGame;
     private final List<RoleRegister> rolesRegister = new ArrayList<>();
-    private final Map<String, String> extraTexts=new HashMap<>();
+    private final Map<String, String> extraTexts = new HashMap<>();
+    private final Map<Plugin, String> defaultLanguages = new HashMap<>();
     private final List<Plugin> listAddons = new ArrayList<>();
     private final Map<String, Commands> listCommands = new HashMap<>();
     private final Map<String, Commands> listAdminCommands = new HashMap<>();
@@ -66,13 +67,14 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
         registerRole();
         registerScenario();
         listAddons.add(this);
-        Bukkit.getPluginManager().registerEvents( this, this);
+        Bukkit.getPluginManager().registerEvents(this, this);
+        currentGame = new GameManager(this);
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
             setWorld();
-            currentGame = new GameManager(this);
+            currentGame.init();
             currentGame.createMap();
             getCommand("a").setExecutor(new AdminLG(this));
-        },60);
+        }, 60);
     }
 
     @Override
@@ -87,17 +89,27 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
     }
 
     @EventHandler
-    public void onJoin(PlayerJoinEvent event){
+    public void onJoin(PlayerJoinEvent event) {
 
         Player player = event.getPlayer();
 
-        if(currentGame==null){
+        if (currentGame.isState(null)) {
             player.kickPlayer("Waiting Addons");
         }
     }
 
+    public Map<Plugin, String> getDefaultLanguages() {
+        return defaultLanguages;
+    }
+
+
+    @EventHandler
+    public void onLanguageChange(UpdateLanguageEvent event) {
+        getCommand("ww").setExecutor(new CommandLG(this, currentGame));
+    }
+
     @Override
-    public List<RoleRegister> getRegisterRoles(){
+    public List<RoleRegister> getRegisterRoles() {
         return this.rolesRegister;
     }
 
@@ -146,21 +158,9 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
     }
 
     @Override
-    public void loadTranslation(Plugin plugin, String defaultLang){
-
-        plugin.saveConfig();
-        String lang = plugin.getConfig().getString("lang");
-        String defaultText = FileUtils.convert(plugin.getResource(defaultLang+".json"));
-
-        File file = new File(plugin.getDataFolder() + File.separator + "languages" + File.separator, lang+".json");
-        if(!file.exists()){
-            FileUtils.copy(plugin.getResource(lang+".json"),plugin.getDataFolder()+ File.separator+"languages"+ File.separator+lang+".json");
-        }
-        if(!file.exists()){
-            assert defaultText != null;
-            FileUtils.saveJson(file, Json.parse(defaultText).asObject());
-        }
-        extraTexts.putAll( this.lang.loadTranslations(FileUtils.loadContent(file)));
+    public void loadTranslation(Plugin plugin, String defaultLang) {
+        extraTexts.putAll(this.lang.loadTranslations(FileUtils.loadContent(lang.buildLanguageFile(plugin, defaultLang))));
+        defaultLanguages.put(plugin, defaultLang);
     }
 
     private void registerRole() {

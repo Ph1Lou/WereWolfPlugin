@@ -4,13 +4,11 @@ package io.github.ph1lou.werewolfplugin.save;
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
+import io.github.ph1lou.werewolfapi.events.UpdateLanguageEvent;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.commandlg.CommandLG;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
-import io.github.ph1lou.werewolfplugin.game.Option;
-import io.github.ph1lou.werewolfplugin.utils.Title;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.util.HashMap;
@@ -53,24 +51,31 @@ public class Lang {
     }
 
 
-    public void updateLanguage(GameManager game){
-
-        String langSelect = main.getConfig().getString("lang");
-        File file = new File(main.getDataFolder() + File.separator + "languages" + File.separator, langSelect+".json");
-        String defaultText = FileUtils.convert(main.getResource("fr.json"));
-
-        if (!file.exists()){
-            FileUtils.copy(main.getResource(langSelect+".json"),main.getDataFolder()+ File.separator+"languages"+ File.separator+langSelect+".json");
+    public void updateLanguage(GameManager game) {
+        game.getLanguage().clear();
+        game.getLanguage().putAll(loadTranslations(FileUtils.loadContent(buildLanguageFile(main, "fr"))));
+        main.getExtraTexts().clear();
+        for (Plugin plugin : main.getDefaultLanguages().keySet()) {
+            main.getExtraTexts().putAll(loadTranslations(FileUtils.loadContent(buildLanguageFile(plugin, main.getDefaultLanguages().get(plugin)))));
         }
-        if(!file.exists()){
+        Bukkit.getPluginManager().callEvent(new UpdateLanguageEvent());
+    }
+
+    public File buildLanguageFile(Plugin plugin, String defaultLang) {
+
+        String lang = main.getConfig().getString("lang");
+        File file = new File(plugin.getDataFolder() + File.separator + "languages" + File.separator, lang + ".json");
+        String defaultText = FileUtils.convert(plugin.getResource(defaultLang + ".json"));
+
+        if (!file.exists()) {
+            FileUtils.copy(plugin.getResource(lang + ".json"), plugin.getDataFolder() + File.separator + "languages" + File.separator + lang + ".json");
+        }
+        if (!file.exists()) {
             assert defaultText != null;
-            FileUtils.saveJson(file,Json.parse(defaultText).asObject());
-            game.getLanguage().clear();
-            game.getLanguage().putAll(loadTranslations(defaultText));
-        }
-        else {
-            Map<String,String> fr =loadTranslations(defaultText);
-            Map<String,String> custom =loadTranslations(FileUtils.loadContent(file));
+            FileUtils.saveJson(file, Json.parse(defaultText).asObject());
+        } else {
+            Map<String, String> fr = loadTranslations(defaultText);
+            Map<String, String> custom = loadTranslations(FileUtils.loadContent(file));
             final JsonObject jsonObject = Json.parse(FileUtils.loadContent(file)).asObject();
 
             for(String string:fr.keySet()){
@@ -91,20 +96,9 @@ public class Lang {
                 }
             }
             FileUtils.saveJson(file,jsonObject);
-            game.getLanguage().clear();
-            game.getLanguage().putAll(loadTranslations(FileUtils.loadContent(file)));
         }
+        return file;
 
 
-        for(Player player:Bukkit.getOnlinePlayers()){
-            Title.sendTabTitle(player, game.translate("werewolf.tab.top"), game.translate("werewolf.tab.bot"));
-            if(game.boards.containsKey(player.getUniqueId())){
-                game.boards.get(player.getUniqueId()).updateTitle(game.translate("werewolf.score_board.title"));
-            }
-
-            player.closeInventory();
-        }
-        game.option =new Option(main,game);
-        main.getCommand("ww").setExecutor(new CommandLG(main,game));
     }
 }

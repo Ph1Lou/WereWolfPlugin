@@ -21,7 +21,8 @@ public class ScenariosLoader {
 
     public ScenariosLoader(Main main, GameManager game) {
         this.main = main;
-        this.game=game;
+        this.game = game;
+        init();
     }
 
     public void init() {

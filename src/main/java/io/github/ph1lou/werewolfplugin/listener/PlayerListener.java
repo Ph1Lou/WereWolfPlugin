@@ -6,6 +6,7 @@ import io.github.ph1lou.werewolfapi.enumlg.State;
 import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
 import io.github.ph1lou.werewolfapi.events.FirstDeathEvent;
+import io.github.ph1lou.werewolfapi.events.UpdateLanguageEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import io.github.ph1lou.werewolfplugin.utils.Title;
@@ -49,6 +50,10 @@ public class PlayerListener implements Listener {
 
 		if (player.getGameMode().equals(GameMode.SPECTATOR)) {
 			event.setCancelled(true);
+		} else if (game.getPlayersWW().containsKey(player.getUniqueId())) {
+			if (game.getPlayersWW().get(player.getUniqueId()).isState(State.JUDGEMENT)) {
+				event.setCancelled(true);
+			}
 		}
 	}
 
@@ -276,8 +281,20 @@ public class PlayerListener implements Listener {
 		}
 		game.updateNameTag();
 		game.updateCompass();
-	}	
-	
+	}
+
+	@EventHandler
+	public void onLanguageUpdate(UpdateLanguageEvent event) {
+
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			Title.sendTabTitle(player, game.translate("werewolf.tab.top"), game.translate("werewolf.tab.bot"));
+			if (game.boards.containsKey(player.getUniqueId())) {
+				game.boards.get(player.getUniqueId()).updateTitle(game.translate("werewolf.score_board.title"));
+			}
+			player.closeInventory();
+		}
+	}
+
 	@EventHandler
 	private void onQuit(PlayerQuitEvent event) {
 

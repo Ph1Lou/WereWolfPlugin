@@ -94,8 +94,8 @@ public class CommandTroubleMaker implements Commands {
         }
 
         ((AffectedPlayers)troublemaker).addAffectedPlayer(argUUID);
-        ((Power)troublemaker).setPower(false);
-        game.transportation(argUUID, Math.random()* Bukkit.getOnlinePlayers().size(),game.translate("werewolf.role.troublemaker.get_switch"));
-        player.sendMessage(game.translate("werewolf.role.troublemaker.troublemaker_perform",args[0]));
+        ((Power) troublemaker).setPower(false);
+        game.transportation(argUUID, Math.random() * 2 * Math.PI, game.translate("werewolf.role.troublemaker.get_switch"));
+        player.sendMessage(game.translate("werewolf.role.troublemaker.troublemaker_perform", args[0]));
     }
 }

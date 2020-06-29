@@ -35,7 +35,7 @@ public class Troublemaker extends RolesVillage implements AffectedPlayers, Power
         for (UUID uuid : game.getPlayersWW().keySet()) {
             PlayerWW plg = game.getPlayersWW().get(uuid);
             if (plg.isState(State.ALIVE)) {
-                game.transportation(uuid, i, game.translate("werewolf.role.troublemaker.troublemaker_death"));
+                game.transportation(uuid, i * 2 * Math.PI / game.getPlayerSize(), game.translate("werewolf.role.troublemaker.troublemaker_death"));
                 i++;
             }
         }

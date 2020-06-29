@@ -126,7 +126,7 @@ public class DeathManagement {
             Player player = Bukkit.getPlayer(playerUUID);
             plg.getRole().recoverPotionEffect(player);
         }
-        game.transportation(playerUUID, Math.random() * Bukkit.getOnlinePlayers().size(),game.translate("werewolf.announcement.resurrection"));
+        game.transportation(playerUUID, Math.random() * Math.PI * 2, game.translate("werewolf.announcement.resurrection"));
         plg.setState(State.ALIVE);
 
         game.checkVictory();

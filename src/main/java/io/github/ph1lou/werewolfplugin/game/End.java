@@ -53,9 +53,9 @@ public class End {
                 for (UUID uuid : game.getPlayersWW().keySet()) {
                     PlayerWW plg =game.getPlayersWW().get(uuid);
                     if (plg.isState(State.JUDGEMENT)) return;
-                    if (plg.isState(State.ALIVE) && plg.getRole() .isDisplay("werewolf.role.cupid.display")){
+                    if (plg.isState(State.ALIVE) && plg.getRole().isDisplay("werewolf.role.cupid.display")) {
                         Cupid cupid = (Cupid) plg.getRole();
-                        if(game.getLoversRange().get(0).contains(cupid.getAffectedPlayers().get(0))) {
+                        if (game.getLoversRange().get(0).contains(cupid.getAffectedPlayers().get(0))) {
                             team.add(uuid);
                         }
                     }

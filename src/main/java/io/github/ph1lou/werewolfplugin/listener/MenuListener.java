@@ -4,8 +4,10 @@ package io.github.ph1lou.werewolfplugin.listener;
 import io.github.ph1lou.werewolfapi.enumlg.Category;
 import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
 import io.github.ph1lou.werewolfapi.events.UpdateConfigEvent;
+import io.github.ph1lou.werewolfapi.events.UpdateLanguageEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
+import io.github.ph1lou.werewolfplugin.game.Option;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.wesjd.anvilgui.AnvilGUI;
@@ -25,24 +27,29 @@ import org.bukkit.inventory.PlayerInventory;
 import java.util.List;
 
 
-public class MenuListener implements Listener{
+public class MenuListener implements Listener {
 
-	private final GameManager game;
-	private final Main main;
-	
-	public MenuListener(Main main, GameManager game) {
-		this.game=game;
-		this.main=main;
-	}
+    private final GameManager game;
+    private final Main main;
 
-	@EventHandler
-	private void onConfigClose(InventoryCloseEvent event) {
-		Inventory inventory=event.getInventory();
+    public MenuListener(Main main, GameManager game) {
+        this.game = game;
+        this.main = main;
+    }
 
-		if(game.option.isConfigInventory(inventory)){
-			Bukkit.getPluginManager().callEvent(new UpdateConfigEvent(event.getPlayer().getUniqueId()));
-		}
-	}
+    @EventHandler
+    public void onLanguageChange(UpdateLanguageEvent event) {
+        game.option = new Option(main, game);
+    }
+
+    @EventHandler
+    private void onConfigClose(InventoryCloseEvent event) {
+        Inventory inventory = event.getInventory();
+
+        if (game.option.isConfigInventory(inventory)) {
+            Bukkit.getPluginManager().callEvent(new UpdateConfigEvent(event.getPlayer().getUniqueId()));
+        }
+    }
 
 
 	@EventHandler

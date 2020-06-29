@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.game;
 import fr.mrmicky.fastboard.FastBoard;
 import io.github.ph1lou.werewolfapi.*;
 import io.github.ph1lou.werewolfapi.enumlg.*;
+import io.github.ph1lou.werewolfapi.events.LoadEvent;
 import io.github.ph1lou.werewolfapi.events.StopEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.InvisibleState;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
@@ -38,17 +39,17 @@ public class GameManager implements WereWolfAPI {
     private final Map<UUID, PlayerWW> playerLG = new HashMap<>();
     private StateLG state;
     private Day dayState;
-    private final DeathManagement deathManage;
+    public RoleManagement roleManage;
     private final Vote vote = new Vote(this);
     public final ScoreBoard score = new ScoreBoard(this);
     public final Events events = new Events(this);
     public Option option;
-    public final RoleManagement roleManage;
+    private DeathManagement deathManage;
     public final LoversManagement loversManage = new LoversManagement(this);
     private final Config config = new Config();
-    private final End end;
-    private final Stuff stuff;
-    private final ScenariosLoader scenarios;
+    private End end;
+    private Stuff stuff;
+    private ScenariosLoader scenarios;
     private final Random r = new Random(System.currentTimeMillis());
     public WorldFillTask wft = null;
     private final Map<String, String> language = new HashMap<>();
@@ -65,21 +66,23 @@ public class GameManager implements WereWolfAPI {
 
 
     public GameManager(Main main) {
-
         this.main = main;
+    }
 
+    public void init() {
+        main.lang.updateLanguage(this);
         end = new End(main, this);
         deathManage = new DeathManagement(main, this);
-        main.lang.updateLanguage(this);
         roleManage = new RoleManagement(main, this);
         stuff = new Stuff(main, this);
-        scenarios = new ScenariosLoader(main, this);
         config.getConfig(this, "saveCurrent");
         stuff.load("saveCurrent");
-        Bukkit.getPluginManager().registerEvents(vote,main);
-        scenarios.init();
+        option = new Option(main, this);
+        scenarios = new ScenariosLoader(main, this);
+        Bukkit.getPluginManager().registerEvents(vote, main);
         setState(StateLG.LOBBY);
         setDay(Day.DAY);
+        Bukkit.getPluginManager().callEvent(new LoadEvent(this));
         LobbyTask start = new LobbyTask(main, this);
         start.runTaskTimer(main, 0, 20);
     }
@@ -170,6 +173,11 @@ public class GameManager implements WereWolfAPI {
     @Override
     public int getPlayerMax() {
         return playerMax;
+    }
+
+    @Override
+    public int getPlayerSize() {
+        return score.getPlayerSize();
     }
 
     @Override
@@ -361,9 +369,9 @@ public class GameManager implements WereWolfAPI {
             Player player = Bukkit.getPlayer(playerUUID);
             World world = player.getWorld();
             WorldBorder wb = world.getWorldBorder();
-            double a = d * 2 * Math.PI / Bukkit.getOnlinePlayers().size();
-            int x = (int) (Math.round(wb.getSize() / 3 * Math.cos(a) + world.getSpawnLocation().getX()));
-            int z = (int) (Math.round(wb.getSize() / 3 * Math.sin(a) + world.getSpawnLocation().getZ()));
+
+            int x = (int) (Math.round(wb.getSize() / 3 * Math.cos(d) + world.getSpawnLocation().getX()));
+            int z = (int) (Math.round(wb.getSize() / 3 * Math.sin(d) + world.getSpawnLocation().getZ()));
             player.setFoodLevel(20);
             player.setSaturation(20);
             player.setGameMode(GameMode.SURVIVAL);
@@ -389,6 +397,7 @@ public class GameManager implements WereWolfAPI {
         Bukkit.getPluginManager().callEvent(new StopEvent(this));
         scenarios.delete();
         main.currentGame = new GameManager(main);
+        main.currentGame.init();
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             FastBoard fastboard = new FastBoard(player);
