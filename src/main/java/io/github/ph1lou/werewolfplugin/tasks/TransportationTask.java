@@ -57,7 +57,7 @@ public class TransportationTask extends BukkitRunnable {
             cancel();
             return;
         }
-        game.score.updateBoard();
+        game.getScore().updateBoard();
         World world = game.getWorld();
         WorldBorder wb = world.getWorldBorder();
 
@@ -116,7 +116,7 @@ public class TransportationTask extends BukkitRunnable {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (game.getPlayersWW().containsKey(p.getUniqueId())) {
                     p.setGameMode(GameMode.SURVIVAL);
-                    p.sendMessage(game.translate("werewolf.announcement.start.message",game.score.conversion(game.getConfig().getTimerValues().get(TimerLG.INVULNERABILITY))));
+                    p.sendMessage(game.translate("werewolf.announcement.start.message", game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.INVULNERABILITY))));
                 } else {
                     p.teleport(game.getWorld().getSpawnLocation());
                     p.setGameMode(GameMode.SPECTATOR);

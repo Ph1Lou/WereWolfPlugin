@@ -16,20 +16,19 @@ import java.util.List;
 public class ScenariosLoader {
 
     private final Main main;
-    private final GameManager game;
     private final List<Scenarios> scenariosRegister = new ArrayList<>();
 
-    public ScenariosLoader(Main main, GameManager game) {
+    public ScenariosLoader(Main main) {
         this.main = main;
-        this.game = game;
         init();
     }
 
     public void init() {
+        GameManager game = main.getCurrentGame();
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new PlayerListener(main, game), main);
-        pm.registerEvents(game.events,main);
-        pm.registerEvents(new MenuListener(main,game), main);
+        pm.registerEvents(game.getEvents(), main);
+        pm.registerEvents(new MenuListener(main, game), main);
         pm.registerEvents(new SmallFeaturesListener(main,game), main);
         pm.registerEvents(new EnchantmentListener(game), main);
         pm.registerEvents(new ChatListener(game), main);

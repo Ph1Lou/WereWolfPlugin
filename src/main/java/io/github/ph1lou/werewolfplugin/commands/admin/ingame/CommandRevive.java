@@ -64,7 +64,7 @@ public class CommandRevive implements Commands {
 
         Roles role = plg.getRole();
         game.getConfig().getRoleCount().put(role.getDisplay(), game.getConfig().getRoleCount().get(role.getDisplay()) + 1);
-        game.score.addPlayerSize();
+        game.getScore().addPlayerSize();
         game.resurrection(uuid);
 
         for (Player p : Bukkit.getOnlinePlayers()) {

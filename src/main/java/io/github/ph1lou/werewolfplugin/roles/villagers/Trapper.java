@@ -104,7 +104,7 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
 
         for (UUID uuid : getAffectedPlayers()) {
             if (game.getPlayersWW().get(uuid).isState(State.ALIVE) && Bukkit.getPlayer(uuid) != null) {
-                stringBuilder.append("§b ").append(game.getPlayersWW().get(uuid).getName()).append(" ").append(game.updateArrow(player, Bukkit.getPlayer(uuid).getLocation()));
+                stringBuilder.append("§b ").append(game.getPlayersWW().get(uuid).getName()).append(" ").append(game.getScore().updateArrow(player, Bukkit.getPlayer(uuid).getLocation()));
             }
         }
 

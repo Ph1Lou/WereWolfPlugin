@@ -63,7 +63,7 @@ public class Comedian extends RolesWithLimitedSelectionDuration implements Potio
 
         player.removePotionEffect(getLastPotionEffect());
         if (getPotionEffects().size() < 4) {
-            player.sendMessage(game.translate("werewolf.role.comedian.wear_mask_message", game.conversion(game.getConfig().getTimerValues().get(TimerLG.POWER_DURATION))));
+            player.sendMessage(game.translate("werewolf.role.comedian.wear_mask_message", game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.POWER_DURATION))));
         }
     }
 

@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.game;
 import fr.mrmicky.fastboard.FastBoard;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.RoleRegister;
+import io.github.ph1lou.werewolfapi.ScoreAPI;
 import io.github.ph1lou.werewolfapi.enumlg.State;
 import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
@@ -22,13 +23,13 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 
-public class ScoreBoard {
+public class ScoreBoard implements ScoreAPI {
 
 	private final GameManager game;
-	private int group_size =5;
-	private int player=0;
-	private int timer=0;
-	private int role=0;
+	private int group_size = 5;
+	private int player = 0;
+	private int timer = 0;
+	private int role = 0;
 	private final List<String> scoreboard1 = new ArrayList<>();
 	private final List<String> scoreboard2 = new ArrayList<>();
 	private final List<String> scoreboard3 = new ArrayList<>();
@@ -165,33 +166,35 @@ public class ScoreBoard {
 				roles.add(0,up.substring(0,Math.min(30,up.length())));
 
 
-				String down = game.translate("werewolf.score_board.page",inf/6+1,total);
+				String down = game.translate("werewolf.score_board.page", inf / 6 + 1, total);
 
-				roles.add(roles.size(),down.substring(0,Math.min(30,down.length())));
+				roles.add(roles.size(), down.substring(0, Math.min(30, down.length())));
 
-			}
-			else roles.clear();
+			} else roles.clear();
 		}
 	}
-	
+
+	@Override
 	public void getKillCounter() {
-		
-		for(UUID uuid:game.getPlayersWW().keySet()) {
-			int i =0;
-			while(i< kill_score.size() && game.getPlayersWW().get(uuid).getNbKill()<game.getPlayersWW().get(kill_score.get(i)).getNbKill()) {
+
+		for (UUID uuid : game.getPlayersWW().keySet()) {
+			int i = 0;
+			while (i < kill_score.size() && game.getPlayersWW().get(uuid).getNbKill() < game.getPlayersWW().get(kill_score.get(i)).getNbKill()) {
 				i++;
 			}
 			kill_score.add(i, uuid);
 		}
 
-		scoreboard3.add(game.translate("werewolf.score_board.score").substring(0,Math.min(30,game.translate("werewolf.score_board.score").length())));
-		for(int i = 0; i<Math.min(game.getPlayersWW().size(),10); i++) {
-			scoreboard3.add(game.getPlayersWW().get(kill_score.get(i)).getName() +"§3 "+game.getPlayersWW().get(kill_score.get(i)).getNbKill());
+		scoreboard3.add(game.translate("werewolf.score_board.score").substring(0, Math.min(30, game.translate("werewolf.score_board.score").length())));
+		for (int i = 0; i < Math.min(game.getPlayersWW().size(), 10); i++) {
+			scoreboard3.add(game.getPlayersWW().get(kill_score.get(i)).getName() + "§3 " + game.getPlayersWW().get(kill_score.get(i)).getNbKill());
 		}
-		String line=game.translate("werewolf.score_board.game_name");
-		scoreboard3.add(line.substring(0,Math.min(30,line.length())));
-		line=game.translate("werewolf.score_board.name",game.getGameName());
-		scoreboard3.add(line.substring(0,Math.min(30,line.length())));
+		String line = game.translate("werewolf.score_board.game_name");
+		scoreboard3.add(line.substring(0, Math.min(30, line.length())));
+		line = game.translate("werewolf.score_board.name", game.getGameName());
+		scoreboard3.add(line.substring(0, Math.min(30, line.length())));
+
+		updateBoard();
 	}
 
 	public int midDistance(Player player) {
@@ -204,11 +207,13 @@ public class ScoreBoard {
 		return distance / 300 * 300;
 	}
 
+	@Override
 	public void actionBar(Player player) {
 
-		UUID playerUUID=player.getUniqueId();
+		UUID playerUUID = player.getUniqueId();
 
-		if(!game.getPlayersWW().containsKey(playerUUID) || !game.getPlayersWW().get(playerUUID).isState(State.ALIVE)) return;
+		if (!game.getPlayersWW().containsKey(playerUUID) || !game.getPlayersWW().get(playerUUID).isState(State.ALIVE))
+			return;
 
 		StringBuilder stringbuilder = new StringBuilder();
 		int d = midDistance(player);
@@ -243,142 +248,122 @@ public class ScoreBoard {
 		if (!game.getConfig().getConfigValues().get(ToolLG.HIDE_COMPOSITION) && TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) % 60 >= 30) {
 			updateScoreBoardRole();
 		}
-		
+
 		if (roles.isEmpty()) {
 			if (game.isState(StateLG.LOBBY)) {
 				updateScoreBoard1();
-			}
-			else updateGlobalScoreBoard2();
+			} else updateGlobalScoreBoard2();
 		}
 
-		for (FastBoard board : game.boards.values()) {
+		for (FastBoard board : game.getBoards().values()) {
 
-			if(game.isState(StateLG.END)) {
+			if (game.isState(StateLG.END)) {
 				board.updateLines(scoreboard3);
-			}
-			else if(!roles.isEmpty()){
+			} else if (!roles.isEmpty()) {
 				board.updateLines(roles);
-			}
-			else if(game.isState(StateLG.LOBBY)) {
+			} else if (game.isState(StateLG.LOBBY)) {
 				board.updateLines(scoreboard1);
-			}
-			else updateScoreBoard2(board);
+			} else updateScoreBoard2(board);
 		}
 
 	}
 
+	@Override
 	public String updateArrow(Player player, Location target) {
 
 		Location location = player.getLocation();
-		String arrow ;
+		String arrow;
 		location.setY(target.getY());
 		Vector dirToMiddle = target.toVector().subtract(player.getEyeLocation().toVector()).normalize();
 		Integer distance = (int) Math.round(target.distance(location));
 		Vector playerDirection = player.getEyeLocation().getDirection();
 		double angle = dirToMiddle.angle(playerDirection);
-		double det=dirToMiddle.getX()*playerDirection.getZ()-dirToMiddle.getZ()*playerDirection.getX();
+		double det = dirToMiddle.getX() * playerDirection.getZ() - dirToMiddle.getZ() * playerDirection.getX();
 
 		angle=angle*Math.signum(det);
 
 		if (angle>-Math.PI/8 && angle<Math.PI/8) {
 			arrow="⬆";
-		}
-		else if (angle>-3*Math.PI/8 && angle<-Math.PI/8) {
+		} else if (angle>-3*Math.PI/8 && angle<-Math.PI/8) {
 			arrow="⬈";
-		}
-		else if (angle<3*Math.PI/8 && angle>Math.PI/8) {
+		} else if (angle<3*Math.PI/8 && angle>Math.PI/8) {
 			arrow="⬉";
-		}
-		else if (angle>3*Math.PI/8 && angle<5*Math.PI/8) {
+		} else if (angle>3*Math.PI/8 && angle<5*Math.PI/8) {
 			arrow="←";
-		}
-		else if (angle<-3*Math.PI/8 && angle>-5*Math.PI/8) {
+		} else if (angle<-3*Math.PI/8 && angle>-5*Math.PI/8) {
 			arrow="➡";
-		}
-		else if (angle<-5*Math.PI/8 && angle>-7*Math.PI/8) {
-			arrow="⬊";
-		}
-		else if (angle>5*Math.PI/8 && angle<7*Math.PI/8) {
-			arrow="⬋";
-		}
-		else arrow="⬇";
-			
-			return distance+" §l"+arrow;
+		} else if (angle<-5*Math.PI/8 && angle>-7*Math.PI/8) {
+			arrow = "⬊";
+		} else if (angle > 5 * Math.PI / 8 && angle < 7 * Math.PI / 8) {
+			arrow = "⬋";
+		} else arrow = "⬇";
+
+		return distance + " §l" + arrow;
 	}
 
+	@Override
 	public String conversion(int timer) {
 
 		String value;
-		float sign=Math.signum(timer);
-		timer=Math.abs(timer);
+		float sign = Math.signum(timer);
+		timer = Math.abs(timer);
 
-		if(timer%60>9) {
-			value=timer%60+"s";
-		}
-		else value="0"+timer%60+"s";
+		if (timer % 60 > 9) {
+			value = timer % 60 + "s";
+		} else value = "0" + timer % 60 + "s";
 
 		if(timer/3600>0) {
 
 			if(timer%3600/60>9) {
 				value = timer/3600+"h"+timer%3600/60+"m"+value;
-			}
-			else value = timer/3600+"h0"+timer%3600/60+"m"+value;
+			} else value = timer/3600+"h0"+timer%3600/60+"m"+value;
+		} else if (timer / 60 > 0) {
+			value = timer / 60 + "m" + value;
 		}
-
-		else if (timer/60>0){
-			value = timer/60+"m"+value;
-		}
-		if(sign<0) value="-"+value;
+		if (sign < 0) value = "-" + value;
 
 		return value;
 	}
 
 
-	public void groupSizeChange() {
-
-		if (player <= group_size * 3 && group_size > 3) {
-			group_size--;
-
-			for (Player p : Bukkit.getOnlinePlayers()) {
-				p.sendMessage(game.translate("werewolf.commands.admin.group.group_change", group_size));
-				Title.sendTitle(p, 20, 60, 20, game.translate("werewolf.commands.admin.group.top_title"), game.translate("werewolf.commands.admin.group.bot_title", game.score.getGroup()));
-			}
-		}
-	}
-
+	@Override
 	public int getRole() {
 		return role;
 	}
 
+	@Override
 	public void setRole(int role) {
 		this.role = role;
 	}
 
+	@Override
 	public void addTimer() {
 		this.timer++;
 	}
-	
+
+	@Override
 	public int getPlayerSize() {
 		return player;
 	}
 
+	@Override
 	public void removePlayerSize() {
 		this.player = this.player - 1;
 	}
+
+	@Override
 	public void addPlayerSize() {
-		this.player = this.player+1;
+		this.player = this.player + 1;
 	}
-	
+
+	@Override
 	public int getGroup() {
 		return this.group_size;
 	}
 
+	@Override
 	public void setGroup(int group) {
 		this.group_size = group;
 	}
 
-
-	public List<String> getScoreboard3() {
-		return scoreboard3;
-	}
 }

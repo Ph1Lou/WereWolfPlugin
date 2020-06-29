@@ -18,31 +18,30 @@ import java.util.UUID;
 
 
 public class RoleManagement {
-	
-	private final GameManager game;
+
 	private final Main main;
 
-	public RoleManagement(Main main, GameManager game) {
-		this.game=game;
-		this.main=main;
+	public RoleManagement(Main main) {
+		this.main = main;
 	}
-	
+
 	public void repartitionRolesLG() {
 
+		GameManager game = main.getCurrentGame();
 		List<UUID> playersUUID = new ArrayList<>(game.getPlayersWW().keySet());
 		List<RoleRegister> config = new ArrayList<>();
 		game.getConfig().getConfigValues().put(ToolLG.CHAT, false);
-		game.getConfig().getRoleCount().put("werewolf.role.villager.display", game.getConfig().getRoleCount().get("werewolf.role.villager.display") + playersUUID.size() - game.score.getRole());
+		game.getConfig().getRoleCount().put("werewolf.role.villager.display", game.getConfig().getRoleCount().get("werewolf.role.villager.display") + playersUUID.size() - game.getScore().getRole());
 
-		for (RoleRegister roleRegister:game.getRolesRegister()) {
+		for (RoleRegister roleRegister : game.getRolesRegister()) {
 			for (int i = 0; i < game.getConfig().getRoleCount().get(roleRegister.getKey()); i++) {
 				config.add(roleRegister);
 			}
 		}
 
 		while (!playersUUID.isEmpty()) {
-			
-			int n =(int) Math.floor(game.getRandom().nextFloat()*playersUUID.size());
+
+			int n = (int) Math.floor(game.getRandom().nextFloat() * playersUUID.size());
 			UUID playerUUID = playersUUID.get(n);
 			PlayerWW plg = game.getPlayersWW().get(playerUUID);
 
@@ -70,11 +69,12 @@ public class RoleManagement {
 
 	public void brotherLife() {
 
+		GameManager game = main.getCurrentGame();
 		int counter = 0;
 		double health = 0;
-		for (UUID uuid:game.getPlayersWW().keySet()) {
+		for (UUID uuid : game.getPlayersWW().keySet()) {
 
-			PlayerWW plg= game.getPlayersWW().get(uuid);
+			PlayerWW plg = game.getPlayersWW().get(uuid);
 
 			if (plg.isState(State.ALIVE) && plg.getRole().isDisplay("werewolf.role.siamese_twin.display") && Bukkit.getPlayer(uuid) != null) {
 				Player c = Bukkit.getPlayer(uuid);
@@ -100,16 +100,17 @@ public class RoleManagement {
 	}
 
 	public UUID autoSelect(UUID playerUUID) {
-		
+
+		GameManager game = main.getCurrentGame();
 		List<UUID> players = new ArrayList<>();
-		for(UUID uuid:game.getPlayersWW().keySet()) {
-			if(game.getPlayersWW().get(uuid).isState(State.ALIVE) && !uuid.equals(playerUUID)) {
+		for (UUID uuid : game.getPlayersWW().keySet()) {
+			if (game.getPlayersWW().get(uuid).isState(State.ALIVE) && !uuid.equals(playerUUID)) {
 				players.add(uuid);
-			}	
+			}
 		}
-		if(players.isEmpty()) {
+		if (players.isEmpty()) {
 			return playerUUID;
 		}
-		return 	players.get((int) Math.floor(game.getRandom().nextFloat()*players.size()));
+		return players.get((int) Math.floor(game.getRandom().nextFloat() * players.size()));
 	}
 }

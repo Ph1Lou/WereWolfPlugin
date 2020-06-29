@@ -62,7 +62,7 @@ public class Detective extends RolesWithLimitedSelectionDuration implements Affe
         }
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        player.sendMessage(game.translate("werewolf.role.detective.inspection_message", game.conversion(game.getConfig().getTimerValues().get(TimerLG.POWER_DURATION))));
+        player.sendMessage(game.translate("werewolf.role.detective.inspection_message", game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.POWER_DURATION))));
     }
 
 

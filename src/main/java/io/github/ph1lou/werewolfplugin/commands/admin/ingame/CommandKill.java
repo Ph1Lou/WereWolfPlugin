@@ -56,7 +56,7 @@ public class CommandKill implements Commands {
             return;
         }
         if (game.isState(StateLG.START)) {
-            game.score.removePlayerSize();
+            game.getScore().removePlayerSize();
             game.getPlayersWW().remove(argUUID);
             sender.sendMessage(game.translate("werewolf.commands.kill.remove_role"));
             return;

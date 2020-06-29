@@ -26,15 +26,15 @@ public class CommandChange implements Commands {
             return;
         }
 
-        if(!game.isState(StateLG.LOBBY)) {
+        if (!game.isState(StateLG.LOBBY)) {
             game.translate("werewolf.check.game_in_progress");
             return;
         }
 
         sender.sendMessage(game.translate("werewolf.commands.admin.change.in_progress"));
-        if(game.wft!=null){
-            game.wft.stop();
-            game.wft=null;
+        if (game.getWft() != null) {
+            game.getWft().stop();
+            game.setWft(null);
         }
         game.deleteMap();
         game.createMap();

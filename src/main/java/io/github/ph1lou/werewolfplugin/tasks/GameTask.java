@@ -33,7 +33,7 @@ public class GameTask extends BukkitRunnable {
 
 		counter++;
 		for (Player p : Bukkit.getOnlinePlayers()) {
-			game.score.actionBar(p);
+			game.getScore().actionBar(p);
 		}
 		if (counter % 4 != 0) return;
 
@@ -41,11 +41,11 @@ public class GameTask extends BukkitRunnable {
 		WorldBorder wb = world.getWorldBorder();
 		long time = world.getTime();
 		Bukkit.getPluginManager().callEvent(new UpdateEvent());
-		game.option.updateSelectionTimer();
-		game.option.updateSelectionBorder();
-		game.score.updateBoard();
-		game.loversManage.detectionAmnesiacLover();
-		game.roleManage.brotherLife();
+		game.getOption().updateSelectionTimer();
+		game.getOption().updateSelectionBorder();
+		game.getScore().updateBoard();
+		game.getLoversManage().detectionAmnesiacLover();
+		game.getRoleManage().brotherLife();
 
 		if (game.getConfig().getTimerValues().get(TimerLG.INVULNERABILITY) == 0) {
 			for (Player p : Bukkit.getOnlinePlayers()) {
@@ -67,7 +67,7 @@ public class GameTask extends BukkitRunnable {
 				} else p.playSound(p.getLocation(), Sound.EXPLODE, 1, 20);
 			}
 			game.getConfig().setTrollSV(false);
-			game.roleManage.repartitionRolesLG();
+			game.getRoleManage().repartitionRolesLG();
 		}
 
 		if (game.getConfig().getTimerValues().get(TimerLG.ROLE_DURATION) - 120 == 0 && game.getConfig().isTrollSV()) {
@@ -101,7 +101,7 @@ public class GameTask extends BukkitRunnable {
 
 			if (game.getConfig().getTimerValues().get(TimerLG.LOVER_DURATION) == 0) {
 				Bukkit.getPluginManager().callEvent(new LoversRepartitionEvent());
-				game.loversManage.autoLovers();
+				game.getLoversManage().autoLovers();
 			}
 			game.getConfig().getTimerValues().put(TimerLG.LOVER_DURATION, game.getConfig().getTimerValues().get(TimerLG.LOVER_DURATION) - 1);
 
@@ -151,7 +151,7 @@ public class GameTask extends BukkitRunnable {
 
 		world.setTime((long) (time + 20 * (600f / game.getConfig().getTimerValues().get(TimerLG.DAY_DURATION) - 1)));
 
-		game.score.addTimer();
+		game.getScore().addTimer();
 	}
 
 }

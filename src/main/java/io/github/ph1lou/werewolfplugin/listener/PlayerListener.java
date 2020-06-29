@@ -215,7 +215,7 @@ public class PlayerListener implements Listener {
 
 		FastBoard fastboard = new FastBoard(player);
 		fastboard.updateTitle(game.translate("werewolf.score_board.title"));
-		game.boards.put(uuid, fastboard);
+		game.getBoards().put(uuid, fastboard);
 		Title.sendTabTitle(player, game.translate("werewolf.tab.top"), game.translate("werewolf.tab.bot"));
 
 		if (game.isState(StateLG.LOBBY)) {
@@ -245,10 +245,10 @@ public class PlayerListener implements Listener {
 						plg.getRole().recoverPower();
 					}
 					if (plg.getAnnounceCursedLoversAFK()) {
-						game.loversManage.announceCursedLovers(player);
+						game.getLoversManage().announceCursedLovers(player);
 					}
 					if (plg.getAnnounceLoversAFK()) {
-						game.loversManage.announceLovers(player);
+						game.getLoversManage().announceLovers(player);
 					}
 				}
 			}
@@ -276,9 +276,7 @@ public class PlayerListener implements Listener {
 			}
 		}
 
-		if (game.isState(StateLG.END)) {
-			fastboard.updateLines(game.score.getScoreboard3());
-		}
+		game.getScore().updateBoard();
 		game.updateNameTag();
 		game.updateCompass();
 	}
@@ -288,8 +286,8 @@ public class PlayerListener implements Listener {
 
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			Title.sendTabTitle(player, game.translate("werewolf.tab.top"), game.translate("werewolf.tab.bot"));
-			if (game.boards.containsKey(player.getUniqueId())) {
-				game.boards.get(player.getUniqueId()).updateTitle(game.translate("werewolf.score_board.title"));
+			if (game.getBoards().containsKey(player.getUniqueId())) {
+				game.getBoards().get(player.getUniqueId()).updateTitle(game.translate("werewolf.score_board.title"));
 			}
 			player.closeInventory();
 		}
@@ -302,20 +300,20 @@ public class PlayerListener implements Listener {
 		String playerName = player.getName();
 		UUID uuid = player.getUniqueId();
 
-		FastBoard fastboard = game.boards.remove(player.getUniqueId());
+		FastBoard fastboard = game.getBoards().remove(player.getUniqueId());
 		if (fastboard != null) {
 			fastboard.delete();
 		}
 
-        if(game.getPlayersWW().containsKey(uuid)) {
+		if (game.getPlayersWW().containsKey(uuid)) {
 
 			PlayerWW plg = game.getPlayersWW().get(uuid);
 
 			if (game.isState(StateLG.LOBBY)) {
-				game.score.removePlayerSize();
+				game.getScore().removePlayerSize();
 				game.getPlayersWW().remove(uuid);
 				game.checkQueue();
-				event.setQuitMessage(game.translate("werewolf.announcement.leave", game.score.getPlayerSize(), game.score.getRole(), player.getName()));
+				event.setQuitMessage(game.translate("werewolf.announcement.leave", game.getScore().getPlayerSize(), game.getScore().getRole(), player.getName()));
 				game.clearPlayer(player);
 			} else if (game.isState(StateLG.END) || !plg.isState(State.ALIVE)) {
 				player.setGameMode(GameMode.SPECTATOR);

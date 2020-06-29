@@ -80,7 +80,7 @@ public class Citizen extends RolesVillage implements LimitedUse, AffectedPlayers
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
         if (getUse() < 2 || hasPower()) {
-            player.sendMessage(game.translate("werewolf.role.citizen.affect_votes",hasPower() ? 1 : 0, 2 - getUse(), game.conversion(game.getConfig().getTimerValues().get(TimerLG.CITIZEN_DURATION))));
+            player.sendMessage(game.translate("werewolf.role.citizen.affect_votes", hasPower() ? 1 : 0, 2 - getUse(), game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.CITIZEN_DURATION))));
         }
     }
 

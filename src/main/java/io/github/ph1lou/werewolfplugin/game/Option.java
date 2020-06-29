@@ -49,14 +49,14 @@ public class Option {
 
 	private Category category = Category.VILLAGER;
 
-	public Option(Main main, GameManager game) {
-		this.main=main;
-		this.game=game;
+	public Option(Main main) {
+		this.main = main;
+		this.game = main.getCurrentGame();
 		invTool = Bukkit.createInventory(null, 54, game.translate("werewolf.menu.name"));
 		invRole = Bukkit.createInventory(null, 54, game.translate("werewolf.menu.roles.name"));
 		invTimer = Bukkit.createInventory(null, 27, game.translate("werewolf.menu.timers.name"));
 		invConfig = Bukkit.createInventory(null, 27, game.translate("werewolf.menu.global.name"));
-		invScenario = Bukkit.createInventory(null, Math.min(54,(main.getRegisterScenarios().size()/9+2)*9), game.translate("werewolf.menu.scenarios.name"));
+		invScenario = Bukkit.createInventory(null, Math.min(54, (main.getRegisterScenarios().size() / 9 + 2) * 9), game.translate("werewolf.menu.scenarios.name"));
 		invBorder = Bukkit.createInventory(null, 18, game.translate("werewolf.menu.border.name"));
 		invSave = Bukkit.createInventory(null, 18, game.translate("werewolf.menu.save.name"));
 		invStuff = Bukkit.createInventory(null, 18, game.translate("werewolf.menu.stuff.name"));
@@ -337,7 +337,7 @@ public class Option {
 			String key = lore.get(lore.size()-1);
 			int j = game.getConfig().getRoleCount().get(key);
 			if (j > 0) {
-				game.setRoleSize(game.score.getRole() - 1);
+				game.getScore().setRole(game.getScore().getRole() - 1);
 				game.getConfig().getRoleCount().put(key, j - 1);
 			}
 		}
@@ -347,10 +347,10 @@ public class Option {
 
 		if(!game.isState(StateLG.GAME)) {
 			List<String> lore = this.invRole.getItem(i).getItemMeta().getLore();
-			String key = lore.get(lore.size()-1);
+			String key = lore.get(lore.size() - 1);
 			int j = game.getConfig().getRoleCount().get(key);
 			game.getConfig().getRoleCount().put(key, j + 1);
-			game.setRoleSize(game.score.getRole() + 1);
+			game.getScore().setRole(game.getScore().getRole() + 1);
 		}
 	}
 
@@ -436,7 +436,7 @@ public class Option {
 
 	public void updateSelectionTimer(int j) {
 
-		String c = game.score.conversion(game.getConfig().getTimerValues().get(TimerLG.values()[j]));
+		String c = game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.values()[j]));
 
 		invTimer.setItem(1, changeMeta(Material.STONE_BUTTON, game.translate("werewolf.utils.display", "-10m", c), 1, null));
 		invTimer.setItem(2, changeMeta(Material.STONE_BUTTON, game.translate("werewolf.utils.display", "-1m", c), 1, null));
@@ -450,7 +450,7 @@ public class Option {
 			if (i == j) {
 				invTimer.setItem(9 + i, changeMeta(Material.FEATHER, game.translate(TimerLG.values()[i].getKey(), c), 1, null));
 			} else
-				invTimer.setItem(9 + i, changeMeta(Material.ANVIL, game.translate(TimerLG.values()[i].getKey(), game.score.conversion(game.getConfig().getTimerValues().get(TimerLG.values()[i]))), 1, null));
+				invTimer.setItem(9 + i, changeMeta(Material.ANVIL, game.translate(TimerLG.values()[i].getKey(), game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.values()[i]))), 1, null));
 		}
 	}
 
@@ -486,13 +486,13 @@ public class Option {
 	}
 
 	public void resetRole() {
-		for (RoleRegister roleRegister:game.getRolesRegister()) {
+		for (RoleRegister roleRegister : game.getRolesRegister()) {
 			game.getConfig().getRoleCount().put(roleRegister.getKey(), 0);
 		}
 		game.getConfig().setAmnesiacLoverSize(0);
 		game.getConfig().setLoverSize(0);
 		game.getConfig().setCursedLoverSize(0);
-		game.setRoleSize(0);
+		game.getScore().setRole(0);
 		updateSelection();
 	}
 

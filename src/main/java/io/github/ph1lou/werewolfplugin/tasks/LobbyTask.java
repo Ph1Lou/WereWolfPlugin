@@ -29,17 +29,16 @@ public class LobbyTask extends BukkitRunnable {
             return;
         }
 
-        game.score.updateBoard();
+        game.getScore().updateBoard();
 
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (game.wft == null) {
+            if (game.getWft() == null) {
                 if (p.isOp() || p.hasPermission("a.use") || p.hasPermission("a.generation.use") || game.getHosts().contains(p.getUniqueId())) {
                     Title.sendActionBar(p, game.translate("werewolf.action_bar.generation"));
                 }
-            } else if(game.wft.getPercentageCompleted()<100){
-                Title.sendActionBar(p, game.translate("werewolf.action_bar.progress", new DecimalFormat("0.0").format(game.wft.getPercentageCompleted())));
-            }
-            else{
+            } else if (game.getWft().getPercentageCompleted() < 100) {
+                Title.sendActionBar(p, game.translate("werewolf.action_bar.progress", new DecimalFormat("0.0").format(game.getWft().getPercentageCompleted())));
+            } else {
                 Title.sendActionBar(p, game.translate("werewolf.action_bar.complete"));
             }
         }

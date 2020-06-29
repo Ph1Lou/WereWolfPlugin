@@ -40,18 +40,18 @@ public class CommandStart implements Commands {
             sender.sendMessage(game.translate("werewolf.check.already_begin"));
             return;
         }
-        if (game.score.getRole() - game.score.getPlayerSize() > 0) {
+        if (game.getScore().getRole() - game.getScore().getPlayerSize() > 0) {
             sender.sendMessage(game.translate("werewolf.commands.admin.start.too_much_role"));
             return;
         }
 
-        if(game.wft == null){
+        if (game.getWft() == null) {
             sender.sendMessage(game.translate("werewolf.commands.admin.generation.not_generated"));
             return;
         }
 
-        if(game.wft.getPercentageCompleted()<100){
-            sender.sendMessage(game.translate("werewolf.commands.admin.generation.not_finished",new DecimalFormat("0.0").format(game.wft.getPercentageCompleted())));
+        if (game.getWft().getPercentageCompleted() < 100) {
+            sender.sendMessage(game.translate("werewolf.commands.admin.generation.not_finished", new DecimalFormat("0.0").format(game.getWft().getPercentageCompleted())));
             return;
         }
 

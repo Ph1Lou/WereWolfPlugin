@@ -33,7 +33,7 @@ public class End {
 
     public void check_victory() {
 
-        int player = game.score.getPlayerSize();
+        int player = game.getScore().getPlayerSize();
 
         if (!game.getCursedLoversRange().isEmpty()) {
             return;
@@ -104,13 +104,13 @@ public class End {
             return;
         }
 
-        if (!teamsAngel.isEmpty() && teamsAngel.get(0).size() > 1 && teamsAngel.get(0).size() == game.score.getPlayerSize()) {
+        if (!teamsAngel.isEmpty() && teamsAngel.get(0).size() > 1 && teamsAngel.get(0).size() == game.getScore().getPlayerSize()) {
             winner = "werewolf.role.guardian_angel.display";
             fin();
             return;
         }
 
-        if (!teamsSuccubus.isEmpty() && teamsSuccubus.get(0).size() > 1 && teamsSuccubus.get(0).size() == game.score.getPlayerSize()) {
+        if (!teamsSuccubus.isEmpty() && teamsSuccubus.get(0).size() > 1 && teamsSuccubus.get(0).size() == game.getScore().getPlayerSize()) {
             winner = "werewolf.role.succubus.display";
             fin();
             return;
@@ -186,9 +186,8 @@ public class End {
 
         game.setState(StateLG.END);
 
-        game.score.getKillCounter();
+        game.getScore().getKillCounter();
 
-        game.score.updateBoard();
         game.getConfig().getConfigValues().put(ToolLG.CHAT, true);
 
 

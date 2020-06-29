@@ -64,33 +64,33 @@ public class Events implements Listener {
 	@EventHandler
 	public void onActionBarRequest(ActionBarEvent event){
 
-		StringBuilder stringBuilder=new StringBuilder(event.getActionBar());
+		StringBuilder stringBuilder = new StringBuilder(event.getActionBar());
 
-		if (game.events.chest_has_been_open.isEmpty()) return;
+		if (game.getEvents().chest_has_been_open.isEmpty()) return;
 
-		if(Bukkit.getPlayer(event.getPlayerUUID())==null) return;
+		if (Bukkit.getPlayer(event.getPlayerUUID()) == null) return;
 
 		Player player = Bukkit.getPlayer(event.getPlayerUUID());
 
-		for (int i = 0; i < game.events.chest_location.size(); i++) {
-			if (!game.events.chest_has_been_open.get(game.events.chest_location.get(i))) {
+		for (int i = 0; i < game.getEvents().chest_location.size(); i++) {
+			if (!game.getEvents().chest_has_been_open.get(game.getEvents().chest_location.get(i))) {
 				stringBuilder.append("§a");
 			} else stringBuilder.append("§6");
-			stringBuilder.append(" ").append(game.score.updateArrow(player, game.events.chest_location.get(i)));
+			stringBuilder.append(" ").append(game.getScore().updateArrow(player, game.getEvents().chest_location.get(i)));
 		}
 		event.setActionBar(stringBuilder.toString());
 	}
 
 	@EventHandler
 	public void event1(ChestEvent event) {
-		
+
 		World world = game.getWorld();
-		WorldBorder wb =world.getWorldBorder();
-		int nb_target = game.score.getPlayerSize() / 3;
-		if(nb_target<2) {
-			nb_target=2;
+		WorldBorder wb = world.getWorldBorder();
+		int nb_target = game.getScore().getPlayerSize() / 3;
+		if (nb_target < 2) {
+			nb_target = 2;
 		}
-		for (int i =0;i<nb_target;i++) {
+		for (int i = 0; i < nb_target; i++) {
 
 			double a = Math.random() * 2 * Math.PI;
 			int x = (int) (Math.round(wb.getSize() / 3 * Math.cos(a) + world.getSpawnLocation().getX()));
@@ -112,11 +112,11 @@ public class Events implements Listener {
 		if (event.getInventory().getType().equals(InventoryType.CHEST)) {
 			if (event.getInventory().getHolder() instanceof Chest) {
 				Location location = ((Chest) event.getInventory().getHolder()).getLocation();
-				if (game.events.chest_location.contains(location)) {
-					game.events.chest_has_been_open.put(location, true);
-					if (!game.events.chest_has_been_open.containsValue(false)) {
-						game.events.chest_location.clear();
-						game.events.chest_has_been_open.clear();
+				if (game.getEvents().chest_location.contains(location)) {
+					game.getEvents().chest_has_been_open.put(location, true);
+					if (!game.getEvents().chest_has_been_open.containsValue(false)) {
+						game.getEvents().chest_location.clear();
+						game.getEvents().chest_has_been_open.clear();
 						Bukkit.broadcastMessage(game.translate("werewolf.event.all_chest_find"));
 						game.getConfig().getConfigValues().put(ToolLG.EVENT_SEER_DEATH, true);
 					}

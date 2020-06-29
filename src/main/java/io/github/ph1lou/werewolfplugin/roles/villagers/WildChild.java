@@ -161,7 +161,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
         if(!transformed) {
-            player.sendMessage(game.translate("werewolf.role.wild_child.design_model", game.conversion(game.getConfig().getTimerValues().get(TimerLG.MODEL_DURATION))));
+            player.sendMessage(game.translate("werewolf.role.wild_child.design_model", game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.MODEL_DURATION))));
         }
         else {
             UUID modelUUID = getAffectedPlayers().get(0);
@@ -201,7 +201,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     public Player recoverPower() {
         Player player = super.recoverPower();
         if(player==null) return null;
-        player.sendMessage(game.translate("werewolf.role.wild_child.design_model", game.conversion(game.getConfig().getTimerValues().get(TimerLG.MODEL_DURATION))));
+        player.sendMessage(game.translate("werewolf.role.wild_child.design_model", game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.MODEL_DURATION))));
         return player;
     }
 

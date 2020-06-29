@@ -70,7 +70,7 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
         }
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        player.sendMessage(game.translate("werewolf.role.seer.see_camp_message", game.conversion(game.getConfig().getTimerValues().get(TimerLG.POWER_DURATION))));
+        player.sendMessage(game.translate("werewolf.role.seer.see_camp_message", game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.POWER_DURATION))));
     }
 
 

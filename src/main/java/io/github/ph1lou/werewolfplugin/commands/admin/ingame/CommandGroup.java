@@ -27,8 +27,8 @@ public class CommandGroup implements Commands {
             return;
         }
         for (Player p : Bukkit.getOnlinePlayers()) {
-            Title.sendTitle(p, 20, 60, 20, game.translate("werewolf.commands.admin.group.top_title"), game.translate("werewolf.commands.admin.group.bot_title", game.score.getGroup()));
-            p.sendMessage(game.translate("werewolf.commands.admin.group.respect_limit", game.score.getGroup()));
+            Title.sendTitle(p, 20, 60, 20, game.translate("werewolf.commands.admin.group.top_title"), game.translate("werewolf.commands.admin.group.bot_title", game.getScore().getGroup()));
+            p.sendMessage(game.translate("werewolf.commands.admin.group.respect_limit", game.getScore().getGroup()));
         }
     }
 }

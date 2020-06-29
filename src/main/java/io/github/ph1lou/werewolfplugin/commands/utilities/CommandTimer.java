@@ -22,11 +22,11 @@ public class CommandTimer implements Commands {
         GameManager game = main.getCurrentGame();
 
         for (TimerLG timer : TimerLG.values()) {
-            String time = game.score.conversion(game.getConfig().getTimerValues().get(timer));
+            String time = game.getScore().conversion(game.getConfig().getTimerValues().get(timer));
             if (time.charAt(0) != '-') {
                 if(timer.equals(TimerLG.ROLE_DURATION)){
                     if(game.getConfig().isTrollSV()){
-                        time =game.score.conversion(game.getConfig().getTimerValues().get(timer)-120);
+                        time = game.getScore().conversion(game.getConfig().getTimerValues().get(timer) - 120);
                         if(time.charAt(0) != '-'){
                             sender.sendMessage(game.translate(timer.getKey(),time));
                         }

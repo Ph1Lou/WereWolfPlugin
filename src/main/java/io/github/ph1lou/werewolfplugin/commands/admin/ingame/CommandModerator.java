@@ -65,7 +65,7 @@ public class CommandModerator implements Commands {
         }
         else{
             if(game.getPlayersWW().containsKey(argUUID)){
-                game.score.removePlayerSize();
+                game.getScore().removePlayerSize();
                 game.getPlayersWW().remove(argUUID);
             }
             else game.getQueue().remove(argUUID);

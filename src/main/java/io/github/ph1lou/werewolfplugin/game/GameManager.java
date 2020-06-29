@@ -35,23 +35,23 @@ import java.util.*;
 public class GameManager implements WereWolfAPI {
 
     private final Main main;
-    public final Map<UUID, FastBoard> boards = new HashMap<>();
+    private final Map<UUID, FastBoard> boards = new HashMap<>();
     private final Map<UUID, PlayerWW> playerLG = new HashMap<>();
     private StateLG state;
     private Day dayState;
-    public RoleManagement roleManage;
+    private final ScoreBoard score = new ScoreBoard(this);
     private final Vote vote = new Vote(this);
-    public final ScoreBoard score = new ScoreBoard(this);
-    public final Events events = new Events(this);
-    public Option option;
+    private final Events events = new Events(this);
+    private final LoversManagement loversManage = new LoversManagement(this);
+    private RoleManagement roleManage;
     private DeathManagement deathManage;
-    public final LoversManagement loversManage = new LoversManagement(this);
+    private Option option;
     private final Config config = new Config();
     private End end;
     private Stuff stuff;
     private ScenariosLoader scenarios;
     private final Random r = new Random(System.currentTimeMillis());
-    public WorldFillTask wft = null;
+    private WorldFillTask wft = null;
     private final Map<String, String> language = new HashMap<>();
     private World world;
     private final List<UUID> queue = new ArrayList<>();
@@ -72,13 +72,13 @@ public class GameManager implements WereWolfAPI {
     public void init() {
         main.getLang().updateLanguage(this);
         end = new End(main, this);
-        deathManage = new DeathManagement(main, this);
-        roleManage = new RoleManagement(main, this);
+        deathManage = new DeathManagement(main);
+        roleManage = new RoleManagement(main);
         stuff = new Stuff(main, this);
         config.getConfig(this, "saveCurrent");
         stuff.load("saveCurrent");
-        option = new Option(main, this);
-        scenarios = new ScenariosLoader(main, this);
+        option = new Option(main);
+        scenarios = new ScenariosLoader(main);
         Bukkit.getPluginManager().registerEvents(vote, main);
         setState(StateLG.LOBBY);
         setDay(Day.DAY);
@@ -175,10 +175,6 @@ public class GameManager implements WereWolfAPI {
         return playerMax;
     }
 
-    @Override
-    public int getPlayerSize() {
-        return score.getPlayerSize();
-    }
 
     @Override
     public void setPlayerMax(int playerMax) {
@@ -429,15 +425,6 @@ public class GameManager implements WereWolfAPI {
         }
     }
 
-    @Override
-    public String conversion(int timer){
-        return score.conversion(timer);
-    }
-
-    @Override
-    public String updateArrow(Player player, Location target){
-        return score.updateArrow(player,target);
-    }
 
     @Override
     public ConfigWereWolfAPI getConfig() {
@@ -680,16 +667,6 @@ public class GameManager implements WereWolfAPI {
     }
 
 
-    @Override
-    public int getRoleSize(){
-        return score.getRole();
-    }
-
-    @Override
-    public void setRoleSize(int roleSize){
-        score.setRole(roleSize);
-    }
-
     public void updateScenarios() {
         scenarios.update();
     }
@@ -701,8 +678,8 @@ public class GameManager implements WereWolfAPI {
 
     public void updateCompass(){
 
-        for(Player player:Bukkit.getOnlinePlayers()) {
-            if(getPlayersWW().containsKey(player.getUniqueId())){
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (getPlayersWW().containsKey(player.getUniqueId())) {
                 if (getConfig().getConfigValues().get(ToolLG.COMPASS_MIDDLE)) {
                     player.setCompassTarget(player.getWorld().getSpawnLocation());
                 } else {
@@ -710,5 +687,42 @@ public class GameManager implements WereWolfAPI {
                 }
             }
         }
+    }
+
+    public WorldFillTask getWft() {
+        return wft;
+    }
+
+    public void setWft(WorldFillTask wft) {
+        this.wft = wft;
+    }
+
+    public LoversManagement getLoversManage() {
+        return loversManage;
+    }
+
+    public Option getOption() {
+        return option;
+    }
+
+    public void setOption(Option option) {
+        this.option = option;
+    }
+
+    public Events getEvents() {
+        return events;
+    }
+
+    @Override
+    public ScoreAPI getScore() {
+        return score;
+    }
+
+    public RoleManagement getRoleManage() {
+        return roleManage;
+    }
+
+    public Map<UUID, FastBoard> getBoards() {
+        return boards;
     }
 }

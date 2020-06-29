@@ -30,6 +30,6 @@ public class CommandConfig implements Commands {
             return;
         }
 
-        game.option.toolBar((Player) sender);
+        game.getOption().toolBar((Player) sender);
     }
 }

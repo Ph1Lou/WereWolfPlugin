@@ -25,17 +25,16 @@ import java.util.stream.Stream;
 
 public class DeathManagement {
 
-    private final GameManager game;
     private final Main main;
 
-    public DeathManagement(Main main, GameManager game) {
-        this.main=main;
-        this.game = game;
+    public DeathManagement(Main main) {
+        this.main = main;
     }
 
 
     public void deathStep1(UUID uuid) {
 
+        GameManager game = main.getCurrentGame();
         PlayerWW plg = game.getPlayersWW().get(uuid);
         SecondDeathEvent secondDeathEvent = new SecondDeathEvent(uuid);
         Bukkit.getPluginManager().callEvent(secondDeathEvent);
@@ -48,8 +47,8 @@ public class DeathManagement {
     }
 
     private void deathStep2(UUID uuid) {
-
-        PlayerWW plg=game.getPlayersWW().get(uuid);
+        GameManager game = main.getCurrentGame();
+        PlayerWW plg = game.getPlayersWW().get(uuid);
         ThirdDeathEvent thirdDeathEvent = new ThirdDeathEvent(uuid);
         Bukkit.getPluginManager().callEvent(thirdDeathEvent);
         Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
@@ -60,7 +59,7 @@ public class DeathManagement {
 	}
 
     public void death(UUID playerUUID) {
-
+        GameManager game = main.getCurrentGame();
         World world = game.getWorld();
         PlayerWW plg = game.getPlayersWW().get(playerUUID);
 
@@ -78,7 +77,7 @@ public class DeathManagement {
         } else Bukkit.broadcastMessage(game.translate("werewolf.announcement.death_message", plg.getName()));
 
         plg.setState(State.DEATH);
-        game.score.removePlayerSize();
+        game.getScore().removePlayerSize();
         Bukkit.getPluginManager().callEvent(new FinalDeathEvent(playerUUID));
 
         for (ItemStack i : Stream.concat(plg.getItemDeath().stream(), game.getStuffs().getDeathLoot().stream()).collect(Collectors.toList())) {
@@ -92,13 +91,13 @@ public class DeathManagement {
         }
 
         if (!plg.getLovers().isEmpty()) {
-            game.loversManage.checkLovers(playerUUID);
+            game.getLoversManage().checkLovers(playerUUID);
         }
         if (plg.getCursedLovers()!=null) {
-            game.loversManage.checkCursedLovers(playerUUID);
+            game.getLoversManage().checkCursedLovers(playerUUID);
         }
         if (plg.getAmnesiacLoverUUID()!=null) {
-            game.loversManage.checkAmnesiacLovers(playerUUID);
+            game.getLoversManage().checkAmnesiacLovers(playerUUID);
         }
 
         if (Bukkit.getPlayer(playerUUID)!=null) {
@@ -118,7 +117,7 @@ public class DeathManagement {
 
 
     public void resurrection(UUID playerUUID) {
-
+        GameManager game = main.getCurrentGame();
         PlayerWW plg = game.getPlayersWW().get(playerUUID);
         Bukkit.getPluginManager().callEvent(new ResurrectionEvent(playerUUID));
 

@@ -182,7 +182,7 @@ public class LoversManagement {
 
 		Boolean polygamy = game.getConfig().getConfigValues().get(ToolLG.POLYGAMY);
 
-		if (!polygamy && (game.getConfig().getLoverSize() == 0 && game.getConfig().getRoleCount().get("werewolf.role.cupid.display") * 2 >= game.score.getPlayerSize()) || (game.getConfig().getLoverSize() != 0 && (game.getConfig().getRoleCount().get("werewolf.role.cupid.display") + game.getConfig().getLoverSize()) * 2 > game.score.getPlayerSize())) {
+		if (!polygamy && (game.getConfig().getLoverSize() == 0 && game.getConfig().getRoleCount().get("werewolf.role.cupid.display") * 2 >= game.getScore().getPlayerSize()) || (game.getConfig().getLoverSize() != 0 && (game.getConfig().getRoleCount().get("werewolf.role.cupid.display") + game.getConfig().getLoverSize()) * 2 > game.getScore().getPlayerSize())) {
 			polygamy = true;
 			Bukkit.broadcastMessage(game.translate("werewolf.role.lover.polygamy"));
 		}
@@ -335,26 +335,26 @@ public class LoversManagement {
 
 		int i = 0;
 
-		while (i < game.loversManage.loversRange.size() && !game.loversManage.loversRange.get(i).contains(playerUUID)) {
+		while (i < loversRange.size() && !loversRange.get(i).contains(playerUUID)) {
 			i++;
 		}
 
-		if (i < game.loversManage.loversRange.size()) {
+		if (i < loversRange.size()) {
 
-			game.loversManage.loversRange.get(i).remove(playerUUID);
+			loversRange.get(i).remove(playerUUID);
 
-			while (!game.loversManage.loversRange.get(i).isEmpty() && game.getPlayersWW().get(game.loversManage.loversRange.get(i).get(0)).isState(State.DEATH)) {
-				game.loversManage.loversRange.get(i).remove(0);
+			while (!loversRange.get(i).isEmpty() && game.getPlayersWW().get(loversRange.get(i).get(0)).isState(State.DEATH)) {
+				loversRange.get(i).remove(0);
 			}
 
-			if (!game.loversManage.loversRange.get(i).isEmpty()) {
-				UUID c1 = game.loversManage.loversRange.get(i).get(0);
-				Bukkit.broadcastMessage(game.translate("werewolf.role.lover.lover_death",game.getPlayersWW().get(c1).getName()));
+			if (!loversRange.get(i).isEmpty()) {
+				UUID c1 = loversRange.get(i).get(0);
+				Bukkit.broadcastMessage(game.translate("werewolf.role.lover.lover_death", game.getPlayersWW().get(c1).getName()));
 
 				game.death(c1);
 			} else {
-				game.loversManage.loversRange.remove(i);
-				game.getConfig().setLoverSize(game.getConfig().getLoverSize()-1);
+				loversRange.remove(i);
+				game.getConfig().setLoverSize(game.getConfig().getLoverSize() - 1);
 			}
 		}
 	}
@@ -363,18 +363,18 @@ public class LoversManagement {
 
 		int i = 0;
 
-		while (i < game.loversManage.amnesiacLoversRange.size() && !game.loversManage.amnesiacLoversRange.get(i).contains(playerUUID)) {
+		while (i < amnesiacLoversRange.size() && !amnesiacLoversRange.get(i).contains(playerUUID)) {
 			i++;
 		}
 
-		if (i < game.loversManage.amnesiacLoversRange.size()) {
+		if (i < amnesiacLoversRange.size()) {
 
-			game.loversManage.amnesiacLoversRange.get(i).remove(playerUUID);
-			UUID c1 = game.loversManage.amnesiacLoversRange.get(i).get(0);
-			game.loversManage.amnesiacLoversRange.remove(i);
+			amnesiacLoversRange.get(i).remove(playerUUID);
+			UUID c1 = amnesiacLoversRange.get(i).get(0);
+			amnesiacLoversRange.remove(i);
 			Bukkit.broadcastMessage(game.translate("werewolf.role.lover.lover_death", game.getPlayersWW().get(c1).getName()));
 			game.death(c1);
-			game.getConfig().setAmnesiacLoverSize(game.getConfig().getAmnesiacLoverSize()-1);
+			game.getConfig().setAmnesiacLoverSize(game.getConfig().getAmnesiacLoverSize() - 1);
 		}
 	}
 
@@ -382,23 +382,23 @@ public class LoversManagement {
 
 		int i = 0;
 
-		while (i < game.loversManage.cursedLoversRange.size() && !game.loversManage.cursedLoversRange.get(i).contains(playerUUID)) {
+		while (i < cursedLoversRange.size() && !cursedLoversRange.get(i).contains(playerUUID)) {
 			i++;
 		}
 
-		if (i < game.loversManage.cursedLoversRange.size()) {
+		if (i < cursedLoversRange.size()) {
 
-			game.loversManage.cursedLoversRange.get(i).remove(playerUUID);
+			cursedLoversRange.get(i).remove(playerUUID);
 
-			UUID cursedLover = game.loversManage.cursedLoversRange.get(i).get(0);
+			UUID cursedLover = cursedLoversRange.get(i).get(0);
 
 			if (Bukkit.getPlayer(cursedLover) != null) {
 				Player killer = Bukkit.getPlayer(cursedLover);
 				killer.sendMessage(game.translate("werewolf.role.cursed_lover.death_cursed_lover"));
 				killer.setMaxHealth(Math.max(killer.getMaxHealth() - 2, 1));
 			}
-			game.loversManage.cursedLoversRange.remove(i);
-			game.getConfig().setCursedLoverSize(game.getConfig().getCursedLoverSize()-1);
+			cursedLoversRange.remove(i);
+			game.getConfig().setCursedLoverSize(game.getConfig().getCursedLoverSize() - 1);
 		}
 	}
 

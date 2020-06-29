@@ -86,7 +86,7 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
         }
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        player.sendMessage(game.translate("werewolf.role.flute_player.power", game.conversion(game.getConfig().getTimerValues().get(TimerLG.POWER_DURATION))));
+        player.sendMessage(game.translate("werewolf.role.flute_player.power", game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.POWER_DURATION))));
     }
 
 
