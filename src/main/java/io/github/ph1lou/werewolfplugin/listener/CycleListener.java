@@ -142,7 +142,7 @@ public class CycleListener implements Listener {
     }
 
     @EventHandler
-    public void onPVP() {
+    public void onPVP(PVPEvent event) {
 
         game.getWorld().setPVP(true);
         for (Player p : Bukkit.getOnlinePlayers()) {
