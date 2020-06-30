@@ -84,11 +84,7 @@ public class GameTask extends BukkitRunnable {
 		game.getConfig().getTimerValues().put(TimerLG.ROLE_DURATION, game.getConfig().getTimerValues().get(TimerLG.ROLE_DURATION) - 1);
 
 		if (game.getConfig().getTimerValues().get(TimerLG.PVP) == 0) {
-			world.setPVP(true);
-			for (Player p : Bukkit.getOnlinePlayers()) {
-				p.sendMessage(game.translate("werewolf.announcement.pvp"));
-				p.playSound(p.getLocation(), Sound.DONKEY_ANGRY, 1, 20);
-			}
+			Bukkit.getPluginManager().callEvent(new PVPEvent());
 		}
 		game.getConfig().getTimerValues().put(TimerLG.PVP, game.getConfig().getTimerValues().get(TimerLG.PVP) - 1);
 
@@ -101,7 +97,7 @@ public class GameTask extends BukkitRunnable {
 
 			if (game.getConfig().getTimerValues().get(TimerLG.LOVER_DURATION) == 0) {
 				Bukkit.getPluginManager().callEvent(new LoversRepartitionEvent());
-				game.getLoversManage().autoLovers();
+
 			}
 			game.getConfig().getTimerValues().put(TimerLG.LOVER_DURATION, game.getConfig().getTimerValues().get(TimerLG.LOVER_DURATION) - 1);
 
@@ -112,7 +108,7 @@ public class GameTask extends BukkitRunnable {
 
 			if (game.getConfig().getTimerValues().get(TimerLG.WEREWOLF_LIST) == 0) {
 				Bukkit.getPluginManager().callEvent(new WereWolfListEvent());
-				game.updateNameTag();
+
 			}
 			game.getConfig().getTimerValues().put(TimerLG.WEREWOLF_LIST, game.getConfig().getTimerValues().get(TimerLG.WEREWOLF_LIST) - 1);
 		}
@@ -138,10 +134,7 @@ public class GameTask extends BukkitRunnable {
 
 		if (game.getConfig().getTimerValues().get(TimerLG.DIGGING) == 0) {
 			Bukkit.getPluginManager().callEvent(new DiggingEndEvent());
-			for (Player p : Bukkit.getOnlinePlayers()) {
-				p.sendMessage(game.translate("werewolf.announcement.mining"));
-				p.playSound(p.getLocation(), Sound.ANVIL_BREAK, 1, 20);
-			}
+
 		}
 		game.getConfig().getTimerValues().put(TimerLG.DIGGING, game.getConfig().getTimerValues().get(TimerLG.DIGGING) - 1);
 

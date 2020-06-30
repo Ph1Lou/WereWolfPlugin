@@ -57,7 +57,11 @@ public class RoleManagement {
 			playersUUID.remove(n);
 		}
 		for(PlayerWW playerWW :game.getPlayersWW().values()){
-			playerWW.getRole().recoverPower();
+			try {
+				playerWW.getRole().recoverPower();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 		game.checkVictory();

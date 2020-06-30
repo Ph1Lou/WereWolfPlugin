@@ -2,8 +2,10 @@ package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.events.UpdateStuffEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -49,5 +51,7 @@ public class CommandLootStart implements Commands {
 
         sender.sendMessage(game.translate("werewolf.commands.admin.stuff_start.perform"));
         ((Player) sender).setGameMode(GameMode.ADVENTURE);
+
+        Bukkit.getPluginManager().callEvent(new UpdateStuffEvent());
     }
 }

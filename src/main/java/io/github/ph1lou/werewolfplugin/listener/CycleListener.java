@@ -7,6 +7,7 @@ import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import io.github.ph1lou.werewolfplugin.utils.Title;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -127,6 +128,34 @@ public class CycleListener implements Listener {
                 p.sendMessage(game.translate("werewolf.commands.admin.group.group_change", score.getGroup()));
                 Title.sendTitle(p, 20, 60, 20, game.translate("werewolf.commands.admin.group.top_title"), game.translate("werewolf.commands.admin.group.bot_title", score.getGroup()));
             }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onWereWolfList(WereWolfListEvent event) {
+        game.updateNameTag();
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onLoverRepartition(LoversRepartitionEvent event) {
+        game.getLoversManage().autoLovers();
+    }
+
+    @EventHandler
+    public void onPVP() {
+
+        game.getWorld().setPVP(true);
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            p.sendMessage(game.translate("werewolf.announcement.pvp"));
+            p.playSound(p.getLocation(), Sound.DONKEY_ANGRY, 1, 20);
+        }
+    }
+
+    @EventHandler
+    public void onDiggingEnd(DiggingEndEvent event) {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            p.sendMessage(game.translate("werewolf.announcement.mining"));
+            p.playSound(p.getLocation(), Sound.ANVIL_BREAK, 1, 20);
         }
     }
 }

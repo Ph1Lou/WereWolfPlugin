@@ -1,8 +1,10 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.events.UpdateStuffEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -40,7 +42,7 @@ public class CommandStuffRole implements Commands {
             sender.sendMessage(game.translate("werewolf.check.invalid_key"));
             return;
         }
-        
+
         game.getStuffs().getStuffRoles().get(args[0]).clear();
         for (ItemStack i : ((Player) sender).getInventory().getContents()) {
             if (i != null) {
@@ -50,5 +52,7 @@ public class CommandStuffRole implements Commands {
         sender.sendMessage(game.translate("werewolf.commands.admin.loot_role.perform"));
         ((Player) sender).getInventory().clear();
         ((Player) sender).setGameMode(GameMode.ADVENTURE);
+
+        Bukkit.getPluginManager().callEvent(new UpdateStuffEvent());
     }
 }
