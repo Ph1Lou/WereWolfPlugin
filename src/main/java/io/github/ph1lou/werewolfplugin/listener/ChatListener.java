@@ -91,6 +91,8 @@ public class ChatListener implements Listener {
         if (!game.getConfig().getConfigValues().get(ToolLG.CHAT)) {
             event.setCancelled(true);
             event.getPlayer().sendMessage(game.translate("werewolf.commands.admin.chat.off"));
+            if(getConfig().getBoolean("bungeechat") == true){
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "chatlock local"); 
         }
         else if(game.getConfig().getConfigValues().get(ToolLG.PROXIMITY_CHAT)){
 
