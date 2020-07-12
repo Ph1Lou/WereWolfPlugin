@@ -18,5 +18,5 @@ default_lobby: true
 
 #If a chat manager is installed, set true so that the chat is deactivated
 bungeechat: false #Automatically do /chatlock local
-multiChat: false
+multiChat: false #Automatically do /multichatbypass (This command execute execute onetime, when the plugin is loaded)
 
