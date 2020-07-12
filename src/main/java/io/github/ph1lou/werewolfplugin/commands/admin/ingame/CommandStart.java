@@ -55,6 +55,7 @@ public class CommandStart implements Commands {
             return;
         }
 
+
         World world = game.getWorld();
         WorldBorder wb = world.getWorldBorder();
         wb.setCenter(world.getSpawnLocation().getX(), world.getSpawnLocation().getZ());

@@ -110,6 +110,7 @@ public class Elder extends RolesVillage implements Power {
             }
             player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
         }
+        event.setCancelled(true);
         game.resurrection(getPlayerUUID());
     }
 }

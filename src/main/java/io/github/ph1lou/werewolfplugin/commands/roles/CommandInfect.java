@@ -127,5 +127,6 @@ public class CommandInfect implements Commands {
         }
         plg1.setCanBeInfect(false);
         game.getPlayersWW().get(argUUID).getRole().setInfected(true);
+        game.checkVictory();
     }
 }

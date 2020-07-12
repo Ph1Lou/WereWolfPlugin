@@ -147,17 +147,22 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
     @EventHandler
     public void onAutoAngel(AutoAngelEvent event){
 
+        if (getPlayerUUID() == null) return;
+
         PlayerWW plg = game.getPlayersWW().get(getPlayerUUID());
 
-        if(isChoice(AngelForm.ANGEL)){
+        if (!plg.isState(State.ALIVE)) {
+            return;
+        }
 
-            if(game.getRandom().nextBoolean()){
-                if(Bukkit.getPlayer(getPlayerUUID())!=null){
-                    Bukkit.getPlayer(getPlayerUUID()).sendMessage(game.translate("werewolf.role.angel.angel_choice_perform",game.translate("werewolf.role.fallen_angel.display")));
+        if (isChoice(AngelForm.ANGEL)) {
+
+            if (game.getRandom().nextBoolean()) {
+                if (Bukkit.getPlayer(getPlayerUUID()) != null) {
+                    Bukkit.getPlayer(getPlayerUUID()).sendMessage(game.translate("werewolf.role.angel.angel_choice_perform", game.translate("werewolf.role.fallen_angel.display")));
                 }
                 setChoice(AngelForm.FALLEN_ANGEL);
-            }
-            else {
+            } else {
                 if(Bukkit.getPlayer(getPlayerUUID())!=null){
                     Bukkit.getPlayer(getPlayerUUID()).sendMessage(game.translate("werewolf.role.angel.angel_choice_perform",game.translate("werewolf.role.guardian_angel.display")));
                 }
@@ -169,10 +174,6 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
         UUID targetUUID = game.autoSelect(getPlayerUUID());
         addAffectedPlayer(targetUUID);
         PlayerWW target = game.getPlayersWW().get(targetUUID);
-
-        if (!plg.isState(State.ALIVE)){
-            return;
-        }
 
         if(Bukkit.getPlayer(getPlayerUUID()) != null){
             Player player = Bukkit.getPlayer(getPlayerUUID());

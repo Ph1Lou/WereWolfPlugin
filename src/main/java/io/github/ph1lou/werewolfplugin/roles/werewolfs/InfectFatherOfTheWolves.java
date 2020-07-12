@@ -71,7 +71,7 @@ public class InfectFatherOfTheWolves extends RolesWereWolf implements AffectedPl
         return "werewolf.role.infect_father_of_the_wolves.display";
     }
 
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onSecondDeathEvent(SecondDeathEvent event){
 
         if(event.isCancelled()) return;
