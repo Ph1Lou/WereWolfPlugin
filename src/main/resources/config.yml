@@ -15,5 +15,8 @@
 lang: fr
 autoRoofedMiddle: true
 default_lobby: true
-bungeechat: false
+
+#If a chat manager is installed, set true so that the chat is deactivated
+bungeechat: false #Automatically do /chatlock local
+multiChat: false
 
