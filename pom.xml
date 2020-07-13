@@ -72,7 +72,7 @@
         <dependency>
             <groupId>com.github.WesJD.AnvilGUI</groupId>
             <artifactId>anvilgui</artifactId>
-            <version>61aa6d8080</version>
+            <version>ef71db62ec</version>
         </dependency>
         <dependency>
             <groupId>io.github.ph1lou</groupId>
