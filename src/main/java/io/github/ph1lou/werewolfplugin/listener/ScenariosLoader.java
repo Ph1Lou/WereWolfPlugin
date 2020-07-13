@@ -31,7 +31,7 @@ public class ScenariosLoader {
         pm.registerEvents(new MenuListener(main, game), main);
         pm.registerEvents(new SmallFeaturesListener(main,game), main);
         pm.registerEvents(new EnchantmentListener(game), main);
-        pm.registerEvents(new ChatListener(game), main);
+        pm.registerEvents(new ChatListener(main, game), main);
         pm.registerEvents(new PatchPotions(game), main);
         pm.registerEvents(new CycleListener(main,game), main);
 

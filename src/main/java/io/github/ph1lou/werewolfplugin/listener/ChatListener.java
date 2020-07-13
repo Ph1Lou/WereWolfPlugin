@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.listener;
 
 
 import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
+import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -16,8 +17,10 @@ import java.util.UUID;
 public class ChatListener implements Listener {
 
     private final GameManager game;
+    private final Main main;
 
-    public ChatListener(GameManager game) {
+    public ChatListener(Main main, GameManager game) {
+        this.main = main;
         this.game = game;
     }
 
@@ -91,8 +94,9 @@ public class ChatListener implements Listener {
         if (!game.getConfig().getConfigValues().get(ToolLG.CHAT)) {
             event.setCancelled(true);
             event.getPlayer().sendMessage(game.translate("werewolf.commands.admin.chat.off"));
-            if(getConfig().getBoolean("bungeechat") == true){
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "chatlock local"); 
+            if (main.getConfig().getBoolean("bungeechat")) {
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "chatlock local");
+            }
         }
         else if(game.getConfig().getConfigValues().get(ToolLG.PROXIMITY_CHAT)){
 
@@ -110,7 +114,6 @@ public class ChatListener implements Listener {
             }
 
         }
-
     }
 
     private String obfuscation(String message, float percentage) {
@@ -130,6 +133,5 @@ public class ChatListener implements Listener {
 
         return returnMessage.toString();
     }
-
-
 }
+

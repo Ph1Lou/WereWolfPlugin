@@ -189,8 +189,8 @@ public class End {
         game.getScore().getKillCounter();
 
         game.getConfig().getConfigValues().put(ToolLG.CHAT, true);
-        if(getConfig().getBoolean("bungeechat") == true){
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "chatlock local"); //reactivation of local chat
+        if (main.getConfig().getBoolean("bungeechat")) {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "chatlock local"); //reactivation of local chat
         }
 
 
