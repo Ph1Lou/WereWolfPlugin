@@ -87,7 +87,7 @@ public class DeathManagement {
         }
 
         for (Player p : Bukkit.getOnlinePlayers()) {
-            p.playSound(p.getLocation(), Sound.AMBIENCE_THUNDER, 1, 20);
+            p.playSound(p.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1, 20);
         }
 
         if (!plg.getLovers().isEmpty()) {

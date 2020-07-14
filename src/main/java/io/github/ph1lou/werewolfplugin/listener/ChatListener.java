@@ -65,7 +65,7 @@ public class ChatListener implements Listener {
             sb.delete(0, args[0].length() + args[1].length() + 2);
             recipient.sendMessage(game.translate("werewolf.commands.message.received", player.getName(), sb.toString()));
             player.sendMessage(game.translate("werewolf.commands.message.send", args[1], sb.toString()));
-            recipient.playSound(recipient.getLocation(), Sound.ANVIL_USE, 1, 20);
+            recipient.playSound(recipient.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 20);
         }
 
 

@@ -8,6 +8,7 @@ import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
@@ -83,7 +84,7 @@ public class RoleManagement {
 			if (plg.isState(State.ALIVE) && plg.getRole().isDisplay("werewolf.role.siamese_twin.display") && Bukkit.getPlayer(uuid) != null) {
 				Player c = Bukkit.getPlayer(uuid);
 				counter++;
-				health += c.getHealth() / c.getMaxHealth();
+				health += c.getHealth() / c.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
 			}
 		}
 		health /= counter;
@@ -93,11 +94,11 @@ public class RoleManagement {
 
 			if (plg.isState(State.ALIVE) && plg.getRole().isDisplay("werewolf.role.siamese_twin.display") && Bukkit.getPlayer(uuid) != null) {
 				Player c = Bukkit.getPlayer(uuid);
-				if(health * c.getMaxHealth()>10){
-					if(health * c.getMaxHealth()+1<c.getHealth()){
-						c.playSound(c.getLocation(), Sound.BURP,1,20);
+				if(health * c.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()>10){
+					if(health * c.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()+1<c.getHealth()){
+						c.playSound(c.getLocation(), Sound.ENTITY_PLAYER_BURP,1,20);
 					}
-					c.setHealth(health * c.getMaxHealth());
+					c.setHealth(health * c.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 				}
 			}
 		}

@@ -50,7 +50,7 @@ public class GameTask extends BukkitRunnable {
 		if (game.getConfig().getTimerValues().get(TimerLG.INVULNERABILITY) == 0) {
 			for (Player p : Bukkit.getOnlinePlayers()) {
 				p.sendMessage(game.translate("werewolf.announcement.invulnerability"));
-				p.playSound(p.getLocation(), Sound.GLASS, 1, 20);
+				p.playSound(p.getLocation(), Sound.BLOCK_GLASS_BREAK, 1, 20);
 			}
 
 		}
@@ -62,9 +62,9 @@ public class GameTask extends BukkitRunnable {
 
 			for (Player p : Bukkit.getOnlinePlayers()) {
 				if (game.getConfig().isTrollSV() && game.getPlayersWW().containsKey(p.getUniqueId())) {
-					p.playSound(p.getLocation(), Sound.PORTAL_TRIGGER, 1, 20);
+					p.playSound(p.getLocation(), Sound.BLOCK_PORTAL_TRIGGER, 1, 20);
 					p.sendMessage(game.translate("werewolf.announcement.troll"));
-				} else p.playSound(p.getLocation(), Sound.EXPLODE, 1, 20);
+				} else p.playSound(p.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 20);
 			}
 			game.getConfig().setTrollSV(false);
 			game.getRoleManage().repartitionRolesLG();
@@ -77,7 +77,7 @@ public class GameTask extends BukkitRunnable {
 			for (Player p : Bukkit.getOnlinePlayers()) {
 				if (game.getPlayersWW().containsKey(p.getUniqueId())) {
 					p.sendMessage(game.translate("werewolf.role.villager.description"));
-					p.playSound(p.getLocation(), Sound.EXPLODE, 1, 20);
+					p.playSound(p.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 20);
 				}
 			}
 		}
@@ -120,7 +120,7 @@ public class GameTask extends BukkitRunnable {
 				Bukkit.getPluginManager().callEvent(new BorderStartEvent());
 				for (Player p : Bukkit.getOnlinePlayers()) {
 					p.sendMessage(game.translate("werewolf.announcement.border"));
-					p.playSound(p.getLocation(), Sound.FIREWORK_LAUNCH, 1, 20);
+					p.playSound(p.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 20);
 				}
 			}
 		} else if (game.getConfig().getTimerValues().get(TimerLG.BORDER_BEGIN) < 0) {

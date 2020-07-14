@@ -9,7 +9,6 @@ import io.github.ph1lou.werewolfapi.events.FirstDeathEvent;
 import io.github.ph1lou.werewolfapi.events.UpdateLanguageEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
-import io.github.ph1lou.werewolfplugin.utils.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.World;
@@ -216,8 +215,7 @@ public class PlayerListener implements Listener {
 		FastBoard fastboard = new FastBoard(player);
 		fastboard.updateTitle(game.translate("werewolf.score_board.title"));
 		game.getBoards().put(uuid, fastboard);
-		Title.sendTabTitle(player, game.translate("werewolf.tab.top"), game.translate("werewolf.tab.bot"));
-
+		player.setPlayerListHeaderFooter(game.translate("werewolf.tab.top"), game.translate("werewolf.tab.bot"));
 		if (game.isState(StateLG.LOBBY)) {
 
 			event.setJoinMessage(null);
@@ -285,7 +283,7 @@ public class PlayerListener implements Listener {
 	public void onLanguageUpdate(UpdateLanguageEvent event) {
 
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			Title.sendTabTitle(player, game.translate("werewolf.tab.top"), game.translate("werewolf.tab.bot"));
+			player.setPlayerListHeaderFooter(game.translate("werewolf.tab.top"), game.translate("werewolf.tab.bot"));
 			if (game.getBoards().containsKey(player.getUniqueId())) {
 				game.getBoards().get(player.getUniqueId()).updateTitle(game.translate("werewolf.score_board.title"));
 			}

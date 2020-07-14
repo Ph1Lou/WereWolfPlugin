@@ -13,6 +13,7 @@ import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -59,7 +60,7 @@ public class SerialKiller extends RolesNeutral implements Power {
         Player player= Bukkit.getPlayer(getPlayerUUID());
 
         if (Bukkit.getPlayer(uuid)!=null) {
-            player.setMaxHealth(Bukkit.getPlayer(uuid).getMaxHealth()+game.getPlayersWW().get(uuid).getLostHeart());
+            player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(Bukkit.getPlayer(uuid).getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()+game.getPlayersWW().get(uuid).getLostHeart());
         }
     }
 
@@ -138,7 +139,7 @@ public class SerialKiller extends RolesNeutral implements Power {
 
         if(Bukkit.getPlayer(getPlayerUUID())!=null){
             Player killer = Bukkit.getPlayer(getPlayerUUID());
-            killer.setMaxHealth(killer.getMaxHealth()+2);
+            killer.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(killer.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()+2);
             killer.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE));
             if(hasPower()){
                 killer.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);

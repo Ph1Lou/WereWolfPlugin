@@ -9,6 +9,7 @@ import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Villager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -71,7 +72,7 @@ public class PlayerLG implements Listener, PlayerWW {
 		Player player = Bukkit.getPlayer(playerUUID);
 
 		if (getLostHeart() > 0) {
-			player.setMaxHealth(player.getMaxHealth() + getLostHeart());
+			player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() + getLostHeart());
 			clearLostHeart();
 		}
 

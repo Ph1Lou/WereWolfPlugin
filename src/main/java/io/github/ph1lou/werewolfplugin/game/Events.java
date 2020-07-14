@@ -36,7 +36,7 @@ public class Events implements Listener {
 		Block block2 = location2.getBlock();
 		
 		block1.setType(Material.CHEST);
-		block2.setType(Material.SIGN_POST);
+		block2.setType(Material.ACACIA_SIGN);
 		
 		Chest chest = (Chest) block1.getState();
 		Sign sign = (Sign) block2.getState();

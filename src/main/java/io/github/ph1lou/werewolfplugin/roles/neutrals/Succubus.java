@@ -163,7 +163,7 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
 
         if (temp >= 100) {
 
-            charmed.playSound(charmed.getLocation(), Sound.PORTAL_TRAVEL, 1, 20);
+            charmed.playSound(charmed.getLocation(), Sound.BLOCK_PORTAL_TRAVEL, 1, 20);
             charmed.sendMessage(game.translate("werewolf.role.succubus.get_charmed", plg.getName()));
             player.sendMessage(game.translate("werewolf.role.succubus.charming_perform", charmed.getName()));
             setProgress(0f);

@@ -1,8 +1,8 @@
-name: WereWolfPlugin
+name: WereWolfPluginLastSpigot
 version: "1.5.1"
 author: Ph1Lou
 main: io.github.ph1lou.werewolfplugin.Main
-api-version: "1.8"
+api-version: "1.16"
 load: STARTUP
 commands:
 

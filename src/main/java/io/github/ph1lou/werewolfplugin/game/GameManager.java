@@ -15,16 +15,16 @@ import io.github.ph1lou.werewolfplugin.tasks.LobbyTask;
 import io.github.ph1lou.werewolfplugin.utils.UpdateChecker;
 import io.github.ph1lou.werewolfplugin.utils.WorldUtils;
 import io.github.ph1lou.werewolfplugin.worldloader.WorldFillTask;
-import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Biome;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
@@ -115,18 +115,16 @@ public class GameManager implements WereWolfAPI {
             world.setThundering(false);
             world.setTime(0);
             world.setPVP(false);
-            world.setGameRuleValue("reducedDebugInfo", "true");
-            world.setGameRuleValue("keepInventory", "true");
-            world.setGameRuleValue("naturalRegeneration", "false");
-            world.setGameRuleValue("doFireTick", "false");
+            world.setGameRule(GameRule.REDUCED_DEBUG_INFO,true);
+            world.setGameRule(GameRule.KEEP_INVENTORY,true);
+            world.setGameRule(GameRule.NATURAL_REGENERATION,false);
+            world.setGameRule(GameRule.DO_FIRE_TICK,false);
             world.save();
             int x = world.getSpawnLocation().getBlockX();
             int z = world.getSpawnLocation().getBlockZ();
-            if(world.getWorldBorder()!=null){
-                world.getWorldBorder().reset();
-            }
+            world.getWorldBorder().reset();
             if (main.getConfig().getBoolean("autoRoofedMiddle")) {
-                Location biome = WorldUtils.findBiome(Biome.ROOFED_FOREST, world, 2000);
+                Location biome = WorldUtils.findBiome(Biome.DARK_FOREST, world, 2000);
                 x = biome.getBlockX();
                 z = biome.getBlockZ();
             }
@@ -247,7 +245,7 @@ public class GameManager implements WereWolfAPI {
 
 
     public void clearPlayer(Player player) {
-        player.setMaxHealth(20);
+        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20);
         player.setHealth(20);
         player.setExp(0);
         player.setLevel(0);
@@ -557,10 +555,10 @@ public class GameManager implements WereWolfAPI {
                 Team team = scoreBoard.getTeam(name);
                 try{
                     if (config.getScenarioValues().get("werewolf.menu.scenarios.no_name_tag")) {
-                        team.setNameTagVisibility(NameTagVisibility.NEVER);
+                        team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
                     } else if ((playerWW2.getRole() instanceof InvisibleState) && ((InvisibleState)playerWW2.getRole()).isInvisible()) {
-                        team.setNameTagVisibility(NameTagVisibility.NEVER);
-                    } else team.setNameTagVisibility(NameTagVisibility.ALWAYS);
+                        team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
+                    } else team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS);
                 }catch(Exception ignored){
 
                 }

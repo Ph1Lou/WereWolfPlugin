@@ -56,7 +56,7 @@ public class BearTrainer extends RolesVillage {
         if (ok) {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 p.sendMessage(game.translate("werewolf.role.bear_trainer.growling_message", builder.toString()));
-                p.playSound(p.getLocation(), Sound.WOLF_GROWL, 1, 20);
+                p.playSound(p.getLocation(), Sound.ENTITY_WOLF_GROWL, 1, 20);
             }
 
         }

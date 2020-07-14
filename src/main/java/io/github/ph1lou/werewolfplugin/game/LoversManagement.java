@@ -10,6 +10,7 @@ import io.github.ph1lou.werewolfapi.events.RevealLoversEvent;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Cupid;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -155,16 +156,16 @@ public class LoversManagement {
 		PlayerWW plg = game.getPlayersWW().get(playerUUID);
 		plg.setRevealAmnesiacLover(true);
 		player.sendMessage(game.translate("werewolf.role.lover.description",game.getPlayersWW().get(plg.getAmnesiacLoverUUID()).getName()));
-		player.playSound(player.getLocation(), Sound.PORTAL_TRAVEL, 1, 20);
+		player.playSound(player.getLocation(), Sound.BLOCK_PORTAL_TRAVEL, 1, 20);
 	}
 
 	public void announceCursedLovers(Player player) {
 
 		UUID playerUUID = player.getUniqueId();
 		PlayerWW plg = game.getPlayersWW().get(playerUUID);
-		player.setMaxHealth(player.getMaxHealth() + 2);
+		player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() + 2);
 		player.sendMessage(game.translate("werewolf.role.cursed_lover.description", game.getPlayersWW().get(plg.getCursedLovers()).getName()));
-		player.playSound(player.getLocation(), Sound.SHEEP_SHEAR, 1, 20);
+		player.playSound(player.getLocation(), Sound.ENTITY_SHEEP_SHEAR, 1, 20);
 	}
 
 	public void autoLovers() {
@@ -297,7 +298,7 @@ public class LoversManagement {
 			couple.append(game.getPlayersWW().get(uuid).getName()).append(" ");
 		}
 		player.sendMessage(game.translate("werewolf.role.lover.description", couple.toString()));
-		player.playSound(player.getLocation(), Sound.SHEEP_SHEAR, 1, 20);
+		player.playSound(player.getLocation(), Sound.ENTITY_SHEEP_SHEAR, 1, 20);
 	}
 
 
@@ -395,7 +396,7 @@ public class LoversManagement {
 			if (Bukkit.getPlayer(cursedLover) != null) {
 				Player killer = Bukkit.getPlayer(cursedLover);
 				killer.sendMessage(game.translate("werewolf.role.cursed_lover.death_cursed_lover"));
-				killer.setMaxHealth(Math.max(killer.getMaxHealth() - 2, 1));
+				killer.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(Math.max(killer.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() - 2, 1));
 			}
 			cursedLoversRange.remove(i);
 			game.getConfig().setCursedLoverSize(game.getConfig().getCursedLoverSize() - 1);

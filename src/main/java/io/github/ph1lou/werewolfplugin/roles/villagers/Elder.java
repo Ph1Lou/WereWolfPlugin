@@ -12,6 +12,7 @@ import io.github.ph1lou.werewolfapi.events.SecondDeathEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -106,7 +107,7 @@ public class Elder extends RolesVillage implements Power {
             Player player = Bukkit.getPlayer(getPlayerUUID());
 
             if (game.getPlayersWW().containsKey(killerUUID) && game.getPlayersWW().get(killerUUID).getRole().isCamp(Camp.VILLAGER)) {
-                player.setMaxHealth(Math.max(1, player.getMaxHealth() - 6));
+                player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(Math.max(1, player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() - 6));
             }
             player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
         }

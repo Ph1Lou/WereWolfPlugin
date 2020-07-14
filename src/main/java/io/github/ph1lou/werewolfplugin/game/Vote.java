@@ -12,6 +12,7 @@ import io.github.ph1lou.werewolfapi.events.VoteEndEvent;
 import io.github.ph1lou.werewolfapi.events.VoteEvent;
 import io.github.ph1lou.werewolfapi.events.VoteResultEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -138,9 +139,9 @@ public class Vote implements Listener, VoteAPI {
 				tempPlayer.add(playerVoteUUID);
 				if (Bukkit.getPlayer(playerVoteUUID) != null) {
 					Player player = Bukkit.getPlayer(playerVoteUUID);
-					double life = player.getMaxHealth();
-					player.setMaxHealth(life - 10);
-					if (player.getHealth() > player.getMaxHealth()) {
+					double life = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+					player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(life - 10);
+					if (player.getHealth() > player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()) {
 						player.setHealth(life - 10);
 					}
 					Bukkit.broadcastMessage(game.translate("werewolf.vote.vote_result", plg.getName(), this.votes.get(playerVoteUUID)));

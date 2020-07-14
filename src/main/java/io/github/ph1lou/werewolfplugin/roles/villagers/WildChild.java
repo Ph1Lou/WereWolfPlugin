@@ -138,7 +138,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
         player.sendMessage(game.translate("werewolf.role.wild_child.reveal_model", model.getName()));
-        player.playSound(player.getLocation(), Sound.BAT_IDLE, 1, 20);
+        player.playSound(player.getLocation(), Sound.ENTITY_BAT_HURT, 1, 20);
     }
 
     @Override

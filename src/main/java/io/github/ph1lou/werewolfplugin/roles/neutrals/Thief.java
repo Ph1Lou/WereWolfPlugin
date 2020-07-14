@@ -13,6 +13,7 @@ import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -177,10 +178,10 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
                             if (Bukkit.getPlayer(uuid1) != null) {
                                 Player pc = Bukkit.getPlayer(uuid1);
                                 pc.sendMessage(game.translate("werewolf.role.lover.description", killerName));
-                                pc.playSound(pc.getLocation(), Sound.SHEEP_SHEAR, 1, 20);
+                                pc.playSound(pc.getLocation(), Sound.ENTITY_SHEEP_SHEAR, 1, 20);
                             }
                             killer.sendMessage(game.translate("werewolf.role.lover.description", llg.getName()));
-                            killer.playSound(killer.getLocation(), Sound.SHEEP_SHEAR, 1, 20);
+                            killer.playSound(killer.getLocation(), Sound.ENTITY_SHEEP_SHEAR, 1, 20);
 
                         }
                     }
@@ -214,10 +215,10 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
                         if (Bukkit.getPlayer(uuid) != null) {
                             Player pc = Bukkit.getPlayer(uuid);
                             pc.sendMessage(game.translate("werewolf.role.lover.description", killerName));
-                            pc.playSound(pc.getLocation(), Sound.PORTAL_TRAVEL, 1, 20);
+                            pc.playSound(pc.getLocation(), Sound.BLOCK_PORTAL_TRAVEL, 1, 20);
                         }
                         killer.sendMessage(game.translate("werewolf.role.lover.description", llg.getName()));
-                        killer.playSound(killer.getLocation(), Sound.PORTAL_TRAVEL, 1, 20);
+                        killer.playSound(killer.getLocation(), Sound.BLOCK_PORTAL_TRAVEL, 1, 20);
 
                         for (int i = 0; i < game.getAmnesiacLoversRange().size(); i++) {
                             if (game.getAmnesiacLoversRange().get(i).contains(playerUUID)) {
@@ -242,11 +243,11 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
                     if (Bukkit.getPlayer(uuid) != null) {
                         Player pc = Bukkit.getPlayer(uuid);
                         pc.sendMessage(game.translate("werewolf.role.cursed_lover.description", killerName));
-                        pc.playSound(pc.getLocation(), Sound.SHEEP_SHEAR, 1, 20);
+                        pc.playSound(pc.getLocation(), Sound.ENTITY_SHEEP_SHEAR, 1, 20);
                     }
                     killer.sendMessage(game.translate("werewolf.role.cursed_lover.description", llg.getName()));
-                    killer.playSound(killer.getLocation(), Sound.SHEEP_SHEAR, 1, 20);
-                    killer.setMaxHealth(killer.getMaxHealth() + 2);
+                    killer.playSound(killer.getLocation(), Sound.ENTITY_SHEEP_SHEAR, 1, 20);
+                    killer.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(killer.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() + 2);
 
                     for (int i = 0; i < game.getCursedLoversRange().size(); i++) {
                         if (game.getCursedLoversRange().get(i).contains(playerUUID)) {

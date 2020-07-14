@@ -13,6 +13,7 @@ import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -86,7 +87,7 @@ public class CommandSeer implements Commands {
             return;
         }
 
-        double life =player.getMaxHealth();
+        double life =player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
 
         if (life<7) {
             player.sendMessage(game.translate("werewolf.role.seer.not_enough_life"));
@@ -108,7 +109,7 @@ public class CommandSeer implements Commands {
             ((AffectedPlayers)seer).addAffectedPlayer(argUUID);
 
             if((role1 instanceof Display && ((Display) role1).isDisplayCamp(Camp.VILLAGER)) || role1.isCamp(Camp.VILLAGER)) {
-                player.setMaxHealth(life-6);
+                player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(life-6);
                 if(player.getHealth()>life-6) {
                     player.setHealth(life-6);
                 }

@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -34,14 +35,14 @@ public class SiameseTwin extends RolesVillage {
             return;
         }
 
-        Bukkit.getPlayer(getPlayerUUID()).setMaxHealth(24);
+        Bukkit.getPlayer(getPlayerUUID()).getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(24);
     }
 
     @Override
     public Player recoverPower() {
         Player player = super.recoverPower();
         if(player==null) return null;
-        player.setMaxHealth(24);
+        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(24);
         return player;
     }
 }

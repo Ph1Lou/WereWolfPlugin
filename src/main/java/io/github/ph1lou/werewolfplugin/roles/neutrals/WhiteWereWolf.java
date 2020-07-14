@@ -8,6 +8,7 @@ import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.events.NightEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -61,14 +62,14 @@ public class WhiteWereWolf extends RolesNeutral {
             return;
         }
         Player player = Bukkit.getPlayer(getPlayerUUID());
-        player.setMaxHealth(player.getMaxHealth()+10);
+        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()+10);
     }
 
     @Override
     public Player recoverPower() {
         Player player = super.recoverPower();
         if(player==null) return null;
-        player.setMaxHealth(30);
+        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(30);
         return player;
     }
 

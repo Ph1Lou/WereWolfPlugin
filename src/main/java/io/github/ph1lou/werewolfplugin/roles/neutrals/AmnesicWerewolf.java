@@ -34,11 +34,12 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
             return;
         }
 
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
-            return;
-        }
         Player player = Bukkit.getPlayer(getPlayerUUID());
-        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, -1, false, false));
+
+        if(player!=null){
+            player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, -1, false, false));
+        }
+
     }
 
 
@@ -49,11 +50,11 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
         if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
             return;
         }
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
-            return;
-        }
         Player player = Bukkit.getPlayer(getPlayerUUID());
-        player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+
+        if(player!=null){
+            player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+        }
     }
 
     @EventHandler
@@ -73,8 +74,10 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
         Bukkit.getPluginManager().callEvent(amnesiacTransformationEvent);
 
         if(amnesiacTransformationEvent.isCancelled()){
-            if(Bukkit.getPlayer(getPlayerUUID())!=null){
-                Bukkit.getPlayer(getPlayerUUID()).sendMessage(game.translate("werewolf.check.transformation"));
+
+            Player player = Bukkit.getPlayer(getPlayerUUID());
+            if(player!=null){
+                player.sendMessage(game.translate("werewolf.check.transformation"));
             }
             return;
         }
@@ -83,8 +86,9 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
         Bukkit.getPluginManager().callEvent(newWereWolfEvent);
 
         if(newWereWolfEvent.isCancelled()){
-            if(Bukkit.getPlayer(getPlayerUUID())!=null){
-                Bukkit.getPlayer(getPlayerUUID()).sendMessage(game.translate("werewolf.check.transformation"));
+            Player player = Bukkit.getPlayer(getPlayerUUID());
+            if(player!=null){
+                player.sendMessage(game.translate("werewolf.check.transformation"));
             }
         }
         else setTransformed(true);
@@ -139,7 +143,7 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
     private void onPlayerDeath(PlayerDeathEvent event) {
 
         if(!transformed) return;
-        if(event.getEntity() == null) return;
+
         if(event.getEntity().getKiller()==null) return;
         Player killer = event.getEntity().getKiller();
 

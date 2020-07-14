@@ -14,6 +14,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Timber extends Scenarios {
@@ -22,12 +23,18 @@ public class Timber extends Scenarios {
         super(main, game,key);
     }
 
+
+    boolean isLog(Material material){
+        List<Material> logs = Arrays.asList(Material.ACACIA_LOG,Material.BIRCH_LOG,Material.DARK_OAK_LOG,Material.JUNGLE_LOG,Material.OAK_LOG,Material.SPRUCE_LOG);
+        return logs.contains(material);
+    }
+
     @EventHandler
     public void onBreak(final BlockBreakEvent event) {
 
         final Player player = event.getPlayer();
         final Material mat = event.getBlock().getType();
-        if (mat == Material.LOG || mat == Material.LOG_2) {
+        if (isLog(mat)) {
             final List<Block> bList = new ArrayList<>();
             final List<ItemStack> finalItems = new ArrayList<>();
             bList.add(event.getBlock());
@@ -36,7 +43,7 @@ public class Timber extends Scenarios {
                     for (int i = 0; i < bList.size(); ++i) {
                         final Block block = bList.get(i);
 
-                        if (block.getType() == Material.LOG || block.getType() == Material.LOG_2) {
+                        if (isLog(block.getType())) {
                             final List<ItemStack> items = new ArrayList<>(block.getDrops());
                             block.setType(Material.AIR);
                             finalItems.addAll(items);
@@ -44,7 +51,7 @@ public class Timber extends Scenarios {
                         BlockFace[] values;
                         for (int length = (values = BlockFace.values()).length, j = 0; j < length; ++j) {
                             final BlockFace face = values[j];
-                            if (block.getRelative(face).getType() == Material.LOG || block.getRelative(face).getType() == Material.LOG_2) {
+                            if (isLog(block.getRelative(face).getType())) {
                                 bList.add(block.getRelative(face));
                             }
                         }

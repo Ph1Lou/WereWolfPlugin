@@ -7,6 +7,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="werewolfplugin" />
+        <module name="WerewolfPluginLastSpigotVersion" />
+        <module name="WereWolfPlugin_LastSpigotVersion" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -15,6 +17,7 @@
       <module name="pluginlgapi" target="8" />
       <module name="pluginrank" target="1.5" />
       <module name="rankplugin" target="8" />
+      <module name="WereWolfPlugin_LastSpigotVersion" target="8" />
       <module name="workspace" target="8" />
     </bytecodeTargetLevel>
   </component>

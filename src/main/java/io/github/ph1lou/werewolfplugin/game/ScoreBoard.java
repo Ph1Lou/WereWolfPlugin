@@ -9,7 +9,8 @@ import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
 import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
-import io.github.ph1lou.werewolfplugin.utils.Title;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -235,8 +236,7 @@ public class ScoreBoard implements ScoreAPI {
 		}
 		ActionBarEvent actionBarEvent = new ActionBarEvent(playerUUID,stringbuilder.toString());
 		Bukkit.getPluginManager().callEvent(actionBarEvent);
-
-		Title.sendActionBar(player, actionBarEvent.getActionBar());
+		player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(actionBarEvent.getActionBar()));
 	}
 		
 	public void updateBoard() {

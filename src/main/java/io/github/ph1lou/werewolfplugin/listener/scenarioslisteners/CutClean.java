@@ -39,13 +39,13 @@ public class CutClean extends Scenarios {
             return;
         }
 
-        Material currentItemType = event.getPlayer().getItemInHand().getType();
+        Material currentItemType = event.getPlayer().getItemOnCursor().getType();
 
         switch (block.getType()) {
 
             case COAL_ORE:
 
-                if (!currentItemType.equals(Material.DIAMOND_PICKAXE) && !currentItemType.equals(Material.IRON_PICKAXE) && !currentItemType.equals(Material.STONE_PICKAXE) && !currentItemType.equals(Material.GOLD_PICKAXE) && !currentItemType.equals(Material.WOOD_PICKAXE)) {
+                if (!currentItemType.equals(Material.DIAMOND_PICKAXE) && !currentItemType.equals(Material.IRON_PICKAXE) && !currentItemType.equals(Material.STONE_PICKAXE) && !currentItemType.equals(Material.GOLDEN_PICKAXE) && !currentItemType.equals(Material.WOODEN_PICKAXE)) {
                     return;
                 }
                 block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop());
@@ -89,17 +89,17 @@ public class CutClean extends Scenarios {
                 return;
             }
             switch (is.getType()) {
-                case RAW_BEEF:
+                case BEEF:
                     loots.remove(i);
                     loots.add(new ItemStack(Material.COOKED_BEEF));
                     break;
 
-                case PORK:
+                case PORKCHOP:
                     loots.remove(i);
-                    loots.add(new ItemStack(Material.GRILLED_PORK));
+                    loots.add(new ItemStack(Material.COOKED_PORKCHOP));
                     break;
 
-                case RAW_CHICKEN:
+                case CHICKEN:
                     loots.remove(i);
                     loots.add(new ItemStack(Material.COOKED_CHICKEN));
                     break;

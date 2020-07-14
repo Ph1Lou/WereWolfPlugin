@@ -6,7 +6,8 @@ import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
-import io.github.ph1lou.werewolfplugin.utils.Title;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -64,8 +65,8 @@ public class TransportationTask extends BukkitRunnable {
         if (i < game.getPlayersWW().size()) {
 
             for (Player p : Bukkit.getOnlinePlayers()) {
-                p.playSound(p.getLocation(), Sound.DIG_GRASS, 1, 20);
-                Title.sendActionBar(p, game.translate("werewolf.action_bar.create_tp_point", i + 1, game.getPlayersWW().size()));
+                p.playSound(p.getLocation(), Sound.BLOCK_GRASS_STEP, 1, 20);
+                p.spigot().sendMessage(ChatMessageType.ACTION_BAR,TextComponent.fromLegacyText(game.translate("werewolf.action_bar.create_tp_point", i + 1, game.getPlayersWW().size())));
             }
 
             UUID uuid = (UUID) game.getPlayersWW().keySet().toArray()[i];
@@ -80,8 +81,8 @@ public class TransportationTask extends BukkitRunnable {
         } else if (i < 2 * game.getPlayersWW().size()) {
 
             for (Player p : Bukkit.getOnlinePlayers()) {
-                p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1, 20);
-                Title.sendActionBar(p, game.translate("werewolf.action_bar.tp", i - game.getPlayersWW().size() + 1, game.getPlayersWW().size()));
+                p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 20);
+                p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(game.translate("werewolf.action_bar.tp", i - game.getPlayersWW().size() + 1, game.getPlayersWW().size())));
             }
 
             UUID uuid = (UUID) game.getPlayersWW().keySet().toArray()[i - game.getPlayersWW().size()];
@@ -122,8 +123,8 @@ public class TransportationTask extends BukkitRunnable {
                     p.setGameMode(GameMode.SPECTATOR);
                 }
 
-                Title.sendTitle(p, 20, 20, 20, game.translate("werewolf.announcement.start.top_title"), game.translate("werewolf.announcement.start.bot_title"));
-                p.playSound(p.getLocation(), Sound.NOTE_BASS, 1, 20);
+                p.sendTitle(game.translate("werewolf.announcement.start.top_title"), game.translate("werewolf.announcement.start.bot_title"), 20, 20, 20);
+                p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1, 20);
             }
             world.setTime(0);
 
@@ -135,8 +136,8 @@ public class TransportationTask extends BukkitRunnable {
             cancel();
         } else if (i % 5 == 0) {
             for (Player p : Bukkit.getOnlinePlayers()) {
-                Title.sendTitle(p, 25, 20, 25, "Start", "§b" + (10 - j));
-                p.playSound(p.getLocation(), Sound.NOTE_PIANO, 1, 20);
+                p.sendTitle("Start", "§b" + (10 - j), 25, 20, 25);
+                p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, 1, 20);
             }
             j++;
         }

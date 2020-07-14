@@ -10,6 +10,7 @@ import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.save.FileUtils;
 import io.github.ph1lou.werewolfplugin.save.Serializer;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.banner.Pattern;
@@ -19,12 +20,11 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.io.File;
+import java.util.*;
 
 public class Option {
 
@@ -73,7 +73,7 @@ public class Option {
 
 	public void toolBar(Player player) {
 
-		invTool.setItem(0, changeMeta(new ItemStack(Material.SKULL_ITEM, 1, (short) 3), game.translate("werewolf.menu.whitelist.name"), null));
+		invTool.setItem(0, changeMeta(Material.PLAYER_HEAD, game.translate("werewolf.menu.whitelist.name"),1, null));
 
 		invTool.setItem(13, changeMeta(Material.BEACON,game.translate("werewolf.menu.roles.name"),1,null));
 		invTool.setItem(22, changeMeta(Material.ANVIL,game.translate("werewolf.menu.timers.name"),1,null));
@@ -82,26 +82,28 @@ public class Option {
 		invTool.setItem(32, changeMeta(Material.GLASS,game.translate("werewolf.menu.border.name"),1,null));
 		invTool.setItem(48, changeMeta(Material.ARMOR_STAND,game.translate("werewolf.menu.save.name"),1,null));
 		invTool.setItem(29, changeMeta(Material.PUMPKIN,game.translate("werewolf.menu.scenarios.name"),1,null));
-		invTool.setItem(33, changeMeta(Material.ENCHANTMENT_TABLE,game.translate("werewolf.menu.enchantments.name"),1,null));
-		ItemStack custom = new ItemStack(Material.BANNER, 1);
+		invTool.setItem(33, changeMeta(Material.ENCHANTING_TABLE,game.translate("werewolf.menu.enchantments.name"),1,null));
+		ItemStack custom = new ItemStack(Material.WHITE_BANNER, 1);
 		BannerMeta customMeta = (BannerMeta) custom.getItemMeta();
 		customMeta.addPattern(new Pattern(DyeColor.WHITE, PatternType.BASE));
 		customMeta.addPattern(new Pattern(DyeColor.CYAN, PatternType.STRAIGHT_CROSS));
+		customMeta.setDisplayName(game.translate("werewolf.menu.languages.name"));
 		custom.setItemMeta(customMeta);
-		invTool.setItem(45, changeMeta(custom,game.translate("werewolf.menu.languages.name"),null));
-		invTool.setItem(50, changeMeta(Material.WORKBENCH,game.translate("werewolf.menu.advanced_tool.name"),1,null));
-		ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+		invTool.setItem(45, custom);
+		invTool.setItem(50, changeMeta(Material.CRAFTING_TABLE,game.translate("werewolf.menu.advanced_tool.name"),1,null));
+		ItemStack skull = new ItemStack(Material.PLAYER_HEAD, 1);
 		SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
-		skullMeta.setOwner("Ph1Lou");
+		skullMeta.setDisplayName("Dev §bPh1Lou");
+		skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(UUID.fromString("056be797-2a0b-4807-9af5-37faf5384396")));
 		skull.setItemMeta(skullMeta);
-		invTool.setItem(53,changeMeta( skull,"Dev §bPh1Lou",null));
+		invTool.setItem(53,skull);
 		int[] SlotRedGlass = {1,2,6,7,8,9,10,16,17,18,26,27,35,36,37,43,44,46,47,51,52};
 		int[] SlotBlackGlass = {3,4,5,11,12,14,15,19,20,21,23,24,25,28,34,38,39,40,41,42,49};
 		for (int slotRedGlass : SlotRedGlass) {
-			invTool.setItem(slotRedGlass, changeMeta(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 14), null, null));
+			invTool.setItem(slotRedGlass, changeMeta(Material.RED_STAINED_GLASS_PANE, "", 1, null));
 		}
 		for (int slotBlackGlass : SlotBlackGlass) {
-			invTool.setItem(slotBlackGlass, changeMeta(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15), null, null));
+			invTool.setItem(slotBlackGlass, changeMeta(Material.BLACK_STAINED_GLASS_PANE, "", 1, null));
 		}
 		player.openInventory(invTool);
 	}
@@ -109,9 +111,9 @@ public class Option {
 	public void whiteListTool(Player player) {
 
 		invWhiteList.setItem(0, changeMeta(Material.COMPASS, game.translate("werewolf.menu.return"), 1, null));
-		invWhiteList.setItem(2, changeMeta(new ItemStack(Material.EMPTY_MAP, 1), game.isWhiteList()?game.translate("werewolf.menu.whitelist.close"):game.translate("werewolf.menu.whitelist.open"), null));
-		invWhiteList.setItem(10, changeMeta(new ItemStack(Material.SKULL_ITEM, 1), game.translate("werewolf.menu.whitelist.spectator_mode"), Collections.singletonList(Arrays.asList(game.translate("werewolf.menu.whitelist.disable"),game.translate("werewolf.menu.whitelist.death_only"),game.translate("werewolf.menu.whitelist.enable")).get(game.getSpectatorMode()))));
-		invWhiteList.setItem(12, changeMeta(new ItemStack(Material.SKULL_ITEM, 1, (short) 3), game.translate("werewolf.menu.whitelist.max", game.getPlayerMax()), null));
+		invWhiteList.setItem(2, changeMeta(Material.MAP, game.isWhiteList()?game.translate("werewolf.menu.whitelist.close"):game.translate("werewolf.menu.whitelist.open"), 1,null));
+		invWhiteList.setItem(10, changeMeta(Material.SKELETON_SKULL, game.translate("werewolf.menu.whitelist.spectator_mode"),1, Collections.singletonList(Arrays.asList(game.translate("werewolf.menu.whitelist.disable"),game.translate("werewolf.menu.whitelist.death_only"),game.translate("werewolf.menu.whitelist.enable")).get(game.getSpectatorMode()))));
+		invWhiteList.setItem(12, changeMeta(Material.PLAYER_HEAD, game.translate("werewolf.menu.whitelist.max", game.getPlayerMax()), 1,null));
 		player.openInventory(invWhiteList);
 
 	}
@@ -172,7 +174,7 @@ public class Option {
 	public void stuffTool(Player player) {
 		invStuff.setItem(0, changeMeta(Material.COMPASS,game.translate("werewolf.menu.return"),1,null));
 		invStuff.setItem(2, changeMeta(Material.EGG,game.translate("werewolf.menu.stuff.normal"),1,null));
-		invStuff.setItem(4, changeMeta(Material.GOLD_SWORD,game.translate("werewolf.menu.stuff.meet_up"),1,null));
+		invStuff.setItem(4, changeMeta(Material.GOLDEN_SWORD,game.translate("werewolf.menu.stuff.meet_up"),1,null));
 		invStuff.setItem(6, changeMeta(Material.JUKEBOX,game.translate("werewolf.menu.stuff.chill"),1,null));
 		invStuff.setItem(10, changeMeta(Material.BARRIER,game.translate("werewolf.menu.stuff.delete"),1,null));
 		invStuff.setItem(13, changeMeta(Material.CHEST,game.translate("werewolf.menu.stuff.start"),1,null));
@@ -186,30 +188,48 @@ public class Option {
 		invAdvancedTool.setItem(2, changeMeta(Material.APPLE, game.translate("werewolf.menu.advanced_tool.apple", game.getConfig().getAppleRate()), 1, lore));
 		invAdvancedTool.setItem(4, changeMeta(Material.FLINT, game.translate("werewolf.menu.advanced_tool.flint", game.getConfig().getFlintRate()), 1, lore));
 		invAdvancedTool.setItem(6, changeMeta(Material.ENDER_PEARL, game.translate("werewolf.menu.advanced_tool.ender_pearl", game.getConfig().getPearlRate()), 1, lore));
-		invAdvancedTool.setItem(8, changeMeta(Material.CARROT_ITEM, game.translate("werewolf.menu.advanced_tool.fox_smell_number", game.getConfig().getUseOfFlair()), 1, lore));
-		invAdvancedTool.setItem(10, changeMeta(new ItemStack(Material.POTION, 1, (short) 8201), game.translate("werewolf.menu.advanced_tool.strength", game.getConfig().getStrengthRate()), lore));
+		invAdvancedTool.setItem(8, changeMeta(Material.CARROT, game.translate("werewolf.menu.advanced_tool.fox_smell_number", game.getConfig().getUseOfFlair()), 1, lore));
+
+		ItemStack potionStrength = new ItemStack(Material.POTION);
+		PotionMeta potionMeta = (PotionMeta) potionStrength.getItemMeta();
+		potionMeta.setColor(Color.FUCHSIA);
+		potionMeta.setDisplayName(game.translate("werewolf.menu.advanced_tool.strength", game.getConfig().getStrengthRate()));
+		potionMeta.setLore(lore);
+		potionStrength.setItemMeta(potionMeta);
+
+		invAdvancedTool.setItem(10, potionStrength);
 		invAdvancedTool.setItem(12, changeMeta(Material.DIAMOND, game.translate("werewolf.menu.advanced_tool.diamond", game.getConfig().getDiamondLimit()), 1, lore));
-		invAdvancedTool.setItem(14, changeMeta(Material.EXP_BOTTLE, game.translate("werewolf.menu.advanced_tool.xp", game.getConfig().getXpBoost()), 1, lore));
-		invAdvancedTool.setItem(16, changeMeta(new ItemStack(Material.SKULL_ITEM, 1, (short) 3), game.translate("werewolf.menu.advanced_tool.vote", game.getConfig().getPlayerRequiredVoteEnd()), lore));
+		invAdvancedTool.setItem(14, changeMeta(Material.EXPERIENCE_BOTTLE, game.translate("werewolf.menu.advanced_tool.xp", game.getConfig().getXpBoost()), 1, lore));
+		invAdvancedTool.setItem(16, changeMeta(Material.PLAYER_HEAD, game.translate("werewolf.menu.advanced_tool.vote", game.getConfig().getPlayerRequiredVoteEnd()), 1, lore));
 		invAdvancedTool.setItem(18, changeMeta(Material.GOLD_NUGGET, game.translate("werewolf.menu.advanced_tool.particles"), 1, Collections.singletonList(Arrays.asList(game.translate("werewolf.menu.advanced_tool.particles_off"),game.translate("werewolf.menu.advanced_tool.exception"),game.translate("werewolf.menu.advanced_tool.particles_on")).get(game.getConfig().getGoldenAppleParticles()))));
-		invAdvancedTool.setItem(20, changeMeta(new ItemStack(Material.WOOL, 1, (short) 1), game.translate("werewolf.menu.advanced_tool.fox", game.getConfig().getDistanceFox()), lore));
-		invAdvancedTool.setItem(22, changeMeta(new ItemStack(Material.WOOL, 1, (short) 12), game.translate("werewolf.menu.advanced_tool.bear_trainer", game.getConfig().getDistanceBearTrainer()), lore));
-		invAdvancedTool.setItem(24, changeMeta(new ItemStack(Material.POTION, 1, (short) 8227), game.translate("werewolf.menu.advanced_tool.resistance", game.getConfig().getResistanceRate()), lore));
-		invAdvancedTool.setItem(26, changeMeta(new ItemStack(Material.BREAD, 1), game.translate(game.getConfig().isTrollSV() ?"werewolf.menu.advanced_tool.troll_on" : "werewolf.menu.advanced_tool.troll_off"), null));
-		invAdvancedTool.setItem(28, changeMeta(new ItemStack(Material.WOOL, 1, (short) 6), game.translate("werewolf.menu.advanced_tool.succubus", game.getConfig().getDistanceSuccubus()), lore));
+		invAdvancedTool.setItem(20, changeMeta(Material.ORANGE_WOOL, game.translate("werewolf.menu.advanced_tool.fox", game.getConfig().getDistanceFox()), 1, lore));
+		invAdvancedTool.setItem(22, changeMeta(Material.BROWN_WOOL, game.translate("werewolf.menu.advanced_tool.bear_trainer", game.getConfig().getDistanceBearTrainer()), 1, lore));
+
+		ItemStack potionResistance = new ItemStack(Material.POTION);
+		potionMeta = (PotionMeta) potionStrength.getItemMeta();
+		potionMeta.setColor(Color.NAVY);
+		potionMeta.setDisplayName( game.translate("werewolf.menu.advanced_tool.resistance", game.getConfig().getResistanceRate()));
+		potionMeta.setLore(lore);
+		potionResistance.setItemMeta(potionMeta);
+
+		invAdvancedTool.setItem(24, potionResistance);
+		invAdvancedTool.setItem(26, changeMeta(Material.BREAD, game.translate(game.getConfig().isTrollSV() ?"werewolf.menu.advanced_tool.troll_on" : "werewolf.menu.advanced_tool.troll_off"), 1,null));
+		invAdvancedTool.setItem(28, changeMeta(Material.PURPLE_WOOL, game.translate("werewolf.menu.advanced_tool.succubus", game.getConfig().getDistanceSuccubus()), 1,lore));
 		player.openInventory(invAdvancedTool);
 	}
 
 	public void languageTool(Player player){
 		invLanguage.setItem(0, changeMeta(Material.COMPASS,game.translate("werewolf.menu.return"),1,null));
-		ItemStack fr = new ItemStack(Material.BANNER, 1);
+		ItemStack fr = new ItemStack(Material.WHITE_BANNER, 1);
 		BannerMeta frMeta = (BannerMeta) fr.getItemMeta();
 		frMeta.addPattern(new Pattern(DyeColor.BLUE, PatternType.STRIPE_LEFT));
 		frMeta.addPattern(new Pattern(DyeColor.WHITE, PatternType.STRIPE_CENTER));
 		frMeta.addPattern(new Pattern(DyeColor.RED, PatternType.STRIPE_RIGHT));
+		frMeta.setDisplayName("Français");
+		frMeta.setLore(Collections.singletonList("Par Ph1Lou"));
 		fr.setItemMeta(frMeta);
 
-		ItemStack en = new ItemStack(Material.BANNER, 1);
+		ItemStack en = new ItemStack(Material.WHITE_BANNER, 1);
 		BannerMeta enMeta = (BannerMeta) en.getItemMeta();
 		enMeta.addPattern(new Pattern(DyeColor.BLUE,PatternType.BASE));
 		enMeta.addPattern(new Pattern(DyeColor.WHITE,PatternType.STRIPE_DOWNLEFT));
@@ -219,9 +239,11 @@ public class Option {
 		enMeta.addPattern(new Pattern(DyeColor.WHITE,PatternType.STRIPE_CENTER));
 		enMeta.addPattern(new Pattern(DyeColor.WHITE,PatternType.STRIPE_MIDDLE));
 		enMeta.addPattern(new Pattern(DyeColor.RED,PatternType.STRAIGHT_CROSS));
+		enMeta.setDisplayName("English");
+		enMeta.setLore( Collections.singletonList("By Jormunth"));
 		en.setItemMeta(enMeta);
-		invLanguage.setItem(2,changeMeta(en,"English", Collections.singletonList("By Jormunth")));
-		invLanguage.setItem(4,changeMeta(fr,"Français", Collections.singletonList("Par Ph1Lou")));
+		invLanguage.setItem(2,en);
+		invLanguage.setItem(4,fr);
 		player.openInventory(invLanguage);
 	}
 
@@ -251,7 +273,7 @@ public class Option {
 		invSave.setItem(9, changeMeta(Material.EMERALD_BLOCK,game.translate("werewolf.menu.save.new"),1,null));
 		if(files.length!=0){
 			invSave.setItem(14, changeMeta(Material.BARRIER,game.translate("werewolf.menu.save.delete",files[j].getName()),1,null));
-			invSave.setItem(12, changeMeta(Material.BED, game.translate("werewolf.menu.save.load",files[j].getName()),1,null));
+			invSave.setItem(12, changeMeta(Material.RED_BED, game.translate("werewolf.menu.save.load",files[j].getName()),1,null));
 		}
 		else {
 			invSave.setItem(12,null);
@@ -272,9 +294,9 @@ public class Option {
 	}
 
 	public void save(String saveName, Player player)  {
-		java.io.File file = new java.io.File(main.getDataFolder()+"/configs/", saveName+".json");
-		java.io.File repertoire = new java.io.File(main.getDataFolder()+"/configs/");
-		java.io.File[] files=repertoire.listFiles();
+		File file = new File(main.getDataFolder()+"/configs/", saveName+".json");
+		File repertoire = new File(main.getDataFolder()+"/configs/");
+		File[] files=repertoire.listFiles();
 		if(files==null || files.length<8){
 			FileUtils.save(file, Serializer.serialize(game.getConfig()));
 			game.getStuffs().save(saveName);
@@ -302,17 +324,14 @@ public class Option {
 		updateSelectionSave(findSelect(invSave));
 	}
 
-	public ItemStack changeMeta(ItemStack item, String item_name, List<String> lore) {
+
+	public ItemStack changeMeta(Material m, String item_name, int i, List<String> lore) {
+		ItemStack item = new ItemStack(m,i);
 		ItemMeta meta1 = item.getItemMeta();
 		meta1.setDisplayName(item_name);
 		meta1.setLore(lore);
 		item.setItemMeta(meta1);
 		return item;
-	}
-
-	public ItemStack changeMeta(Material m, String item_name, int i, List<String> lore) {
-		ItemStack item = new ItemStack(m,i);
-		return changeMeta(item,item_name,lore);
 	}
 
 	private int findSelect(Inventory inv) {
@@ -379,19 +398,19 @@ public class Option {
 		int i=9;
 
 		if (game.getConfig().getLoverSize() > 0) {
-			invRole.setItem(2, changeMeta(new ItemStack(Material.STAINED_CLAY, game.getConfig().getLoverSize(), (short) 5), game.translate("werewolf.role.lover.display"), lore));
+			invRole.setItem(2, changeMeta(Material.GREEN_TERRACOTTA, game.translate("werewolf.role.lover.display"), game.getConfig().getLoverSize(), lore));
 		} else
-			invRole.setItem(2, changeMeta(new ItemStack(Material.STAINED_CLAY, 1, (short) 6), game.translate("werewolf.role.lover.display"), lore));
+			invRole.setItem(2, changeMeta(Material.RED_TERRACOTTA, game.translate("werewolf.role.lover.display"),1, lore));
 
 		if (game.getConfig().getAmnesiacLoverSize() > 0) {
-			invRole.setItem(4, changeMeta(new ItemStack(Material.STAINED_CLAY, game.getConfig().getAmnesiacLoverSize(), (short) 5), game.translate("werewolf.role.amnesiac_lover.display"), lore));
+			invRole.setItem(4, changeMeta(Material.GREEN_TERRACOTTA,  game.translate("werewolf.role.amnesiac_lover.display"),game.getConfig().getAmnesiacLoverSize(), lore));
 		} else
-			invRole.setItem(4, changeMeta(new ItemStack(Material.STAINED_CLAY, 1, (short) 6), game.translate("werewolf.role.amnesiac_lover.display"), lore));
+			invRole.setItem(4, changeMeta(Material.RED_TERRACOTTA, game.translate("werewolf.role.amnesiac_lover.display"),1, lore));
 
 		if (game.getConfig().getCursedLoverSize() > 0) {
-			invRole.setItem(6, changeMeta(new ItemStack(Material.STAINED_CLAY, game.getConfig().getCursedLoverSize(), (short) 5), game.translate("werewolf.role.cursed_lover.display"), lore));
+			invRole.setItem(6, changeMeta(Material.GREEN_TERRACOTTA, game.translate("werewolf.role.cursed_lover.display"),game.getConfig().getCursedLoverSize(), lore));
 		} else
-			invRole.setItem(6, changeMeta(new ItemStack(Material.STAINED_CLAY, 1, (short) 6), game.translate("werewolf.role.cursed_lover.display"), lore));
+			invRole.setItem(6, changeMeta(Material.RED_TERRACOTTA, game.translate("werewolf.role.cursed_lover.display"), 1,lore));
 
 		for(Category category:Category.values()){
 			invRole.setItem(category.ordinal()*2+46,changeMeta(this.category.equals(category)?Material.EMERALD_BLOCK:Material.REDSTONE_BLOCK,  game.translate(category.getKey()),count(category),null));
@@ -408,9 +427,9 @@ public class Option {
 				lore2.add(key);
 
 				if (game.getConfig().getRoleCount().get(key) > 0) {
-					invRole.setItem(i, changeMeta(new ItemStack(Material.STAINED_CLAY, game.getConfig().getRoleCount().get(key), (short) 5), roleRegister.getName(), lore2));
+					invRole.setItem(i, changeMeta(Material.GREEN_TERRACOTTA,   roleRegister.getName(),game.getConfig().getRoleCount().get(key), lore2));
 				} else
-					invRole.setItem( i, changeMeta(new ItemStack(Material.STAINED_CLAY, 1, (short) 6), roleRegister.getName(), lore2));
+					invRole.setItem( i, changeMeta(Material.RED_TERRACOTTA, roleRegister.getName(),1, lore2));
 				i++;
 			}
 		}
@@ -458,9 +477,9 @@ public class Option {
 	public void updateSelectionTool() {
 		for (int i = 0; i < ToolLG.values().length; i++) {
 			if (game.getConfig().getConfigValues().get(ToolLG.values()[i])) {
-				invConfig.setItem(9 + i, changeMeta(new ItemStack(Material.STAINED_CLAY, 1, (short) 5), game.translate(ToolLG.values()[i].getKey()), Collections.singletonList(game.translate("werewolf.utils.enable", ""))));
+				invConfig.setItem(9 + i, changeMeta(Material.GREEN_TERRACOTTA, game.translate(ToolLG.values()[i].getKey()),1, Collections.singletonList(game.translate("werewolf.utils.enable", ""))));
 			} else
-				invConfig.setItem(9 + i, changeMeta(new ItemStack(Material.STAINED_CLAY, 1, (short) 6), game.translate(ToolLG.values()[i].getKey()), Collections.singletonList(game.translate("werewolf.utils.disable", ""))));
+				invConfig.setItem(9 + i, changeMeta(Material.RED_TERRACOTTA, game.translate(ToolLG.values()[i].getKey()), 1,Collections.singletonList(game.translate("werewolf.utils.disable", ""))));
 		}
 	}
 
@@ -468,17 +487,19 @@ public class Option {
 		int i=0;
 		for (ScenarioRegister scenarioRegister:main.getRegisterScenarios()) {
 
-			List<String> lore = new ArrayList<>();
-			short clay=6;
-
-			if (game.getConfig().getScenarioValues().get(scenarioRegister.getKey())) {
-				clay=5;
-				lore.add(0,game.translate("werewolf.utils.enable", ""));
-			}
-			else lore.add(0,game.translate("werewolf.utils.disable", ""));
-			lore.addAll(scenarioRegister.getLore());
+			List<String> lore = new ArrayList<>(scenarioRegister.getLore());
 			lore.add(scenarioRegister.getKey());
-			invScenario.setItem(9 + i, changeMeta(new ItemStack(Material.STAINED_CLAY, 1, clay), game.translate(scenarioRegister.getKey()), lore));
+			if (game.getConfig().getScenarioValues().get(scenarioRegister.getKey())) {
+				lore.add(0,game.translate("werewolf.utils.enable", ""));
+				invScenario.setItem(9 + i, changeMeta(Material.GREEN_TERRACOTTA, game.translate(scenarioRegister.getKey()),1, lore));
+			}
+			else {
+				lore.add(0,game.translate("werewolf.utils.disable", ""));
+				invScenario.setItem(9 + i, changeMeta(Material.RED_TERRACOTTA, game.translate(scenarioRegister.getKey()),1, lore));
+			}
+
+
+
 			i++;
 		}
 		game.updateNameTag();

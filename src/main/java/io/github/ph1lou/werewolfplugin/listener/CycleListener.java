@@ -5,7 +5,6 @@ import io.github.ph1lou.werewolfapi.enumlg.*;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
-import io.github.ph1lou.werewolfplugin.utils.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -126,7 +125,7 @@ public class CycleListener implements Listener {
 
             for (Player p : Bukkit.getOnlinePlayers()) {
                 p.sendMessage(game.translate("werewolf.commands.admin.group.group_change", score.getGroup()));
-                Title.sendTitle(p, 20, 60, 20, game.translate("werewolf.commands.admin.group.top_title"), game.translate("werewolf.commands.admin.group.bot_title", score.getGroup()));
+                p.sendTitle( game.translate("werewolf.commands.admin.group.top_title"), game.translate("werewolf.commands.admin.group.bot_title", score.getGroup()), 20, 60, 20);
             }
         }
     }
@@ -147,7 +146,7 @@ public class CycleListener implements Listener {
         game.getWorld().setPVP(true);
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.sendMessage(game.translate("werewolf.announcement.pvp"));
-            p.playSound(p.getLocation(), Sound.DONKEY_ANGRY, 1, 20);
+            p.playSound(p.getLocation(), Sound.ENTITY_DONKEY_ANGRY, 1, 20);
         }
     }
 
@@ -155,7 +154,7 @@ public class CycleListener implements Listener {
     public void onDiggingEnd(DiggingEndEvent event) {
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.sendMessage(game.translate("werewolf.announcement.mining"));
-            p.playSound(p.getLocation(), Sound.ANVIL_BREAK, 1, 20);
+            p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_BREAK, 1, 20);
         }
     }
 }

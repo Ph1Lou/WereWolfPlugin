@@ -2,7 +2,6 @@ package io.github.ph1lou.werewolfplugin.save;
 
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.WriterConfig;
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
@@ -13,10 +12,12 @@ public class FileUtils {
     public static void createFile(File file) throws IOException {
 
         if (!file.exists()) {
+
             if(file.getParentFile().mkdirs()){
-                if(file.createNewFile()){
-                    System.out.println("[WereWolfPlugin] Create " + file.getName());
-                }
+                System.out.println("[WereWolfPlugin] Create parent directory of" + file.getName());
+            }
+            if(file.createNewFile()){
+                System.out.println("[WereWolfPlugin] Create " + file.getName());
             }
         }
     }

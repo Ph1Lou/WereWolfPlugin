@@ -69,7 +69,7 @@ public class CommandRevive implements Commands {
 
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.sendMessage(game.translate("werewolf.commands.admin.revive.perform", args[0]));
-            p.playSound(p.getLocation(), Sound.AMBIENCE_THUNDER, 1, 20);
+            p.playSound(p.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1, 20);
         }
 
     }

@@ -12,6 +12,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -62,7 +63,7 @@ public class Stuff implements StuffManager {
             int pos = 0;
             FileConfiguration config = getOrCreateCustomConfig(plugin, configName);
             if (config == null) {
-                System.out.println("[pluginLG] backup error");
+                System.out.println("[WereWolfPlugin] backup error");
             }
             else{
 
@@ -161,22 +162,21 @@ public class Stuff implements StuffManager {
 
     public FileConfiguration getOrCreateCustomConfig(Plugin plugin, String configName) {
 
-        java.io.File customConfigFile = new java.io.File(plugin.getDataFolder() + java.io.File.separator + "stuffs" + java.io.File.separator, configName + ".yml");
+        File customConfigFile = new File(plugin.getDataFolder() + File.separator + "stuffs" + File.separator, configName + ".yml");
         FileConfiguration customConfig = null;
-        if (!customConfigFile.exists()) {
-            try {
-                FileUtils.createFile(customConfigFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
         try {
+            if (!customConfigFile.exists()) {
+                FileUtils.createFile(customConfigFile);
+            }
             customConfig = new YamlConfiguration();
             customConfig.load(customConfigFile);
+
+
 
         } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
         }
+
         return customConfig;
     }
 

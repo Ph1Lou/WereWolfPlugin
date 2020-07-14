@@ -14,10 +14,7 @@ import io.github.ph1lou.werewolfplugin.roles.werewolfs.*;
 import io.github.ph1lou.werewolfplugin.save.FileUtils;
 import io.github.ph1lou.werewolfplugin.save.Lang;
 import io.github.ph1lou.werewolfplugin.utils.WorldUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -70,7 +67,7 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
 
     @Override
     public void onEnable() {
-	if(getConfig().getBoolean("multichat") == true){
+	if(getConfig().getBoolean("multichat")){
         	Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "multichatbypass"); 
         }
         saveDefaultConfig();
@@ -134,10 +131,11 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
         World world = Bukkit.getWorlds().get(0);
         world.setWeatherDuration(0);
         world.setThundering(false);
-        world.setGameRuleValue("doFireTick", "false");
-        world.setGameRuleValue("reducedDebugInfo", "true");
-        world.setGameRuleValue("naturalRegeneration", "false");
-        world.setGameRuleValue("keepInventory", "true");
+        world.setGameRule(GameRule.DO_FIRE_TICK,false);
+        world.setGameRule(GameRule.REDUCED_DEBUG_INFO,true);
+        world.setGameRule(GameRule.NATURAL_REGENERATION,false);
+        world.setGameRule(GameRule.KEEP_INVENTORY,true);
+
         int x = world.getSpawnLocation().getBlockX();
         int z = world.getSpawnLocation().getBlockZ();
         try{
