@@ -38,7 +38,7 @@ public class LobbyTask extends BukkitRunnable {
                     p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(game.translate("werewolf.action_bar.generation")));
                 }
             } else if (game.getWft().getPercentageCompleted() < 100) {
-                p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(game.translate("werewolf.action_bar.generation",new DecimalFormat("0.0").format(game.getWft().getPercentageCompleted()))));
+                p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(game.translate("werewolf.action_bar.progress",new DecimalFormat("0.0").format(game.getWft().getPercentageCompleted()))));
             } else {
                 p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(game.translate("werewolf.action_bar.complete")));
             }

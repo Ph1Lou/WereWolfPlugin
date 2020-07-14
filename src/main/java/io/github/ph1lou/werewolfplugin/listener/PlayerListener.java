@@ -215,7 +215,7 @@ public class PlayerListener implements Listener {
 		FastBoard fastboard = new FastBoard(player);
 		fastboard.updateTitle(game.translate("werewolf.score_board.title"));
 		game.getBoards().put(uuid, fastboard);
-		player.setPlayerListHeaderFooter(game.translate("werewolf.tab.top"), game.translate("werewolf.tab.bot"));
+		player.setPlayerListHeaderFooter(game.translate("werewolf.tab.top"), game.translate("werewolf.tab.bot")+"§bPh1Lou");
 		if (game.isState(StateLG.LOBBY)) {
 
 			event.setJoinMessage(null);
@@ -283,7 +283,7 @@ public class PlayerListener implements Listener {
 	public void onLanguageUpdate(UpdateLanguageEvent event) {
 
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			player.setPlayerListHeaderFooter(game.translate("werewolf.tab.top"), game.translate("werewolf.tab.bot"));
+			player.setPlayerListHeaderFooter(game.translate("werewolf.tab.top"), game.translate("werewolf.tab.bot")+"§bPh1Lou");
 			if (game.getBoards().containsKey(player.getUniqueId())) {
 				game.getBoards().get(player.getUniqueId()).updateTitle(game.translate("werewolf.score_board.title"));
 			}

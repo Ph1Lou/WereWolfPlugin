@@ -229,13 +229,13 @@ public class MenuListener implements Listener {
                 }
 				else if(current.getType()==Material.STONE_BUTTON) {
 					if(event.getSlot()==1) {
-                        game.getOption().SelectMinusTimer(600);
+                        game.getOption().selectMinusTimer(600);
                     }
 					else if(event.getSlot()==2) {
-                        game.getOption().SelectMinusTimer(60);
+                        game.getOption().selectMinusTimer(60);
                     }
 					else if(event.getSlot()==3) {
-                        game.getOption().SelectMinusTimer(10);
+                        game.getOption().selectMinusTimer(10);
                     }
 					else if(event.getSlot()==5) {
                         game.getOption().selectPlusTimer(10);
@@ -414,7 +414,7 @@ public class MenuListener implements Listener {
                                 game.getConfig().setStrengthRate(game.getConfig().getStrengthRate() + 10);
                             } else if (game.getConfig().getStrengthRate() - 10 >= 0)
                                 game.getConfig().setStrengthRate(game.getConfig().getStrengthRate() - 10);
-                        } else if (potionMeta.getColor().equals(Color.NAVY)) {
+                        } else if (potionMeta.getColor().equals(Color.LIME)) {
                             if (event.getClick().isLeftClick()) {
                                 game.getConfig().setResistanceRate(game.getConfig().getResistanceRate() + 2);
                             } else if (game.getConfig().getResistanceRate() - 2 >= 0)

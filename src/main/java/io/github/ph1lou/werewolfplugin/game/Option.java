@@ -207,7 +207,7 @@ public class Option {
 
 		ItemStack potionResistance = new ItemStack(Material.POTION);
 		potionMeta = (PotionMeta) potionStrength.getItemMeta();
-		potionMeta.setColor(Color.NAVY);
+		potionMeta.setColor(Color.LIME);
 		potionMeta.setDisplayName( game.translate("werewolf.menu.advanced_tool.resistance", game.getConfig().getResistanceRate()));
 		potionMeta.setLore(lore);
 		potionResistance.setItemMeta(potionMeta);
@@ -373,7 +373,7 @@ public class Option {
 		}
 	}
 
-	public void SelectMinusTimer(int v) {
+	public void selectMinusTimer(int v) {
 		int i = Math.max(findSelect(invTimer) - 9, 0);
 		int j = game.getConfig().getTimerValues().get(TimerLG.values()[i]);
 		if (j >= v) {
@@ -413,7 +413,7 @@ public class Option {
 			invRole.setItem(6, changeMeta(Material.RED_TERRACOTTA, game.translate("werewolf.role.cursed_lover.display"), 1,lore));
 
 		for(Category category:Category.values()){
-			invRole.setItem(category.ordinal()*2+46,changeMeta(this.category.equals(category)?Material.EMERALD_BLOCK:Material.REDSTONE_BLOCK,  game.translate(category.getKey()),count(category),null));
+			invRole.setItem(category.ordinal()*2+46,changeMeta(this.category.equals(category)?Material.EMERALD_BLOCK:Material.REDSTONE_BLOCK, game.translate(category.getKey()),Math.max(1,count(category)),null));
 		}
 
 		lore.add(game.translate("werewolf.menu.shift"));
