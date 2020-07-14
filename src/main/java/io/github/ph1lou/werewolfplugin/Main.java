@@ -70,8 +70,8 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
 
     @Override
     public void onEnable() {
-	if(getConfig().getBoolean("multichat") == true){
-        	Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "multichatbypass"); 
+        if (getConfig().getBoolean("multichat")) {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "multichatbypass");
         }
         saveDefaultConfig();
         registerRole();
