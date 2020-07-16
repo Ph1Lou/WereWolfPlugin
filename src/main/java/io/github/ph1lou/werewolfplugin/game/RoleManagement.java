@@ -2,12 +2,13 @@ package io.github.ph1lou.werewolfplugin.game;
 
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.RoleRegister;
+import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.State;
 import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
+import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
@@ -79,25 +80,26 @@ public class RoleManagement {
 		for (UUID uuid : game.getPlayersWW().keySet()) {
 
 			PlayerWW plg = game.getPlayersWW().get(uuid);
+			Player c = Bukkit.getPlayer(uuid);
 
-			if (plg.isState(State.ALIVE) && plg.getRole().isDisplay("werewolf.role.siamese_twin.display") && Bukkit.getPlayer(uuid) != null) {
-				Player c = Bukkit.getPlayer(uuid);
+			if (plg.isState(State.ALIVE) && plg.getRole().isDisplay("werewolf.role.siamese_twin.display") && c != null) {
 				counter++;
-				health += c.getHealth() / c.getMaxHealth();
+				health += c.getHealth() / VersionUtils.getVersionUtils().getPlayerMaxHealth(c);
 			}
 		}
 		health /= counter;
 		for (UUID uuid:game.getPlayersWW().keySet()) {
 
-			PlayerWW plg= game.getPlayersWW().get(uuid);
+			PlayerWW plg = game.getPlayersWW().get(uuid);
+			Player c = Bukkit.getPlayer(uuid);
 
-			if (plg.isState(State.ALIVE) && plg.getRole().isDisplay("werewolf.role.siamese_twin.display") && Bukkit.getPlayer(uuid) != null) {
-				Player c = Bukkit.getPlayer(uuid);
-				if(health * c.getMaxHealth()>10){
-					if(health * c.getMaxHealth()+1<c.getHealth()){
-						c.playSound(c.getLocation(), Sound.BURP,1,20);
+			if (plg.isState(State.ALIVE) && plg.getRole().isDisplay("werewolf.role.siamese_twin.display") && c != null) {
+
+				if (health * VersionUtils.getVersionUtils().getPlayerMaxHealth(c) > 10) {
+					if (health * VersionUtils.getVersionUtils().getPlayerMaxHealth(c) + 1 < c.getHealth()) {
+						Sounds.BURP.play(c);
 					}
-					c.setHealth(health * c.getMaxHealth());
+					c.setHealth(health * VersionUtils.getVersionUtils().getPlayerMaxHealth(c));
 				}
 			}
 		}

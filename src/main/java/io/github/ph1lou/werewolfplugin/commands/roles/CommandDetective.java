@@ -83,39 +83,48 @@ public class CommandDetective implements Commands {
 
         for(String p:args) {
 
-            if(Bukkit.getPlayer(p)==null){
+            Player playerArg = Bukkit.getPlayer(p);
+
+            if (playerArg == null) {
                 player.sendMessage(game.translate("werewolf.check.offline_player"));
                 return;
             }
-            UUID uuid1=Bukkit.getPlayer(p).getUniqueId();
 
-            if(!game.getPlayersWW().containsKey(uuid1) || game.getPlayersWW().get(uuid).isState(State.DEATH)) {
+            UUID uuid1 = playerArg.getUniqueId();
+
+
+            if (!game.getPlayersWW().containsKey(uuid1) || game.getPlayersWW().get(uuid).isState(State.DEATH)) {
                 player.sendMessage(game.translate("werewolf.check.player_not_found"));
                 return;
             }
 
-            if(uuid.equals(uuid1)) {
+            if (uuid.equals(uuid1)) {
                 player.sendMessage(game.translate("werewolf.check.not_yourself"));
                 return;
             }
 
-            if(((AffectedPlayers)detective).getAffectedPlayers().contains(uuid1)){
+            if (((AffectedPlayers) detective).getAffectedPlayers().contains(uuid1)) {
                 player.sendMessage(game.translate("werewolf.role.detective.already_inspect"));
                 return;
             }
         }
 
-        UUID uuid1=Bukkit.getPlayer(args[0]).getUniqueId();
-        UUID uuid2=Bukkit.getPlayer(args[1]).getUniqueId();
+        Player player1 = Bukkit.getPlayer(args[0]);
+        Player player2 = Bukkit.getPlayer(args[1]);
+
+        if (player1 == null || player2 == null) return;
+
+        UUID uuid1 = player1.getUniqueId();
+        UUID uuid2 = player2.getUniqueId();
 
         PlayerWW plg1 = game.getPlayersWW().get(uuid1);
         PlayerWW plg2 = game.getPlayersWW().get(uuid2);
 
-        Camp isLG1=plg2.getRole().getCamp();
-        Camp isLG2=plg1.getRole().getCamp();
+        Camp isLG1 = plg2.getRole().getCamp();
+        Camp isLG2 = plg1.getRole().getCamp();
 
-        if(plg1.getRole() instanceof Display) {
-            isLG2= ((Display) plg1.getRole()).getDisplayCamp();
+        if (plg1.getRole() instanceof Display) {
+            isLG2 = ((Display) plg1.getRole()).getDisplayCamp();
         }
         if(plg2.getRole() instanceof Display) {
             isLG1= ((Display) plg2.getRole()).getDisplayCamp();

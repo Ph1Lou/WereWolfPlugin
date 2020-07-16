@@ -4,6 +4,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
+import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -30,18 +31,21 @@ public class SiameseTwin extends RolesVillage {
     @Override
     public void stolen(UUID uuid) {
 
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
+        if (getPlayerUUID() == null) return;
+
+        Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (player == null) {
             return;
         }
-
-        Bukkit.getPlayer(getPlayerUUID()).setMaxHealth(24);
+        VersionUtils.getVersionUtils().setPlayerMaxHealth(player, 24);
     }
 
     @Override
     public Player recoverPower() {
         Player player = super.recoverPower();
         if(player==null) return null;
-        player.setMaxHealth(24);
+        VersionUtils.getVersionUtils().setPlayerMaxHealth(player, 24);
         return player;
     }
 }

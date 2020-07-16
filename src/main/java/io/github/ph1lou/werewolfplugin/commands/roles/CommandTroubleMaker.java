@@ -63,23 +63,25 @@ public class CommandTroubleMaker implements Commands {
             return;
         }
 
-        if(!plg.isState(State.ALIVE)){
+        if (!plg.isState(State.ALIVE)) {
             player.sendMessage(game.translate("werewolf.check.death"));
             return;
         }
 
-        if(!((Power)troublemaker).hasPower()) {
+        if (!((Power) troublemaker).hasPower()) {
             player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
 
-        if(Bukkit.getPlayer(args[0])==null){
+        Player playerArg = Bukkit.getPlayer(args[0]);
+
+        if (playerArg == null) {
             player.sendMessage(game.translate("werewolf.check.offline_player"));
             return;
         }
-        UUID argUUID = Bukkit.getPlayer(args[0]).getUniqueId();
+        UUID argUUID = playerArg.getUniqueId();
 
-        if(!game.getPlayersWW().containsKey(argUUID) || !game.getPlayersWW().get(argUUID).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().containsKey(argUUID) || !game.getPlayersWW().get(argUUID).isState(State.ALIVE)) {
             player.sendMessage(game.translate("werewolf.check.player_not_found"));
             return;
         }

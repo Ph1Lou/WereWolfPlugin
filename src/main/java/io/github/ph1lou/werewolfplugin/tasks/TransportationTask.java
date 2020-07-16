@@ -1,12 +1,13 @@
 package io.github.ph1lou.werewolfplugin.tasks;
 
 import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
-import io.github.ph1lou.werewolfplugin.utils.Title;
+import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -64,8 +65,8 @@ public class TransportationTask extends BukkitRunnable {
         if (i < game.getPlayersWW().size()) {
 
             for (Player p : Bukkit.getOnlinePlayers()) {
-                p.playSound(p.getLocation(), Sound.DIG_GRASS, 1, 20);
-                Title.sendActionBar(p, game.translate("werewolf.action_bar.create_tp_point", i + 1, game.getPlayersWW().size()));
+                Sounds.DIG_GRASS.play(p);
+                VersionUtils.getVersionUtils().sendActionBar(p, game.translate("werewolf.action_bar.create_tp_point", i + 1, game.getPlayersWW().size()));
             }
 
             UUID uuid = (UUID) game.getPlayersWW().keySet().toArray()[i];
@@ -80,14 +81,15 @@ public class TransportationTask extends BukkitRunnable {
         } else if (i < 2 * game.getPlayersWW().size()) {
 
             for (Player p : Bukkit.getOnlinePlayers()) {
-                p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1, 20);
-                Title.sendActionBar(p, game.translate("werewolf.action_bar.tp", i - game.getPlayersWW().size() + 1, game.getPlayersWW().size()));
+                Sounds.ORB_PICKUP.play(p);
+                VersionUtils.getVersionUtils().sendActionBar(p, game.translate("werewolf.action_bar.tp", i - game.getPlayersWW().size() + 1, game.getPlayersWW().size()));
             }
 
             UUID uuid = (UUID) game.getPlayersWW().keySet().toArray()[i - game.getPlayersWW().size()];
+            Player player = Bukkit.getPlayer(uuid);
 
-            if (Bukkit.getPlayer(uuid) != null) {
-                Player player = Bukkit.getPlayer(uuid);
+            if (player != null) {
+
                 player.setGameMode(GameMode.ADVENTURE);
                 game.clearPlayer(player);
                 Inventory inventory = player.getInventory();
@@ -122,8 +124,8 @@ public class TransportationTask extends BukkitRunnable {
                     p.setGameMode(GameMode.SPECTATOR);
                 }
 
-                Title.sendTitle(p, 20, 20, 20, game.translate("werewolf.announcement.start.top_title"), game.translate("werewolf.announcement.start.bot_title"));
-                p.playSound(p.getLocation(), Sound.NOTE_BASS, 1, 20);
+                VersionUtils.getVersionUtils().sendTitle(p, game.translate("werewolf.announcement.start.top_title"), game.translate("werewolf.announcement.start.bot_title"), 20, 20, 20);
+                Sounds.NOTE_BASS.play(p);
             }
             world.setTime(0);
 
@@ -135,8 +137,8 @@ public class TransportationTask extends BukkitRunnable {
             cancel();
         } else if (i % 5 == 0) {
             for (Player p : Bukkit.getOnlinePlayers()) {
-                Title.sendTitle(p, 25, 20, 25, "Start", "§b" + (10 - j));
-                p.playSound(p.getLocation(), Sound.NOTE_PIANO, 1, 20);
+                VersionUtils.getVersionUtils().sendTitle(p, "Start", "§b" + (10 - j), 25, 20, 25);
+                Sounds.NOTE_PIANO.play(p);
             }
             j++;
         }

@@ -53,10 +53,10 @@ public class Lang {
 
     public void updateLanguage(GameManager game) {
         game.getLanguage().clear();
-        game.getLanguage().putAll(loadTranslations(FileUtils.loadContent(buildLanguageFile(main, "fr"))));
+        game.getLanguage().putAll(loadTranslations(FileUtils_.loadContent(buildLanguageFile(main, "fr"))));
         main.getExtraTexts().clear();
         for (Plugin plugin : main.getDefaultLanguages().keySet()) {
-            main.getExtraTexts().putAll(loadTranslations(FileUtils.loadContent(buildLanguageFile(plugin, main.getDefaultLanguages().get(plugin)))));
+            main.getExtraTexts().putAll(loadTranslations(FileUtils_.loadContent(buildLanguageFile(plugin, main.getDefaultLanguages().get(plugin)))));
         }
         Bukkit.getPluginManager().callEvent(new UpdateLanguageEvent());
     }
@@ -65,27 +65,27 @@ public class Lang {
 
         String lang = main.getConfig().getString("lang");
         File file = new File(plugin.getDataFolder() + File.separator + "languages" + File.separator, lang + ".json");
-        String defaultText = FileUtils.convert(plugin.getResource(defaultLang + ".json"));
+        String defaultText = FileUtils_.convert(plugin.getResource(defaultLang + ".json"));
 
         if (!file.exists()) {
-            FileUtils.copy(plugin.getResource(lang + ".json"), plugin.getDataFolder() + File.separator + "languages" + File.separator + lang + ".json");
+            FileUtils_.copy(plugin.getResource(lang + ".json"), plugin.getDataFolder() + File.separator + "languages" + File.separator + lang + ".json");
         }
         if (!file.exists()) {
             assert defaultText != null;
-            FileUtils.saveJson(file, Json.parse(defaultText).asObject());
+            FileUtils_.saveJson(file, Json.parse(defaultText).asObject());
         } else {
             Map<String, String> fr = loadTranslations(defaultText);
-            Map<String, String> custom = loadTranslations(FileUtils.loadContent(file));
-            final JsonObject jsonObject = Json.parse(FileUtils.loadContent(file)).asObject();
+            Map<String, String> custom = loadTranslations(FileUtils_.loadContent(file));
+            final JsonObject jsonObject = Json.parse(FileUtils_.loadContent(file)).asObject();
 
-            for(String string:fr.keySet()){
-                if(!custom.containsKey(string)){
+            for (String string : fr.keySet()) {
+                if (!custom.containsKey(string)) {
                     JsonObject temp = jsonObject;
                     String tempString = string;
-                    while(temp.get(tempString.split("\\.")[0])!=null){
-                        String temp2=tempString.split("\\.")[0];
-                        tempString=tempString.replaceFirst(temp2+"\\.","");
-                        temp=temp.get(temp2).asObject();
+                    while (temp.get(tempString.split("\\.")[0]) != null) {
+                        String temp2 = tempString.split("\\.")[0];
+                        tempString = tempString.replaceFirst(temp2 + "\\.", "");
+                        temp = temp.get(temp2).asObject();
                     }
                     String[] strings =tempString.split("\\.");
                     for (int i=0;i<strings.length-1;i++){
@@ -95,7 +95,7 @@ public class Lang {
                     temp.set(strings[strings.length-1],fr.get(string));
                 }
             }
-            FileUtils.saveJson(file,jsonObject);
+            FileUtils_.saveJson(file, jsonObject);
         }
         return file;
 

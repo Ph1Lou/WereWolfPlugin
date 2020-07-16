@@ -57,7 +57,7 @@ public class Config implements ConfigWereWolfAPI {
         java.io.File file = new java.io.File(main.getDataFolder() + java.io.File.separator + "configs" + java.io.File.separator, configName + ".json");
 
         if (file.exists()) {
-            this_load = Serializer.deserialize(FileUtils.loadContent(file));
+            this_load = Serializer.deserialize(FileUtils_.loadContent(file));
             this.setDiamondLimit(this_load.getDiamondLimit());
             this.setStrengthRate(this_load.getStrengthRate());
             this.setPlayerRequiredVoteEnd(this_load.getPlayerRequiredVoteEnd());
@@ -107,7 +107,7 @@ public class Config implements ConfigWereWolfAPI {
             this.scenarioValues.put(scenarioRegister.getKey(), this_load.scenarioValues.getOrDefault(scenarioRegister.getKey(), scenarioRegister.getDefaultValue()));
         }
 
-        FileUtils.save(file, Serializer.serialize(this));
+        FileUtils_.save(file, Serializer.serialize(this));
 
 
     }

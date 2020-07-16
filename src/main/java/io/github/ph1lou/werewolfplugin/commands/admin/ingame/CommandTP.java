@@ -33,28 +33,31 @@ public class CommandTP implements Commands {
             return;
         }
 
+        Player playerArg1 = Bukkit.getPlayer(args[0]);
+
         if (args.length == 1) {
-            try {
-                if (player.getWorld().equals(Bukkit.getPlayer(args[0]).getWorld())) {
-                    player.teleport(Bukkit.getPlayer(args[0]));
-                    Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.commands.admin.teleportation", sender.getName(), args[0]));
-                }
-            } catch (Exception ignored) {
+
+            if (playerArg1 == null) {
+                player.sendMessage(game.translate("werewolf.check.offline_player"));
+                return;
             }
+
+            player.teleport(playerArg1);
+            Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.commands.admin.teleportation", sender.getName(), args[0]));
         }
 
 
+        if (args.length != 2) return;
 
-        if(args.length!=2) return;
+        Player playerArg2 = Bukkit.getPlayer(args[1]);
 
-        try{
-            if(Bukkit.getPlayer(args[1]).getWorld().equals(Bukkit.getPlayer(args[0]).getWorld())){
-                Bukkit.getPlayer(args[0]).teleport(Bukkit.getPlayer(args[1]));
-                Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.commands.admin.teleportation",args[0],args[1]));
-            }
+        if (playerArg2 == null || playerArg1 == null) {
+            player.sendMessage(game.translate("werewolf.check.offline_player"));
+            return;
         }
-        catch (Exception ignored) {
-        }
+
+        playerArg1.teleport(playerArg2);
+        Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.commands.admin.teleportation", args[0], args[1]));
 
     }
 }

@@ -30,7 +30,6 @@ public class EnchantmentListener implements Listener {
     @EventHandler
     public void onPrepareAnvilEvent(InventoryClickEvent event) {
 
-        if(event.getInventory() ==null) return;
         if(!event.getInventory().getType().equals(InventoryType.ANVIL)) return;
         if(event.getSlot()!=2) return;
         ItemStack current = event.getCurrentItem();

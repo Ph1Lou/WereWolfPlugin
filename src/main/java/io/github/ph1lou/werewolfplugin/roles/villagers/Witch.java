@@ -14,6 +14,7 @@ import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
 import java.util.ArrayList;
@@ -70,22 +71,25 @@ public class Witch extends RolesVillage implements AffectedPlayers, Power {
     }
 
     @EventHandler
-    public void onThirdDeathEvent(ThirdDeathEvent event){
+    public void onThirdDeathEvent(ThirdDeathEvent event) {
 
-        if(event.isCancelled()) return;
+        if (event.isCancelled()) return;
 
-        if(!hasPower()) return;
+        if (!hasPower()) return;
+
+        if (getPlayerUUID() == null) return;
 
         PlayerWW plg = game.getPlayersWW().get(event.getUuid());
+        Player player = Bukkit.getPlayer(getPlayerUUID());
 
         if (event.getUuid().equals(getPlayerUUID())) {
-            if(game.getConfig().getConfigValues().get(ToolLG.AUTO_REZ_WITCH)){
-                WitchResurrectionEvent witchResurrectionEvent=new WitchResurrectionEvent(getPlayerUUID(),event.getUuid());
+            if (game.getConfig().getConfigValues().get(ToolLG.AUTO_REZ_WITCH)) {
+                WitchResurrectionEvent witchResurrectionEvent = new WitchResurrectionEvent(getPlayerUUID(), event.getUuid());
                 Bukkit.getPluginManager().callEvent(witchResurrectionEvent);
 
-                if(witchResurrectionEvent.isCancelled()){
-                    if(Bukkit.getPlayer(getPlayerUUID())!=null){
-                        Bukkit.getPlayer(getPlayerUUID()).sendMessage(game.translate("werewolf.check.cancel"));
+                if (witchResurrectionEvent.isCancelled()) {
+                    if (player != null) {
+                        player.sendMessage(game.translate("werewolf.check.cancel"));
                     }
                     return;
                 }
@@ -98,10 +102,10 @@ public class Witch extends RolesVillage implements AffectedPlayers, Power {
 
             if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE) ) return;
 
-            if(Bukkit.getPlayer(getPlayerUUID()) != null){
+            if (player != null) {
                 TextComponent witch_msg = new TextComponent(game.translate("werewolf.role.witch.resuscitation_message", plg.getName()));
-                witch_msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/ww "+game.translate("werewolf.role.witch.command") +" "+ event.getUuid()));
-                Bukkit.getPlayer(getPlayerUUID()).spigot().sendMessage(witch_msg);
+                witch_msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/ww " + game.translate("werewolf.role.witch.command") + " " + event.getUuid()));
+                player.spigot().sendMessage(witch_msg);
             }
         }
     }

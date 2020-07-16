@@ -64,25 +64,26 @@ public class CommandLibrarian implements Commands {
             return;
         }
 
-        if(!plg.isState(State.ALIVE)){
+        if (!plg.isState(State.ALIVE)) {
             player.sendMessage(game.translate("werewolf.check.death"));
             return;
         }
 
-        if(args[0].toLowerCase().equals(playername.toLowerCase())) {
+        if (args[0].toLowerCase().equals(playername.toLowerCase())) {
             player.sendMessage(game.translate("werewolf.check.not_yourself"));
             return;
         }
 
-        if(Bukkit.getPlayer(args[0])==null){
+        Player selectionPlayer = Bukkit.getPlayer(args[0]);
+
+        if (selectionPlayer == null) {
             player.sendMessage(game.translate("werewolf.check.offline_player"));
             return;
         }
 
-        Player selectionPlayer =Bukkit.getPlayer(args[0]);
         UUID argUUID = selectionPlayer.getUniqueId();
 
-        if(!game.getPlayersWW().containsKey(argUUID) || !game.getPlayersWW().get(argUUID).isState(State.ALIVE)){
+        if (!game.getPlayersWW().containsKey(argUUID) || !game.getPlayersWW().get(argUUID).isState(State.ALIVE)) {
             player.sendMessage(game.translate("werewolf.check.player_not_found"));
             return;
         }

@@ -51,17 +51,18 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
     @EventHandler
     public void onDay(DayEvent event) {
 
+        if (getPlayerUUID() == null) return;
 
         if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
             return;
         }
-
+        Player player = Bukkit.getPlayer(getPlayerUUID());
         setPower(true);
 
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
+        if (player == null) {
             return;
         }
-        Player player = Bukkit.getPlayer(getPlayerUUID());
+
 
         player.sendMessage(game.translate("werewolf.role.raven.curse_message", game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.POWER_DURATION))));
     }
@@ -88,6 +89,7 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
     @EventHandler
     private void onPlayerDamage(EntityDamageEvent event) {
 
+        if (getPlayerUUID() == null) return;
 
         if (!(event.getEntity() instanceof Player)) return;
 

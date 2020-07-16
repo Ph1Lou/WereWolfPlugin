@@ -70,16 +70,18 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
     @Override
     public void stolen(UUID uuid) {
 
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
-            return;
-        }
+        if (getPlayerUUID() == null) return;
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (player == null) {
+            return;
+        }
 
         if (hasPower()) {
             player.sendMessage(game.translate("werewolf.role.cupid.lover_designation_message", game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.LOVER_DURATION))));
         } else {
-            player.sendMessage(game.translate("werewolf.role.cupid.designation_perform",game.getPlayersWW().get(getAffectedPlayers().get(0)).getName(), game.getPlayersWW().get(getAffectedPlayers().get(1)).getName()));
+            player.sendMessage(game.translate("werewolf.role.cupid.designation_perform", game.getPlayersWW().get(getAffectedPlayers().get(0)).getName(), game.getPlayersWW().get(getAffectedPlayers().get(1)).getName()));
         }
     }
 

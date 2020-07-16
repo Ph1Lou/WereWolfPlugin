@@ -32,15 +32,18 @@ public class CommandVote implements Commands {
             sender.sendMessage(game.translate("werewolf.check.player_input"));
             return;
         }
-        if(!game.getPlayersWW().containsKey(((Player) sender).getUniqueId())) {
+        if (!game.getPlayersWW().containsKey(((Player) sender).getUniqueId())) {
             sender.sendMessage(game.translate("werewolf.check.not_in_game"));
             return;
         }
-        if(Bukkit.getPlayer(args[0])==null){
+
+        Player playerArg = Bukkit.getPlayer(args[0]);
+
+        if (playerArg == null) {
             sender.sendMessage(game.translate("werewolf.check.offline_player"));
             return;
         }
-        UUID argUUID = Bukkit.getPlayer(args[0]).getUniqueId();
+        UUID argUUID = playerArg.getUniqueId();
         game.getVote().setUnVote(((Player) sender).getUniqueId(), argUUID);
     }
 }

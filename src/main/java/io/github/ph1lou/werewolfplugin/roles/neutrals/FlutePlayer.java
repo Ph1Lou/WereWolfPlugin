@@ -36,16 +36,19 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
 
         if (!hasPower()) return;
 
-        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
+        if (getPlayerUUID() == null) return;
+
+        Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
             return;
         }
 
         setPower(false);
 
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
+        if (player == null) {
             return;
         }
-        Player player = Bukkit.getPlayer(getPlayerUUID());
 
         player.sendMessage(game.translate("werewolf.check.end_selection"));
     }
@@ -75,16 +78,18 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
             return;
         }
 
+        if (getPlayerUUID() == null) return;
+
+        Player player = Bukkit.getPlayer(getPlayerUUID());
         setPower(true);
 
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
+        if (player == null) {
             return;
         }
-        Player player = Bukkit.getPlayer(getPlayerUUID());
 
         player.sendMessage(game.translate("werewolf.role.flute_player.power", game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.POWER_DURATION))));
     }
@@ -148,9 +153,10 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
 
         if(!event.getPlayerUUID().equals(getPlayerUUID())) return;
 
-        for(UUID uuid:affectedPlayer){
-            if(Bukkit.getPlayer(uuid)!=null){
-                Bukkit.getPlayer(uuid).sendMessage(enchantedList());
+        for(UUID uuid:affectedPlayer) {
+            Player player = Bukkit.getPlayer(uuid);
+            if (player != null) {
+                player.sendMessage(enchantedList());
             }
         }
     }
@@ -168,11 +174,13 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
     @Override
     public void stolen(UUID uuid) {
 
-        if(Bukkit.getPlayer(getPlayerUUID())==null) return;
+        if (getPlayerUUID() == null) return;
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if(!enchantedList().isEmpty()){
+        if (player == null) return;
+
+        if (!enchantedList().isEmpty()) {
             player.sendMessage(enchantedList());
         }
 

@@ -458,9 +458,9 @@
     "menu": {
       "name": "Option §bLG",
       "return": "Revenir au Menu Principal",
-      "left":"§fClique-§bGauche§r >> +",
-      "right":"§fClique-§bDroit§r >> -",
-      "shift":"§bShift§r-Clique >> Stuff",
+      "left": "§fClique-§bGauche§f >> +",
+      "right": "§fClique-§bDroit§f >> -",
+      "shift": "§bShift§f-Clique >> Stuff",
       "advanced_tool": {
         "name": "Configuration §bAvancée",
         "troll_on": "Troll SV §2Activé",
@@ -559,14 +559,15 @@
         "succubus_duration": "Durée du Charme du Succube (§b%s§r)"
       },
       "save": {
-        "name":"Configuration §bSauvegarde",
+        "name": "Configuration §bSauvegarde",
         "new": "Créer une nouvelle sauvegarde",
         "load": "Charger §b%s",
         "delete": "Supprimer §b%s",
         "configuration": "Configuration §b%s",
         "success": "[§aLG UHC§r] Configuration §bsauvegardée",
         "failure": "[§cLG UHC§r] Slot de configuration plein",
-        "delete_failed": "[§cLG UHC§r] Erreur lors de la suppression de §b%s"
+        "delete_failed": "[§cLG UHC§r] Erreur lors de la suppression de §b%s",
+        "save_menu": "§bMenu de §bSauvegarde"
       },
       "stuff": {
         "name": "Configuration §bStuff",
@@ -682,7 +683,7 @@
       "up_to_date": "[§aLG UHC§r] Le plugin LG UHC est à jour",
       "out_of_date": "[§6LG UHC§r] Une mise à jour du plugin est disponible"
     },
-    "bug": "§b§m§l-+-----------------------------------------+-\n§f        [§cLG UHC§r] Signalez les bugs en cliquant ici\n§r§b§m§l-+-----------------------------------------+-",
+    "bug": "§b§m§l-+-----------------------------------------+-\n§f        [§cLG UHC§f] Signalez les bugs en cliquant ici\n§r§b§m§l-+-----------------------------------------+-",
     "event": {
       "on_sign": "Bon toutou",
       "seer_death": "[§eLG UHC§r] Avant de mourir, la Voyante a fait apparaitre §b%s§r caches sur la map, une seule renferme le nom d'un Ennemi du Village",

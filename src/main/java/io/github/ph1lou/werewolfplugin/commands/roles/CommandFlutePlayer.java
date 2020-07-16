@@ -82,18 +82,18 @@ public class CommandFlutePlayer implements Commands {
 
             for(String p:args) {
 
-                if(Bukkit.getPlayer(p)==null){
+                Player playerArg = Bukkit.getPlayer(p);
+
+                if (playerArg == null) {
                     player.sendMessage(game.translate("werewolf.check.offline_player"));
                     return;
                 }
 
-                Player p1=Bukkit.getPlayer(p);
+                UUID playerUUID = playerArg.getUniqueId();
 
-                UUID playerUUID = Bukkit.getPlayer(p).getUniqueId();
-
-                if(!game.getPlayersWW().containsKey(playerUUID) || game.getPlayersWW().get(playerUUID).isState(State.DEATH)){
+                if (!game.getPlayersWW().containsKey(playerUUID) || game.getPlayersWW().get(playerUUID).isState(State.DEATH)) {
                     player.sendMessage(game.translate("werewolf.check.player_not_found"));
-                    return ;
+                    return;
                 }
 
                 if(p.equals(plg.getName())) {
@@ -101,19 +101,19 @@ public class CommandFlutePlayer implements Commands {
                     return ;
                 }
 
-                if(!game.getPlayersWW().containsKey(playerUUID)){
+                if (!game.getPlayersWW().containsKey(playerUUID)) {
                     player.sendMessage(game.translate("werewolf.check.not_in_game_player"));
-                    return ;
+                    return;
                 }
 
-                if(((AffectedPlayers)flutePlayer).getAffectedPlayers().contains(playerUUID) ){
-                    player.sendMessage(game.translate("werewolf.role.flute_player.already_enchant",p1.getName()));
-                    return ;
+                if (((AffectedPlayers) flutePlayer).getAffectedPlayers().contains(playerUUID)) {
+                    player.sendMessage(game.translate("werewolf.role.flute_player.already_enchant", playerArg.getName()));
+                    return;
                 }
 
-                if(player.getLocation().distance(p1.getLocation())>100 ){
-                    player.sendMessage(game.translate("werewolf.role.flute_player.distance",p1.getName()));
-                    return ;
+                if (player.getLocation().distance(playerArg.getLocation()) > 100) {
+                    player.sendMessage(game.translate("werewolf.role.flute_player.distance", playerArg.getName()));
+                    return;
                 }
             }
 
@@ -121,6 +121,7 @@ public class CommandFlutePlayer implements Commands {
 
             for(String p:args) {
                 Player enchanted =Bukkit.getPlayer(p);
+                if (enchanted == null) return;
                 UUID uuid1=enchanted.getUniqueId();
                 listUUIDs.add(uuid1);
                 ((AffectedPlayers) flutePlayer).addAffectedPlayer(uuid1);

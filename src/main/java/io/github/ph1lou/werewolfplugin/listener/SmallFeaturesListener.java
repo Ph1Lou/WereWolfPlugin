@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.listener;
 
+import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.events.GoldenAppleParticleEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
@@ -49,7 +50,7 @@ public class SmallFeaturesListener implements Listener {
         Action a = event.getAction();
         if (a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK) {
 
-            if (event.getPlayer().getInventory().getItemInHand().getType() == Material.MILK_BUCKET) {
+            if (event.getPlayer().getItemOnCursor().getType() == Material.MILK_BUCKET) {
                 event.setCancelled(true);
             }
         }
@@ -63,7 +64,7 @@ public class SmallFeaturesListener implements Listener {
 
         if(inv.getResult()==null) return;
 
-        if (inv.getResult().getType() == Material.GOLDEN_APPLE && inv.getResult().getDurability() == 1) {
+        if (UniversalMaterial.ENCHANTED_GOLDEN_APPLE.getStack(inv.getResult().getAmount()).equals(inv.getResult())) {
             inv.setResult(AIR);
         }
     }
@@ -71,17 +72,14 @@ public class SmallFeaturesListener implements Listener {
     @EventHandler
     public void onAppleEat(PlayerItemConsumeEvent event) {
 
-        if (event.getItem().getType().equals(Material.GOLDEN_APPLE)) {
+        if (UniversalMaterial.ENCHANTED_GOLDEN_APPLE.getStack(event.getItem().getAmount()).equals(event.getItem())) {
+            event.setCancelled(true);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> event.getPlayer().getInventory().remove(event.getItem()));
 
-            if (event.getItem().getDurability() == 1) {
-                event.setCancelled(true);
-            }
+        } else if (event.getItem().getType().equals(Material.GOLDEN_APPLE)) {
 
             Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
-                if (event.getItem().getDurability() == 1) {
-                    event.getPlayer().getInventory().remove(event.getItem());
-                    return;
-                }
+
                 if (game.getConfig().getGoldenAppleParticles() == 2) {
                     return;
                 }

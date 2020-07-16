@@ -8,15 +8,16 @@ import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
 
-public class FileUtils {
+public class FileUtils_ {
 
     public static void createFile(File file) throws IOException {
 
         if (!file.exists()) {
-            if(file.getParentFile().mkdirs()){
-                if(file.createNewFile()){
-                    System.out.println("[WereWolfPlugin] Create " + file.getName());
-                }
+            if (file.getParentFile().mkdirs()) {
+                System.out.println("[WereWolfPlugin] Create Parent Directory for " + file.getName());
+            }
+            if (file.createNewFile()) {
+                System.out.println("[WereWolfPlugin] Create " + file.getName());
             }
         }
     }

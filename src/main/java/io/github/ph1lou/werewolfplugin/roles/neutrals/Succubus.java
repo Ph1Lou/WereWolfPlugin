@@ -4,6 +4,7 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.State;
 import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
 import io.github.ph1lou.werewolfapi.events.*;
@@ -13,7 +14,6 @@ import io.github.ph1lou.werewolfapi.rolesattributs.Progress;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
@@ -86,20 +86,23 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
     @Override
     public void stolen(UUID uuid) {
 
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
+        if (getPlayerUUID() == null) return;
+
+        Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (player == null) {
             return;
         }
-
-        Player player =Bukkit.getPlayer(getPlayerUUID());
 
         if (hasPower()) {
             player.sendMessage(game.translate("werewolf.role.succubus.charming_message"));
         } else {
             if (!getAffectedPlayers().isEmpty()) {
-                UUID affectedUUID=getAffectedPlayers().get(0);
+                UUID affectedUUID = getAffectedPlayers().get(0);
+                Player affected = Bukkit.getPlayer(affectedUUID);
                 player.sendMessage(game.translate("werewolf.role.succubus.charming_perform", game.getPlayersWW().get(affectedUUID).getName()));
-                if(Bukkit.getPlayer(affectedUUID)!=null){
-                    Bukkit.getPlayer(affectedUUID).sendMessage(game.translate("werewolf.role.succubus.get_charmed",game.getPlayersWW().get(getPlayerUUID()).getName()));
+                if (affected != null) {
+                    affected.sendMessage(game.translate("werewolf.role.succubus.get_charmed", game.getPlayersWW().get(getPlayerUUID()).getName()));
                 }
             }
         }
@@ -116,35 +119,39 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
     @EventHandler
     public void onUpdate(UpdateEvent event) {
 
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
-            return;
-        }
+        if (getPlayerUUID() == null) return;
+
         PlayerWW plg = game.getPlayersWW().get(getPlayerUUID());
+        Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if(!plg.isState(State.ALIVE)){
-            return;
-        }
-        if(getAffectedPlayers().isEmpty()){
+        if (player == null) {
             return;
         }
 
-        if(!hasPower()){
+        if (!plg.isState(State.ALIVE)) {
+            return;
+        }
+        if (getAffectedPlayers().isEmpty()) {
+            return;
+        }
+
+        if (!hasPower()) {
             return;
         }
 
         UUID playerCharmedUUID = getAffectedPlayers().get(0);
+        Player charmed = Bukkit.getPlayer(playerCharmedUUID);
         PlayerWW plc = game.getPlayersWW().get(playerCharmedUUID);
 
         if (!plc.isState(State.ALIVE)) {
             return;
         }
 
-        if(Bukkit.getPlayer(playerCharmedUUID) == null){
+        if (charmed == null) {
             return;
         }
 
-        Player charmed = Bukkit.getPlayer(playerCharmedUUID);
-        Player player = Bukkit.getPlayer(getPlayerUUID());
+
 
         Location succubusLocation = player.getLocation();
         Location playerLocation = charmed.getLocation();
@@ -163,7 +170,7 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
 
         if (temp >= 100) {
 
-            charmed.playSound(charmed.getLocation(), Sound.PORTAL_TRAVEL, 1, 20);
+            Sounds.PORTAL_TRAVEL.play(charmed);
             charmed.sendMessage(game.translate("werewolf.role.succubus.get_charmed", plg.getName()));
             player.sendMessage(game.translate("werewolf.role.succubus.charming_perform", charmed.getName()));
             setProgress(0f);
@@ -173,35 +180,39 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
         }
     }
     @EventHandler
-    public void onTargetIsStolen(StealEvent event){
+    public void onTargetIsStolen(StealEvent event) {
+
+        if (getPlayerUUID() == null) return;
 
         UUID newUUID = event.getNewUUID();
         UUID oldUUID = event.getOldUUID();
+        Player player = Bukkit.getPlayer(getPlayerUUID());
+        Player charmed = Bukkit.getPlayer(newUUID);
         PlayerWW plg = game.getPlayersWW().get(getPlayerUUID());
 
-        if(!getAffectedPlayers().contains(oldUUID)) return;
+        if (!getAffectedPlayers().contains(oldUUID)) return;
 
         removeAffectedPlayer(oldUUID);
         addAffectedPlayer(newUUID);
 
-        if(Bukkit.getPlayer(newUUID)!=null){
-            Player player = Bukkit.getPlayer(newUUID);
-            player.sendMessage(game.translate("werewolf.role.succubus.get_charmed", plg.getName()));
+        if (charmed != null) {
+            charmed.sendMessage(game.translate("werewolf.role.succubus.get_charmed", plg.getName()));
         }
-        if(Bukkit.getPlayer(getPlayerUUID())!=null) {
-            Player player = Bukkit.getPlayer(getPlayerUUID());
-            player.sendMessage(game.translate("werewolf.role.succubus.change",game.getPlayersWW().get(newUUID).getName()));
+        if (player != null) {
+            player.sendMessage(game.translate("werewolf.role.succubus.change", game.getPlayersWW().get(newUUID).getName()));
         }
     }
 
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 
-        UUID uuid=event.getUuid();
+        if (getPlayerUUID() == null) return;
 
+        UUID uuid = event.getUuid();
+        Player player = Bukkit.getPlayer(getPlayerUUID());
         PlayerWW plg = game.getPlayersWW().get(getPlayerUUID());
 
-        if(!getAffectedPlayers().contains(uuid)) return;
+        if (!getAffectedPlayers().contains(uuid)) return;
 
 
         if (!plg.isState(State.ALIVE)) return;
@@ -210,26 +221,29 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
         setPower(true);
         setProgress(0f);
 
-        if(Bukkit.getPlayer(getPlayerUUID())==null) return;
+        if (player == null) return;
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
         player.sendMessage(game.translate("werewolf.role.succubus.charming_message"));
     }
 
     @EventHandler
     public void onFirstDeathEvent(FirstDeathEvent event) {
 
-        UUID uuid = event.getUuid();
+        if (getPlayerUUID() == null) return;
 
-        if(event.isCancelled()) return;
+        UUID uuid = event.getUuid();
+        Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (event.isCancelled()) return;
 
         if (!event.getUuid().equals(getPlayerUUID())) return;
 
-        if(getAffectedPlayers().isEmpty()) return;
+        if (getAffectedPlayers().isEmpty()) return;
 
         if(hasPower()) return;
 
         UUID targetUUID = getAffectedPlayers().get(0);
+        Player target = Bukkit.getPlayer(targetUUID);
 
         PlayerWW trg = game.getPlayersWW().get(targetUUID);
 
@@ -239,9 +253,9 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
 
         Bukkit.getPluginManager().callEvent(succubusResurrectionEvent);
 
-        if(succubusResurrectionEvent.isCancelled()){
-            if(Bukkit.getPlayer(getPlayerUUID())!=null){
-                Bukkit.getPlayer(getPlayerUUID()).sendMessage(game.translate("werewolf.check.cancel"));
+        if(succubusResurrectionEvent.isCancelled()) {
+            if (player != null) {
+                player.sendMessage(game.translate("werewolf.check.cancel"));
             }
             return;
         }
@@ -249,10 +263,10 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
         clearAffectedPlayer();
         event.setCancelled(true);
 
-        if (Bukkit.getPlayer(targetUUID) == null) {
+        if (target == null) {
             game.death(targetUUID);
         } else {
-            Player target = Bukkit.getPlayer(targetUUID);
+
             target.damage(10000);
             target.sendMessage(game.translate("werewolf.role.succubus.free_of_succubus"));
         }

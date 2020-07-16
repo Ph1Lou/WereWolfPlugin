@@ -54,15 +54,17 @@ public class FalsifierWereWolf extends RolesWereWolf implements Display {
     @EventHandler
     public void onSelectionEnd(SelectionEndEvent event) {
 
+        if (getPlayerUUID() == null) return;
 
-        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
             return;
         }
 
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
-            return;
-        }
         Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (player == null) {
+            return;
+        }
 
         List<UUID> players = new ArrayList<>();
         for (UUID uuid : game.getPlayersWW().keySet()) {
@@ -70,7 +72,7 @@ public class FalsifierWereWolf extends RolesWereWolf implements Display {
                 players.add(uuid);
             }
         }
-        if(players.size()<=0){
+        if (players.size() <= 0) {
             return;
         }
 
@@ -98,10 +100,14 @@ public class FalsifierWereWolf extends RolesWereWolf implements Display {
     @Override
     public void stolen(UUID uuid) {
 
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
+        if (getPlayerUUID() == null) return;
+
+        Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (player == null) {
             return;
         }
 
-        Bukkit.getPlayer(getPlayerUUID()).sendMessage(game.translate("werewolf.role.falsifier_werewolf.display_role_message", game.translate(getDisplayRole().getDisplay())));
+        player.sendMessage(game.translate("werewolf.role.falsifier_werewolf.display_role_message", game.translate(getDisplayRole().getDisplay())));
     }
 }

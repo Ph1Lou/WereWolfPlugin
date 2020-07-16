@@ -1,11 +1,11 @@
 package io.github.ph1lou.werewolfplugin.listener;
 
 
+import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -40,13 +40,14 @@ public class ChatListener implements Listener {
 
             event.setCancelled(true);
             if (args.length <= 2) return;
-            if (Bukkit.getPlayer(args[1]) == null) {
+
+            Player recipient = Bukkit.getPlayer(args[1]);
+
+            if (recipient == null) {
                 player.sendMessage(game.
                         translate("werewolf.check.offline_player"));
                 return;
             }
-
-            Player recipient = Bukkit.getPlayer(args[1]);
 
             if (!recipient.hasPermission("a.use") && !player.hasPermission("tell.use")) {
 
@@ -65,7 +66,7 @@ public class ChatListener implements Listener {
             sb.delete(0, args[0].length() + args[1].length() + 2);
             recipient.sendMessage(game.translate("werewolf.commands.message.received", player.getName(), sb.toString()));
             player.sendMessage(game.translate("werewolf.commands.message.send", args[1], sb.toString()));
-            recipient.playSound(recipient.getLocation(), Sound.ANVIL_USE, 1, 20);
+            Sounds.ANVIL_USE.play(recipient);
         }
 
 

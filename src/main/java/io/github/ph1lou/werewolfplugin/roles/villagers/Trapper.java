@@ -61,17 +61,17 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
     @EventHandler
     public void onDay(DayEvent event) {
 
+        if (getPlayerUUID() == null) return;
 
         if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
             return;
         }
-
+        Player player = Bukkit.getPlayer(getPlayerUUID());
         setPower(true);
 
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
+        if (player == null) {
             return;
         }
-        Player player = Bukkit.getPlayer(getPlayerUUID());
 
         player.sendMessage(game.translate("werewolf.role.trapper.tracking_message"));
     }
@@ -88,13 +88,15 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
     }
 
     @EventHandler
-    public void onActionBarRequest(ActionBarEvent event){
+    public void onActionBarRequest(ActionBarEvent event) {
 
-        if(!getPlayerUUID().equals(event.getPlayerUUID())) return;
+        if (getPlayerUUID() == null) return;
 
-        StringBuilder stringBuilder=new StringBuilder(event.getActionBar());
+        if (!getPlayerUUID().equals(event.getPlayerUUID())) return;
 
-        if(Bukkit.getPlayer(event.getPlayerUUID())==null) return;
+        StringBuilder stringBuilder = new StringBuilder(event.getActionBar());
+
+        if (Bukkit.getPlayer(event.getPlayerUUID()) == null) return;
 
         if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) return;
 
@@ -103,8 +105,9 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
         if(hasPower()) return;
 
         for (UUID uuid : getAffectedPlayers()) {
-            if (game.getPlayersWW().get(uuid).isState(State.ALIVE) && Bukkit.getPlayer(uuid) != null) {
-                stringBuilder.append("§b ").append(game.getPlayersWW().get(uuid).getName()).append(" ").append(game.getScore().updateArrow(player, Bukkit.getPlayer(uuid).getLocation()));
+            Player player1 = Bukkit.getPlayer(uuid);
+            if (game.getPlayersWW().get(uuid).isState(State.ALIVE) && player1 != null) {
+                stringBuilder.append("§b ").append(game.getPlayersWW().get(uuid).getName()).append(" ").append(game.getScore().updateArrow(player, player1.getLocation()));
             }
         }
 

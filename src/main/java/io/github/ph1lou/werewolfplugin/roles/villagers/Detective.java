@@ -51,16 +51,17 @@ public class Detective extends RolesWithLimitedSelectionDuration implements Affe
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
             return;
         }
+        if (getPlayerUUID() == null) return;
 
+        Player player = Bukkit.getPlayer(getPlayerUUID());
         setPower(true);
 
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
+        if (player == null) {
             return;
         }
-        Player player = Bukkit.getPlayer(getPlayerUUID());
 
         player.sendMessage(game.translate("werewolf.role.detective.inspection_message", game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.POWER_DURATION))));
     }

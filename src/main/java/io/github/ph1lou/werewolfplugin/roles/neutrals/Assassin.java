@@ -29,26 +29,34 @@ public class Assassin extends RolesNeutral {
     @EventHandler
     public void onNight(NightEvent event) {
 
-        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
-            return;
-        }
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
-            return;
-        }
+        if (getPlayerUUID() == null) return;
+
         Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+            return;
+        }
+        if (player == null) {
+            return;
+        }
+
         player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
     }
 
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
-            return;
-        }
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
-            return;
-        }
+        if (getPlayerUUID() == null) return;
+
         Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+            return;
+        }
+        if (player == null) {
+            return;
+        }
+
         player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, -1, false, false));
     }
 

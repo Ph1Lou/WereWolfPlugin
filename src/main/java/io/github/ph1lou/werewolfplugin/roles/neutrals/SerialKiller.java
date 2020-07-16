@@ -11,6 +11,7 @@ import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.NightEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
+import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -52,14 +53,16 @@ public class SerialKiller extends RolesNeutral implements Power {
     @Override
     public void stolen(UUID uuid) {
 
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
+        if (getPlayerUUID() == null) return;
+
+        Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (player == null) {
             return;
         }
 
-        Player player= Bukkit.getPlayer(getPlayerUUID());
-
-        if (Bukkit.getPlayer(uuid)!=null) {
-            player.setMaxHealth(Bukkit.getPlayer(uuid).getMaxHealth()+game.getPlayersWW().get(uuid).getLostHeart());
+        if (Bukkit.getPlayer(uuid) != null) {
+            VersionUtils.getVersionUtils().setPlayerMaxHealth(player, VersionUtils.getVersionUtils().getPlayerMaxHealth(Bukkit.getPlayer(uuid)) + game.getPlayersWW().get(uuid).getLostHeart());
         }
     }
 
@@ -103,15 +106,19 @@ public class SerialKiller extends RolesNeutral implements Power {
     }
 
 
-    public void restoreResistance(){
+    public void restoreResistance() {
 
-        if(!hasPower()) return;
+        if (!hasPower()) return;
 
         if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) return;
 
-        if(Bukkit.getPlayer(getPlayerUUID())==null) return;
+        if (getPlayerUUID() == null) return;
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (player == null) return;
+
+
         player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
         player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, 0, false, false));
     }
@@ -128,19 +135,21 @@ public class SerialKiller extends RolesNeutral implements Power {
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 
-        UUID uuid = event.getUuid();
+        if (getPlayerUUID() == null) return;
 
+        UUID uuid = event.getUuid();
+        Player killer = Bukkit.getPlayer(getPlayerUUID());
         PlayerWW target = game.getPlayersWW().get(uuid);
 
-        if(target.getLastKiller()==null) return;
+        if (target.getLastKiller() == null) return;
 
-        if(!target.getLastKiller().equals(getPlayerUUID())) return;
+        if (!target.getLastKiller().equals(getPlayerUUID())) return;
 
-        if(Bukkit.getPlayer(getPlayerUUID())!=null){
-            Player killer = Bukkit.getPlayer(getPlayerUUID());
-            killer.setMaxHealth(killer.getMaxHealth()+2);
+        if (killer != null) {
+
+            VersionUtils.getVersionUtils().setPlayerMaxHealth(killer, VersionUtils.getVersionUtils().getPlayerMaxHealth(killer) + 2);
             killer.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE));
-            if(hasPower()){
+            if (hasPower()) {
                 killer.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
                 setPower(false);
             }

@@ -88,14 +88,17 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
             return;
         }
 
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
+        if (getPlayerUUID() == null) return;
+
+        Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (player == null) {
             return;
         }
-        Player player = Bukkit.getPlayer(getPlayerUUID());
 
         if (getUse() < game.getConfig().getUseOfFlair()) {
             setPower(true);
@@ -124,29 +127,33 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
     @EventHandler
     public void onUpdate(UpdateEvent event) {
 
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
+        if (getPlayerUUID() == null) return;
+
+        Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (player == null) {
             return;
         }
-        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
             return;
         }
-        if(getAffectedPlayers().isEmpty()){
+        if (getAffectedPlayers().isEmpty()) {
             return;
         }
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
+
         UUID playerSmellUUID = getAffectedPlayers().get(0);
         PlayerWW plf = game.getPlayersWW().get(playerSmellUUID);
+        Player flair = Bukkit.getPlayer(playerSmellUUID);
 
         if (!plf.isState(State.ALIVE)) {
             return;
         }
 
-        if(Bukkit.getPlayer(playerSmellUUID) == null){
+        if (flair == null) {
             return;
         }
 
-        Player flair = Bukkit.getPlayer(playerSmellUUID);
         Location renardLocation = player.getLocation();
         Location playerLocation = flair.getLocation();
 

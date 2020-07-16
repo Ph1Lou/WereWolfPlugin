@@ -31,11 +31,13 @@ public class CatEyes extends Scenarios {
 
     @EventHandler
     private void onResurrection(ResurrectionEvent event){
-        if(Bukkit.getPlayer(event.getPlayerUUID())==null) return;
 
         Player player = Bukkit.getPlayer(event.getPlayerUUID());
+
+        if (player == null) return;
+
         player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION,Integer.MAX_VALUE,0,false,false));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0, false, false));
     }
 
     @Override

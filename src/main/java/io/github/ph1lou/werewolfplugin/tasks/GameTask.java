@@ -1,13 +1,13 @@
 package io.github.ph1lou.werewolfplugin.tasks;
 
 
+import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
 import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
-import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
 import org.bukkit.entity.Player;
@@ -50,7 +50,7 @@ public class GameTask extends BukkitRunnable {
 		if (game.getConfig().getTimerValues().get(TimerLG.INVULNERABILITY) == 0) {
 			for (Player p : Bukkit.getOnlinePlayers()) {
 				p.sendMessage(game.translate("werewolf.announcement.invulnerability"));
-				p.playSound(p.getLocation(), Sound.GLASS, 1, 20);
+				Sounds.GLASS.play(p);
 			}
 
 		}
@@ -62,9 +62,9 @@ public class GameTask extends BukkitRunnable {
 
 			for (Player p : Bukkit.getOnlinePlayers()) {
 				if (game.getConfig().isTrollSV() && game.getPlayersWW().containsKey(p.getUniqueId())) {
-					p.playSound(p.getLocation(), Sound.PORTAL_TRIGGER, 1, 20);
+					Sounds.PORTAL_TRIGGER.play(p);
 					p.sendMessage(game.translate("werewolf.announcement.troll"));
-				} else p.playSound(p.getLocation(), Sound.EXPLODE, 1, 20);
+				} else Sounds.EXPLODE.play(p);
 			}
 			game.getConfig().setTrollSV(false);
 			game.getRoleManage().repartitionRolesLG();
@@ -77,7 +77,7 @@ public class GameTask extends BukkitRunnable {
 			for (Player p : Bukkit.getOnlinePlayers()) {
 				if (game.getPlayersWW().containsKey(p.getUniqueId())) {
 					p.sendMessage(game.translate("werewolf.role.villager.description"));
-					p.playSound(p.getLocation(), Sound.EXPLODE, 1, 20);
+					Sounds.EXPLODE.play(p);
 				}
 			}
 		}
@@ -120,7 +120,7 @@ public class GameTask extends BukkitRunnable {
 				Bukkit.getPluginManager().callEvent(new BorderStartEvent());
 				for (Player p : Bukkit.getOnlinePlayers()) {
 					p.sendMessage(game.translate("werewolf.announcement.border"));
-					p.playSound(p.getLocation(), Sound.FIREWORK_LAUNCH, 1, 20);
+					Sounds.FIREWORK_LAUNCH.play(p);
 				}
 			}
 		} else if (game.getConfig().getTimerValues().get(TimerLG.BORDER_BEGIN) < 0) {

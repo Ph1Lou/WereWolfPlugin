@@ -12,6 +12,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -112,7 +113,7 @@ public class Stuff implements StuffManager {
         Map<String, List<ItemStack>> temp = new HashMap<>();
 
         if (!(new java.io.File(plugin.getDataFolder() + java.io.File.separator + "stuffs" + java.io.File.separator, configName + ".yml")).exists()) {
-            FileUtils.copy(plugin.getResource("stuffRole.yml"), plugin.getDataFolder() + java.io.File.separator + "stuffs" + java.io.File.separator + configName + ".yml");
+            FileUtils_.copy(plugin.getResource("stuffRole.yml"), plugin.getDataFolder() + java.io.File.separator + "stuffs" + java.io.File.separator + configName + ".yml");
         }
         FileConfiguration config = getOrCreateCustomConfig(plugin, configName);
 
@@ -155,17 +156,17 @@ public class Stuff implements StuffManager {
 
     @Override
     public void loadStuffChill() {
-        FileUtils.copy(main.getResource("stuffChill.yml"), main.getDataFolder() + java.io.File.separator + "stuffs" + java.io.File.separator + "stuffChill.yml");
+        FileUtils_.copy(main.getResource("stuffChill.yml"), main.getDataFolder() + java.io.File.separator + "stuffs" + java.io.File.separator + "stuffChill.yml");
         loadStuffStartAndDeath("stuffChill");
     }
 
     public FileConfiguration getOrCreateCustomConfig(Plugin plugin, String configName) {
 
-        java.io.File customConfigFile = new java.io.File(plugin.getDataFolder() + java.io.File.separator + "stuffs" + java.io.File.separator, configName + ".yml");
+        File customConfigFile = new File(plugin.getDataFolder() + File.separator + "stuffs" + File.separator, configName + ".yml");
         FileConfiguration customConfig = null;
         if (!customConfigFile.exists()) {
             try {
-                FileUtils.createFile(customConfigFile);
+                FileUtils_.createFile(customConfigFile);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -194,7 +195,7 @@ public class Stuff implements StuffManager {
     }
 
     public void loadAllStuffMeetUP() {
-        FileUtils.copy(main.getResource("stuffMeetUp.yml"), main.getDataFolder() + java.io.File.separator + "stuffs" + java.io.File.separator + "stuffMeetUp.yml");
+        FileUtils_.copy(main.getResource("stuffMeetUp.yml"), main.getDataFolder() + java.io.File.separator + "stuffs" + java.io.File.separator + "stuffMeetUp.yml");
         loadStuff("stuffMeetUp");
         loadStuffStartAndDeath("stuffMeetUp");
     }

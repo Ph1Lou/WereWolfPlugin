@@ -71,13 +71,19 @@ public class Citizen extends RolesVillage implements LimitedUse, AffectedPlayers
     @EventHandler
     public void onVoteEnd(VoteEndEvent event) {
 
-        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
-            return;
-        }
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
-            return;
-        }
+        if (getPlayerUUID() == null) return;
+
         Player player = Bukkit.getPlayer(getPlayerUUID());
+
+
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+            return;
+        }
+
+        if (player == null) {
+            return;
+        }
+
 
         if (getUse() < 2 || hasPower()) {
             player.sendMessage(game.translate("werewolf.role.citizen.affect_votes", hasPower() ? 1 : 0, 2 - getUse(), game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.CITIZEN_DURATION))));

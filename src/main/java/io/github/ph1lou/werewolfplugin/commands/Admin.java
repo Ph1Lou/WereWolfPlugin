@@ -10,6 +10,7 @@ import io.github.ph1lou.werewolfplugin.commands.admin.ingame.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -48,20 +49,20 @@ public class Admin implements TabExecutor {
         listAdminCommands.put("change", new CommandChange(main));
         listAdminCommands.putAll(main.getListAdminCommands());
     }
-	
-	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-        if (args.length == 0){
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
+
+        if (args.length == 0) {
             this.listAdminCommands.get("h").execute(sender, null);
-        }
-        else this.listAdminCommands.getOrDefault(args[0], this.listAdminCommands.get("h")).execute(sender, Arrays.copyOfRange(args, 1, args.length));
+        } else
+            this.listAdminCommands.getOrDefault(args[0], this.listAdminCommands.get("h")).execute(sender, Arrays.copyOfRange(args, 1, args.length));
         return true;
     }
 
 
-	@Override
-	public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] args) {
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, String[] args) {
 
         List<String> temp = new ArrayList<>(this.listAdminCommands.keySet());
         if (args.length == 0) {

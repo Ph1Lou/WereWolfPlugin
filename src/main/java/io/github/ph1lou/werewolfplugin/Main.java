@@ -11,9 +11,9 @@ import io.github.ph1lou.werewolfplugin.listener.scenarioslisteners.*;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.*;
 import io.github.ph1lou.werewolfplugin.roles.villagers.*;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.*;
-import io.github.ph1lou.werewolfplugin.save.FileUtils;
+import io.github.ph1lou.werewolfplugin.save.FileUtils_;
 import io.github.ph1lou.werewolfplugin.save.Lang;
-import io.github.ph1lou.werewolfplugin.utils.WorldUtils;
+import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -42,7 +42,6 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
     private final Map<String, Commands> listCommands = new HashMap<>();
     private final Map<String, Commands> listAdminCommands = new HashMap<>();
     private final List<ScenarioRegister> scenariosRegister = new ArrayList<>();
-
 
     public GameManager getCurrentGame() {
         return currentGame;
@@ -88,9 +87,9 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
     }
 
     @Override
-	public void onLoad(){
-		WorldUtils.patchBiomes();
-	}
+	public void onLoad() {
+        VersionUtils.getVersionUtils().patchBiomes();
+    }
 
 
     @Override
@@ -134,19 +133,20 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
         World world = Bukkit.getWorlds().get(0);
         world.setWeatherDuration(0);
         world.setThundering(false);
-        world.setGameRuleValue("doFireTick", "false");
-        world.setGameRuleValue("reducedDebugInfo", "true");
-        world.setGameRuleValue("naturalRegeneration", "false");
-        world.setGameRuleValue("keepInventory", "true");
+        VersionUtils.getVersionUtils().setGameRuleValue(world, "doFireTick", false);
+        VersionUtils.getVersionUtils().setGameRuleValue(world, "reducedDebugInfo", true);
+        VersionUtils.getVersionUtils().setGameRuleValue(world, "naturalRegeneration", false);
+        VersionUtils.getVersionUtils().setGameRuleValue(world, "keepInventory", true);
+
         int x = world.getSpawnLocation().getBlockX();
         int z = world.getSpawnLocation().getBlockZ();
-        try{
+        try {
             world.getWorldBorder().reset();
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if(getConfig().getBoolean("default_lobby")){
+        if (getConfig().getBoolean("default_lobby")) {
 
             world.setSpawnLocation(x, 151, z);
 
@@ -169,7 +169,7 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
 
     @Override
     public void loadTranslation(Plugin plugin, String defaultLang) {
-        extraTexts.putAll(this.lang.loadTranslations(FileUtils.loadContent(lang.buildLanguageFile(plugin, defaultLang))));
+        extraTexts.putAll(this.lang.loadTranslations(FileUtils_.loadContent(lang.buildLanguageFile(plugin, defaultLang))));
         defaultLanguages.put(plugin, defaultLang);
     }
 

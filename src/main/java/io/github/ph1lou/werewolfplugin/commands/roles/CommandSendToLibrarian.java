@@ -76,12 +76,13 @@ public class CommandSendToLibrarian implements Commands {
 
                     Roles roles = playerWW.getRole();
                     if(((AffectedPlayers)roles).getAffectedPlayers().contains(uuid)){
-                        ((Storage)roles).getStorage().add(sb2.toString());
+                        ((Storage) roles).getStorage().add(sb2.toString());
                         ((AffectedPlayers) roles).removeAffectedPlayer(uuid);
                         player.sendMessage(game.translate("werewolf.role.librarian.contribute"));
-                        find=true;
-                        if(Bukkit.getPlayer(roles.getPlayerUUID())!=null){
-                            Bukkit.getPlayer(roles.getPlayerUUID()).sendMessage(game.translate("werewolf.role.librarian.contribution",player.getName(),sb2.toString()));
+                        find = true;
+                        Player librarian = Bukkit.getPlayer(roles.getPlayerUUID());
+                        if (librarian != null) {
+                            librarian.sendMessage(game.translate("werewolf.role.librarian.contribution", player.getName(), sb2.toString()));
                         }
                     }
                 }

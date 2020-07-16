@@ -11,6 +11,7 @@ import io.github.ph1lou.werewolfapi.events.NightEvent;
 import io.github.ph1lou.werewolfapi.events.SecondDeathEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
+import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -65,15 +66,18 @@ public class Elder extends RolesVillage implements Power {
     }
 
 
-    public void restoreResistance(){
+    public void restoreResistance() {
 
-        if(!hasPower()) return;
+        if (!hasPower()) return;
+
+        if (getPlayerUUID() == null) return;
+
+        Player player = Bukkit.getPlayer(getPlayerUUID());
 
         if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) return;
 
-        if(Bukkit.getPlayer(getPlayerUUID())==null) return;
+        if (player == null) return;
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
         player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
         player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 0, false, false));
     }
@@ -89,10 +93,11 @@ public class Elder extends RolesVillage implements Power {
 
         ElderResurrectionEvent elderResurrectionEvent = new ElderResurrectionEvent(getPlayerUUID());
         Bukkit.getPluginManager().callEvent(elderResurrectionEvent);
+        Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if(elderResurrectionEvent.isCancelled()){
-            if(Bukkit.getPlayer(getPlayerUUID())!=null){
-                Bukkit.getPlayer(getPlayerUUID()).sendMessage(game.translate("werewolf.check.cancel"));
+        if(elderResurrectionEvent.isCancelled()) {
+            if (player != null) {
+                player.sendMessage(game.translate("werewolf.check.cancel"));
             }
             return;
         }
@@ -101,12 +106,10 @@ public class Elder extends RolesVillage implements Power {
 
         UUID killerUUID = game.getPlayersWW().get(getPlayerUUID()).getLastKiller();
 
-        if (Bukkit.getPlayer(getPlayerUUID()) != null) {
-
-            Player player = Bukkit.getPlayer(getPlayerUUID());
+        if (player != null) {
 
             if (game.getPlayersWW().containsKey(killerUUID) && game.getPlayersWW().get(killerUUID).getRole().isCamp(Camp.VILLAGER)) {
-                player.setMaxHealth(Math.max(1, player.getMaxHealth() - 6));
+                VersionUtils.getVersionUtils().setPlayerMaxHealth(player, Math.max(1, VersionUtils.getVersionUtils().getPlayerMaxHealth(player) - 6));
             }
             player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
         }

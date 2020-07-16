@@ -9,7 +9,7 @@ import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
 import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
-import io.github.ph1lou.werewolfplugin.utils.Title;
+import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -222,21 +222,23 @@ public class ScoreBoard implements ScoreAPI {
 
 		if (plg.isState(State.ALIVE)) {
 			for (UUID uuid : plg.getLovers()) {
-				if (Bukkit.getPlayer(uuid) != null && game.getPlayersWW().get(uuid).isState(State.ALIVE)) {
-					stringbuilder.append("§d ").append(game.getPlayersWW().get(uuid).getName()).append(" ").append(updateArrow(player, Bukkit.getPlayer(uuid).getLocation()));
+				Player player1 = Bukkit.getPlayer(uuid);
+				if (player1 != null && game.getPlayersWW().get(uuid).isState(State.ALIVE)) {
+					stringbuilder.append("§d ").append(game.getPlayersWW().get(uuid).getName()).append(" ").append(updateArrow(player, player1.getLocation()));
 				}
 			}
-			if(plg.getAmnesiacLoverUUID()!=null && plg.getRevealAmnesiacLover()){
-				UUID uuid =plg.getAmnesiacLoverUUID();
-				if (Bukkit.getPlayer(uuid) != null && game.getPlayersWW().get(uuid).isState(State.ALIVE)) {
-					stringbuilder.append("§d ").append(game.getPlayersWW().get(uuid).getName()).append(" ").append(updateArrow(player, Bukkit.getPlayer(uuid).getLocation()));
+			if(plg.getAmnesiacLoverUUID()!=null && plg.getRevealAmnesiacLover()) {
+				UUID uuid = plg.getAmnesiacLoverUUID();
+				Player player1 = Bukkit.getPlayer(uuid);
+				if (player1 != null && game.getPlayersWW().get(uuid).isState(State.ALIVE)) {
+					stringbuilder.append("§d ").append(game.getPlayersWW().get(uuid).getName()).append(" ").append(updateArrow(player, player1.getLocation()));
 				}
 			}
 		}
-		ActionBarEvent actionBarEvent = new ActionBarEvent(playerUUID,stringbuilder.toString());
+		ActionBarEvent actionBarEvent = new ActionBarEvent(playerUUID, stringbuilder.toString());
 		Bukkit.getPluginManager().callEvent(actionBarEvent);
 
-		Title.sendActionBar(player, actionBarEvent.getActionBar());
+		VersionUtils.getVersionUtils().sendActionBar(player, actionBarEvent.getActionBar());
 	}
 		
 	public void updateBoard() {

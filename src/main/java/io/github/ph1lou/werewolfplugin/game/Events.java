@@ -1,8 +1,10 @@
 package io.github.ph1lou.werewolfplugin.game;
+
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.Camp;
 import io.github.ph1lou.werewolfapi.enumlg.State;
 import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
+import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
 import io.github.ph1lou.werewolfapi.events.ChestEvent;
 import org.bukkit.*;
@@ -30,19 +32,19 @@ public class Events implements Listener {
 	private void createTarget(Location location, Boolean active) {
 
 		Location location2 = location.clone();
-		location2.setY(location2.getY()+1);
+		location2.setY(location2.getY() + 1);
 		List<PlayerWW> danger = new ArrayList<>();
 		Block block1 = location.getBlock();
 		Block block2 = location2.getBlock();
-		
+
 		block1.setType(Material.CHEST);
-		block2.setType(Material.SIGN_POST);
-		
+		block2.setType(UniversalMaterial.SIGN.getType());
+
 		Chest chest = (Chest) block1.getState();
 		Sign sign = (Sign) block2.getState();
-		
-		for(PlayerWW plg:game.getPlayersWW().values()) {
-			if(!plg.getRole().isCamp(Camp.VILLAGER) && plg.isState(State.ALIVE)) {
+
+		for (PlayerWW plg : game.getPlayersWW().values()) {
+			if (!plg.getRole().isCamp(Camp.VILLAGER) && plg.isState(State.ALIVE)) {
 				danger.add(plg);
 			}
 		}

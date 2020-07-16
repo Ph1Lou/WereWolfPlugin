@@ -11,6 +11,7 @@ import io.github.ph1lou.werewolfapi.events.SeeVoteEvent;
 import io.github.ph1lou.werewolfapi.events.VoteEndEvent;
 import io.github.ph1lou.werewolfapi.events.VoteEvent;
 import io.github.ph1lou.werewolfapi.events.VoteResultEvent;
+import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,17 +35,14 @@ public class Vote implements Listener, VoteAPI {
 	}
 
 	@Override
-	public void setUnVote(UUID voterUUID,UUID vote){
+	public void setUnVote(UUID voterUUID,UUID vote) {
 
-		PlayerWW plg = game.getPlayersWW().get(voterUUID);
+        PlayerWW plg = game.getPlayersWW().get(voterUUID);
+        Player voter = Bukkit.getPlayer(voterUUID);
 
-		if(Bukkit.getPlayer(voterUUID)==null){
-			return;
-		}
+        if (voter == null) return;
 
-		Player voter = Bukkit.getPlayer(voterUUID);
-
-		if (!plg.isState(State.ALIVE)) {
+        if (!plg.isState(State.ALIVE)) {
             voter.sendMessage(game.translate("werewolf.vote.death"));
         } else if (game.getConfig().getTimerValues().get(TimerLG.VOTE_BEGIN) > 0) {
             voter.sendMessage(game.translate("werewolf.vote.vote_not_yet_activated"));
@@ -129,24 +127,24 @@ public class Vote implements Listener, VoteAPI {
 	@Override
 	public void showResultVote(UUID playerVoteUUID) {
 
-		if(playerVoteUUID != null){
+		if(playerVoteUUID != null) {
 
-			PlayerWW plg = game.getPlayersWW().get(playerVoteUUID);
+            PlayerWW plg = game.getPlayersWW().get(playerVoteUUID);
+            Player player = Bukkit.getPlayer(playerVoteUUID);
 
-			if(plg.isState(State.ALIVE)){
+            if (plg.isState(State.ALIVE)) {
 
-				tempPlayer.add(playerVoteUUID);
-				if (Bukkit.getPlayer(playerVoteUUID) != null) {
-					Player player = Bukkit.getPlayer(playerVoteUUID);
-					double life = player.getMaxHealth();
-					player.setMaxHealth(life - 10);
-					if (player.getHealth() > player.getMaxHealth()) {
-						player.setHealth(life - 10);
-					}
-					Bukkit.broadcastMessage(game.translate("werewolf.vote.vote_result", plg.getName(), this.votes.get(playerVoteUUID)));
-					plg.addKLostHeart(10);
-				}
-			}
+                tempPlayer.add(playerVoteUUID);
+                if (player != null) {
+                    double life = VersionUtils.getVersionUtils().getPlayerMaxHealth(player);
+                    VersionUtils.getVersionUtils().setPlayerMaxHealth(player, life - 10);
+                    if (player.getHealth() > VersionUtils.getVersionUtils().getPlayerMaxHealth(player)) {
+                        player.setHealth(life - 10);
+                    }
+                    Bukkit.broadcastMessage(game.translate("werewolf.vote.vote_result", plg.getName(), this.votes.get(playerVoteUUID)));
+                    plg.addKLostHeart(10);
+                }
+            }
 		}
 		resetVote();
 		currentStatus=VoteStatus.NOT_IN_PROGRESS;

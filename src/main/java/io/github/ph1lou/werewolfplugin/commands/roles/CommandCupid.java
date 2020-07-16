@@ -80,18 +80,21 @@ public class CommandCupid implements Commands {
 
         for(String p:args) {
 
-            if(Bukkit.getPlayer(p)==null){
+            Player playerArg = Bukkit.getPlayer(p);
+
+            if (playerArg == null) {
                 player.sendMessage(game.translate("werewolf.check.offline_player"));
                 return;
             }
-            UUID uuid1=Bukkit.getPlayer(p).getUniqueId();
 
-            if(!game.getPlayersWW().containsKey(uuid1) || game.getPlayersWW().get(uuid).isState(State.DEATH)) {
+            UUID uuid1 = playerArg.getUniqueId();
+
+            if (!game.getPlayersWW().containsKey(uuid1) || game.getPlayersWW().get(uuid).isState(State.DEATH)) {
                 player.sendMessage(game.translate("werewolf.check.player_not_found"));
                 return;
             }
 
-            if(uuid.equals(uuid1)) {
+            if (uuid.equals(uuid1)) {
                 player.sendMessage(game.translate("werewolf.check.not_yourself"));
                 return;
             }
@@ -99,7 +102,10 @@ public class CommandCupid implements Commands {
 
 
         for(String p:args) {
-            ((AffectedPlayers)cupid).addAffectedPlayer(Bukkit.getPlayer(p).getUniqueId());
+            Player playerArg = Bukkit.getPlayer(p);
+            if (playerArg != null) {
+                ((AffectedPlayers) cupid).addAffectedPlayer(playerArg.getUniqueId());
+            }
         }
         ((Power) cupid).setPower(false);
         Bukkit.getPluginManager().callEvent(new CupidLoversEvent(uuid, ((AffectedPlayers) cupid).getAffectedPlayers()));

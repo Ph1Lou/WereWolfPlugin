@@ -3,7 +3,7 @@ package io.github.ph1lou.werewolfplugin.commands.admin;
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
-import io.github.ph1lou.werewolfplugin.utils.WorldUtils;
+import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Location;
@@ -39,7 +39,7 @@ public class CommandSize implements Commands {
         }
 
         sender.sendMessage(game.translate("werewolf.commands.admin.size.begin"));
-        int size= WorldUtils.biomeSize(location,world);
+        int size = VersionUtils.getVersionUtils().biomeSize(location, world);
         sender.sendMessage(game.translate("werewolf.commands.admin.size.result",size));
 
         if(!(sender instanceof Player)) return;

@@ -7,6 +7,7 @@ import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Villager;
+import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -17,68 +18,64 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 
 public class PlayerLG implements Listener, PlayerWW {
 
-	private State state = State.ALIVE;
-	private Roles role ;
-	private Boolean canBeInfect = false;
-	private Boolean damn = false;
-	private Boolean salvation = false;
-	private final List<UUID> lovers = new ArrayList<>();
-	private Boolean kit = false;
-	private Boolean announceCursedLoversAFK = false;
-	private Boolean announceLoversAFK = false;
-	private Boolean thief = false;
-	private transient Scoreboard board= Bukkit.getScoreboardManager().getNewScoreboard();
-	private Boolean revealAmnesiacLover=false;
-	private final List<ItemStack> itemsDeath = new ArrayList<>();
-	private UUID cursedLovers=null;
-	private UUID amnesiacLoverUUID=null;
-	private transient Location spawn;
-	private final transient GameManager game;
-	private int deathTime = 0;
-	private int lostHeart = 0;
-	private int kill = 0;
-	private final List<UUID> killer = new ArrayList<>();
+    private State state = State.ALIVE;
+    private Roles role;
+    private Boolean canBeInfect = false;
+    private Boolean damn = false;
+    private Boolean salvation = false;
+    private final List<UUID> lovers = new ArrayList<>();
+    private Boolean kit = false;
+    private Boolean announceCursedLoversAFK = false;
+    private Boolean announceLoversAFK = false;
+    private Boolean thief = false;
+    private transient Scoreboard board;
+    private Boolean revealAmnesiacLover = false;
+    private final List<ItemStack> itemsDeath = new ArrayList<>();
+    private UUID cursedLovers = null;
+    private UUID amnesiacLoverUUID = null;
+    private transient Location spawn;
+    private final transient GameManager game;
+    private int deathTime = 0;
+    private int lostHeart = 0;
+    private int kill = 0;
+    private final List<UUID> killer = new ArrayList<>();
 	private String name;
 	private final UUID playerUUID;
 
 
 
 	public PlayerLG (Main main, GameManager game, Player player) {
-		this.spawn = player.getWorld().getSpawnLocation();
-		this.playerUUID=player.getUniqueId();
-		this.game=game;
-		this.role=new Villager(main,game,this.playerUUID);
-		this.name=player.getName();
-	}
+        this.spawn = player.getWorld().getSpawnLocation();
+        this.playerUUID = player.getUniqueId();
+        this.game = game;
+        this.role = new Villager(main, game, this.playerUUID);
+        this.name = player.getName();
+        this.board = Objects.requireNonNull(Bukkit.getScoreboardManager()).getNewScoreboard();
+    }
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onDay(DayEvent event) {
 
-		if (!isState(State.ALIVE)) return;
+        if (!isState(State.ALIVE)) return;
 
-		if(Bukkit.getPlayer(playerUUID)==null){
-			return;
-		}
+        Player player = Bukkit.getPlayer(playerUUID);
 
-		Player player = Bukkit.getPlayer(playerUUID);
+        if (player == null) return;
 
-		if (getLostHeart() > 0) {
-			player.setMaxHealth(player.getMaxHealth() + getLostHeart());
-			clearLostHeart();
-		}
+        if (getLostHeart() > 0) {
+            VersionUtils.getVersionUtils().setPlayerMaxHealth(player, VersionUtils.getVersionUtils().getPlayerMaxHealth(player) + getLostHeart());
+            clearLostHeart();
+        }
 
-		if (hasDamn()) {
-			setDamn(false);
-			player.removePotionEffect(PotionEffectType.JUMP);
-			player.sendMessage(game.translate("werewolf.role.raven.no_longer_curse"));
+        if (hasDamn()) {
+            setDamn(false);
+            player.removePotionEffect(PotionEffectType.JUMP);
+            player.sendMessage(game.translate("werewolf.role.raven.no_longer_curse"));
 		}
 		if (hasSalvation()) {
 			setSalvation(false);

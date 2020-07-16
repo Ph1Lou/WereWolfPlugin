@@ -66,23 +66,25 @@ public class CommandProtector implements Commands {
             return;
         }
 
-        if(!plg.isState(State.ALIVE)){
+        if (!plg.isState(State.ALIVE)) {
             player.sendMessage(game.translate("werewolf.check.death"));
             return;
         }
 
-        if(!((Power)protector).hasPower()) {
+        if (!((Power) protector).hasPower()) {
             player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
 
-        if(Bukkit.getPlayer(args[0])==null){
+        Player playerArg = Bukkit.getPlayer(args[0]);
+
+        if (playerArg == null) {
             player.sendMessage(game.translate("werewolf.check.offline_player"));
             return;
         }
-        UUID argUUID = Bukkit.getPlayer(args[0]).getUniqueId();
+        UUID argUUID = playerArg.getUniqueId();
 
-        if(!game.getPlayersWW().containsKey(argUUID) || !game.getPlayersWW().get(argUUID).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().containsKey(argUUID) || !game.getPlayersWW().get(argUUID).isState(State.ALIVE)) {
             player.sendMessage(game.translate("werewolf.check.player_not_found"));
             return;
         }
@@ -106,6 +108,7 @@ public class CommandProtector implements Commands {
         ((AffectedPlayers) protector).addAffectedPlayer(argUUID);
 
         Player playerProtected = Bukkit.getPlayer(args[0]);
+        if (playerProtected == null) return;
         playerProtected.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
         playerProtected.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,Integer.MAX_VALUE,0,false,false));
         game.getPlayersWW().get(argUUID).setSalvation(true);

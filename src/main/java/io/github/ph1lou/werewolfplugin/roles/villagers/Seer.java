@@ -55,20 +55,24 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
             return;
         }
 
-        if (game.getConfig().getConfigValues().get(ToolLG.SEER_EVERY_OTHER_DAY) && event.getNumber()==dayNumber+1) {
+        if (game.getConfig().getConfigValues().get(ToolLG.SEER_EVERY_OTHER_DAY) && event.getNumber() == dayNumber + 1) {
             return;
         }
+
+        if (getPlayerUUID() == null) return;
 
         setPower(true);
-        dayNumber=event.getNumber();
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
+        dayNumber = event.getNumber();
+        Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (player == null) {
             return;
         }
-        Player player = Bukkit.getPlayer(getPlayerUUID());
+
 
         player.sendMessage(game.translate("werewolf.role.seer.see_camp_message", game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.POWER_DURATION))));
     }

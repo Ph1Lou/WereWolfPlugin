@@ -35,13 +35,14 @@ public class CommandWhitelist implements Commands {
             return;
         }
 
-        if (Bukkit.getPlayer(args[0]) == null) {
+        Player playerArg = Bukkit.getPlayer(args[0]);
+
+        if (playerArg == null) {
             sender.sendMessage(game.translate("werewolf.check.offline_player"));
             return;
         }
 
-        Player player = Bukkit.getPlayer(args[0]);
-        UUID uuid = player.getUniqueId();
+        UUID uuid = playerArg.getUniqueId();
 
         if (game.getWhiteListedPlayers().contains(uuid)) {
             sender.sendMessage(game.translate("werewolf.commands.admin.whitelist.remove"));
@@ -50,7 +51,7 @@ public class CommandWhitelist implements Commands {
             sender.sendMessage(game.translate("werewolf.commands.admin.whitelist.add"));
             game.addPlayerOnWhiteList(uuid);
             if (game.isState(StateLG.LOBBY)) {
-                game.join(player);
+                game.join(playerArg);
             }
         }
     }

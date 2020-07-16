@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.Scenarios;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
+import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -15,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class CutClean extends Scenarios {
 
@@ -39,13 +41,13 @@ public class CutClean extends Scenarios {
             return;
         }
 
-        Material currentItemType = event.getPlayer().getItemInHand().getType();
+        Material currentItemType = event.getPlayer().getItemOnCursor().getType();
 
         switch (block.getType()) {
 
             case COAL_ORE:
 
-                if (!currentItemType.equals(Material.DIAMOND_PICKAXE) && !currentItemType.equals(Material.IRON_PICKAXE) && !currentItemType.equals(Material.STONE_PICKAXE) && !currentItemType.equals(Material.GOLD_PICKAXE) && !currentItemType.equals(Material.WOOD_PICKAXE)) {
+                if (!currentItemType.equals(Material.DIAMOND_PICKAXE) && !currentItemType.equals(Material.IRON_PICKAXE) && !currentItemType.equals(Material.STONE_PICKAXE) && !currentItemType.equals(UniversalMaterial.GOLDEN_PICKAXE.getType()) && !currentItemType.equals(UniversalMaterial.WOODEN_PICKAXE.getType())) {
                     return;
                 }
                 block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop());
@@ -88,30 +90,33 @@ public class CutClean extends Scenarios {
             if (is == null) {
                 return;
             }
-            switch (is.getType()) {
+            UniversalMaterial material = UniversalMaterial.ofType(is.getType());
+            if (material == null) return;
+
+            switch (material) {
                 case RAW_BEEF:
                     loots.remove(i);
-                    loots.add(new ItemStack(Material.COOKED_BEEF));
+                    loots.add(new ItemStack(Objects.requireNonNull(UniversalMaterial.COOKED_BEEF.getType())));
                     break;
 
-                case PORK:
+                case RAW_PORK:
                     loots.remove(i);
-                    loots.add(new ItemStack(Material.GRILLED_PORK));
+                    loots.add(new ItemStack(Objects.requireNonNull(UniversalMaterial.COOKED_PORKCHOP.getType())));
                     break;
 
                 case RAW_CHICKEN:
                     loots.remove(i);
-                    loots.add(new ItemStack(Material.COOKED_CHICKEN));
+                    loots.add(new ItemStack(Objects.requireNonNull(UniversalMaterial.COOKED_CHICKEN.getType())));
                     break;
 
-                case MUTTON:
+                case RAW_MUTTON:
                     loots.remove(i);
-                    loots.add(new ItemStack(Material.COOKED_MUTTON));
+                    loots.add(new ItemStack(Objects.requireNonNull(UniversalMaterial.COOKED_MUTTON.getType())));
                     break;
 
-                case RABBIT:
+                case RAW_RABBIT:
                     loots.remove(i);
-                    loots.add(new ItemStack(Material.COOKED_RABBIT));
+                    loots.add(new ItemStack(Objects.requireNonNull(UniversalMaterial.COOKED_RABBIT.getType())));
                     break;
                 default:
 

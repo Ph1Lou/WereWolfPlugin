@@ -38,12 +38,13 @@ public class CommandModerator implements Commands {
             return;
         }
 
-        if (Bukkit.getPlayer(args[0]) == null) {
+        Player moderator = Bukkit.getPlayer(args[0]);
+
+        if (moderator == null) {
             sender.sendMessage(game.translate("werewolf.check.offline_player"));
             return;
         }
 
-        Player moderator = Bukkit.getPlayer(args[0]);
         UUID argUUID = moderator.getUniqueId();
 
         if (game.getModerators().contains(argUUID)) {

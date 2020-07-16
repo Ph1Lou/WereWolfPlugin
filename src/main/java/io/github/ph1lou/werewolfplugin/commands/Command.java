@@ -8,6 +8,7 @@ import io.github.ph1lou.werewolfplugin.commands.utilities.*;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -54,7 +55,7 @@ public class Command implements TabExecutor {
 
 
     @Override
-    public boolean onCommand(CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull org.bukkit.command.Command cmd, @NotNull String label, String[] args) {
 
         if (args.length == 0) {
             this.listCommands.get("h").execute(sender, null);
@@ -64,7 +65,7 @@ public class Command implements TabExecutor {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender commandSender, org.bukkit.command.Command command, String s, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull org.bukkit.command.Command command, @NotNull String s, String[] args) {
 
         List<String> temp = new ArrayList<>(this.listCommands.keySet());
 

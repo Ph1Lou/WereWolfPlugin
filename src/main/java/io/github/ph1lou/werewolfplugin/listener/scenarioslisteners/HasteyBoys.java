@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.listener.scenarioslisteners;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.Scenarios;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
@@ -23,7 +24,7 @@ public class HasteyBoys extends Scenarios {
 
         Material itemType = event.getInventory().getResult().getType();
 
-        if (itemType != Material.WOOD_HOE && itemType != Material.STONE_HOE && itemType != Material.GOLD_HOE && itemType != Material.IRON_HOE && itemType != Material.DIAMOND_HOE && itemType != Material.WOOD_AXE && itemType != Material.WOOD_PICKAXE && itemType != Material.WOOD_SPADE && itemType != Material.GOLD_AXE && itemType != Material.GOLD_PICKAXE && itemType != Material.GOLD_SPADE && itemType != Material.STONE_AXE && itemType != Material.STONE_PICKAXE && itemType != Material.STONE_SPADE && itemType != Material.IRON_AXE && itemType != Material.IRON_PICKAXE && itemType != Material.IRON_SPADE && itemType != Material.DIAMOND_AXE && itemType != Material.DIAMOND_PICKAXE && itemType != Material.DIAMOND_SPADE) {
+        if (itemType != Material.DIAMOND_HOE && itemType != UniversalMaterial.WOODEN_AXE.getType() && itemType != UniversalMaterial.WOODEN_PICKAXE.getType() && itemType != UniversalMaterial.WOODEN_SHOVEL.getType() && itemType != UniversalMaterial.GOLDEN_AXE.getType() && itemType != UniversalMaterial.GOLDEN_PICKAXE.getType() && itemType != UniversalMaterial.GOLDEN_SHOVEL.getType() && itemType != Material.STONE_AXE && itemType != Material.STONE_PICKAXE && itemType != UniversalMaterial.STONE_SHOVEL.getType() && itemType != Material.IRON_AXE && itemType != Material.IRON_PICKAXE && itemType != UniversalMaterial.IRON_SHOVEL.getType() && itemType != Material.DIAMOND_AXE && itemType != Material.DIAMOND_PICKAXE && itemType != UniversalMaterial.DIAMOND_SHOVEL.getType()) {
             return;
         }
         ItemStack item = new ItemStack(itemType);

@@ -18,8 +18,12 @@ public class HorseLess extends Scenarios {
     @EventHandler
     public void onEntityMount(EntityMountEvent event) {
 
-        if (event.getEntity() != null && event.getEntity() instanceof Player && event.getMount() != null && event.getMount() instanceof Horse) {
-            event.setCancelled(true);
+        event.getEntity();
+        if (event.getEntity() instanceof Player) {
+            event.getMount();
+            if (event.getMount() instanceof Horse) {
+                event.setCancelled(true);
+            }
         }
     }
 }

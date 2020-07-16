@@ -13,18 +13,16 @@ import io.github.ph1lou.werewolfplugin.save.Config;
 import io.github.ph1lou.werewolfplugin.save.Stuff;
 import io.github.ph1lou.werewolfplugin.tasks.LobbyTask;
 import io.github.ph1lou.werewolfplugin.utils.UpdateChecker;
-import io.github.ph1lou.werewolfplugin.utils.WorldUtils;
+import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
 import io.github.ph1lou.werewolfplugin.worldloader.WorldFillTask;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
-import org.bukkit.block.Biome;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
@@ -115,18 +113,21 @@ public class GameManager implements WereWolfAPI {
             world.setThundering(false);
             world.setTime(0);
             world.setPVP(false);
-            world.setGameRuleValue("reducedDebugInfo", "true");
-            world.setGameRuleValue("keepInventory", "true");
-            world.setGameRuleValue("naturalRegeneration", "false");
-            world.setGameRuleValue("doFireTick", "false");
+            VersionUtils.getVersionUtils().setGameRuleValue(world, "doFireTick", false);
+            VersionUtils.getVersionUtils().setGameRuleValue(world, "reducedDebugInfo", true);
+            VersionUtils.getVersionUtils().setGameRuleValue(world, "naturalRegeneration", false);
+            VersionUtils.getVersionUtils().setGameRuleValue(world, "keepInventory", true);
             world.save();
             int x = world.getSpawnLocation().getBlockX();
             int z = world.getSpawnLocation().getBlockZ();
-            if(world.getWorldBorder()!=null){
+            try {
                 world.getWorldBorder().reset();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
             if (main.getConfig().getBoolean("autoRoofedMiddle")) {
-                Location biome = WorldUtils.findBiome(Biome.ROOFED_FOREST, world, 2000);
+                Location biome = VersionUtils.getVersionUtils().findBiome(world);
                 x = biome.getBlockX();
                 z = biome.getBlockZ();
             }
@@ -226,8 +227,8 @@ public class GameManager implements WereWolfAPI {
         List<UUID> temp = new ArrayList<>(queue);
         int i = 0;
         while (!temp.isEmpty() && getPlayerMax() > getPlayersWW().size()) {
-            if (Bukkit.getPlayer(temp.get(0)) != null && (!isWhiteList() || getWhiteListedPlayers().contains(temp.get(0)))) {
-                Player player = Bukkit.getPlayer(temp.get(0));
+            Player player = Bukkit.getPlayer(temp.get(0));
+            if (player != null && (!isWhiteList() || getWhiteListedPlayers().contains(temp.get(0)))) {
                 queue.remove(i);
                 join(player);
             } else i++;
@@ -247,7 +248,7 @@ public class GameManager implements WereWolfAPI {
 
 
     public void clearPlayer(Player player) {
-        player.setMaxHealth(20);
+        VersionUtils.getVersionUtils().setPlayerMaxHealth(player, 20);
         player.setHealth(20);
         player.setExp(0);
         player.setLevel(0);
@@ -360,9 +361,10 @@ public class GameManager implements WereWolfAPI {
     @Override
     public void transportation(UUID playerUUID, double d, String message) {
 
-        if (Bukkit.getPlayer(playerUUID) != null) {
+        Player player = Bukkit.getPlayer(playerUUID);
 
-            Player player = Bukkit.getPlayer(playerUUID);
+        if (player != null) {
+
             World world = player.getWorld();
             WorldBorder wb = world.getWorldBorder();
 
@@ -503,12 +505,14 @@ public class GameManager implements WereWolfAPI {
     @Override
     public void death(UUID uuid) {
 
-        if (Bukkit.getPlayer(uuid) != null) {
+        Player player = Bukkit.getPlayer(uuid);
+
+        if (player != null) {
 
             PlayerWW playerWW = getPlayersWW().get(uuid);
 
             if (playerWW.isState(State.ALIVE)) {
-                Player player = Bukkit.getPlayer(uuid);
+
                 playerWW.setSpawn(player.getLocation());
                 playerWW.clearItemDeath();
 
@@ -550,17 +554,15 @@ public class GameManager implements WereWolfAPI {
                 String name =playerWW2.getName();
 
                 if (scoreBoard.getTeam(name) == null) {
-                    scoreBoard.registerNewTeam(name);
-                    scoreBoard.getTeam(name).addEntry(name);
+                    scoreBoard.registerNewTeam(name).addEntry(name);
                 }
 
                 Team team = scoreBoard.getTeam(name);
                 try{
                     if (config.getScenarioValues().get("werewolf.menu.scenarios.no_name_tag")) {
-                        team.setNameTagVisibility(NameTagVisibility.NEVER);
-                    } else if ((playerWW2.getRole() instanceof InvisibleState) && ((InvisibleState)playerWW2.getRole()).isInvisible()) {
-                        team.setNameTagVisibility(NameTagVisibility.NEVER);
-                    } else team.setNameTagVisibility(NameTagVisibility.ALWAYS);
+                        VersionUtils.getVersionUtils().setTeamNameTagVisibility(team, false);
+                    } else
+                        VersionUtils.getVersionUtils().setTeamNameTagVisibility(team, (!(playerWW2.getRole() instanceof InvisibleState)) || !((InvisibleState) playerWW2.getRole()).isInvisible());
                 }catch(Exception ignored){
 
                 }
@@ -568,40 +570,40 @@ public class GameManager implements WereWolfAPI {
             }
 
             for (UUID uuid: this.getModerators()) {
-                if(Bukkit.getPlayer(uuid)!=null){
-                    String name3 = Bukkit.getPlayer(uuid).getName();
-                    if(scoreBoard.getTeam(name3)==null){
-                        scoreBoard.registerNewTeam(name3);
-                        scoreBoard.getTeam(name3).addEntry(name3);
+                Player player = Bukkit.getPlayer(uuid);
+                if (player != null) {
+                    String name3 = player.getName();
+                    if (scoreBoard.getTeam(name3) == null) {
+                        scoreBoard.registerNewTeam(name3).addEntry(name3);
                     }
                 }
             }
 
             for (UUID uuid: this.getHosts()) {
-                if(Bukkit.getPlayer(uuid)!=null){
-                    String name3 = Bukkit.getPlayer(uuid).getName();
-                    if(scoreBoard.getTeam(name3)==null){
-                        scoreBoard.registerNewTeam(name3);
-                        scoreBoard.getTeam(name3).addEntry(name3);
+                Player player = Bukkit.getPlayer(uuid);
+                if (player != null) {
+                    String name3 = player.getName();
+                    if (scoreBoard.getTeam(name3) == null) {
+                        scoreBoard.registerNewTeam(name3).addEntry(name3);
                     }
                 }
             }
 
             for(Team t:scoreBoard.getTeams()){
 
-                for(String e:t.getEntries()){
-                    if(Bukkit.getPlayer(e)!=null){
-                        UUID uuid=Bukkit.getPlayer(e).getUniqueId();
+                for(String e:t.getEntries()) {
+                    Player player = Bukkit.getPlayer(e);
+                    if (player != null) {
+                        UUID uuid = player.getUniqueId();
                         StringBuilder sb = new StringBuilder();
-                        if(this.getHosts().contains(uuid)){
+                        if (this.getHosts().contains(uuid)) {
                             sb.append(this.translate("werewolf.commands.admin.host.tag"));
-                        }
-                        else if (this.getModerators().contains(uuid)){
+                        } else if (this.getModerators().contains(uuid)) {
                             sb.append(this.translate("werewolf.commands.admin.moderator.tag"));
                         }
-                        if(getPlayersWW().containsKey(uuid)){
+                        if (getPlayersWW().containsKey(uuid)) {
                             Roles roles = getPlayersWW().get(uuid).getRole();
-                            if(roles.isWereWolf() && playerWW.getRole().isWereWolf()){
+                            if (roles.isWereWolf() && playerWW.getRole().isWereWolf()) {
                                 if (getConfig().getConfigValues().get(ToolLG.RED_NAME_TAG)) {
                                     if(getConfig().getTimerValues().get(TimerLG.WEREWOLF_LIST) <= 0){
                                         sb.append(ChatColor.DARK_RED);

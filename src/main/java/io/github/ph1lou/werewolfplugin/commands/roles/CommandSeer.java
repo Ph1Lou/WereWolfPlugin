@@ -12,6 +12,7 @@ import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
+import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -74,19 +75,20 @@ public class CommandSeer implements Commands {
             player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
+        Player playerArg = Bukkit.getPlayer(args[0]);
 
-        if(Bukkit.getPlayer(args[0])==null){
+        if (playerArg == null) {
             player.sendMessage(game.translate("werewolf.check.offline_player"));
             return;
         }
-        UUID argUUID = Bukkit.getPlayer(args[0]).getUniqueId();
+        UUID argUUID = playerArg.getUniqueId();
 
         if(!game.getPlayersWW().containsKey(argUUID) || !game.getPlayersWW().get(argUUID).isState(State.ALIVE)){
             player.sendMessage(game.translate("werewolf.check.player_not_found"));
             return;
         }
 
-        double life =player.getMaxHealth();
+        double life = VersionUtils.getVersionUtils().getPlayerMaxHealth(player);
 
         if (life<7) {
             player.sendMessage(game.translate("werewolf.role.seer.not_enough_life"));
@@ -108,7 +110,7 @@ public class CommandSeer implements Commands {
             ((AffectedPlayers)seer).addAffectedPlayer(argUUID);
 
             if((role1 instanceof Display && ((Display) role1).isDisplayCamp(Camp.VILLAGER)) || role1.isCamp(Camp.VILLAGER)) {
-                player.setMaxHealth(life-6);
+                VersionUtils.getVersionUtils().setPlayerMaxHealth(player, life - 6);
                 if(player.getHealth()>life-6) {
                     player.setHealth(life-6);
                 }

@@ -36,11 +36,14 @@ public class CommandInventory implements Commands {
             sender.sendMessage(game.translate("werewolf.check.player_input"));
             return;
         }
-        if (Bukkit.getPlayer(args[0]) == null) {
+
+        Player pInv = Bukkit.getPlayer(args[0]);
+
+        if (pInv == null) {
             sender.sendMessage(game.translate("werewolf.check.offline_player"));
             return;
         }
-        Player pInv = Bukkit.getPlayer(args[0]);
+
         Inventory inv = Bukkit.createInventory(null, 45, args[0]);
 
         for (int i = 0; i < 40; i++) {

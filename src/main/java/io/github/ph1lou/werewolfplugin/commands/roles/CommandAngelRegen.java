@@ -66,27 +66,28 @@ public class CommandAngelRegen implements Commands {
             return;
         }
 
-        if (((LimitedUse)guardianAngel).getUse() >= 3) {
+        if (((LimitedUse) guardianAngel).getUse() >= 3) {
             player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
 
-        if (((AffectedPlayers)guardianAngel).getAffectedPlayers().isEmpty()) {
+        if (((AffectedPlayers) guardianAngel).getAffectedPlayers().isEmpty()) {
             player.sendMessage(game.translate("werewolf.role.guardian_angel.no_protege"));
             return;
         }
 
-        if (Bukkit.getPlayer(((AffectedPlayers) guardianAngel).getAffectedPlayers().get(0)) == null) {
+        Player playerProtected = Bukkit.getPlayer(((AffectedPlayers) guardianAngel).getAffectedPlayers().get(0));
+
+        if (playerProtected == null) {
             player.sendMessage(game.translate("werewolf.role.guardian_angel.disconnected_protege"));
             return;
         }
 
-        ((LimitedUse) guardianAngel).setUse(((LimitedUse) guardianAngel).getUse()+1);
+        ((LimitedUse) guardianAngel).setUse(((LimitedUse) guardianAngel).getUse() + 1);
 
-        Player playerProtected = Bukkit.getPlayer(((AffectedPlayers) guardianAngel).getAffectedPlayers().get(0));
         playerProtected.removePotionEffect(PotionEffectType.REGENERATION);
         playerProtected.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 400, 0, false, false));
         playerProtected.sendMessage(game.translate("werewolf.role.guardian_angel.get_regeneration"));
-        player.sendMessage(game.translate("werewolf.role.guardian_angel.perform",3-((LimitedUse) guardianAngel).getUse()));
+        player.sendMessage(game.translate("werewolf.role.guardian_angel.perform", 3 - ((LimitedUse) guardianAngel).getUse()));
     }
 }

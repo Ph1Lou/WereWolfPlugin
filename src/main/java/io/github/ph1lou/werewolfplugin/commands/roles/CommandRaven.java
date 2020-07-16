@@ -65,22 +65,25 @@ public class CommandRaven implements Commands {
             return;
         }
 
-        if(!plg.isState(State.ALIVE)){
+        if (!plg.isState(State.ALIVE)) {
             player.sendMessage(game.translate("werewolf.check.death"));
             return;
         }
 
-        if(!((Power)raven).hasPower()) {
+        if (!((Power) raven).hasPower()) {
             player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
-        if(Bukkit.getPlayer(args[0])==null){
+
+        Player playerArg = Bukkit.getPlayer(args[0]);
+
+        if (playerArg == null) {
             player.sendMessage(game.translate("werewolf.check.offline_player"));
             return;
         }
-        UUID argUUID = Bukkit.getPlayer(args[0]).getUniqueId();
+        UUID argUUID = playerArg.getUniqueId();
 
-        if(!game.getPlayersWW().containsKey(argUUID) || !game.getPlayersWW().get(argUUID).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().containsKey(argUUID) || !game.getPlayersWW().get(argUUID).isState(State.ALIVE)) {
             player.sendMessage(game.translate("werewolf.check.player_not_found"));
             return;
         }
@@ -94,7 +97,7 @@ public class CommandRaven implements Commands {
 
         Bukkit.getPluginManager().callEvent(curseEvent);
 
-        if(curseEvent.isCancelled()){
+        if (curseEvent.isCancelled()) {
             player.sendMessage(game.translate("werewolf.check.cancel"));
             return;
         }
@@ -103,10 +106,9 @@ public class CommandRaven implements Commands {
         ((Power) raven).setPower(false);
         ((AffectedPlayers) raven).addAffectedPlayer(argUUID);
         game.getPlayersWW().get(argUUID).setDamn(true);
-        Player playerDamned=Bukkit.getPlayer(args[0]);
-        playerDamned.removePotionEffect(PotionEffectType.JUMP);
-        playerDamned.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,Integer.MAX_VALUE,1,false,false));
-        playerDamned.sendMessage(game.translate("werewolf.role.raven.get_curse"));
-        player.sendMessage(game.translate("werewolf.role.raven.curse_perform",args[0]));
+        playerArg.removePotionEffect(PotionEffectType.JUMP);
+        playerArg.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 1, false, false));
+        playerArg.sendMessage(game.translate("werewolf.role.raven.get_curse"));
+        player.sendMessage(game.translate("werewolf.role.raven.curse_perform", args[0]));
     }
 }

@@ -11,7 +11,7 @@ import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.Succubus;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Cupid;
-import io.github.ph1lou.werewolfplugin.utils.Title;
+import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -235,7 +235,7 @@ public class End {
 
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.sendMessage(game.translate("werewolf.end.message", subtitles_victory));
-            Title.sendTitle(p, 20, 60, 20, game.translate("werewolf.end.victory"), subtitles_victory);
+            VersionUtils.getVersionUtils().sendTitle(p, game.translate("werewolf.end.victory"), subtitles_victory, 20, 60, 20);
             TextComponent msg = new TextComponent(game.translate("werewolf.bug"));
             msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/GXXCVUA"));
             p.spigot().sendMessage(msg);

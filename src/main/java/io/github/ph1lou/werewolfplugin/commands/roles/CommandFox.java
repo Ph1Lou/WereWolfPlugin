@@ -68,29 +68,31 @@ public class CommandFox implements Commands {
             return;
         }
 
-        if(!((Power)fox).hasPower()) {
+        if (!((Power) fox).hasPower()) {
             player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
 
-        if(args[0].toLowerCase().equals(playername.toLowerCase())) {
+        if (args[0].toLowerCase().equals(playername.toLowerCase())) {
             player.sendMessage(game.translate("werewolf.check.not_yourself"));
             return;
         }
 
-        if(Bukkit.getPlayer(args[0])==null){
+        Player playerArg = Bukkit.getPlayer(args[0]);
+
+        if (playerArg == null) {
             player.sendMessage(game.translate("werewolf.check.offline_player"));
             return;
         }
-        UUID argUUID = Bukkit.getPlayer(args[0]).getUniqueId();
+        UUID argUUID = playerArg.getUniqueId();
 
-        if(!game.getPlayersWW().containsKey(argUUID) || !game.getPlayersWW().get(argUUID).isState(State.ALIVE)){
+        if (!game.getPlayersWW().containsKey(argUUID) || !game.getPlayersWW().get(argUUID).isState(State.ALIVE)) {
             player.sendMessage(game.translate("werewolf.check.player_not_found"));
             return;
         }
 
         Location location = player.getLocation();
-        Location locationTarget = Bukkit.getPlayer(args[0]).getLocation();
+        Location locationTarget = playerArg.getLocation();
 
         if (location.distance(locationTarget) > game.getConfig().getDistanceFox()) {
             player.sendMessage(game.translate("werewolf.role.fox.not_enough_near"));

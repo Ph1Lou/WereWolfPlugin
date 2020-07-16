@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.game;
 
 import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.State;
 import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
 import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
@@ -12,7 +13,6 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -62,6 +62,7 @@ public class DeathManagement {
         GameManager game = main.getCurrentGame();
         World world = game.getWorld();
         PlayerWW plg = game.getPlayersWW().get(playerUUID);
+        Player player = Bukkit.getPlayer(playerUUID);
 
         plg.setDeathTime((int) TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()));
         String roleLG = plg.getRole().getDisplay();
@@ -87,21 +88,21 @@ public class DeathManagement {
         }
 
         for (Player p : Bukkit.getOnlinePlayers()) {
-            p.playSound(p.getLocation(), Sound.AMBIENCE_THUNDER, 1, 20);
+            Sounds.AMBIENCE_THUNDER.play(p);
         }
 
         if (!plg.getLovers().isEmpty()) {
             game.getLoversManage().checkLovers(playerUUID);
         }
-        if (plg.getCursedLovers()!=null) {
+        if (plg.getCursedLovers() != null) {
             game.getLoversManage().checkCursedLovers(playerUUID);
         }
-        if (plg.getAmnesiacLoverUUID()!=null) {
+        if (plg.getAmnesiacLoverUUID() != null) {
             game.getLoversManage().checkAmnesiacLovers(playerUUID);
         }
 
-        if (Bukkit.getPlayer(playerUUID)!=null) {
-            Player player = Bukkit.getPlayer(playerUUID);
+        if (player != null) {
+
             player.setGameMode(GameMode.SPECTATOR);
             TextComponent msg = new TextComponent(game.translate("werewolf.bug"));
             msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/GXXCVUA"));

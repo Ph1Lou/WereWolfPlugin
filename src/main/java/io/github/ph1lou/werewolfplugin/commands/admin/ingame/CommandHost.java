@@ -38,6 +38,7 @@ public class CommandHost implements Commands {
             return;
         }
         Player host = Bukkit.getPlayer(args[0]);
+        if (host == null) return;
         UUID uuid = host.getUniqueId();
 
         if(game.getHosts().contains(uuid)){

@@ -32,17 +32,20 @@ public class CommandTPGroup implements Commands {
             sender.sendMessage(game.translate("werewolf.check.permission_denied"));
             return;
         }
-        
+
 
         if (args.length != 1 && args.length != 2) {
             sender.sendMessage(game.translate("werewolf.check.player_input"));
             return;
         }
-        if(Bukkit.getPlayer(args[0])==null){
+
+        Player playerArg = Bukkit.getPlayer(args[0]);
+
+        if (playerArg == null) {
             sender.sendMessage(game.translate("werewolf.check.offline_player"));
             return;
         }
-        UUID argUUID = Bukkit.getPlayer(args[0]).getUniqueId();
+        UUID argUUID = playerArg.getUniqueId();
 
         if (!game.getPlayersWW().containsKey(argUUID)) {
             sender.sendMessage(game.translate("werewolf.check.player_not_found"));
@@ -60,8 +63,8 @@ public class CommandTPGroup implements Commands {
         int d = 20;
         int size = game.getScore().getGroup();
         double r = Math.random() * 2 * Math.PI;
-        Player target = Bukkit.getPlayer(args[0]);
-        Location location = target.getLocation();
+
+        Location location = playerArg.getLocation();
         StringBuilder sb = new StringBuilder();
         try {
             if (args.length == 2) {

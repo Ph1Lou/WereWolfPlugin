@@ -7,6 +7,7 @@ import io.github.ph1lou.werewolfapi.enumlg.State;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.events.NightEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
+import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,15 +27,18 @@ public class WhiteWereWolf extends RolesNeutral {
     public void onNight(NightEvent event) {
 
 
-        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
             return;
         }
 
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
-            return;
-        }
+        if (getPlayerUUID() == null) return;
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (player == null) {
+            return;
+        }
+
         player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, -1, false, false));
     }
 
@@ -42,33 +46,39 @@ public class WhiteWereWolf extends RolesNeutral {
     public void onDay(DayEvent event) {
 
 
-        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
             return;
         }
-
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
-            return;
-        }
+        if (getPlayerUUID() == null) return;
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (player == null) {
+            return;
+        }
+
         player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
     }
 
     @Override
     public void stolen(UUID uuid) {
 
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
+        if (getPlayerUUID() == null) return;
+
+        Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (player == null) {
             return;
         }
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-        player.setMaxHealth(player.getMaxHealth()+10);
+
+        VersionUtils.getVersionUtils().setPlayerMaxHealth(player, VersionUtils.getVersionUtils().getPlayerMaxHealth(player) + 10);
     }
 
     @Override
     public Player recoverPower() {
         Player player = super.recoverPower();
         if(player==null) return null;
-        player.setMaxHealth(30);
+        VersionUtils.getVersionUtils().setPlayerMaxHealth(player, 30);
         return player;
     }
 
@@ -104,7 +114,6 @@ public class WhiteWereWolf extends RolesNeutral {
     @EventHandler
     private void onPlayerDeath(PlayerDeathEvent event) {
 
-        if(event.getEntity() == null) return;
         if(event.getEntity().getKiller()==null) return;
         Player killer = event.getEntity().getKiller();
 

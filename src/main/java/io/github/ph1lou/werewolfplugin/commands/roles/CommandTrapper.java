@@ -69,21 +69,23 @@ public class CommandTrapper implements Commands {
             return;
         }
 
-        if (!((Power)trapper).hasPower()) {
+        if (!((Power) trapper).hasPower()) {
             player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
 
-        if(args[0].toLowerCase().equals(playername.toLowerCase())) {
+        if (args[0].toLowerCase().equals(playername.toLowerCase())) {
             player.sendMessage(game.translate("werewolf.check.not_yourself"));
             return;
         }
 
-        if(Bukkit.getPlayer(args[0])==null){
+        Player playerArg = Bukkit.getPlayer(args[0]);
+
+        if (playerArg == null) {
             player.sendMessage(game.translate("werewolf.check.offline_player"));
             return;
         }
-        UUID argUUID = Bukkit.getPlayer(args[0]).getUniqueId();
+        UUID argUUID = playerArg.getUniqueId();
 
         if (!game.getPlayersWW().containsKey(argUUID) || !game.getPlayersWW().get(argUUID).isState(State.ALIVE)) {
             player.sendMessage(game.translate("werewolf.check.player_not_found"));
@@ -108,7 +110,7 @@ public class CommandTrapper implements Commands {
         ((AffectedPlayers) trapper).addAffectedPlayer(argUUID);
         ((Power) trapper).setPower(false);
 
-        Bukkit.getPlayer(args[0]).sendMessage(game.translate("werewolf.role.trapper.get_track"));
+        playerArg.sendMessage(game.translate("werewolf.role.trapper.get_track"));
         player.sendMessage(game.translate("werewolf.role.trapper.tracking_perform", args[0]));
     }
 }

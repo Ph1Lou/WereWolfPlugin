@@ -51,15 +51,19 @@ public class Comedian extends RolesWithLimitedSelectionDuration implements Potio
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
+        if (getPlayerUUID() == null) return;
+
+        Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
             return;
         }
         setPower(true);
 
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
+        if (player == null) {
             return;
         }
-        Player player = Bukkit.getPlayer(getPlayerUUID());
+
 
         player.removePotionEffect(getLastPotionEffect());
         if (getPotionEffects().size() < 4) {

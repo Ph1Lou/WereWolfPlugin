@@ -4,13 +4,13 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.Camp;
+import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.State;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.Display;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
@@ -25,17 +25,18 @@ public class BearTrainer extends RolesVillage {
     @EventHandler
     public void onDay(DayEvent event) {
 
+        if (getPlayerUUID() == null) return;
 
-        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
+        Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
             return;
         }
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
-            return;
-        }
+        if (player == null) return;
 
         StringBuilder builder = new StringBuilder();
         boolean ok = false;
-        Location oursLocation = Bukkit.getPlayer(getPlayerUUID()).getLocation();
+        Location oursLocation = player.getLocation();
 
         for (Player pls : Bukkit.getOnlinePlayers()) {
 
@@ -56,7 +57,7 @@ public class BearTrainer extends RolesVillage {
         if (ok) {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 p.sendMessage(game.translate("werewolf.role.bear_trainer.growling_message", builder.toString()));
-                p.playSound(p.getLocation(), Sound.WOLF_GROWL, 1, 20);
+                Sounds.WOLF_GROWL.play(p);
             }
 
         }

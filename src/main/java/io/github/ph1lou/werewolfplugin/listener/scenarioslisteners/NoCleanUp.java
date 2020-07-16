@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.listener.scenarioslisteners;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.Scenarios;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -17,10 +18,8 @@ public class NoCleanUp extends Scenarios {
     @EventHandler(priority = EventPriority.LOWEST)
     private void onPlayerDeath(PlayerDeathEvent event) {
 
-        try {
-            Player killer = event.getEntity().getKiller();
-            killer.setHealth(Math.min(killer.getHealth() + 4, killer.getMaxHealth()));
-        } catch (Exception ignored) {
-        }
+        Player killer = event.getEntity().getKiller();
+        if (killer == null) return;
+        VersionUtils.getVersionUtils().setPlayerMaxHealth(killer, Math.min(killer.getHealth() + 4, VersionUtils.getVersionUtils().getPlayerMaxHealth(killer)));
     }
 }

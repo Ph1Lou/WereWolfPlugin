@@ -5,7 +5,7 @@ import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfapi.events.StartEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
-import io.github.ph1lou.werewolfplugin.save.FileUtils;
+import io.github.ph1lou.werewolfplugin.save.FileUtils_;
 import io.github.ph1lou.werewolfplugin.save.Serializer;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -63,7 +63,7 @@ public class CommandStart implements Commands {
         wb.setWarningDistance((int) (wb.getSize() / 7));
         game.setState(StateLG.TRANSPORTATION);
         java.io.File file = new java.io.File(main.getDataFolder() + java.io.File.separator + "configs" + java.io.File.separator, "saveCurrent.json");
-        FileUtils.save(file, Serializer.serialize(game.getConfig()));
+        FileUtils_.save(file, Serializer.serialize(game.getConfig()));
         game.getStuffs().save("saveCurrent");
         Bukkit.getPluginManager().callEvent(new StartEvent(game));
     }

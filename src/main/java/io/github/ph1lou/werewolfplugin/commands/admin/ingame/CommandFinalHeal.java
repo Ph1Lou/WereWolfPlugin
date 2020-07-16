@@ -1,10 +1,11 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
+import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -28,8 +29,8 @@ public class CommandFinalHeal implements Commands {
         }
 
         for (Player p : Bukkit.getOnlinePlayers()) {
-            p.setHealth(p.getMaxHealth());
-            p.playSound(p.getLocation(), Sound.NOTE_STICKS, 1, 20);
+            p.setHealth(VersionUtils.getVersionUtils().getPlayerMaxHealth(p));
+            Sounds.NOTE_STICKS.play(p);
             p.sendMessage(game.translate("werewolf.commands.admin.final_heal"));
         }
     }

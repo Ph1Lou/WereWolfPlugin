@@ -40,28 +40,46 @@ public class Sister extends RolesVillage {
     @EventHandler
     public void onUpdate(UpdateEvent event) {
 
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
-            return;
-        }
-        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
-            return;
-        }
+        if (getPlayerUUID() == null) return;
+
         Player sister1 = Bukkit.getPlayer(getPlayerUUID());
+
+        if (sister1 == null) {
+            return;
+        }
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+            return;
+        }
+
         Location location = sister1.getLocation();
 
-        for(UUID uuid:game.getPlayersWW().keySet()){
+        for (UUID uuid : game.getPlayersWW().keySet()) {
             PlayerWW plg = game.getPlayersWW().get(uuid);
             if(!uuid.equals(getPlayerUUID())){
                 if(plg.isState(State.ALIVE)){
-                    if(plg.getRole().isDisplay("werewolf.role.sister.display")){
-                        if(Bukkit.getPlayer(uuid)!=null){
+                    if(plg.getRole().isDisplay("werewolf.role.sister.display")) {
+                        Player sister2 = Bukkit.getPlayer(uuid);
+                        if (sister2 != null) {
 
-                            Player sister2 = Bukkit.getPlayer(uuid);
-                            Location location2= sister2.getLocation();
+                            Location location2 = sister2.getLocation();
 
-                            if(location.distance(location2)<20){
-                                sister1.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,100,0,false,false));
-                                sister2.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,100,0,false,false));
+                            if (location.distance(location2) < 20) {
+                                if (sister1.hasPotionEffect(PotionEffectType.DAMAGE_RESISTANCE)) {
+                                    for (PotionEffect po : sister1.getActivePotionEffects()) {
+                                        if (po.getDuration() != Integer.MAX_VALUE) {
+                                            sister1.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+                                        }
+                                    }
+                                }
+                                sister1.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 0, false, false));
+                                if (sister2.hasPotionEffect(PotionEffectType.DAMAGE_RESISTANCE)) {
+                                    for (PotionEffect po : sister2.getActivePotionEffects()) {
+                                        if (po.getDuration() != Integer.MAX_VALUE) {
+                                            sister2.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+                                        }
+                                    }
+                                }
+                                sister2.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 0, false, false));
                             }
                         }
                     }
@@ -71,16 +89,19 @@ public class Sister extends RolesVillage {
     }
 
     @EventHandler
-    public void onSisterDeath(FinalDeathEvent event){
+    public void onSisterDeath(FinalDeathEvent event) {
+
+        if (getPlayerUUID() == null) return;
 
         UUID uuid = event.getUuid();
-        PlayerWW plg =game.getPlayersWW().get(uuid);
+        PlayerWW plg = game.getPlayersWW().get(uuid);
         PlayerWW plg2 = game.getPlayersWW().get(getPlayerUUID());
+        Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if(uuid.equals(getPlayerUUID())){
-            List<UUID> sisters =new ArrayList<>();
-            for(UUID uuid1:game.getPlayersWW().keySet()){
-                if(game.getPlayersWW().get(uuid1).getRole().isDisplay("werewolf.role.sister.display")){
+        if (uuid.equals(getPlayerUUID())) {
+            List<UUID> sisters = new ArrayList<>();
+            for (UUID uuid1 : game.getPlayersWW().keySet()) {
+                if (game.getPlayersWW().get(uuid1).getRole().isDisplay("werewolf.role.sister.display")) {
                     sisters.add(uuid1);
                 }
             }
@@ -88,7 +109,7 @@ public class Sister extends RolesVillage {
             return;
         }
 
-        if(!(plg.getRole().isDisplay("werewolf.role.sister.display"))){
+        if (!(plg.getRole().isDisplay("werewolf.role.sister.display"))) {
             return;
         }
 
@@ -96,8 +117,8 @@ public class Sister extends RolesVillage {
             return;
         }
 
-        if(Bukkit.getPlayer(getPlayerUUID()) != null){
-            Bukkit.getPlayer(getPlayerUUID()).sendMessage(game.translate("werewolf.role.sister.reveal_killer", plg.getName(),plg.getLastKiller()!=null? game.getPlayersWW().get(plg.getLastKiller()).getName():game.translate("werewolf.utils.pve")));
+        if (player != null) {
+            player.sendMessage(game.translate("werewolf.role.sister.reveal_killer", plg.getName(), plg.getLastKiller() != null ? game.getPlayersWW().get(plg.getLastKiller()).getName() : game.translate("werewolf.utils.pve")));
         }
     }
 }

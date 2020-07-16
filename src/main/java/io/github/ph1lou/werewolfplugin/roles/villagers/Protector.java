@@ -49,16 +49,18 @@ public class Protector extends RolesWithLimitedSelectionDuration implements Affe
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
+        if (getPlayerUUID() == null) return;
+
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
             return;
         }
 
+        Player player = Bukkit.getPlayer(getPlayerUUID());
         setPower(true);
 
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
+        if (player == null) {
             return;
         }
-        Player player = Bukkit.getPlayer(getPlayerUUID());
 
         player.sendMessage(game.translate("werewolf.role.protector.protection_message", game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.POWER_DURATION))));
     }

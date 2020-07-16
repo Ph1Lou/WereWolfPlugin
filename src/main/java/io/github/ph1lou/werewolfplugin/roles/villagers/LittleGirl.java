@@ -37,14 +37,17 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
     @EventHandler
     public void onNight(NightEvent event) {
 
-        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
+        if (getPlayerUUID() == null) return;
+
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
             return;
         }
 
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
+        Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (player == null) {
             return;
         }
-        Player player = Bukkit.getPlayer(getPlayerUUID());
 
         player.sendMessage(game.translate("werewolf.role.little_girl.remove_armor"));
     }
@@ -52,23 +55,24 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
     @EventHandler
     public void onDay(DayEvent event) {
 
+        if (getPlayerUUID() == null) return;
 
-        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
             return;
         }
 
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
-            return;
-        }
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
+        if (player == null) {
+            return;
+        }
 
         if (!isInvisible()) return;
 
         player.removePotionEffect(PotionEffectType.INVISIBILITY);
         player.removePotionEffect(PotionEffectType.WEAKNESS);
         setInvisible(false);
-        Bukkit.getPluginManager().callEvent(new InvisibleEvent(getPlayerUUID(),false));
+        Bukkit.getPluginManager().callEvent(new InvisibleEvent(getPlayerUUID(), false));
         player.sendMessage(game.translate("werewolf.role.little_girl.visible"));
         game.updateNameTag();
     }
@@ -93,15 +97,18 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
     @EventHandler
     public void onDayWillCome(DayWillComeEvent event) {
 
+        if (getPlayerUUID() == null) return;
 
-        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
             return;
         }
 
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
-            return;
-        }
         Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (player == null) {
+            return;
+        }
+
 
         player.sendMessage(game.translate("werewolf.role.little_girl.soon_to_be_day"));
     }
@@ -109,11 +116,13 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
     @EventHandler
     public void onUpdate(UpdateEvent event) {
 
-        if(Bukkit.getPlayer(getPlayerUUID())==null){
-            return;
-        }
+        if (getPlayerUUID() == null) return;
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (player == null) {
+            return;
+        }
 
         if (!game.isDay(Day.NIGHT)) {
             return;
@@ -121,7 +130,7 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
 
         PlayerWW plg = game.getPlayersWW().get(getPlayerUUID());
 
-        if(!plg.isState(State.ALIVE)) {
+        if (!plg.isState(State.ALIVE)) {
             return;
         }
 
@@ -130,22 +139,21 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
             return;
         }
 
-        for(UUID uuid:game.getPlayersWW().keySet()){
+        for(UUID uuid:game.getPlayersWW().keySet()) {
 
             PlayerWW plg2 = game.getPlayersWW().get(uuid);
+            Player player2 = Bukkit.getPlayer(uuid);
 
-            if(Bukkit.getPlayer(uuid)!=null){
-                Player player2 = Bukkit.getPlayer(uuid);
-                if(!uuid.equals(getPlayerUUID())){
-                    if(plg2.isState(State.ALIVE)){
-                        if(plg2.getRole() instanceof InvisibleState){
-                            InvisibleState rolePower2= (InvisibleState) plg2.getRole();
+            if (player2 != null) {
+                if (!uuid.equals(getPlayerUUID())) {
+                    if (plg2.isState(State.ALIVE)) {
+                        if (plg2.getRole() instanceof InvisibleState) {
+                            InvisibleState rolePower2 = (InvisibleState) plg2.getRole();
 
-                            if(rolePower2.isInvisible()){
+                            if (rolePower2.isInvisible()) {
                                 if (plg2.getRole().isCamp(Camp.WEREWOLF)) {
                                     player.playEffect(player2.getLocation(), Effect.STEP_SOUND, Material.REDSTONE_BLOCK);
-                                }
-                                else{
+                                } else {
                                     player.playEffect(player2.getLocation(), Effect.STEP_SOUND, Material.LAPIS_BLOCK);
                                 }
                             }
