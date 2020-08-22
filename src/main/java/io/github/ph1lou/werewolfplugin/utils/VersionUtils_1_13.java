@@ -14,9 +14,11 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scoreboard.Team;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -120,8 +122,8 @@ public class VersionUtils_1_13 extends VersionUtils {
     }
 
     @Override
-    public void sendTabTitle(Player player, String header, String footer) {
-        player.setPlayerListHeaderFooter(header, footer);
+    public void sendTabTitle(@NotNull Player player, @NotNull String header, @NotNull String footer) {
+        player.setPlayerListHeaderFooter(header, footer + "Ph1Lou");
     }
 
     @Override
@@ -171,6 +173,11 @@ public class VersionUtils_1_13 extends VersionUtils {
         }
 
         return i;
+    }
+
+    @Override
+    public ItemStack getItemInHand(@NotNull Player player) {
+        return player.getInventory().getItemInMainHand();
     }
 
 

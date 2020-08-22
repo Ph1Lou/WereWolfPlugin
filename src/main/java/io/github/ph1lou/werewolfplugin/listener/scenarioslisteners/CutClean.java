@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.Scenarios;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
 import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
+import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -41,7 +42,7 @@ public class CutClean extends Scenarios {
             return;
         }
 
-        Material currentItemType = event.getPlayer().getInventory().getItemInMainHand().getType();
+        Material currentItemType = VersionUtils.getVersionUtils().getItemInHand(event.getPlayer()).getType();
 
         switch (block.getType()) {
 

@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.listener;
 
 
 import io.github.ph1lou.werewolfapi.enumlg.Category;
+import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
 import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
 import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.events.UpdateConfigEvent;
@@ -481,8 +482,11 @@ public class MenuListener implements Listener {
                         game.getConfig().setDistanceSuccubus(game.getConfig().getDistanceSuccubus() - 5);
                     game.getOption().advancedTool(player);
                 } else if (current.getType().equals(Material.BREAD)) {
-                    game.getConfig().setTrollSV(!game.getConfig().isTrollSV());
-                    game.getOption().advancedTool(player);
+
+                    if (game.getConfig().getTimerValues().get(TimerLG.ROLE_DURATION) > 0) {
+                        game.getConfig().setTrollSV(!game.getConfig().isTrollSV());
+                        game.getOption().advancedTool(player);
+                    }
                 }
 			}
 			else if(view.getTitle().equals(game.translate("werewolf.menu.languages.name"))) {

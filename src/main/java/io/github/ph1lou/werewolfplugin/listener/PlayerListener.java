@@ -151,7 +151,9 @@ public class PlayerListener implements Listener {
 		Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> player.spigot().respawn(), 10L);
 		event.setKeepInventory(true);
 
-		if (game.isState(StateLG.GAME) && !game.getConfig().isTrollSV()) {
+		if (game.getConfig().isTrollSV()) return;
+
+		if (game.isState(StateLG.GAME)) {
 
 			event.setDeathMessage(null);
 			event.setKeepLevel(true);
@@ -326,4 +328,6 @@ public class PlayerListener implements Listener {
 			}
 		}
     }
+
+
 }

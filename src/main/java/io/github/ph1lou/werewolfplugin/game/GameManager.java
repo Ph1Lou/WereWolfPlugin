@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.*;
 import io.github.ph1lou.werewolfapi.enumlg.*;
 import io.github.ph1lou.werewolfapi.events.LoadEvent;
 import io.github.ph1lou.werewolfapi.events.StopEvent;
+import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.InvisibleState;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -59,7 +60,7 @@ public class GameManager implements WereWolfAPI {
     private int spectatorMode = 2;  // 0 no Spectators, 1 allowed for death players, 2 for all players;
     private boolean whiteList = false;
     private int playerMax = 30;
-    private String gameName = "/a name";
+    private String gameName = "@Ph1Lou_";
     private final UUID uuid = UUID.randomUUID();
 
 
@@ -666,6 +667,7 @@ public class GameManager implements WereWolfAPI {
                 player.setScoreboard(scoreboardSpectator);
             }
         }
+        Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent());
     }
 
 

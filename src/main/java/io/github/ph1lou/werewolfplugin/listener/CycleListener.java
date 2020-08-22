@@ -157,4 +157,35 @@ public class CycleListener implements Listener {
             Sounds.ANVIL_BREAK.play(p);
         }
     }
+
+    @EventHandler
+    public void onTrollSV(TrollEvent event) {
+
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (game.getPlayersWW().containsKey(p.getUniqueId())) {
+                p.sendMessage(game.translate("werewolf.role.villager.description"));
+                Sounds.EXPLODE.play(p);
+            }
+        }
+
+
+        Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
+
+            game.getConfig().getTimerValues().put(TimerLG.MODEL_DURATION, game.getConfig().getTimerValues().get(TimerLG.MODEL_DURATION) + 90);
+            game.getConfig().getTimerValues().put(TimerLG.LOVER_DURATION, game.getConfig().getTimerValues().get(TimerLG.LOVER_DURATION) + 90);
+            game.getConfig().getTimerValues().put(TimerLG.ANGEL_DURATION, game.getConfig().getTimerValues().get(TimerLG.ANGEL_DURATION) + 90);
+            game.getConfig().getTimerValues().put(TimerLG.WEREWOLF_LIST, game.getConfig().getTimerValues().get(TimerLG.WEREWOLF_LIST) + 90);
+
+
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (game.getConfig().isTrollSV() && game.getPlayersWW().containsKey(p.getUniqueId())) {
+                    Sounds.PORTAL_TRIGGER.play(p);
+                    p.sendMessage(game.translate("werewolf.announcement.troll"));
+                }
+            }
+            game.getConfig().setTrollSV(false);
+            game.getRoleManage().repartitionRolesLG();
+
+        }, 1800L);
+    }
 }

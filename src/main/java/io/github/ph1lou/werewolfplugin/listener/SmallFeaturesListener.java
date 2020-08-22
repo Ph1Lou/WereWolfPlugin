@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.events.GoldenAppleParticleEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
+import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -50,7 +51,7 @@ public class SmallFeaturesListener implements Listener {
         Action a = event.getAction();
         if (a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK) {
 
-            if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.MILK_BUCKET) {
+            if (VersionUtils.getVersionUtils().getItemInHand(event.getPlayer()).getType() == Material.MILK_BUCKET) {
                 event.setCancelled(true);
             }
         }

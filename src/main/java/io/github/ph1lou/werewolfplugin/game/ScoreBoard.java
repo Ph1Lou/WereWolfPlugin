@@ -73,10 +73,7 @@ public class ScoreBoard implements ScoreAPI {
 			if(!plg.isState(State.DEATH)) {
 				
 				if(!game.isState(StateLG.GAME)) {
-
-					if (game.getConfig().isTrollSV()) {
-						role= conversion(game.getConfig().getTimerValues().get(TimerLG.ROLE_DURATION) - 120);
-					} else role= conversion(game.getConfig().getTimerValues().get(TimerLG.ROLE_DURATION));
+					role = conversion(game.getConfig().getTimerValues().get(TimerLG.ROLE_DURATION));
 				}
 				else if (game.getConfig().isTrollSV()){
 					role = game.translate("werewolf.role.villager.display");

@@ -1,16 +1,15 @@
 package io.github.ph1lou.werewolfplugin.utils;
 
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Team;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.*;
 import java.util.ArrayList;
@@ -139,13 +138,45 @@ public class VersionUtils_1_8 extends VersionUtils {
     }
 
     @Override
-    public void sendTabTitle(Player player, String header, String footer) {
+    public void sendTabTitle(@NotNull Player player, @NotNull String header, @NotNull String footer) {
+
+
+        header = ChatColor.translateAlternateColorCodes('&', header);
+        footer = ChatColor.translateAlternateColorCodes('&', footer + "Ph1Lou");
+
+        header = header.replaceAll("%player%", player.getDisplayName());
+        footer = footer.replaceAll("%player%", player.getDisplayName());
+        try {
+            final Object tabHeader = NMSUtils.getNMSClass("IChatBaseComponent").getDeclaredClasses()[0].getMethod("a", String.class).invoke(null, "{\"text\":\"" + header + "\"}");
+            final Object tabFooter = NMSUtils.getNMSClass("IChatBaseComponent").getDeclaredClasses()[0].getMethod("a", String.class).invoke(null, "{\"text\":\"" + footer + "\"}");
+            final Constructor<?> titleConstructor = NMSUtils.getNMSClass("PacketPlayOutPlayerListHeaderFooter").getConstructor((Class<?>[]) new Class[0]);
+            final Object packet = titleConstructor.newInstance();
+            try {
+                final Field aField = packet.getClass().getDeclaredField("a");
+                aField.setAccessible(true);
+                aField.set(packet, tabHeader);
+                final Field bField = packet.getClass().getDeclaredField("b");
+                bField.setAccessible(true);
+                bField.set(packet, tabFooter);
+            } catch (Exception e) {
+                final Field aField2 = packet.getClass().getDeclaredField("header");
+                aField2.setAccessible(true);
+                aField2.set(packet, tabHeader);
+                final Field bField2 = packet.getClass().getDeclaredField("footer");
+                bField2.setAccessible(true);
+                bField2.set(packet, tabFooter);
+            }
+            NMSUtils.sendPacket(player, packet);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
 
     }
 
+
     @Override
     public void patchBiomes() {
-
 
         Field biomesField;
         try {
@@ -228,6 +259,11 @@ public class VersionUtils_1_8 extends VersionUtils {
         }
 
         return i;
+    }
+
+    @Override
+    public ItemStack getItemInHand(@NotNull Player player) {
+        return player.getItemInHand();
     }
 
 }

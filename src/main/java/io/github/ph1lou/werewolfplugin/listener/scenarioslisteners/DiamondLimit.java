@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.Scenarios;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
+import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -43,7 +44,7 @@ public class DiamondLimit extends Scenarios {
             return;
         }
 
-        if (!event.getPlayer().getItemOnCursor().getType().equals(Material.DIAMOND_PICKAXE) && !event.getPlayer().getItemOnCursor().getType().equals(Material.IRON_PICKAXE)) {
+        if (!VersionUtils.getVersionUtils().getItemInHand(event.getPlayer()).getType().equals(Material.DIAMOND_PICKAXE) && !event.getPlayer().getItemOnCursor().getType().equals(Material.IRON_PICKAXE)) {
             return;
         }
         if (diamondPerPlayer.getOrDefault(playerName, 0) >= game.getConfig().getDiamondLimit()) {

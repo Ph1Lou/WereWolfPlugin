@@ -59,26 +59,15 @@ public class GameTask extends BukkitRunnable {
 		if (game.getConfig().getTimerValues().get(TimerLG.ROLE_DURATION) == 0) {
 
 			game.setState(StateLG.GAME);
+			game.getConfig().getConfigValues().put(ToolLG.CHAT, false);
 
-			for (Player p : Bukkit.getOnlinePlayers()) {
-				if (game.getConfig().isTrollSV() && game.getPlayersWW().containsKey(p.getUniqueId())) {
-					Sounds.PORTAL_TRIGGER.play(p);
-					p.sendMessage(game.translate("werewolf.announcement.troll"));
-				} else Sounds.EXPLODE.play(p);
-			}
-			game.getConfig().setTrollSV(false);
-			game.getRoleManage().repartitionRolesLG();
-		}
-
-		if (game.getConfig().getTimerValues().get(TimerLG.ROLE_DURATION) - 120 == 0 && game.getConfig().isTrollSV()) {
-
-			game.setState(StateLG.GAME);
-			game.getConfig().getConfigValues().put(ToolLG.CHAT,false);
-			for (Player p : Bukkit.getOnlinePlayers()) {
-				if (game.getPlayersWW().containsKey(p.getUniqueId())) {
-					p.sendMessage(game.translate("werewolf.role.villager.description"));
+			if (game.getConfig().isTrollSV()) {
+				Bukkit.getPluginManager().callEvent(new TrollEvent());
+			} else {
+				for (Player p : Bukkit.getOnlinePlayers()) {
 					Sounds.EXPLODE.play(p);
 				}
+				game.getRoleManage().repartitionRolesLG();
 			}
 		}
 		game.getConfig().getTimerValues().put(TimerLG.ROLE_DURATION, game.getConfig().getTimerValues().get(TimerLG.ROLE_DURATION) - 1);

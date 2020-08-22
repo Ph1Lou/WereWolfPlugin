@@ -6,9 +6,11 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scoreboard.Team;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class VersionUtils {
 
@@ -45,10 +47,12 @@ public abstract class VersionUtils {
 
     public abstract void sendActionBar(Player player, String message);
 
-    public abstract void sendTabTitle(Player player, String header, String footer);
+    public abstract void sendTabTitle(@NotNull Player player, @NotNull String header, @NotNull String footer);
 
     public abstract Location findBiome(World world) throws Exception;
 
     public abstract int biomeSize(Location location, World world);
+
+    public abstract ItemStack getItemInHand(@NotNull Player player);
 }
 

@@ -39,12 +39,14 @@ public class End {
             return;
         }
 
+        if (game.getConfig().isTrollSV()) return;
+
         if (game.isState(StateLG.END)) return;
 
         List<Set<UUID>> teamsAngel = getAngeTeam();
         List<Set<UUID>> teamsSuccubus = getSuccubusTeam();
 
-        if (game.getLoversRange().size()+game.getAmnesiacLoversRange().size()==1) {
+        if (game.getLoversRange().size() + game.getAmnesiacLoversRange().size() == 1) {
 
             Set<UUID> team;
 
