@@ -18,6 +18,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -149,7 +150,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     }
 
     @Override
-    public void stolen(UUID uuid) {
+    public void stolen(@NotNull UUID uuid) {
 
         if (getPlayerUUID() == null) return;
 
@@ -179,20 +180,20 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
                 NewWereWolfEvent newWereWolfEvent = new NewWereWolfEvent(getPlayerUUID());
                 Bukkit.getPluginManager().callEvent(newWereWolfEvent);
 
-                if(newWereWolfEvent.isCancelled()){
+                if (newWereWolfEvent.isCancelled()) {
                     player.sendMessage(game.translate("werewolf.check.transformation"));
-                }
-                else setTransformed(true);
+                } else setTransformed(true);
 
             } else
                 player.sendMessage(game.translate("werewolf.role.wild_child.reveal_model", model.getName()));
         }
     }
+
     @Override
-    public void recoverPotionEffect(Player player) {
+    public void recoverPotionEffect(@NotNull Player player) {
         super.recoverPotionEffect(player);
-        if(!transformed) return;
-        player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION,Integer.MAX_VALUE,0,false,false));
+        if (!transformed) return;
+        player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0, false, false));
     }
 
     @Override

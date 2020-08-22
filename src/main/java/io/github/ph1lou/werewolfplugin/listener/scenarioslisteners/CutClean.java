@@ -41,7 +41,7 @@ public class CutClean extends Scenarios {
             return;
         }
 
-        Material currentItemType = event.getPlayer().getItemOnCursor().getType();
+        Material currentItemType = event.getPlayer().getInventory().getItemInMainHand().getType();
 
         switch (block.getType()) {
 

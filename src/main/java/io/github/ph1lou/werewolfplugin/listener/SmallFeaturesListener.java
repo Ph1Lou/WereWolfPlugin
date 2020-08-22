@@ -50,7 +50,7 @@ public class SmallFeaturesListener implements Listener {
         Action a = event.getAction();
         if (a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK) {
 
-            if (event.getPlayer().getItemOnCursor().getType() == Material.MILK_BUCKET) {
+            if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.MILK_BUCKET) {
                 event.setCancelled(true);
             }
         }

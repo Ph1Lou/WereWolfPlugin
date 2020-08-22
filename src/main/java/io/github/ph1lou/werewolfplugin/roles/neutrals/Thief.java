@@ -16,6 +16,7 @@ import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.plugin.Plugin;
@@ -129,15 +130,15 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
         Player killer = Bukkit.getPlayer(killerUUID);
         boolean isInfected = klg.getRole().getInfected();
 
-        Roles roleClone= role.publicClone();
-        Bukkit.getPluginManager().registerEvents((Listener) roleClone, (Plugin) main);
-        klg.getRole().setPlayerUUID(null);
+        HandlerList.unregisterAll((Listener) klg.getRole());
+        Roles roleClone = role.publicClone();
         klg.setRole(roleClone);
         roleClone.setPlayerUUID(killerUUID);
-        if(isInfected) {
+        Bukkit.getPluginManager().registerEvents((Listener) roleClone, (Plugin) main);
+
+        if (isInfected) {
             roleClone.setInfected(true);
-        }
-        else if(roleClone.isWereWolf()) {
+        } else if (roleClone.isWereWolf()) {
             Bukkit.getPluginManager().callEvent(new NewWereWolfEvent(killerUUID));
         }
 
@@ -217,7 +218,6 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
                             Sounds.PORTAL_TRAVEL.play(pc);
                         }
                         killer.sendMessage(game.translate("werewolf.role.lover.description", llg.getName()));
-                        Sounds.PORTAL_TRAVEL.play(pc);
 
                         for (int i = 0; i < game.getAmnesiacLoversRange().size(); i++) {
                             if (game.getAmnesiacLoversRange().get(i).contains(playerUUID)) {

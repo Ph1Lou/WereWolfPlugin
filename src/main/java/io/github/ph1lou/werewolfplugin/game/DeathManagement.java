@@ -121,9 +121,9 @@ public class DeathManagement {
         GameManager game = main.getCurrentGame();
         PlayerWW plg = game.getPlayersWW().get(playerUUID);
         Bukkit.getPluginManager().callEvent(new ResurrectionEvent(playerUUID));
+        Player player = Bukkit.getPlayer(playerUUID);
 
-        if (Bukkit.getPlayer(playerUUID) != null) {
-            Player player = Bukkit.getPlayer(playerUUID);
+        if (player != null) {
             plg.getRole().recoverPotionEffect(player);
         }
         game.transportation(playerUUID, Math.random() * Math.PI * 2, game.translate("werewolf.announcement.resurrection"));

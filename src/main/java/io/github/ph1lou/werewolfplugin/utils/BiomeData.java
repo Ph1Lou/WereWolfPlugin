@@ -1,6 +1,6 @@
 package io.github.ph1lou.werewolfplugin.utils;
 
-
+@SuppressWarnings({"unused"})
 public enum BiomeData {
     ALL(-1),
     OCEAN(0),

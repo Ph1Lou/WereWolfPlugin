@@ -18,6 +18,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -49,9 +50,9 @@ public class Elder extends RolesVillage implements Power {
     }
 
     @Override
-    public void recoverPotionEffect(Player player) {
-        if(!hasPower()) return;
-        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,Integer.MAX_VALUE,0,false,false));
+    public void recoverPotionEffect(@NotNull Player player) {
+        if (!hasPower()) return;
+        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 0, false, false));
         super.recoverPotionEffect(player);
     }
 

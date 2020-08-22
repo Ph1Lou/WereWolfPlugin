@@ -7,6 +7,7 @@ import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
 import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -29,7 +30,7 @@ public class SiameseTwin extends RolesVillage {
 
 
     @Override
-    public void stolen(UUID uuid) {
+    public void stolen(@NotNull UUID uuid) {
 
         if (getPlayerUUID() == null) return;
 

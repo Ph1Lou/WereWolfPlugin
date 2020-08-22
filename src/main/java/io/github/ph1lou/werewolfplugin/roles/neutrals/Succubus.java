@@ -16,6 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +85,7 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
     }
 
     @Override
-    public void stolen(UUID uuid) {
+    public void stolen(@NotNull UUID uuid) {
 
         if (getPlayerUUID() == null) return;
 

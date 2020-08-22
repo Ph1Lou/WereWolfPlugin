@@ -22,6 +22,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -208,7 +209,7 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
     }
 
     @Override
-    public void stolen(UUID uuid) {
+    public void stolen(@NotNull UUID uuid) {
         setInvisible(false);
     }
 

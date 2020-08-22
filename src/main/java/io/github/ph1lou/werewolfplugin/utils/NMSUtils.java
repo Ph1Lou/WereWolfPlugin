@@ -3,13 +3,8 @@ package io.github.ph1lou.werewolfplugin.utils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import javax.annotation.Nullable;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class NMSUtils {
 
@@ -21,25 +16,6 @@ public class NMSUtils {
         } else {
             String name = Bukkit.getServer().getClass().getPackage().getName();
             return name.substring(name.lastIndexOf(46) + 1) + ".";
-        }
-    }
-
-    @Nullable
-    public static Object getHandle(Object craftObject) {
-        try {
-            return getMethod(craftObject.getClass(), "getHandle").invoke(craftObject);
-        } catch (ReflectiveOperationException | IllegalArgumentException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
-
-    @Nullable
-    public static Object getServer(Object o) {
-        try {
-            return getMethod(o.getClass(), "getServer").invoke(o);
-        } catch (ReflectiveOperationException | IllegalArgumentException ex) {
-            return null;
         }
     }
 
@@ -84,24 +60,6 @@ public class NMSUtils {
         throw new ReflectiveOperationException("Method " + name + " not found in " + c.getName());
     }
 
-    public static List<Field> getAnnotatedFields(Class<?> c, Class<? extends Annotation> annotation) {
-        List<Field> fields = new ArrayList<>();
-        for (Field field : c.getFields()) {
-            if (field.isAnnotationPresent(annotation)) {
-                field.setAccessible(true);
-                fields.add(field);
-            }
-        }
-
-        for (Field field : c.getDeclaredFields()) {
-            if (field.isAnnotationPresent(annotation)) {
-                field.setAccessible(true);
-                fields.add(field);
-            }
-        }
-
-        return fields;
-    }
 
 
     public static void sendPacket(Player player, Object packet) {

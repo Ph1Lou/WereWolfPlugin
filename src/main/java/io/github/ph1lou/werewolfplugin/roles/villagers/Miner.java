@@ -7,6 +7,7 @@ import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -28,8 +29,8 @@ public class Miner extends RolesVillage {
     }
 
     @Override
-    public void recoverPotionEffect(Player player) {
+    public void recoverPotionEffect(@NotNull Player player) {
         super.recoverPotionEffect(player);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING,Integer.MAX_VALUE,0,false,false));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, Integer.MAX_VALUE, 0, false, false));
     }
 }

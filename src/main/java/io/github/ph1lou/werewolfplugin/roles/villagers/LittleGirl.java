@@ -22,6 +22,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -176,7 +177,7 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
     }
 
     @Override
-    public void stolen(UUID uuid) {
+    public void stolen(@NotNull UUID uuid) {
         setInvisible(false);
     }
 
@@ -191,9 +192,9 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
     }
 
     @Override
-    public void recoverPotionEffect(Player player) {
+    public void recoverPotionEffect(@NotNull Player player) {
         super.recoverPotionEffect(player);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION,Integer.MAX_VALUE,0,false,false));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0, false, false));
     }
 
     @EventHandler

@@ -12,6 +12,7 @@ import io.github.ph1lou.werewolfapi.rolesattributs.RolesWereWolf;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,7 +99,7 @@ public class FalsifierWereWolf extends RolesWereWolf implements Display {
     }
 
     @Override
-    public void stolen(UUID uuid) {
+    public void stolen(@NotNull UUID uuid) {
 
         if (getPlayerUUID() == null) return;
 

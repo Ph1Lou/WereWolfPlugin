@@ -230,9 +230,9 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
 
     private void registerScenario() {
         try {
-            new ScenarioRegister(this,this,"werewolf.menu.scenarios.cat_eyes").registerScenario(CatEyes.class).create();
-            new ScenarioRegister(this,this,"werewolf.menu.scenarios.compass_target_last_death").registerScenario(CompassTargetLastDeath.class);
-            new ScenarioRegister(this,this,"werewolf.menu.scenarios.cut_clean").registerScenario(CutClean.class).setDefaultValue(true).create();
+            new ScenarioRegister(this, this, "werewolf.menu.scenarios.cat_eyes").registerScenario(CatEyes.class).create();
+            new ScenarioRegister(this, this, "werewolf.menu.scenarios.compass_target_last_death").registerScenario(CompassTargetLastDeath.class).create();
+            new ScenarioRegister(this, this, "werewolf.menu.scenarios.cut_clean").registerScenario(CutClean.class).setDefaultValue(true).create();
             new ScenarioRegister(this,this, "werewolf.menu.scenarios.diamond_limit").registerScenario(DiamondLimit.class).setDefaultValue(true).create();
             new ScenarioRegister(this,this,"werewolf.menu.scenarios.double_jump").registerScenario(DoubleJump.class).create();
             new ScenarioRegister(this,this,"werewolf.menu.scenarios.fast_smelting").registerScenario(FastSmelting.class).setDefaultValue(true).create();

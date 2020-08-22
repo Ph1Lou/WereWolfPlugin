@@ -79,9 +79,12 @@ public class Option {
 		invTool.setItem(33, changeMeta(UniversalMaterial.ENCHANTING_TABLE.getType(), game.translate("werewolf.menu.enchantments.name"), 1, null));
 		ItemStack custom = UniversalMaterial.WHITE_BANNER.getStack();
 		BannerMeta customMeta = (BannerMeta) custom.getItemMeta();
-		customMeta.addPattern(new Pattern(DyeColor.WHITE, PatternType.BASE));
-		customMeta.addPattern(new Pattern(DyeColor.CYAN, PatternType.STRAIGHT_CROSS));
-		custom.setItemMeta(customMeta);
+		if (customMeta != null) {
+			customMeta.addPattern(new Pattern(DyeColor.WHITE, PatternType.BASE));
+			customMeta.addPattern(new Pattern(DyeColor.CYAN, PatternType.STRAIGHT_CROSS));
+			custom.setItemMeta(customMeta);
+		}
+
 		invTool.setItem(45, changeMeta(custom, game.translate("werewolf.menu.languages.name"), null));
 		invTool.setItem(50, changeMeta(UniversalMaterial.CRAFTING_TABLE.getType(), game.translate("werewolf.menu.advanced_tool.name"), 1, null));
 		ItemStack skull = UniversalMaterial.PLAYER_HEAD.getStack();
@@ -198,24 +201,30 @@ public class Option {
 		invLanguage.setItem(0, changeMeta(Material.COMPASS, game.translate("werewolf.menu.return"), 1, null));
 		ItemStack fr = UniversalMaterial.WHITE_BANNER.getStack();
 		BannerMeta frMeta = (BannerMeta) fr.getItemMeta();
-		frMeta.addPattern(new Pattern(DyeColor.BLUE, PatternType.STRIPE_LEFT));
-		frMeta.addPattern(new Pattern(DyeColor.WHITE, PatternType.STRIPE_CENTER));
-		frMeta.addPattern(new Pattern(DyeColor.RED, PatternType.STRIPE_RIGHT));
-		fr.setItemMeta(frMeta);
+		if (frMeta != null) {
+			frMeta.addPattern(new Pattern(DyeColor.BLUE, PatternType.STRIPE_LEFT));
+			frMeta.addPattern(new Pattern(DyeColor.WHITE, PatternType.STRIPE_CENTER));
+			frMeta.addPattern(new Pattern(DyeColor.RED, PatternType.STRIPE_RIGHT));
+			fr.setItemMeta(frMeta);
+		}
+
 
 		ItemStack en = UniversalMaterial.WHITE_BANNER.getStack();
 		BannerMeta enMeta = (BannerMeta) en.getItemMeta();
-		enMeta.addPattern(new Pattern(DyeColor.BLUE, PatternType.BASE));
-		enMeta.addPattern(new Pattern(DyeColor.WHITE, PatternType.STRIPE_DOWNLEFT));
-		enMeta.addPattern(new Pattern(DyeColor.WHITE, PatternType.STRIPE_DOWNRIGHT));
-		enMeta.addPattern(new Pattern(DyeColor.WHITE, PatternType.STRIPE_DOWNRIGHT));
-		enMeta.addPattern(new Pattern(DyeColor.RED, PatternType.CROSS));
-		enMeta.addPattern(new Pattern(DyeColor.WHITE, PatternType.STRIPE_CENTER));
-		enMeta.addPattern(new Pattern(DyeColor.WHITE, PatternType.STRIPE_MIDDLE));
-		enMeta.addPattern(new Pattern(DyeColor.RED, PatternType.STRAIGHT_CROSS));
-		en.setItemMeta(enMeta);
-		invLanguage.setItem(2,changeMeta(en,"English", Collections.singletonList("By Jormunth")));
-		invLanguage.setItem(4,changeMeta(fr,"Français", Collections.singletonList("Par Ph1Lou")));
+		if (enMeta != null) {
+			enMeta.addPattern(new Pattern(DyeColor.BLUE, PatternType.BASE));
+			enMeta.addPattern(new Pattern(DyeColor.WHITE, PatternType.STRIPE_DOWNLEFT));
+			enMeta.addPattern(new Pattern(DyeColor.WHITE, PatternType.STRIPE_DOWNRIGHT));
+			enMeta.addPattern(new Pattern(DyeColor.WHITE, PatternType.STRIPE_DOWNRIGHT));
+			enMeta.addPattern(new Pattern(DyeColor.RED, PatternType.CROSS));
+			enMeta.addPattern(new Pattern(DyeColor.WHITE, PatternType.STRIPE_CENTER));
+			enMeta.addPattern(new Pattern(DyeColor.WHITE, PatternType.STRIPE_MIDDLE));
+			enMeta.addPattern(new Pattern(DyeColor.RED, PatternType.STRAIGHT_CROSS));
+			en.setItemMeta(enMeta);
+		}
+
+		invLanguage.setItem(2, changeMeta(en, "English", Collections.singletonList("By Jormunth")));
+		invLanguage.setItem(4, changeMeta(fr, "Français", Collections.singletonList("Par Ph1Lou")));
 		player.openInventory(invLanguage);
 	}
 

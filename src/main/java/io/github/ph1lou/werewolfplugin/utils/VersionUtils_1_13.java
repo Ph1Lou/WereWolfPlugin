@@ -90,9 +90,9 @@ public class VersionUtils_1_13 extends VersionUtils {
 
 
     @Override
-    @SuppressWarnings("unchecked")
     public void setGameRuleValue(World world, String name, Object value) {
         GameRule gameRule = GameRule.getByName(name);
+
         if (gameRule == null) return;
         world.setGameRule(gameRule, value);
     }

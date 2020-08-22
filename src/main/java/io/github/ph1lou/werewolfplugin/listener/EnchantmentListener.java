@@ -37,7 +37,9 @@ public class EnchantmentListener implements Listener {
         if(current.getEnchantments().isEmpty()){
             if(current.getType().equals(Material.ENCHANTED_BOOK)){
                 EnchantmentStorageMeta meta = (EnchantmentStorageMeta) current.getItemMeta();
-                event.setCurrentItem(checkEnchant(meta.getStoredEnchants(),(Player) event.getWhoClicked(),current));
+                if (meta != null) {
+                    event.setCurrentItem(checkEnchant(meta.getStoredEnchants(), (Player) event.getWhoClicked(), current));
+                }
             }
         }
         else event.setCurrentItem(checkEnchant(current.getEnchantments(),(Player) event.getWhoClicked(),current));
@@ -99,12 +101,14 @@ public class EnchantmentListener implements Listener {
             result.addUnsafeEnchantments(tempEnchant);
         }
         else{
-            if(!tempEnchant.isEmpty()){
-                result=new ItemStack(Material.ENCHANTED_BOOK);
+            if(!tempEnchant.isEmpty()) {
+                result = new ItemStack(Material.ENCHANTED_BOOK);
                 EnchantmentStorageMeta meta = (EnchantmentStorageMeta) result.getItemMeta();
-                for(Enchantment e:tempEnchant.keySet())
-                    meta.addStoredEnchant(e,tempEnchant.get(e),false);
-                result.setItemMeta(meta);
+                if (meta != null) {
+                    for (Enchantment e : tempEnchant.keySet())
+                        meta.addStoredEnchant(e, tempEnchant.get(e), false);
+                    result.setItemMeta(meta);
+                }
             }
            else  result=new ItemStack(Material.BOOK);
         }

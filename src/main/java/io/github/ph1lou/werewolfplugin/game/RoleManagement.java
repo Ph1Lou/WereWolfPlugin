@@ -47,7 +47,7 @@ public class RoleManagement {
 			PlayerWW plg = game.getPlayersWW().get(playerUUID);
 
 			try {
-				Roles role = config.get(0).getConstructors().newInstance(main,game,playerUUID);
+				Roles role = (Roles) config.get(0).getConstructors().newInstance(main, game, playerUUID);
 				Bukkit.getPluginManager().registerEvents((Listener) role, main);
 				plg.setRole(role);
 
