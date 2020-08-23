@@ -13,8 +13,10 @@
       <w>mastername</w>
       <w>playername</w>
       <w>respawn</w>
+      <w>setgroup</w>
       <w>targetname</w>
       <w>teamange</w>
+      <w>tpgroup</w>
     </words>
   </dictionary>
 </component>

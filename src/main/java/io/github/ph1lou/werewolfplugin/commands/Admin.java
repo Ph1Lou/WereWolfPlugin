@@ -25,13 +25,13 @@ public class Admin implements TabExecutor {
         listAdminCommands.put("chat", new CommandChat(main));
         listAdminCommands.put("info", new CommandInfo(main));
         listAdminCommands.put("generation", new CommandGeneration(main));
-        listAdminCommands.put("setGroup", new CommandSetGroup(main));
+        listAdminCommands.put("setgroup", new CommandSetGroup(main));
         listAdminCommands.put("group", new CommandGroup(main));
         listAdminCommands.put("config", new CommandConfig(main));
         listAdminCommands.put("kill", new CommandKill(main));
         listAdminCommands.put("disc", new CommandDisconnected(main));
         listAdminCommands.put("inv", new CommandInventory(main));
-        listAdminCommands.put("tpGroup", new CommandTPGroup(main));
+        listAdminCommands.put("tpgroup", new CommandTPGroup(main));
         listAdminCommands.put("role", new CommandRole(main));
         listAdminCommands.put("revive", new CommandRevive(main));
         listAdminCommands.put("fh", new CommandFinalHeal(main));
@@ -47,6 +47,7 @@ public class Admin implements TabExecutor {
         listAdminCommands.put("tp", new CommandTP(main));
         listAdminCommands.put("size", new CommandSize(main));
         listAdminCommands.put("change", new CommandChange(main));
+        listAdminCommands.put("preview", new CommandPreview(main));
         listAdminCommands.putAll(main.getListAdminCommands());
     }
 

@@ -401,7 +401,7 @@
         },
         "gamemode": "[§eWW UHC§r] §b%s§r changed his gamemode to §b%d",
         "teleportation": "[§eWW UHC§r] Teleportation of §b%s§r to §b%s",
-        "help": "§6/a config §9To setup the game\n§6/a host §9To setup the host\n§6/a start §9To launch the game\n§6/a chat §9To enable/disable the chat\n§6/a info §9To talk to every player\n§6/a group §9To remind of the group's limit\n§6/a fh §9To FinalHeal\n§6/a inv §9To see a player's inventory\n§6/a kill §9To kill an disconnected player\n§6/a revive §9To revive a player\n§6/a role §9To see a player's role\n§6/a disc §9To see the disconnected player's list\n§6/a setGroup§9 To set the group's limit\n§6/a tpGroup§9 To teleport a group\n§6/a generation§9 To generate the map"
+        "help": "§6/a config §9To setup the game\n§6/a host §9To setup the host\n§6/a start §9To launch the game\n§6/a chat §9To enable/disable the chat\n§6/a info §9To talk to every player\n§6/a group §9To remind of the group's limit\n§6/a fh §9To FinalHeal\n§6/a inv §9To see a player's inventory\n§6/a kill §9To kill an disconnected player\n§6/a revive §9To revive a player\n§6/a role §9To see a player's role\n§6/a disc §9To see the disconnected player's list\n§6/a setgroup§9 To set the group's limit\n§6/a tpgroup§9 To teleport a group\n§6/a generation§9 To generate the map"
       },
       "message": {
         "send": "[Message sent to §b%s§r] » §b%s",

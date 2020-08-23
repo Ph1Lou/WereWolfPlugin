@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -33,6 +34,6 @@ public class CommandInfo implements Commands {
         for (String w : args) {
             sb2.append(w).append(" ");
         }
-        Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.info", sb2.toString()));
+        Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.info", ChatColor.translateAlternateColorCodes('&', sb2.toString())));
     }
 }
