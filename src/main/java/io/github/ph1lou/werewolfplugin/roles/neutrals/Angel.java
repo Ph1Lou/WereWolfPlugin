@@ -7,7 +7,6 @@ import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.AngelForm;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.rolesattributs.*;
 import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
@@ -102,7 +101,7 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
         }
 
         if (isChoice(AngelForm.ANGEL)) {
-            player.sendMessage(game.translate("werewolf.role.angel.angel_choice", game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.ANGEL_DURATION))));
+            player.sendMessage(game.translate("werewolf.role.angel.angel_choice", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.angel_duration"))));
             VersionUtils.getVersionUtils().setPlayerMaxHealth(player, VersionUtils.getVersionUtils().getPlayerMaxHealth(player) + 4);
 
         } else {
@@ -140,7 +139,7 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
         Player player = super.recoverPower();
         if(player == null) return null;
         if (isChoice(AngelForm.ANGEL)) {
-            player.sendMessage(game.translate("werewolf.role.angel.angel_choice", game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.ANGEL_DURATION))));
+            player.sendMessage(game.translate("werewolf.role.angel.angel_choice", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.angel_duration"))));
         }
         VersionUtils.getVersionUtils().setPlayerMaxHealth(player, 24);
         player.setHealth(24);

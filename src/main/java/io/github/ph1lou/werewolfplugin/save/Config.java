@@ -1,11 +1,6 @@
 package io.github.ph1lou.werewolfplugin.save;
 
-import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
-import io.github.ph1lou.werewolfapi.RoleRegister;
-import io.github.ph1lou.werewolfapi.ScenarioRegister;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
-import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
+import io.github.ph1lou.werewolfapi.*;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -14,8 +9,8 @@ import java.util.Map;
 
 public class Config implements ConfigWereWolfAPI {
 
-    private final Map<TimerLG, Integer> timerValues = new HashMap<>();
-    private final Map<ToolLG, Boolean> configValues = new HashMap<>();
+    private final Map<String, Integer> timerValues = new HashMap<>();
+    private final Map<String, Boolean> configValues = new HashMap<>();
     private final Map<String, Integer> roleCount = new HashMap<>();
     private final Map<String, Boolean> scenarioValues = new HashMap<>();
 
@@ -46,6 +41,8 @@ public class Config implements ConfigWereWolfAPI {
     private int loverSize=0;
     private int amnesiacLoverSize=0;
     private int cursedLoverSize=0;
+    private int limitDepthStrider=0;
+
 
     @Override
     public void getConfig(WereWolfAPI api, String configName) {
@@ -94,12 +91,12 @@ public class Config implements ConfigWereWolfAPI {
             api.getScore().setRole(api.getScore().getRole() + this.roleCount.get(roleRegister.getKey()));
         }
 
-        for(ToolLG tool:ToolLG.values()) {
-            this.configValues.put(tool, this_load.configValues.getOrDefault(tool, tool.getValue()));
+        for(ConfigRegister configRegister:main.getRegisterConfigs()) {
+            this.configValues.put(configRegister.getKey(), this_load.configValues.getOrDefault(configRegister.getKey(), configRegister.getDefaultValue()));
         }
 
-        for(TimerLG timer:TimerLG.values()) {
-            this.timerValues.put(timer, this_load.timerValues.getOrDefault(timer, timer.getValue()));
+        for(TimerRegister TimerRegister:main.getRegisterTimers()) {
+            this.timerValues.put(TimerRegister.getKey(), this_load.timerValues.getOrDefault(TimerRegister.getKey(), TimerRegister.getDefaultValue()));
         }
 
 
@@ -111,6 +108,17 @@ public class Config implements ConfigWereWolfAPI {
 
 
     }
+
+    @Override
+    public int getLimitDepthStrider() {
+        return this.limitDepthStrider;
+    }
+
+    @Override
+    public void setLimitDepthStrider(int i) {
+        this.limitDepthStrider=i;
+    }
+
     @Override
 	public int getDiamondLimit() {
         return this.diamondLimit;
@@ -352,12 +360,12 @@ public class Config implements ConfigWereWolfAPI {
     }
 
     @Override
-    public Map<TimerLG, Integer> getTimerValues() {
+    public Map<String, Integer> getTimerValues() {
         return timerValues;
     }
 
     @Override
-    public Map<ToolLG, Boolean> getConfigValues() {
+    public Map<String, Boolean> getConfigValues() {
         return configValues;
     }
 

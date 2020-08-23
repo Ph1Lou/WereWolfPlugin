@@ -42,6 +42,8 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
     private final Map<String, Commands> listCommands = new HashMap<>();
     private final Map<String, Commands> listAdminCommands = new HashMap<>();
     private final List<ScenarioRegister> scenariosRegister = new ArrayList<>();
+    private final List<ConfigRegister> configsRegister = new ArrayList<>();
+    private final List<TimerRegister> timersRegister = new ArrayList<>();
 
     public GameManager getCurrentGame() {
         return currentGame;
@@ -75,6 +77,8 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
         saveDefaultConfig();
         registerRole();
         registerScenario();
+        registerTimers();
+        registerConfig();
         listAddons.add(this);
         Bukkit.getPluginManager().registerEvents(this, this);
         currentGame = new GameManager(this);
@@ -85,6 +89,7 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
             getCommand("a").setExecutor(new Admin(this));
         }, 60);
     }
+
 
     @Override
 	public void onLoad() {
@@ -256,6 +261,50 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
 
     }
 
+    private void registerConfig() {
+        new ConfigRegister(this, this, "werewolf.menu.global.victory_couple").setDefaultValue(false).create();
+        new ConfigRegister(this, this, "werewolf.menu.global.event_seer_death").setDefaultValue(true).create();
+        new ConfigRegister(this, this, "werewolf.menu.global.chat").setDefaultValue(true).create();
+        new ConfigRegister(this,this, "werewolf.menu.global.compass_middle").setDefaultValue(true).create();
+        new ConfigRegister(this,this,"werewolf.menu.global.show_role_to_death").setDefaultValue(true).create();
+        new ConfigRegister(this,this,"werewolf.menu.global.auto_rez_infect").setDefaultValue(false).create();
+        new ConfigRegister(this,this,"werewolf.menu.global.auto_rez_witch").setDefaultValue(false).create();
+        new ConfigRegister(this,this,"werewolf.menu.global.polygamy").setDefaultValue(false).create();
+        new ConfigRegister(this,this,"werewolf.menu.global.vote").setDefaultValue(true).create();
+        new ConfigRegister(this,this,"werewolf.menu.global.hide_composition").setDefaultValue(false).create();
+        new ConfigRegister(this,this,"werewolf.menu.global.red_name_tag").setDefaultValue(true).create();
+        new ConfigRegister(this,this,"werewolf.menu.global.seer_every_other_day").setDefaultValue(true).create();
+        new ConfigRegister(this,this,"werewolf.menu.global.proximity_chat").setDefaultValue(false).create();
+    }
+
+    private void registerTimers() {
+
+        new TimerRegister(this,this,"werewolf.menu.timers.invulnerability").setDefaultValue(30).create();
+        new TimerRegister(this,this,"werewolf.menu.timers.role_duration").setDefaultValue(1200).create();
+        new TimerRegister(this, this, "werewolf.menu.timers.pvp").setDefaultValue(1500).create();
+        new TimerRegister(this,this,"werewolf.menu.timers.werewolf_list").setDefaultValue(600).create();
+
+        new TimerRegister(this,this,"werewolf.menu.timers.vote_begin").setDefaultValue(2400).create();
+        new TimerRegister(this,this,"werewolf.menu.timers.border_begin").setDefaultValue(3600).create();
+
+        new TimerRegister(this,this,"werewolf.menu.timers.digging_end").setDefaultValue(4200).create();
+
+        new TimerRegister(this,this, "werewolf.menu.timers.border_duration").setDefaultValue(280).create();
+
+        new TimerRegister(this, this, "werewolf.menu.timers.vote_duration").setDefaultValue(180).create();
+        new TimerRegister(this, this, "werewolf.menu.timers.citizen_duration").setDefaultValue(60).create();
+        new TimerRegister(this,this,"werewolf.menu.timers.model_duration").setDefaultValue(240).create();
+        new TimerRegister(this,this,"werewolf.menu.timers.lover_duration").setDefaultValue(240).create();
+        new TimerRegister(this,this,"werewolf.menu.timers.angel_duration").setDefaultValue(240).create();
+        new TimerRegister(this,this,"werewolf.menu.timers.power_duration").setDefaultValue(240).create();
+        new TimerRegister(this,this,"werewolf.menu.timers.fox_smell_duration").setDefaultValue(120).create();
+
+        new TimerRegister(this,this,"werewolf.menu.timers.succubus_duration").setDefaultValue(180).create();
+
+        new TimerRegister(this,this,"werewolf.menu.timers.day_duration").setDefaultValue(300).create();
+
+    }
+
 
     public Lang getLang() {
         return lang;
@@ -264,6 +313,16 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
     @Override
     public List<ScenarioRegister> getRegisterScenarios() {
         return this.scenariosRegister;
+    }
+
+    @Override
+    public List<ConfigRegister> getRegisterConfigs() {
+        return this.configsRegister;
+    }
+
+    @Override
+    public List<TimerRegister> getRegisterTimers() {
+        return this.timersRegister;
     }
 }
 		

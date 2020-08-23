@@ -4,7 +4,6 @@ package io.github.ph1lou.werewolfplugin.game;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
 import io.github.ph1lou.werewolfapi.events.CupidLoversEvent;
 import io.github.ph1lou.werewolfapi.events.RevealAmnesiacLoversEvent;
 import io.github.ph1lou.werewolfapi.events.RevealLoversEvent;
@@ -181,7 +180,7 @@ public class LoversManagement {
 			return;
 		}
 
-		Boolean polygamy = game.getConfig().getConfigValues().get(ToolLG.POLYGAMY);
+		Boolean polygamy = game.getConfig().getConfigValues().get("werewolf.menu.global.polygamy");
 
 		if (!polygamy && (game.getConfig().getLoverSize() == 0 && game.getConfig().getRoleCount().get("werewolf.role.cupid.display") * 2 >= game.getScore().getPlayerSize()) || (game.getConfig().getLoverSize() != 0 && (game.getConfig().getRoleCount().get("werewolf.role.cupid.display") + game.getConfig().getLoverSize()) * 2 > game.getScore().getPlayerSize())) {
 			polygamy = true;

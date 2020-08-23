@@ -91,6 +91,9 @@ public class EnchantmentListener implements Listener {
             else if(Enchantment.ARROW_DAMAGE.equals(e)){
                 tempEnchant.put(e,Math.min(enchant.get(e),game.getConfig().getLimitPowerBow()));
             }
+            else if(Enchantment.DEPTH_STRIDER.equals(e)){
+                tempEnchant.put(e,Math.min(enchant.get(e),game.getConfig().getLimitDepthStrider()));
+            }
             else tempEnchant.put(e,enchant.get(e));
         }
 

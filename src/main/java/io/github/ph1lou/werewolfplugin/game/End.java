@@ -1,7 +1,10 @@
 package io.github.ph1lou.werewolfplugin.game;
 
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enumlg.*;
+import io.github.ph1lou.werewolfapi.enumlg.AngelForm;
+import io.github.ph1lou.werewolfapi.enumlg.Camp;
+import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfapi.events.EndPlayerMessageEvent;
 import io.github.ph1lou.werewolfapi.events.WinConditionsCheckEvent;
 import io.github.ph1lou.werewolfapi.events.WinEvent;
@@ -92,7 +95,7 @@ public class End {
             }
         }
 
-        if (game.getConfig().getConfigValues().get(ToolLG.VICTORY_COUPLE) && (!game.getLoversRange().isEmpty() || !game.getAmnesiacLoversRange().isEmpty())) {
+        if (game.getConfig().getConfigValues().get("werewolf.menu.global.victory_couple") && (!game.getLoversRange().isEmpty() || !game.getAmnesiacLoversRange().isEmpty())) {
             return;
         }
         WinConditionsCheckEvent winConditionsCheckEvent = new WinConditionsCheckEvent();
@@ -188,7 +191,7 @@ public class End {
 
         game.getScore().getKillCounter();
 
-        game.getConfig().getConfigValues().put(ToolLG.CHAT, true);
+        game.getConfig().getConfigValues().put("werewolf.menu.global.chat", true);
         if (main.getConfig().getBoolean("bungeechat")) {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "chatlock local"); //reactivation of local chat
         }

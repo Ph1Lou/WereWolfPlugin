@@ -2,7 +2,6 @@ package io.github.ph1lou.werewolfplugin.commands.utilities;
 
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.RoleRegister;
-import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.command.CommandSender;
@@ -21,7 +20,7 @@ public class CommandCompo implements Commands {
 
         GameManager game = main.getCurrentGame();
 
-        if (!game.getConfig().getConfigValues().get(ToolLG.HIDE_COMPOSITION)) {
+        if (!game.getConfig().getConfigValues().get("werewolf.menu.global.hide_composition")) {
             StringBuilder sb = new StringBuilder();
             if(game.getConfig().getLoverSize()>0){
                 sb.append("§3").append(game.getConfig().getLoverSize()).append("§r ").append(game.translate("werewolf.role.lover.display")).append("\n");

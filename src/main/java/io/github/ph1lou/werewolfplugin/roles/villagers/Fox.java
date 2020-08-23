@@ -6,7 +6,6 @@ import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.Camp;
 import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.events.SniffEvent;
 import io.github.ph1lou.werewolfapi.events.UpdateEvent;
@@ -161,11 +160,11 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
             return;
         }
 
-        float temp = getProgress() + 100f / (game.getConfig().getTimerValues().get(TimerLG.FOX_SMELL_DURATION) + 1);
+        float temp = getProgress() + 100f / (game.getConfig().getTimerValues().get("werewolf.menu.timers.fox_smell_duration") + 1);
 
         setProgress(temp);
 
-        if (temp % 10 > 0 && temp % 10 <= 100f / (game.getConfig().getTimerValues().get(TimerLG.FOX_SMELL_DURATION) + 1)) {
+        if (temp % 10 > 0 && temp % 10 <= 100f / (game.getConfig().getTimerValues().get("werewolf.menu.timers.fox_smell_duration") + 1)) {
             player.sendMessage(game.translate("werewolf.role.fox.progress", Math.min(100,Math.floor(temp))));
         }
 

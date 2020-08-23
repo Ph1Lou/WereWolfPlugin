@@ -4,7 +4,6 @@ import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.State;
 import io.github.ph1lou.werewolfapi.enumlg.StateLG;
-import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
 import io.github.ph1lou.werewolfapi.events.WitchResurrectionEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
@@ -80,7 +79,7 @@ public class CommandWitch implements Commands {
         }
         UUID argUUID = UUID.fromString(args[0]);
 
-        if (!game.getConfig().getConfigValues().get(ToolLG.AUTO_REZ_WITCH) && argUUID.equals(uuid)) {
+        if (!game.getConfig().getConfigValues().get("werewolf.menu.global.auto_rez_witch") && argUUID.equals(uuid)) {
             player.sendMessage(game.translate("werewolf.check.not_yourself"));
             return;
         }

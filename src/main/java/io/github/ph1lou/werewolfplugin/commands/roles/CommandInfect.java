@@ -5,7 +5,6 @@ import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.Camp;
 import io.github.ph1lou.werewolfapi.enumlg.State;
 import io.github.ph1lou.werewolfapi.enumlg.StateLG;
-import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
 import io.github.ph1lou.werewolfapi.events.InfectionEvent;
 import io.github.ph1lou.werewolfapi.events.NewWereWolfEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
@@ -83,7 +82,7 @@ public class CommandInfect implements Commands {
         }
         UUID argUUID = UUID.fromString(args[0]);
 
-        if (!game.getConfig().getConfigValues().get(ToolLG.AUTO_REZ_INFECT) && argUUID.equals(uuid)) {
+        if (!game.getConfig().getConfigValues().get("werewolf.menu.global.auto_rez_infect") && argUUID.equals(uuid)) {
             player.sendMessage(game.translate("werewolf.check.not_yourself"));
             return;
         }

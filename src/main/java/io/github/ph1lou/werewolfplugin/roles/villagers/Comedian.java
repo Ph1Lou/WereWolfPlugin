@@ -3,7 +3,6 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.PotionEffects;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesWithLimitedSelectionDuration;
@@ -67,7 +66,7 @@ public class Comedian extends RolesWithLimitedSelectionDuration implements Potio
 
         player.removePotionEffect(getLastPotionEffect());
         if (getPotionEffects().size() < 4) {
-            player.sendMessage(game.translate("werewolf.role.comedian.wear_mask_message", game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.POWER_DURATION))));
+            player.sendMessage(game.translate("werewolf.role.comedian.wear_mask_message", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.power_duration"))));
         }
     }
 

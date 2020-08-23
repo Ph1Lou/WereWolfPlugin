@@ -4,7 +4,6 @@ import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.State;
 import io.github.ph1lou.werewolfapi.enumlg.StateLG;
-import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.command.CommandSender;
@@ -58,7 +57,7 @@ public class CommandWereWolf implements Commands {
             return;
         }
 
-        if (game.getConfig().getTimerValues().get(TimerLG.WEREWOLF_LIST) > 0) {
+        if (game.getConfig().getTimerValues().get("werewolf.menu.timers.werewolf_list") > 0) {
             sender.sendMessage(game.translate("werewolf.role.werewolf.list_not_revealed"));
             return;
         }

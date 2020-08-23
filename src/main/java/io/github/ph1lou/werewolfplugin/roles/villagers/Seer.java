@@ -4,8 +4,6 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
-import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
 import io.github.ph1lou.werewolfapi.events.ChestEvent;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
@@ -60,7 +58,7 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
             return;
         }
 
-        if (game.getConfig().getConfigValues().get(ToolLG.SEER_EVERY_OTHER_DAY) && event.getNumber() == dayNumber + 1) {
+        if (game.getConfig().getConfigValues().get("werewolf.menu.global.seer_every_other_day") && event.getNumber() == dayNumber + 1) {
             return;
         }
 
@@ -75,7 +73,7 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
         }
 
 
-        player.sendMessage(game.translate("werewolf.role.seer.see_camp_message", game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.POWER_DURATION))));
+        player.sendMessage(game.translate("werewolf.role.seer.see_camp_message", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.power_duration"))));
     }
 
 
@@ -99,12 +97,12 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
     public void onFinalDeath(FinalDeathEvent event) {
 
         UUID uuid = event.getUuid();
-        if (!game.getConfig().getConfigValues().get(ToolLG.EVENT_SEER_DEATH)) return;
+        if (!game.getConfig().getConfigValues().get("werewolf.menu.global.event_seer_death")) return;
 
         if(!uuid.equals(getPlayerUUID())) return;
 
         Bukkit.getPluginManager().callEvent(new ChestEvent());
-        game.getConfig().getConfigValues().put(ToolLG.EVENT_SEER_DEATH, false);
+        game.getConfig().getConfigValues().put("werewolf.menu.global.event_seer_death", false);
     }
 
 

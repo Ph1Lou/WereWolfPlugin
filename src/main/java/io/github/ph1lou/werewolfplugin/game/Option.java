@@ -1,13 +1,18 @@
 package io.github.ph1lou.werewolfplugin.game;
 
+import io.github.ph1lou.werewolfapi.ConfigRegister;
 import io.github.ph1lou.werewolfapi.RoleRegister;
 import io.github.ph1lou.werewolfapi.ScenarioRegister;
-import io.github.ph1lou.werewolfapi.enumlg.*;
+import io.github.ph1lou.werewolfapi.TimerRegister;
+import io.github.ph1lou.werewolfapi.enumlg.Category;
+import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.save.FileUtils_;
 import io.github.ph1lou.werewolfplugin.save.Serializer;
 import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.banner.Pattern;
@@ -18,6 +23,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -49,8 +56,8 @@ public class Option {
 		this.game = main.getCurrentGame();
 		invTool = Bukkit.createInventory(null, 54, game.translate("werewolf.menu.name"));
 		invRole = Bukkit.createInventory(null, 54, game.translate("werewolf.menu.roles.name"));
-		invTimer = Bukkit.createInventory(null, 27, game.translate("werewolf.menu.timers.name"));
-		invConfig = Bukkit.createInventory(null, 27, game.translate("werewolf.menu.global.name"));
+		invTimer = Bukkit.createInventory(null, Math.min(54, (main.getRegisterTimers().size() / 9 + 2) * 9), game.translate("werewolf.menu.timers.name"));
+		invConfig = Bukkit.createInventory(null, Math.min(54, (main.getRegisterConfigs().size() / 9 + 2) * 9), game.translate("werewolf.menu.global.name"));
 		invScenario = Bukkit.createInventory(null, Math.min(54, (main.getRegisterScenarios().size() / 9 + 2) * 9), game.translate("werewolf.menu.scenarios.name"));
 		invBorder = Bukkit.createInventory(null, 18, game.translate("werewolf.menu.border.name"));
 		invSave = Bukkit.createInventory(null, 18, game.translate("werewolf.menu.save.name"));
@@ -123,7 +130,7 @@ public class Option {
 
 	public void timerTool(Player player) {
 		invTimer.setItem(0, changeMeta(Material.COMPASS,game.translate("werewolf.menu.return"),1,null));
-		updateSelectionTimer( Math.max(findSelect(invBorder)-9,0));
+		updateSelectionTimer(Math.max(findSelect(invTimer)-9,0));
 		player.openInventory(invTimer);
 	}
 
@@ -162,6 +169,7 @@ public class Option {
 		invEnchant.setItem(13,changeMeta(Material.DIAMOND_SWORD,game.translate("werewolf.menu.enchantments.sharpness_diamond",game.getConfig().getLimitSharpnessDiamond()),1,lore));
 		invEnchant.setItem(8,changeMeta(Material.STICK,Arrays.asList(game.translate("werewolf.menu.enchantments.knock_back_disable"),game.translate("werewolf.menu.enchantments.knock_back_invisible"),game.translate("werewolf.menu.enchantments.knock_back_enable")).get(game.getConfig().getLimitKnockBack()),1,null));
 		invEnchant.setItem(15,changeMeta(Material.ARROW,Arrays.asList(game.translate("werewolf.menu.enchantments.punch_disable"),game.translate("werewolf.menu.enchantments.punch_cupid"),game.translate("werewolf.menu.enchantments.punch_enable")).get(game.getConfig().getLimitPunch()),1,null));
+		invEnchant.setItem(17,changeMeta(UniversalMaterial.OAK_BOAT.getType(),game.translate("werewolf.menu.enchantments.depth_rider",game.getConfig().getLimitDepthStrider()),1,lore));
 
 		player.openInventory(invEnchant);
 	}
@@ -339,12 +347,7 @@ public class Option {
 		if(!game.isState(StateLG.GAME)) {
 			ItemStack itemStack = this.invRole.getItem(i);
 			if (itemStack == null) return;
-			ItemMeta itemMeta = itemStack.getItemMeta();
-			if (itemMeta == null) return;
-			List<String> lore = itemMeta.getLore();
-			if (lore == null) return;
-			if (lore.isEmpty()) return;
-			String key = lore.get(lore.size() - 1);
+			String key = getKeyFromLore(itemStack);
 			int j = game.getConfig().getRoleCount().get(key);
 			if (j > 0) {
 				game.getScore().setRole(game.getScore().getRole() - 1);
@@ -358,31 +361,37 @@ public class Option {
 		if(!game.isState(StateLG.GAME)) {
 			ItemStack itemStack = this.invRole.getItem(i);
 			if (itemStack == null) return;
-			ItemMeta itemMeta = itemStack.getItemMeta();
-			if (itemMeta == null) return;
-			List<String> lore = itemMeta.getLore();
-			if (lore == null) return;
-			if (lore.isEmpty()) return;
-			String key = lore.get(lore.size() - 1);
+			String key = getKeyFromLore(itemStack);
+
 			int j = game.getConfig().getRoleCount().get(key);
+
 			game.getConfig().getRoleCount().put(key, j + 1);
 			game.getScore().setRole(game.getScore().getRole() + 1);
 		}
 	}
 
 	public void SelectMinusTimer(int v) {
-		int i = Math.max(findSelect(invTimer) - 9, 0);
-		int j = game.getConfig().getTimerValues().get(TimerLG.values()[i]);
+
+		int i = findSelect(invTimer);
+		ItemStack itemStack = this.invTimer.getItem(i);
+		if (itemStack == null) return;
+		String key = getKeyFromLore(itemStack);
+		int j = game.getConfig().getTimerValues().get(key);
+
 		if (j >= v) {
-			game.getConfig().getTimerValues().put(TimerLG.values()[i], j - v);
-			updateSelectionTimer(i);
+			game.getConfig().getTimerValues().put(key, j - v);
+			updateSelectionTimer(i-9);
 		}
 	}
 
 	public void selectPlusTimer(int v) {
-		int i = Math.max(findSelect(invTimer) - 9, 0);
-		game.getConfig().getTimerValues().put(TimerLG.values()[i], game.getConfig().getTimerValues().get(TimerLG.values()[i]) + v);
-		updateSelectionTimer(i);
+		int i = findSelect(invTimer);
+		ItemStack itemStack = this.invTimer.getItem(i);
+		if (itemStack == null) return;
+		String key = getKeyFromLore(itemStack);
+		int j = game.getConfig().getTimerValues().get(key);
+		game.getConfig().getTimerValues().put(key, j + v);
+		updateSelectionTimer(i-9);
 	}
 
 
@@ -421,7 +430,7 @@ public class Option {
 				List<String> lore2 = new ArrayList<>(lore);
 				lore2.addAll(roleRegister.getLore());
 				String key = roleRegister.getKey();
-				lore2.add(key);
+				lore2.add(ChatColor.BLACK+key);
 
 				if (game.getConfig().getRoleCount().get(key) > 0) {
 					invRole.setItem(i, changeMeta(UniversalMaterial.GREEN_TERRACOTTA.getStack(game.getConfig().getRoleCount().get(key)), roleRegister.getName(), lore2));
@@ -452,31 +461,55 @@ public class Option {
 
 	public void updateSelectionTimer(int j) {
 
-		String c = game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.values()[j]));
+		int i =0;
+		String key = null;
+		
+		for (TimerRegister timer:main.getRegisterTimers()) {
+
+			List<String> lore = new ArrayList<>(timer.getLore());
+			lore.add(ChatColor.BLACK+timer.getKey());
+			if (i==j) {
+				key=timer.getKey();
+				invTimer.setItem(9 + i, changeMeta(Material.FEATHER, game.translate(timer.getKey(), game.getScore().conversion(game.getConfig().getTimerValues().get(key))), 1, lore));
+				
+			} else {
+				invTimer.setItem(9 + i, changeMeta(Material.ANVIL, game.translate(timer.getKey(), game.getScore().conversion(game.getConfig().getTimerValues().get(timer.getKey()))), 1, lore));
+			}
+
+			i++;
+		}
+		
+		
+		if(key==null) return;
+		String c = game.getScore().conversion(game.getConfig().getTimerValues().get(key));
 
 		invTimer.setItem(1, changeMeta(Material.STONE_BUTTON, game.translate("werewolf.utils.display", "-10m", c), 1, null));
 		invTimer.setItem(2, changeMeta(Material.STONE_BUTTON, game.translate("werewolf.utils.display", "-1m", c), 1, null));
 		invTimer.setItem(3, changeMeta(Material.STONE_BUTTON, game.translate("werewolf.utils.display", "-10s", c), 1, null));
-		invTimer.setItem(4, changeMeta(Material.BEACON, game.translate(TimerLG.values()[j].getKey(), c), 1, null));
+		invTimer.setItem(4, changeMeta(Material.BEACON, game.translate(key, c), 1, null));
 		invTimer.setItem(5, changeMeta(Material.STONE_BUTTON, game.translate("werewolf.utils.display", "+10s", c), 1, null));
 		invTimer.setItem(6, changeMeta(Material.STONE_BUTTON, game.translate("werewolf.utils.display", "+1m", c), 1, null));
 		invTimer.setItem(7, changeMeta(Material.STONE_BUTTON, game.translate("werewolf.utils.display", "+10m", c), 1, null));
 
-		for (int i = 0; i < TimerLG.values().length; i++) {
-			if (i == j) {
-				invTimer.setItem(9 + i, changeMeta(Material.FEATHER, game.translate(TimerLG.values()[i].getKey(), c), 1, null));
-			} else
-				invTimer.setItem(9 + i, changeMeta(Material.ANVIL, game.translate(TimerLG.values()[i].getKey(), game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.values()[i]))), 1, null));
-		}
+
 	}
 
 
 	public void updateSelectionTool() {
-		for (int i = 0; i < ToolLG.values().length; i++) {
-			if (game.getConfig().getConfigValues().get(ToolLG.values()[i])) {
-				invConfig.setItem(9 + i, changeMeta(UniversalMaterial.GREEN_TERRACOTTA.getStack(), game.translate(ToolLG.values()[i].getKey()), Collections.singletonList(game.translate("werewolf.utils.enable", ""))));
-			} else
-				invConfig.setItem(9 + i, changeMeta(UniversalMaterial.RED_TERRACOTTA.getStack(), game.translate(ToolLG.values()[i].getKey()), Collections.singletonList(game.translate("werewolf.utils.disable", ""))));
+		int i=0;
+		for (ConfigRegister ConfigRegister:main.getRegisterConfigs()) {
+
+			List<String> lore = new ArrayList<>(ConfigRegister.getLore());
+			lore.add(ChatColor.BLACK+ConfigRegister.getKey());
+			if (game.getConfig().getConfigValues().get(ConfigRegister.getKey())) {
+				lore.add(0, game.translate("werewolf.utils.enable", ""));
+				invConfig.setItem(9 + i, changeMeta(UniversalMaterial.GREEN_TERRACOTTA.getStack(), game.translate(ConfigRegister.getKey()), lore));
+			} else {
+				lore.add(0, game.translate("werewolf.utils.disable", ""));
+				invConfig.setItem(9 + i, changeMeta(UniversalMaterial.RED_TERRACOTTA.getStack(), game.translate(ConfigRegister.getKey()), lore));
+			}
+
+			i++;
 		}
 	}
 
@@ -485,7 +518,7 @@ public class Option {
 		for (ScenarioRegister scenarioRegister:main.getRegisterScenarios()) {
 
 			List<String> lore = new ArrayList<>(scenarioRegister.getLore());
-			lore.add(scenarioRegister.getKey());
+			lore.add(ChatColor.BLACK+scenarioRegister.getKey());
 			if (game.getConfig().getScenarioValues().get(scenarioRegister.getKey())) {
 				lore.add(0, game.translate("werewolf.utils.enable", ""));
 				invScenario.setItem(9 + i, changeMeta(UniversalMaterial.GREEN_TERRACOTTA.getStack(), game.translate(scenarioRegister.getKey()), lore));
@@ -519,6 +552,19 @@ public class Option {
 		invBorder.setItem(12, changeMeta(Material.STONE_BUTTON, game.translate("werewolf.utils.display", "-", game.getConfig().getBorderMin()), 1, null));
 		invBorder.setItem(13, changeMeta(Material.GLASS,game.translate("werewolf.menu.border.radius_border_min",game.getConfig().getBorderMin()), 1, null));
 		invBorder.setItem(14, changeMeta(Material.STONE_BUTTON, game.translate("werewolf.utils.display", "+", game.getConfig().getBorderMin()), 1, null));
+	}
+
+	@Nullable
+	public String getKeyFromLore(@NotNull ItemStack item){
+
+		ItemMeta itemMeta = item.getItemMeta();
+		if (itemMeta == null) return null;
+		List<String> lore = itemMeta.getLore();
+		if (lore == null) return null;
+		if (lore.isEmpty()) return null;
+		String key = lore.get(lore.size() - 1);
+
+		return key.replace(ChatColor.BLACK.toString(),"");
 	}
 }
 

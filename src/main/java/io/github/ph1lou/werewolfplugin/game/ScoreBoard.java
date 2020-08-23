@@ -6,8 +6,6 @@ import io.github.ph1lou.werewolfapi.RoleRegister;
 import io.github.ph1lou.werewolfapi.ScoreAPI;
 import io.github.ph1lou.werewolfapi.enumlg.State;
 import io.github.ph1lou.werewolfapi.enumlg.StateLG;
-import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
-import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
 import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
 import org.bukkit.Bukkit;
@@ -73,7 +71,7 @@ public class ScoreBoard implements ScoreAPI {
 			if(!plg.isState(State.DEATH)) {
 				
 				if(!game.isState(StateLG.GAME)) {
-					role = conversion(game.getConfig().getTimerValues().get(TimerLG.ROLE_DURATION));
+					role = conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.role_duration"));
 				}
 				else if (game.getConfig().isTrollSV()){
 					role = game.translate("werewolf.role.villager.display");
@@ -97,8 +95,8 @@ public class ScoreBoard implements ScoreAPI {
 		String border_size=String.valueOf(Math.round(wb.getSize()));
 		String border;
 
-		if (game.getConfig().getTimerValues().get(TimerLG.BORDER_BEGIN) > 0) {
-			border=conversion(game.getConfig().getTimerValues().get(TimerLG.BORDER_BEGIN));
+		if (game.getConfig().getTimerValues().get("werewolf.menu.timers.border_begin") > 0) {
+			border=conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.border_begin"));
 		} else {
 			border= game.translate("werewolf.utils.on");
 			if (wb.getSize() > game.getConfig().getBorderMin()) {
@@ -112,7 +110,7 @@ public class ScoreBoard implements ScoreAPI {
 		while(game.getLanguage().containsKey("werewolf.score_board.scoreboard_2."+i)){
 			String line=game.translate("werewolf.score_board.scoreboard_2."+i);
 			line=line.replace("&timer&",conversion(timer));
-			line=line.replace("&day&",String.valueOf(timer / game.getConfig().getTimerValues().get(TimerLG.DAY_DURATION) / 2 + 1));
+			line=line.replace("&day&",String.valueOf(timer / game.getConfig().getTimerValues().get("werewolf.menu.timers.day_duration") / 2 + 1));
 			line=line.replace("&players&",String.valueOf(player));
 			line=line.replace("&group&",String.valueOf(group_size));
 			line=line.replace("&border&",border);
@@ -244,7 +242,7 @@ public class ScoreBoard implements ScoreAPI {
 
 		roles.clear();
 
-		if (!game.getConfig().getConfigValues().get(ToolLG.HIDE_COMPOSITION) && TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) % 60 >= 30) {
+		if (!game.getConfig().getConfigValues().get("werewolf.menu.global.hide_composition") && TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) % 60 >= 30) {
 			updateScoreBoardRole();
 		}
 

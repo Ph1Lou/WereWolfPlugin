@@ -3,7 +3,6 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
 import io.github.ph1lou.werewolfapi.events.VoteEndEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.LimitedUse;
@@ -86,7 +85,7 @@ public class Citizen extends RolesVillage implements LimitedUse, AffectedPlayers
 
 
         if (getUse() < 2 || hasPower()) {
-            player.sendMessage(game.translate("werewolf.role.citizen.affect_votes", hasPower() ? 1 : 0, 2 - getUse(), game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.CITIZEN_DURATION))));
+            player.sendMessage(game.translate("werewolf.role.citizen.affect_votes", hasPower() ? 1 : 0, 2 - getUse(), game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.citizen_duration"))));
         }
     }
 

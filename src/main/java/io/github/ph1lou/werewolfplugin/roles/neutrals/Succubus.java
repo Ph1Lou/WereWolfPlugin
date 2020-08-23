@@ -6,7 +6,6 @@ import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
@@ -161,11 +160,11 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
             return;
         }
 
-        float temp = getProgress() + 100f / (game.getConfig().getTimerValues().get(TimerLG.SUCCUBUS_DURATION) + 1);
+        float temp = getProgress() + 100f / (game.getConfig().getTimerValues().get("werewolf.menu.timers.succubus_duration") + 1);
 
         setProgress(temp);
 
-        if (temp % 10 > 0 && temp % 10 <= 100f / (game.getConfig().getTimerValues().get(TimerLG.SUCCUBUS_DURATION) + 1)) {
+        if (temp % 10 > 0 && temp % 10 <= 100f / (game.getConfig().getTimerValues().get("werewolf.menu.timers.succubus_duration") + 1)) {
             player.sendMessage(game.translate("werewolf.role.succubus.progress_charm", Math.min(100,Math.floor(temp))));
         }
 

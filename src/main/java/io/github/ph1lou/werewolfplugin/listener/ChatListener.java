@@ -2,7 +2,6 @@ package io.github.ph1lou.werewolfplugin.listener;
 
 
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
-import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
@@ -92,14 +91,14 @@ public class ChatListener implements Listener {
         }
         else event.setFormat(format);
 
-        if (!game.getConfig().getConfigValues().get(ToolLG.CHAT)) {
+        if (!game.getConfig().getConfigValues().get("werewolf.menu.global.chat")) {
             event.setCancelled(true);
             event.getPlayer().sendMessage(game.translate("werewolf.commands.admin.chat.off"));
             if (main.getConfig().getBoolean("bungeechat")) {
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "chatlock local");
             }
         }
-        else if(game.getConfig().getConfigValues().get(ToolLG.PROXIMITY_CHAT)){
+        else if(game.getConfig().getConfigValues().get("werewolf.menu.global.proximity_chat")){
 
             event.setCancelled(true);
 

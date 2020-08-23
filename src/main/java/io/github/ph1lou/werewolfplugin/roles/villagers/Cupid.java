@@ -3,7 +3,6 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
 import io.github.ph1lou.werewolfapi.events.EnchantmentEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
@@ -80,7 +79,7 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
         }
 
         if (hasPower()) {
-            player.sendMessage(game.translate("werewolf.role.cupid.lover_designation_message", game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.LOVER_DURATION))));
+            player.sendMessage(game.translate("werewolf.role.cupid.lover_designation_message", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.lover_duration"))));
         } else {
             player.sendMessage(game.translate("werewolf.role.cupid.designation_perform", game.getPlayersWW().get(getAffectedPlayers().get(0)).getName(), game.getPlayersWW().get(getAffectedPlayers().get(1)).getName()));
         }
@@ -103,7 +102,7 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
     public Player recoverPower() {
         Player player = super.recoverPower();
         if(player==null) return null;
-        player.sendMessage(game.translate("werewolf.role.cupid.lover_designation_message", game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.LOVER_DURATION))));
+        player.sendMessage(game.translate("werewolf.role.cupid.lover_designation_message", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.lover_duration"))));
         return player;
     }
 }

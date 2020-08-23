@@ -5,7 +5,6 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
 import io.github.ph1lou.werewolfapi.events.ThirdDeathEvent;
 import io.github.ph1lou.werewolfapi.events.WitchResurrectionEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
@@ -83,7 +82,7 @@ public class Witch extends RolesVillage implements AffectedPlayers, Power {
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
         if (event.getUuid().equals(getPlayerUUID())) {
-            if (game.getConfig().getConfigValues().get(ToolLG.AUTO_REZ_WITCH)) {
+            if (game.getConfig().getConfigValues().get("werewolf.menu.global.auto_rez_witch")) {
                 WitchResurrectionEvent witchResurrectionEvent = new WitchResurrectionEvent(getPlayerUUID(), event.getUuid());
                 Bukkit.getPluginManager().callEvent(witchResurrectionEvent);
 

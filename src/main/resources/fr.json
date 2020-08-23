@@ -439,7 +439,7 @@
         },
         "gamemode": "[§eLG UHC§r] §b%s§r s'est mis en gamemode §b%d",
         "teleportation": "[§eLG UHC§r] Téléportation de §b%s§r vers §b%s",
-        "help": "§6/a config §9Pour configurer la partie\n§6/a host §9Pour configurer l'host\n§6/a start §9Pour lancer la partie\n§6/a chat §9Pour activer/désactiver le chat\n§6/a info §9Pour parler à tous les joueurs\n§6/a group §9Pour faire respecter les groupes\n§6/a fh §9Pour FinalHeal\n§6/a inv §9Pour voir l'inventaire d'un joueur\n§6/a kill §9Pour tuer un joueur offline\n§6/a revive §9Pour ressusciter un joueur\n§6/a role §9Pour voir le rôle d'un joueur\n§6/a disc §9Pour voir les joueurs déco\n§6/a setGroup§9 Pour configurer les groupes\n§6/a tpGroup§9 Pour téléporter un groupe\n§6/a generation§9 Pour générer la map\n§6/a size§9 Pour obtenir la taille du biome central\n§6/a moderator§9 Pour ajouter un modérator\n§6/a host§9 Pour ajouter un host"
+        "help": "§6/a config §9Pour configurer la partie\n§6/a host §9Pour configurer l'host\n§6/a start §9Pour lancer la partie\n§6/a chat §9Pour activer/désactiver le chat\n§6/a info §9Pour parler à tous les joueurs\n§6/a group §9Pour faire respecter les groupes\n§6/a fh §9Pour FinalHeal\n§6/a inv §9Pour voir l'inventaire d'un joueur\n§6/a kill §9Pour tuer un joueur offline\n§6/a revive §9Pour ressusciter un joueur\n§6/a role §9Pour voir le rôle d'un joueur\n§6/a disc §9Pour voir les joueurs déco\n§6/a setGroup§9 Pour configurer les groupes\n§6/a tpGroup§9 Pour téléporter un groupe\n§6/a generation§9 Pour générer la map\n§6/a size§9 Pour obtenir la taille du biome central\n§6/a moderator§9 Pour ajouter un modérator\n§6/a host§9 Pour ajouter un host\n§6/a change§9 Pour changer la map"
       },
       "message": {
         "send": "[Message envoyé à §b%s§r] » §b%s",
@@ -535,7 +535,8 @@
         "knock_back_enable":"KnockBack §2Activé",
         "punch_disable":"Punch §4Désactivé",
         "punch_cupid":"Punch §6pour le Cupidon",
-        "punch_enable":"Punch §2Activé"
+        "punch_enable":"Punch §2Activé",
+        "depth_rider": "Depth Strider §b%d"
       },
       "timers": {
         "command": "timers",

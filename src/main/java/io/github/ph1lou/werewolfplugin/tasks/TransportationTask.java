@@ -3,7 +3,6 @@ package io.github.ph1lou.werewolfplugin.tasks;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.StateLG;
-import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
@@ -118,7 +117,7 @@ public class TransportationTask extends BukkitRunnable {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (game.getPlayersWW().containsKey(p.getUniqueId())) {
                     p.setGameMode(GameMode.SURVIVAL);
-                    p.sendMessage(game.translate("werewolf.announcement.start.message", game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.INVULNERABILITY))));
+                    p.sendMessage(game.translate("werewolf.announcement.start.message", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.invulnerability"))));
                 } else {
                     p.teleport(game.getWorld().getSpawnLocation());
                     p.setGameMode(GameMode.SPECTATOR);

@@ -2,7 +2,9 @@ package io.github.ph1lou.werewolfplugin.game;
 
 import fr.mrmicky.fastboard.FastBoard;
 import io.github.ph1lou.werewolfapi.*;
-import io.github.ph1lou.werewolfapi.enumlg.*;
+import io.github.ph1lou.werewolfapi.enumlg.Day;
+import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfapi.events.LoadEvent;
 import io.github.ph1lou.werewolfapi.events.StopEvent;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
@@ -500,6 +502,7 @@ public class GameManager implements WereWolfAPI {
         return this.vote;
     }
 
+    @Override
     public void deathStep1(UUID uuid){
         deathManage.deathStep1(uuid);
     }
@@ -606,8 +609,8 @@ public class GameManager implements WereWolfAPI {
                         if (getPlayersWW().containsKey(uuid)) {
                             Roles roles = getPlayersWW().get(uuid).getRole();
                             if (roles.isWereWolf() && playerWW.getRole().isWereWolf()) {
-                                if (getConfig().getConfigValues().get(ToolLG.RED_NAME_TAG)) {
-                                    if(getConfig().getTimerValues().get(TimerLG.WEREWOLF_LIST) <= 0){
+                                if (getConfig().getConfigValues().get("werewolf.menu.global.red_name_tag")) {
+                                    if(getConfig().getTimerValues().get("werewolf.menu.timers.werewolf_list") <= 0){
                                         sb.append(ChatColor.DARK_RED);
                                     }
                                 }
@@ -688,7 +691,7 @@ public class GameManager implements WereWolfAPI {
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (getPlayersWW().containsKey(player.getUniqueId())) {
-                if (getConfig().getConfigValues().get(ToolLG.COMPASS_MIDDLE)) {
+                if (getConfig().getConfigValues().get("werewolf.menu.global.compass_middle")) {
                     player.setCompassTarget(player.getWorld().getSpawnLocation());
                 } else {
                     player.setCompassTarget(getPlayersWW().get(player.getUniqueId()).getSpawn());

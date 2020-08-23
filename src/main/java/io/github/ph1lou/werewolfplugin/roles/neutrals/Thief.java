@@ -6,7 +6,6 @@ import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
@@ -16,6 +15,7 @@ import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -96,7 +96,7 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
         killer.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 1200, 0, false, false));
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onFirstDeathEvent(FirstDeathEvent event){
 
         UUID uuid = event.getUuid();
@@ -111,11 +111,22 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
 
         setPower(false);
 
+        event.setCancelled(true);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
             if (game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
-                event.setCancelled(true);
                 thief_recover_role(getPlayerUUID(), uuid);
+            }
+            else {
+                Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
+
+                    FirstDeathEvent firstDeathEvent = new FirstDeathEvent(uuid);
+                    Bukkit.getPluginManager().callEvent(firstDeathEvent);
+
+                    if(firstDeathEvent.isCancelled()) return;
+
+                    game.deathStep1(uuid);
+                }, 20L);
             }
         },7*20);
     }
@@ -158,7 +169,7 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
 
             if(klg.getCursedLovers()!=null) return;
             if(klg.getAmnesiacLoverUUID()!=null) return;
-            if(!klg.getLovers().isEmpty() && !game.getConfig().getConfigValues().get(ToolLG.POLYGAMY)) return;
+            if(!klg.getLovers().isEmpty() && !game.getConfig().getConfigValues().get("werewolf.menu.global.polygamy")) return;
 
             if(!klg.getLovers().isEmpty() || !plg.getLovers().isEmpty()){
 

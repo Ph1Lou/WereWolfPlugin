@@ -4,7 +4,6 @@ import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.RoleRegister;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
@@ -31,7 +30,7 @@ public class RoleManagement {
 		GameManager game = main.getCurrentGame();
 		List<UUID> playersUUID = new ArrayList<>(game.getPlayersWW().keySet());
 		List<RoleRegister> config = new ArrayList<>();
-		game.getConfig().getConfigValues().put(ToolLG.CHAT, false);
+		game.getConfig().getConfigValues().put("werewolf.menu.global.chat", false);
 		game.getConfig().getRoleCount().put("werewolf.role.villager.display", game.getConfig().getRoleCount().get("werewolf.role.villager.display") + playersUUID.size() - game.getScore().getRole());
 
 		for (RoleRegister roleRegister : game.getRolesRegister()) {

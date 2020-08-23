@@ -2,8 +2,6 @@ package io.github.ph1lou.werewolfplugin.listener;
 
 
 import io.github.ph1lou.werewolfapi.enumlg.Category;
-import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
-import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
 import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.events.UpdateConfigEvent;
 import io.github.ph1lou.werewolfapi.events.UpdateLanguageEvent;
@@ -25,9 +23,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.List;
 
 
 public class MenuListener implements Listener {
@@ -99,30 +94,26 @@ public class MenuListener implements Listener {
 			else if(view.getTitle().equals(game.translate("werewolf.menu.global.name"))) {
                 event.setCancelled(true);
                 if (current.getType().equals(UniversalMaterial.GREEN_TERRACOTTA.getType()) || current.getType().equals(UniversalMaterial.RED_TERRACOTTA.getType())) {
-                    ToolLG toolLG = ToolLG.values()[(event.getSlot() - 9)];
-                    game.getConfig().getConfigValues().put(toolLG, !game.getConfig().getConfigValues().get(toolLG));
-                    if (toolLG.equals(ToolLG.RED_NAME_TAG)) {
+                    String key = game.getOption().getKeyFromLore(current);
+                    if(key==null) return;
+                    game.getConfig().getConfigValues().put(key, !game.getConfig().getConfigValues().get(key));
+                    game.getOption().updateSelectionTool();
+
+                    if (key.equals("werewolf.menu.global.red_name_tag")) {
                         game.updateNameTag();
-                    } else if (toolLG.equals(ToolLG.COMPASS_MIDDLE)) {
+                    } else if (key.equals("werewolf.menu.global.compass_middle")) {
                         game.updateCompass();
                     }
-
-                    game.getOption().updateSelectionTool();
-                }
-				else if(current.getType()==Material.COMPASS) {
+                } else if (current.getType() == Material.COMPASS) {
                     game.getOption().toolBar(player);
                 }
+
 			}
 
 			else if(view.getTitle().equals(game.translate("werewolf.menu.scenarios.name"))) {
                 event.setCancelled(true);
                 if (current.getType().equals(UniversalMaterial.GREEN_TERRACOTTA.getType()) || current.getType().equals(UniversalMaterial.RED_TERRACOTTA.getType())) {
-                    ItemMeta itemMeta = current.getItemMeta();
-                    if (itemMeta == null) return;
-                    List<String> lore = current.getItemMeta().getLore();
-                    if (lore == null) return;
-                    if (lore.isEmpty()) return;
-                    String key = lore.get(lore.size() - 1);
+                    String key = game.getOption().getKeyFromLore(current);
                     game.getConfig().getScenarioValues().put(key, !game.getConfig().getScenarioValues().get(key));
                     game.getOption().updateSelectionScenario();
                 } else if (current.getType() == Material.COMPASS) {
@@ -139,12 +130,7 @@ public class MenuListener implements Listener {
                     if (event.getClick().isShiftClick() && event.getSlot() > 8) {
                         player.setGameMode(GameMode.CREATIVE);
                         player.getInventory().clear();
-                        ItemMeta itemMeta = current.getItemMeta();
-                        if (itemMeta == null) return;
-                        List<String> lore = itemMeta.getLore();
-                        if (lore == null) return;
-                        if (lore.isEmpty()) return;
-                        String key = lore.get(lore.size() - 1);
+                        String key = game.getOption().getKeyFromLore(current);
 
                         for (ItemStack i : game.getStuffs().getStuffRoles().get(key)) {
                             if (i != null) {
@@ -378,6 +364,13 @@ public class MenuListener implements Listener {
                     } else game.getConfig().setLimitKnockBack((game.getConfig().getLimitKnockBack() + 2) % 3);
                     game.getOption().enchantmentTool(player);
                 }
+                else if(current.getType()==UniversalMaterial.OAK_BOAT.getType()) {
+                    if (event.getClick().isLeftClick()) {
+                        game.getConfig().setLimitDepthStrider(game.getConfig().getLimitDepthStrider() + 1);
+                    } else if (game.getConfig().getLimitDepthStrider() > 0)
+                        game.getConfig().setLimitDepthStrider(game.getConfig().getLimitDepthStrider() - 1);
+                    game.getOption().enchantmentTool(player);
+                }
 				else if(current.getType()==Material.ARROW) {
                     if (event.getClick().isLeftClick()) {
                         game.getConfig().setLimitPunch((game.getConfig().getLimitPunch() + 1) % 3);
@@ -483,7 +476,7 @@ public class MenuListener implements Listener {
                     game.getOption().advancedTool(player);
                 } else if (current.getType().equals(Material.BREAD)) {
 
-                    if (game.getConfig().getTimerValues().get(TimerLG.ROLE_DURATION) > 0) {
+                    if (game.getConfig().getTimerValues().get("werewolf.menu.timers.role_duration") >= 0) {
                         game.getConfig().setTrollSV(!game.getConfig().isTrollSV());
                         game.getOption().advancedTool(player);
                     }

@@ -1,7 +1,10 @@
 package io.github.ph1lou.werewolfplugin.listener;
 
 import io.github.ph1lou.werewolfapi.ScoreAPI;
-import io.github.ph1lou.werewolfapi.enumlg.*;
+import io.github.ph1lou.werewolfapi.enumlg.Day;
+import io.github.ph1lou.werewolfapi.enumlg.Sounds;
+import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.enumlg.VoteStatus;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
@@ -29,19 +32,19 @@ public class CycleListener implements Listener {
 
         if(game.isState(StateLG.END)) return;
 
-        long duration = game.getConfig().getTimerValues().get(TimerLG.VOTE_DURATION);
+        long duration = game.getConfig().getTimerValues().get("werewolf.menu.timers.vote_duration");
         Bukkit.broadcastMessage(game.translate("werewolf.announcement.day", event.getNumber()));
         groupSizeChange();
 
-        if (game.getConfig().getConfigValues().get(ToolLG.VOTE) && game.getScore().getPlayerSize() < game.getConfig().getPlayerRequiredVoteEnd()) {
-            game.getConfig().getConfigValues().put(ToolLG.VOTE, false);
+        if (game.getConfig().getConfigValues().get("werewolf.menu.global.vote") && game.getScore().getPlayerSize() < game.getConfig().getPlayerRequiredVoteEnd()) {
+            game.getConfig().getConfigValues().put("werewolf.menu.global.vote", false);
             Bukkit.broadcastMessage(game.translate("werewolf.vote.vote_deactivate"));
             game.getVote().setStatus(VoteStatus.ENDED);
         }
 
-        if(2*game.getConfig().getTimerValues().get(TimerLG.DAY_DURATION) - duration-game.getConfig().getTimerValues().get(TimerLG.CITIZEN_DURATION)>0){
+        if(2*game.getConfig().getTimerValues().get("werewolf.menu.timers.day_duration") - duration-game.getConfig().getTimerValues().get("werewolf.menu.timers.citizen_duration")>0){
 
-            if (game.getConfig().getConfigValues().get(ToolLG.VOTE) && game.getConfig().getTimerValues().get(TimerLG.VOTE_BEGIN) < 0) {
+            if (game.getConfig().getConfigValues().get("werewolf.menu.global.vote") && game.getConfig().getTimerValues().get("werewolf.menu.timers.vote_begin") < 0) {
                 Bukkit.broadcastMessage(game.translate("werewolf.vote.vote_time", game.getScore().conversion((int) duration)));
                 game.getVote().setStatus(VoteStatus.IN_PROGRESS);
                 Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
@@ -52,9 +55,9 @@ public class CycleListener implements Listener {
                 },duration*20);
             }
         }
-        long duration2 = game.getConfig().getTimerValues().get(TimerLG.POWER_DURATION);
+        long duration2 = game.getConfig().getTimerValues().get("werewolf.menu.timers.power_duration");
 
-        if (2*game.getConfig().getTimerValues().get(TimerLG.DAY_DURATION)-duration2>0) {
+        if (2*game.getConfig().getTimerValues().get("werewolf.menu.timers.day_duration")-duration2>0) {
             Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
 
                 if(!game.isState(StateLG.END)){
@@ -64,7 +67,7 @@ public class CycleListener implements Listener {
 
         }
 
-        long duration3 = game.getConfig().getTimerValues().get(TimerLG.DAY_DURATION);
+        long duration3 = game.getConfig().getTimerValues().get("werewolf.menu.timers.day_duration");
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
             if(!game.isState(StateLG.END)){
@@ -79,7 +82,7 @@ public class CycleListener implements Listener {
     public void onNight(NightEvent event){
 
 
-        long duration  =game.getConfig().getTimerValues().get(TimerLG.DAY_DURATION)-30;
+        long duration  =game.getConfig().getTimerValues().get("werewolf.menu.timers.day_duration")-30;
         game.setDay(Day.NIGHT);
 
         if(game.isState(StateLG.END)) return;
@@ -107,7 +110,7 @@ public class CycleListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onVoteEnd(VoteEndEvent event) {
 
-        long duration = game.getConfig().getTimerValues().get(TimerLG.CITIZEN_DURATION);
+        long duration = game.getConfig().getTimerValues().get("werewolf.menu.timers.citizen_duration");
         Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
             if (!game.isState(StateLG.END)) {
                 Bukkit.getPluginManager().callEvent(new VoteResultEvent());

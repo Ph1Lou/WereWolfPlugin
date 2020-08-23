@@ -1,7 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
@@ -27,8 +26,8 @@ public class CommandChat implements Commands {
             return;
         }
 
-        game.getConfig().getConfigValues().put(ToolLG.CHAT, !game.getConfig().getConfigValues().get(ToolLG.CHAT));
+        game.getConfig().getConfigValues().put("werewolf.menu.global.chat", !game.getConfig().getConfigValues().get("werewolf.menu.global.chat"));
 
-        Bukkit.broadcastMessage(game.getConfig().getConfigValues().get(ToolLG.CHAT) ? game.translate("werewolf.commands.admin.chat.on") : game.translate("werewolf.commands.admin.chat.off"));
+        Bukkit.broadcastMessage(game.getConfig().getConfigValues().get("werewolf.menu.global.chat") ? game.translate("werewolf.commands.admin.chat.on") : game.translate("werewolf.commands.admin.chat.off"));
     }
 }

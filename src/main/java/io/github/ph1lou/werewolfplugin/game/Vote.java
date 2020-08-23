@@ -4,8 +4,6 @@ package io.github.ph1lou.werewolfplugin.game;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.VoteAPI;
 import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
-import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
 import io.github.ph1lou.werewolfapi.enumlg.VoteStatus;
 import io.github.ph1lou.werewolfapi.events.SeeVoteEvent;
 import io.github.ph1lou.werewolfapi.events.VoteEndEvent;
@@ -44,9 +42,9 @@ public class Vote implements Listener, VoteAPI {
 
         if (!plg.isState(State.ALIVE)) {
             voter.sendMessage(game.translate("werewolf.vote.death"));
-        } else if (game.getConfig().getTimerValues().get(TimerLG.VOTE_BEGIN) > 0) {
+        } else if (game.getConfig().getTimerValues().get("werewolf.menu.timers.vote_begin") > 0) {
             voter.sendMessage(game.translate("werewolf.vote.vote_not_yet_activated"));
-        } else if (!game.getConfig().getConfigValues().get(ToolLG.VOTE)) {
+        } else if (!game.getConfig().getConfigValues().get("werewolf.menu.global.vote")) {
             voter.sendMessage(game.translate("werewolf.vote.vote_disable"));
         } else if (!currentStatus.equals(VoteStatus.IN_PROGRESS)) {
             voter.sendMessage(game.translate("werewolf.vote.not_vote_time"));

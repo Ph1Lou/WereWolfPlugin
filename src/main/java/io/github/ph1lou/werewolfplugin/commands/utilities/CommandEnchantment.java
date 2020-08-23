@@ -29,6 +29,6 @@ public class CommandEnchantment implements Commands {
         sender.sendMessage(game.translate("werewolf.menu.enchantments.power", game.getConfig().getLimitPowerBow()));
         sender.sendMessage(game.translate("werewolf.menu.enchantments.sharpness_iron", game.getConfig().getLimitSharpnessIron()));
         sender.sendMessage(game.translate("werewolf.menu.enchantments.sharpness_diamond", game.getConfig().getLimitSharpnessDiamond()));
-
+        sender.sendMessage(game.translate("werewolf.menu.enchantments.depth_rider", game.getConfig().getLimitDepthStrider()));
     }
 }

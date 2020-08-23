@@ -5,7 +5,6 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
 import io.github.ph1lou.werewolfapi.events.InfectionEvent;
 import io.github.ph1lou.werewolfapi.events.SecondDeathEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
@@ -88,7 +87,7 @@ public class InfectFatherOfTheWolves extends RolesWereWolf implements AffectedPl
         if (game.getPlayersWW().containsKey(killerUUID) && game.getPlayersWW().get(killerUUID).getRole().isWereWolf()) {
 
             if (event.getUuid().equals(getPlayerUUID())) {
-                if (game.getConfig().getConfigValues().get(ToolLG.AUTO_REZ_INFECT)) {
+                if (game.getConfig().getConfigValues().get("werewolf.menu.global.auto_rez_infect")) {
                     InfectionEvent infectionEvent = new InfectionEvent(event.getUuid(), event.getUuid());
                     Bukkit.getPluginManager().callEvent(infectionEvent);
 

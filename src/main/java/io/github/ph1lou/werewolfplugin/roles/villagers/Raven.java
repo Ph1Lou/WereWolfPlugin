@@ -4,7 +4,6 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.events.VoteEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
@@ -64,7 +63,7 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
         }
 
 
-        player.sendMessage(game.translate("werewolf.role.raven.curse_message", game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.POWER_DURATION))));
+        player.sendMessage(game.translate("werewolf.role.raven.curse_message", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.power_duration"))));
     }
 
 

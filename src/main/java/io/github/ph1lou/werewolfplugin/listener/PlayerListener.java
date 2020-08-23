@@ -4,7 +4,6 @@ import fr.mrmicky.fastboard.FastBoard;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.State;
 import io.github.ph1lou.werewolfapi.enumlg.StateLG;
-import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
 import io.github.ph1lou.werewolfapi.events.FirstDeathEvent;
 import io.github.ph1lou.werewolfapi.events.UpdateLanguageEvent;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -88,7 +87,7 @@ public class PlayerListener implements Listener {
 
 		//Wither effect = NO_FALL
 
-		if (world.equals(game.getWorld()) && game.getConfig().getTimerValues().get(TimerLG.INVULNERABILITY) > 0) {
+		if (world.equals(game.getWorld()) && game.getConfig().getTimerValues().get("werewolf.menu.timers.invulnerability") > 0) {
 			event.setCancelled(true);
 			return;
 		}

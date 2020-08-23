@@ -6,7 +6,6 @@ import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.TimerLG;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
@@ -161,7 +160,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
         }
 
         if (!transformed) {
-            player.sendMessage(game.translate("werewolf.role.wild_child.design_model", game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.MODEL_DURATION))));
+            player.sendMessage(game.translate("werewolf.role.wild_child.design_model", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.model_duration"))));
         } else {
             UUID modelUUID = getAffectedPlayers().get(0);
             PlayerWW model = game.getPlayersWW().get(modelUUID);
@@ -200,7 +199,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     public Player recoverPower() {
         Player player = super.recoverPower();
         if(player==null) return null;
-        player.sendMessage(game.translate("werewolf.role.wild_child.design_model", game.getScore().conversion(game.getConfig().getTimerValues().get(TimerLG.MODEL_DURATION))));
+        player.sendMessage(game.translate("werewolf.role.wild_child.design_model", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.model_duration"))));
         return player;
     }
 

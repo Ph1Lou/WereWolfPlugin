@@ -3,7 +3,6 @@ package io.github.ph1lou.werewolfplugin.game;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.ToolLG;
 import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.ResurrectionEvent;
 import io.github.ph1lou.werewolfapi.events.SecondDeathEvent;
@@ -76,7 +75,7 @@ public class DeathManagement {
 
         game.getConfig().getRoleCount().put(roleLG, game.getConfig().getRoleCount().get(roleLG) - 1);
 
-        if (game.getConfig().getConfigValues().get(ToolLG.SHOW_ROLE_TO_DEATH)) {
+        if (game.getConfig().getConfigValues().get("werewolf.menu.global.show_role_to_death")) {
             Bukkit.broadcastMessage(game.translate("werewolf.announcement.death_message_with_role", plg.getName(), game.translate(roleLG)));
         } else Bukkit.broadcastMessage(game.translate("werewolf.announcement.death_message", plg.getName()));
 
