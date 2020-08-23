@@ -27,7 +27,7 @@ public class CommandInventory implements Commands {
             return;
         }
 
-        if (!sender.hasPermission("a.use") && !sender.hasPermission("a.inv.use") && !game.getModerators().contains(((Player) sender).getUniqueId()) && !game.getHosts().contains(((Player) sender).getUniqueId())) {
+        if (!sender.hasPermission("a.inv.use") && !game.getModerators().contains(((Player) sender).getUniqueId()) && !game.getHosts().contains(((Player) sender).getUniqueId())) {
             sender.sendMessage(game.translate("werewolf.check.permission_denied"));
             return;
         }

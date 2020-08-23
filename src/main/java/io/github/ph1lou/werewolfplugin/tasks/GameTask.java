@@ -77,7 +77,7 @@ public class GameTask extends BukkitRunnable {
 		}
 		game.getConfig().getTimerValues().put(TimerLG.PVP, game.getConfig().getTimerValues().get(TimerLG.PVP) - 1);
 
-		if (game.getConfig().getTimerValues().get(TimerLG.ROLE_DURATION) < 0) {
+		if (game.getConfig().getTimerValues().get(TimerLG.ROLE_DURATION) < 0 && !game.getConfig().isTrollSV()) {
 
 			if (game.getConfig().getTimerValues().get(TimerLG.MODEL_DURATION) == 0) {
 				Bukkit.getPluginManager().callEvent(new AutoModelEvent());

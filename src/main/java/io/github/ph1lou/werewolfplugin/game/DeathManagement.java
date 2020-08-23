@@ -16,6 +16,7 @@ import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -32,33 +33,35 @@ public class DeathManagement {
     }
 
 
-    public void deathStep1(UUID uuid) {
+    public void deathStep1(@NotNull UUID uuid) {
 
         GameManager game = main.getCurrentGame();
         PlayerWW plg = game.getPlayersWW().get(uuid);
         SecondDeathEvent secondDeathEvent = new SecondDeathEvent(uuid);
         Bukkit.getPluginManager().callEvent(secondDeathEvent);
         Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
-            if(plg.isState(State.JUDGEMENT) && !secondDeathEvent.isCancelled()){
+            if (plg.isState(State.JUDGEMENT) && !secondDeathEvent.isCancelled()) {
                 plg.setCanBeInfect(false);
                 deathStep2(uuid);
             }
-        },7*20);
+        }, 7 * 20);
     }
 
-    private void deathStep2(UUID uuid) {
+    private void deathStep2(@NotNull UUID uuid) {
+
         GameManager game = main.getCurrentGame();
         PlayerWW plg = game.getPlayersWW().get(uuid);
         ThirdDeathEvent thirdDeathEvent = new ThirdDeathEvent(uuid);
         Bukkit.getPluginManager().callEvent(thirdDeathEvent);
         Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
-            if(plg.isState(State.JUDGEMENT) && !thirdDeathEvent.isCancelled()){
+            if (plg.isState(State.JUDGEMENT) && !thirdDeathEvent.isCancelled()) {
                 death(uuid);
             }
-        },7*20);
-	}
+        }, 7 * 20);
+    }
 
-    public void death(UUID playerUUID) {
+    public void death(@NotNull UUID playerUUID) {
+
         GameManager game = main.getCurrentGame();
         World world = game.getWorld();
         PlayerWW plg = game.getPlayersWW().get(playerUUID);

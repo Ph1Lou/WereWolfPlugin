@@ -3,9 +3,6 @@ package io.github.ph1lou.werewolfplugin.utils;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.minecraft.server.v1_16_R1.BiomeBase;
-import net.minecraft.server.v1_16_R1.IRegistry;
-import net.minecraft.server.v1_16_R1.MinecraftKey;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -21,10 +18,7 @@ import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class VersionUtils_1_13 extends VersionUtils {
 
@@ -52,45 +46,26 @@ public class VersionUtils_1_13 extends VersionUtils {
 
     @Override
     public void patchBiomes() {
+        BiomeMapping.replaceBiomes(BiomeMapping.Biome.OCEAN, BiomeMapping.Biome.PLAINS);
+        BiomeMapping.replaceBiomes(BiomeMapping.Biome.DEEP_OCEAN, BiomeMapping.Biome.FOREST);
+        BiomeMapping.replaceBiomes(BiomeMapping.Biome.FROZEN_OCEAN, BiomeMapping.Biome.PLAINS);
+        BiomeMapping.replaceBiomes(BiomeMapping.Biome.DEEP_FROZEN_OCEAN, BiomeMapping.Biome.FOREST);
+        BiomeMapping.replaceBiomes(BiomeMapping.Biome.WARM_OCEAN, BiomeMapping.Biome.PLAINS);
+        BiomeMapping.replaceBiomes(BiomeMapping.Biome.DEEP_WARM_OCEAN, BiomeMapping.Biome.FOREST);
+        BiomeMapping.replaceBiomes(BiomeMapping.Biome.LUKEWARM_OCEAN, BiomeMapping.Biome.PLAINS);
+        BiomeMapping.replaceBiomes(BiomeMapping.Biome.DEEP_LUKEWARM_OCEAN, BiomeMapping.Biome.FOREST);
+        BiomeMapping.replaceBiomes(BiomeMapping.Biome.COLD_OCEAN, BiomeMapping.Biome.PLAINS);
+        BiomeMapping.replaceBiomes(BiomeMapping.Biome.DEEP_COLD_OCEAN, BiomeMapping.Biome.FOREST);
+        BiomeMapping.replaceBiomes(BiomeMapping.Biome.JUNGLE, BiomeMapping.Biome.PLAINS);
+        BiomeMapping.replaceBiomes(BiomeMapping.Biome.JUNGLE_EDGE, BiomeMapping.Biome.PLAINS);
+        BiomeMapping.replaceBiomes(BiomeMapping.Biome.JUNGLE_HILLS, BiomeMapping.Biome.PLAINS);
+        BiomeMapping.replaceBiomes(BiomeMapping.Biome.BAMBOO_JUNGLE, BiomeMapping.Biome.PLAINS);
+        BiomeMapping.replaceBiomes(BiomeMapping.Biome.MODIFIED_JUNGLE, BiomeMapping.Biome.PLAINS);
+        BiomeMapping.replaceBiomes(BiomeMapping.Biome.BAMBOO_JUNGLE_HILLS, BiomeMapping.Biome.PLAINS);
 
-        Map<String, BiomeBase> biomeBackup = new HashMap<>();
-
-        final List<BiomeBase> base = IRegistry.BIOME.e().collect(Collectors.toList());
-        for (final BiomeBase b : base) {
-
-            MinecraftKey key = IRegistry.BIOME.getKey(b);
-            if (key != null) {
-                biomeBackup.put(key.getKey(), b);
-            }
-        }
-
-        swap(BiomeData.BAMBOO_JUNGLE, BiomeData.PLAINS, biomeBackup);
-        swap(BiomeData.BAMBOO_JUNGLE_HILLS, BiomeData.PLAINS, biomeBackup);
-        swap(BiomeData.BEACHES, BiomeData.PLAINS, biomeBackup);
-        swap(BiomeData.COLD_BEACH, BiomeData.PLAINS, biomeBackup);
-        swap(BiomeData.COLD_OCEAN, BiomeData.PLAINS, biomeBackup);
-        swap(BiomeData.DEEP_COLD_OCEAN, BiomeData.PLAINS, biomeBackup);
-        swap(BiomeData.DEEP_FROZEN_OCEAN, BiomeData.PLAINS, biomeBackup);
-        swap(BiomeData.EXTREME_HILLS, BiomeData.PLAINS, biomeBackup);
-        swap(BiomeData.DEEP_OCEAN, BiomeData.PLAINS, biomeBackup);
-        swap(BiomeData.WARM_OCEAN, BiomeData.PLAINS, biomeBackup);
-        swap(BiomeData.SMALLER_EXTREME_HILLS, BiomeData.PLAINS, biomeBackup);
-        swap(BiomeData.FROZEN_OCEAN, BiomeData.PLAINS, biomeBackup);
-        swap(BiomeData.JUNGLE, BiomeData.PLAINS, biomeBackup);
-        swap(BiomeData.JUNGLE_EDGE, BiomeData.PLAINS, biomeBackup);
-        swap(BiomeData.JUNGLE_HILLS, BiomeData.PLAINS, biomeBackup);
-        swap(BiomeData.OCEAN, BiomeData.PLAINS, biomeBackup);
-        swap(BiomeData.MUTATED_JUNGLE, BiomeData.PLAINS, biomeBackup);
-        swap(BiomeData.MUTATED_JUNGLE_EDGE, BiomeData.PLAINS, biomeBackup);
-        swap(BiomeData.MUTATED_EXTREME_HILLS_PLUS, BiomeData.PLAINS, biomeBackup);
     }
 
-
-    public void swap(BiomeData from, BiomeData to, Map<String, BiomeBase> biomeBackup) {
-        IRegistry.a(IRegistry.BIOME, from.getId(), to.getKey_1_13().toLowerCase(), biomeBackup.get(to.getKey_1_13().toLowerCase()));
-    }
-
-
+    @SuppressWarnings("unchecked")
     @Override
     public void setGameRuleValue(World world, String name, Object value) {
         GameRule gameRule = GameRule.getByName(name);

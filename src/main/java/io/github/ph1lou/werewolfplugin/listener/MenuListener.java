@@ -401,12 +401,12 @@ public class MenuListener implements Listener {
                 }
 				else if(current.getType().equals(Material.POTION)) {
 
-                    if (current.getDurability() == 8201) {
+                    if (event.getSlot() == 10) {
                         if (event.getClick().isLeftClick()) {
                             game.getConfig().setStrengthRate(game.getConfig().getStrengthRate() + 10);
                         } else if (game.getConfig().getStrengthRate() - 10 >= 0)
                             game.getConfig().setStrengthRate(game.getConfig().getStrengthRate() - 10);
-                    } else if (current.getDurability() == 8227) {
+                    } else if (event.getSlot() == 24) {
                         if (event.getClick().isLeftClick()) {
                             game.getConfig().setResistanceRate(game.getConfig().getResistanceRate() + 2);
                         } else if (game.getConfig().getResistanceRate() - 2 >= 0)

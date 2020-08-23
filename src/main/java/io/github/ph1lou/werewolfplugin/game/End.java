@@ -39,8 +39,6 @@ public class End {
             return;
         }
 
-        if (game.getConfig().isTrollSV()) return;
-
         if (game.isState(StateLG.END)) return;
 
         List<Set<UUID>> teamsAngel = getAngeTeam();

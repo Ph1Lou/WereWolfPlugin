@@ -33,7 +33,7 @@ public class CommandSize implements Commands {
 
         Location location = world.getSpawnLocation();
 
-        if (!sender.hasPermission("a.use") && !sender.hasPermission("a.size.use") && !game.getHosts().contains(((Player) sender).getUniqueId())) {
+        if (!sender.hasPermission("a.size.use") && !game.getHosts().contains(((Player) sender).getUniqueId())) {
             sender.sendMessage(game.translate("werewolf.check.permission_denied"));
             return;
         }

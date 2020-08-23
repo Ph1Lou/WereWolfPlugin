@@ -20,7 +20,7 @@ public class CommandGeneration implements Commands {
 
         GameManager game = main.getCurrentGame();
 
-        if (!sender.hasPermission("a.use") && !sender.hasPermission("a.generation.use") && !game.getHosts().contains(((Player) sender).getUniqueId())) {
+        if (!sender.hasPermission("a.generation.use") && !game.getHosts().contains(((Player) sender).getUniqueId())) {
             sender.sendMessage(game.translate("werewolf.check.permission_denied"));
             return;
         }

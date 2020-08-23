@@ -28,7 +28,7 @@ public class CommandTP implements Commands {
 
         Player player = (Player) sender;
 
-        if (!sender.hasPermission("a.use") && !sender.hasPermission("a.gamemode.use") && !game.getModerators().contains(((Player) sender).getUniqueId()) && !game.getHosts().contains(((Player) sender).getUniqueId())) {
+        if (!sender.hasPermission("a.gamemode.use") && !game.getModerators().contains(((Player) sender).getUniqueId()) && !game.getHosts().contains(((Player) sender).getUniqueId())) {
             sender.sendMessage(game.translate("werewolf.check.permission_denied"));
             return;
         }

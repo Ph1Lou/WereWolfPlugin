@@ -25,6 +25,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 
 import java.io.File;
@@ -617,22 +618,25 @@ public class GameManager implements WereWolfAPI {
                 }
             }
         }
+        ScoreboardManager scoreboardManager = Bukkit.getScoreboardManager();
 
-        Scoreboard scoreboardModerator = Bukkit.getScoreboardManager().getNewScoreboard();
+        if (scoreboardManager == null) return;
+
+        Scoreboard scoreboardModerator = scoreboardManager.getNewScoreboard();
         Team hosts = scoreboardModerator.registerNewTeam("hostsSpectator");
-        hosts.setPrefix(this.translate("werewolf.commands.admin.host.tag"));
+        hosts.setPrefix(translate("werewolf.commands.admin.host.tag"));
         Team hostsWW = scoreboardModerator.registerNewTeam("hostsWW");
-        hostsWW.setPrefix(this.translate("werewolf.commands.admin.host.tag")+ChatColor.DARK_RED);
+        hostsWW.setPrefix(translate("werewolf.commands.admin.host.tag") + ChatColor.DARK_RED);
         Team moderators = scoreboardModerator.registerNewTeam("moderators");
-        moderators.setPrefix(this.translate("werewolf.commands.admin.moderator.tag"));
+        moderators.setPrefix(translate("werewolf.commands.admin.moderator.tag"));
         Team ww = scoreboardModerator.registerNewTeam("ww");
         ww.setPrefix(String.valueOf(ChatColor.DARK_RED));
 
         Scoreboard scoreboardSpectator = Bukkit.getScoreboardManager().getNewScoreboard();
         Team hostsSpectator = scoreboardSpectator.registerNewTeam("hostsSpectator");
-        hostsSpectator.setPrefix(this.translate("werewolf.commands.admin.host.tag"));
+        hostsSpectator.setPrefix(translate("werewolf.commands.admin.host.tag"));
         Team moderatorsSpectator = scoreboardSpectator.registerNewTeam("moderators");
-        moderatorsSpectator.setPrefix(this.translate("werewolf.commands.admin.moderator.tag"));
+        moderatorsSpectator.setPrefix(translate("werewolf.commands.admin.moderator.tag"));
 
 
         for(Player player:Bukkit.getOnlinePlayers()){

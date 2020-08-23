@@ -171,12 +171,6 @@ public class CycleListener implements Listener {
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
 
-            game.getConfig().getTimerValues().put(TimerLG.MODEL_DURATION, game.getConfig().getTimerValues().get(TimerLG.MODEL_DURATION) + 90);
-            game.getConfig().getTimerValues().put(TimerLG.LOVER_DURATION, game.getConfig().getTimerValues().get(TimerLG.LOVER_DURATION) + 90);
-            game.getConfig().getTimerValues().put(TimerLG.ANGEL_DURATION, game.getConfig().getTimerValues().get(TimerLG.ANGEL_DURATION) + 90);
-            game.getConfig().getTimerValues().put(TimerLG.WEREWOLF_LIST, game.getConfig().getTimerValues().get(TimerLG.WEREWOLF_LIST) + 90);
-
-
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (game.getConfig().isTrollSV() && game.getPlayersWW().containsKey(p.getUniqueId())) {
                     Sounds.PORTAL_TRIGGER.play(p);
