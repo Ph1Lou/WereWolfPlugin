@@ -167,11 +167,13 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
             klg.getRole().stolen(playerUUID);
             Bukkit.getPluginManager().callEvent(new StealEvent(killerUUID, playerUUID));
 
-            if(klg.getCursedLovers()!=null) return;
-            if(klg.getAmnesiacLoverUUID()!=null) return;
-            if(!klg.getLovers().isEmpty() && !game.getConfig().getConfigValues().get("werewolf.menu.global.polygamy")) return;
+            if (klg.getCursedLovers() != null || klg.getAmnesiacLoverUUID() != null) {
+                Bukkit.getConsoleSender().sendMessage("[WreWolfPlugin] Thief in special lover");
+            } else if (!klg.getLovers().isEmpty() && !game.getConfig().getConfigValues().get("werewolf.menu.global.polygamy")) {
+                Bukkit.getConsoleSender().sendMessage("[WreWolfPlugin] Thief in lover & no polygamy");
+            }
 
-            if(!klg.getLovers().isEmpty() || !plg.getLovers().isEmpty()){
+            if (!klg.getLovers().isEmpty() || !plg.getLovers().isEmpty()) {
 
                 if (!klg.getLovers().contains(playerUUID)) {
 

@@ -267,13 +267,14 @@ public class PlayerListener implements Listener {
 			if (game.getModerators().contains(uuid)) {
 				player.sendMessage(game.translate("werewolf.commands.admin.moderator.message"));
 				player.setGameMode(GameMode.SPECTATOR);
-				player.teleport(game.getWorld().getSpawnLocation());
+				Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> player.teleport(game.getWorld().getSpawnLocation()), 10);
 			} else if (game.getSpectatorMode() < 2) {
 				player.kickPlayer(game.translate("werewolf.check.spectator_disabled"));
 			} else {
 				player.setGameMode(GameMode.SPECTATOR);
 				player.sendMessage(game.translate("werewolf.check.already_begin"));
-				player.teleport(game.getWorld().getSpawnLocation());
+				Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> player.teleport(game.getWorld().getSpawnLocation()), 10);
+
 			}
 		}
 

@@ -211,6 +211,7 @@ public class GameManager implements WereWolfAPI {
                 player.setScoreboard(getPlayersWW().get(uuid).getScoreBoard());
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 0, false, false));
                 player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+
                 new UpdateChecker(main, 73113).getVersion(version -> {
 
                     if (main.getDescription().getVersion().equalsIgnoreCase(version)) {

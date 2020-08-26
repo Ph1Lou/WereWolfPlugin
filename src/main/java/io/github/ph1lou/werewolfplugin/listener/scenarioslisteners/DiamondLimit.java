@@ -43,7 +43,7 @@ public class DiamondLimit extends Scenarios {
             return;
         }
 
-        if (!VersionUtils.getVersionUtils().getItemInHand(event.getPlayer()).getType().equals(Material.DIAMOND_PICKAXE) && !event.getPlayer().getItemOnCursor().getType().equals(Material.IRON_PICKAXE)) {
+        if (!VersionUtils.getVersionUtils().getItemInHand(event.getPlayer()).getType().equals(Material.DIAMOND_PICKAXE) && !VersionUtils.getVersionUtils().getItemInHand(event.getPlayer()).getType().equals(Material.IRON_PICKAXE)) {
             return;
         }
         if (diamondPerPlayer.getOrDefault(playerName, 0) >= game.getConfig().getDiamondLimit()) {
