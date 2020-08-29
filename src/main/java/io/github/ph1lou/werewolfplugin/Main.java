@@ -1,13 +1,14 @@
 package io.github.ph1lou.werewolfplugin;
 
 
+import fr.minuskube.inv.InventoryManager;
 import io.github.ph1lou.werewolfapi.*;
 import io.github.ph1lou.werewolfapi.enumlg.Category;
 import io.github.ph1lou.werewolfapi.events.UpdateLanguageEvent;
 import io.github.ph1lou.werewolfplugin.commands.Admin;
 import io.github.ph1lou.werewolfplugin.commands.Command;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
-import io.github.ph1lou.werewolfplugin.listener.scenarioslisteners.*;
+import io.github.ph1lou.werewolfplugin.listeners.scenarioslisteners.*;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.*;
 import io.github.ph1lou.werewolfplugin.roles.villagers.*;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.*;
@@ -45,6 +46,12 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
     private final List<ConfigRegister> configsRegister = new ArrayList<>();
     private final List<TimerRegister> timersRegister = new ArrayList<>();
 
+    private InventoryManager invManager;
+
+    public InventoryManager getInvManager() {
+        return invManager;
+    }
+
     public GameManager getCurrentGame() {
         return currentGame;
     }
@@ -68,7 +75,6 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
         return this.listAddons;
     }
 
-
     @Override
     public void onEnable() {
         if (getConfig().getBoolean("multichat")) {
@@ -79,6 +85,8 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
         registerScenario();
         registerTimers();
         registerConfig();
+        this.invManager = new InventoryManager(this);
+        this.invManager.init();
         listAddons.add(this);
         Bukkit.getPluginManager().registerEvents(this, this);
         currentGame = new GameManager(this);

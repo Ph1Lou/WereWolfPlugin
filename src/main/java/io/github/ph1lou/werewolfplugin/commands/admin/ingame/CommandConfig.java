@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
+import io.github.ph1lou.werewolfplugin.guis.Config;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -30,6 +31,6 @@ public class CommandConfig implements Commands {
             return;
         }
 
-        game.getOption().toolBar((Player) sender);
+        Config.INVENTORY.open((Player) sender);
     }
 }

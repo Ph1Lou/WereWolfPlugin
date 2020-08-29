@@ -39,8 +39,6 @@ public class GameTask extends BukkitRunnable {
 		WorldBorder wb = world.getWorldBorder();
 		long time = world.getTime();
 		Bukkit.getPluginManager().callEvent(new UpdateEvent());
-		game.getOption().updateSelectionTimer();
-		game.getOption().updateSelectionBorder();
 		game.getScore().updateBoard();
 		game.getLoversManage().detectionAmnesiacLover();
 		game.getRoleManage().brotherLife();

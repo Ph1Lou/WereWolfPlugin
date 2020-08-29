@@ -11,7 +11,7 @@ import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.InvisibleState;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.listener.ScenariosLoader;
+import io.github.ph1lou.werewolfplugin.listeners.ScenariosLoader;
 import io.github.ph1lou.werewolfplugin.save.Config;
 import io.github.ph1lou.werewolfplugin.save.Stuff;
 import io.github.ph1lou.werewolfplugin.tasks.LobbyTask;
@@ -47,7 +47,6 @@ public class GameManager implements WereWolfAPI {
     private final LoversManagement loversManage = new LoversManagement(this);
     private RoleManagement roleManage;
     private DeathManagement deathManage;
-    private Option option;
     private final Config config = new Config();
     private End end;
     private Stuff stuff;
@@ -79,7 +78,6 @@ public class GameManager implements WereWolfAPI {
         stuff = new Stuff(main, this);
         config.getConfig(this, "saveCurrent");
         stuff.load("saveCurrent");
-        option = new Option(main);
         scenarios = new ScenariosLoader(main);
         Bukkit.getPluginManager().registerEvents(vote, main);
         setState(StateLG.LOBBY);
@@ -711,14 +709,6 @@ public class GameManager implements WereWolfAPI {
 
     public LoversManagement getLoversManage() {
         return loversManage;
-    }
-
-    public Option getOption() {
-        return option;
-    }
-
-    public void setOption(Option option) {
-        this.option = option;
     }
 
     public Events getEvents() {

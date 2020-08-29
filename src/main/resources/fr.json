@@ -498,9 +498,9 @@
         "spectator_mode": "§fMode Spectateur :",
         "open": "§fWhiteList §2ouverte",
         "close": "§fWhiteList §4fermée",
-        "disable": "§4Désactivé§r pour tous",
+        "disable": "§4Désactivé§f pour tous",
         "death_only": "§fPour les Morts §6uniquement",
-        "enable": "§2Activé§r pour tous"
+        "enable": "§2Activé§f pour tous"
       },
       "scenarios": {
         "command": "scenarios",
