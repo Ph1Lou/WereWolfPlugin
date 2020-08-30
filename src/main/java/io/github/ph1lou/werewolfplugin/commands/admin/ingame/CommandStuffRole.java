@@ -45,9 +45,7 @@ public class CommandStuffRole implements Commands {
 
         game.getStuffs().getStuffRoles().get(args[0]).clear();
         for (ItemStack i : ((Player) sender).getInventory().getContents()) {
-            if (i != null) {
-                game.getStuffs().getStuffRoles().get(args[0]).add(i);
-            }
+            game.getStuffs().getStuffRoles().get(args[0]).add(i);
         }
         sender.sendMessage(game.translate("werewolf.commands.admin.loot_role.perform"));
         ((Player) sender).getInventory().clear();

@@ -86,10 +86,12 @@
             <artifactId>commons-io</artifactId>
             <version>2.6</version>
         </dependency>
+
+
         <dependency>
-            <groupId>fr.minuskube.inv</groupId>
-            <artifactId>smart-invs</artifactId>
-            <version>1.2.7</version>
+            <groupId>com.github.Tanju42</groupId>
+            <artifactId>smart-invs-fork</artifactId>
+            <version>1.2.9</version>
         </dependency>
 
 

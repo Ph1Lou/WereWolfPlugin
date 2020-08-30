@@ -1,7 +1,6 @@
 package io.github.ph1lou.werewolfplugin.utils;
 
 import org.bukkit.Color;
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.banner.Pattern;
@@ -18,7 +17,7 @@ import java.util.List;
 
 public class ItemBuilder {
 
-    private ItemStack stack;
+    private final ItemStack stack;
 
     public ItemBuilder(Material mat) {
         stack = new ItemStack(mat);
@@ -65,18 +64,11 @@ public class ItemBuilder {
     public ItemBuilder setUnbreakable(boolean unbreakable) {
         ItemMeta meta = stack.getItemMeta();
         assert meta != null;
-        meta.setUnbreakable(unbreakable);
+        VersionUtils.getVersionUtils().setItemUnbreakable(meta, true);
         stack.setItemMeta(meta);
         return this;
     }
 
-    public ItemBuilder setBannerColor(DyeColor color) {
-        BannerMeta meta = (BannerMeta) stack.getItemMeta();
-        assert meta != null;
-        meta.setBaseColor(color);
-        setItemMeta(meta);
-        return this;
-    }
 
     public ItemBuilder addPattern(Pattern pattern) {
         BannerMeta meta = (BannerMeta) stack.getItemMeta();
@@ -95,6 +87,7 @@ public class ItemBuilder {
         SkullMeta meta = (SkullMeta) stack.getItemMeta();
         assert meta != null;
         VersionUtils.getVersionUtils().setSkullOwner(meta, offlinePlayer, owner);
+        setItemMeta(meta);
         return this;
     }
 
@@ -105,10 +98,6 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder setItemStack(ItemStack stack) {
-        this.stack = stack;
-        return this;
-    }
 
     public ItemBuilder setLore(List<String> lore) {
         ItemMeta meta = getItemMeta();

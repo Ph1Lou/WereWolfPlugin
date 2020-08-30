@@ -47,14 +47,14 @@ public class Borders implements InventoryProvider {
                 game.getConfig().setBorderMax(game.getConfig().getBorderMax() - 100);
             }
         }));
-        contents.set(0, 4, ClickableItem.of((new ItemBuilder(Material.GLASS).setDisplayName(game.translate("werewolf.menu.border.radius_border_max", config.getBorderMax())).build()), null));
+        contents.set(0, 4, ClickableItem.empty((new ItemBuilder(Material.GLASS).setDisplayName(game.translate("werewolf.menu.border.radius_border_max", config.getBorderMax())).build())));
         contents.set(0, 5, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "+", config.getBorderMax())).build()), e -> game.getConfig().setBorderMax(game.getConfig().getBorderMax() + 100)));
         contents.set(1, 3, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "-", config.getBorderMin())).build()), e -> {
             if (game.getConfig().getBorderMin() >= 100) {
                 game.getConfig().setBorderMin(game.getConfig().getBorderMin() - 100);
             }
         }));
-        contents.set(1, 4, ClickableItem.of((new ItemBuilder(Material.GLASS).setDisplayName(game.translate("werewolf.menu.border.radius_border_min", config.getBorderMin())).build()), null));
+        contents.set(1, 4, ClickableItem.empty((new ItemBuilder(Material.GLASS).setDisplayName(game.translate("werewolf.menu.border.radius_border_min", config.getBorderMin())).build())));
         contents.set(1, 5, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "+", config.getBorderMin())).build()), e -> game.getConfig().setBorderMin(game.getConfig().getBorderMin() + 100)));
 
 

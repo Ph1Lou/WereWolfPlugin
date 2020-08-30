@@ -145,6 +145,7 @@ public class Roles implements InventoryProvider {
                     contents.set(i / 9, i % 9, ClickableItem.of((new ItemBuilder(UniversalMaterial.GREEN_TERRACOTTA.getStack(config.getRoleCount().get(key))).setLore(lore).setDisplayName(roleRegister.getName()).build()), e -> {
 
                         if (e.isShiftClick()) {
+
                             player.setGameMode(GameMode.CREATIVE);
                             player.getInventory().clear();
 
@@ -167,7 +168,21 @@ public class Roles implements InventoryProvider {
                     }));
                 } else
                     contents.set(i / 9, i % 9, ClickableItem.of((new ItemBuilder(UniversalMaterial.RED_TERRACOTTA.getStack()).setLore(lore).setDisplayName(roleRegister.getName()).build()), e -> {
-                        if (e.isLeftClick()) {
+
+                        if (e.isShiftClick()) {
+                            player.setGameMode(GameMode.CREATIVE);
+                            player.getInventory().clear();
+
+                            for (ItemStack item : game.getStuffs().getStuffRoles().get(key)) {
+                                if (item != null) {
+                                    player.getInventory().addItem(item);
+                                }
+                            }
+                            TextComponent msg = new TextComponent(game.translate("werewolf.commands.admin.loot_role.valid"));
+                            msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/a stuffRole " + key));
+                            player.spigot().sendMessage(msg);
+                            player.closeInventory();
+                        } else if (e.isLeftClick()) {
                             selectPlus(game, roleRegister.getKey());
                         }
                     }));

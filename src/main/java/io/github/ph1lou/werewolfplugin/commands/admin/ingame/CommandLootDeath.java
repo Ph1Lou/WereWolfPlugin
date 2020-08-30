@@ -42,9 +42,7 @@ public class CommandLootDeath implements Commands {
         }
         game.getStuffs().clearDeathLoot();
         for (ItemStack i : ((Player) sender).getInventory().getContents()) {
-            if (i != null) {
-                game.getStuffs().addDeathLoot(i);
-            }
+            game.getStuffs().addDeathLoot(i);
         }
         sender.sendMessage(game.translate("werewolf.commands.admin.loot_death.perform"));
         ((Player) sender).getInventory().clear();
