@@ -30,7 +30,7 @@ public class Assassin extends RolesNeutral {
     @EventHandler
     public void onNight(NightEvent event) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -47,7 +47,7 @@ public class Assassin extends RolesNeutral {
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 

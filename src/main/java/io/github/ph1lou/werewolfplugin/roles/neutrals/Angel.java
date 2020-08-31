@@ -92,7 +92,7 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
     @Override
     public void stolen(@NotNull UUID uuid) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -150,7 +150,7 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
     @EventHandler
     public void onAutoAngel(AutoAngelEvent event){
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         PlayerWW plg = game.getPlayersWW().get(getPlayerUUID());
         Player player = Bukkit.getPlayer(getPlayerUUID());
@@ -213,7 +213,7 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         UUID uuid = event.getUuid();
 
@@ -244,7 +244,7 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
     @EventHandler
     public void onTargetIsStolen(StealEvent event) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         UUID newUUID = event.getNewUUID();
         UUID oldUUID = event.getOldUUID();
@@ -271,7 +271,7 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
     @EventHandler
     public void onActionBarRequest(ActionBarEvent event) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         if (!getPlayerUUID().equals(event.getPlayerUUID())) return;
 

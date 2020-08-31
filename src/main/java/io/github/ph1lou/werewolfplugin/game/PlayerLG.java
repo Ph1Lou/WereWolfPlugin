@@ -18,7 +18,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 
 public class PlayerLG implements Listener, PlayerWW {
@@ -54,8 +57,8 @@ public class PlayerLG implements Listener, PlayerWW {
         this.playerUUID = player.getUniqueId();
         this.game = game;
         this.role = new Villager(main, game, this.playerUUID);
-        this.name = player.getName();
-        this.board = Objects.requireNonNull(Bukkit.getScoreboardManager()).getNewScoreboard();
+		this.name = player.getName();
+		this.board = Bukkit.getScoreboardManager().getNewScoreboard();
     }
 
 	@EventHandler(priority = EventPriority.LOWEST)

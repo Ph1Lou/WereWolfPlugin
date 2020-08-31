@@ -50,7 +50,7 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
             return;
@@ -88,7 +88,7 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
     @EventHandler
     private void onPlayerDamage(EntityDamageEvent event) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         if (!(event.getEntity() instanceof Player)) return;
 

@@ -47,7 +47,7 @@ public class Protector extends RolesWithLimitedSelectionDuration implements Affe
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
             return;

@@ -50,7 +50,7 @@ public class Comedian extends RolesWithLimitedSelectionDuration implements Potio
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 

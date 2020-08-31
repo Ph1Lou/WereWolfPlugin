@@ -15,6 +15,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("UnusedReturnValue")
 public class ItemBuilder {
 
     private final ItemStack stack;
@@ -25,10 +26,6 @@ public class ItemBuilder {
 
     public ItemBuilder(ItemStack itemStack) {
         stack = itemStack;
-    }
-
-    public ItemBuilder(Material mat, short sh) {
-        stack = new ItemStack(mat, 1, sh);
     }
 
     public ItemMeta getItemMeta() {

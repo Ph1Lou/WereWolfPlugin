@@ -76,7 +76,7 @@ public class Witch extends RolesVillage implements AffectedPlayers, Power {
 
         if (!hasPower()) return;
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         PlayerWW plg = game.getPlayersWW().get(event.getUuid());
         Player player = Bukkit.getPlayer(getPlayerUUID());

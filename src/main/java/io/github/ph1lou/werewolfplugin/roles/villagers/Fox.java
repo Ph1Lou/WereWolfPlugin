@@ -91,7 +91,7 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
             return;
         }
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -126,7 +126,7 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
     @EventHandler
     public void onUpdate(UpdateEvent event) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 

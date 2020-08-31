@@ -38,10 +38,10 @@ public class Config implements InventoryProvider {
 
         contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.PLAYER_HEAD.getStack()).setDisplayName(game.translate("werewolf.menu.whitelist.name")).build()), e -> WhiteList.INVENTORY.open(player)));
         contents.set(1, 4, ClickableItem.of((new ItemBuilder(Material.BEACON).setDisplayName(game.translate("werewolf.menu.roles.name")).build()), e -> Roles.INVENTORY.open(player)));
-        contents.set(2, 4, ClickableItem.of((new ItemBuilder(Material.ANVIL).setDisplayName(game.translate("werewolf.menu.timers.name")).build()), e -> Timers.INVENTORY.open(player)));
+        contents.set(2, 4, ClickableItem.of((new ItemBuilder(UniversalMaterial.ANVIL.getType()).setDisplayName(game.translate("werewolf.menu.timers.name")).build()), e -> Timers.INVENTORY.open(player)));
         contents.set(3, 2, ClickableItem.of((new ItemBuilder(Material.PUMPKIN).setDisplayName(game.translate("werewolf.menu.scenarios.name")).build()), e -> Scenarios.INVENTORY.open(player)));
-        contents.set(3, 3, ClickableItem.of((new ItemBuilder(Material.MAP).setDisplayName(game.translate("werewolf.menu.global.name")).build()), e -> GlobalConfigs.INVENTORY.open(player)));
-        contents.set(3, 4, ClickableItem.of((new ItemBuilder(Material.CHEST).setDisplayName(game.translate("werewolf.menu.stuff.name")).build()), e -> Stuffs.INVENTORY.open(player)));
+        contents.set(3, 3, ClickableItem.of((new ItemBuilder(UniversalMaterial.MAP.getType()).setDisplayName(game.translate("werewolf.menu.global.name")).build()), e -> GlobalConfigs.INVENTORY.open(player)));
+        contents.set(3, 4, ClickableItem.of((new ItemBuilder(UniversalMaterial.CHEST.getType()).setDisplayName(game.translate("werewolf.menu.stuff.name")).build()), e -> Stuffs.INVENTORY.open(player)));
         contents.set(3, 5, ClickableItem.of((new ItemBuilder(Material.GLASS).setDisplayName(game.translate("werewolf.menu.border.name")).build()), e -> Borders.INVENTORY.open(player)));
         contents.set(3, 6, ClickableItem.of((new ItemBuilder(UniversalMaterial.ENCHANTING_TABLE.getType()).setDisplayName(game.translate("werewolf.menu.enchantments.name")).build()), e -> Enchantments.INVENTORY.open(player)));
         contents.set(5, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.WHITE_BANNER.getStack()).setDisplayName(game.translate("werewolf.menu.languages.name")).addPattern(new Pattern(DyeColor.WHITE, PatternType.BASE)).addPattern(new Pattern(DyeColor.CYAN, PatternType.STRAIGHT_CROSS)).build()), e -> Languages.INVENTORY.open(player)));

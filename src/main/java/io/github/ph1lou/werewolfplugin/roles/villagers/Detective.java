@@ -53,7 +53,7 @@ public class Detective extends RolesWithLimitedSelectionDuration implements Affe
         if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
             return;
         }
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
         setPower(true);

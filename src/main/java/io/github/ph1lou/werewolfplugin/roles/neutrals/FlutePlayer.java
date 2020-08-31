@@ -36,7 +36,7 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
 
         if (!hasPower()) return;
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -82,7 +82,7 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
             return;
         }
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
         setPower(true);
@@ -174,7 +174,7 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
     @Override
     public void stolen(@NotNull UUID uuid) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 

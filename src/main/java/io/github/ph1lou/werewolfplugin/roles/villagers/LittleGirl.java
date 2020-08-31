@@ -38,7 +38,7 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
     @EventHandler
     public void onNight(NightEvent event) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
             return;
@@ -56,7 +56,7 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
             return;
@@ -98,7 +98,7 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
     @EventHandler
     public void onDayWillCome(DayWillComeEvent event) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
             return;
@@ -117,7 +117,7 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
     @EventHandler
     public void onUpdate(UpdateEvent event) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 

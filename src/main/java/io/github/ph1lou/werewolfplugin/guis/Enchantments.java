@@ -49,46 +49,54 @@ public class Enchantments implements InventoryProvider {
                 game.getConfig().setLimitProtectionIron(game.getConfig().getLimitProtectionIron() + 1);
             } else if (game.getConfig().getLimitProtectionIron() > 0)
                 game.getConfig().setLimitProtectionIron(game.getConfig().getLimitProtectionIron() - 1);
+            Enchantments.INVENTORY.open(player);
         }));
         contents.set(0, 4, ClickableItem.of((new ItemBuilder(Material.DIAMOND_CHESTPLATE).setDisplayName(game.translate("werewolf.menu.enchantments.diamond_protection", game.getConfig().getLimitProtectionDiamond()))).setLore(lore).build(), e -> {
             if (e.isLeftClick()) {
                 game.getConfig().setLimitProtectionDiamond(game.getConfig().getLimitProtectionDiamond() + 1);
             } else if (game.getConfig().getLimitProtectionDiamond() > 0)
                 game.getConfig().setLimitProtectionDiamond(game.getConfig().getLimitProtectionDiamond() - 1);
+            Enchantments.INVENTORY.open(player);
         }));
         contents.set(0, 6, ClickableItem.of((new ItemBuilder(Material.BOW).setDisplayName(game.translate("werewolf.menu.enchantments.power", game.getConfig().getLimitPowerBow()))).setLore(lore).build(), e -> {
             if (e.isLeftClick()) {
                 game.getConfig().setLimitPowerBow(game.getConfig().getLimitPowerBow() + 1);
             } else if (game.getConfig().getLimitPowerBow() > 0)
                 game.getConfig().setLimitPowerBow(game.getConfig().getLimitPowerBow() - 1);
+            Enchantments.INVENTORY.open(player);
         }));
         contents.set(0, 8, ClickableItem.of((new ItemBuilder(Material.STICK).setDisplayName(Arrays.asList(game.translate("werewolf.menu.enchantments.knock_back_disable"), game.translate("werewolf.menu.enchantments.knock_back_invisible"), game.translate("werewolf.menu.enchantments.knock_back_enable")).get(game.getConfig().getLimitKnockBack())).setLore(lore)).build(), e -> {
             if (e.isLeftClick()) {
                 game.getConfig().setLimitKnockBack((game.getConfig().getLimitKnockBack() + 1) % 3);
             } else game.getConfig().setLimitKnockBack((game.getConfig().getLimitKnockBack() + 2) % 3);
+            Enchantments.INVENTORY.open(player);
         }));
         contents.set(1, 2, ClickableItem.of((new ItemBuilder(Material.IRON_SWORD).setDisplayName(game.translate("werewolf.menu.enchantments.sharpness_iron", game.getConfig().getLimitSharpnessIron()))).setLore(lore).build(), e -> {
             if (e.isLeftClick()) {
                 game.getConfig().setLimitSharpnessIron(game.getConfig().getLimitSharpnessIron() + 1);
             } else if (game.getConfig().getLimitSharpnessIron() > 0)
                 game.getConfig().setLimitSharpnessIron(game.getConfig().getLimitSharpnessIron() - 1);
+            Enchantments.INVENTORY.open(player);
         }));
         contents.set(1, 4, ClickableItem.of((new ItemBuilder(Material.DIAMOND_SWORD).setDisplayName(game.translate("werewolf.menu.enchantments.sharpness_diamond", game.getConfig().getLimitSharpnessDiamond()))).setLore(lore).build(), e -> {
             if (e.isLeftClick()) {
                 game.getConfig().setLimitSharpnessDiamond(game.getConfig().getLimitSharpnessDiamond() + 1);
             } else if (game.getConfig().getLimitSharpnessDiamond() > 0)
                 game.getConfig().setLimitSharpnessDiamond(game.getConfig().getLimitSharpnessDiamond() - 1);
+            Enchantments.INVENTORY.open(player);
         }));
         contents.set(1, 6, ClickableItem.of((new ItemBuilder(Material.ARROW).setDisplayName(Arrays.asList(game.translate("werewolf.menu.enchantments.punch_disable"), game.translate("werewolf.menu.enchantments.punch_cupid"), game.translate("werewolf.menu.enchantments.punch_enable")).get(game.getConfig().getLimitPunch()))).setLore(lore).build(), e -> {
             if (e.isLeftClick()) {
                 game.getConfig().setLimitPunch((game.getConfig().getLimitPunch() + 1) % 3);
             } else game.getConfig().setLimitPunch((game.getConfig().getLimitPunch() + 2) % 3);
+            Enchantments.INVENTORY.open(player);
         }));
         contents.set(1, 8, ClickableItem.of((new ItemBuilder(UniversalMaterial.OAK_BOAT.getType()).setDisplayName(game.translate("werewolf.menu.enchantments.depth_rider", game.getConfig().getLimitDepthStrider()))).setLore(lore).build(), e -> {
             if (e.isLeftClick()) {
                 game.getConfig().setLimitDepthStrider(game.getConfig().getLimitDepthStrider() + 1);
             } else if (game.getConfig().getLimitDepthStrider() > 0)
                 game.getConfig().setLimitDepthStrider(game.getConfig().getLimitDepthStrider() - 1);
+            Enchantments.INVENTORY.open(player);
         }));
 
     }

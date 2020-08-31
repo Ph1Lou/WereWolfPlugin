@@ -30,7 +30,7 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
     @EventHandler
     public void onNight(NightEvent event) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -49,7 +49,7 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -66,7 +66,7 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         UUID uuid = event.getUuid();
         PlayerWW target = game.getPlayersWW().get(uuid);

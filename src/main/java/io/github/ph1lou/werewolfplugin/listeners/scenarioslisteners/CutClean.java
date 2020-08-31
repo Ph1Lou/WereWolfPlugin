@@ -16,7 +16,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class CutClean extends Scenarios {
 
@@ -96,27 +95,27 @@ public class CutClean extends Scenarios {
             switch (material) {
                 case RAW_BEEF:
                     loots.remove(i);
-                    loots.add(new ItemStack(Objects.requireNonNull(UniversalMaterial.COOKED_BEEF.getType())));
+                    loots.add(new ItemStack(UniversalMaterial.COOKED_BEEF.getType()));
                     break;
 
                 case RAW_PORK:
                     loots.remove(i);
-                    loots.add(new ItemStack(Objects.requireNonNull(UniversalMaterial.COOKED_PORKCHOP.getType())));
+                    loots.add(new ItemStack(UniversalMaterial.COOKED_PORKCHOP.getType()));
                     break;
 
                 case RAW_CHICKEN:
                     loots.remove(i);
-                    loots.add(new ItemStack(Objects.requireNonNull(UniversalMaterial.COOKED_CHICKEN.getType())));
+                    loots.add(new ItemStack(UniversalMaterial.COOKED_CHICKEN.getType()));
                     break;
 
                 case RAW_MUTTON:
                     loots.remove(i);
-                    loots.add(new ItemStack(Objects.requireNonNull(UniversalMaterial.COOKED_MUTTON.getType())));
+                    loots.add(new ItemStack(UniversalMaterial.COOKED_MUTTON.getType()));
                     break;
 
                 case RAW_RABBIT:
                     loots.remove(i);
-                    loots.add(new ItemStack(Objects.requireNonNull(UniversalMaterial.COOKED_RABBIT.getType())));
+                    loots.add(new ItemStack(UniversalMaterial.COOKED_RABBIT.getType()));
                     break;
                 default:
 

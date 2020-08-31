@@ -79,7 +79,6 @@ public class GameManager implements WereWolfAPI {
         config.getConfig(this, "saveCurrent");
         stuff.load("saveCurrent");
         scenarios = new ScenariosLoader(main);
-        Bukkit.getPluginManager().registerEvents(vote, main);
         setState(StateLG.LOBBY);
         setDay(Day.DAY);
         Bukkit.getPluginManager().callEvent(new LoadEvent(this));

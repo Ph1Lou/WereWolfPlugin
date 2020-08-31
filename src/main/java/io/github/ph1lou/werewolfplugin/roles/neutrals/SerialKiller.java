@@ -54,7 +54,7 @@ public class SerialKiller extends RolesNeutral implements Power {
     @Override
     public void stolen(@NotNull UUID uuid) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -113,7 +113,7 @@ public class SerialKiller extends RolesNeutral implements Power {
 
         if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) return;
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -135,7 +135,7 @@ public class SerialKiller extends RolesNeutral implements Power {
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         UUID uuid = event.getUuid();
         Player killer = Bukkit.getPlayer(getPlayerUUID());

@@ -76,7 +76,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     @EventHandler
     public void onNight(NightEvent event) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -96,7 +96,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -116,7 +116,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     @EventHandler
     public void onAutoModel(AutoModelEvent event) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         UUID modelUUID = game.autoSelect(getPlayerUUID());
         PlayerWW model = game.getPlayersWW().get(modelUUID);
@@ -151,7 +151,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     @Override
     public void stolen(@NotNull UUID uuid) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -226,7 +226,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         UUID uuid = event.getUuid();
         Player player = Bukkit.getPlayer(getPlayerUUID());
@@ -259,7 +259,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     @EventHandler
     public void onTargetIsStolen(StealEvent event) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         UUID newUUID = event.getNewUUID();
         UUID oldUUID = event.getOldUUID();

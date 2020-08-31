@@ -70,7 +70,7 @@ public class Citizen extends RolesVillage implements LimitedUse, AffectedPlayers
     @EventHandler
     public void onVoteEnd(VoteEndEvent event) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 

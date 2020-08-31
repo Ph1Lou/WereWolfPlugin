@@ -58,7 +58,6 @@ public class BiomeMapping {
         modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
     }
 
-    @SuppressWarnings("unused")
     public enum Biome {
         OCEAN(0, "ocean", "BiomeOcean"),
         PLAINS(1, "plains", "BiomePlains"),

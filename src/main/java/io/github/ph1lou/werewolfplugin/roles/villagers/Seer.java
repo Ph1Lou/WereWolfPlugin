@@ -62,7 +62,7 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
             return;
         }
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         setPower(true);
         dayNumber = event.getNumber();

@@ -70,7 +70,7 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
     @Override
     public void stolen(@NotNull UUID uuid) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 

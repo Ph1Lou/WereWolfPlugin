@@ -71,7 +71,7 @@ public class Elder extends RolesVillage implements Power {
 
         if (!hasPower()) return;
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 

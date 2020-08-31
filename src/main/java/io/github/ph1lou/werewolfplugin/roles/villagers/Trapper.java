@@ -61,7 +61,7 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
             return;
@@ -90,7 +90,7 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
     @EventHandler
     public void onActionBarRequest(ActionBarEvent event) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         if (!getPlayerUUID().equals(event.getPlayerUUID())) return;
 

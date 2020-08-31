@@ -78,7 +78,7 @@ public class InfectFatherOfTheWolves extends RolesWereWolf implements AffectedPl
 
         if (!hasPower()) return;
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         PlayerWW plg = game.getPlayersWW().get(event.getUuid());
         UUID killerUUID = plg.getLastKiller();

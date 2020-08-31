@@ -40,7 +40,7 @@ public class Sister extends RolesVillage {
     @EventHandler
     public void onUpdate(UpdateEvent event) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         Player sister1 = Bukkit.getPlayer(getPlayerUUID());
 
@@ -91,7 +91,7 @@ public class Sister extends RolesVillage {
     @EventHandler
     public void onSisterDeath(FinalDeathEvent event) {
 
-        if (getPlayerUUID() == null) return;
+        getPlayerUUID();
 
         UUID uuid = event.getUuid();
         PlayerWW plg = game.getPlayersWW().get(uuid);

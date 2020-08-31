@@ -31,13 +31,12 @@ public class Timers implements InventoryProvider {
             .build();
 
 
-    private String key = null;
+    private String key = "werewolf.menu.timers.invulnerability";
 
     @Override
     public void init(Player player, InventoryContents contents) {
         Main main = JavaPlugin.getPlugin(Main.class);
         GameManager game = main.getCurrentGame();
-        key = main.getRegisterTimers().get(0).getKey();
         contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType()).setDisplayName(game.translate("werewolf.menu.return")).build()), e -> Config.INVENTORY.open(player)));
     }
 
@@ -50,12 +49,30 @@ public class Timers implements InventoryProvider {
 
         String c = game.getScore().conversion(config.getTimerValues().get(key));
 
-        contents.set(0, 1, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "-10m", c)).build()), e -> selectMinusTimer(game, this.key, 600)));
-        contents.set(0, 2, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "-1m", c)).build()), e -> selectMinusTimer(game, this.key, 60)));
-        contents.set(0, 3, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "-10s", c)).build()), e -> selectMinusTimer(game, this.key, 10)));
-        contents.set(0, 5, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "+10s", c)).build()), e -> selectPlusTimer(game, this.key, 10)));
-        contents.set(0, 6, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "+1m", c)).build()), e -> selectPlusTimer(game, this.key, 60)));
-        contents.set(0, 7, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "+10m", c)).build()), e -> selectPlusTimer(game, this.key, 600)));
+        contents.set(0, 1, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "-10m", c)).build()), e -> {
+            selectMinusTimer(game, this.key, 600);
+            Timers.INVENTORY.open(player);
+        }));
+        contents.set(0, 2, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "-1m", c)).build()), e -> {
+            selectMinusTimer(game, this.key, 60);
+            Timers.INVENTORY.open(player);
+        }));
+        contents.set(0, 3, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "-10s", c)).build()), e -> {
+            selectMinusTimer(game, this.key, 10);
+            Timers.INVENTORY.open(player);
+        }));
+        contents.set(0, 5, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "+10s", c)).build()), e -> {
+            selectPlusTimer(game, this.key, 10);
+            Timers.INVENTORY.open(player);
+        }));
+        contents.set(0, 6, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "+1m", c)).build()), e -> {
+            selectPlusTimer(game, this.key, 60);
+            Timers.INVENTORY.open(player);
+        }));
+        contents.set(0, 7, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "+10m", c)).build()), e -> {
+            selectPlusTimer(game, this.key, 600);
+            Timers.INVENTORY.open(player);
+        }));
 
         int i = 0;
 
