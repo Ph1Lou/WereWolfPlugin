@@ -148,7 +148,7 @@
       "chatty_seer": {
         "display": "Voyante Bavarde",
         "description":   "§6LOUP-GAROU §7➽§9 Vous êtes §1Voyante Bavarde§9. Votre objectif est d’éliminer les Loups-Garous. \nVous obtenez 4 obsidiennes et 4 bibliothèques. Le Jour, Vous pouvez connaître le camp d'un joueur avec §b/ww voir§9. \nCependant si c'est un Villageois, vous perdrez 3 coeurs jusqu'au matin. \nLe camp sera affiché dans le chat global.",
-        "see_perform": "[§eLG UHC§r] Une Voyante Bavarde vient d'espionner un membre du camp §b%s"
+        "see_perform": "[§eLG UHC§r] Une Voyante Bavarde vient d'espionner un membre du camp des §b%s"
       },
       "infect_father_of_the_wolves": {
         "display": "Infect Père des Loups",
@@ -465,10 +465,12 @@
       "left": "§fClique-§bGauche§f >> +",
       "right": "§fClique-§bDroit§f >> -",
       "shift": "§bShift§f-Clique >> Stuff",
+
       "advanced_tool": {
         "name": "Configuration §bAvancée",
-        "troll_on": "Troll SV §2Activé",
-        "troll_off": "Troll SV §4Désactivé",
+        "troll_on": "Troll §2Activé",
+        "troll_off": "Troll §4Désactivé",
+        "troll_set": "§bShift§f-Clique pour configurer",
         "resistance": "Resistance §b%d%%",
         "succubus": "Champ d'action du Succube §b%s",
         "fox_smell_number": "Nombre de Flair du Renard §b%d",

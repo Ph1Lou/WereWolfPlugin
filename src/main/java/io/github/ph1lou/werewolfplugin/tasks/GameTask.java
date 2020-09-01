@@ -60,9 +60,6 @@ public class GameTask extends BukkitRunnable {
 			if (game.getConfig().isTrollSV()) {
 				Bukkit.getPluginManager().callEvent(new TrollEvent());
 			} else {
-				for (Player p : Bukkit.getOnlinePlayers()) {
-					Sounds.EXPLODE.play(p);
-				}
 				game.getRoleManage().repartitionRolesLG();
 			}
 		}
@@ -130,6 +127,7 @@ public class GameTask extends BukkitRunnable {
 		world.setTime((long) (time + 20 * (600f / game.getConfig().getTimerValues().get("werewolf.menu.timers.day_duration") - 1)));
 
 		game.getScore().addTimer();
+
 	}
 
 }

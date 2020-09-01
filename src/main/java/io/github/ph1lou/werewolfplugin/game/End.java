@@ -36,6 +36,8 @@ public class End {
 
     public void check_victory() {
 
+        if (game.getConfig().isTrollSV()) return;
+
         int player = game.getScore().getPlayerSize();
 
         if (!game.getCursedLoversRange().isEmpty()) {

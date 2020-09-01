@@ -27,9 +27,7 @@ public class CommandStart implements Commands {
     @Override
     public void execute(CommandSender sender, String[] args) {
 
-
         GameManager game = main.getCurrentGame();
-
 
         if (!sender.hasPermission("a.start.use") && !game.getHosts().contains(((Player) sender).getUniqueId())) {
             sender.sendMessage(game.translate("werewolf.check.permission_denied"));

@@ -126,13 +126,13 @@ public class TransportationTask extends BukkitRunnable {
                 VersionUtils.getVersionUtils().sendTitle(p, game.translate("werewolf.announcement.start.top_title"), game.translate("werewolf.announcement.start.bot_title"), 20, 20, 20);
                 Sounds.NOTE_BASS.play(p);
             }
-            world.setTime(0);
 
+            world.setTime(23000);
             game.updateCompass();
             game.setState(StateLG.START);
             GameTask start = new GameTask(game);
             start.runTaskTimer(main, 0, 5);
-            Bukkit.getPluginManager().callEvent(new DayEvent(1));
+            Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> Bukkit.getPluginManager().callEvent(new DayEvent(1)), 40);
             cancel();
         } else if (i % 5 == 0) {
             for (Player p : Bukkit.getOnlinePlayers()) {

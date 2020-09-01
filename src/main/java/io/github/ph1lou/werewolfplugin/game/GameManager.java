@@ -41,6 +41,7 @@ public class GameManager implements WereWolfAPI {
     private final Map<UUID, PlayerWW> playerLG = new HashMap<>();
     private StateLG state;
     private Day dayState;
+    private String trollKey = "werewolf.role.villager.display";
     private final ScoreBoard score = new ScoreBoard(this);
     private final Vote vote = new Vote(this);
     private final Events events = new Events(this);
@@ -662,8 +663,6 @@ public class GameManager implements WereWolfAPI {
         }
 
 
-
-
         for(Player player:Bukkit.getOnlinePlayers()){
             if(getModerators().contains(player.getUniqueId())){
                 player.setScoreboard(scoreboardModerator);
@@ -725,5 +724,13 @@ public class GameManager implements WereWolfAPI {
 
     public Map<UUID, FastBoard> getBoards() {
         return boards;
+    }
+
+    public String getTrollKey() {
+        return trollKey;
+    }
+
+    public void setTrollKey(String trollKey) {
+        this.trollKey = trollKey;
     }
 }

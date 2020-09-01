@@ -1,11 +1,14 @@
 package io.github.ph1lou.werewolfplugin.listeners;
 
+import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.RoleRegister;
 import io.github.ph1lou.werewolfapi.ScoreAPI;
 import io.github.ph1lou.werewolfapi.enumlg.Day;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfapi.enumlg.VoteStatus;
 import io.github.ph1lou.werewolfapi.events.*;
+import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
@@ -13,7 +16,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.potion.PotionEffect;
+
+import java.lang.reflect.InvocationTargetException;
 
 public class CycleListener implements Listener {
 
@@ -164,20 +171,44 @@ public class CycleListener implements Listener {
     @EventHandler
     public void onTrollSV(TrollEvent event) {
 
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            if (game.getPlayersWW().containsKey(p.getUniqueId())) {
-                p.sendMessage(game.translate("werewolf.role.villager.description"));
-                Sounds.EXPLODE.play(p);
+        for (RoleRegister roleRegister : main.getRegisterRoles()) {
+
+            if (roleRegister.getKey().equals(game.getTrollKey())) {
+
+                for (PlayerWW playerWW : game.getPlayersWW().values()) {
+                    try {
+                        Roles role = (Roles) roleRegister.getConstructors().newInstance(main, game, playerWW.getRole().getPlayerUUID());
+                        Bukkit.getPluginManager().registerEvents((Listener) role, main);
+                        playerWW.setRole(role);
+
+                    } catch (InstantiationException | InvocationTargetException | IllegalAccessException exception) {
+                        exception.printStackTrace();
+                    }
+                }
             }
         }
 
+        for (PlayerWW playerWW : game.getPlayersWW().values()) {
+            try {
+                playerWW.getRole().recoverPower();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
 
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (game.getConfig().isTrollSV() && game.getPlayersWW().containsKey(p.getUniqueId())) {
                     Sounds.PORTAL_TRIGGER.play(p);
+                    for (PotionEffect po : p.getActivePotionEffects()) {
+                        p.removePotionEffect(po.getType());
+                    }
+                    VersionUtils.getVersionUtils().setPlayerMaxHealth(p, 20);
                     p.sendMessage(game.translate("werewolf.announcement.troll"));
+                    PlayerWW playerWW = game.getPlayersWW().get(p.getUniqueId());
+                    HandlerList.unregisterAll((Listener) playerWW.getRole());
+                    playerWW.setKit(false);
                 }
             }
             game.getConfig().setTrollSV(false);

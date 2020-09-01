@@ -6,6 +6,7 @@ import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
@@ -111,11 +112,18 @@ public class AdvancedConfig implements InventoryProvider {
                 config.setGoldenAppleParticles((config.getGoldenAppleParticles() + 2) % 3);
             AdvancedConfig.INVENTORY.open(player);
         }));
-        contents.set(2, 2, ClickableItem.of((new ItemBuilder(Material.BREAD).setDisplayName(game.translate(config.isTrollSV() ? "werewolf.menu.advanced_tool.troll_on" : "werewolf.menu.advanced_tool.troll_off")).build()), e -> {
-            if (config.getTimerValues().get("werewolf.menu.timers.role_duration") >= 0) {
-                config.setTrollSV(!config.isTrollSV());
+        contents.set(2, 2, ClickableItem.of((new ItemBuilder(Material.BREAD).setDisplayName(game.translate(config.isTrollSV() ? "werewolf.menu.advanced_tool.troll_on" : "werewolf.menu.advanced_tool.troll_off")).setLore(Arrays.asList(game.translate(game.getTrollKey()), game.translate("werewolf.menu.advanced_tool.troll_set"))).build()), e -> {
+
+            if (!game.isState(StateLG.GAME)) {
+                if (e.isShiftClick()) {
+                    TrollChoice.INVENTORY.open(player);
+                } else {
+                    config.setTrollSV(!config.isTrollSV());
+                    AdvancedConfig.INVENTORY.open(player);
+                }
             }
-            AdvancedConfig.INVENTORY.open(player);
+
+
         }));
         contents.set(2, 4, ClickableItem.of((new ItemBuilder(UniversalMaterial.ORANGE_WOOL.getStack()).setDisplayName(game.translate("werewolf.menu.advanced_tool.fox", config.getDistanceFox())).setLore(lore).build()), e -> {
 
