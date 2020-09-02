@@ -488,11 +488,15 @@
         "fox": "Champ d'action du Renard §b%d",
         "bear_trainer": "Champ d'action du Montreur d'Ours §b%d"
       },
+      "troll": "Configuration §bTroll",
       "roles": {
         "command_1": "role",
         "command_2": "compo",
-        "name":"Configuration §bRôles",
-        "zero": "Tout mettre à zéro"
+        "name": "Configuration §bRôles",
+        "zero": "Tout mettre à zéro",
+        "previous": "Précédent §b%d §r»§b %d ",
+        "next": "Suivant §b%d §r»§b %d",
+        "current": "Page §b%d§r/§b%d"
       },
       "whitelist": {
         "name": "Configuration §bWhiteList",
