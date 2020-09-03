@@ -93,7 +93,7 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
             setWorld();
             getCurrentGame().init();
-            getCurrentGame().createMap();
+            getCurrentGame().getMapManager().createMap();
             getCommand("a").setExecutor(new Admin(this));
         }, 60);
     }

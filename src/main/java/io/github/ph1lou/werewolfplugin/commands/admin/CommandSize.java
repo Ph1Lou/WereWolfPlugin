@@ -24,16 +24,16 @@ public class CommandSize implements Commands {
     public void execute(CommandSender sender, String[] args) {
 
         GameManager game = main.getCurrentGame();
-        World world = game.getWorld();
+        World world = game.getMapManager().getWorld();
 
-        if(world==null){
-            game.createMap();
-            world=game.getWorld();
+        if(world==null) {
+            game.getMapManager().createMap();
+            world = game.getMapManager().getWorld();
         }
 
         Location location = world.getSpawnLocation();
 
-        if (!sender.hasPermission("a.size.use") && !game.getHosts().contains(((Player) sender).getUniqueId())) {
+        if (!sender.hasPermission("a.size.use") && !game.getModerationManager().getHosts().contains(((Player) sender).getUniqueId())) {
             sender.sendMessage(game.translate("werewolf.check.permission_denied"));
             return;
         }

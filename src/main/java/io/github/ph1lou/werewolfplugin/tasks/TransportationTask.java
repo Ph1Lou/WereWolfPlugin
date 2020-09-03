@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
+import io.github.ph1lou.werewolfapi.events.UpdateEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
@@ -35,7 +36,7 @@ public class TransportationTask extends BukkitRunnable {
         double x = location.getX();
         double y = location.getY();
         double z = location.getZ();
-        World world = game.getWorld();
+        World world = game.getMapManager().getWorld();
         for (int i = -2; i < 3; i++) {
             for (int j = -2; j < 3; j++) {
                 if (Math.abs(j) == 2 || Math.abs(i) == 2) {
@@ -57,8 +58,8 @@ public class TransportationTask extends BukkitRunnable {
             cancel();
             return;
         }
-        game.getScore().updateBoard();
-        World world = game.getWorld();
+        Bukkit.getPluginManager().callEvent(new UpdateEvent());
+        World world = game.getMapManager().getWorld();
         WorldBorder wb = world.getWorldBorder();
 
         if (i < game.getPlayersWW().size()) {
@@ -119,7 +120,7 @@ public class TransportationTask extends BukkitRunnable {
                     p.setGameMode(GameMode.SURVIVAL);
                     p.sendMessage(game.translate("werewolf.announcement.start.message", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.invulnerability"))));
                 } else {
-                    p.teleport(game.getWorld().getSpawnLocation());
+                    p.teleport(game.getMapManager().getWorld().getSpawnLocation());
                     p.setGameMode(GameMode.SPECTATOR);
                 }
 
@@ -128,7 +129,7 @@ public class TransportationTask extends BukkitRunnable {
             }
 
             world.setTime(23000);
-            game.updateCompass();
+            game.getScenarios().updateCompass();
             game.setState(StateLG.START);
             GameTask start = new GameTask(game);
             start.runTaskTimer(main, 0, 5);

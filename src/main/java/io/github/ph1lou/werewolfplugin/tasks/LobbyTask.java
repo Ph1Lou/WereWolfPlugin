@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.tasks;
 
 import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.events.UpdateEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
@@ -29,15 +30,15 @@ public class LobbyTask extends BukkitRunnable {
             return;
         }
 
-        game.getScore().updateBoard();
+        Bukkit.getPluginManager().callEvent(new UpdateEvent());
 
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (game.getWft() == null) {
-                if (p.isOp() || p.hasPermission("a.use") || p.hasPermission("a.generation.use") || game.getHosts().contains(p.getUniqueId())) {
+            if (game.getMapManager().getWft() == null) {
+                if (p.isOp() || p.hasPermission("a.use") || p.hasPermission("a.generation.use") || game.getModerationManager().getHosts().contains(p.getUniqueId())) {
                     VersionUtils.getVersionUtils().sendActionBar(p, game.translate("werewolf.action_bar.generation"));
                 }
-            } else if (game.getWft().getPercentageCompleted() < 100) {
-                VersionUtils.getVersionUtils().sendActionBar(p, game.translate("werewolf.action_bar.progress", new DecimalFormat("0.0").format(game.getWft().getPercentageCompleted())));
+            } else if (game.getMapManager().getWft().getPercentageCompleted() < 100) {
+                VersionUtils.getVersionUtils().sendActionBar(p, game.translate("werewolf.action_bar.progress", new DecimalFormat("0.0").format(game.getMapManager().getWft().getPercentageCompleted())));
             } else {
                 VersionUtils.getVersionUtils().sendActionBar(p, game.translate("werewolf.action_bar.complete"));
             }

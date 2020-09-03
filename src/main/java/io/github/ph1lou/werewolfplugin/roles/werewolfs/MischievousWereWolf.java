@@ -128,7 +128,7 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
             setInvisible(false);
             Bukkit.getPluginManager().callEvent(new InvisibleEvent(getPlayerUUID(),false));
             player.sendMessage(game.translate("werewolf.role.little_girl.visible"));
-            game.updateNameTag();
+            Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent());
         }
         else player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
     }
@@ -244,8 +244,8 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
                 player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, Integer.MAX_VALUE, 0, false, false));
                 player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
                 setInvisible(true);
-                Bukkit.getPluginManager().callEvent(new InvisibleEvent(uuid,true));
-                game.updateNameTag();
+                Bukkit.getPluginManager().callEvent(new InvisibleEvent(uuid, true));
+                Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent());
             }
         } else if (isInvisible()) {
             player.sendMessage(game.translate("werewolf.role.little_girl.visible"));
@@ -253,8 +253,8 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
             player.removePotionEffect(PotionEffectType.INVISIBILITY);
             player.removePotionEffect(PotionEffectType.WEAKNESS);
             setInvisible(false);
-            Bukkit.getPluginManager().callEvent(new InvisibleEvent(uuid,false));
-            game.updateNameTag();
+            Bukkit.getPluginManager().callEvent(new InvisibleEvent(uuid, false));
+            Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent());
         }
     }
 

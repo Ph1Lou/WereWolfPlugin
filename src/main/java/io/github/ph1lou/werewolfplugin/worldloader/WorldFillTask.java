@@ -53,7 +53,7 @@ public class WorldFillTask implements Runnable {
 		this.server = Bukkit.getServer();
 		this.chunksPerRun = chunksPerRun;
 
-		this.world = game.getWorld();
+		this.world = game.getMapManager().getWorld();
 
 		Location spawn = world.getSpawnLocation();
 		this.border = new BorderData(spawn.getX(), spawn.getZ(), radius, radius);

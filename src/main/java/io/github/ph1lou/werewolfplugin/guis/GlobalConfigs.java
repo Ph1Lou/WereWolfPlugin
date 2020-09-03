@@ -48,7 +48,7 @@ public class GlobalConfigs implements InventoryProvider {
 
         int i = 0;
         for (ConfigRegister ConfigRegister : main.getRegisterConfigs()) {
-
+            String key = ConfigRegister.getKey();
             List<String> lore = new ArrayList<>(ConfigRegister.getLore());
             ItemStack itemStack;
 
@@ -59,7 +59,12 @@ public class GlobalConfigs implements InventoryProvider {
                 lore.add(0, game.translate("werewolf.utils.disable", ""));
                 itemStack = UniversalMaterial.RED_TERRACOTTA.getStack();
             }
-            contents.set(i / 9 + 1, i % 9, ClickableItem.of((new ItemBuilder(itemStack).setDisplayName(game.translate(ConfigRegister.getKey())).setLore(lore).build()), e -> config.getConfigValues().put(ConfigRegister.getKey(), !config.getConfigValues().get(ConfigRegister.getKey()))));
+            contents.set(i / 9 + 1, i % 9, ClickableItem.of((new ItemBuilder(itemStack).setDisplayName(game.translate(ConfigRegister.getKey())).setLore(lore).build()), e -> {
+                config.getConfigValues().put(key, !config.getConfigValues().get(key));
+                if (key.equals("werewolf.menu.global.compass_middle")) {
+                    game.getScenarios().updateCompass();
+                }
+            }));
             i++;
         }
     }

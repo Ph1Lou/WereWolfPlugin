@@ -3,8 +3,10 @@ package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.enumlg.State;
 import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
+import io.github.ph1lou.werewolfplugin.game.ModerationManager;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
@@ -26,9 +28,9 @@ public class CommandModerator implements Commands {
 
 
         GameManager game = main.getCurrentGame();
+        ModerationManager moderationManager = game.getModerationManager();
 
-
-        if (!sender.hasPermission("a.moderator.use") && !game.getHosts().contains(((Player) sender).getUniqueId())) {
+        if (!sender.hasPermission("a.moderator.use") && !moderationManager.getHosts().contains(((Player) sender).getUniqueId())) {
             sender.sendMessage(game.translate("werewolf.check.permission_denied"));
             return;
         }
@@ -47,14 +49,14 @@ public class CommandModerator implements Commands {
 
         UUID argUUID = moderator.getUniqueId();
 
-        if (game.getModerators().contains(argUUID)) {
+        if (moderationManager.getModerators().contains(argUUID)) {
             Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.moderator.remove", args[0]));
-            game.getModerators().remove(argUUID);
+            moderationManager.getModerators().remove(argUUID);
 
             if (game.isState(StateLG.LOBBY)) {
                 game.join(moderator);
             }
-            game.updateNameTag();
+            Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent());
             return;
         }
 
@@ -63,18 +65,16 @@ public class CommandModerator implements Commands {
                 sender.sendMessage(game.translate("werewolf.commands.admin.moderator.player_living"));
                 return;
             }
-        }
-        else{
-            if(game.getPlayersWW().containsKey(argUUID)){
+        } else {
+            if (game.getPlayersWW().containsKey(argUUID)) {
                 game.getScore().removePlayerSize();
                 game.getPlayersWW().remove(argUUID);
-            }
-            else game.getQueue().remove(argUUID);
+            } else moderationManager.getQueue().remove(argUUID);
         }
         moderator.setGameMode(GameMode.SPECTATOR);
-        game.getModerators().add(argUUID);
+        moderationManager.getModerators().add(argUUID);
         Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.moderator.add", args[0]));
-        game.updateNameTag();
-        game.checkQueue();
+        Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent());
+        moderationManager.checkQueue();
     }
 }

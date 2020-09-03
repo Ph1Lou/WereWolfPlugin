@@ -7,6 +7,7 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
+import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
 import io.github.ph1lou.werewolfapi.RoleRegister;
 import io.github.ph1lou.werewolfapi.enumlg.Category;
 import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
@@ -45,6 +46,7 @@ public class TrollChoice implements InventoryProvider {
     public void update(Player player, InventoryContents contents) {
 
         GameManager game = JavaPlugin.getPlugin(Main.class).getCurrentGame();
+        ConfigWereWolfAPI config = game.getConfig();
         Pagination pagination = contents.pagination();
         UUID uuid = player.getUniqueId();
 
@@ -65,11 +67,11 @@ public class TrollChoice implements InventoryProvider {
                 String key = roleRegister.getKey();
                 List<String> lore = new ArrayList<>(roleRegister.getLore());
 
-                if (game.getTrollKey().equals(key)) {
+                if (config.getTrollKey().equals(key)) {
                     items.add(ClickableItem.empty(new ItemBuilder(UniversalMaterial.GREEN_TERRACOTTA.getStack()).setLore(lore).setDisplayName(roleRegister.getName()).build()));
                 } else {
                     items.add(ClickableItem.of((new ItemBuilder(UniversalMaterial.RED_TERRACOTTA.getStack()).setLore(lore).setDisplayName(roleRegister.getName()).build()), event -> {
-                        game.setTrollKey(roleRegister.getKey());
+                        config.setTrollKey(roleRegister.getKey());
                         AdvancedConfig.INVENTORY.open(player);
                     }));
                 }

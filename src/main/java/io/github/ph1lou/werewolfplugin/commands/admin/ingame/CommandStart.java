@@ -29,7 +29,7 @@ public class CommandStart implements Commands {
 
         GameManager game = main.getCurrentGame();
 
-        if (!sender.hasPermission("a.start.use") && !game.getHosts().contains(((Player) sender).getUniqueId())) {
+        if (!sender.hasPermission("a.start.use") && !game.getModerationManager().getHosts().contains(((Player) sender).getUniqueId())) {
             sender.sendMessage(game.translate("werewolf.check.permission_denied"));
             return;
         }
@@ -43,18 +43,18 @@ public class CommandStart implements Commands {
             return;
         }
 
-        if (game.getWft() == null) {
+        if (game.getMapManager().getWft() == null) {
             sender.sendMessage(game.translate("werewolf.commands.admin.generation.not_generated"));
             return;
         }
 
-        if (game.getWft().getPercentageCompleted() < 100) {
-            sender.sendMessage(game.translate("werewolf.commands.admin.generation.not_finished", new DecimalFormat("0.0").format(game.getWft().getPercentageCompleted())));
+        if (game.getMapManager().getWft().getPercentageCompleted() < 100) {
+            sender.sendMessage(game.translate("werewolf.commands.admin.generation.not_finished", new DecimalFormat("0.0").format(game.getMapManager().getWft().getPercentageCompleted())));
             return;
         }
 
 
-        World world = game.getWorld();
+        World world = game.getMapManager().getWorld();
         WorldBorder wb = world.getWorldBorder();
         wb.setCenter(world.getSpawnLocation().getX(), world.getSpawnLocation().getZ());
         wb.setSize(game.getConfig().getBorderMax());

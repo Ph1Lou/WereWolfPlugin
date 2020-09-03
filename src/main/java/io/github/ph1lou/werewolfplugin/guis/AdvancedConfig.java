@@ -112,7 +112,7 @@ public class AdvancedConfig implements InventoryProvider {
                 config.setGoldenAppleParticles((config.getGoldenAppleParticles() + 2) % 3);
             AdvancedConfig.INVENTORY.open(player);
         }));
-        contents.set(2, 2, ClickableItem.of((new ItemBuilder(Material.BREAD).setDisplayName(game.translate(config.isTrollSV() ? "werewolf.menu.advanced_tool.troll_on" : "werewolf.menu.advanced_tool.troll_off")).setLore(Arrays.asList(game.translate(game.getTrollKey()), game.translate("werewolf.menu.advanced_tool.troll_set"))).build()), e -> {
+        contents.set(2, 2, ClickableItem.of((new ItemBuilder(Material.BREAD).setDisplayName(game.translate(config.isTrollSV() ? "werewolf.menu.advanced_tool.troll_on" : "werewolf.menu.advanced_tool.troll_off")).setLore(Arrays.asList(game.translate(config.getTrollKey()), game.translate("werewolf.menu.advanced_tool.troll_set"))).build()), e -> {
 
             if (!game.isState(StateLG.GAME)) {
                 if (e.isShiftClick()) {

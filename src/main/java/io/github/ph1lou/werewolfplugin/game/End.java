@@ -11,7 +11,6 @@ import io.github.ph1lou.werewolfapi.events.WinEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.AngelRole;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
-import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.Succubus;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Cupid;
 import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
@@ -26,12 +25,10 @@ public class End {
 
 
     private String winner = null;
-    private final Main main;
     private final GameManager game;
 
-    public End(Main main, GameManager game) {
+    public End(GameManager game) {
         this.game = game;
-        this.main = main;
     }
 
     public void check_victory() {
@@ -194,7 +191,7 @@ public class End {
         game.getScore().getKillCounter();
 
         game.getConfig().getConfigValues().put("werewolf.menu.global.chat", true);
-        if (main.getConfig().getBoolean("bungeechat")) {
+        if (game.getMain().getConfig().getBoolean("bungeechat")) {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "chatlock local"); //reactivation of local chat
         }
 
@@ -246,7 +243,7 @@ public class End {
             p.spigot().sendMessage(msg);
         }
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(main, game::stopGame, 600);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(game.getMain(), game::stopGame, 600);
         Bukkit.broadcastMessage(game.translate("werewolf.announcement.restart"));
     }
 

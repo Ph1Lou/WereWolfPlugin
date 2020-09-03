@@ -30,7 +30,7 @@ public class CommandLootStart implements Commands {
             return;
         }
 
-        if (!sender.hasPermission("a.lootStart.use") && !game.getHosts().contains(((Player) sender).getUniqueId())) {
+        if (!sender.hasPermission("a.lootStart.use") && !game.getModerationManager().getHosts().contains(((Player) sender).getUniqueId())) {
             sender.sendMessage(game.translate("werewolf.check.permission_denied"));
             return;
         }

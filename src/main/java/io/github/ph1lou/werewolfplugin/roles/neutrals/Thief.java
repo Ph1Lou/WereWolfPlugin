@@ -118,15 +118,7 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
                 thief_recover_role(getPlayerUUID(), uuid);
             }
             else {
-                Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
-
-                    FirstDeathEvent firstDeathEvent = new FirstDeathEvent(uuid);
-                    Bukkit.getPluginManager().callEvent(firstDeathEvent);
-
-                    if(firstDeathEvent.isCancelled()) return;
-
-                    game.deathStep1(uuid);
-                }, 20L);
+                Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> Bukkit.getPluginManager().callEvent(new FirstDeathEvent(uuid)), 20L);
             }
         },7*20);
     }

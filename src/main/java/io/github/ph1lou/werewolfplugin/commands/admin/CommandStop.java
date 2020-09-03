@@ -22,7 +22,7 @@ public class CommandStop implements Commands {
 
         GameManager game = main.getCurrentGame();
 
-        if (!sender.hasPermission("a.stop.use") && !game.getHosts().contains(((Player) sender).getUniqueId())) {
+        if (!sender.hasPermission("a.stop.use") && !game.getModerationManager().getHosts().contains(((Player) sender).getUniqueId())) {
             sender.sendMessage(game.translate("werewolf.check.permission_denied"));
             return;
         }

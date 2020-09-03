@@ -22,7 +22,7 @@ public class CommandName implements Commands {
         GameManager game = main.getCurrentGame();
 
 
-        if (!sender.hasPermission("a.name.use") && !game.getHosts().contains(((Player) sender).getUniqueId())) {
+        if (!sender.hasPermission("a.name.use") && !game.getModerationManager().getHosts().contains(((Player) sender).getUniqueId())) {
             sender.sendMessage(game.translate("werewolf.check.permission_denied"));
             return;
         }
@@ -36,6 +36,6 @@ public class CommandName implements Commands {
         for (String w : args) {
             sb.append(w).append(" ");
         }
-        game.setGameName(sb.toString());
+        game.getConfig().setGameName(sb.toString());
     }
 }

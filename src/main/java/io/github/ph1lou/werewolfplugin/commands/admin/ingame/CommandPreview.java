@@ -29,7 +29,7 @@ public class CommandPreview implements Commands {
 
         Player player = (Player) sender;
 
-        if (!sender.hasPermission("a.preview.use") && !game.getModerators().contains(((Player) sender).getUniqueId()) && !game.getHosts().contains(((Player) sender).getUniqueId())) {
+        if (!sender.hasPermission("a.preview.use") && !game.getModerationManager().getModerators().contains(((Player) sender).getUniqueId()) && !game.getModerationManager().getHosts().contains(((Player) sender).getUniqueId())) {
             sender.sendMessage(game.translate("werewolf.check.permission_denied"));
             return;
         }
@@ -39,11 +39,11 @@ public class CommandPreview implements Commands {
             return;
         }
 
-        if (player.getWorld().equals(game.getWorld())) {
+        if (player.getWorld().equals(game.getMapManager().getWorld())) {
             player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
             player.sendMessage(game.translate("werewolf.commands.admin.preview.lobby"));
         } else {
-            player.teleport(game.getWorld().getSpawnLocation());
+            player.teleport(game.getMapManager().getWorld().getSpawnLocation());
             player.sendMessage(game.translate("werewolf.commands.admin.preview.map"));
         }
 

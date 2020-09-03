@@ -61,8 +61,7 @@ public class Scenarios implements InventoryProvider {
             }
             contents.set(i / 9 + 1, i % 9, ClickableItem.of((new ItemBuilder(itemStack).setDisplayName(game.translate(scenarioRegister.getKey())).setLore(lore).build()), e -> {
                 config.getScenarioValues().put(scenarioRegister.getKey(), !config.getScenarioValues().get(scenarioRegister.getKey()));
-                game.updateNameTag();
-                game.updateScenarios();
+                game.getScenarios().update();
             }));
             i++;
         }

@@ -7,12 +7,18 @@ import io.github.ph1lou.werewolfapi.ScoreAPI;
 import io.github.ph1lou.werewolfapi.enumlg.State;
 import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
+import io.github.ph1lou.werewolfapi.events.UpdateEvent;
+import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.InvisibleState;
+import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.WorldBorder;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
+import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -21,7 +27,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 
-public class ScoreBoard implements ScoreAPI {
+public class ScoreBoard implements ScoreAPI, Listener {
 
 	private final GameManager game;
 	private int group_size = 5;
@@ -48,15 +54,15 @@ public class ScoreBoard implements ScoreAPI {
 			String line = game.translate("werewolf.score_board.scoreboard_1." + i);
 			line = line.replace("&players&", String.valueOf(player));
 			line = line.replace("&roles&", String.valueOf(role));
-			line = line.replace("&max&", String.valueOf(game.getPlayerMax()));
+			line = line.replace("&max&", String.valueOf(game.getConfig().getPlayerMax()));
 			line = line.substring(0, Math.min(30, line.length()));
 			scoreboard1.add(line);
 			i++;
 		}
-		String line=game.translate("werewolf.score_board.game_name");
-		scoreboard1.add(line.substring(0,Math.min(30,line.length())));
-		line=game.translate("werewolf.score_board.name",game.getGameName());
-		scoreboard1.add(line.substring(0,Math.min(30,line.length())));
+		String line = game.translate("werewolf.score_board.game_name");
+		scoreboard1.add(line.substring(0, Math.min(30, line.length())));
+		line = game.translate("werewolf.score_board.name", game.getConfig().getGameName());
+		scoreboard1.add(line.substring(0, Math.min(30, line.length())));
 	}
 	
 	public void updateScoreBoard2(FastBoard board) {
@@ -88,16 +94,16 @@ public class ScoreBoard implements ScoreAPI {
 
 	private void updateGlobalScoreBoard2() {
 
-		WorldBorder wb = game.getWorld().getWorldBorder();
-		String border_size=String.valueOf(Math.round(wb.getSize()));
+		WorldBorder wb = game.getMapManager().getWorld().getWorldBorder();
+		String border_size = String.valueOf(Math.round(wb.getSize()));
 		String border;
 
 		if (game.getConfig().getTimerValues().get("werewolf.menu.timers.border_begin") > 0) {
-			border=conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.border_begin"));
+			border = conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.border_begin"));
 		} else {
-			border= game.translate("werewolf.utils.on");
+			border = game.translate("werewolf.utils.on");
 			if (wb.getSize() > game.getConfig().getBorderMin()) {
-				border_size= border_size+" > " + game.getConfig().getBorderMin();
+				border_size = border_size + " > " + game.getConfig().getBorderMin();
 			}
 		}
 
@@ -106,17 +112,17 @@ public class ScoreBoard implements ScoreAPI {
 		int i=0;
 		while(game.getLanguage().containsKey("werewolf.score_board.scoreboard_2."+i)){
 			String line=game.translate("werewolf.score_board.scoreboard_2."+i);
-			line=line.replace("&timer&",conversion(timer));
-			line=line.replace("&day&",String.valueOf(timer / game.getConfig().getTimerValues().get("werewolf.menu.timers.day_duration") / 2 + 1));
-			line=line.replace("&players&",String.valueOf(player));
-			line=line.replace("&group&",String.valueOf(group_size));
-			line=line.replace("&border&",border);
-			line=line.replace("&border_size&",border_size);
+			line = line.replace("&timer&", conversion(timer));
+			line = line.replace("&day&", String.valueOf(timer / game.getConfig().getTimerValues().get("werewolf.menu.timers.day_duration") / 2 + 1));
+			line = line.replace("&players&", String.valueOf(player));
+			line = line.replace("&group&", String.valueOf(group_size));
+			line = line.replace("&border&", border);
+			line = line.replace("&border_size&", border_size);
 			scoreboard2.add(line);
 			i++;
 		}
 		scoreboard2.add(game.translate("werewolf.score_board.game_name"));
-		scoreboard2.add(game.translate("werewolf.score_board.name",game.getGameName()));
+		scoreboard2.add(game.translate("werewolf.score_board.name", game.getConfig().getGameName()));
 	}
 
 	private void updateScoreBoardRole(){
@@ -183,10 +189,10 @@ public class ScoreBoard implements ScoreAPI {
 		}
 		String line = game.translate("werewolf.score_board.game_name");
 		scoreboard3.add(line.substring(0, Math.min(30, line.length())));
-		line = game.translate("werewolf.score_board.name", game.getGameName());
+		line = game.translate("werewolf.score_board.name", game.getConfig().getGameName());
 		scoreboard3.add(line.substring(0, Math.min(30, line.length())));
 
-		updateBoard();
+		Bukkit.getPluginManager().callEvent(new UpdateEvent());
 	}
 
 	public int midDistance(Player player) {
@@ -232,10 +238,11 @@ public class ScoreBoard implements ScoreAPI {
 
 		VersionUtils.getVersionUtils().sendActionBar(player, actionBarEvent.getActionBar());
 	}
-		
-	public void updateBoard() {
 
-		if(Bukkit.getOnlinePlayers().size()==0) return;
+	@EventHandler
+	public void updateBoard(UpdateEvent event) {
+
+		if (Bukkit.getOnlinePlayers().size() == 0) return;
 
 		roles.clear();
 
@@ -309,14 +316,139 @@ public class ScoreBoard implements ScoreAPI {
 		if(timer/3600>0) {
 
 			if(timer%3600/60>9) {
-				value = timer/3600+"h"+timer%3600/60+"m"+value;
-			} else value = timer/3600+"h0"+timer%3600/60+"m"+value;
+				value = timer / 3600 + "h" + timer % 3600 / 60 + "m" + value;
+			} else value = timer / 3600 + "h0" + timer % 3600 / 60 + "m" + value;
 		} else if (timer / 60 > 0) {
 			value = timer / 60 + "m" + value;
 		}
 		if (sign < 0) value = "-" + value;
 
 		return value;
+	}
+
+	@EventHandler
+	public void onNameTagUpdate(UpdateNameTagEvent event) {
+		ModerationManager moderationManager = game.getModerationManager();
+
+		for (PlayerWW playerWW : game.getPlayersWW().values()) {
+
+			Scoreboard scoreBoard = playerWW.getScoreBoard();
+
+			for (PlayerWW playerWW2 : game.getPlayersWW().values()) {
+
+				String name = playerWW2.getName();
+
+				if (scoreBoard.getTeam(name) == null) {
+					scoreBoard.registerNewTeam(name).addEntry(name);
+				}
+
+				Team team = scoreBoard.getTeam(name);
+				try {
+					if (game.getConfig().getScenarioValues().get("werewolf.menu.scenarios.no_name_tag")) {
+						VersionUtils.getVersionUtils().setTeamNameTagVisibility(team, false);
+					} else
+						VersionUtils.getVersionUtils().setTeamNameTagVisibility(team, (!(playerWW2.getRole() instanceof InvisibleState)) || !((InvisibleState) playerWW2.getRole()).isInvisible());
+				} catch (Exception ignored) {
+
+				}
+
+			}
+
+			for (UUID uuid : moderationManager.getModerators()) {
+				Player player = Bukkit.getPlayer(uuid);
+				if (player != null) {
+					String name3 = player.getName();
+					if (scoreBoard.getTeam(name3) == null) {
+						scoreBoard.registerNewTeam(name3).addEntry(name3);
+					}
+				}
+			}
+
+			for (UUID uuid : moderationManager.getHosts()) {
+				Player player = Bukkit.getPlayer(uuid);
+				if (player != null) {
+					String name3 = player.getName();
+					if (scoreBoard.getTeam(name3) == null) {
+						scoreBoard.registerNewTeam(name3).addEntry(name3);
+					}
+				}
+			}
+
+			for (Team t : scoreBoard.getTeams()) {
+
+				for (String e : t.getEntries()) {
+					Player player = Bukkit.getPlayer(e);
+					if (player != null) {
+						UUID uuid = player.getUniqueId();
+						StringBuilder sb = new StringBuilder();
+						if (moderationManager.getHosts().contains(uuid)) {
+							sb.append(game.translate("werewolf.commands.admin.host.tag"));
+						} else if (moderationManager.getModerators().contains(uuid)) {
+							sb.append(game.translate("werewolf.commands.admin.moderator.tag"));
+						}
+						if (game.getPlayersWW().containsKey(uuid)) {
+							Roles roles = game.getPlayersWW().get(uuid).getRole();
+							if (roles.isWereWolf() && playerWW.getRole().isWereWolf()) {
+								if (game.getConfig().getConfigValues().get("werewolf.menu.global.red_name_tag")) {
+									if (game.getConfig().getTimerValues().get("werewolf.menu.timers.werewolf_list") <= 0) {
+										sb.append(ChatColor.DARK_RED);
+									}
+								}
+							}
+						}
+						t.setPrefix(sb.toString());
+					}
+				}
+			}
+		}
+		ScoreboardManager scoreboardManager = Bukkit.getScoreboardManager();
+
+		if (scoreboardManager == null) return;
+
+		Scoreboard scoreboardModerator = scoreboardManager.getNewScoreboard();
+		Team hosts = scoreboardModerator.registerNewTeam("hostsSpectator");
+		hosts.setPrefix(game.translate("werewolf.commands.admin.host.tag"));
+		Team hostsWW = scoreboardModerator.registerNewTeam("hostsWW");
+		hostsWW.setPrefix(game.translate("werewolf.commands.admin.host.tag") + ChatColor.DARK_RED);
+		Team moderators = scoreboardModerator.registerNewTeam("moderators");
+		moderators.setPrefix(game.translate("werewolf.commands.admin.moderator.tag"));
+		Team ww = scoreboardModerator.registerNewTeam("ww");
+		ww.setPrefix(String.valueOf(ChatColor.DARK_RED));
+
+		Scoreboard scoreboardSpectator = Bukkit.getScoreboardManager().getNewScoreboard();
+		Team hostsSpectator = scoreboardSpectator.registerNewTeam("hostsSpectator");
+		hostsSpectator.setPrefix(game.translate("werewolf.commands.admin.host.tag"));
+		Team moderatorsSpectator = scoreboardSpectator.registerNewTeam("moderators");
+		moderatorsSpectator.setPrefix(game.translate("werewolf.commands.admin.moderator.tag"));
+
+
+		for (Player player : Bukkit.getOnlinePlayers()) {
+
+			UUID uuid = player.getUniqueId();
+			String playerName = player.getName();
+
+			if (moderationManager.getHosts().contains(uuid)) {
+				if (game.getPlayersWW().containsKey(uuid) && game.getPlayersWW().get(uuid).getRole().isWereWolf()) {
+					hostsWW.addEntry(playerName);
+				} else hosts.addEntry(playerName);
+				hostsSpectator.addEntry(playerName);
+			} else if (moderationManager.getModerators().contains(uuid)) {
+				moderators.addEntry(playerName);
+				moderatorsSpectator.addEntry(playerName);
+			} else if (game.getPlayersWW().containsKey(uuid) && game.getPlayersWW().get(uuid).getRole().isWereWolf()) {
+				ww.addEntry(playerName);
+			}
+		}
+
+
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			if (moderationManager.getModerators().contains(player.getUniqueId())) {
+				player.setScoreboard(scoreboardModerator);
+			} else if (!game.getPlayersWW().containsKey(player.getUniqueId())) {
+				player.setScoreboard(scoreboardSpectator);
+			}
+		}
+
 	}
 
 

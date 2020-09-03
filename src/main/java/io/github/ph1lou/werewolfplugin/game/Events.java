@@ -85,7 +85,7 @@ public class Events implements Listener {
 	@EventHandler
 	public void event1(ChestEvent event) {
 
-		World world = game.getWorld();
+		World world = game.getMapManager().getWorld();
 		WorldBorder wb = world.getWorldBorder();
 		int nb_target = game.getScore().getPlayerSize() / 3;
 		if (nb_target < 2) {

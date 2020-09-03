@@ -21,6 +21,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.potion.PotionEffect;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class CycleListener implements Listener {
 
@@ -142,7 +145,7 @@ public class CycleListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onWereWolfList(WereWolfListEvent event) {
-        game.updateNameTag();
+        Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -153,7 +156,7 @@ public class CycleListener implements Listener {
     @EventHandler
     public void onPVP(PVPEvent event) {
 
-        game.getWorld().setPVP(true);
+        game.getMapManager().getWorld().setPVP(true);
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.sendMessage(game.translate("werewolf.announcement.pvp"));
             Sounds.DONKEY_ANGRY.play(p);
@@ -171,9 +174,12 @@ public class CycleListener implements Listener {
     @EventHandler
     public void onTrollSV(TrollEvent event) {
 
+        game.setState(StateLG.GAME);
+        game.getConfig().getConfigValues().put("werewolf.menu.global.chat", false);
+
         for (RoleRegister roleRegister : main.getRegisterRoles()) {
 
-            if (roleRegister.getKey().equals(game.getTrollKey())) {
+            if (roleRegister.getKey().equals(game.getConfig().getTrollKey())) {
 
                 for (PlayerWW playerWW : game.getPlayersWW().values()) {
                     try {
@@ -212,8 +218,68 @@ public class CycleListener implements Listener {
                 }
             }
             game.getConfig().setTrollSV(false);
-            game.getRoleManage().repartitionRolesLG();
+            Bukkit.getPluginManager().callEvent(new RepartitionEvent());
 
         }, 1800L);
+    }
+
+    @EventHandler
+    public void onRepartition(RepartitionEvent event) {
+
+        game.setState(StateLG.GAME);
+
+        List<UUID> playersUUID = new ArrayList<>(game.getPlayersWW().keySet());
+        List<RoleRegister> config = new ArrayList<>();
+        game.getConfig().getConfigValues().put("werewolf.menu.global.chat", false);
+        game.getConfig().getRoleCount().put("werewolf.role.villager.display", game.getConfig().getRoleCount().get("werewolf.role.villager.display") + playersUUID.size() - game.getScore().getRole());
+
+        for (RoleRegister roleRegister : game.getRolesRegister()) {
+            for (int i = 0; i < game.getConfig().getRoleCount().get(roleRegister.getKey()); i++) {
+                config.add(roleRegister);
+            }
+        }
+
+        while (!playersUUID.isEmpty()) {
+
+            int n = (int) Math.floor(game.getRandom().nextFloat() * playersUUID.size());
+            UUID playerUUID = playersUUID.get(n);
+            PlayerWW plg = game.getPlayersWW().get(playerUUID);
+
+            try {
+                Roles role = (Roles) config.get(0).getConstructors().newInstance(game.getMain(), game, playerUUID);
+                Bukkit.getPluginManager().registerEvents((Listener) role, game.getMain());
+                plg.setRole(role);
+
+            } catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            config.remove(0);
+            playersUUID.remove(n);
+        }
+        for (PlayerWW playerWW : game.getPlayersWW().values()) {
+            try {
+                playerWW.getRole().recoverPower();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        game.checkVictory();
+    }
+
+    @EventHandler
+    public void onBorderStart(BorderStartEvent event) {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            p.sendMessage(game.translate("werewolf.announcement.border"));
+            Sounds.FIREWORK_LAUNCH.play(p);
+        }
+    }
+
+    @EventHandler
+    public void onInvulnerabilityEnd(InvulnerabilityEvent event) {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            p.sendMessage(game.translate("werewolf.announcement.invulnerability"));
+            Sounds.GLASS.play(p);
+        }
     }
 }

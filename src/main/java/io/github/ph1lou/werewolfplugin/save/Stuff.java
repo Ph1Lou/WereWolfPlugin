@@ -22,12 +22,12 @@ public class Stuff implements StuffManager {
     private final List<ItemStack> death_loot = new ArrayList<>();
     private final Inventory start_loot = Bukkit.createInventory(null, 45);
     private final GameManager game;
-    private final Main main;
 
-    public Stuff(Main main, GameManager game) {
-        this.main = main;
+
+    public Stuff(GameManager game) {
         this.game = game;
     }
+
     @Override
     public List<ItemStack> getDeathLoot() {
         return this.death_loot;
@@ -58,6 +58,7 @@ public class Stuff implements StuffManager {
     @Override
     public void save(String configName) {
 
+        Main main = game.getMain();
         for(Plugin plugin:main.getAddonsList()){
 
             int pos = 0;
@@ -89,7 +90,7 @@ public class Stuff implements StuffManager {
                     }
                 }
 
-                java.io.File file = new java.io.File(plugin.getDataFolder() + java.io.File.separator + "stuffs" + java.io.File.separator, configName + ".yml");
+                File file = new File(plugin.getDataFolder() + File.separator + "stuffs" + File.separator, configName + ".yml");
                 try {
                     config.save(file);
                 } catch (IOException e) {
@@ -112,13 +113,13 @@ public class Stuff implements StuffManager {
 
         Map<String, List<ItemStack>> temp = new HashMap<>();
 
-        if (!(new java.io.File(plugin.getDataFolder() + java.io.File.separator + "stuffs" + java.io.File.separator, configName + ".yml")).exists()) {
-            FileUtils_.copy(plugin.getResource("stuffRole.yml"), plugin.getDataFolder() + java.io.File.separator + "stuffs" + java.io.File.separator + configName + ".yml");
+        if (!(new File(plugin.getDataFolder() + File.separator + "stuffs" + File.separator, configName + ".yml")).exists()) {
+            FileUtils_.copy(plugin.getResource("stuffRole.yml"), plugin.getDataFolder() + File.separator + "stuffs" + File.separator + configName + ".yml");
         }
         FileConfiguration config = getOrCreateCustomConfig(plugin, configName);
 
-        for (RoleRegister roleRegister:game.getRolesRegister()) {
-            if(roleRegister.getPlugin().equals(plugin)){
+        for (RoleRegister roleRegister : game.getRolesRegister()) {
+            if (roleRegister.getPlugin().equals(plugin)) {
                 String key = roleRegister.getKey();
                 temp.put(key, new ArrayList<>());
                 if (config.getItemStack(key + ".0") != null) {
@@ -134,6 +135,7 @@ public class Stuff implements StuffManager {
 
     public void loadStuffStartAndDeath(String configName) {
 
+        Main main = game.getMain();
         start_loot.clear();
         death_loot.clear();
         FileConfiguration config = getOrCreateCustomConfig(main,configName);
@@ -156,12 +158,12 @@ public class Stuff implements StuffManager {
 
     @Override
     public void loadStuffChill() {
-        FileUtils_.copy(main.getResource("stuffChill.yml"), main.getDataFolder() + java.io.File.separator + "stuffs" + java.io.File.separator + "stuffChill.yml");
+        Main main = game.getMain();
+        FileUtils_.copy(main.getResource("stuffChill.yml"), main.getDataFolder() + File.separator + "stuffs" + File.separator + "stuffChill.yml");
         loadStuffStartAndDeath("stuffChill");
     }
 
     public FileConfiguration getOrCreateCustomConfig(Plugin plugin, String configName) {
-
         File customConfigFile = new File(plugin.getDataFolder() + File.separator + "stuffs" + File.separator, configName + ".yml");
         FileConfiguration customConfig = null;
         if (!customConfigFile.exists()) {
@@ -184,8 +186,8 @@ public class Stuff implements StuffManager {
     public void loadStuff(String configName){
 
         stuffRoles.clear();
-        for(Plugin plugin:main.getAddonsList()){
-            stuffRoles.putAll(loadStuff(plugin,configName));
+        for (Plugin plugin : game.getMain().getAddonsList()) {
+            stuffRoles.putAll(loadStuff(plugin, configName));
         }
     }
 
@@ -195,7 +197,8 @@ public class Stuff implements StuffManager {
     }
 
     public void loadAllStuffMeetUP() {
-        FileUtils_.copy(main.getResource("stuffMeetUp.yml"), main.getDataFolder() + java.io.File.separator + "stuffs" + java.io.File.separator + "stuffMeetUp.yml");
+        Main main = game.getMain();
+        FileUtils_.copy(main.getResource("stuffMeetUp.yml"), main.getDataFolder() + File.separator + "stuffs" + File.separator + "stuffMeetUp.yml");
         loadStuff("stuffMeetUp");
         loadStuffStartAndDeath("stuffMeetUp");
     }

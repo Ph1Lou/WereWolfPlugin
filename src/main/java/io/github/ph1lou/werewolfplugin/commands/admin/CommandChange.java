@@ -21,7 +21,7 @@ public class CommandChange implements Commands {
 
         GameManager game = main.getCurrentGame();
 
-        if (!sender.hasPermission("a.change.use") && !game.getHosts().contains(((Player) sender).getUniqueId())) {
+        if (!sender.hasPermission("a.change.use") && !game.getModerationManager().getHosts().contains(((Player) sender).getUniqueId())) {
             sender.sendMessage(game.translate("werewolf.check.permission_denied"));
             return;
         }
@@ -32,12 +32,12 @@ public class CommandChange implements Commands {
         }
 
         sender.sendMessage(game.translate("werewolf.commands.admin.change.in_progress"));
-        if (game.getWft() != null) {
-            game.getWft().stop();
-            game.setWft(null);
+        if (game.getMapManager().getWft() != null) {
+            game.getMapManager().getWft().stop();
+            game.getMapManager().setWft(null);
         }
-        game.deleteMap();
-        game.createMap();
+        game.getMapManager().deleteMap();
+        game.getMapManager().createMap();
         sender.sendMessage(game.translate("werewolf.commands.admin.change.finished"));
     }
 }

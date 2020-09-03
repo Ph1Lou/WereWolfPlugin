@@ -36,12 +36,17 @@ public class Config implements ConfigWereWolfAPI {
     private int distanceAmnesiacLovers = 15;
     private int distanceFox = 20;
     private boolean trollSV = false;
-    private int BorderMax =2000;
-    private int BorderMin =300;
-    private int loverSize=0;
-    private int amnesiacLoverSize=0;
-    private int cursedLoverSize=0;
-    private int limitDepthStrider=0;
+    private int BorderMax = 2000;
+    private int BorderMin = 300;
+    private int loverSize = 0;
+    private int amnesiacLoverSize = 0;
+    private int cursedLoverSize = 0;
+    private int limitDepthStrider = 0;
+    private String trollKey = "werewolf.role.villager.display";
+    private int spectatorMode = 2;  // 0 no Spectators, 1 allowed for death players, 2 for all players;
+    private boolean whiteList = false;
+    private int playerMax = 30;
+    private String gameName = "@Ph1Lou_";
 
 
     @Override
@@ -407,5 +412,56 @@ public class Config implements ConfigWereWolfAPI {
     @Override
     public void setCursedLoverSize(int cursedLoverSize) {
         this.cursedLoverSize = cursedLoverSize;
+    }
+
+    @Override
+    public boolean isWhiteList() {
+        return whiteList;
+    }
+
+    @Override
+    public void setWhiteList(boolean whiteList) {
+        this.whiteList = whiteList;
+    }
+
+    @Override
+    public int getPlayerMax() {
+        return playerMax;
+    }
+
+
+    @Override
+    public void setPlayerMax(int playerMax) {
+        this.playerMax = playerMax;
+    }
+
+    @Override
+    public int getSpectatorMode() {
+        return spectatorMode;
+    }
+
+    @Override
+    public void setSpectatorMode(int spectatorMode) {
+        this.spectatorMode = spectatorMode;
+    }
+
+    @Override
+    public String getGameName() {
+        return gameName;
+    }
+
+    @Override
+    public void setGameName(String gameName) {
+        this.gameName = gameName;
+    }
+
+    @Override
+    public String getTrollKey() {
+        return trollKey;
+    }
+
+    @Override
+    public void setTrollKey(String trollKey) {
+        this.trollKey = trollKey;
     }
 }

@@ -4,6 +4,7 @@ package io.github.ph1lou.werewolfplugin.listeners;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
+import io.github.ph1lou.werewolfplugin.game.ModerationManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,6 +29,7 @@ public class ChatListener implements Listener {
 
         Player player = event.getPlayer();
         String[] args = event.getMessage().split(" ");
+        ModerationManager moderationManager = game.getModerationManager();
 
         if (args[0].equalsIgnoreCase("/rl") || args[0].equalsIgnoreCase("/reload") || args[0].equalsIgnoreCase("/bukkit:rl") || args[0].equalsIgnoreCase("/bukkit:reload")) {
             event.setCancelled(true);
@@ -50,8 +52,8 @@ public class ChatListener implements Listener {
 
             if (!recipient.hasPermission("a.use") && !player.hasPermission("tell.use")) {
 
-                if (!game.getHosts().contains(recipient.getUniqueId()) && !game.getHosts().contains(player.getUniqueId())) {
-                    if (!game.getModerators().contains(recipient.getUniqueId()) && !game.getModerators().contains(player.getUniqueId())) {
+                if (!moderationManager.getHosts().contains(recipient.getUniqueId()) && !moderationManager.getHosts().contains(player.getUniqueId())) {
+                    if (!moderationManager.getModerators().contains(recipient.getUniqueId()) && !moderationManager.getModerators().contains(player.getUniqueId())) {
                         player.sendMessage(game.translate("werewolf.check.permission_denied"));
                         return;
                     }
@@ -76,6 +78,7 @@ public class ChatListener implements Listener {
 
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
+        ModerationManager moderationManager = game.getModerationManager();
         String format;
 
         if(player.getName().equals("Ph1Lou")){
@@ -83,13 +86,11 @@ public class ChatListener implements Listener {
         }
         else format=game.translate("werewolf.commands.admin.chat.template","%s","%s");
 
-        if(game.getHosts().contains(uuid)){
-            event.setFormat(game.translate("werewolf.commands.admin.host.tag")+format);
-        }
-        else if(game.getModerators().contains(uuid)){
-            event.setFormat(game.translate("werewolf.commands.admin.moderator.tag")+format);
-        }
-        else event.setFormat(format);
+        if (moderationManager.getHosts().contains(uuid)) {
+            event.setFormat(game.translate("werewolf.commands.admin.host.tag") + format);
+        } else if (moderationManager.getModerators().contains(uuid)) {
+            event.setFormat(game.translate("werewolf.commands.admin.moderator.tag") + format);
+        } else event.setFormat(format);
 
         if (!game.getConfig().getConfigValues().get("werewolf.menu.global.chat")) {
             event.setCancelled(true);
