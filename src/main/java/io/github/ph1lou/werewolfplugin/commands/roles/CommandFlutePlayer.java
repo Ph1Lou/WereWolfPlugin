@@ -79,6 +79,7 @@ public class CommandFlutePlayer implements Commands {
                 return ;
             }
 
+            List<UUID> listUUIDs = new ArrayList<>();
 
             for(String p:args) {
 
@@ -115,24 +116,31 @@ public class CommandFlutePlayer implements Commands {
                     player.sendMessage(game.translate("werewolf.role.flute_player.distance", playerArg.getName()));
                     return;
                 }
+                listUUIDs.add(playerUUID);
             }
 
-            List<UUID> listUUIDs = new ArrayList<>();
+        ((Power) flutePlayer).setPower(false);
 
-            for(String p:args) {
-                Player enchanted =Bukkit.getPlayer(p);
-                if (enchanted == null) return;
-                UUID uuid1=enchanted.getUniqueId();
-                listUUIDs.add(uuid1);
-                ((AffectedPlayers) flutePlayer).addAffectedPlayer(uuid1);
-                enchanted.sendMessage(game.translate("werewolf.role.flute_player.enchanted"));
-                player.sendMessage(game.translate("werewolf.role.flute_player.perform",enchanted.getName()));
-            }
+        EnchantedEvent enchantedEvent = new EnchantedEvent(uuid, listUUIDs);
 
-            ((Power) flutePlayer).setPower(false);
+        Bukkit.getPluginManager().callEvent(enchantedEvent);
 
-            Bukkit.getPluginManager().callEvent(new EnchantedEvent(uuid,listUUIDs));
+        if (enchantedEvent.isCancelled()) {
+            player.sendMessage(game.translate("werewolf.check.cancel"));
+            return;
+        }
 
-            game.checkVictory();
+        for (UUID uuid1 : listUUIDs) {
+
+            Player enchanted = Bukkit.getPlayer(uuid1);
+            if (enchanted == null) return;
+
+            ((AffectedPlayers) flutePlayer).addAffectedPlayer(uuid1);
+            enchanted.sendMessage(game.translate("werewolf.role.flute_player.enchanted"));
+            player.sendMessage(game.translate("werewolf.role.flute_player.perform", enchanted.getName()));
+        }
+
+
+        game.checkVictory();
     }
 }

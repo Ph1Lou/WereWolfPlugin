@@ -94,7 +94,7 @@ public class CommandRaven implements Commands {
         }
 
         CurseEvent curseEvent=new CurseEvent(uuid,argUUID);
-
+        ((Power) raven).setPower(false);
         Bukkit.getPluginManager().callEvent(curseEvent);
 
         if (curseEvent.isCancelled()) {
@@ -103,7 +103,6 @@ public class CommandRaven implements Commands {
         }
 
         ((AffectedPlayers) raven).clearAffectedPlayer();
-        ((Power) raven).setPower(false);
         ((AffectedPlayers) raven).addAffectedPlayer(argUUID);
         game.getPlayersWW().get(argUUID).setDamn(true);
         playerArg.removePotionEffect(PotionEffectType.JUMP);

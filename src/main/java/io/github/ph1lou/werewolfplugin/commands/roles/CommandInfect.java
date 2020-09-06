@@ -103,16 +103,18 @@ public class CommandInfect implements Commands {
             return;
         }
 
-        InfectionEvent infectionEvent = new InfectionEvent(uuid,argUUID);
+        ((Power) infect).setPower(false);
+
+        InfectionEvent infectionEvent = new InfectionEvent(uuid, argUUID);
         Bukkit.getPluginManager().callEvent(infectionEvent);
 
-        if(infectionEvent.isCancelled()){
+        if (infectionEvent.isCancelled()) {
             player.sendMessage(game.translate("werewolf.check.cancel"));
             return;
         }
 
-        ((AffectedPlayers)infect).addAffectedPlayer(argUUID);
-        ((Power) infect).setPower(false);
+        ((AffectedPlayers) infect).addAffectedPlayer(argUUID);
+
         player.sendMessage(game.translate("werewolf.role.infect_father_of_the_wolves.infection_perform",plg1.getName()));
         game.resurrection(argUUID);
 

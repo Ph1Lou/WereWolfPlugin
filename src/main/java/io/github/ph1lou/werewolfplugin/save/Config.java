@@ -46,7 +46,6 @@ public class Config implements ConfigWereWolfAPI {
     private int spectatorMode = 2;  // 0 no Spectators, 1 allowed for death players, 2 for all players;
     private boolean whiteList = false;
     private int playerMax = 30;
-    private String gameName = "@Ph1Lou_";
 
 
     @Override
@@ -443,16 +442,6 @@ public class Config implements ConfigWereWolfAPI {
     @Override
     public void setSpectatorMode(int spectatorMode) {
         this.spectatorMode = spectatorMode;
-    }
-
-    @Override
-    public String getGameName() {
-        return gameName;
-    }
-
-    @Override
-    public void setGameName(String gameName) {
-        this.gameName = gameName;
     }
 
     @Override

@@ -97,22 +97,23 @@ public class CommandFox implements Commands {
         if (location.distance(locationTarget) > game.getConfig().getDistanceFox()) {
             player.sendMessage(game.translate("werewolf.role.fox.not_enough_near"));
             return;
-        } else if (((LimitedUse)fox).getUse() >= game.getConfig().getUseOfFlair()) {
+        } else if (((LimitedUse) fox).getUse() >= game.getConfig().getUseOfFlair()) {
             player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
 
-        BeginSniffEvent beginSniffEvent=new BeginSniffEvent(uuid,argUUID);
+        ((Power) fox).setPower(false);
+        ((LimitedUse) fox).setUse(((LimitedUse) fox).getUse() + 1);
+
+        BeginSniffEvent beginSniffEvent = new BeginSniffEvent(uuid, argUUID);
         Bukkit.getPluginManager().callEvent(beginSniffEvent);
 
-        if(beginSniffEvent.isCancelled()){
+        if (beginSniffEvent.isCancelled()) {
             player.sendMessage(game.translate("werewolf.check.cancel"));
             return;
         }
 
-        ((AffectedPlayers)fox).clearAffectedPlayer();
-        ((Power) fox).setPower(false);
-        ((LimitedUse) fox).setUse(((LimitedUse) fox).getUse()+1);
+        ((AffectedPlayers) fox).clearAffectedPlayer();
         ((AffectedPlayers) fox).addAffectedPlayer(argUUID);
         ((Progress)fox).setProgress(0f);
 

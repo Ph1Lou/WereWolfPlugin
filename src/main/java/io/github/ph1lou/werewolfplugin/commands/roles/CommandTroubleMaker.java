@@ -87,7 +87,7 @@ public class CommandTroubleMaker implements Commands {
         }
 
         TroubleMakerEvent troubleMakerEvent = new TroubleMakerEvent(uuid,argUUID);
-
+        ((Power) troublemaker).setPower(false);
         Bukkit.getPluginManager().callEvent(troubleMakerEvent);
 
         if(troubleMakerEvent.isCancelled()){
@@ -96,7 +96,7 @@ public class CommandTroubleMaker implements Commands {
         }
 
         ((AffectedPlayers)troublemaker).addAffectedPlayer(argUUID);
-        ((Power) troublemaker).setPower(false);
+
         game.getMapManager().transportation(argUUID, Math.random() * 2 * Math.PI, game.translate("werewolf.role.troublemaker.get_switch"));
         player.sendMessage(game.translate("werewolf.role.troublemaker.troublemaker_perform", args[0]));
     }

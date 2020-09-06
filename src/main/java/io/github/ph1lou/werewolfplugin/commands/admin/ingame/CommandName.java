@@ -36,6 +36,6 @@ public class CommandName implements Commands {
         for (String w : args) {
             sb.append(w).append(" ");
         }
-        game.getConfig().setGameName(sb.toString());
+        game.setGameName(sb.toString());
     }
 }

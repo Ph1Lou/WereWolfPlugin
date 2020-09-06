@@ -126,19 +126,20 @@ public class CommandDetective implements Commands {
         if (plg1.getRole() instanceof Display) {
             isLG2 = ((Display) plg1.getRole()).getDisplayCamp();
         }
-        if(plg2.getRole() instanceof Display) {
-            isLG1= ((Display) plg2.getRole()).getDisplayCamp();
+        if (plg2.getRole() instanceof Display) {
+            isLG1 = ((Display) plg2.getRole()).getDisplayCamp();
         }
 
-        InvestigateEvent event=new InvestigateEvent(uuid, Arrays.asList(uuid1,uuid2),isLG1==isLG2);
+        ((Power) detective).setPower(false);
+
+        InvestigateEvent event = new InvestigateEvent(uuid, Arrays.asList(uuid1, uuid2), isLG1 == isLG2);
         Bukkit.getPluginManager().callEvent(event);
 
-        if(event.isCancelled()) {
+        if (event.isCancelled()) {
             player.sendMessage(game.translate("werewolf.check.cancel"));
             return;
         }
 
-        ((Power) detective).setPower(false);
         ((AffectedPlayers) detective).addAffectedPlayer(uuid1);
         ((AffectedPlayers) detective).addAffectedPlayer(uuid2);
 

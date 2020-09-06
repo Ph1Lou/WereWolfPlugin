@@ -81,8 +81,8 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
     @EventHandler
     public void onVoteEvent(VoteEvent event){
 
-        if(!event.getVoterUUID().equals(getPlayerUUID())) return;
-        game.getVote().getVotes().put(event.getVoteUUID(),game.getVote().getVotes().get(event.getVoteUUID())+1);
+        if (!event.getPlayerUUID().equals(getPlayerUUID())) return;
+        game.getVote().getVotes().put(event.getTargetUUID(), game.getVote().getVotes().get(event.getTargetUUID()) + 1);
     }
 
     @EventHandler

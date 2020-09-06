@@ -162,10 +162,9 @@
         "display": "Voyante",
         "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Voyante§9. Votre objectif est d’éliminer les Loups-Garous\nVous obtenez 4 obsidiennes et 4 bibliothèques. Le Jour, Vous pouvez connaître le camp d'un joueur avec §b/ww voir§9.\nCependant si c'est un Villageois, vous perdrez 3 coeurs jusqu'au matin.",
         "see_camp_message": "[§eLG UHC§r] Découvrez le camp d'un joueur §6/ww voir§r vous avez §b%s",
-        "see_perform": "[§eLG UHC§r] Vous venez d'espionner un membre du camp §b%s",
+        "see_perform": "[§eLG UHC§r] Vous venez d'espionner un membre du camp des §b%s",
         "not_enough_life": "[§cLG UHC§r] Vous n'avez plus assez de vie pour espionner un joueur",
         "see_villager": "[§cLG UHC§r] Vous venez d'espionner un membre du Village vous perdez 3 coeurs jusqu'au matin",
-        "neutral": "§6Neutre",
         "command": "voir"
       },
       "protector": {

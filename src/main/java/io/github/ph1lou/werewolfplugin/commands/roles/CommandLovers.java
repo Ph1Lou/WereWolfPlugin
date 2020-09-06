@@ -96,12 +96,16 @@ public class CommandLovers implements Commands {
                         if (playerCouple != null) {
 
                             if (VersionUtils.getVersionUtils().getPlayerMaxHealth(playerCouple) - playerCouple.getHealth() >= don) {
-                                playerCouple.setHealth(playerCouple.getHealth() + don);
-                                playerCouple.sendMessage(game.translate("werewolf.role.lover.received", don, playername));
-                                player.sendMessage((game.translate("werewolf.role.lover.complete", don, playerCouple.getName())));
-                                Sounds.PORTAL.play(playerCouple);
-                                Bukkit.getPluginManager().callEvent(new DonEvent(uuid, uuid1, don));
-                                temp -= don;
+                                DonEvent donEvent = new DonEvent(uuid, uuid1, don);
+                                Bukkit.getPluginManager().callEvent(donEvent);
+
+                                if (!donEvent.isCancelled()) {
+                                    playerCouple.setHealth(playerCouple.getHealth() + don);
+                                    playerCouple.sendMessage(game.translate("werewolf.role.lover.received", don, playername));
+                                    player.sendMessage((game.translate("werewolf.role.lover.complete", don, playerCouple.getName())));
+                                    Sounds.PORTAL.play(playerCouple);
+                                    temp -= don;
+                                } else player.sendMessage(game.translate("werewolf.check.cancel"));
                             } else
                                 player.sendMessage(game.translate("werewolf.role.lover.too_many_heart", playerCouple.getName()));
                         }
@@ -116,12 +120,16 @@ public class CommandLovers implements Commands {
 
                     if (game.getPlayersWW().get(plg.getAmnesiacLoverUUID()).isState(State.ALIVE)) {
                         if (VersionUtils.getVersionUtils().getPlayerMaxHealth(playerCouple) - playerCouple.getHealth() >= heart) {
-                            playerCouple.setHealth(playerCouple.getHealth() + heart);
-                            playerCouple.sendMessage(game.translate("werewolf.role.lover.received", heart, playername));
-                            player.sendMessage((game.translate("werewolf.role.lover.complete", heart, playerCouple.getName())));
-                            Sounds.PORTAL.play(playerCouple);
-                            temp -= heart;
-                            Bukkit.getPluginManager().callEvent(new DonEvent(uuid, plg.getAmnesiacLoverUUID(), heart));
+                            DonEvent donEvent = new DonEvent(uuid, plg.getAmnesiacLoverUUID(), heart);
+                            Bukkit.getPluginManager().callEvent(donEvent);
+
+                            if (!donEvent.isCancelled()) {
+                                playerCouple.setHealth(playerCouple.getHealth() + heart);
+                                playerCouple.sendMessage(game.translate("werewolf.role.lover.received", heart, playername));
+                                player.sendMessage((game.translate("werewolf.role.lover.complete", heart, playerCouple.getName())));
+                                Sounds.PORTAL.play(playerCouple);
+                                temp -= heart;
+                            } else player.sendMessage(game.translate("werewolf.check.cancel"));
                         } else
                             player.sendMessage(game.translate("werewolf.role.lover.too_many_heart", playerCouple.getName()));
                     }
@@ -157,10 +165,18 @@ public class CommandLovers implements Commands {
             player.setHealth(life-heart);
 
             if (VersionUtils.getVersionUtils().getPlayerMaxHealth(playerCouple) - playerCouple.getHealth() >= heart) {
-                playerCouple.setHealth(playerCouple.getHealth() + heart);
-                playerCouple.sendMessage(game.translate("werewolf.role.lover.received", heart, playername));
-                player.sendMessage((game.translate("werewolf.role.lover.complete", heart, args[1])));
-                Bukkit.getPluginManager().callEvent(new DonEvent(uuid, argUUID, heart));
+
+                DonEvent donEvent = new DonEvent(uuid, argUUID, heart);
+                Bukkit.getPluginManager().callEvent(donEvent);
+
+                if (!donEvent.isCancelled()) {
+                    playerCouple.setHealth(playerCouple.getHealth() + heart);
+                    playerCouple.sendMessage(game.translate("werewolf.role.lover.received", heart, playername));
+                    player.sendMessage((game.translate("werewolf.role.lover.complete", heart, args[1])));
+                } else {
+                    player.sendMessage(game.translate("werewolf.check.cancel"));
+                    player.setHealth(player.getHealth() + heart);
+                }
             } else {
                 player.sendMessage(game.translate("werewolf.role.lover.too_many_heart", args[1]));
                 player.setHealth(player.getHealth() + heart);

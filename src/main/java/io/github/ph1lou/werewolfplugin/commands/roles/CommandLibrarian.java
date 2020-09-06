@@ -99,6 +99,7 @@ public class CommandLibrarian implements Commands {
             return;
         }
 
+        ((LimitedUse) librarian).setUse(((LimitedUse) librarian).getUse() + 1);
         LibrarianRequestEvent librarianRequestEvent=new LibrarianRequestEvent(uuid,argUUID);
         Bukkit.getPluginManager().callEvent(librarianRequestEvent);
 
@@ -107,7 +108,6 @@ public class CommandLibrarian implements Commands {
             return;
         }
 
-        ((LimitedUse) librarian).setUse(((LimitedUse) librarian).getUse()+1);
         ((AffectedPlayers) librarian).addAffectedPlayer(argUUID);
 
         selectionPlayer.sendMessage(game.translate("werewolf.role.librarian.message"));

@@ -177,14 +177,16 @@ public class End {
 
     public void fin() {
 
-        String subtitles_victory = winner == null ? game.translate("werewolf.end.death") : game.translate(winner);
+
         List<UUID> players = new ArrayList<>();
         for (UUID uuid : game.getPlayersWW().keySet()) {
             if (game.getPlayersWW().get(uuid).isState(State.ALIVE)) {
                 players.add(uuid);
             }
         }
-        Bukkit.getPluginManager().callEvent(new WinEvent(subtitles_victory, players));
+        Bukkit.getPluginManager().callEvent(new WinEvent(winner == null ? "werewolf.end.death" : winner, players));
+
+        String subtitles_victory = winner == null ? game.translate("werewolf.end.death") : game.translate(winner);
 
         game.setState(StateLG.END);
 

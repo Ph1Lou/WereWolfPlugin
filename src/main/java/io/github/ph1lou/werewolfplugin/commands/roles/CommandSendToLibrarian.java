@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.State;
 import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.events.LibrarianGiveBackEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfapi.rolesattributs.Storage;
@@ -75,9 +76,16 @@ public class CommandSendToLibrarian implements Commands {
                 if(playerWW.getRole().isDisplay("werewolf.role.librarian.display")){
 
                     Roles roles = playerWW.getRole();
-                    if(((AffectedPlayers)roles).getAffectedPlayers().contains(uuid)){
-                        ((Storage) roles).getStorage().add(sb2.toString());
+                    if(((AffectedPlayers)roles).getAffectedPlayers().contains(uuid)) {
                         ((AffectedPlayers) roles).removeAffectedPlayer(uuid);
+                        LibrarianGiveBackEvent librarianGiveBackEvent = new LibrarianGiveBackEvent(uuid, roles.getPlayerUUID(), sb2.toString());
+                        if (librarianGiveBackEvent.isCancelled()) {
+                            player.sendMessage(game.translate("werewolf.check.cancel"));
+                            return;
+                        }
+
+                        ((Storage) roles).getStorage().add(sb2.toString());
+
                         player.sendMessage(game.translate("werewolf.role.librarian.contribute"));
                         find = true;
                         Player librarian = Bukkit.getPlayer(roles.getPlayerUUID());

@@ -170,13 +170,19 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
 
         if (temp >= 100) {
 
-            Sounds.PORTAL_TRAVEL.play(charmed);
-            charmed.sendMessage(game.translate("werewolf.role.succubus.get_charmed", plg.getName()));
-            player.sendMessage(game.translate("werewolf.role.succubus.charming_perform", charmed.getName()));
+            CharmEvent charmEvent = new CharmEvent(getPlayerUUID(), playerCharmedUUID);
+            Bukkit.getPluginManager().callEvent(charmEvent);
+
+            if (!charmEvent.isCancelled()) {
+                Sounds.PORTAL_TRAVEL.play(charmed);
+                charmed.sendMessage(game.translate("werewolf.role.succubus.get_charmed", plg.getName()));
+                player.sendMessage(game.translate("werewolf.role.succubus.charming_perform", charmed.getName()));
+                game.checkVictory();
+            } else player.sendMessage(game.translate("werewolf.check.cancel"));
+
             setProgress(0f);
             setPower(false);
-            Bukkit.getPluginManager().callEvent(new CharmEvent(getPlayerUUID(),playerCharmedUUID));
-            game.checkVictory();
+
         }
     }
     @EventHandler

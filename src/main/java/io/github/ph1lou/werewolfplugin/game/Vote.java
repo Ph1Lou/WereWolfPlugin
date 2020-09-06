@@ -59,26 +59,34 @@ public class Vote implements Listener, VoteAPI {
 			voter.sendMessage(game.translate("werewolf.vote.player_already_voted"));
 		}
 		else {
-			this.voters.put(voterUUID,vote);
+			VoteEvent voteEvent = new VoteEvent(voterUUID, vote);
+			Bukkit.getPluginManager().callEvent(voteEvent);
+
+			if (voteEvent.isCancelled()) {
+				voter.sendMessage(game.translate("werewolf.check.cancel"));
+				return;
+			}
+			this.voters.put(voterUUID, vote);
 			this.votes.merge(vote, 1, Integer::sum);
-			Bukkit.getPluginManager().callEvent(new VoteEvent(voterUUID,vote));
-			voter.sendMessage(game.translate("werewolf.vote.perform_vote",game.getPlayersWW().get(vote).getName()));
+
+			voter.sendMessage(game.translate("werewolf.vote.perform_vote", game.getPlayersWW().get(vote).getName()));
 		}
-				
+
 	}
 
 	@EventHandler
-	public void onVoteEnd(VoteEndEvent event){
+	public void onVoteEnd(VoteEndEvent event) {
 
-		this.currentStatus=VoteStatus.WAITING_CITIZEN;
+		this.currentStatus = VoteStatus.WAITING_CITIZEN;
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onVoteResult(VoteResultEvent event){
-
-		event.setPlayerVotedUUID(getResult());
-		showResultVote(event.getPlayerVoteUUID());
-		this.currentStatus=VoteStatus.NOT_IN_PROGRESS;
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onVoteResult(VoteResultEvent event) {
+		if (!event.isCancelled()) {
+			event.setPlayerVotedUUID(getResult());
+			showResultVote(event.getPlayerVoteUUID());
+		}
+		this.currentStatus = VoteStatus.NOT_IN_PROGRESS;
 	}
 
 	@Override
@@ -89,12 +97,19 @@ public class Vote implements Listener, VoteAPI {
 
 	@Override
 	public void seeVote(Player player) {
-		Bukkit.getPluginManager().callEvent(new SeeVoteEvent(player.getUniqueId(),votes));
+
+		SeeVoteEvent seeVoteEvent = new SeeVoteEvent(player.getUniqueId(), votes);
+		Bukkit.getPluginManager().callEvent(seeVoteEvent);
+
+		if (seeVoteEvent.isCancelled()) {
+			player.sendMessage(game.translate("werewolf.check.cancel"));
+			return;
+		}
 		player.sendMessage(game.translate("werewolf.role.citizen.count_votes"));
-		for(UUID uuid:voters.keySet()) {
-			String voterName=game.getPlayersWW().get(uuid).getName();
-			String voteName=game.getPlayersWW().get(this.voters.get(uuid)).getName();
-			player.sendMessage(game.translate("werewolf.role.citizen.see_vote",voterName,voteName));
+		for (UUID uuid : voters.keySet()) {
+			String voterName = game.getPlayersWW().get(uuid).getName();
+			String voteName = game.getPlayersWW().get(this.voters.get(uuid)).getName();
+			player.sendMessage(game.translate("werewolf.role.citizen.see_vote", voterName, voteName));
 		}
 	}
 

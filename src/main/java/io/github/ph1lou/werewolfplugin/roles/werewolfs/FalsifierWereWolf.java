@@ -78,10 +78,18 @@ public class FalsifierWereWolf extends RolesWereWolf implements Display {
         }
 
         UUID pc = players.get((int) Math.floor(Math.random() * players.size()));
+        Roles roles = game.getPlayersWW().get(pc).getRole();
+        NewDisplayRole newDisplayRole = new NewDisplayRole(getPlayerUUID(), roles.getDisplay(), roles.getCamp());
+        Bukkit.getPluginManager().callEvent(newDisplayRole);
 
-        setDisplayRole(game.getPlayersWW().get(pc).getRole());
-        setDisplayCamp(getDisplayRole().getCamp());
-        Bukkit.getPluginManager().callEvent(new NewDisplayRole(getPlayerUUID(),getDisplayRole().getDisplay(),getDisplayCamp()));
+        if (newDisplayRole.isCancelled()) {
+            player.sendMessage(game.translate("werewolf.check.cancel"));
+            setDisplayCamp(Camp.WEREWOLF);
+            setDisplayRole(this);
+        } else {
+            setDisplayRole(roles);
+            setDisplayCamp(newDisplayRole.getNewDisplayCamp());
+        }
         player.sendMessage(game.translate("werewolf.role.falsifier_werewolf.display_role_message", game.translate(getDisplayRole().getDisplay())));
     }
 

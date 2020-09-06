@@ -85,16 +85,26 @@ public class CommandComedian implements Commands {
                 return;
             }
 
-            if (((PotionEffects)comedian).getPotionEffects().contains(potionsType[i])) {
+            if (((PotionEffects) comedian).getPotionEffects().contains(potionsType[i])) {
                 player.sendMessage(game.translate("werewolf.role.comedian.used_mask"));
                 return;
             }
             ((Power) comedian).setPower(false);
             ((PotionEffects) comedian).addPotionEffect(potionsType[i]);
+
+            UseMaskEvent useMaskEvent = new UseMaskEvent(uuid, i);
+            Bukkit.getPluginManager().callEvent(useMaskEvent);
+
+            if (useMaskEvent.isCancelled()) {
+                player.sendMessage(game.translate("werewolf.check.cancel"));
+                return;
+            }
+
+
             player.sendMessage(game.translate("werewolf.role.comedian.wear_mask_perform", maskName[i]));
             player.removePotionEffect(potionsType[i]);
             player.addPotionEffect(new PotionEffect(potionsType[i], Integer.MAX_VALUE, i == 2 ? -1 : 0, false, false));
-            Bukkit.getPluginManager().callEvent(new UseMaskEvent(uuid,i));
+
         } catch (NumberFormatException ignored) {
         }
     }

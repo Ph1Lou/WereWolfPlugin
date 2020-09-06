@@ -197,6 +197,12 @@ public class Roles implements InventoryProvider {
             pagination.setItemsPerPage(27);
             pagination.addToIterator(contents.newIterator(SlotIterator.Type.HORIZONTAL, 1, 0));
             int page = pagination.getPage() + 1;
+            contents.set(4, 0, null);
+            contents.set(4, 1, null);
+            contents.set(4, 3, null);
+            contents.set(4, 5, null);
+            contents.set(4, 7, null);
+            contents.set(4, 8, null);
             contents.set(4, 2, ClickableItem.of(new ItemBuilder(Material.ARROW).setDisplayName(game.translate("werewolf.menu.roles.previous", page, pagination.isFirst() ? page : page - 1)).build(),
                     e -> INVENTORY.open(player, pagination.previous().getPage())));
             contents.set(4, 6, ClickableItem.of(new ItemBuilder(Material.ARROW).setDisplayName(game.translate("werewolf.menu.roles.next", page, pagination.isLast() ? page : page + 1)).build(),

@@ -41,6 +41,7 @@ public class GameManager implements WereWolfAPI {
     private final Random r = new Random(System.currentTimeMillis());
     private final Map<String, String> language = new HashMap<>();
     private final UUID uuid = UUID.randomUUID();
+    private String gameName = "@Ph1Lou_";
 
 
     public GameManager(Main main) {
@@ -119,6 +120,16 @@ public class GameManager implements WereWolfAPI {
     @Override
     public boolean isState(StateLG state) {
         return this.state == state;
+    }
+
+    @Override
+    public String getGameName() {
+        return gameName;
+    }
+
+    @Override
+    public void setGameName(String gameName) {
+        this.gameName = gameName;
     }
 
     public void setDay(Day day) {

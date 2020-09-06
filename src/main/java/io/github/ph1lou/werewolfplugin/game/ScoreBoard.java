@@ -61,7 +61,7 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		}
 		String line = game.translate("werewolf.score_board.game_name");
 		scoreboard1.add(line.substring(0, Math.min(30, line.length())));
-		line = game.translate("werewolf.score_board.name", game.getConfig().getGameName());
+		line = game.translate("werewolf.score_board.name", game.getGameName());
 		scoreboard1.add(line.substring(0, Math.min(30, line.length())));
 	}
 	
@@ -122,7 +122,7 @@ public class ScoreBoard implements ScoreAPI, Listener {
 			i++;
 		}
 		scoreboard2.add(game.translate("werewolf.score_board.game_name"));
-		scoreboard2.add(game.translate("werewolf.score_board.name", game.getConfig().getGameName()));
+		scoreboard2.add(game.translate("werewolf.score_board.name", game.getGameName()));
 	}
 
 	private void updateScoreBoardRole(){
@@ -189,7 +189,7 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		}
 		String line = game.translate("werewolf.score_board.game_name");
 		scoreboard3.add(line.substring(0, Math.min(30, line.length())));
-		line = game.translate("werewolf.score_board.name", game.getConfig().getGameName());
+		line = game.translate("werewolf.score_board.name", game.getGameName());
 		scoreboard3.add(line.substring(0, Math.min(30, line.length())));
 
 		Bukkit.getPluginManager().callEvent(new UpdateEvent());
@@ -483,6 +483,11 @@ public class ScoreBoard implements ScoreAPI, Listener {
 	}
 
 	@Override
+	public int getTimer() {
+		return timer;
+	}
+
+	@Override
 	public int getGroup() {
 		return this.group_size;
 	}
@@ -490,6 +495,26 @@ public class ScoreBoard implements ScoreAPI, Listener {
 	@Override
 	public void setGroup(int group) {
 		this.group_size = group;
+	}
+
+
+	public char getArrowChar(Player p, Location mate) {
+
+		Location ploc = p.getLocation();
+		ploc.setY(mate.getY());
+		p.setCompassTarget(mate);
+		Vector v = p.getCompassTarget().subtract(ploc).toVector().normalize();
+
+		Vector d = ploc.getDirection();
+
+		double a = Math.toDegrees(Math.atan2(d.getX(), d.getZ()));
+		a -= Math.toDegrees(Math.atan2(v.getX(), v.getZ()));
+		a = ((int) (a + 22.5D) % 360);
+
+		if (a < 0.0) a += 360.0;
+
+		return "↑↗→↘↓↙←↖".charAt((int) a / 45);
+
 	}
 
 }

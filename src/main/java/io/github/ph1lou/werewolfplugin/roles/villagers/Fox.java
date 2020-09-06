@@ -170,21 +170,29 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
 
         if (temp >= 100) {
 
-            boolean isWereWolf =true;
+            boolean isWereWolf = true;
 
             if (plf.getRole() instanceof Display && (!((Display) plf.getRole()).isDisplayCamp(Camp.WEREWOLF))) {
-                isWereWolf=false;
+                isWereWolf = false;
             } else if (!plf.getRole().isWereWolf()) {
-               isWereWolf=false;
+                isWereWolf = false;
             }
-            if (isWereWolf) {
-                player.sendMessage(game.translate("werewolf.role.fox.werewolf", plf.getName()));
-            } else {
-                player.sendMessage(game.translate("werewolf.role.fox.not_werewolf", plf.getName()));
-            }
+
+            SniffEvent sniffEvent = new SniffEvent(getPlayerUUID(), playerSmellUUID, isWereWolf);
+
+            Bukkit.getPluginManager().callEvent(sniffEvent);
+
+            if (!sniffEvent.isCancelled()) {
+                if (isWereWolf) {
+                    player.sendMessage(game.translate("werewolf.role.fox.werewolf", plf.getName()));
+                } else {
+                    player.sendMessage(game.translate("werewolf.role.fox.not_werewolf", plf.getName()));
+                }
+            } else player.sendMessage(game.translate("werewolf.check.cancel"));
+
+
             clearAffectedPlayer();
             setProgress(0f);
-            Bukkit.getPluginManager().callEvent(new SniffEvent(getPlayerUUID(),playerSmellUUID,isWereWolf));
         }
     }
 }

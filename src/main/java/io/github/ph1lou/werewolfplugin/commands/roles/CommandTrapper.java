@@ -98,7 +98,7 @@ public class CommandTrapper implements Commands {
         }
 
         TrackEvent trackEvent=new TrackEvent(uuid,argUUID);
-
+        ((Power) trapper).setPower(false);
         Bukkit.getPluginManager().callEvent(trackEvent);
 
         if(trackEvent.isCancelled()){
@@ -108,7 +108,6 @@ public class CommandTrapper implements Commands {
 
         ((AffectedPlayers) trapper).clearAffectedPlayer();
         ((AffectedPlayers) trapper).addAffectedPlayer(argUUID);
-        ((Power) trapper).setPower(false);
 
         playerArg.sendMessage(game.translate("werewolf.role.trapper.get_track"));
         player.sendMessage(game.translate("werewolf.role.trapper.tracking_perform", args[0]));

@@ -89,22 +89,24 @@ public class CommandProtector implements Commands {
             return;
         }
 
-        if(((AffectedPlayers)protector).getAffectedPlayers().contains(argUUID)){
+        if (((AffectedPlayers) protector).getAffectedPlayers().contains(argUUID)) {
             player.sendMessage(game.translate("werewolf.check.already_get_power"));
             return;
         }
 
-        ProtectionEvent protectionEvent=new ProtectionEvent(uuid,argUUID);
+
+        ((Power) protector).setPower(false);
+
+        ProtectionEvent protectionEvent = new ProtectionEvent(uuid, argUUID);
 
         Bukkit.getPluginManager().callEvent(protectionEvent);
 
-        if(protectionEvent.isCancelled()){
+        if (protectionEvent.isCancelled()) {
             player.sendMessage(game.translate("werewolf.check.cancel"));
             return;
         }
 
         ((AffectedPlayers) protector).clearAffectedPlayer();
-        ((Power) protector).setPower(false);
         ((AffectedPlayers) protector).addAffectedPlayer(argUUID);
 
         Player playerProtected = Bukkit.getPlayer(args[0]);

@@ -99,16 +99,17 @@ public class CommandWitch implements Commands {
         if (plg1.canBeInfect()) {
             return;
         }
-        WitchResurrectionEvent witchResurrectionEvent=new WitchResurrectionEvent(uuid,argUUID);
+
+        ((Power) witch).setPower(false);
+        WitchResurrectionEvent witchResurrectionEvent = new WitchResurrectionEvent(uuid, argUUID);
         Bukkit.getPluginManager().callEvent(witchResurrectionEvent);
 
-        if(witchResurrectionEvent.isCancelled()){
+        if (witchResurrectionEvent.isCancelled()) {
             player.sendMessage(game.translate("werewolf.check.cancel"));
             return;
         }
 
-        ((AffectedPlayers)witch).addAffectedPlayer(argUUID);
-        ((Power) witch).setPower(false);
+        ((AffectedPlayers) witch).addAffectedPlayer(argUUID);
         game.resurrection(argUUID);
         sender.sendMessage(game.translate("werewolf.role.witch.resuscitation_perform",plg1.getName()));
     }
