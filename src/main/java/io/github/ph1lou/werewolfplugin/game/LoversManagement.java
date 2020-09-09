@@ -72,7 +72,7 @@ public class LoversManagement {
 			i++;
 			cursedLoversRange.add(new ArrayList<>(Arrays.asList(j1, j2)));
 			Player player1 = Bukkit.getPlayer(j1);
-			Player player2 = Bukkit.getPlayer(j1);
+			Player player2 = Bukkit.getPlayer(j2);
 			if (player1 != null) {
 				announceCursedLovers(player1);
 			} else game.getPlayersWW().get(j1).setAnnounceCursedLoversAFK(true);

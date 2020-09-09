@@ -223,7 +223,7 @@
       },
       "cursed_lover": {
         "display": "Couple Maudit",
-        "description":   "§6LOUP-GAROU §7➽§c Une liaison destructive entre §6%s§c et vous vient de naitre, même si vous n'êtes pas dans le même camp, vous ne pouvez gagner ensemble.\n Vous possédez un coeur supplémentaire permanent et chute Amortie tant quevous êtes les deux en vie.",
+        "description": "§6LOUP-GAROU §7➽§c Une liaison destructive entre §6%s§c et vous vient de naitre, même si vous n'êtes pas dans le même camp, vous ne pouvez gagner ensemble.\n Vous possédez un coeur supplémentaire permanent et chute Amortie tant que vous êtes les deux en vie.",
         "death_cursed_lover": "[§cLG UHC§r] Votre Couple Maudit est Mort, vous perdez vos Bonus associés",
         "not_enough_players": "[§cLG UHC§r] Il n'y a pas assez de personnes pour former un couple maudit"
       },
