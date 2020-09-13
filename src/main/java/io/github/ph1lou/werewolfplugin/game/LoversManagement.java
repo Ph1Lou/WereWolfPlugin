@@ -4,9 +4,7 @@ package io.github.ph1lou.werewolfplugin.game;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.events.CupidLoversEvent;
-import io.github.ph1lou.werewolfapi.events.RevealAmnesiacLoversEvent;
-import io.github.ph1lou.werewolfapi.events.RevealLoversEvent;
+import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Cupid;
 import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
 import org.bukkit.Bukkit;
@@ -351,7 +349,7 @@ public class LoversManagement {
 			if (!loversRange.get(i).isEmpty()) {
 				UUID c1 = loversRange.get(i).get(0);
 				Bukkit.broadcastMessage(game.translate("werewolf.role.lover.lover_death", game.getPlayersWW().get(c1).getName()));
-
+				Bukkit.getPluginManager().callEvent(new LoverDeathEvent(playerUUID, c1));
 				game.death(c1);
 			} else {
 				loversRange.remove(i);
@@ -374,6 +372,7 @@ public class LoversManagement {
 			UUID c1 = amnesiacLoversRange.get(i).get(0);
 			amnesiacLoversRange.remove(i);
 			Bukkit.broadcastMessage(game.translate("werewolf.role.lover.lover_death", game.getPlayersWW().get(c1).getName()));
+			Bukkit.getPluginManager().callEvent(new AmnesiacLoverDeathEvent(playerUUID, c1));
 			game.death(c1);
 			game.getConfig().setAmnesiacLoverSize(game.getConfig().getAmnesiacLoverSize() - 1);
 		}
@@ -392,6 +391,7 @@ public class LoversManagement {
 			cursedLoversRange.get(i).remove(playerUUID);
 
 			UUID cursedLover = cursedLoversRange.get(i).get(0);
+			Bukkit.getPluginManager().callEvent(new CursedLoverDeathEvent(playerUUID, cursedLover));
 			Player killer = Bukkit.getPlayer(cursedLover);
 
 			if (killer != null) {
