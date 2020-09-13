@@ -237,7 +237,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
 
         if (transformed) return;
 
-        WildChildTransformationEvent wildChildTransformationEvent = new WildChildTransformationEvent(getPlayerUUID(),getPlayerUUID());
+        WildChildTransformationEvent wildChildTransformationEvent = new WildChildTransformationEvent(getPlayerUUID(), uuid);
 
         Bukkit.getPluginManager().callEvent(wildChildTransformationEvent);
 

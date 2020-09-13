@@ -36,18 +36,26 @@ public class CommandRole implements Commands {
             sender.sendMessage(game.translate("werewolf.check.permission_denied"));
             return;
         }
-        
+
         if (!game.isState(StateLG.GAME) && !game.isState(StateLG.END)) {
             sender.sendMessage(game.translate("werewolf.check.role_not_set"));
             return;
         }
+
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
+            if (game.getPlayersWW().containsKey(player.getUniqueId()) && game.getPlayersWW().get(player.getUniqueId()).isState(State.ALIVE)) {
+                sender.sendMessage(game.translate("werewolf.commands.admin.role.in_game"));
+                return;
+            }
+        }
+
         if (args.length == 0) {
-            for(PlayerWW playerWW:game.getPlayersWW().values()){
-                Bukkit.dispatchCommand(sender,"a role "+playerWW.getName());
+            for (PlayerWW playerWW : game.getPlayersWW().values()) {
+                Bukkit.dispatchCommand(sender, "a role " + playerWW.getName());
             }
             return;
         }
-
 
         UUID playerUUID = null;
 
@@ -56,7 +64,6 @@ public class CommandRole implements Commands {
                 playerUUID=playerWW.getRole().getPlayerUUID();
             }
         }
-
 
         if(playerUUID==null){
             sender.sendMessage(game.translate("werewolf.check.not_in_game_player"));
@@ -69,13 +76,6 @@ public class CommandRole implements Commands {
         }
         PlayerWW plg = game.getPlayersWW().get(playerUUID);
 
-        if(sender instanceof Player){
-            Player player = (Player) sender;
-            if (game.getPlayersWW().containsKey(player.getUniqueId()) && game.getPlayersWW().get(player.getUniqueId()).isState(State.ALIVE)) {
-                sender.sendMessage(game.translate("werewolf.commands.admin.role.in_game"));
-                return;
-            }
-        }
 
         Roles role = plg.getRole();
         sender.sendMessage(game.translate("werewolf.commands.admin.role.role", args[0], game.translate(role.getDisplay())));

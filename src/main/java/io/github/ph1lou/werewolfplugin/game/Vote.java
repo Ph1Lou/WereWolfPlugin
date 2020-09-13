@@ -84,7 +84,9 @@ public class Vote implements Listener, VoteAPI {
 	public void onVoteResult(VoteResultEvent event) {
 		if (!event.isCancelled()) {
 			event.setPlayerVotedUUID(getResult());
-			showResultVote(event.getPlayerVoteUUID());
+			if (event.getPlayerVoteUUID() == null) {
+				event.setCancelled(true);
+			} else showResultVote(event.getPlayerVoteUUID());
 		}
 		this.currentStatus = VoteStatus.NOT_IN_PROGRESS;
 	}

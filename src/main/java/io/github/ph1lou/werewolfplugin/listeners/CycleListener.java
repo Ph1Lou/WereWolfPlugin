@@ -263,8 +263,7 @@ public class CycleListener implements Listener {
                 e.printStackTrace();
             }
         }
-
-        game.checkVictory();
+        Bukkit.getScheduler().scheduleSyncDelayedTask(game.getMain(), game::checkVictory);
     }
 
     @EventHandler

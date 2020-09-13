@@ -10,7 +10,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 public class CommandDisconnected implements Commands {
 
@@ -35,7 +34,7 @@ public class CommandDisconnected implements Commands {
         for (UUID uuid : game.getPlayersWW().keySet()) {
             PlayerWW plg = game.getPlayersWW().get(uuid);
             if (plg.isState(State.ALIVE) && Bukkit.getPlayer(uuid) == null) {
-                sender.sendMessage(game.translate("werewolf.commands.admin.disconnected", plg.getName(), game.getScore().conversion((int) (TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) - plg.getDeathTime()))));
+                sender.sendMessage(game.translate("werewolf.commands.admin.disconnected", plg.getName(), game.getScore().conversion(game.getScore().getTimer() - plg.getDeathTime())));
             }
         }
     }

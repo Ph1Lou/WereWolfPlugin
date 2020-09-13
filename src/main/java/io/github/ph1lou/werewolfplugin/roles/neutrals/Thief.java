@@ -139,6 +139,8 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
         roleClone.setPlayerUUID(killerUUID);
         Bukkit.getPluginManager().registerEvents((Listener) roleClone, (Plugin) main);
 
+        Bukkit.getPluginManager().callEvent(new StealEvent(killerUUID, playerUUID, roleClone.getDisplay()));
+
         if (isInfected) {
             roleClone.setInfected(true);
         } else if (roleClone.isWereWolf()) {
@@ -157,15 +159,12 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
             }
             klg.getRole().recoverPotionEffect(killer);
             klg.getRole().stolen(playerUUID);
-            Bukkit.getPluginManager().callEvent(new StealEvent(killerUUID, playerUUID));
 
             if (klg.getCursedLovers() != null || klg.getAmnesiacLoverUUID() != null) {
-                Bukkit.getConsoleSender().sendMessage("[WreWolfPlugin] Thief in special lover");
+                Bukkit.getConsoleSender().sendMessage("[WereWolfPlugin] Thief in special lover");
             } else if (!klg.getLovers().isEmpty() && !game.getConfig().getConfigValues().get("werewolf.menu.global.polygamy")) {
-                Bukkit.getConsoleSender().sendMessage("[WreWolfPlugin] Thief in lover & no polygamy");
-            }
-
-            if (!klg.getLovers().isEmpty() || !plg.getLovers().isEmpty()) {
+                Bukkit.getConsoleSender().sendMessage("[WereWolfPlugin] Thief in lover & no polygamy");
+            } else if (!klg.getLovers().isEmpty() || !plg.getLovers().isEmpty()) {
 
                 if (!klg.getLovers().contains(playerUUID)) {
 
@@ -208,6 +207,7 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
             else if (plg.getAmnesiacLoverUUID()!=null) {
 
                 UUID uuid = plg.getAmnesiacLoverUUID();
+                plg.setAmnesiacLoverUUID(null);
                 Player pc = Bukkit.getPlayer(uuid);
                 PlayerWW llg = game.getPlayersWW().get(uuid);
 
@@ -237,6 +237,7 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
             else if (plg.getCursedLovers()!=null) {
 
                 UUID uuid = plg.getCursedLovers();
+                plg.setCursedLover(null);
                 PlayerWW llg = game.getPlayersWW().get(uuid);
                 Player pc = Bukkit.getPlayer(uuid);
 

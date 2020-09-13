@@ -33,7 +33,6 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -325,7 +324,7 @@ public class PlayerListener implements Listener {
 				event.setQuitMessage(game.translate("werewolf.announcement.leave_in_spec", playerName));
 			} else {
 				event.setQuitMessage(game.translate("werewolf.announcement.leave_in_game", playerName));
-				plg.setDeathTime((int) TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()));
+				plg.setDeathTime(game.getScore().getTimer());
 			}
 		}
 	}
@@ -381,7 +380,7 @@ public class PlayerListener implements Listener {
 
 		if (playerWW.isState(State.DEATH)) return;
 
-		playerWW.setDeathTime((int) TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()));
+		playerWW.setDeathTime(game.getScore().getTimer());
 
 
 		if (playerWW.isThief()) {
@@ -428,7 +427,7 @@ public class PlayerListener implements Listener {
 				player.kickPlayer(game.translate("werewolf.check.death_spectator"));
 			}
 		}
-		game.checkVictory();
+		Bukkit.getScheduler().scheduleSyncDelayedTask(game.getMain(), game::checkVictory);
 	}
 
 	@EventHandler
@@ -446,7 +445,7 @@ public class PlayerListener implements Listener {
 		game.getMapManager().transportation(uuid, Math.random() * Math.PI * 2, game.translate("werewolf.announcement.resurrection"));
 		plg.setState(State.ALIVE);
 
-		game.checkVictory();
+		Bukkit.getScheduler().scheduleSyncDelayedTask(game.getMain(), game::checkVictory);
 	}
 
 
