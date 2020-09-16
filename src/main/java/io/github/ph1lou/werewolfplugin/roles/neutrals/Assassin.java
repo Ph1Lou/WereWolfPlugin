@@ -30,13 +30,8 @@ public class Assassin extends RolesNeutral {
     @EventHandler
     public void onNight(NightEvent event) {
 
-        getPlayerUUID();
-
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
-            return;
-        }
         if (player == null) {
             return;
         }
@@ -47,7 +42,6 @@ public class Assassin extends RolesNeutral {
     @EventHandler
     public void onDay(DayEvent event) {
 
-        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -64,14 +58,18 @@ public class Assassin extends RolesNeutral {
     @EventHandler
     public void onEnchantment(EnchantmentEvent event){
 
-        if(!event.getPlayerUUID().equals(getPlayerUUID())) return;
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+            return;
+        }
+
+        if (!event.getPlayerUUID().equals(getPlayerUUID())) return;
 
         ItemStack item = event.getItem();
 
-        if(event.getEnchants().containsKey(Enchantment.PROTECTION_ENVIRONMENTAL)){
+        if (event.getEnchants().containsKey(Enchantment.PROTECTION_ENVIRONMENTAL)) {
 
-            if (item.getType().equals(Material.DIAMOND_BOOTS) || item.getType().equals(Material.DIAMOND_LEGGINGS) ||  item.getType().equals(Material.DIAMOND_HELMET) ||  item.getType().equals(Material.DIAMOND_CHESTPLATE)){
-                event.getFinalEnchants().put(Enchantment.PROTECTION_ENVIRONMENTAL,Math.min(event.getEnchants().get(Enchantment.PROTECTION_ENVIRONMENTAL),game.getConfig().getLimitProtectionDiamond()+1));
+            if (item.getType().equals(Material.DIAMOND_BOOTS) || item.getType().equals(Material.DIAMOND_LEGGINGS) || item.getType().equals(Material.DIAMOND_HELMET) || item.getType().equals(Material.DIAMOND_CHESTPLATE)) {
+                event.getFinalEnchants().put(Enchantment.PROTECTION_ENVIRONMENTAL, Math.min(event.getEnchants().get(Enchantment.PROTECTION_ENVIRONMENTAL), game.getConfig().getLimitProtectionDiamond() + 1));
             }
             else {
                 event.getFinalEnchants().put(Enchantment.PROTECTION_ENVIRONMENTAL,Math.min(event.getEnchants().get(Enchantment.PROTECTION_ENVIRONMENTAL),game.getConfig().getLimitProtectionIron()+1));

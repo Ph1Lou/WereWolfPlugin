@@ -246,8 +246,8 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
 
         getPlayerUUID();
 
-        UUID newUUID = event.getNewUUID();
-        UUID oldUUID = event.getOldUUID();
+        UUID newUUID = event.getKiller();
+        UUID oldUUID = event.getPlayer();
         PlayerWW plg = game.getPlayersWW().get(getPlayerUUID());
         Player player = Bukkit.getPlayer(getPlayerUUID());
         String targetName = game.getPlayersWW().get(newUUID).getName();

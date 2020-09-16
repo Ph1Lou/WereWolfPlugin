@@ -190,8 +190,8 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
 
         getPlayerUUID();
 
-        UUID newUUID = event.getNewUUID();
-        UUID oldUUID = event.getOldUUID();
+        UUID newUUID = event.getKiller();
+        UUID oldUUID = event.getPlayer();
         Player player = Bukkit.getPlayer(getPlayerUUID());
         Player charmed = Bukkit.getPlayer(newUUID);
         PlayerWW plg = game.getPlayersWW().get(getPlayerUUID());

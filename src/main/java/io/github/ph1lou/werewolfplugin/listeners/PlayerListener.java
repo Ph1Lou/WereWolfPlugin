@@ -117,11 +117,8 @@ public class PlayerListener implements Listener {
 				event.setCancelled(true);
 				return;
 			}
-			if (plg.hasSalvation()) {
-				event.setCancelled(true);
-				return;
-			}
-			for (List<UUID> loversCursed : game.getCursedLoversRange()) {
+
+            for (List<UUID> loversCursed : game.getCursedLoversRange()) {
 				if (loversCursed.contains(uuid)) {
 					event.setCancelled(true);
 					break;

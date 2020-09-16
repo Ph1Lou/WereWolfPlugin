@@ -117,6 +117,6 @@ public class CommandSuccubus implements Commands {
         }
 
         ((AffectedPlayers) succubus).addAffectedPlayer(argUUID);
-        player.sendMessage(game.translate("werewolf.role.succubus.charming_beginning", args[0]));
+        player.sendMessage(game.translate("werewolf.role.succubus.charming_beginning", playerArg.getName()));
     }
 }

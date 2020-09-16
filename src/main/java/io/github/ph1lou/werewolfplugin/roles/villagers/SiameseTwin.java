@@ -37,7 +37,6 @@ public class SiameseTwin extends RolesVillage {
     @Override
     public void stolen(@NotNull UUID uuid) {
 
-        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 

@@ -98,6 +98,6 @@ public class CommandTroubleMaker implements Commands {
         ((AffectedPlayers)troublemaker).addAffectedPlayer(argUUID);
 
         game.getMapManager().transportation(argUUID, Math.random() * 2 * Math.PI, game.translate("werewolf.role.troublemaker.get_switch"));
-        player.sendMessage(game.translate("werewolf.role.troublemaker.troublemaker_perform", args[0]));
+        player.sendMessage(game.translate("werewolf.role.troublemaker.troublemaker_perform", playerArg.getName()));
     }
 }

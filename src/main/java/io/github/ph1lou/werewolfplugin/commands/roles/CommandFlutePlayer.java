@@ -130,7 +130,7 @@ public class CommandFlutePlayer implements Commands {
             return;
         }
 
-        for (UUID uuid1 : listUUIDs) {
+        for (UUID uuid1 : enchantedEvent.getPlayersUUID()) {
 
             Player enchanted = Bukkit.getPlayer(uuid1);
             if (enchanted == null) return;

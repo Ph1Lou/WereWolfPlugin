@@ -55,7 +55,6 @@ public class FalsifierWereWolf extends RolesWereWolf implements Display {
     @EventHandler
     public void onSelectionEnd(SelectionEndEvent event) {
 
-        getPlayerUUID();
 
         if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
             return;
@@ -109,7 +108,6 @@ public class FalsifierWereWolf extends RolesWereWolf implements Display {
     @Override
     public void stolen(@NotNull UUID uuid) {
 
-        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 

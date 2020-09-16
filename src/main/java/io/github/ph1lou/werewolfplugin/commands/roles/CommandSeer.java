@@ -117,7 +117,7 @@ public class CommandSeer implements Commands {
 
             ((AffectedPlayers) seer).addAffectedPlayer(argUUID);
 
-            if (camp.equals("werewolf.categories.villager")) {
+            if (seerEvent.getCamp().equals("werewolf.categories.villager")) {
                 VersionUtils.getVersionUtils().setPlayerMaxHealth(player, life - 6);
                 if (player.getHealth() > life - 6) {
                     player.setHealth(life - 6);
@@ -127,7 +127,7 @@ public class CommandSeer implements Commands {
                     Bukkit.broadcastMessage(game.translate("werewolf.role.chatty_seer.see_perform", game.translate("werewolf.categories.villager")));
                 }
                 plg.addKLostHeart(6);
-            } else if (camp.equals("werewolf.categories.werewolf")) {
+            } else if (seerEvent.getCamp().equals("werewolf.categories.werewolf")) {
                 player.sendMessage(game.translate("werewolf.role.seer.see_perform", game.translate("werewolf.categories.werewolf")));
                 if (seer.isDisplay("werewolf.role.chatty_seer.display")) {
                     Bukkit.broadcastMessage(game.translate("werewolf.role.chatty_seer.see_perform", game.translate("werewolf.categories.werewolf")));

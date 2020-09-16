@@ -48,7 +48,6 @@ public class BearTrainer extends RolesVillage {
                 if (!(plo.getRole() instanceof Display) || ((Display) plo.getRole()).isDisplayCamp(Camp.WEREWOLF)) {
                     if (plo.getRole().isWereWolf() && plo.isState(State.ALIVE)) {
                         if (oursLocation.distance(pls.getLocation()) < game.getConfig().getDistanceBearTrainer()) {
-                            builder.append(game.translate("werewolf.role.bear_trainer.growling"));
                             growled.add(pls.getUniqueId());
                             ok = true;
                         }
@@ -63,6 +62,9 @@ public class BearTrainer extends RolesVillage {
             if (growlEvent.isCancelled()) {
                 player.sendMessage(game.translate("werewolf.check.cancel"));
                 return;
+            }
+            for (UUID ignored : growlEvent.getPlayersUUID()) {
+                builder.append(game.translate("werewolf.role.bear_trainer.growling"));
             }
             for (Player p : Bukkit.getOnlinePlayers()) {
                 p.sendMessage(game.translate("werewolf.role.bear_trainer.growling_message", builder.toString()));

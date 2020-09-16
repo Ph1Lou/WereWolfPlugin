@@ -76,7 +76,6 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     @EventHandler
     public void onNight(NightEvent event) {
 
-        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -96,7 +95,6 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     @EventHandler
     public void onDay(DayEvent event) {
 
-        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -116,7 +114,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     @EventHandler
     public void onAutoModel(AutoModelEvent event) {
 
-        getPlayerUUID();
+
 
         UUID modelUUID = game.autoSelect(getPlayerUUID());
         PlayerWW model = game.getPlayersWW().get(modelUUID);
@@ -151,7 +149,6 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     @Override
     public void stolen(@NotNull UUID uuid) {
 
-        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -226,7 +223,6 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 
-        getPlayerUUID();
 
         UUID uuid = event.getUuid();
         Player player = Bukkit.getPlayer(getPlayerUUID());
@@ -259,10 +255,9 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     @EventHandler
     public void onTargetIsStolen(StealEvent event) {
 
-        getPlayerUUID();
 
-        UUID newUUID = event.getNewUUID();
-        UUID oldUUID = event.getOldUUID();
+        UUID newUUID = event.getKiller();
+        UUID oldUUID = event.getPlayer();
         PlayerWW plg = game.getPlayersWW().get(getPlayerUUID());
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -271,7 +266,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
         removeAffectedPlayer(oldUUID);
         addAffectedPlayer(newUUID);
 
-        if(!plg.isState(State.ALIVE)) return;
+        if (!plg.isState(State.ALIVE)) return;
 
         if (player != null) {
             player.sendMessage(game.translate("werewolf.role.wild_child.change", game.getPlayersWW().get(newUUID).getName()));

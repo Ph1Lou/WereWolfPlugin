@@ -16,6 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -120,19 +121,19 @@ public class CommandDetective implements Commands {
         PlayerWW plg1 = game.getPlayersWW().get(uuid1);
         PlayerWW plg2 = game.getPlayersWW().get(uuid2);
 
-        Camp isLG1 = plg2.getRole().getCamp();
-        Camp isLG2 = plg1.getRole().getCamp();
+        Camp isLG1 = plg1.getRole().getCamp();
+        Camp isLG2 = plg2.getRole().getCamp();
 
         if (plg1.getRole() instanceof Display) {
-            isLG2 = ((Display) plg1.getRole()).getDisplayCamp();
+            isLG1 = ((Display) plg1.getRole()).getDisplayCamp();
         }
         if (plg2.getRole() instanceof Display) {
-            isLG1 = ((Display) plg2.getRole()).getDisplayCamp();
+            isLG2 = ((Display) plg2.getRole()).getDisplayCamp();
         }
 
         ((Power) detective).setPower(false);
 
-        InvestigateEvent event = new InvestigateEvent(uuid, Arrays.asList(uuid1, uuid2), isLG1 == isLG2);
+        InvestigateEvent event = new InvestigateEvent(uuid, new ArrayList<>(Arrays.asList(uuid1, uuid2)), isLG1 == isLG2);
         Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
@@ -143,9 +144,9 @@ public class CommandDetective implements Commands {
         ((AffectedPlayers) detective).addAffectedPlayer(uuid1);
         ((AffectedPlayers) detective).addAffectedPlayer(uuid2);
 
-        if(isLG1!=isLG2) {
-            player.sendMessage(game.translate("werewolf.role.detective.opposing_camp",args[0],args[1]));
-        }
-        else player.sendMessage(game.translate("werewolf.role.detective.same_camp",args[0],args[1]));
+        if (event.isSameCamp()) {
+            player.sendMessage(game.translate("werewolf.role.detective.same_camp", player1.getName(), player2.getName()));
+        } else
+            player.sendMessage(game.translate("werewolf.role.detective.opposing_camp", player1.getName(), player2.getName()));
     }
 }

@@ -104,10 +104,9 @@ public class CommandRaven implements Commands {
 
         ((AffectedPlayers) raven).clearAffectedPlayer();
         ((AffectedPlayers) raven).addAffectedPlayer(argUUID);
-        game.getPlayersWW().get(argUUID).setDamn(true);
         playerArg.removePotionEffect(PotionEffectType.JUMP);
         playerArg.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 1, false, false));
         playerArg.sendMessage(game.translate("werewolf.role.raven.get_curse"));
-        player.sendMessage(game.translate("werewolf.role.raven.curse_perform", args[0]));
+        player.sendMessage(game.translate("werewolf.role.raven.curse_perform", playerArg.getName()));
     }
 }

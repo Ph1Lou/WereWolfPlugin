@@ -94,7 +94,7 @@ public class CommandWildChild implements Commands {
 
         ((AffectedPlayers)wildChild).addAffectedPlayer(argUUID);
         ((Power) wildChild).setPower(false);
-        Bukkit.getPluginManager().callEvent(new ModelEvent(uuid,argUUID));
-        player.sendMessage(game.translate("werewolf.role.wild_child.reveal_model", args[0]));
+        Bukkit.getPluginManager().callEvent(new ModelEvent(uuid, argUUID));
+        player.sendMessage(game.translate("werewolf.role.wild_child.reveal_model", playerArg.getName()));
     }
 }

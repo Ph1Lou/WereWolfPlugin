@@ -264,7 +264,7 @@ public class LoversManagement {
 		autoAmnesiacLovers();
 
 		autoCursedLovers();
-		Bukkit.getPluginManager().callEvent(new RevealLoversEvent(this.cursedLoversRange));
+		Bukkit.getPluginManager().callEvent(new RevealCursedLoversEvent(this.cursedLoversRange));
 		game.checkVictory();
 	}
 

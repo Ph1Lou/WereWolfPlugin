@@ -107,7 +107,7 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
 
     @Override
     public WereWolfAPI getWereWolfAPI() {
-        return getCurrentGame();
+        return currentGame;
     }
 
     @EventHandler

@@ -110,6 +110,6 @@ public class CommandTrapper implements Commands {
         ((AffectedPlayers) trapper).addAffectedPlayer(argUUID);
 
         playerArg.sendMessage(game.translate("werewolf.role.trapper.get_track"));
-        player.sendMessage(game.translate("werewolf.role.trapper.tracking_perform", args[0]));
+        player.sendMessage(game.translate("werewolf.role.trapper.tracking_perform", playerArg.getName()));
     }
 }

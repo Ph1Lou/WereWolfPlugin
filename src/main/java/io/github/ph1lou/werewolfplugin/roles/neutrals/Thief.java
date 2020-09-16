@@ -109,22 +109,19 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
 
         if(!hasPower())return;
 
-        setPower(false);
-
         event.setCancelled(true);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
-            if (game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+            if (game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE) && hasPower()) {
                 thief_recover_role(getPlayerUUID(), uuid);
-            }
-            else {
+            } else {
                 Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> Bukkit.getPluginManager().callEvent(new FirstDeathEvent(uuid)), 20L);
             }
         },7*20);
     }
 
 
-    public void thief_recover_role(UUID killerUUID,UUID playerUUID){
+    public void thief_recover_role(UUID killerUUID,UUID playerUUID) {
 
         PlayerWW plg = game.getPlayersWW().get(playerUUID);
         Roles role = plg.getRole();
@@ -133,30 +130,30 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
         Player killer = Bukkit.getPlayer(killerUUID);
         boolean isInfected = klg.getRole().getInfected();
 
-        HandlerList.unregisterAll((Listener) klg.getRole());
-        Roles roleClone = role.publicClone();
-        klg.setRole(roleClone);
-        roleClone.setPlayerUUID(killerUUID);
-        Bukkit.getPluginManager().registerEvents((Listener) roleClone, (Plugin) main);
-
-        Bukkit.getPluginManager().callEvent(new StealEvent(killerUUID, playerUUID, roleClone.getDisplay()));
-
-        if (isInfected) {
-            roleClone.setInfected(true);
-        } else if (roleClone.isWereWolf()) {
-            Bukkit.getPluginManager().callEvent(new NewWereWolfEvent(killerUUID));
-        }
-
-        klg.setThief(true);
 
         if (killer != null) {
+
+            setPower(false);
+            klg.setThief(true);
+            HandlerList.unregisterAll((Listener) klg.getRole());
+            Roles roleClone = role.publicClone();
+            klg.setRole(roleClone);
+            roleClone.setPlayerUUID(killerUUID);
+            Bukkit.getPluginManager().registerEvents((Listener) roleClone, (Plugin) main);
+
+            if (isInfected) {
+                roleClone.setInfected(true);
+            } else if (roleClone.isWereWolf()) {
+                Bukkit.getPluginManager().callEvent(new NewWereWolfEvent(killerUUID));
+            }
 
             killer.sendMessage(game.translate("werewolf.role.thief.realized_theft", game.translate(role.getDisplay())));
             killer.sendMessage(game.translate("werewolf.announcement.review_role"));
 
-            if (!klg.hasSalvation()) {
-                killer.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-            }
+            killer.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+            Bukkit.getPluginManager().callEvent(new StealEvent(killerUUID, playerUUID, roleClone.getDisplay()));
+
+
             klg.getRole().recoverPotionEffect(killer);
             klg.getRole().stolen(playerUUID);
 

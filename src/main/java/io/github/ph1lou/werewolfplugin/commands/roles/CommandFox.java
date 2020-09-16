@@ -117,6 +117,6 @@ public class CommandFox implements Commands {
         ((AffectedPlayers) fox).addAffectedPlayer(argUUID);
         ((Progress)fox).setProgress(0f);
 
-        player.sendMessage(game.translate("werewolf.role.fox.smell_beginning", args[0]));
+        player.sendMessage(game.translate("werewolf.role.fox.smell_beginning", playerArg.getName()));
     }
 }

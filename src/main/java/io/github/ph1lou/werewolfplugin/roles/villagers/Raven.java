@@ -11,7 +11,9 @@ import io.github.ph1lou.werewolfapi.rolesattributs.RolesWithLimitedSelectionDura
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,7 @@ import java.util.UUID;
 public class Raven extends RolesWithLimitedSelectionDuration implements AffectedPlayers {
 
     private final List<UUID> affectedPlayer = new ArrayList<>();
+    private UUID last;
 
     public Raven(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
 
@@ -30,6 +33,7 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
     @Override
     public void addAffectedPlayer(UUID uuid) {
         this.affectedPlayer.add(uuid);
+        this.last = uuid;
     }
 
     @Override
@@ -47,12 +51,21 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
         return (this.affectedPlayer);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onDay(DayEvent event) {
 
-        getPlayerUUID();
 
-        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
+        if (last != null) {
+            Player player = Bukkit.getPlayer(last);
+
+            if (player != null) {
+                player.removePotionEffect(PotionEffectType.JUMP);
+                player.sendMessage(game.translate("werewolf.role.raven.no_longer_curse"));
+            }
+            last = null;
+        }
+
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
             return;
         }
         Player player = Bukkit.getPlayer(getPlayerUUID());
@@ -82,7 +95,7 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
     public void onVoteEvent(VoteEvent event){
 
         if (!event.getPlayerUUID().equals(getPlayerUUID())) return;
-        game.getVote().getVotes().put(event.getTargetUUID(), game.getVote().getVotes().get(event.getTargetUUID()) + 1);
+        game.getVote().getVotes().put(event.getTargetUUID(), game.getVote().getVotes().getOrDefault(event.getTargetUUID(), 0) + 1);
     }
 
     @EventHandler

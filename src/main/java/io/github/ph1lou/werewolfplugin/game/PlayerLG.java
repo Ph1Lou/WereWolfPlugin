@@ -15,7 +15,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
@@ -29,8 +28,6 @@ public class PlayerLG implements Listener, PlayerWW {
     private State state = State.ALIVE;
     private Roles role;
     private Boolean canBeInfect = false;
-    private Boolean damn = false;
-    private Boolean salvation = false;
     private final List<UUID> lovers = new ArrayList<>();
     private Boolean kit = false;
     private Boolean announceCursedLoversAFK = false;
@@ -42,7 +39,6 @@ public class PlayerLG implements Listener, PlayerWW {
     private UUID cursedLovers = null;
     private UUID amnesiacLoverUUID = null;
     private transient Location spawn;
-    private final transient GameManager game;
     private int deathTime = 0;
     private int lostHeart = 0;
     private int kill = 0;
@@ -55,7 +51,6 @@ public class PlayerLG implements Listener, PlayerWW {
 	public PlayerLG (Main main, GameManager game, Player player) {
         this.spawn = player.getWorld().getSpawnLocation();
         this.playerUUID = player.getUniqueId();
-        this.game = game;
         this.role = new Villager(main, game, this.playerUUID);
 		this.name = player.getName();
 		this.board = Bukkit.getScoreboardManager().getNewScoreboard();
@@ -75,16 +70,6 @@ public class PlayerLG implements Listener, PlayerWW {
             clearLostHeart();
         }
 
-        if (hasDamn()) {
-            setDamn(false);
-            player.removePotionEffect(PotionEffectType.JUMP);
-            player.sendMessage(game.translate("werewolf.role.raven.no_longer_curse"));
-		}
-		if (hasSalvation()) {
-			setSalvation(false);
-			player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-			player.sendMessage(game.translate("werewolf.role.protector.no_longer_protected"));
-		}
 	}
 
 	@Override
@@ -177,26 +162,6 @@ public class PlayerLG implements Listener, PlayerWW {
 	@Override
 	public Location getSpawn() {
 		return(this.spawn);
-	}
-
-	@Override
-	public void setDamn(Boolean damn) {
-		this.damn = damn;
-	}
-
-	@Override
-	public Boolean hasDamn() {
-		return(this.damn);
-	}
-
-	@Override
-	public void setSalvation(Boolean salvation) {
-		this.salvation = salvation;
-	}
-
-	@Override
-	public Boolean hasSalvation() {
-		return(this.salvation);
 	}
 
 	@Override

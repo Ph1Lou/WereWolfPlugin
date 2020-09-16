@@ -113,8 +113,7 @@ public class CommandProtector implements Commands {
         if (playerProtected == null) return;
         playerProtected.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
         playerProtected.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,Integer.MAX_VALUE,0,false,false));
-        game.getPlayersWW().get(argUUID).setSalvation(true);
         playerProtected.sendMessage(game.translate("werewolf.role.protector.get_protection"));
-        player.sendMessage(game.translate("werewolf.role.protector.protection_perform",args[0]));
+        player.sendMessage(game.translate("werewolf.role.protector.protection_perform", playerArg.getName()));
     }
 }

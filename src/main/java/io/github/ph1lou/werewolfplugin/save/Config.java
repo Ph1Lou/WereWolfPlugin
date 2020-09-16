@@ -86,6 +86,11 @@ public class Config implements ConfigWereWolfAPI {
             this.setLoverSize(this_load.getLoverSize());
             this.setAmnesiacLoverSize(this_load.getAmnesiacLoverSize());
             this.setCursedLoverSize(this_load.getCursedLoverSize());
+            this.setLimitDepthStrider(this_load.getLimitDepthStrider());
+            this.setTrollKey(this_load.getTrollKey());
+            this.setSpectatorMode(this_load.getSpectatorMode());
+            this.setWhiteList(this_load.isWhiteList());
+            this.setPlayerMax(this_load.getPlayerMax());
         }
 
         api.getScore().setRole(0);
