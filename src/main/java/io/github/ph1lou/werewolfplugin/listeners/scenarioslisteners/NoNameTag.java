@@ -5,16 +5,7 @@ import io.github.ph1lou.werewolfapi.Scenarios;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 
 public class NoNameTag extends Scenarios {
-
     public NoNameTag(GetWereWolfAPI main, WereWolfAPI game, String key) {
         super(main, game, key);
     }
-
-    @Override
-    public void register() {
-        super.register();
-    }
-
-    //game.getScore().updateNameTag();
-
 }
