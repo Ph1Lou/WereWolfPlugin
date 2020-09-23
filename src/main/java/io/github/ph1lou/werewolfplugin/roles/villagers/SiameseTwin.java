@@ -22,7 +22,6 @@ public class SiameseTwin extends RolesVillage {
         super(main,game,uuid);
     }
 
-
     @Override
     public String getDescription() {
         return game.translate("werewolf.role.siamese_twin.description");

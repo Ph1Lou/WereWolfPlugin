@@ -297,8 +297,6 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
 
     public void restoreResistance() {
 
-        getPlayerUUID();
-
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
         if (!hasPower()) return;

@@ -43,8 +43,6 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
             return;
         }
 
-        getPlayerUUID();
-
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
         if (player == null) {
@@ -57,8 +55,6 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
 
     @EventHandler
     public void onUpdate(UpdateEvent event) {
-
-        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -110,7 +106,6 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
     @EventHandler
     public void onDay(DayEvent event) {
 
-        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -163,8 +158,6 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
 
     @EventHandler
     public void onDayWillCome(DayWillComeEvent event) {
-
-        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 

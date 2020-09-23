@@ -32,8 +32,6 @@ public class WhiteWereWolf extends RolesNeutral {
             return;
         }
 
-        getPlayerUUID();
-
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
         if (player == null) {
@@ -50,7 +48,6 @@ public class WhiteWereWolf extends RolesNeutral {
         if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
             return;
         }
-        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -64,7 +61,6 @@ public class WhiteWereWolf extends RolesNeutral {
     @Override
     public void stolen(@NotNull UUID uuid) {
 
-        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 

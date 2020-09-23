@@ -22,7 +22,6 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
     private final List<UUID> affectedPlayer = new ArrayList<>();
 
     public Trapper(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-
         super(main,game,uuid);
         setPower(false);
     }
@@ -61,8 +60,6 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
     @EventHandler
     public void onDay(DayEvent event) {
 
-        getPlayerUUID();
-
         if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
             return;
         }
@@ -89,8 +86,6 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
 
     @EventHandler
     public void onActionBarRequest(ActionBarEvent event) {
-
-        getPlayerUUID();
 
         if (!getPlayerUUID().equals(event.getPlayerUUID())) return;
 

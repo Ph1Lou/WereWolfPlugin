@@ -12,13 +12,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 public class Comedian extends RolesWithLimitedSelectionDuration implements PotionEffects {
 
-    private final List<PotionEffectType> comedianEffects = new ArrayList<>(Collections.singletonList(PotionEffectType.BLINDNESS));
+    private final List<PotionEffectType> comedianEffects = new ArrayList<>();
 
     public Comedian(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
         super(main,game,uuid);
@@ -33,6 +32,7 @@ public class Comedian extends RolesWithLimitedSelectionDuration implements Potio
 
     @Override
     public PotionEffectType getLastPotionEffect() {
+        if (comedianEffects.isEmpty()) return PotionEffectType.BLINDNESS;
         return comedianEffects.get(comedianEffects.size() - 1);
     }
 
@@ -50,24 +50,22 @@ public class Comedian extends RolesWithLimitedSelectionDuration implements Potio
     @EventHandler
     public void onDay(DayEvent event) {
 
-        getPlayerUUID();
-
         Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (player == null) return;
+
+        player.removePotionEffect(getLastPotionEffect());
 
         if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
             return;
         }
+
+        if (getPotionEffects().size() >= 3) return;
+
         setPower(true);
 
-        if (player == null) {
-            return;
-        }
+        player.sendMessage(game.translate("werewolf.role.comedian.wear_mask_message", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.power_duration"))));
 
-
-        player.removePotionEffect(getLastPotionEffect());
-        if (getPotionEffects().size() < 4) {
-            player.sendMessage(game.translate("werewolf.role.comedian.wear_mask_message", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.power_duration"))));
-        }
     }
 
     @Override

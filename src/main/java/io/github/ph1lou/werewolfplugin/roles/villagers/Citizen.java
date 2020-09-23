@@ -20,12 +20,11 @@ public class Citizen extends RolesVillage implements LimitedUse, AffectedPlayers
 
     private int use = 0;
     private final List<UUID> affectedPlayer = new ArrayList<>();
+    private boolean power = true;
 
     public Citizen(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
         super(main,game,uuid);
     }
-
-    private boolean power=true;
 
     @Override
     public void setPower(Boolean power) {
@@ -70,7 +69,6 @@ public class Citizen extends RolesVillage implements LimitedUse, AffectedPlayers
     @EventHandler
     public void onVoteEnd(VoteEndEvent event) {
 
-        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -79,9 +77,7 @@ public class Citizen extends RolesVillage implements LimitedUse, AffectedPlayers
             return;
         }
 
-        if (player == null) {
-            return;
-        }
+        if (player == null) return;
 
 
         if (getUse() < 2 || hasPower()) {

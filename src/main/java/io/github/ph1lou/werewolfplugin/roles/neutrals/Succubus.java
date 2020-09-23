@@ -86,7 +86,6 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
     @Override
     public void stolen(@NotNull UUID uuid) {
 
-        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -118,8 +117,6 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
 
     @EventHandler
     public void onUpdate(UpdateEvent event) {
-
-        getPlayerUUID();
 
         PlayerWW plg = game.getPlayersWW().get(getPlayerUUID());
         Player player = Bukkit.getPlayer(getPlayerUUID());
@@ -188,7 +185,6 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
     @EventHandler
     public void onTargetIsStolen(StealEvent event) {
 
-        getPlayerUUID();
 
         UUID newUUID = event.getKiller();
         UUID oldUUID = event.getPlayer();
@@ -212,7 +208,6 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 
-        getPlayerUUID();
 
         UUID uuid = event.getUuid();
         Player player = Bukkit.getPlayer(getPlayerUUID());
@@ -235,7 +230,6 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
     @EventHandler
     public void onFirstDeathEvent(FirstDeathEvent event) {
 
-        getPlayerUUID();
 
         UUID uuid = event.getUuid();
         Player player = Bukkit.getPlayer(getPlayerUUID());

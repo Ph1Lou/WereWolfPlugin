@@ -5,10 +5,7 @@ import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.AngelForm;
 import io.github.ph1lou.werewolfapi.enumlg.State;
 import io.github.ph1lou.werewolfapi.enumlg.StateLG;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.AngelRole;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
+import io.github.ph1lou.werewolfapi.rolesattributs.*;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
@@ -80,22 +77,24 @@ public class CommandRole implements Commands {
         Roles role = plg.getRole();
         sender.sendMessage(game.translate("werewolf.commands.admin.role.role", args[0], game.translate(role.getDisplay())));
 
-        if(role instanceof AngelRole && role.isDisplay("werewolf.role.angel.display") && !((AngelRole) role).isChoice(AngelForm.ANGEL)){
-            sender.sendMessage(game.translate("werewolf.commands.admin.role.angel", game.translate(((AngelRole) role).isChoice(AngelForm.FALLEN_ANGEL)?"werewolf.role.fallen_angel.display":"werewolf.role.guardian_angel.display")));
+        if (role instanceof AngelRole && role.isDisplay("werewolf.role.angel.display") && !((AngelRole) role).isChoice(AngelForm.ANGEL)) {
+            sender.sendMessage(game.translate("werewolf.commands.admin.role.angel", game.translate(((AngelRole) role).isChoice(AngelForm.FALLEN_ANGEL) ? "werewolf.role.fallen_angel.display" : "werewolf.role.guardian_angel.display")));
         }
-        if(role instanceof Power){
+        if (role instanceof Power) {
             sender.sendMessage(game.translate("werewolf.commands.admin.role.power", ((Power) role).hasPower()));
-
+        }
+        if (role instanceof Transformed) {
+            sender.sendMessage(game.translate("werewolf.commands.admin.role.transformed", game.translate(((Transformed) role).getTransformed() ? "werewolf.commands.admin.role.yes" : "werewolf.commands.admin.role.no")));
         }
         StringBuilder sb = new StringBuilder();
         for (UUID uuid : plg.getLovers()) {
             sb.append(game.getPlayersWW().get(uuid).getName()).append(" ");
         }
-        if(sb.length()!=0){
+        if (sb.length() != 0) {
             sender.sendMessage(game.translate("werewolf.commands.admin.role.lover", sb.toString()));
         }
 
-        if (plg.getCursedLovers()!=null) {
+        if (plg.getCursedLovers() != null) {
             sender.sendMessage(game.translate("werewolf.commands.admin.role.cursed_lover", game.getPlayersWW().get(plg.getCursedLovers()).getName()));
         }
 

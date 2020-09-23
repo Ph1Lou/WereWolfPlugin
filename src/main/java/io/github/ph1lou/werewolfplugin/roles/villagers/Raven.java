@@ -54,7 +54,6 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
     @EventHandler(priority = EventPriority.LOWEST)
     public void onDay(DayEvent event) {
 
-
         if (last != null) {
             Player player = Bukkit.getPlayer(last);
 
@@ -74,7 +73,6 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
         if (player == null) {
             return;
         }
-
 
         player.sendMessage(game.translate("werewolf.role.raven.curse_message", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.power_duration"))));
     }
@@ -101,13 +99,10 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
     @EventHandler
     private void onPlayerDamage(EntityDamageEvent event) {
 
-        getPlayerUUID();
-
         if (!(event.getEntity() instanceof Player)) return;
 
         Player player = (Player) event.getEntity();
         UUID uuid = player.getUniqueId();
-
 
         if (!getPlayerUUID().equals(uuid)) return;
 

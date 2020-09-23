@@ -23,12 +23,12 @@ import java.util.UUID;
 public class Witch extends RolesVillage implements AffectedPlayers, Power {
 
     private final List<UUID> affectedPlayer = new ArrayList<>();
+    private boolean power = true;
 
     public Witch(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
         super(main,game,uuid);
     }
 
-    private boolean power=true;
     @Override
     public void setPower(Boolean power) {
         this.power=power;
@@ -76,8 +76,6 @@ public class Witch extends RolesVillage implements AffectedPlayers, Power {
 
         if (!hasPower()) return;
 
-        getPlayerUUID();
-
         PlayerWW plg = game.getPlayersWW().get(event.getUuid());
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -85,17 +83,16 @@ public class Witch extends RolesVillage implements AffectedPlayers, Power {
             if (game.getConfig().getConfigValues().get("werewolf.menu.global.auto_rez_witch")) {
                 WitchResurrectionEvent witchResurrectionEvent = new WitchResurrectionEvent(getPlayerUUID(), event.getUuid());
                 Bukkit.getPluginManager().callEvent(witchResurrectionEvent);
+                setPower(false);
 
                 if (witchResurrectionEvent.isCancelled()) {
                     if (player != null) {
                         player.sendMessage(game.translate("werewolf.check.cancel"));
                     }
-                    return;
+                } else {
+                    game.resurrection(getPlayerUUID());
+                    event.setCancelled(true);
                 }
-
-                setPower(false);
-                game.resurrection(getPlayerUUID());
-                event.setCancelled(true);
             }
         } else {
 

@@ -100,7 +100,6 @@ public class CommandComedian implements Commands {
                 return;
             }
 
-
             player.sendMessage(game.translate("werewolf.role.comedian.wear_mask_perform", maskName[i]));
             player.removePotionEffect(potionsType[i]);
             player.addPotionEffect(new PotionEffect(potionsType[i], Integer.MAX_VALUE, i == 2 ? -1 : 0, false, false));

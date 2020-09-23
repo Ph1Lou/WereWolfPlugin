@@ -24,7 +24,6 @@ public class Librarian extends RolesVillage implements LimitedUse, AffectedPlaye
         super(main,game,uuid);
     }
 
-
     @Override
     public void addAffectedPlayer(UUID uuid) {
         this.affectedPlayer.add(uuid);

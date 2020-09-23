@@ -59,18 +59,18 @@ public class Vote implements Listener, VoteAPI {
 			voter.sendMessage(game.translate("werewolf.vote.player_already_voted"));
 		}
 		else {
-			VoteEvent voteEvent = new VoteEvent(voterUUID, vote);
-			Bukkit.getPluginManager().callEvent(voteEvent);
+            VoteEvent voteEvent = new VoteEvent(voterUUID, vote);
+            Bukkit.getPluginManager().callEvent(voteEvent);
 
-			if (voteEvent.isCancelled()) {
-				voter.sendMessage(game.translate("werewolf.check.cancel"));
-				return;
-			}
-			this.voters.put(voterUUID, vote);
-			this.votes.merge(vote, 1, Integer::sum);
+            if (voteEvent.isCancelled()) {
+                voter.sendMessage(game.translate("werewolf.check.cancel"));
+                return;
+            }
+            this.voters.put(voteEvent.getPlayerUUID(), voteEvent.getTargetUUID());
+            this.votes.merge(vote, 1, Integer::sum);
 
-			voter.sendMessage(game.translate("werewolf.vote.perform_vote", game.getPlayersWW().get(vote).getName()));
-		}
+            voter.sendMessage(game.translate("werewolf.vote.perform_vote", game.getPlayersWW().get(vote).getName()));
+        }
 
 	}
 

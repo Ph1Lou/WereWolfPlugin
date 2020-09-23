@@ -24,12 +24,12 @@ import java.util.UUID;
 public class InfectFatherOfTheWolves extends RolesWereWolf implements AffectedPlayers, Power {
 
     private final List<UUID> affectedPlayer = new ArrayList<>();
+    private boolean power = true;
 
     public InfectFatherOfTheWolves(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
         super(main,game,uuid);
     }
 
-    private boolean power=true;
     @Override
     public void setPower(Boolean power) {
         this.power=power;
@@ -78,8 +78,6 @@ public class InfectFatherOfTheWolves extends RolesWereWolf implements AffectedPl
 
         if (!hasPower()) return;
 
-        getPlayerUUID();
-
         PlayerWW plg = game.getPlayersWW().get(event.getUuid());
         UUID killerUUID = plg.getLastKiller();
         Player player = Bukkit.getPlayer(getPlayerUUID());
@@ -90,16 +88,17 @@ public class InfectFatherOfTheWolves extends RolesWereWolf implements AffectedPl
                 if (game.getConfig().getConfigValues().get("werewolf.menu.global.auto_rez_infect")) {
                     InfectionEvent infectionEvent = new InfectionEvent(event.getUuid(), event.getUuid());
                     Bukkit.getPluginManager().callEvent(infectionEvent);
+                    setPower(false);
 
-                    if(infectionEvent.isCancelled()) {
+                    if (infectionEvent.isCancelled()) {
                         if (player != null) {
                             player.sendMessage(game.translate("werewolf.check.cancel"));
                         }
-                        return;
+                    } else {
+                        game.resurrection(getPlayerUUID());
+                        event.setCancelled(true);
                     }
-                    setPower(false);
-                    game.resurrection(getPlayerUUID());
-                    event.setCancelled(true);
+
                 }
             } else {
                 plg.setCanBeInfect(true);

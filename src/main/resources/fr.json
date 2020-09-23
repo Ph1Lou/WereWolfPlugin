@@ -392,7 +392,10 @@
           "role": "§b%s§r est §b%s",
           "sister": "Soeurs : §b%s",
           "siamese_twin": "Frères Siamois : §b%s",
-          "angel": "Ange choisi : §b%s"
+          "angel": "Ange choisi : §b%s",
+          "transformed": "Transformé : §b%s",
+          "yes": "oui",
+          "no": "non"
         },
         "final_heal": "[§6LG UHC§r] Final Heal !",
         "generation": {

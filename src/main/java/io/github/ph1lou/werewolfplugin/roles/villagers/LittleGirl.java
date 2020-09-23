@@ -38,8 +38,6 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
     @EventHandler
     public void onNight(NightEvent event) {
 
-        getPlayerUUID();
-
         if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
             return;
         }
@@ -55,8 +53,6 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
 
     @EventHandler
     public void onDay(DayEvent event) {
-
-        getPlayerUUID();
 
         if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
             return;
@@ -87,7 +83,6 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
 
         if(game.getConfig().getGoldenAppleParticles() != 1) return;
 
-
         if(!isInvisible()) return;
 
         event.setCancelled(true);
@@ -98,7 +93,6 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
     @EventHandler
     public void onDayWillCome(DayWillComeEvent event) {
 
-        getPlayerUUID();
 
         if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
             return;
@@ -110,14 +104,11 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
             return;
         }
 
-
         player.sendMessage(game.translate("werewolf.role.little_girl.soon_to_be_day"));
     }
 
     @EventHandler
     public void onUpdate(UpdateEvent event) {
-
-        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -134,7 +125,6 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
         if (!plg.isState(State.ALIVE)) {
             return;
         }
-
 
         if(!isInvisible()){
             return;

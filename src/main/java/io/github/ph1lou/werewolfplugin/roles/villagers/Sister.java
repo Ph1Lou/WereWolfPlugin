@@ -13,11 +13,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class Sister extends RolesVillage {
@@ -88,37 +88,39 @@ public class Sister extends RolesVillage {
         }
     }
 
+
+    @EventHandler
+    public void onSisterDeathReveal(SisterDeathEvent event) {
+
+        if (event.isCancelled()) return;
+
+        PlayerWW plg = game.getPlayersWW().get(getPlayerUUID());
+        Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (!plg.isState(State.ALIVE)) return;
+
+        event.getAllSisters().add(getPlayerUUID());
+
+        if (player == null) return;
+
+        player.sendMessage(game.translate("werewolf.role.sister.reveal_killer", plg.getName(), plg.getLastKiller() != null ? game.getPlayersWW().get(plg.getLastKiller()).getName() : game.translate("werewolf.utils.pve")));
+
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onSisterDeathRevealEnd(SisterDeathEvent event) {
+        if (event.getAllSisters().isEmpty()) event.setCancelled(true);
+    }
+
     @EventHandler
     public void onSisterDeath(FinalDeathEvent event) {
 
-        getPlayerUUID();
-
         UUID uuid = event.getUuid();
         PlayerWW plg = game.getPlayersWW().get(uuid);
-        PlayerWW plg2 = game.getPlayersWW().get(getPlayerUUID());
-        Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (uuid.equals(getPlayerUUID())) {
-            List<UUID> sisters = new ArrayList<>();
-            for (UUID uuid1 : game.getPlayersWW().keySet()) {
-                if (game.getPlayersWW().get(uuid1).getRole().isDisplay("werewolf.role.sister.display")) {
-                    sisters.add(uuid1);
-                }
-            }
-            Bukkit.getPluginManager().callEvent(new SisterDeathEvent(uuid,sisters,plg.getLastKiller()));
-            return;
-        }
+        if (!uuid.equals(getPlayerUUID())) return;
 
-        if (!(plg.getRole().isDisplay("werewolf.role.sister.display"))) {
-            return;
-        }
+        Bukkit.getPluginManager().callEvent(new SisterDeathEvent(uuid, new ArrayList<>(), plg.getLastKiller()));
 
-        if (!plg2.isState(State.ALIVE)) {
-            return;
-        }
-
-        if (player != null) {
-            player.sendMessage(game.translate("werewolf.role.sister.reveal_killer", plg.getName(), plg.getLastKiller() != null ? game.getPlayersWW().get(plg.getLastKiller()).getName() : game.translate("werewolf.utils.pve")));
-        }
     }
 }

@@ -36,8 +36,6 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
 
         if (!hasPower()) return;
 
-        getPlayerUUID();
-
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
         if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
@@ -82,7 +80,6 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
             return;
         }
 
-        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
         setPower(true);
@@ -173,8 +170,6 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
 
     @Override
     public void stolen(@NotNull UUID uuid) {
-
-        getPlayerUUID();
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 

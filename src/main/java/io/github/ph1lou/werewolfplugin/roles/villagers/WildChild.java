@@ -152,9 +152,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (player == null) {
-            return;
-        }
+        if (player == null) return;
 
         if (!transformed) {
             player.sendMessage(game.translate("werewolf.role.wild_child.design_model", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.model_duration"))));

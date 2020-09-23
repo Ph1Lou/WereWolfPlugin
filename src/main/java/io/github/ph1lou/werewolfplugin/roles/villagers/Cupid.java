@@ -20,12 +20,11 @@ import java.util.UUID;
 public class Cupid extends RolesVillage implements AffectedPlayers, Power {
 
     private final List<UUID> affectedPlayer = new ArrayList<>();
+    private boolean power = true;
 
     public Cupid(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
         super(main,game,uuid);
     }
-
-    private boolean power=true;
 
     @Override
     public void setPower(Boolean power) {
@@ -70,13 +69,9 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
     @Override
     public void stolen(@NotNull UUID uuid) {
 
-        getPlayerUUID();
-
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (player == null) {
-            return;
-        }
+        if (player == null) return;
 
         if (hasPower()) {
             player.sendMessage(game.translate("werewolf.role.cupid.lover_designation_message", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.lover_duration"))));

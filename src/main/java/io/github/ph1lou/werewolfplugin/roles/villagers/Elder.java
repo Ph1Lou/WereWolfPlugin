@@ -24,14 +24,15 @@ import java.util.UUID;
 
 public class Elder extends RolesVillage implements Power {
 
+    private boolean power = true;
+
     public Elder(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+        super(main, game, uuid);
     }
 
-    private boolean power=true;
     @Override
     public void setPower(Boolean power) {
-        this.power=power;
+        this.power = power;
     }
 
     @Override
@@ -71,8 +72,6 @@ public class Elder extends RolesVillage implements Power {
 
         if (!hasPower()) return;
 
-        getPlayerUUID();
-
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
         if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) return;
@@ -84,7 +83,7 @@ public class Elder extends RolesVillage implements Power {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onSecondDeathEvent(SecondDeathEvent event){
+    public void onSecondDeathEvent(SecondDeathEvent event) {
 
         if (event.isCancelled()) return;
 
@@ -94,27 +93,22 @@ public class Elder extends RolesVillage implements Power {
 
         UUID killerUUID = game.getPlayersWW().get(getPlayerUUID()).getLastKiller();
 
+        Player player = Bukkit.getPlayer(getPlayerUUID());
+
         ElderResurrectionEvent elderResurrectionEvent = new ElderResurrectionEvent(getPlayerUUID(), game.getPlayersWW().containsKey(killerUUID) && game.getPlayersWW().get(killerUUID).getRole().isCamp(Camp.VILLAGER));
         Bukkit.getPluginManager().callEvent(elderResurrectionEvent);
-        Player player = Bukkit.getPlayer(getPlayerUUID());
         setPower(false);
 
-
         if (elderResurrectionEvent.isCancelled()) {
-            if (player != null) {
-                player.sendMessage(game.translate("werewolf.check.cancel"));
-            }
-            return;
-        }
-
-        if (player != null) {
-
+            if (player == null) return;
+            player.sendMessage(game.translate("werewolf.check.cancel"));
+        } else {
             if (elderResurrectionEvent.isKillerAVillager()) {
                 VersionUtils.getVersionUtils().setPlayerMaxHealth(player, Math.max(1, VersionUtils.getVersionUtils().getPlayerMaxHealth(player) - 6));
             }
-            player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+            event.setCancelled(true);
+            game.resurrection(getPlayerUUID());
         }
-        event.setCancelled(true);
-        game.resurrection(getPlayerUUID());
+
     }
 }

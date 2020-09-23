@@ -25,14 +25,13 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
 
     private float progress = 0;
     private int use = 0;
+    private boolean power = false;
     private final List<UUID> affectedPlayer = new ArrayList<>();
 
     public Fox(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
         super(main,game,uuid);
-        setPower(false);
     }
 
-    private boolean power=true;
     @Override
     public void setPower(Boolean power) {
         this.power=power;
@@ -91,18 +90,18 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
             return;
         }
 
-        getPlayerUUID();
-
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
         if (player == null) {
             return;
         }
 
-        if (getUse() < game.getConfig().getUseOfFlair()) {
-            setPower(true);
-            player.sendMessage(game.translate("werewolf.role.fox.smell_message", game.getConfig().getUseOfFlair() - getUse()));
+        if (getUse() >= game.getConfig().getUseOfFlair()) {
+            return;
         }
+
+        setPower(true);
+        player.sendMessage(game.translate("werewolf.role.fox.smell_message", game.getConfig().getUseOfFlair() - getUse()));
     }
 
 
@@ -126,8 +125,6 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
     @EventHandler
     public void onUpdate(UpdateEvent event) {
 
-        getPlayerUUID();
-
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
         if (player == null) {
@@ -139,7 +136,6 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
         if (getAffectedPlayers().isEmpty()) {
             return;
         }
-
 
         UUID playerSmellUUID = getAffectedPlayers().get(0);
         PlayerWW plf = game.getPlayersWW().get(playerSmellUUID);

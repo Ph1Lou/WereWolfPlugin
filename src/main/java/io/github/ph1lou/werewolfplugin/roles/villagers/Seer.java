@@ -62,8 +62,6 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
             return;
         }
 
-        getPlayerUUID();
-
         setPower(true);
         dayNumber = event.getNumber();
         Player player = Bukkit.getPlayer(getPlayerUUID());

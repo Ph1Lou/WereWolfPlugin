@@ -57,6 +57,7 @@ public class Protector extends RolesWithLimitedSelectionDuration implements Affe
 
 
         if (this.last != null) {
+
             Player player = Bukkit.getPlayer(this.last);
 
             if (player != null) {
@@ -90,7 +91,6 @@ public class Protector extends RolesWithLimitedSelectionDuration implements Affe
 
         Player player = Bukkit.getPlayer(this.last);
 
-
         if (player == null) return;
 
         player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 0, false, false));
@@ -109,7 +109,6 @@ public class Protector extends RolesWithLimitedSelectionDuration implements Affe
 
     @EventHandler
     private void onPlayerDamage(EntityDamageEvent event) {
-
 
         if (!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();

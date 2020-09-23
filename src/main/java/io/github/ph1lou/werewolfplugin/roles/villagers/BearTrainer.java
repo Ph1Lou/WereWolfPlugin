@@ -36,7 +36,6 @@ public class BearTrainer extends RolesVillage {
         if (player == null) return;
 
         StringBuilder builder = new StringBuilder();
-        boolean ok = false;
         Location oursLocation = player.getLocation();
         List<UUID> growled = new ArrayList<>();
         for (Player pls : Bukkit.getOnlinePlayers()) {
@@ -49,15 +48,16 @@ public class BearTrainer extends RolesVillage {
                     if (plo.getRole().isWereWolf() && plo.isState(State.ALIVE)) {
                         if (oursLocation.distance(pls.getLocation()) < game.getConfig().getDistanceBearTrainer()) {
                             growled.add(pls.getUniqueId());
-                            ok = true;
                         }
                     }
                 }
             }
         }
-        if (ok) {
-            GrowlEvent growlEvent = new GrowlEvent(getPlayerUUID(), growled);
-            Bukkit.getPluginManager().callEvent(growlEvent);
+
+        GrowlEvent growlEvent = new GrowlEvent(getPlayerUUID(), growled);
+        Bukkit.getPluginManager().callEvent(growlEvent);
+
+        if (!growlEvent.getPlayersUUID().isEmpty()) {
 
             if (growlEvent.isCancelled()) {
                 player.sendMessage(game.translate("werewolf.check.cancel"));
