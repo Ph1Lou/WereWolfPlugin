@@ -196,11 +196,13 @@ public class PlayerListener implements Listener {
 			} else plg.addKiller(null);
 
 			Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
+                if (!game.isState(StateLG.END)) {
+                    FirstDeathEvent firstDeathEvent = new FirstDeathEvent(uuid);
+                    Bukkit.getPluginManager().callEvent(firstDeathEvent);
+                }
 
-				FirstDeathEvent firstDeathEvent = new FirstDeathEvent(uuid);
-				Bukkit.getPluginManager().callEvent(firstDeathEvent);
 
-			}, 20L);
+            }, 20L);
 		}
 	}
 
@@ -222,14 +224,17 @@ public class PlayerListener implements Listener {
 		if (game.isState(StateLG.LOBBY)) {
 
 			event.setJoinMessage(null);
+            if (moderationManager.getModerators().contains(uuid)) {
+                player.sendMessage(game.translate("werewolf.commands.admin.moderator.message"));
+                player.setGameMode(GameMode.SPECTATOR);
+            } else if (moderationManager.getQueue().contains(uuid)) {
+                event.setJoinMessage(game.translate("werewolf.announcement.queue_rejoin", playerName, game.getModerationManager().getQueue().indexOf(uuid) + 1));
+            } else {
+                game.join(player);
+            }
 
-			if (moderationManager.getModerators().contains(uuid)) {
-				player.sendMessage(game.translate("werewolf.commands.admin.moderator.message"));
-				player.setGameMode(GameMode.SPECTATOR);
-			} else {
-				game.join(player);
-			}
-		} else if (game.getPlayersWW().containsKey(uuid)) {
+
+        } else if (game.getPlayersWW().containsKey(uuid)) {
 
 			PlayerWW plg = game.getPlayersWW().get(uuid);
 			if(!plg.getName().equals(playerName)){
@@ -315,15 +320,20 @@ public class PlayerListener implements Listener {
 				event.setQuitMessage(game.translate("werewolf.announcement.leave", game.getScore().getPlayerSize(), game.getScore().getRole(), player.getName()));
 				game.clearPlayer(player);
 			} else if (game.isState(StateLG.END) || !plg.isState(State.ALIVE)) {
-				player.setGameMode(GameMode.SPECTATOR);
-				game.clearPlayer(player);
-				player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
-				event.setQuitMessage(game.translate("werewolf.announcement.leave_in_spec", playerName));
-			} else {
-				event.setQuitMessage(game.translate("werewolf.announcement.leave_in_game", playerName));
-				plg.setDeathTime(game.getScore().getTimer());
-			}
-		}
+                player.setGameMode(GameMode.SPECTATOR);
+                game.clearPlayer(player);
+                player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+                event.setQuitMessage(game.translate("werewolf.announcement.leave_in_spec", playerName));
+            } else {
+
+                event.setQuitMessage(game.translate("werewolf.announcement.leave_in_game", playerName));
+                plg.setDeathTime(game.getScore().getTimer());
+            }
+        } else {
+            if (game.getModerationManager().getQueue().contains(uuid)) {
+                event.setQuitMessage(game.translate("werewolf.announcement.spectator_leave", playerName));
+            } else event.setQuitMessage(game.translate("werewolf.announcement.leave_spec", playerName));
+        }
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -336,18 +346,24 @@ public class PlayerListener implements Listener {
 		SecondDeathEvent secondDeathEvent = new SecondDeathEvent(uuid);
 		Bukkit.getPluginManager().callEvent(secondDeathEvent);
 		Bukkit.getScheduler().scheduleSyncDelayedTask(game.getMain(), () -> {
-			if (plg.isState(State.JUDGEMENT) && !secondDeathEvent.isCancelled()) {
+            if (!game.isState(StateLG.END)) {
+                if (plg.isState(State.JUDGEMENT) && !secondDeathEvent.isCancelled()) {
 
-				plg.setCanBeInfect(false);
-				ThirdDeathEvent thirdDeathEvent = new ThirdDeathEvent(uuid);
-				Bukkit.getPluginManager().callEvent(thirdDeathEvent);
-				Bukkit.getScheduler().scheduleSyncDelayedTask(game.getMain(), () -> {
-					if (plg.isState(State.JUDGEMENT) && !thirdDeathEvent.isCancelled()) {
-						game.death(uuid);
-					}
-				}, 7 * 20);
-			}
-		}, 7 * 20);
+                    plg.setCanBeInfect(false);
+                    ThirdDeathEvent thirdDeathEvent = new ThirdDeathEvent(uuid);
+                    Bukkit.getPluginManager().callEvent(thirdDeathEvent);
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(game.getMain(), () -> {
+                        if (!game.isState(StateLG.END)) {
+                            if (plg.isState(State.JUDGEMENT) && !thirdDeathEvent.isCancelled()) {
+                                game.death(uuid);
+                            }
+                        }
+
+                    }, 7 * 20);
+                }
+            }
+
+        }, 7 * 20);
 	}
 
 	@EventHandler

@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
@@ -46,8 +47,17 @@ public class CommandHost implements Commands {
 
         if (moderationManager.getHosts().contains(uuid)) {
             Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.host.remove", args[0]));
-            moderationManager.getHosts().remove(host.getUniqueId());
+            moderationManager.getHosts().remove(uuid);
+            if (moderationManager.getModerators().contains(uuid)) {
+                if (game.getPlayersWW().containsKey(uuid)) {
+                    game.getScore().removePlayerSize();
+                    game.getPlayersWW().remove(uuid);
+                }
+            }
         } else {
+            if (game.isState(StateLG.LOBBY) && !game.getPlayersWW().containsKey(uuid)) {
+                game.finalJoin(host);
+            }
             moderationManager.getHosts().add(uuid);
             Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.host.add", args[0]));
         }

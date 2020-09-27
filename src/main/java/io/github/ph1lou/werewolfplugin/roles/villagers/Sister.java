@@ -103,7 +103,7 @@ public class Sister extends RolesVillage {
 
         if (player == null) return;
 
-        player.sendMessage(game.translate("werewolf.role.sister.reveal_killer", plg.getName(), plg.getLastKiller() != null ? game.getPlayersWW().get(plg.getLastKiller()).getName() : game.translate("werewolf.utils.pve")));
+        player.sendMessage(game.translate("werewolf.role.sister.reveal_killer", game.getPlayersWW().get(event.getSister()).getName(), event.getKiller() != null ? game.getPlayersWW().get(event.getKiller()).getName() : game.translate("werewolf.utils.pve")));
 
     }
 

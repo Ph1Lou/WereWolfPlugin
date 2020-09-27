@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.LibrarianDeathEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.LimitedUse;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
@@ -73,15 +74,17 @@ public class Librarian extends RolesVillage implements LimitedUse, AffectedPlaye
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event){
 
-        if(!event.getUuid().equals(getPlayerUUID())) return;
+        if (!event.getUuid().equals(getPlayerUUID())) return;
 
-        if(this.storage.isEmpty()) return;
+        if (this.storage.isEmpty()) return;
 
         Bukkit.broadcastMessage(game.translate("werewolf.role.librarian.death"));
-        int i=1;
-        for(String s:this.storage){
-            Bukkit.broadcastMessage(game.translate("werewolf.role.librarian.book",i,s));
+        int i = 1;
+        for (String s : this.storage) {
+            Bukkit.broadcastMessage(game.translate("werewolf.role.librarian.book", i, s));
             i++;
         }
+
+        Bukkit.getPluginManager().callEvent(new LibrarianDeathEvent(getPlayerUUID()));
     }
 }

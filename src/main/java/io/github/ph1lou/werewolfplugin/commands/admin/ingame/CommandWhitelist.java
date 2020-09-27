@@ -52,7 +52,7 @@ public class CommandWhitelist implements Commands {
             sender.sendMessage(game.translate("werewolf.commands.admin.whitelist.add"));
             moderationManager.addPlayerOnWhiteList(uuid);
             if (game.isState(StateLG.LOBBY)) {
-                game.join(playerArg);
+                game.finalJoin(playerArg);
             }
         }
     }

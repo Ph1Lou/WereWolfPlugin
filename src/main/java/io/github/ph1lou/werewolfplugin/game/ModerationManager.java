@@ -28,7 +28,10 @@ public class ModerationManager implements ModerationManagerAPI {
 
         List<UUID> temp = new ArrayList<>(queue);
         int i = 0;
+
+
         while (!temp.isEmpty() && game.getConfig().getPlayerMax() > game.getPlayersWW().size()) {
+
             Player player = Bukkit.getPlayer(temp.get(0));
             if (player != null && (!game.getConfig().isWhiteList() || getWhiteListedPlayers().contains(temp.get(0)))) {
                 queue.remove(i);
@@ -44,7 +47,8 @@ public class ModerationManager implements ModerationManagerAPI {
 
         if (!getQueue().contains(uuid)) {
             queue.add(uuid);
-            Bukkit.broadcastMessage(game.translate("werewolf.announcement.queue", player.getName()));
+            Bukkit.broadcastMessage(game.translate("werewolf.announcement.queue", player.getName(), queue.indexOf(uuid) + 1));
+            player.sendMessage(game.translate("werewolf.announcement.rank"));
         }
     }
 

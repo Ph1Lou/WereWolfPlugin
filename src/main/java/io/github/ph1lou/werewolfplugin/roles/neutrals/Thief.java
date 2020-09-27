@@ -6,6 +6,7 @@ import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
@@ -112,11 +113,19 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
         event.setCancelled(true);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
-            if (game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE) && hasPower()) {
-                thief_recover_role(getPlayerUUID(), uuid);
-            } else {
-                Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> Bukkit.getPluginManager().callEvent(new FirstDeathEvent(uuid)), 20L);
+            if (!game.isState(StateLG.END)) {
+                if (game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE) && hasPower()) {
+                    thief_recover_role(getPlayerUUID(), uuid);
+                } else {
+                    Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
+                        if (!game.isState(StateLG.END)) {
+                            Bukkit.getPluginManager().callEvent(new FirstDeathEvent(uuid));
+                        }
+
+                    }, 20L);
+                }
             }
+
         },7*20);
     }
 

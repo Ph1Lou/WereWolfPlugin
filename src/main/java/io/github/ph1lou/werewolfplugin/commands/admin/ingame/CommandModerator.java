@@ -54,7 +54,7 @@ public class CommandModerator implements Commands {
             moderationManager.getModerators().remove(argUUID);
 
             if (game.isState(StateLG.LOBBY)) {
-                game.join(moderator);
+                game.finalJoin(moderator);
             }
             Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent());
             return;
@@ -69,12 +69,14 @@ public class CommandModerator implements Commands {
             if (game.getPlayersWW().containsKey(argUUID)) {
                 game.getScore().removePlayerSize();
                 game.getPlayersWW().remove(argUUID);
-            } else moderationManager.getQueue().remove(argUUID);
+            } else {
+                moderationManager.getQueue().remove(argUUID);
+                game.getModerationManager().checkQueue();
+            }
         }
         moderator.setGameMode(GameMode.SPECTATOR);
         moderationManager.getModerators().add(argUUID);
         Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.moderator.add", args[0]));
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent());
-        moderationManager.checkQueue();
     }
 }

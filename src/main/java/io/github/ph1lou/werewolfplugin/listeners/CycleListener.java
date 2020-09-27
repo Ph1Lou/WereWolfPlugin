@@ -203,22 +203,24 @@ public class CycleListener implements Listener {
         }
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
-
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                if (game.getConfig().isTrollSV() && game.getPlayersWW().containsKey(p.getUniqueId())) {
-                    Sounds.PORTAL_TRIGGER.play(p);
-                    for (PotionEffect po : p.getActivePotionEffects()) {
-                        p.removePotionEffect(po.getType());
+            if (!game.isState(StateLG.END)) {
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    if (game.getConfig().isTrollSV() && game.getPlayersWW().containsKey(p.getUniqueId())) {
+                        Sounds.PORTAL_TRIGGER.play(p);
+                        for (PotionEffect po : p.getActivePotionEffects()) {
+                            p.removePotionEffect(po.getType());
+                        }
+                        VersionUtils.getVersionUtils().setPlayerMaxHealth(p, 20);
+                        p.sendMessage(game.translate("werewolf.announcement.troll"));
+                        PlayerWW playerWW = game.getPlayersWW().get(p.getUniqueId());
+                        HandlerList.unregisterAll((Listener) playerWW.getRole());
+                        playerWW.setKit(false);
                     }
-                    VersionUtils.getVersionUtils().setPlayerMaxHealth(p, 20);
-                    p.sendMessage(game.translate("werewolf.announcement.troll"));
-                    PlayerWW playerWW = game.getPlayersWW().get(p.getUniqueId());
-                    HandlerList.unregisterAll((Listener) playerWW.getRole());
-                    playerWW.setKit(false);
                 }
+                game.getConfig().setTrollSV(false);
+                Bukkit.getPluginManager().callEvent(new RepartitionEvent());
             }
-            game.getConfig().setTrollSV(false);
-            Bukkit.getPluginManager().callEvent(new RepartitionEvent());
+
 
         }, 1800L);
     }

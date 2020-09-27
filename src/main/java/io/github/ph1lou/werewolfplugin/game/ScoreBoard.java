@@ -374,6 +374,16 @@ public class ScoreBoard implements ScoreAPI, Listener {
 				}
 			}
 
+			for (UUID uuid : moderationManager.getQueue()) {
+				Player player = Bukkit.getPlayer(uuid);
+				if (player != null) {
+					String name3 = player.getName();
+					if (scoreBoard.getTeam(name3) == null) {
+						scoreBoard.registerNewTeam(name3).addEntry(name3);
+					}
+				}
+			}
+
 			for (Team t : scoreBoard.getTeams()) {
 
 				for (String e : t.getEntries()) {
@@ -385,6 +395,9 @@ public class ScoreBoard implements ScoreAPI, Listener {
 							sb.append(game.translate("werewolf.commands.admin.host.tag"));
 						} else if (moderationManager.getModerators().contains(uuid)) {
 							sb.append(game.translate("werewolf.commands.admin.moderator.tag"));
+						}
+						if (moderationManager.getQueue().contains(uuid)) {
+							sb.append(game.translate("werewolf.menu.rank.tag"));
 						}
 						if (game.getPlayersWW().containsKey(uuid)) {
 							Roles roles = game.getPlayersWW().get(uuid).getRole();
@@ -421,6 +434,16 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		Team moderatorsSpectator = scoreboardSpectator.registerNewTeam("moderators");
 		moderatorsSpectator.setPrefix(game.translate("werewolf.commands.admin.moderator.tag"));
 
+		Team queue = scoreboardModerator.registerNewTeam("queue");
+		Team queueSpectator = scoreboardSpectator.registerNewTeam("queue");
+		if (game.isState(StateLG.LOBBY)) {
+			queue.setPrefix(game.translate("werewolf.menu.rank.tag"));
+			queueSpectator.setPrefix(game.translate("werewolf.menu.rank.tag"));
+		} else {
+			queue.setPrefix("");
+			queueSpectator.setPrefix("");
+		}
+
 
 		for (Player player : Bukkit.getOnlinePlayers()) {
 
@@ -437,6 +460,9 @@ public class ScoreBoard implements ScoreAPI, Listener {
 				moderatorsSpectator.addEntry(playerName);
 			} else if (game.getPlayersWW().containsKey(uuid) && game.getPlayersWW().get(uuid).getRole().isWereWolf()) {
 				ww.addEntry(playerName);
+			} else if (game.getModerationManager().getQueue().contains(uuid)) {
+				queue.addEntry(playerName);
+				queueSpectator.addEntry(playerName);
 			}
 		}
 

@@ -46,7 +46,6 @@ public class GameManager implements WereWolfAPI {
 
     public GameManager(Main main) {
         this.main = main;
-        setState(StateLG.LOBBY);
         setDay(Day.DAY);
     }
 
@@ -54,6 +53,7 @@ public class GameManager implements WereWolfAPI {
         main.getLang().updateLanguage(this);
         config.getConfig(this, "saveCurrent");
         stuff.load("saveCurrent");
+        setState(StateLG.LOBBY);
         scenarios.init();
         Bukkit.getPluginManager().callEvent(new LoadEvent(this));
         LobbyTask start = new LobbyTask(main, this);
@@ -62,40 +62,46 @@ public class GameManager implements WereWolfAPI {
 
     public void join(Player player) {
 
-        String playerName = player.getName();
         UUID uuid = player.getUniqueId();
 
-        if (getPlayersWW().size() >= config.getPlayerMax()) {
+        if (moderationManager.getWhiteListedPlayers().contains(uuid)) {
+            finalJoin(player);
+        } else if (getPlayersWW().size() >= config.getPlayerMax()) {
             player.sendMessage(translate("werewolf.check.full"));
             moderationManager.addQueue(player);
+        } else if (config.isWhiteList()) {
+            player.sendMessage(translate("werewolf.commands.admin.whitelist.player_not_whitelisted"));
+            moderationManager.addQueue(player);
         } else {
-            if (config.isWhiteList() && !moderationManager.getWhiteListedPlayers().contains(uuid)) {
-                player.sendMessage(translate("werewolf.commands.admin.whitelist.player_not_whitelisted"));
-                moderationManager.addQueue(player);
-            } else {
-                moderationManager.getQueue().remove(uuid);
-                score.addPlayerSize();
-                Bukkit.broadcastMessage(translate("werewolf.announcement.join", score.getPlayerSize(), score.getRole(), playerName));
-                clearPlayer(player);
-                player.setGameMode(GameMode.ADVENTURE);
-                PlayerWW plg = new PlayerLG(main, this, player);
-                getPlayersWW().put(uuid, plg);
-                Bukkit.getPluginManager().registerEvents((Listener) plg, main);
-                player.setScoreboard(getPlayersWW().get(uuid).getScoreBoard());
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 0, false, false));
-                player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
-
-                new UpdateChecker(main, 73113).getVersion(version -> {
-
-                    if (main.getDescription().getVersion().equalsIgnoreCase(version)) {
-                        player.sendMessage(translate("werewolf.update.up_to_date"));
-                    } else {
-                        player.sendMessage(translate("werewolf.update.out_of_date"));
-                    }
-                });
-                Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent());
-            }
+            finalJoin(player);
         }
+    }
+
+    public void finalJoin(Player player) {
+
+        UUID uuid = player.getUniqueId();
+
+        moderationManager.getQueue().remove(uuid);
+        score.addPlayerSize();
+        Bukkit.broadcastMessage(translate("werewolf.announcement.join", score.getPlayerSize(), score.getRole(), player.getName()));
+        clearPlayer(player);
+        player.setGameMode(GameMode.ADVENTURE);
+        PlayerWW plg = new PlayerLG(main, this, player);
+        getPlayersWW().put(uuid, plg);
+        Bukkit.getPluginManager().registerEvents((Listener) plg, main);
+        player.setScoreboard(getPlayersWW().get(uuid).getScoreBoard());
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 0, false, false));
+        player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+
+        new UpdateChecker(main, 73113).getVersion(version -> {
+
+            if (main.getDescription().getVersion().equalsIgnoreCase(version)) {
+                player.sendMessage(translate("werewolf.update.up_to_date"));
+            } else {
+                player.sendMessage(translate("werewolf.update.out_of_date"));
+            }
+        });
+        Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent());
     }
 
     public void clearPlayer(Player player) {
@@ -161,6 +167,7 @@ public class GameManager implements WereWolfAPI {
 
         Bukkit.getPluginManager().callEvent(new StopEvent(this));
         scenarios.delete();
+
         main.setCurrentGame(new GameManager(main));
         main.getCurrentGame().init();
 

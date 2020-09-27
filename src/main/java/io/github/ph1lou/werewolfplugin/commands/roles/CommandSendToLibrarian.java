@@ -79,6 +79,9 @@ public class CommandSendToLibrarian implements Commands {
                     if(((AffectedPlayers)roles).getAffectedPlayers().contains(uuid)) {
                         ((AffectedPlayers) roles).removeAffectedPlayer(uuid);
                         LibrarianGiveBackEvent librarianGiveBackEvent = new LibrarianGiveBackEvent(uuid, roles.getPlayerUUID(), sb2.toString());
+
+                        Bukkit.getPluginManager().callEvent(librarianGiveBackEvent);
+
                         if (librarianGiveBackEvent.isCancelled()) {
                             player.sendMessage(game.translate("werewolf.check.cancel"));
                             return;

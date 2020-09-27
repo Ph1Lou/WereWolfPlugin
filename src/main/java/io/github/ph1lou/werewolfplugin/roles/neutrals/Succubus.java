@@ -15,6 +15,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -227,8 +228,8 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
         player.sendMessage(game.translate("werewolf.role.succubus.charming_message"));
     }
 
-    @EventHandler
-    public void onFirstDeathEvent(FirstDeathEvent event) {
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onSecondDeathEvent(ThirdDeathEvent event) {
 
 
         UUID uuid = event.getUuid();

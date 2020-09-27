@@ -50,6 +50,8 @@ public class Command implements TabExecutor {
         listCommands.put(game.translate("werewolf.role.flute_player.command"), new CommandFlutePlayer(main));
         listCommands.put(game.translate("werewolf.role.librarian.command"), new CommandLibrarian(main));
         listCommands.put(game.translate("werewolf.role.librarian.request_command"), new CommandSendToLibrarian(main));
+        listCommands.put(game.translate("werewolf.menu.rank.command"), new CommandRank(main));
+
         listCommands.putAll(main.getListCommands());
     }
 
