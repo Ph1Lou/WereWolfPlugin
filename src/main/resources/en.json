@@ -14,6 +14,7 @@
         "no_protege": "[§cWW UHC§r] You don't have a protégé yet",
         "disconnected_protege": "[§cWW UHC§r] Your protégé is not currently online",
         "command": "regen",
+        "perform": "[§aWW UHC§r] Your protégé receives regeneration, you have §b%s§r regeneration(s) left",
         "new_protege": "[§6WW UHC§r] Your protégé is now §b%s"
       },
       "amnesiac_werewolf": {
@@ -81,11 +82,12 @@
       },
       "angel": {
         "display": "Angel",
-        "description": "§6WEREWOLF§7➽§9 You are §1Angel§9. Your objective is to win alone. \nIn the early game, you can do a choice. If you chose §1Guardian Angel§9, you will obtain 15 hearts, and must protect a random chosen player and win with him (or alone). If your protégé dies, you will go back to 12 hearts and must win with the Village. If you chose §1Fallen Angel§9 you will obtain 12 hearts, a random target will be assigned to you and if you kill it, you will go to 15 hearts until the end of the game.",
+        "description": "§6WEREWOLF§7➽§9 You are §1Angel§9. Your objective is to win alone. \nIn the early game, you have a choice. If you chose §1Guardian Angel§9, you will obtain 15 hearts, and must protect a random chosen player and win with them. If your protégé dies, you will go back to 12 hearts and must win with the Village. If you chose §1Fallen Angel§9 you will obtain 12 hearts, a random target will be assigned to you and if you kill it, you will go to 15 hearts until the end of the game.",
         "angel_choice": "[§eWW UHC§r] You can decide to be either Fallen Angel §6/ww fallen§r or Guardian Angel §6/ww guardian§r\nyou have §b%s",
         "angel_choice_perform": "[§eWW UHC§r] You just chose §b%s",
         "command_1": "guardian",
-        "command_2": "fallen"
+        "command_2": "fallen",
+        "choice": "he chose %s"
       },
       "fox": {
         "display": "Fox",
@@ -112,7 +114,7 @@
         "command": "curse"
       },
       "villager": {
-        "display": "Villagers",
+        "display": "Simple Villager",
         "description": "§6WEREWOLF §7➽§9 You are §1Villager§9. Your objective is to eliminate the Werewolves.\nYou do not have any ability"
       },
       "assassin": {
@@ -145,7 +147,7 @@
       "chatty_seer": {
         "display": "Chatty Seer",
         "description": "§6WEREWOLF §7➽§9 You are §1Chatty Seer§9. Your objective is to eliminate the Werewolves. \nYou receive 4 obsidians and 4 bookshelves. During daytime, you can know the team(Villagers, Werewolves or Neutrals) of a player with §b/ww see§9. \nHowever if it is a Villager, you loose 3 hearts. \nThe team will be shown in the global chat.",
-        "see_perform": "[§eWW UHC§r] A Chatty Seer has seen a member of the §b%s§r team"
+        "see_perform": "[§eWW UHC§r] A Chatty Seer has spied on a member of the §b%s camp"
       },
       "infect_father_of_the_wolves": {
         "display": "Infect Father of the Wolves",
@@ -159,10 +161,9 @@
         "display": "Seer",
         "description": "§6WEREWOLF §7➽§9 You are §1Seer§9. Your objective is to eliminate the Werewolves.\nYou receive 4 obsidians and 4 bookshelves. During daytime, you can know the team(Villagers, Werewolves or Neutrals) of a player with §b/ww see§9.\nHowever if it is a Villager, you loose 3 hearts until the next morning.",
         "see_camp_message": "[§eWW UHC§r] Discover a player's team §6/ww see§r you have §b%s",
-        "see_perform": "[§eWW UHC§r] You've seen a member of the §b%s§r team",
+        "see_perform": "[§eWW UHC§r] You have spied on a member of the §b%s camp",
         "not_enough_life": "[§cWW UHC§r] You don't have enough life to spy on someone",
         "see_villager": "[§cWW UHC§r] You've seen a member of the Village, you loose 3 hearts until next morning",
-        "neutral": "§6Neutral",
         "command": "see"
       },
       "protector": {
@@ -200,7 +201,7 @@
       },
       "siamese_twin": {
         "display": "Siamese Twin",
-        "description": "§6WEREWOLF §7➽§9 You are §1Siamese Twin§9. Your objective is to eliminate the Werewolves. \nYou have been separated from your brother at birth, however you have kept a strong link with him. You have 3 extra hearts but after your 5 first hearts the others are shared.",
+        "description": "§6WEREWOLF §7➽§9 You are §1Siamese Twin§9. Your objectif is to kill the Werewolves. \nYou have been separated from your twin at birth, however you still are deeply connected. As well as having two extra hearts, you share your hearts after the fifth one.",
         "siamese_twin_list": "Siamese Twin's List: §b%s"
       },
       "lover": {
@@ -213,14 +214,15 @@
         "not_enough_heart_send": "[§cWW UHC§r] You didn't donate enough hearts",
         "polygamy": "[§6WW UHC§r] Due to a lack of players compared to the number of players, polygamy is disabled",
         "not_enough_heart": "[§cWW UHC§r] You don't have enough hearts",
-        "received": "[§eWW UHC§r] You received §b%d§r half-hearts from §b%s",
+        "received": "[§eWW UHC§r] You received §b%d§r half-heart(s) from §b%s",
         "disconnected": "[§cWW UHC§r] You lover isn't online",
+        "complete": "[§aWW UHC§r] You sent §b%s§r half-heart(s) to §b%s",
         "command": "donate",
-        "too_many_heart": "[§cWW UHC§r] You can't send as many hearts"
+        "too_many_heart": "[§cWW UHC§r] You can't send as many hearts to §b%s"
       },
       "cursed_lover": {
         "display": "Cursed Lovers",
-        "description": "§6WEREWOLF §7➽§c A hateful relationship between §6%s§c and you has emerged, eve",
+        "description": "§6Werewolf §7➽§c A destructive link between §6%s§c and you has emerged. You cannot win together, even if you are in the same team.\n You have an additional heart and NoFall while both of you are alive.",
         "death_cursed_lover": "[§cWW UHC§r] Your cursed lover is dead, you loose all your bonus effects",
         "not_enough_players": "[§cWW UHC§r] There aren't enough players to add cursed lovers"
       },
@@ -235,6 +237,31 @@
       "elder": {
         "display": "Elder",
         "description": "§6WEREWOLF §7➽ §9 You are §1Elder§9. Your objective is to eliminate the Werewolves.\nIn order to do this, you have the effect Resistance and a second life.\nYou will loose your Resistance effect after your first death, but be ware, if a Villager kills you, you will loose 1/3 of your health."
+      },
+      "flute_player": {
+        "display": "Pied Piper",
+        "description": "§6WEREWOLF §7➽§9 You are a §1Pied Piper§9. You have to win alone. Every day, you may bewitch 2 players that are at less than 100 blocks of you. If you bewitch all living players, you win.\nBewitched players know the list of bewitched players",
+        "list": "[§eWW UHC§r] List of Bewitched Players : §b",
+        "power": "[§eWW UHC§r] Bewitch two players with §6/ww bewitch§r You have §b%s",
+        "already_enchant": "[§eWW UHC§r] You have already bewitched §b%s",
+        "distance": "[§cWW UHC§r] You are at more than a 100 blocks from §b%s",
+        "enchanted": "[§eWW UHC§r] You have just been bewitched by the Pied Piper",
+        "perform": "[§eWW UHC§r] You just bewitched §b%s§r",
+        "command": "bewitch"
+      },
+      "librarian": {
+        "display": "Librarian",
+        "description": "§6WEREWOLF §7➽§9 You are a §1Librarian§9. Your objective is to eliminate the werewolves.\nYou obtain 4 bookshelves.\n Three times during the game, you can ask a player to write you a book using §b/ww book§9. \nWhen you die, the books you received are published",
+        "perform": "[§eWW UHC§r] You just sent a book to §b%s",
+        "message": "[§eWW UHC§r] The §bLibrarian§r wishes for you to write him a book. Do so with §b/ww write§r followed by your message",
+        "contribute": "[§aWW UHC§r] You just wrote a book",
+        "contribution": "[§aWW UHC§r] §b%s§r sent you a book containing §b%s",
+        "prohibit": "[§cWW UHC§r] You are not authorized to write a book",
+        "waiting": "[§cWW UHC§r] You are already expecting a book from that player",
+        "request_command": "write",
+        "death": "[§eWW UHC§r] A §bLibrarian§r just died, the books he received are revealed :",
+        "book": "[§eWW UHC§r] Book §b%d§r : %s",
+        "command": "book"
       },
       "comedian": {
         "display": "Comedian",
@@ -259,7 +286,7 @@
       "succubus": {
         "display": "Succubus",
         "description": "§6WEREWOLF §7➽§9You are §1Succubus§9. Your objective is to win alone with the player that you will charm. \nYou can charm a player with §b/ww charm§9\nIf you die, your Charmed will die in your place.",
-        "charming_message": "[§eWW UHC§r] You can charm someone §6/ww charm",
+        "charming_message": "[§eWW UHC§r] You can designate a player to charm §6/ww charm",
         "charming_beginning": "[§eWW UHC§r] You started charming §b%s",
         "charming_perform": "[§aWW UHC§r] §b%s§r is totally charmed, if you die he will die in your place",
         "get_charmed": "[§eWW UHC§r] The Succubus §b%s§r has charmed you, you now have to win with them.\nIf the Succubus dies, you will die in their place.",
@@ -289,7 +316,7 @@
       "pvp": "[§6WW UHC§r] PVP enabled",
       "border": "[§6WW UHC§r] Borders started to shrink",
       "mining": "[§6WW UHC§r] Mining Disabled",
-      "day": "[§eWW UHC§r] It's Daytime §b%s§r ☀ ",
+      "day": "[§6WW UHC§r] It is now Day §b%s§r ✸ ",
       "death_message_with_role": "§b§m§l-+-----------------------------------------+-\n§f        [§cWW UHC§r] §b%s§r is dead, he was §b%s§r\n§r§b§m§l-+-----------------------------------------+-",
       "death_message": "§b§m§l-+-----------------------------------------+-\n§f                 [§cWW UHC§r] §b%s§r is dead\n§r§b§m§l-+-----------------------------------------+-",
       "review_role": "[§eWW UHC§r] To see your role's description again §6/ww role",
@@ -307,21 +334,25 @@
       "leave": "[§c%d/%d§r] §b%s§r left the Village",
       "leave_in_game": "§b§l%s§r has a power cut in his neighborhood",
       "leave_in_spec": "§b%s§r's soul left the Village",
-      "queue": "[§eWW UHC§r] §b%s§r joined the waiting line",
+      "queue_rejoin": "[§eWW UHC§r] §b%s§r regains its place in the queue (position: §b%d§r)",
+      "queue_leave": "[§eWW UHC§r] §b%s§r leaves the game",
+      "spectator_leave": "[§eWW UHC§r] §b%s§r leaves the queue",
+      "leave_spec": "[§eWW UHC§r] The spectator §b%s§r leaves the Game",
+      "queue": "[§eWW UHC§r] §b%s§r has joined the queue (position: §b%d§r)",
+      "rank": "§b/ww rank§r to see your position in the queue",
       "stop": "[§cWW UHC§r] §b%s§r stopped the game",
       "resurrection": "[§eWW UHC§r] You just came back to life"
     },
     "end": {
       "thief": "§e He stole a %s",
-      "infect": " (infected) ",
+      "infect": " who was infected ",
       "reveal_death": "§e§m%s was %s",
-      "transform": " (transformed) ",
+      "transform": "transformed ",
       "reveal": "§e%s was %s",
-      "team": "Team §b%s",
-      "model": " master (%s) ",
+      "model": " with %s as master ",
       "death": "§cOf Death",
-      "lover": " in love with (%s)",
-      "cursed_lover": " in cursed love with (%s)",
+      "lover": " in love with %s",
+      "cursed_lover": " in a cursed relationship with %s",
       "victory": "Victory",
       "message": "§m§l-+-----------------------------------------+-\n§f                   [§6WW UHC§r] Victory %s\n§r§m§l-+-----------------------------------------+-"
     },
@@ -365,13 +396,25 @@
           "role": "§b%s§r is §b%s",
           "sister": "Sisters : §b%s",
           "siamese_twin": "Siamese Twins : §b%s",
-          "angel": "Chosen Angel : §b%s"
+          "angel": "Chosen Angel : §b%s",
+          "transformed": "Transformed: §b%s",
+          "yes": "yes",
+          "no": "no"
         },
         "final_heal": "[§6WW UHC§r] Final Heal !",
         "generation": {
           "already_start": "[§cWW UHC§r] Generation has already been launched",
           "perform": "[§eWW UHC§r] World generation has begun",
-          "not_generated": "[§cWW UHC§r] Map not generated. Do /a generation"
+          "not_generated": "[§cWW UHC§r] Map not generated. Do §b/a generation",
+          "not_finished": "[§cWW UHC§r] Wait for the map's generation to end (§b%s%%§r)"
+        },
+        "change": {
+          "in_progress": "[§eWW UHC§r] Switching Map in progress",
+          "finished": "[§aWW UHC§r] New Map created"
+        },
+        "preview": {
+          "map": "[§eWW UHC§r] You have been teleported to the center of the game map\n §b/a preview§r to return to lobby",
+          "lobby": "[§eWW UHC§r] You have returned to the lobby"
         },
         "tp_group": {
           "broadcast": "[§eWW UHC§r] §b%s§r were teleported by an administrator",
@@ -381,6 +424,11 @@
         "revive": {
           "perform": "[§eWW UHC§r] §b%s§r was resuscitated by an administrator",
           "not_death": "[§cWW UHC§r] The player isn't Dead"
+        },
+        "size": {
+          "begin": "[§eWW UHC§r] Beginning of calculation (area of the central biome)",
+          "result": "[§aWW UHC§r] The central biome has an area of §b%s§r blocks.",
+          "change": "[§eWW UHC§r] Click here to change the Map"
         },
         "host": {
           "add": "[§aWW UHC§r] §b%s§r is now Host",
@@ -401,7 +449,7 @@
         },
         "gamemode": "[§eWW UHC§r] §b%s§r changed his gamemode to §b%d",
         "teleportation": "[§eWW UHC§r] Teleportation of §b%s§r to §b%s",
-        "help": "§6/a config §9To setup the game\n§6/a host §9To setup the host\n§6/a start §9To launch the game\n§6/a chat §9To enable/disable the chat\n§6/a info §9To talk to every player\n§6/a group §9To remind of the group's limit\n§6/a fh §9To FinalHeal\n§6/a inv §9To see a player's inventory\n§6/a kill §9To kill an disconnected player\n§6/a revive §9To revive a player\n§6/a role §9To see a player's role\n§6/a disc §9To see the disconnected player's list\n§6/a setgroup§9 To set the group's limit\n§6/a tpgroup§9 To teleport a group\n§6/a generation§9 To generate the map"
+        "help": "§6/a config §9 Game configuration\n§6/a host §9 Setting the game name\n§6/a start §9 To start the game\n§6/a chat §9 Enable/Disable chat\n§6/a info §9 Broadcast\n§6/a group §9 Remind players of group size\n§6/a fh §9 FinalHeal\n§6/a inv §9 Look at the inventory of a player\n§6/a kill §9 Kill an offline player\n§6/a revive §9 Revive a player\n§6/a role §9 Look at a player's role\n§6/a disc §9 List of disconnected players\n§6/a setgroup§9 Set groups size\n§6/a tpgroup§9 Teleport a group to a random position\n§6/a generation§9 Generate game map\n§6/a size§9 Obtain the size of the central biome\n§6/a moderator§9 Add a moderator\n§6/a host§9 Add a host\n§6/a change§9 Change game map\n§6/a preview§9 Look at game map"
       },
       "message": {
         "send": "[Message sent to §b%s§r] » §b%s",
@@ -415,18 +463,19 @@
         "remove_role": "[§6WW UHC§r] Remove a role in the configuration to compensate with the player",
         "not_living": "[§cWW UHC§r] The player isn't alive"
       },
-      "help": "§6/ww timers §9To see the timers\n§6/ww rules §9To see the rules\n§6/ww role §9To see your role\n§6/ww scenarios §9To see the scenarios\n§6/ww compo §9To see the role' composition\n§6/ww enchantment §9To see the enchantment's limits"
+      "help": "§6/ww timers §9To see the timers\n§6/ww rules §9To see the rules\n§6/ww role §9To see your role\n§6/ww scenarios §9To see the scenarios\n§6/ww compo §9To see the role's composition\n§6/ww enchantment §9To see the enchantment's limits\n§6/ww rank §9To see his rank in the queue"
     },
     "menu": {
       "name": "Option §bWW",
       "return": "Return to Main Menu",
-      "left": "§fClick-§bLeft§r >> +",
-      "right": "§fClick-§bRight§r >> -",
-      "shift": "§bShift§r-Click >> Stuff",
+      "left": "§fLeft-§bClick§f >> +",
+      "right": "§fRight-§bClick§f >> -",
+      "shift": "§bShift§f-Click >> Stuff",
       "advanced_tool": {
         "name": "§bAdvanced §rSettings",
-        "troll_on": "Villager Troll §2Enabled",
-        "troll_off": "Villager Troll §2Disabled",
+        "troll_on": "Troll §2Enabled",
+        "troll_off": "Troll §4Disabled",
+        "troll_set": "§bShift§f-Click to configure",
         "resistance": "Resistance §b%d%%",
         "succubus": "Succubus' action zone §b%s",
         "fox_smell_number": "Fox's Number of Smell §b%d",
@@ -444,11 +493,15 @@
         "fox": "Fox's action zone §b%d",
         "bear_trainer": "Bear Trainer's action zone §b%d"
       },
+      "troll": "Configuration §bTroll",
       "roles": {
         "command_1": "role",
         "command_2": "compo",
         "name": "§bRoles §rSettings",
-        "zero": "Reset"
+        "zero": "Reset",
+        "previous": "Previous §b%d §r»§b %d ",
+        "next": "Next §b%d §r»§b %d",
+        "current": "Page §b%d§r/§b%d"
       },
       "whitelist": {
         "name": "§bWhiteList §rSettings",
@@ -456,9 +509,9 @@
         "spectator_mode": "§fSpectator Mode :",
         "open": "§fWhiteList §2open",
         "close": "§fWhiteList §4closed",
-        "disable": "§4Disable§r for all",
+        "disable": "§4Disabled§f for all",
         "death_only": "§fFor Deads §6only",
-        "enable": "§2Enable§r for all"
+        "enable": "§2Enabled§f for all"
       },
       "scenarios": {
         "command": "scenarios",
@@ -484,6 +537,12 @@
         "timber": "Timber",
         "double_jump": "Double Jump"
       },
+      "rank": {
+        "command": "rank",
+        "perform": "[§aWW UHC§r] You are in position §b%d§r in the queue",
+        "not_in_queue": "[§cWW UHC§r] You are not in the queue",
+        "tag": "§6Queue§r » "
+      },
       "enchantments": {
         "command": "enchantment",
         "name": "§bEnchantments §rSettings",
@@ -496,8 +555,9 @@
         "knock_back_invisible": "Knockback §6for Little-Girl and Mischievous Wolf",
         "knock_back_enable": "KnockBack §2Enabled",
         "punch_disable": "Punch §4Disabled",
-        "punch_cupid": "Punch §for the Cupid",
-        "punch_enable": "Punch §2Enabled"
+        "punch_cupid": "Punch §6for the Cupid",
+        "punch_enable": "Punch §2Enabled",
+        "depth_rider": "Depth Strider §b%d"
       },
       "timers": {
         "command": "timers",
@@ -528,7 +588,8 @@
         "configuration": "Configuration §b%s",
         "success": "[§aWW UHC§r] Settings §bsaved",
         "failure": "[§cWW UHC§r] Configuration slots full",
-        "delete_failed": "[§cWW UHC§r] Error while deleting §b%s"
+        "delete_failed": "[§cWW UHC§r] Error while deleting §b%s",
+        "save_menu": "§bSaves §bMenu"
       },
       "stuff": {
         "name": "§bInventory §rSettings",
@@ -553,7 +614,8 @@
         "vote": "Vote",
         "hide_composition": "Hidden Composition",
         "red_name_tag": "Werewolves' name in red",
-        "seer_every_other_day": "Seer every two days"
+        "seer_every_other_day": "Seer every two days",
+        "proximity_chat": "Proximity chat"
       },
       "border": {
         "name": "§bBorder §rSettings",
@@ -609,6 +671,7 @@
     "check": {
       "death": "[§cWW UHC§r] You are not alive",
       "game_not_in_progress": "[§cWW UHC§r] The game is already finished or roles have not been revealed yet",
+      "game_in_progress": "[§cWW UHC§r] The game is in progress",
       "player_input": "[§cWW UHC§r] The command takes a player as input",
       "end_selection": "[§cWW UHC§r] You can't use your ability anymore today",
       "not_in_game": "[§cWW UHC§r] You are not in the game",
@@ -630,13 +693,16 @@
       "disabled_command": "[§cWW UHC§r] Command disabled",
       "spectator_disabled": "[§cWW UHC§r] Outside spectators are disabled during this game",
       "console": "[§cWW UHC§r] This command is not usable via the console",
-      "full": "[§cWW UHC§r] The game is full"
+      "full": "[§cWW UHC§r] The game is full",
+      "cancel": "[§cWW UHC§r] Your power has been canceled",
+      "transformation": "[§cWW UHC§r] Your transformation has been canceled",
+      "invalid_key": "[§cWW UHC§r] Invalid key"
     },
     "update": {
       "up_to_date": "[§aWW UHC§r] The plugin WW UHC is updated",
       "out_of_date": "[§6WW UHC§r] A plugin's update is available"
     },
-    "bug": "§b§m§l-+-----------------------------------------+-\n§f        [§cWW UHC§r] Report bugs by clicking here\n§r§b§m§l-+-----------------------------------------+-",
+    "bug": "§b§m§l-+-----------------------------------------+-\n§f        [§cWW UHC§f] Report bugs by clicking here\n§r§b§m§l-+-----------------------------------------+-",
     "event": {
       "on_sign": "Good doggy",
       "seer_death": "[§eWW UHC§r] Before dying, the Seer has spawn §b%s§r chests on the map, only one contains the name of a Village's Ennemy",
@@ -648,6 +714,12 @@
       "display": "%s (§b%s§r)",
       "pve": "§bPVE",
       "on": "§bON"
+    },
+    "categories": {
+      "villager": "Villagers",
+      "werewolf": "Werewolves",
+      "neutral": "Neutrals",
+      "addons": "Addons Roles"
     }
   }
 }
