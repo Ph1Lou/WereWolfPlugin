@@ -6,7 +6,7 @@
 
     <groupId>io.github.ph1lou</groupId>
     <artifactId>werewolfplugin</artifactId>
-    <version>1.6</version>
+    <version>1.6.1</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -9,7 +9,7 @@ import io.github.ph1lou.werewolfapi.events.SeeVoteEvent;
 import io.github.ph1lou.werewolfapi.events.VoteEndEvent;
 import io.github.ph1lou.werewolfapi.events.VoteEvent;
 import io.github.ph1lou.werewolfapi.events.VoteResultEvent;
-import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
+import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

@@ -3,7 +3,7 @@ package io.github.ph1lou.werewolfplugin.listeners.scenarioslisteners;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.Scenarios;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
+import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

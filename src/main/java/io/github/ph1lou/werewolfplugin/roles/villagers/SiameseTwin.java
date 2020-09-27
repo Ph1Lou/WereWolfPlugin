@@ -8,7 +8,7 @@ import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.State;
 import io.github.ph1lou.werewolfapi.events.UpdateEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
-import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
+import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

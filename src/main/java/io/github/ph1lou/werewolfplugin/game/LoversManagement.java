@@ -5,8 +5,8 @@ import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.State;
 import io.github.ph1lou.werewolfapi.events.*;
+import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Cupid;
-import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

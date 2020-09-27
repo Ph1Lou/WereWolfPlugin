@@ -1,7 +1,7 @@
 package io.github.ph1lou.werewolfplugin.game;
 
 import io.github.ph1lou.werewolfapi.MapManagerAPI;
-import io.github.ph1lou.werewolfplugin.utils.VersionUtils;
+import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.worldloader.WorldFillTask;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
