@@ -1,4 +1,4 @@
-package io.github.ph1lou.werewolfplugin.game;
+package io.github.ph1lou.werewolfplugin.scoreboards;
 
 import fr.mrmicky.fastboard.FastBoard;
 import io.github.ph1lou.werewolfapi.PlayerWW;
@@ -6,19 +6,18 @@ import io.github.ph1lou.werewolfapi.RoleRegister;
 import io.github.ph1lou.werewolfapi.ScoreAPI;
 import io.github.ph1lou.werewolfapi.enumlg.State;
 import io.github.ph1lou.werewolfapi.enumlg.StateLG;
-import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
-import io.github.ph1lou.werewolfapi.events.UpdateEvent;
-import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.InvisibleState;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
+import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
-import org.bukkit.*;
+import io.github.ph1lou.werewolfplugin.game.GameManager;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.WorldBorder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
-import org.bukkit.scoreboard.Team;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -39,11 +38,13 @@ public class ScoreBoard implements ScoreAPI, Listener {
 	private final List<String> scoreboard3 = new ArrayList<>();
 	private List<String> roles = new ArrayList<>();
 	private final List<UUID> kill_score = new ArrayList<>();
-	
+	private final TabManager tabManager;
+
 	public ScoreBoard(GameManager game) {
-		this.game=game;
+		this.game = game;
+		this.tabManager = new TabManager(game);
 	}
-	
+
 	public void updateScoreBoard1() {
 
 		scoreboard1.clear();
@@ -276,16 +277,21 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		String arrow;
 		location.setY(target.getY());
 		Vector dirToMiddle = target.toVector().subtract(player.getEyeLocation().toVector()).normalize();
-		Integer distance = (int) Math.round(target.distance(location));
+
+		int distance = 0;
+		if (target.getWorld().getName().equals(location.getWorld().getName())) {
+			distance = (int) Math.round(target.distance(location));
+		}
+
 		Vector playerDirection = player.getEyeLocation().getDirection();
 		double angle = dirToMiddle.angle(playerDirection);
 		double det = dirToMiddle.getX() * playerDirection.getZ() - dirToMiddle.getZ() * playerDirection.getX();
 
-		angle=angle*Math.signum(det);
+		angle = angle * Math.signum(det);
 
-		if (angle>-Math.PI/8 && angle<Math.PI/8) {
-			arrow="⬆";
-		} else if (angle>-3*Math.PI/8 && angle<-Math.PI/8) {
+		if (angle > -Math.PI / 8 && angle < Math.PI / 8) {
+			arrow = "⬆";
+		} else if (angle > -3 * Math.PI / 8 && angle < -Math.PI / 8) {
 			arrow="⬈";
 		} else if (angle<3*Math.PI/8 && angle>Math.PI/8) {
 			arrow="⬉";
@@ -328,155 +334,38 @@ public class ScoreBoard implements ScoreAPI, Listener {
 
 	@EventHandler
 	public void onNameTagUpdate(UpdateNameTagEvent event) {
-		ModerationManager moderationManager = game.getModerationManager();
-
-		for (PlayerWW playerWW : game.getPlayersWW().values()) {
-
-			Scoreboard scoreBoard = playerWW.getScoreBoard();
-
-			for (PlayerWW playerWW2 : game.getPlayersWW().values()) {
-
-				String name = playerWW2.getName();
-
-				if (scoreBoard.getTeam(name) == null) {
-					scoreBoard.registerNewTeam(name).addEntry(name);
-				}
-
-				Team team = scoreBoard.getTeam(name);
-				try {
-					if (game.getConfig().getScenarioValues().get("werewolf.menu.scenarios.no_name_tag")) {
-						VersionUtils.getVersionUtils().setTeamNameTagVisibility(team, false);
-					} else
-						VersionUtils.getVersionUtils().setTeamNameTagVisibility(team, (!(playerWW2.getRole() instanceof InvisibleState)) || !((InvisibleState) playerWW2.getRole()).isInvisible());
-				} catch (Exception ignored) {
-
-				}
-
-			}
-
-			for (UUID uuid : moderationManager.getModerators()) {
-				Player player = Bukkit.getPlayer(uuid);
-				if (player != null) {
-					String name3 = player.getName();
-					if (scoreBoard.getTeam(name3) == null) {
-						scoreBoard.registerNewTeam(name3).addEntry(name3);
-					}
-				}
-			}
-
-			for (UUID uuid : moderationManager.getHosts()) {
-				Player player = Bukkit.getPlayer(uuid);
-				if (player != null) {
-					String name3 = player.getName();
-					if (scoreBoard.getTeam(name3) == null) {
-						scoreBoard.registerNewTeam(name3).addEntry(name3);
-					}
-				}
-			}
-
-			for (UUID uuid : moderationManager.getQueue()) {
-				Player player = Bukkit.getPlayer(uuid);
-				if (player != null) {
-					String name3 = player.getName();
-					if (scoreBoard.getTeam(name3) == null) {
-						scoreBoard.registerNewTeam(name3).addEntry(name3);
-					}
-				}
-			}
-
-			for (Team t : scoreBoard.getTeams()) {
-
-				for (String e : t.getEntries()) {
-					Player player = Bukkit.getPlayer(e);
-					if (player != null) {
-						UUID uuid = player.getUniqueId();
-						StringBuilder sb = new StringBuilder();
-						if (moderationManager.getHosts().contains(uuid)) {
-							sb.append(game.translate("werewolf.commands.admin.host.tag"));
-						} else if (moderationManager.getModerators().contains(uuid)) {
-							sb.append(game.translate("werewolf.commands.admin.moderator.tag"));
-						}
-						if (moderationManager.getQueue().contains(uuid)) {
-							sb.append(game.translate("werewolf.menu.rank.tag"));
-						}
-						if (game.getPlayersWW().containsKey(uuid)) {
-							Roles roles = game.getPlayersWW().get(uuid).getRole();
-							if (roles.isWereWolf() && playerWW.getRole().isWereWolf()) {
-								if (game.getConfig().getConfigValues().get("werewolf.menu.global.red_name_tag")) {
-									if (game.getConfig().getTimerValues().get("werewolf.menu.timers.werewolf_list") <= 0) {
-										sb.append(ChatColor.DARK_RED);
-									}
-								}
-							}
-						}
-						t.setPrefix(sb.toString());
-					}
-				}
-			}
-		}
-		ScoreboardManager scoreboardManager = Bukkit.getScoreboardManager();
-
-		if (scoreboardManager == null) return;
-
-		Scoreboard scoreboardModerator = scoreboardManager.getNewScoreboard();
-		Team hosts = scoreboardModerator.registerNewTeam("hostsSpectator");
-		hosts.setPrefix(game.translate("werewolf.commands.admin.host.tag"));
-		Team hostsWW = scoreboardModerator.registerNewTeam("hostsWW");
-		hostsWW.setPrefix(game.translate("werewolf.commands.admin.host.tag") + ChatColor.DARK_RED);
-		Team moderators = scoreboardModerator.registerNewTeam("moderators");
-		moderators.setPrefix(game.translate("werewolf.commands.admin.moderator.tag"));
-		Team ww = scoreboardModerator.registerNewTeam("ww");
-		ww.setPrefix(String.valueOf(ChatColor.DARK_RED));
-
-		Scoreboard scoreboardSpectator = Bukkit.getScoreboardManager().getNewScoreboard();
-		Team hostsSpectator = scoreboardSpectator.registerNewTeam("hostsSpectator");
-		hostsSpectator.setPrefix(game.translate("werewolf.commands.admin.host.tag"));
-		Team moderatorsSpectator = scoreboardSpectator.registerNewTeam("moderators");
-		moderatorsSpectator.setPrefix(game.translate("werewolf.commands.admin.moderator.tag"));
-
-		Team queue = scoreboardModerator.registerNewTeam("queue");
-		Team queueSpectator = scoreboardSpectator.registerNewTeam("queue");
-		if (game.isState(StateLG.LOBBY)) {
-			queue.setPrefix(game.translate("werewolf.menu.rank.tag"));
-			queueSpectator.setPrefix(game.translate("werewolf.menu.rank.tag"));
-		} else {
-			queue.setPrefix("");
-			queueSpectator.setPrefix("");
-		}
-
-
-		for (Player player : Bukkit.getOnlinePlayers()) {
-
-			UUID uuid = player.getUniqueId();
-			String playerName = player.getName();
-
-			if (moderationManager.getHosts().contains(uuid)) {
-				if (game.getPlayersWW().containsKey(uuid) && game.getPlayersWW().get(uuid).getRole().isWereWolf()) {
-					hostsWW.addEntry(playerName);
-				} else hosts.addEntry(playerName);
-				hostsSpectator.addEntry(playerName);
-			} else if (moderationManager.getModerators().contains(uuid)) {
-				moderators.addEntry(playerName);
-				moderatorsSpectator.addEntry(playerName);
-			} else if (game.getPlayersWW().containsKey(uuid) && game.getPlayersWW().get(uuid).getRole().isWereWolf()) {
-				ww.addEntry(playerName);
-			} else if (game.getModerationManager().getQueue().contains(uuid)) {
-				queue.addEntry(playerName);
-				queueSpectator.addEntry(playerName);
-			}
-		}
-
-
-		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (moderationManager.getModerators().contains(player.getUniqueId())) {
-				player.setScoreboard(scoreboardModerator);
-			} else if (!game.getPlayersWW().containsKey(player.getUniqueId())) {
-				player.setScoreboard(scoreboardSpectator);
-			}
-		}
-
+		tabManager.updatePlayers();
 	}
 
+	@EventHandler
+	public void onQuit(PlayerQuitEvent event) {
+		tabManager.unregisterPlayer(event.getPlayer());
+	}
+
+	@EventHandler
+	public void onJoin(PlayerJoinEvent event) {
+		tabManager.registerPlayer(event.getPlayer());
+	}
+
+	@EventHandler
+	public void onStop(StopEvent event) {
+		Bukkit.getOnlinePlayers().forEach(player1 -> tabManager.registerPlayer(player1));
+	}
+
+	@EventHandler
+	public void onModeratorUpdate(ModeratorEvent event) {
+		tabManager.updatePlayer(event.getPlayerUUID(), Bukkit.getOnlinePlayers());
+	}
+
+	@EventHandler
+	public void onHostUpdate(HostEvent event) {
+		tabManager.updatePlayer(event.getPlayerUUID(), Bukkit.getOnlinePlayers());
+	}
+
+	@EventHandler
+	public void onInvisible(InvisibleEvent event) {
+		tabManager.updatePlayer(event.getPlayerUUID(), Bukkit.getOnlinePlayers());
+	}
 
 	@Override
 	public int getRole() {
@@ -523,7 +412,7 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		this.group_size = group;
 	}
 
-
+/*
 	public char getArrowChar(Player p, Location mate) {
 
 		Location ploc = p.getLocation();
@@ -542,5 +431,5 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		return "↑↗→↘↓↙←↖".charAt((int) a / 45);
 
 	}
-
+*/
 }

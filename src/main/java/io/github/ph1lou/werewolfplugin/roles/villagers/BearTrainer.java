@@ -14,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,6 @@ public class BearTrainer extends RolesVillage {
         }
         if (player == null) return;
 
-        StringBuilder builder = new StringBuilder();
         Location oursLocation = player.getLocation();
         List<UUID> growled = new ArrayList<>();
         for (Player pls : Bukkit.getOnlinePlayers()) {
@@ -53,25 +53,38 @@ public class BearTrainer extends RolesVillage {
                 }
             }
         }
-
         GrowlEvent growlEvent = new GrowlEvent(getPlayerUUID(), growled);
         Bukkit.getPluginManager().callEvent(growlEvent);
+    }
 
-        if (!growlEvent.getPlayersUUID().isEmpty()) {
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onGrowl(GrowlEvent event) {
 
-            if (growlEvent.isCancelled()) {
-                player.sendMessage(game.translate("werewolf.check.cancel"));
-                return;
-            }
-            for (UUID ignored : growlEvent.getPlayersUUID()) {
-                builder.append(game.translate("werewolf.role.bear_trainer.growling"));
-            }
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                p.sendMessage(game.translate("werewolf.role.bear_trainer.growling_message", builder.toString()));
-                Sounds.WOLF_GROWL.play(p);
-            }
-
+        if (event.getPlayersUUID().isEmpty()) {
+            event.setCancelled(true);
+            return;
         }
+
+        if (!event.getPlayerUUID().equals(getPlayerUUID())) return;
+
+        Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (player == null) return;
+
+        if (event.isCancelled()) {
+            player.sendMessage(game.translate("werewolf.check.cancel"));
+            return;
+        }
+
+        StringBuilder builder = new StringBuilder();
+
+        for (UUID ignored : event.getPlayersUUID()) {
+            builder.append(game.translate("werewolf.role.bear_trainer.growling"));
+        }
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            Sounds.WOLF_GROWL.play(p);
+        }
+        Bukkit.broadcastMessage(game.translate("werewolf.role.bear_trainer.growling_message", builder.toString()));
     }
 
     @Override

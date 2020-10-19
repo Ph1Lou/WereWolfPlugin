@@ -55,8 +55,9 @@ public class Lang {
         game.getLanguage().clear();
         game.getLanguage().putAll(loadTranslations(FileUtils_.loadContent(buildLanguageFile(main, "fr"))));
         main.getExtraTexts().clear();
-        for (Plugin plugin : main.getDefaultLanguages().keySet()) {
-            main.getExtraTexts().putAll(loadTranslations(FileUtils_.loadContent(buildLanguageFile(plugin, main.getDefaultLanguages().get(plugin)))));
+        for (Plugin plugin : main.getAddonsList()) {
+            main.getExtraTexts().putAll(loadTranslations(FileUtils_.loadContent(buildLanguageFile(plugin, main.getDefaultLanguages(plugin)))));
+
         }
         Bukkit.getPluginManager().callEvent(new UpdateLanguageEvent());
     }

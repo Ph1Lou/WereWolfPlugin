@@ -15,7 +15,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +32,6 @@ public class PlayerLG implements Listener, PlayerWW {
     private Boolean announceCursedLoversAFK = false;
     private Boolean announceLoversAFK = false;
     private Boolean thief = false;
-    private transient Scoreboard board;
     private Boolean revealAmnesiacLover = false;
     private final List<ItemStack> itemsDeath = new ArrayList<>();
     private UUID cursedLovers = null;
@@ -53,7 +51,6 @@ public class PlayerLG implements Listener, PlayerWW {
         this.playerUUID = player.getUniqueId();
         this.role = new Villager(main, game, this.playerUUID);
 		this.name = player.getName();
-		this.board = Bukkit.getScoreboardManager().getNewScoreboard();
     }
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -72,15 +69,6 @@ public class PlayerLG implements Listener, PlayerWW {
 
 	}
 
-	@Override
-	public Scoreboard getScoreBoard() {
-		return this.board;
-	}
-
-	@Override
-	public void setScoreBoard(Scoreboard board){
-		this.board=board;
-	}
 
 	@Override
 	public void setItemDeath(ItemStack[] itemsDeath) {

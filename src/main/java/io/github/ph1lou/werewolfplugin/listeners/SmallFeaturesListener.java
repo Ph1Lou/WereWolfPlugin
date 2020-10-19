@@ -84,11 +84,14 @@ public class SmallFeaturesListener implements Listener {
                 if (game.getConfig().getGoldenAppleParticles() == 2) {
                     return;
                 }
-                GoldenAppleParticleEvent goldenAppleParticleEvent = new GoldenAppleParticleEvent(event.getPlayer().getUniqueId());
 
-                Bukkit.getPluginManager().callEvent(goldenAppleParticleEvent);
+                if (game.getConfig().getGoldenAppleParticles() != 0) {
+                    GoldenAppleParticleEvent goldenAppleParticleEvent = new GoldenAppleParticleEvent(event.getPlayer().getUniqueId());
 
-                if(!goldenAppleParticleEvent.isCancelled()) return;
+                    Bukkit.getPluginManager().callEvent(goldenAppleParticleEvent);
+
+                    if (!goldenAppleParticleEvent.isCancelled()) return;
+                }
 
                 if (event.getPlayer().hasPotionEffect(PotionEffectType.ABSORPTION)) {
                     event.getPlayer().removePotionEffect(PotionEffectType.ABSORPTION);

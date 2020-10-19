@@ -94,12 +94,14 @@ public class GameTask extends BukkitRunnable {
 				pm.callEvent(new BorderStartEvent());
 			}
 		} else if (game.getConfig().getTimerValues().get("werewolf.menu.timers.border_begin") < 0) {
-			game.getConfig().setBorderMax((int) (wb.getSize()));
-			if(game.getConfig().getBorderMax()==game.getConfig().getBorderMin()) {
-				pm.callEvent(new BorderStopEvent());
+
+			if (game.getConfig().getBorderMax() != game.getConfig().getBorderMin()) {
+				wb.setSize(game.getConfig().getBorderMin(), (long) Math.abs(wb.getSize() - game.getConfig().getBorderMin()) * game.getConfig().getTimerValues().get("werewolf.menu.timers.border_duration") / 100);
+				game.getConfig().setBorderMax((int) (wb.getSize()));
 			}
-			else wb.setSize(game.getConfig().getBorderMin(), (long) Math.abs(wb.getSize() - game.getConfig().getBorderMin())* game.getConfig().getTimerValues().get("werewolf.menu.timers.border_duration") / 100);
+
 		}
+
 		game.getConfig().getTimerValues().put("werewolf.menu.timers.border_begin", game.getConfig().getTimerValues().get("werewolf.menu.timers.border_begin") - 1);
 
 		if (game.getConfig().getTimerValues().get("werewolf.menu.timers.digging_end") == 0) {

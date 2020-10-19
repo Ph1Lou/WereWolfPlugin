@@ -120,6 +120,7 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
             }
         }
 
+
         for(UUID uuid1:affectedPlayer){
             if(game.getPlayersWW().get(uuid1).isState(State.ALIVE)){
                 counter++;

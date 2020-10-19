@@ -222,9 +222,11 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
 
         if (player == null) return;
 
+
         Bukkit.getPluginManager().callEvent(new AngelTargetDeathEvent(getPlayerUUID(), uuid));
         if (isChoice(AngelForm.FALLEN_ANGEL)) {
             if (target.getLastKiller().equals(getPlayerUUID())) {
+                Bukkit.getPluginManager().callEvent(new FallenAngelTargetDeathEvent(getPlayerUUID(), uuid));
                 VersionUtils.getVersionUtils().setPlayerMaxHealth(player, VersionUtils.getVersionUtils().getPlayerMaxHealth(player) + 6);
                 player.sendMessage(game.translate("werewolf.role.fallen_angel.deadly_target"));
             }

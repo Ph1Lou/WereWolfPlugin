@@ -82,7 +82,6 @@ public class CommandAngelRegen implements Commands {
             player.sendMessage(game.translate("werewolf.role.guardian_angel.disconnected_protege"));
             return;
         }
-
         ((LimitedUse) guardianAngel).setUse(((LimitedUse) guardianAngel).getUse() + 1);
 
         playerProtected.removePotionEffect(PotionEffectType.REGENERATION);

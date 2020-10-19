@@ -3,7 +3,7 @@ package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.enumlg.State;
 import io.github.ph1lou.werewolfapi.enumlg.StateLG;
-import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
+import io.github.ph1lou.werewolfapi.events.ModeratorEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import io.github.ph1lou.werewolfplugin.game.ModerationManager;
@@ -56,7 +56,7 @@ public class CommandModerator implements Commands {
             if (game.isState(StateLG.LOBBY)) {
                 game.finalJoin(moderator);
             }
-            Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent());
+            Bukkit.getPluginManager().callEvent(new ModeratorEvent(argUUID, false));
             return;
         }
 
@@ -77,6 +77,6 @@ public class CommandModerator implements Commands {
         moderator.setGameMode(GameMode.SPECTATOR);
         moderationManager.getModerators().add(argUUID);
         Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.moderator.add", args[0]));
-        Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent());
+        Bukkit.getPluginManager().callEvent(new ModeratorEvent(argUUID, true));
     }
 }

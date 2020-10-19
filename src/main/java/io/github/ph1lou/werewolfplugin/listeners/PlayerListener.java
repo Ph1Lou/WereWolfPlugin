@@ -240,7 +240,6 @@ public class PlayerListener implements Listener {
 			if(!plg.getName().equals(playerName)){
 				plg.setName(playerName);
 			}
-			player.setScoreboard(plg.getScoreBoard());
 
 			if (plg.isState(State.ALIVE)) {
 
@@ -282,8 +281,6 @@ public class PlayerListener implements Listener {
 			}
 		}
 		game.getScenarios().updateCompass();
-		Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent());
-
 	}
 
 	@EventHandler

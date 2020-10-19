@@ -5,10 +5,7 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.events.DayEvent;
-import io.github.ph1lou.werewolfapi.events.EnchantmentEvent;
-import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
-import io.github.ph1lou.werewolfapi.events.NightEvent;
+import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
@@ -140,7 +137,7 @@ public class SerialKiller extends RolesNeutral implements Power {
         if (!target.getLastKiller().equals(getPlayerUUID())) return;
 
         if (killer != null) {
-
+            Bukkit.getPluginManager().callEvent(new SerialKillerEvent(getPlayerUUID(), uuid));
             VersionUtils.getVersionUtils().setPlayerMaxHealth(killer, VersionUtils.getVersionUtils().getPlayerMaxHealth(killer) + 2);
             killer.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE));
             if (hasPower()) {

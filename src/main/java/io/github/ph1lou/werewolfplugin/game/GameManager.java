@@ -5,11 +5,15 @@ import io.github.ph1lou.werewolfapi.*;
 import io.github.ph1lou.werewolfapi.enumlg.Day;
 import io.github.ph1lou.werewolfapi.enumlg.State;
 import io.github.ph1lou.werewolfapi.enumlg.StateLG;
-import io.github.ph1lou.werewolfapi.events.*;
+import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.LoadEvent;
+import io.github.ph1lou.werewolfapi.events.ResurrectionEvent;
+import io.github.ph1lou.werewolfapi.events.StopEvent;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.save.Config;
 import io.github.ph1lou.werewolfplugin.save.Stuff;
+import io.github.ph1lou.werewolfplugin.scoreboards.ScoreBoard;
 import io.github.ph1lou.werewolfplugin.tasks.LobbyTask;
 import io.github.ph1lou.werewolfplugin.utils.UpdateChecker;
 import org.bukkit.Bukkit;
@@ -18,6 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -89,7 +94,6 @@ public class GameManager implements WereWolfAPI {
         PlayerWW plg = new PlayerLG(main, this, player);
         getPlayersWW().put(uuid, plg);
         Bukkit.getPluginManager().registerEvents((Listener) plg, main);
-        player.setScoreboard(getPlayersWW().get(uuid).getScoreBoard());
         player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 0, false, false));
         player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
 
@@ -101,7 +105,7 @@ public class GameManager implements WereWolfAPI {
                 player.sendMessage(translate("werewolf.update.out_of_date"));
             }
         });
-        Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent());
+
     }
 
     public void clearPlayer(Player player) {
@@ -165,11 +169,10 @@ public class GameManager implements WereWolfAPI {
 
         if (mapManager.getWorld() == null) return;
 
-        Bukkit.getPluginManager().callEvent(new StopEvent(this));
         scenarios.delete();
 
-        main.setCurrentGame(new GameManager(main));
-        main.getCurrentGame().init();
+        main.createGame();
+
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             FastBoard fastboard = new FastBoard(player);
@@ -179,11 +182,23 @@ public class GameManager implements WereWolfAPI {
             main.getCurrentGame().join(player);
         }
         mapManager.deleteMap();
+
+        Bukkit.getPluginManager().callEvent(new StopEvent(this));
     }
 
     @Override
     public Map<UUID, PlayerWW> getPlayersWW() {
         return this.playerLG;
+    }
+
+    @Nullable
+    public PlayerWW getPlayerWW(UUID uuid) {
+
+        if (!this.playerLG.containsKey(uuid)) {
+            return null;
+        }
+
+        return this.playerLG.get(uuid);
     }
 
 

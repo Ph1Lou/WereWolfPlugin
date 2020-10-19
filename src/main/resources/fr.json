@@ -450,7 +450,7 @@
         },
         "gamemode": "[§eLG UHC§r] §b%s§r s'est mis en gamemode §b%d",
         "teleportation": "[§eLG UHC§r] Téléportation de §b%s§r vers §b%s",
-        "help": "§6/a config §9Pour configurer la partie\n§6/a host §9Pour configurer l'host\n§6/a start §9Pour lancer la partie\n§6/a chat §9Pour activer/désactiver le chat\n§6/a info §9Pour parler à tous les joueurs\n§6/a group §9Pour faire respecter les groupes\n§6/a fh §9Pour FinalHeal\n§6/a inv §9Pour voir l'inventaire d'un joueur\n§6/a kill §9Pour tuer un joueur offline\n§6/a revive §9Pour ressusciter un joueur\n§6/a role §9Pour voir le rôle d'un joueur\n§6/a disc §9Pour voir les joueurs déco\n§6/a setgroup§9 Pour configurer les groupes\n§6/a tpgroup§9 Pour téléporter un groupe\n§6/a generation§9 Pour générer la map\n§6/a size§9 Pour obtenir la taille du biome central\n§6/a moderator§9 Pour ajouter un modérator\n§6/a host§9 Pour ajouter un host\n§6/a change§9 Pour changer la map\n§6/a preview§9 Pour voir la map de jeu"
+        "help": "§6/a config §9Pour configurer la partie\n§6/a start §9Pour lancer la partie\n§6/a chat §9Pour activer/désactiver le chat\n§6/a info §9Pour parler à tous les joueurs\n§6/a group §9Pour faire respecter les groupes\n§6/a fh §9Pour FinalHeal\n§6/a inv §9Pour voir l'inventaire d'un joueur\n§6/a kill §9Pour tuer un joueur offline\n§6/a revive §9Pour ressusciter un joueur\n§6/a role §9Pour voir le rôle d'un joueur\n§6/a disc §9Pour voir les joueurs déco\n§6/a setgroup§9 Pour configurer les groupes\n§6/a tpgroup§9 Pour téléporter un groupe\n§6/a generation§9 Pour générer la map\n§6/a size§9 Pour obtenir la taille du biome central\n§6/a moderator§9 Pour ajouter un modérator\n§6/a host§9 Pour ajouter un host\n§6/a change§9 Pour changer la map\n§6/a preview§9 Pour voir la map de jeu"
       },
       "message": {
         "send": "[Message envoyé à §b%s§r] » §b%s",
@@ -552,13 +552,13 @@
         "diamond_protection": "Limite de Protection sur le diamant : §b%d",
         "power": "Arc : Max Power §b%d",
         "sharpness_iron": "Epée en fer : Max Tranchant §b%d",
-        "sharpness_diamond": "Epée en diamand : Max Tranchant §b%d",
+        "sharpness_diamond": "Epée en diamant : Max Tranchant §b%d",
         "knock_back_disable": "KnockBack §4Désactivé",
         "knock_back_invisible": "KnockBack §6pour la Petite Fille et le Loup Perfide",
-        "knock_back_enable":"KnockBack §2Activé",
-        "punch_disable":"Punch §4Désactivé",
-        "punch_cupid":"Punch §6pour le Cupidon",
-        "punch_enable":"Punch §2Activé",
+        "knock_back_enable": "KnockBack §2Activé",
+        "punch_disable": "Punch §4Désactivé",
+        "punch_cupid": "Punch §6pour le Cupidon",
+        "punch_enable": "Punch §2Activé",
         "depth_rider": "Depth Strider §b%d"
       },
       "timers": {

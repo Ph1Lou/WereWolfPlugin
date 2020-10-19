@@ -4,8 +4,11 @@ import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.State;
 import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.events.AppearInWereWolfListEvent;
+import io.github.ph1lou.werewolfapi.events.RequestSeeWereWolfListEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -52,7 +55,11 @@ public class CommandWereWolf implements Commands {
             return;
         }
 
-        if (!plg.getRole().isWereWolf()) {
+        RequestSeeWereWolfListEvent requestSeeWereWolfListEvent = new RequestSeeWereWolfListEvent(uuid);
+        Bukkit.getPluginManager().callEvent(requestSeeWereWolfListEvent);
+
+
+        if (!requestSeeWereWolfListEvent.isAccept()) {
             sender.sendMessage(game.translate("werewolf.role.werewolf.not_werewolf"));
             return;
         }
@@ -67,8 +74,10 @@ public class CommandWereWolf implements Commands {
         for (UUID playerUUID : game.getPlayersWW().keySet()) {
 
             PlayerWW lg = game.getPlayersWW().get(playerUUID);
+            AppearInWereWolfListEvent appearInWereWolfListEvent = new AppearInWereWolfListEvent(playerUUID);
+            Bukkit.getPluginManager().callEvent(appearInWereWolfListEvent);
 
-            if (lg.isState(State.ALIVE) && lg.getRole().isWereWolf()) {
+            if (lg.isState(State.ALIVE) && appearInWereWolfListEvent.isAppear()) {
                 list.append(lg.getName()).append(" ");
             }
         }
