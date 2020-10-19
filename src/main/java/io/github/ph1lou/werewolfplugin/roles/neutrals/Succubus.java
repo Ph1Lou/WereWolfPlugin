@@ -229,7 +229,7 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onSecondDeathEvent(ThirdDeathEvent event) {
+    public void onThirdDeathEvent(ThirdDeathEvent event) {
 
 
         UUID uuid = event.getUuid();

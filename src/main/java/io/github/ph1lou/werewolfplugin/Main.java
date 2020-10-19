@@ -20,6 +20,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -130,7 +131,12 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
         this.currentGame.init();
     }
 
+    @Nullable
     public String getDefaultLanguages(Plugin plugin) {
+        if (!defaultLanguages.containsKey(plugin)) {
+            return null;
+        }
+
         return defaultLanguages.get(plugin);
     }
 

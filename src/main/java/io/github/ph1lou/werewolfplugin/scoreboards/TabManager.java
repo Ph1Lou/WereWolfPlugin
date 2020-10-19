@@ -75,6 +75,10 @@ public class TabManager {
         }
     }
 
+    public void updatePlayer(UUID uuid) {
+        updatePlayer(uuid, Bukkit.getOnlinePlayers());
+    }
+
     public void updatePlayer(UUID uuid, Collection<? extends Player> players) {
 
         ModerationManager moderationManager = game.getModerationManager();

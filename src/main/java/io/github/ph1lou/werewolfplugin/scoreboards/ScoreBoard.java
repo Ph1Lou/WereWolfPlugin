@@ -349,22 +349,27 @@ public class ScoreBoard implements ScoreAPI, Listener {
 
 	@EventHandler
 	public void onStop(StopEvent event) {
-		Bukkit.getOnlinePlayers().forEach(player1 -> tabManager.registerPlayer(player1));
+		Bukkit.getOnlinePlayers().forEach(tabManager::registerPlayer);
 	}
 
 	@EventHandler
 	public void onModeratorUpdate(ModeratorEvent event) {
-		tabManager.updatePlayer(event.getPlayerUUID(), Bukkit.getOnlinePlayers());
+		tabManager.updatePlayer(event.getPlayerUUID());
+	}
+
+	@EventHandler
+	public void onFinalJoinEvent(FinalJoinEvent event) {
+		tabManager.updatePlayer(event.getPlayerUUID());
 	}
 
 	@EventHandler
 	public void onHostUpdate(HostEvent event) {
-		tabManager.updatePlayer(event.getPlayerUUID(), Bukkit.getOnlinePlayers());
+		tabManager.updatePlayer(event.getPlayerUUID());
 	}
 
 	@EventHandler
 	public void onInvisible(InvisibleEvent event) {
-		tabManager.updatePlayer(event.getPlayerUUID(), Bukkit.getOnlinePlayers());
+		tabManager.updatePlayer(event.getPlayerUUID());
 	}
 
 	@Override
