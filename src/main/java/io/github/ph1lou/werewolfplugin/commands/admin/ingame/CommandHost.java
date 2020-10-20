@@ -49,7 +49,7 @@ public class CommandHost implements Commands {
             Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.host.remove", args[0]));
             moderationManager.getHosts().remove(uuid);
             if (moderationManager.getModerators().contains(uuid)) {
-                if (game.getPlayersWW().containsKey(uuid)) {
+                if (game.isState(StateLG.LOBBY) && game.getPlayersWW().containsKey(uuid)) {
                     game.getScore().removePlayerSize();
                     game.getPlayersWW().remove(uuid);
                 }

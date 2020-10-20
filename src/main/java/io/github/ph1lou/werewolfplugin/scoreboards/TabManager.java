@@ -23,7 +23,7 @@ import java.util.UUID;
 
 public class TabManager {
 
-    GameManager game;
+    final GameManager game;
 
     public TabManager(GameManager game) {
         this.game = game;
