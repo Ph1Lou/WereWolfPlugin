@@ -9,6 +9,7 @@ import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
+import io.github.ph1lou.werewolfplugin.game.ModerationManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -370,6 +371,24 @@ public class ScoreBoard implements ScoreAPI, Listener {
 	@EventHandler
 	public void onInvisible(InvisibleEvent event) {
 		tabManager.updatePlayer(event.getPlayerUUID());
+	}
+
+
+	@EventHandler
+	public void onRequestWereWolfList(RequestSeeWereWolfListEvent event) {
+
+		UUID uuid = event.getPlayerUUID();
+		PlayerWW playerWW = game.getPlayerWW(uuid);
+
+		if (playerWW != null && playerWW.isState(State.DEATH)) return;
+
+		ModerationManager moderationManager = game.getModerationManager();
+
+		if (moderationManager.getModerators().contains(uuid)) {
+			event.setAccept(true);
+		} else if (moderationManager.getHosts().contains(uuid)) {
+			event.setAccept(true);
+		}
 	}
 
 	@Override

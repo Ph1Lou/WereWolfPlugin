@@ -131,20 +131,17 @@ public class TabManager {
         StringBuilder sb = new StringBuilder(event1.getPrefix());
         if (team != null) {
             UUID uuid1 = player.getUniqueId();
-            PlayerWW playerWW1 = game.getPlayerWW(uuid1);
+            RequestSeeWereWolfListEvent requestSeeWereWolfListEvent = new RequestSeeWereWolfListEvent(uuid1);
+            Bukkit.getPluginManager().callEvent(requestSeeWereWolfListEvent);
 
-            if (playerWW1 != null) {
-                RequestSeeWereWolfListEvent requestSeeWereWolfListEvent = new RequestSeeWereWolfListEvent(uuid1);
-                Bukkit.getPluginManager().callEvent(requestSeeWereWolfListEvent);
-
-                if (event2.isAppear() && requestSeeWereWolfListEvent.isAccept()) {
-                    if (game.getConfig().getConfigValues().get("werewolf.menu.global.red_name_tag")) {
-                        if (game.getConfig().getTimerValues().get("werewolf.menu.timers.werewolf_list") <= 0) {
-                            sb.append(ChatColor.DARK_RED);
-                        }
+            if (event2.isAppear() && requestSeeWereWolfListEvent.isAccept()) {
+                if (game.getConfig().getConfigValues().get("werewolf.menu.global.red_name_tag")) {
+                    if (game.getConfig().getTimerValues().get("werewolf.menu.timers.werewolf_list") <= 0) {
+                        sb.append(ChatColor.DARK_RED);
                     }
                 }
             }
+
             team.setPrefix(sb.toString());
             team.setSuffix(event1.getSuffix());
             VersionUtils.getVersionUtils().setTeamNameTagVisibility(team, event1.isVisibility());

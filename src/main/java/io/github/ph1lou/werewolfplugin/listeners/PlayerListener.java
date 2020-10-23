@@ -363,6 +363,7 @@ public class PlayerListener implements Listener {
         }, 7 * 20);
 	}
 
+
 	@EventHandler
 	public void onFinalDeath(FinalDeathEvent event) {
 

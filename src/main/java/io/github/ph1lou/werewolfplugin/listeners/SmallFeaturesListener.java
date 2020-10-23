@@ -8,6 +8,7 @@ import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -85,23 +86,26 @@ public class SmallFeaturesListener implements Listener {
                     return;
                 }
 
-                if (game.getConfig().getGoldenAppleParticles() != 0) {
+                if (game.getConfig().getGoldenAppleParticles() == 1) {
                     GoldenAppleParticleEvent goldenAppleParticleEvent = new GoldenAppleParticleEvent(event.getPlayer().getUniqueId());
 
                     Bukkit.getPluginManager().callEvent(goldenAppleParticleEvent);
 
-                    if (!goldenAppleParticleEvent.isCancelled()) return;
+                    if (event.isCancelled()) return;
                 }
 
-                if (event.getPlayer().hasPotionEffect(PotionEffectType.ABSORPTION)) {
-                    event.getPlayer().removePotionEffect(PotionEffectType.ABSORPTION);
-                    event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 2400, 0, false, false));
+                Player player = event.getPlayer();
+
+                if (player.hasPotionEffect(PotionEffectType.ABSORPTION)) {
+                    player.removePotionEffect(PotionEffectType.ABSORPTION);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 2400, 0, false, false));
                 }
-                if (event.getPlayer().hasPotionEffect(PotionEffectType.REGENERATION)) {
-                    event.getPlayer().removePotionEffect(PotionEffectType.REGENERATION);
-                    event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 180, 0, false, false));
+                if (player.hasPotionEffect(PotionEffectType.REGENERATION)) {
+                    player.removePotionEffect(PotionEffectType.REGENERATION);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 180, 0, false, false));
                 }
 
+                event.setCancelled(true);
             }, 1L);
         }
     }

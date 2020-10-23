@@ -130,16 +130,13 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
     @EventHandler
     public void onGoldenAppleEat(GoldenAppleParticleEvent event){
 
-        if(!event.getPlayerUUID().equals(getPlayerUUID())) return;
-
-        if (game.isDay(Day.DAY)) return;
-
-        if(game.getConfig().getGoldenAppleParticles() != 1) return;
-
-
-        if(!isInvisible()) return;
-
         event.setCancelled(true);
+
+        if (!event.getPlayerUUID().equals(getPlayerUUID())) return;
+
+        if (!isInvisible()) return;
+
+        event.setCancelled(false);
 
     }
 
@@ -227,7 +224,7 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
 
         if (!game.isState(StateLG.GAME)) return;
         if (!game.isDay(Day.NIGHT)) return;
-
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) return;
 
         if (inventory.getItem(36) == null && inventory.getItem(37) == null && inventory.getItem(38) == null && inventory.getItem(39) == null) {
             if (!isInvisible()) {

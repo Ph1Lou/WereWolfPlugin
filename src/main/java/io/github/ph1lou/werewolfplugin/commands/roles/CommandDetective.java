@@ -77,7 +77,7 @@ public class CommandDetective implements Commands {
             return;
         }
 
-        if(args[0].toLowerCase().equals(args[1].toLowerCase())) {
+        if (args[0].equalsIgnoreCase(args[1])) {
             player.sendMessage(game.translate("werewolf.check.two_distinct_player"));
             return;
         }

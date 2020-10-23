@@ -37,21 +37,21 @@ public class CommandWereWolf implements Commands {
         Player player = (Player) sender;
         UUID uuid = player.getUniqueId();
 
-        if(!game.getPlayersWW().containsKey(uuid)) {
-            player.sendMessage(game.translate("werewolf.check.not_in_game"));
-            return;
-        }
+        if (game.getPlayersWW().containsKey(uuid)) {
 
-        PlayerWW plg = game.getPlayersWW().get(uuid);
+            player.sendMessage(game.translate("werewolf.check.not_in_game"));
+
+            PlayerWW plg = game.getPlayersWW().get(uuid);
+
+            if (!plg.isState(State.ALIVE)) {
+                player.sendMessage(game.translate("werewolf.check.death"));
+                return;
+            }
+        }
 
 
         if (!game.isState(StateLG.GAME)) {
             player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
-            return;
-        }
-
-        if (!plg.isState(State.ALIVE)) {
-            player.sendMessage(game.translate("werewolf.check.death"));
             return;
         }
 

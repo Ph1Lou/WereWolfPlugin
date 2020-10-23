@@ -19,6 +19,7 @@ import org.bukkit.event.EventPriority;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class BearTrainer extends RolesVillage {
 
@@ -76,15 +77,12 @@ public class BearTrainer extends RolesVillage {
             return;
         }
 
-        StringBuilder builder = new StringBuilder();
+        String builder = event.getPlayersUUID().stream().map(ignored -> game.translate("werewolf.role.bear_trainer.growling")).collect(Collectors.joining());
 
-        for (UUID ignored : event.getPlayersUUID()) {
-            builder.append(game.translate("werewolf.role.bear_trainer.growling"));
-        }
         for (Player p : Bukkit.getOnlinePlayers()) {
             Sounds.WOLF_GROWL.play(p);
         }
-        Bukkit.broadcastMessage(game.translate("werewolf.role.bear_trainer.growling_message", builder.toString()));
+        Bukkit.broadcastMessage(game.translate("werewolf.role.bear_trainer.growling_message", builder));
     }
 
     @Override
