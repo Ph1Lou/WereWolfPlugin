@@ -64,6 +64,10 @@ public class CommandRevive implements Commands {
             return;
         }
 
+        if (game.getModerationManager().getModerators().contains(uuid)) {
+            Bukkit.dispatchCommand(sender, "a moderator " + player.getName());
+        }
+
         Roles role = plg.getRole();
         game.getConfig().getRoleCount().put(role.getDisplay(), game.getConfig().getRoleCount().get(role.getDisplay()) + 1);
         game.getScore().addPlayerSize();

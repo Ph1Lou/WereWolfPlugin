@@ -29,18 +29,21 @@ public class GameTask extends BukkitRunnable {
 			return;
 		}
 
+		World world = game.getMapManager().getWorld();
 		counter++;
+		world.setTime((long) (world.getTime() + 5 * (600f / game.getConfig().getTimerValues().get("werewolf.menu.timers.day_duration") - 1)));
+
+
 		for (Player p : Bukkit.getOnlinePlayers()) {
 			game.getScore().actionBar(p);
 		}
 		if (counter % 4 != 0) return;
 
-		World world = game.getMapManager().getWorld();
+
 		WorldBorder wb = world.getWorldBorder();
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.callEvent(new UpdateEvent());
 		game.getLoversManage().detectionAmnesiacLover();
-		world.setTime((long) (world.getTime() + 20 * (600f / game.getConfig().getTimerValues().get("werewolf.menu.timers.day_duration") - 1)));
 		game.getScore().addTimer();
 
 		if (game.getConfig().getTimerValues().get("werewolf.menu.timers.invulnerability") == 0) {

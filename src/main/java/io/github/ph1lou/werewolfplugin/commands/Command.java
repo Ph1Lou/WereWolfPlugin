@@ -37,6 +37,7 @@ public class Command implements TabExecutor {
         listCommands.put(game.translate("werewolf.menu.roles.command_2"), new CommandCompo(main));
         listCommands.put(game.translate("werewolf.role.comedian.command"), new CommandComedian(main));
         listCommands.put("h", new CommandHelp(main));
+        listCommands.put("?", new CommandAnonymeChat(main));
         listCommands.put(game.translate("werewolf.menu.roles.command_1"), new CommandRole(main));
         listCommands.put(game.translate("werewolf.menu.global.command"), new CommandRules(main));
         listCommands.put(game.translate("werewolf.menu.scenarios.command"), new CommandScenarios(main));

@@ -62,7 +62,6 @@ public class ScenariosLoader {
             }
         }
         for (PlayerWW plg : game.getPlayersWW().values()) {
-            HandlerList.unregisterAll(((Listener) plg));
             HandlerList.unregisterAll((Listener) plg.getRole());
         }
     }

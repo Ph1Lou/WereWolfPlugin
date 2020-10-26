@@ -3,17 +3,11 @@ package io.github.ph1lou.werewolfplugin.game;
 
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
-import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Villager;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -22,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 
-public class PlayerLG implements Listener, PlayerWW {
+public class PlayerLG implements PlayerWW {
 
     private State state = State.ALIVE;
     private Roles role;
@@ -42,32 +36,14 @@ public class PlayerLG implements Listener, PlayerWW {
     private int kill = 0;
     private final List<UUID> killer = new ArrayList<>();
 	private String name;
-	private final UUID playerUUID;
-
 
 
 	public PlayerLG (Main main, GameManager game, Player player) {
         this.spawn = player.getWorld().getSpawnLocation();
-        this.playerUUID = player.getUniqueId();
-        this.role = new Villager(main, game, this.playerUUID);
-		this.name = player.getName();
+        this.role = new Villager(main, game, player.getUniqueId());
+        this.name = player.getName();
     }
 
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onDay(DayEvent event) {
-
-        if (!isState(State.ALIVE)) return;
-
-        Player player = Bukkit.getPlayer(playerUUID);
-
-        if (player == null) return;
-
-        if (getLostHeart() > 0) {
-            VersionUtils.getVersionUtils().setPlayerMaxHealth(player, VersionUtils.getVersionUtils().getPlayerMaxHealth(player) + getLostHeart());
-            clearLostHeart();
-        }
-
-	}
 
 
 	@Override

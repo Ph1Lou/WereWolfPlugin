@@ -81,6 +81,6 @@ public class Admin implements TabExecutor {
             }
             return temp;
         }
-        return Collections.emptyList();
+        return null;
     }
 }

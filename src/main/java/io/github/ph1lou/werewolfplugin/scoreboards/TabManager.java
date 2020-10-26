@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfapi.events.AppearInWereWolfListEvent;
 import io.github.ph1lou.werewolfapi.events.RequestSeeWereWolfListEvent;
+import io.github.ph1lou.werewolfapi.events.UpdateModeratorNameTag;
 import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTag;
 import io.github.ph1lou.werewolfapi.rolesattributs.InvisibleState;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
@@ -51,11 +52,13 @@ public class TabManager {
             }
         }
 
-        for (UUID uuid : game.getBoards().keySet()) {
-            updatePlayer(uuid, Collections.singleton(player));
-        }
+        updatePlayerScoreBoard(player, game.getBoards().keySet());
 
         updatePlayer(player.getUniqueId(), Bukkit.getOnlinePlayers());
+    }
+
+    public void updatePlayerScoreBoard(Player player, Collection<? extends UUID> uuids) {
+        uuids.forEach(uuid -> updatePlayer(uuid, Collections.singleton(player)));
     }
 
     public void unregisterPlayer(Player player) {
@@ -115,16 +118,17 @@ public class TabManager {
             name = playerWW.getName();
         } else name = player.getName();
 
-        UpdatePlayerNameTag event = new UpdatePlayerNameTag(uuid, sb.toString(), "", visibility);
+        UpdatePlayerNameTag event = new UpdatePlayerNameTag(uuid, sb.toString(), " ", name, visibility);
         AppearInWereWolfListEvent appearInWereWolfListEvent = new AppearInWereWolfListEvent(uuid);
-
+        UpdateModeratorNameTag updateModeratorNameTag = new UpdateModeratorNameTag(uuid, "", " ");
         Bukkit.getPluginManager().callEvent(event);
         Bukkit.getPluginManager().callEvent(appearInWereWolfListEvent);
+        Bukkit.getPluginManager().callEvent(updateModeratorNameTag);
 
-        players.forEach(player1 -> set(name, player1, event, appearInWereWolfListEvent));
+        players.forEach(player1 -> set(name, player1, event, appearInWereWolfListEvent.isAppear(), updateModeratorNameTag));
     }
 
-    public void set(String name, Player player, UpdatePlayerNameTag event1, AppearInWereWolfListEvent event2) {
+    public void set(String name, Player player, UpdatePlayerNameTag event1, boolean appear, UpdateModeratorNameTag event2) {
 
         Scoreboard scoreboard = player.getScoreboard();
         Team team = scoreboard.getTeam(name);
@@ -134,16 +138,22 @@ public class TabManager {
             RequestSeeWereWolfListEvent requestSeeWereWolfListEvent = new RequestSeeWereWolfListEvent(uuid1);
             Bukkit.getPluginManager().callEvent(requestSeeWereWolfListEvent);
 
-            if (event2.isAppear() && requestSeeWereWolfListEvent.isAccept()) {
-                if (game.getConfig().getConfigValues().get("werewolf.menu.global.red_name_tag")) {
-                    if (game.getConfig().getTimerValues().get("werewolf.menu.timers.werewolf_list") <= 0) {
-                        sb.append(ChatColor.DARK_RED);
-                    }
-                }
+            if (appear && requestSeeWereWolfListEvent.isAccept()) {
+                sb.append(ChatColor.DARK_RED);
             }
 
-            team.setPrefix(sb.toString());
-            team.setSuffix(event1.getSuffix());
+            if (game.getModerationManager().getModerators().contains(uuid1)) {
+                String string1 = event2.getSuffix() + event1.getSuffix();
+                team.setSuffix(string1.substring(0, Math.min(16, string1.length())));
+                String string2 = sb.toString() + event2.getPrefix();
+                team.setPrefix(string2.substring(0, Math.min(16, string2.length())));
+            } else {
+                String string1 = event1.getSuffix();
+                team.setSuffix(string1.substring(0, Math.min(16, string1.length())));
+                String string2 = sb.toString();
+                team.setPrefix(string2.substring(0, Math.min(16, string2.length())));
+            }
+            team.setDisplayName(event1.getDisplay());
             VersionUtils.getVersionUtils().setTeamNameTagVisibility(team, event1.isVisibility());
         }
     }

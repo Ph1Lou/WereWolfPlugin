@@ -73,9 +73,9 @@
             <version>d1cc0a91c4</version>
         </dependency>
         <dependency>
-            <groupId>com.github.Ph1Lou</groupId>
-            <artifactId>WereWolfAPI</artifactId>
-            <version>1.7-SNAPSHOT-SNAPSHOT</version>
+            <groupId>io.github.ph1lou</groupId>
+            <artifactId>werewolfapi</artifactId>
+            <version>1.1</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>

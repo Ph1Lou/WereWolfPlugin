@@ -72,6 +72,7 @@ public class MapManager implements MapManagerAPI {
             VersionUtils.getVersionUtils().setGameRuleValue(world, "reducedDebugInfo", true);
             VersionUtils.getVersionUtils().setGameRuleValue(world, "naturalRegeneration", false);
             VersionUtils.getVersionUtils().setGameRuleValue(world, "keepInventory", true);
+            VersionUtils.getVersionUtils().setGameRuleValue(world, "announceAdvancements", false);
             world.save();
             int x = world.getSpawnLocation().getBlockX();
             int z = world.getSpawnLocation().getBlockZ();

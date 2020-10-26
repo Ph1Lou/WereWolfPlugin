@@ -4,6 +4,7 @@ import fr.mrmicky.fastboard.FastBoard;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.RoleRegister;
 import io.github.ph1lou.werewolfapi.ScoreAPI;
+import io.github.ph1lou.werewolfapi.enumlg.Day;
 import io.github.ph1lou.werewolfapi.enumlg.State;
 import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfapi.events.*;
@@ -16,12 +17,14 @@ import org.bukkit.World;
 import org.bukkit.WorldBorder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -71,21 +74,23 @@ public class ScoreBoard implements ScoreAPI, Listener {
 
 		UUID playerUUID = board.getPlayer().getUniqueId();
 		List<String> score = new ArrayList<>(scoreboard2);
+		ModerationManager moderationManager = game.getModerationManager();
 		String role;
-		if(game.getPlayersWW().containsKey(playerUUID)) {
+		if (game.getPlayersWW().containsKey(playerUUID)) {
 
 			PlayerWW plg = game.getPlayersWW().get(playerUUID);
 
-			if(!plg.isState(State.DEATH)) {
-				
-				if(!game.isState(StateLG.GAME)) {
+			if (!plg.isState(State.DEATH)) {
+
+				if (!game.isState(StateLG.GAME)) {
 					role = conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.role_duration"));
-				}
-				else role=game.translate(plg.getRole().getDisplay());
-			}
-			else role=game.translate("werewolf.score_board.death");
-		}
-		else role=game.translate("werewolf.score_board.spectator");
+				} else role = game.translate(plg.getRole().getDisplay());
+			} else role = game.translate("werewolf.score_board.death");
+		} else if (moderationManager.getModerators().contains(playerUUID)) {
+			role = game.translate("werewolf.commands.admin.moderator.name");
+		} else if (moderationManager.getHosts().contains(playerUUID)) {
+			role = game.translate("werewolf.commands.admin.host.name");
+		} else role = game.translate("werewolf.score_board.spectator");
 
 		for(int i=0;i<score.size();i++){
 			score.set(i,score.get(i).replace("&role&",role));
@@ -112,13 +117,14 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		scoreboard2.clear();
 
 		int i=0;
-		while(game.getLanguage().containsKey("werewolf.score_board.scoreboard_2."+i)){
-			String line=game.translate("werewolf.score_board.scoreboard_2."+i);
+		while(game.getLanguage().containsKey("werewolf.score_board.scoreboard_2."+i)) {
+			String line = game.translate("werewolf.score_board.scoreboard_2." + i);
 			line = line.replace("&timer&", conversion(timer));
 			line = line.replace("&day&", String.valueOf(timer / game.getConfig().getTimerValues().get("werewolf.menu.timers.day_duration") / 2 + 1));
 			line = line.replace("&players&", String.valueOf(player));
 			line = line.replace("&group&", String.valueOf(group_size));
 			line = line.replace("&border&", border);
+			line = line.replace("&daystate&", game.translate(game.isDay(Day.DAY) ? "werewolf.score_board.day" : "werewolf.score_board.night"));
 			line = line.replace("&border_size&", border_size);
 			scoreboard2.add(line);
 			i++;
@@ -355,12 +361,45 @@ public class ScoreBoard implements ScoreAPI, Listener {
 
 	@EventHandler
 	public void onModeratorUpdate(ModeratorEvent event) {
+
 		tabManager.updatePlayer(event.getPlayerUUID());
+
+		Player player = Bukkit.getPlayer(event.getPlayerUUID());
+
+		if (player == null) return;
+
+		for (UUID uuid : game.getBoards().keySet()) {
+			tabManager.updatePlayer(uuid, Collections.singleton(player));
+		}
+	}
+
+	@EventHandler
+	public void onUpdate(UpdatePlayerNameTag event) {
+
+		StringBuilder sb = new StringBuilder(event.getSuffix());
+
+		PlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID());
+
+		if (playerWW == null) {
+			return;
+		}
+
+		if (playerWW.isState(State.DEATH)) {
+			if (game.getConfig().getConfigValues().get("werewolf.menu.global.show_role_to_death")) {
+				sb.append(game.translate(playerWW.getRole().getDisplay()));
+			} else sb.append(game.translate("werewolf.score_board.death"));
+			event.setSuffix(sb.toString());
+		}
 	}
 
 	@EventHandler
 	public void onFinalJoinEvent(FinalJoinEvent event) {
 		tabManager.updatePlayer(event.getPlayerUUID());
+	}
+
+	@EventHandler
+	public void onFinalDeath(FinalDeathEvent event) {
+		tabManager.updatePlayer(event.getUuid());
 	}
 
 	@EventHandler
@@ -374,20 +413,40 @@ public class ScoreBoard implements ScoreAPI, Listener {
 	}
 
 
-	@EventHandler
-	public void onRequestWereWolfList(RequestSeeWereWolfListEvent event) {
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onRepartition(RepartitionEvent event) {
+		for (UUID uuid : game.getModerationManager().getModerators()) {
+			Player player = Bukkit.getPlayer(uuid);
+			if (player != null) {
+				tabManager.updatePlayerScoreBoard(player, game.getBoards().keySet());
+			}
+		}
+	}
 
-		UUID uuid = event.getPlayerUUID();
-		PlayerWW playerWW = game.getPlayerWW(uuid);
 
-		if (playerWW != null && playerWW.isState(State.DEATH)) return;
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onAmnesiacReveal(RevealAmnesiacLoversEvent event) {
+		for (UUID uuid : game.getModerationManager().getModerators()) {
+			Player player = Bukkit.getPlayer(uuid);
+			if (player != null) {
+				tabManager.updatePlayerScoreBoard(player, event.getPlayersUUID());
+			}
+		}
+	}
 
-		ModerationManager moderationManager = game.getModerationManager();
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onLoverRepartition(LoversRepartitionEvent event) {
+		for (UUID uuid : game.getModerationManager().getModerators()) {
+			Player player = Bukkit.getPlayer(uuid);
+			if (player != null) {
+				for (List<UUID> lovers : game.getLoversManage().getLoversRange()) {
+					tabManager.updatePlayerScoreBoard(player, lovers);
+				}
+				for (List<UUID> cursedLovers : game.getLoversManage().getCursedLoversRange()) {
+					tabManager.updatePlayerScoreBoard(player, cursedLovers);
+				}
 
-		if (moderationManager.getModerators().contains(uuid)) {
-			event.setAccept(true);
-		} else if (moderationManager.getHosts().contains(uuid)) {
-			event.setAccept(true);
+			}
 		}
 	}
 

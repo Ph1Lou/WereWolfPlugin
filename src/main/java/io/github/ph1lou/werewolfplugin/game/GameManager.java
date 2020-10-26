@@ -16,7 +16,6 @@ import io.github.ph1lou.werewolfplugin.utils.UpdateChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
@@ -90,7 +89,6 @@ public class GameManager implements WereWolfAPI {
         player.setGameMode(GameMode.ADVENTURE);
         PlayerWW plg = new PlayerLG(main, this, player);
         getPlayersWW().put(uuid, plg);
-        Bukkit.getPluginManager().registerEvents((Listener) plg, main);
         player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 0, false, false));
         player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
 
@@ -188,6 +186,8 @@ public class GameManager implements WereWolfAPI {
         return this.playerLG;
     }
 
+
+    @Override
     @Nullable
     public PlayerWW getPlayerWW(UUID uuid) {
 

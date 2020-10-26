@@ -71,8 +71,8 @@ public class CommandModerator implements Commands {
                 game.getPlayersWW().remove(argUUID);
             } else {
                 moderationManager.getQueue().remove(argUUID);
-                game.getModerationManager().checkQueue();
             }
+            game.getModerationManager().checkQueue();
         }
         moderator.setGameMode(GameMode.SPECTATOR);
         moderationManager.getModerators().add(argUUID);

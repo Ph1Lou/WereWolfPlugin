@@ -29,11 +29,11 @@ public class CommandInfo implements Commands {
 
         if (args.length == 0) return;
 
-        StringBuilder sb2 = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
         for (String w : args) {
-            sb2.append(w).append(" ");
+            sb.append(w).append(" ");
         }
-        Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.info", ChatColor.translateAlternateColorCodes('&', sb2.toString())));
+        Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.info", ChatColor.translateAlternateColorCodes('&', sb.toString())));
     }
 }

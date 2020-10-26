@@ -40,7 +40,9 @@ public class CycleListener implements Listener {
 
         game.setDay(Day.DAY);
 
-        if(game.isState(StateLG.END)) return;
+        if (game.isState(StateLG.END)) return;
+        //23000
+        game.getMapManager().getWorld().setTime(23500);
 
         long duration = game.getConfig().getTimerValues().get("werewolf.menu.timers.vote_duration");
         Bukkit.broadcastMessage(game.translate("werewolf.announcement.day", event.getNumber()));
@@ -89,20 +91,22 @@ public class CycleListener implements Listener {
 
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onNight(NightEvent event){
+    public void onNight(NightEvent event) {
 
 
-        long duration  =game.getConfig().getTimerValues().get("werewolf.menu.timers.day_duration")-30;
+        long duration = game.getConfig().getTimerValues().get("werewolf.menu.timers.day_duration") - 30;
         game.setDay(Day.NIGHT);
 
-        if(game.isState(StateLG.END)) return;
+        if (game.isState(StateLG.END)) return;
+
+        game.getMapManager().getWorld().setTime(12000);
 
         Bukkit.broadcastMessage(game.translate("werewolf.announcement.night", event.getNumber()));
         groupSizeChange();
 
-        if(duration>0){
+        if (duration > 0) {
             Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
-                if(!game.isState(StateLG.END)){
+                if (!game.isState(StateLG.END)) {
                     Bukkit.getPluginManager().callEvent(new DayWillComeEvent());
                 }
 
@@ -143,14 +147,11 @@ public class CycleListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onWereWolfList(WereWolfListEvent event) {
-        Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent());
-    }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLoverRepartition(LoversRepartitionEvent event) {
         game.getLoversManage().autoLovers();
+
     }
 
     @EventHandler

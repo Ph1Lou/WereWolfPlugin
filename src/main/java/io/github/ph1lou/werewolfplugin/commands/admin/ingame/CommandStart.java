@@ -13,6 +13,7 @@ import org.bukkit.WorldBorder;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.io.File;
 import java.text.DecimalFormat;
 
 public class CommandStart implements Commands {
@@ -60,7 +61,7 @@ public class CommandStart implements Commands {
         wb.setSize(game.getConfig().getBorderMax());
         wb.setWarningDistance((int) (wb.getSize() / 7));
         game.setState(StateLG.TRANSPORTATION);
-        java.io.File file = new java.io.File(main.getDataFolder() + java.io.File.separator + "configs" + java.io.File.separator, "saveCurrent.json");
+        File file = new File(main.getDataFolder() + File.separator + "configs" + File.separator, "saveCurrent.json");
         FileUtils_.save(file, Serializer.serialize(game.getConfig()));
         game.getStuffs().save("saveCurrent");
         Bukkit.getPluginManager().callEvent(new StartEvent(game));
