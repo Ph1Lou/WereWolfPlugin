@@ -4,7 +4,6 @@ import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class CommandTP implements Commands {
@@ -17,21 +16,9 @@ public class CommandTP implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
         GameManager game = main.getCurrentGame();
-
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(game.translate("werewolf.check.console"));
-            return;
-        }
-
-        Player player = (Player) sender;
-
-        if (!sender.hasPermission("a.gamemode.use") && !game.getModerationManager().getModerators().contains(((Player) sender).getUniqueId()) && !game.getModerationManager().getHosts().contains(((Player) sender).getUniqueId())) {
-            sender.sendMessage(game.translate("werewolf.check.permission_denied"));
-            return;
-        }
 
         Player playerArg1 = Bukkit.getPlayer(args[0]);
 
@@ -43,7 +30,7 @@ public class CommandTP implements Commands {
             }
 
             player.teleport(playerArg1);
-            Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.commands.admin.teleportation", sender.getName(), args[0]));
+            Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.commands.admin.teleportation", player.getName(), playerArg1.getName()));
         }
 
 
@@ -57,7 +44,7 @@ public class CommandTP implements Commands {
         }
 
         playerArg1.teleport(playerArg2);
-        Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.commands.admin.teleportation", args[0], args[1]));
+        Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.commands.admin.teleportation", playerArg1.getName(), playerArg2.getName()));
 
     }
 }

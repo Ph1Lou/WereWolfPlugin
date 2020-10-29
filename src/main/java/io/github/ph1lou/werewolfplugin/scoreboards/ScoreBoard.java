@@ -139,24 +139,24 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		if(game.getConfig().getLoverSize()>0){
 			StringBuilder sb = new StringBuilder();
 			sb.append("§3").append(game.getConfig().getLoverSize()).append("§r ").append(game.translate("werewolf.role.lover.display"));
-			roles.add(sb.toString().substring(0, Math.min(30, sb.length())));
+			roles.add(sb.substring(0, Math.min(30, sb.length())));
 		}
-		if(game.getConfig().getAmnesiacLoverSize()>0){
+		if(game.getConfig().getAmnesiacLoverSize()>0) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("§3").append(game.getConfig().getAmnesiacLoverSize()).append("§r ").append(game.translate("werewolf.role.amnesiac_lover.display"));
-			roles.add(sb.toString().substring(0, Math.min(30, sb.length())));
+			roles.add(sb.substring(0, Math.min(30, sb.length())));
 		}
-		if(game.getConfig().getCursedLoverSize()>0){
+		if(game.getConfig().getCursedLoverSize()>0) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("§3").append(game.getConfig().getCursedLoverSize()).append("§r ").append(game.translate("werewolf.role.cursed_lover.display"));
-			roles.add(sb.toString().substring(0, Math.min(30, sb.length())));
+			roles.add(sb.substring(0, Math.min(30, sb.length())));
 		}
 		for (RoleRegister roleRegister:game.getRolesRegister()) {
 			String key = roleRegister.getKey();
 			if (game.getConfig().getRoleCount().get(key) > 0) {
 				StringBuilder sb = new StringBuilder();
 				sb.append("§3").append(game.getConfig().getRoleCount().get(key)).append("§r ").append(roleRegister.getName());
-				roles.add(sb.toString().substring(0, Math.min(30, sb.length())));
+				roles.add(sb.substring(0, Math.min(30, sb.length())));
 			}
 		}
 
@@ -393,6 +393,11 @@ public class ScoreBoard implements ScoreAPI, Listener {
 	}
 
 	@EventHandler
+	public void onWereWolfList(WereWolfListEvent event) {
+		tabManager.updatePlayers();
+	}
+
+	@EventHandler
 	public void onFinalJoinEvent(FinalJoinEvent event) {
 		tabManager.updatePlayer(event.getPlayerUUID());
 	}
@@ -445,7 +450,6 @@ public class ScoreBoard implements ScoreAPI, Listener {
 				for (List<UUID> cursedLovers : game.getLoversManage().getCursedLoversRange()) {
 					tabManager.updatePlayerScoreBoard(player, cursedLovers);
 				}
-
 			}
 		}
 	}

@@ -35,8 +35,8 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
     private final Map<String, String> extraTexts = new HashMap<>();
     private final Map<Plugin, String> defaultLanguages = new HashMap<>();
     private final List<Plugin> listAddons = new ArrayList<>();
-    private final Map<String, Commands> listCommands = new HashMap<>();
-    private final Map<String, Commands> listAdminCommands = new HashMap<>();
+    private final List<CommandRegister> listCommands = new ArrayList<>();
+    private final List<CommandRegister> listAdminCommands = new ArrayList<>();
     private final Register register = new Register(this);
 
     private InventoryManager invManager;
@@ -50,13 +50,13 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
     }
 
     @Override
-    public Map<String, Commands> getListCommands() {
-        return listCommands;
+    public void registerCommands(CommandRegister commandRegister) {
+        listCommands.add(commandRegister);
     }
 
     @Override
-    public Map<String, Commands> getListAdminCommands() {
-        return listAdminCommands;
+    public void registerAdminCommands(CommandRegister commandRegister) {
+        listAdminCommands.add(commandRegister);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
 
 
     @Override
-	public void onLoad() {
+    public void onLoad() {
         VersionUtils.getVersionUtils().patchBiomes();
     }
 
@@ -186,7 +186,6 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
     }
 
 
-
     @Override
     public List<ScenarioRegister> getRegisterScenarios() {
         return this.register.getScenariosRegister();
@@ -203,8 +202,14 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
     }
 
 
+    public List<CommandRegister> getListCommands() {
+        return listCommands;
+    }
+
+    public List<CommandRegister> getListAdminCommands() {
+        return listAdminCommands;
+    }
+
+
 }
-		
-
-
 

@@ -94,6 +94,7 @@ public class Config implements ConfigWereWolfAPI {
         }
 
         api.getScore().setRole(0);
+        main.getCurrentGame().getModerationManager().checkQueue();
 
         for (RoleRegister roleRegister:main.getRegisterRoles()) {
             this.roleCount.put(roleRegister.getKey(), this_load.roleCount.getOrDefault(roleRegister.getKey(), 0));

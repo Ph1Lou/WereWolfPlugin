@@ -6,7 +6,6 @@ import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -21,22 +20,17 @@ public class CommandKill implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
 
         GameManager game = main.getCurrentGame();
 
-        if (!sender.hasPermission("a.kill.use") && !game.getModerationManager().getModerators().contains(((Player) sender).getUniqueId()) && !game.getModerationManager().getHosts().contains(((Player) sender).getUniqueId())) {
-            sender.sendMessage(game.translate("werewolf.check.permission_denied"));
-            return;
-        }
-        
         if (args.length != 1) {
-            sender.sendMessage(game.translate("werewolf.check.player_input"));
+            player.sendMessage(game.translate("werewolf.check.player_input"));
             return;
         }
 
-        boolean find=false;
+        boolean find = false;
 
         UUID argUUID=null;
 
@@ -47,26 +41,26 @@ public class CommandKill implements Commands {
             }
         }
         if(!find){
-            sender.sendMessage(game.translate("werewolf.check.not_in_game_player"));
+            player.sendMessage(game.translate("werewolf.check.not_in_game_player"));
             return;
         }
 
         if (!game.getPlayersWW().get(argUUID).isState(State.ALIVE)) {
-            sender.sendMessage(game.translate("werewolf.commands.kill.not_living"));
+            player.sendMessage(game.translate("werewolf.commands.kill.not_living"));
             return;
         }
         if (game.isState(StateLG.START)) {
             game.getScore().removePlayerSize();
             game.getPlayersWW().remove(argUUID);
-            sender.sendMessage(game.translate("werewolf.commands.kill.remove_role"));
+            player.sendMessage(game.translate("werewolf.commands.kill.remove_role"));
             return;
         }
         if (Bukkit.getPlayer(args[0]) != null) {
-            sender.sendMessage(game.translate("werewolf.commands.kill.on_line"));
+            player.sendMessage(game.translate("werewolf.commands.kill.on_line"));
             return;
         }
         if (!game.isState(StateLG.GAME)) {
-            sender.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
+            player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
             return;
         }
 

@@ -11,7 +11,6 @@ import io.github.ph1lou.werewolfapi.rolesattributs.Storage;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -25,40 +24,18 @@ public class CommandSendToLibrarian implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
         GameManager game = main.getCurrentGame();
-
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(game.translate("werewolf.check.console"));
-            return;
-        }
-
-        Player player = (Player) sender;
-
         UUID uuid = player.getUniqueId();
-
-        if(!game.getPlayersWW().containsKey(uuid)) {
-            player.sendMessage(game.translate("werewolf.check.not_in_game"));
-            return;
-        }
-
-        PlayerWW plg = game.getPlayersWW().get(uuid);
-
 
         if (!game.isState(StateLG.GAME)) {
             player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
             return;
         }
 
-
-        if (args.length==0) {
+        if (args.length == 0) {
             player.sendMessage(game.translate("werewolf.check.parameters",1));
-            return;
-        }
-
-        if(!plg.isState(State.ALIVE)){
-            player.sendMessage(game.translate("werewolf.check.death"));
             return;
         }
 

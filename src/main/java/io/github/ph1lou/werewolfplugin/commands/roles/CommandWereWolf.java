@@ -9,7 +9,6 @@ import io.github.ph1lou.werewolfapi.events.RequestSeeWereWolfListEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -24,30 +23,10 @@ public class CommandWereWolf implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
         GameManager game = main.getCurrentGame();
-
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(game.translate("werewolf.check.console"));
-            return;
-        }
-
-
-        Player player = (Player) sender;
         UUID uuid = player.getUniqueId();
-
-        if (game.getPlayersWW().containsKey(uuid)) {
-
-            player.sendMessage(game.translate("werewolf.check.not_in_game"));
-
-            PlayerWW plg = game.getPlayersWW().get(uuid);
-
-            if (!plg.isState(State.ALIVE)) {
-                player.sendMessage(game.translate("werewolf.check.death"));
-                return;
-            }
-        }
 
 
         if (!game.isState(StateLG.GAME)) {
@@ -60,12 +39,12 @@ public class CommandWereWolf implements Commands {
 
 
         if (!requestSeeWereWolfListEvent.isAccept()) {
-            sender.sendMessage(game.translate("werewolf.role.werewolf.not_werewolf"));
+            player.sendMessage(game.translate("werewolf.role.werewolf.not_werewolf"));
             return;
         }
 
         if (game.getConfig().getTimerValues().get("werewolf.menu.timers.werewolf_list") > 0) {
-            sender.sendMessage(game.translate("werewolf.role.werewolf.list_not_revealed"));
+            player.sendMessage(game.translate("werewolf.role.werewolf.list_not_revealed"));
             return;
         }
 

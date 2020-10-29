@@ -54,6 +54,7 @@ public class LoversManagement {
 
 		if (cursedLovers.size() < 2 && game.getConfig().getCursedLoverSize() > 0) {
 			Bukkit.broadcastMessage(game.translate("werewolf.role.cursed_lover.not_enough_players"));
+			game.getConfig().setCursedLoverSize(0);
 			return;
 		}
 
@@ -93,6 +94,7 @@ public class LoversManagement {
 
 		if (amnesiacLovers.size() < 2 && game.getConfig().getAmnesiacLoverSize() > 0) {
 			Bukkit.broadcastMessage(game.translate("werewolf.role.amnesiac_lover.not_enough_players"));
+			game.getConfig().setAmnesiacLoverSize(0);
 			return;
 		}
 

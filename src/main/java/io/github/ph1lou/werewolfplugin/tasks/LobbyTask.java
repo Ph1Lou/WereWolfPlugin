@@ -3,7 +3,6 @@ package io.github.ph1lou.werewolfplugin.tasks;
 import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfapi.events.UpdateEvent;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
-import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -14,12 +13,11 @@ import java.text.DecimalFormat;
 
 public class LobbyTask extends BukkitRunnable {
 
-    private final Main main;
+
     private final GameManager game;
 
-    public LobbyTask(Main main, GameManager game) {
-        this.main = main;
-        this.game=game;
+    public LobbyTask(GameManager game) {
+        this.game = game;
     }
 
     @Override
@@ -45,8 +43,7 @@ public class LobbyTask extends BukkitRunnable {
         }
 
         if (game.isState(StateLG.TRANSPORTATION)) {
-            TransportationTask transportationTask = new TransportationTask(main,game);
-            transportationTask.runTaskTimer(main, 0, 4);
+            new TransportationTask(game);
             cancel();
         }
     }

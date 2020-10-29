@@ -7,7 +7,6 @@ import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import io.github.ph1lou.werewolfplugin.game.ModerationManager;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -22,23 +21,18 @@ public class CommandHost implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
         GameManager game = main.getCurrentGame();
         ModerationManager moderationManager = game.getModerationManager();
 
-        if (!sender.hasPermission("a.host.use") && !moderationManager.getHosts().contains(((Player) sender).getUniqueId())) {
-            sender.sendMessage(game.translate("werewolf.check.permission_denied"));
-            return;
-        }
-
         if (args.length == 0) {
-            sender.sendMessage(game.translate("werewolf.check.player_input"));
+            player.sendMessage(game.translate("werewolf.check.player_input"));
             return;
         }
 
-        if(Bukkit.getPlayer(args[0])==null){
-            sender.sendMessage(game.translate("werewolf.check.offline_player"));
+        if (Bukkit.getPlayer(args[0]) == null) {
+            player.sendMessage(game.translate("werewolf.check.offline_player"));
             return;
         }
         Player host = Bukkit.getPlayer(args[0]);

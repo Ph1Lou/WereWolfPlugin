@@ -10,7 +10,6 @@ import io.github.ph1lou.werewolfplugin.save.Serializer;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -26,31 +25,26 @@ public class CommandStart implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
         GameManager game = main.getCurrentGame();
 
-        if (!sender.hasPermission("a.start.use") && !game.getModerationManager().getHosts().contains(((Player) sender).getUniqueId())) {
-            sender.sendMessage(game.translate("werewolf.check.permission_denied"));
-            return;
-        }
-        
         if (!game.isState(StateLG.LOBBY)) {
-            sender.sendMessage(game.translate("werewolf.check.already_begin"));
+            player.sendMessage(game.translate("werewolf.check.already_begin"));
             return;
         }
         if (game.getScore().getRole() - game.getScore().getPlayerSize() > 0) {
-            sender.sendMessage(game.translate("werewolf.commands.admin.start.too_much_role"));
+            player.sendMessage(game.translate("werewolf.commands.admin.start.too_much_role"));
             return;
         }
 
         if (game.getMapManager().getWft() == null) {
-            sender.sendMessage(game.translate("werewolf.commands.admin.generation.not_generated"));
+            player.sendMessage(game.translate("werewolf.commands.admin.generation.not_generated"));
             return;
         }
 
         if (game.getMapManager().getWft().getPercentageCompleted() < 100) {
-            sender.sendMessage(game.translate("werewolf.commands.admin.generation.not_finished", new DecimalFormat("0.0").format(game.getMapManager().getWft().getPercentageCompleted())));
+            player.sendMessage(game.translate("werewolf.commands.admin.generation.not_finished", new DecimalFormat("0.0").format(game.getMapManager().getWft().getPercentageCompleted())));
             return;
         }
 

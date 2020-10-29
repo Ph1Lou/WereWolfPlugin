@@ -5,7 +5,6 @@ import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class CommandGamemode implements Commands {
@@ -18,21 +17,9 @@ public class CommandGamemode implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
         GameManager game = main.getCurrentGame();
-
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(game.translate("werewolf.check.console"));
-            return;
-        }
-
-        Player player = (Player) sender;
-
-        if (!sender.hasPermission("a.gamemode.use") && !game.getModerationManager().getModerators().contains(((Player) sender).getUniqueId()) && !game.getModerationManager().getHosts().contains(((Player) sender).getUniqueId())) {
-            sender.sendMessage(game.translate("werewolf.check.permission_denied"));
-            return;
-        }
 
         if (args.length != 1) return;
 
@@ -44,7 +31,7 @@ public class CommandGamemode implements Commands {
                 i = 0;
             }
             player.setGameMode(GameMode.values()[i]);
-            Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.commands.admin.gamemode", sender.getName(), i));
+            Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.commands.admin.gamemode", player.getName(), i));
         }
         catch (NumberFormatException ignored){
         }

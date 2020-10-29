@@ -9,7 +9,6 @@ import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -24,48 +23,43 @@ public class CommandRevive implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
         GameManager game = main.getCurrentGame();
 
-        if (!sender.hasPermission("a.revive.use") && !game.getModerationManager().getModerators().contains(((Player) sender).getUniqueId()) && !game.getModerationManager().getHosts().contains(((Player) sender).getUniqueId())) {
-            sender.sendMessage(game.translate("werewolf.check.permission_denied"));
-            return;
-        }
-
         if (args.length != 1) {
-            sender.sendMessage(game.translate("werewolf.check.player_input"));
+            player.sendMessage(game.translate("werewolf.check.player_input"));
             return;
         }
 
         if (!game.isState(StateLG.GAME)) {
-            sender.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
+            player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
             return;
         }
 
-        Player player = Bukkit.getPlayer(args[0]);
+        Player player1 = Bukkit.getPlayer(args[0]);
 
-        if (player == null) {
-            sender.sendMessage(game.translate("werewolf.check.offline_player"));
+        if (player1 == null) {
+            player.sendMessage(game.translate("werewolf.check.offline_player"));
             return;
         }
 
-        UUID uuid = player.getUniqueId();
+        UUID uuid = player1.getUniqueId();
 
         if (!game.getPlayersWW().containsKey(uuid)) {
-            sender.sendMessage(game.translate("werewolf.check.not_in_game_player"));
+            player.sendMessage(game.translate("werewolf.check.not_in_game_player"));
             return;
         }
 
         PlayerWW plg = game.getPlayersWW().get(uuid);
 
         if (!plg.isState(State.DEATH)) {
-            sender.sendMessage(game.translate("werewolf.commands.admin.revive.not_death"));
+            player.sendMessage(game.translate("werewolf.commands.admin.revive.not_death"));
             return;
         }
 
         if (game.getModerationManager().getModerators().contains(uuid)) {
-            Bukkit.dispatchCommand(sender, "a moderator " + player.getName());
+            Bukkit.dispatchCommand(player, "a moderator " + player1.getName());
         }
 
         Roles role = plg.getRole();
@@ -74,7 +68,7 @@ public class CommandRevive implements Commands {
         game.resurrection(uuid);
 
         for (Player p : Bukkit.getOnlinePlayers()) {
-            p.sendMessage(game.translate("werewolf.commands.admin.revive.perform", args[0]));
+            p.sendMessage(game.translate("werewolf.commands.admin.revive.perform", player1.getName()));
             Sounds.AMBIENCE_THUNDER.play(p);
         }
 

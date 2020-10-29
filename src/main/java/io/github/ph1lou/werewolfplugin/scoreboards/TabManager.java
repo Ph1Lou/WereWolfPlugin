@@ -118,7 +118,7 @@ public class TabManager {
             name = playerWW.getName();
         } else name = player.getName();
 
-        UpdatePlayerNameTag event = new UpdatePlayerNameTag(uuid, sb.toString(), " ", name, visibility);
+        UpdatePlayerNameTag event = new UpdatePlayerNameTag(uuid, sb.toString(), " ", visibility);
         AppearInWereWolfListEvent appearInWereWolfListEvent = new AppearInWereWolfListEvent(uuid);
         UpdateModeratorNameTag updateModeratorNameTag = new UpdateModeratorNameTag(uuid, "", " ");
         Bukkit.getPluginManager().callEvent(event);
@@ -153,7 +153,7 @@ public class TabManager {
                 String string2 = sb.toString();
                 team.setPrefix(string2.substring(0, Math.min(16, string2.length())));
             }
-            team.setDisplayName(event1.getDisplay());
+
             VersionUtils.getVersionUtils().setTeamNameTagVisibility(team, event1.isVisibility());
         }
     }

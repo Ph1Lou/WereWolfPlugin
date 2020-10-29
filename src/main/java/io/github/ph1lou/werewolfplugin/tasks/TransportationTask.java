@@ -3,84 +3,30 @@ package io.github.ph1lou.werewolfplugin.tasks;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
-import io.github.ph1lou.werewolfapi.events.UpdateEvent;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
-public class TransportationTask extends BukkitRunnable {
+public class TransportationTask {
 
-    private final Main main;
     private final GameManager game;
+    private final Main main;
     private final List<Location> spawns = new ArrayList<>();
     private final Map<Integer, Integer> taskStep = new HashMap<>();
 
-    public TransportationTask(Main main, GameManager game) {
-        this.main = main;
+    public TransportationTask(GameManager game) {
         this.game = game;
+        this.main = game.getMain();
+        step0();
     }
 
-    private void initStructure(World world, int i) {
-
-        WorldBorder wb = world.getWorldBorder();
-
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            Sounds.DIG_GRASS.play(p);
-            VersionUtils.getVersionUtils().sendActionBar(p, game.translate("werewolf.action_bar.create_tp_point", i + 1, game.getPlayersWW().size()));
-        }
-
-        double a = i * 2 * Math.PI / game.getScore().getPlayerSize();
-        int x = (int) (Math.round(wb.getSize() / 3 * Math.cos(a) + world.getSpawnLocation().getX()));
-        int z = (int) (Math.round(wb.getSize() / 3 * Math.sin(a) + world.getSpawnLocation().getZ()));
-        Location spawn = new Location(world, x, world.getHighestBlockYAt(x, z) + 100, z);
-        world.getChunkAt(x, z).load(true);
-        spawns.add(spawn);
-        createStructure(Material.BARRIER, spawn);
-    }
-
-
-    private void createStructure(Material m, Location location) {
-
-        double x = location.getX();
-        double y = location.getY();
-        double z = location.getZ();
-        World world = game.getMapManager().getWorld();
-        for (int i = -2; i < 3; i++) {
-            for (int j = -2; j < 3; j++) {
-                if (Math.abs(j) == 2 || Math.abs(i) == 2) {
-                    for (int k = 0; k < 2; k++) {
-                        new Location(world, x + i, y - 1 + k, z + j).getBlock().setType(m);
-                    }
-                }
-                new Location(world, x + i, y - 2, z + j).getBlock().setType(m);
-                new Location(world, x + i, y + 2, z + j).getBlock().setType(m);
-            }
-        }
-    }
-
-    @Override
-    public void run() {
-
-        if (game.isState(StateLG.END)) {
-            cancel();
-            return;
-        }
-
-        Bukkit.getPluginManager().callEvent(new UpdateEvent());
-
-        if (game.isState(StateLG.TRANSPORTATION)) {
-            cancel();
-            step0();
-        }
-    }
 
     private void step0() {
 
@@ -113,7 +59,6 @@ public class TransportationTask extends BukkitRunnable {
             teleportPlayer(i.getAndIncrement());
 
         }, 0, 20));
-
 
     }
 
@@ -155,17 +100,18 @@ public class TransportationTask extends BukkitRunnable {
 
     private void step4() {
 
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            if (game.getPlayersWW().containsKey(p.getUniqueId())) {
-                p.setGameMode(GameMode.SURVIVAL);
-                p.sendMessage(game.translate("werewolf.announcement.start.message", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.invulnerability"))));
+        for (Player player : Bukkit.getOnlinePlayers()) {
+
+            if (game.getPlayersWW().containsKey(player.getUniqueId())) {
+                player.setGameMode(GameMode.SURVIVAL);
+                player.sendMessage(game.translate("werewolf.announcement.start.message", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.invulnerability"))));
             } else {
-                p.teleport(game.getMapManager().getWorld().getSpawnLocation());
-                p.setGameMode(GameMode.SPECTATOR);
+                player.teleport(game.getMapManager().getWorld().getSpawnLocation());
+                player.setGameMode(GameMode.SPECTATOR);
             }
 
-            VersionUtils.getVersionUtils().sendTitle(p, game.translate("werewolf.announcement.start.top_title"), game.translate("werewolf.announcement.start.bot_title"), 20, 20, 20);
-            Sounds.NOTE_BASS.play(p);
+            VersionUtils.getVersionUtils().sendTitle(player, game.translate("werewolf.announcement.start.top_title"), game.translate("werewolf.announcement.start.bot_title"), 20, 20, 20);
+            Sounds.NOTE_BASS.play(player);
         }
 
         game.getScenarios().updateCompass();
@@ -207,6 +153,44 @@ public class TransportationTask extends BukkitRunnable {
 
     private void kill(int step) {
         Bukkit.getScheduler().cancelTask(taskStep.get(step));
+    }
+
+    private void initStructure(World world, int i) {
+
+        WorldBorder wb = world.getWorldBorder();
+
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            Sounds.DIG_GRASS.play(p);
+            VersionUtils.getVersionUtils().sendActionBar(p, game.translate("werewolf.action_bar.create_tp_point", i + 1, game.getPlayersWW().size()));
+        }
+
+        double a = i * 2 * Math.PI / game.getScore().getPlayerSize();
+        int x = (int) (Math.round(wb.getSize() / 3 * Math.cos(a) + world.getSpawnLocation().getX()));
+        int z = (int) (Math.round(wb.getSize() / 3 * Math.sin(a) + world.getSpawnLocation().getZ()));
+        Location spawn = new Location(world, x, world.getHighestBlockYAt(x, z) + 100, z);
+        world.getChunkAt(x, z).load(true);
+        spawns.add(spawn);
+        createStructure(Material.BARRIER, spawn);
+    }
+
+
+    private void createStructure(Material m, Location location) {
+
+        double x = location.getX();
+        double y = location.getY();
+        double z = location.getZ();
+        World world = game.getMapManager().getWorld();
+        for (int i = -2; i < 3; i++) {
+            for (int j = -2; j < 3; j++) {
+                if (Math.abs(j) == 2 || Math.abs(i) == 2) {
+                    for (int k = 0; k < 2; k++) {
+                        new Location(world, x + i, y - 1 + k, z + j).getBlock().setType(m);
+                    }
+                }
+                new Location(world, x + i, y - 2, z + j).getBlock().setType(m);
+                new Location(world, x + i, y + 2, z + j).getBlock().setType(m);
+            }
+        }
     }
 
 

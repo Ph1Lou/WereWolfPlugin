@@ -419,7 +419,7 @@
         },
         "change": {
           "in_progress": "[§eLG UHC§r] Changement de la Map en cours",
-          "finished": "[§aLG UHC§r] Nouvelle Map crée"
+          "finished": "[§aLG UHC§r] Nouvelle Map créée"
         },
         "preview": {
           "map": "[§eLG UHC§r] Vous venez d'être téléporté au centre de la map de la partie\n §b/a preview§r pour revenir",

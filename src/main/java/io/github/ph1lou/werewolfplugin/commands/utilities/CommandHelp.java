@@ -3,7 +3,7 @@ package io.github.ph1lou.werewolfplugin.commands.utilities;
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
-import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class CommandHelp implements Commands {
 
@@ -15,10 +15,10 @@ public class CommandHelp implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
         GameManager game = main.getCurrentGame();
 
-        sender.sendMessage(game.translate("werewolf.commands.help"));
+        player.sendMessage(game.translate("werewolf.commands.help"));
     }
 }

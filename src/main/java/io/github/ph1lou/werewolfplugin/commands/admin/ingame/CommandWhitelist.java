@@ -6,7 +6,6 @@ import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import io.github.ph1lou.werewolfplugin.game.ModerationManager;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -21,16 +20,11 @@ public class CommandWhitelist implements Commands {
 
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
 
         GameManager game = main.getCurrentGame();
         ModerationManager moderationManager = game.getModerationManager();
-
-        if (!sender.hasPermission("a.whitelist.use") && !moderationManager.getHosts().contains(((Player) sender).getUniqueId())) {
-            sender.sendMessage(game.translate("werewolf.check.permission_denied"));
-            return;
-        }
 
         if (args.length != 1) {
             return;
@@ -39,17 +33,17 @@ public class CommandWhitelist implements Commands {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            sender.sendMessage(game.translate("werewolf.check.offline_player"));
+            player.sendMessage(game.translate("werewolf.check.offline_player"));
             return;
         }
 
         UUID uuid = playerArg.getUniqueId();
 
         if (moderationManager.getWhiteListedPlayers().contains(uuid)) {
-            sender.sendMessage(game.translate("werewolf.commands.admin.whitelist.remove"));
+            player.sendMessage(game.translate("werewolf.commands.admin.whitelist.remove"));
             moderationManager.removePlayerOnWhiteList(uuid);
         } else {
-            sender.sendMessage(game.translate("werewolf.commands.admin.whitelist.add"));
+            player.sendMessage(game.translate("werewolf.commands.admin.whitelist.add"));
             moderationManager.addPlayerOnWhiteList(uuid);
             if (game.isState(StateLG.LOBBY)) {
                 game.finalJoin(playerArg);

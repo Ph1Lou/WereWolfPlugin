@@ -57,7 +57,7 @@ public class GameManager implements WereWolfAPI {
         setState(StateLG.LOBBY);
         scenarios.init();
         Bukkit.getPluginManager().callEvent(new LoadEvent(this));
-        LobbyTask start = new LobbyTask(main, this);
+        LobbyTask start = new LobbyTask(this);
         start.runTaskTimer(main, 0, 20);
     }
 

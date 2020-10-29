@@ -5,13 +5,11 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfapi.events.EnchantedEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -27,47 +25,17 @@ public class CommandFlutePlayer implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
-            WereWolfAPI game = api.getWereWolfAPI();
+        WereWolfAPI game = api.getWereWolfAPI();
+        UUID uuid = player.getUniqueId();
+        PlayerWW plg = game.getPlayersWW().get(uuid);
+        Roles flutePlayer = plg.getRole();
 
-            if (!(sender instanceof Player)) {
-                sender.sendMessage(game.translate("werewolf.check.console"));
-                return ;
-            }
-
-            Player player = (Player) sender;
-            UUID uuid = player.getUniqueId();
-
-            if(!game.getPlayersWW().containsKey(uuid)) {
-                player.sendMessage(game.translate("werewolf.check.not_in_game"));
-                return ;
-            }
-
-            PlayerWW plg = game.getPlayersWW().get(uuid);
-
-
-            if (!game.isState(StateLG.GAME)) {
-                player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
-                return ;
-            }
-
-            if (!(plg.getRole().isDisplay("werewolf.role.flute_player.display"))){
-                player.sendMessage(game.translate("werewolf.check.role", game.translate("werewolf.role.flute_player.display")));
-                return ;
-            }
-
-            Roles flutePlayer = plg.getRole();
-
-            if (args.length!=2 && args.length!=1) {
-                player.sendMessage(game.translate("werewolf.check.parameters",2));
-                return ;
-            }
-
-            if(!plg.isState(State.ALIVE)){
-                player.sendMessage(game.translate("werewolf.check.death"));
-                return ;
-            }
+        if (args.length != 2 && args.length != 1) {
+            player.sendMessage(game.translate("werewolf.check.parameters", 2));
+            return;
+        }
 
             if(!((Power)flutePlayer).hasPower()) {
                 player.sendMessage(game.translate("werewolf.check.power"));
