@@ -4,7 +4,6 @@ import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.AngelForm;
 import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfapi.rolesattributs.*;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
@@ -27,11 +26,6 @@ public class CommandRole implements Commands {
 
         GameManager game = main.getCurrentGame();
         UUID uuid = player.getUniqueId();
-
-        if (!game.isState(StateLG.GAME) && !game.isState(StateLG.END)) {
-            player.sendMessage(game.translate("werewolf.check.role_not_set"));
-            return;
-        }
 
         if (game.getPlayersWW().containsKey(uuid) && game.getPlayersWW().get(uuid).isState(State.ALIVE)) {
             player.sendMessage(game.translate("werewolf.commands.admin.role.in_game"));

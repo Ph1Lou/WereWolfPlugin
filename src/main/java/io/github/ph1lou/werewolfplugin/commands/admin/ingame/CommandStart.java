@@ -29,10 +29,6 @@ public class CommandStart implements Commands {
 
         GameManager game = main.getCurrentGame();
 
-        if (!game.isState(StateLG.LOBBY)) {
-            player.sendMessage(game.translate("werewolf.check.already_begin"));
-            return;
-        }
         if (game.getScore().getRole() - game.getScore().getPlayerSize() > 0) {
             player.sendMessage(game.translate("werewolf.commands.admin.start.too_much_role"));
             return;
@@ -47,7 +43,6 @@ public class CommandStart implements Commands {
             player.sendMessage(game.translate("werewolf.commands.admin.generation.not_finished", new DecimalFormat("0.0").format(game.getMapManager().getWft().getPercentageCompleted())));
             return;
         }
-
 
         World world = game.getMapManager().getWorld();
         WorldBorder wb = world.getWorldBorder();

@@ -1,7 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import io.github.ph1lou.werewolfplugin.game.ModerationManager;
@@ -25,11 +24,6 @@ public class CommandWhitelist implements Commands {
 
         GameManager game = main.getCurrentGame();
         ModerationManager moderationManager = game.getModerationManager();
-
-        if (args.length != 1) {
-            return;
-        }
-
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
@@ -45,9 +39,7 @@ public class CommandWhitelist implements Commands {
         } else {
             player.sendMessage(game.translate("werewolf.commands.admin.whitelist.add"));
             moderationManager.addPlayerOnWhiteList(uuid);
-            if (game.isState(StateLG.LOBBY)) {
-                game.finalJoin(playerArg);
-            }
+            game.finalJoin(playerArg);
         }
     }
 }

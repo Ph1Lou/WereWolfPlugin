@@ -38,11 +38,6 @@ public class CommandRole implements Commands {
             return;
         }
 
-        if(!plg.isState(State.ALIVE)){
-            player.sendMessage(game.translate("werewolf.check.death"));
-            return;
-        }
-
         player.sendMessage(plg.getRole().getDescription());
 
         if(plg.getRole().isDisplay("werewolf.role.sister.display")) {

@@ -20,13 +20,6 @@ public class CommandInventory implements Commands {
     public void execute(Player player, String[] args) {
 
         GameManager game = main.getCurrentGame();
-
-
-        if (args.length != 1) {
-            player.sendMessage(game.translate("werewolf.check.player_input"));
-            return;
-        }
-
         Player pInv = Bukkit.getPlayer(args[0]);
 
         if (pInv == null) {

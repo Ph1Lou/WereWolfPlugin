@@ -28,12 +28,6 @@ public class CommandModerator implements Commands {
 
         GameManager game = main.getCurrentGame();
         ModerationManager moderationManager = game.getModerationManager();
-
-        if (args.length == 0) {
-            player.sendMessage(game.translate("werewolf.check.player_input"));
-            return;
-        }
-
         Player moderator = Bukkit.getPlayer(args[0]);
 
         if (moderator == null) {

@@ -1,7 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfapi.events.UpdateStuffEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
@@ -23,12 +22,8 @@ public class CommandLootDeath implements Commands {
     public void execute(Player player, String[] args) {
 
         GameManager game = main.getCurrentGame();
-
-        if (!game.isState(StateLG.LOBBY)) {
-            player.sendMessage(game.translate("werewolf.check.already_begin"));
-            return;
-        }
         game.getStuffs().clearDeathLoot();
+
         for (ItemStack i : player.getInventory().getContents()) {
             game.getStuffs().addDeathLoot(i);
         }

@@ -23,10 +23,6 @@ public class CommandStuffRole implements Commands {
 
         GameManager game = main.getCurrentGame();
 
-        if (args.length != 1) {
-            player.sendMessage(game.translate("werewolf.check.number_required"));
-            return;
-        }
         if (!game.getStuffs().getStuffRoles().containsKey(args[0])) {
             player.sendMessage(game.translate("werewolf.check.invalid_key"));
             return;

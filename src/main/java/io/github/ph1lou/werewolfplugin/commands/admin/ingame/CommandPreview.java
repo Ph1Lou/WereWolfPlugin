@@ -1,7 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
@@ -20,12 +19,6 @@ public class CommandPreview implements Commands {
     public void execute(Player player, String[] args) {
 
         GameManager game = main.getCurrentGame();
-
-
-        if (!game.isState(StateLG.LOBBY)) {
-            player.sendMessage(game.translate("werewolf.check.game_in_progress"));
-            return;
-        }
 
         if (player.getWorld().equals(game.getMapManager().getWorld())) {
             player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());

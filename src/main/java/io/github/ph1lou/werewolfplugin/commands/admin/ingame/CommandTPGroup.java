@@ -2,7 +2,6 @@ package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
@@ -25,12 +24,6 @@ public class CommandTPGroup implements Commands {
 
 
         GameManager game = main.getCurrentGame();
-
-        if (args.length != 1 && args.length != 2) {
-            player.sendMessage(game.translate("werewolf.check.player_input"));
-            return;
-        }
-
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
@@ -41,11 +34,6 @@ public class CommandTPGroup implements Commands {
 
         if (!game.getPlayersWW().containsKey(argUUID)) {
             player.sendMessage(game.translate("werewolf.check.player_not_found"));
-            return;
-        }
-
-        if (!game.isState(StateLG.GAME)) {
-            player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
             return;
         }
 

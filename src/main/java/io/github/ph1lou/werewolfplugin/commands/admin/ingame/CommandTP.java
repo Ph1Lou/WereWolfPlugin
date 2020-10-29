@@ -31,10 +31,9 @@ public class CommandTP implements Commands {
 
             player.teleport(playerArg1);
             Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.commands.admin.teleportation", player.getName(), playerArg1.getName()));
+
+            return;
         }
-
-
-        if (args.length != 2) return;
 
         Player playerArg2 = Bukkit.getPlayer(args[1]);
 

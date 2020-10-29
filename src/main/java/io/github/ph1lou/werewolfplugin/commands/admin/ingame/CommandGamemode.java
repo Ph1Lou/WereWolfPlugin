@@ -21,8 +21,6 @@ public class CommandGamemode implements Commands {
 
         GameManager game = main.getCurrentGame();
 
-        if (args.length != 1) return;
-
         try {
             int i = Integer.parseInt(args[0]);
             if (i == 0) {

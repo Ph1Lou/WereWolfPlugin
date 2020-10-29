@@ -325,5 +325,8 @@ public class GameManager implements WereWolfAPI {
         return moderationManager;
     }
 
-
+    @Override
+    public StateLG getState() {
+        return this.state;
+    }
 }

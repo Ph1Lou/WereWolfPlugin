@@ -25,18 +25,13 @@ public class CommandHost implements Commands {
 
         GameManager game = main.getCurrentGame();
         ModerationManager moderationManager = game.getModerationManager();
+        Player host = Bukkit.getPlayer(args[0]);
 
-        if (args.length == 0) {
-            player.sendMessage(game.translate("werewolf.check.player_input"));
-            return;
-        }
-
-        if (Bukkit.getPlayer(args[0]) == null) {
+        if (host == null) {
             player.sendMessage(game.translate("werewolf.check.offline_player"));
             return;
         }
-        Player host = Bukkit.getPlayer(args[0]);
-        if (host == null) return;
+
         UUID uuid = host.getUniqueId();
 
         if (moderationManager.getHosts().contains(uuid)) {

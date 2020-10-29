@@ -22,13 +22,7 @@ public class CommandKill implements Commands {
     @Override
     public void execute(Player player, String[] args) {
 
-
         GameManager game = main.getCurrentGame();
-
-        if (args.length != 1) {
-            player.sendMessage(game.translate("werewolf.check.player_input"));
-            return;
-        }
 
         boolean find = false;
 
@@ -57,10 +51,6 @@ public class CommandKill implements Commands {
         }
         if (Bukkit.getPlayer(args[0]) != null) {
             player.sendMessage(game.translate("werewolf.commands.kill.on_line"));
-            return;
-        }
-        if (!game.isState(StateLG.GAME)) {
-            player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
             return;
         }
 

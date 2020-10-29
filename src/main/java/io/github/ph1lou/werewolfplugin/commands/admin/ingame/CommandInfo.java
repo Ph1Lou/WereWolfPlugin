@@ -21,7 +21,10 @@ public class CommandInfo implements Commands {
 
         GameManager game = main.getCurrentGame();
 
-        if (args.length == 0) return;
+        if (args.length == 0) {
+            player.sendMessage(game.translate("werewolf.check.parameters", 1));
+            return;
+        }
 
         StringBuilder sb = new StringBuilder();
 

@@ -31,10 +31,6 @@ public class CommandCupid implements Commands {
         PlayerWW plg = game.getPlayersWW().get(uuid);
         Roles cupid = plg.getRole();
 
-        if (args.length != 2) {
-            player.sendMessage(game.translate("werewolf.check.parameters", 2));
-            return;
-        }
 
         if(!((Power)cupid).hasPower()) {
             player.sendMessage(game.translate("werewolf.check.power"));

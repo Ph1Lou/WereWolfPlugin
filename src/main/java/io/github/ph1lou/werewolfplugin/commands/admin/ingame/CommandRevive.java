@@ -4,7 +4,6 @@ import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
@@ -26,17 +25,6 @@ public class CommandRevive implements Commands {
     public void execute(Player player, String[] args) {
 
         GameManager game = main.getCurrentGame();
-
-        if (args.length != 1) {
-            player.sendMessage(game.translate("werewolf.check.player_input"));
-            return;
-        }
-
-        if (!game.isState(StateLG.GAME)) {
-            player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
-            return;
-        }
-
         Player player1 = Bukkit.getPlayer(args[0]);
 
         if (player1 == null) {

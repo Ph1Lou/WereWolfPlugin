@@ -24,6 +24,7 @@ public class CommandName implements Commands {
             player.sendMessage(game.translate("werewolf.check.parameters", 1));
             return;
         }
+
         player.sendMessage(game.translate("werewolf.commands.admin.set_game_name"));
         StringBuilder sb = new StringBuilder();
         for (String w : args) {

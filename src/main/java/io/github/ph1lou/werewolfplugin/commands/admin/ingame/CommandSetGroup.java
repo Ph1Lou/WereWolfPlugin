@@ -22,11 +22,6 @@ public class CommandSetGroup implements Commands {
 
         GameManager game = main.getCurrentGame();
 
-
-        if (args.length != 1) {
-            player.sendMessage(game.translate("werewolf.check.number_required"));
-            return;
-        }
         try {
             game.getScore().setGroup(Integer.parseInt(args[0]));
             for (Player p : Bukkit.getOnlinePlayers()) {

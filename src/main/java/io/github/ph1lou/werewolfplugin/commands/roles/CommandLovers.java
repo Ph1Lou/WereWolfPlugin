@@ -43,11 +43,6 @@ public class CommandLovers implements Commands {
             return;
         }
 
-        if (!plg.isState(State.ALIVE)) {
-            player.sendMessage(game.translate("werewolf.check.death"));
-            return;
-        }
-
         if (plg.getLovers().isEmpty() && (plg.getAmnesiacLoverUUID()==null || !plg.getRevealAmnesiacLover())) {
             player.sendMessage(game.translate("werewolf.role.lover.not_in_pairs"));
             return;

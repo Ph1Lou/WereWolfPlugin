@@ -474,7 +474,7 @@
         "remove_role": "[§6LG UHC§r] Enlevez un rôle dans la config pour compenser le joueur",
         "not_living": "[§cLG UHC§r] Le joueur n'est pas vivant"
       },
-      "help": "§6/ww timers §9Pour voir les timers\n§6/ww regles §9Pour voir les règles\n§6/ww role §9Pour voir votre rôle\n§6/ww scenarios §9Pour voir les scenarios\n§6/ww compo §9Pour voir la compo\n§6/ww enchantement §9Pour voir les limites d'enchantements\\n§6/ww rang §9Pour voir son rang dans la file\n§6/ww ? §9Pour poser une question anonyme"
+      "help": "§6/ww timers §9Pour voir les timers\n§6/ww regles §9Pour voir les règles\n§6/ww role §9Pour voir votre rôle\n§6/ww scenarios §9Pour voir les scenarios\n§6/ww compo §9Pour voir la compo\n§6/ww enchantement §9Pour voir les limites d'enchantements\n§6/ww rang §9Pour voir son rang dans la file\n§6/ww ? §9Pour poser une question anonyme"
     },
     "menu": {
       "name": "Option §bLG",

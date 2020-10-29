@@ -248,15 +248,19 @@ public class PlayerLG implements PlayerWW {
 		this.name = name;
 	}
 
-	@Override
-	public Boolean getRevealAmnesiacLover() {
-		return revealAmnesiacLover;
-	}
+    @Override
+    public Boolean getRevealAmnesiacLover() {
+        return revealAmnesiacLover;
+    }
 
-	@Override
-	public void setRevealAmnesiacLover(Boolean revealAmnesiacLover) {
-		this.revealAmnesiacLover = revealAmnesiacLover;
-	}
+    @Override
+    public void setRevealAmnesiacLover(Boolean revealAmnesiacLover) {
+        this.revealAmnesiacLover = revealAmnesiacLover;
+    }
 
+    @Override
+    public State getState() {
+        return state;
+    }
 }
 
