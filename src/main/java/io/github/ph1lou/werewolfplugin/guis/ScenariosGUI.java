@@ -9,6 +9,7 @@ import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
 import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
 import io.github.ph1lou.werewolfapi.ScenarioRegister;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -21,15 +22,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Scenarios implements InventoryProvider {
+public class ScenariosGUI implements InventoryProvider {
 
 
     public static final SmartInventory INVENTORY = SmartInventory.builder()
             .id("scenarios")
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
-            .provider(new Scenarios())
-            .size(Math.min(54, (JavaPlugin.getPlugin(Main.class).getRegisterScenarios().size() / 9 + 2) * 9) / 9, 9)
-            .title(JavaPlugin.getPlugin(Main.class).getCurrentGame().translate("werewolf.menu.scenarios.name"))
+            .provider(new ScenariosGUI())
+            .size(Math.min(54, (JavaPlugin.getPlugin(Main.class).getRegisterManager().getScenariosRegister().size() / 9 + 2) * 9) / 9, 9)
+            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.scenarios.name"))
             .closeable(true)
             .build();
 
@@ -37,7 +38,7 @@ public class Scenarios implements InventoryProvider {
     @Override
     public void init(Player player, InventoryContents contents) {
         Main main = JavaPlugin.getPlugin(Main.class);
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
 
         contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType()).setDisplayName(game.translate("werewolf.menu.return")).build()), e -> Config.INVENTORY.open(player)));
     }
@@ -46,12 +47,12 @@ public class Scenarios implements InventoryProvider {
     public void update(Player player, InventoryContents contents) {
 
         Main main = JavaPlugin.getPlugin(Main.class);
-        GameManager game = main.getCurrentGame();
+        GameManager game = (GameManager) main.getWereWolfAPI();
         ConfigWereWolfAPI config = game.getConfig();
         Pagination pagination = contents.pagination();
         List<ClickableItem> items = new ArrayList<>();
 
-        for (ScenarioRegister scenarioRegister : main.getRegisterScenarios()) {
+        for (ScenarioRegister scenarioRegister : main.getRegisterManager().getScenariosRegister()) {
 
             List<String> lore = new ArrayList<>(scenarioRegister.getLore());
             ItemStack itemStack;

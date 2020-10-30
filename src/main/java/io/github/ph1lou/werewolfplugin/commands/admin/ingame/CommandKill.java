@@ -1,10 +1,10 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.StateGame;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -22,7 +22,7 @@ public class CommandKill implements Commands {
     @Override
     public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
 
         boolean find = false;
 
@@ -39,11 +39,11 @@ public class CommandKill implements Commands {
             return;
         }
 
-        if (!game.getPlayersWW().get(argUUID).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().get(argUUID).isState(StatePlayer.ALIVE)) {
             player.sendMessage(game.translate("werewolf.commands.kill.not_living"));
             return;
         }
-        if (game.isState(StateLG.START)) {
+        if (game.isState(StateGame.START)) {
             game.getScore().removePlayerSize();
             game.getPlayersWW().remove(argUUID);
             player.sendMessage(game.translate("werewolf.commands.kill.remove_role"));

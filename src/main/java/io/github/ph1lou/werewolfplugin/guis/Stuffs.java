@@ -5,10 +5,10 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.GameMode;
@@ -26,7 +26,7 @@ public class Stuffs implements InventoryProvider {
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
             .provider(new Stuffs())
             .size(2, 9)
-            .title(JavaPlugin.getPlugin(Main.class).getCurrentGame().translate("werewolf.menu.stuff.name"))
+            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.stuff.name"))
             .closeable(true)
             .build();
 
@@ -34,7 +34,7 @@ public class Stuffs implements InventoryProvider {
     @Override
     public void init(Player player, InventoryContents contents) {
         Main main = JavaPlugin.getPlugin(Main.class);
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
 
         contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType()).setDisplayName(game.translate("werewolf.menu.return")).build()), e -> Config.INVENTORY.open(player)));
     }
@@ -43,7 +43,7 @@ public class Stuffs implements InventoryProvider {
     public void update(Player player, InventoryContents contents) {
 
         Main main = JavaPlugin.getPlugin(Main.class);
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
 
         contents.set(0, 2, ClickableItem.of((new ItemBuilder(Material.EGG).setDisplayName(game.translate("werewolf.menu.stuff.normal"))).build(), e -> game.getStuffs().loadAllStuffDefault()));
         contents.set(0, 4, ClickableItem.of((new ItemBuilder(UniversalMaterial.GOLDEN_SWORD.getType()).setDisplayName(game.translate("werewolf.menu.stuff.meet_up"))).build(), e -> game.getStuffs().loadAllStuffMeetUP()));

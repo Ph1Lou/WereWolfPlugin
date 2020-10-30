@@ -4,7 +4,8 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
+import io.github.ph1lou.werewolfapi.enumlg.Timers;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.events.EnchantedEvent;
 import io.github.ph1lou.werewolfapi.events.SelectionEndEvent;
@@ -27,8 +28,8 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
     private boolean power=false;
     private final List<UUID> affectedPlayer = new ArrayList<>();
 
-    public FlutePlayer(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public FlutePlayer(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main,game,uuid, key);
     }
 
     @EventHandler
@@ -38,7 +39,7 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -76,7 +77,7 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -88,7 +89,7 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
             return;
         }
 
-        player.sendMessage(game.translate("werewolf.role.flute_player.power", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.power_duration"))));
+        player.sendMessage(game.translate("werewolf.role.flute_player.power", game.getScore().conversion(game.getConfig().getTimerValues().get(Timers.POWER_DURATION.getKey()))));
     }
 
 
@@ -97,32 +98,26 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
         return game.translate("werewolf.role.flute_player.description");
     }
 
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.flute_player.display";
-    }
-
-
 
     @EventHandler
     public void onDetectVictory(WinConditionsCheckEvent event){
 
         if(event.isCancelled()) return;
 
-        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) return;
+        if(!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) return;
 
         int counter=1;
         int playerAlive=0;
 
         for(PlayerWW playerWW:game.getPlayersWW().values()){
-            if(playerWW.isState(State.ALIVE)){
+            if(playerWW.isState(StatePlayer.ALIVE)){
                 playerAlive++;
             }
         }
 
 
         for(UUID uuid1:affectedPlayer){
-            if(game.getPlayersWW().get(uuid1).isState(State.ALIVE)){
+            if(game.getPlayersWW().get(uuid1).isState(StatePlayer.ALIVE)){
                 counter++;
             }
         }
@@ -132,7 +127,7 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
             if(!affectedPlayer.isEmpty()){
                 UUID uuid1=affectedPlayer.get(0);
 
-                if(game.getPlayersWW().get(uuid1).isState(State.ALIVE)){
+                if(game.getPlayersWW().get(uuid1).isState(StatePlayer.ALIVE)){
 
                     affectedPlayer.remove(uuid1);
                     game.death(uuid1);
@@ -140,7 +135,7 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
             }
             if(playerAlive==1){
                 event.setCancelled(true);
-                event.setVictoryTeam(getDisplay());
+                event.setVictoryTeam(getKey());
             }
         }
 

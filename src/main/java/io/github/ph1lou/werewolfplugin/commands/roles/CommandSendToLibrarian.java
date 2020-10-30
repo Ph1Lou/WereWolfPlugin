@@ -2,14 +2,14 @@ package io.github.ph1lou.werewolfplugin.commands.roles;
 
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.StateGame;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.LibrarianGiveBackEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfapi.rolesattributs.Storage;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -26,10 +26,10 @@ public class CommandSendToLibrarian implements Commands {
     @Override
     public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
 
-        if (!game.isState(StateLG.GAME)) {
+        if (!game.isState(StateGame.GAME)) {
             player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
             return;
         }
@@ -49,8 +49,8 @@ public class CommandSendToLibrarian implements Commands {
 
         for(PlayerWW playerWW:game.getPlayersWW().values()){
 
-            if(playerWW.isState(State.ALIVE)){
-                if(playerWW.getRole().isDisplay("werewolf.role.librarian.display")){
+            if(playerWW.isState(StatePlayer.ALIVE)){
+                if(playerWW.getRole().isKey("werewolf.role.librarian.display")){
 
                     Roles roles = playerWW.getRole();
                     if(((AffectedPlayers)roles).getAffectedPlayers().contains(uuid)) {

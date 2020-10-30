@@ -6,8 +6,8 @@ import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.Camp;
 import io.github.ph1lou.werewolfapi.enumlg.Day;
-import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.enumlg.StateGame;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.rolesattributs.InvisibleState;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesWereWolf;
@@ -30,8 +30,8 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
 
     private boolean invisible =false;
 
-    public MischievousWereWolf(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public MischievousWereWolf(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main,game,uuid, key);
     }
 
 
@@ -39,7 +39,7 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
     public void onNight(NightEvent event) {
 
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -68,7 +68,7 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
 
         PlayerWW plg = game.getPlayersWW().get(getPlayerUUID());
 
-        if (!plg.isState(State.ALIVE)) {
+        if (!plg.isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -84,7 +84,7 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
             if (player2 != null) {
 
                 if (!uuid.equals(getPlayerUUID())) {
-                    if (plg2.isState(State.ALIVE)) {
+                    if (plg2.isState(StatePlayer.ALIVE)) {
                         if (plg2.getRole() instanceof InvisibleState) {
                             InvisibleState rolePower2 = (InvisibleState) plg2.getRole();
 
@@ -109,7 +109,7 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -157,7 +157,7 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -192,10 +192,6 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
         return game.translate("werewolf.role.mischievous_werewolf.description");
     }
 
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.mischievous_werewolf.display";
-    }
 
     @Override
     public void stolen(@NotNull UUID uuid) {
@@ -222,9 +218,9 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
 
         Inventory inventory = player.getInventory();
 
-        if (!game.isState(StateLG.GAME)) return;
+        if (!game.isState(StateGame.GAME)) return;
         if (!game.isDay(Day.NIGHT)) return;
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) return;
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) return;
 
         if (inventory.getItem(36) == null && inventory.getItem(37) == null && inventory.getItem(38) == null && inventory.getItem(39) == null) {
             if (!isInvisible()) {

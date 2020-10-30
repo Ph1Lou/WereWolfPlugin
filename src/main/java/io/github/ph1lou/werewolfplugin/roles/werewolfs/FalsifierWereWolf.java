@@ -3,7 +3,7 @@ package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.Camp;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.NewDisplayRole;
 import io.github.ph1lou.werewolfapi.events.SelectionEndEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.Display;
@@ -23,8 +23,8 @@ public class FalsifierWereWolf extends RolesWereWolf implements Display {
     private Camp displayCamp = Camp.WEREWOLF;
     private Roles displayRole = this;
 
-    public FalsifierWereWolf(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public FalsifierWereWolf(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main,game,uuid, key);
     }
 
     @Override
@@ -48,15 +48,15 @@ public class FalsifierWereWolf extends RolesWereWolf implements Display {
     }
 
     @Override
-    public void setDisplayRole(Roles roleLG) {
-        this.displayRole =roleLG;
+    public void setDisplayRole(Roles role) {
+        this.displayRole =role;
     }
 
     @EventHandler
     public void onSelectionEnd(SelectionEndEvent event) {
 
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -68,7 +68,7 @@ public class FalsifierWereWolf extends RolesWereWolf implements Display {
 
         List<UUID> players = new ArrayList<>();
         for (UUID uuid : game.getPlayersWW().keySet()) {
-            if (game.getPlayersWW().get(uuid).isState(State.ALIVE) && !uuid.equals(player.getUniqueId())) {
+            if (game.getPlayersWW().get(uuid).isState(StatePlayer.ALIVE) && !uuid.equals(player.getUniqueId())) {
                 players.add(uuid);
             }
         }
@@ -78,7 +78,7 @@ public class FalsifierWereWolf extends RolesWereWolf implements Display {
 
         UUID pc = players.get((int) Math.floor(Math.random() * players.size()));
         Roles roles = game.getPlayersWW().get(pc).getRole();
-        NewDisplayRole newDisplayRole = new NewDisplayRole(getPlayerUUID(), roles.getDisplay(), roles.getCamp());
+        NewDisplayRole newDisplayRole = new NewDisplayRole(getPlayerUUID(), roles.getKey(), roles.getCamp());
         Bukkit.getPluginManager().callEvent(newDisplayRole);
 
         if (newDisplayRole.isCancelled()) {
@@ -89,7 +89,7 @@ public class FalsifierWereWolf extends RolesWereWolf implements Display {
             setDisplayRole(roles);
             setDisplayCamp(newDisplayRole.getNewDisplayCamp());
         }
-        player.sendMessage(game.translate("werewolf.role.falsifier_werewolf.display_role_message", game.translate(getDisplayRole().getDisplay())));
+        player.sendMessage(game.translate("werewolf.role.falsifier_werewolf.display_role_message", game.translate(getDisplayRole().getKey())));
     }
 
 
@@ -100,10 +100,6 @@ public class FalsifierWereWolf extends RolesWereWolf implements Display {
         return game.translate("werewolf.role.falsifier_werewolf.description");
     }
 
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.falsifier_werewolf.display";
-    }
 
     @Override
     public void stolen(@NotNull UUID uuid) {
@@ -115,6 +111,6 @@ public class FalsifierWereWolf extends RolesWereWolf implements Display {
             return;
         }
 
-        player.sendMessage(game.translate("werewolf.role.falsifier_werewolf.display_role_message", game.translate(getDisplayRole().getDisplay())));
+        player.sendMessage(game.translate("werewolf.role.falsifier_werewolf.display_role_message", game.translate(getDisplayRole().getKey())));
     }
 }

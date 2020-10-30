@@ -4,7 +4,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.TroubleMakerDeathEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
@@ -21,8 +21,8 @@ public class Troublemaker extends RolesVillage implements AffectedPlayers, Power
 
     private final List<UUID> affectedPlayer = new ArrayList<>();
 
-    public Troublemaker(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public Troublemaker(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main,game,uuid, key);
     }
 
     @EventHandler
@@ -34,7 +34,7 @@ public class Troublemaker extends RolesVillage implements AffectedPlayers, Power
         int i = 0;
         for (UUID uuid : game.getPlayersWW().keySet()) {
             PlayerWW plg = game.getPlayersWW().get(uuid);
-            if (plg.isState(State.ALIVE)) {
+            if (plg.isState(StatePlayer.ALIVE)) {
                 game.getMapManager().transportation(uuid, i * 2 * Math.PI / game.getScore().getPlayerSize(), game.translate("werewolf.role.troublemaker.troublemaker_death"));
                 i++;
             }
@@ -78,8 +78,5 @@ public class Troublemaker extends RolesVillage implements AffectedPlayers, Power
         return game.translate("werewolf.role.troublemaker.description");
     }
 
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.troublemaker.display";
-    }
+
 }

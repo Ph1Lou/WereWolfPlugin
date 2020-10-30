@@ -1,10 +1,10 @@
 package io.github.ph1lou.werewolfplugin.listeners;
 
 
+import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.Configs;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
-import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
-import io.github.ph1lou.werewolfplugin.game.ModerationManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,11 +16,9 @@ import java.util.UUID;
 
 public class ChatListener implements Listener {
 
-    private final GameManager game;
-    private final Main main;
+    private final WereWolfAPI game;
 
-    public ChatListener(Main main, GameManager game) {
-        this.main = main;
+    public ChatListener(WereWolfAPI game) {
         this.game = game;
     }
 
@@ -29,7 +27,7 @@ public class ChatListener implements Listener {
 
         Player player = event.getPlayer();
         String[] args = event.getMessage().split(" ");
-        ModerationManager moderationManager = game.getModerationManager();
+        ModerationManagerAPI moderationManager = game.getModerationManager();
 
         if (args[0].equalsIgnoreCase("/rl") || args[0].equalsIgnoreCase("/reload") || args[0].equalsIgnoreCase("/bukkit:rl") || args[0].equalsIgnoreCase("/bukkit:reload")) {
             event.setCancelled(true);
@@ -78,7 +76,7 @@ public class ChatListener implements Listener {
 
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
-        ModerationManager moderationManager = game.getModerationManager();
+        ModerationManagerAPI moderationManager = game.getModerationManager();
         String format;
 
         if(player.getName().equals("Ph1Lou")){
@@ -92,15 +90,12 @@ public class ChatListener implements Listener {
             event.setFormat(game.translate("werewolf.commands.admin.moderator.tag") + format);
         } else event.setFormat(format);
 
-        if (!game.getConfig().getConfigValues().get("werewolf.menu.global.chat")) {
+        if (!game.getConfig().getConfigValues().get(Configs.CHAT.getKey())) {
             event.setCancelled(true);
             event.getPlayer().sendMessage(game.translate("werewolf.commands.admin.chat.off"));
-            if (main.getConfig().getBoolean("bungeechat")) {
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "chatlock local");
-            }
-        }
-        else if(game.getConfig().getConfigValues().get("werewolf.menu.global.proximity_chat")){
 
+        }
+        else if(game.getConfig().getConfigValues().get(Configs.CHAT.getKey())){
             event.setCancelled(true);
 
             for(Player p:Bukkit.getOnlinePlayers()){

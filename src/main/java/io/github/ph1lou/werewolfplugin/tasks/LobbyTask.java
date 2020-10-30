@@ -1,6 +1,6 @@
 package io.github.ph1lou.werewolfplugin.tasks;
 
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.enumlg.StateGame;
 import io.github.ph1lou.werewolfapi.events.UpdateEvent;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
@@ -23,7 +23,7 @@ public class LobbyTask extends BukkitRunnable {
     @Override
     public void run() {
 
-        if (game.isState(StateLG.END)) {
+        if (game.isState(StateGame.END)) {
             cancel();
             return;
         }
@@ -42,7 +42,7 @@ public class LobbyTask extends BukkitRunnable {
             }
         }
 
-        if (game.isState(StateLG.TRANSPORTATION)) {
+        if (game.isState(StateGame.TRANSPORTATION)) {
             new TransportationTask(game);
             cancel();
         }

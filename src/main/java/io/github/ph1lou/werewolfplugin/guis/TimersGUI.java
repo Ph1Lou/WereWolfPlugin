@@ -9,10 +9,10 @@ import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
 import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
 import io.github.ph1lou.werewolfapi.TimerRegister;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,15 +20,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Timers implements InventoryProvider {
+public class TimersGUI implements InventoryProvider {
 
 
     public static final SmartInventory INVENTORY = SmartInventory.builder()
             .id("timers")
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
-            .provider(new Timers())
-            .size(Math.min(54, (JavaPlugin.getPlugin(Main.class).getRegisterTimers().size() / 9 + 2) * 9) / 9, 9)
-            .title(JavaPlugin.getPlugin(Main.class).getCurrentGame().translate("werewolf.menu.timers.name"))
+            .provider(new TimersGUI())
+            .size(Math.min(54, (JavaPlugin.getPlugin(Main.class).getRegisterManager().getTimersRegister().size() / 9 + 2) * 9) / 9, 9)
+            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.timers.name"))
             .closeable(true)
             .build();
 
@@ -38,7 +38,7 @@ public class Timers implements InventoryProvider {
     @Override
     public void init(Player player, InventoryContents contents) {
         Main main = JavaPlugin.getPlugin(Main.class);
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
         contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType()).setDisplayName(game.translate("werewolf.menu.return")).build()), e -> Config.INVENTORY.open(player)));
     }
 
@@ -46,7 +46,7 @@ public class Timers implements InventoryProvider {
     public void update(Player player, InventoryContents contents) {
 
         Main main = JavaPlugin.getPlugin(Main.class);
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
         ConfigWereWolfAPI config = game.getConfig();
         Pagination pagination = contents.pagination();
         List<ClickableItem> items = new ArrayList<>();
@@ -55,31 +55,31 @@ public class Timers implements InventoryProvider {
 
         contents.set(0, 1, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "-10m", c)).build()), e -> {
             selectMinusTimer(game, this.key, 600);
-            Timers.INVENTORY.open(player);
+            TimersGUI.INVENTORY.open(player);
         }));
         contents.set(0, 2, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "-1m", c)).build()), e -> {
             selectMinusTimer(game, this.key, 60);
-            Timers.INVENTORY.open(player);
+            TimersGUI.INVENTORY.open(player);
         }));
         contents.set(0, 3, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "-10s", c)).build()), e -> {
             selectMinusTimer(game, this.key, 10);
-            Timers.INVENTORY.open(player);
+            TimersGUI.INVENTORY.open(player);
         }));
         contents.set(0, 5, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "+10s", c)).build()), e -> {
             selectPlusTimer(game, this.key, 10);
-            Timers.INVENTORY.open(player);
+            TimersGUI.INVENTORY.open(player);
         }));
         contents.set(0, 6, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "+1m", c)).build()), e -> {
             selectPlusTimer(game, this.key, 60);
-            Timers.INVENTORY.open(player);
+            TimersGUI.INVENTORY.open(player);
         }));
         contents.set(0, 7, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "+10m", c)).build()), e -> {
             selectPlusTimer(game, this.key, 600);
-            Timers.INVENTORY.open(player);
+            TimersGUI.INVENTORY.open(player);
         }));
 
 
-        for (TimerRegister timer : main.getRegisterTimers()) {
+        for (TimerRegister timer : main.getRegisterManager().getTimersRegister()) {
             List<String> lore = new ArrayList<>(timer.getLore());
             items.add(ClickableItem.of((new ItemBuilder(timer.getKey().equals(key) ? Material.FEATHER : Material.ANVIL).setLore(lore).setDisplayName(game.translate(timer.getKey(), game.getScore().conversion(config.getTimerValues().get(timer.getKey())))).build()), e -> this.key = timer.getKey()));
         }
@@ -113,7 +113,7 @@ public class Timers implements InventoryProvider {
 
     }
 
-    public void selectMinusTimer(GameManager game, String key, int value) {
+    public void selectMinusTimer(WereWolfAPI game, String key, int value) {
         ConfigWereWolfAPI config = game.getConfig();
         int j = config.getTimerValues().get(key);
 
@@ -122,7 +122,7 @@ public class Timers implements InventoryProvider {
         }
     }
 
-    public void selectPlusTimer(GameManager game, String key, int value) {
+    public void selectPlusTimer(WereWolfAPI game, String key, int value) {
         ConfigWereWolfAPI config = game.getConfig();
         int j = config.getTimerValues().get(key);
         config.getTimerValues().put(key, j + value);

@@ -3,7 +3,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
@@ -21,8 +21,8 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
 
     private final List<UUID> affectedPlayer = new ArrayList<>();
 
-    public Trapper(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public Trapper(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main,game,uuid, key);
         setPower(false);
     }
 
@@ -60,7 +60,7 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
+        if(!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)){
             return;
         }
         Player player = Bukkit.getPlayer(getPlayerUUID());
@@ -79,11 +79,6 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
         return game.translate("werewolf.role.trapper.description");
     }
 
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.trapper.display";
-    }
-
     @EventHandler
     public void onActionBarRequest(ActionBarEvent event) {
 
@@ -93,7 +88,7 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
 
         if (Bukkit.getPlayer(event.getPlayerUUID()) == null) return;
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) return;
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) return;
 
         Player player = Bukkit.getPlayer(event.getPlayerUUID());
 
@@ -101,7 +96,7 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
 
         for (UUID uuid : getAffectedPlayers()) {
             Player player1 = Bukkit.getPlayer(uuid);
-            if (game.getPlayersWW().get(uuid).isState(State.ALIVE) && player1 != null) {
+            if (game.getPlayersWW().get(uuid).isState(StatePlayer.ALIVE) && player1 != null) {
                 stringBuilder.append("§b ").append(game.getPlayersWW().get(uuid).getName()).append(" ").append(game.getScore().updateArrow(player, player1.getLocation()));
             }
         }

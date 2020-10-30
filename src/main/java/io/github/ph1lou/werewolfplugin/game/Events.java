@@ -2,7 +2,8 @@ package io.github.ph1lou.werewolfplugin.game;
 
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.Camp;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.Configs;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
 import io.github.ph1lou.werewolfapi.events.ChestEvent;
@@ -21,9 +22,11 @@ import java.util.*;
 
 public class Events implements Listener {
 	
-	final GameManager game;
-	public final Map<Location,Boolean> chest_has_been_open = new HashMap<>();
-	public final List<Location> chest_location = new ArrayList<>();
+	private final GameManager game;
+	private final Map<Location,Boolean> chest_has_been_open = new HashMap<>();
+	private final List<Location> chest_location = new ArrayList<>();
+
+
 	public Events(GameManager game) {
 		this.game=game;
 	}
@@ -43,7 +46,7 @@ public class Events implements Listener {
 		Sign sign = (Sign) block2.getState();
 
 		for (PlayerWW plg : game.getPlayersWW().values()) {
-			if (!plg.getRole().isCamp(Camp.VILLAGER) && plg.isState(State.ALIVE)) {
+			if (!plg.getRole().isCamp(Camp.VILLAGER) && plg.isState(StatePlayer.ALIVE)) {
 				danger.add(plg);
 			}
 		}
@@ -119,7 +122,7 @@ public class Events implements Listener {
 						game.getEvents().chest_location.clear();
 						game.getEvents().chest_has_been_open.clear();
 						Bukkit.broadcastMessage(game.translate("werewolf.event.all_chest_find"));
-						game.getConfig().getConfigValues().put("werewolf.menu.global.event_seer_death", true);
+						game.getConfig().getConfigValues().put(Configs.SEER_EVERY_OTHER_DAY.getKey(), true);
 					}
 				}
 			}

@@ -1,177 +1,931 @@
 package io.github.ph1lou.werewolfplugin;
 
-import io.github.ph1lou.werewolfapi.ConfigRegister;
-import io.github.ph1lou.werewolfapi.RoleRegister;
-import io.github.ph1lou.werewolfapi.ScenarioRegister;
-import io.github.ph1lou.werewolfapi.TimerRegister;
-import io.github.ph1lou.werewolfapi.enumlg.Category;
+import io.github.ph1lou.werewolfapi.*;
+import io.github.ph1lou.werewolfapi.enumlg.Scenarios;
+import io.github.ph1lou.werewolfapi.enumlg.*;
+import io.github.ph1lou.werewolfplugin.commands.admin.CommandChange;
+import io.github.ph1lou.werewolfplugin.commands.admin.CommandGeneration;
+import io.github.ph1lou.werewolfplugin.commands.admin.CommandSize;
+import io.github.ph1lou.werewolfplugin.commands.admin.CommandStop;
+import io.github.ph1lou.werewolfplugin.commands.admin.ingame.*;
+import io.github.ph1lou.werewolfplugin.commands.roles.*;
+import io.github.ph1lou.werewolfplugin.commands.utilities.*;
 import io.github.ph1lou.werewolfplugin.listeners.scenarioslisteners.*;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.*;
 import io.github.ph1lou.werewolfplugin.roles.villagers.*;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.*;
+import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class Register {
+public class Register implements RegisterManager {
 
-    private final Main main;
     private final List<RoleRegister> rolesRegister = new ArrayList<>();
     private final List<ScenarioRegister> scenariosRegister = new ArrayList<>();
     private final List<ConfigRegister> configsRegister = new ArrayList<>();
     private final List<TimerRegister> timersRegister = new ArrayList<>();
+    private final List<CommandRegister> commandsRegister = new ArrayList<>();
+    private final List<CommandRegister> adminCommandsRegister = new ArrayList<>();
+    private final List<AddonRegister> addonsRegister = new ArrayList<>();
 
     public Register(Main main) {
-        this.main = main;
-    }
-
-    public void init() {
-        registerRole();
-        registerScenario();
+        registerRoles();
+        registerScenarios();
         registerTimers();
-        registerConfig();
+        registerConfigs();
+        registerCommands(main);
+        registerAdminCommands(main);
     }
 
-    private void registerRole() {
+    private void registerAdminCommands(Main main) {
+
+        adminCommandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.admin.set_game_name.command", new CommandName(main))
+                        .setHostAccess());
+
+        adminCommandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.admin.start.command", new CommandStart(main))
+                        .setHostAccess()
+                        .addStateWW(StateGame.LOBBY)
+                        .addArgNumbers(0));
+        adminCommandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.admin.chat.command", new CommandChat(main))
+                        .setHostAccess()
+                        .setModeratorAccess()
+                        .addArgNumbers(0));
+        adminCommandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.admin.info.command", new CommandInfo(main))
+                        .setHostAccess()
+                        .setModeratorAccess());
+        adminCommandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.admin.generation.command", new CommandGeneration(main))
+                        .setHostAccess().setModeratorAccess()
+                        .addStateWW(StateGame.LOBBY)
+                        .addArgNumbers(0));
+        adminCommandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.admin.group.command_2", new CommandSetGroup(main))
+                        .setHostAccess()
+                        .setModeratorAccess()
+                        .addArgNumbers(1));
+        adminCommandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.admin.group.command", new CommandGroup(main))
+                        .setHostAccess()
+                        .setModeratorAccess()
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(0));
+        adminCommandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.menu.command", new CommandConfig())
+                        .setHostAccess()
+                        .setModeratorAccess()
+                        .addArgNumbers(0));
+        adminCommandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.kill.command", new CommandKill(main))
+                        .setHostAccess()
+                        .setModeratorAccess()
+                        .addStateWW(StateGame.GAME)
+                        .addStateWW(StateGame.START)
+                        .addArgNumbers(1));
+        adminCommandsRegister.
+                add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.admin.disconnected.command", new CommandDisconnected(main))
+                        .setHostAccess()
+                        .setModeratorAccess()
+                        .addStateWW(StateGame.START)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(0));
+        adminCommandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.inventory.command", new CommandInventory(main))
+                        .setHostAccess()
+                        .setModeratorAccess()
+                        .addArgNumbers(1));
+        adminCommandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.admin.tp_group.command", new CommandTPGroup(main))
+                        .setHostAccess()
+                        .setModeratorAccess()
+                        .addArgNumbers(1)
+                        .addArgNumbers(2)
+                        .addStateWW(StateGame.GAME));
+        adminCommandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.admin.role.command", new CommandAdminRole(main))
+                        .setHostAccess()
+                        .setModeratorAccess()
+                        .addStateWW(StateGame.GAME)
+                        .addStateWW(StateGame.END)
+                        .addArgNumbers(0)
+                        .addArgNumbers(1));
+        adminCommandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.admin.revive.command", new CommandRevive(main))
+                        .setHostAccess()
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(1));
+        adminCommandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.admin.final_heal.command", new CommandFinalHeal(main))
+                        .setHostAccess()
+                        .setModeratorAccess()
+                        .addStateWW(StateGame.GAME)
+                        .addStateWW(StateGame.START)
+                        .addArgNumbers(0));
+        adminCommandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.admin.stuff_start.command", new CommandLootStart(main))
+                        .setHostAccess()
+                        .setModeratorAccess()
+                        .unsetAutoCompletion()
+                        .addStateWW(StateGame.LOBBY)
+                        .addArgNumbers(0));
+        adminCommandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.admin.loot_death.command", new CommandLootDeath(main))
+                        .setHostAccess()
+                        .setModeratorAccess()
+                        .unsetAutoCompletion()
+                        .addArgNumbers(0));
+        adminCommandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.admin.loot_role.command", new CommandStuffRole(main))
+                        .setHostAccess()
+                        .setModeratorAccess()
+                        .unsetAutoCompletion()
+                        .addArgNumbers(1)
+                        .addStateWW(StateGame.LOBBY)
+                        .addStateWW(StateGame.START));
+        adminCommandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.admin.help.command", new CommandAdminHelp(main))
+                        .setHostAccess()
+                        .setModeratorAccess());
+        adminCommandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.admin.stop.command", new CommandStop(main))
+                        .setHostAccess()
+                        .addArgNumbers(0)
+                        .addStateWW(StateGame.GAME)
+                        .addStateWW(StateGame.END));
+        adminCommandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.admin.whitelist.command", new CommandWhitelist(main))
+                        .setHostAccess()
+                        .setModeratorAccess()
+                        .addStateWW(StateGame.LOBBY)
+                        .addArgNumbers(1));
+        adminCommandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.admin.moderator.command", new CommandModerator(main))
+                        .setHostAccess()
+                        .addArgNumbers(1));
+        adminCommandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.admin.host.command", new CommandHost(main))
+                        .setHostAccess()
+                        .addArgNumbers(1));
+        adminCommandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.admin.gamemode.command", new CommandGamemode(main))
+                        .setHostAccess()
+                        .setModeratorAccess()
+                        .addArgNumbers(1));
+        adminCommandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.admin.teleportation.command", new CommandTP(main))
+                        .setHostAccess()
+                        .setModeratorAccess()
+                        .addArgNumbers(1)
+                        .addArgNumbers(2));
+        adminCommandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.admin.size.command", new CommandSize(main))
+                        .setHostAccess()
+                        .setModeratorAccess()
+                        .addStateWW(StateGame.LOBBY)
+                        .addArgNumbers(0));
+        adminCommandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.admin.change.command", new CommandChange(main))
+                        .setHostAccess()
+                        .addStateWW(StateGame.LOBBY)
+                        .addArgNumbers(0));
+        adminCommandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.admin.preview.command", new CommandPreview(main))
+                        .setHostAccess()
+                        .setModeratorAccess()
+                        .addStateWW(StateGame.LOBBY)
+                        .addArgNumbers(0));
+    }
+
+    private void registerCommands(Main main) {
+
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.seer.command", new CommandSeer(main))
+                        .addRoleKey("werewolf.role.seer.display")
+                        .addRoleKey("werewolf.role.seer.display")
+                        .setRoleOnly()
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(1));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.cupid.command", new CommandCupid(main))
+                        .addRoleKey("werewolf.role.cupid.display")
+                        .setRoleOnly()
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(2));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.detective.command", new CommandDetective(main))
+                        .addRoleKey("werewolf.role.detective.display")
+                        .setRoleOnly()
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(2));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.angel.command_2", new CommandFallenAngel(main))
+                        .addRoleKey("werewolf.role.angel.display")
+                        .setRoleOnly()
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(1));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.angel.command_1", new CommandGuardianAngel(main))
+                        .addRoleKey("werewolf.role.angel.display")
+                        .setRoleOnly()
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(1));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.infect_father_of_the_wolves.command", new CommandInfect(main))
+                        .addRoleKey("werewolf.role.infect_father_of_the_wolves.display")
+                        .setRoleOnly().unsetAutoCompletion()
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(1));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.fox.command", new CommandFox(main))
+                        .addRoleKey("werewolf.role.fox.display")
+                        .setRoleOnly()
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(1));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.lover.command", new CommandLovers(main))
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(2)
+                        .addArgNumbers(3));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.protector.command", new CommandProtector(main))
+                        .addRoleKey("werewolf.role.protector.display")
+                        .setRoleOnly()
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(1));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.raven.command", new CommandRaven(main))
+                        .addRoleKey("werewolf.role.raven.display")
+                        .setRoleOnly()
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(1));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.citizen.command_2", new CommandCitizenCancelVote(main))
+                        .addRoleKey("werewolf.role.citizen.display")
+                        .setRoleOnly().addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME).addArgNumbers(0));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.citizen.command_1", new CommandCitizenSeeVote(main))
+                        .addRoleKey("werewolf.role.citizen.display")
+                        .setRoleOnly()
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(0));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.troublemaker.command", new CommandTroubleMaker(main))
+                        .addRoleKey("werewolf.role.troublemaker.display")
+                        .setRoleOnly()
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(1));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.werewolf.command", new CommandWereWolf(main))
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(0));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.wild_child.command", new CommandWildChild(main))
+                        .addRoleKey("werewolf.role.wild_child.display")
+                        .setRoleOnly()
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(1));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.comedian.command", new CommandComedian(main))
+                        .addRoleKey("werewolf.role.comedian.display")
+                        .setRoleOnly()
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(1));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.witch.command", new CommandWitch(main))
+                        .addRoleKey("werewolf.role.witch.display")
+                        .setRoleOnly().unsetAutoCompletion()
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(1));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.trapper.command", new CommandTrapper(main))
+                        .addRoleKey("werewolf.role.trapper.display")
+                        .setRoleOnly()
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(1));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.guardian_angel.command", new CommandAngelRegen(main))
+                        .addRoleKey("werewolf.role.angel.display")
+                        .addRoleKey("werewolf.role.guardian_angel.display")
+                        .setRoleOnly().addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(0));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.succubus.command", new CommandSuccubus(main))
+                        .addRoleKey("werewolf.role.succubus.display")
+                        .setRoleOnly()
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(1));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.flute_player.command", new CommandFlutePlayer(main))
+                        .addRoleKey("werewolf.role.flute_player.display")
+                        .setRoleOnly()
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(1)
+                        .addArgNumbers(2));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.librarian.command", new CommandLibrarian(main))
+                        .addRoleKey("werewolf.role.librarian.display")
+                        .setRoleOnly()
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(1));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.librarian.request_command", new CommandSendToLibrarian(main))
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.menu.roles.command_1", new CommandRole(main))
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(0));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.menu.rank.command", new CommandRank(main))
+                        .addStateWW(StateGame.LOBBY)
+                        .addArgNumbers(0));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.menu.global.command", new CommandRules(main))
+                        .addArgNumbers(0));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.menu.roles.command_2", new CommandCompo(main))
+                        .addArgNumbers(0));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.menu.scenarios.command", new CommandScenarios(main))
+                        .addArgNumbers(0));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.menu.enchantments.command", new CommandEnchantment(main))
+                        .addArgNumbers(0));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.menu.timers.command", new CommandTimer(main))
+                        .addArgNumbers(0));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.vote.command", new CommandVote(main))
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(1));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.help.command", new CommandHelp(main)));
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.admin.anonymous_chat.command", new CommandAnonymeChat(main))
+                        .addStateWW(StateGame.GAME)
+                        .addStateWW(StateGame.START)
+                        .setRequiredPlayerInGame()
+                        .addStateAccess(StatePlayer.ALIVE));
+    }
+
+    private void registerRoles() {
         try {
-            new RoleRegister(main, main, "werewolf.role.cupid.display").registerRole(Cupid.class).addCategory(Category.VILLAGER).create();
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                    Roles.CUPID.getKey(),Cupid.class)
+                            .addCategory(Category.VILLAGER));
 
-            new RoleRegister(main, main, "werewolf.role.werewolf.display").registerRole(WereWolf.class).addCategory(Category.WEREWOLF).create();
-            new RoleRegister(main, main, "werewolf.role.falsifier_werewolf.display").registerRole(FalsifierWereWolf.class).addCategory(Category.WEREWOLF).create();
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                    Roles.WEREWOLF.getKey(),WereWolf.class)
+                            .addCategory(Category.WEREWOLF));
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                    Roles.FALSIFIER_WEREWOLF.getKey(),FalsifierWereWolf.class)
+                            .addCategory(Category.WEREWOLF));
 
-            new RoleRegister(main, main, "werewolf.role.infect_father_of_the_wolves.display").registerRole(InfectFatherOfTheWolves.class).addCategory(Category.WEREWOLF).create();
-            new RoleRegister(main, main, "werewolf.role.witch.display").registerRole(Witch.class).addCategory(Category.VILLAGER).create();
-            new RoleRegister(main, main, "werewolf.role.elder.display").registerRole(Elder.class).addCategory(Category.VILLAGER).create();
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.INFECT.getKey(),InfectFatherOfTheWolves.class)
+                            .addCategory(Category.WEREWOLF));
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.WITCH.getKey(),Witch.class)
+                            .addCategory(Category.VILLAGER));
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.ELDER.getKey(),Elder.class)
+                            .addCategory(Category.VILLAGER));
 
-            new RoleRegister(main, main, "werewolf.role.naughty_little_wolf.display").registerRole(NaughtyLittleWolf.class).addCategory(Category.WEREWOLF).create();
-            new RoleRegister(main, main, "werewolf.role.fox.display").registerRole(Fox.class).addCategory(Category.VILLAGER).create();
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.NAUGHTY_LITTLE_WOLF.getKey(),NaughtyLittleWolf.class)
+                            .addCategory(Category.WEREWOLF));
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.FOX.getKey(),Fox.class)
+                            .addCategory(Category.VILLAGER));
 
-            new RoleRegister(main, main, "werewolf.role.mischievous_werewolf.display").registerRole(MischievousWereWolf.class).addCategory(Category.WEREWOLF).create();
-            new RoleRegister(main, main, "werewolf.role.little_girl.display").registerRole(LittleGirl.class).addCategory(Category.VILLAGER).create();
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.MISCHIEVOUS_WEREWOLF.getKey(),MischievousWereWolf.class)
+                            .addCategory(Category.WEREWOLF));
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.LITTLE_GIRL.getKey(),LittleGirl.class)
+                            .addCategory(Category.VILLAGER));
 
-            new RoleRegister(main, main, "werewolf.role.wild_child.display").registerRole(WildChild.class).addCategory(Category.VILLAGER).create();
-            new RoleRegister(main, main, "werewolf.role.citizen.display").registerRole(Citizen.class).addCategory(Category.VILLAGER).create();
-            new RoleRegister(main, main, "werewolf.role.comedian.display").registerRole(Comedian.class).addCategory(Category.VILLAGER).create();
-            new RoleRegister(main, main, "werewolf.role.miner.display").registerRole(Miner.class).addCategory(Category.VILLAGER).create();
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.WILD_CHILD.getKey(),WildChild.class)
+                            .addCategory(Category.VILLAGER));
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.CITIZEN.getKey(),Citizen.class)
+                            .addCategory(Category.VILLAGER));
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.COMEDIAN.getKey(),Comedian.class)
+                            .addCategory(Category.VILLAGER));
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.MINER.getKey(),Miner.class)
+                            .addCategory(Category.VILLAGER));
 
-            new RoleRegister(main, main, "werewolf.role.sister.display").registerRole(Sister.class).addCategory(Category.VILLAGER).create();
-            new RoleRegister(main, main, "werewolf.role.siamese_twin.display").registerRole(SiameseTwin.class).addCategory(Category.VILLAGER).create();
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.SISTER.getKey(),Sister.class)
+                            .addCategory(Category.VILLAGER));
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.SIAMESE_TWIN.getKey(),SiameseTwin.class)
+                            .addCategory(Category.VILLAGER));
 
-            new RoleRegister(main, main, "werewolf.role.raven.display").registerRole(Raven.class).addCategory(Category.VILLAGER).create();
-            new RoleRegister(main, main, "werewolf.role.protector.display").registerRole(Protector.class).addCategory(Category.VILLAGER).create();
-            new RoleRegister(main, main, "werewolf.role.trapper.display").registerRole(Trapper.class).addCategory(Category.VILLAGER).create();
-            new RoleRegister(main, main, "werewolf.role.troublemaker.display").registerRole(Troublemaker.class).addCategory(Category.VILLAGER).create();
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.RAVEN.getKey(),Raven.class)
+                            .addCategory(Category.VILLAGER));
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.PROTECTOR.getKey(),Protector.class)
+                            .addCategory(Category.VILLAGER));
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.TRAPPER.getKey(),Trapper.class)
+                            .addCategory(Category.VILLAGER));
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.TROUBLEMAKER.getKey(),Troublemaker.class)
+                            .addCategory(Category.VILLAGER));
 
-            new RoleRegister(main, main, "werewolf.role.bear_trainer.display").registerRole(BearTrainer.class).addCategory(Category.VILLAGER).create();
-            new RoleRegister(main, main, "werewolf.role.seer.display").registerRole(Seer.class).addCategory(Category.VILLAGER).create();
-            new RoleRegister(main, main, "werewolf.role.chatty_seer.display").registerRole(ChattySeer.class).addCategory(Category.VILLAGER).create();
-            new RoleRegister(main, main, "werewolf.role.detective.display").registerRole(Detective.class).addCategory(Category.VILLAGER).create();
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.BEAR_TRAINER.getKey(),BearTrainer.class)
+                            .addCategory(Category.VILLAGER));
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.SEER.getKey(),Seer.class)
+                            .addCategory(Category.VILLAGER));
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.CHATTY_SEER.getKey(),ChattySeer.class)
+                            .addCategory(Category.VILLAGER));
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.DETECTIVE.getKey(),Detective.class)
+                            .addCategory(Category.VILLAGER));
 
-            new RoleRegister(main, main, "werewolf.role.succubus.display").registerRole(Succubus.class).addCategory(Category.NEUTRAL).create();
-            new RoleRegister(main, main, "werewolf.role.angel.display").registerRole(Angel.class).addCategory(Category.NEUTRAL).create();
-            new RoleRegister(main, main, "werewolf.role.fallen_angel.display").registerRole(FallenAngel.class).addCategory(Category.NEUTRAL).create();
-            new RoleRegister(main, main, "werewolf.role.guardian_angel.display").registerRole(GuardianAngel.class).addCategory(Category.NEUTRAL).create();
-            new RoleRegister(main, main, "werewolf.role.assassin.display").registerRole(Assassin.class).addCategory(Category.NEUTRAL).create();
-            new RoleRegister(main, main, "werewolf.role.serial_killer.display").registerRole(SerialKiller.class).addCategory(Category.NEUTRAL).create();
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.SUCCUBUS.getKey(),Succubus.class)
+                            .addCategory(Category.NEUTRAL));
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.ANGEL.getKey(),Angel.class)
+                            .addCategory(Category.NEUTRAL));
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.FALLEN_ANGEL.getKey(),FallenAngel.class)
+                            .addCategory(Category.NEUTRAL));
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.GUARDIAN_ANGEL.getKey(),GuardianAngel.class)
+                            .addCategory(Category.NEUTRAL));
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.ASSASSIN.getKey(),Assassin.class)
+                            .addCategory(Category.NEUTRAL));
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.SERIAL_KILLER.getKey(),SerialKiller.class)
+                            .addCategory(Category.NEUTRAL));
 
-            new RoleRegister(main, main, "werewolf.role.amnesiac_werewolf.display").registerRole(AmnesicWerewolf.class).addCategory(Category.NEUTRAL).create();
-            new RoleRegister(main, main, "werewolf.role.white_werewolf.display").registerRole(WhiteWereWolf.class).addCategory(Category.NEUTRAL).create();
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.AMNESIAC_WEREWOLF.getKey(),AmnesicWerewolf.class)
+                            .addCategory(Category.NEUTRAL));
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.WHITE_WEREWOLF.getKey(),WhiteWereWolf.class)
+                            .addCategory(Category.NEUTRAL));
 
-            new RoleRegister(main, main, "werewolf.role.thief.display").registerRole(Thief.class).addCategory(Category.NEUTRAL).create();
-            new RoleRegister(main, main, "werewolf.role.flute_player.display").registerRole(FlutePlayer.class).addCategory(Category.NEUTRAL).create();
-            new RoleRegister(main, main, "werewolf.role.librarian.display").registerRole(Librarian.class).addCategory(Category.VILLAGER).create();
-            new RoleRegister(main, main, "werewolf.role.villager.display").registerRole(Villager.class).addCategory(Category.VILLAGER).create();
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.THIEF.getKey(),Thief.class)
+                            .addCategory(Category.NEUTRAL));
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.FLUTE_PLAYER.getKey(),FlutePlayer.class)
+                            .addCategory(Category.NEUTRAL));
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.LIBRARIAN.getKey(),Librarian.class)
+                            .addCategory(Category.VILLAGER));
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            Roles.VILLAGER.getKey(),
+                            Villager.class)
+                            .addCategory(Category.VILLAGER));
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
 
     }
 
-    private void registerScenario() {
+    private void registerScenarios() {
         try {
-            new ScenarioRegister(main, main, "werewolf.menu.scenarios.cat_eyes").registerScenario(CatEyes.class).create();
-            new ScenarioRegister(main, main, "werewolf.menu.scenarios.compass_target_last_death").registerScenario(CompassTargetLastDeath.class).create();
-            new ScenarioRegister(main, main, "werewolf.menu.scenarios.cut_clean").registerScenario(CutClean.class).setDefaultValue(true).create();
-            new ScenarioRegister(main, main, "werewolf.menu.scenarios.diamond_limit").registerScenario(DiamondLimit.class).setDefaultValue(true).create();
-            new ScenarioRegister(main, main, "werewolf.menu.scenarios.double_jump").registerScenario(DoubleJump.class).create();
-            new ScenarioRegister(main, main, "werewolf.menu.scenarios.fast_smelting").registerScenario(FastSmelting.class).setDefaultValue(true).create();
-            new ScenarioRegister(main, main, "werewolf.menu.scenarios.fire_less").registerScenario(FireLess.class).setDefaultValue(true).create();
-            new ScenarioRegister(main, main, "werewolf.menu.scenarios.hastey_boys").registerScenario(HasteyBoys.class).setDefaultValue(true).create();
-            new ScenarioRegister(main, main, "werewolf.menu.scenarios.horse_less").registerScenario(HorseLess.class).setDefaultValue(true).create();
-            new ScenarioRegister(main, main, "werewolf.menu.scenarios.no_clean_up").registerScenario(NoCleanUp.class).create();
-            new ScenarioRegister(main, main, "werewolf.menu.scenarios.no_egg_snowball").registerScenario(NoEggSnowBall.class).setDefaultValue(true).create();
-            new ScenarioRegister(main, main, "werewolf.menu.scenarios.no_fall").registerScenario(NoFall.class).create();
-            new ScenarioRegister(main, main, "werewolf.menu.scenarios.no_fire_weapons").registerScenario(NoFireWeapon.class).setDefaultValue(true).create();
-            new ScenarioRegister(main, main, "werewolf.menu.scenarios.no_name_tag").registerScenario(NoNameTag.class).create();
-            new ScenarioRegister(main, main, "werewolf.menu.scenarios.no_poison").registerScenario(NoPoison.class).setDefaultValue(true).create();
-            new ScenarioRegister(main, main, "werewolf.menu.scenarios.rod_less").registerScenario(RodLess.class).setDefaultValue(true).create();
-            new ScenarioRegister(main, main, "werewolf.menu.scenarios.slow_bow").registerScenario(SlowBow.class).create();
-            new ScenarioRegister(main, main, "werewolf.menu.scenarios.timber").registerScenario(Timber.class).create();
-            new ScenarioRegister(main, main, "werewolf.menu.scenarios.xp_boost").registerScenario(XpBoost.class).setDefaultValue(true).create();
-            new ScenarioRegister(main, main, "werewolf.menu.scenarios.vanilla_plus").registerScenario(VanillaPlus.class).setDefaultValue(true).create();
+            scenariosRegister
+                    .add(new ScenarioRegister("werewolf.name",
+                            Scenarios.CAT_EYES.getKey(),
+                            CatEyes.class));
+            scenariosRegister
+                    .add(new ScenarioRegister("werewolf.name",
+                            Scenarios.COMPASS_TARGET_LAST_DEATH.getKey(),
+                            CompassTargetLastDeath.class));
+            scenariosRegister
+                    .add(new ScenarioRegister("werewolf.name",
+                            Scenarios.CUT_CLEAN.getKey(),
+                            CutClean.class)
+                            .setDefaultValue());
+            scenariosRegister
+                    .add(new ScenarioRegister("werewolf.name",
+                            Scenarios.DIAMOND_LIMIT.getKey(),
+                            DiamondLimit.class).setDefaultValue());
+            scenariosRegister
+                    .add(new ScenarioRegister("werewolf.name",
+                            Scenarios.DOUBLE_JUMP.getKey(),
+                            DoubleJump.class));
+            scenariosRegister
+                    .add(new ScenarioRegister("werewolf.name",
+                            Scenarios.FAST_SMELTING.getKey(),
+                            FastSmelting.class)
+                            .setDefaultValue());
+            scenariosRegister
+                    .add(new ScenarioRegister("werewolf.name",
+                            Scenarios.FIRE_LESS.getKey(),
+                            FireLess.class)
+                            .setDefaultValue());
+            scenariosRegister
+                    .add(new ScenarioRegister("werewolf.name",
+                            Scenarios.HASTEY_BOYS.getKey(),
+                            HasteyBoys.class)
+                            .setDefaultValue());
+            scenariosRegister
+                    .add(new ScenarioRegister("werewolf.name",
+                            Scenarios.HORSE_LESS.getKey(),
+                            HorseLess.class)
+                            .setDefaultValue());
+            scenariosRegister
+                    .add(new ScenarioRegister("werewolf.name",
+                            Scenarios.NO_CLEAN_UP.getKey(),
+                            NoCleanUp.class));
+            scenariosRegister
+                    .add(new ScenarioRegister("werewolf.name",
+                            Scenarios.NO_EGG_SNOWBALL.getKey(),
+                            NoEggSnowBall.class)
+                            .setDefaultValue());
+            scenariosRegister
+                    .add(new ScenarioRegister("werewolf.name",
+                            Scenarios.NO_FALL.getKey(),
+                            NoFall.class));
+            scenariosRegister
+                    .add(new ScenarioRegister("werewolf.name",
+                            Scenarios.NO_FIRE_WEAPONS.getKey(),
+                            NoFireWeapon.class)
+                            .setDefaultValue());
+            scenariosRegister
+                    .add(new ScenarioRegister("werewolf.name",
+                            Scenarios.NO_NAME_TAG.getKey(),
+                            NoNameTag.class));
+            scenariosRegister
+                    .add(new ScenarioRegister("werewolf.name",
+                            Scenarios.NO_POISON.getKey(),
+                            NoPoison.class)
+                            .setDefaultValue());
+            scenariosRegister
+                    .add(new ScenarioRegister("werewolf.name",
+                            Scenarios.ROD_LESS.getKey(),
+                            RodLess.class)
+                            .setDefaultValue());
+            scenariosRegister
+                    .add(new ScenarioRegister("werewolf.name",
+                            Scenarios.SLOW_BOW.getKey(),
+                            SlowBow.class));
+            scenariosRegister
+                    .add(new ScenarioRegister("werewolf.name",
+                            Scenarios.TIMBER.getKey(),
+                            Timber.class));
+            scenariosRegister
+                    .add(new ScenarioRegister("werewolf.name",
+                            Scenarios.XP_BOOST.getKey(),
+                            XpBoost.class).setDefaultValue());
+            scenariosRegister
+                    .add(new ScenarioRegister("werewolf.name",
+                            Scenarios.VANILLA_PLUS.getKey(),
+                            VanillaPlus.class)
+                            .setDefaultValue());
+
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
 
     }
 
-    private void registerConfig() {
-        new ConfigRegister(main, main, "werewolf.menu.global.victory_couple").setDefaultValue(false).create();
-        new ConfigRegister(main, main, "werewolf.menu.global.event_seer_death").setDefaultValue(true).create();
-        new ConfigRegister(main, main, "werewolf.menu.global.chat").setDefaultValue(true).create();
-        new ConfigRegister(main, main, "werewolf.menu.global.compass_middle").setDefaultValue(true).create();
-        new ConfigRegister(main, main, "werewolf.menu.global.show_role_to_death").setDefaultValue(true).create();
-        new ConfigRegister(main, main, "werewolf.menu.global.auto_rez_infect").setDefaultValue(false).create();
-        new ConfigRegister(main, main, "werewolf.menu.global.auto_rez_witch").setDefaultValue(false).create();
-        new ConfigRegister(main, main, "werewolf.menu.global.polygamy").setDefaultValue(false).create();
-        new ConfigRegister(main, main, "werewolf.menu.global.vote").setDefaultValue(true).create();
-        new ConfigRegister(main, main, "werewolf.menu.global.hide_composition").setDefaultValue(false).create();
-        new ConfigRegister(main, main, "werewolf.menu.global.red_name_tag").setDefaultValue(true).create();
-        new ConfigRegister(main, main, "werewolf.menu.global.seer_every_other_day").setDefaultValue(true).create();
-        new ConfigRegister(main, main, "werewolf.menu.global.proximity_chat").setDefaultValue(false).create();
+    private void registerConfigs() {
+
+        configsRegister
+                .add(new ConfigRegister("werewolf.name",
+                        Configs.VICTORY_LOVERS.getKey()));
+        configsRegister
+                .add(new ConfigRegister("werewolf.name",
+                        Configs.EVENT_SEER_DEATH.getKey())
+                        .setDefaultValue());
+        configsRegister
+                .add(new ConfigRegister("werewolf.name",
+                        Configs.CHAT.getKey())
+                        .setDefaultValue());
+        configsRegister
+                .add(new ConfigRegister("werewolf.name",
+                        Configs.COMPASS_MIDDLE.getKey())
+                        .setDefaultValue());
+        configsRegister
+                .add(new ConfigRegister("werewolf.name",
+                        Configs.SHOW_ROLE_TO_DEATH.getKey()).setDefaultValue());
+        configsRegister
+                .add(new ConfigRegister("werewolf.name",
+                        Configs.AUTO_REZ_INFECT.getKey()));
+        configsRegister
+                .add(new ConfigRegister("werewolf.name",
+                        Configs.AUTO_REZ_WITCH.getKey()));
+        configsRegister
+                .add(new ConfigRegister("werewolf.name",
+                        Configs.POLYGAMY.getKey()));
+        configsRegister
+                .add(new ConfigRegister("werewolf.name",
+                        Configs.VOTE.getKey())
+                        .setDefaultValue());
+        configsRegister
+                .add(new ConfigRegister("werewolf.name",
+                        Configs.HIDE_COMPOSITION.getKey()));
+        configsRegister
+                .add(new ConfigRegister("werewolf.name",
+                        Configs.RED_NAME_TAG.getKey())
+                        .setDefaultValue());
+        configsRegister
+                .add(new ConfigRegister("werewolf.name",
+                        Configs.SEER_EVERY_OTHER_DAY.getKey())
+                        .setDefaultValue());
+        configsRegister
+                .add(new ConfigRegister("werewolf.name",
+                        Configs.PROXIMITY_CHAT.getKey()));
     }
 
     private void registerTimers() {
 
-        new TimerRegister(main, main, "werewolf.menu.timers.invulnerability").setDefaultValue(30).create();
-        new TimerRegister(main, main, "werewolf.menu.timers.role_duration").setDefaultValue(1200).create();
-        new TimerRegister(main, main, "werewolf.menu.timers.pvp").setDefaultValue(1500).create();
-        new TimerRegister(main, main, "werewolf.menu.timers.werewolf_list").setDefaultValue(600).create();
+        timersRegister
+                .add(new TimerRegister("werewolf.name",
+                        Timers.INVULNERABILITY.getKey())
+                        .setDefaultValue(30));
+        timersRegister
+                .add(new TimerRegister("werewolf.name",
+                        Timers.ROLE_DURATION.getKey())
+                        .setDefaultValue(1200));
+        timersRegister
+                .add(new TimerRegister("werewolf.name",
+                        Timers.PVP.getKey())
+                        .setDefaultValue(1500));
+        timersRegister
+                .add(new TimerRegister("werewolf.name",
+                        Timers.WEREWOLF_LIST.getKey())
+                        .setDefaultValue(600));
 
-        new TimerRegister(main, main, "werewolf.menu.timers.vote_begin").setDefaultValue(2400).create();
-        new TimerRegister(main, main, "werewolf.menu.timers.border_begin").setDefaultValue(3600).create();
+        timersRegister
+                .add(new TimerRegister("werewolf.name",
+                        Timers.VOTE_BEGIN.getKey())
+                        .setDefaultValue(2400));
+        timersRegister
+                .add(new TimerRegister("werewolf.name",
+                        Timers.BORDER_BEGIN.getKey())
+                        .setDefaultValue(3600));
 
-        new TimerRegister(main, main, "werewolf.menu.timers.digging_end").setDefaultValue(4200).create();
+        timersRegister
+                .add(new TimerRegister("werewolf.name",
+                        Timers.DIGGING.getKey())
+                        .setDefaultValue(4200));
 
-        new TimerRegister(main, main, "werewolf.menu.timers.border_duration").setDefaultValue(280).create();
+        timersRegister
+                .add(new TimerRegister("werewolf.name",
+                        Timers.BORDER_DURATION.getKey())
+                        .setDefaultValue(280));
 
-        new TimerRegister(main, main, "werewolf.menu.timers.vote_duration").setDefaultValue(180).create();
-        new TimerRegister(main, main, "werewolf.menu.timers.citizen_duration").setDefaultValue(60).create();
-        new TimerRegister(main, main, "werewolf.menu.timers.model_duration").setDefaultValue(240).create();
-        new TimerRegister(main, main, "werewolf.menu.timers.lover_duration").setDefaultValue(240).create();
-        new TimerRegister(main, main, "werewolf.menu.timers.angel_duration").setDefaultValue(240).create();
-        new TimerRegister(main, main, "werewolf.menu.timers.power_duration").setDefaultValue(240).create();
-        new TimerRegister(main, main, "werewolf.menu.timers.fox_smell_duration").setDefaultValue(120).create();
+        timersRegister
+                .add(new TimerRegister("werewolf.name",
+                        Timers.VOTE_DURATION.getKey())
+                        .setDefaultValue(180));
+        timersRegister
+                .add(new TimerRegister("werewolf.name",
+                        Timers.CITIZEN_DURATION.getKey())
+                        .setDefaultValue(60));
+        timersRegister
+                .add(new TimerRegister("werewolf.name",
+                        Timers.MODEL_DURATION.getKey())
+                        .setDefaultValue(240));
+        timersRegister
+                .add(new TimerRegister("werewolf.name",
+                        Timers.LOVER_DURATION.getKey())
+                        .setDefaultValue(240));
+        timersRegister
+                .add(new TimerRegister("werewolf.name",
+                        Timers.ANGEL_DURATION.getKey())
+                        .setDefaultValue(240));
+        timersRegister
+                .add(new TimerRegister("werewolf.name",
+                        Timers.POWER_DURATION.getKey())
+                        .setDefaultValue(240));
+        timersRegister
+                .add(new TimerRegister("werewolf.name",
+                        Timers.FOX_SMELL_DURATION.getKey())
+                        .setDefaultValue(120));
 
-        new TimerRegister(main, main, "werewolf.menu.timers.succubus_duration").setDefaultValue(180).create();
+        timersRegister
+                .add(new TimerRegister("werewolf.name",
+                        Timers.SUCCUBUS_DURATION.getKey())
+                        .setDefaultValue(180));
 
-        new TimerRegister(main, main, "werewolf.menu.timers.day_duration").setDefaultValue(300).create();
+        timersRegister
+                .add(new TimerRegister("werewolf.name",
+                        Timers.DAY_DURATION.getKey())
+                        .setDefaultValue(300));
 
     }
 
-    public List<RoleRegister> getRolesRegister() {
+    @Override
+    public List<? extends RoleRegister> getRolesRegister() {
         return rolesRegister;
     }
 
-    public List<ScenarioRegister> getScenariosRegister() {
+    @Override
+    public List<? extends ScenarioRegister> getScenariosRegister() {
         return scenariosRegister;
     }
 
-    public List<ConfigRegister> getConfigsRegister() {
+    @Override
+    public List<? extends ConfigRegister> getConfigsRegister() {
         return configsRegister;
     }
 
-    public List<TimerRegister> getTimersRegister() {
+    @Override
+    public List<? extends TimerRegister> getTimersRegister() {
         return timersRegister;
     }
+
+    @Override
+    public List<? extends CommandRegister> getCommandsRegister() {
+        return commandsRegister;
+    }
+
+    @Override
+    public List<? extends CommandRegister> getAdminCommandsRegister() {
+        return adminCommandsRegister;
+    }
+
+    @Override
+    public List<? extends AddonRegister> getAddonsRegister() {
+        return addonsRegister;
+    }
+
+    @Override
+    public void registerAddon(AddonRegister addonRegister) {
+       register(addonRegister,addonsRegister);
+    }
+
+    @Override
+    public void registerRole(RoleRegister roleRegister) {
+       register(roleRegister,rolesRegister);
+    }
+
+    @Override
+    public void registerScenario(ScenarioRegister scenarioRegister) {
+        register(scenarioRegister,scenariosRegister);
+    }
+
+    @Override
+    public void registerConfig(ConfigRegister configRegister) {
+        register(configRegister,configsRegister);
+    }
+
+    @Override
+    public void registerTimer(TimerRegister timerRegister) {
+        register(timerRegister,timersRegister);
+    }
+
+    @Override
+    public void registerCommands(CommandRegister commandRegister) {
+        register(commandRegister,commandsRegister);
+    }
+
+    @Override
+    public void registerAdminCommands(CommandRegister commandRegister) {
+        register(commandRegister,adminCommandsRegister);
+    }
+
+    private <A extends RegisterAPI> void register(A register, List<A> registers ){
+        if(registers.removeAll(registers.stream()
+                .filter(register1 -> register1.getKey().equalsIgnoreCase(register.getKey()))
+                .collect(Collectors.toList()))){
+            Bukkit.getLogger().warning(String.format("[WereWolfPlugin] L'élément %s a été écrasé par l'addon %s",register.getKey(),register.getAddonKey()));
+        }
+        registers.add(register);
+    }
+
+
 }

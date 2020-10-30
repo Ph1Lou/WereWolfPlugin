@@ -1,9 +1,9 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -23,7 +23,7 @@ public class CommandTPGroup implements Commands {
     public void execute(Player player, String[] args) {
 
 
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
@@ -37,7 +37,7 @@ public class CommandTPGroup implements Commands {
             return;
         }
 
-        if (!game.getPlayersWW().get(argUUID).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().get(argUUID).isState(StatePlayer.ALIVE)) {
             return;
         }
         int d = 20;
@@ -54,7 +54,7 @@ public class CommandTPGroup implements Commands {
         }
         for (Player p : Bukkit.getOnlinePlayers()) {
             UUID uuid = p.getUniqueId();
-            if (size > 0 && game.getPlayersWW().containsKey(uuid) && game.getPlayersWW().get(uuid).isState(State.ALIVE)) {
+            if (size > 0 && game.getPlayersWW().containsKey(uuid) && game.getPlayersWW().get(uuid).isState(StatePlayer.ALIVE)) {
                 if (p.getLocation().distance(location) <= d) {
                     size--;
                     sb.append(p.getName()).append(" ");

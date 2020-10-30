@@ -1,8 +1,8 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -19,7 +19,7 @@ public class CommandInfo implements Commands {
     @Override
     public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
 
         if (args.length == 0) {
             player.sendMessage(game.translate("werewolf.check.parameters", 1));
@@ -31,6 +31,6 @@ public class CommandInfo implements Commands {
         for (String w : args) {
             sb.append(w).append(" ");
         }
-        Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.info", ChatColor.translateAlternateColorCodes('&', sb.toString())));
+        Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.info.send", ChatColor.translateAlternateColorCodes('&', sb.toString())));
     }
 }

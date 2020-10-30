@@ -5,7 +5,8 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
+import io.github.ph1lou.werewolfapi.enumlg.Timers;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
@@ -28,8 +29,8 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     boolean transformed=false;
     private final List<UUID> affectedPlayer = new ArrayList<>();
 
-    public WildChild(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public WildChild(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main,game,uuid, key);
     }
 
     private boolean power=true;
@@ -79,7 +80,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -98,7 +99,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -128,7 +129,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
 
         if (player == null) return;
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -142,11 +143,6 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     }
 
     @Override
-    public String getDisplay() {
-        return "werewolf.role.wild_child.display";
-    }
-
-    @Override
     public void stolen(@NotNull UUID uuid) {
 
 
@@ -155,7 +151,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
         if (player == null) return;
 
         if (!transformed) {
-            player.sendMessage(game.translate("werewolf.role.wild_child.design_model", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.model_duration"))));
+            player.sendMessage(game.translate("werewolf.role.wild_child.design_model", game.getScore().conversion(game.getConfig().getTimerValues().get(Timers.MODEL_DURATION.getKey()))));
         } else {
             UUID modelUUID = getAffectedPlayers().get(0);
             PlayerWW model = game.getPlayersWW().get(modelUUID);
@@ -194,7 +190,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     public Player recoverPower() {
         Player player = super.recoverPower();
         if(player==null) return null;
-        player.sendMessage(game.translate("werewolf.role.wild_child.design_model", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.model_duration"))));
+        player.sendMessage(game.translate("werewolf.role.wild_child.design_model", game.getScore().conversion(game.getConfig().getTimerValues().get(Timers.MODEL_DURATION.getKey()))));
         return player;
     }
 
@@ -227,7 +223,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
 
         if (!getAffectedPlayers().contains(uuid)) return;
 
-        if (game.getPlayersWW().get(getPlayerUUID()).isState(State.DEATH)) return;
+        if (game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.DEATH)) return;
 
         if (transformed) return;
 
@@ -264,7 +260,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
         removeAffectedPlayer(oldUUID);
         addAffectedPlayer(newUUID);
 
-        if (!plg.isState(State.ALIVE)) return;
+        if (!plg.isState(StatePlayer.ALIVE)) return;
 
         if (player != null) {
             player.sendMessage(game.translate("werewolf.role.wild_child.change", game.getPlayersWW().get(newUUID).getName()));

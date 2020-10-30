@@ -4,7 +4,7 @@ import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.Camp;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.InvestigateEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Display;
@@ -62,7 +62,7 @@ public class CommandDetective implements Commands {
             UUID uuid1 = playerArg.getUniqueId();
 
 
-            if (!game.getPlayersWW().containsKey(uuid1) || game.getPlayersWW().get(uuid).isState(State.DEATH)) {
+            if (!game.getPlayersWW().containsKey(uuid1) || game.getPlayersWW().get(uuid).isState(StatePlayer.DEATH)) {
                 player.sendMessage(game.translate("werewolf.check.player_not_found"));
                 return;
             }

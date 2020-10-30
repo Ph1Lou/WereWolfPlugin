@@ -8,8 +8,8 @@ import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
 import java.util.UUID;
 
 public class Villager extends RolesVillage {
-    public Villager(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public Villager(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main,game,uuid, key);
     }
 
 
@@ -18,8 +18,4 @@ public class Villager extends RolesVillage {
         return game.translate("werewolf.role.villager.description");
     }
 
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.villager.display";
-    }
 }

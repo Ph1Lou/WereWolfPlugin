@@ -2,6 +2,9 @@ package io.github.ph1lou.werewolfplugin.save;
 
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.WriterConfig;
+import io.github.ph1lou.werewolfapi.*;
+import io.github.ph1lou.werewolfplugin.Main;
+import io.github.ph1lou.werewolfplugin.game.GameManager;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -20,6 +23,44 @@ public class FileUtils_ {
                 System.out.println("[WereWolfPlugin] Create " + file.getName());
             }
         }
+    }
+
+    public static void loadConfig(Main main, String name){
+
+        GameManager game = (GameManager) main.getWereWolfAPI();
+
+        File file = new File(main.getDataFolder() + File.separator + "configs" + File.separator, name + ".json");
+
+        if(file.exists()){
+            game.setConfig(Serializer.deserialize(loadContent(file)));
+            game.getScore().setRole(0);
+            game.getModerationManager().checkQueue();
+            ConfigWereWolfAPI config = game.getConfig();
+            RegisterManager register = main.getRegisterManager();
+
+            for (RoleRegister roleRegister:register.getRolesRegister()) {
+                String key = roleRegister.getKey();
+                config.getRoleCount().put(key,config.getRoleCount().getOrDefault(key,0));
+                game.getScore().setRole(game.getScore().getRole() +config.getRoleCount().get(key) );
+            }
+
+            for (TimerRegister timerRegister:register.getTimersRegister()) {
+                String key = timerRegister.getKey();
+                config.getTimerValues().put(key,config.getTimerValues().getOrDefault(key,timerRegister.getDefaultValue()));
+            }
+
+            for (ConfigRegister configRegister:register.getConfigsRegister()) {
+                String key = configRegister.getKey();
+                config.getConfigValues().put(key,config.getConfigValues().getOrDefault(key,configRegister.getDefaultValue()));
+            }
+
+            for (ScenarioRegister scenarioRegister:register.getScenariosRegister()) {
+                String key = scenarioRegister.getKey();
+                config.getScenarioValues().put(key,config.getScenarioValues().getOrDefault(key,scenarioRegister.getDefaultValue()));
+            }
+        }
+
+        save(file, Serializer.serialize(game.getConfig()));
     }
 
     public static void save(File file, String text) {

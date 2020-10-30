@@ -9,11 +9,11 @@ import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
 import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
 import io.github.ph1lou.werewolfapi.RoleRegister;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.Category;
 import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -28,7 +28,7 @@ public class TrollChoice implements InventoryProvider {
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
             .provider(new TrollChoice())
             .size(6, 9)
-            .title(JavaPlugin.getPlugin(Main.class).getCurrentGame().translate("werewolf.menu.troll"))
+            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.troll"))
             .closeable(true)
             .build();
 
@@ -38,14 +38,14 @@ public class TrollChoice implements InventoryProvider {
 
     @Override
     public void init(Player player, InventoryContents contents) {
-        GameManager game = JavaPlugin.getPlugin(Main.class).getCurrentGame();
+        WereWolfAPI game = JavaPlugin.getPlugin(Main.class).getWereWolfAPI();
         contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType()).setDisplayName(game.translate("werewolf.menu.return")).build()), e -> AdvancedConfig.INVENTORY.open(player)));
     }
 
     @Override
     public void update(Player player, InventoryContents contents) {
-
-        GameManager game = JavaPlugin.getPlugin(Main.class).getCurrentGame();
+        Main main = JavaPlugin.getPlugin(Main.class);
+        WereWolfAPI game = main.getWereWolfAPI();
         ConfigWereWolfAPI config = game.getConfig();
         Pagination pagination = contents.pagination();
         UUID uuid = player.getUniqueId();
@@ -60,7 +60,7 @@ public class TrollChoice implements InventoryProvider {
         List<ClickableItem> items = new ArrayList<>();
 
 
-        for (RoleRegister roleRegister : game.getRolesRegister()) {
+        for (RoleRegister roleRegister : main.getRegisterManager().getRolesRegister()) {
 
             if (roleRegister.getCategories().contains(categories.getOrDefault(uuid, Category.WEREWOLF))) {
 
@@ -68,9 +68,9 @@ public class TrollChoice implements InventoryProvider {
                 List<String> lore = new ArrayList<>(roleRegister.getLore());
 
                 if (config.getTrollKey().equals(key)) {
-                    items.add(ClickableItem.empty(new ItemBuilder(UniversalMaterial.GREEN_TERRACOTTA.getStack()).setLore(lore).setDisplayName(roleRegister.getName()).build()));
+                    items.add(ClickableItem.empty(new ItemBuilder(UniversalMaterial.GREEN_TERRACOTTA.getStack()).setLore(lore).setDisplayName(game.translate(roleRegister.getKey())).build()));
                 } else {
-                    items.add(ClickableItem.of((new ItemBuilder(UniversalMaterial.RED_TERRACOTTA.getStack()).setLore(lore).setDisplayName(roleRegister.getName()).build()), event -> {
+                    items.add(ClickableItem.of((new ItemBuilder(UniversalMaterial.RED_TERRACOTTA.getStack()).setLore(lore).setDisplayName(game.translate(roleRegister.getKey())).build()), event -> {
                         config.setTrollKey(roleRegister.getKey());
                         AdvancedConfig.INVENTORY.open(player);
                     }));

@@ -1,8 +1,8 @@
 package io.github.ph1lou.werewolfplugin.commands.utilities;
 
 import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -20,7 +20,7 @@ public class CommandEnchantment implements Commands {
     public void execute(Player player, String[] args) {
 
 
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
 
         player.sendMessage(Arrays.asList(game.translate("werewolf.menu.enchantments.knock_back_disable"), game.translate("werewolf.menu.enchantments.knock_back_invisible"), game.translate("werewolf.menu.enchantments.knock_back_enable")).get(game.getConfig().getLimitKnockBack()));
         player.sendMessage(Arrays.asList(game.translate("werewolf.menu.enchantments.punch_disable"), game.translate("werewolf.menu.enchantments.punch_cupid"), game.translate("werewolf.menu.enchantments.punch_enable")).get(game.getConfig().getLimitPunch()));

@@ -3,12 +3,13 @@ package io.github.ph1lou.werewolfplugin.game;
 import fr.mrmicky.fastboard.FastBoard;
 import io.github.ph1lou.werewolfapi.*;
 import io.github.ph1lou.werewolfapi.enumlg.Day;
-import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.enumlg.StateGame;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.save.Config;
+import io.github.ph1lou.werewolfplugin.save.FileUtils_;
 import io.github.ph1lou.werewolfplugin.save.Stuff;
 import io.github.ph1lou.werewolfplugin.scoreboards.ScoreBoard;
 import io.github.ph1lou.werewolfplugin.tasks.LobbyTask;
@@ -27,18 +28,18 @@ public class GameManager implements WereWolfAPI {
     private final Main main;
     private final Map<UUID, FastBoard> boards = new HashMap<>();
     private final Map<UUID, PlayerWW> playerLG = new HashMap<>();
-    private StateLG state;
-    private Day dayState;
+    private StateGame state;
+    private Day day;
     private final ScoreBoard score = new ScoreBoard(this);
     private final Vote vote = new Vote(this);
     private final Events events = new Events(this);
     private final LoversManagement loversManage = new LoversManagement(this);
     private final ModerationManager moderationManager = new ModerationManager(this);
-    private final MapManager mapManager = new MapManager(this);
-    private final Config config = new Config();
+    private final MapManager mapManager;
+    private Config config = new Config();
     private final End end = new End(this);
-    private final Stuff stuff = new Stuff(this);
-    private final ScenariosLoader scenarios = new ScenariosLoader(this);
+    private final Stuff stuff;
+    private final ScenariosLoader scenarios;
     private final Random r = new Random(System.currentTimeMillis());
     private final Map<String, String> language = new HashMap<>();
     private final UUID uuid = UUID.randomUUID();
@@ -47,14 +48,17 @@ public class GameManager implements WereWolfAPI {
 
     public GameManager(Main main) {
         this.main = main;
+        mapManager = new MapManager(main);
+        stuff = new Stuff(main);
+        scenarios = new ScenariosLoader(main);
         setDay(Day.DAY);
     }
 
     public void init() {
-        main.getLang().updateLanguage(this);
-        config.getConfig(this, "saveCurrent");
+        Bukkit.getPluginManager().callEvent(new UpdateLanguageEvent());
+        FileUtils_.loadConfig(main, "saveCurrent");
         stuff.load("saveCurrent");
-        setState(StateLG.LOBBY);
+        setState(StateGame.LOBBY);
         scenarios.init();
         Bukkit.getPluginManager().callEvent(new LoadEvent(this));
         LobbyTask start = new LobbyTask(this);
@@ -118,12 +122,12 @@ public class GameManager implements WereWolfAPI {
         }
     }
 
-    public void setState(StateLG state) {
+    public void setState(StateGame state) {
         this.state = state;
     }
 
     @Override
-    public boolean isState(StateLG state) {
+    public boolean isState(StateGame state) {
         return this.state == state;
     }
 
@@ -138,12 +142,12 @@ public class GameManager implements WereWolfAPI {
     }
 
     public void setDay(Day day) {
-        this.dayState = day;
+        this.day = day;
     }
 
     @Override
     public boolean isDay(Day day) {
-        return this.dayState == day;
+        return this.day == day;
     }
 
     @Override
@@ -160,7 +164,7 @@ public class GameManager implements WereWolfAPI {
     @Override
     public void stopGame() {
 
-        setState(StateLG.END);
+        setState(StateGame.END);
 
         if (mapManager.getWorld() == null) return;
 
@@ -171,10 +175,10 @@ public class GameManager implements WereWolfAPI {
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             FastBoard fastboard = new FastBoard(player);
-            fastboard.updateTitle(main.getCurrentGame().translate("werewolf.score_board.title"));
-            main.getCurrentGame().boards.put(player.getUniqueId(), fastboard);
+            fastboard.updateTitle(main.getWereWolfAPI().translate("werewolf.score_board.title"));
+            boards.put(player.getUniqueId(), fastboard);
             player.setGameMode(GameMode.ADVENTURE);
-            main.getCurrentGame().join(player);
+            join(player);
         }
         mapManager.deleteMap();
 
@@ -204,17 +208,21 @@ public class GameManager implements WereWolfAPI {
         return this.config;
     }
 
+    public void setConfig(Config config){
+        this.config=config;
+    }
+
 
     @Override
     public String translate(String key, Object... args) {
         final String translation;
-        if(!main.getExtraTexts().containsKey(key.toLowerCase())){
+        if(!main.getLangManager().getExtraTexts().containsKey(key.toLowerCase())){
             if(!this.language.containsKey(key.toLowerCase())){
                 return String.format("Message error (%s) ", key.toLowerCase());
             }
             translation = this.language.get(key.toLowerCase());
         }
-        else translation = main.getExtraTexts().get(key.toLowerCase());
+        else translation = main.getLangManager().getExtraTexts().get(key.toLowerCase());
         try {
             return String.format(translation, args);
         } catch (IllegalFormatException e) {
@@ -239,7 +247,7 @@ public class GameManager implements WereWolfAPI {
 
         List<UUID> players = new ArrayList<>();
         for (UUID uuid : getPlayersWW().keySet()) {
-            if (getPlayersWW().get(uuid).isState(State.ALIVE) && !uuid.equals(playerUUID)) {
+            if (getPlayersWW().get(uuid).isState(StatePlayer.ALIVE) && !uuid.equals(playerUUID)) {
                 players.add(uuid);
             }
         }
@@ -249,8 +257,8 @@ public class GameManager implements WereWolfAPI {
         return players.get((int) Math.floor(getRandom().nextFloat() * players.size()));
     }
 
-    public List<RoleRegister> getRolesRegister() {
-        return main.getRegisterRoles();
+    public List<? extends RoleRegister> getRolesRegister() {
+        return main.getRegisterManager().getRolesRegister();
     }
 
     @Override
@@ -321,12 +329,13 @@ public class GameManager implements WereWolfAPI {
         return scenarios;
     }
 
+    @Override
     public ModerationManager getModerationManager() {
         return moderationManager;
     }
 
     @Override
-    public StateLG getState() {
+    public StateGame getState() {
         return this.state;
     }
 }

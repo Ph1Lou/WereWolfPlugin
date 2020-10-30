@@ -1,16 +1,14 @@
 package io.github.ph1lou.werewolfplugin.scoreboards;
 
 import fr.mrmicky.fastboard.FastBoard;
+import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.RoleRegister;
 import io.github.ph1lou.werewolfapi.ScoreAPI;
-import io.github.ph1lou.werewolfapi.enumlg.Day;
-import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.enumlg.*;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
-import io.github.ph1lou.werewolfplugin.game.ModerationManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -74,17 +72,17 @@ public class ScoreBoard implements ScoreAPI, Listener {
 
 		UUID playerUUID = board.getPlayer().getUniqueId();
 		List<String> score = new ArrayList<>(scoreboard2);
-		ModerationManager moderationManager = game.getModerationManager();
+		ModerationManagerAPI moderationManager = game.getModerationManager();
 		String role;
 		if (game.getPlayersWW().containsKey(playerUUID)) {
 
 			PlayerWW plg = game.getPlayersWW().get(playerUUID);
 
-			if (!plg.isState(State.DEATH)) {
+			if (!plg.isState(StatePlayer.DEATH)) {
 
-				if (!game.isState(StateLG.GAME)) {
-					role = conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.role_duration"));
-				} else role = game.translate(plg.getRole().getDisplay());
+				if (!game.isState(StateGame.GAME)) {
+					role = conversion(game.getConfig().getTimerValues().get(Timers.ROLE_DURATION.getKey()));
+				} else role = game.translate(plg.getRole().getKey());
 			} else role = game.translate("werewolf.score_board.death");
 		} else if (moderationManager.getModerators().contains(playerUUID)) {
 			role = game.translate("werewolf.commands.admin.moderator.name");
@@ -105,8 +103,8 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		String border_size = String.valueOf(Math.round(wb.getSize()));
 		String border;
 
-		if (game.getConfig().getTimerValues().get("werewolf.menu.timers.border_begin") > 0) {
-			border = conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.border_begin"));
+		if (game.getConfig().getTimerValues().get(Timers.BORDER_BEGIN.getKey()) > 0) {
+			border = conversion(game.getConfig().getTimerValues().get(Timers.BORDER_BEGIN.getKey()));
 		} else {
 			border = game.translate("werewolf.utils.on");
 			if (wb.getSize() > game.getConfig().getBorderMin()) {
@@ -120,7 +118,7 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		while(game.getLanguage().containsKey("werewolf.score_board.scoreboard_2."+i)) {
 			String line = game.translate("werewolf.score_board.scoreboard_2." + i);
 			line = line.replace("&timer&", conversion(timer));
-			line = line.replace("&day&", String.valueOf(timer / game.getConfig().getTimerValues().get("werewolf.menu.timers.day_duration") / 2 + 1));
+			line = line.replace("&day&", String.valueOf(timer / game.getConfig().getTimerValues().get(Timers.DAY_DURATION.getKey()) / 2 + 1));
 			line = line.replace("&players&", String.valueOf(player));
 			line = line.replace("&group&", String.valueOf(group_size));
 			line = line.replace("&border&", border);
@@ -155,7 +153,7 @@ public class ScoreBoard implements ScoreAPI, Listener {
 			String key = roleRegister.getKey();
 			if (game.getConfig().getRoleCount().get(key) > 0) {
 				StringBuilder sb = new StringBuilder();
-				sb.append("§3").append(game.getConfig().getRoleCount().get(key)).append("§r ").append(roleRegister.getName());
+				sb.append("§3").append(game.getConfig().getRoleCount().get(key)).append("§r ").append(game.translate(roleRegister.getKey()));
 				roles.add(sb.substring(0, Math.min(30, sb.length())));
 			}
 		}
@@ -218,7 +216,7 @@ public class ScoreBoard implements ScoreAPI, Listener {
 
 		UUID playerUUID = player.getUniqueId();
 
-		if (!game.getPlayersWW().containsKey(playerUUID) || !game.getPlayersWW().get(playerUUID).isState(State.ALIVE))
+		if (!game.getPlayersWW().containsKey(playerUUID) || !game.getPlayersWW().get(playerUUID).isState(StatePlayer.ALIVE))
 			return;
 
 		StringBuilder stringbuilder = new StringBuilder();
@@ -226,17 +224,17 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		stringbuilder.append(game.translate("werewolf.action_bar.in_game", d, d + 300, (int) Math.floor(player.getLocation().getY())));
 		PlayerWW plg = game.getPlayersWW().get(playerUUID);
 
-		if (plg.isState(State.ALIVE)) {
+		if (plg.isState(StatePlayer.ALIVE)) {
 			for (UUID uuid : plg.getLovers()) {
 				Player player1 = Bukkit.getPlayer(uuid);
-				if (player1 != null && game.getPlayersWW().get(uuid).isState(State.ALIVE)) {
+				if (player1 != null && game.getPlayersWW().get(uuid).isState(StatePlayer.ALIVE)) {
 					stringbuilder.append("§d ").append(game.getPlayersWW().get(uuid).getName()).append(" ").append(updateArrow(player, player1.getLocation()));
 				}
 			}
 			if(plg.getAmnesiacLoverUUID()!=null && plg.getRevealAmnesiacLover()) {
 				UUID uuid = plg.getAmnesiacLoverUUID();
 				Player player1 = Bukkit.getPlayer(uuid);
-				if (player1 != null && game.getPlayersWW().get(uuid).isState(State.ALIVE)) {
+				if (player1 != null && game.getPlayersWW().get(uuid).isState(StatePlayer.ALIVE)) {
 					stringbuilder.append("§d ").append(game.getPlayersWW().get(uuid).getName()).append(" ").append(updateArrow(player, player1.getLocation()));
 				}
 			}
@@ -254,23 +252,23 @@ public class ScoreBoard implements ScoreAPI, Listener {
 
 		roles.clear();
 
-		if (!game.getConfig().getConfigValues().get("werewolf.menu.global.hide_composition") && TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) % 60 >= 30) {
+		if (!game.getConfig().getConfigValues().get(Configs.HIDE_COMPOSITION.getKey()) && TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) % 60 >= 30) {
 			updateScoreBoardRole();
 		}
 
 		if (roles.isEmpty()) {
-			if (game.isState(StateLG.LOBBY)) {
+			if (game.isState(StateGame.LOBBY)) {
 				updateScoreBoard1();
 			} else updateGlobalScoreBoard2();
 		}
 
 		for (FastBoard board : game.getBoards().values()) {
 
-			if (game.isState(StateLG.END)) {
+			if (game.isState(StateGame.END)) {
 				board.updateLines(scoreboard3);
 			} else if (!roles.isEmpty()) {
 				board.updateLines(roles);
-			} else if (game.isState(StateLG.LOBBY)) {
+			} else if (game.isState(StateGame.LOBBY)) {
 				board.updateLines(scoreboard1);
 			} else updateScoreBoard2(board);
 		}
@@ -384,9 +382,9 @@ public class ScoreBoard implements ScoreAPI, Listener {
 			return;
 		}
 
-		if (playerWW.isState(State.DEATH)) {
-			if (game.getConfig().getConfigValues().get("werewolf.menu.global.show_role_to_death")) {
-				sb.append(game.translate(playerWW.getRole().getDisplay()));
+		if (playerWW.isState(StatePlayer.DEATH)) {
+			if (game.getConfig().getConfigValues().get(Configs.SHOW_ROLE_TO_DEATH.getKey())) {
+				sb.append(game.translate(playerWW.getRole().getKey()));
 			} else sb.append(game.translate("werewolf.score_board.death"));
 			event.setSuffix(sb.toString());
 		}
@@ -444,10 +442,10 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		for (UUID uuid : game.getModerationManager().getModerators()) {
 			Player player = Bukkit.getPlayer(uuid);
 			if (player != null) {
-				for (List<UUID> lovers : game.getLoversManage().getLoversRange()) {
+				for (List<UUID> lovers : game.getLoversRange()) {
 					tabManager.updatePlayerScoreBoard(player, lovers);
 				}
-				for (List<UUID> cursedLovers : game.getLoversManage().getCursedLoversRange()) {
+				for (List<UUID> cursedLovers : game.getCursedLoversRange()) {
 					tabManager.updatePlayerScoreBoard(player, cursedLovers);
 				}
 			}

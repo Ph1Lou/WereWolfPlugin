@@ -4,7 +4,7 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.Day;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.events.EnchantmentEvent;
 import io.github.ph1lou.werewolfapi.events.NightEvent;
@@ -23,8 +23,8 @@ import java.util.UUID;
 
 public class Assassin extends RolesNeutral {
 
-    public Assassin(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public Assassin(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main,game,uuid, key);
     }
 
     @EventHandler
@@ -45,7 +45,7 @@ public class Assassin extends RolesNeutral {
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
             return;
         }
         if (player == null) {
@@ -58,7 +58,7 @@ public class Assassin extends RolesNeutral {
     @EventHandler
     public void onEnchantment(EnchantmentEvent event){
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -93,10 +93,6 @@ public class Assassin extends RolesNeutral {
         return game.translate("werewolf.role.assassin.description");
     }
 
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.assassin.display";
-    }
 
     @Override
     public void recoverPotionEffect(@NotNull Player player) {

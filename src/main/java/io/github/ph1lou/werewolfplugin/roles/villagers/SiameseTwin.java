@@ -5,7 +5,7 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.UpdateEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
@@ -18,18 +18,13 @@ import java.util.UUID;
 
 public class SiameseTwin extends RolesVillage {
 
-    public SiameseTwin(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public SiameseTwin(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main,game,uuid, key);
     }
 
     @Override
     public String getDescription() {
         return game.translate("werewolf.role.siamese_twin.description");
-    }
-
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.siamese_twin.display";
     }
 
 
@@ -63,7 +58,7 @@ public class SiameseTwin extends RolesVillage {
             PlayerWW plg = game.getPlayersWW().get(uuid);
             Player c = Bukkit.getPlayer(uuid);
 
-            if (plg.isState(State.ALIVE) && plg.getRole().isDisplay("werewolf.role.siamese_twin.display") && c != null) {
+            if (plg.isState(StatePlayer.ALIVE) && plg.getRole().isKey("werewolf.role.siamese_twin.display") && c != null) {
                 counter++;
                 health += c.getHealth() / VersionUtils.getVersionUtils().getPlayerMaxHealth(c);
             }
@@ -74,7 +69,7 @@ public class SiameseTwin extends RolesVillage {
             PlayerWW plg = game.getPlayersWW().get(uuid);
             Player c = Bukkit.getPlayer(uuid);
 
-            if (plg.isState(State.ALIVE) && plg.getRole().isDisplay("werewolf.role.siamese_twin.display") && c != null) {
+            if (plg.isState(StatePlayer.ALIVE) && plg.getRole().isKey("werewolf.role.siamese_twin.display") && c != null) {
 
                 if (health * VersionUtils.getVersionUtils().getPlayerMaxHealth(c) > 10) {
                     if (health * VersionUtils.getVersionUtils().getPlayerMaxHealth(c) + 1 < c.getHealth()) {

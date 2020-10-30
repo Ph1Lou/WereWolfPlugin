@@ -1,7 +1,8 @@
 package io.github.ph1lou.werewolfplugin.tasks;
 
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.enumlg.StateGame;
+import io.github.ph1lou.werewolfapi.enumlg.Timers;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -104,7 +105,7 @@ public class TransportationTask {
 
             if (game.getPlayersWW().containsKey(player.getUniqueId())) {
                 player.setGameMode(GameMode.SURVIVAL);
-                player.sendMessage(game.translate("werewolf.announcement.start.message", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.invulnerability"))));
+                player.sendMessage(game.translate("werewolf.announcement.start.message", game.getScore().conversion(game.getConfig().getTimerValues().get(Timers.INVULNERABILITY.getKey()))));
             } else {
                 player.teleport(game.getMapManager().getWorld().getSpawnLocation());
                 player.setGameMode(GameMode.SPECTATOR);
@@ -115,7 +116,7 @@ public class TransportationTask {
         }
 
         game.getScenarios().updateCompass();
-        game.setState(StateLG.START);
+        game.setState(StateGame.START);
         GameTask start = new GameTask(game);
         start.runTaskTimer(main, 0, 5);
         Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> Bukkit.getPluginManager().callEvent(new DayEvent(1)), 40);

@@ -8,12 +8,13 @@ import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
 import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
+import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.RoleRegister;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.Category;
 import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.GameMode;
@@ -32,7 +33,7 @@ public class Roles implements InventoryProvider {
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
             .provider(new Roles())
             .size(6, 9)
-            .title(JavaPlugin.getPlugin(Main.class).getCurrentGame().translate("werewolf.menu.roles.name"))
+            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.roles.name"))
             .closeable(true)
             .build();
 
@@ -41,13 +42,13 @@ public class Roles implements InventoryProvider {
 
     @Override
     public void init(Player player, InventoryContents contents) {
-
-        GameManager game = JavaPlugin.getPlugin(Main.class).getCurrentGame();
+        Main main =JavaPlugin.getPlugin(Main.class);
+        WereWolfAPI game = main.getWereWolfAPI();
         ConfigWereWolfAPI config = game.getConfig();
 
         contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType()).setDisplayName(game.translate("werewolf.menu.return")).build()), e -> Config.INVENTORY.open(player)));
         contents.set(0, 8, ClickableItem.of((new ItemBuilder(UniversalMaterial.BARRIER.getType()).setDisplayName(game.translate("werewolf.menu.roles.zero")).build()), e -> {
-            for (RoleRegister roleRegister : game.getRolesRegister()) {
+            for (RoleRegister roleRegister : main.getRegisterManager().getRolesRegister()) {
                 config.getRoleCount().put(roleRegister.getKey(), 0);
             }
             config.setAmnesiacLoverSize(0);
@@ -60,7 +61,8 @@ public class Roles implements InventoryProvider {
     @Override
     public void update(Player player, InventoryContents contents) {
 
-        GameManager game = JavaPlugin.getPlugin(Main.class).getCurrentGame();
+        Main main=JavaPlugin.getPlugin(Main.class);
+        WereWolfAPI game = main.getWereWolfAPI();
         ConfigWereWolfAPI config = game.getConfig();
         Pagination pagination = contents.pagination();
         UUID uuid = player.getUniqueId();
@@ -126,10 +128,10 @@ public class Roles implements InventoryProvider {
             }));
 
 
-        contents.set(5, 1, ClickableItem.of((new ItemBuilder(Category.WEREWOLF == this.categories.getOrDefault(uuid, Category.WEREWOLF) ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate("werewolf.categories.werewolf")).setAmount(Math.max(1, count(game, Category.WEREWOLF))).build()), e -> this.categories.put(uuid, Category.WEREWOLF)));
-        contents.set(5, 3, ClickableItem.of((new ItemBuilder(Category.VILLAGER == this.categories.getOrDefault(uuid, Category.WEREWOLF) ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate("werewolf.categories.villager")).setAmount(Math.max(1, count(game, Category.VILLAGER))).build()), e -> this.categories.put(uuid, Category.VILLAGER)));
-        contents.set(5, 5, ClickableItem.of((new ItemBuilder(Category.NEUTRAL == this.categories.getOrDefault(uuid, Category.WEREWOLF) ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate("werewolf.categories.neutral")).setAmount(Math.max(1, count(game, Category.NEUTRAL))).build()), e -> this.categories.put(uuid, Category.NEUTRAL)));
-        contents.set(5, 7, ClickableItem.of((new ItemBuilder(Category.ADDONS == this.categories.getOrDefault(uuid, Category.WEREWOLF) ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate("werewolf.categories.addons")).setAmount(Math.max(1, count(game, Category.ADDONS))).build()), e -> this.categories.put(uuid, Category.ADDONS)));
+        contents.set(5, 1, ClickableItem.of((new ItemBuilder(Category.WEREWOLF == this.categories.getOrDefault(uuid, Category.WEREWOLF) ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate("werewolf.categories.werewolf")).setAmount(Math.max(1, count(main, Category.WEREWOLF))).build()), e -> this.categories.put(uuid, Category.WEREWOLF)));
+        contents.set(5, 3, ClickableItem.of((new ItemBuilder(Category.VILLAGER == this.categories.getOrDefault(uuid, Category.WEREWOLF) ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate("werewolf.categories.villager")).setAmount(Math.max(1, count(main, Category.VILLAGER))).build()), e -> this.categories.put(uuid, Category.VILLAGER)));
+        contents.set(5, 5, ClickableItem.of((new ItemBuilder(Category.NEUTRAL == this.categories.getOrDefault(uuid, Category.WEREWOLF) ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate("werewolf.categories.neutral")).setAmount(Math.max(1, count(main, Category.NEUTRAL))).build()), e -> this.categories.put(uuid, Category.NEUTRAL)));
+        contents.set(5, 7, ClickableItem.of((new ItemBuilder(Category.ADDONS == this.categories.getOrDefault(uuid, Category.WEREWOLF) ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate("werewolf.categories.addons")).setAmount(Math.max(1, count(main, Category.ADDONS))).build()), e -> this.categories.put(uuid, Category.ADDONS)));
 
 
         lore.add(game.translate("werewolf.menu.shift"));
@@ -137,7 +139,7 @@ public class Roles implements InventoryProvider {
         List<ClickableItem> items = new ArrayList<>();
 
 
-        for (RoleRegister roleRegister : game.getRolesRegister()) {
+        for (RoleRegister roleRegister : main.getRegisterManager().getRolesRegister()) {
 
             if (roleRegister.getCategories().contains(categories.getOrDefault(uuid, Category.WEREWOLF))) {
 
@@ -146,7 +148,7 @@ public class Roles implements InventoryProvider {
                 lore2.addAll(roleRegister.getLore());
 
                 if (config.getRoleCount().get(key) > 0) {
-                    items.add(ClickableItem.of((new ItemBuilder(UniversalMaterial.GREEN_TERRACOTTA.getStack(config.getRoleCount().get(key))).setLore(lore2).setDisplayName(roleRegister.getName()).build()), e -> {
+                    items.add(ClickableItem.of((new ItemBuilder(UniversalMaterial.GREEN_TERRACOTTA.getStack(config.getRoleCount().get(key))).setLore(lore2).setDisplayName(game.translate(roleRegister.getKey())).build()), e -> {
 
                         if (e.isShiftClick()) {
 
@@ -171,7 +173,7 @@ public class Roles implements InventoryProvider {
 
                     }));
                 } else
-                    items.add(ClickableItem.of((new ItemBuilder(UniversalMaterial.RED_TERRACOTTA.getStack()).setLore(lore2).setDisplayName(roleRegister.getName()).build()), e -> {
+                    items.add(ClickableItem.of((new ItemBuilder(UniversalMaterial.RED_TERRACOTTA.getStack()).setLore(lore2).setDisplayName(game.translate(roleRegister.getKey())).build()), e -> {
 
                         if (e.isShiftClick()) {
                             player.setGameMode(GameMode.CREATIVE);
@@ -222,7 +224,7 @@ public class Roles implements InventoryProvider {
     }
 
 
-    public void selectMinus(GameManager game, String key) {
+    public void selectMinus(WereWolfAPI game, String key) {
         ConfigWereWolfAPI config = game.getConfig();
         int j = config.getRoleCount().get(key);
         if (j > 0) {
@@ -231,7 +233,7 @@ public class Roles implements InventoryProvider {
         }
     }
 
-    public void selectPlus(GameManager game, String key) {
+    public void selectPlus(WereWolfAPI game, String key) {
         ConfigWereWolfAPI config = game.getConfig();
         int j = config.getRoleCount().get(key);
 
@@ -239,11 +241,11 @@ public class Roles implements InventoryProvider {
         game.getScore().setRole(game.getScore().getRole() + 1);
     }
 
-    private int count(GameManager game, Category category) {
+    private int count(GetWereWolfAPI main, Category category) {
         int i = 0;
-        for (RoleRegister roleRegister : game.getRolesRegister()) {
+        for (RoleRegister roleRegister : main.getRegisterManager().getRolesRegister()) {
             if (roleRegister.getCategories().contains(category)) {
-                i += game.getConfig().getRoleCount().get(roleRegister.getKey());
+                i += main.getWereWolfAPI().getConfig().getRoleCount().get(roleRegister.getKey());
             }
 
         }

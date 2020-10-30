@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.listeners.scenarioslisteners;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.Scenarios;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.Timers;
 import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Location;
@@ -30,7 +31,7 @@ public class CutClean extends Scenarios {
         Block block = event.getBlock();
         final Location loc = new Location(block.getWorld(), block.getLocation().getBlockX() + 0.5, block.getLocation().getBlockY() + 0.5, block.getLocation().getBlockZ() + 0.5);
 
-        if (game.getConfig().getTimerValues().get("werewolf.menu.timers.digging_end") < 0) {
+        if (game.getConfig().getTimerValues().get(Timers.DIGGING.getKey()) < 0) {
             List<Material> m = Arrays.asList(Material.REDSTONE_ORE, Material.EMERALD_ORE, Material.LAPIS_ORE, Material.COAL_ORE, Material.IRON_ORE, Material.GOLD_ORE, Material.DIAMOND_ORE);
 
             if (m.contains(block.getType())) {

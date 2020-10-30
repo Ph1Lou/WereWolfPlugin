@@ -1,8 +1,8 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -19,7 +19,7 @@ public class CommandGamemode implements Commands {
     @Override
     public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
 
         try {
             int i = Integer.parseInt(args[0]);
@@ -29,7 +29,7 @@ public class CommandGamemode implements Commands {
                 i = 0;
             }
             player.setGameMode(GameMode.values()[i]);
-            Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.commands.admin.gamemode", player.getName(), i));
+            Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.commands.admin.gamemode.send", player.getName(), i));
         }
         catch (NumberFormatException ignored){
         }

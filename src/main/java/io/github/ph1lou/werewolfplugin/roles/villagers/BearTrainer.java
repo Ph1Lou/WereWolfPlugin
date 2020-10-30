@@ -5,7 +5,7 @@ import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.Camp;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.events.GrowlEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.Display;
@@ -23,8 +23,8 @@ import java.util.stream.Collectors;
 
 public class BearTrainer extends RolesVillage {
 
-    public BearTrainer(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public BearTrainer(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main,game,uuid, key);
     }
 
     @EventHandler
@@ -32,7 +32,7 @@ public class BearTrainer extends RolesVillage {
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
             return;
         }
         if (player == null) return;
@@ -46,7 +46,7 @@ public class BearTrainer extends RolesVillage {
                 PlayerWW plo = game.getPlayersWW().get(pls.getUniqueId());
 
                 if (!(plo.getRole() instanceof Display) || ((Display) plo.getRole()).isDisplayCamp(Camp.WEREWOLF)) {
-                    if (plo.getRole().isWereWolf() && plo.isState(State.ALIVE)) {
+                    if (plo.getRole().isWereWolf() && plo.isState(StatePlayer.ALIVE)) {
                         if (oursLocation.distance(pls.getLocation()) < game.getConfig().getDistanceBearTrainer()) {
                             growled.add(pls.getUniqueId());
                         }
@@ -90,8 +90,4 @@ public class BearTrainer extends RolesVillage {
         return game.translate("werewolf.role.bear_trainer.description");
     }
 
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.bear_trainer.display";
-    }
 }

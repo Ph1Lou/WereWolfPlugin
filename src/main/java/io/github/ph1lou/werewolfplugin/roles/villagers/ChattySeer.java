@@ -8,8 +8,8 @@ import java.util.UUID;
 
 public class ChattySeer extends Seer {
 
-    public ChattySeer(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public ChattySeer(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main,game,uuid, key);
     }
 
     @Override
@@ -17,9 +17,5 @@ public class ChattySeer extends Seer {
         return game.translate("werewolf.role.chatty_seer.description");
     }
 
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.chatty_seer.display";
-    }
 
 }

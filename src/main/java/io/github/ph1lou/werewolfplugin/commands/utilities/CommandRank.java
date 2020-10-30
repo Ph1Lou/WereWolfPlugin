@@ -1,9 +1,9 @@
 package io.github.ph1lou.werewolfplugin.commands.utilities;
 
 import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.StateGame;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -21,12 +21,12 @@ public class CommandRank implements Commands {
     @Override
     public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
 
         List<UUID> queue = game.getModerationManager().getQueue();
 
-        if (!game.isState(StateLG.LOBBY)) {
+        if (!game.isState(StateGame.LOBBY)) {
             player.sendMessage(game.translate("werewolf.check.already_begin"));
             return;
         }

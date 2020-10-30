@@ -1,6 +1,8 @@
 {
   "werewolf": {
 
+    "name": "WereWolfPlugin",
+
     "role": {
       "serial_killer": {
         "display": "Tueur en Série",
@@ -344,7 +346,6 @@
       "join_moderator": "[§eLG UHC§r] Le modérateur §b%s§r rejoint la Partie",
       "queue": "[§eLG UHC§r] §b%s§r a rejoint la file d'attente (position : §b%d§r)",
       "rank": "§b/ww rang§r pour voir votre position dans la queue",
-      "stop": "[§cLG UHC§r] §b%s§r a stoppé la partie",
       "resurrection": "[§eLG UHC§r] Vous venez de ressusciter"
     },
     "end": {
@@ -362,40 +363,60 @@
     },
     "commands": {
       "admin": {
+
+        "stop": {
+          "command": "stop",
+          "send": "[§cLG UHC§r] §b%s§r a stoppé la partie"
+        },
         "start": {
+          "command": "start",
           "too_much_role": "[§cLG UHC§r] Vous devez enlever des rôles pour lancer la partie."
         },
         "group": {
+          "command": "group",
+          "command_2": "setgroup",
           "group_change": "[§6LG UHC§r] Les groupes passent à §b%s",
           "respect_limit": "[§eLG UHC§r] Respectez les limites, groupes de §b%d",
           "top_title": "Respectez la limite",
           "bot_title": "groupe de §b%s"
         },
         "anonymous_chat": {
+          "command": "?",
           "send": "[§b%s§r] %s (Cliquez pour répondre)",
           "anonyme": "Anonyme",
           "failure": "[§cLG UHC§r] Votre message n'a pas pu être envoyé"
         },
-        "info": "§b§l[Info]§r » §b%s",
-        "set_game_name": "[§aLG UHC§r] Nom de la partie configuré",
+        "info": {
+          "command": "info",
+          "send": "§b§l[Info]§r » §b%s"
+        },
+        "set_game_name": {
+          "send": "[§aLG UHC§r] Nom de la partie configuré",
+          "command": "name"
+        },
         "chat": {
+          "command": "chat",
           "on": "[§aLG UHC§r] Le Chat est §bactivé",
           "off": "[§cLG UHC§r] Le Chat est §bdésactivé",
           "template": "%s : %s"
         },
         "stuff_start": {
+          "command": "lootStart",
           "valid": "[§eLG UHC§r] Cliquez ici pour valider l'inventaire de départ",
           "perform": "[§aLG UHC§r] Stuff de départ actualisé"
         },
-        "loot_death":{
+        "loot_death": {
+          "command": "lootDeath",
           "valid": "[§eLG UHC§r] Cliquez ici pour valider les objets à la mort",
           "perform": "[§aLG UHC§r] Stuff de mort actualisé"
         },
         "loot_role": {
+          "command": "stuffRole",
           "valid": "[§eLG UHC§r] Cliquez ici pour valider le stuff",
           "perform": "[§aLG UHC§r] Stuff Actualisé"
         },
         "role": {
+          "command": "role",
           "in_game": "[§cLG UHC§r] Vous ne pouvez pas voir le rôle du joueur si vous êtes encore dans la partie",
           "affected": "Affecte : §b%s",
           "cursed_lover": "En Liaison maudite avec : §b%s",
@@ -410,47 +431,62 @@
           "yes": "oui",
           "no": "non"
         },
-        "final_heal": "[§6LG UHC§r] Final Heal !",
+        "final_heal": {
+          "command": "fh",
+          "send ": "[§6LG UHC§r] Final Heal !"
+        },
         "generation": {
+          "command": "generation",
           "already_start": "[§cLG UHC§r] La Génération est déjà lancée",
           "perform": "[§eLG UHC§r] La Génération du monde a commencé",
           "not_generated": "[§cLG UHC§r] Carte non générée. Faites §b/a generation",
           "not_finished": "[§cLG UHC§r] Attendez la fin de génération de la carte (§b%s%%§r)"
         },
         "change": {
+          "command": "change",
           "in_progress": "[§eLG UHC§r] Changement de la Map en cours",
           "finished": "[§aLG UHC§r] Nouvelle Map créée"
         },
         "preview": {
+          "command": "preview",
           "map": "[§eLG UHC§r] Vous venez d'être téléporté au centre de la map de la partie\n §b/a preview§r pour revenir",
           "lobby": "[§eLG UHC§r] Vous êtes revenu au lobby"
         },
         "tp_group": {
+          "command": "tpgroup",
           "broadcast": "[§eLG UHC§r] §b%s§r ont été téléporté par un administrateur",
           "perform": "[§eLG UHC§r] Vous venez d'être téléporté par un administrateur"
         },
-        "disconnected": "§b%s§r s'est déconnecté il y a §b%s",
+        "disconnected": {
+          "command": "disc",
+          "send": "§b%s§r s'est déconnecté il y a §b%s"
+        },
         "revive": {
+          "command": "revive",
           "perform": "[§eLG UHC§r] §b%s§r a été ressuscité par un Administrateur",
           "not_death": "[§cLG UHC§r] Le joueur n'est pas Mort"
         },
         "size": {
+          "command": "size",
           "begin": "[§eLG UHC§r] Début du Calcul de la surface du Biome central",
           "result": "[§aLG UHC§r] Le Biome central occupe §b%s§r blocs.",
           "change": "[§eLG UHC§r] Cliquez ici pour changer de Map"
         },
         "host": {
+          "command": "host",
           "name": "Host",
           "add": "[§aLG UHC§r] §b%s§r est à présent Host",
           "remove": "[§cLG UHC§r] §b%s§r n'est plus Host",
           "tag": "§cHost§r » "
         },
         "whitelist": {
+          "command": "whitelist",
           "add": "[§aLG UHC§r] Le joueur a été ajouté à la whitelist",
           "remove": "[§cLG UHC§r] Le joueur a été enlevé de la whitelist",
           "player_not_whitelisted": "[§cLG UHC§r] Vous n'êtes pas sur la whiteList"
         },
         "moderator": {
+          "command": "moderator",
           "name": "Modérateur",
           "add": "[§aLG UHC§r] §b%s§r est à présent modérateur",
           "remove": "[§cLG UHC§r] §b%s§r n'est plus modérateur",
@@ -458,9 +494,21 @@
           "tag": "§bModo§r » ",
           "message": "[§aLG UHC§r] Vous êtes en Mode Modération"
         },
-        "gamemode": "[§eLG UHC§r] §b%s§r s'est mis en gamemode §b%d",
-        "teleportation": "[§eLG UHC§r] Téléportation de §b%s§r vers §b%s",
-        "help": "§6/a config §9Pour configurer la partie\n§6/a start §9Pour lancer la partie\n§6/a chat §9Pour activer/désactiver le chat\n§6/a info §9Pour parler à tous les joueurs\n§6/a group §9Pour faire respecter les groupes\n§6/a fh §9Pour FinalHeal\n§6/a inv §9Pour voir l'inventaire d'un joueur\n§6/a kill §9Pour tuer un joueur offline\n§6/a revive §9Pour ressusciter un joueur\n§6/a role §9Pour voir le rôle d'un joueur\n§6/a disc §9Pour voir les joueurs déco\n§6/a setgroup§9 Pour configurer les groupes\n§6/a tpgroup§9 Pour téléporter un groupe\n§6/a generation§9 Pour générer la map\n§6/a size§9 Pour obtenir la taille du biome central\n§6/a moderator§9 Pour ajouter un modérator\n§6/a host§9 Pour ajouter un host\n§6/a change§9 Pour changer la map\n§6/a preview§9 Pour voir la map de jeu"
+        "gamemode": {
+          "command": "gamemode",
+          "send": "[§eLG UHC§r] §b%s§r s'est mis en gamemode §b%d"
+        },
+        "teleportation": {
+          "command": "tp",
+          "send": "[§eLG UHC§r] Téléportation de §b%s§r vers §b%s"
+        },
+        "help": {
+          "command": "h",
+          "send": "§6/a config §9Pour configurer la partie\n§6/a start §9Pour lancer la partie\n§6/a chat §9Pour activer/désactiver le chat\n§6/a info §9Pour parler à tous les joueurs\n§6/a group §9Pour faire respecter les groupes\n§6/a fh §9Pour FinalHeal\n§6/a inv §9Pour voir l'inventaire d'un joueur\n§6/a kill §9Pour tuer un joueur offline\n§6/a revive §9Pour ressusciter un joueur\n§6/a role §9Pour voir le rôle d'un joueur\n§6/a disc §9Pour voir les joueurs déco\n§6/a setgroup§9 Pour configurer les groupes\n§6/a tpgroup§9 Pour téléporter un groupe\n§6/a generation§9 Pour générer la map\n§6/a size§9 Pour obtenir la taille du biome central\n§6/a moderator§9 Pour ajouter un modérator\n§6/a host§9 Pour ajouter un host\n§6/a change§9 Pour changer la map\n§6/a preview§9 Pour voir la map de jeu"
+        }
+      },
+      "inventory": {
+        "command": "inv"
       },
       "message": {
         "send": "[Message envoyé à §b%s§r] » §b%s",
@@ -470,19 +518,27 @@
         "composition_hide": "[§cLG UHC§r] La Composition est cachée"
       },
       "kill": {
-       "on_line": "[§cLG UHC§r] Le joueur est en ligne",
+        "command": "kill",
+        "on_line": "[§cLG UHC§r] Le joueur est en ligne",
         "remove_role": "[§6LG UHC§r] Enlevez un rôle dans la config pour compenser le joueur",
         "not_living": "[§cLG UHC§r] Le joueur n'est pas vivant"
       },
-      "help": "§6/ww timers §9Pour voir les timers\n§6/ww regles §9Pour voir les règles\n§6/ww role §9Pour voir votre rôle\n§6/ww scenarios §9Pour voir les scenarios\n§6/ww compo §9Pour voir la compo\n§6/ww enchantement §9Pour voir les limites d'enchantements\n§6/ww rang §9Pour voir son rang dans la file\n§6/ww ? §9Pour poser une question anonyme"
+      "help": {
+        "command": "h",
+        "send":"§6/ww timers §9Pour voir les timers\n§6/ww regles §9Pour voir les règles\n§6/ww role §9Pour voir votre rôle\n§6/ww scenarios §9Pour voir les scenarios\n§6/ww compo §9Pour voir la compo\n§6/ww enchantement §9Pour voir les limites d'enchantements\n§6/ww rang §9Pour voir son rang dans la file\n§6/ww ? §9Pour poser une question anonyme"
+      }
     },
     "menu": {
+      "command": "config",
       "name": "Option §bLG",
       "return": "Revenir au Menu Principal",
       "left": "§fClique-§bGauche§f >> +",
       "right": "§fClique-§bDroit§f >> -",
       "shift": "§bShift§f-Clique >> Stuff",
+      "addon": {
+        "name": "Réglages Addons"
 
+      },
       "advanced_tool": {
         "name": "Configuration §bAvancée",
         "troll_on": "Troll §2Activé",
@@ -712,7 +768,8 @@
       "full": "[§cLG UHC§r] La partie est pleine",
       "cancel": "[§cLG UHC§r] Votre pouvoir a été annulé",
       "transformation": "[§cLG UHC§r] Votre transformation a été annulé",
-      "invalid_key": "[§cLG UHC§r] Clef invalide"
+      "invalid_key": "[§cLG UHC§r] Clef invalide",
+      "state": "[§cLG UHC§r] Vous ne pouvez pas faire cette commande à ce moment de la partie"
     },
     "update": {
       "up_to_date": "[§aLG UHC§r] Le plugin LG UHC est à jour",

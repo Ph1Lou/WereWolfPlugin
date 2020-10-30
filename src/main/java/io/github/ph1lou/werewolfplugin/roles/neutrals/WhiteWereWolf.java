@@ -3,7 +3,7 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.Day;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.events.NightEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
@@ -20,15 +20,15 @@ import java.util.UUID;
 
 public class WhiteWereWolf extends RolesNeutral {
 
-    public WhiteWereWolf(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public WhiteWereWolf(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main,game,uuid, key);
     }
 
     @EventHandler
     public void onNight(NightEvent event) {
 
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -45,7 +45,7 @@ public class WhiteWereWolf extends RolesNeutral {
     public void onDay(DayEvent event) {
 
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -92,10 +92,6 @@ public class WhiteWereWolf extends RolesNeutral {
         return game.translate("werewolf.role.white_werewolf.description");
     }
 
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.white_werewolf.display";
-    }
 
     @Override
     public boolean isWereWolf() {

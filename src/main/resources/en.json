@@ -367,8 +367,12 @@
           "top_title": "Respect the limit",
           "bot_title": "group of §b%s"
         },
-        "info": "§b§l[Info]§r » §b%s",
-        "set_game_name": "[§aWW UHC§r] Custom game's name",
+        "info": {
+          "send": "§b§l[Info]§r » §b%s"
+        },
+        "set_game_name": {
+          "send":"[§aWW UHC§r] Custom game's name"
+        },
         "chat": {
           "on": "[§aWW UHC§r] Chat is §benabled",
           "off": "[§cWW UHC§r] Chat is §bdisabled",
@@ -401,7 +405,10 @@
           "yes": "yes",
           "no": "no"
         },
-        "final_heal": "[§6WW UHC§r] Final Heal !",
+        "final_heal": {
+          "command": "fh",
+          "send ": "[§6LG UHC§r] Final Heal !"
+        },
         "generation": {
           "already_start": "[§cWW UHC§r] Generation has already been launched",
           "perform": "[§eWW UHC§r] World generation has begun",
@@ -420,7 +427,9 @@
           "broadcast": "[§eWW UHC§r] §b%s§r were teleported by an administrator",
           "perform": "[§eWW UHC§r] You have been teleported by an administrator"
         },
-        "disconnected": "§b%s§r disconnected §b%s§r ago",
+        "disconnected": {
+          "send": "§b%s§r disconnected §b%s§r ago"
+        },
         "revive": {
           "perform": "[§eWW UHC§r] §b%s§r was resuscitated by an administrator",
           "not_death": "[§cWW UHC§r] The player isn't Dead"
@@ -447,9 +456,18 @@
           "tag": "§bModo§r » ",
           "message": "[§aWW UHC§r] You are in Moderator Mode"
         },
-        "gamemode": "[§eWW UHC§r] §b%s§r changed his gamemode to §b%d",
-        "teleportation": "[§eWW UHC§r] Teleportation of §b%s§r to §b%s",
-        "help": "§6/a config §9 Game configuration\n§6/a host §9 Setting the game name\n§6/a start §9 To start the game\n§6/a chat §9 Enable/Disable chat\n§6/a info §9 Broadcast\n§6/a group §9 Remind players of group size\n§6/a fh §9 FinalHeal\n§6/a inv §9 Look at the inventory of a player\n§6/a kill §9 Kill an offline player\n§6/a revive §9 Revive a player\n§6/a role §9 Look at a player's role\n§6/a disc §9 List of disconnected players\n§6/a setgroup§9 Set groups size\n§6/a tpgroup§9 Teleport a group to a random position\n§6/a generation§9 Generate game map\n§6/a size§9 Obtain the size of the central biome\n§6/a moderator§9 Add a moderator\n§6/a host§9 Add a host\n§6/a change§9 Change game map\n§6/a preview§9 Look at game map"
+        "gamemode": {
+          "command": "gamemode",
+          "send": "[§eLG UHC§r] §b%s§r s'est mis en gamemode §b%d"
+        },
+        "teleportation": {
+          "command": "tp",
+          "send": "[§eLG UHC§r] Téléportation de §b%s§r vers §b%s"
+        },
+        "help": {
+          "command": "h",
+          "send": "§6/a config §9Pour configurer la partie\n§6/a start §9Pour lancer la partie\n§6/a chat §9Pour activer/désactiver le chat\n§6/a info §9Pour parler à tous les joueurs\n§6/a group §9Pour faire respecter les groupes\n§6/a fh §9Pour FinalHeal\n§6/a inv §9Pour voir l'inventaire d'un joueur\n§6/a kill §9Pour tuer un joueur offline\n§6/a revive §9Pour ressusciter un joueur\n§6/a role §9Pour voir le rôle d'un joueur\n§6/a disc §9Pour voir les joueurs déco\n§6/a setgroup§9 Pour configurer les groupes\n§6/a tpgroup§9 Pour téléporter un groupe\n§6/a generation§9 Pour générer la map\n§6/a size§9 Pour obtenir la taille du biome central\n§6/a moderator§9 Pour ajouter un modérator\n§6/a host§9 Pour ajouter un host\n§6/a change§9 Pour changer la map\n§6/a preview§9 Pour voir la map de jeu"
+        }
       },
       "message": {
         "send": "[Message sent to §b%s§r] » §b%s",
@@ -463,8 +481,10 @@
         "remove_role": "[§6WW UHC§r] Remove a role in the configuration to compensate with the player",
         "not_living": "[§cWW UHC§r] The player isn't alive"
       },
-      "help": "§6/ww timers §9To see the timers\n§6/ww rules §9To see the rules\n§6/ww role §9To see your role\n§6/ww scenarios §9To see the scenarios\n§6/ww compo §9To see the role's composition\n§6/ww enchantment §9To see the enchantment's limits\n§6/ww rank §9To see his rank in the queue"
-    },
+      "help": {
+        "command": "h",
+        "send":"§6/ww timers §9Pour voir les timers\n§6/ww regles §9Pour voir les règles\n§6/ww role §9Pour voir votre rôle\n§6/ww scenarios §9Pour voir les scenarios\n§6/ww compo §9Pour voir la compo\n§6/ww enchantement §9Pour voir les limites d'enchantements\n§6/ww rang §9Pour voir son rang dans la file\n§6/ww ? §9Pour poser une question anonyme"
+      }    },
     "menu": {
       "name": "Option §bWW",
       "return": "Return to Main Menu",

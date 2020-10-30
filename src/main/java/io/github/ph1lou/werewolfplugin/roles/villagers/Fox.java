@@ -5,7 +5,8 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.Camp;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
+import io.github.ph1lou.werewolfapi.enumlg.Timers;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.events.SniffEvent;
 import io.github.ph1lou.werewolfapi.events.UpdateEvent;
@@ -28,8 +29,8 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
     private boolean power = false;
     private final List<UUID> affectedPlayer = new ArrayList<>();
 
-    public Fox(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public Fox(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main,game,uuid, key);
     }
 
     @Override
@@ -86,7 +87,7 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -110,10 +111,6 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
         return game.translate("werewolf.role.fox.description");
     }
 
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.fox.display";
-    }
 
     @Override
     public void recoverPotionEffect(Player player) {
@@ -130,7 +127,7 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
         if (player == null) {
             return;
         }
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
             return;
         }
         if (getAffectedPlayers().isEmpty()) {
@@ -141,7 +138,7 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
         PlayerWW plf = game.getPlayersWW().get(playerSmellUUID);
         Player flair = Bukkit.getPlayer(playerSmellUUID);
 
-        if (!plf.isState(State.ALIVE)) {
+        if (!plf.isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -156,11 +153,11 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
             return;
         }
 
-        float temp = getProgress() + 100f / (game.getConfig().getTimerValues().get("werewolf.menu.timers.fox_smell_duration") + 1);
+        float temp = getProgress() + 100f / (game.getConfig().getTimerValues().get(Timers.FOX_SMELL_DURATION.getKey()) + 1);
 
         setProgress(temp);
 
-        if (temp % 10 > 0 && temp % 10 <= 100f / (game.getConfig().getTimerValues().get("werewolf.menu.timers.fox_smell_duration") + 1)) {
+        if (temp % 10 > 0 && temp % 10 <= 100f / (game.getConfig().getTimerValues().get(Timers.FOX_SMELL_DURATION.getKey()) + 1)) {
             player.sendMessage(game.translate("werewolf.role.fox.progress", Math.min(100,Math.floor(temp))));
         }
 

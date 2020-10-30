@@ -2,11 +2,11 @@ package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -24,7 +24,7 @@ public class CommandRevive implements Commands {
     @Override
     public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
         Player player1 = Bukkit.getPlayer(args[0]);
 
         if (player1 == null) {
@@ -41,7 +41,7 @@ public class CommandRevive implements Commands {
 
         PlayerWW plg = game.getPlayersWW().get(uuid);
 
-        if (!plg.isState(State.DEATH)) {
+        if (!plg.isState(StatePlayer.DEATH)) {
             player.sendMessage(game.translate("werewolf.commands.admin.revive.not_death"));
             return;
         }
@@ -51,7 +51,7 @@ public class CommandRevive implements Commands {
         }
 
         Roles role = plg.getRole();
-        game.getConfig().getRoleCount().put(role.getDisplay(), game.getConfig().getRoleCount().get(role.getDisplay()) + 1);
+        game.getConfig().getRoleCount().put(role.getKey(), game.getConfig().getRoleCount().get(role.getKey()) + 1);
         game.getScore().addPlayerSize();
         game.resurrection(uuid);
 

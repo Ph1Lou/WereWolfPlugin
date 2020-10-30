@@ -1,9 +1,9 @@
 package io.github.ph1lou.werewolfplugin.commands.utilities;
 
 import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.ConfigRegister;
+import io.github.ph1lou.werewolfapi.RegisterAPI;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.entity.Player;
 
 public class CommandRules implements Commands {
@@ -18,9 +18,9 @@ public class CommandRules implements Commands {
     @Override
     public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
 
-        for (ConfigRegister ConfigRegister : main.getRegisterConfigs()) {
+        for (RegisterAPI ConfigRegister : main.getRegisterManager().getConfigsRegister()) {
             if (game.getConfig().getConfigValues().get(ConfigRegister.getKey())) {
                 player.sendMessage(game.translate("werewolf.utils.enable", game.translate(ConfigRegister.getKey())));
             } else

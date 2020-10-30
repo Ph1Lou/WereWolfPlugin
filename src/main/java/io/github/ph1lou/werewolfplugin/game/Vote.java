@@ -3,7 +3,10 @@ package io.github.ph1lou.werewolfplugin.game;
 
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.VoteAPI;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.Configs;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
+import io.github.ph1lou.werewolfapi.enumlg.Timers;
 import io.github.ph1lou.werewolfapi.enumlg.VoteStatus;
 import io.github.ph1lou.werewolfapi.events.SeeVoteEvent;
 import io.github.ph1lou.werewolfapi.events.VoteEndEvent;
@@ -22,13 +25,13 @@ import java.util.*;
 public class Vote implements Listener, VoteAPI {
 	
 	
-	private final GameManager game;
+	private final WereWolfAPI game;
 	private final List<UUID> tempPlayer = new ArrayList<>();
 	private final Map<UUID,Integer> votes = new HashMap<>();
 	private final Map<UUID,UUID> voters = new HashMap<>();
 	private VoteStatus currentStatus = VoteStatus.NOT_BEGIN;
 
-	public Vote(GameManager game) {
+	public Vote(WereWolfAPI game) {
 		this.game=game;
 	}
 
@@ -40,11 +43,11 @@ public class Vote implements Listener, VoteAPI {
 
         if (voter == null) return;
 
-        if (!plg.isState(State.ALIVE)) {
+        if (!plg.isState(StatePlayer.ALIVE)) {
             voter.sendMessage(game.translate("werewolf.vote.death"));
-        } else if (game.getConfig().getTimerValues().get("werewolf.menu.timers.vote_begin") > 0) {
+        } else if (game.getConfig().getTimerValues().get(Timers.VOTE_BEGIN.getKey()) > 0) {
             voter.sendMessage(game.translate("werewolf.vote.vote_not_yet_activated"));
-        } else if (!game.getConfig().getConfigValues().get("werewolf.menu.global.vote")) {
+        } else if (!game.getConfig().getConfigValues().get(Configs.VOTE.getKey())) {
             voter.sendMessage(game.translate("werewolf.vote.vote_disable"));
         } else if (!currentStatus.equals(VoteStatus.IN_PROGRESS)) {
             voter.sendMessage(game.translate("werewolf.vote.not_vote_time"));
@@ -52,7 +55,7 @@ public class Vote implements Listener, VoteAPI {
             voter.sendMessage(game.translate("werewolf.vote.already_voted"));
         } else if (!game.getPlayersWW().containsKey(vote)) {
             voter.sendMessage(game.translate("werewolf.check.player_not_found"));
-        } else if (game.getPlayersWW().get(vote).isState(State.DEATH)) {
+        } else if (game.getPlayersWW().get(vote).isState(StatePlayer.DEATH)) {
             voter.sendMessage(game.translate("werewolf.check.player_not_found"));
 		}
 		else if (tempPlayer.contains(vote)){
@@ -147,7 +150,7 @@ public class Vote implements Listener, VoteAPI {
             PlayerWW plg = game.getPlayersWW().get(playerVoteUUID);
             Player player = Bukkit.getPlayer(playerVoteUUID);
 
-            if (plg.isState(State.ALIVE)) {
+            if (plg.isState(StatePlayer.ALIVE)) {
 
                 tempPlayer.add(playerVoteUUID);
                 if (player != null) {

@@ -17,7 +17,7 @@ public class CommandChange implements Commands {
     @Override
     public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
+        GameManager game = (GameManager) main.getWereWolfAPI();
 
         player.sendMessage(game.translate("werewolf.commands.admin.change.in_progress"));
         if (game.getMapManager().getWft() != null) {

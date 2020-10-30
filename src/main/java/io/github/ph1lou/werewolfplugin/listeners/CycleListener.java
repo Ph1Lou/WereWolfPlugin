@@ -3,10 +3,7 @@ package io.github.ph1lou.werewolfplugin.listeners;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.RoleRegister;
 import io.github.ph1lou.werewolfapi.ScoreAPI;
-import io.github.ph1lou.werewolfapi.enumlg.Day;
-import io.github.ph1lou.werewolfapi.enumlg.Sounds;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
-import io.github.ph1lou.werewolfapi.enumlg.VoteStatus;
+import io.github.ph1lou.werewolfapi.enumlg.*;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
@@ -30,9 +27,9 @@ public class CycleListener implements Listener {
     private final Main main;
     private final GameManager game;
 
-    public CycleListener(Main main, GameManager game) {
+    public CycleListener(Main main) {
         this.main = main;
-        this.game = game;
+        this.game = (GameManager) main.getWereWolfAPI();
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -40,49 +37,49 @@ public class CycleListener implements Listener {
 
         game.setDay(Day.DAY);
 
-        if (game.isState(StateLG.END)) return;
+        if (game.isState(StateGame.END)) return;
         //23000
         game.getMapManager().getWorld().setTime(23500);
 
-        long duration = game.getConfig().getTimerValues().get("werewolf.menu.timers.vote_duration");
+        long duration = game.getConfig().getTimerValues().get(Timers.VOTE_DURATION.getKey());
         Bukkit.broadcastMessage(game.translate("werewolf.announcement.day", event.getNumber()));
         groupSizeChange();
 
-        if (game.getConfig().getConfigValues().get("werewolf.menu.global.vote") && game.getScore().getPlayerSize() < game.getConfig().getPlayerRequiredVoteEnd()) {
-            game.getConfig().getConfigValues().put("werewolf.menu.global.vote", false);
+        if (game.getConfig().getConfigValues().get(Configs.VOTE.getKey()) && game.getScore().getPlayerSize() < game.getConfig().getPlayerRequiredVoteEnd()) {
+            game.getConfig().getConfigValues().put(Configs.VOTE.getKey(), false);
             Bukkit.broadcastMessage(game.translate("werewolf.vote.vote_deactivate"));
             game.getVote().setStatus(VoteStatus.ENDED);
         }
 
-        if(2*game.getConfig().getTimerValues().get("werewolf.menu.timers.day_duration") - duration-game.getConfig().getTimerValues().get("werewolf.menu.timers.citizen_duration")>0){
+        if(2*game.getConfig().getTimerValues().get(Timers.DAY_DURATION.getKey()) - duration-game.getConfig().getTimerValues().get(Timers.CITIZEN_DURATION.getKey())>0){
 
-            if (game.getConfig().getConfigValues().get("werewolf.menu.global.vote") && game.getConfig().getTimerValues().get("werewolf.menu.timers.vote_begin") < 0) {
+            if (game.getConfig().getConfigValues().get(Configs.VOTE.getKey()) && game.getConfig().getTimerValues().get(Timers.VOTE_BEGIN.getKey()) < 0) {
                 Bukkit.broadcastMessage(game.translate("werewolf.vote.vote_time", game.getScore().conversion((int) duration)));
                 game.getVote().setStatus(VoteStatus.IN_PROGRESS);
                 Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
-                    if(!game.isState(StateLG.END)){
+                    if(!game.isState(StateGame.END)){
                         Bukkit.getPluginManager().callEvent(new VoteEndEvent());
                     }
 
                 },duration*20);
             }
         }
-        long duration2 = game.getConfig().getTimerValues().get("werewolf.menu.timers.power_duration");
+        long duration2 = game.getConfig().getTimerValues().get(Timers.POWER_DURATION.getKey());
 
-        if (2*game.getConfig().getTimerValues().get("werewolf.menu.timers.day_duration")-duration2>0) {
+        if (2*game.getConfig().getTimerValues().get(Timers.DAY_DURATION.getKey())-duration2>0) {
             Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
 
-                if(!game.isState(StateLG.END)){
+                if(!game.isState(StateGame.END)){
                     Bukkit.getPluginManager().callEvent(new SelectionEndEvent());
                 }
             },duration2*20);
 
         }
 
-        long duration3 = game.getConfig().getTimerValues().get("werewolf.menu.timers.day_duration");
+        long duration3 = game.getConfig().getTimerValues().get(Timers.DAY_DURATION.getKey());
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
-            if(!game.isState(StateLG.END)){
+            if(!game.isState(StateGame.END)){
                 Bukkit.getPluginManager().callEvent(new NightEvent( event.getNumber()));
             }
 
@@ -94,10 +91,10 @@ public class CycleListener implements Listener {
     public void onNight(NightEvent event) {
 
 
-        long duration = game.getConfig().getTimerValues().get("werewolf.menu.timers.day_duration") - 30;
+        long duration = game.getConfig().getTimerValues().get(Timers.DAY_DURATION.getKey()) - 30;
         game.setDay(Day.NIGHT);
 
-        if (game.isState(StateLG.END)) return;
+        if (game.isState(StateGame.END)) return;
 
         game.getMapManager().getWorld().setTime(12000);
 
@@ -106,7 +103,7 @@ public class CycleListener implements Listener {
 
         if (duration > 0) {
             Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
-                if (!game.isState(StateLG.END)) {
+                if (!game.isState(StateGame.END)) {
                     Bukkit.getPluginManager().callEvent(new DayWillComeEvent());
                 }
 
@@ -114,7 +111,7 @@ public class CycleListener implements Listener {
         }
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
-            if(!game.isState(StateLG.END)){
+            if(!game.isState(StateGame.END)){
                 Bukkit.getPluginManager().callEvent(new DayEvent(event.getNumber()+1));
             }
 
@@ -124,9 +121,9 @@ public class CycleListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onVoteEnd(VoteEndEvent event) {
 
-        long duration = game.getConfig().getTimerValues().get("werewolf.menu.timers.citizen_duration");
+        long duration = game.getConfig().getTimerValues().get(Timers.CITIZEN_DURATION.getKey());
         Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
-            if (!game.isState(StateLG.END)) {
+            if (!game.isState(StateGame.END)) {
                 Bukkit.getPluginManager().callEvent(new VoteResultEvent());
             }
 
@@ -175,16 +172,16 @@ public class CycleListener implements Listener {
     @EventHandler
     public void onTrollSV(TrollEvent event) {
 
-        game.setState(StateLG.GAME);
-        game.getConfig().getConfigValues().put("werewolf.menu.global.chat", false);
+        game.setState(StateGame.GAME);
+        game.getConfig().getConfigValues().put(Configs.CHAT.getKey(), false);
 
-        for (RoleRegister roleRegister : main.getRegisterRoles()) {
+        for (RoleRegister roleRegister : main.getRegisterManager().getRolesRegister()) {
 
             if (roleRegister.getKey().equals(game.getConfig().getTrollKey())) {
 
                 for (PlayerWW playerWW : game.getPlayersWW().values()) {
                     try {
-                        Roles role = (Roles) roleRegister.getConstructors().newInstance(main, game, playerWW.getRole().getPlayerUUID());
+                        Roles role = (Roles) roleRegister.getConstructors().newInstance(main, game, playerWW.getRole().getPlayerUUID(),roleRegister.getKey());
                         Bukkit.getPluginManager().registerEvents((Listener) role, main);
                         playerWW.setRole(role);
 
@@ -204,7 +201,7 @@ public class CycleListener implements Listener {
         }
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
-            if (!game.isState(StateLG.END)) {
+            if (!game.isState(StateGame.END)) {
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     if (game.getConfig().isTrollSV() && game.getPlayersWW().containsKey(p.getUniqueId())) {
                         Sounds.PORTAL_TRIGGER.play(p);
@@ -229,12 +226,12 @@ public class CycleListener implements Listener {
     @EventHandler
     public void onRepartition(RepartitionEvent event) {
 
-        game.setState(StateLG.GAME);
+        game.setState(StateGame.GAME);
 
         List<UUID> playersUUID = new ArrayList<>(game.getPlayersWW().keySet());
         List<RoleRegister> config = new ArrayList<>();
-        game.getConfig().getConfigValues().put("werewolf.menu.global.chat", false);
-        game.getConfig().getRoleCount().put("werewolf.role.villager.display", game.getConfig().getRoleCount().get("werewolf.role.villager.display") + playersUUID.size() - game.getScore().getRole());
+        game.getConfig().getConfigValues().put(Configs.CHAT.getKey(), false);
+        game.getConfig().getRoleCount().put(io.github.ph1lou.werewolfapi.enumlg.Roles.VILLAGER.getKey(), game.getConfig().getRoleCount().get(io.github.ph1lou.werewolfapi.enumlg.Roles.VILLAGER.getKey()) + playersUUID.size() - game.getScore().getRole());
 
         for (RoleRegister roleRegister : game.getRolesRegister()) {
             for (int i = 0; i < game.getConfig().getRoleCount().get(roleRegister.getKey()); i++) {
@@ -249,7 +246,7 @@ public class CycleListener implements Listener {
             PlayerWW plg = game.getPlayersWW().get(playerUUID);
 
             try {
-                Roles role = (Roles) config.get(0).getConstructors().newInstance(game.getMain(), game, playerUUID);
+                Roles role = (Roles) config.get(0).getConstructors().newInstance(game.getMain(), game, playerUUID,config.get(0).getKey());
                 Bukkit.getPluginManager().registerEvents((Listener) role, game.getMain());
                 plg.setRole(role);
 

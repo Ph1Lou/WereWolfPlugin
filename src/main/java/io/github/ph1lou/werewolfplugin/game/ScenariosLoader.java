@@ -3,6 +3,8 @@ package io.github.ph1lou.werewolfplugin.game;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.ScenarioRegister;
 import io.github.ph1lou.werewolfapi.Scenarios;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.Configs;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.listeners.*;
 import org.bukkit.Bukkit;
@@ -14,26 +16,28 @@ import org.bukkit.plugin.PluginManager;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class ScenariosLoader {
 
-    private final GameManager game;
     private final List<Scenarios> scenariosRegister = new ArrayList<>();
     private final List<Listener> listeners = new ArrayList<>();
+    private final Main main;
 
-    public ScenariosLoader(GameManager game) {
-        this.game = game;
+    public ScenariosLoader(Main main) {
+        this.main = main;
     }
 
     public void init() {
-        Main main = game.getMain();
         PluginManager pm = Bukkit.getPluginManager();
-        listeners.add(new PlayerListener(main, game));
-        listeners.add(new SmallFeaturesListener(main, game));
+        GameManager game = (GameManager) main.getWereWolfAPI();
+        listeners.add(new PlayerListener(main));
+        listeners.add(new SmallFeaturesListener(main));
         listeners.add(new EnchantmentListener(game));
-        listeners.add(new ChatListener(main, game));
+        listeners.add(new ChatListener(game));
         listeners.add(new PatchPotions(game));
-        listeners.add(new CycleListener(main, game));
+        listeners.add(new CycleListener(main));
         listeners.add((Listener) game.getScore());
         listeners.add(game.getEvents());
         listeners.add((Listener) game.getVote());
@@ -41,7 +45,7 @@ public class ScenariosLoader {
             pm.registerEvents(listener, main);
         }
 
-        for (ScenarioRegister scenarioRegister : main.getRegisterScenarios()) {
+        for (ScenarioRegister scenarioRegister : main.getRegisterManager().getScenariosRegister()) {
             try {
                 scenariosRegister.add((Scenarios) scenarioRegister.getConstructors().newInstance(main, game, scenarioRegister.getKey()));
             } catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
@@ -61,7 +65,7 @@ public class ScenariosLoader {
                 HandlerList.unregisterAll(scenario);
             }
         }
-        for (PlayerWW plg : game.getPlayersWW().values()) {
+        for (PlayerWW plg : main.getWereWolfAPI().getPlayersWW().values()) {
             HandlerList.unregisterAll((Listener) plg.getRole());
         }
     }
@@ -74,12 +78,15 @@ public class ScenariosLoader {
 
     public void updateCompass() {
 
+        WereWolfAPI game = main.getWereWolfAPI();
+        Map<UUID,PlayerWW> playerWWs = game.getPlayersWW();
+
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (game.getPlayersWW().containsKey(player.getUniqueId())) {
-                if (game.getConfig().getConfigValues().get("werewolf.menu.global.compass_middle")) {
+            if (playerWWs.containsKey(player.getUniqueId())) {
+                if (game.getConfig().getConfigValues().get(Configs.COMPASS_MIDDLE.getKey())) {
                     player.setCompassTarget(player.getWorld().getSpawnLocation());
                 } else {
-                    player.setCompassTarget(game.getPlayersWW().get(player.getUniqueId()).getSpawn());
+                    player.setCompassTarget(playerWWs.get(player.getUniqueId()).getSpawn());
                 }
             }
         }

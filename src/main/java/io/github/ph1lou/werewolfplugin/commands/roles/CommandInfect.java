@@ -2,15 +2,16 @@ package io.github.ph1lou.werewolfplugin.commands.roles;
 
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.Camp;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.Configs;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.InfectionEvent;
 import io.github.ph1lou.werewolfapi.events.NewWereWolfEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -29,7 +30,7 @@ public class CommandInfect implements Commands {
     public void execute(Player player, String[] args) {
 
 
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
         PlayerWW plg = game.getPlayersWW().get(uuid);
         Roles infect = plg.getRole();
@@ -50,7 +51,7 @@ public class CommandInfect implements Commands {
         }
         UUID argUUID = UUID.fromString(args[0]);
 
-        if (!game.getConfig().getConfigValues().get("werewolf.menu.global.auto_rez_infect") && argUUID.equals(uuid)) {
+        if (!game.getConfig().getConfigValues().get(Configs.AUTO_REZ_INFECT.getKey()) && argUUID.equals(uuid)) {
             player.sendMessage(game.translate("werewolf.check.not_yourself"));
             return;
         }
@@ -61,7 +62,7 @@ public class CommandInfect implements Commands {
         }
         PlayerWW plg1 = game.getPlayersWW().get(argUUID);
 
-        if (!plg1.isState(State.JUDGEMENT)) {
+        if (!plg1.isState(StatePlayer.JUDGEMENT)) {
             player.sendMessage(game.translate("werewolf.check.not_in_judgement"));
             return;
         }

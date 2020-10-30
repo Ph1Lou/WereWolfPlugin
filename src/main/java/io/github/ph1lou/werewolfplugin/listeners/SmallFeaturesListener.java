@@ -1,10 +1,10 @@
 package io.github.ph1lou.werewolfplugin.listeners;
 
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.events.GoldenAppleParticleEvent;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -28,11 +28,11 @@ import java.util.List;
 public class SmallFeaturesListener implements Listener {
 
     private final Main main;
-    private final GameManager game;
+    private final WereWolfAPI game;
 
-    public SmallFeaturesListener(Main main, GameManager game) {
+    public SmallFeaturesListener(Main main) {
         this.main = main;
-        this.game = game;
+        this.game = main.getWereWolfAPI();
     }
 
     @EventHandler

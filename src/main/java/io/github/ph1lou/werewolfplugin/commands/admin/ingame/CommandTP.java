@@ -1,8 +1,8 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -18,7 +18,7 @@ public class CommandTP implements Commands {
     @Override
     public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
 
         Player playerArg1 = Bukkit.getPlayer(args[0]);
 
@@ -30,7 +30,7 @@ public class CommandTP implements Commands {
             }
 
             player.teleport(playerArg1);
-            Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.commands.admin.teleportation", player.getName(), playerArg1.getName()));
+            Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.commands.admin.teleportation.send", player.getName(), playerArg1.getName()));
 
             return;
         }
@@ -43,7 +43,7 @@ public class CommandTP implements Commands {
         }
 
         playerArg1.teleport(playerArg2);
-        Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.commands.admin.teleportation", playerArg1.getName(), playerArg2.getName()));
+        Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.commands.admin.teleportation.send", playerArg1.getName(), playerArg2.getName()));
 
     }
 }

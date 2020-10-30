@@ -3,7 +3,8 @@ package io.github.ph1lou.werewolfplugin.listeners.scenarioslisteners;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.Scenarios;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.enumlg.StateGame;
+import io.github.ph1lou.werewolfapi.enumlg.Timers;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -28,7 +29,7 @@ public class DiamondLimit extends Scenarios {
     @EventHandler
     private void onBlockBreak(BlockBreakEvent event) {
 
-        if (game.isState(StateLG.LOBBY)) return;
+        if (game.isState(StateGame.LOBBY)) return;
 
         String playerName = event.getPlayer().getName();
         Block block = event.getBlock();
@@ -37,7 +38,7 @@ public class DiamondLimit extends Scenarios {
 
         final Location loc = new Location(block.getWorld(), block.getLocation().getBlockX() + 0.5, block.getLocation().getBlockY() + 0.5, block.getLocation().getBlockZ() + 0.5);
 
-        if (game.getConfig().getTimerValues().get("werewolf.menu.timers.digging_end") < 0) {
+        if (game.getConfig().getTimerValues().get(Timers.DIGGING.getKey()) < 0) {
             block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop());
             block.setType(Material.AIR);
             return;

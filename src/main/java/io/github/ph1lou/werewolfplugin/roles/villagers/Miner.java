@@ -13,8 +13,8 @@ import java.util.UUID;
 
 public class Miner extends RolesVillage {
 
-    public Miner(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public Miner(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main,game,uuid, key);
     }
 
 
@@ -23,10 +23,6 @@ public class Miner extends RolesVillage {
         return game.translate("werewolf.role.miner.description");
     }
 
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.miner.display";
-    }
 
     @Override
     public void recoverPotionEffect(@NotNull Player player) {

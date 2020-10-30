@@ -2,7 +2,8 @@ package io.github.ph1lou.werewolfplugin.game;
 
 
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Villager;
@@ -18,7 +19,7 @@ import java.util.UUID;
 
 public class PlayerLG implements PlayerWW {
 
-    private State state = State.ALIVE;
+    private StatePlayer state = StatePlayer.ALIVE;
     private Roles role;
     private Boolean canBeInfect = false;
     private final List<UUID> lovers = new ArrayList<>();
@@ -38,12 +39,11 @@ public class PlayerLG implements PlayerWW {
 	private String name;
 
 
-	public PlayerLG (Main main, GameManager game, Player player) {
+	public PlayerLG (Main main, WereWolfAPI game, Player player) {
         this.spawn = player.getWorld().getSpawnLocation();
-        this.role = new Villager(main, game, player.getUniqueId());
+        this.role = new Villager(main, game, player.getUniqueId(), io.github.ph1lou.werewolfapi.enumlg.Roles.VILLAGER.getKey());
         this.name = player.getName();
     }
-
 
 
 	@Override
@@ -62,12 +62,12 @@ public class PlayerLG implements PlayerWW {
 	}
 
 	@Override
-	public void setState(State state) {
+	public void setState(StatePlayer state) {
 		this.state=state;
 	}
 
 	@Override
-	public boolean isState(State state) {
+	public boolean isState(StatePlayer state) {
 		return(this.state==state);
 	}
 
@@ -259,7 +259,7 @@ public class PlayerLG implements PlayerWW {
     }
 
     @Override
-    public State getState() {
+    public StatePlayer getState() {
         return state;
     }
 }

@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.game;
 
 import io.github.ph1lou.werewolfapi.MapManagerAPI;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
+import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.worldloader.WorldFillTask;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
@@ -16,16 +17,19 @@ import java.util.UUID;
 
 public class MapManager implements MapManagerAPI {
 
-    private final GameManager game;
+    private final Main main;
     private World world;
     private WorldFillTask wft = null;
 
-    public MapManager(GameManager game) {
-        this.game = game;
+    public MapManager(Main main) {
+        this.main = main;
     }
 
 
+    @Override
     public void generateMap(CommandSender sender, int mapRadius) {
+
+        GameManager game = (GameManager) main.getWereWolfAPI();
 
         if (getWorld() == null) {
             createMap();
@@ -38,6 +42,7 @@ public class MapManager implements MapManagerAPI {
         } else sender.sendMessage(game.translate("werewolf.commands.admin.generation.already_start"));
     }
 
+    @Override
     public void createMap() {
         WorldCreator wc = new WorldCreator("werewolf");
         wc.environment(World.Environment.NORMAL);
@@ -82,7 +87,7 @@ public class MapManager implements MapManagerAPI {
                 e.printStackTrace();
             }
 
-            if (game.getMain().getConfig().getBoolean("autoRoofedMiddle")) {
+            if (main.getConfig().getBoolean("autoRoofedMiddle")) {
                 Location biome = VersionUtils.getVersionUtils().findBiome(world);
                 x = biome.getBlockX();
                 z = biome.getBlockZ();
@@ -134,7 +139,7 @@ public class MapManager implements MapManagerAPI {
             player.teleport(new Location(world, x, world.getHighestBlockYAt(x, z) + 100, z));
         }
     }
-
+    @Override
     public World getWorld() {
         return this.world;
     }

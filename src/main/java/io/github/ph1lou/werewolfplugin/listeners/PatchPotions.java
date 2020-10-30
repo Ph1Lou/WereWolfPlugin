@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.listeners;
 
-import io.github.ph1lou.werewolfplugin.game.GameManager;
+
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -9,9 +10,9 @@ import org.bukkit.potion.PotionEffectType;
 
 public class PatchPotions implements Listener {
 
-    private final GameManager game;
+    private final WereWolfAPI game;
 
-    public PatchPotions(GameManager game) {
+    public PatchPotions(WereWolfAPI game) {
         this.game = game;
     }
 

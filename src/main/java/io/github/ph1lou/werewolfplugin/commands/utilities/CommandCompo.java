@@ -2,8 +2,9 @@ package io.github.ph1lou.werewolfplugin.commands.utilities;
 
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.RoleRegister;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.Configs;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.entity.Player;
 
 public class CommandCompo implements Commands {
@@ -18,9 +19,9 @@ public class CommandCompo implements Commands {
     @Override
     public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
 
-        if (game.getConfig().getConfigValues().get("werewolf.menu.global.hide_composition")) {
+        if (game.getConfig().getConfigValues().get(Configs.HIDE_COMPOSITION.getKey())) {
 
             player.sendMessage(game.translate("werewolf.commands.compo.composition_hide"));
         } else {
@@ -35,10 +36,10 @@ public class CommandCompo implements Commands {
             if (game.getConfig().getCursedLoverSize() > 0) {
                 sb.append("§3").append(game.getConfig().getCursedLoverSize()).append("§r ").append(game.translate("werewolf.role.cursed_lover.display")).append("\n");
             }
-            for (RoleRegister roleRegister : game.getRolesRegister()) {
+            for (RoleRegister roleRegister : main.getRegisterManager().getRolesRegister()) {
                 String key = roleRegister.getKey();
                 if (game.getConfig().getRoleCount().get(key) > 0) {
-                    sb.append("§3").append(game.getConfig().getRoleCount().get(key)).append("§r ").append(roleRegister.getName()).append("\n");
+                    sb.append("§3").append(game.getConfig().getRoleCount().get(key)).append("§r ").append(game.translate(roleRegister.getKey())).append("\n");
                 }
             }
             player.sendMessage(sb.toString());

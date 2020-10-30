@@ -1,8 +1,6 @@
 package io.github.ph1lou.werewolfplugin.save;
 
-import io.github.ph1lou.werewolfapi.*;
-import io.github.ph1lou.werewolfplugin.Main;
-import org.bukkit.plugin.java.JavaPlugin;
+import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,77 +45,6 @@ public class Config implements ConfigWereWolfAPI {
     private boolean whiteList = false;
     private int playerMax = 30;
 
-
-    @Override
-    public void getConfig(WereWolfAPI api, String configName) {
-
-        Config this_load = this;
-
-        Main main = JavaPlugin.getPlugin(Main.class);
-
-        java.io.File file = new java.io.File(main.getDataFolder() + java.io.File.separator + "configs" + java.io.File.separator, configName + ".json");
-
-        if (file.exists()) {
-            this_load = Serializer.deserialize(FileUtils_.loadContent(file));
-            this.setDiamondLimit(this_load.getDiamondLimit());
-            this.setStrengthRate(this_load.getStrengthRate());
-            this.setPlayerRequiredVoteEnd(this_load.getPlayerRequiredVoteEnd());
-            this.setAppleRate(this_load.getAppleRate());
-            this.setFlintRate(this_load.getFlintRate());
-            this.setPearlRate(this_load.getPearlRate());
-            this.setXpBoost(this_load.getXpBoost());
-            this.setLimitPowerBow(this_load.getLimitPowerBow());
-            this.setLimitSharpnessIron(this_load.getLimitSharpnessIron());
-            this.setLimitSharpnessDiamond(this_load.getLimitSharpnessDiamond());
-            this.setLimitProtectionDiamond(this_load.getLimitProtectionDiamond());
-            this.setLimitProtectionIron(this_load.getLimitProtectionIron());
-            this.setLimitKnockBack(this_load.getLimitKnockBack());
-            this.setLimitPunch(this_load.getLimitPunch());
-            this.setUseOfFlair(this_load.getUseOfFlair());
-            this.setGoldenAppleParticles(this_load.getGoldenAppleParticles());
-            this.setDistanceBearTrainer(this_load.getDistanceBearTrainer());
-            this.setDistanceFox(this_load.getDistanceFox());
-            this.setResistanceRate(this_load.getResistanceRate());
-            this.setTrollSV(this_load.isTrollSV());
-            this.setDistanceSuccubus(this_load.getDistanceSuccubus());
-            this.setBorderMax(this_load.getBorderMax());
-            this.setBorderMin(this_load.getBorderMin());
-            this.setDistanceAmnesiacLovers(this_load.getDistanceAmnesiacLovers());
-            this.setLoverSize(this_load.getLoverSize());
-            this.setAmnesiacLoverSize(this_load.getAmnesiacLoverSize());
-            this.setCursedLoverSize(this_load.getCursedLoverSize());
-            this.setLimitDepthStrider(this_load.getLimitDepthStrider());
-            this.setTrollKey(this_load.getTrollKey());
-            this.setSpectatorMode(this_load.getSpectatorMode());
-            this.setWhiteList(this_load.isWhiteList());
-            this.setPlayerMax(this_load.getPlayerMax());
-        }
-
-        api.getScore().setRole(0);
-        main.getCurrentGame().getModerationManager().checkQueue();
-
-        for (RoleRegister roleRegister:main.getRegisterRoles()) {
-            this.roleCount.put(roleRegister.getKey(), this_load.roleCount.getOrDefault(roleRegister.getKey(), 0));
-            api.getScore().setRole(api.getScore().getRole() + this.roleCount.get(roleRegister.getKey()));
-        }
-
-        for(ConfigRegister configRegister:main.getRegisterConfigs()) {
-            this.configValues.put(configRegister.getKey(), this_load.configValues.getOrDefault(configRegister.getKey(), configRegister.getDefaultValue()));
-        }
-
-        for(TimerRegister TimerRegister:main.getRegisterTimers()) {
-            this.timerValues.put(TimerRegister.getKey(), this_load.timerValues.getOrDefault(TimerRegister.getKey(), TimerRegister.getDefaultValue()));
-        }
-
-
-        for(ScenarioRegister scenarioRegister:main.getRegisterScenarios()) {
-            this.scenarioValues.put(scenarioRegister.getKey(), this_load.scenarioValues.getOrDefault(scenarioRegister.getKey(), scenarioRegister.getDefaultValue()));
-        }
-
-        FileUtils_.save(file, Serializer.serialize(this));
-
-
-    }
 
     @Override
     public int getLimitDepthStrider() {

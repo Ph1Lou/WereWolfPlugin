@@ -4,7 +4,7 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.Day;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
 import io.github.ph1lou.werewolfapi.rolesattributs.Transformed;
@@ -21,8 +21,8 @@ import java.util.UUID;
 public class AmnesicWerewolf extends RolesNeutral implements Transformed {
 
 
-    public AmnesicWerewolf(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public AmnesicWerewolf(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main,game,uuid, key);
     }
 
     private Boolean transformed=false;
@@ -32,7 +32,7 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -49,7 +49,7 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
             return;
         }
         if (player == null) {
@@ -107,10 +107,6 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
         return game.translate("werewolf.role.amnesiac_werewolf.description");
     }
 
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.amnesiac_werewolf.display";
-    }
 
     @Override
     public boolean getTransformed() {

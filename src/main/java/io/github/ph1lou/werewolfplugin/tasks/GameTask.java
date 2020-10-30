@@ -1,7 +1,8 @@
 package io.github.ph1lou.werewolfplugin.tasks;
 
 
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.enumlg.StateGame;
+import io.github.ph1lou.werewolfapi.enumlg.Timers;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
@@ -24,14 +25,14 @@ public class GameTask extends BukkitRunnable {
 	@Override
 	public void run() {
 
-		if (game.isState(StateLG.END)) {
+		if (game.isState(StateGame.END)) {
 			cancel();
 			return;
 		}
 
 		World world = game.getMapManager().getWorld();
 		counter++;
-		world.setTime((long) (world.getTime() + 5 * (600f / game.getConfig().getTimerValues().get("werewolf.menu.timers.day_duration") - 1)));
+		world.setTime((long) (world.getTime() + 5 * (600f / game.getConfig().getTimerValues().get(Timers.DAY_DURATION.getKey()) - 1)));
 
 
 		for (Player p : Bukkit.getOnlinePlayers()) {
@@ -46,12 +47,12 @@ public class GameTask extends BukkitRunnable {
 		game.getLoversManage().detectionAmnesiacLover();
 		game.getScore().addTimer();
 
-		if (game.getConfig().getTimerValues().get("werewolf.menu.timers.invulnerability") == 0) {
+		if (game.getConfig().getTimerValues().get(Timers.INVULNERABILITY.getKey()) == 0) {
 			pm.callEvent(new InvulnerabilityEvent());
 		}
-		game.getConfig().getTimerValues().put("werewolf.menu.timers.invulnerability", game.getConfig().getTimerValues().get("werewolf.menu.timers.invulnerability") - 1);
+		game.getConfig().getTimerValues().put(Timers.INVULNERABILITY.getKey(), game.getConfig().getTimerValues().get(Timers.INVULNERABILITY.getKey()) - 1);
 
-		if (game.getConfig().getTimerValues().get("werewolf.menu.timers.role_duration") == 0) {
+		if (game.getConfig().getTimerValues().get(Timers.ROLE_DURATION.getKey()) == 0) {
 
 			if (game.getConfig().isTrollSV()) {
 				pm.callEvent(new TrollEvent());
@@ -59,62 +60,62 @@ public class GameTask extends BukkitRunnable {
 				pm.callEvent(new RepartitionEvent());
 			}
 		}
-		game.getConfig().getTimerValues().put("werewolf.menu.timers.role_duration", game.getConfig().getTimerValues().get("werewolf.menu.timers.role_duration") - 1);
+		game.getConfig().getTimerValues().put(Timers.ROLE_DURATION.getKey(), game.getConfig().getTimerValues().get(Timers.ROLE_DURATION.getKey()) - 1);
 
-		if (game.getConfig().getTimerValues().get("werewolf.menu.timers.pvp") == 0) {
+		if (game.getConfig().getTimerValues().get(Timers.PVP.getKey()) == 0) {
 			pm.callEvent(new PVPEvent());
 		}
-		game.getConfig().getTimerValues().put("werewolf.menu.timers.pvp", game.getConfig().getTimerValues().get("werewolf.menu.timers.pvp") - 1);
+		game.getConfig().getTimerValues().put(Timers.PVP.getKey(), game.getConfig().getTimerValues().get(Timers.PVP.getKey()) - 1);
 
-		if (game.getConfig().getTimerValues().get("werewolf.menu.timers.role_duration") < 0 && !game.getConfig().isTrollSV()) {
+		if (game.getConfig().getTimerValues().get(Timers.ROLE_DURATION.getKey()) < 0 && !game.getConfig().isTrollSV()) {
 
-			if (game.getConfig().getTimerValues().get("werewolf.menu.timers.model_duration") == 0) {
+			if (game.getConfig().getTimerValues().get(Timers.MODEL_DURATION.getKey()) == 0) {
 				pm.callEvent(new AutoModelEvent());
 			}
-			game.getConfig().getTimerValues().put("werewolf.menu.timers.model_duration", game.getConfig().getTimerValues().get("werewolf.menu.timers.model_duration") - 1);
+			game.getConfig().getTimerValues().put(Timers.MODEL_DURATION.getKey(), game.getConfig().getTimerValues().get(Timers.MODEL_DURATION.getKey()) - 1);
 
-			if (game.getConfig().getTimerValues().get("werewolf.menu.timers.lover_duration") == 0) {
+			if (game.getConfig().getTimerValues().get(Timers.LOVER_DURATION.getKey()) == 0) {
 				pm.callEvent(new LoversRepartitionEvent());
 
 			}
-			game.getConfig().getTimerValues().put("werewolf.menu.timers.lover_duration", game.getConfig().getTimerValues().get("werewolf.menu.timers.lover_duration") - 1);
+			game.getConfig().getTimerValues().put(Timers.LOVER_DURATION.getKey(), game.getConfig().getTimerValues().get(Timers.LOVER_DURATION.getKey()) - 1);
 
-			if (game.getConfig().getTimerValues().get("werewolf.menu.timers.angel_duration") == 0) {
+			if (game.getConfig().getTimerValues().get(Timers.ANGEL_DURATION.getKey()) == 0) {
 				pm.callEvent(new AutoAngelEvent());
 			}
-			game.getConfig().getTimerValues().put("werewolf.menu.timers.angel_duration", game.getConfig().getTimerValues().get("werewolf.menu.timers.angel_duration") - 1);
+			game.getConfig().getTimerValues().put(Timers.ANGEL_DURATION.getKey(), game.getConfig().getTimerValues().get(Timers.ANGEL_DURATION.getKey()) - 1);
 
-			if (game.getConfig().getTimerValues().get("werewolf.menu.timers.werewolf_list") == 0) {
+			if (game.getConfig().getTimerValues().get(Timers.WEREWOLF_LIST.getKey()) == 0) {
 				pm.callEvent(new WereWolfListEvent());
 
 			}
-			game.getConfig().getTimerValues().put("werewolf.menu.timers.werewolf_list", game.getConfig().getTimerValues().get("werewolf.menu.timers.werewolf_list") - 1);
+			game.getConfig().getTimerValues().put(Timers.WEREWOLF_LIST.getKey(), game.getConfig().getTimerValues().get(Timers.WEREWOLF_LIST.getKey()) - 1);
 		}
 
-		if (game.getConfig().getTimerValues().get("werewolf.menu.timers.border_begin") == 0) {
+		if (game.getConfig().getTimerValues().get(Timers.BORDER_BEGIN.getKey()) == 0) {
 
 			if (wb.getSize() != game.getConfig().getBorderMin()) {
 				pm.callEvent(new BorderStartEvent());
 			}
-		} else if (game.getConfig().getTimerValues().get("werewolf.menu.timers.border_begin") < 0) {
+		} else if (game.getConfig().getTimerValues().get(Timers.BORDER_BEGIN.getKey()) < 0) {
 
 			if (game.getConfig().getBorderMax() != game.getConfig().getBorderMin()) {
-				wb.setSize(game.getConfig().getBorderMin(), (long) Math.abs(wb.getSize() - game.getConfig().getBorderMin()) * game.getConfig().getTimerValues().get("werewolf.menu.timers.border_duration") / 100);
+				wb.setSize(game.getConfig().getBorderMin(), (long) Math.abs(wb.getSize() - game.getConfig().getBorderMin()) * game.getConfig().getTimerValues().get(Timers.BORDER_DURATION.getKey()) / 100);
 				game.getConfig().setBorderMax((int) (wb.getSize()));
 			}
 
 		}
 
-		game.getConfig().getTimerValues().put("werewolf.menu.timers.border_begin", game.getConfig().getTimerValues().get("werewolf.menu.timers.border_begin") - 1);
+		game.getConfig().getTimerValues().put(Timers.BORDER_BEGIN.getKey(), game.getConfig().getTimerValues().get(Timers.BORDER_BEGIN.getKey()) - 1);
 
-		if (game.getConfig().getTimerValues().get("werewolf.menu.timers.digging_end") == 0) {
+		if (game.getConfig().getTimerValues().get(Timers.DIGGING.getKey()) == 0) {
 			pm.callEvent(new DiggingEndEvent());
 
 		}
-		game.getConfig().getTimerValues().put("werewolf.menu.timers.digging_end", game.getConfig().getTimerValues().get("werewolf.menu.timers.digging_end") - 1);
+		game.getConfig().getTimerValues().put(Timers.DIGGING.getKey(), game.getConfig().getTimerValues().get(Timers.DIGGING.getKey()) - 1);
 
 
-		game.getConfig().getTimerValues().put("werewolf.menu.timers.vote_begin", game.getConfig().getTimerValues().get("werewolf.menu.timers.vote_begin") - 1);
+		game.getConfig().getTimerValues().put(Timers.VOTE_BEGIN.getKey(), game.getConfig().getTimerValues().get(Timers.VOTE_BEGIN.getKey()) - 1);
 
 	}
 

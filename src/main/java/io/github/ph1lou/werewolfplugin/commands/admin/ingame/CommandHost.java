@@ -1,11 +1,11 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
+import io.github.ph1lou.werewolfapi.enumlg.StateGame;
 import io.github.ph1lou.werewolfapi.events.HostEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
-import io.github.ph1lou.werewolfplugin.game.ModerationManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -23,8 +23,8 @@ public class CommandHost implements Commands {
     @Override
     public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
-        ModerationManager moderationManager = game.getModerationManager();
+        GameManager game = (GameManager) main.getWereWolfAPI();
+        ModerationManagerAPI moderationManager = game.getModerationManager();
         Player host = Bukkit.getPlayer(args[0]);
 
         if (host == null) {
@@ -38,13 +38,13 @@ public class CommandHost implements Commands {
             Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.host.remove", args[0]));
             moderationManager.getHosts().remove(uuid);
             if (moderationManager.getModerators().contains(uuid)) {
-                if (game.isState(StateLG.LOBBY) && game.getPlayersWW().containsKey(uuid)) {
+                if (game.isState(StateGame.LOBBY) && game.getPlayersWW().containsKey(uuid)) {
                     game.getScore().removePlayerSize();
                     game.getPlayersWW().remove(uuid);
                 }
             }
         } else {
-            if (game.isState(StateLG.LOBBY) && !game.getPlayersWW().containsKey(uuid)) {
+            if (game.isState(StateGame.LOBBY) && !game.getPlayersWW().containsKey(uuid)) {
                 game.finalJoin(host);
             }
             moderationManager.getHosts().add(uuid);

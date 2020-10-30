@@ -1,7 +1,10 @@
 package io.github.ph1lou.werewolfplugin.scoreboards;
 
+import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.Scenarios;
+import io.github.ph1lou.werewolfapi.enumlg.StateGame;
 import io.github.ph1lou.werewolfapi.events.AppearInWereWolfListEvent;
 import io.github.ph1lou.werewolfapi.events.RequestSeeWereWolfListEvent;
 import io.github.ph1lou.werewolfapi.events.UpdateModeratorNameTag;
@@ -9,10 +12,9 @@ import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTag;
 import io.github.ph1lou.werewolfapi.rolesattributs.InvisibleState;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
-import io.github.ph1lou.werewolfplugin.game.ModerationManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
@@ -21,12 +23,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class TabManager {
 
-    final GameManager game;
+    final WereWolfAPI game;
 
-    public TabManager(GameManager game) {
+    public TabManager(WereWolfAPI game) {
         this.game = game;
     }
 
@@ -52,7 +55,11 @@ public class TabManager {
             }
         }
 
-        updatePlayerScoreBoard(player, game.getBoards().keySet());
+        updatePlayerScoreBoard(player, Bukkit.getOnlinePlayers()
+                .stream()
+                .map(Entity::getUniqueId)
+                .collect(Collectors.toList())
+        );
 
         updatePlayer(player.getUniqueId(), Bukkit.getOnlinePlayers());
     }
@@ -84,7 +91,7 @@ public class TabManager {
 
     public void updatePlayer(UUID uuid, Collection<? extends Player> players) {
 
-        ModerationManager moderationManager = game.getModerationManager();
+        ModerationManagerAPI moderationManager = game.getModerationManager();
 
         StringBuilder sb = new StringBuilder();
         PlayerWW playerWW = game.getPlayerWW(uuid);
@@ -96,7 +103,7 @@ public class TabManager {
             return;
         }
 
-        if (game.getConfig().getScenarioValues().get("werewolf.menu.scenarios.no_name_tag")) {
+        if (game.getConfig().getScenarioValues().get(Scenarios.NO_NAME_TAG.getKey())) {
             visibility = false;
         }
         if (moderationManager.getHosts().contains(uuid)) {
@@ -104,7 +111,7 @@ public class TabManager {
         } else if (moderationManager.getModerators().contains(uuid)) {
             sb.append(game.translate("werewolf.commands.admin.moderator.tag"));
         } else if (moderationManager.getQueue().contains(uuid)) {
-            if (game.isState(StateLG.LOBBY)) {
+            if (game.isState(StateGame.LOBBY)) {
                 sb.append(game.translate("werewolf.menu.rank.tag"));
             }
         }
@@ -147,14 +154,16 @@ public class TabManager {
                 team.setSuffix(string1.substring(0, Math.min(16, string1.length())));
                 String string2 = sb.toString() + event2.getPrefix();
                 team.setPrefix(string2.substring(0, Math.min(16, string2.length())));
+                VersionUtils.getVersionUtils().setTeamNameTagVisibility(team, true);
+
             } else {
                 String string1 = event1.getSuffix();
                 team.setSuffix(string1.substring(0, Math.min(16, string1.length())));
                 String string2 = sb.toString();
                 team.setPrefix(string2.substring(0, Math.min(16, string2.length())));
-            }
+                VersionUtils.getVersionUtils().setTeamNameTagVisibility(team, event1.isVisibility());
 
-            VersionUtils.getVersionUtils().setTeamNameTagVisibility(team, event1.isVisibility());
+            }
         }
     }
 

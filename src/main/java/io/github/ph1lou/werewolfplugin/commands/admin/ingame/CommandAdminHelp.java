@@ -1,8 +1,8 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.entity.Player;
 
 public class CommandAdminHelp implements Commands {
@@ -17,8 +17,8 @@ public class CommandAdminHelp implements Commands {
     @Override
     public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
 
-        player.sendMessage(game.translate("werewolf.commands.admin.help"));
+        player.sendMessage(game.translate("werewolf.commands.admin.help.send"));
     }
 }

@@ -4,7 +4,8 @@ package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.Configs;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.InfectionEvent;
 import io.github.ph1lou.werewolfapi.events.SecondDeathEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
@@ -26,8 +27,8 @@ public class InfectFatherOfTheWolves extends RolesWereWolf implements AffectedPl
     private final List<UUID> affectedPlayer = new ArrayList<>();
     private boolean power = true;
 
-    public InfectFatherOfTheWolves(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public InfectFatherOfTheWolves(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main,game,uuid, key);
     }
 
     @Override
@@ -66,11 +67,6 @@ public class InfectFatherOfTheWolves extends RolesWereWolf implements AffectedPl
         return game.translate("werewolf.role.infect_father_of_the_wolves.description");
     }
 
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.infect_father_of_the_wolves.display";
-    }
-
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onSecondDeathEvent(SecondDeathEvent event) {
 
@@ -85,7 +81,7 @@ public class InfectFatherOfTheWolves extends RolesWereWolf implements AffectedPl
         if (game.getPlayersWW().containsKey(killerUUID) && game.getPlayersWW().get(killerUUID).getRole().isWereWolf()) {
 
             if (event.getUuid().equals(getPlayerUUID())) {
-                if (game.getConfig().getConfigValues().get("werewolf.menu.global.auto_rez_infect")) {
+                if (game.getConfig().getConfigValues().get(Configs.AUTO_REZ_INFECT.getKey())) {
                     InfectionEvent infectionEvent = new InfectionEvent(event.getUuid(), event.getUuid());
                     Bukkit.getPluginManager().callEvent(infectionEvent);
                     setPower(false);
@@ -103,7 +99,7 @@ public class InfectFatherOfTheWolves extends RolesWereWolf implements AffectedPl
             } else {
                 plg.setCanBeInfect(true);
 
-                if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE) ) return;
+                if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE) ) return;
 
                 if (player != null) {
                     TextComponent infect_msg = new TextComponent(game.translate("werewolf.role.infect_father_of_the_wolves.infection_message", plg.getName()));

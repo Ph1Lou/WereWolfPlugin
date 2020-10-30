@@ -2,12 +2,13 @@ package io.github.ph1lou.werewolfplugin.commands.roles;
 
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.StateGame;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
+import io.github.ph1lou.werewolfapi.enumlg.Timers;
 import io.github.ph1lou.werewolfapi.events.AppearInWereWolfListEvent;
 import io.github.ph1lou.werewolfapi.events.RequestSeeWereWolfListEvent;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -25,11 +26,11 @@ public class CommandWereWolf implements Commands {
     @Override
     public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
 
 
-        if (!game.isState(StateLG.GAME)) {
+        if (!game.isState(StateGame.GAME)) {
             player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
             return;
         }
@@ -43,7 +44,7 @@ public class CommandWereWolf implements Commands {
             return;
         }
 
-        if (game.getConfig().getTimerValues().get("werewolf.menu.timers.werewolf_list") > 0) {
+        if (game.getConfig().getTimerValues().get(Timers.WEREWOLF_LIST.getKey()) > 0) {
             player.sendMessage(game.translate("werewolf.role.werewolf.list_not_revealed"));
             return;
         }
@@ -56,7 +57,7 @@ public class CommandWereWolf implements Commands {
             AppearInWereWolfListEvent appearInWereWolfListEvent = new AppearInWereWolfListEvent(playerUUID);
             Bukkit.getPluginManager().callEvent(appearInWereWolfListEvent);
 
-            if (lg.isState(State.ALIVE) && appearInWereWolfListEvent.isAppear()) {
+            if (lg.isState(StatePlayer.ALIVE) && appearInWereWolfListEvent.isAppear()) {
                 list.append(lg.getName()).append(" ");
             }
         }

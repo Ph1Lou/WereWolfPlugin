@@ -4,9 +4,10 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.Configs;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
-import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.enumlg.StateGame;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
@@ -32,8 +33,8 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
 
     private final List<UUID> affectedPlayer = new ArrayList<>();
 
-    public Thief(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public Thief(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main,game,uuid, key);
     }
 
     private boolean power=true;
@@ -74,11 +75,6 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
     }
 
     @Override
-    public String getDisplay() {
-        return "werewolf.role.thief.display";
-    }
-
-    @Override
     public void recoverPotionEffect(Player player) {
         player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,Integer.MAX_VALUE,0,false,false));
         super.recoverPotionEffect(player);
@@ -113,12 +109,12 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
         event.setCancelled(true);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
-            if (!game.isState(StateLG.END)) {
-                if (game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE) && hasPower()) {
+            if (!game.isState(StateGame.END)) {
+                if (game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE) && hasPower()) {
                     thief_recover_role(getPlayerUUID(), uuid);
                 } else {
                     Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
-                        if (!game.isState(StateLG.END)) {
+                        if (!game.isState(StateGame.END)) {
                             Bukkit.getPluginManager().callEvent(new FirstDeathEvent(uuid));
                         }
 
@@ -156,11 +152,11 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
                 Bukkit.getPluginManager().callEvent(new NewWereWolfEvent(killerUUID));
             }
 
-            killer.sendMessage(game.translate("werewolf.role.thief.realized_theft", game.translate(role.getDisplay())));
+            killer.sendMessage(game.translate("werewolf.role.thief.realized_theft", game.translate(role.getKey())));
             killer.sendMessage(game.translate("werewolf.announcement.review_role"));
 
             killer.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-            Bukkit.getPluginManager().callEvent(new StealEvent(killerUUID, playerUUID, roleClone.getDisplay()));
+            Bukkit.getPluginManager().callEvent(new StealEvent(killerUUID, playerUUID, roleClone.getKey()));
 
 
             klg.getRole().recoverPotionEffect(killer);
@@ -168,7 +164,7 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
 
             if (klg.getCursedLovers() != null || klg.getAmnesiacLoverUUID() != null) {
                 Bukkit.getConsoleSender().sendMessage("[WereWolfPlugin] Thief in special lover");
-            } else if (!klg.getLovers().isEmpty() && !game.getConfig().getConfigValues().get("werewolf.menu.global.polygamy")) {
+            } else if (!klg.getLovers().isEmpty() && !game.getConfig().getConfigValues().get(Configs.POLYGAMY.getKey())) {
                 Bukkit.getConsoleSender().sendMessage("[WereWolfPlugin] Thief in lover & no polygamy");
             } else if (!klg.getLovers().isEmpty() || !plg.getLovers().isEmpty()) {
 
@@ -179,7 +175,7 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
                         PlayerWW llg = game.getPlayersWW().get(uuid1);
                         Player pc = Bukkit.getPlayer(uuid1);
 
-                        if (llg.isState(State.ALIVE)) {
+                        if (llg.isState(StatePlayer.ALIVE)) {
 
                             klg.addLover(uuid1);
                             llg.addLover(killerUUID);
@@ -199,7 +195,7 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
 
                     for (UUID uuid2 : game.getPlayersWW().keySet()) {
                         PlayerWW plc =game.getPlayersWW().get(uuid2);
-                        if (plc.getRole().isDisplay("werewolf.role.cupid.display")){
+                        if (plc.getRole().isKey("werewolf.role.cupid.display")){
                             AffectedPlayers cupid = (AffectedPlayers) plc.getRole();
                             if(cupid.getAffectedPlayers().contains(playerUUID)) {
                                 cupid.addAffectedPlayer(killerUUID);
@@ -217,7 +213,7 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
                 Player pc = Bukkit.getPlayer(uuid);
                 PlayerWW llg = game.getPlayersWW().get(uuid);
 
-                if(llg.isState(State.ALIVE)){
+                if(llg.isState(StatePlayer.ALIVE)){
 
                     klg.setAmnesiacLoverUUID(uuid);
                     llg.setAmnesiacLoverUUID(killerUUID);
@@ -247,7 +243,7 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
                 PlayerWW llg = game.getPlayersWW().get(uuid);
                 Player pc = Bukkit.getPlayer(uuid);
 
-                if(llg.isState(State.ALIVE)) {
+                if(llg.isState(StatePlayer.ALIVE)) {
 
                     klg.setCursedLover(uuid);
                     llg.setCursedLover(killerUUID);
@@ -310,7 +306,7 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
 
         if (!hasPower()) return;
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) return;
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) return;
 
         if (player == null) return;
 

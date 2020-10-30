@@ -4,7 +4,8 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.Configs;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.ThirdDeathEvent;
 import io.github.ph1lou.werewolfapi.events.WitchResurrectionEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
@@ -25,8 +26,8 @@ public class Witch extends RolesVillage implements AffectedPlayers, Power {
     private final List<UUID> affectedPlayer = new ArrayList<>();
     private boolean power = true;
 
-    public Witch(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public Witch(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main,game,uuid, key);
     }
 
     @Override
@@ -64,10 +65,6 @@ public class Witch extends RolesVillage implements AffectedPlayers, Power {
         return game.translate("werewolf.role.witch.description");
     }
 
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.witch.display";
-    }
 
     @EventHandler
     public void onThirdDeathEvent(ThirdDeathEvent event) {
@@ -80,7 +77,7 @@ public class Witch extends RolesVillage implements AffectedPlayers, Power {
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
         if (event.getUuid().equals(getPlayerUUID())) {
-            if (game.getConfig().getConfigValues().get("werewolf.menu.global.auto_rez_witch")) {
+            if (game.getConfig().getConfigValues().get(Configs.AUTO_REZ_WITCH.getKey())) {
                 WitchResurrectionEvent witchResurrectionEvent = new WitchResurrectionEvent(getPlayerUUID(), event.getUuid());
                 Bukkit.getPluginManager().callEvent(witchResurrectionEvent);
                 setPower(false);
@@ -96,7 +93,7 @@ public class Witch extends RolesVillage implements AffectedPlayers, Power {
             }
         } else {
 
-            if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE) ) return;
+            if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE) ) return;
 
             if (player != null) {
                 TextComponent witch_msg = new TextComponent(game.translate("werewolf.role.witch.resuscitation_message", plg.getName()));

@@ -9,19 +9,14 @@ import java.util.UUID;
 
 public class WereWolf extends RolesWereWolf {
 
-    public WereWolf(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public WereWolf(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main,game,uuid, key);
     }
 
 
     @Override
     public String getDescription() {
         return game.translate("werewolf.role.werewolf.description");
-    }
-
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.werewolf.display";
     }
 
 

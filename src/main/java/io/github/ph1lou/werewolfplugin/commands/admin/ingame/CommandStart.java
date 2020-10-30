@@ -1,7 +1,7 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.enumlg.StateGame;
 import io.github.ph1lou.werewolfapi.events.StartEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
@@ -27,7 +27,7 @@ public class CommandStart implements Commands {
     @Override
     public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
+        GameManager game = (GameManager) main.getWereWolfAPI();
 
         if (game.getScore().getRole() - game.getScore().getPlayerSize() > 0) {
             player.sendMessage(game.translate("werewolf.commands.admin.start.too_much_role"));
@@ -49,7 +49,7 @@ public class CommandStart implements Commands {
         wb.setCenter(world.getSpawnLocation().getX(), world.getSpawnLocation().getZ());
         wb.setSize(game.getConfig().getBorderMax());
         wb.setWarningDistance((int) (wb.getSize() / 7));
-        game.setState(StateLG.TRANSPORTATION);
+        game.setState(StateGame.TRANSPORTATION);
         File file = new File(main.getDataFolder() + File.separator + "configs" + File.separator, "saveCurrent.json");
         FileUtils_.save(file, Serializer.serialize(game.getConfig()));
         game.getStuffs().save("saveCurrent");

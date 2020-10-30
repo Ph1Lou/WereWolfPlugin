@@ -4,7 +4,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.Camp;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.events.ElderResurrectionEvent;
 import io.github.ph1lou.werewolfapi.events.NightEvent;
@@ -26,8 +26,8 @@ public class Elder extends RolesVillage implements Power {
 
     private boolean power = true;
 
-    public Elder(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main, game, uuid);
+    public Elder(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main, game, uuid, key);
     }
 
     @Override
@@ -45,10 +45,6 @@ public class Elder extends RolesVillage implements Power {
         return game.translate("werewolf.role.elder.description");
     }
 
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.elder.display";
-    }
 
     @Override
     public void recoverPotionEffect(@NotNull Player player) {
@@ -74,7 +70,7 @@ public class Elder extends RolesVillage implements Power {
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) return;
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) return;
 
         if (player == null) return;
 

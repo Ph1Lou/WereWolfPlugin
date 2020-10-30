@@ -2,7 +2,8 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
+import io.github.ph1lou.werewolfapi.enumlg.Timers;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.PotionEffects;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesWithLimitedSelectionDuration;
@@ -19,8 +20,8 @@ public class Comedian extends RolesWithLimitedSelectionDuration implements Potio
 
     private final List<PotionEffectType> comedianEffects = new ArrayList<>();
 
-    public Comedian(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public Comedian(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main,game,uuid, key);
         setPower(false);
     }
 
@@ -56,7 +57,7 @@ public class Comedian extends RolesWithLimitedSelectionDuration implements Potio
 
         player.removePotionEffect(getLastPotionEffect());
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -64,7 +65,7 @@ public class Comedian extends RolesWithLimitedSelectionDuration implements Potio
 
         setPower(true);
 
-        player.sendMessage(game.translate("werewolf.role.comedian.wear_mask_message", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.power_duration"))));
+        player.sendMessage(game.translate("werewolf.role.comedian.wear_mask_message", game.getScore().conversion(game.getConfig().getTimerValues().get(Timers.POWER_DURATION.getKey()))));
 
     }
 
@@ -73,8 +74,4 @@ public class Comedian extends RolesWithLimitedSelectionDuration implements Potio
         return game.translate("werewolf.role.comedian.description");
     }
 
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.comedian.display";
-    }
 }

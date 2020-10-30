@@ -1,10 +1,10 @@
 package io.github.ph1lou.werewolfplugin.commands.utilities;
 
 import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.StateGame;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
-import io.github.ph1lou.werewolfplugin.game.ModerationManager;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -29,9 +29,9 @@ public class CommandAnonymeChat implements Commands {
     @Override
     public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
 
-        if (game.isState(StateLG.LOBBY)) {
+        if (game.isState(StateGame.LOBBY)) {
             player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
             return;
         }
@@ -41,7 +41,7 @@ public class CommandAnonymeChat implements Commands {
         for (String w : args) {
             sb.append(w).append(" ");
         }
-        ModerationManager moderationManager = game.getModerationManager();
+        ModerationManagerAPI moderationManager = game.getModerationManager();
 
         if (args.length > 2 && args[0].charAt(0) == '?') {
 

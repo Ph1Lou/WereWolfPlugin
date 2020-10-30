@@ -3,7 +3,8 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
+import io.github.ph1lou.werewolfapi.enumlg.Timers;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.events.StealEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
@@ -26,8 +27,8 @@ public class Protector extends RolesWithLimitedSelectionDuration implements Affe
     private UUID last;
 
 
-    public Protector(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main, game, uuid);
+    public Protector(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main, game, uuid, key);
         setPower(false);
     }
 
@@ -68,7 +69,7 @@ public class Protector extends RolesWithLimitedSelectionDuration implements Affe
         }
 
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -79,7 +80,7 @@ public class Protector extends RolesWithLimitedSelectionDuration implements Affe
             return;
         }
 
-        player.sendMessage(game.translate("werewolf.role.protector.protection_message", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.power_duration"))));
+        player.sendMessage(game.translate("werewolf.role.protector.protection_message", game.getScore().conversion(game.getConfig().getTimerValues().get(Timers.POWER_DURATION.getKey()))));
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -102,10 +103,6 @@ public class Protector extends RolesWithLimitedSelectionDuration implements Affe
         return game.translate("werewolf.role.protector.description");
     }
 
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.protector.display";
-    }
 
     @EventHandler
     private void onPlayerDamage(EntityDamageEvent event) {

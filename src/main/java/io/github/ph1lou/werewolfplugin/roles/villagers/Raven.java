@@ -3,7 +3,8 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
+import io.github.ph1lou.werewolfapi.enumlg.Timers;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.events.VoteEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
@@ -24,9 +25,9 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
     private final List<UUID> affectedPlayer = new ArrayList<>();
     private UUID last;
 
-    public Raven(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
+    public Raven(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
 
-        super(main,game,uuid);
+        super(main,game,uuid, key);
         setPower(false);
     }
 
@@ -64,7 +65,7 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
             last = null;
         }
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
             return;
         }
         Player player = Bukkit.getPlayer(getPlayerUUID());
@@ -74,18 +75,13 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
             return;
         }
 
-        player.sendMessage(game.translate("werewolf.role.raven.curse_message", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.power_duration"))));
+        player.sendMessage(game.translate("werewolf.role.raven.curse_message", game.getScore().conversion(game.getConfig().getTimerValues().get(Timers.POWER_DURATION.getKey()))));
     }
 
 
     @Override
     public String getDescription() {
         return game.translate("werewolf.role.raven.description");
-    }
-
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.raven.display";
     }
 
 

@@ -2,8 +2,8 @@ package io.github.ph1lou.werewolfplugin.commands.utilities;
 
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.TimerRegister;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.entity.Player;
 
 public class CommandTimer implements Commands {
@@ -19,9 +19,9 @@ public class CommandTimer implements Commands {
     public void execute(Player player, String[] args) {
 
 
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
 
-        for (TimerRegister timer : main.getRegisterTimers()) {
+        for (TimerRegister timer : main.getRegisterManager().getTimersRegister()) {
             String time = game.getScore().conversion(game.getConfig().getTimerValues().get(timer.getKey()));
             if (time.charAt(0) != '-') {
                 player.sendMessage(game.translate(timer.getKey(), time));

@@ -2,8 +2,11 @@ package io.github.ph1lou.werewolfplugin.game;
 
 
 import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.Configs;
+import io.github.ph1lou.werewolfapi.enumlg.Roles;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Cupid;
@@ -34,9 +37,9 @@ public class LoversManagement {
 	}
 
 	private final List<List<UUID>> amnesiacLoversRange = new ArrayList<>();
-	private final GameManager game;
+	private final WereWolfAPI game;
 
-	public LoversManagement(GameManager game) {
+	public LoversManagement(WereWolfAPI game) {
 		this.game = game;
 	}
 
@@ -47,7 +50,7 @@ public class LoversManagement {
 
 		for (UUID uuid : game.getPlayersWW().keySet()) {
 			PlayerWW plg = game.getPlayersWW().get(uuid);
-			if (plg.isState(State.ALIVE) && plg.getLovers().isEmpty() && plg.getAmnesiacLoverUUID()==null) {
+			if (plg.isState(StatePlayer.ALIVE) && plg.getLovers().isEmpty() && plg.getAmnesiacLoverUUID()==null) {
 				cursedLovers.add(uuid);
 			}
 		}
@@ -87,7 +90,7 @@ public class LoversManagement {
 
 		for (UUID uuid : game.getPlayersWW().keySet()) {
 			PlayerWW plg = game.getPlayersWW().get(uuid);
-			if (plg.isState(State.ALIVE) && plg.getLovers().isEmpty()) {
+			if (plg.isState(StatePlayer.ALIVE) && plg.getLovers().isEmpty()) {
 				amnesiacLovers.add(uuid);
 			}
 		}
@@ -118,7 +121,7 @@ public class LoversManagement {
 		List<PlayerWW> amnesiacLovers = new ArrayList<>();
 
 		for (PlayerWW plg : game.getPlayersWW().values()) {
-			if (plg.getAmnesiacLoverUUID()!=null && plg.isState(State.ALIVE) && game.getPlayersWW().get(plg.getAmnesiacLoverUUID()).isState(State.ALIVE)) {
+			if (plg.getAmnesiacLoverUUID()!=null && plg.isState(StatePlayer.ALIVE) && game.getPlayersWW().get(plg.getAmnesiacLoverUUID()).isState(StatePlayer.ALIVE)) {
 				amnesiacLovers.add(plg);
 			}
 		}
@@ -171,18 +174,18 @@ public class LoversManagement {
 
 		List<UUID> lovers = new ArrayList<>();
 		for (UUID uuid : game.getPlayersWW().keySet()) {
-			if (game.getPlayersWW().get(uuid).isState(State.ALIVE)) {
+			if (game.getPlayersWW().get(uuid).isState(StatePlayer.ALIVE)) {
 				lovers.add(uuid);
 			}
 		}
-		if (lovers.size() < 2 && game.getConfig().getRoleCount().get("werewolf.role.cupid.display") + game.getConfig().getLoverSize() > 0) {
+		if (lovers.size() < 2 && game.getConfig().getRoleCount().get(Roles.CUPID.getKey()) + game.getConfig().getLoverSize() > 0) {
 			Bukkit.broadcastMessage(game.translate("werewolf.role.lover.not_enough_players"));
 			return;
 		}
 
-		Boolean polygamy = game.getConfig().getConfigValues().get("werewolf.menu.global.polygamy");
+		Boolean polygamy = game.getConfig().getConfigValues().get(Configs.POLYGAMY.getKey());
 
-		if (!polygamy && (game.getConfig().getLoverSize() == 0 && game.getConfig().getRoleCount().get("werewolf.role.cupid.display") * 2 >= game.getScore().getPlayerSize()) || (game.getConfig().getLoverSize() != 0 && (game.getConfig().getRoleCount().get("werewolf.role.cupid.display") + game.getConfig().getLoverSize()) * 2 > game.getScore().getPlayerSize())) {
+		if (!polygamy && (game.getConfig().getLoverSize() == 0 && game.getConfig().getRoleCount().get(Roles.CUPID.getKey()) * 2 >= game.getScore().getPlayerSize()) || (game.getConfig().getLoverSize() != 0 && (game.getConfig().getRoleCount().get(Roles.CUPID.getKey()) + game.getConfig().getLoverSize()) * 2 > game.getScore().getPlayerSize())) {
 			polygamy = true;
 			Bukkit.broadcastMessage(game.translate("werewolf.role.lover.polygamy"));
 		}
@@ -192,11 +195,11 @@ public class LoversManagement {
 		for (UUID uuid : game.getPlayersWW().keySet()) {
 
 			PlayerWW plg = game.getPlayersWW().get(uuid);
-			if (plg.getRole().isDisplay("werewolf.role.cupid.display")) {
+			if (plg.getRole().isKey(Roles.CUPID.getKey())) {
 
 				Cupid cupid = (Cupid) plg.getRole();
 
-				if (cupid.hasPower() || !game.getPlayersWW().get(cupid.getAffectedPlayers().get(0)).isState(State.ALIVE) || !game.getPlayersWW().get(cupid.getAffectedPlayers().get(1)).isState(State.ALIVE)) {
+				if (cupid.hasPower() || !game.getPlayersWW().get(cupid.getAffectedPlayers().get(0)).isState(StatePlayer.ALIVE) || !game.getPlayersWW().get(cupid.getAffectedPlayers().get(1)).isState(StatePlayer.ALIVE)) {
 
 					if (lovers.contains(uuid)) {
 						lovers.remove(uuid);
@@ -344,7 +347,7 @@ public class LoversManagement {
 
 			loversRange.get(i).remove(playerUUID);
 
-			while (!loversRange.get(i).isEmpty() && game.getPlayersWW().get(loversRange.get(i).get(0)).isState(State.DEATH)) {
+			while (!loversRange.get(i).isEmpty() && game.getPlayersWW().get(loversRange.get(i).get(0)).isState(StatePlayer.DEATH)) {
 				loversRange.get(i).remove(0);
 			}
 

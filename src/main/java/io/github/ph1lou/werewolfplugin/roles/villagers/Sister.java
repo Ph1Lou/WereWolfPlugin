@@ -4,7 +4,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.SisterDeathEvent;
 import io.github.ph1lou.werewolfapi.events.UpdateEvent;
@@ -22,19 +22,14 @@ import java.util.UUID;
 
 public class Sister extends RolesVillage {
 
-    public Sister(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public Sister(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main,game,uuid, key);
     }
 
 
     @Override
     public String getDescription() {
         return game.translate("werewolf.role.sister.description");
-    }
-
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.sister.display";
     }
 
     @EventHandler
@@ -47,7 +42,7 @@ public class Sister extends RolesVillage {
         if (sister1 == null) {
             return;
         }
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -56,8 +51,8 @@ public class Sister extends RolesVillage {
         for (UUID uuid : game.getPlayersWW().keySet()) {
             PlayerWW plg = game.getPlayersWW().get(uuid);
             if(!uuid.equals(getPlayerUUID())){
-                if(plg.isState(State.ALIVE)){
-                    if(plg.getRole().isDisplay("werewolf.role.sister.display")) {
+                if(plg.isState(StatePlayer.ALIVE)){
+                    if(plg.getRole().isKey("werewolf.role.sister.display")) {
                         Player sister2 = Bukkit.getPlayer(uuid);
                         if (sister2 != null) {
 
@@ -97,7 +92,7 @@ public class Sister extends RolesVillage {
         PlayerWW plg = game.getPlayersWW().get(getPlayerUUID());
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (!plg.isState(State.ALIVE)) return;
+        if (!plg.isState(StatePlayer.ALIVE)) return;
 
         event.getAllSisters().add(getPlayerUUID());
 

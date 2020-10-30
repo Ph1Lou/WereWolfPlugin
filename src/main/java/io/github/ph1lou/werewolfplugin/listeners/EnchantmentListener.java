@@ -1,7 +1,7 @@
 package io.github.ph1lou.werewolfplugin.listeners;
 
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.events.EnchantmentEvent;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -20,10 +20,10 @@ import java.util.UUID;
 
 public class EnchantmentListener implements Listener {
 
-    private final GameManager game;
+    private final WereWolfAPI game;
 
 
-    public EnchantmentListener(GameManager game) {
+    public EnchantmentListener(WereWolfAPI game) {
         this.game=game;
     }
 

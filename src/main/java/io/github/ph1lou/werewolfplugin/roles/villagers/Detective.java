@@ -3,7 +3,8 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
+import io.github.ph1lou.werewolfapi.enumlg.Timers;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesWithLimitedSelectionDuration;
@@ -21,8 +22,8 @@ public class Detective extends RolesWithLimitedSelectionDuration implements Affe
     private final List<UUID> affectedPlayer = new ArrayList<>();
 
 
-    public Detective(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public Detective(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main,game,uuid, key);
         setPower(false);
     }
 
@@ -50,7 +51,7 @@ public class Detective extends RolesWithLimitedSelectionDuration implements Affe
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -61,18 +62,13 @@ public class Detective extends RolesWithLimitedSelectionDuration implements Affe
             return;
         }
 
-        player.sendMessage(game.translate("werewolf.role.detective.inspection_message", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.power_duration"))));
+        player.sendMessage(game.translate("werewolf.role.detective.inspection_message", game.getScore().conversion(game.getConfig().getTimerValues().get(Timers.POWER_DURATION.getKey()))));
     }
 
 
     @Override
     public String getDescription() {
         return game.translate("werewolf.role.detective.description");
-    }
-
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.detective.display";
     }
 
 

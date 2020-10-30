@@ -2,13 +2,14 @@ package io.github.ph1lou.werewolfplugin.commands.roles;
 
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.Configs;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.WitchResurrectionEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -26,7 +27,7 @@ public class CommandWitch implements Commands {
     @Override
     public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
         PlayerWW plg = game.getPlayersWW().get(uuid);
         Roles witch = plg.getRole();
@@ -52,14 +53,14 @@ public class CommandWitch implements Commands {
             return;
         }
 
-        if (!game.getConfig().getConfigValues().get("werewolf.menu.global.auto_rez_witch") && argUUID.equals(uuid)) {
+        if (!game.getConfig().getConfigValues().get(Configs.AUTO_REZ_WITCH.getKey()) && argUUID.equals(uuid)) {
             player.sendMessage(game.translate("werewolf.check.not_yourself"));
             return;
         }
 
         PlayerWW plg1 = game.getPlayersWW().get(argUUID);
 
-        if (!plg1.isState(State.JUDGEMENT)) {
+        if (!plg1.isState(StatePlayer.JUDGEMENT)) {
             player.sendMessage(game.translate("werewolf.check.not_in_judgement"));
             return;
         }

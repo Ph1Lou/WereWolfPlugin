@@ -1,10 +1,7 @@
 package io.github.ph1lou.werewolfplugin.game;
 
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enumlg.AngelForm;
-import io.github.ph1lou.werewolfapi.enumlg.Camp;
-import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.enumlg.*;
 import io.github.ph1lou.werewolfapi.events.EndPlayerMessageEvent;
 import io.github.ph1lou.werewolfapi.events.WinConditionsCheckEvent;
 import io.github.ph1lou.werewolfapi.events.WinEvent;
@@ -41,7 +38,7 @@ public class End {
             return;
         }
 
-        if (game.isState(StateLG.END)) return;
+        if (game.isState(StateGame.END)) return;
 
         List<Set<UUID>> teamsAngel = getAngeTeam();
         List<Set<UUID>> teamsSuccubus = getSuccubusTeam();
@@ -54,8 +51,8 @@ public class End {
                 team = new HashSet<>(game.getLoversRange().get(0));
                 for (UUID uuid : game.getPlayersWW().keySet()) {
                     PlayerWW plg =game.getPlayersWW().get(uuid);
-                    if (plg.isState(State.JUDGEMENT)) return;
-                    if (plg.isState(State.ALIVE) && plg.getRole().isDisplay("werewolf.role.cupid.display")) {
+                    if (plg.isState(StatePlayer.JUDGEMENT)) return;
+                    if (plg.isState(StatePlayer.ALIVE) && plg.getRole().isKey("werewolf.role.cupid.display")) {
                         Cupid cupid = (Cupid) plg.getRole();
                         if (game.getLoversRange().get(0).contains(cupid.getAffectedPlayers().get(0))) {
                             team.add(uuid);
@@ -66,7 +63,7 @@ public class End {
             else{
                 team = new HashSet<>(game.getAmnesiacLoversRange().get(0));
                 for(UUID uuid:game.getAmnesiacLoversRange().get(0)){
-                    if(game.getPlayersWW().get(uuid).isState(State.JUDGEMENT)) return;
+                    if(game.getPlayersWW().get(uuid).isState(StatePlayer.JUDGEMENT)) return;
                 }
             }
 
@@ -94,7 +91,7 @@ public class End {
             }
         }
 
-        if (game.getConfig().getConfigValues().get("werewolf.menu.global.victory_couple") && (!game.getLoversRange().isEmpty() || !game.getAmnesiacLoversRange().isEmpty())) {
+        if (game.getConfig().getConfigValues().get(Configs.VICTORY_LOVERS.getKey()) && (!game.getLoversRange().isEmpty() || !game.getAmnesiacLoversRange().isEmpty())) {
             return;
         }
         WinConditionsCheckEvent winConditionsCheckEvent = new WinConditionsCheckEvent();
@@ -121,9 +118,9 @@ public class End {
         Camp camp = null;
 
         for (UUID uuid : game.getPlayersWW().keySet()) {
-            if (game.getPlayersWW().get(uuid).isState(State.JUDGEMENT)) return;
+            if (game.getPlayersWW().get(uuid).isState(StatePlayer.JUDGEMENT)) return;
             PlayerWW plg = game.getPlayersWW().get(uuid);
-            if (plg.isState(State.ALIVE)) {
+            if (plg.isState(StatePlayer.ALIVE)) {
                 if(camp==null) {
                     camp=plg.getRole().getCamp();
                 }
@@ -158,7 +155,7 @@ public class End {
             for(UUID uuid:game.getPlayersWW().keySet()) {
 
                 PlayerWW plg = game.getPlayersWW().get(uuid);
-                if(plg.isState(State.ALIVE)) {
+                if(plg.isState(StatePlayer.ALIVE)) {
                     if(role==null) {
                         role=plg.getRole();
                     }
@@ -170,7 +167,7 @@ public class End {
             if(role == null){
                 return;
             }
-            winner = role.getDisplay();
+            winner = role.getKey();
             fin();
         }
     }
@@ -180,7 +177,7 @@ public class End {
 
         List<UUID> players = new ArrayList<>();
         for (UUID uuid : game.getPlayersWW().keySet()) {
-            if (game.getPlayersWW().get(uuid).isState(State.ALIVE)) {
+            if (game.getPlayersWW().get(uuid).isState(StatePlayer.ALIVE)) {
                 players.add(uuid);
             }
         }
@@ -188,33 +185,29 @@ public class End {
 
         String subtitles_victory = winner == null ? game.translate("werewolf.end.death") : game.translate(winner);
 
-        game.setState(StateLG.END);
+        game.setState(StateGame.END);
 
         game.getScore().getKillCounter();
 
-        game.getConfig().getConfigValues().put("werewolf.menu.global.chat", true);
-        if (game.getMain().getConfig().getBoolean("bungeechat")) {
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "chatlock local"); //reactivation of local chat
-        }
-
+        game.getConfig().getConfigValues().put(Configs.CHAT.getKey(), true);
 
         for (UUID uuid : game.getPlayersWW().keySet()) {
 
             PlayerWW plg = game.getPlayersWW().get(uuid);
-            String role = game.translate(plg.getRole().getDisplay());
+            String role = game.translate(plg.getRole().getKey());
             String playerName = plg.getName();
             StringBuilder sb = new StringBuilder();
 
             if(plg.isThief()){
                 role=game.translate("werewolf.role.thief.display");
             }
-            if (plg.isState(State.DEATH)) {
+            if (plg.isState(StatePlayer.DEATH)) {
                 sb.append(game.translate("werewolf.end.reveal_death", playerName, role));
             } else {
                 sb.append(game.translate("werewolf.end.reveal", playerName, role));
             }
             if(plg.isThief()){
-                role = game.translate(plg.getRole().getDisplay());
+                role = game.translate(plg.getRole().getKey());
                 sb.append(game.translate("werewolf.end.thief", role));
             }
 
@@ -258,7 +251,7 @@ public class End {
 
             PlayerWW plg1 = game.getPlayersWW().get(uuid);
 
-            if(plg1.isState(State.ALIVE)) {
+            if(plg1.isState(StatePlayer.ALIVE)) {
                 List<UUID> teamange= new ArrayList<>();
                 teamange.add(uuid);
                 if(plg1.getRole() instanceof AngelRole){
@@ -267,7 +260,7 @@ public class End {
                         if(angel instanceof AffectedPlayers){
                             AffectedPlayers affectedPlayers = (AffectedPlayers) angel;
 
-                            if(!affectedPlayers.getAffectedPlayers().isEmpty() && game.getPlayersWW().get(affectedPlayers.getAffectedPlayers().get(0)).isState(State.ALIVE)){
+                            if(!affectedPlayers.getAffectedPlayers().isEmpty() && game.getPlayersWW().get(affectedPlayers.getAffectedPlayers().get(0)).isState(StatePlayer.ALIVE)){
                                 teamange.add(affectedPlayers.getAffectedPlayers().get(0));
                             }
                         }
@@ -288,7 +281,7 @@ public class End {
                                     AffectedPlayers affectedPlayers = (AffectedPlayers) angel;
 
                                     if(affectedPlayers.getAffectedPlayers().contains(teamange.get(i))){
-                                        if(plg2.isState(State.ALIVE)) {
+                                        if(plg2.isState(StatePlayer.ALIVE)) {
                                             if (!teamange.contains(uuid2)) {
                                                 teamange.add(uuid2);
                                             }
@@ -324,14 +317,14 @@ public class End {
 
             PlayerWW plg1 = game.getPlayersWW().get(uuid);
 
-            if (plg1.isState(State.ALIVE)) {
+            if (plg1.isState(StatePlayer.ALIVE)) {
 
                 List<UUID> teamSuccubus = new ArrayList<>();
                 teamSuccubus.add(uuid);
 
-                if (plg1.getRole().isDisplay("werewolf.role.succubus.display")){
+                if (plg1.getRole().isKey("werewolf.role.succubus.display")){
                     Succubus succubus = (Succubus) plg1.getRole();
-                    if(!succubus.getAffectedPlayers().isEmpty() && !succubus.hasPower() && game.getPlayersWW().get(succubus.getAffectedPlayers().get(0)).isState(State.ALIVE)){
+                    if(!succubus.getAffectedPlayers().isEmpty() && !succubus.hasPower() && game.getPlayersWW().get(succubus.getAffectedPlayers().get(0)).isState(StatePlayer.ALIVE)){
                         teamSuccubus.add(succubus.getAffectedPlayers().get(0));
                     }
                 }
@@ -339,10 +332,10 @@ public class End {
                 for (int i = 0; i < teamSuccubus.size(); i++) {
                     for (UUID uuid2 : game.getPlayersWW().keySet()) {
                         PlayerWW plg2 = game.getPlayersWW().get(uuid2);
-                        if (plg2.getRole().isDisplay("werewolf.role.succubus.display")){
+                        if (plg2.getRole().isKey("werewolf.role.succubus.display")){
                             Succubus succubus= (Succubus) plg2.getRole();
                             if(succubus.getAffectedPlayers().contains(teamSuccubus.get(i))){
-                                if(plg2.isState(State.ALIVE) && !succubus.hasPower()) {
+                                if(plg2.isState(StatePlayer.ALIVE) && !succubus.hasPower()) {
                                     if (!teamSuccubus.contains(uuid2)) {
                                         teamSuccubus.add(uuid2);
                                     }

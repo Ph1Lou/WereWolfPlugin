@@ -2,13 +2,13 @@ package io.github.ph1lou.werewolfplugin.commands.roles;
 
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
-import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.enumlg.StateGame;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.DonEvent;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -26,7 +26,7 @@ public class CommandLovers implements Commands {
     @Override
     public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
         String playername = player.getName();
         UUID uuid = player.getUniqueId();
 
@@ -38,7 +38,7 @@ public class CommandLovers implements Commands {
         PlayerWW plg = game.getPlayersWW().get(uuid);
 
 
-        if (!game.isState(StateLG.GAME)) {
+        if (!game.isState(StateGame.GAME)) {
             player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
             return;
         }
@@ -77,7 +77,7 @@ public class CommandLovers implements Commands {
 
                 int don = heart / plg.getLovers().size();
                 for (UUID uuid1 : plg.getLovers()) {
-                    if(game.getPlayersWW().get(uuid1).isState(State.ALIVE)) {
+                    if(game.getPlayersWW().get(uuid1).isState(StatePlayer.ALIVE)) {
                         Player playerCouple = Bukkit.getPlayer(uuid1);
 
                         if (playerCouple != null) {
@@ -105,7 +105,7 @@ public class CommandLovers implements Commands {
 
                 if (plg.getAmnesiacLoverUUID() != null && playerCouple != null) {
 
-                    if (game.getPlayersWW().get(plg.getAmnesiacLoverUUID()).isState(State.ALIVE)) {
+                    if (game.getPlayersWW().get(plg.getAmnesiacLoverUUID()).isState(StatePlayer.ALIVE)) {
                         if (VersionUtils.getVersionUtils().getPlayerMaxHealth(playerCouple) - playerCouple.getHealth() >= heart) {
                             DonEvent donEvent = new DonEvent(uuid, plg.getAmnesiacLoverUUID(), heart);
                             Bukkit.getPluginManager().callEvent(donEvent);
@@ -140,7 +140,7 @@ public class CommandLovers implements Commands {
 
             UUID argUUID = playerCouple.getUniqueId();
 
-            if (!game.getPlayersWW().get(argUUID).isState(State.ALIVE)) {
+            if (!game.getPlayersWW().get(argUUID).isState(StatePlayer.ALIVE)) {
                 player.sendMessage(game.translate("werewolf.check.offline_player"));
                 return;
             }

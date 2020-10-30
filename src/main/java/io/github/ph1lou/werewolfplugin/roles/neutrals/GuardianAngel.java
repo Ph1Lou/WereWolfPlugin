@@ -12,8 +12,8 @@ import java.util.UUID;
 public class GuardianAngel extends Angel  {
 
 
-    public GuardianAngel(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public GuardianAngel(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main,game,uuid, key);
         setChoice(AngelForm.GUARDIAN_ANGEL);
         Bukkit.getPluginManager().callEvent(new AngelChoiceEvent(getPlayerUUID(),AngelForm.GUARDIAN_ANGEL));
     }
@@ -24,9 +24,5 @@ public class GuardianAngel extends Angel  {
         return game.translate("werewolf.role.guardian_angel.description");
     }
 
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.guardian_angel.display";
-    }
 
 }

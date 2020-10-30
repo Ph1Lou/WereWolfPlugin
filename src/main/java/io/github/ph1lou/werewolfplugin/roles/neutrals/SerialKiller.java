@@ -4,7 +4,7 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
@@ -23,8 +23,8 @@ import java.util.UUID;
 
 public class SerialKiller extends RolesNeutral implements Power {
 
-    public SerialKiller(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public SerialKiller(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main,game,uuid, key);
     }
 
     private boolean power=true;
@@ -43,10 +43,6 @@ public class SerialKiller extends RolesNeutral implements Power {
         return game.translate("werewolf.role.serial_killer.description");
     }
 
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.serial_killer.display";
-    }
 
     @Override
     public void stolen(@NotNull UUID uuid) {
@@ -106,7 +102,7 @@ public class SerialKiller extends RolesNeutral implements Power {
 
         if (!hasPower()) return;
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) return;
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) return;
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 

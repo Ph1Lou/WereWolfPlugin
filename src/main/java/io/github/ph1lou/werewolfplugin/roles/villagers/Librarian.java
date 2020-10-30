@@ -21,8 +21,8 @@ public class Librarian extends RolesVillage implements LimitedUse, AffectedPlaye
     private final List<UUID> affectedPlayer = new ArrayList<>();
     private final List<String> storage= new ArrayList<>();
 
-    public Librarian(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public Librarian(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main,game,uuid, key);
     }
 
     @Override
@@ -59,11 +59,6 @@ public class Librarian extends RolesVillage implements LimitedUse, AffectedPlaye
     @Override
     public String getDescription() {
         return game.translate("werewolf.role.librarian.description");
-    }
-
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.librarian.display";
     }
 
     @Override

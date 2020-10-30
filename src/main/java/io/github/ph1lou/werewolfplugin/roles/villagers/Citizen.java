@@ -2,7 +2,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.VoteEndEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.LimitedUse;
@@ -22,8 +22,8 @@ public class Citizen extends RolesVillage implements LimitedUse, AffectedPlayers
     private final List<UUID> affectedPlayer = new ArrayList<>();
     private boolean power = true;
 
-    public Citizen(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public Citizen(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main,game,uuid, key);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class Citizen extends RolesVillage implements LimitedUse, AffectedPlayers
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -90,8 +90,4 @@ public class Citizen extends RolesVillage implements LimitedUse, AffectedPlayers
         return game.translate("werewolf.role.citizen.description");
     }
 
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.citizen.display";
-    }
 }

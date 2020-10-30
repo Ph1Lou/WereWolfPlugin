@@ -9,6 +9,7 @@ import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
 import io.github.ph1lou.werewolfapi.ConfigRegister;
 import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -28,8 +29,8 @@ public class GlobalConfigs implements InventoryProvider {
             .id("global")
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
             .provider(new GlobalConfigs())
-            .size(Math.min(54, (JavaPlugin.getPlugin(Main.class).getRegisterConfigs().size() / 9 + 2) * 9) / 9, 9)
-            .title(JavaPlugin.getPlugin(Main.class).getCurrentGame().translate("werewolf.menu.global.name"))
+            .size(Math.min(54, (JavaPlugin.getPlugin(Main.class).getRegisterManager().getConfigsRegister().size() / 9 + 2) * 9) / 9, 9)
+            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.global.name"))
             .closeable(true)
             .build();
 
@@ -37,7 +38,7 @@ public class GlobalConfigs implements InventoryProvider {
     @Override
     public void init(Player player, InventoryContents contents) {
         Main main = JavaPlugin.getPlugin(Main.class);
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
 
         contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType()).setDisplayName(game.translate("werewolf.menu.return")).build()), e -> Config.INVENTORY.open(player)));
     }
@@ -46,12 +47,12 @@ public class GlobalConfigs implements InventoryProvider {
     public void update(Player player, InventoryContents contents) {
 
         Main main = JavaPlugin.getPlugin(Main.class);
-        GameManager game = main.getCurrentGame();
+        GameManager game = (GameManager) main.getWereWolfAPI();
         ConfigWereWolfAPI config = game.getConfig();
         Pagination pagination = contents.pagination();
         List<ClickableItem> items = new ArrayList<>();
 
-        for (ConfigRegister ConfigRegister : main.getRegisterConfigs()) {
+        for (ConfigRegister ConfigRegister : main.getRegisterManager().getConfigsRegister()) {
             String key = ConfigRegister.getKey();
             List<String> lore = new ArrayList<>(ConfigRegister.getLore());
             ItemStack itemStack;

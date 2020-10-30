@@ -4,7 +4,7 @@ import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.EnchantedEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
@@ -60,7 +60,7 @@ public class CommandFlutePlayer implements Commands {
 
                 UUID playerUUID = playerArg.getUniqueId();
 
-                if (!game.getPlayersWW().containsKey(playerUUID) || game.getPlayersWW().get(playerUUID).isState(State.DEATH)) {
+                if (!game.getPlayersWW().containsKey(playerUUID) || game.getPlayersWW().get(playerUUID).isState(StatePlayer.DEATH)) {
                     player.sendMessage(game.translate("werewolf.check.player_not_found"));
                     return;
                 }

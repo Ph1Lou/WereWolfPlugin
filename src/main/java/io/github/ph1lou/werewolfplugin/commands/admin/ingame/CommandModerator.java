@@ -1,12 +1,12 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
+import io.github.ph1lou.werewolfapi.enumlg.StateGame;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.ModeratorEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
-import io.github.ph1lou.werewolfplugin.game.ModerationManager;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -26,8 +26,8 @@ public class CommandModerator implements Commands {
     public void execute(Player player, String[] args) {
 
 
-        GameManager game = main.getCurrentGame();
-        ModerationManager moderationManager = game.getModerationManager();
+        GameManager game = (GameManager) main.getWereWolfAPI();
+        ModerationManagerAPI moderationManager = game.getModerationManager();
         Player moderator = Bukkit.getPlayer(args[0]);
 
         if (moderator == null) {
@@ -41,15 +41,15 @@ public class CommandModerator implements Commands {
             Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.moderator.remove", args[0]));
             moderationManager.getModerators().remove(argUUID);
 
-            if (game.isState(StateLG.LOBBY)) {
+            if (game.isState(StateGame.LOBBY)) {
                 game.finalJoin(moderator);
             }
             Bukkit.getPluginManager().callEvent(new ModeratorEvent(argUUID, false));
             return;
         }
 
-        if (!game.isState(StateLG.LOBBY)) {
-            if (game.getPlayersWW().containsKey(argUUID) && !game.getPlayersWW().get(argUUID).isState(State.DEATH)) {
+        if (!game.isState(StateGame.LOBBY)) {
+            if (game.getPlayersWW().containsKey(argUUID) && !game.getPlayersWW().get(argUUID).isState(StatePlayer.DEATH)) {
                 player.sendMessage(game.translate("werewolf.commands.admin.moderator.player_living"));
                 return;
             }

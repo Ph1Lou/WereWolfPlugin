@@ -12,8 +12,8 @@ import java.util.UUID;
 
 public class NaughtyLittleWolf extends RolesWereWolf {
 
-    public NaughtyLittleWolf(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public NaughtyLittleWolf(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main,game,uuid, key);
     }
 
 
@@ -22,10 +22,6 @@ public class NaughtyLittleWolf extends RolesWereWolf {
         return game.translate("werewolf.role.naughty_little_wolf.description");
     }
 
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.naughty_little_wolf.display";
-    }
 
     @Override
     public void recoverPotionEffect(Player player) {

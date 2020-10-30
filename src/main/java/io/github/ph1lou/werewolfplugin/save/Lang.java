@@ -4,32 +4,36 @@ package io.github.ph1lou.werewolfplugin.save;
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
+import io.github.ph1lou.werewolfapi.LangManager;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.events.UpdateLanguageEvent;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
-import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Lang {
+public class Lang implements LangManager, Listener {
 
-    final Main main;
+    private final Main main;
+    private final Map<String, String> extraTexts = new HashMap<>();
 
     public Lang(Main main) {
         this.main = main;
     }
 
 
-    public Map<String, String> loadTranslations(final String file) {
+    private Map<String, String> loadTranslations(String file) {
         final JsonObject jsonObject = Json.parse(file).asObject();
 
         return this.loadTranslationsRec("", jsonObject, new HashMap<>());
     }
 
-    private Map<String, String> loadTranslationsRec(final String currentPath, final JsonValue jsonValue, final Map<String, String> keys) {
+    private Map<String, String> loadTranslationsRec(String currentPath, JsonValue jsonValue, Map<String, String> keys) {
         // This value is an object - it means she contains sub-section that should be analyzed
         if (jsonValue.isObject()) {
 
@@ -42,7 +46,6 @@ public class Lang {
             }
         }
 
-        // This value is a single string (not object), add-it to the list of translations (only if not null)
         else if (!jsonValue.isNull()) {
             keys.put(currentPath, jsonValue.asString());
         }
@@ -51,22 +54,21 @@ public class Lang {
     }
 
 
-    public void updateLanguage(GameManager game) {
+    @EventHandler(priority = EventPriority.LOW)
+    private void updateLanguage(UpdateLanguageEvent event) {
+
+        WereWolfAPI game = main.getWereWolfAPI();
         game.getLanguage().clear();
         game.getLanguage().putAll(loadTranslations(FileUtils_.loadContent(buildLanguageFile(main, "fr"))));
-        main.getExtraTexts().clear();
-        main.getAddonsList().forEach(plugin -> {
+        extraTexts.clear();
 
-            String defaultLanguages = main.getDefaultLanguages(plugin);
-            if (defaultLanguages != null) {
-                main.getExtraTexts().putAll(loadTranslations(FileUtils_.loadContent(buildLanguageFile(plugin, defaultLanguages))));
-            }
+        main.getRegisterManager().getAddonsRegister().forEach(addon -> {
+            String defaultLanguages = addon.getDefaultLanguage();
+            extraTexts.putAll(loadTranslations(FileUtils_.loadContent(buildLanguageFile(addon.getPlugin(), defaultLanguages))));
         });
-
-        Bukkit.getPluginManager().callEvent(new UpdateLanguageEvent());
     }
 
-    public File buildLanguageFile(Plugin plugin, String defaultLang) {
+    private File buildLanguageFile(Plugin plugin, String defaultLang) {
 
         String lang = main.getConfig().getString("lang");
         File file = new File(plugin.getDataFolder() + File.separator + "languages" + File.separator, lang + ".json");
@@ -93,6 +95,7 @@ public class Lang {
                         temp = temp.get(temp2).asObject();
                     }
                     String[] strings =tempString.split("\\.");
+
                     for (int i=0;i<strings.length-1;i++){
                         temp.set(strings[i],new JsonObject());
                         temp=temp.get(strings[i]).asObject();
@@ -103,7 +106,10 @@ public class Lang {
             FileUtils_.saveJson(file, jsonObject);
         }
         return file;
+    }
 
-
+    @Override
+    public Map<String, String> getExtraTexts() {
+        return extraTexts;
     }
 }

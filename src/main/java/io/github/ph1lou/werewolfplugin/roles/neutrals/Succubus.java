@@ -5,7 +5,8 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
+import io.github.ph1lou.werewolfapi.enumlg.Timers;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
@@ -27,8 +28,8 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
     private float progress = 0;
     private final List<UUID> affectedPlayer = new ArrayList<>();
 
-    public Succubus(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public Succubus(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
+        super(main,game,uuid, key);
     }
 
     private boolean power=true;
@@ -79,10 +80,6 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
         return game.translate("werewolf.role.succubus.description");
     }
 
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.succubus.display";
-    }
 
     @Override
     public void stolen(@NotNull UUID uuid) {
@@ -126,7 +123,7 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
             return;
         }
 
-        if (!plg.isState(State.ALIVE)) {
+        if (!plg.isState(StatePlayer.ALIVE)) {
             return;
         }
         if (getAffectedPlayers().isEmpty()) {
@@ -141,7 +138,7 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
         Player charmed = Bukkit.getPlayer(playerCharmedUUID);
         PlayerWW plc = game.getPlayersWW().get(playerCharmedUUID);
 
-        if (!plc.isState(State.ALIVE)) {
+        if (!plc.isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -158,11 +155,11 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
             return;
         }
 
-        float temp = getProgress() + 100f / (game.getConfig().getTimerValues().get("werewolf.menu.timers.succubus_duration") + 1);
+        float temp = getProgress() + 100f / (game.getConfig().getTimerValues().get(Timers.SUCCUBUS_DURATION.getKey()) + 1);
 
         setProgress(temp);
 
-        if (temp % 10 > 0 && temp % 10 <= 100f / (game.getConfig().getTimerValues().get("werewolf.menu.timers.succubus_duration") + 1)) {
+        if (temp % 10 > 0 && temp % 10 <= 100f / (game.getConfig().getTimerValues().get(Timers.SUCCUBUS_DURATION.getKey()) + 1)) {
             player.sendMessage(game.translate("werewolf.role.succubus.progress_charm", Math.min(100,Math.floor(temp))));
         }
 
@@ -217,7 +214,7 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
         if (!getAffectedPlayers().contains(uuid)) return;
 
 
-        if (!plg.isState(State.ALIVE)) return;
+        if (!plg.isState(StatePlayer.ALIVE)) return;
 
         clearAffectedPlayer();
         setPower(true);
@@ -248,7 +245,7 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
 
         PlayerWW trg = game.getPlayersWW().get(targetUUID);
 
-        if (!trg.isState(State.ALIVE)) return;
+        if (!trg.isState(StatePlayer.ALIVE)) return;
 
         SuccubusResurrectionEvent succubusResurrectionEvent = new SuccubusResurrectionEvent(uuid,targetUUID);
 
