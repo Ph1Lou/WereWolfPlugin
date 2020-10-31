@@ -123,6 +123,9 @@ public class Command implements TabExecutor {
                 .filter(commandRegister -> (args[0].isEmpty() || game.translate(commandRegister.getKey()).contains(args[0])))
                 .filter(commandRegister -> !commandRegister.isRoleOnly() || (playerWW != null && commandRegister.isRoleKey(playerWW.getRole().getKey())))
                 .filter(CommandRegister::isAutoCompletion)
+                .filter(commandRegister -> commandRegister.isStateWW(game.getState()))
+                .filter(commandRegister -> !commandRegister.isRequiredPlayerInGame() || playerWW != null)
+                .filter(commandRegister -> playerWW == null || commandRegister.isStateAccess(playerWW.getState()))
                 .map(commandRegister -> game.translate(commandRegister.getKey()))
                 .collect(Collectors.toList());
     }

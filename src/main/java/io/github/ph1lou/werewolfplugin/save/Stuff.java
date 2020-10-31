@@ -127,10 +127,9 @@ public class Stuff implements StuffManager {
     }
 
 
-    public Map<String, List<ItemStack>> loadStuff(AddonRegister addon, String configName) {
+    public Map<String, List<ItemStack>> loadStuff(Plugin plugin, String addonKey, String configName) {
 
         Map<String, List<ItemStack>> temp = new HashMap<>();
-        Plugin plugin = addon.getPlugin();
 
         if (!(new File(plugin.getDataFolder() + File.separator + "stuffs" + File.separator, configName + ".yml")).exists()) {
             FileUtils_.copy(plugin.getResource("stuffRole.yml"), plugin.getDataFolder() + File.separator + "stuffs" + File.separator + configName + ".yml");
@@ -139,11 +138,11 @@ public class Stuff implements StuffManager {
 
         for (RoleRegister roleRegister : main.getRegisterManager().getRolesRegister()) {
 
-            if (roleRegister.getAddonKey().equals(addon.getKey())) {
+            if (roleRegister.getAddonKey().equals(addonKey)) {
                 String key = roleRegister.getKey();
                 temp.put(key, new ArrayList<>());
-                ConfigurationSection configurationSection = config.getConfigurationSection(key );
-                if(configurationSection!=null){
+                ConfigurationSection configurationSection = config.getConfigurationSection(key);
+                if (configurationSection != null) {
                     Set<String> sl = configurationSection.getKeys(false);
                     for (String s2 : sl) {
                         temp.get(key).add(config.getItemStack(key + "." + s2));
@@ -209,11 +208,12 @@ public class Stuff implements StuffManager {
         return customConfig;
     }
 
-    public void loadStuff(String configName){
+    public void loadStuff(String configName) {
 
         stuffRoles.clear();
 
-        main.getRegisterManager().getAddonsRegister().forEach(addonRegister -> stuffRoles.putAll(loadStuff(addonRegister, configName)));
+        main.getRegisterManager().getAddonsRegister().forEach(addonRegister -> stuffRoles.putAll(loadStuff(addonRegister.getPlugin(), addonRegister.getAddonKey(), configName)));
+        stuffRoles.putAll(loadStuff(main, "werewolf.name", configName));
     }
 
 

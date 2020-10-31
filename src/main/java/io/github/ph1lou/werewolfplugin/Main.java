@@ -21,13 +21,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Objects;
+
 public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
 
 
     private final Lang lang = new Lang(this);
     private GameManager currentGame;
     private final Register register = new Register(this);
-    private final InventoryManager invManager= new InventoryManager(this);
+    private final InventoryManager invManager = new InventoryManager(this);
 
     @Override
     public InventoryManager getInvManager() {
@@ -39,12 +41,11 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
 
         saveDefaultConfig();
         this.invManager.init();
-        Bukkit.getPluginManager().registerEvents(lang,this);
-        Bukkit.getPluginManager().registerEvents(this,this);
+        Bukkit.getPluginManager().registerEvents(lang, this);
+        Bukkit.getPluginManager().registerEvents(this, this);
         currentGame = new GameManager(this);
-        getCommand("a").setExecutor(new Admin(this));
-        getCommand("ww").setExecutor(new Command(this));
-
+        Objects.requireNonNull(getCommand("a")).setExecutor(new Admin(this));
+        Objects.requireNonNull(getCommand("ww")).setExecutor(new Command(this));
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
             setWorld();

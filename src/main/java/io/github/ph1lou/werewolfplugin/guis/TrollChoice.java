@@ -50,15 +50,36 @@ public class TrollChoice implements InventoryProvider {
         Pagination pagination = contents.pagination();
         UUID uuid = player.getUniqueId();
 
-
-        contents.set(5, 1, ClickableItem.of((new ItemBuilder(Category.WEREWOLF == this.categories.getOrDefault(uuid, Category.WEREWOLF) ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate("werewolf.categories.werewolf")).build()), e -> this.categories.put(uuid, Category.WEREWOLF)));
-        contents.set(5, 3, ClickableItem.of((new ItemBuilder(Category.VILLAGER == this.categories.getOrDefault(uuid, Category.WEREWOLF) ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate("werewolf.categories.villager")).build()), e -> this.categories.put(uuid, Category.VILLAGER)));
-        contents.set(5, 5, ClickableItem.of((new ItemBuilder(Category.NEUTRAL == this.categories.getOrDefault(uuid, Category.WEREWOLF) ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate("werewolf.categories.neutral")).build()), e -> this.categories.put(uuid, Category.NEUTRAL)));
-        contents.set(5, 7, ClickableItem.of((new ItemBuilder(Category.ADDONS == this.categories.getOrDefault(uuid, Category.WEREWOLF) ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate("werewolf.categories.addons")).build()), e -> this.categories.put(uuid, Category.ADDONS)));
-
+        contents.set(5, 1, ClickableItem.of((
+                new ItemBuilder(
+                        Category.WEREWOLF == this.categories.getOrDefault(
+                                uuid, Category.WEREWOLF) ?
+                                Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK)
+                        .setDisplayName(game.translate("werewolf.categories.werewolf"))
+                        .build()), e -> this.categories.put(uuid, Category.WEREWOLF)));
+        contents.set(5, 3, ClickableItem.of((
+                new ItemBuilder(
+                        Category.VILLAGER == this.categories.getOrDefault(
+                                uuid, Category.WEREWOLF) ?
+                                Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK)
+                        .setDisplayName(game.translate("werewolf.categories.villager"))
+                        .build()), e -> this.categories.put(uuid, Category.VILLAGER)));
+        contents.set(5, 5, ClickableItem.of((
+                new ItemBuilder(
+                        Category.NEUTRAL == this.categories.getOrDefault(
+                                uuid, Category.WEREWOLF) ?
+                                Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK)
+                        .setDisplayName(game.translate("werewolf.categories.neutral"))
+                        .build()), e -> this.categories.put(uuid, Category.NEUTRAL)));
+        contents.set(5, 7, ClickableItem.of((
+                new ItemBuilder(
+                        Category.ADDONS == this.categories.getOrDefault(
+                                uuid, Category.WEREWOLF) ?
+                                Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK)
+                        .setDisplayName(game.translate("werewolf.categories.addons"))
+                        .build()), e -> this.categories.put(uuid, Category.ADDONS)));
 
         List<ClickableItem> items = new ArrayList<>();
-
 
         for (RoleRegister roleRegister : main.getRegisterManager().getRolesRegister()) {
 

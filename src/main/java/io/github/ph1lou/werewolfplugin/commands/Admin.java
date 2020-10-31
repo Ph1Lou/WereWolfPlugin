@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.commands;
 
 import io.github.ph1lou.werewolfapi.CommandRegister;
 import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
+import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.command.Command;
@@ -112,6 +113,8 @@ public class Admin implements TabExecutor {
 
         Player player = (Player) sender;
         WereWolfAPI game = main.getWereWolfAPI();
+        UUID uuid = player.getUniqueId();
+        PlayerWW playerWW = game.getPlayerWW(uuid);
 
         if (args.length > 1) {
             return null;
@@ -121,6 +124,9 @@ public class Admin implements TabExecutor {
                 .filter(commandRegister -> (args[0].isEmpty() || game.translate(commandRegister.getKey()).contains(args[0])))
                 .filter(CommandRegister::isAutoCompletion)
                 .filter(commandRegister -> checkPermission(commandRegister, player))
+                .filter(commandRegister -> commandRegister.isStateWW(game.getState()))
+                .filter(commandRegister -> !commandRegister.isRequiredPlayerInGame() || playerWW != null)
+                .filter(commandRegister -> playerWW == null || commandRegister.isStateAccess(playerWW.getState()))
                 .map(commandRegister -> game.translate(commandRegister.getKey()))
                 .collect(Collectors.toList());
     }

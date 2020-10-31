@@ -22,6 +22,11 @@
       <option name="url" value="https://repo.puha.io/repo/" />
     </remote-repository>
     <remote-repository>
+      <option name="id" value="spigot-repo" />
+      <option name="name" value="spigot-repo" />
+      <option name="url" value="https://hub.spigotmc.org/nexus/content/repositories/snapshots/" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="enginehub-maven" />
       <option name="name" value="enginehub-maven" />
       <option name="url" value="http://maven.enginehub.org/repo/" />

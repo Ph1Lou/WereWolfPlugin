@@ -22,7 +22,7 @@ public class AddonMenu implements InventoryProvider {
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
             .provider(new AddonMenu())
             .size(4, 9)
-            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.advanced_tool.name"))
+            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.addon.name"))
             .closeable(true)
             .build();
 
