@@ -3,7 +3,6 @@ package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfplugin.Main;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
@@ -29,7 +28,7 @@ public class CommandGamemode implements Commands {
                 i = 0;
             }
             player.setGameMode(GameMode.values()[i]);
-            Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.commands.admin.gamemode.send", player.getName(), i));
+            game.getModerationManager().alertHostsAndModerators(game.translate("werewolf.commands.admin.gamemode.send", player.getName(), i));
         }
         catch (NumberFormatException ignored){
         }

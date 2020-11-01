@@ -6,7 +6,6 @@ import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import io.github.ph1lou.werewolfapi.AddonRegister;
-import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
@@ -42,10 +41,6 @@ public class AddonMenu implements InventoryProvider {
 
     @Override
     public void update(Player player, InventoryContents contents) {
-
-        Main main = JavaPlugin.getPlugin(Main.class);
-        WereWolfAPI game = main.getWereWolfAPI();
-        ConfigWereWolfAPI config = game.getConfig();
 
 
     }

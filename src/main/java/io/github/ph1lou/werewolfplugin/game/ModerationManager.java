@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class ModerationManager implements ModerationManagerAPI {
 
@@ -118,6 +119,35 @@ public class ModerationManager implements ModerationManagerAPI {
     @Override
     public List<UUID> getQueue() {
         return this.queue;
+    }
+
+
+    @Override
+    public void alertModerators(String message) {
+        alert(moderators, message);
+    }
+
+    @Override
+    public void alertHostsAndModerators(String message) {
+        alert(hosts, message);
+        alert(moderators, message);
+    }
+
+    @Override
+    public void alertHosts(String message) {
+        alert(hosts, message);
+    }
+
+
+    private void alert(List<UUID> players, String message) {
+        players.stream()
+                .map(Bukkit::getPlayer)
+                .collect(Collectors.toList())
+                .forEach(player1 -> {
+                    if (player1 != null) {
+                        player1.sendMessage(message);
+                    }
+                });
     }
 
 
