@@ -19,6 +19,7 @@ public class FastSmelting extends Scenarios {
     public void onBurn(FurnaceBurnEvent event) {
 
         Furnace block = (Furnace) event.getBlock().getState();
+
         new BukkitRunnable() {
             public void run() {
                 if (block.getCookTime() > 0 || block.getBurnTime() > 0) {

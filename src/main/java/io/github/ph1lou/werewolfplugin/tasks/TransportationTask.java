@@ -2,8 +2,9 @@ package io.github.ph1lou.werewolfplugin.tasks;
 
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.StateGame;
-import io.github.ph1lou.werewolfapi.enumlg.Timers;
+import io.github.ph1lou.werewolfapi.enumlg.TimersBase;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
+import io.github.ph1lou.werewolfapi.events.UpdateCompassEvent;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
@@ -34,6 +35,12 @@ public class TransportationTask {
         World world = game.getMapManager().getWorld();
         AtomicInteger i = new AtomicInteger();
         taskIdManager(0, Bukkit.getScheduler().scheduleSyncRepeatingTask(main, () -> {
+
+            if (game.isState(StateGame.END)) {
+                kill(0);
+                return;
+            }
+
             if (i.get() == game.getScore().getPlayerSize()) {
                 kill(0);
                 step1();
@@ -52,6 +59,12 @@ public class TransportationTask {
         AtomicInteger i = new AtomicInteger();
 
         taskIdManager(1, Bukkit.getScheduler().scheduleSyncRepeatingTask(main, () -> {
+
+            if (game.isState(StateGame.END)) {
+                kill(1);
+                return;
+            }
+
             if (i.get() == game.getScore().getPlayerSize()) {
                 kill(1);
                 step2();
@@ -68,6 +81,12 @@ public class TransportationTask {
         AtomicInteger i = new AtomicInteger(10);
 
         taskIdManager(2, Bukkit.getScheduler().scheduleSyncRepeatingTask(main, () -> {
+
+            if (game.isState(StateGame.END)) {
+                kill(2);
+                return;
+            }
+
             if (i.get() == 0) {
                 kill(2);
                 step3();
@@ -87,6 +106,11 @@ public class TransportationTask {
     private void step3() {
 
         taskIdManager(3, Bukkit.getScheduler().scheduleSyncRepeatingTask(main, () -> {
+
+            if (game.isState(StateGame.END)) {
+                kill(3);
+                return;
+            }
             if (spawns.isEmpty()) {
                 kill(3);
                 step4();
@@ -99,13 +123,14 @@ public class TransportationTask {
 
     }
 
+
     private void step4() {
 
         for (Player player : Bukkit.getOnlinePlayers()) {
 
             if (game.getPlayersWW().containsKey(player.getUniqueId())) {
                 player.setGameMode(GameMode.SURVIVAL);
-                player.sendMessage(game.translate("werewolf.announcement.start.message", game.getScore().conversion(game.getConfig().getTimerValues().get(Timers.INVULNERABILITY.getKey()))));
+                player.sendMessage(game.translate("werewolf.announcement.start.message", game.getScore().conversion(game.getConfig().getTimerValues().get(TimersBase.INVULNERABILITY.getKey()))));
             } else {
                 player.teleport(game.getMapManager().getWorld().getSpawnLocation());
                 player.setGameMode(GameMode.SPECTATOR);
@@ -115,10 +140,10 @@ public class TransportationTask {
             Sounds.NOTE_BASS.play(player);
         }
 
-        game.getScenarios().updateCompass();
+        Bukkit.getPluginManager().callEvent(new UpdateCompassEvent(Bukkit.getOnlinePlayers()));
         game.setState(StateGame.START);
         GameTask start = new GameTask(game);
-        start.runTaskTimer(main, 0, 5);
+        start.runTaskTimer(main, 0, 20);
         Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> Bukkit.getPluginManager().callEvent(new DayEvent(1)), 40);
     }
 

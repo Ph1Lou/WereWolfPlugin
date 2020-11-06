@@ -27,7 +27,6 @@ public class CommandTrapper implements Commands {
     public void execute(Player player, String[] args) {
 
         WereWolfAPI game = main.getWereWolfAPI();
-        String playername = player.getName();
         UUID uuid = player.getUniqueId();
         PlayerWW plg = game.getPlayersWW().get(uuid);
         Roles trapper = plg.getRole();
@@ -42,25 +41,26 @@ public class CommandTrapper implements Commands {
             return;
         }
 
-        if (args[0].toLowerCase().equals(playername.toLowerCase())) {
-            player.sendMessage(game.translate("werewolf.check.not_yourself"));
-            return;
-        }
-
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
             player.sendMessage(game.translate("werewolf.check.offline_player"));
             return;
         }
+
         UUID argUUID = playerArg.getUniqueId();
+
+        if (uuid.equals(argUUID)) {
+            player.sendMessage(game.translate("werewolf.check.not_yourself"));
+            return;
+        }
 
         if (!game.getPlayersWW().containsKey(argUUID) || !game.getPlayersWW().get(argUUID).isState(StatePlayer.ALIVE)) {
             player.sendMessage(game.translate("werewolf.check.player_not_found"));
             return;
         }
 
-        if (((AffectedPlayers)trapper).getAffectedPlayers().contains(argUUID)) {
+        if (((AffectedPlayers) trapper).getAffectedPlayers().contains(argUUID)) {
             player.sendMessage(game.translate("werewolf.check.already_get_power"));
             return;
         }

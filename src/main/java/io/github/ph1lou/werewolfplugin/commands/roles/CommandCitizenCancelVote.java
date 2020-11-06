@@ -50,8 +50,11 @@ public class CommandCitizenCancelVote implements Commands {
             return;
         }
 
-        player.sendMessage(game.translate("werewolf.role.citizen.cancelling_vote_perform", game.getPlayersWW().get(vote).getName()));
+        player.sendMessage(game.translate(
+                "werewolf.role.citizen.cancelling_vote_perform",
+                game.getPlayersWW().get(vote).getName()));
         citizen.addAffectedPlayer(vote);
-        Bukkit.broadcastMessage(game.translate("werewolf.role.citizen.cancelling_broadcast"));
+        Bukkit.broadcastMessage(game.translate(
+                "werewolf.role.citizen.cancelling_broadcast"));
     }
 }

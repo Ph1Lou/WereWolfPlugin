@@ -14,7 +14,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -40,7 +39,11 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
             return;
         }
 
-        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, -1, false, false));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,
+                Integer.MAX_VALUE,
+                -1,
+                false,
+                false));
     }
 
 
@@ -72,34 +75,47 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
 
         if (transformed) return;
 
-        AmnesiacTransformationEvent amnesiacTransformationEvent=new AmnesiacTransformationEvent(getPlayerUUID(),uuid);
+        AmnesiacTransformationEvent amnesiacTransformationEvent =
+                new AmnesiacTransformationEvent(getPlayerUUID(), uuid);
+
         Bukkit.getPluginManager().callEvent(amnesiacTransformationEvent);
 
-        if(amnesiacTransformationEvent.isCancelled()) {
+        if (amnesiacTransformationEvent.isCancelled()) {
             if (player != null) {
                 player.sendMessage(game.translate("werewolf.check.transformation"));
             }
             return;
         }
 
-        NewWereWolfEvent newWereWolfEvent = new NewWereWolfEvent(getPlayerUUID());
-        Bukkit.getPluginManager().callEvent(newWereWolfEvent);
+        setTransformed(true);
 
-        if(newWereWolfEvent.isCancelled()) {
-            if (player != null) {
-                player.sendMessage(game.translate("werewolf.check.transformation"));
-            }
+        if (!super.isWereWolf()) {
+            Bukkit.getPluginManager().callEvent(
+                    new NewWereWolfEvent(getPlayerUUID()));
         }
-        else setTransformed(true);
 
     }
 
     @Override
-    public void recoverPotionEffect(@NotNull Player player) {
-        super.recoverPotionEffect(player);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0, false, false));
+    public void recoverPotionEffect() {
+
+        super.recoverPotionEffect();
+
+        Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (player == null) return;
+
+        player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION,
+                Integer.MAX_VALUE,
+                0,
+                false,
+                false));
         if (game.isDay(Day.DAY)) return;
-        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, -1, false, false));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,
+                Integer.MAX_VALUE,
+                -1,
+                false,
+                false));
     }
 
     @Override
@@ -137,16 +153,24 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
     @EventHandler
     private void onPlayerDeath(PlayerDeathEvent event) {
 
-        if(!transformed) return;
+        if (!transformed) return;
 
-        if(event.getEntity().getKiller()==null) return;
+        if (event.getEntity().getKiller() == null) return;
         Player killer = event.getEntity().getKiller();
 
-        if(!killer.getUniqueId().equals(getPlayerUUID())) return;
+        if (!killer.getUniqueId().equals(getPlayerUUID())) return;
 
         killer.removePotionEffect(PotionEffectType.ABSORPTION);
-        killer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1200, 0, false, false));
-        killer.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 1200, 0, false, false));
+        killer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,
+                1200,
+                0,
+                false,
+                false));
+        killer.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,
+                1200,
+                0,
+                false,
+                false));
     }
 
 }

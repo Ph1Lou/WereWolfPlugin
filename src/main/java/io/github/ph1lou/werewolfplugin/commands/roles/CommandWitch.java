@@ -3,7 +3,7 @@ package io.github.ph1lou.werewolfplugin.commands.roles;
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.Configs;
+import io.github.ph1lou.werewolfapi.enumlg.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.WitchResurrectionEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
@@ -53,7 +53,7 @@ public class CommandWitch implements Commands {
             return;
         }
 
-        if (!game.getConfig().getConfigValues().get(Configs.AUTO_REZ_WITCH.getKey()) && argUUID.equals(uuid)) {
+        if (!game.getConfig().getConfigValues().get(ConfigsBase.AUTO_REZ_WITCH.getKey()) && argUUID.equals(uuid)) {
             player.sendMessage(game.translate("werewolf.check.not_yourself"));
             return;
         }
@@ -65,7 +65,7 @@ public class CommandWitch implements Commands {
             return;
         }
 
-        if (plg1.canBeInfect()) {
+        if (game.getScore().getTimer() - plg1.getDeathTime() < 7) {
             return;
         }
 

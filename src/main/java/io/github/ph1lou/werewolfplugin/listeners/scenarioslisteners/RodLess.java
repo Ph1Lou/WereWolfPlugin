@@ -19,7 +19,7 @@ public class RodLess extends Scenarios {
     @EventHandler
     public void onCraft(PrepareItemCraftEvent event) {
 
-        final CraftingInventory inv = event.getInventory();
+        CraftingInventory inv = event.getInventory();
 
         if(inv.getResult()==null) return;
 

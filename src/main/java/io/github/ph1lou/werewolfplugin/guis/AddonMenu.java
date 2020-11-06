@@ -21,7 +21,8 @@ public class AddonMenu implements InventoryProvider {
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
             .provider(new AddonMenu())
             .size(4, 9)
-            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.addon.name"))
+            .title(JavaPlugin.getPlugin(Main.class)
+                    .getWereWolfAPI().translate("werewolf.menu.addon.name"))
             .closeable(true)
             .build();
 
@@ -30,13 +31,17 @@ public class AddonMenu implements InventoryProvider {
     public void init(Player player, InventoryContents contents) {
         Main main = JavaPlugin.getPlugin(Main.class);
         WereWolfAPI game = main.getWereWolfAPI();
-        int i=1;
+        int i = 1;
 
-        for(AddonRegister addon:main.getRegisterManager().getAddonsRegister()){
-            contents.set(i/9, i%9, ClickableItem.of((addon.getItem()),e -> addon.getAction().make(player)));
+        for (AddonRegister addon : main.getRegisterManager().getAddonsRegister()) {
+            contents.set(i / 9, i % 9, ClickableItem.of((addon.getItem()), e ->
+                    addon.getAction().make(player)));
             i++;
         }
-        contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType()).setDisplayName(game.translate("werewolf.menu.return")).build()), e -> Config.INVENTORY.open(player)));
+        contents.set(0, 0, ClickableItem.of((new ItemBuilder(
+                UniversalMaterial.COMPASS.getType())
+                .setDisplayName(game.translate("werewolf.menu.return"))
+                .build()), e -> Config.INVENTORY.open(player)));
     }
 
     @Override

@@ -76,7 +76,8 @@ public class Librarian extends RolesVillage implements LimitedUse, AffectedPlaye
         Bukkit.broadcastMessage(game.translate("werewolf.role.librarian.death"));
         int i = 1;
         for (String s : this.storage) {
-            Bukkit.broadcastMessage(game.translate("werewolf.role.librarian.book", i, s));
+            Bukkit.broadcastMessage(game.translate(
+                    "werewolf.role.librarian.book", i, s));
             i++;
         }
 

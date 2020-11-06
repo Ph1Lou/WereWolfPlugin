@@ -10,10 +10,14 @@ import fr.minuskube.inv.content.SlotIterator;
 import io.github.ph1lou.werewolfapi.ConfigRegister;
 import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
+import io.github.ph1lou.werewolfapi.events.UpdateCompassEvent;
+import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -66,40 +70,44 @@ public class GlobalConfigs implements InventoryProvider {
             }
             items.add(ClickableItem.of((new ItemBuilder(itemStack).setDisplayName(game.translate(ConfigRegister.getKey())).setLore(lore).build()), e -> {
                 config.getConfigValues().put(key, !config.getConfigValues().get(key));
-                if (key.equals("werewolf.menu.global.compass_middle")) {
-                    game.getScenarios().updateCompass();
+                if (key.equals(ConfigsBase.COMPASS_MIDDLE.getKey())) {
+                    Bukkit.getPluginManager().callEvent(new UpdateCompassEvent(Bukkit.getOnlinePlayers()));
+                }
+                if (key.equals(ConfigsBase.RED_NAME_TAG.getKey())) {
+                    Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(Bukkit.getOnlinePlayers()));
                 }
             }));
-        }
 
-        if (items.size() > 45) {
-            pagination.setItems(items.toArray(new ClickableItem[0]));
-            pagination.setItemsPerPage(36);
-            pagination.addToIterator(contents.newIterator(SlotIterator.Type.HORIZONTAL, 1, 0));
-            int page = pagination.getPage() + 1;
-            contents.set(5, 0, null);
-            contents.set(5, 1, null);
-            contents.set(5, 3, null);
-            contents.set(5, 5, null);
-            contents.set(5, 7, null);
-            contents.set(5, 8, null);
-            contents.set(5, 2, ClickableItem.of(new ItemBuilder(Material.ARROW).setDisplayName(game.translate("werewolf.menu.roles.previous", page, pagination.isFirst() ? page : page - 1)).build(),
-                    e -> INVENTORY.open(player, pagination.previous().getPage())));
-            contents.set(5, 6, ClickableItem.of(new ItemBuilder(Material.ARROW).setDisplayName(game.translate("werewolf.menu.roles.next", page, pagination.isLast() ? page : page + 1)).build(),
-                    e -> INVENTORY.open(player, pagination.next().getPage())));
-            contents.set(5, 4, ClickableItem.empty(new ItemBuilder(UniversalMaterial.SIGN.getType()).setDisplayName(game.translate("werewolf.menu.roles.current", page, items.size() / 36 + 1)).build()));
-        } else {
-            int i = 0;
-            for (ClickableItem clickableItem : items) {
-                contents.set(i / 9 + 1, i % 9, clickableItem);
-                i++;
+            if (items.size() > 45) {
+                pagination.setItems(items.toArray(new ClickableItem[0]));
+                pagination.setItemsPerPage(36);
+                pagination.addToIterator(contents.newIterator(SlotIterator.Type.HORIZONTAL, 1, 0));
+                int page = pagination.getPage() + 1;
+                contents.set(5, 0, null);
+                contents.set(5, 1, null);
+                contents.set(5, 3, null);
+                contents.set(5, 5, null);
+                contents.set(5, 7, null);
+                contents.set(5, 8, null);
+                contents.set(5, 2, ClickableItem.of(new ItemBuilder(Material.ARROW).setDisplayName(game.translate("werewolf.menu.roles.previous", page, pagination.isFirst() ? page : page - 1)).build(),
+                        e -> INVENTORY.open(player, pagination.previous().getPage())));
+                contents.set(5, 6, ClickableItem.of(new ItemBuilder(Material.ARROW).setDisplayName(game.translate("werewolf.menu.roles.next", page, pagination.isLast() ? page : page + 1)).build(),
+                        e -> INVENTORY.open(player, pagination.next().getPage())));
+                contents.set(5, 4, ClickableItem.empty(new ItemBuilder(UniversalMaterial.SIGN.getType()).setDisplayName(game.translate("werewolf.menu.roles.current", page, items.size() / 36 + 1)).build()));
+            } else {
+                int i = 0;
+                for (ClickableItem clickableItem : items) {
+                    contents.set(i / 9 + 1, i % 9, clickableItem);
+                    i++;
+                }
+                for (int k = i; k < (i / 9 + 1) * 9; k++) {
+                    contents.set(k / 9 + 1, k % 9, null);
+                }
             }
-            for (int k = i; k < (i / 9 + 1) * 9; k++) {
-                contents.set(k / 9 + 1, k % 9, null);
-            }
+
+
         }
-
-
     }
+
 }
 

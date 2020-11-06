@@ -4,16 +4,18 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.RolesBase;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.UpdateEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class SiameseTwin extends RolesVillage {
@@ -24,12 +26,26 @@ public class SiameseTwin extends RolesVillage {
 
     @Override
     public String getDescription() {
-        return game.translate("werewolf.role.siamese_twin.description");
+
+        StringBuilder list = new StringBuilder();
+
+        game.getPlayersWW().values()
+                .stream()
+                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                .filter(playerWW -> !playerWW.getRole().equals(this))
+                .filter(playerWW -> playerWW.getRole().isKey(
+                        RolesBase.SIAMESE_TWIN.getKey()))
+                .forEach(playerWW -> list.append(playerWW.getName()).append(" "));
+
+        return game.translate("werewolf.role.siamese_twin.description") +
+                "\n§f" +
+                game.translate("werewolf.role.siamese_twin.siamese_twin_list",
+                        list.toString());
     }
 
 
     @Override
-    public void stolen(@NotNull UUID uuid) {
+    public void recoverPowerAfterStolen() {
 
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
@@ -41,43 +57,50 @@ public class SiameseTwin extends RolesVillage {
     }
 
     @Override
-    public Player recoverPower() {
-        Player player = super.recoverPower();
-        if (player == null) return null;
+    public void recoverPower() {
+        super.recoverPower();
+        Player player = Bukkit.getPlayer(getPlayerUUID());
+        if (player == null) return;
         VersionUtils.getVersionUtils().setPlayerMaxHealth(player, 24);
-        return player;
     }
 
     @EventHandler
     public void onUpdate(UpdateEvent event) {
 
-        int counter = 0;
-        double health = 0;
-        for (UUID uuid : game.getPlayersWW().keySet()) {
+        double health = game.getPlayersWW().values()
+                .stream()
+                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                .map(PlayerWW::getRole)
+                .filter(roles -> roles.isKey(RolesBase.SIAMESE_TWIN.getKey()))
+                .map(Roles::getPlayerUUID)
+                .map(Bukkit::getPlayer)
+                .filter(Objects::nonNull)
+                .mapToDouble(player -> player.getHealth() /
+                        VersionUtils.getVersionUtils().getPlayerMaxHealth(player))
+                .average()
+                .orElse(0);
 
-            PlayerWW plg = game.getPlayersWW().get(uuid);
-            Player c = Bukkit.getPlayer(uuid);
-
-            if (plg.isState(StatePlayer.ALIVE) && plg.getRole().isKey("werewolf.role.siamese_twin.display") && c != null) {
-                counter++;
-                health += c.getHealth() / VersionUtils.getVersionUtils().getPlayerMaxHealth(c);
-            }
-        }
-        health /= counter;
-        for (UUID uuid : game.getPlayersWW().keySet()) {
-
-            PlayerWW plg = game.getPlayersWW().get(uuid);
-            Player c = Bukkit.getPlayer(uuid);
-
-            if (plg.isState(StatePlayer.ALIVE) && plg.getRole().isKey("werewolf.role.siamese_twin.display") && c != null) {
-
-                if (health * VersionUtils.getVersionUtils().getPlayerMaxHealth(c) > 10) {
-                    if (health * VersionUtils.getVersionUtils().getPlayerMaxHealth(c) + 1 < c.getHealth()) {
-                        Sounds.BURP.play(c);
+        game.getPlayersWW().values()
+                .stream()
+                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                .map(PlayerWW::getRole)
+                .filter(roles -> roles.isKey(RolesBase.SIAMESE_TWIN.getKey()))
+                .map(Roles::getPlayerUUID)
+                .map(Bukkit::getPlayer)
+                .filter(Objects::nonNull)
+                .filter(player -> health *
+                        VersionUtils.getVersionUtils().getPlayerMaxHealth(player)
+                        > 10)
+                .forEach(player -> {
+                    if (health * VersionUtils.getVersionUtils()
+                            .getPlayerMaxHealth(player) + 1
+                            < player.getHealth()) {
+                        Sounds.BURP.play(player);
                     }
-                    c.setHealth(health * VersionUtils.getVersionUtils().getPlayerMaxHealth(c));
-                }
-            }
-        }
+                    player.setHealth(health *
+                            VersionUtils.getVersionUtils()
+                                    .getPlayerMaxHealth(player));
+                });
+
     }
 }

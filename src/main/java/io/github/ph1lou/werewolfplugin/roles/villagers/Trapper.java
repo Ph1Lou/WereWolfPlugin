@@ -2,12 +2,14 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
+import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
+import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -15,6 +17,7 @@ import org.bukkit.event.EventHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Trapper extends RolesVillage implements AffectedPlayers, Power {
@@ -60,7 +63,7 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if(!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)){
+        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
             return;
         }
         Player player = Bukkit.getPlayer(getPlayerUUID());
@@ -70,7 +73,8 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
             return;
         }
 
-        player.sendMessage(game.translate("werewolf.role.trapper.tracking_message"));
+        player.sendMessage(game.translate(
+                "werewolf.role.trapper.tracking_message"));
     }
 
 
@@ -92,14 +96,22 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
 
         Player player = Bukkit.getPlayer(event.getPlayerUUID());
 
-        if(hasPower()) return;
+        if (hasPower()) return;
 
-        for (UUID uuid : getAffectedPlayers()) {
-            Player player1 = Bukkit.getPlayer(uuid);
-            if (game.getPlayersWW().get(uuid).isState(StatePlayer.ALIVE) && player1 != null) {
-                stringBuilder.append("§b ").append(game.getPlayersWW().get(uuid).getName()).append(" ").append(game.getScore().updateArrow(player, player1.getLocation()));
-            }
-        }
+        getAffectedPlayers()
+                .stream()
+                .map(game::getPlayerWW)
+                .filter(Objects::nonNull)
+                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                .peek(playerWW -> stringBuilder.append("§b ")
+                        .append(playerWW.getName())
+                        .append(" "))
+                .map(PlayerWW::getRole)
+                .map(Roles::getPlayerUUID)
+                .map(Bukkit::getPlayer)
+                .filter(Objects::nonNull)
+                .forEach(player1 -> stringBuilder.append(game.getScore()
+                        .updateArrow(player, player1.getLocation())));
 
         event.setActionBar(stringBuilder.toString());
     }

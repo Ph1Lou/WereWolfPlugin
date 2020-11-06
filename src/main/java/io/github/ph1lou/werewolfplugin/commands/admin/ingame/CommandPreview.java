@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.MapManagerAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
@@ -19,6 +20,11 @@ public class CommandPreview implements Commands {
     public void execute(Player player, String[] args) {
 
         WereWolfAPI game = main.getWereWolfAPI();
+        MapManagerAPI mapManager = game.getMapManager();
+
+        if (mapManager.getWorld() == null) {
+            mapManager.createMap();
+        }
 
         if (player.getWorld().equals(game.getMapManager().getWorld())) {
             player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());

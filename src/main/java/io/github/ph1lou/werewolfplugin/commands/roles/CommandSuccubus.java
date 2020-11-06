@@ -30,7 +30,6 @@ public class CommandSuccubus implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        String playername = player.getName();
         PlayerWW plg = game.getPlayersWW().get(uuid);
         Roles succubus = plg.getRole();
 
@@ -41,11 +40,6 @@ public class CommandSuccubus implements Commands {
 
         if (!((AffectedPlayers)succubus).getAffectedPlayers().isEmpty()) {
             player.sendMessage(game.translate("werewolf.check.power"));
-            return;
-        }
-
-        if (args[0].toLowerCase().equals(playername.toLowerCase())) {
-            player.sendMessage(game.translate("werewolf.check.not_yourself"));
             return;
         }
 
@@ -61,6 +55,11 @@ public class CommandSuccubus implements Commands {
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
+
+        if (argUUID.equals(uuid)) {
+            player.sendMessage(game.translate("werewolf.check.not_yourself"));
+            return;
+        }
 
         if (!game.getPlayersWW().containsKey(argUUID) || !game.getPlayersWW().get(argUUID).isState(StatePlayer.ALIVE)) {
             player.sendMessage(game.translate("werewolf.check.player_not_found"));

@@ -24,7 +24,22 @@ public class HasteyBoys extends Scenarios {
 
         Material itemType = event.getInventory().getResult().getType();
 
-        if (itemType != Material.DIAMOND_HOE && itemType != UniversalMaterial.WOODEN_AXE.getType() && itemType != UniversalMaterial.WOODEN_PICKAXE.getType() && itemType != UniversalMaterial.WOODEN_SHOVEL.getType() && itemType != UniversalMaterial.GOLDEN_AXE.getType() && itemType != UniversalMaterial.GOLDEN_PICKAXE.getType() && itemType != UniversalMaterial.GOLDEN_SHOVEL.getType() && itemType != Material.STONE_AXE && itemType != Material.STONE_PICKAXE && itemType != UniversalMaterial.STONE_SHOVEL.getType() && itemType != Material.IRON_AXE && itemType != Material.IRON_PICKAXE && itemType != UniversalMaterial.IRON_SHOVEL.getType() && itemType != Material.DIAMOND_AXE && itemType != Material.DIAMOND_PICKAXE && itemType != UniversalMaterial.DIAMOND_SHOVEL.getType()) {
+        if (itemType != Material.DIAMOND_HOE &&
+                itemType != UniversalMaterial.WOODEN_AXE.getType() &&
+                itemType != UniversalMaterial.WOODEN_PICKAXE.getType() &&
+                itemType != UniversalMaterial.WOODEN_SHOVEL.getType() &&
+                itemType != UniversalMaterial.GOLDEN_AXE.getType() &&
+                itemType != UniversalMaterial.GOLDEN_PICKAXE.getType() &&
+                itemType != UniversalMaterial.GOLDEN_SHOVEL.getType() &&
+                itemType != Material.STONE_AXE &&
+                itemType != Material.STONE_PICKAXE &&
+                itemType != UniversalMaterial.STONE_SHOVEL.getType() &&
+                itemType != Material.IRON_AXE &&
+                itemType != Material.IRON_PICKAXE &&
+                itemType != UniversalMaterial.IRON_SHOVEL.getType() &&
+                itemType != Material.DIAMOND_AXE &&
+                itemType != Material.DIAMOND_PICKAXE &&
+                itemType != UniversalMaterial.DIAMOND_SHOVEL.getType()) {
             return;
         }
         ItemStack item = new ItemStack(itemType);

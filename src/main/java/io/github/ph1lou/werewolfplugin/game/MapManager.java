@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
+
 public class MapManager implements MapManagerAPI {
 
     private final Main main;
@@ -31,12 +32,12 @@ public class MapManager implements MapManagerAPI {
 
         GameManager game = (GameManager) main.getWereWolfAPI();
 
-        if (getWorld() == null) {
+        if (world == null) {
             createMap();
         }
         int chunksPerRun = 20;
         if (wft == null || wft.getPercentageCompleted() == 100) {
-            wft = new WorldFillTask(game, chunksPerRun, mapRadius);
+            wft = new WorldFillTask(world, chunksPerRun, mapRadius);
             wft.setTaskID(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(game.getMain(), wft, 1, 1));
             sender.sendMessage(game.translate("werewolf.commands.admin.generation.perform"));
         } else sender.sendMessage(game.translate("werewolf.commands.admin.generation.already_start"));
@@ -44,6 +45,8 @@ public class MapManager implements MapManagerAPI {
 
     @Override
     public void createMap() {
+
+        Bukkit.broadcastMessage(main.getWereWolfAPI().translate("werewolf.commands.admin.preview.create"));
         WorldCreator wc = new WorldCreator("werewolf");
         wc.environment(World.Environment.NORMAL);
         wc.type(WorldType.NORMAL);
@@ -53,6 +56,10 @@ public class MapManager implements MapManagerAPI {
 
     @Override
     public void deleteMap() {
+
+        if (world == null) {
+            return;
+        }
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
@@ -81,11 +88,7 @@ public class MapManager implements MapManagerAPI {
             world.save();
             int x = world.getSpawnLocation().getBlockX();
             int z = world.getSpawnLocation().getBlockZ();
-            try {
-                world.getWorldBorder().reset();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            world.getWorldBorder().reset();
 
             if (main.getConfig().getBoolean("autoRoofedMiddle")) {
                 Location biome = VersionUtils.getVersionUtils().findBiome(world);

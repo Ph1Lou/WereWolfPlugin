@@ -4,7 +4,6 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.Scenarios;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
@@ -19,9 +18,8 @@ public class CompassTargetLastDeath extends Scenarios {
 
         if (!game.getPlayersWW().containsKey(event.getEntity().getUniqueId())) return;
 
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            p.setCompassTarget(event.getEntity().getLocation());
-        }
+        Bukkit.getOnlinePlayers()
+                .forEach(player -> player.setCompassTarget(event.getEntity().getLocation()));
     }
 
 

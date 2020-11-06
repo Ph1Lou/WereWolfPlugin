@@ -2,11 +2,13 @@ package io.github.ph1lou.werewolfplugin.game;
 
 import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
 import io.github.ph1lou.werewolfapi.enumlg.StateGame;
+import io.github.ph1lou.werewolfplugin.commands.Admin;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -150,5 +152,24 @@ public class ModerationManager implements ModerationManagerAPI {
                 });
     }
 
+    @Override
+    public boolean isStaff(UUID uuid) {
+        return hosts.contains(uuid) || moderators.contains(uuid);
+    }
+
+    @Override
+    public boolean checkAccessAdminCommand(String commandKey, Player player) {
+        return checkAccessAdminCommand(commandKey, player, true);
+    }
+
+    @Override
+    public boolean checkAccessAdminCommand(String commandKey, Player player, boolean seePermissionMessages) {
+        return ((Admin) Objects.requireNonNull(
+                game
+                        .getMain()
+                        .getCommand("a"))
+                .getExecutor())
+                .checkAccess(commandKey, player, seePermissionMessages);
+    }
 
 }

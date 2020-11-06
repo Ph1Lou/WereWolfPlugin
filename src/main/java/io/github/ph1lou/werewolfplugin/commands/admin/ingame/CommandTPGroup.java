@@ -25,6 +25,7 @@ public class CommandTPGroup implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         Player playerArg = Bukkit.getPlayer(args[0]);
+        String playerName = player.getName();
 
         if (playerArg == null) {
             player.sendMessage(game.translate("werewolf.check.offline_player"));
@@ -58,10 +59,10 @@ public class CommandTPGroup implements Commands {
                 if (p.getLocation().distance(location) <= d) {
                     size--;
                     sb.append(p.getName()).append(" ");
-                    game.getMapManager().transportation(uuid, r, game.translate("werewolf.commands.admin.tp_group.perform"));
+                    game.getMapManager().transportation(uuid, r, game.translate("werewolf.commands.admin.tp_group.perform", playerName));
                 }
             }
         }
-        Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.commands.admin.tp_group.broadcast",sb.toString()));
+        Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.commands.admin.tp_group.broadcast", sb.toString(), playerName));
     }
 }

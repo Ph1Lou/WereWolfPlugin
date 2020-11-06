@@ -2,7 +2,7 @@ package io.github.ph1lou.werewolfplugin.game;
 
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.Camp;
-import io.github.ph1lou.werewolfapi.enumlg.Configs;
+import io.github.ph1lou.werewolfapi.enumlg.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
@@ -122,7 +122,7 @@ public class Events implements Listener {
 						game.getEvents().chest_location.clear();
 						game.getEvents().chest_has_been_open.clear();
 						Bukkit.broadcastMessage(game.translate("werewolf.event.all_chest_find"));
-						game.getConfig().getConfigValues().put(Configs.SEER_EVERY_OTHER_DAY.getKey(), true);
+						game.getConfig().getConfigValues().put(ConfigsBase.SEER_EVERY_OTHER_DAY.getKey(), true);
 					}
 				}
 			}

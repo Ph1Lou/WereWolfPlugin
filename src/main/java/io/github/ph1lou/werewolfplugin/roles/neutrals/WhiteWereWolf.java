@@ -14,7 +14,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -38,7 +37,12 @@ public class WhiteWereWolf extends RolesNeutral {
             return;
         }
 
-        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, -1, false, false));
+        player.addPotionEffect(
+                new PotionEffect(PotionEffectType.INCREASE_DAMAGE,
+                        Integer.MAX_VALUE,
+                        -1,
+                        false,
+                        false));
     }
 
     @EventHandler
@@ -59,7 +63,7 @@ public class WhiteWereWolf extends RolesNeutral {
     }
 
     @Override
-    public void stolen(@NotNull UUID uuid) {
+    public void recoverPowerAfterStolen() {
 
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
@@ -68,23 +72,43 @@ public class WhiteWereWolf extends RolesNeutral {
             return;
         }
 
-        VersionUtils.getVersionUtils().setPlayerMaxHealth(player, VersionUtils.getVersionUtils().getPlayerMaxHealth(player) + 10);
+        VersionUtils.getVersionUtils().setPlayerMaxHealth(player,
+                VersionUtils.getVersionUtils().getPlayerMaxHealth(player) + 10);
     }
 
     @Override
-    public Player recoverPower() {
-        Player player = super.recoverPower();
-        if(player==null) return null;
+    public void recoverPower() {
+
+        super.recoverPower();
+        Player player = Bukkit.getPlayer(getPlayerUUID());
+        if (player == null) return;
         VersionUtils.getVersionUtils().setPlayerMaxHealth(player, 30);
-        return player;
     }
 
     @Override
-    public void recoverPotionEffect(@NotNull Player player) {
-        super.recoverPotionEffect(player);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0, false, false));
+    public void recoverPotionEffect() {
+
+        super.recoverPotionEffect();
+
+        Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (player == null) return;
+
+        player.addPotionEffect(
+                new PotionEffect(PotionEffectType.NIGHT_VISION,
+                        Integer.MAX_VALUE,
+                        0,
+                        false,
+                        false));
+
         if (game.isDay(Day.DAY)) return;
-        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, -1, false, false));
+
+        player.addPotionEffect(new PotionEffect(
+                PotionEffectType.INCREASE_DAMAGE,
+                Integer.MAX_VALUE,
+                -1,
+                false,
+                false));
     }
 
     @Override
@@ -107,13 +131,23 @@ public class WhiteWereWolf extends RolesNeutral {
     @EventHandler
     private void onPlayerDeath(PlayerDeathEvent event) {
 
-        if(event.getEntity().getKiller()==null) return;
+        if (event.getEntity().getKiller() == null) return;
         Player killer = event.getEntity().getKiller();
 
-        if(!killer.getUniqueId().equals(getPlayerUUID())) return;
+        if (!killer.getUniqueId().equals(getPlayerUUID())) return;
 
         killer.removePotionEffect(PotionEffectType.ABSORPTION);
-        killer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1200, 0, false, false));
-        killer.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 1200, 0, false, false));
+        killer.addPotionEffect(new PotionEffect(
+                PotionEffectType.SPEED,
+                1200,
+                0,
+                false,
+                false));
+        killer.addPotionEffect(new PotionEffect(
+                PotionEffectType.ABSORPTION,
+                1200,
+                0,
+                false,
+                false));
     }
 }

@@ -10,6 +10,7 @@ import io.github.ph1lou.werewolfplugin.roles.villagers.Villager;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +22,6 @@ public class PlayerLG implements PlayerWW {
 
     private StatePlayer state = StatePlayer.ALIVE;
     private Roles role;
-    private Boolean canBeInfect = false;
     private final List<UUID> lovers = new ArrayList<>();
     private Boolean kit = false;
     private Boolean announceCursedLoversAFK = false;
@@ -33,15 +33,16 @@ public class PlayerLG implements PlayerWW {
     private UUID amnesiacLoverUUID = null;
     private transient Location spawn;
     private int deathTime = 0;
+    private int disconnectedTime = 0;
     private int lostHeart = 0;
     private int kill = 0;
     private final List<UUID> killer = new ArrayList<>();
-	private String name;
+    private String name;
 
 
-	public PlayerLG (Main main, WereWolfAPI game, Player player) {
+    public PlayerLG(Main main, WereWolfAPI game, Player player) {
         this.spawn = player.getWorld().getSpawnLocation();
-        this.role = new Villager(main, game, player.getUniqueId(), io.github.ph1lou.werewolfapi.enumlg.Roles.VILLAGER.getKey());
+        this.role = new Villager(main, game, player.getUniqueId(), io.github.ph1lou.werewolfapi.enumlg.RolesBase.VILLAGER.getKey());
         this.name = player.getName();
     }
 
@@ -163,15 +164,6 @@ public class PlayerLG implements PlayerWW {
 		return(this.deathTime);
 	}
 
-	@Override
-	public void setCanBeInfect(Boolean b) {
-		this.canBeInfect =b;
-	}
-
-	@Override
-	public Boolean canBeInfect() {
-		return(this.canBeInfect);
-	}
 
 	@Override
 	public void clearLostHeart() {
@@ -203,25 +195,26 @@ public class PlayerLG implements PlayerWW {
 		this.announceCursedLoversAFK = announceCursedLoversAFK;
 	}
 
-	@Override
-	public Boolean getAnnounceLoversAFK() {
-		return announceLoversAFK;
-	}
-
-	@Override
-	public void setAnnounceLoversAFK(Boolean announceLoversAFK) {
-		this.announceLoversAFK = announceLoversAFK;
-	}
-
-	@Override
-    public UUID getLastKiller() {
-		return this.killer.isEmpty()?null:this.killer.get(this.killer.size()-1);
+    @Override
+    public Boolean getAnnounceLoversAFK() {
+        return announceLoversAFK;
     }
 
-	@Override
-	public void setThief(Boolean thief) {
-		this.thief = thief;
-	}
+    @Override
+    public void setAnnounceLoversAFK(Boolean announceLoversAFK) {
+        this.announceLoversAFK = announceLoversAFK;
+    }
+
+    @Nullable
+    @Override
+    public UUID getLastKiller() {
+        return this.killer.isEmpty() ? null : this.killer.get(this.killer.size() - 1);
+    }
+
+    @Override
+    public void setThief(Boolean thief) {
+        this.thief = thief;
+    }
 
 	@Override
 	public Boolean isThief() {
@@ -261,6 +254,16 @@ public class PlayerLG implements PlayerWW {
     @Override
     public StatePlayer getState() {
         return state;
+    }
+
+    @Override
+    public int getDisconnectedTime() {
+        return disconnectedTime;
+    }
+
+    @Override
+    public void setDisconnectedTime(int disconnectedTime) {
+        this.disconnectedTime = disconnectedTime;
     }
 }
 

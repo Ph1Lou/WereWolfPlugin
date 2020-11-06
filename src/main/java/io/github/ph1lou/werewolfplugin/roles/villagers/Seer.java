@@ -3,9 +3,9 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.Configs;
+import io.github.ph1lou.werewolfapi.enumlg.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
-import io.github.ph1lou.werewolfapi.enumlg.Timers;
+import io.github.ph1lou.werewolfapi.enumlg.TimersBase;
 import io.github.ph1lou.werewolfapi.events.ChestEvent;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
@@ -16,7 +16,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +59,9 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
             return;
         }
 
-        if (game.getConfig().getConfigValues().get(Configs.SEER_EVERY_OTHER_DAY.getKey()) && event.getNumber() == dayNumber + 1) {
+        if (game.getConfig().getConfigValues()
+                .get(ConfigsBase.SEER_EVERY_OTHER_DAY.getKey()) &&
+                event.getNumber() == dayNumber + 1) {
             return;
         }
 
@@ -73,7 +74,12 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
         }
 
 
-        player.sendMessage(game.translate("werewolf.role.seer.see_camp_message", game.getScore().conversion(game.getConfig().getTimerValues().get(Timers.POWER_DURATION.getKey()))));
+        player.sendMessage(game.translate(
+                "werewolf.role.seer.see_camp_message",
+                game.getScore().conversion(
+                        game.getConfig()
+                                .getTimerValues()
+                                .get(TimersBase.POWER_DURATION.getKey()))));
     }
 
 
@@ -84,21 +90,34 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
 
 
     @Override
-    public void recoverPotionEffect(@NotNull Player player) {
-        super.recoverPotionEffect(player);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0, false, false));
+    public void recoverPotionEffect() {
+
+        super.recoverPotionEffect();
+
+        Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (player == null) return;
+
+        player.addPotionEffect(
+                new PotionEffect(PotionEffectType.NIGHT_VISION,
+                        Integer.MAX_VALUE,
+                        0,
+                        false,
+                        false));
     }
 
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 
         UUID uuid = event.getUuid();
-        if (!game.getConfig().getConfigValues().get(Configs.EVENT_SEER_DEATH.getKey())) return;
+        if (!game.getConfig().getConfigValues()
+                .get(ConfigsBase.EVENT_SEER_DEATH.getKey())) return;
 
-        if(!uuid.equals(getPlayerUUID())) return;
+        if (!uuid.equals(getPlayerUUID())) return;
 
         Bukkit.getPluginManager().callEvent(new ChestEvent());
-        game.getConfig().getConfigValues().put(Configs.EVENT_SEER_DEATH.getKey(), false);
+        game.getConfig().getConfigValues()
+                .put(ConfigsBase.EVENT_SEER_DEATH.getKey(), false);
     }
 
 

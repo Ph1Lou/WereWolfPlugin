@@ -3,8 +3,8 @@ package io.github.ph1lou.werewolfplugin.game;
 
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.Configs;
-import io.github.ph1lou.werewolfapi.enumlg.Roles;
+import io.github.ph1lou.werewolfapi.enumlg.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enumlg.RolesBase;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.*;
@@ -178,14 +178,14 @@ public class LoversManagement {
 				lovers.add(uuid);
 			}
 		}
-		if (lovers.size() < 2 && game.getConfig().getRoleCount().get(Roles.CUPID.getKey()) + game.getConfig().getLoverSize() > 0) {
+		if (lovers.size() < 2 && game.getConfig().getRoleCount().get(RolesBase.CUPID.getKey()) + game.getConfig().getLoverSize() > 0) {
 			Bukkit.broadcastMessage(game.translate("werewolf.role.lover.not_enough_players"));
 			return;
 		}
 
-		Boolean polygamy = game.getConfig().getConfigValues().get(Configs.POLYGAMY.getKey());
+		Boolean polygamy = game.getConfig().getConfigValues().get(ConfigsBase.POLYGAMY.getKey());
 
-		if (!polygamy && (game.getConfig().getLoverSize() == 0 && game.getConfig().getRoleCount().get(Roles.CUPID.getKey()) * 2 >= game.getScore().getPlayerSize()) || (game.getConfig().getLoverSize() != 0 && (game.getConfig().getRoleCount().get(Roles.CUPID.getKey()) + game.getConfig().getLoverSize()) * 2 > game.getScore().getPlayerSize())) {
+		if (!polygamy && (game.getConfig().getLoverSize() == 0 && game.getConfig().getRoleCount().get(RolesBase.CUPID.getKey()) * 2 >= game.getScore().getPlayerSize()) || (game.getConfig().getLoverSize() != 0 && (game.getConfig().getRoleCount().get(RolesBase.CUPID.getKey()) + game.getConfig().getLoverSize()) * 2 > game.getScore().getPlayerSize())) {
 			polygamy = true;
 			Bukkit.broadcastMessage(game.translate("werewolf.role.lover.polygamy"));
 		}
@@ -195,7 +195,7 @@ public class LoversManagement {
 		for (UUID uuid : game.getPlayersWW().keySet()) {
 
 			PlayerWW plg = game.getPlayersWW().get(uuid);
-			if (plg.getRole().isKey(Roles.CUPID.getKey())) {
+			if (plg.getRole().isKey(RolesBase.CUPID.getKey())) {
 
 				Cupid cupid = (Cupid) plg.getRole();
 

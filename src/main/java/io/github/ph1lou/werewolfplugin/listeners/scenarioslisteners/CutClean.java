@@ -3,7 +3,7 @@ package io.github.ph1lou.werewolfplugin.listeners.scenarioslisteners;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.Scenarios;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.Timers;
+import io.github.ph1lou.werewolfapi.enumlg.TimersBase;
 import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Location;
@@ -31,7 +31,7 @@ public class CutClean extends Scenarios {
         Block block = event.getBlock();
         final Location loc = new Location(block.getWorld(), block.getLocation().getBlockX() + 0.5, block.getLocation().getBlockY() + 0.5, block.getLocation().getBlockZ() + 0.5);
 
-        if (game.getConfig().getTimerValues().get(Timers.DIGGING.getKey()) < 0) {
+        if (game.getConfig().getTimerValues().get(TimersBase.DIGGING.getKey()) < 0) {
             List<Material> m = Arrays.asList(Material.REDSTONE_ORE, Material.EMERALD_ORE, Material.LAPIS_ORE, Material.COAL_ORE, Material.IRON_ORE, Material.GOLD_ORE, Material.DIAMOND_ORE);
 
             if (m.contains(block.getType())) {
@@ -61,7 +61,7 @@ public class CutClean extends Scenarios {
                 if (!currentItemType.equals(Material.DIAMOND_PICKAXE) && !currentItemType.equals(Material.IRON_PICKAXE) && !currentItemType.equals(Material.STONE_PICKAXE)) {
                     return;
                 }
-                block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(game.getConfig().getScenarioValues().get("werewolf.menu.scenarios.xp_boost") ? (int) (game.getConfig().getXpBoost() / 100f) : 1);
+                block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(game.getConfig().getScenarioValues().get(io.github.ph1lou.werewolfapi.enumlg.ScenariosBase.XP_BOOST.getKey()) ? (int) (game.getConfig().getXpBoost() / 100f) : 1);
                 block.setType(Material.AIR);
                 block.getWorld().dropItem(loc, new ItemStack(Material.IRON_INGOT, 1));
                 break;
@@ -70,7 +70,7 @@ public class CutClean extends Scenarios {
                 if (!currentItemType.equals(Material.DIAMOND_PICKAXE) && !currentItemType.equals(Material.IRON_PICKAXE)) {
                     return;
                 }
-                block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(game.getConfig().getScenarioValues().get("werewolf.menu.scenarios.xp_boost") ? (int) (game.getConfig().getXpBoost() / 100f) : 1);
+                block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(game.getConfig().getScenarioValues().get(io.github.ph1lou.werewolfapi.enumlg.ScenariosBase.XP_BOOST.getKey()) ? (int) (game.getConfig().getXpBoost() / 100f) : 1);
                 block.setType(Material.AIR);
                 block.getWorld().dropItem(loc, new ItemStack(Material.GOLD_INGOT, 1));
                 break;
@@ -81,7 +81,7 @@ public class CutClean extends Scenarios {
     }
 
     @EventHandler
-    public void onEntityDeath(final EntityDeathEvent event) {
+    public void onEntityDeath(EntityDeathEvent event) {
 
         List<ItemStack> loots = event.getDrops();
 

@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.commands.utilities;
 
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -22,16 +23,6 @@ public class CommandVote implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-
-        if (args.length != 1) {
-            player.sendMessage(game.translate("werewolf.check.player_input"));
-            return;
-        }
-        if (!game.getPlayersWW().containsKey(uuid)) {
-            player.sendMessage(game.translate("werewolf.check.not_in_game"));
-            return;
-        }
-
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
@@ -39,6 +30,17 @@ public class CommandVote implements Commands {
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
+
+        if (!game.getPlayersWW().containsKey(argUUID)) {
+            player.sendMessage(game.translate("werewolf.check.player_not_found"));
+            return;
+        }
+
+        if (game.getPlayersWW().get(argUUID).isState(StatePlayer.DEATH)) {
+            player.sendMessage(game.translate("werewolf.check.player_not_found"));
+            return;
+        }
+
         game.getVote().setUnVote(uuid, argUUID);
     }
 }

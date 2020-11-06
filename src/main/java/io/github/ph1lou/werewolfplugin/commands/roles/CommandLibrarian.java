@@ -9,6 +9,8 @@ import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.LimitedUse;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -51,12 +53,14 @@ public class CommandLibrarian implements Commands {
 
         UUID argUUID = selectionPlayer.getUniqueId();
 
-        if (!game.getPlayersWW().containsKey(argUUID) || !game.getPlayersWW().get(argUUID).isState(StatePlayer.ALIVE)) {
+        if (!game.getPlayersWW().containsKey(argUUID) ||
+                !game.getPlayersWW().get(argUUID).isState(StatePlayer.ALIVE)) {
+
             player.sendMessage(game.translate("werewolf.check.player_not_found"));
             return;
         }
 
-        if(((AffectedPlayers)librarian).getAffectedPlayers().contains(argUUID)){
+        if (((AffectedPlayers) librarian).getAffectedPlayers().contains(argUUID)) {
             player.sendMessage(game.translate("werewolf.role.librarian.waiting"));
             return;
         }
@@ -68,17 +72,28 @@ public class CommandLibrarian implements Commands {
         }
 
         ((LimitedUse) librarian).setUse(((LimitedUse) librarian).getUse() + 1);
-        LibrarianRequestEvent librarianRequestEvent=new LibrarianRequestEvent(uuid,argUUID);
+        LibrarianRequestEvent librarianRequestEvent = new LibrarianRequestEvent(uuid, argUUID);
         Bukkit.getPluginManager().callEvent(librarianRequestEvent);
 
-        if(librarianRequestEvent.isCancelled()){
+        if (librarianRequestEvent.isCancelled()) {
             player.sendMessage(game.translate("werewolf.check.cancel"));
             return;
         }
 
         ((AffectedPlayers) librarian).addAffectedPlayer(argUUID);
 
-        selectionPlayer.sendMessage(game.translate("werewolf.role.librarian.message"));
-        player.sendMessage(game.translate("werewolf.role.librarian.perform",selectionPlayer.getName()));
+        TextComponent contributionMessage = new TextComponent(game.translate(
+                "werewolf.role.librarian.message"));
+        contributionMessage
+                .setClickEvent(new ClickEvent(
+                        ClickEvent.Action.SUGGEST_COMMAND,
+                        String.format(
+                                "/ww %s",
+                                game.translate("werewolf.role.librarian.request_command"))));
+        selectionPlayer.spigot().sendMessage(contributionMessage);
+
+        player.sendMessage(game.translate(
+                "werewolf.role.librarian.perform",
+                selectionPlayer.getName()));
     }
 }

@@ -3,7 +3,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.Timers;
+import io.github.ph1lou.werewolfapi.enumlg.TimersBase;
 import io.github.ph1lou.werewolfapi.events.EnchantmentEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
@@ -12,7 +12,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,16 +63,28 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
 
 
     @Override
-    public void stolen(@NotNull UUID uuid) {
+    public void recoverPowerAfterStolen() {
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
         if (player == null) return;
 
         if (hasPower()) {
-            player.sendMessage(game.translate("werewolf.role.cupid.lover_designation_message", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.lover_duration"))));
+            player.sendMessage(
+                    game.translate("werewolf.role.cupid.lover_designation_message",
+                            game.getScore().conversion(
+                                    game.getConfig()
+                                            .getTimerValues()
+                                            .get("werewolf.menu.timers.lover_duration"))));
         } else {
-            player.sendMessage(game.translate("werewolf.role.cupid.designation_perform", game.getPlayersWW().get(getAffectedPlayers().get(0)).getName(), game.getPlayersWW().get(getAffectedPlayers().get(1)).getName()));
+            player.sendMessage(
+                    game.translate("werewolf.role.cupid.designation_perform",
+                            game.getPlayersWW().get(
+                                    getAffectedPlayers().get(0))
+                                    .getName(),
+                            game.getPlayersWW().get(
+                                    getAffectedPlayers().get(1))
+                                    .getName()));
         }
     }
 
@@ -83,18 +94,25 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
         if(!event.getPlayerUUID().equals(getPlayerUUID())) return;
 
         if(game.getConfig().getLimitPunch()==1){
-            if(event.getEnchants().containsKey(Enchantment.ARROW_KNOCKBACK)){
-                event.getFinalEnchants().put(Enchantment.ARROW_KNOCKBACK,event.getEnchants().get(Enchantment.ARROW_KNOCKBACK));
+            if(event.getEnchants().containsKey(Enchantment.ARROW_KNOCKBACK)) {
+                event.getFinalEnchants().put(Enchantment.ARROW_KNOCKBACK,
+                        event.getEnchants().get(Enchantment.ARROW_KNOCKBACK));
             }
         }
     }
 
 
     @Override
-    public Player recoverPower() {
-        Player player = super.recoverPower();
-        if(player==null) return null;
-        player.sendMessage(game.translate("werewolf.role.cupid.lover_designation_message", game.getScore().conversion(game.getConfig().getTimerValues().get(Timers.LOVER_DURATION.getKey()))));
-        return player;
+    public void recoverPower() {
+
+        super.recoverPower();
+        Player player = Bukkit.getPlayer(getPlayerUUID());
+        if (player == null) return;
+        player.sendMessage(game.translate(
+                "werewolf.role.cupid.lover_designation_message",
+                game.getScore().conversion(
+                        game.getConfig().getTimerValues()
+                                .get(TimersBase.LOVER_DURATION
+                                        .getKey()))));
     }
 }

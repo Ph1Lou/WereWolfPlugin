@@ -7,20 +7,21 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
-import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
-import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.RoleRegister;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.*;
 import io.github.ph1lou.werewolfapi.enumlg.Category;
+import io.github.ph1lou.werewolfapi.enumlg.RolesBase;
 import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.Main;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
@@ -70,62 +71,97 @@ public class Roles implements InventoryProvider {
         List<String> lore = new ArrayList<>(Arrays.asList(game.translate("werewolf.menu.left"), game.translate("werewolf.menu.right")));
 
         if (config.getLoverSize() > 0) {
-            contents.set(0, 2, ClickableItem.of((new ItemBuilder(UniversalMaterial.GREEN_TERRACOTTA.getStack(config.getLoverSize())).setDisplayName(game.translate("werewolf.role.lover.display")).setLore(lore).build()), e -> {
+            contents.set(0, 2,
+                    ClickableItem.of((
+                            new ItemBuilder(
+                                    UniversalMaterial.GREEN_TERRACOTTA
+                                            .getStack(config.getLoverSize()))
+                                    .setDisplayName(game.translate(RolesBase.LOVER.getKey()))
+                                    .setLore(lore).build()), e -> {
 
-                if (e.isLeftClick()) {
-                    config.setLoverSize(config.getLoverSize() + 1);
-                } else if (e.isRightClick()) {
-                    int LoverNumber = config.getLoverSize();
-                    if (LoverNumber > 0) {
-                        config.setLoverSize(LoverNumber - 1);
-                    }
-                }
-            }));
+                        if (e.isLeftClick()) {
+                            config.setLoverSize(config.getLoverSize() + 1);
+                        } else if (e.isRightClick()) {
+                            int LoverNumber = config.getLoverSize();
+                            if (LoverNumber > 0) {
+                                config.setLoverSize(LoverNumber - 1);
+                            }
+                        }
+                    }));
         } else
-            contents.set(0, 2, ClickableItem.of((new ItemBuilder(UniversalMaterial.RED_TERRACOTTA.getStack()).setDisplayName(game.translate("werewolf.role.lover.display")).setLore(lore).build()), e -> {
-                if (e.isLeftClick()) {
-                    config.setLoverSize(config.getLoverSize() + 1);
-                }
+            contents.set(0, 2,
+                    ClickableItem.of((
+                            new ItemBuilder(
+                                    UniversalMaterial.RED_TERRACOTTA
+                                            .getStack())
+                                    .setDisplayName(game.translate(RolesBase.LOVER.getKey()))
+                                    .setLore(lore).build()), e -> {
+                        if (e.isLeftClick()) {
+                            config.setLoverSize(config.getLoverSize() + 1);
+                        }
 
-            }));
+                    }));
 
         if (config.getAmnesiacLoverSize() > 0) {
-            contents.set(0, 4, ClickableItem.of((new ItemBuilder(UniversalMaterial.GREEN_TERRACOTTA.getStack(config.getAmnesiacLoverSize())).setDisplayName(game.translate("werewolf.role.amnesiac_lover.display")).setLore(lore).build()), e -> {
-                if (e.isLeftClick()) {
-                    config.setAmnesiacLoverSize(config.getAmnesiacLoverSize() + 1);
-                } else if (e.isRightClick()) {
-                    int AmnesiacLoverNumber = config.getAmnesiacLoverSize();
-                    if (AmnesiacLoverNumber > 0) {
-                        config.setAmnesiacLoverSize(AmnesiacLoverNumber - 1);
-                    }
-                }
-            }));
+            contents.set(0, 4,
+                    ClickableItem.of((
+                            new ItemBuilder(
+                                    UniversalMaterial.GREEN_TERRACOTTA
+                                            .getStack(config.getAmnesiacLoverSize()))
+                                    .setDisplayName(game.translate(RolesBase.AMNESIAC_LOVER.getKey()))
+                                    .setLore(lore).build()), e -> {
+                        if (e.isLeftClick()) {
+                            config.setAmnesiacLoverSize(config.getAmnesiacLoverSize() + 1);
+                        } else if (e.isRightClick()) {
+                            int AmnesiacLoverNumber = config.getAmnesiacLoverSize();
+                            if (AmnesiacLoverNumber > 0) {
+                                config.setAmnesiacLoverSize(AmnesiacLoverNumber - 1);
+                            }
+                        }
+                    }));
         } else
-            contents.set(0, 4, ClickableItem.of((new ItemBuilder(UniversalMaterial.RED_TERRACOTTA.getStack()).setDisplayName(game.translate("werewolf.role.amnesiac_lover.display")).setLore(lore).build()), e -> {
-                if (e.isLeftClick()) {
-                    config.setAmnesiacLoverSize(config.getAmnesiacLoverSize() + 1);
-                }
+            contents.set(0, 4,
+                    ClickableItem.of((
+                            new ItemBuilder(UniversalMaterial.RED_TERRACOTTA
+                                    .getStack())
+                                    .setDisplayName(game.translate(RolesBase.AMNESIAC_LOVER.getKey()))
+                                    .setLore(lore).build()), e -> {
+                        if (e.isLeftClick()) {
+                            config.setAmnesiacLoverSize(config.getAmnesiacLoverSize() + 1);
+                        }
 
-            }));
+                    }));
 
         if (config.getCursedLoverSize() > 0) {
-            contents.set(0, 6, ClickableItem.of((new ItemBuilder(UniversalMaterial.GREEN_TERRACOTTA.getStack(config.getCursedLoverSize())).setDisplayName(game.translate("werewolf.role.cursed_lover.display")).setLore(lore).build()), e -> {
-                if (e.isLeftClick()) {
-                    config.setCursedLoverSize(config.getCursedLoverSize() + 1);
-                } else if (e.isRightClick()) {
-                    int cursedLoverNumber = config.getCursedLoverSize();
-                    if (cursedLoverNumber > 0) {
-                        config.setCursedLoverSize(cursedLoverNumber - 1);
-                    }
-                }
-            }));
+            contents.set(0, 6,
+                    ClickableItem.of((
+                            new ItemBuilder(
+                                    UniversalMaterial.GREEN_TERRACOTTA
+                                            .getStack(config.getCursedLoverSize()))
+                                    .setDisplayName(game.translate(RolesBase.CURSED_LOVER.getKey()))
+                                    .setLore(lore).build()), e -> {
+                        if (e.isLeftClick()) {
+                            config.setCursedLoverSize(config.getCursedLoverSize() + 1);
+                        } else if (e.isRightClick()) {
+                            int cursedLoverNumber = config.getCursedLoverSize();
+                            if (cursedLoverNumber > 0) {
+                                config.setCursedLoverSize(cursedLoverNumber - 1);
+                            }
+                        }
+                    }));
         } else
-            contents.set(0, 6, ClickableItem.of((new ItemBuilder(UniversalMaterial.RED_TERRACOTTA.getStack()).setDisplayName(game.translate("werewolf.role.cursed_lover.display")).setLore(lore).build()), e -> {
+            contents.set(0, 6,
+                    ClickableItem.of((
+                            new ItemBuilder(
+                                    UniversalMaterial.RED_TERRACOTTA
+                                            .getStack())
+                                    .setDisplayName(game.translate(RolesBase.CURSED_LOVER.getKey()))
+                                    .setLore(lore).build()), e -> {
 
-                if (e.isLeftClick()) {
-                    config.setCursedLoverSize(config.getCursedLoverSize() + 1);
-                }
-            }));
+                        if (e.isLeftClick()) {
+                            config.setCursedLoverSize(config.getCursedLoverSize() + 1);
+                        }
+                    }));
 
 
         contents.set(5, 1, ClickableItem.of((new ItemBuilder(Category.WEREWOLF == this.categories.getOrDefault(uuid, Category.WEREWOLF) ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate("werewolf.categories.werewolf")).setAmount(Math.max(1, count(main, Category.WEREWOLF))).build()), e -> this.categories.put(uuid, Category.WEREWOLF)));
@@ -151,19 +187,7 @@ public class Roles implements InventoryProvider {
                     items.add(ClickableItem.of((new ItemBuilder(UniversalMaterial.GREEN_TERRACOTTA.getStack(config.getRoleCount().get(key))).setLore(lore2).setDisplayName(game.translate(roleRegister.getKey())).build()), e -> {
 
                         if (e.isShiftClick()) {
-
-                            player.setGameMode(GameMode.CREATIVE);
-                            player.getInventory().clear();
-
-                            for (ItemStack item : game.getStuffs().getStuffRoles().get(key)) {
-                                if (item != null) {
-                                    player.getInventory().addItem(item);
-                                }
-                            }
-                            TextComponent msg = new TextComponent(game.translate("werewolf.commands.admin.loot_role.valid"));
-                            msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/a stuffRole " + key));
-                            player.spigot().sendMessage(msg);
-                            player.closeInventory();
+                            manageStuff(main, player, key);
                         } else if (e.isLeftClick()) {
                             selectPlus(game, roleRegister.getKey());
                         } else if (e.isRightClick()) {
@@ -176,18 +200,7 @@ public class Roles implements InventoryProvider {
                     items.add(ClickableItem.of((new ItemBuilder(UniversalMaterial.RED_TERRACOTTA.getStack()).setLore(lore2).setDisplayName(game.translate(roleRegister.getKey())).build()), e -> {
 
                         if (e.isShiftClick()) {
-                            player.setGameMode(GameMode.CREATIVE);
-                            player.getInventory().clear();
-
-                            for (ItemStack item : game.getStuffs().getStuffRoles().get(key)) {
-                                if (item != null) {
-                                    player.getInventory().addItem(item);
-                                }
-                            }
-                            TextComponent msg = new TextComponent(game.translate("werewolf.commands.admin.loot_role.valid"));
-                            msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/a stuffRole " + key));
-                            player.spigot().sendMessage(msg);
-                            player.closeInventory();
+                            manageStuff(main, player, key);
                         } else if (e.isLeftClick()) {
                             selectPlus(game, roleRegister.getKey());
                         }
@@ -221,6 +234,45 @@ public class Roles implements InventoryProvider {
             }
         }
 
+    }
+
+    private void manageStuff(Main main, Player player, String key) {
+
+        WereWolfAPI game = main.getWereWolfAPI();
+        UUID uuid = player.getUniqueId();
+
+        if (!game.getModerationManager()
+                .checkAccessAdminCommand("werewolf.commands.admin.loot_role.command",
+                        player)) {
+            return;
+        }
+
+        StuffManager stuffManager = game.getStuffs();
+        PlayerInventory inventory = player.getInventory();
+        player.setGameMode(GameMode.CREATIVE);
+
+        if (!stuffManager.getTempStuff().containsKey(uuid)) {
+
+            Inventory inventoryTemp = Bukkit.createInventory(player, 45);
+            for (int j = 0; j < 40; j++) {
+                inventoryTemp.setItem(j, inventory.getItem(j));
+            }
+            stuffManager.getTempStuff().put(uuid, inventoryTemp);
+        }
+
+        for (int j = 0; j < 40; j++) {
+            inventory.setItem(j, null);
+        }
+
+        for (ItemStack item : game.getStuffs().getStuffRoles().get(key)) {
+            if (item != null) {
+                player.getInventory().addItem(item);
+            }
+        }
+        TextComponent msg = new TextComponent(game.translate("werewolf.commands.admin.loot_role.valid"));
+        msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/a %s %s", game.translate("werewolf.commands.admin.loot_role.command"), key)));
+        player.spigot().sendMessage(msg);
+        player.closeInventory();
     }
 
 

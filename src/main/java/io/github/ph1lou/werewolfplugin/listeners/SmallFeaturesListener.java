@@ -52,7 +52,8 @@ public class SmallFeaturesListener implements Listener {
         Action a = event.getAction();
         if (a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK) {
 
-            if (VersionUtils.getVersionUtils().getItemInHand(event.getPlayer()).getType() == Material.MILK_BUCKET) {
+            if (VersionUtils.getVersionUtils()
+                    .getItemInHand(event.getPlayer()).getType() == Material.MILK_BUCKET) {
                 event.setCancelled(true);
             }
         }
@@ -64,9 +65,10 @@ public class SmallFeaturesListener implements Listener {
         final CraftingInventory inv = event.getInventory();
         final ItemStack AIR = new ItemStack(Material.AIR);
 
-        if(inv.getResult()==null) return;
+        if (inv.getResult() == null) return;
 
-        if (UniversalMaterial.ENCHANTED_GOLDEN_APPLE.getStack(inv.getResult().getAmount()).equals(inv.getResult())) {
+        if (UniversalMaterial.ENCHANTED_GOLDEN_APPLE.getStack(
+                inv.getResult().getAmount()).equals(inv.getResult())) {
             inv.setResult(AIR);
         }
     }
@@ -74,9 +76,11 @@ public class SmallFeaturesListener implements Listener {
     @EventHandler
     public void onAppleEat(PlayerItemConsumeEvent event) {
 
-        if (UniversalMaterial.ENCHANTED_GOLDEN_APPLE.getStack(event.getItem().getAmount()).equals(event.getItem())) {
+        if (UniversalMaterial.ENCHANTED_GOLDEN_APPLE.getStack(
+                event.getItem().getAmount()).equals(event.getItem())) {
             event.setCancelled(true);
-            Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> event.getPlayer().getInventory().remove(event.getItem()));
+            Bukkit.getScheduler().scheduleSyncDelayedTask(main, () ->
+                    event.getPlayer().getInventory().remove(event.getItem()));
 
         } else if (event.getItem().getType().equals(Material.GOLDEN_APPLE)) {
 
@@ -87,7 +91,8 @@ public class SmallFeaturesListener implements Listener {
                 }
 
                 if (game.getConfig().getGoldenAppleParticles() == 1) {
-                    GoldenAppleParticleEvent goldenAppleParticleEvent = new GoldenAppleParticleEvent(event.getPlayer().getUniqueId());
+                    GoldenAppleParticleEvent goldenAppleParticleEvent =
+                            new GoldenAppleParticleEvent(event.getPlayer().getUniqueId());
 
                     Bukkit.getPluginManager().callEvent(goldenAppleParticleEvent);
 
@@ -98,11 +103,21 @@ public class SmallFeaturesListener implements Listener {
 
                 if (player.hasPotionEffect(PotionEffectType.ABSORPTION)) {
                     player.removePotionEffect(PotionEffectType.ABSORPTION);
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 2400, 0, false, false));
+                    player.addPotionEffect(new PotionEffect(
+                            PotionEffectType.ABSORPTION,
+                            2400,
+                            0,
+                            false,
+                            false));
                 }
                 if (player.hasPotionEffect(PotionEffectType.REGENERATION)) {
                     player.removePotionEffect(PotionEffectType.REGENERATION);
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 180, 0, false, false));
+                    player.addPotionEffect(new PotionEffect(
+                            PotionEffectType.REGENERATION,
+                            180,
+                            0,
+                            false,
+                            false));
                 }
 
                 event.setCancelled(true);

@@ -3,9 +3,7 @@ package io.github.ph1lou.werewolfplugin.commands.roles;
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.AngelForm;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.AngelRole;
 import io.github.ph1lou.werewolfapi.rolesattributs.LimitedUse;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -31,13 +29,6 @@ public class CommandAngelRegen implements Commands {
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
         PlayerWW plg = game.getPlayersWW().get(uuid);
-
-
-        if (!(plg.getRole() instanceof AngelRole) || !((AngelRole) plg.getRole()).getChoice().equals(AngelForm.GUARDIAN_ANGEL)) {
-            player.sendMessage(game.translate("werewolf.check.role", game.translate("werewolf.role.guardian_angel.display")));
-            return;
-        }
-
         Roles guardianAngel = plg.getRole();
 
 
@@ -46,22 +37,36 @@ public class CommandAngelRegen implements Commands {
             return;
         }
 
-        if (((AffectedPlayers) guardianAngel).getAffectedPlayers().isEmpty()) {
-            player.sendMessage(game.translate("werewolf.role.guardian_angel.no_protege"));
+        if (((AffectedPlayers) guardianAngel)
+                .getAffectedPlayers().isEmpty()) {
+            player.sendMessage(game.translate(
+                    "werewolf.role.guardian_angel.no_protege"));
             return;
         }
 
-        Player playerProtected = Bukkit.getPlayer(((AffectedPlayers) guardianAngel).getAffectedPlayers().get(0));
+        Player playerProtected = Bukkit.getPlayer(((AffectedPlayers) guardianAngel)
+                .getAffectedPlayers().get(0));
 
         if (playerProtected == null) {
-            player.sendMessage(game.translate("werewolf.role.guardian_angel.disconnected_protege"));
+            player.sendMessage(
+                    game.translate(
+                            "werewolf.role.guardian_angel.disconnected_protege"));
             return;
         }
         ((LimitedUse) guardianAngel).setUse(((LimitedUse) guardianAngel).getUse() + 1);
 
         playerProtected.removePotionEffect(PotionEffectType.REGENERATION);
-        playerProtected.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 400, 0, false, false));
-        playerProtected.sendMessage(game.translate("werewolf.role.guardian_angel.get_regeneration"));
-        player.sendMessage(game.translate("werewolf.role.guardian_angel.perform", 3 - ((LimitedUse) guardianAngel).getUse()));
+        playerProtected.addPotionEffect(new PotionEffect(
+                PotionEffectType.REGENERATION,
+                400,
+                0,
+                false,
+                false));
+
+        playerProtected.sendMessage(
+                game.translate("werewolf.role.guardian_angel.get_regeneration"));
+        player.sendMessage(
+                game.translate("werewolf.role.guardian_angel.perform",
+                        3 - ((LimitedUse) guardianAngel).getUse()));
     }
 }

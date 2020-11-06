@@ -26,7 +26,6 @@ public class CommandFox implements Commands {
     public void execute(Player player, String[] args) {
 
         WereWolfAPI game = main.getWereWolfAPI();
-        String playername = player.getName();
         UUID uuid = player.getUniqueId();
         PlayerWW plg = game.getPlayersWW().get(uuid);
         Roles fox = plg.getRole();
@@ -41,11 +40,6 @@ public class CommandFox implements Commands {
             return;
         }
 
-        if (args[0].toLowerCase().equals(playername.toLowerCase())) {
-            player.sendMessage(game.translate("werewolf.check.not_yourself"));
-            return;
-        }
-
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
@@ -53,6 +47,11 @@ public class CommandFox implements Commands {
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
+
+        if (argUUID.equals(uuid)) {
+            player.sendMessage(game.translate("werewolf.check.not_yourself"));
+            return;
+        }
 
         if (!game.getPlayersWW().containsKey(argUUID) || !game.getPlayersWW().get(argUUID).isState(StatePlayer.ALIVE)) {
             player.sendMessage(game.translate("werewolf.check.player_not_found"));

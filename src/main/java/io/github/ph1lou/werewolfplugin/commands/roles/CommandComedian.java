@@ -33,25 +33,40 @@ public class CommandComedian implements Commands {
         Roles comedian = plg.getRole();
 
         if (args.length != 1) {
-            player.sendMessage(game.translate("werewolf.check.parameters", 1));
+            player.sendMessage(game.translate("werewolf.check.parameters",
+                    1));
             return;
         }
 
-        if (!((Power)comedian).hasPower()) {
+        if (!((Power) comedian).hasPower()) {
             player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
-        PotionEffectType[] potionsType = {PotionEffectType.DAMAGE_RESISTANCE, PotionEffectType.SPEED, PotionEffectType.INCREASE_DAMAGE};
-        String[] maskName = {game.translate("werewolf.role.comedian.1"), game.translate("werewolf.role.comedian.2"), game.translate("werewolf.role.comedian.3")};
+        PotionEffectType[] potionsType = {
+                PotionEffectType.DAMAGE_RESISTANCE,
+                PotionEffectType.SPEED,
+                PotionEffectType.INCREASE_DAMAGE
+        };
+
+        String[] maskName = {
+                game.translate("werewolf.role.comedian.1"),
+                game.translate("werewolf.role.comedian.2"),
+                game.translate("werewolf.role.comedian.3")
+        };
+
         try {
             int i = Integer.parseInt(args[0]) - 1;
             if (i < 0 || i > 2) {
-                player.sendMessage(game.translate("werewolf.role.comedian.mask_unknown"));
+                player.sendMessage(game.translate(
+                        "werewolf.role.comedian.mask_unknown"));
                 return;
             }
 
-            if (((PotionEffects) comedian).getPotionEffects().contains(potionsType[i])) {
-                player.sendMessage(game.translate("werewolf.role.comedian.used_mask"));
+            if (((PotionEffects) comedian).getPotionEffects()
+                    .contains(potionsType[i])) {
+
+                player.sendMessage(game.translate(
+                        "werewolf.role.comedian.used_mask"));
                 return;
             }
             ((Power) comedian).setPower(false);
@@ -65,9 +80,16 @@ public class CommandComedian implements Commands {
                 return;
             }
 
-            player.sendMessage(game.translate("werewolf.role.comedian.wear_mask_perform", maskName[i]));
+            player.sendMessage(game.translate(
+                    "werewolf.role.comedian.wear_mask_perform",
+                    maskName[i]));
             player.removePotionEffect(potionsType[i]);
-            player.addPotionEffect(new PotionEffect(potionsType[i], Integer.MAX_VALUE, i == 2 ? -1 : 0, false, false));
+            player.addPotionEffect(new PotionEffect(
+                    potionsType[i],
+                    Integer.MAX_VALUE,
+                    i == 2 ? -1 : 0,
+                    false,
+                    false));
 
         } catch (NumberFormatException ignored) {
         }

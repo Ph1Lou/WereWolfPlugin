@@ -6,6 +6,7 @@ import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.StateGame;
 import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -92,8 +93,9 @@ public class Config implements InventoryProvider {
                         Bukkit.getOfflinePlayer(UUID.fromString("056be797-2a0b-4807-9af5-37faf5384396")))
                 .build())));
 
+
         int[] SlotRedGlass = {1, 2, 6, 7, 9, 10, 16, 17, 18, 26, 27, 35, 36, 37, 43, 44, 46, 47, 51, 52};
-        int[] SlotBlackGlass = {3, 4, 5, 11, 12, 14, 15, 19, 20, 21, 23, 24, 25, 28, 34, 38, 39, 40, 41, 42, 49};
+        int[] SlotBlackGlass = {3, 5, 11, 12, 14, 15, 19, 20, 21, 23, 24, 25, 28, 34, 38, 39, 40, 41, 42, 49};
         for (int slotRedGlass : SlotRedGlass) {
             contents.set(slotRedGlass / 9, slotRedGlass % 9, ClickableItem.empty((new ItemBuilder(UniversalMaterial.RED_STAINED_GLASS_PANE.getStack()).build())));
 
@@ -106,6 +108,22 @@ public class Config implements InventoryProvider {
 
     @Override
     public void update(Player player, InventoryContents contents) {
+
+        WereWolfAPI game = JavaPlugin.getPlugin(Main.class).getWereWolfAPI();
+
+        if (game.isState(StateGame.LOBBY)) {
+            contents.set(0, 4, ClickableItem.of((new ItemBuilder(UniversalMaterial.LIME_WOOL
+                            .getStack())
+                            .setDisplayName(game.translate("werewolf.announcement.start.launch"))
+                            .build()),
+                    e -> Start.INVENTORY.open(player)));
+        } else {
+            contents.set(0, 4, ClickableItem.of((new ItemBuilder(UniversalMaterial.RED_WOOL
+                    .getStack())
+                    .setDisplayName(game.translate("werewolf.commands.admin.stop.message"))
+                    .build()), e -> Start.INVENTORY.open(player)));
+        }
+
     }
 }
 

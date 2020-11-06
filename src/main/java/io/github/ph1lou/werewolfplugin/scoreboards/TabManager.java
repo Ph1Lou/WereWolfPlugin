@@ -1,28 +1,20 @@
 package io.github.ph1lou.werewolfplugin.scoreboards;
 
 import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.Scenarios;
 import io.github.ph1lou.werewolfapi.enumlg.StateGame;
 import io.github.ph1lou.werewolfapi.events.AppearInWereWolfListEvent;
 import io.github.ph1lou.werewolfapi.events.RequestSeeWereWolfListEvent;
 import io.github.ph1lou.werewolfapi.events.UpdateModeratorNameTag;
 import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTag;
-import io.github.ph1lou.werewolfapi.rolesattributs.InvisibleState;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TabManager {
@@ -32,7 +24,6 @@ public class TabManager {
     public TabManager(WereWolfAPI game) {
         this.game = game;
     }
-
 
     public void registerPlayer(Player player) {
 
@@ -55,23 +46,30 @@ public class TabManager {
             }
         }
 
-        updatePlayerScoreBoard(player, Bukkit.getOnlinePlayers()
-                .stream()
-                .map(Entity::getUniqueId)
-                .collect(Collectors.toList())
-        );
-
-        updatePlayer(player.getUniqueId(), Bukkit.getOnlinePlayers());
+        updatePlayerOthersAndHimself(player);
     }
 
-    public void updatePlayerScoreBoard(Player player, Collection<? extends UUID> uuids) {
-        uuids.forEach(uuid -> updatePlayer(uuid, Collections.singleton(player)));
+    public void updatePlayerScoreBoard(Player player, List<UUID> uuids) {
+        updatePlayerScoreBoard(player, uuids.stream()
+                .map(Bukkit::getPlayer)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList()));
+    }
+
+
+    public void updatePlayerScoreBoard(Player player, Collection<? extends Player> players) {
+        players.forEach(player1 -> updatePlayerForOthers(player1, Collections.singleton(player)));
+    }
+
+    public void updatePlayerScoreBoard(Player player) {
+
+        Bukkit.getOnlinePlayers()
+                .forEach(player1 -> updatePlayerForOthers(player1, Collections.singleton(player)));
     }
 
     public void unregisterPlayer(Player player) {
 
         String name = player.getName();
-
 
         for (Player player1 : Bukkit.getOnlinePlayers()) {
             Scoreboard scoreBoard = player1.getScoreboard();
@@ -81,31 +79,36 @@ public class TabManager {
 
     public void updatePlayers() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            updatePlayer(player.getUniqueId(), Bukkit.getOnlinePlayers());
+            updatePlayerForOthers(player);
         }
     }
 
-    public void updatePlayer(UUID uuid) {
-        updatePlayer(uuid, Bukkit.getOnlinePlayers());
+    public void updatePlayerOthersAndHimself(Player player) {
+        updatePlayerScoreBoard(player);
+        updatePlayerForOthers(player);
     }
 
-    public void updatePlayer(UUID uuid, Collection<? extends Player> players) {
+    public void updatePlayerForOthers(UUID uuid) {
+
+        Player player = Bukkit.getPlayer(uuid);
+
+        if (player == null) return;
+
+        updatePlayerForOthers(player, Bukkit.getOnlinePlayers());
+    }
+
+    public void updatePlayerForOthers(Player player) {
+        updatePlayerForOthers(player, Bukkit.getOnlinePlayers());
+    }
+
+    public void updatePlayerForOthers(Player player, Collection<? extends Player> players) {
 
         ModerationManagerAPI moderationManager = game.getModerationManager();
 
         StringBuilder sb = new StringBuilder();
-        PlayerWW playerWW = game.getPlayerWW(uuid);
-        Player player = Bukkit.getPlayer(uuid);
-        boolean visibility = true;
-        String name;
+        UUID uuid = player.getUniqueId();
+        String name = player.getName();
 
-        if (playerWW == null && player == null) {
-            return;
-        }
-
-        if (game.getConfig().getScenarioValues().get(Scenarios.NO_NAME_TAG.getKey())) {
-            visibility = false;
-        }
         if (moderationManager.getHosts().contains(uuid)) {
             sb.append(game.translate("werewolf.commands.admin.host.tag"));
         } else if (moderationManager.getModerators().contains(uuid)) {
@@ -115,17 +118,8 @@ public class TabManager {
                 sb.append(game.translate("werewolf.menu.rank.tag"));
             }
         }
-        if (playerWW != null) {
 
-            Roles role = playerWW.getRole();
-
-            if (visibility) {
-                visibility = (!(role instanceof InvisibleState)) || !((InvisibleState) role).isInvisible();
-            }
-            name = playerWW.getName();
-        } else name = player.getName();
-
-        UpdatePlayerNameTag event = new UpdatePlayerNameTag(uuid, sb.toString(), " ", visibility);
+        UpdatePlayerNameTag event = new UpdatePlayerNameTag(uuid, sb.toString(), " ", true);
         AppearInWereWolfListEvent appearInWereWolfListEvent = new AppearInWereWolfListEvent(uuid);
         UpdateModeratorNameTag updateModeratorNameTag = new UpdateModeratorNameTag(uuid, "", " ");
         Bukkit.getPluginManager().callEvent(event);
@@ -146,7 +140,9 @@ public class TabManager {
             Bukkit.getPluginManager().callEvent(requestSeeWereWolfListEvent);
 
             if (appear && requestSeeWereWolfListEvent.isAccept()) {
-                sb.append(ChatColor.DARK_RED);
+                if (game.getConfig().getConfigValues().get("werewolf.menu.global.red_name_tag")) {
+                    sb.append(ChatColor.DARK_RED);
+                }
             }
 
             if (game.getModerationManager().getModerators().contains(uuid1)) {

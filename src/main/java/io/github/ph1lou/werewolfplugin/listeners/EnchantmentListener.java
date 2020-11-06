@@ -33,21 +33,23 @@ public class EnchantmentListener implements Listener {
         if(!event.getInventory().getType().equals(InventoryType.ANVIL)) return;
         if(event.getSlot()!=2) return;
         ItemStack current = event.getCurrentItem();
-        if (current==null) return;
-        if(current.getEnchantments().isEmpty()){
-            if(current.getType().equals(Material.ENCHANTED_BOOK)){
+        if (current == null) return;
+        if (current.getEnchantments().isEmpty()) {
+            if (current.getType().equals(Material.ENCHANTED_BOOK)) {
                 EnchantmentStorageMeta meta = (EnchantmentStorageMeta) current.getItemMeta();
                 if (meta != null) {
-                    event.setCurrentItem(checkEnchant(meta.getStoredEnchants(), (Player) event.getWhoClicked(), current));
+                    event.setCurrentItem(checkEnchant(meta.getStoredEnchants(),
+                            (Player) event.getWhoClicked(), current));
                 }
             }
-        }
-        else event.setCurrentItem(checkEnchant(current.getEnchantments(),(Player) event.getWhoClicked(),current));
+        } else event.setCurrentItem(checkEnchant(current.getEnchantments(),
+                (Player) event.getWhoClicked(), current));
     }
 
     @EventHandler
     public void onItemEnchant(EnchantItemEvent event) {
-        event.getInventory().setItem(0,checkEnchant(event.getEnchantsToAdd(),event.getEnchanter(),event.getItem()));
+        event.getInventory().setItem(0, checkEnchant(event.getEnchantsToAdd(),
+                event.getEnchanter(), event.getItem()));
     }
 
 
@@ -66,21 +68,27 @@ public class EnchantmentListener implements Listener {
                     tempEnchant.put(e,enchant.get(e));
                 }
             }
-            else if(Enchantment.PROTECTION_ENVIRONMENTAL.equals(e)){
+            else if(Enchantment.PROTECTION_ENVIRONMENTAL.equals(e)) {
 
-                if (item.getType().equals(Material.DIAMOND_BOOTS) || item.getType().equals(Material.DIAMOND_LEGGINGS) ||  item.getType().equals(Material.DIAMOND_HELMET) ||  item.getType().equals(Material.DIAMOND_CHESTPLATE)){
-                    tempEnchant.put(e,Math.min(enchant.get(e),game.getConfig().getLimitProtectionDiamond()));
-                }
-                else {
-                    tempEnchant.put(e,Math.min(enchant.get(e),game.getConfig().getLimitProtectionIron()));
+                if (item.getType().equals(Material.DIAMOND_BOOTS) ||
+                        item.getType().equals(Material.DIAMOND_LEGGINGS) ||
+                        item.getType().equals(Material.DIAMOND_HELMET) ||
+                        item.getType().equals(Material.DIAMOND_CHESTPLATE)) {
+                    tempEnchant.put(e, Math.min(enchant.get(e),
+                            game.getConfig().getLimitProtectionDiamond()));
+                } else {
+                    tempEnchant.put(e, Math.min(enchant.get(e),
+                            game.getConfig().getLimitProtectionIron()));
                 }
             }
             else if(Enchantment.DAMAGE_ALL.equals(e)){
                 if (item.getType().equals(Material.DIAMOND_SWORD)) {
-                    tempEnchant.put(e, Math.min(enchant.get(e), game.getConfig().getLimitSharpnessDiamond()));
+                    tempEnchant.put(e, Math.min(enchant.get(e),
+                            game.getConfig().getLimitSharpnessDiamond()));
                 }
                 else {
-                    tempEnchant.put(e, Math.min(enchant.get(e), Math.min(enchant.get(e), game.getConfig().getLimitSharpnessIron())));
+                    tempEnchant.put(e, Math.min(enchant.get(e),
+                            Math.min(enchant.get(e), game.getConfig().getLimitSharpnessIron())));
                 }
             }
             else if(Enchantment.ARROW_KNOCKBACK.equals(e)){

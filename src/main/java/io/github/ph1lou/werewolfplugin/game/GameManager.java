@@ -17,6 +17,7 @@ import io.github.ph1lou.werewolfplugin.utils.UpdateChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
@@ -108,15 +109,18 @@ public class GameManager implements WereWolfAPI {
     }
 
     public void clearPlayer(Player player) {
+
+        PlayerInventory inventory = player.getInventory();
         VersionUtils.getVersionUtils().setPlayerMaxHealth(player, 20);
         player.setHealth(20);
         player.setExp(0);
         player.setLevel(0);
-        player.getInventory().clear();
-        player.getInventory().setHelmet(null);
-        player.getInventory().setChestplate(null);
-        player.getInventory().setLeggings(null);
-        player.getInventory().setBoots(null);
+        inventory.clear();
+        inventory.setHelmet(null);
+        inventory.setChestplate(null);
+        inventory.setLeggings(null);
+        inventory.setBoots(null);
+
         for (PotionEffect po : player.getActivePotionEffects()) {
             player.removePotionEffect(po.getType());
         }
@@ -172,15 +176,20 @@ public class GameManager implements WereWolfAPI {
 
         main.createGame();
 
+        GameManager newGame = (GameManager) main.getWereWolfAPI();
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             FastBoard fastboard = new FastBoard(player);
-            fastboard.updateTitle(main.getWereWolfAPI().translate("werewolf.score_board.title"));
-            boards.put(player.getUniqueId(), fastboard);
+            fastboard.updateTitle(newGame.translate("werewolf.score_board.title"));
+            newGame.boards.put(player.getUniqueId(), fastboard);
             player.setGameMode(GameMode.ADVENTURE);
-            join(player);
+            newGame.join(player);
         }
-        mapManager.deleteMap();
+        if (score.getTimer() > 60) { //Si la game a commencé depuis moins d'une minute on ne delete pas la map
+            mapManager.deleteMap();
+        } else {
+            newGame.getMapManager().generateMap(newGame.getConfig().getBorderMax());
+        }
 
         Bukkit.getPluginManager().callEvent(new StopEvent(this));
     }
@@ -338,4 +347,6 @@ public class GameManager implements WereWolfAPI {
     public StateGame getState() {
         return this.state;
     }
+
+
 }

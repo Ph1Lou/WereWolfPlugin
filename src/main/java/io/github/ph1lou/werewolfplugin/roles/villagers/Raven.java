@@ -4,7 +4,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
-import io.github.ph1lou.werewolfapi.enumlg.Timers;
+import io.github.ph1lou.werewolfapi.enumlg.TimersBase;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.events.VoteEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
@@ -75,7 +75,11 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
             return;
         }
 
-        player.sendMessage(game.translate("werewolf.role.raven.curse_message", game.getScore().conversion(game.getConfig().getTimerValues().get(Timers.POWER_DURATION.getKey()))));
+        player.sendMessage(game.translate("werewolf.role.raven.curse_message",
+                game.getScore().conversion(
+                        game.getConfig()
+                                .getTimerValues()
+                                .get(TimersBase.POWER_DURATION.getKey()))));
     }
 
 
@@ -86,10 +90,14 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
 
 
     @EventHandler
-    public void onVoteEvent(VoteEvent event){
+    public void onVoteEvent(VoteEvent event) {
 
         if (!event.getPlayerUUID().equals(getPlayerUUID())) return;
-        game.getVote().getVotes().put(event.getTargetUUID(), game.getVote().getVotes().getOrDefault(event.getTargetUUID(), 0) + 1);
+        game.getVote().getVotes().put(event.getTargetUUID(),
+                game.getVote().getVotes()
+                        .getOrDefault(event.getTargetUUID(),
+                                0
+                        ) + 1);
     }
 
     @EventHandler

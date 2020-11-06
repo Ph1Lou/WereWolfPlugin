@@ -64,23 +64,51 @@ public class Admin implements TabExecutor {
             return;
         }
 
-        if (!checkPermission(commandRegister, player)) {
-            player.sendMessage(game.translate("werewolf.check.permission_denied"));
-            return;
+        if (accessCommand(commandRegister, player, args.length, true)) {
+            commandRegister.getCommand().execute(player, args);
         }
+
+    }
+
+
+    public boolean accessCommand(CommandRegister commandRegister, Player player, int args, boolean seePermissionMessages) {
+
+        WereWolfAPI game = main.getWereWolfAPI();
 
         if (!commandRegister.isStateWW(game.getState())) {
-            player.sendMessage(game.translate("werewolf.check.state"));
-            return;
+            if (seePermissionMessages) {
+                player.sendMessage(game.translate("werewolf.check.state"));
+            }
+            return false;
         }
 
-        if (!commandRegister.isArgNumbers(args.length)) {
-            player.sendMessage(game.translate("werewolf.check.parameters", commandRegister.getMinArgNumbers()));
-            return;
+        if (!commandRegister.isArgNumbers(args)) {
+            if (seePermissionMessages) {
+                player.sendMessage(game.translate("werewolf.check.parameters", commandRegister.getMinArgNumbers()));
+            }
+            return false;
         }
 
-        commandRegister.getCommand().execute(player, args);
+        if (!checkPermission(commandRegister, player)) {
+            if (seePermissionMessages) {
+                player.sendMessage(game.translate("werewolf.check.permission_denied"));
+            }
+            return false;
+        }
+
+        return true;
     }
+
+
+    public boolean checkAccess(String commandeKey, Player player, boolean seePermissionMessages) {
+        for (CommandRegister commandRegister : main.getRegisterManager().getAdminCommandsRegister()) {
+            if (commandRegister.getKey().equals(commandeKey)) {
+                return accessCommand(commandRegister, player, commandRegister.getMinArgNumbers(), seePermissionMessages);
+            }
+        }
+        return false;
+    }
+
 
     private boolean checkPermission(CommandRegister commandRegister, Player player) {
 

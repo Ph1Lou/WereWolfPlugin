@@ -4,7 +4,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
-import io.github.ph1lou.werewolfapi.enumlg.Timers;
+import io.github.ph1lou.werewolfapi.enumlg.TimersBase;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.events.StealEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
@@ -63,7 +63,9 @@ public class Protector extends RolesWithLimitedSelectionDuration implements Affe
 
             if (player != null) {
                 player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-                player.sendMessage(game.translate("werewolf.role.protector.no_longer_protected"));
+                player.sendMessage(
+                        game.translate(
+                                "werewolf.role.protector.no_longer_protected"));
             }
             this.last = null;
         }
@@ -80,7 +82,11 @@ public class Protector extends RolesWithLimitedSelectionDuration implements Affe
             return;
         }
 
-        player.sendMessage(game.translate("werewolf.role.protector.protection_message", game.getScore().conversion(game.getConfig().getTimerValues().get(Timers.POWER_DURATION.getKey()))));
+        player.sendMessage(game.translate(
+                "werewolf.role.protector.protection_message",
+                game.getScore().conversion(
+                        game.getConfig().getTimerValues()
+                                .get(TimersBase.POWER_DURATION.getKey()))));
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -94,7 +100,12 @@ public class Protector extends RolesWithLimitedSelectionDuration implements Affe
 
         if (player == null) return;
 
-        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 0, false, false));
+        player.addPotionEffect(new PotionEffect(
+                PotionEffectType.DAMAGE_RESISTANCE,
+                Integer.MAX_VALUE,
+                0,
+                false,
+                false));
 
     }
 

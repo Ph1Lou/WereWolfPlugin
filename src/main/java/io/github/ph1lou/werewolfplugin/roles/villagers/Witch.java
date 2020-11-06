@@ -4,7 +4,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.Configs;
+import io.github.ph1lou.werewolfapi.enumlg.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.ThirdDeathEvent;
 import io.github.ph1lou.werewolfapi.events.WitchResurrectionEvent;
@@ -76,31 +76,52 @@ public class Witch extends RolesVillage implements AffectedPlayers, Power {
         PlayerWW plg = game.getPlayersWW().get(event.getUuid());
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
+        if (player == null) return;
+
+
         if (event.getUuid().equals(getPlayerUUID())) {
-            if (game.getConfig().getConfigValues().get(Configs.AUTO_REZ_WITCH.getKey())) {
-                WitchResurrectionEvent witchResurrectionEvent = new WitchResurrectionEvent(getPlayerUUID(), event.getUuid());
-                Bukkit.getPluginManager().callEvent(witchResurrectionEvent);
-                setPower(false);
-
-                if (witchResurrectionEvent.isCancelled()) {
-                    if (player != null) {
-                        player.sendMessage(game.translate("werewolf.check.cancel"));
-                    }
-                } else {
-                    game.resurrection(getPlayerUUID());
-                    event.setCancelled(true);
-                }
-            }
-        } else {
-
-            if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE) ) return;
-
-            if (player != null) {
-                TextComponent witch_msg = new TextComponent(game.translate("werewolf.role.witch.resuscitation_message", plg.getName()));
-                witch_msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/ww " + game.translate("werewolf.role.witch.command") + " " + event.getUuid()));
-                player.spigot().sendMessage(witch_msg);
-            }
+            event.setCancelled(autoResurrection(player));
+            return;
         }
+
+        if (!game.getPlayersWW()
+                .get(getPlayerUUID())
+                .isState(StatePlayer.ALIVE)) return;
+
+        TextComponent textComponent =
+                new TextComponent(
+                        game.translate(
+                                "werewolf.role.witch.resuscitation_message",
+                                plg.getName()));
+        textComponent.setClickEvent(new ClickEvent(
+                ClickEvent.Action.RUN_COMMAND,
+                String.format("/ww %s %s",
+                        game.translate("werewolf.role.witch.command"),
+                        event.getUuid())));
+        player.spigot().sendMessage(textComponent);
+    }
+
+    private boolean autoResurrection(Player player) {
+
+        if (!game.getConfig().getConfigValues()
+                .get(ConfigsBase.AUTO_REZ_WITCH.getKey())) {
+            return false;
+        }
+
+        WitchResurrectionEvent witchResurrectionEvent =
+                new WitchResurrectionEvent(getPlayerUUID(),
+                        getPlayerUUID());
+        Bukkit.getPluginManager().callEvent(witchResurrectionEvent);
+        setPower(false);
+
+        if (!witchResurrectionEvent.isCancelled()) {
+            game.resurrection(getPlayerUUID());
+            return true;
+        }
+
+        player.sendMessage(game.translate("werewolf.check.cancel"));
+
+        return false;
     }
 
 }

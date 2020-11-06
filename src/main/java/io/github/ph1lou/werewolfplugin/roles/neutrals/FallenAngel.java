@@ -12,16 +12,9 @@ import java.util.UUID;
 public class FallenAngel extends Angel {
 
     public FallenAngel(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
-        super(main,game,uuid, key);
+        super(main, game, uuid, key);
         setChoice(AngelForm.FALLEN_ANGEL);
-        Bukkit.getPluginManager().callEvent(new AngelChoiceEvent(getPlayerUUID(),AngelForm.FALLEN_ANGEL));
+        Bukkit.getPluginManager().callEvent(
+                new AngelChoiceEvent(getPlayerUUID(), AngelForm.FALLEN_ANGEL));
     }
-
-
-
-    @Override
-    public String getDescription() {
-        return game.translate("werewolf.role.fallen_angel.description");
-    }
-
 }

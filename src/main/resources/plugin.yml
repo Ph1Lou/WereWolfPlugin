@@ -7,7 +7,7 @@ load: STARTUP
 commands:
 
   ww:
-    description: commands for players
+    description: player commands
   a:
     description: admin commands
 

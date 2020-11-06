@@ -31,33 +31,34 @@ public class FileUtils_ {
 
         File file = new File(main.getDataFolder() + File.separator + "configs" + File.separator, name + ".json");
 
-        if(file.exists()){
+        if (file.exists()) {
             game.setConfig(Serializer.deserialize(loadContent(file)));
             game.getScore().setRole(0);
             game.getModerationManager().checkQueue();
-            ConfigWereWolfAPI config = game.getConfig();
-            RegisterManager register = main.getRegisterManager();
+        }
 
-            for (RoleRegister roleRegister:register.getRolesRegister()) {
-                String key = roleRegister.getKey();
-                config.getRoleCount().put(key,config.getRoleCount().getOrDefault(key,0));
-                game.getScore().setRole(game.getScore().getRole() +config.getRoleCount().get(key) );
-            }
+        ConfigWereWolfAPI config = game.getConfig();
+        RegisterManager register = main.getRegisterManager();
 
-            for (TimerRegister timerRegister:register.getTimersRegister()) {
-                String key = timerRegister.getKey();
-                config.getTimerValues().put(key,config.getTimerValues().getOrDefault(key,timerRegister.getDefaultValue()));
-            }
+        for (RoleRegister roleRegister : register.getRolesRegister()) {
+            String key = roleRegister.getKey();
+            config.getRoleCount().put(key, config.getRoleCount().getOrDefault(key, 0));
+            game.getScore().setRole(game.getScore().getRole() + config.getRoleCount().get(key));
+        }
 
-            for (ConfigRegister configRegister:register.getConfigsRegister()) {
-                String key = configRegister.getKey();
-                config.getConfigValues().put(key,config.getConfigValues().getOrDefault(key,configRegister.getDefaultValue()));
-            }
+        for (TimerRegister timerRegister : register.getTimersRegister()) {
+            String key = timerRegister.getKey();
+            config.getTimerValues().put(key, config.getTimerValues().getOrDefault(key, timerRegister.getDefaultValue()));
+        }
 
-            for (ScenarioRegister scenarioRegister:register.getScenariosRegister()) {
-                String key = scenarioRegister.getKey();
-                config.getScenarioValues().put(key,config.getScenarioValues().getOrDefault(key,scenarioRegister.getDefaultValue()));
-            }
+        for (ConfigRegister configRegister : register.getConfigsRegister()) {
+            String key = configRegister.getKey();
+            config.getConfigValues().put(key, config.getConfigValues().getOrDefault(key, configRegister.getDefaultValue()));
+        }
+
+        for (ScenarioRegister scenarioRegister : register.getScenariosRegister()) {
+            String key = scenarioRegister.getKey();
+            config.getScenarioValues().put(key, config.getScenarioValues().getOrDefault(key, scenarioRegister.getDefaultValue()));
         }
 
         save(file, Serializer.serialize(game.getConfig()));

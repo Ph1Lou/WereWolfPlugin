@@ -29,9 +29,19 @@ public class SlowBow extends Scenarios {
         if (!(damager instanceof Player)) return;
         Player player = (Player) event.getEntity();
 
-        ((Player) damager).addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 160, 0, false, false));
+        ((Player) damager).addPotionEffect(new PotionEffect(
+                PotionEffectType.SPEED,
+                160,
+                0,
+                false,
+                false));
         player.removePotionEffect(PotionEffectType.SLOW);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 160, 0, false, false));
+        player.addPotionEffect(new PotionEffect(
+                PotionEffectType.SLOW,
+                160,
+                0,
+                false,
+                false));
     }
 
 

@@ -28,7 +28,7 @@ public class CommandDisconnected implements Commands {
         for (UUID uuid : game.getPlayersWW().keySet()) {
             PlayerWW plg = game.getPlayersWW().get(uuid);
             if (plg.isState(StatePlayer.ALIVE) && Bukkit.getPlayer(uuid) == null) {
-                player.sendMessage(game.translate("werewolf.commands.admin.disconnected.send", plg.getName(), game.getScore().conversion(game.getScore().getTimer() - plg.getDeathTime())));
+                player.sendMessage(game.translate("werewolf.commands.admin.disconnected.send", plg.getName(), game.getScore().conversion(game.getScore().getTimer() - plg.getDisconnectedTime())));
             }
         }
     }

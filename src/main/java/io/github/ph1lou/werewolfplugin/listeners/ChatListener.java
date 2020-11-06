@@ -3,8 +3,9 @@ package io.github.ph1lou.werewolfplugin.listeners;
 
 import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.Configs;
+import io.github.ph1lou.werewolfapi.enumlg.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
+import io.github.ph1lou.werewolfapi.enumlg.StateGame;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,13 +30,20 @@ public class ChatListener implements Listener {
         String[] args = event.getMessage().split(" ");
         ModerationManagerAPI moderationManager = game.getModerationManager();
 
-        if (args[0].equalsIgnoreCase("/rl") || args[0].equalsIgnoreCase("/reload") || args[0].equalsIgnoreCase("/bukkit:rl") || args[0].equalsIgnoreCase("/bukkit:reload")) {
+        if (args[0].equalsIgnoreCase("/rl") ||
+                args[0].equalsIgnoreCase("/reload") ||
+                args[0].equalsIgnoreCase("/bukkit:rl") ||
+                args[0].equalsIgnoreCase("/bukkit:reload")) {
             event.setCancelled(true);
             player.sendMessage(game.translate("werewolf.check.disabled_command"));
-        } else if (args[0].equalsIgnoreCase("/me") || args[0].equalsIgnoreCase("/minecraft:me")) {
+        } else if (args[0].equalsIgnoreCase("/me") ||
+                args[0].equalsIgnoreCase("/minecraft:me")) {
             event.setCancelled(true);
             player.sendMessage(game.translate("werewolf.check.disabled_command"));
-        } else if (args[0].equalsIgnoreCase("/tellRaw") || args[0].equalsIgnoreCase("/msg") || args[0].equalsIgnoreCase("/tell") || args[0].equalsIgnoreCase("/minecraft:tell")) {
+        } else if (args[0].equalsIgnoreCase("/tellRaw") ||
+                args[0].equalsIgnoreCase("/msg") ||
+                args[0].equalsIgnoreCase("/tell") ||
+                args[0].equalsIgnoreCase("/minecraft:tell")) {
 
             event.setCancelled(true);
             if (args.length <= 2) return;
@@ -50,11 +58,10 @@ public class ChatListener implements Listener {
 
             if (!recipient.hasPermission("a.use") && !player.hasPermission("tell.use")) {
 
-                if (!moderationManager.getHosts().contains(recipient.getUniqueId()) && !moderationManager.getHosts().contains(player.getUniqueId())) {
-                    if (!moderationManager.getModerators().contains(recipient.getUniqueId()) && !moderationManager.getModerators().contains(player.getUniqueId())) {
-                        player.sendMessage(game.translate("werewolf.check.permission_denied"));
-                        return;
-                    }
+                if (!moderationManager.isStaff(recipient.getUniqueId()) &&
+                        !moderationManager.isStaff(player.getUniqueId())) {
+                    player.sendMessage(game.translate("werewolf.check.permission_denied"));
+                    return;
                 }
             }
 
@@ -63,8 +70,11 @@ public class ChatListener implements Listener {
                 sb.append(w).append(" ");
             }
             sb.delete(0, args[0].length() + args[1].length() + 2);
-            recipient.sendMessage(game.translate("werewolf.commands.message.received", player.getName(), sb.toString()));
-            player.sendMessage(game.translate("werewolf.commands.message.send", args[1], sb.toString()));
+            recipient.sendMessage(game.translate("werewolf.commands.message.received",
+                    player.getName(), sb.toString()));
+            player.sendMessage(game.translate("werewolf.commands.message.send",
+                    args[1],
+                    sb.toString()));
             Sounds.ANVIL_USE.play(recipient);
         }
 
@@ -90,22 +100,23 @@ public class ChatListener implements Listener {
             event.setFormat(game.translate("werewolf.commands.admin.moderator.tag") + format);
         } else event.setFormat(format);
 
-        if (!game.getConfig().getConfigValues().get(Configs.CHAT.getKey())) {
+        if (!game.getConfig().getConfigValues().get(ConfigsBase.CHAT.getKey())) {
             event.setCancelled(true);
             event.getPlayer().sendMessage(game.translate("werewolf.commands.admin.chat.off"));
 
-        }
-        else if(game.getConfig().getConfigValues().get(Configs.CHAT.getKey())){
+        } else if (game.getConfig().getConfigValues().get(ConfigsBase.PROXIMITY_CHAT.getKey()) &&
+                !game.isState(StateGame.LOBBY)) {
             event.setCancelled(true);
 
-            for(Player p:Bukkit.getOnlinePlayers()){
-                double distance =p.getLocation().distance(player.getLocation());
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                double distance = p.getLocation().distance(player.getLocation());
 
-                if(distance<20){
-                    p.sendMessage(String.format(event.getFormat(),player.getName(),event.getMessage()));
-                }
-                else if (distance<=50){
-                    p.sendMessage(String.format(event.getFormat(),player.getName(),obfuscation(event.getMessage(), ((int)distance-20)/70f)));
+                if (distance < 20) {
+                    p.sendMessage(String.format(event.getFormat(), player.getName(), event.getMessage()));
+                } else if (distance <= 50) {
+                    p.sendMessage(String.format(event.getFormat(),
+                            player.getName(),
+                            obfuscation(event.getMessage(), ((int) distance - 20) / 70f)));
                 }
             }
 

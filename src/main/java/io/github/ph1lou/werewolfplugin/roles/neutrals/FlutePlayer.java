@@ -5,7 +5,7 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
-import io.github.ph1lou.werewolfapi.enumlg.Timers;
+import io.github.ph1lou.werewolfapi.enumlg.TimersBase;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.events.EnchantedEvent;
 import io.github.ph1lou.werewolfapi.events.SelectionEndEvent;
@@ -16,7 +16,6 @@ import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,7 +88,7 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
             return;
         }
 
-        player.sendMessage(game.translate("werewolf.role.flute_player.power", game.getScore().conversion(game.getConfig().getTimerValues().get(Timers.POWER_DURATION.getKey()))));
+        player.sendMessage(game.translate("werewolf.role.flute_player.power", game.getScore().conversion(game.getConfig().getTimerValues().get(TimersBase.POWER_DURATION.getKey()))));
     }
 
 
@@ -165,7 +164,7 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
     }
 
     @Override
-    public void stolen(@NotNull UUID uuid) {
+    public void recoverPowerAfterStolen() {
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 

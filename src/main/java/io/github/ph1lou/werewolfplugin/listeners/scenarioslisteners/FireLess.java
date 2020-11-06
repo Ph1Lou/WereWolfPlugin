@@ -19,7 +19,9 @@ public class FireLess extends Scenarios {
 
         if (!(event.getEntity() instanceof Player)) return;
 
-        if (event.getCause().equals(EntityDamageEvent.DamageCause.LAVA) || event.getCause().equals(EntityDamageEvent.DamageCause.FIRE) || event.getCause().equals(EntityDamageEvent.DamageCause.FIRE_TICK)) {
+        if (event.getCause().equals(EntityDamageEvent.DamageCause.LAVA) ||
+                event.getCause().equals(EntityDamageEvent.DamageCause.FIRE) ||
+                event.getCause().equals(EntityDamageEvent.DamageCause.FIRE_TICK)) {
             event.setCancelled(true);
         }
 

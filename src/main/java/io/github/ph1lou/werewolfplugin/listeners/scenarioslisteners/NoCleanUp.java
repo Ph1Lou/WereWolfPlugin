@@ -20,6 +20,7 @@ public class NoCleanUp extends Scenarios {
 
         Player killer = event.getEntity().getKiller();
         if (killer == null) return;
-        killer.setHealth(Math.min(killer.getHealth() + 4, VersionUtils.getVersionUtils().getPlayerMaxHealth(killer)));
+        killer.setHealth(Math.min(killer.getHealth() + 4,
+                VersionUtils.getVersionUtils().getPlayerMaxHealth(killer)));
     }
 }

@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.save;
 
 import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.RolesBase;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +41,7 @@ public class Config implements ConfigWereWolfAPI {
     private int amnesiacLoverSize = 0;
     private int cursedLoverSize = 0;
     private int limitDepthStrider = 0;
-    private String trollKey = "werewolf.role.villager.display";
+    private String trollKey = RolesBase.VILLAGER.getKey();
     private int spectatorMode = 2;  // 0 no Spectators, 1 allowed for death players, 2 for all players;
     private boolean whiteList = false;
     private int playerMax = 30;

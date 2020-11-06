@@ -3,7 +3,8 @@ package io.github.ph1lou.werewolfplugin.commands.utilities;
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.RoleRegister;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.Configs;
+import io.github.ph1lou.werewolfapi.enumlg.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enumlg.RolesBase;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.entity.Player;
 
@@ -21,20 +22,20 @@ public class CommandCompo implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
 
-        if (game.getConfig().getConfigValues().get(Configs.HIDE_COMPOSITION.getKey())) {
+        if (game.getConfig().getConfigValues().get(ConfigsBase.HIDE_COMPOSITION.getKey())) {
 
             player.sendMessage(game.translate("werewolf.commands.compo.composition_hide"));
         } else {
 
             StringBuilder sb = new StringBuilder();
             if (game.getConfig().getLoverSize() > 0) {
-                sb.append("§3").append(game.getConfig().getLoverSize()).append("§r ").append(game.translate("werewolf.role.lover.display")).append("\n");
+                sb.append("§3").append(game.getConfig().getLoverSize()).append("§r ").append(game.translate(RolesBase.LOVER.getKey())).append("\n");
             }
             if (game.getConfig().getAmnesiacLoverSize() > 0) {
-                sb.append("§3").append(game.getConfig().getAmnesiacLoverSize()).append("§r ").append(game.translate("werewolf.role.amnesiac_lover.display")).append("\n");
+                sb.append("§3").append(game.getConfig().getAmnesiacLoverSize()).append("§r ").append(game.translate(RolesBase.AMNESIAC_LOVER.getKey())).append("\n");
             }
             if (game.getConfig().getCursedLoverSize() > 0) {
-                sb.append("§3").append(game.getConfig().getCursedLoverSize()).append("§r ").append(game.translate("werewolf.role.cursed_lover.display")).append("\n");
+                sb.append("§3").append(game.getConfig().getCursedLoverSize()).append("§r ").append(game.translate(RolesBase.CURSED_LOVER.getKey())).append("\n");
             }
             for (RoleRegister roleRegister : main.getRegisterManager().getRolesRegister()) {
                 String key = roleRegister.getKey();

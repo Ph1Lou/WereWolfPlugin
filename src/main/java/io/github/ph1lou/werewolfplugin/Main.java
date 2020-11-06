@@ -6,6 +6,8 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.LangManager;
 import io.github.ph1lou.werewolfapi.RegisterManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.StateGame;
+import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.commands.Admin;
 import io.github.ph1lou.werewolfplugin.commands.Command;
@@ -51,7 +53,15 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
             setWorld();
             currentGame.init();
             currentGame.getMapManager().createMap();
-        }, 60);
+            Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> Bukkit.getOnlinePlayers()
+                    .forEach(player -> {
+                        if (currentGame == null || !currentGame.isState(StateGame.TRANSPORTATION)) {
+                            ActionBarEvent actionBarEvent = new ActionBarEvent(player.getUniqueId(), "");
+                            Bukkit.getPluginManager().callEvent(actionBarEvent);
+                            VersionUtils.getVersionUtils().sendActionBar(player, actionBarEvent.getActionBar());
+                        }
+                    }), 0, 4);
+        }, 5);
     }
 
 
@@ -105,11 +115,7 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
         VersionUtils.getVersionUtils().setGameRuleValue(world, "announceAdvancements", false);
         int x = world.getSpawnLocation().getBlockX();
         int z = world.getSpawnLocation().getBlockZ();
-        try {
-            world.getWorldBorder().reset();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        world.getWorldBorder().reset();
 
         if (getConfig().getBoolean("default_lobby")) {
 

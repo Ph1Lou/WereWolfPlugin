@@ -7,6 +7,8 @@ import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class CommandTP implements Commands {
 
 
@@ -20,7 +22,7 @@ public class CommandTP implements Commands {
     public void execute(Player player, String[] args) {
 
         WereWolfAPI game = main.getWereWolfAPI();
-
+        UUID uuid = player.getUniqueId();
         Player playerArg1 = Bukkit.getPlayer(args[0]);
         ModerationManagerAPI moderationManager = game.getModerationManager();
 
@@ -37,14 +39,15 @@ public class CommandTP implements Commands {
 
             if (playerArg1 == null) {
                 player.sendMessage(game.translate("werewolf.check.offline_player"));
-                Bukkit.broadcastMessage(args[0]);
                 return;
             }
 
             player.teleport(playerArg1);
-
-            moderationManager.alertHostsAndModerators(game.translate("werewolf.commands.admin.teleportation.send", player.getName(), playerArg1.getName()));
-
+            String message = game.translate("werewolf.commands.admin.teleportation.send", player.getName(), playerArg1.getName());
+            moderationManager.alertHostsAndModerators(message);
+            if (!moderationManager.isStaff(uuid)) {
+                player.sendMessage(message);
+            }
             return;
         }
 
@@ -70,8 +73,11 @@ public class CommandTP implements Commands {
         }
 
 
-        moderationManager.alertHostsAndModerators(game.translate("werewolf.commands.admin.teleportation.send", playerArg1.getName(), playerArg2.getName()));
-
+        String message = game.translate("werewolf.commands.admin.teleportation.send", playerArg1.getName(), playerArg2.getName());
+        moderationManager.alertHostsAndModerators(message);
+        if (!moderationManager.isStaff(uuid)) {
+            player.sendMessage(message);
+        }
 
     }
 

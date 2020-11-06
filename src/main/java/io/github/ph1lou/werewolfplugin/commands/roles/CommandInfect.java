@@ -3,8 +3,7 @@ package io.github.ph1lou.werewolfplugin.commands.roles;
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.Camp;
-import io.github.ph1lou.werewolfapi.enumlg.Configs;
+import io.github.ph1lou.werewolfapi.enumlg.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.InfectionEvent;
 import io.github.ph1lou.werewolfapi.events.NewWereWolfEvent;
@@ -15,6 +14,7 @@ import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class CommandInfect implements Commands {
@@ -51,7 +51,7 @@ public class CommandInfect implements Commands {
         }
         UUID argUUID = UUID.fromString(args[0]);
 
-        if (!game.getConfig().getConfigValues().get(Configs.AUTO_REZ_INFECT.getKey()) && argUUID.equals(uuid)) {
+        if (!game.getConfig().getConfigValues().get(ConfigsBase.AUTO_REZ_INFECT.getKey()) && argUUID.equals(uuid)) {
             player.sendMessage(game.translate("werewolf.check.not_yourself"));
             return;
         }
@@ -67,10 +67,17 @@ public class CommandInfect implements Commands {
             return;
         }
 
-        if (!plg1.canBeInfect()) {
+        if (plg1.getLastKiller() == null ||
+                !Objects.requireNonNull(
+                        game.getPlayerWW(plg1.getLastKiller()))
+                        .getRole()
+                        .isWereWolf() ||
+                game.getScore().getTimer() - plg1.getDeathTime() >= 7) {
+
             player.sendMessage(game.translate("werewolf.role.infect_father_of_the_wolves.player_cannot_be_infected"));
             return;
         }
+
 
         ((Power) infect).setPower(false);
 
@@ -84,19 +91,16 @@ public class CommandInfect implements Commands {
 
         ((AffectedPlayers) infect).addAffectedPlayer(argUUID);
 
-        player.sendMessage(game.translate("werewolf.role.infect_father_of_the_wolves.infection_perform",plg1.getName()));
+        player.sendMessage(game.translate("werewolf.role.infect_father_of_the_wolves.infection_perform", plg1.getName()));
         game.resurrection(argUUID);
 
-        if(!plg1.getRole().isCamp(Camp.WEREWOLF)) {
-            NewWereWolfEvent newWereWolfEvent = new NewWereWolfEvent(argUUID);
-            Bukkit.getPluginManager().callEvent(newWereWolfEvent);
-
-            if(newWereWolfEvent.isCancelled()){
-                return;
-            }
+        if (!plg1.getRole().isWereWolf()) { //si déjà loup
+            plg1.getRole().setInfected(true); //pour qu'il sois actualisé en tan que loup
+            Bukkit.getPluginManager().callEvent(
+                    new NewWereWolfEvent(argUUID));
         }
-        plg1.setCanBeInfect(false);
-        game.getPlayersWW().get(argUUID).getRole().setInfected(true);
+
+        plg1.getRole().setInfected(true); //répétition indispensable
         game.checkVictory();
     }
 }

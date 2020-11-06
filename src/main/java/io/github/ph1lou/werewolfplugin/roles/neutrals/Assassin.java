@@ -17,7 +17,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -68,23 +67,35 @@ public class Assassin extends RolesNeutral {
 
         if (event.getEnchants().containsKey(Enchantment.PROTECTION_ENVIRONMENTAL)) {
 
-            if (item.getType().equals(Material.DIAMOND_BOOTS) || item.getType().equals(Material.DIAMOND_LEGGINGS) || item.getType().equals(Material.DIAMOND_HELMET) || item.getType().equals(Material.DIAMOND_CHESTPLATE)) {
+            if (item.getType().equals(Material.DIAMOND_BOOTS) ||
+                    item.getType().equals(Material.DIAMOND_LEGGINGS) ||
+                    item.getType().equals(Material.DIAMOND_HELMET) ||
+                    item.getType().equals(Material.DIAMOND_CHESTPLATE)) {
                 event.getFinalEnchants().put(Enchantment.PROTECTION_ENVIRONMENTAL, Math.min(event.getEnchants().get(Enchantment.PROTECTION_ENVIRONMENTAL), game.getConfig().getLimitProtectionDiamond() + 1));
-            }
-            else {
-                event.getFinalEnchants().put(Enchantment.PROTECTION_ENVIRONMENTAL,Math.min(event.getEnchants().get(Enchantment.PROTECTION_ENVIRONMENTAL),game.getConfig().getLimitProtectionIron()+1));
+            } else {
+                event.getFinalEnchants().put(
+                        Enchantment.PROTECTION_ENVIRONMENTAL,
+                        Math.min(event.getEnchants()
+                                        .get(Enchantment.PROTECTION_ENVIRONMENTAL),
+                                game.getConfig().getLimitProtectionIron() + 1));
             }
         }
         if(event.getEnchants().containsKey(Enchantment.DAMAGE_ALL)){
             if (item.getType().equals(Material.DIAMOND_SWORD)) {
-                event.getFinalEnchants().put(Enchantment.DAMAGE_ALL, Math.min(event.getEnchants().get(Enchantment.DAMAGE_ALL), game.getConfig().getLimitSharpnessDiamond()+1));
+                event.getFinalEnchants().put(Enchantment.DAMAGE_ALL,
+                        Math.min(event.getEnchants().get(Enchantment.DAMAGE_ALL),
+                                game.getConfig().getLimitSharpnessDiamond() + 1));
             }
             else {
-                event.getFinalEnchants().put(Enchantment.DAMAGE_ALL, Math.min(event.getEnchants().get(Enchantment.DAMAGE_ALL), game.getConfig().getLimitSharpnessIron()+1));
+                event.getFinalEnchants().put(Enchantment.DAMAGE_ALL,
+                        Math.min(event.getEnchants().get(Enchantment.DAMAGE_ALL),
+                                game.getConfig().getLimitSharpnessIron() + 1));
             }
         }
-        if(event.getEnchants().containsKey(Enchantment.ARROW_DAMAGE)){
-            event.getFinalEnchants().put(Enchantment.ARROW_DAMAGE,Math.min(event.getEnchants().get(Enchantment.ARROW_DAMAGE),game.getConfig().getLimitPowerBow()+1));
+        if(event.getEnchants().containsKey(Enchantment.ARROW_DAMAGE)) {
+            event.getFinalEnchants().put(Enchantment.ARROW_DAMAGE,
+                    Math.min(event.getEnchants().get(Enchantment.ARROW_DAMAGE),
+                            game.getConfig().getLimitPowerBow() + 1));
         }
     }
 
@@ -95,9 +106,17 @@ public class Assassin extends RolesNeutral {
 
 
     @Override
-    public void recoverPotionEffect(@NotNull Player player) {
-        super.recoverPotionEffect(player);
+    public void recoverPotionEffect() {
+
+        super.recoverPotionEffect();
+
+        Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (player == null) return;
+
         if (game.isDay(Day.NIGHT)) return;
-        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, -1, false, false));
+
+        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,
+                Integer.MAX_VALUE, -1, false, false));
     }
 }

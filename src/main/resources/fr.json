@@ -47,7 +47,7 @@
         "display": "Soeur",
         "description":  "§6LOUP-GAROU §7➽§9 Vous êtes §1Soeur§9. Votre objectif est d’éliminer les Loups-Garous. \nVous possédez un effet de Résistance lorsque vous vous trouvez à moins de 20 blocs d'une de vos soeurs. Lorsqu'une soeur meurt vous connaîtrez son assassin.",
         "reveal_killer": "[§eLG UHC§r] §b%s§r a été tué par §b%s",
-        "sisters_list": "Liste des Soeurs : §b%s"
+        "sisters_list": "Liste de vos Soeurs : §b%s"
       },
       "witch": {
         "display": "Sorcière",
@@ -74,8 +74,13 @@
       },
       "citizen": {
         "display": "Citoyen",
-        "description":  "§6LOUP-GAROU §7➽§9 Vous êtes §1Citoyen§9. Votre objectif est d’éliminer les Loups-Garous.\nVous pouvez, deux fois dans le partie, décider de voir les Votes §b/ww depouiller§9, et une fois de les annuler §b/ww annuler§9.",
-        "affect_votes": "[§eLG UHC§r] Vous pouvez encore annuler le vote §b%d§r fois  §6/ww annuler§r ou dépouiller le vote §b%d§r fois §6/ww depouiller§r vous avez §b%s",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Citoyen§9. Votre objectif est d’éliminer les Loups-Garous.\nVous pouvez, deux fois dans le partie, décider de voir les Votes, et une fois seulement de les annuler.",
+        "cancel_vote_message": "[§eLG UHC§r] Vous pouvez encore annuler le vote §b%d§r fois. ",
+        "see_vote_message": "[§eLG UHC§r] Vous pouvez encore dépouiller les votes §b%d§r fois. ",
+        "click": "§bCliquez ici ",
+        "cancel": "Annuler le §bVote",
+        "see": "Voir les §bVotes",
+        "time_left": ", vous avez §b%s",
         "cancelling_vote_perform": "[§eLG UHC§r] Vote annulé, vous venez de sauver §b%s",
         "cancelling_broadcast": "[§aLG UHC§r] Un Citoyen a annulé le vote",
         "count_votes": "[§aLG UHC§r] Dépouillement ",
@@ -85,12 +90,16 @@
       },
       "angel": {
         "display": "Ange",
-        "description":  "§6LOUP-GAROU §7➽§9 Vous êtes §1Ange§9. Votre objectif est de gagner seul. \nEn début de partie, vous pouvez faire un choix. Si vous choisissez §1Ange Gardien§9, vous obtiendrez 15 coeurs et devrez protéger une personne choisie aléatoirement et gagner avec elle. Si celle-ci meurt, vous repasserez à 12 coeurs et devrez gagnez avec le Village. Si vous choisissez §1Ange Déchu§9 vous obtiendrez 12 coeurs, une cible vous sera assignée aléatoirement si vous la tuez, vous passerez à 15 coeurs jusqu'à la fin de la partie.",
-        "angel_choice": "[§eLG UHC§r] Vous pouvez décider d'être sois Ange Déchu §6/ww dechu§r sois Ange Gardien §6/ww gardien§r, vous avez §b%s",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Ange§9. Votre objectif est de gagner seul. \nEn début de partie, vous pouvez faire un choix.",
+        "angel_choice": "§9 Vous pouvez décider d'être soit ",
+        "or": "§9 soit ",
+        "time": "§9, vous avez §b%s §9(Cliquez pour choisir)",
+        "fallen_choice": "§9Si vous choisissez §1Ange Déchu§9,\n§9 vous obtiendrez 12 coeurs, une cible vous sera assignée aléatoirement si vous la tuez,\n§9 vous passerez à 15 coeurs jusqu'à la fin de la partie.",
+        "guardian_choice": "§9Si vous choisissez §1Ange Gardien§9,\n§9 vous obtiendrez 15 coeurs et devrez protéger une personne choisie aléatoirement et gagner avec elle.\n§9 Si celle-ci meurt, vous repasserez à 12 coeurs \n§9et devrez gagnez avec le Village.",
         "angel_choice_perform": "[§eLG UHC§r] Vous venez de choisir §b%s",
         "command_1": "gardien",
         "command_2": "dechu",
-        "choice" : "il a choisi %s"
+        "choice": "il a choisi %s"
       },
       "fox": {
         "display": "Renard",
@@ -186,8 +195,9 @@
       },
       "fallen_angel": {
         "display": "Ange Déchu",
-        "description":  "§6LOUP-GAROU §7➽§9 Vous êtes §1Ange Déchu§9. Vous devez gagner seul. \nVous possédez 2 coeurs supplémentaires. Une cible vous est assignée aléatoirement, si vous la tuez, vous gagnez trois coeurs supplémentaires jusqu'à la fin de la partie.",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Ange Déchu§9. Vous devez gagner seul. \nVous possédez 2 coeurs supplémentaires. Une cible vous est assignée aléatoirement, si vous la tuez, vous gagnez trois coeurs supplémentaires jusqu'à la fin de la partie.",
         "deadly_target": "[§eLG UHC§r] Vous avez tué votre cible, vous gagnez 3 coeurs",
+        "deadly_target_by_other": "[§cLG UHC§r] Votre cible a été tué par un autre joueur, vous ne pouvez plus gagner de coeurs supplémentaires",
         "reveal_target": "[§eLG UHC§r] Votre cible est §b%s",
         "new_target": "[§6LG UHC§r] Votre cible est maintenant §b%s"
       },
@@ -205,7 +215,7 @@
       "siamese_twin": {
         "display": "Frère Siamois",
         "description":  "§6LOUP-GAROU §7➽§9 Vous êtes §1Frère Siamois§9. Votre objectif est d’éliminer les Loups-Garous. \nVous avez été séparé de votre frère à la naissance, cependant vous avez gardé un lien très fort avec lui. En plus de disposez de 2 coeurs supplémentaires, vos coeurs au dela du cinquième sont liées.",
-        "siamese_twin_list": "Liste des Frères Siamois: §b%s"
+        "siamese_twin_list": "Liste de vos Frères Siamois: §b%s"
       },
       "lover": {
         "display": "Couple",
@@ -256,7 +266,7 @@
         "display": "Bibliothécaire",
         "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Bibliothécaire§9. Votre objectif est d’éliminer les Loups-Garous.\nVous obtenez 4 bibliothèques.\n Vous pouvez trois fois au cours de la partie, demander à une personne d'écrire dans votre livre §b/ww livre§9. \nQuand vous mourrez, votre livre est publié",
         "perform": "[§eLG UHC§r] Vous venez d'envoyer un livre à §b%s",
-        "message": "[§eLG UHC§r] Le §bBibliothécaire§r souhaite que vous contribuez à son livre. Faites §b/ww contribuer§r suivie de votre message",
+        "message": "[§eLG UHC§r] Le §bBibliothécaire§r souhaite que vous contribuez à son livre. Cliquez ici",
         "contribute": "[§aLG UHC§r] Vous venez de contribuer",
         "contribution": "[§aLG UHC§r] §b%s§r vient de vous envoyer §b%s",
         "prohibit": "[§cLG UHC§r] Vous n'êtes pas autorisé à contribuer",
@@ -288,7 +298,7 @@
       },
       "succubus": {
         "display": "Succube",
-        "description":   "§6LOUP-GAROU §7➽ §9Vous êtes §1Succube§9. Votre objectif est de gagner seul avec la personne que vous aurez charmé.\nVous pouvez charmer un joueur avec §b/ww charmer§9. \nSi vous mourrez, votre personne charmée mourra à votre place.",
+        "description": "§6LOUP-GAROU §7➽ §9Vous êtes §1Succube§9. Votre objectif est de gagner seul avec la personne que vous aurez charmé.\nVous pouvez charmer un joueur avec §b/ww charmer§9. \nSi vous mourrez, votre personne charmée mourra à votre place.",
         "charming_message": "[§eLG UHC§r] Vous pouvez désigner une personne à charmer §6/ww charmer",
         "charming_beginning": "[§eLG UHC§r] Vous commencez à charmer §b%s",
         "charming_perform": "[§aLG UHC§r] §b%s§r est totalement charmé, si vous mourrez il mourra à votre place",
@@ -308,7 +318,6 @@
       "vote_disable": "[§cLG UHC§r] Les Votes sont désactivés",
       "vote_deactivate": "[§6LG UHC§r] En raison du nombre de joueurs, les Votes sont désactivés",
       "vote_not_yet_activated": "[§cLG UHC§r] Les Votes ne sont pas encore activés",
-      "death": "[§cLG UHC§r] Les morts ne peuvent pas voter",
       "vote_result": "[§eLG UHC§r] §b%s§r est celui qui a recueillit le plus de vote§r : §b%s§r. Il perd 5 coeurs",
       "no_result": "[§6LG UHC§r] Aucun joueur n'a été voté plus d'une fois",
       "vote_time": "§b§m§l-+-----------------------------------+-\n§f[§6LG UHC§r] C'est l'heure de voter §6/ww vote§r Vous avez §b%s\n§r§b§m§l-+-----------------------------------+-",
@@ -328,7 +337,8 @@
       "start": {
         "message": "[§eLG UHC§r] Vous avez §b%s§r d'invulnérabilité\n Plus d'infos sur la partie §6/ww h",
         "top_title": "Début de Partie",
-        "bot_title": "§bBonne Game"
+        "bot_title": "§bBonne Game",
+        "launch": "Lancer la §bPartie"
       },
       "potential_revive": "[§6LG UHC§r] En attente d'une potentielle resurrection",
       "invulnerability": "[§eLG UHC§r] Fin de l'invulnérabilité",
@@ -366,6 +376,7 @@
 
         "stop": {
           "command": "stop",
+          "message": "Stopper la Partie",
           "send": "[§cLG UHC§r] §b%s§r a stoppé la partie"
         },
         "start": {
@@ -384,7 +395,7 @@
           "command": "?",
           "send": "[§b%s§r] %s (Cliquez pour répondre)",
           "anonyme": "Anonyme",
-          "failure": "[§cLG UHC§r] Votre message n'a pas pu être envoyé"
+          "failure": "[§cLG UHC§r] Votre message n'a pas pu être envoyé.\n Aucun Staff de connecté"
         },
         "info": {
           "command": "info",
@@ -413,7 +424,7 @@
         "loot_role": {
           "command": "stuffRole",
           "valid": "[§eLG UHC§r] Cliquez ici pour valider le stuff",
-          "perform": "[§aLG UHC§r] Stuff Actualisé"
+          "perform": "[§aLG UHC§r] Stuff §b%s§r Actualisé"
         },
         "role": {
           "command": "role",
@@ -450,12 +461,13 @@
         "preview": {
           "command": "preview",
           "map": "[§eLG UHC§r] Vous venez d'être téléporté au centre de la map de la partie\n §b/a preview§r pour revenir",
-          "lobby": "[§eLG UHC§r] Vous êtes revenu au lobby"
+          "lobby": "[§eLG UHC§r] Vous êtes revenu au lobby",
+          "create": "[§cLG UHC§r] Création de la Carte en cours, veuillez patienter..."
         },
         "tp_group": {
           "command": "tpgroup",
-          "broadcast": "[§eLG UHC§r] §b%s§r ont été téléporté par un administrateur",
-          "perform": "[§eLG UHC§r] Vous venez d'être téléporté par un administrateur"
+          "broadcast": "[§eLG UHC§r] §b%s§r ont été téléporté par §b%s",
+          "perform": "[§eLG UHC§r] Vous venez d'être téléporté par §b%s"
         },
         "disconnected": {
           "command": "disc",
@@ -463,7 +475,7 @@
         },
         "revive": {
           "command": "revive",
-          "perform": "[§eLG UHC§r] §b%s§r a été ressuscité par un Administrateur",
+          "perform": "[§eLG UHC§r] §b%s§r a été ressuscité par un §b%s",
           "not_death": "[§cLG UHC§r] Le joueur n'est pas Mort"
         },
         "size": {

@@ -77,7 +77,8 @@ public class DoubleJump extends Scenarios {
     private void onMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
         Location location = player.getLocation();
-        if (player.getGameMode() != GameMode.CREATIVE && location.subtract(0.0, 1.0, 0.0).getBlock().getType() != Material.AIR) {
+        if (player.getGameMode() != GameMode.CREATIVE &&
+                location.subtract(0.0, 1.0, 0.0).getBlock().getType() != Material.AIR) {
             player.setAllowFlight(true);
         }
     }

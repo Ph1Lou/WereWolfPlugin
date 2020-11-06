@@ -1,6 +1,5 @@
 package io.github.ph1lou.werewolfplugin.worldloader;
 
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.events.GenerationStartEvent;
 import io.github.ph1lou.werewolfapi.events.GenerationStopEvent;
 import org.bukkit.*;
@@ -47,13 +46,13 @@ public class WorldFillTask implements Runnable {
 	private boolean finish = false;
 
 
-	public WorldFillTask(WereWolfAPI game, int chunksPerRun, int radius) {
+	public WorldFillTask(World world, int chunksPerRun, int radius) {
 
 		Bukkit.getPluginManager().callEvent(new GenerationStartEvent());
 		this.server = Bukkit.getServer();
 		this.chunksPerRun = chunksPerRun;
 
-		this.world = game.getMapManager().getWorld();
+		this.world = world;
 
 		Location spawn = world.getSpawnLocation();
 		this.border = new BorderData(spawn.getX(), spawn.getZ(), radius, radius);

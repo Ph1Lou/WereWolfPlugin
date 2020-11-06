@@ -38,7 +38,8 @@ public class CommandCupid implements Commands {
         }
 
         if (args[0].equalsIgnoreCase(args[1])) {
-            player.sendMessage(game.translate("werewolf.check.two_distinct_player"));
+            player.sendMessage(game.translate(
+                    "werewolf.check.two_distinct_player"));
             return;
         }
 

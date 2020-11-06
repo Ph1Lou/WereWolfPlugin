@@ -17,9 +17,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+
 public class Stuff implements StuffManager {
 
     private final Map<String, List<ItemStack>> stuffRoles = new HashMap<>();
+
+    private final Map<UUID, Inventory> tempStuff = new HashMap<>();
     private final List<ItemStack> death_loot = new ArrayList<>();
     private final Inventory start_loot = Bukkit.createInventory(null, 45);
     private final Main main;
@@ -230,5 +233,10 @@ public class Stuff implements StuffManager {
     @Override
     public Map<String, List<ItemStack>> getStuffRoles() {
         return stuffRoles;
+    }
+
+    @Override
+    public Map<UUID, Inventory> getTempStuff() {
+        return tempStuff;
     }
 }

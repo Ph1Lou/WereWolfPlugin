@@ -27,7 +27,8 @@ public class AdvancedConfig implements InventoryProvider {
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
             .provider(new AdvancedConfig())
             .size(4, 9)
-            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.advanced_tool.name"))
+            .title(JavaPlugin.getPlugin(Main.class)
+                    .getWereWolfAPI().translate("werewolf.menu.advanced_tool.name"))
             .closeable(true)
             .build();
 
@@ -37,7 +38,10 @@ public class AdvancedConfig implements InventoryProvider {
         Main main = JavaPlugin.getPlugin(Main.class);
         WereWolfAPI game = main.getWereWolfAPI();
 
-        contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType()).setDisplayName(game.translate("werewolf.menu.return")).build()), e -> Config.INVENTORY.open(player)));
+        contents.set(0, 0, ClickableItem.of((new ItemBuilder(
+                UniversalMaterial.COMPASS.getType())
+                .setDisplayName(game.translate("werewolf.menu.return"))
+                .build()), e -> Config.INVENTORY.open(player)));
     }
 
     @Override
@@ -47,9 +51,14 @@ public class AdvancedConfig implements InventoryProvider {
         WereWolfAPI game = main.getWereWolfAPI();
         ConfigWereWolfAPI config = game.getConfig();
 
-        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"), game.translate("werewolf.menu.right"));
+        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
+                game.translate("werewolf.menu.right"));
 
-        contents.set(0, 2, ClickableItem.of((new ItemBuilder(Material.APPLE).setLore(lore).setDisplayName(game.translate("werewolf.menu.advanced_tool.apple", config.getAppleRate())).build()), e -> {
+        contents.set(0, 2, ClickableItem.of((new ItemBuilder(Material.APPLE)
+                .setLore(lore)
+                .setDisplayName(game.translate("werewolf.menu.advanced_tool.apple",
+                        config.getAppleRate())).build()), e -> {
+
             if (e.isLeftClick()) {
                 if (config.getAppleRate() + 5 <= 100) {
                     config.setAppleRate(config.getAppleRate() + 5);

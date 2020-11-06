@@ -6,7 +6,7 @@ import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.Camp;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
-import io.github.ph1lou.werewolfapi.enumlg.Timers;
+import io.github.ph1lou.werewolfapi.enumlg.TimersBase;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.events.SniffEvent;
 import io.github.ph1lou.werewolfapi.events.UpdateEvent;
@@ -113,10 +113,23 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
 
 
     @Override
-    public void recoverPotionEffect(Player player) {
+    public void recoverPotionEffect() {
+
+        super.recoverPotionEffect();
+
+        Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (player == null) return;
+
         player.removePotionEffect(PotionEffectType.SPEED);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,Integer.MAX_VALUE,0,false,false));
-        super.recoverPotionEffect(player);
+        player.addPotionEffect(
+                new PotionEffect(
+                        PotionEffectType.SPEED,
+                        Integer.MAX_VALUE,
+                        0,
+                        false,
+                        false));
+
     }
 
     @EventHandler
@@ -149,37 +162,49 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
         Location renardLocation = player.getLocation();
         Location playerLocation = flair.getLocation();
 
-        if (renardLocation.distance(playerLocation) > game.getConfig().getDistanceFox()) {
+        if (renardLocation.distance(playerLocation) >
+                game.getConfig().getDistanceFox()) {
             return;
         }
 
-        float temp = getProgress() + 100f / (game.getConfig().getTimerValues().get(Timers.FOX_SMELL_DURATION.getKey()) + 1);
+        float temp = getProgress() + 100f /
+                (game.getConfig().getTimerValues()
+                        .get(TimersBase.FOX_SMELL_DURATION.getKey()) + 1);
 
         setProgress(temp);
 
-        if (temp % 10 > 0 && temp % 10 <= 100f / (game.getConfig().getTimerValues().get(Timers.FOX_SMELL_DURATION.getKey()) + 1)) {
-            player.sendMessage(game.translate("werewolf.role.fox.progress", Math.min(100,Math.floor(temp))));
+        if (temp % 10 > 0 && temp % 10 <= 100f /
+                (game.getConfig().getTimerValues()
+                        .get(TimersBase.FOX_SMELL_DURATION.getKey()) + 1)) {
+            player.sendMessage(game.translate("werewolf.role.fox.progress",
+                    Math.min(100, Math.floor(temp))));
         }
 
         if (temp >= 100) {
 
             boolean isWereWolf = true;
 
-            if (plf.getRole() instanceof Display && (!((Display) plf.getRole()).isDisplayCamp(Camp.WEREWOLF))) {
+            if (plf.getRole() instanceof Display &&
+                    (!((Display) plf.getRole()).isDisplayCamp(Camp.WEREWOLF))) {
                 isWereWolf = false;
             } else if (!plf.getRole().isWereWolf()) {
                 isWereWolf = false;
             }
 
-            SniffEvent sniffEvent = new SniffEvent(getPlayerUUID(), playerSmellUUID, isWereWolf);
+            SniffEvent sniffEvent = new SniffEvent(getPlayerUUID(),
+                    playerSmellUUID, isWereWolf);
 
             Bukkit.getPluginManager().callEvent(sniffEvent);
 
             if (!sniffEvent.isCancelled()) {
                 if (sniffEvent.isWereWolf()) {
-                    player.sendMessage(game.translate("werewolf.role.fox.werewolf", plf.getName()));
+                    player.sendMessage(game.translate(
+                            "werewolf.role.fox.werewolf",
+                            plf.getName()));
                 } else {
-                    player.sendMessage(game.translate("werewolf.role.fox.not_werewolf", plf.getName()));
+                    player.sendMessage(game.translate(
+                            "werewolf.role.fox.not_werewolf",
+                            plf.getName()));
                 }
             } else player.sendMessage(game.translate("werewolf.check.cancel"));
 

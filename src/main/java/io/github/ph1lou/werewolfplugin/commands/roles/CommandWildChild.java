@@ -28,7 +28,6 @@ public class CommandWildChild implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        String playername = player.getName();
         PlayerWW plg = game.getPlayersWW().get(uuid);
         Roles wildChild = plg.getRole();
 
@@ -55,7 +54,7 @@ public class CommandWildChild implements Commands {
             return;
         }
 
-        if(args[0].toLowerCase().equals(playername.toLowerCase())) {
+        if (argUUID.equals(uuid)) {
             player.sendMessage(game.translate("werewolf.check.not_yourself"));
             return;
         }

@@ -18,7 +18,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -47,10 +46,21 @@ public class Elder extends RolesVillage implements Power {
 
 
     @Override
-    public void recoverPotionEffect(@NotNull Player player) {
+    public void recoverPotionEffect() {
+
+        super.recoverPotionEffect();
+
+        Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (player == null) return;
+
         if (!hasPower()) return;
-        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 0, false, false));
-        super.recoverPotionEffect(player);
+        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,
+                Integer.MAX_VALUE,
+                0,
+                false,
+                false));
+
     }
 
     @EventHandler
@@ -75,7 +85,12 @@ public class Elder extends RolesVillage implements Power {
         if (player == null) return;
 
         player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 0, false, false));
+        player.addPotionEffect(new PotionEffect(
+                PotionEffectType.DAMAGE_RESISTANCE,
+                Integer.MAX_VALUE,
+                0,
+                false,
+                false));
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -91,7 +106,12 @@ public class Elder extends RolesVillage implements Power {
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        ElderResurrectionEvent elderResurrectionEvent = new ElderResurrectionEvent(getPlayerUUID(), game.getPlayersWW().containsKey(killerUUID) && game.getPlayersWW().get(killerUUID).getRole().isCamp(Camp.VILLAGER));
+        ElderResurrectionEvent elderResurrectionEvent =
+                new ElderResurrectionEvent(getPlayerUUID(),
+                        game.getPlayersWW().containsKey(killerUUID)
+                                && game.getPlayersWW().get(killerUUID)
+                                .getRole().isCamp(Camp.VILLAGER));
+
         Bukkit.getPluginManager().callEvent(elderResurrectionEvent);
         setPower(false);
 
@@ -100,7 +120,10 @@ public class Elder extends RolesVillage implements Power {
             player.sendMessage(game.translate("werewolf.check.cancel"));
         } else {
             if (elderResurrectionEvent.isKillerAVillager()) {
-                VersionUtils.getVersionUtils().setPlayerMaxHealth(player, Math.max(1, VersionUtils.getVersionUtils().getPlayerMaxHealth(player) - 6));
+                VersionUtils.getVersionUtils().setPlayerMaxHealth(player,
+                        Math.max(1,
+                                VersionUtils.getVersionUtils()
+                                        .getPlayerMaxHealth(player) - 6));
             }
             event.setCancelled(true);
             game.resurrection(getPlayerUUID());

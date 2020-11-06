@@ -3,17 +3,18 @@ package io.github.ph1lou.werewolfplugin.commands.roles;
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.RolesBase;
 import io.github.ph1lou.werewolfapi.enumlg.StateGame;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.LibrarianGiveBackEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfapi.rolesattributs.Storage;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CommandSendToLibrarian implements Commands {
 
@@ -39,45 +40,49 @@ public class CommandSendToLibrarian implements Commands {
             return;
         }
 
-        boolean find =false;
+        AtomicBoolean find = new AtomicBoolean(false);
 
         StringBuilder sb2 = new StringBuilder();
 
         for (String w : args) {
             sb2.append(w).append(" ");
         }
+        game.getPlayersWW().values()
+                .stream()
+                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                .filter(playerWW -> playerWW.getRole().isKey(RolesBase.LIBRARIAN.getKey()))
+                .map(PlayerWW::getRole)
+                .filter(roles -> ((AffectedPlayers) roles).getAffectedPlayers().contains(uuid))
+                .forEach(roles -> {
 
-        for(PlayerWW playerWW:game.getPlayersWW().values()){
+                    ((AffectedPlayers) roles).removeAffectedPlayer(uuid);
+                    LibrarianGiveBackEvent librarianGiveBackEvent =
+                            new LibrarianGiveBackEvent(uuid,
+                                    roles.getPlayerUUID(),
+                                    sb2.toString());
 
-            if(playerWW.isState(StatePlayer.ALIVE)){
-                if(playerWW.getRole().isKey("werewolf.role.librarian.display")){
+                    Bukkit.getPluginManager().callEvent(librarianGiveBackEvent);
 
-                    Roles roles = playerWW.getRole();
-                    if(((AffectedPlayers)roles).getAffectedPlayers().contains(uuid)) {
-                        ((AffectedPlayers) roles).removeAffectedPlayer(uuid);
-                        LibrarianGiveBackEvent librarianGiveBackEvent = new LibrarianGiveBackEvent(uuid, roles.getPlayerUUID(), sb2.toString());
-
-                        Bukkit.getPluginManager().callEvent(librarianGiveBackEvent);
-
-                        if (librarianGiveBackEvent.isCancelled()) {
-                            player.sendMessage(game.translate("werewolf.check.cancel"));
-                            return;
-                        }
-
-                        ((Storage) roles).getStorage().add(sb2.toString());
-
-                        player.sendMessage(game.translate("werewolf.role.librarian.contribute"));
-                        find = true;
-                        Player librarian = Bukkit.getPlayer(librarianGiveBackEvent.getTargetUUID());
-                        if (librarian != null) {
-                            librarian.sendMessage(game.translate("werewolf.role.librarian.contribution", player.getName(), librarianGiveBackEvent.getInfo()));
-                        }
+                    if (librarianGiveBackEvent.isCancelled()) {
+                        player.sendMessage(game.translate("werewolf.check.cancel"));
+                        return;
                     }
-                }
-            }
-        }
 
-        if(!find){
+                    ((Storage) roles).getStorage().add(sb2.toString());
+
+                    player.sendMessage(game.translate("werewolf.role.librarian.contribute"));
+                    find.set(true);
+                    Player librarian = Bukkit.getPlayer(librarianGiveBackEvent.getTargetUUID());
+                    if (librarian != null) {
+                        librarian.sendMessage(game.translate(
+                                "werewolf.role.librarian.contribution",
+                                player.getName(),
+                                librarianGiveBackEvent.getInfo()));
+                    }
+                });
+
+
+        if (!find.get()) {
             player.sendMessage(game.translate("werewolf.role.librarian.prohibit"));
         }
 

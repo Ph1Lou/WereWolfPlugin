@@ -36,7 +36,7 @@ public class CommandSize implements Commands {
         player.sendMessage(game.translate("werewolf.commands.admin.size.result", size));
 
         TextComponent msg = new TextComponent(game.translate("werewolf.commands.admin.size.change"));
-        msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/a change"));
+        msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/a %s", game.translate("werewolf.commands.admin.change.command"))));
         player.spigot().sendMessage(msg);
     }
 }

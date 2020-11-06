@@ -3,12 +3,9 @@ package io.github.ph1lou.werewolfplugin.game;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.ScenarioRegister;
 import io.github.ph1lou.werewolfapi.Scenarios;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.Configs;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.listeners.*;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
@@ -16,8 +13,7 @@ import org.bukkit.plugin.PluginManager;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+
 
 public class ScenariosLoader {
 
@@ -76,19 +72,4 @@ public class ScenariosLoader {
         }
     }
 
-    public void updateCompass() {
-
-        WereWolfAPI game = main.getWereWolfAPI();
-        Map<UUID,PlayerWW> playerWWs = game.getPlayersWW();
-
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (playerWWs.containsKey(player.getUniqueId())) {
-                if (game.getConfig().getConfigValues().get(Configs.COMPASS_MIDDLE.getKey())) {
-                    player.setCompassTarget(player.getWorld().getSpawnLocation());
-                } else {
-                    player.setCompassTarget(playerWWs.get(player.getUniqueId()).getSpawn());
-                }
-            }
-        }
-    }
 }

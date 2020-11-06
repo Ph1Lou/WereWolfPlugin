@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.Camp;
+import io.github.ph1lou.werewolfapi.enumlg.RolesBase;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.SeerEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
@@ -91,18 +92,18 @@ public class CommandSeer implements Commands {
                     player.setHealth(life - 6);
                 }
                 player.sendMessage(game.translate("werewolf.role.seer.see_villager"));
-                if (seer.isKey("werewolf.role.chatty_seer.display")) {
+                if (seer.isKey(RolesBase.CHATTY_SEER.getKey())) {
                     Bukkit.broadcastMessage(game.translate("werewolf.role.chatty_seer.see_perform", game.translate("werewolf.categories.villager")));
                 }
                 plg.addKLostHeart(6);
             } else if (seerEvent.getCamp().equals("werewolf.categories.werewolf")) {
                 player.sendMessage(game.translate("werewolf.role.seer.see_perform", game.translate("werewolf.categories.werewolf")));
-                if (seer.isKey("werewolf.role.chatty_seer.display")) {
+                if (seer.isKey(RolesBase.CHATTY_SEER.getKey())) {
                     Bukkit.broadcastMessage(game.translate("werewolf.role.chatty_seer.see_perform", game.translate("werewolf.categories.werewolf")));
                 }
             } else {
                 player.sendMessage(game.translate("werewolf.role.seer.see_perform", game.translate("werewolf.categories.neutral")));
-                if (seer.isKey("werewolf.role.chatty_seer.display")) {
+                if (seer.isKey(RolesBase.CHATTY_SEER.getKey())) {
                     Bukkit.broadcastMessage(game.translate("werewolf.role.chatty_seer.see_perform", game.translate("werewolf.categories.neutral")));
                 }
             }

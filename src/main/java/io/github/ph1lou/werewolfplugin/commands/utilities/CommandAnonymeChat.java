@@ -65,7 +65,7 @@ public class CommandAnonymeChat implements Commands {
 
             if (player1 != null) {
                 TextComponent anonymeMessage = new TextComponent(game.translate("werewolf.commands.admin.anonymous_chat.send", player1.getName(), sb.toString()));
-                anonymeMessage.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tell " + player.getName()));
+                anonymeMessage.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, String.format("/tell %s", player.getName())));
                 player1.spigot().sendMessage(anonymeMessage);
                 i++;
             }
@@ -77,7 +77,7 @@ public class CommandAnonymeChat implements Commands {
 
                 if (player1 != null) {
                     TextComponent anonymeMessage = new TextComponent(game.translate("werewolf.commands.admin.anonymous_chat.send", game.translate("werewolf.commands.admin.anonymous_chat.anonyme"), sb.toString()));
-                    anonymeMessage.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/ww ? ? " + hash(cesar, player1) + " Message"));
+                    anonymeMessage.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, String.format("/ww %s ? %s %s", game.translate("werewolf.commands.admin.anonymous_chat.command"), hash(cesar, player1), "Message")));
                     player1.spigot().sendMessage(anonymeMessage);
                     i++;
                 }
