@@ -50,7 +50,7 @@ public class CommandSendToLibrarian implements Commands {
         game.getPlayersWW().values()
                 .stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
-                .filter(playerWW -> playerWW.getRole().isKey(RolesBase.LIBRARIAN.getKey()))
+                .filter(playerWW -> playerWW.isKey(RolesBase.LIBRARIAN.getKey()))
                 .map(PlayerWW::getRole)
                 .filter(roles -> ((AffectedPlayers) roles).getAffectedPlayers().contains(uuid))
                 .forEach(roles -> {

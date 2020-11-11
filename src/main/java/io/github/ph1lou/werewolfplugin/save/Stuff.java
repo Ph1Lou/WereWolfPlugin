@@ -63,7 +63,6 @@ public class Stuff implements StuffManager {
     public void save(String configName) {
 
         for(AddonRegister addon:main.getRegisterManager().getAddonsRegister()){
-
             Plugin plugin = addon.getPlugin();
             saveStuffRole(plugin,configName,addon.getAddonKey());
         }
@@ -91,6 +90,14 @@ public class Stuff implements StuffManager {
             config.set("death_loot." + pos, i);
             pos++;
         }
+
+        File file = new File(main.getDataFolder() + File.separator + "stuffs" + File.separator, configName + ".yml");
+        try {
+            config.save(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void saveStuffRole(Plugin plugin,String configName, String keyAddon) {

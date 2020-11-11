@@ -30,11 +30,6 @@ public class CommandFox implements Commands {
         PlayerWW plg = game.getPlayersWW().get(uuid);
         Roles fox = plg.getRole();
 
-        if (args.length != 1) {
-            player.sendMessage(game.translate("werewolf.check.player_input"));
-            return;
-        }
-
         if (!((Power) fox).hasPower()) {
             player.sendMessage(game.translate("werewolf.check.power"));
             return;

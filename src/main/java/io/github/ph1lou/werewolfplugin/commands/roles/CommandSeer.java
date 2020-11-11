@@ -66,11 +66,11 @@ public class CommandSeer implements Commands {
             PlayerWW plg1 = game.getPlayersWW().get(argUUID);
             Roles role1 = plg1.getRole();
 
-            String camp = "werewolf.categories.neutral";
+            String camp = "werewolf.categories.villager";
 
-            if ((role1 instanceof Display && ((Display) role1).isDisplayCamp(Camp.VILLAGER)) || role1.isCamp(Camp.VILLAGER)) {
-                camp = "werewolf.categories.villager";
-            } else if ((role1 instanceof Display && ((Display) role1).isDisplayCamp(Camp.WEREWOLF)) || (!(role1 instanceof Display) && role1.isCamp(Camp.WEREWOLF))) {
+            if ((role1 instanceof Display && ((Display) role1).isDisplayCamp(Camp.NEUTRAL)) || role1.isNeutral()) {
+                camp = "werewolf.categories.neutral";
+            } else if ((role1 instanceof Display && ((Display) role1).isDisplayCamp(Camp.WEREWOLF)) || (!(role1 instanceof Display) && role1.isWereWolf())) {
                 camp = "werewolf.categories.werewolf";
             }
 

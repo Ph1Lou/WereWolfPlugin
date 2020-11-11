@@ -3,7 +3,9 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.enumlg.TimersBase;
+import io.github.ph1lou.werewolfapi.events.AroundLover;
 import io.github.ph1lou.werewolfapi.events.EnchantmentEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
@@ -12,9 +14,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Cupid extends RolesVillage implements AffectedPlayers, Power {
@@ -57,7 +61,7 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getDescription() {
         return game.translate("werewolf.role.cupid.description");
     }
 
@@ -89,12 +93,34 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
     }
 
     @EventHandler
-    public void onEnchantment(EnchantmentEvent event){
+    public void onLover(AroundLover event) {
 
-        if(!event.getPlayerUUID().equals(getPlayerUUID())) return;
+        if (!Objects.requireNonNull(
+                game.getPlayerWW(
+                        getPlayerUUID())).isState(StatePlayer.ALIVE)) return;
 
-        if(game.getConfig().getLimitPunch()==1){
-            if(event.getEnchants().containsKey(Enchantment.ARROW_KNOCKBACK)) {
+        if (event.getUuidS().contains(getPlayerUUID())) {
+            for (UUID uuid : affectedPlayer) {
+                event.addPlayer(uuid);
+            }
+            return;
+        }
+
+        for (UUID uuid : event.getUuidS()) {
+            if (affectedPlayer.contains(uuid)) {
+                event.addPlayer(getPlayerUUID());
+                break;
+            }
+        }
+    }
+
+    @EventHandler
+    public void onEnchantment(EnchantmentEvent event) {
+
+        if (!event.getPlayerUUID().equals(getPlayerUUID())) return;
+
+        if (game.getConfig().getLimitPunch() == 1) {
+            if (event.getEnchants().containsKey(Enchantment.ARROW_KNOCKBACK)) {
                 event.getFinalEnchants().put(Enchantment.ARROW_KNOCKBACK,
                         event.getEnchants().get(Enchantment.ARROW_KNOCKBACK));
             }

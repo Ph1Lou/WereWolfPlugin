@@ -17,10 +17,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.plugin.Plugin;
 import org.javatuples.Pair;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, AngelRole, Transformed {
 
@@ -81,15 +80,19 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getDescription() {
 
         StringBuilder sb = new StringBuilder();
 
         if (choice.equals(AngelForm.FALLEN_ANGEL))
             sb.append(game.translate("werewolf.role.fallen_angel.description"));
-        else if (choice.equals(AngelForm.GUARDIAN_ANGEL))
-            sb.append(game.translate("werewolf.role.guardian_angel.description"));
-        else {
+        else if (choice.equals(AngelForm.GUARDIAN_ANGEL)) {
+            if (game.getConfig().getConfigValues().get(ConfigsBase.SWEET_ANGEL.getKey())) {
+                sb.append(game.translate("werewolf.role.guardian_angel.description"));
+            } else {
+                sb.append(game.translate("werewolf.role.guardian_angel.description_patch"));
+            }
+        } else {
             sb.append(game.translate("werewolf.role.angel.description"));
         }
         sb.append("\n§f").append(heartAndMessageTargetManagement().getValue1());
@@ -156,8 +159,14 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
 
                 } else {
                     extraHearts += 4;
-                    sb.append(game.translate(
-                            "werewolf.role.guardian_angel.protege_death"));
+                    if (game.getConfig().getConfigValues()
+                            .get(ConfigsBase.SWEET_ANGEL.getKey())) {
+                        sb.append(game.translate(
+                                "werewolf.role.guardian_angel.protege_death"));
+                    } else {
+                        sb.append(game.translate(
+                                "werewolf.role.guardian_angel.protege_death_patch"));
+                    }
                 }
 
 
@@ -191,7 +200,10 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
                         HoverEvent.Action.SHOW_TEXT,
                         new ComponentBuilder(
                                 game.translate(
-                                        "werewolf.role.angel.guardian_choice"))
+                                        game.getConfig().getConfigValues().get(
+                                                ConfigsBase.SWEET_ANGEL.getKey())
+                                                ? "werewolf.role.angel.guardian_choice" :
+                                                "werewolf.role.angel.guardian_choice_patch"))
                                 .create()));
 
         TextComponent fallen = new TextComponent(
@@ -341,9 +353,19 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
             }
         } else if (isChoice(AngelForm.GUARDIAN_ANGEL)) {
             VersionUtils.getVersionUtils().setPlayerMaxHealth(player, VersionUtils.getVersionUtils().getPlayerMaxHealth(player) - 6);
-            player.sendMessage(game.translate("werewolf.role.guardian_angel.protege_death"));
-            transformed=true;
+
+            if (game.getConfig().getConfigValues().get(
+                    ConfigsBase.SWEET_ANGEL.getKey())) {
+                player.sendMessage(game.translate(
+                        "werewolf.role.guardian_angel.protege_death"));
+            } else {
+                player.sendMessage(game.translate(
+                        "werewolf.role.guardian_angel.protege_death_patch"));
+            }
+
+            transformed = true;
         }
+
     }
 
     @EventHandler
@@ -405,11 +427,87 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
 
     @Override
     public void setTransformed(boolean b) {
-        this.transformed=b;
+        this.transformed = b;
     }
 
     @Override
     public boolean isNeutral() {
-        return super.isNeutral() && !transformed;
+        return super.isNeutral() &&
+                (!game.getConfig().getConfigValues().get(ConfigsBase.SWEET_ANGEL.getKey())
+                        || !transformed);
     }
+
+    @EventHandler
+    public void onLover(AroundLover event) {
+
+        if (!choice.equals(AngelForm.GUARDIAN_ANGEL)) return;
+
+        if (!Objects.requireNonNull(
+                game.getPlayerWW(
+                        getPlayerUUID())).isState(StatePlayer.ALIVE)) return;
+
+        if (event.getUuidS().contains(getPlayerUUID())) {
+            for (UUID uuid : affectedPlayer) {
+                event.addPlayer(uuid);
+            }
+            return;
+        }
+
+        for (UUID uuid : event.getUuidS()) {
+            if (affectedPlayer.contains(uuid)) {
+                event.addPlayer(getPlayerUUID());
+                break;
+            }
+        }
+    }
+
+    @EventHandler
+    public void onDetectVictoryWithProtege(WinConditionsCheckEvent event) {
+
+        if (event.isCancelled()) return;
+
+        if (!Objects.requireNonNull(
+                game.getPlayerWW(
+                        getPlayerUUID())).isState(StatePlayer.ALIVE)) return;
+
+        if (affectedPlayer.isEmpty()) return;
+
+
+        PlayerWW playerWW = game.getPlayerWW(affectedPlayer.get(0));
+
+        if (playerWW == null) return;
+
+        if (!playerWW.isState(StatePlayer.ALIVE)) return;
+
+
+        List<UUID> list = new ArrayList<>(Collections.singleton(affectedPlayer.get(0)));
+
+
+        for (int i = 0; i < list.size(); i++) {
+
+            UUID uuid = list.get(i);
+
+            game.getPlayersWW().values()
+                    .stream()
+                    .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
+                    .map(PlayerWW::getRole)
+                    .filter(roles -> roles.isKey(RolesBase.ANGEL.getKey())
+                            || roles.isKey(RolesBase.GUARDIAN_ANGEL.getKey()))
+                    .filter(roles -> ((AngelRole) roles).isChoice(AngelForm.GUARDIAN_ANGEL))
+                    .forEach(role -> {
+                        if (((AffectedPlayers) role).getAffectedPlayers().contains(uuid)) {
+                            if (!list.contains(role.getPlayerUUID())) {
+                                list.add(role.getPlayerUUID());
+                            }
+                        }
+                    });
+
+        }
+
+        if (game.getScore().getPlayerSize() == list.size()) {
+            event.setCancelled(true);
+            event.setVictoryTeam(RolesBase.GUARDIAN_ANGEL.getKey());
+        }
+    }
+
 }

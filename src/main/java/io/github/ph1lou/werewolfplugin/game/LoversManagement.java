@@ -195,7 +195,7 @@ public class LoversManagement {
 		for (UUID uuid : game.getPlayersWW().keySet()) {
 
 			PlayerWW plg = game.getPlayersWW().get(uuid);
-			if (plg.getRole().isKey(RolesBase.CUPID.getKey())) {
+			if (plg.isKey(RolesBase.CUPID.getKey())) {
 
 				Cupid cupid = (Cupid) plg.getRole();
 

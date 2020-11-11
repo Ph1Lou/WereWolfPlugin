@@ -95,12 +95,12 @@ public class CommandInfect implements Commands {
         game.resurrection(argUUID);
 
         if (!plg1.getRole().isWereWolf()) { //si déjà loup
-            plg1.getRole().setInfected(true); //pour qu'il sois actualisé en tan que loup
+            plg1.getRole().setInfected(); //pour qu'il sois actualisé en tan que loup
             Bukkit.getPluginManager().callEvent(
                     new NewWereWolfEvent(argUUID));
         }
 
-        plg1.getRole().setInfected(true); //répétition indispensable
+        plg1.getRole().setInfected(); //répétition indispensable
         game.checkVictory();
     }
 }

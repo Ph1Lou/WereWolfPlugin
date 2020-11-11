@@ -14,6 +14,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -119,7 +120,7 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getDescription() {
         return game.translate("werewolf.role.amnesiac_werewolf.description");
     }
 

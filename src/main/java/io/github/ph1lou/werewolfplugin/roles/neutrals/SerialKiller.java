@@ -17,6 +17,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -39,7 +40,7 @@ public class SerialKiller extends RolesNeutral implements Power {
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getDescription() {
         return game.translate("werewolf.role.serial_killer.description");
     }
 

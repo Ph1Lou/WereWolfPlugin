@@ -18,6 +18,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -31,7 +32,7 @@ public class Sister extends RolesVillage {
 
 
     @Override
-    public String getDescription() {
+    public @NotNull String getDescription() {
 
         StringBuilder list = new StringBuilder();
 
@@ -39,7 +40,7 @@ public class Sister extends RolesVillage {
                 .stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> !playerWW.getRole().equals(this))
-                .filter(playerWW -> playerWW.getRole().isKey(RolesBase.SISTER.getKey()))
+                .filter(playerWW -> playerWW.isKey(RolesBase.SISTER.getKey()))
                 .forEach(playerWW -> list.append(playerWW.getName()).append(" "));
 
         return game.translate("werewolf.role.sister.description") +

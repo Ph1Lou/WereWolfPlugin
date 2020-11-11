@@ -17,6 +17,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +28,16 @@ public class InfectFatherOfTheWolves extends RolesWereWolf implements AffectedPl
     private final List<UUID> affectedPlayer = new ArrayList<>();
     private boolean power = true;
 
-    public InfectFatherOfTheWolves(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
-        super(main,game,uuid, key);
+    public InfectFatherOfTheWolves(GetWereWolfAPI main,
+                                   WereWolfAPI game,
+                                   UUID uuid,
+                                   String key) {
+        super(main, game, uuid, key);
     }
 
     @Override
     public void setPower(Boolean power) {
-        this.power=power;
+        this.power = power;
     }
 
     @Override
@@ -63,7 +67,7 @@ public class InfectFatherOfTheWolves extends RolesWereWolf implements AffectedPl
 
 
     @Override
-    public String getDescription() {
+    public @NotNull String getDescription() {
         return game.translate("werewolf.role.infect_father_of_the_wolves.description");
     }
 

@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.game;
 
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.RolesBase;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -42,7 +43,9 @@ public class PlayerLG implements PlayerWW {
 
     public PlayerLG(Main main, WereWolfAPI game, Player player) {
         this.spawn = player.getWorld().getSpawnLocation();
-        this.role = new Villager(main, game, player.getUniqueId(), io.github.ph1lou.werewolfapi.enumlg.RolesBase.VILLAGER.getKey());
+        this.role = new Villager(main, game,
+                player.getUniqueId(),
+                RolesBase.VILLAGER.getKey());
         this.name = player.getName();
     }
 
@@ -114,10 +117,10 @@ public class PlayerLG implements PlayerWW {
 		return (this.role);
 	}
 
-	@Override
-	public Boolean isRole(Roles role) {
-		return (this.role.equals(role));
-	}
+    @Override
+    public Boolean isKey(String role) {
+        return (role.equals(this.role.getKey()));
+    }
 
 	@Override
 	public void setSpawn(Location spawn) {

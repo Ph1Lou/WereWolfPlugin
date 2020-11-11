@@ -168,9 +168,7 @@ public class GameManager implements WereWolfAPI {
     @Override
     public void stopGame() {
 
-        setState(StateGame.END);
-
-        if (mapManager.getWorld() == null) return;
+        if (!main.getWereWolfAPI().equals(this)) return;
 
         scenarios.delete();
 
@@ -185,11 +183,18 @@ public class GameManager implements WereWolfAPI {
             player.setGameMode(GameMode.ADVENTURE);
             newGame.join(player);
         }
+
+        Bukkit.getOnlinePlayers()
+                .stream()
+                .filter(player -> player.getWorld().equals(mapManager.getWorld()))
+                .forEach(player -> player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation()));
+
         if (score.getTimer() > 60) { //Si la game a commencé depuis moins d'une minute on ne delete pas la map
             mapManager.deleteMap();
         } else {
             newGame.getMapManager().generateMap(newGame.getConfig().getBorderMax());
         }
+
 
         Bukkit.getPluginManager().callEvent(new StopEvent(this));
     }

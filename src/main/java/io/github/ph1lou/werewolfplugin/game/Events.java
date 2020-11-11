@@ -1,12 +1,12 @@
 package io.github.ph1lou.werewolfplugin.game;
 
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enumlg.Camp;
 import io.github.ph1lou.werewolfapi.enumlg.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
 import io.github.ph1lou.werewolfapi.events.ChestEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -46,8 +46,11 @@ public class Events implements Listener {
 		Sign sign = (Sign) block2.getState();
 
 		for (PlayerWW plg : game.getPlayersWW().values()) {
-			if (!plg.getRole().isCamp(Camp.VILLAGER) && plg.isState(StatePlayer.ALIVE)) {
-				danger.add(plg);
+			Roles role = plg.getRole();
+			if (plg.isState(StatePlayer.ALIVE)) {
+				if (role.isWereWolf() || role.isWereWolf()) {
+					danger.add(plg);
+				}
 			}
 		}
 		

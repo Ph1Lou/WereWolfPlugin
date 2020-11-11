@@ -121,7 +121,7 @@ public class CommandAdminRole implements Commands {
             sb = new StringBuilder();
 
             for (UUID uuid1 : game.getPlayersWW().keySet()) {
-                if (game.getPlayersWW().get(uuid1).getRole().isKey(RolesBase.SISTER.getKey()) && !uuid1.equals(playerUUID)) {
+                if (game.getPlayersWW().get(uuid1).isKey(RolesBase.SISTER.getKey()) && !uuid1.equals(playerUUID)) {
                     sb.append(game.getPlayersWW().get(uuid1).getName()).append(" ");
                 }
             }
@@ -149,7 +149,11 @@ public class CommandAdminRole implements Commands {
 
         for (UUID uuid1 : plg.getKillers()) {
             if (uuid1 != null) {
-                sb.append(game.getPlayersWW().get(uuid1).getName()).append(" ");
+                PlayerWW playerWW = game.getPlayerWW(uuid1);
+                if (playerWW != null) { //si tué par un joueur externe à la game
+                    sb.append(playerWW.getName()).append(" ");
+                }
+
             } else sb.append(game.translate("werewolf.utils.pve")).append(" ");
         }
 

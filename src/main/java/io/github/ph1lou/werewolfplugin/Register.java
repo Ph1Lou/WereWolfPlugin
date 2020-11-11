@@ -626,6 +626,11 @@ public class Register implements RegisterManager {
                             RolesBase.VILLAGER.getKey(),
                             Villager.class)
                             .addCategory(Category.VILLAGER));
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.METAMORPH.getKey(),
+                            Metamorph.class)
+                            .addCategory(Category.VILLAGER));
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
@@ -771,6 +776,9 @@ public class Register implements RegisterManager {
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.RED_NAME_TAG.getKey())
                         .setDefaultValue());
+        configsRegister
+                .add(new ConfigRegister("werewolf.name",
+                        ConfigsBase.SWEET_ANGEL.getKey()));
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.SEER_EVERY_OTHER_DAY.getKey())

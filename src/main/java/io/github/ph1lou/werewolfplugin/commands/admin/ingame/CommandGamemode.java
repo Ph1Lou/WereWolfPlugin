@@ -24,14 +24,16 @@ public class CommandGamemode implements Commands {
         UUID uuid = player.getUniqueId();
         try {
             int i = Integer.parseInt(args[0]);
+            int j = 2;
             if (i == 0) {
-                i = 1;
+                j = 1;
             } else if (i == 1) {
-                i = 0;
+                j = 0;
             }
 
+            player.setGameMode(GameMode.values()[j]);
             String message = game.translate("werewolf.commands.admin.gamemode.send", player.getName(), i);
-            player.setGameMode(GameMode.values()[i]);
+
             game.getModerationManager().alertHostsAndModerators(message);
             if (!game.getModerationManager().isStaff(uuid)) {
                 player.sendMessage(message);

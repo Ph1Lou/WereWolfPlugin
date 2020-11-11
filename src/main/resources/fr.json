@@ -11,7 +11,9 @@
       "guardian_angel": {
         "display": "Ange Gardien",
         "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Ange Gardien§9. Vous avez 15 coeurs et devez protéger une personne choisie aléatoirement et gagner avec elle. Si celle-ci meurt, vous passez à 12 coeurs et §ldevez gagner avec le Village§r§9.\nVous pouvez, trois fois au cours de la partie, lui donner Régeneration pendant 20 secondes §b/ww regen",
+        "description_patch": "§6LOUP-GAROU §7➽§9 Vous êtes §1Ange Gardien§9. Vous avez 15 coeurs et devez protéger une personne choisie aléatoirement et gagner avec elle. Si celle-ci meurt, vous passez à 12 coeurs et §ldevez gagner Seule§r§9.\nVous pouvez, trois fois au cours de la partie, lui donner Régeneration pendant 20 secondes §b/ww regen",
         "protege_death": "[§eLG UHC§r] Votre protégé a été tué, vous perdez 3 coeurs et devez maintenant gagner avec le Village",
+        "protege_death_patch": "[§eLG UHC§r] Votre protégé a été tué, vous perdez 3 coeurs et devez maintenant gagner Seule",
         "reveal_protege": "[§eLG UHC§r] Votre protégé est §b%s",
         "get_regeneration": "[§aLG UHC§r] Vous obtenez Regeneration de la part de votre Ange Gardien pendant 20 secondes",
         "no_protege": "[§cLG UHC§r] Vous n'avez pas encore de protégé",
@@ -45,20 +47,24 @@
       },
       "sister": {
         "display": "Soeur",
-        "description":  "§6LOUP-GAROU §7➽§9 Vous êtes §1Soeur§9. Votre objectif est d’éliminer les Loups-Garous. \nVous possédez un effet de Résistance lorsque vous vous trouvez à moins de 20 blocs d'une de vos soeurs. Lorsqu'une soeur meurt vous connaîtrez son assassin.",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Soeur§9. Votre objectif est d’éliminer les Loups-Garous. \nVous possédez un effet de Résistance lorsque vous vous trouvez à moins de 20 blocs d'une de vos soeurs. Lorsqu'une soeur meurt vous connaîtrez son assassin.",
         "reveal_killer": "[§eLG UHC§r] §b%s§r a été tué par §b%s",
         "sisters_list": "Liste de vos Soeurs : §b%s"
       },
+      "metamorph": {
+        "display": "Metamorphe",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Metamorphe§9. Votre objectif est d’éliminer les Loups-Garous. \n Grâce à vos capacité de métamorphose, les Loups Garous vous voient dans leur liste. Cependant, vous ne connaissez pas les loups garous"
+      },
       "witch": {
         "display": "Sorcière",
-        "description":  "§6LOUP-GAROU §7➽§9 Vous êtes §1Sorcière§9. Votre objectif est d’éliminer les Loups-Garous.\nPour cela, vous recevez 3 potions de Soins, 3 potions de Dégats et 1 potion de Régénération. Une fois dans la partie, vous pouvez ressusciter un joueur (ou vous même si l'option est activé).",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Sorcière§9. Votre objectif est d’éliminer les Loups-Garous.\nPour cela, vous recevez 3 potions de Soins, 3 potions de Dégats et 1 potion de Régénération. Une fois dans la partie, vous pouvez ressusciter un joueur (ou vous même si l'option est activé).",
         "resuscitation_message": "[§eLG UHC§r] §b%s§r est mort, pour le ressusciter, §6Cliquez ici §r(Vous avez §b7sec§r)",
         "resuscitation_perform": "[§eLG UHC§r] Vous venez de ressusciter §b%s",
         "command": "sauver"
       },
       "little_girl": {
         "display": "Petite Fille",
-        "description":  "§6LOUP-GAROU §7➽§9 Vous êtes §1Petite-Fille§9. Vous objectif est d’éliminer les Loups-Garous. \nDurant la nuit, vous pouvez devenir invisible en enlevant votre armure. Mais attention, vous laissez des particules bleues derrière vous visible par les Loups Garous Perfides. \nHeureusement vous pouvez repérer les Loups Garous Perfides par leurs particules rouges.",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Petite-Fille§9. Vous objectif est d’éliminer les Loups-Garous. \nDurant la nuit, vous pouvez devenir invisible en enlevant votre armure. Mais attention, vous laissez des particules bleues derrière vous visible par les Loups Garous Perfides. \nHeureusement vous pouvez repérer les Loups Garous Perfides par leurs particules rouges.",
         "remove_armor": "[§eLG UHC§r] C'est la nuit, enlevez votre armure pour devenir invisible",
         "visible": "[§eLG UHC§r] Vous redevenez visible",
         "remove_armor_perform": "[§aLG UHC§r] Vous devenez invisible. Remettez votre armure pour redevenir visible",
@@ -96,6 +102,7 @@
         "time": "§9, vous avez §b%s §9(Cliquez pour choisir)",
         "fallen_choice": "§9Si vous choisissez §1Ange Déchu§9,\n§9 vous obtiendrez 12 coeurs, une cible vous sera assignée aléatoirement si vous la tuez,\n§9 vous passerez à 15 coeurs jusqu'à la fin de la partie.",
         "guardian_choice": "§9Si vous choisissez §1Ange Gardien§9,\n§9 vous obtiendrez 15 coeurs et devrez protéger une personne choisie aléatoirement et gagner avec elle.\n§9 Si celle-ci meurt, vous repasserez à 12 coeurs \n§9et devrez gagnez avec le Village.",
+        "guardian_choice_patch": "§9Si vous choisissez §1Ange Gardien§9,\n§9 vous obtiendrez 15 coeurs et devrez protéger une personne choisie aléatoirement et gagner avec elle.\n§9 Si celle-ci meurt, vous repasserez à 12 coeurs \n§9et devrez gagnez Seule.",
         "angel_choice_perform": "[§eLG UHC§r] Vous venez de choisir §b%s",
         "command_1": "gardien",
         "command_2": "dechu",
@@ -475,7 +482,7 @@
         },
         "revive": {
           "command": "revive",
-          "perform": "[§eLG UHC§r] §b%s§r a été ressuscité par un §b%s",
+          "perform": "[§eLG UHC§r] §b%s§r a été ressuscité par §b%s",
           "not_death": "[§cLG UHC§r] Le joueur n'est pas Mort"
         },
         "size": {
@@ -682,7 +689,7 @@
       },
       "global": {
         "command": "regles",
-        "name":"Configuration §bGlobale",
+        "name": "Configuration §bGlobale",
         "victory_couple": "Les Couples ne peuvent gagner qu'en Couple",
         "event_seer_death": "Event à la mort d'une Voyante",
         "chat": "Chat",
@@ -691,6 +698,7 @@
         "auto_rez_infect": "L'infect peut s'infecter",
         "auto_rez_witch": "la Sorcière peut s'autorez",
         "polygamy": "Polygamie",
+        "sweet_angel": "L'ange Gardien gagne Village quand son protégé meurt",
         "vote": "Vote",
         "hide_composition": "Composition Cachée",
         "red_name_tag": "Pseudo des Loups Garous en rouge",

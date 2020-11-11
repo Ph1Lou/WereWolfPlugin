@@ -39,7 +39,11 @@ public class TimersGUI implements InventoryProvider {
     public void init(Player player, InventoryContents contents) {
         Main main = JavaPlugin.getPlugin(Main.class);
         WereWolfAPI game = main.getWereWolfAPI();
-        contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType()).setDisplayName(game.translate("werewolf.menu.return")).build()), e -> Config.INVENTORY.open(player)));
+        contents.set(0, 0, ClickableItem.of((
+                new ItemBuilder(UniversalMaterial.COMPASS.getType())
+                        .setDisplayName(
+                                game.translate("werewolf.menu.return"))
+                        .build()), e -> Config.INVENTORY.open(player)));
     }
 
     @Override
@@ -51,31 +55,93 @@ public class TimersGUI implements InventoryProvider {
         Pagination pagination = contents.pagination();
         List<ClickableItem> items = new ArrayList<>();
 
-        String c = game.getScore().conversion(config.getTimerValues().get(key));
+        String c = getConversion(game, key);
 
-        contents.set(0, 1, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "-10m", c)).build()), e -> {
+        contents.set(0, 1, ClickableItem.of((
+                new ItemBuilder(Material.STONE_BUTTON)
+
+                        .setDisplayName(game.translate("werewolf.utils.display",
+                                "-10m", c))
+                        .build()), e -> {
+
             selectMinusTimer(game, this.key, 600);
-            TimersGUI.INVENTORY.open(player);
+
+            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                    .setDisplayName(game.translate("werewolf.utils.display",
+                            "-10m", getConversion(game, key)))
+                    .build());
+
         }));
-        contents.set(0, 2, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "-1m", c)).build()), e -> {
+        contents.set(0, 2, ClickableItem.of((
+                new ItemBuilder(Material.STONE_BUTTON)
+                        .setDisplayName(game.translate("werewolf.utils.display",
+                                "-1m", c))
+                        .build()), e -> {
+
             selectMinusTimer(game, this.key, 60);
-            TimersGUI.INVENTORY.open(player);
+
+            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                    .setDisplayName(game.translate("werewolf.utils.display",
+                            "-1m", getConversion(game, key)))
+                    .build());
+
         }));
-        contents.set(0, 3, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "-10s", c)).build()), e -> {
+        contents.set(0, 3, ClickableItem.of((
+                new ItemBuilder(Material.STONE_BUTTON)
+                        .setDisplayName(game.translate("werewolf.utils.display",
+                                "-10s", c))
+                        .build()), e -> {
+
             selectMinusTimer(game, this.key, 10);
-            TimersGUI.INVENTORY.open(player);
+
+            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                    .setDisplayName(game.translate("werewolf.utils.display",
+                            "-10s", getConversion(game, key)))
+                    .build());
+
         }));
-        contents.set(0, 5, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "+10s", c)).build()), e -> {
+        contents.set(0, 5, ClickableItem.of((
+                new ItemBuilder(Material.STONE_BUTTON)
+                        .setDisplayName(
+                                game.translate("werewolf.utils.display",
+                                        "+10s", c))
+                        .build()), e -> {
+
             selectPlusTimer(game, this.key, 10);
-            TimersGUI.INVENTORY.open(player);
+
+            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                    .setDisplayName(
+                            game.translate("werewolf.utils.display",
+                                    "+10s", getConversion(game, key)))
+                    .build());
+
         }));
-        contents.set(0, 6, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "+1m", c)).build()), e -> {
+        contents.set(0, 6, ClickableItem.of((
+                new ItemBuilder(Material.STONE_BUTTON)
+                        .setDisplayName(game.translate("werewolf.utils.display",
+                                "+1m", c))
+                        .build()), e -> {
+
             selectPlusTimer(game, this.key, 60);
-            TimersGUI.INVENTORY.open(player);
+
+            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                    .setDisplayName(game.translate("werewolf.utils.display",
+                            "+1m", getConversion(game, key)))
+                    .build());
+
         }));
-        contents.set(0, 7, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "+10m", c)).build()), e -> {
+        contents.set(0, 7, ClickableItem.of((
+                new ItemBuilder(Material.STONE_BUTTON)
+                        .setDisplayName(game.translate("werewolf.utils.display",
+                                "+10m", c))
+
+                        .build()), e -> {
             selectPlusTimer(game, this.key, 600);
-            TimersGUI.INVENTORY.open(player);
+
+            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                    .setDisplayName(game.translate("werewolf.utils.display",
+                            "+10m", getConversion(game, key)))
+                    .build());
         }));
 
 
@@ -95,11 +161,22 @@ public class TimersGUI implements InventoryProvider {
             contents.set(5, 5, null);
             contents.set(5, 7, null);
             contents.set(5, 8, null);
-            contents.set(5, 2, ClickableItem.of(new ItemBuilder(Material.ARROW).setDisplayName(game.translate("werewolf.menu.roles.previous", page, pagination.isFirst() ? page : page - 1)).build(),
+            contents.set(5, 2, ClickableItem.of(new ItemBuilder(Material.ARROW)
+                            .setDisplayName(game.translate("werewolf.menu.roles.previous",
+                                    page, pagination.isFirst() ? page : page - 1))
+                            .build(),
+
                     e -> INVENTORY.open(player, pagination.previous().getPage())));
-            contents.set(5, 6, ClickableItem.of(new ItemBuilder(Material.ARROW).setDisplayName(game.translate("werewolf.menu.roles.next", page, pagination.isLast() ? page : page + 1)).build(),
+            contents.set(5, 6, ClickableItem.of(new ItemBuilder(Material.ARROW)
+                            .setDisplayName(game.translate("werewolf.menu.roles.next",
+                                    page, pagination.isLast() ? page : page + 1))
+                            .build(),
+
                     e -> INVENTORY.open(player, pagination.next().getPage())));
-            contents.set(5, 4, ClickableItem.empty(new ItemBuilder(UniversalMaterial.SIGN.getType()).setDisplayName(game.translate("werewolf.menu.roles.current", page, items.size() / 36 + 1)).build()));
+            contents.set(5, 4, ClickableItem.empty(
+                    new ItemBuilder(UniversalMaterial.SIGN.getType())
+                            .setDisplayName(game.translate("werewolf.menu.roles.current",
+                                    page, items.size() / 36 + 1)).build()));
         } else {
             int i = 0;
             for (ClickableItem clickableItem : items) {
@@ -126,6 +203,14 @@ public class TimersGUI implements InventoryProvider {
         ConfigWereWolfAPI config = game.getConfig();
         int j = config.getTimerValues().get(key);
         config.getTimerValues().put(key, j + value);
+    }
+
+    public String getConversion(WereWolfAPI game, String key) {
+        return game.getScore()
+                .conversion(game
+                        .getConfig()
+                        .getTimerValues()
+                        .get(key));
     }
 }
 

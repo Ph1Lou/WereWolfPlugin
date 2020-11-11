@@ -21,6 +21,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +69,7 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
 
 
     @Override
-    public String getDescription() {
+    public @NotNull String getDescription() {
         return game.translate("werewolf.role.thief.description");
     }
 
@@ -168,20 +169,23 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
             HandlerList.unregisterAll((Listener) klg.getRole());
             Roles roleClone = role.publicClone();
             klg.setRole(roleClone);
-            roleClone.setPlayerUUID(killerUUID);
+            Objects.requireNonNull(roleClone).setPlayerUUID(killerUUID);
             Bukkit.getPluginManager().registerEvents((Listener) roleClone, (Plugin) main);
 
             if (isInfected) {
-                roleClone.setInfected(true);
+                roleClone.setInfected();
             } else if (roleClone.isWereWolf()) {
                 Bukkit.getPluginManager().callEvent(new NewWereWolfEvent(killerUUID));
             }
 
-            killer.sendMessage(game.translate("werewolf.role.thief.realized_theft", game.translate(role.getKey())));
+            killer.sendMessage(game.translate("werewolf.role.thief.realized_theft",
+                    game.translate(role.getKey())));
             killer.sendMessage(game.translate("werewolf.announcement.review_role"));
 
             killer.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-            Bukkit.getPluginManager().callEvent(new StealEvent(killerUUID, playerUUID, roleClone.getKey()));
+            Bukkit.getPluginManager().callEvent(new StealEvent(killerUUID,
+                    playerUUID,
+                    roleClone.getKey()));
 
 
             klg.getRole().recoverPotionEffect();
@@ -189,11 +193,13 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
 
             if (klg.getCursedLovers() != null ||
                     klg.getAmnesiacLoverUUID() != null) {
-                Bukkit.getConsoleSender().sendMessage("[WereWolfPlugin] Thief in special lover");
+                Bukkit.getConsoleSender()
+                        .sendMessage("[WereWolfPlugin] Thief in special lover");
             } else if (!klg.getLovers().isEmpty() &&
                     !game.getConfig().getConfigValues()
                             .get(ConfigsBase.POLYGAMY.getKey())) {
-                Bukkit.getConsoleSender().sendMessage("[WereWolfPlugin] Thief in lover & no polygamy");
+                Bukkit.getConsoleSender()
+                        .sendMessage("[WereWolfPlugin] Thief in lover & no polygamy");
             } else if (!klg.getLovers().isEmpty() || !plg.getLovers().isEmpty()) {
 
                 if (!klg.getLovers().contains(playerUUID)) {
@@ -255,10 +261,12 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
                     if(plg.getRevealAmnesiacLover()) {
                         klg.setRevealAmnesiacLover(true);
                         if (pc != null) {
-                            pc.sendMessage(game.translate("werewolf.role.lover.description", killerName));
+                            pc.sendMessage(game.translate("werewolf.role.lover.description",
+                                    killerName));
                             Sounds.PORTAL_TRAVEL.play(pc);
                         }
-                        killer.sendMessage(game.translate("werewolf.role.lover.description", llg.getName()));
+                        killer.sendMessage(game.translate("werewolf.role.lover.description",
+                                llg.getName()));
 
                         game.getAmnesiacLoversRange()
                                 .stream()

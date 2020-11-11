@@ -3,7 +3,6 @@ package io.github.ph1lou.werewolfplugin.commands.utilities;
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.StateGame;
 import io.github.ph1lou.werewolfplugin.Main;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -30,12 +29,6 @@ public class CommandAnonymeChat implements Commands {
     public void execute(Player player, String[] args) {
 
         WereWolfAPI game = main.getWereWolfAPI();
-
-        if (game.isState(StateGame.LOBBY)) {
-            player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
-            return;
-        }
-
         StringBuilder sb = new StringBuilder();
 
         for (String w : args) {
@@ -50,8 +43,11 @@ public class CommandAnonymeChat implements Commands {
                 Player player1 = Bukkit.getPlayer(uuid);
                 if (player1 != null) {
                     String response = sb.substring(args[0].length() + args[1].length() + 2);
-                    player1.sendMessage(game.translate("werewolf.commands.message.received", player1.getName(), response));
-                    player1.sendMessage(game.translate("werewolf.commands.message.send", game.translate("werewolf.commands.admin.anonymous_chat.anonyme"), response));
+                    player1.sendMessage(game.translate("werewolf.commands.message.received",
+                            player.getName(), response));
+                    player.sendMessage(game.translate("werewolf.commands.message.send",
+                            game.translate("werewolf.commands.admin.anonymous_chat.anonyme"),
+                            response));
                     return;
                 }
             }
@@ -76,8 +72,15 @@ public class CommandAnonymeChat implements Commands {
                 Player player1 = Bukkit.getPlayer(uuid);
 
                 if (player1 != null) {
-                    TextComponent anonymeMessage = new TextComponent(game.translate("werewolf.commands.admin.anonymous_chat.send", game.translate("werewolf.commands.admin.anonymous_chat.anonyme"), sb.toString()));
-                    anonymeMessage.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, String.format("/ww %s ? %s %s", game.translate("werewolf.commands.admin.anonymous_chat.command"), hash(cesar, player1), "Message")));
+                    TextComponent anonymeMessage =
+                            new TextComponent(game.translate(
+                                    "werewolf.commands.admin.anonymous_chat.send",
+                                    game.translate("werewolf.commands.admin.anonymous_chat.anonyme"),
+                                    sb.toString()));
+                    anonymeMessage.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,
+                            String.format("/ww %s ? %s %s",
+                                    game.translate("werewolf.commands.admin.anonymous_chat.command"),
+                                    hash(cesar, player), "Message")));
                     player1.spigot().sendMessage(anonymeMessage);
                     i++;
                 }
@@ -87,7 +90,9 @@ public class CommandAnonymeChat implements Commands {
         if (i == 0) {
             player.sendMessage(game.translate("werewolf.commands.admin.anonymous_chat.failure"));
         } else
-            player.sendMessage(game.translate("werewolf.commands.message.send", game.translate("werewolf.commands.admin.moderator.name"), sb.toString()));
+            player.sendMessage(game.translate("werewolf.commands.message.send",
+                    game.translate("werewolf.commands.admin.moderator.name"),
+                    sb.toString()));
 
 
     }

@@ -144,7 +144,12 @@ public class TransportationTask {
         game.setState(StateGame.START);
         GameTask start = new GameTask(game);
         start.runTaskTimer(main, 0, 20);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> Bukkit.getPluginManager().callEvent(new DayEvent(1)), 40);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
+            if (!game.isState(StateGame.END)) {
+                Bukkit.getPluginManager().callEvent(new DayEvent(1));
+            }
+
+        }, 20);
     }
 
     private void teleportPlayer(int i) {

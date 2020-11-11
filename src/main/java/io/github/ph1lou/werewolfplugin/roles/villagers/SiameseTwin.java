@@ -14,6 +14,7 @@ import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -25,7 +26,7 @@ public class SiameseTwin extends RolesVillage {
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getDescription() {
 
         StringBuilder list = new StringBuilder();
 
@@ -33,7 +34,7 @@ public class SiameseTwin extends RolesVillage {
                 .stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> !playerWW.getRole().equals(this))
-                .filter(playerWW -> playerWW.getRole().isKey(
+                .filter(playerWW -> playerWW.isKey(
                         RolesBase.SIAMESE_TWIN.getKey()))
                 .forEach(playerWW -> list.append(playerWW.getName()).append(" "));
 

@@ -23,6 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.javatuples.Pair;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -95,6 +96,7 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
                 .stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .map(PlayerWW::getRole)
+                .filter(roles -> !roles.equals(this))
                 .filter(roles -> roles instanceof InvisibleState)
                 .map(roles -> (InvisibleState) roles)
                 .filter(InvisibleState::isInvisible)
@@ -141,14 +143,17 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
         else player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
     }
 
+
     @EventHandler
-    public void onGoldenAppleEat(GoldenAppleParticleEvent event){
+    public void onGoldenAppleEat(GoldenAppleParticleEvent event) {
 
         event.setCancelled(true);
 
         if (!event.getPlayerUUID().equals(getPlayerUUID())) return;
 
         if (!isInvisible()) return;
+
+        if (game.isDay(Day.DAY)) return;
 
         event.setCancelled(false);
 
@@ -204,7 +209,7 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getDescription() {
         return game.translate("werewolf.role.mischievous_werewolf.description");
     }
 

@@ -95,7 +95,6 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
         }
     }
 
-
     public void createGame() {
 
         this.currentGame = new GameManager(this);

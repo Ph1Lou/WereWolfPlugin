@@ -26,15 +26,16 @@ public class NoNameTag extends Scenarios {
 
         if (game.getConfig().getScenarioValues().get(scenarioID)) {
             if (!register) {
+                Bukkit.getPluginManager().registerEvents(this, (Plugin) main);
+
                 Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(
                         Bukkit.getOnlinePlayers()));
-
-                Bukkit.getPluginManager().registerEvents(this, (Plugin) main);
                 register = true;
             }
         } else {
             if (register) {
                 register = false;
+
                 HandlerList.unregisterAll(this);
                 Bukkit.getPluginManager().callEvent(
                         new UpdateNameTagEvent(Bukkit.getOnlinePlayers()));

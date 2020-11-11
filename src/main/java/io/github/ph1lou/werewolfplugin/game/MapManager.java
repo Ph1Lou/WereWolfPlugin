@@ -61,9 +61,11 @@ public class MapManager implements MapManagerAPI {
             return;
         }
 
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
-        }
+        Bukkit.getOnlinePlayers()
+                .stream()
+                .filter(player -> player.getWorld().equals(world))
+                .forEach(player -> player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation()));
+
         try {
             Bukkit.unloadWorld(world, false);
             FileUtils.deleteDirectory(new File(Bukkit.getWorldContainer() + File.separator + world.getName()));

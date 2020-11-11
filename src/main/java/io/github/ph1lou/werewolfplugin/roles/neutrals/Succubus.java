@@ -4,6 +4,7 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.RolesBase;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.enumlg.TimersBase;
@@ -17,10 +18,9 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Succubus extends RolesNeutral implements Progress, AffectedPlayers, Power {
 
@@ -74,7 +74,7 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getDescription() {
         return game.translate("werewolf.role.succubus.description");
     }
 
@@ -290,6 +290,75 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
         }
 
         game.resurrection(uuid);
+    }
+
+    @EventHandler
+    public void onDetectVictoryWitchCharmed(WinConditionsCheckEvent event) {
+
+        if (event.isCancelled()) return;
+
+        if (!Objects.requireNonNull(
+                game.getPlayerWW(
+                        getPlayerUUID())).isState(StatePlayer.ALIVE)) return;
+
+        if (affectedPlayer.isEmpty()) return;
+
+
+        PlayerWW playerWW = game.getPlayerWW(affectedPlayer.get(0));
+
+        if (playerWW == null) return;
+
+        if (!playerWW.isState(StatePlayer.ALIVE)) return;
+
+
+        List<UUID> list = new ArrayList<>(Collections.singleton(affectedPlayer.get(0)));
+
+
+        for (int i = 0; i < list.size(); i++) {
+
+            UUID uuid = list.get(i);
+
+            game.getPlayersWW().values()
+                    .stream()
+                    .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
+                    .map(PlayerWW::getRole)
+                    .filter(roles -> roles.isKey(RolesBase.SUCCUBUS.getKey()))
+                    .forEach(role -> {
+                        if (((AffectedPlayers) role).getAffectedPlayers().contains(uuid)) {
+                            if (!list.contains(role.getPlayerUUID())) {
+                                list.add(role.getPlayerUUID());
+                            }
+                        }
+                    });
+
+        }
+
+        if (game.getScore().getPlayerSize() == list.size()) {
+            event.setCancelled(true);
+            event.setVictoryTeam(RolesBase.SUCCUBUS.getKey());
+        }
+    }
+
+    @EventHandler
+    public void onLover(AroundLover event) {
+
+        if (!Objects.requireNonNull(
+                game.getPlayerWW(
+                        getPlayerUUID())).isState(StatePlayer.ALIVE)) return;
+
+        if (event.getUuidS().contains(getPlayerUUID())) {
+            for (UUID uuid : affectedPlayer) {
+                event.addPlayer(uuid);
+            }
+            return;
+        }
+
+        for (UUID uuid : event.getUuidS()) {
+            if (affectedPlayer.contains(uuid)) {
+                event.addPlayer(getPlayerUUID());
+                break;
+            }
+        }
     }
 
 }

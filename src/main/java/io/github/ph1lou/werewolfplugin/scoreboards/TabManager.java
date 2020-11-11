@@ -121,12 +121,16 @@ public class TabManager {
 
         UpdatePlayerNameTag event = new UpdatePlayerNameTag(uuid, sb.toString(), " ", true);
         AppearInWereWolfListEvent appearInWereWolfListEvent = new AppearInWereWolfListEvent(uuid);
-        UpdateModeratorNameTag updateModeratorNameTag = new UpdateModeratorNameTag(uuid, "", " ");
+        UpdateModeratorNameTag updateModeratorNameTag =
+                new UpdateModeratorNameTag(uuid, "", " ");
+
         Bukkit.getPluginManager().callEvent(event);
         Bukkit.getPluginManager().callEvent(appearInWereWolfListEvent);
         Bukkit.getPluginManager().callEvent(updateModeratorNameTag);
 
-        players.forEach(player1 -> set(name, player1, event, appearInWereWolfListEvent.isAppear(), updateModeratorNameTag));
+        players.forEach(player1 -> set(name, player1,
+                event, appearInWereWolfListEvent.isAppear(),
+                updateModeratorNameTag));
     }
 
     public void set(String name, Player player, UpdatePlayerNameTag event1, boolean appear, UpdateModeratorNameTag event2) {

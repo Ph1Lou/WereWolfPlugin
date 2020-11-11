@@ -16,6 +16,7 @@ import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,7 +94,7 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
 
 
     @Override
-    public String getDescription() {
+    public @NotNull String getDescription() {
         return game.translate("werewolf.role.flute_player.description");
     }
 

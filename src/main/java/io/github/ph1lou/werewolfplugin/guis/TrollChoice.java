@@ -91,10 +91,8 @@ public class TrollChoice implements InventoryProvider {
                 if (config.getTrollKey().equals(key)) {
                     items.add(ClickableItem.empty(new ItemBuilder(UniversalMaterial.GREEN_TERRACOTTA.getStack()).setLore(lore).setDisplayName(game.translate(roleRegister.getKey())).build()));
                 } else {
-                    items.add(ClickableItem.of((new ItemBuilder(UniversalMaterial.RED_TERRACOTTA.getStack()).setLore(lore).setDisplayName(game.translate(roleRegister.getKey())).build()), event -> {
-                        config.setTrollKey(roleRegister.getKey());
-                        AdvancedConfig.INVENTORY.open(player);
-                    }));
+                    items.add(ClickableItem.of((new ItemBuilder(UniversalMaterial.RED_TERRACOTTA.getStack()).setLore(lore).setDisplayName(game.translate(roleRegister.getKey())).build()), event ->
+                            config.setTrollKey(roleRegister.getKey())));
                 }
 
             }
