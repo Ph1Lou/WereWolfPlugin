@@ -72,7 +72,7 @@ public class CommandTP implements Commands {
             return;
         }
 
-
+        playerArg1.teleport(playerArg1);
         String message = game.translate("werewolf.commands.admin.teleportation.send", playerArg1.getName(), playerArg2.getName());
         moderationManager.alertHostsAndModerators(message);
         if (!moderationManager.isStaff(uuid)) {

@@ -29,6 +29,8 @@ public class CommandGamemode implements Commands {
                 j = 1;
             } else if (i == 1) {
                 j = 0;
+            } else if (i == 3) {
+                j = 3;
             }
 
             player.setGameMode(GameMode.values()[j]);

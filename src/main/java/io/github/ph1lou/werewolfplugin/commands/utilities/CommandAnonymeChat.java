@@ -60,7 +60,7 @@ public class CommandAnonymeChat implements Commands {
             Player player1 = Bukkit.getPlayer(uuid);
 
             if (player1 != null) {
-                TextComponent anonymeMessage = new TextComponent(game.translate("werewolf.commands.admin.anonymous_chat.send", player1.getName(), sb.toString()));
+                TextComponent anonymeMessage = new TextComponent(game.translate("werewolf.commands.admin.anonymous_chat.send", player.getName(), sb.toString()));
                 anonymeMessage.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, String.format("/tell %s", player.getName())));
                 player1.spigot().sendMessage(anonymeMessage);
                 i++;
