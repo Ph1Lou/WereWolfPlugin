@@ -64,8 +64,9 @@ public class EnchantmentListener implements Listener {
             result.removeEnchantment(e);
 
             if(Enchantment.KNOCKBACK.equals(e)){
-                if(game.getConfig().getLimitKnockBack()==2){
-                    tempEnchant.put(e,enchant.get(e));
+                if (game.getConfig().getKnockBackMode() == 1) {
+                    tempEnchant.put(e, Math.min(enchant.get(e),
+                            game.getConfig().getLimitKnockBack()));
                 }
             }
             else if(Enchantment.PROTECTION_ENVIRONMENTAL.equals(e)) {
@@ -91,10 +92,9 @@ public class EnchantmentListener implements Listener {
                             Math.min(enchant.get(e), game.getConfig().getLimitSharpnessIron())));
                 }
             }
-            else if(Enchantment.ARROW_KNOCKBACK.equals(e)){
-                if(game.getConfig().getLimitPunch()==2){
-                    tempEnchant.put(e,enchant.get(e));
-                }
+            else if(Enchantment.ARROW_KNOCKBACK.equals(e)) {
+                tempEnchant.put(e, Math.min(enchant.get(e), game.getConfig().getLimitPunch()));
+
             }
             else if(Enchantment.ARROW_DAMAGE.equals(e)){
                 tempEnchant.put(e,Math.min(enchant.get(e),game.getConfig().getLimitPowerBow()));

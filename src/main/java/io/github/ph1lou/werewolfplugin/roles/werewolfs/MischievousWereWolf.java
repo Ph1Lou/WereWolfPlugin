@@ -162,14 +162,12 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
     @EventHandler
     public void onEnchantment(EnchantmentEvent event){
 
-        if(!event.getPlayerUUID().equals(getPlayerUUID())) return;
+        if (!event.getPlayerUUID().equals(getPlayerUUID())) return;
 
-        if(game.getConfig().getLimitKnockBack()==1){
-            if(event.getEnchants().containsKey(Enchantment.KNOCKBACK)) {
-                event.getFinalEnchants().put(
-                        Enchantment.KNOCKBACK,
-                        event.getEnchants().get(Enchantment.KNOCKBACK));
-            }
+        if (event.getEnchants().containsKey(Enchantment.KNOCKBACK)) {
+            event.getFinalEnchants().put(Enchantment.KNOCKBACK,
+                    Math.min(event.getEnchants().get(Enchantment.KNOCKBACK),
+                            game.getConfig().getLimitKnockBack()));
         }
     }
 

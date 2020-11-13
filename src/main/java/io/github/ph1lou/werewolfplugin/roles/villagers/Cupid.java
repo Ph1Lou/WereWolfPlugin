@@ -119,11 +119,10 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
 
         if (!event.getPlayerUUID().equals(getPlayerUUID())) return;
 
-        if (game.getConfig().getLimitPunch() == 1) {
-            if (event.getEnchants().containsKey(Enchantment.ARROW_KNOCKBACK)) {
-                event.getFinalEnchants().put(Enchantment.ARROW_KNOCKBACK,
-                        event.getEnchants().get(Enchantment.ARROW_KNOCKBACK));
-            }
+        if (event.getEnchants().containsKey(Enchantment.ARROW_DAMAGE)) {
+            event.getFinalEnchants().put(Enchantment.ARROW_DAMAGE,
+                    Math.min(event.getEnchants().get(Enchantment.ARROW_DAMAGE),
+                            game.getConfig().getLimitPowerBow() + 1));
         }
     }
 

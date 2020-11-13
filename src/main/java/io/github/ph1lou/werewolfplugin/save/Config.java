@@ -41,6 +41,7 @@ public class Config implements ConfigWereWolfAPI {
     private int amnesiacLoverSize = 0;
     private int cursedLoverSize = 0;
     private int limitDepthStrider = 0;
+    private int knockBackMode = 0;
     private String trollKey = RolesBase.VILLAGER.getKey();
     private int spectatorMode = 2;  // 0 no Spectators, 1 allowed for death players, 2 for all players;
     private boolean whiteList = false;
@@ -386,5 +387,15 @@ public class Config implements ConfigWereWolfAPI {
     @Override
     public void setTrollKey(String trollKey) {
         this.trollKey = trollKey;
+    }
+
+    @Override
+    public int getKnockBackMode() {
+        return knockBackMode;
+    }
+
+    @Override
+    public void setKnockBackMode(int knockBackMode) {
+        this.knockBackMode = knockBackMode;
     }
 }

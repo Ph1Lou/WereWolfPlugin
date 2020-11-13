@@ -140,7 +140,7 @@ public class MapManager implements MapManagerAPI {
             player.setGameMode(GameMode.SURVIVAL);
             player.sendMessage(message);
             player.removePotionEffect(PotionEffectType.WITHER);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 400, -1, false, false));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 700, -1, false, false));
             player.teleport(new Location(world, x, world.getHighestBlockYAt(x, z) + 100, z));
         }
     }
