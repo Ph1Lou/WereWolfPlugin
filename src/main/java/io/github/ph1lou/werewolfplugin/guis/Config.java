@@ -6,10 +6,12 @@ import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.StateGame;
 import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.Main;
+import io.github.ph1lou.werewolfplugin.save.Configuration;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -22,6 +24,7 @@ import java.util.UUID;
 
 public class Config implements InventoryProvider {
 
+    private int surprise = 0;
 
     public static final SmartInventory INVENTORY = SmartInventory.builder()
             .id("config")
@@ -87,11 +90,24 @@ public class Config implements InventoryProvider {
                 .setDisplayName(game.translate("werewolf.menu.advanced_tool.name"))
                 .build()), e -> AdvancedConfig.INVENTORY.open(player)));
 
-        contents.set(5, 8, ClickableItem.empty((new ItemBuilder(UniversalMaterial.PLAYER_HEAD.getStack())
+        contents.set(5, 8, ClickableItem.of((new ItemBuilder(UniversalMaterial.PLAYER_HEAD.getStack())
                 .setDisplayName("Dev §bPh1Lou")
                 .setHead("Ph1Lou",
                         Bukkit.getOfflinePlayer(UUID.fromString("056be797-2a0b-4807-9af5-37faf5384396")))
-                .build())));
+                .build()), e -> {
+            if (e.isShiftClick()) {
+                Sounds.NOTE_BASS.play(player);
+                surprise++;
+                if (surprise == 10) {
+                    ((Configuration) game.getConfig()).setDoubleTroll(true);
+                    Sounds.SUCCESSFUL_HIT.play(player);
+                } else if (surprise >= 20) {
+                    ((Configuration) game.getConfig()).setDoubleTroll(false);
+                    Sounds.ANVIL_BREAK.play(player);
+                    surprise = 0;
+                }
+            }
+        }));
 
 
         int[] SlotRedGlass = {1, 2, 6, 7, 9, 10, 16, 17, 18, 26, 27, 35, 36, 37, 43, 44, 46, 47, 51, 52};

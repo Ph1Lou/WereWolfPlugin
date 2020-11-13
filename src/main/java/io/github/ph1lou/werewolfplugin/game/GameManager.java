@@ -8,7 +8,7 @@ import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.save.Config;
+import io.github.ph1lou.werewolfplugin.save.Configuration;
 import io.github.ph1lou.werewolfplugin.save.FileUtils_;
 import io.github.ph1lou.werewolfplugin.save.Stuff;
 import io.github.ph1lou.werewolfplugin.scoreboards.ScoreBoard;
@@ -37,7 +37,7 @@ public class GameManager implements WereWolfAPI {
     private final LoversManagement loversManage = new LoversManagement(this);
     private final ModerationManager moderationManager = new ModerationManager(this);
     private final MapManager mapManager;
-    private Config config = new Config();
+    private Configuration configuration = new Configuration();
     private final End end = new End(this);
     private final Stuff stuff;
     private final ScenariosLoader scenarios;
@@ -72,10 +72,10 @@ public class GameManager implements WereWolfAPI {
 
         if (moderationManager.getWhiteListedPlayers().contains(uuid)) {
             finalJoin(player);
-        } else if (getPlayersWW().size() >= config.getPlayerMax()) {
+        } else if (getPlayersWW().size() >= configuration.getPlayerMax()) {
             player.sendMessage(translate("werewolf.check.full"));
             moderationManager.addQueue(player);
-        } else if (config.isWhiteList()) {
+        } else if (configuration.isWhiteList()) {
             player.sendMessage(translate("werewolf.commands.admin.whitelist.player_not_whitelisted"));
             moderationManager.addQueue(player);
         } else {
@@ -219,19 +219,19 @@ public class GameManager implements WereWolfAPI {
 
     @Override
     public ConfigWereWolfAPI getConfig() {
-        return this.config;
+        return this.configuration;
     }
 
-    public void setConfig(Config config){
-        this.config=config;
+    public void setConfig(Configuration configuration) {
+        this.configuration = configuration;
     }
 
 
     @Override
     public String translate(String key, Object... args) {
         final String translation;
-        if(!main.getLangManager().getExtraTexts().containsKey(key.toLowerCase())){
-            if(!this.language.containsKey(key.toLowerCase())){
+        if (!main.getLangManager().getExtraTexts().containsKey(key.toLowerCase())) {
+            if (!this.language.containsKey(key.toLowerCase())) {
                 return String.format("Message error (%s) ", key.toLowerCase());
             }
             translation = this.language.get(key.toLowerCase());

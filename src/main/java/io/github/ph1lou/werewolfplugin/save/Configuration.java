@@ -6,7 +6,7 @@ import io.github.ph1lou.werewolfapi.enumlg.RolesBase;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Config implements ConfigWereWolfAPI {
+public class Configuration implements ConfigWereWolfAPI {
 
     private final Map<String, Integer> timerValues = new HashMap<>();
     private final Map<String, Boolean> configValues = new HashMap<>();
@@ -35,8 +35,9 @@ public class Config implements ConfigWereWolfAPI {
     private int distanceAmnesiacLovers = 15;
     private int distanceFox = 20;
     private boolean trollSV = false;
-    private int BorderMax = 2000;
-    private int BorderMin = 300;
+    private boolean doubleTroll = false;
+    private int borderMax = 2000;
+    private int borderMin = 300;
     private int loverSize = 0;
     private int amnesiacLoverSize = 0;
     private int cursedLoverSize = 0;
@@ -270,22 +271,22 @@ public class Config implements ConfigWereWolfAPI {
 
     @Override
     public int getBorderMax() {
-        return BorderMax;
+        return borderMax;
     }
 
     @Override
     public void setBorderMax(int borderMax) {
-        this.BorderMax = borderMax;
+        this.borderMax = borderMax;
     }
 
     @Override
     public int getBorderMin() {
-        return BorderMin;
+        return borderMin;
     }
 
     @Override
     public void setBorderMin(int borderMin) {
-        this.BorderMin = borderMin;
+        this.borderMin = borderMin;
     }
 
     @Override
@@ -397,5 +398,13 @@ public class Config implements ConfigWereWolfAPI {
     @Override
     public void setKnockBackMode(int knockBackMode) {
         this.knockBackMode = knockBackMode;
+    }
+
+    public boolean isDoubleTroll() {
+        return doubleTroll;
+    }
+
+    public void setDoubleTroll(boolean doubleTroll) {
+        this.doubleTroll = doubleTroll;
     }
 }

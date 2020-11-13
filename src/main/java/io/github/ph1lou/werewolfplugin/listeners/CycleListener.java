@@ -9,6 +9,7 @@ import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
+import io.github.ph1lou.werewolfplugin.save.Configuration;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -190,7 +191,7 @@ public class CycleListener implements Listener {
     }
 
     @EventHandler
-    public void onTrollSV(TrollEvent event) {
+    public void onTroll(TrollEvent event) {
 
         game.setState(StateGame.GAME);
         game.getConfig().getConfigValues().put(ConfigsBase.CHAT.getKey(), false);
@@ -241,8 +242,13 @@ public class CycleListener implements Listener {
                                 playerWW.setKit(false);
                             }
                         });
-                game.getConfig().setTrollSV(false);
-                Bukkit.getPluginManager().callEvent(new RepartitionEvent());
+                if (((Configuration) game.getConfig()).isDoubleTroll()) {
+                    Bukkit.getPluginManager().callEvent(new TrollEvent());
+                } else {
+                    game.getConfig().setTrollSV(false);
+                    Bukkit.getPluginManager().callEvent(new RepartitionEvent());
+                }
+
             }
 
 

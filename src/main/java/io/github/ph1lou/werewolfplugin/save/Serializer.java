@@ -9,18 +9,18 @@ public class Serializer {
 
 	public static Gson gson(){
 		return new GsonBuilder()
-				.setPrettyPrinting()
-				.serializeNulls()
-				.disableHtmlEscaping()
-				.create();
-	}
+                .setPrettyPrinting()
+                .serializeNulls()
+                .disableHtmlEscaping()
+                .create();
+    }
 
     public static String serialize(ConfigWereWolfAPI config) {
-		return gson().toJson(config);
-	}
+        return gson().toJson(config);
+    }
 
-	public static Config deserialize(String json) {
-		return gson().fromJson(json, Config.class);
-	}
+    public static Configuration deserialize(String json) {
+        return gson().fromJson(json, Configuration.class);
+    }
 
 }
