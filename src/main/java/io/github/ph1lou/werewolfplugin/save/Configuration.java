@@ -35,7 +35,6 @@ public class Configuration implements ConfigWereWolfAPI {
     private int distanceAmnesiacLovers = 15;
     private int distanceFox = 20;
     private boolean trollSV = false;
-    private boolean doubleTroll = false;
     private int borderMax = 2000;
     private int borderMin = 300;
     private int loverSize = 0;
@@ -400,11 +399,4 @@ public class Configuration implements ConfigWereWolfAPI {
         this.knockBackMode = knockBackMode;
     }
 
-    public boolean isDoubleTroll() {
-        return doubleTroll;
-    }
-
-    public void setDoubleTroll(boolean doubleTroll) {
-        this.doubleTroll = doubleTroll;
-    }
 }

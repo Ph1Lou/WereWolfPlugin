@@ -13,6 +13,7 @@ import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.Main;
+import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -50,7 +51,7 @@ public class TimersGUI implements InventoryProvider {
     public void update(Player player, InventoryContents contents) {
 
         Main main = JavaPlugin.getPlugin(Main.class);
-        WereWolfAPI game = main.getWereWolfAPI();
+        GameManager game = (GameManager) main.getWereWolfAPI();
         ConfigWereWolfAPI config = game.getConfig();
         Pagination pagination = contents.pagination();
         List<ClickableItem> items = new ArrayList<>();
@@ -147,7 +148,19 @@ public class TimersGUI implements InventoryProvider {
 
         for (TimerRegister timer : main.getRegisterManager().getTimersRegister()) {
             List<String> lore = new ArrayList<>(timer.getLore());
-            items.add(ClickableItem.of((new ItemBuilder(timer.getKey().equals(key) ? Material.FEATHER : Material.ANVIL).setLore(lore).setDisplayName(game.translate(timer.getKey(), game.getScore().conversion(config.getTimerValues().get(timer.getKey())))).build()), e -> this.key = timer.getKey()));
+
+            if (game.getConfig().getTimerValues().get(timer.getKey()) >= 0 || game.isDebug()) {
+
+                items.add(ClickableItem.of((new ItemBuilder(timer.getKey().equals(key) ?
+                                Material.FEATHER :
+                                Material.ANVIL)
+                                .setLore(lore)
+                                .setDisplayName(game.translate(timer.getKey(),
+                                        game.getScore().conversion(config.getTimerValues()
+                                                .get(timer.getKey())))).build()),
+                        e -> this.key = timer.getKey()));
+            }
+
         }
 
         if (items.size() > 45) {

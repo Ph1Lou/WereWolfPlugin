@@ -9,7 +9,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
@@ -86,17 +85,11 @@ public class DoubleJump extends ListenerManager {
     @Override
     public void register(boolean isActive) {
 
-        if (isActive) {
-            if (!isRegister()) {
-                Bukkit.getPluginManager().registerEvents(this, (Plugin) main);
-                setRegister(true);
-            }
-        } else if (isRegister()) {
-            HandlerList.unregisterAll(this);
-            setRegister(false);
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                p.setAllowFlight(false);
-            }
-        }
+        super.register(isActive);
+
+        if (isActive) return;
+
+        Bukkit.getOnlinePlayers()
+                .forEach(player -> player.setAllowFlight(false));
     }
 }

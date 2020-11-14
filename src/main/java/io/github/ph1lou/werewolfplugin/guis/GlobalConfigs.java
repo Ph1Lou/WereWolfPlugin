@@ -7,7 +7,6 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
-import io.github.ph1lou.werewolfapi.ConfigRegister;
 import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
@@ -54,7 +53,7 @@ public class GlobalConfigs implements InventoryProvider {
 
         main.getRegisterManager().getConfigsRegister()
                 .stream()
-                .filter(ConfigRegister::isAppearInMenu)
+                .filter(config1 -> config1.isAppearInMenu() || game.isDebug())
                 .forEach(configRegister -> {
                     String key = configRegister.getKey();
                     List<String> lore = new ArrayList<>(configRegister.getLore());

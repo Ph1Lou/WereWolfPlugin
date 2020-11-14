@@ -10,8 +10,6 @@ import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTag;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.plugin.Plugin;
 
 public class ShowDeathRole extends ListenerManager {
 
@@ -50,22 +48,9 @@ public class ShowDeathRole extends ListenerManager {
 
     @Override
     public void register(boolean isActive) {
-
-        if (isActive) {
-            if (!isRegister()) {
-                Bukkit.getPluginManager().registerEvents(this, (Plugin) main);
-                Bukkit.getPluginManager().callEvent(
-                        new UpdateNameTagEvent(Bukkit.getOnlinePlayers()));
-
-                setRegister(true);
-            }
-        } else if (isRegister()) {
-            setRegister(false);
-            HandlerList.unregisterAll(this);
-
-            Bukkit.getPluginManager().callEvent(
-                    new UpdateNameTagEvent(Bukkit.getOnlinePlayers()));
-        }
+        super.register(isActive);
+        Bukkit.getPluginManager().callEvent(
+                new UpdateNameTagEvent(Bukkit.getOnlinePlayers()));
     }
 
 

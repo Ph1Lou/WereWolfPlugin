@@ -31,6 +31,7 @@ public class GameManager implements WereWolfAPI {
     private final Map<UUID, PlayerWW> playerLG = new HashMap<>();
     private StateGame state;
     private Day day;
+    private boolean debug = false;
     private final ScoreBoard score = new ScoreBoard(this);
     private final Vote vote = new Vote(this);
     private final LoversManagement loversManage = new LoversManagement(this);
@@ -345,4 +346,11 @@ public class GameManager implements WereWolfAPI {
     }
 
 
+    public boolean isDebug() {
+        return debug;
+    }
+
+    public void setDebug(boolean debug) {
+        this.debug = debug;
+    }
 }

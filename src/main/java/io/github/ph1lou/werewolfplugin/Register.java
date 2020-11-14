@@ -743,7 +743,6 @@ public class Register implements RegisterManager {
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.EVENT_SEER_DEATH.getKey())
-                        .setDefaultValue()
                         .addConfig(new SeerEvent(main)));
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
@@ -783,9 +782,15 @@ public class Register implements RegisterManager {
                         .setDefaultValue()
                         .addConfig(new RedNameTag(main)));
 
+
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.SWEET_ANGEL.getKey()));
+        configsRegister
+                .add(new ConfigRegister("werewolf.name",
+                        ConfigsBase.DOUBLE_TROLL.getKey())
+                        .unSetAppearInMenu());
+
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.SEER_EVERY_OTHER_DAY.getKey())

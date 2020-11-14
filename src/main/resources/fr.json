@@ -702,7 +702,8 @@
         "hide_composition": "Composition Cachée",
         "red_name_tag": "Pseudo des Loups Garous en rouge",
         "seer_every_other_day": "Voyante tous les deux jours",
-        "proximity_chat": "Chat de Proximité"
+        "proximity_chat": "Chat de Proximité",
+        "double_troll": "Double Troll"
       },
       "border": {
         "name":"Configuration §bBordure",
@@ -805,7 +806,8 @@
       "enable": "%s §2Activé",
       "display": "%s (§b%s§r)",
       "pve": "§bPVE",
-      "on": "§bON"
+      "on": "§bON",
+      "debug": "§fMode §4debug"
     },
     "categories": {
       "villager": "Villageois",

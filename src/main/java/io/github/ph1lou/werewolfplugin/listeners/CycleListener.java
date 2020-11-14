@@ -9,7 +9,6 @@ import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
-import io.github.ph1lou.werewolfplugin.save.Configuration;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -265,9 +264,9 @@ public class CycleListener implements Listener {
                                 playerWW.setKit(false);
                             }
                         });
-                if (((Configuration) game.getConfig()).isDoubleTroll()) {
+                if (game.getConfig().getConfigValues().get(ConfigsBase.DOUBLE_TROLL.getKey())) {
                     Bukkit.getPluginManager().callEvent(new TrollEvent());
-                    ((Configuration) game.getConfig()).setDoubleTroll(false);
+                    game.getConfig().getConfigValues().put(ConfigsBase.DOUBLE_TROLL.getKey(), false);
                 } else {
                     game.getConfig().setTrollSV(false);
                     Bukkit.getPluginManager().callEvent(new RepartitionEvent());

@@ -11,7 +11,7 @@ import io.github.ph1lou.werewolfapi.enumlg.StateGame;
 import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.save.Configuration;
+import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -38,7 +38,7 @@ public class Config implements InventoryProvider {
     @Override
     public void init(Player player, InventoryContents contents) {
 
-        WereWolfAPI game = JavaPlugin.getPlugin(Main.class).getWereWolfAPI();
+        GameManager game = (GameManager) JavaPlugin.getPlugin(Main.class).getWereWolfAPI();
 
         contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.PLAYER_HEAD.getStack())
                 .setDisplayName(game.translate("werewolf.menu.whitelist.name"))
@@ -99,13 +99,19 @@ public class Config implements InventoryProvider {
                 Sounds.NOTE_BASS.play(player);
                 surprise++;
                 if (surprise == 10) {
-                    ((Configuration) game.getConfig()).setDoubleTroll(true);
+                    game.setDebug(true);
                     Sounds.SUCCESSFUL_HIT.play(player);
                 } else if (surprise >= 20) {
-                    ((Configuration) game.getConfig()).setDoubleTroll(false);
+                    game.setDebug(false);
                     Sounds.ANVIL_BREAK.play(player);
                     surprise = 0;
                 }
+                e.setCurrentItem(new ItemBuilder(UniversalMaterial.PLAYER_HEAD.getStack())
+                        .setDisplayName("Dev §bPh1Lou")
+                        .setLore(game.isDebug() ? game.translate("werewolf.utils.debug") : "")
+                        .setHead("Ph1Lou",
+                                Bukkit.getOfflinePlayer(UUID.fromString("056be797-2a0b-4807-9af5-37faf5384396")))
+                        .build());
             }
         }));
 
