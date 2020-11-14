@@ -9,7 +9,11 @@ import io.github.ph1lou.werewolfplugin.commands.admin.CommandStop;
 import io.github.ph1lou.werewolfplugin.commands.admin.ingame.*;
 import io.github.ph1lou.werewolfplugin.commands.roles.*;
 import io.github.ph1lou.werewolfplugin.commands.utilities.*;
-import io.github.ph1lou.werewolfplugin.listeners.scenarioslisteners.*;
+import io.github.ph1lou.werewolfplugin.listeners.configs.CompassMiddle;
+import io.github.ph1lou.werewolfplugin.listeners.configs.RedNameTag;
+import io.github.ph1lou.werewolfplugin.listeners.configs.SeerEvent;
+import io.github.ph1lou.werewolfplugin.listeners.configs.ShowDeathRole;
+import io.github.ph1lou.werewolfplugin.listeners.scenarios.*;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.*;
 import io.github.ph1lou.werewolfplugin.roles.villagers.*;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.*;
@@ -31,9 +35,9 @@ public class Register implements RegisterManager {
 
     public Register(Main main) {
         registerRoles();
-        registerScenarios();
+        registerScenarios(main);
         registerTimers();
-        registerConfigs();
+        registerConfigs(main);
         registerCommands(main);
         registerAdminCommands(main);
     }
@@ -637,106 +641,101 @@ public class Register implements RegisterManager {
 
     }
 
-    private void registerScenarios() {
-        try {
-            scenariosRegister
-                    .add(new ScenarioRegister("werewolf.name",
-                            ScenariosBase.CAT_EYES.getKey(),
-                            CatEyes.class));
-            scenariosRegister
-                    .add(new ScenarioRegister("werewolf.name",
-                            ScenariosBase.COMPASS_TARGET_LAST_DEATH.getKey(),
-                            CompassTargetLastDeath.class));
-            scenariosRegister
-                    .add(new ScenarioRegister("werewolf.name",
-                            ScenariosBase.CUT_CLEAN.getKey(),
-                            CutClean.class)
-                            .setDefaultValue());
-            scenariosRegister
-                    .add(new ScenarioRegister("werewolf.name",
-                            ScenariosBase.DIAMOND_LIMIT.getKey(),
-                            DiamondLimit.class).setDefaultValue());
-            scenariosRegister
-                    .add(new ScenarioRegister("werewolf.name",
-                            ScenariosBase.DOUBLE_JUMP.getKey(),
-                            DoubleJump.class));
-            scenariosRegister
-                    .add(new ScenarioRegister("werewolf.name",
-                            ScenariosBase.FAST_SMELTING.getKey(),
-                            FastSmelting.class)
-                            .setDefaultValue());
-            scenariosRegister
-                    .add(new ScenarioRegister("werewolf.name",
-                            ScenariosBase.FIRE_LESS.getKey(),
-                            FireLess.class)
-                            .setDefaultValue());
-            scenariosRegister
-                    .add(new ScenarioRegister("werewolf.name",
-                            ScenariosBase.HASTEY_BOYS.getKey(),
-                            HasteyBoys.class)
-                            .setDefaultValue());
-            scenariosRegister
-                    .add(new ScenarioRegister("werewolf.name",
-                            ScenariosBase.HORSE_LESS.getKey(),
-                            HorseLess.class)
-                            .setDefaultValue());
-            scenariosRegister
-                    .add(new ScenarioRegister("werewolf.name",
-                            ScenariosBase.NO_CLEAN_UP.getKey(),
-                            NoCleanUp.class));
-            scenariosRegister
-                    .add(new ScenarioRegister("werewolf.name",
-                            ScenariosBase.NO_EGG_SNOWBALL.getKey(),
-                            NoEggSnowBall.class)
-                            .setDefaultValue());
-            scenariosRegister
-                    .add(new ScenarioRegister("werewolf.name",
-                            ScenariosBase.NO_FALL.getKey(),
-                            NoFall.class));
-            scenariosRegister
-                    .add(new ScenarioRegister("werewolf.name",
-                            ScenariosBase.NO_FIRE_WEAPONS.getKey(),
-                            NoFireWeapon.class)
-                            .setDefaultValue());
-            scenariosRegister
-                    .add(new ScenarioRegister("werewolf.name",
-                            ScenariosBase.NO_NAME_TAG.getKey(),
-                            NoNameTag.class));
-            scenariosRegister
-                    .add(new ScenarioRegister("werewolf.name",
-                            ScenariosBase.NO_POISON.getKey(),
-                            NoPoison.class)
-                            .setDefaultValue());
-            scenariosRegister
-                    .add(new ScenarioRegister("werewolf.name",
-                            ScenariosBase.ROD_LESS.getKey(),
-                            RodLess.class)
-                            .setDefaultValue());
-            scenariosRegister
-                    .add(new ScenarioRegister("werewolf.name",
-                            ScenariosBase.SLOW_BOW.getKey(),
-                            SlowBow.class));
-            scenariosRegister
-                    .add(new ScenarioRegister("werewolf.name",
-                            ScenariosBase.TIMBER.getKey(),
-                            Timber.class));
-            scenariosRegister
-                    .add(new ScenarioRegister("werewolf.name",
-                            ScenariosBase.XP_BOOST.getKey(),
-                            XpBoost.class).setDefaultValue());
-            scenariosRegister
-                    .add(new ScenarioRegister("werewolf.name",
-                            ScenariosBase.VANILLA_PLUS.getKey(),
-                            VanillaPlus.class)
-                            .setDefaultValue());
-
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
+    private void registerScenarios(Main main) {
+        scenariosRegister
+                .add(new ScenarioRegister("werewolf.name",
+                        ScenariosBase.CAT_EYES.getKey(),
+                        new CatEyes(main)));
+        scenariosRegister
+                .add(new ScenarioRegister("werewolf.name",
+                        ScenariosBase.COMPASS_TARGET_LAST_DEATH.getKey(),
+                        new CompassTargetLastDeath(main)));
+        scenariosRegister
+                .add(new ScenarioRegister("werewolf.name",
+                        ScenariosBase.CUT_CLEAN.getKey(),
+                        new CutClean(main))
+                        .setDefaultValue());
+        scenariosRegister
+                .add(new ScenarioRegister("werewolf.name",
+                        ScenariosBase.DIAMOND_LIMIT.getKey(),
+                        new DiamondLimit(main)).setDefaultValue());
+        scenariosRegister
+                .add(new ScenarioRegister("werewolf.name",
+                        ScenariosBase.DOUBLE_JUMP.getKey(),
+                        new DoubleJump(main)));
+        scenariosRegister
+                .add(new ScenarioRegister("werewolf.name",
+                        ScenariosBase.FAST_SMELTING.getKey(),
+                        new FastSmelting(main))
+                        .setDefaultValue());
+        scenariosRegister
+                .add(new ScenarioRegister("werewolf.name",
+                        ScenariosBase.FIRE_LESS.getKey(),
+                        new FireLess(main))
+                        .setDefaultValue());
+        scenariosRegister
+                .add(new ScenarioRegister("werewolf.name",
+                        ScenariosBase.HASTEY_BOYS.getKey(),
+                        new HasteyBoys(main))
+                        .setDefaultValue());
+        scenariosRegister
+                .add(new ScenarioRegister("werewolf.name",
+                        ScenariosBase.HORSE_LESS.getKey(),
+                        new HorseLess(main))
+                        .setDefaultValue());
+        scenariosRegister
+                .add(new ScenarioRegister("werewolf.name",
+                        ScenariosBase.NO_CLEAN_UP.getKey(),
+                        new NoCleanUp(main)));
+        scenariosRegister
+                .add(new ScenarioRegister("werewolf.name",
+                        ScenariosBase.NO_EGG_SNOWBALL.getKey(),
+                        new NoEggSnowBall(main))
+                        .setDefaultValue());
+        scenariosRegister
+                .add(new ScenarioRegister("werewolf.name",
+                        ScenariosBase.NO_FALL.getKey(),
+                        new NoFall(main)));
+        scenariosRegister
+                .add(new ScenarioRegister("werewolf.name",
+                        ScenariosBase.NO_FIRE_WEAPONS.getKey(),
+                        new NoFireWeapon(main))
+                        .setDefaultValue());
+        scenariosRegister
+                .add(new ScenarioRegister("werewolf.name",
+                        ScenariosBase.NO_NAME_TAG.getKey(),
+                        new NoNameTag(main)));
+        scenariosRegister
+                .add(new ScenarioRegister("werewolf.name",
+                        ScenariosBase.NO_POISON.getKey(),
+                        new NoPoison(main))
+                        .setDefaultValue());
+        scenariosRegister
+                .add(new ScenarioRegister("werewolf.name",
+                        ScenariosBase.ROD_LESS.getKey(),
+                        new RodLess(main))
+                        .setDefaultValue());
+        scenariosRegister
+                .add(new ScenarioRegister("werewolf.name",
+                        ScenariosBase.SLOW_BOW.getKey(),
+                        new SlowBow(main)));
+        scenariosRegister
+                .add(new ScenarioRegister("werewolf.name",
+                        ScenariosBase.TIMBER.getKey(),
+                        new Timber(main)));
+        scenariosRegister
+                .add(new ScenarioRegister("werewolf.name",
+                        ScenariosBase.XP_BOOST.getKey(),
+                        new XpBoost(main)).setDefaultValue());
+        scenariosRegister
+                .add(new ScenarioRegister("werewolf.name",
+                        ScenariosBase.VANILLA_PLUS.getKey(),
+                        new VanillaPlus(main))
+                        .setDefaultValue());
 
     }
 
-    private void registerConfigs() {
+    private void registerConfigs(Main main) {
 
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
@@ -744,18 +743,23 @@ public class Register implements RegisterManager {
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.EVENT_SEER_DEATH.getKey())
-                        .setDefaultValue());
+                        .setDefaultValue()
+                        .addConfig(new SeerEvent(main)));
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.CHAT.getKey())
-                        .setDefaultValue());
+                        .setDefaultValue()
+                        .unSetAppearInMenu());
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.COMPASS_MIDDLE.getKey())
-                        .setDefaultValue());
+                        .setDefaultValue()
+                        .addConfig(new CompassMiddle(main)));
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
-                        ConfigsBase.SHOW_ROLE_TO_DEATH.getKey()).setDefaultValue());
+                        ConfigsBase.SHOW_ROLE_TO_DEATH.getKey())
+                        .setDefaultValue()
+                        .addConfig(new ShowDeathRole(main)));
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.AUTO_REZ_INFECT.getKey()));
@@ -768,14 +772,17 @@ public class Register implements RegisterManager {
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.VOTE.getKey())
-                        .setDefaultValue());
+                        .setDefaultValue()
+                        .unSetAppearInMenu());
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.HIDE_COMPOSITION.getKey()));
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.RED_NAME_TAG.getKey())
-                        .setDefaultValue());
+                        .setDefaultValue()
+                        .addConfig(new RedNameTag(main)));
+
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.SWEET_ANGEL.getKey()));

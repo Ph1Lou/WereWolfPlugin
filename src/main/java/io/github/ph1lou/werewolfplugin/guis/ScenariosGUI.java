@@ -74,7 +74,8 @@ public class ScenariosGUI implements InventoryProvider {
                 config.getScenarioValues().put(scenarioRegister.getKey(),
                         !config.getScenarioValues()
                                 .get(scenarioRegister.getKey()));
-                game.getScenarios().update();
+                scenarioRegister.getScenario().register(config.getScenarioValues()
+                        .get(scenarioRegister.getKey()));
             }));
         }
 

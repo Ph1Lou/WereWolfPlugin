@@ -1,8 +1,7 @@
-package io.github.ph1lou.werewolfplugin.listeners.scenarioslisteners;
+package io.github.ph1lou.werewolfplugin.listeners.scenarios;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.Scenarios;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.ListenerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -19,13 +18,13 @@ import org.bukkit.plugin.Plugin;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class DoubleJump extends Scenarios {
+public class DoubleJump extends ListenerManager {
 
     private final HashMap<UUID, Long> jumpTime = new HashMap<>();
 
 
-    public DoubleJump(GetWereWolfAPI main, WereWolfAPI game, String key) {
-        super(main, game, key);
+    public DoubleJump(GetWereWolfAPI main) {
+        super(main);
     }
 
     @EventHandler
@@ -34,7 +33,7 @@ public class DoubleJump extends Scenarios {
 
         if (entity instanceof Player) {
 
-            Player player = (Player)entity;
+            Player player = (Player) entity;
             UUID uuid = player.getUniqueId();
             if (this.jumpTime.containsKey(uuid)) {
                 long secs = (System.currentTimeMillis() - this.jumpTime.get(uuid)) / 1000L;
@@ -83,19 +82,20 @@ public class DoubleJump extends Scenarios {
         }
     }
 
-    public void register() {
-        if (game.getConfig().getScenarioValues().get(scenarioID)) {
-            if (!register) {
-                Bukkit.getPluginManager().registerEvents(this,(Plugin) main);
-                register = true;
+
+    @Override
+    public void register(boolean isActive) {
+
+        if (isActive) {
+            if (!isRegister()) {
+                Bukkit.getPluginManager().registerEvents(this, (Plugin) main);
+                setRegister(true);
             }
-        } else {
-            if (register) {
-                HandlerList.unregisterAll(this);
-                register = false;
-                for (Player p:Bukkit.getOnlinePlayers()){
-                    p.setAllowFlight(false);
-                }
+        } else if (isRegister()) {
+            HandlerList.unregisterAll(this);
+            setRegister(false);
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                p.setAllowFlight(false);
             }
         }
     }

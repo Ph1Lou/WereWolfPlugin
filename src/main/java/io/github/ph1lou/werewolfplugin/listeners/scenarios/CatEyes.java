@@ -1,7 +1,7 @@
-package io.github.ph1lou.werewolfplugin.listeners.scenarioslisteners;
+package io.github.ph1lou.werewolfplugin.listeners.scenarios;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.Scenarios;
+import io.github.ph1lou.werewolfapi.ListenerManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.events.ResurrectionEvent;
 import org.bukkit.Bukkit;
@@ -16,11 +16,11 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.Objects;
 
-public class CatEyes extends Scenarios {
+public class CatEyes extends ListenerManager {
 
 
-    public CatEyes(GetWereWolfAPI main, WereWolfAPI game, String key) {
-        super(main, game, key);
+    public CatEyes(GetWereWolfAPI main) {
+        super(main);
     }
 
     @EventHandler
@@ -55,10 +55,12 @@ public class CatEyes extends Scenarios {
     }
 
     @Override
-    public void register() {
+    public void register(boolean isActive) {
 
-        if (game.getConfig().getScenarioValues().get(scenarioID)) {
-            if (!register) {
+        WereWolfAPI game = main.getWereWolfAPI();
+
+        if (isActive) {
+            if (!isRegister()) {
 
                 Bukkit.getOnlinePlayers()
                         .forEach(player -> {
@@ -71,23 +73,21 @@ public class CatEyes extends Scenarios {
                                             false));
                         });
                 Bukkit.getPluginManager().registerEvents(this, (Plugin) main);
-                register = true;
+                setRegister(true);
             }
-        } else {
-            if (register) {
-                register = false;
-                HandlerList.unregisterAll(this);
+        } else if (isRegister()) {
+            setRegister(false);
+            HandlerList.unregisterAll(this);
 
-                Bukkit.getOnlinePlayers()
-                        .forEach(player -> player.removePotionEffect(PotionEffectType.NIGHT_VISION));
+            Bukkit.getOnlinePlayers()
+                    .forEach(player -> player.removePotionEffect(PotionEffectType.NIGHT_VISION));
 
-                Bukkit.getOnlinePlayers()
-                        .stream()
-                        .map(Entity::getUniqueId)
-                        .map(game::getPlayerWW)
-                        .filter(Objects::nonNull)
-                        .forEach(playerWW -> playerWW.getRole().recoverPotionEffect());
-            }
+            Bukkit.getOnlinePlayers()
+                    .stream()
+                    .map(Entity::getUniqueId)
+                    .map(game::getPlayerWW)
+                    .filter(Objects::nonNull)
+                    .forEach(playerWW -> playerWW.getRole().recoverPotionEffect());
         }
     }
 }

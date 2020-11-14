@@ -1,8 +1,7 @@
 package io.github.ph1lou.werewolfplugin.game;
 
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.ScenarioRegister;
-import io.github.ph1lou.werewolfapi.Scenarios;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.listeners.*;
 import org.bukkit.Bukkit;
@@ -10,14 +9,12 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class ScenariosLoader {
 
-    private final List<Scenarios> scenariosRegister = new ArrayList<>();
     private final List<Listener> listeners = new ArrayList<>();
     private final Main main;
 
@@ -35,18 +32,9 @@ public class ScenariosLoader {
         listeners.add(new PatchPotions(game));
         listeners.add(new CycleListener(main));
         listeners.add((Listener) game.getScore());
-        listeners.add(game.getEvents());
         listeners.add((Listener) game.getVote());
         for (Listener listener : listeners) {
             pm.registerEvents(listener, main);
-        }
-
-        for (ScenarioRegister scenarioRegister : main.getRegisterManager().getScenariosRegister()) {
-            try {
-                scenariosRegister.add((Scenarios) scenarioRegister.getConstructors().newInstance(main, game, scenarioRegister.getKey()));
-            } catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
-                e.printStackTrace();
-            }
         }
         update();
     }
@@ -56,20 +44,26 @@ public class ScenariosLoader {
         for (Listener listener : listeners) {
             HandlerList.unregisterAll(listener);
         }
-        for (Scenarios scenario : scenariosRegister) {
-            if (scenario.isRegister()) {
-                HandlerList.unregisterAll(scenario);
-            }
-        }
+
         for (PlayerWW plg : main.getWereWolfAPI().getPlayersWW().values()) {
             HandlerList.unregisterAll((Listener) plg.getRole());
         }
     }
 
     public void update() {
-        for (Scenarios scenario : this.scenariosRegister) {
-            scenario.register();
-        }
-    }
 
+        WereWolfAPI game = main.getWereWolfAPI();
+
+        main.getRegisterManager().getScenariosRegister()
+                .forEach(scenarioRegister -> scenarioRegister.getScenario()
+                        .register(game.getConfig()
+                                .getScenarioValues()
+                                .get(scenarioRegister.getKey())));
+
+        main.getRegisterManager().getConfigsRegister()
+                .stream()
+                .filter(configRegister -> configRegister.getConfig() != null)
+                .forEach(configRegister -> configRegister.getConfig().register(game.getConfig()
+                        .getConfigValues().get(configRegister.getKey())));
+    }
 }

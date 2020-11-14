@@ -11,15 +11,21 @@ import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import io.github.ph1lou.werewolfplugin.save.Configuration;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.potion.PotionEffect;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -190,6 +196,23 @@ public class CycleListener implements Listener {
                 });
     }
 
+    @EventHandler(priority = EventPriority.LOWEST)
+    private void onBlockBreak(BlockBreakEvent event) {
+
+        if (game.getConfig().getTimerValues().get(TimersBase.DIGGING.getKey()) >= 0) {
+            return;
+        }
+
+        Block block = event.getBlock();
+        List<Material> m = Arrays.asList(Material.REDSTONE_ORE, Material.EMERALD_ORE, Material.LAPIS_ORE, Material.COAL_ORE, Material.IRON_ORE, Material.GOLD_ORE, Material.DIAMOND_ORE);
+        Location loc = new Location(block.getWorld(), block.getLocation().getBlockX() + 0.5, block.getLocation().getBlockY() + 0.5, block.getLocation().getBlockZ() + 0.5);
+
+        if (m.contains(block.getType())) {
+            block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop());
+            block.setType(Material.AIR);
+        }
+    }
+
     @EventHandler
     public void onTroll(TrollEvent event) {
 
@@ -244,6 +267,7 @@ public class CycleListener implements Listener {
                         });
                 if (((Configuration) game.getConfig()).isDoubleTroll()) {
                     Bukkit.getPluginManager().callEvent(new TrollEvent());
+                    ((Configuration) game.getConfig()).setDoubleTroll(false);
                 } else {
                     game.getConfig().setTrollSV(false);
                     Bukkit.getPluginManager().callEvent(new RepartitionEvent());

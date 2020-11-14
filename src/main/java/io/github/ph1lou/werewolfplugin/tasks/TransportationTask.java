@@ -4,7 +4,6 @@ import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.StateGame;
 import io.github.ph1lou.werewolfapi.enumlg.TimersBase;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
-import io.github.ph1lou.werewolfapi.events.UpdateCompassEvent;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
@@ -140,7 +139,6 @@ public class TransportationTask {
             Sounds.NOTE_BASS.play(player);
         }
 
-        Bukkit.getPluginManager().callEvent(new UpdateCompassEvent(Bukkit.getOnlinePlayers()));
         game.setState(StateGame.START);
         GameTask start = new GameTask(game);
         start.runTaskTimer(main, 0, 20);

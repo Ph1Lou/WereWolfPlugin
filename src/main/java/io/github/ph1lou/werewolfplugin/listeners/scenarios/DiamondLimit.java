@@ -1,7 +1,7 @@
-package io.github.ph1lou.werewolfplugin.listeners.scenarioslisteners;
+package io.github.ph1lou.werewolfplugin.listeners.scenarios;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.Scenarios;
+import io.github.ph1lou.werewolfapi.ListenerManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.StateGame;
 import io.github.ph1lou.werewolfapi.enumlg.TimersBase;
@@ -17,18 +17,20 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DiamondLimit extends Scenarios {
+public class DiamondLimit extends ListenerManager {
 
     final Map<String, Integer> diamondPerPlayer = new HashMap<>();
 
-    public DiamondLimit(GetWereWolfAPI main, WereWolfAPI game, String key) {
-        super(main, game,key);
+    public DiamondLimit(GetWereWolfAPI main) {
+        super(main);
     }
 
 
     @EventHandler
     private void onBlockBreak(BlockBreakEvent event) {
 
+
+        WereWolfAPI game = main.getWereWolfAPI();
         if (game.isState(StateGame.LOBBY)) return;
 
         String playerName = event.getPlayer().getName();

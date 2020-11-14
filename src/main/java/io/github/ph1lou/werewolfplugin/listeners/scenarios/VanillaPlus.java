@@ -1,7 +1,7 @@
-package io.github.ph1lou.werewolfplugin.listeners.scenarioslisteners;
+package io.github.ph1lou.werewolfplugin.listeners.scenarios;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.Scenarios;
+import io.github.ph1lou.werewolfapi.ListenerManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -11,15 +11,17 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class VanillaPlus extends Scenarios {
+public class VanillaPlus extends ListenerManager {
 
 
-    public VanillaPlus(GetWereWolfAPI main, WereWolfAPI game, String key) {
-        super(main, game, key);
+    public VanillaPlus(GetWereWolfAPI main) {
+        super(main);
     }
 
     @EventHandler
     private void onGravelBreak(BlockBreakEvent event) {
+
+        WereWolfAPI game = main.getWereWolfAPI();
 
         Block block = event.getBlock();
         Location loc = new Location(block.getWorld(),
@@ -39,6 +41,8 @@ public class VanillaPlus extends Scenarios {
 
     @EventHandler
     public void onLeaveDecay(LeavesDecayEvent event) {
+
+        WereWolfAPI game = main.getWereWolfAPI();
 
         event.getBlock().setType(Material.AIR);
         if (Math.random() * 100 < game.getConfig().getAppleRate()) {

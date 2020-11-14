@@ -1,19 +1,19 @@
-package io.github.ph1lou.werewolfplugin.listeners.scenarioslisteners;
+package io.github.ph1lou.werewolfplugin.listeners.scenarios;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.Scenarios;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.ListenerManager;
 import org.bukkit.block.Furnace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.FurnaceBurnEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class FastSmelting extends Scenarios {
+public class FastSmelting extends ListenerManager {
 
 
-    public FastSmelting(GetWereWolfAPI main, WereWolfAPI game, String key) {
-        super(main, game,key);}
+    public FastSmelting(GetWereWolfAPI main) {
+        super(main);
+    }
 
     @EventHandler
     public void onBurn(FurnaceBurnEvent event) {

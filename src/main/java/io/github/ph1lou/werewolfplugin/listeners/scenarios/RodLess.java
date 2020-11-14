@@ -1,19 +1,18 @@
-package io.github.ph1lou.werewolfplugin.listeners.scenarioslisteners;
+package io.github.ph1lou.werewolfplugin.listeners.scenarios;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.Scenarios;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.ListenerManager;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 
-public class RodLess extends Scenarios {
+public class RodLess extends ListenerManager {
 
 
-    public RodLess(GetWereWolfAPI main, WereWolfAPI game, String key) {
-        super(main, game,key);
+    public RodLess(GetWereWolfAPI main) {
+        super(main);
     }
 
     @EventHandler
@@ -21,7 +20,7 @@ public class RodLess extends Scenarios {
 
         CraftingInventory inv = event.getInventory();
 
-        if(inv.getResult()==null) return;
+        if (inv.getResult() == null) return;
 
         if (inv.getResult().getType().equals(Material.FISHING_ROD)) {
             inv.setResult(new ItemStack(Material.AIR));

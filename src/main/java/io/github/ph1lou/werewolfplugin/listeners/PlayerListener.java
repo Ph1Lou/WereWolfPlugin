@@ -31,7 +31,6 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.text.DecimalFormat;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -270,7 +269,6 @@ public class PlayerListener implements Listener {
         } else if (game.getPlayersWW().containsKey(uuid)) {
 
 			PlayerWW plg = game.getPlayersWW().get(uuid);
-			Bukkit.getPluginManager().callEvent(new UpdateCompassEvent(player));
 
 			if (!plg.getName().equals(playerName)) {
 				plg.setName(playerName);
@@ -417,31 +415,6 @@ public class PlayerListener implements Listener {
 		}, 7 * 20);
 	}
 
-	@EventHandler
-	public void onUpdateCompass(UpdateCompassEvent event) {
-
-		Map<UUID, PlayerWW> playerWWs = game.getPlayersWW();
-
-		event.getPlayers()
-				.stream()
-				.filter(player -> playerWWs.containsKey(player.getUniqueId()))
-				.forEach(player -> {
-					if (game.getConfig()
-							.getConfigValues()
-							.get(ConfigsBase.COMPASS_MIDDLE
-									.getKey())) {
-						player.setCompassTarget(player
-								.getWorld()
-								.getSpawnLocation());
-					} else {
-						player.setCompassTarget(playerWWs
-								.get(player
-										.getUniqueId())
-								.getSpawn());
-					}
-				});
-	}
-
 
 	@EventHandler
 	public void onFinalDeath(FinalDeathEvent event) {
@@ -479,15 +452,26 @@ public class PlayerListener implements Listener {
 
 		game.getConfig().getRoleCount().put(roleLG, game.getConfig().getRoleCount().get(roleLG) - 1);
 
-		if (game.getConfig().getConfigValues().get(ConfigsBase.SHOW_ROLE_TO_DEATH.getKey())) {
-			Bukkit.broadcastMessage(game.translate("werewolf.announcement.death_message_with_role",
-					playerWW.getName(), game.translate(roleLG)));
-		} else Bukkit.broadcastMessage(game.translate("werewolf.announcement.death_message",
-				playerWW.getName()));
+		AnnouncementDeathEvent announcementDeathEvent = new AnnouncementDeathEvent(playerWW.getName(),
+				game.translate(roleLG),
+				game.translate("werewolf.announcement.death_message"));
+
+		Bukkit.getPluginManager().callEvent(announcementDeathEvent);
+
+		if (!announcementDeathEvent.isCancelled()) {
+
+			String deathMessage = announcementDeathEvent.getFormat();
+			deathMessage = deathMessage.replace("&player&",
+					announcementDeathEvent.getPlayerName());
+			deathMessage = deathMessage.replace("&role&",
+					announcementDeathEvent.getRole());
+
+			Bukkit.broadcastMessage(deathMessage);
+		}
+
 
 		playerWW.setState(StatePlayer.DEATH);
 		game.getScore().removePlayerSize();
-
 
 		Stream.concat(playerWW.getItemDeath()
 						.stream(),

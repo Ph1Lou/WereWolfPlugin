@@ -33,7 +33,6 @@ public class GameManager implements WereWolfAPI {
     private Day day;
     private final ScoreBoard score = new ScoreBoard(this);
     private final Vote vote = new Vote(this);
-    private final Events events = new Events(this);
     private final LoversManagement loversManage = new LoversManagement(this);
     private final ModerationManager moderationManager = new ModerationManager(this);
     private final MapManager mapManager;
@@ -317,10 +316,6 @@ public class GameManager implements WereWolfAPI {
         return loversManage;
     }
 
-    public Events getEvents() {
-        return events;
-    }
-
     @Override
     public ScoreAPI getScore() {
         return score;
@@ -337,10 +332,6 @@ public class GameManager implements WereWolfAPI {
     @Override
     public MapManager getMapManager() {
         return mapManager;
-    }
-
-    public ScenariosLoader getScenarios() {
-        return scenarios;
     }
 
     @Override

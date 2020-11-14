@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.scoreboards;
 
 import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enumlg.StateGame;
 import io.github.ph1lou.werewolfapi.events.AppearInWereWolfListEvent;
 import io.github.ph1lou.werewolfapi.events.RequestSeeWereWolfListEvent;
@@ -144,7 +145,8 @@ public class TabManager {
             Bukkit.getPluginManager().callEvent(requestSeeWereWolfListEvent);
 
             if (appear && requestSeeWereWolfListEvent.isAccept()) {
-                if (game.getConfig().getConfigValues().get("werewolf.menu.global.red_name_tag")) {
+                if (game.getConfig().getConfigValues()
+                        .get(ConfigsBase.RED_NAME_TAG.getKey())) {
                     sb.append(ChatColor.DARK_RED);
                 }
             }

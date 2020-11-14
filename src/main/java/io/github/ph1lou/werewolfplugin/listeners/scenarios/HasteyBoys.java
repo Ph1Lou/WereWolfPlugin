@@ -1,8 +1,7 @@
-package io.github.ph1lou.werewolfplugin.listeners.scenarioslisteners;
+package io.github.ph1lou.werewolfplugin.listeners.scenarios;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.Scenarios;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.ListenerManager;
 import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -10,11 +9,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class HasteyBoys extends Scenarios {
+public class HasteyBoys extends ListenerManager {
 
 
-    public HasteyBoys(GetWereWolfAPI main, WereWolfAPI game, String key) {
-        super(main, game,key);
+    public HasteyBoys(GetWereWolfAPI main) {
+        super(main);
     }
 
     @EventHandler

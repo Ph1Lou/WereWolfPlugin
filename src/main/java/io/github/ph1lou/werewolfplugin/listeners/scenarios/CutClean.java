@@ -1,9 +1,8 @@
-package io.github.ph1lou.werewolfplugin.listeners.scenarioslisteners;
+package io.github.ph1lou.werewolfplugin.listeners.scenarios;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.Scenarios;
+import io.github.ph1lou.werewolfapi.ListenerManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.TimersBase;
 import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Location;
@@ -15,31 +14,22 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
 import java.util.List;
 
-public class CutClean extends Scenarios {
+public class CutClean extends ListenerManager {
 
 
-    public CutClean(GetWereWolfAPI main, WereWolfAPI game, String key) {
-        super(main, game,key);
+    public CutClean(GetWereWolfAPI main) {
+        super(main);
     }
 
     @EventHandler
     private void onBlockBreak(BlockBreakEvent event) {
 
+        WereWolfAPI game = main.getWereWolfAPI();
         Block block = event.getBlock();
-        final Location loc = new Location(block.getWorld(), block.getLocation().getBlockX() + 0.5, block.getLocation().getBlockY() + 0.5, block.getLocation().getBlockZ() + 0.5);
+        Location loc = new Location(block.getWorld(), block.getLocation().getBlockX() + 0.5, block.getLocation().getBlockY() + 0.5, block.getLocation().getBlockZ() + 0.5);
 
-        if (game.getConfig().getTimerValues().get(TimersBase.DIGGING.getKey()) < 0) {
-            List<Material> m = Arrays.asList(Material.REDSTONE_ORE, Material.EMERALD_ORE, Material.LAPIS_ORE, Material.COAL_ORE, Material.IRON_ORE, Material.GOLD_ORE, Material.DIAMOND_ORE);
-
-            if (m.contains(block.getType())) {
-                block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop());
-                block.setType(Material.AIR);
-            }
-            return;
-        }
 
         Material currentItemType = VersionUtils.getVersionUtils().getItemInHand(event.getPlayer()).getType();
 

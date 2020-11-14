@@ -111,14 +111,11 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
     public void onFinalDeath(FinalDeathEvent event) {
 
         UUID uuid = event.getUuid();
-        if (!game.getConfig().getConfigValues()
-                .get(ConfigsBase.EVENT_SEER_DEATH.getKey())) return;
 
         if (!uuid.equals(getPlayerUUID())) return;
 
         Bukkit.getPluginManager().callEvent(new ChestEvent());
-        game.getConfig().getConfigValues()
-                .put(ConfigsBase.EVENT_SEER_DEATH.getKey(), false);
+
     }
 
 

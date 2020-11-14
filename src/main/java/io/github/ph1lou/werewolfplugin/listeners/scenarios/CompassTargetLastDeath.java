@@ -1,20 +1,23 @@
-package io.github.ph1lou.werewolfplugin.listeners.scenarioslisteners;
+package io.github.ph1lou.werewolfplugin.listeners.scenarios;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.Scenarios;
+import io.github.ph1lou.werewolfapi.ListenerManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-public class CompassTargetLastDeath extends Scenarios {
+public class CompassTargetLastDeath extends ListenerManager {
 
-    public CompassTargetLastDeath(GetWereWolfAPI main, WereWolfAPI game, String key) {
-        super(main, game,  key);
+    public CompassTargetLastDeath(GetWereWolfAPI main) {
+        super(main);
     }
+
 
     @EventHandler
     private void onPlayerDeath(PlayerDeathEvent event) {
+
+        WereWolfAPI game = main.getWereWolfAPI();
 
         if (!game.getPlayersWW().containsKey(event.getEntity().getUniqueId())) return;
 

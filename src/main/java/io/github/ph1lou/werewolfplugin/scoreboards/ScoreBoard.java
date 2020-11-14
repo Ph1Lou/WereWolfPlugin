@@ -365,9 +365,7 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		}
 
 		if (playerWW.isState(StatePlayer.DEATH)) {
-			if (game.getConfig().getConfigValues().get(ConfigsBase.SHOW_ROLE_TO_DEATH.getKey())) {
-				sb.append(game.translate(playerWW.getRole().getKey()));
-			} else sb.append(game.translate("werewolf.score_board.death"));
+			sb.append(game.translate("werewolf.score_board.death"));
 			event.setSuffix(sb.toString());
 		}
 	}
