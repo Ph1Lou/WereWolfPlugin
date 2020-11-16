@@ -1,0 +1,18 @@
+# WereWolfPlugin Main Configuration
+
+# Author Ph1Lou
+
+# Link : https://www.spigotmc.org/resources/loup-garou-uhc.73113/
+
+# Version 1.6.1 Snapshot
+
+# You are not allowed to claim this plugin as your own.
+
+# Copyright : All Rights Reserved - 2020
+# Available (en, fr)
+
+lang: fr
+autoRoofedMiddle: true
+default_lobby: true
+
+

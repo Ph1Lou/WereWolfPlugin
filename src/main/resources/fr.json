@@ -714,7 +714,7 @@
         "name": "Configuration §bMaps",
         "map": "Monde §b%s",
         "roofed": "Roofed au Centre",
-        "new": "Créez un Nouveau Monde"
+        "new": "Créer un Nouveau §bMonde"
       },
       "languages": {
         "name": "Configuration §bLangue"
