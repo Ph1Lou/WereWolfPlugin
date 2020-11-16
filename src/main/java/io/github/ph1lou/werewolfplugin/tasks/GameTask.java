@@ -32,7 +32,11 @@ public class GameTask extends BukkitRunnable {
 		WorldBorder wb = world.getWorldBorder();
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.callEvent(new UpdateEvent());
-		world.setTime((long) (world.getTime() + 20 * (600f / game.getConfig().getTimerValues().get("werewolf.menu.timers.day_duration") - 1)));
+		world.setTime((long) (world.getTime() + 20 *
+				(600f /
+						game.getConfig().getTimerValues().get(
+								"werewolf.menu.timers.day_duration") - 1)));
+
 		game.getLoversManage().detectionAmnesiacLover();
 		game.getScore().addTimer();
 

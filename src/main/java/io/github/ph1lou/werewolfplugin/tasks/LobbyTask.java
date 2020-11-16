@@ -28,9 +28,7 @@ public class LobbyTask extends BukkitRunnable {
 
         if (game.isState(StateGame.TRANSPORTATION)) {
             cancel();
-            new TransportationTask(game);
+            Bukkit.getPluginManager().registerEvents(new TransportationTask(game), game.getMain());
         }
-
-
     }
 }

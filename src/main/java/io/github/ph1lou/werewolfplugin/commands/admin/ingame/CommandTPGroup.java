@@ -56,10 +56,15 @@ public class CommandTPGroup implements Commands {
         for (Player p : Bukkit.getOnlinePlayers()) {
             UUID uuid = p.getUniqueId();
             if (size > 0 && game.getPlayersWW().containsKey(uuid) && game.getPlayersWW().get(uuid).isState(StatePlayer.ALIVE)) {
-                if (p.getLocation().distance(location) <= d) {
-                    size--;
-                    sb.append(p.getName()).append(" ");
-                    game.getMapManager().transportation(uuid, r, game.translate("werewolf.commands.admin.tp_group.perform", playerName));
+
+                try {
+                    if (p.getLocation().distance(location) <= d) {
+                        size--;
+                        sb.append(p.getName()).append(" ");
+                        game.getMapManager().transportation(uuid, r, game.translate("werewolf.commands.admin.tp_group.perform", playerName));
+                    }
+                } catch (Exception ignored) {
+
                 }
             }
         }

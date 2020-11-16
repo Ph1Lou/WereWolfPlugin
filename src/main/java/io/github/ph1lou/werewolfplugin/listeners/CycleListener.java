@@ -81,7 +81,9 @@ public class CycleListener implements Listener {
         }
         long duration2 = game.getConfig().getTimerValues().get(TimersBase.POWER_DURATION.getKey());
 
-        if (2 * game.getConfig().getTimerValues().get(TimersBase.DAY_DURATION.getKey()) - duration2 > 0) {
+        if (2 * game.getConfig().getTimerValues().get(TimersBase.DAY_DURATION.getKey())
+                - duration2 > 0) {
+
             Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
 
                 if (!game.isState(StateGame.END)) {
@@ -105,14 +107,16 @@ public class CycleListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onNight(NightEvent event) {
 
-        long duration = game.getConfig().getTimerValues().get(TimersBase.DAY_DURATION.getKey()) - 30;
+        long duration = game.getConfig().getTimerValues().get(TimersBase.DAY_DURATION.getKey())
+                - 30;
         game.setDay(Day.NIGHT);
 
         if (game.isState(StateGame.END)) return;
 
         game.getMapManager().getWorld().setTime(12000);
 
-        Bukkit.broadcastMessage(game.translate("werewolf.announcement.night", event.getNumber()));
+        Bukkit.broadcastMessage(game.translate("werewolf.announcement.night",
+                event.getNumber()));
         groupSizeChange();
 
         if (duration > 0) {
@@ -121,7 +125,7 @@ public class CycleListener implements Listener {
                     Bukkit.getPluginManager().callEvent(new DayWillComeEvent());
                 }
 
-            },duration*20);
+            }, duration * 20);
         }
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
@@ -203,8 +207,18 @@ public class CycleListener implements Listener {
         }
 
         Block block = event.getBlock();
-        List<Material> m = Arrays.asList(Material.REDSTONE_ORE, Material.EMERALD_ORE, Material.LAPIS_ORE, Material.COAL_ORE, Material.IRON_ORE, Material.GOLD_ORE, Material.DIAMOND_ORE);
-        Location loc = new Location(block.getWorld(), block.getLocation().getBlockX() + 0.5, block.getLocation().getBlockY() + 0.5, block.getLocation().getBlockZ() + 0.5);
+        List<Material> m = Arrays.asList(Material.REDSTONE_ORE,
+                Material.EMERALD_ORE,
+                Material.LAPIS_ORE,
+                Material.COAL_ORE,
+                Material.IRON_ORE,
+                Material.GOLD_ORE,
+                Material.DIAMOND_ORE);
+
+        Location loc = new Location(block.getWorld(),
+                block.getLocation().getBlockX() + 0.5,
+                block.getLocation().getBlockY() + 0.5,
+                block.getLocation().getBlockZ() + 0.5);
 
         if (m.contains(block.getType())) {
             block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop());
@@ -232,7 +246,9 @@ public class CycleListener implements Listener {
                                                         playerWW.getRole().getPlayerUUID(),
                                                         roleRegister.getKey());
 
-                                        Bukkit.getPluginManager().registerEvents((Listener) role, main);
+                                        Bukkit.getPluginManager().registerEvents((Listener) role,
+                                                main);
+
                                         playerWW.setRole(role);
                                     } catch (InstantiationException |
                                             InvocationTargetException |
@@ -292,9 +308,11 @@ public class CycleListener implements Listener {
                         .get(RolesBase.VILLAGER.getKey()) +
                         playersUUID.size() -
                         game.getScore().getRole());
-        game.getRolesRegister()
+        main.getRegisterManager().getRolesRegister()
                 .forEach(roleRegister -> {
-                    for (int i = 0; i < game.getConfig().getRoleCount().get(roleRegister.getKey()); i++) {
+                    for (int i = 0; i < game.getConfig().getRoleCount()
+                            .get(roleRegister.getKey()); i++) {
+
                         config.add(roleRegister);
                     }
                 });

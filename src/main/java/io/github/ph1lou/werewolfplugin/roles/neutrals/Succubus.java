@@ -153,8 +153,12 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
         Location succubusLocation = player.getLocation();
         Location playerLocation = charmed.getLocation();
 
-        if (succubusLocation.distance(playerLocation) >
-                game.getConfig().getDistanceSuccubus()) {
+        try {
+            if (succubusLocation.distance(playerLocation) >
+                    game.getConfig().getDistanceSuccubus()) {
+                return;
+            }
+        } catch (Exception ignored) {
             return;
         }
 

@@ -80,10 +80,16 @@ public class CommandFlutePlayer implements Commands {
                     return;
                 }
 
-                if (player.getLocation().distance(playerArg.getLocation()) > 100) {
-                    player.sendMessage(game.translate("werewolf.role.flute_player.distance", playerArg.getName()));
+                try {
+                    if (player.getLocation().distance(playerArg.getLocation()) > 100) {
+                        player.sendMessage(game.translate("werewolf.role.flute_player.distance", playerArg.getName()));
+                        return;
+                    }
+                } catch (Exception ignored) {
                     return;
                 }
+
+
                 listUUIDs.add(playerUUID);
             }
 

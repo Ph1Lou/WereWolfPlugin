@@ -22,6 +22,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.util.*;
 
 public class GameManager implements WereWolfAPI {
@@ -52,6 +53,12 @@ public class GameManager implements WereWolfAPI {
         mapManager = new MapManager(main);
         stuff = new Stuff(main);
         scenarios = new ScenariosLoader(main);
+        File mapFolder = new File(main.getDataFolder() +
+                File.separator + "maps");
+        if (!mapFolder.exists()) {
+            mapFolder.mkdirs();
+        }
+
         setDay(Day.DAY);
     }
 
@@ -269,10 +276,6 @@ public class GameManager implements WereWolfAPI {
             return playerUUID;
         }
         return players.get((int) Math.floor(getRandom().nextFloat() * players.size()));
-    }
-
-    public List<? extends RoleRegister> getRolesRegister() {
-        return main.getRegisterManager().getRolesRegister();
     }
 
     @Override

@@ -48,7 +48,7 @@ public class Save implements InventoryProvider {
         Main main = JavaPlugin.getPlugin(Main.class);
         WereWolfAPI game = main.getWereWolfAPI();
 
-        File repertoire = new File(main.getDataFolder() + "/configs/");
+        File repertoire = new File(main.getDataFolder() + File.separator + "configs");
         File[] files = repertoire.listFiles();
         if (files == null) return;
 
@@ -96,7 +96,7 @@ public class Save implements InventoryProvider {
 
     public void load(Main main) {
         WereWolfAPI game = main.getWereWolfAPI();
-        File repertoire = new File(main.getDataFolder() + "/configs/");
+        File repertoire = new File(main.getDataFolder() + File.separator + "configs");
         File[] files = repertoire.listFiles();
         if (files.length <= j) return;
         FileUtils_.loadConfig(main, files[j].getName().replace(".json", ""));
@@ -105,8 +105,8 @@ public class Save implements InventoryProvider {
 
     public void save(Main main, String saveName, Player player) {
         WereWolfAPI game = main.getWereWolfAPI();
-        File file = new File(main.getDataFolder() + "/configs/", saveName + ".json");
-        File repertoire = new File(main.getDataFolder() + "/configs/");
+        File file = new File(main.getDataFolder() + File.separator + "configs", saveName + ".json");
+        File repertoire = new File(main.getDataFolder() + File.separator + "configs");
         File[] files = repertoire.listFiles();
         if (files == null || files.length < 8) {
             FileUtils_.save(file, Serializer.serialize(game.getConfig()));
@@ -117,16 +117,16 @@ public class Save implements InventoryProvider {
 
     public void erase(Main main) {
         WereWolfAPI game = main.getWereWolfAPI();
-        File repertoire = new File(main.getDataFolder() + "/configs/");
+        File repertoire = new File(main.getDataFolder() + File.separator + "configs");
         File[] files = repertoire.listFiles();
 
         if (files.length <= j) return;
 
-        File file = new File(main.getDataFolder() + "/configs/", files[j].getName());
+        File file = new File(main.getDataFolder() + File.separator + "configs", files[j].getName());
         if (!file.delete()) {
             Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.menu.save.delete_failed", files[j].getName()));
         }
-        file = new File(main.getDataFolder() + "/stuffs/", files[j].getName().replaceFirst(".json", ".yml"));
+        file = new File(main.getDataFolder() + File.separator + "stuffs", files[j].getName().replaceFirst(".json", ".yml"));
         if (!file.delete()) {
             Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.menu.save.delete_failed", files[j].getName().replaceFirst(".json", ".yml")));
         }

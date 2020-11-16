@@ -121,7 +121,7 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
 
 
     /**
-     * @return nb de coeurs en plus qu'a l'ange plus le texte
+     * @return nb de coeur en plus qu'a l'ange plus le texte
      */
 
     private Pair<Integer, String> heartAndMessageTargetManagement() {

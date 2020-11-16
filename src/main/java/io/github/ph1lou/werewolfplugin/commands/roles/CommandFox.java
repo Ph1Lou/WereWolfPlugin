@@ -56,10 +56,17 @@ public class CommandFox implements Commands {
         Location location = player.getLocation();
         Location locationTarget = playerArg.getLocation();
 
-        if (location.distance(locationTarget) > game.getConfig().getDistanceFox()) {
-            player.sendMessage(game.translate("werewolf.role.fox.not_enough_near"));
+        try {
+            if (location.distance(locationTarget) > game.getConfig().getDistanceFox()) {
+                player.sendMessage(game.translate("werewolf.role.fox.not_enough_near"));
+                return;
+            }
+        } catch (Exception ignored) {
             return;
-        } else if (((LimitedUse) fox).getUse() >= game.getConfig().getUseOfFlair()) {
+        }
+
+
+        if (((LimitedUse) fox).getUse() >= game.getConfig().getUseOfFlair()) {
             player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }

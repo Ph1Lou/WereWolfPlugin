@@ -5,7 +5,6 @@ import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.*;
 import io.github.ph1lou.werewolfapi.events.*;
-import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -241,8 +240,6 @@ public class PlayerListener implements Listener {
 		FastBoard fastboard = new FastBoard(player);
 		fastboard.updateTitle(game.translate("werewolf.score_board.title"));
 		game.getBoards().put(uuid, fastboard);
-		VersionUtils.getVersionUtils().sendTabTitle(player, game.translate("werewolf.tab.top"),
-				game.translate("werewolf.tab.bot"));
 		event.setJoinMessage(null);
 
 		if (game.isState(StateGame.LOBBY)) {
@@ -326,12 +323,6 @@ public class PlayerListener implements Listener {
 
 	@EventHandler
 	public void onLanguageUpdate(UpdateLanguageEvent event) {
-
-
-		Bukkit.getOnlinePlayers()
-				.forEach(player -> VersionUtils.getVersionUtils().sendTabTitle(player,
-						game.translate("werewolf.tab.top"),
-						game.translate("werewolf.tab.bot")));
 
 		Bukkit.getOnlinePlayers()
 				.stream()

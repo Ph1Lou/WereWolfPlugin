@@ -7,6 +7,7 @@ import io.github.ph1lou.werewolfapi.RoleRegister;
 import io.github.ph1lou.werewolfapi.ScoreAPI;
 import io.github.ph1lou.werewolfapi.enumlg.*;
 import io.github.ph1lou.werewolfapi.events.*;
+import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -22,7 +23,6 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -34,6 +34,8 @@ public class ScoreBoard implements ScoreAPI, Listener {
 	private int player = 0;
 	private int timer = 0;
 	private int role = 0;
+	private int day;
+	private String dayState;
 	private final List<String> scoreboard1 = new ArrayList<>();
 	private final List<String> scoreboard2 = new ArrayList<>();
 	private final List<String> scoreboard3 = new ArrayList<>();
@@ -114,14 +116,17 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		scoreboard2.clear();
 
 		int i = 0;
-		while(game.getLanguage().containsKey("werewolf.score_board.scoreboard_2."+i)) {
+		this.day = timer / game.getConfig().getTimerValues().get(TimersBase.DAY_DURATION.getKey()) / 2 + 1;
+		this.dayState = game.translate(game.isDay(Day.DAY) ? "werewolf.score_board.day" : "werewolf.score_board.night");
+
+		while (game.getLanguage().containsKey("werewolf.score_board.scoreboard_2." + i)) {
 			String line = game.translate("werewolf.score_board.scoreboard_2." + i);
 			line = line.replace("&timer&", conversion(timer));
-			line = line.replace("&day&", String.valueOf(timer / game.getConfig().getTimerValues().get(TimersBase.DAY_DURATION.getKey()) / 2 + 1));
+			line = line.replace("&day&", String.valueOf(this.day));
 			line = line.replace("&players&", String.valueOf(player));
 			line = line.replace("&group&", String.valueOf(group_size));
 			line = line.replace("&border&", border);
-			line = line.replace("&daystate&", game.translate(game.isDay(Day.DAY) ? "werewolf.score_board.day" : "werewolf.score_board.night"));
+			line = line.replace("&daystate&", this.dayState);
 			line = line.replace("&border_size&", border_size);
 			scoreboard2.add(line);
 			i++;
@@ -138,17 +143,17 @@ public class ScoreBoard implements ScoreAPI, Listener {
 			sb.append("§3").append(game.getConfig().getLoverSize()).append("§r ").append(game.translate(RolesBase.LOVER.getKey()));
 			roles.add(sb.substring(0, Math.min(30, sb.length())));
 		}
-		if(game.getConfig().getAmnesiacLoverSize()>0) {
+		if (game.getConfig().getAmnesiacLoverSize() > 0) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("§3").append(game.getConfig().getAmnesiacLoverSize()).append("§r ").append(game.translate(RolesBase.AMNESIAC_LOVER.getKey()));
 			roles.add(sb.substring(0, Math.min(30, sb.length())));
 		}
-		if(game.getConfig().getCursedLoverSize()>0) {
+		if (game.getConfig().getCursedLoverSize() > 0) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("§3").append(game.getConfig().getCursedLoverSize()).append("§r ").append(game.translate(RolesBase.CURSED_LOVER.getKey()));
 			roles.add(sb.substring(0, Math.min(30, sb.length())));
 		}
-		for (RoleRegister roleRegister:game.getRolesRegister()) {
+		for (RoleRegister roleRegister : game.getMain().getRegisterManager().getRolesRegister()) {
 			String key = roleRegister.getKey();
 			if (game.getConfig().getRoleCount().get(key) > 0) {
 				StringBuilder sb = new StringBuilder();
@@ -157,7 +162,7 @@ public class ScoreBoard implements ScoreAPI, Listener {
 			}
 		}
 
-		if(!roles.isEmpty()){
+		if (!roles.isEmpty()) {
 
 			int inf= 6*((int) TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())%30/5);
 			int total = (int) Math.ceil(roles.size()/6f);
@@ -205,7 +210,13 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		World world = player.getWorld();
 		Location location = player.getLocation();
 		location.setY(world.getSpawnLocation().getY());
-		int distance = (int) location.distance(world.getSpawnLocation());
+		int distance = 0;
+
+		try {
+			distance = (int) location.distance(world.getSpawnLocation());
+		} catch (Exception ignored) {
+		}
+
 
 		return distance / 300 * 300;
 	}
@@ -247,7 +258,19 @@ public class ScoreBoard implements ScoreAPI, Listener {
 			} else updateGlobalScoreBoard2();
 		}
 
+		String bot = "";
+
+		if (game.isState(StateGame.START) || game.isState(StateGame.GAME)) {
+			bot = game.translate("werewolf.tab.timer", conversion(timer), day, dayState);
+		}
+
+		bot += game.translate("werewolf.tab.bot");
+
 		for (FastBoard board : game.getBoards().values()) {
+
+			VersionUtils.getVersionUtils().sendTabTitle(board.getPlayer(),
+					game.translate("werewolf.tab.top"),
+					bot);
 
 			if (game.isState(StateGame.END)) {
 				board.updateLines(scoreboard3);
@@ -255,7 +278,9 @@ public class ScoreBoard implements ScoreAPI, Listener {
 				board.updateLines(roles);
 			} else if (game.isState(StateGame.LOBBY)) {
 				board.updateLines(scoreboard1);
-			} else updateScoreBoard2(board);
+			} else {
+				updateScoreBoard2(board);
+			}
 		}
 
 	}
@@ -269,8 +294,9 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		Vector dirToMiddle = target.toVector().subtract(player.getEyeLocation().toVector()).normalize();
 
 		int distance = 0;
-		if (Objects.requireNonNull(target.getWorld()).getName().equals(Objects.requireNonNull(location.getWorld()).getName())) {
+		try {
 			distance = (int) Math.round(target.distance(location));
+		} catch (Exception ignored) {
 		}
 
 		Vector playerDirection = player.getEyeLocation().getDirection();

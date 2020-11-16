@@ -6,7 +6,6 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.LangManager;
 import io.github.ph1lou.werewolfapi.RegisterManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.StateGame;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.commands.Admin;
@@ -55,11 +54,9 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
             currentGame.getMapManager().createMap();
             Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> Bukkit.getOnlinePlayers()
                     .forEach(player -> {
-                        if (currentGame == null || !currentGame.isState(StateGame.TRANSPORTATION)) {
-                            ActionBarEvent actionBarEvent = new ActionBarEvent(player.getUniqueId(), "");
-                            Bukkit.getPluginManager().callEvent(actionBarEvent);
-                            VersionUtils.getVersionUtils().sendActionBar(player, actionBarEvent.getActionBar());
-                        }
+                        ActionBarEvent actionBarEvent = new ActionBarEvent(player.getUniqueId());
+                        Bukkit.getPluginManager().callEvent(actionBarEvent);
+                        VersionUtils.getVersionUtils().sendActionBar(player, actionBarEvent.getActionBar());
                     }), 0, 4);
         }, 5);
     }

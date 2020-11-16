@@ -5,6 +5,8 @@ import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.entity.Player;
 
+import java.io.IOException;
+
 public class CommandChange implements Commands {
 
 
@@ -20,12 +22,14 @@ public class CommandChange implements Commands {
         GameManager game = (GameManager) main.getWereWolfAPI();
 
         player.sendMessage(game.translate("werewolf.commands.admin.change.in_progress"));
-        if (game.getMapManager().getWft() != null) {
-            game.getMapManager().getWft().stop();
-            game.getMapManager().setWft(null);
+
+
+        try {
+            game.getMapManager().loadMap();
+        } catch (IOException ignored) {
         }
-        game.getMapManager().deleteMap();
-        game.getMapManager().createMap();
+
         player.sendMessage(game.translate("werewolf.commands.admin.change.finished"));
+
     }
 }

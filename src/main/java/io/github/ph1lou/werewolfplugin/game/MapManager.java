@@ -10,9 +10,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.UUID;
 
 
@@ -43,6 +45,7 @@ public class MapManager implements MapManagerAPI {
         } else sender.sendMessage(game.translate("werewolf.commands.admin.generation.already_start"));
     }
 
+
     @Override
     public void createMap() {
 
@@ -53,6 +56,32 @@ public class MapManager implements MapManagerAPI {
         this.world = wc.createWorld();
         setWorld();
     }
+
+    @Override
+    public void loadMap() throws IOException {
+        loadMap(null);
+    }
+
+    @Override
+    public void loadMap(@Nullable File map) throws IOException {
+
+        File werewolfWorld = Objects.requireNonNull(
+                Bukkit.getWorld("werewolf")).getWorldFolder();
+
+        if (wft != null) {
+            wft.stop();
+            wft = null;
+        }
+        deleteMap();
+
+        if (map != null && map.exists()) {
+            FileUtils.copyDirectory(map, werewolfWorld);
+        }
+
+        createMap();
+
+    }
+
 
     @Override
     public void deleteMap() {

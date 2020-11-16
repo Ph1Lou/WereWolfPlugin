@@ -31,8 +31,6 @@ public class ShowDeathRole extends ListenerManager {
 
         WereWolfAPI game = main.getWereWolfAPI();
 
-        StringBuilder sb = new StringBuilder(event.getSuffix().replace(game.translate("werewolf.score_board.death"), ""));
-
         PlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID());
 
         if (playerWW == null) {
@@ -41,9 +39,10 @@ public class ShowDeathRole extends ListenerManager {
 
         if (!playerWW.isState(StatePlayer.DEATH)) return;
 
-        sb.append(game.translate(playerWW.getRole().getKey()));
-
-        event.setSuffix(sb.toString());
+        event.setSuffix(event.getSuffix()
+                .replace(game.translate("werewolf.score_board.death"),
+                        "")
+                + game.translate(playerWW.getRole().getKey()));
     }
 
     @Override

@@ -121,7 +121,10 @@ public class LoversManagement {
 		List<PlayerWW> amnesiacLovers = new ArrayList<>();
 
 		for (PlayerWW plg : game.getPlayersWW().values()) {
-			if (plg.getAmnesiacLoverUUID()!=null && plg.isState(StatePlayer.ALIVE) && game.getPlayersWW().get(plg.getAmnesiacLoverUUID()).isState(StatePlayer.ALIVE)) {
+			if (plg.getAmnesiacLoverUUID() != null &&
+					plg.isState(StatePlayer.ALIVE) &&
+					game.getPlayersWW().get(plg.getAmnesiacLoverUUID())
+							.isState(StatePlayer.ALIVE)) {
 				amnesiacLovers.add(plg);
 			}
 		}
@@ -133,14 +136,26 @@ public class LoversManagement {
 			Player player1 = Bukkit.getPlayer(plg.getName());
 			Player player2 = Bukkit.getPlayer(loverUUID);
 			if (player1 != null && player2 != null) {
+
 				if (!amnesiacLovers.get(0).getRevealAmnesiacLover()) {
-					if (player1.getLocation().distance(player2.getLocation()) < game.getConfig().getDistanceAmnesiacLovers()) {
-						amnesiacLoversRange.add(new ArrayList<>(Arrays.asList(player1.getUniqueId(), loverUUID)));
-						Bukkit.getPluginManager().callEvent(new RevealAmnesiacLoversEvent(Arrays.asList(player1.getUniqueId(), loverUUID)));
-						announceAmnesiacLovers(player1);
-						announceAmnesiacLovers(player2);
-						game.getConfig().setAmnesiacLoverSize(game.getConfig().getAmnesiacLoverSize() + 1);
-						game.checkVictory();
+
+					try {
+						if (player1.getLocation().distance(player2.getLocation()) <
+								game.getConfig().getDistanceAmnesiacLovers()) {
+
+							amnesiacLoversRange.add(new ArrayList<>(Arrays.asList(player1.getUniqueId(),
+									loverUUID)));
+
+							Bukkit.getPluginManager().callEvent(new RevealAmnesiacLoversEvent(
+									Arrays.asList(player1.getUniqueId(), loverUUID)));
+							announceAmnesiacLovers(player1);
+							announceAmnesiacLovers(player2);
+							game.getConfig().setAmnesiacLoverSize(
+									game.getConfig().getAmnesiacLoverSize() + 1);
+							game.checkVictory();
+						}
+					} catch (Exception ignored) {
+
 					}
 				}
 			}

@@ -37,7 +37,9 @@ public class Languages implements InventoryProvider {
         Main main = JavaPlugin.getPlugin(Main.class);
         WereWolfAPI game = main.getWereWolfAPI();
 
-        contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType()).setDisplayName(game.translate("werewolf.menu.return")).build()), e -> Config.INVENTORY.open(player)));
+        contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType())
+                        .setDisplayName(game.translate("werewolf.menu.return")).build()),
+                e -> Config.INVENTORY.open(player)));
 
         ItemBuilder fr = new ItemBuilder(UniversalMaterial.WHITE_BANNER.getStack());
         fr.addPattern(new Pattern(DyeColor.BLUE, PatternType.STRIPE_LEFT));
@@ -71,10 +73,6 @@ public class Languages implements InventoryProvider {
     }
 
 
-    @Override
-    public void update(Player player, InventoryContents contents) {
 
-
-    }
 }
 

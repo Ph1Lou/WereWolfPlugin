@@ -1,7 +1,7 @@
 package io.github.ph1lou.werewolfplugin.commands.utilities;
 
 import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.RegisterAPI;
+import io.github.ph1lou.werewolfapi.ConfigRegister;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.entity.Player;
@@ -20,11 +20,16 @@ public class CommandRules implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
 
-        for (RegisterAPI ConfigRegister : main.getRegisterManager().getConfigsRegister()) {
-            if (game.getConfig().getConfigValues().get(ConfigRegister.getKey())) {
-                player.sendMessage(game.translate("werewolf.utils.enable", game.translate(ConfigRegister.getKey())));
-            } else
-                player.sendMessage(game.translate("werewolf.utils.disable", game.translate(ConfigRegister.getKey())));
+        for (ConfigRegister configRegister : main.getRegisterManager().getConfigsRegister()) {
+
+            if (configRegister.isAppearInMenu()) {
+                if (game.getConfig().getConfigValues().get(configRegister.getKey())) {
+                    player.sendMessage(game.translate("werewolf.utils.enable", game.translate(configRegister.getKey())));
+                } else {
+                    player.sendMessage(game.translate("werewolf.utils.disable", game.translate(configRegister.getKey())));
+                }
+            }
+
         }
     }
 }

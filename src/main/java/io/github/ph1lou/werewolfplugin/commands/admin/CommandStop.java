@@ -20,7 +20,8 @@ public class CommandStop implements Commands {
     public void execute(Player player, String[] args) {
 
         GameManager game = (GameManager) main.getWereWolfAPI();
-        Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.stop.send", player.getName()));
+        Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.stop.send",
+                player.getName()));
         game.setState(StateGame.END);
         game.stopGame();
 

@@ -17,7 +17,7 @@ public class Start implements InventoryProvider {
 
 
     public static final SmartInventory INVENTORY = SmartInventory.builder()
-            .id("startgame")
+            .id("startGame")
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
             .provider(new Start())
             .size(3, 9)

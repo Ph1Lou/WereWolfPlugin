@@ -60,7 +60,7 @@ public class Config implements InventoryProvider {
                 .setDisplayName(game.translate("werewolf.menu.scenarios.name"))
                 .build()), e -> ScenariosGUI.INVENTORY.open(player)));
 
-        contents.set(3, 3, ClickableItem.of((new ItemBuilder(UniversalMaterial.MAP.getType())
+        contents.set(3, 3, ClickableItem.of((new ItemBuilder(UniversalMaterial.NAME_TAG.getType())
                 .setDisplayName(game.translate("werewolf.menu.global.name"))
                 .build()), e -> GlobalConfigs.INVENTORY.open(player)));
 
@@ -73,8 +73,12 @@ public class Config implements InventoryProvider {
                 .build()), e -> Borders.INVENTORY.open(player)));
 
         contents.set(3, 6, ClickableItem.of((new ItemBuilder(UniversalMaterial.ENCHANTING_TABLE.getType())
-                .setDisplayName(game.translate("werewolf.menu.enchantments.name"))
+                .setDisplayName(game.translate("werewolf.menu.maps.name"))
                 .build()), e -> Enchantments.INVENTORY.open(player)));
+
+        contents.set(4, 4, ClickableItem.of((new ItemBuilder(UniversalMaterial.MAP.getType())
+                .setDisplayName(game.translate("werewolf.menu.maps.name"))
+                .build()), e -> Maps.INVENTORY.open(player)));
 
         contents.set(5, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.WHITE_BANNER.getStack())
                 .setDisplayName(game.translate("werewolf.menu.languages.name"))
@@ -117,7 +121,7 @@ public class Config implements InventoryProvider {
 
 
         int[] SlotRedGlass = {1, 2, 6, 7, 9, 10, 16, 17, 18, 26, 27, 35, 36, 37, 43, 44, 46, 47, 51, 52};
-        int[] SlotBlackGlass = {3, 5, 11, 12, 14, 15, 19, 20, 21, 23, 24, 25, 28, 34, 38, 39, 40, 41, 42, 49};
+        int[] SlotBlackGlass = {3, 5, 11, 12, 14, 15, 19, 20, 21, 23, 24, 25, 28, 34, 38, 39, 41, 42, 49};
         for (int slotRedGlass : SlotRedGlass) {
             contents.set(slotRedGlass / 9, slotRedGlass % 9, ClickableItem.empty((new ItemBuilder(UniversalMaterial.RED_STAINED_GLASS_PANE.getStack()).build())));
 

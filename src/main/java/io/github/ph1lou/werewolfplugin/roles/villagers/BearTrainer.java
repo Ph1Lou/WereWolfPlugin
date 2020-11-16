@@ -42,8 +42,14 @@ public class BearTrainer extends RolesVillage {
         Location oursLocation = player.getLocation();
         List<UUID> growled = Bukkit.getOnlinePlayers()
                 .stream()
-                .filter(player1 -> oursLocation.distance(player1.getLocation())
-                        < game.getConfig().getDistanceBearTrainer())
+                .filter(player1 -> {
+                    try {
+                        return oursLocation.distance(player1.getLocation())
+                                < game.getConfig().getDistanceBearTrainer();
+                    } catch (Exception ignored) {
+                        return false;
+                    }
+                })
                 .map(Entity::getUniqueId)
                 .map(game::getPlayerWW)
                 .filter(Objects::nonNull)

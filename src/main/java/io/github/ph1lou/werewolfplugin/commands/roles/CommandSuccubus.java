@@ -69,16 +69,20 @@ public class CommandSuccubus implements Commands {
         Location location = player.getLocation();
         Location locationTarget = playerArg.getLocation();
 
-        if (location.distance(locationTarget) > game.getConfig().getDistanceSuccubus()) {
-            player.sendMessage(game.translate("werewolf.role.succubus.not_enough_near"));
+        try {
+            if (location.distance(locationTarget) > game.getConfig().getDistanceSuccubus()) {
+                player.sendMessage(game.translate("werewolf.role.succubus.not_enough_near"));
+                return;
+            }
+        } catch (Exception ignored) {
             return;
         }
 
-        BeginCharmEvent beginCharmEvent = new BeginCharmEvent(uuid,argUUID);
+        BeginCharmEvent beginCharmEvent = new BeginCharmEvent(uuid, argUUID);
 
         Bukkit.getPluginManager().callEvent(beginCharmEvent);
 
-        if(beginCharmEvent.isCancelled()){
+        if (beginCharmEvent.isCancelled()) {
             player.sendMessage(game.translate("werewolf.check.cancel"));
             return;
         }

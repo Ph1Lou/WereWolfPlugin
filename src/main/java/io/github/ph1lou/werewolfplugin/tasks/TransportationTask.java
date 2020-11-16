@@ -3,20 +3,25 @@ package io.github.ph1lou.werewolfplugin.tasks;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.StateGame;
 import io.github.ph1lou.werewolfapi.enumlg.TimersBase;
+import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
-public class TransportationTask {
+public class TransportationTask implements Listener {
 
+    private String actionBar;
     private final GameManager game;
     private final Main main;
     private final List<Location> spawns = new ArrayList<>();
@@ -37,6 +42,7 @@ public class TransportationTask {
 
             if (game.isState(StateGame.END)) {
                 kill(0);
+                HandlerList.unregisterAll(this);
                 return;
             }
 
@@ -61,11 +67,13 @@ public class TransportationTask {
 
             if (game.isState(StateGame.END)) {
                 kill(1);
+                HandlerList.unregisterAll(this);
                 return;
             }
 
             if (i.get() == game.getScore().getPlayerSize()) {
                 kill(1);
+                HandlerList.unregisterAll(this);
                 step2();
                 return;
             }
@@ -152,10 +160,10 @@ public class TransportationTask {
 
     private void teleportPlayer(int i) {
 
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            Sounds.ORB_PICKUP.play(p);
-            VersionUtils.getVersionUtils().sendActionBar(p, game.translate("werewolf.action_bar.tp", i + 1, game.getPlayersWW().size()));
-        }
+        Bukkit.getOnlinePlayers()
+                .forEach(Sounds.ORB_PICKUP::play);
+
+        actionBar = game.translate("werewolf.action_bar.tp", i + 1, game.getScore().getPlayerSize());
 
         UUID uuid = (UUID) game.getPlayersWW().keySet().toArray()[i];
         game.getPlayersWW().get(uuid).setSpawn(spawns.get(i));
@@ -190,8 +198,9 @@ public class TransportationTask {
 
         for (Player p : Bukkit.getOnlinePlayers()) {
             Sounds.DIG_GRASS.play(p);
-            VersionUtils.getVersionUtils().sendActionBar(p, game.translate("werewolf.action_bar.create_tp_point", i + 1, game.getPlayersWW().size()));
         }
+
+        actionBar = game.translate("werewolf.action_bar.create_tp_point", i + 1, game.getPlayersWW().size());
 
         double a = i * 2 * Math.PI / game.getScore().getPlayerSize();
         int x = (int) (Math.round(wb.getSize() / 3 * Math.cos(a) + world.getSpawnLocation().getX()));
@@ -220,6 +229,11 @@ public class TransportationTask {
                 new Location(world, x + i, y + 2, z + j).getBlock().setType(m);
             }
         }
+    }
+
+    @EventHandler
+    public void onActionBar(ActionBarEvent event) {
+        event.setActionBar(event.getActionBar() + actionBar);
     }
 
 

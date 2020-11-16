@@ -71,7 +71,13 @@ public class Sister extends RolesVillage {
                 .map(Roles::getPlayerUUID)
                 .map(Bukkit::getPlayer)
                 .filter(Objects::nonNull)
-                .filter(player -> location.distance(player.getLocation()) < 20)
+                .filter(player -> {
+                    try {
+                        return location.distance(player.getLocation()) < 20;
+                    } catch (Exception ignored) {
+                        return false;
+                    }
+                })
                 .findFirst()
                 .orElse(null) != null;
 

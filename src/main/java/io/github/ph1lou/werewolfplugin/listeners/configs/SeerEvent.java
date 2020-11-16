@@ -20,7 +20,10 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SeerEvent extends ListenerManager {
 
@@ -58,7 +61,8 @@ public class SeerEvent extends ListenerManager {
 
         if (active && !danger.isEmpty()) {
             chest.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE, 2));
-            PlayerWW plg = danger.get((int) Math.floor(new Random(System.currentTimeMillis()).nextFloat() * danger.size()));
+            PlayerWW plg = danger.get((int) Math.floor(
+                    game.getRandom().nextFloat() * danger.size()));
             sign.setLine(1, plg.getName());
         } else {
             chest.getInventory().addItem(new ItemStack(Material.BONE, 8));
@@ -112,8 +116,10 @@ public class SeerEvent extends ListenerManager {
         for (int i = 0; i < nb_target; i++) {
 
             double a = Math.random() * 2 * Math.PI;
-            int x = (int) (Math.round(wb.getSize() / 3 * Math.cos(a) + world.getSpawnLocation().getX()));
-            int z = (int) (Math.round(wb.getSize() / 3 * Math.sin(a) + world.getSpawnLocation().getBlockZ()));
+            int x = (int) (Math.round(wb.getSize() / 3 *
+                    Math.cos(a) + world.getSpawnLocation().getX()));
+            int z = (int) (Math.round(wb.getSize() / 3 *
+                    Math.sin(a) + world.getSpawnLocation().getBlockZ()));
             Location location = new Location(world, x, world.getHighestBlockYAt(x, z), z);
 
             createTarget(location, i == 0);

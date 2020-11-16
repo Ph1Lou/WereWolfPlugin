@@ -43,18 +43,23 @@ public class CommandCitizenCancelVote implements Commands {
         UUID vote = game.getVote().getResult();
         CancelVoteEvent cancelVoteEvent = new CancelVoteEvent(uuid, vote);
         Bukkit.getPluginManager().callEvent(cancelVoteEvent);
-        game.getVote().resetVote();
 
         if (cancelVoteEvent.isCancelled()) {
             player.sendMessage(game.translate("werewolf.check.cancel"));
             return;
         }
 
+        game.getVote().resetVote();
+        Bukkit.broadcastMessage(game.translate(
+                "werewolf.role.citizen.cancelling_broadcast"));
+
+        if (vote == null) return;
+
         player.sendMessage(game.translate(
                 "werewolf.role.citizen.cancelling_vote_perform",
                 game.getPlayersWW().get(vote).getName()));
         citizen.addAffectedPlayer(vote);
-        Bukkit.broadcastMessage(game.translate(
-                "werewolf.role.citizen.cancelling_broadcast"));
+
+
     }
 }

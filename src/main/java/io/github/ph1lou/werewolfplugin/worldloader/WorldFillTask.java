@@ -39,7 +39,7 @@ public class WorldFillTask implements Runnable {
 
 	// for reporting progress back to user occasionally
 	private long lastReport = System.currentTimeMillis();
-	private long lastAutosave = System.currentTimeMillis();
+	private long lastAutoSave = System.currentTimeMillis();
 	private int reportTarget = 0;
 	private int reportTotal = 0;
 	private int reportNum = 0;
@@ -285,8 +285,8 @@ public class WorldFillTask implements Runnable {
 
 		// go ahead and save world to disk every 30 seconds or so by default, just in case; can take a couple of seconds or more, so we don't want to run it too often
 		int fillAutoSaveFrequency = 30;
-		if (lastAutosave + (fillAutoSaveFrequency * 1000) < lastReport) {
-			lastAutosave = lastReport;
+		if (lastAutoSave + (fillAutoSaveFrequency * 1000) < lastReport) {
+			lastAutoSave = lastReport;
 			sendMessage("Saving the world to disk, just to be on the safe side.");
 			world.save();
 		}
