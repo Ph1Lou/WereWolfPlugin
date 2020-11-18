@@ -9,7 +9,7 @@ import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.Main;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -62,32 +62,17 @@ public class Maps implements InventoryProvider {
             i++;
         }
 
-        FileConfiguration config = main.getConfig();
-        if (config.getBoolean("autoRoofedMiddle")) {
-            contents.set(1, 1, ClickableItem.of((
-                            new ItemBuilder(UniversalMaterial.GREEN_TERRACOTTA.getStack())
-                                    .setDisplayName(game.translate(
-                                            "werewolf.menu.maps.roofed"))
-                                    .build()),
-                    e -> config.set("autoRoofedMiddle", false)));
-        } else {
-            contents.set(1, 1, ClickableItem.of((
-                            new ItemBuilder(UniversalMaterial.RED_TERRACOTTA.getStack())
-                                    .setDisplayName(game.translate("werewolf.menu.maps.roofed")).build()),
-                    e -> config.set("autoRoofedMiddle", true)));
-        }
 
-        contents.set(1, 3, ClickableItem.of((
+        contents.set(1, 1, ClickableItem.of((
                         new ItemBuilder(UniversalMaterial.LAVA_BUCKET.getType())
                                 .setDisplayName(game.translate("werewolf.menu.maps.new")).build()),
-                e -> {
+                e -> Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
                     try {
+                        player.closeInventory();
                         game.getMapManager().loadMap(null);
                     } catch (IOException ignored) {
                     }
-                }));
-
-
+                })));
     }
 
 

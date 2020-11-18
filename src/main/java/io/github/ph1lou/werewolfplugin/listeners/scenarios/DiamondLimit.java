@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.ListenerManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.StateGame;
 import io.github.ph1lou.werewolfapi.enumlg.TimersBase;
+import io.github.ph1lou.werewolfapi.events.StopEvent;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -23,6 +24,12 @@ public class DiamondLimit extends ListenerManager {
 
     public DiamondLimit(GetWereWolfAPI main) {
         super(main);
+    }
+
+
+    @EventHandler
+    public void onGameStop(StopEvent event) {
+        diamondPerPlayer.clear();
     }
 
 

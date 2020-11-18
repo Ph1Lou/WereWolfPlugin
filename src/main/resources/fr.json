@@ -712,9 +712,8 @@
       },
       "maps": {
         "name": "Configuration §bMaps",
-        "map": "Monde §b%s",
-        "roofed": "Roofed au Centre",
-        "new": "Créer un Nouveau §bMonde"
+        "map": "Charger Monde §b%s",
+        "new": "Créer un Nouveau §bMonde§f avec une roofed"
       },
       "languages": {
         "name": "Configuration §bLangue"

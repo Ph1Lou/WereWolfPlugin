@@ -73,7 +73,7 @@ public class Config implements InventoryProvider {
                 .build()), e -> Borders.INVENTORY.open(player)));
 
         contents.set(3, 6, ClickableItem.of((new ItemBuilder(UniversalMaterial.ENCHANTING_TABLE.getType())
-                .setDisplayName(game.translate("werewolf.menu.maps.name"))
+                .setDisplayName(game.translate("werewolf.menu.enchantments.name"))
                 .build()), e -> Enchantments.INVENTORY.open(player)));
 
         contents.set(4, 4, ClickableItem.of((new ItemBuilder(UniversalMaterial.MAP.getType())
@@ -96,6 +96,7 @@ public class Config implements InventoryProvider {
 
         contents.set(5, 8, ClickableItem.of((new ItemBuilder(UniversalMaterial.PLAYER_HEAD.getStack())
                 .setDisplayName("Dev §bPh1Lou")
+                .setLore(game.isDebug() ? game.translate("werewolf.utils.debug") : "")
                 .setHead("Ph1Lou",
                         Bukkit.getOfflinePlayer(UUID.fromString("056be797-2a0b-4807-9af5-37faf5384396")))
                 .build()), e -> {

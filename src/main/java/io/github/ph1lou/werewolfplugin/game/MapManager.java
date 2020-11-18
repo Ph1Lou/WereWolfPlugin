@@ -48,13 +48,16 @@ public class MapManager implements MapManagerAPI {
 
     @Override
     public void createMap() {
+        createMap(true);
+    }
 
+    public void createMap(boolean roofed) {
         Bukkit.broadcastMessage(main.getWereWolfAPI().translate("werewolf.commands.admin.preview.create"));
         WorldCreator wc = new WorldCreator("werewolf");
         wc.environment(World.Environment.NORMAL);
         wc.type(WorldType.NORMAL);
         this.world = wc.createWorld();
-        setWorld();
+        setWorld(roofed);
     }
 
     @Override
@@ -76,10 +79,8 @@ public class MapManager implements MapManagerAPI {
 
         if (map != null && map.exists()) {
             FileUtils.copyDirectory(map, werewolfWorld);
-        }
-
-        createMap();
-
+            createMap(false);
+        } else createMap();
     }
 
 
@@ -104,7 +105,7 @@ public class MapManager implements MapManagerAPI {
         }
     }
 
-    public void setWorld() {
+    public void setWorld(boolean roofed) {
 
         try {
             world.setWeatherDuration(0);
@@ -121,7 +122,7 @@ public class MapManager implements MapManagerAPI {
             int z = world.getSpawnLocation().getBlockZ();
             world.getWorldBorder().reset();
 
-            if (main.getConfig().getBoolean("autoRoofedMiddle")) {
+            if (roofed) {
                 Location biome = VersionUtils.getVersionUtils().findBiome(world);
                 x = biome.getBlockX();
                 z = biome.getBlockZ();

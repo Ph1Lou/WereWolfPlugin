@@ -72,7 +72,7 @@ public class CommandInfect implements Commands {
                         game.getPlayerWW(plg1.getLastKiller()))
                         .getRole()
                         .isWereWolf() ||
-                game.getScore().getTimer() - plg1.getDeathTime() >= 7) {
+                game.getScore().getTimer() - plg1.getDeathTime() > 7) {
 
             player.sendMessage(game.translate("werewolf.role.infect_father_of_the_wolves.player_cannot_be_infected"));
             return;

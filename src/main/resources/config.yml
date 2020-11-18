@@ -12,7 +12,6 @@
 # Available (en, fr)
 
 lang: fr
-autoRoofedMiddle: true
 default_lobby: true
 
 
