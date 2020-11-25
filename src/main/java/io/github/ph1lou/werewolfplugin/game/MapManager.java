@@ -28,6 +28,10 @@ public class MapManager implements MapManagerAPI {
         this.main = main;
     }
 
+    public void init() {
+        setLobbyWorld();
+        createMap();
+    }
 
     @Override
     public void generateMap(CommandSender sender, int mapRadius) {
@@ -185,5 +189,40 @@ public class MapManager implements MapManagerAPI {
 
     public void setWft(WorldFillTask wft) {
         this.wft = wft;
+    }
+
+    public void setLobbyWorld() {
+
+        World world = Bukkit.getWorlds().get(0);
+        world.setWeatherDuration(0);
+        world.setThundering(false);
+        VersionUtils.getVersionUtils().setGameRuleValue(world, "doFireTick", false);
+        VersionUtils.getVersionUtils().setGameRuleValue(world, "reducedDebugInfo", true);
+        VersionUtils.getVersionUtils().setGameRuleValue(world, "naturalRegeneration", false);
+        VersionUtils.getVersionUtils().setGameRuleValue(world, "keepInventory", true);
+        VersionUtils.getVersionUtils().setGameRuleValue(world, "announceAdvancements", false);
+        int x = world.getSpawnLocation().getBlockX();
+        int z = world.getSpawnLocation().getBlockZ();
+        world.getWorldBorder().reset();
+
+        if (main.getConfig().getBoolean("default_lobby")) {
+
+            world.setSpawnLocation(x, 151, z);
+
+            for (int i = -16; i <= 16; i++) {
+
+                for (int j = -16; j <= 16; j++) {
+
+                    new Location(world, i + x, 150, j + z).getBlock().setType(Material.BARRIER);
+                    new Location(world, i + x, 154, j + z).getBlock().setType(Material.BARRIER);
+                }
+                for (int j = 151; j < 154; j++) {
+                    new Location(world, i + x, j, z - 16).getBlock().setType(Material.BARRIER);
+                    new Location(world, i + x, j, z + 16).getBlock().setType(Material.BARRIER);
+                    new Location(world, x - 16, j, i + z).getBlock().setType(Material.BARRIER);
+                    new Location(world, x + 16, j, i + z).getBlock().setType(Material.BARRIER);
+                }
+            }
+        }
     }
 }

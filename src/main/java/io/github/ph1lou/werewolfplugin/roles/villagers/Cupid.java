@@ -130,7 +130,7 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
     @Override
     public void recoverPower() {
 
-        super.recoverPower();
+
         Player player = Bukkit.getPlayer(getPlayerUUID());
         if (player == null) return;
         player.sendMessage(game.translate(

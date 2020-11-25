@@ -496,6 +496,7 @@
           "name": "Host",
           "add": "[§aLG UHC§r] §b%s§r est à présent Host",
           "remove": "[§cLG UHC§r] §b%s§r n'est plus Host",
+          "one": "§cLG UHC§r] Il faut au minimum un host",
           "tag": "§cHost§r » "
         },
         "whitelist": {

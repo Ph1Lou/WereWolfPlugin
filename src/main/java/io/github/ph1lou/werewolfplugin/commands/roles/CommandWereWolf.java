@@ -28,9 +28,13 @@ public class CommandWereWolf implements Commands {
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
 
+        if (game.getConfig().getTimerValues().get("werewolf.menu.timers.werewolf_list") > 0) {
+            player.sendMessage(game.translate("werewolf.role.werewolf.list_not_revealed"));
+            return;
+        }
+
         RequestSeeWereWolfListEvent requestSeeWereWolfListEvent = new RequestSeeWereWolfListEvent(uuid);
         Bukkit.getPluginManager().callEvent(requestSeeWereWolfListEvent);
-
 
         if (!requestSeeWereWolfListEvent.isAccept()) {
             player.sendMessage(game.translate("werewolf.role.werewolf.not_werewolf"));

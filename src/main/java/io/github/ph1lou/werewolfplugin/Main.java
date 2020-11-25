@@ -11,20 +11,14 @@ import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.commands.Admin;
 import io.github.ph1lou.werewolfplugin.commands.Command;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
+import io.github.ph1lou.werewolfplugin.game.MapManager;
 import io.github.ph1lou.werewolfplugin.save.Lang;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
 
-public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
+public class Main extends JavaPlugin implements GetWereWolfAPI {
 
 
     private final Lang lang = new Lang(this);
@@ -43,22 +37,20 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
         saveDefaultConfig();
         this.invManager.init();
         Bukkit.getPluginManager().registerEvents(lang, this);
-        Bukkit.getPluginManager().registerEvents(this, this);
         currentGame = new GameManager(this);
         Objects.requireNonNull(getCommand("a")).setExecutor(new Admin(this));
         Objects.requireNonNull(getCommand("ww")).setExecutor(new Command(this));
+        currentGame.init();
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
-            setWorld();
-            currentGame.init();
-            currentGame.getMapManager().createMap();
-            Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> Bukkit.getOnlinePlayers()
-                    .forEach(player -> {
-                        ActionBarEvent actionBarEvent = new ActionBarEvent(player.getUniqueId());
-                        Bukkit.getPluginManager().callEvent(actionBarEvent);
-                        VersionUtils.getVersionUtils().sendActionBar(player, actionBarEvent.getActionBar());
-                    }), 0, 4);
-        }, 5);
+        MapManager mapManager = currentGame.getMapManager();
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this, mapManager::init);
+
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> Bukkit.getOnlinePlayers()
+                .forEach(player -> {
+                    ActionBarEvent actionBarEvent = new ActionBarEvent(player.getUniqueId());
+                    Bukkit.getPluginManager().callEvent(actionBarEvent);
+                    VersionUtils.getVersionUtils().sendActionBar(player, actionBarEvent.getActionBar());
+                }), 0, 4);
     }
 
 
@@ -82,62 +74,12 @@ public class Main extends JavaPlugin implements GetWereWolfAPI, Listener {
         return lang;
     }
 
-    @EventHandler
-    public void onJoin(PlayerJoinEvent event) {
-
-        Player player = event.getPlayer();
-
-        if (getWereWolfAPI().isState(null)) {
-            player.kickPlayer("Waiting Addons");
-        }
-    }
 
     public void createGame() {
 
         this.currentGame = new GameManager(this);
         this.currentGame.init();
     }
-
-
-    public void setWorld() {
-
-        World world = Bukkit.getWorlds().get(0);
-        world.setWeatherDuration(0);
-        world.setThundering(false);
-        VersionUtils.getVersionUtils().setGameRuleValue(world, "doFireTick", false);
-        VersionUtils.getVersionUtils().setGameRuleValue(world, "reducedDebugInfo", true);
-        VersionUtils.getVersionUtils().setGameRuleValue(world, "naturalRegeneration", false);
-        VersionUtils.getVersionUtils().setGameRuleValue(world, "keepInventory", true);
-        VersionUtils.getVersionUtils().setGameRuleValue(world, "announceAdvancements", false);
-        int x = world.getSpawnLocation().getBlockX();
-        int z = world.getSpawnLocation().getBlockZ();
-        world.getWorldBorder().reset();
-
-        if (getConfig().getBoolean("default_lobby")) {
-
-            world.setSpawnLocation(x, 151, z);
-
-            for (int i = -16; i <= 16; i++) {
-
-                for (int j = -16; j <= 16; j++) {
-
-                    new Location(world, i + x, 150, j + z).getBlock().setType(Material.BARRIER);
-                    new Location(world, i + x, 154, j + z).getBlock().setType(Material.BARRIER);
-                }
-                for (int j = 151; j < 154; j++) {
-                    new Location(world, i + x, j, z - 16).getBlock().setType(Material.BARRIER);
-                    new Location(world, i + x, j, z + 16).getBlock().setType(Material.BARRIER);
-                    new Location(world, x - 16, j, i + z).getBlock().setType(Material.BARRIER);
-                    new Location(world, x + 16, j, i + z).getBlock().setType(Material.BARRIER);
-                }
-            }
-        }
-    }
-
-
-
-
-
 
 }
 

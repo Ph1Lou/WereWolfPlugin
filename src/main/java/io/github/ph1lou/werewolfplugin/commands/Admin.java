@@ -126,7 +126,7 @@ public class Admin implements TabExecutor {
             pass = true;
         }
 
-        if (player.hasPermission("a"+game.translate(commandRegister.getKey()))) {
+        if (player.hasPermission("a." + game.translate(commandRegister.getKey()))) {
             pass = true;
         }
 

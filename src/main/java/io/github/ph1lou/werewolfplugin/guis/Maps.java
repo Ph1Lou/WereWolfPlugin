@@ -6,6 +6,7 @@ import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.StateGame;
 import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -53,6 +54,10 @@ public class Maps implements InventoryProvider {
                                     .setDisplayName(game.translate("werewolf.menu.maps.map",
                                             file.getName())).build()),
                     e -> {
+                        if (!game.isState(StateGame.LOBBY)) {
+                            player.sendMessage(game.translate("werewolf.check.game_in_progress"));
+                            return;
+                        }
                         try {
                             game.getMapManager().loadMap(file);
                         } catch (IOException ioException) {
@@ -67,6 +72,10 @@ public class Maps implements InventoryProvider {
                         new ItemBuilder(UniversalMaterial.LAVA_BUCKET.getType())
                                 .setDisplayName(game.translate("werewolf.menu.maps.new")).build()),
                 e -> Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
+                    if (!game.isState(StateGame.LOBBY)) {
+                        player.sendMessage(game.translate("werewolf.check.game_in_progress"));
+                        return;
+                    }
                     try {
                         player.closeInventory();
                         game.getMapManager().loadMap(null);

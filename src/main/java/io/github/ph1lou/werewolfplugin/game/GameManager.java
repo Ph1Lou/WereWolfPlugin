@@ -63,6 +63,7 @@ public class GameManager implements WereWolfAPI {
     }
 
     public void init() {
+
         Bukkit.getPluginManager().callEvent(new UpdateLanguageEvent());
         FileUtils_.loadConfig(main, "saveCurrent");
         stuff.load("saveCurrent");
@@ -177,6 +178,8 @@ public class GameManager implements WereWolfAPI {
 
         if (!main.getWereWolfAPI().equals(this)) return;
 
+        Bukkit.getPluginManager().callEvent(new StopEvent(this));
+
         scenarios.delete();
 
         main.createGame();
@@ -203,7 +206,6 @@ public class GameManager implements WereWolfAPI {
         }
 
 
-        Bukkit.getPluginManager().callEvent(new StopEvent(this));
     }
 
     @Override

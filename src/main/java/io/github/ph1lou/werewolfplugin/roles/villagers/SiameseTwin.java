@@ -59,7 +59,7 @@ public class SiameseTwin extends RolesVillage {
 
     @Override
     public void recoverPower() {
-        super.recoverPower();
+
         Player player = Bukkit.getPlayer(getPlayerUUID());
         if (player == null) return;
         VersionUtils.getVersionUtils().setPlayerMaxHealth(player, 24);

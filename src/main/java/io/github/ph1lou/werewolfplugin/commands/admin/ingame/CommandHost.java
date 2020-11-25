@@ -35,7 +35,12 @@ public class CommandHost implements Commands {
         UUID uuid = host.getUniqueId();
 
         if (moderationManager.getHosts().contains(uuid)) {
-            Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.host.remove", args[0]));
+
+            if (moderationManager.getHosts().size() == 1) {
+                player.sendMessage(game.translate("werewolf.commands.admin.host.one"));
+                return;
+            }
+            Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.host.remove", host.getName()));
             moderationManager.getHosts().remove(uuid);
             if (moderationManager.getModerators().contains(uuid)) {
                 if (game.isState(StateGame.LOBBY) && game.getPlayersWW().containsKey(uuid)) {
@@ -48,7 +53,7 @@ public class CommandHost implements Commands {
                 game.finalJoin(host);
             }
             moderationManager.getHosts().add(uuid);
-            Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.host.add", args[0]));
+            Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.host.add", host.getName()));
         }
         Bukkit.getPluginManager().callEvent(new HostEvent(uuid, moderationManager.getHosts().contains(uuid)));
     }

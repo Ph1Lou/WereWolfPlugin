@@ -242,7 +242,6 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
     @Override
     public void recoverPower() {
 
-        super.recoverPower();
         Player player = Bukkit.getPlayer(getPlayerUUID());
         if (player == null) return;
 

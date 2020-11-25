@@ -278,7 +278,7 @@ public class PlayerListener implements Listener {
 
 				if (game.isState(StateGame.GAME)) {
 					if (!plg.hasKit()) {
-						plg.getRole().recoverPower();
+						plg.getRole().roleAnnouncement();
 					}
 					if (plg.getAnnounceCursedLoversAFK()) {
 						game.getLoversManage().announceCursedLovers(player);
@@ -295,7 +295,7 @@ public class PlayerListener implements Listener {
 					player.setGameMode(GameMode.SPECTATOR);
 					event.setJoinMessage(game.translate("werewolf.announcement.join_in_spec",
 							playerName));
-				} else {
+				} else if (!player.isOp()) {
 					player.kickPlayer(game.translate("werewolf.check.death_spectator"));
 				}
 			}
@@ -491,7 +491,7 @@ public class PlayerListener implements Listener {
 			msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
 					"https://discord.gg/GXXCVUA"));
 			player.spigot().sendMessage(msg);
-			if (game.getConfig().getSpectatorMode() == 0) {
+			if (game.getConfig().getSpectatorMode() == 0 && !player.isOp()) {
 				player.kickPlayer(game.translate("werewolf.check.death_spectator"));
 			}
 		}

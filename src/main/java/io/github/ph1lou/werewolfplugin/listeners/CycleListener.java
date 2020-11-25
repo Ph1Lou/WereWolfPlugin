@@ -261,7 +261,7 @@ public class CycleListener implements Listener {
 
 
         game.getPlayersWW().values()
-                .forEach(playerWW -> playerWW.getRole().recoverPower());
+                .forEach(playerWW -> playerWW.getRole().roleAnnouncement());
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
             if (!game.isState(StateGame.END)) {
@@ -340,7 +340,7 @@ public class CycleListener implements Listener {
             playersUUID.remove(n);
         }
         game.getPlayersWW().values()
-                .forEach(playerWW -> playerWW.getRole().recoverPower());
+                .forEach(playerWW -> playerWW.getRole().roleAnnouncement());
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(game.getMain(), game::checkVictory);
     }

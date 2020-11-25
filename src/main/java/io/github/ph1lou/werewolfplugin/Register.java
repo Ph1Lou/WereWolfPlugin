@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin;
 
 import io.github.ph1lou.werewolfapi.*;
 import io.github.ph1lou.werewolfapi.enumlg.*;
+import io.github.ph1lou.werewolfapi.events.UpdateLanguageEvent;
 import io.github.ph1lou.werewolfplugin.commands.admin.CommandChange;
 import io.github.ph1lou.werewolfplugin.commands.admin.CommandGeneration;
 import io.github.ph1lou.werewolfplugin.commands.admin.CommandSize;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 
 public class Register implements RegisterManager {
 
+    private final Main main;
     private final List<RoleRegister> rolesRegister = new ArrayList<>();
     private final List<ScenarioRegister> scenariosRegister = new ArrayList<>();
     private final List<ConfigRegister> configsRegister = new ArrayList<>();
@@ -34,15 +36,16 @@ public class Register implements RegisterManager {
     private final List<AddonRegister> addonsRegister = new ArrayList<>();
 
     public Register(Main main) {
+        this.main = main;
         registerRoles();
-        registerScenarios(main);
+        registerScenarios();
         registerTimers();
-        registerConfigs(main);
-        registerCommands(main);
-        registerAdminCommands(main);
+        registerConfigs();
+        registerCommands();
+        registerAdminCommands();
     }
 
-    private void registerAdminCommands(Main main) {
+    private void registerAdminCommands() {
 
         adminCommandsRegister
                 .add(new CommandRegister("werewolf.name",
@@ -236,7 +239,7 @@ public class Register implements RegisterManager {
                         .addArgNumbers(0));
     }
 
-    private void registerCommands(Main main) {
+    private void registerCommands() {
 
         commandsRegister
                 .add(new CommandRegister("werewolf.name",
@@ -641,7 +644,7 @@ public class Register implements RegisterManager {
 
     }
 
-    private void registerScenarios(Main main) {
+    private void registerScenarios() {
         scenariosRegister
                 .add(new ScenarioRegister("werewolf.name",
                         ScenariosBase.CAT_EYES.getKey(),
@@ -735,7 +738,7 @@ public class Register implements RegisterManager {
 
     }
 
-    private void registerConfigs(Main main) {
+    private void registerConfigs() {
 
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
@@ -916,7 +919,8 @@ public class Register implements RegisterManager {
 
     @Override
     public void registerAddon(AddonRegister addonRegister) {
-       register(addonRegister,addonsRegister);
+        register(addonRegister, addonsRegister);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> Bukkit.getPluginManager().callEvent(new UpdateLanguageEvent()));
     }
 
     @Override
