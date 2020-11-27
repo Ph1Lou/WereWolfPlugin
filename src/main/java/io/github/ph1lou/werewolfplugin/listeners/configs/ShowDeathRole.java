@@ -10,6 +10,7 @@ import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTag;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 
 public class ShowDeathRole extends ListenerManager {
 
@@ -26,7 +27,7 @@ public class ShowDeathRole extends ListenerManager {
         event.setFormat(game.translate("werewolf.announcement.death_message_with_role"));
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onUpdate(UpdatePlayerNameTag event) {
 
         WereWolfAPI game = main.getWereWolfAPI();

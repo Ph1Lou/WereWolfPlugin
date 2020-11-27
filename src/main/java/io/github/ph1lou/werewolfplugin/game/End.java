@@ -86,6 +86,7 @@ public class End {
             fin();
             return;
 
+
         }
         if (event.getVillager() == game.getScore().getPlayerSize()) {
             winner = Category.VILLAGER.getKey();

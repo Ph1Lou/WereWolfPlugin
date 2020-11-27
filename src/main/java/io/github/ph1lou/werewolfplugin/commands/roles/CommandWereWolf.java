@@ -28,7 +28,7 @@ public class CommandWereWolf implements Commands {
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
 
-        if (game.getConfig().getTimerValues().get("werewolf.menu.timers.werewolf_list") > 0) {
+        if (game.getConfig().getTimerValues().get(TimersBase.WEREWOLF_LIST.getKey()) > 0) {
             player.sendMessage(game.translate("werewolf.role.werewolf.list_not_revealed"));
             return;
         }
@@ -38,11 +38,6 @@ public class CommandWereWolf implements Commands {
 
         if (!requestSeeWereWolfListEvent.isAccept()) {
             player.sendMessage(game.translate("werewolf.role.werewolf.not_werewolf"));
-            return;
-        }
-
-        if (game.getConfig().getTimerValues().get(TimersBase.WEREWOLF_LIST.getKey()) > 0) {
-            player.sendMessage(game.translate("werewolf.role.werewolf.list_not_revealed"));
             return;
         }
 
