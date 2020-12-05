@@ -75,10 +75,7 @@ public class MapManager implements MapManagerAPI {
         File werewolfWorld = Objects.requireNonNull(
                 Bukkit.getWorld("werewolf")).getWorldFolder();
 
-        if (wft != null) {
-            wft.stop();
-            wft = null;
-        }
+
         deleteMap();
 
         if (map != null && map.exists()) {
@@ -93,6 +90,11 @@ public class MapManager implements MapManagerAPI {
 
         if (world == null) {
             return;
+        }
+
+        if (wft != null) {
+            wft.stop();
+            wft = null;
         }
 
         Bukkit.getOnlinePlayers()
@@ -152,6 +154,16 @@ public class MapManager implements MapManagerAPI {
     }
 
     @Override
+    public void changeBorder(int mapRadius) {
+
+        if (wft != null) {
+            wft.stop();
+            wft = null;
+            generateMap(mapRadius);
+        }
+    }
+
+    @Override
     public void generateMap(int mapRadius) {
         generateMap(Bukkit.getConsoleSender(), mapRadius);
     }
@@ -178,17 +190,18 @@ public class MapManager implements MapManagerAPI {
             player.teleport(new Location(world, x, world.getHighestBlockYAt(x, z) + 100, z));
         }
     }
+
     @Override
     public World getWorld() {
         return this.world;
     }
 
-    public WorldFillTask getWft() {
-        return wft;
-    }
 
-    public void setWft(WorldFillTask wft) {
-        this.wft = wft;
+    @Override
+    public double getPercentageGenerated() {
+        if (wft == null) return 0;
+
+        return wft.getPercentageCompleted();
     }
 
     public void setLobbyWorld() {

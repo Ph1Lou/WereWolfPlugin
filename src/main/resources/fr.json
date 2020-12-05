@@ -524,7 +524,7 @@
         },
         "help": {
           "command": "h",
-          "send": "§6/a config §9Pour configurer la partie\n§6/a start §9Pour lancer la partie\n§6/a chat §9Pour activer/désactiver le chat\n§6/a info §9Pour parler à tous les joueurs\n§6/a group §9Pour faire respecter les groupes\n§6/a fh §9Pour FinalHeal\n§6/a inv §9Pour voir l'inventaire d'un joueur\n§6/a kill §9Pour tuer un joueur offline\n§6/a revive §9Pour ressusciter un joueur\n§6/a role §9Pour voir le rôle d'un joueur\n§6/a disc §9Pour voir les joueurs déco\n§6/a setgroup§9 Pour configurer les groupes\n§6/a tpgroup§9 Pour téléporter un groupe\n§6/a generation§9 Pour générer la map\n§6/a size§9 Pour obtenir la taille du biome central\n§6/a moderator§9 Pour ajouter un modérator\n§6/a host§9 Pour ajouter un host\n§6/a change§9 Pour changer la map\n§6/a preview§9 Pour voir la map de jeu"
+          "send": "§6/a config §9Pour configurer la partie\n§6/a start §9Pour lancer la partie\n§6/a chat §9Pour activer/désactiver le chat\n§6/a info §9Pour parler à tous les joueurs\n§6/a group §9Pour faire respecter les groupes\n§6/a fh §9Pour FinalHeal\n§6/a inv §9Pour voir l'inventaire d'un joueur\n§6/a kill §9Pour tuer un joueur offline\n§6/a revive §9Pour ressusciter un joueur\n§6/a role §9Pour voir le rôle d'un joueur\n§6/a disc §9Pour voir les joueurs déco\n§6/a setgroup§9 Pour configurer les groupes\n§6/a tpgroup§9 Pour téléporter un groupe\n§6/a generation§9 Pour générer la map\n§6/a size§9 Pour obtenir la taille du biome central\n§6/a moderator§9 Pour ajouter un modérator\n§6/a host§9 Pour ajouter un host\n§6/a change§9 Pour changer la map\n§6/a preview§9 Pour voir la map de jeu\n§6/a gamemode pour changer de gamemode"
         }
       },
       "inventory": {
@@ -573,7 +573,7 @@
         "vote": "Fin des votes à §b%d§r personnes",
         "diamond": "Diamond Limit §b%d",
         "xp": "XpBoost §b%d%%",
-        "strength": "Force §b%d%%",
+        "strength": "Force + §b%d%%",
         "particles": "Particules des Pommes d'Or",
         "particles_on": "§bActivé§r pour tous les joueurs",
         "particles_off": "§4Désactivé§r pour tous les joueurs",
@@ -673,6 +673,8 @@
         "load": "Charger §b%s",
         "delete": "Supprimer §b%s",
         "configuration": "Configuration §b%s",
+        "load_message": "[§aLG UHC§r] Configuration §b%s§r chargée",
+        "delete_message": "[§cLG UHC§r] Configuration §b%s§r supprimée",
         "success": "[§aLG UHC§r] Configuration §bsauvegardée",
         "failure": "[§cLG UHC§r] Slot de configuration plein",
         "delete_failed": "[§cLG UHC§r] Erreur lors de la suppression de §b%s",

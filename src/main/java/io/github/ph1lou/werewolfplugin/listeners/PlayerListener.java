@@ -524,12 +524,13 @@ public class PlayerListener implements Listener {
 
 		if (player == null) return;
 
-		if (game.getMapManager().getWft() == null) {
+		if (game.getMapManager().getPercentageGenerated() == 0) {
 
 			if (game.getModerationManager()
 					.checkAccessAdminCommand(
 							"werewolf.commands.admin.generation.command",
-							player, false)) {
+							player,
+							false)) {
 				event.setActionBar(event.getActionBar() +
 						game.translate("werewolf.action_bar.generation"));
 			}
@@ -538,17 +539,15 @@ public class PlayerListener implements Listener {
 		}
 
 
-		if (game.getMapManager().getWft().getPercentageCompleted() < 100) {
+		if (game.getMapManager().getPercentageGenerated() < 100) {
 			event.setActionBar(event.getActionBar() +
 					game.translate("werewolf.action_bar.progress",
 							new DecimalFormat("0.0")
 									.format(game.getMapManager()
-											.getWft()
-											.getPercentageCompleted())));
+											.getPercentageGenerated())));
 
 			return;
 		}
-
 
 		event.setActionBar(event.getActionBar() +
 				game.translate("werewolf.action_bar.complete"));

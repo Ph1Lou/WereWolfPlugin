@@ -26,7 +26,8 @@ public class PatchPotions implements Listener {
         Player player = (Player) event.getEntity();
 
         if (damager.hasPotionEffect(PotionEffectType.INCREASE_DAMAGE)) {
-            event.setDamage(event.getDamage() * game.getConfig().getStrengthRate() / 100f);
+            event.setDamage(event.getDamage() *
+                    (1 + game.getConfig().getStrengthRate() / 100f));
         }
         if (player.hasPotionEffect(PotionEffectType.DAMAGE_RESISTANCE)) {
             if (game.getConfig().getResistanceRate() >= 100) {

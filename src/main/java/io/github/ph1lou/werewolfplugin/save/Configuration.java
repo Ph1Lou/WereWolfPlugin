@@ -13,7 +13,7 @@ public class Configuration implements ConfigWereWolfAPI {
     private final Map<String, Integer> roleCount = new HashMap<>();
     private final Map<String, Boolean> scenarioValues = new HashMap<>();
 
-    private int strengthRate = 130;
+    private int strengthRate = 30;
     private int resistanceRate = 20;
     private int appleRate = 10;
     private int flintRate = 10;

@@ -84,8 +84,22 @@ public class Save implements InventoryProvider {
                 .open(player)));
 
         if (files.length != 0) {
-            contents.set(1, 3, ClickableItem.of((new ItemBuilder(UniversalMaterial.BED.getType()).setDisplayName(game.translate("werewolf.menu.save.load", files[j].getName())).build()), e -> load(main)));
-            contents.set(1, 5, ClickableItem.of((new ItemBuilder(UniversalMaterial.BARRIER.getType()).setDisplayName(game.translate("werewolf.menu.save.delete", files[j].getName())).build()), e -> erase(main)));
+            contents.set(1, 3,
+                    ClickableItem.of((new ItemBuilder(
+                            UniversalMaterial.BED.getType())
+                            .setDisplayName(game.translate("werewolf.menu.save.load",
+                                    files[j].getName())).build()), e -> {
+                        load(main);
+                        player.sendMessage(game.translate("werewolf.menu.save.load_message", files[j].getName()));
+                    }));
+            contents.set(1, 5, ClickableItem.of((
+                    new ItemBuilder(UniversalMaterial.BARRIER.getType())
+                            .setDisplayName(game.translate("werewolf.menu.save.delete",
+                                    files[j].getName())).build()), e -> {
+                player.sendMessage(game.translate("werewolf.menu.save.delete_message",
+                        files[j].getName()));
+                erase(main);
+            }));
         } else {
             contents.set(1, 3, null);
             contents.set(1, 5, null);

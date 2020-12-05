@@ -23,8 +23,8 @@ public class Stuff implements StuffManager {
     private final Map<String, List<ItemStack>> stuffRoles = new HashMap<>();
 
     private final Map<UUID, Inventory> tempStuff = new HashMap<>();
-    private final List<ItemStack> death_loot = new ArrayList<>();
-    private final Inventory start_loot = Bukkit.createInventory(null, 45);
+    private final List<ItemStack> deathLoot = new ArrayList<>();
+    private final Inventory startLoot = Bukkit.createInventory(null, 45);
     private final Main main;
 
 
@@ -34,29 +34,29 @@ public class Stuff implements StuffManager {
 
     @Override
     public List<ItemStack> getDeathLoot() {
-        return this.death_loot;
+        return this.deathLoot;
     }
 
     @Override
     public Inventory getStartLoot() {
-        return this.start_loot;
+        return this.startLoot;
     }
 
     @Override
     public void clearDeathLoot() {
-        death_loot.clear();
+        deathLoot.clear();
     }
 
     @Override
     public void clearStartLoot() {
-        start_loot.clear();
+        startLoot.clear();
     }
 
 
 
     @Override
     public void addDeathLoot(ItemStack i) {
-        death_loot.add(i);
+        deathLoot.add(i);
     }
 
     @Override
@@ -81,12 +81,12 @@ public class Stuff implements StuffManager {
             return;
         }
 
-        for (ItemStack i : start_loot) {
+        for (ItemStack i : startLoot) {
             config.set("start_loot." + pos, i);
             pos++;
         }
         pos = 0;
-        for (ItemStack i : death_loot) {
+        for (ItemStack i : deathLoot) {
             config.set("death_loot." + pos, i);
             pos++;
         }
@@ -165,19 +165,19 @@ public class Stuff implements StuffManager {
 
     public void loadStuffStartAndDeath(String configName) {
 
-        start_loot.clear();
-        death_loot.clear();
-        FileConfiguration config = getOrCreateCustomConfig(main,configName);
+        startLoot.clear();
+        deathLoot.clear();
+        FileConfiguration config = getOrCreateCustomConfig(main, configName);
 
         ConfigurationSection configurationSection = config.getConfigurationSection("start_loot");
 
-        if(configurationSection!=null){
+        if (configurationSection != null) {
             Set<String> sl = configurationSection.getKeys(false);
 
             for (String s : sl) {
                 ItemStack item = config.getItemStack("start_loot." + s);
-                if(item!=null){
-                    start_loot.addItem(item);
+                if (item != null) {
+                    startLoot.addItem(item);
                 }
             }
         }
@@ -187,7 +187,7 @@ public class Stuff implements StuffManager {
         if(configurationSection!=null){
             Set<String> sl = configurationSection.getKeys(false);
             for (String s : sl) {
-                death_loot.add(config.getItemStack("death_loot." + s));
+                deathLoot.add(config.getItemStack("death_loot." + s));
             }
         }
     }

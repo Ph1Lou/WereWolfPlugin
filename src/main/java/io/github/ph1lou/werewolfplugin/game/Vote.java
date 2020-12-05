@@ -78,18 +78,19 @@ public class Vote implements Listener, VoteAPI {
         if (!event.isCancelled()) {
             event.setPlayerVotedUUID(getResult());
             if (event.getPlayerVoteUUID() == null) {
+                Bukkit.broadcastMessage(game.translate("werewolf.vote.no_result"));
                 event.setCancelled(true);
             } else showResultVote(event.getPlayerVoteUUID());
         }
-        this.currentStatus = VoteStatus.NOT_IN_PROGRESS;
         resetVote();
     }
 
 	@Override
 	public void resetVote() {
-		this.voters.clear();
-		this.votes.clear();
-	}
+        this.currentStatus = VoteStatus.NOT_IN_PROGRESS;
+        this.voters.clear();
+        this.votes.clear();
+    }
 
 	@Override
 	public void seeVote(Player player) {
@@ -127,7 +128,6 @@ public class Vote implements Listener, VoteAPI {
 			}
 		}
 		if(maxVote<=1) {
-			Bukkit.broadcastMessage(game.translate("werewolf.vote.no_result"));
 			return null;
 		}
 		return playerVote;

@@ -2,7 +2,6 @@ package io.github.ph1lou.werewolfplugin;
 
 import io.github.ph1lou.werewolfapi.*;
 import io.github.ph1lou.werewolfapi.enumlg.*;
-import io.github.ph1lou.werewolfapi.events.UpdateLanguageEvent;
 import io.github.ph1lou.werewolfplugin.commands.admin.CommandChange;
 import io.github.ph1lou.werewolfplugin.commands.admin.CommandGeneration;
 import io.github.ph1lou.werewolfplugin.commands.admin.CommandSize;
@@ -18,7 +17,6 @@ import io.github.ph1lou.werewolfplugin.listeners.scenarios.*;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.*;
 import io.github.ph1lou.werewolfplugin.roles.villagers.*;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.*;
-import io.github.ph1lou.werewolfplugin.save.FileUtils_;
 import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
@@ -921,11 +919,6 @@ public class Register implements RegisterManager {
     @Override
     public void registerAddon(AddonRegister addonRegister) {
         register(addonRegister, addonsRegister);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
-            Bukkit.getPluginManager().callEvent(new UpdateLanguageEvent());
-            FileUtils_.loadConfig(main, "saveCurrent");
-            main.getWereWolfAPI().getStuffs().load("saveCurrent");
-        });
     }
 
     @Override

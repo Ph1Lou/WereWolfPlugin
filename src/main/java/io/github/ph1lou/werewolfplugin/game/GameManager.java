@@ -58,21 +58,20 @@ public class GameManager implements WereWolfAPI {
         if (!mapFolder.exists()) {
             mapFolder.mkdirs();
         }
-
         setDay(Day.DAY);
-    }
 
-    public void init() {
-
-        Bukkit.getPluginManager().callEvent(new UpdateLanguageEvent());
-        FileUtils_.loadConfig(main, "saveCurrent");
-        stuff.load("saveCurrent");
+        Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
+            Bukkit.getPluginManager().callEvent(new UpdateLanguageEvent());
+            FileUtils_.loadConfig(main, "saveCurrent");
+            main.getWereWolfAPI().getStuffs().load("saveCurrent");
+            scenarios.init();
+        });
         setState(StateGame.LOBBY);
-        scenarios.init();
         Bukkit.getPluginManager().callEvent(new LoadEvent(this));
         LobbyTask start = new LobbyTask(this);
         start.runTaskTimer(main, 0, 20);
     }
+
 
     public void join(Player player) {
 
@@ -186,13 +185,19 @@ public class GameManager implements WereWolfAPI {
 
         GameManager newGame = (GameManager) main.getWereWolfAPI();
 
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            FastBoard fastboard = new FastBoard(player);
-            fastboard.updateTitle(newGame.translate("werewolf.score_board.title"));
-            newGame.boards.put(player.getUniqueId(), fastboard);
-            player.setGameMode(GameMode.ADVENTURE);
-            newGame.join(player);
-        }
+        Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                FastBoard fastboard = new FastBoard(player);
+                fastboard.updateTitle(newGame.translate("werewolf.score_board.title"));
+                newGame.boards.put(player.getUniqueId(), fastboard);
+                player.setGameMode(GameMode.ADVENTURE);
+                newGame.join(player);
+            }
+
+            if (score.getTimer() <= 60) {
+                newGame.getMapManager().generateMap(newGame.getConfig().getBorderMax());
+            }
+        }, 10);
 
         Bukkit.getOnlinePlayers()
                 .stream()
@@ -201,11 +206,7 @@ public class GameManager implements WereWolfAPI {
 
         if (score.getTimer() > 60) { //Si la game a commencé depuis moins d'une minute on ne delete pas la map
             mapManager.deleteMap();
-        } else {
-            newGame.getMapManager().generateMap(newGame.getConfig().getBorderMax());
         }
-
-
     }
 
     @Override

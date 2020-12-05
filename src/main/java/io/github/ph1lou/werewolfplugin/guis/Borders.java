@@ -45,12 +45,14 @@ public class Borders implements InventoryProvider {
         contents.set(0, 3, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "-", config.getBorderMax())).build()), e -> {
             if (game.getConfig().getBorderMax() >= 100) {
                 game.getConfig().setBorderMax(game.getConfig().getBorderMax() - 100);
+                game.getMapManager().changeBorder(game.getConfig().getBorderMax() / 2);
                 Borders.INVENTORY.open(player);
             }
         }));
         contents.set(0, 4, ClickableItem.empty((new ItemBuilder(Material.GLASS).setDisplayName(game.translate("werewolf.menu.border.radius_border_max", config.getBorderMax())).build())));
         contents.set(0, 5, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "+", config.getBorderMax())).build()), e -> {
             game.getConfig().setBorderMax(game.getConfig().getBorderMax() + 100);
+            game.getMapManager().changeBorder(game.getConfig().getBorderMax() / 2);
             Borders.INVENTORY.open(player);
         }));
         contents.set(1, 3, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "-", config.getBorderMin())).build()), e -> {

@@ -30,17 +30,22 @@ public class CommandStart implements Commands {
         GameManager game = (GameManager) main.getWereWolfAPI();
 
         if (game.getScore().getRole() - game.getScore().getPlayerSize() > 0) {
-            player.sendMessage(game.translate("werewolf.commands.admin.start.too_much_role"));
+            player.sendMessage(
+                    game.translate("werewolf.commands.admin.start.too_much_role"));
             return;
         }
 
-        if (game.getMapManager().getWft() == null) {
-            player.sendMessage(game.translate("werewolf.commands.admin.generation.not_generated"));
+        if (game.getMapManager().getPercentageGenerated() == 0) {
+            player.sendMessage(
+                    game.translate("werewolf.commands.admin.generation.not_generated"));
             return;
         }
 
-        if (game.getMapManager().getWft().getPercentageCompleted() < 100) {
-            player.sendMessage(game.translate("werewolf.commands.admin.generation.not_finished", new DecimalFormat("0.0").format(game.getMapManager().getWft().getPercentageCompleted())));
+        if (game.getMapManager().getPercentageGenerated() < 100) {
+            player.sendMessage(
+                    game.translate("werewolf.commands.admin.generation.not_finished",
+                            new DecimalFormat("0.0")
+                                    .format(game.getMapManager().getPercentageGenerated())));
             return;
         }
 
@@ -50,7 +55,13 @@ public class CommandStart implements Commands {
         wb.setSize(game.getConfig().getBorderMax());
         wb.setWarningDistance((int) (wb.getSize() / 7));
         game.setState(StateGame.TRANSPORTATION);
-        File file = new File(main.getDataFolder() + File.separator + "configs" + File.separator, "saveCurrent.json");
+        File file = new File(
+                main.getDataFolder() +
+                        File.separator +
+                        "configs" +
+                        File.separator,
+                "saveCurrent.json");
+
         FileUtils_.save(file, Serializer.serialize(game.getConfig()));
         game.getStuffs().save("saveCurrent");
         Bukkit.getPluginManager().callEvent(new StartEvent(game));

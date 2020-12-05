@@ -339,4 +339,9 @@ public class WorldFillTask implements Runnable {
 	public boolean AvailableMemoryTooLow() {
 		return AvailableMemory() < 500;
 	}
+
+	public BorderData getBorder() {
+		return border;
+	}
+
 }
