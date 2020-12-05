@@ -49,6 +49,7 @@ public class Register implements RegisterManager {
         adminCommandsRegister
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.commands.admin.set_game_name.command", new CommandName(main))
+                        .setDescription("werewolf.commands.admin.set_game_name.description")
                         .setHostAccess());
 
         adminCommandsRegister
@@ -56,29 +57,34 @@ public class Register implements RegisterManager {
                         "werewolf.commands.admin.start.command", new CommandStart(main))
                         .setHostAccess()
                         .addStateWW(StateGame.LOBBY)
+                        .setDescription("werewolf.commands.admin.start.description")
                         .addArgNumbers(0));
         adminCommandsRegister
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.commands.admin.chat.command", new CommandChat(main))
                         .setHostAccess()
                         .setModeratorAccess()
+                        .setDescription("werewolf.commands.admin.chat.description")
                         .addArgNumbers(0));
         adminCommandsRegister
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.commands.admin.info.command", new CommandInfo(main))
                         .setHostAccess()
+                        .setDescription("werewolf.commands.admin.info.description")
                         .setModeratorAccess());
         adminCommandsRegister
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.commands.admin.generation.command", new CommandGeneration(main))
                         .setHostAccess().setModeratorAccess()
                         .addStateWW(StateGame.LOBBY)
+                        .setDescription("werewolf.commands.admin.generation.description")
                         .addArgNumbers(0));
         adminCommandsRegister
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.commands.admin.group.command_2", new CommandSetGroup(main))
                         .setHostAccess()
                         .setModeratorAccess()
+                        .setDescription("werewolf.commands.admin.group.description2")
                         .addArgNumbers(1));
         adminCommandsRegister
                 .add(new CommandRegister("werewolf.name",
@@ -86,11 +92,13 @@ public class Register implements RegisterManager {
                         .setHostAccess()
                         .setModeratorAccess()
                         .addStateWW(StateGame.GAME)
+                        .setDescription("werewolf.commands.admin.group.description1")
                         .addArgNumbers(0));
         adminCommandsRegister
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.menu.command", new CommandConfig())
                         .setHostAccess()
+                        .setDescription("werewolf.menu.description")
                         .setModeratorAccess()
                         .addArgNumbers(0));
         adminCommandsRegister
@@ -100,6 +108,7 @@ public class Register implements RegisterManager {
                         .setModeratorAccess()
                         .addStateWW(StateGame.GAME)
                         .addStateWW(StateGame.START)
+                        .setDescription("werewolf.commands.kill.description")
                         .addArgNumbers(1));
         adminCommandsRegister.
                 add(new CommandRegister("werewolf.name",
@@ -108,12 +117,14 @@ public class Register implements RegisterManager {
                         .setModeratorAccess()
                         .addStateWW(StateGame.START)
                         .addStateWW(StateGame.GAME)
+                        .setDescription("werewolf.commands.admin.disconnected.description")
                         .addArgNumbers(0));
         adminCommandsRegister
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.commands.inventory.command", new CommandInventory(main))
                         .setHostAccess()
                         .setModeratorAccess()
+                        .setDescription("werewolf.commands.inventory.description")
                         .addArgNumbers(1));
         adminCommandsRegister
                 .add(new CommandRegister("werewolf.name",
@@ -122,6 +133,7 @@ public class Register implements RegisterManager {
                         .setModeratorAccess()
                         .addArgNumbers(1)
                         .addArgNumbers(2)
+                        .setDescription("werewolf.commands.admin.tp_group.description")
                         .addStateWW(StateGame.GAME));
         adminCommandsRegister
                 .add(new CommandRegister("werewolf.name",
@@ -131,12 +143,14 @@ public class Register implements RegisterManager {
                         .addStateWW(StateGame.GAME)
                         .addStateWW(StateGame.END)
                         .addArgNumbers(0)
+                        .setDescription("werewolf.commands.admin.role.description")
                         .addArgNumbers(1));
         adminCommandsRegister
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.commands.admin.revive.command", new CommandRevive(main))
                         .setHostAccess()
                         .addStateWW(StateGame.GAME)
+                        .setDescription("werewolf.commands.admin.revive.description")
                         .addArgNumbers(1));
         adminCommandsRegister
                 .add(new CommandRegister("werewolf.name",
@@ -145,6 +159,7 @@ public class Register implements RegisterManager {
                         .setModeratorAccess()
                         .addStateWW(StateGame.GAME)
                         .addStateWW(StateGame.START)
+                        .setDescription("werewolf.commands.admin.final_heal.description")
                         .addArgNumbers(0));
         adminCommandsRegister
                 .add(new CommandRegister("werewolf.name",
@@ -169,8 +184,20 @@ public class Register implements RegisterManager {
                         .unsetAutoCompletion()
                         .addArgNumbers(1)
                         .addStateWW(StateGame.LOBBY)
-                        .addStateWW(StateGame.GAME)
+                        .addStateWW(StateGame.START)
                         .addStateWW(StateGame.TRANSPORTATION));
+
+        adminCommandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.late.command", new CommandLate(main))
+                        .setHostAccess()
+                        .setModeratorAccess()
+                        .addArgNumbers(1)
+                        .addStateWW(StateGame.LOBBY)
+                        .addStateWW(StateGame.START)
+                        .setDescription("werewolf.commands.late.description")
+                        .addStateWW(StateGame.TRANSPORTATION));
+
         adminCommandsRegister
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.commands.admin.help.command", new CommandAdminHelp(main))
@@ -184,6 +211,7 @@ public class Register implements RegisterManager {
                         .addStateWW(StateGame.GAME)
                         .addStateWW(StateGame.START)
                         .addStateWW(StateGame.TRANSPORTATION)
+                        .setDescription("werewolf.commands.admin.stop.description")
                         .addStateWW(StateGame.END));
         adminCommandsRegister
                 .add(new CommandRegister("werewolf.name",
@@ -191,22 +219,26 @@ public class Register implements RegisterManager {
                         .setHostAccess()
                         .setModeratorAccess()
                         .addStateWW(StateGame.LOBBY)
+                        .setDescription("werewolf.commands.admin.whitelist.description")
                         .addArgNumbers(1));
         adminCommandsRegister
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.commands.admin.moderator.command", new CommandModerator(main))
                         .setHostAccess()
+                        .setDescription("werewolf.commands.admin.moderator.description")
                         .addArgNumbers(1));
         adminCommandsRegister
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.commands.admin.host.command", new CommandHost(main))
                         .setHostAccess()
+                        .setDescription("werewolf.commands.admin.host.description")
                         .addArgNumbers(1));
         adminCommandsRegister
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.commands.admin.gamemode.command", new CommandGamemode(main))
                         .setHostAccess()
                         .setModeratorAccess()
+                        .setDescription("werewolf.commands.admin.gamemode.description")
                         .addArgNumbers(1));
         adminCommandsRegister
                 .add(new CommandRegister("werewolf.name",
@@ -214,6 +246,7 @@ public class Register implements RegisterManager {
                         .setHostAccess()
                         .setModeratorAccess()
                         .addArgNumbers(1)
+                        .setDescription("werewolf.commands.admin.teleportation.description")
                         .addArgNumbers(2));
         adminCommandsRegister
                 .add(new CommandRegister("werewolf.name",
@@ -221,6 +254,7 @@ public class Register implements RegisterManager {
                         .setHostAccess()
                         .setModeratorAccess()
                         .addStateWW(StateGame.LOBBY)
+                        .setDescription("werewolf.commands.admin.size.description")
                         .addArgNumbers(0));
         adminCommandsRegister
                 .add(new CommandRegister("werewolf.name",
@@ -228,6 +262,7 @@ public class Register implements RegisterManager {
                         .setHostAccess()
                         .addStateWW(StateGame.LOBBY)
                         .unsetAutoCompletion()
+                        .setDescription("werewolf.commands.admin.change.description")
                         .addArgNumbers(0));
         adminCommandsRegister
                 .add(new CommandRegister("werewolf.name",
@@ -235,6 +270,7 @@ public class Register implements RegisterManager {
                         .setHostAccess()
                         .setModeratorAccess()
                         .addStateWW(StateGame.LOBBY)
+                        .setDescription("werewolf.commands.admin.preview.description")
                         .addArgNumbers(0));
     }
 
@@ -429,31 +465,38 @@ public class Register implements RegisterManager {
                         .setRequiredPlayerInGame()
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
+                        .setDescription("werewolf.menu.roles.description1")
                         .addArgNumbers(0));
         commandsRegister
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.menu.rank.command", new CommandRank(main))
                         .addStateWW(StateGame.LOBBY)
+                        .setDescription("werewolf.menu.rank.description")
                         .addArgNumbers(0));
         commandsRegister
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.menu.global.command", new CommandRules(main))
+                        .setDescription("werewolf.menu.global.description")
                         .addArgNumbers(0));
         commandsRegister
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.menu.roles.command_2", new CommandCompo(main))
+                        .setDescription("werewolf.menu.roles.description2")
                         .addArgNumbers(0));
         commandsRegister
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.menu.scenarios.command", new CommandScenarios(main))
+                        .setDescription("werewolf.menu.scenarios.description")
                         .addArgNumbers(0));
         commandsRegister
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.menu.enchantments.command", new CommandEnchantment(main))
+                        .setDescription("werewolf.menu.enchantments.description")
                         .addArgNumbers(0));
         commandsRegister
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.menu.timers.command", new CommandTimer(main))
+                        .setDescription("werewolf.menu.timers.description")
                         .addArgNumbers(0));
         commandsRegister
                 .add(new CommandRegister("werewolf.name",
@@ -471,6 +514,7 @@ public class Register implements RegisterManager {
                         .addStateWW(StateGame.GAME)
                         .addStateWW(StateGame.START)
                         .setRequiredPlayerInGame()
+                        .setDescription("werewolf.commands.admin.anonymous_chat.description")
                         .addStateAccess(StatePlayer.ALIVE));
     }
 

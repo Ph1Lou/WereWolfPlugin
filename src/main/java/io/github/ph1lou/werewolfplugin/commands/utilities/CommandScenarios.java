@@ -23,8 +23,7 @@ public class CommandScenarios implements Commands {
         for (ScenarioRegister scenarioRegister : main.getRegisterManager().getScenariosRegister()) {
             if (game.getConfig().getScenarioValues().get(scenarioRegister.getKey())) {
                 player.sendMessage(game.translate("werewolf.utils.enable", game.translate(scenarioRegister.getKey())));
-            } else
-                player.sendMessage(game.translate("werewolf.utils.disable", game.translate(scenarioRegister.getKey())));
+            }
         }
     }
 }

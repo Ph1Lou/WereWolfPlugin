@@ -174,7 +174,6 @@ public class TransportationTask implements Listener {
             player.setGameMode(GameMode.ADVENTURE);
             game.clearPlayer(player);
             Inventory inventory = player.getInventory();
-            inventory.clear();
 
             for (int j = 0; j < 40; j++) {
                 inventory.setItem(j, game.getStuffs().getStartLoot().getItem(j));

@@ -16,7 +16,9 @@ import io.github.ph1lou.werewolfplugin.tasks.LobbyTask;
 import io.github.ph1lou.werewolfplugin.utils.UpdateChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -100,7 +102,7 @@ public class GameManager implements WereWolfAPI {
         clearPlayer(player);
         player.setGameMode(GameMode.ADVENTURE);
         PlayerWW plg = new PlayerLG(main, this, player);
-        getPlayersWW().put(uuid, plg);
+        playerLG.put(uuid, plg);
         player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 0, false, false));
         player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
 
@@ -113,6 +115,26 @@ public class GameManager implements WereWolfAPI {
             }
         });
 
+    }
+
+    public void addLatePlayer(Player player) {
+
+        clearPlayer(player);
+
+        Inventory inventory = player.getInventory();
+
+        player.setGameMode(GameMode.SURVIVAL);
+        PlayerWW plg = new PlayerLG(main, this, player);
+        playerLG.put(uuid, plg);
+        Location spawn = mapManager.getWorld().getSpawnLocation();
+        plg.setSpawn(spawn);
+        score.addPlayerSize();
+
+        for (int j = 0; j < 40; j++) {
+            inventory.setItem(j, stuff.getStartLoot().getItem(j));
+        }
+
+        mapManager.transportation(player.getUniqueId(), 0, "");
     }
 
     public void clearPlayer(Player player) {
