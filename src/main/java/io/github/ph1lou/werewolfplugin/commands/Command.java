@@ -68,14 +68,15 @@ public class Command implements TabExecutor {
 
         if (commandRegister.isRequiredPlayerInGame()) {
 
-            if (!game.getPlayersWW().containsKey(uuid)) {
+            PlayerWW playerWW = game.getPlayerWW(uuid);
+
+            if (playerWW == null) {
                 player.sendMessage(game.translate("werewolf.check.not_in_game"));
                 return;
             }
 
-            PlayerWW plg = game.getPlayersWW().get(uuid);
 
-            if (!commandRegister.isStateAccess(plg.getState())) {
+            if (!commandRegister.isStateAccess(playerWW.getState())) {
 
                 player.sendMessage(game.translate("werewolf.check.death"));
                 return;
@@ -84,7 +85,7 @@ public class Command implements TabExecutor {
 
             if (commandRegister.isRoleOnly()) {
 
-                if (!commandRegister.isRoleKey(plg.getRole().getKey())) {
+                if (!commandRegister.isRoleKey(playerWW.getRole().getKey())) {
                     player.sendMessage(game.translate("werewolf.check.role", game.translate(RolesBase.COMEDIAN.getKey())));
                     return;
                 }

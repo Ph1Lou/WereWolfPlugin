@@ -3,7 +3,6 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
@@ -19,24 +18,23 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.UUID;
-
 public class SerialKiller extends RolesNeutral implements Power {
 
-    public SerialKiller(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
-        super(main,game,uuid, key);
+    public SerialKiller(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+        super(main, playerWW, key);
     }
 
     private boolean power = true;
     private int extraHeart = 0;
+
     @Override
-    public void setPower(Boolean power) {
-        this.power=power;
+    public void setPower(boolean power) {
+        this.power = power;
     }
 
     @Override
-    public Boolean hasPower() {
-        return(this.power);
+    public boolean hasPower() {
+        return (this.power);
     }
 
     @Override
@@ -45,8 +43,10 @@ public class SerialKiller extends RolesNeutral implements Power {
     }
 
 
-    @Override
-    public void recoverPowerAfterStolen() {
+    @EventHandler
+    public void onStealEvent(StealEvent event) {
+
+        if (!event.getThiefWW().equals(getPlayerWW())) return;
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -59,14 +59,19 @@ public class SerialKiller extends RolesNeutral implements Power {
 
     }
 
-    @EventHandler
-    public void onEnchantment(EnchantmentEvent event){
+    @Override
+    public void recoverPower() {
 
-        if(!event.getPlayerUUID().equals(getPlayerUUID())) return;
+    }
+
+    @EventHandler
+    public void onEnchantment(EnchantmentEvent event) {
+
+        if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         ItemStack item = event.getItem();
 
-        if(event.getEnchants().containsKey(Enchantment.PROTECTION_ENVIRONMENTAL)) {
+        if (event.getEnchants().containsKey(Enchantment.PROTECTION_ENVIRONMENTAL)) {
 
             if (item.getType().equals(Material.DIAMOND_BOOTS) ||
                     item.getType().equals(Material.DIAMOND_LEGGINGS) ||
@@ -117,7 +122,7 @@ public class SerialKiller extends RolesNeutral implements Power {
 
         if (!hasPower()) return;
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) return;
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -154,18 +159,18 @@ public class SerialKiller extends RolesNeutral implements Power {
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 
-        UUID uuid = event.getUuid();
+
         Player killer = Bukkit.getPlayer(getPlayerUUID());
-        PlayerWW target = game.getPlayersWW().get(uuid);
+        PlayerWW playerWW = event.getPlayerWW();
 
-        if (target.getLastKiller() == null) return;
+        if (playerWW.getLastKiller() == null) return;
 
-        if (!target.getLastKiller().equals(getPlayerUUID())) return;
+        if (!playerWW.getLastKiller().equals(getPlayerWW())) return;
 
         if (killer != null) {
             Bukkit.getPluginManager().callEvent(new SerialKillerEvent(
-                    getPlayerUUID(),
-                    uuid));
+                    getPlayerWW(),
+                    playerWW));
             VersionUtils.getVersionUtils().setPlayerMaxHealth(
                     killer,
                     VersionUtils.getVersionUtils().getPlayerMaxHealth(killer) + 2);

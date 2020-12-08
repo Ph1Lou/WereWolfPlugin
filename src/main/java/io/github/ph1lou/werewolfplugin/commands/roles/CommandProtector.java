@@ -30,8 +30,11 @@ public class CommandProtector implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        PlayerWW plg = game.getPlayersWW().get(uuid);
-        Roles protector = plg.getRole();
+        PlayerWW playerWW = game.getPlayerWW(uuid);
+
+        if (playerWW == null) return;
+
+        Roles protector = playerWW.getRole();
 
         if (args.length != 1) {
             player.sendMessage(game.translate("werewolf.check.player_input"));
@@ -50,13 +53,14 @@ public class CommandProtector implements Commands {
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
+        PlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
-        if (!game.getPlayersWW().containsKey(argUUID) || !game.getPlayersWW().get(argUUID).isState(StatePlayer.ALIVE)) {
+        if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
             player.sendMessage(game.translate("werewolf.check.player_not_found"));
             return;
         }
 
-        if (((AffectedPlayers) protector).getAffectedPlayers().contains(argUUID)) {
+        if (((AffectedPlayers) protector).getAffectedPlayers().contains(playerWW1)) {
             player.sendMessage(game.translate("werewolf.check.already_get_power"));
             return;
         }
@@ -64,7 +68,7 @@ public class CommandProtector implements Commands {
 
         ((Power) protector).setPower(false);
 
-        ProtectionEvent protectionEvent = new ProtectionEvent(uuid, argUUID);
+        ProtectionEvent protectionEvent = new ProtectionEvent(playerWW, playerWW1);
 
         Bukkit.getPluginManager().callEvent(protectionEvent);
 
@@ -74,7 +78,7 @@ public class CommandProtector implements Commands {
         }
 
         ((AffectedPlayers) protector).clearAffectedPlayer();
-        ((AffectedPlayers) protector).addAffectedPlayer(argUUID);
+        ((AffectedPlayers) protector).addAffectedPlayer(playerWW1);
 
         Player playerProtected = Bukkit.getPlayer(args[0]);
         if (playerProtected == null) return;

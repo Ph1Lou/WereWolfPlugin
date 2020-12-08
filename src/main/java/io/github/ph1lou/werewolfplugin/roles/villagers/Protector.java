@@ -2,7 +2,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.enumlg.TimersBase;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
@@ -24,24 +24,24 @@ import java.util.UUID;
 
 public class Protector extends RolesWithLimitedSelectionDuration implements AffectedPlayers {
 
-    private final List<UUID> affectedPlayer = new ArrayList<>();
-    private UUID last;
+    private final List<PlayerWW> affectedPlayer = new ArrayList<>();
+    private PlayerWW last;
 
 
-    public Protector(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
-        super(main, game, uuid, key);
+    public Protector(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+        super(main, playerWW, key);
         setPower(false);
     }
 
     @Override
-    public void addAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.add(uuid);
-        this.last = uuid;
+    public void addAffectedPlayer(PlayerWW playerWW) {
+        this.affectedPlayer.add(playerWW);
+        this.last = playerWW;
     }
 
     @Override
-    public void removeAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.remove(uuid);
+    public void removeAffectedPlayer(PlayerWW playerWW) {
+        this.affectedPlayer.remove(playerWW);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class Protector extends RolesWithLimitedSelectionDuration implements Affe
     }
 
     @Override
-    public List<UUID> getAffectedPlayers() {
+    public List<PlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
@@ -60,7 +60,7 @@ public class Protector extends RolesWithLimitedSelectionDuration implements Affe
 
         if (this.last != null) {
 
-            Player player = Bukkit.getPlayer(this.last);
+            Player player = Bukkit.getPlayer(this.last.getUUID());
 
             if (player != null) {
                 player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
@@ -72,7 +72,7 @@ public class Protector extends RolesWithLimitedSelectionDuration implements Affe
         }
 
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -95,9 +95,9 @@ public class Protector extends RolesWithLimitedSelectionDuration implements Affe
 
         if (this.last == null) return;
 
-        if (!event.getKiller().equals(this.last)) return;
+        if (!event.getThiefWW().equals(this.last)) return;
 
-        Player player = Bukkit.getPlayer(this.last);
+        Player player = Bukkit.getPlayer(this.last.getUUID());
 
         if (player == null) return;
 
@@ -116,14 +116,23 @@ public class Protector extends RolesWithLimitedSelectionDuration implements Affe
     }
 
 
+    @Override
+    public void recoverPower() {
+
+    }
+
+
     @EventHandler
     private void onPlayerDamage(EntityDamageEvent event) {
 
         if (!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
         UUID uuid = player.getUniqueId();
+        PlayerWW playerWW = game.getPlayerWW(uuid);
 
-        if (!uuid.equals(last)) return;
+        if (playerWW == null) return;
+
+        if (!playerWW.equals(last)) return;
 
         if (!event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) return;
 

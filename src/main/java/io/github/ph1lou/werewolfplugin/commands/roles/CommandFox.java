@@ -27,8 +27,11 @@ public class CommandFox implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        PlayerWW plg = game.getPlayersWW().get(uuid);
-        Roles fox = plg.getRole();
+        PlayerWW playerWW = game.getPlayerWW(uuid);
+
+        if (playerWW == null) return;
+
+        Roles fox = playerWW.getRole();
 
         if (!((Power) fox).hasPower()) {
             player.sendMessage(game.translate("werewolf.check.power"));
@@ -42,13 +45,14 @@ public class CommandFox implements Commands {
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
+        PlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
         if (argUUID.equals(uuid)) {
             player.sendMessage(game.translate("werewolf.check.not_yourself"));
             return;
         }
 
-        if (!game.getPlayersWW().containsKey(argUUID) || !game.getPlayersWW().get(argUUID).isState(StatePlayer.ALIVE)) {
+        if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
             player.sendMessage(game.translate("werewolf.check.player_not_found"));
             return;
         }
@@ -74,7 +78,7 @@ public class CommandFox implements Commands {
         ((Power) fox).setPower(false);
         ((LimitedUse) fox).setUse(((LimitedUse) fox).getUse() + 1);
 
-        BeginSniffEvent beginSniffEvent = new BeginSniffEvent(uuid, argUUID);
+        BeginSniffEvent beginSniffEvent = new BeginSniffEvent(playerWW, playerWW1);
         Bukkit.getPluginManager().callEvent(beginSniffEvent);
 
         if (beginSniffEvent.isCancelled()) {
@@ -83,8 +87,8 @@ public class CommandFox implements Commands {
         }
 
         ((AffectedPlayers) fox).clearAffectedPlayer();
-        ((AffectedPlayers) fox).addAffectedPlayer(argUUID);
-        ((Progress)fox).setProgress(0f);
+        ((AffectedPlayers) fox).addAffectedPlayer(playerWW1);
+        ((Progress) fox).setProgress(0f);
 
         player.sendMessage(game.translate("werewolf.role.fox.smell_beginning", playerArg.getName()));
     }

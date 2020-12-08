@@ -28,8 +28,11 @@ public class CommandWildChild implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        PlayerWW plg = game.getPlayersWW().get(uuid);
-        Roles wildChild = plg.getRole();
+        PlayerWW playerWW = game.getPlayerWW(uuid);
+
+        if (playerWW == null) return;
+
+        Roles wildChild = playerWW.getRole();
 
         if (args.length != 1) {
             player.sendMessage(game.translate("werewolf.check.player_input"));
@@ -48,8 +51,9 @@ public class CommandWildChild implements Commands {
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
+        PlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
-        if (!game.getPlayersWW().containsKey(argUUID) || !game.getPlayersWW().get(argUUID).isState(StatePlayer.ALIVE)) {
+        if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
             player.sendMessage(game.translate("werewolf.check.player_not_found"));
             return;
         }
@@ -59,9 +63,9 @@ public class CommandWildChild implements Commands {
             return;
         }
 
-        ((AffectedPlayers)wildChild).addAffectedPlayer(argUUID);
+        ((AffectedPlayers) wildChild).addAffectedPlayer(playerWW1);
         ((Power) wildChild).setPower(false);
-        Bukkit.getPluginManager().callEvent(new ModelEvent(uuid, argUUID));
+        Bukkit.getPluginManager().callEvent(new ModelEvent(playerWW, playerWW1));
         player.sendMessage(game.translate("werewolf.role.wild_child.reveal_model", playerArg.getName()));
     }
 }

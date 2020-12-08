@@ -29,15 +29,18 @@ public class CommandWitch implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        PlayerWW plg = game.getPlayersWW().get(uuid);
-        Roles witch = plg.getRole();
+        PlayerWW playerWW = game.getPlayerWW(uuid);
+
+        if (playerWW == null) return;
+
+        Roles witch = playerWW.getRole();
 
         if (args.length != 1) {
             player.sendMessage(game.translate("werewolf.check.player_input"));
             return;
         }
 
-        if(!((Power)witch).hasPower()) {
+        if (!((Power) witch).hasPower()) {
             player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
@@ -47,8 +50,9 @@ public class CommandWitch implements Commands {
             return;
         }
         UUID argUUID = UUID.fromString(args[0]);
+        PlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
-        if (!game.getPlayersWW().containsKey(argUUID)) {
+        if (playerWW1 == null) {
             player.sendMessage(game.translate("werewolf.check.player_not_found"));
             return;
         }
@@ -58,19 +62,17 @@ public class CommandWitch implements Commands {
             return;
         }
 
-        PlayerWW plg1 = game.getPlayersWW().get(argUUID);
-
-        if (!plg1.isState(StatePlayer.JUDGEMENT)) {
+        if (!playerWW1.isState(StatePlayer.JUDGEMENT)) {
             player.sendMessage(game.translate("werewolf.check.not_in_judgement"));
             return;
         }
 
-        if (game.getScore().getTimer() - plg1.getDeathTime() < 7) {
+        if (game.getScore().getTimer() - playerWW1.getDeathTime() < 7) {
             return;
         }
 
         ((Power) witch).setPower(false);
-        WitchResurrectionEvent witchResurrectionEvent = new WitchResurrectionEvent(uuid, argUUID);
+        WitchResurrectionEvent witchResurrectionEvent = new WitchResurrectionEvent(playerWW, playerWW1);
         Bukkit.getPluginManager().callEvent(witchResurrectionEvent);
 
         if (witchResurrectionEvent.isCancelled()) {
@@ -78,8 +80,9 @@ public class CommandWitch implements Commands {
             return;
         }
 
-        ((AffectedPlayers) witch).addAffectedPlayer(argUUID);
-        game.resurrection(argUUID);
-        player.sendMessage(game.translate("werewolf.role.witch.resuscitation_perform", plg1.getName()));
+        ((AffectedPlayers) witch).addAffectedPlayer(playerWW1);
+        game.resurrection(playerWW1);
+        player.sendMessage(game.translate("werewolf.role.witch.resuscitation_perform",
+                playerWW1.getName()));
     }
 }

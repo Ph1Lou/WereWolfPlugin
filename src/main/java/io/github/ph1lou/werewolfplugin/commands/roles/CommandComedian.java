@@ -29,8 +29,11 @@ public class CommandComedian implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        PlayerWW plg = game.getPlayersWW().get(uuid);
-        Roles comedian = plg.getRole();
+        PlayerWW playerWW = game.getPlayerWW(uuid);
+
+        if (playerWW == null) return;
+
+        Roles comedian = playerWW.getRole();
 
         if (args.length != 1) {
             player.sendMessage(game.translate("werewolf.check.parameters",
@@ -72,7 +75,7 @@ public class CommandComedian implements Commands {
             ((Power) comedian).setPower(false);
             ((PotionEffects) comedian).addPotionEffect(potionsType[i]);
 
-            UseMaskEvent useMaskEvent = new UseMaskEvent(uuid, i);
+            UseMaskEvent useMaskEvent = new UseMaskEvent(playerWW, i);
             Bukkit.getPluginManager().callEvent(useMaskEvent);
 
             if (useMaskEvent.isCancelled()) {

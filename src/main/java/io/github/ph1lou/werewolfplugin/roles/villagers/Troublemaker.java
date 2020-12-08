@@ -3,7 +3,6 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.TroubleMakerDeathEvent;
@@ -16,27 +15,26 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class Troublemaker extends RolesVillage implements AffectedPlayers, Power {
 
-    private final List<UUID> affectedPlayer = new ArrayList<>();
+    private final List<PlayerWW> affectedPlayer = new ArrayList<>();
 
-    public Troublemaker(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
-        super(main,game,uuid, key);
+    public Troublemaker(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+        super(main, playerWW, key);
     }
 
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 
-        if(!event.getUuid().equals(getPlayerUUID())) return;
+        if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
-        Bukkit.getPluginManager().callEvent(new TroubleMakerDeathEvent(getPlayerUUID()));
+        Bukkit.getPluginManager().callEvent(new TroubleMakerDeathEvent(getPlayerWW()));
         int i = 0;
-        for (UUID uuid : game.getPlayersWW().keySet()) {
-            PlayerWW plg = game.getPlayersWW().get(uuid);
-            if (plg.isState(StatePlayer.ALIVE)) {
-                game.getMapManager().transportation(uuid,
+        for (PlayerWW playerWW1 : game.getPlayerWW()) {
+
+            if (playerWW1.isState(StatePlayer.ALIVE)) {
+                game.getMapManager().transportation(playerWW1,
                         i * 2 * Math.PI / game.getScore().getPlayerSize(),
                         game.translate("werewolf.role.troublemaker.troublemaker_death"));
                 i++;
@@ -45,24 +43,25 @@ public class Troublemaker extends RolesVillage implements AffectedPlayers, Power
     }
 
     private boolean power=true;
+
     @Override
-    public void setPower(Boolean power) {
-        this.power=power;
+    public void setPower(boolean power) {
+        this.power = power;
     }
 
     @Override
-    public Boolean hasPower() {
-        return(this.power);
+    public boolean hasPower() {
+        return (this.power);
     }
 
     @Override
-    public void addAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.add(uuid);
+    public void addAffectedPlayer(PlayerWW playerWW) {
+        this.affectedPlayer.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.remove(uuid);
+    public void removeAffectedPlayer(PlayerWW playerWW) {
+        this.affectedPlayer.remove(playerWW);
     }
 
     @Override
@@ -71,7 +70,7 @@ public class Troublemaker extends RolesVillage implements AffectedPlayers, Power
     }
 
     @Override
-    public List<UUID> getAffectedPlayers() {
+    public List<PlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
@@ -79,6 +78,12 @@ public class Troublemaker extends RolesVillage implements AffectedPlayers, Power
     @Override
     public @NotNull String getDescription() {
         return game.translate("werewolf.role.troublemaker.description");
+    }
+
+
+    @Override
+    public void recoverPower() {
+
     }
 
 

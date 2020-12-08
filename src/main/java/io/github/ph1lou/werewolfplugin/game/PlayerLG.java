@@ -2,15 +2,16 @@ package io.github.ph1lou.werewolfplugin.game;
 
 
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.RolesBase;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
+import io.github.ph1lou.werewolfapi.rolesattributs.LoverAPI;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Villager;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -23,30 +24,26 @@ public class PlayerLG implements PlayerWW {
 
     private StatePlayer state = StatePlayer.ALIVE;
     private Roles role;
-    private final List<UUID> lovers = new ArrayList<>();
-    private Boolean kit = false;
-    private Boolean announceCursedLoversAFK = false;
-    private Boolean announceLoversAFK = false;
-    private Boolean thief = false;
-    private Boolean revealAmnesiacLover = false;
+    private final List<LoverAPI> lovers = new ArrayList<>();
+    private final UUID uuid;
+    private final List<PlayerWW> killer = new ArrayList<>();
     private final List<ItemStack> itemsDeath = new ArrayList<>();
-    private UUID cursedLovers = null;
-    private UUID amnesiacLoverUUID = null;
     private transient Location spawn;
     private int deathTime = 0;
     private int disconnectedTime = 0;
     private int lostHeart = 0;
     private int kill = 0;
-    private final List<UUID> killer = new ArrayList<>();
+    private boolean kit = false;
+    private boolean thief = false;
     private String name;
 
 
-    public PlayerLG(Main main, WereWolfAPI game, Player player) {
+    public PlayerLG(Main main, Player player) {
         this.spawn = player.getWorld().getSpawnLocation();
-        this.role = new Villager(main, game,
-                player.getUniqueId(),
-                RolesBase.VILLAGER.getKey());
+        this.uuid = player.getUniqueId();
         this.name = player.getName();
+        this.role = new Villager(main, this,
+                RolesBase.VILLAGER.getKey());
     }
 
 
@@ -96,15 +93,15 @@ public class PlayerLG implements PlayerWW {
 	}
 
 
-	@Override
-	public void setKit(Boolean kit) {
-		this.kit=kit;
-	}
+    @Override
+    public void setKit(boolean kit) {
+        this.kit = kit;
+    }
 
-	@Override
-	public Boolean hasKit() {		
-		return(this.kit);
-	}
+    @Override
+    public boolean hasKit() {
+        return (this.kit);
+    }
 
 
 	@Override
@@ -118,7 +115,7 @@ public class PlayerLG implements PlayerWW {
 	}
 
     @Override
-    public Boolean isKey(String role) {
+    public boolean isKey(String role) {
         return (role.equals(this.role.getKey()));
     }
 
@@ -132,30 +129,20 @@ public class PlayerLG implements PlayerWW {
 		return(this.spawn);
 	}
 
-	@Override
-	public void addLover(UUID uuid) {
-		this.lovers.add(uuid);
-	}
+    @Override
+    public List<LoverAPI> getLovers() {
+        return (this.lovers);
+    }
 
-	@Override
-	public void clearLovers() {
-		this.lovers.clear();
-	}
+    @Override
+    public void addKiller(PlayerWW killerUUID) {
+        this.killer.add(killerUUID);
+    }
 
-	@Override
-	public List<UUID> getLovers() {
-		return (this.lovers);
-	}
-
-	@Override
-	public void addKiller(UUID killerUUID) {
-		this.killer.add(killerUUID);
-	}
-
-	@Override
-	public List<UUID> getKillers() {
-		return (this.killer);
-	}
+    @Override
+    public List<? extends PlayerWW> getKillers() {
+        return (this.killer);
+    }
 
 	@Override
 	public void setDeathTime(Integer deathTime) {
@@ -169,93 +156,38 @@ public class PlayerLG implements PlayerWW {
 
 
 	@Override
-	public void clearLostHeart() {
-		this.lostHeart = 0;
-	}
-
-	@Override
-	public void removeLover(UUID uuid) {
-		this.lovers.remove(uuid);
-	}
-
-	@Override
-	public UUID getCursedLovers() {
-		return cursedLovers;
-	}
-
-	@Override
-	public void setCursedLover(UUID uuid) {
-		this.cursedLovers = uuid;
-	}
-
-	@Override
-	public Boolean getAnnounceCursedLoversAFK() {
-		return announceCursedLoversAFK;
-	}
-
-	@Override
-	public void setAnnounceCursedLoversAFK(Boolean announceCursedLoversAFK) {
-		this.announceCursedLoversAFK = announceCursedLoversAFK;
-	}
-
-    @Override
-    public Boolean getAnnounceLoversAFK() {
-        return announceLoversAFK;
-    }
-
-    @Override
-    public void setAnnounceLoversAFK(Boolean announceLoversAFK) {
-        this.announceLoversAFK = announceLoversAFK;
+    public void clearLostHeart() {
+        this.lostHeart = 0;
     }
 
     @Nullable
     @Override
-    public UUID getLastKiller() {
+    public PlayerWW getLastKiller() {
         return this.killer.isEmpty() ? null : this.killer.get(this.killer.size() - 1);
     }
 
     @Override
-    public void setThief(Boolean thief) {
+    public boolean isThief() {
+        return (this.thief);
+    }
+
+    @Override
+    public void setThief(boolean thief) {
         this.thief = thief;
     }
 
-	@Override
-	public Boolean isThief() {
-		return(this.thief);
-	}
-
-	@Override
-	public UUID getAmnesiacLoverUUID() {
-		return amnesiacLoverUUID;
-	}
-
-	@Override
-	public void setAmnesiacLoverUUID(UUID uuid) {
-		this.amnesiacLoverUUID = uuid;
-	}
-
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public void setName(String name) {
-		this.name = name;
-	}
-
     @Override
-    public Boolean getRevealAmnesiacLover() {
-        return revealAmnesiacLover;
+    public String getName() {
+        return name;
     }
 
     @Override
-    public void setRevealAmnesiacLover(Boolean revealAmnesiacLover) {
-        this.revealAmnesiacLover = revealAmnesiacLover;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
-    public StatePlayer getState() {
+    public @NotNull StatePlayer getState() {
         return state;
     }
 
@@ -267,6 +199,11 @@ public class PlayerLG implements PlayerWW {
     @Override
     public void setDisconnectedTime(int disconnectedTime) {
         this.disconnectedTime = disconnectedTime;
+    }
+
+    @Override
+    public @NotNull UUID getUUID() {
+        return uuid;
     }
 
 

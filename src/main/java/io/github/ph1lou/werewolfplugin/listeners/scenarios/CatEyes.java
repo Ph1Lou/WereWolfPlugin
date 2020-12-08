@@ -41,7 +41,7 @@ public class CatEyes extends ListenerManager {
     @EventHandler
     private void onResurrection(ResurrectionEvent event) {
 
-        Player player = Bukkit.getPlayer(event.getPlayerUUID());
+        Player player = Bukkit.getPlayer(event.getPlayerWW().getUUID());
 
         if (player == null) return;
 

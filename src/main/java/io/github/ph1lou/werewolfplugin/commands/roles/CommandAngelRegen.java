@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.commands.roles;
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.events.RegenerationEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.LimitedUse;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
@@ -28,8 +29,11 @@ public class CommandAngelRegen implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        PlayerWW plg = game.getPlayersWW().get(uuid);
-        Roles guardianAngel = plg.getRole();
+        PlayerWW playerWW = game.getPlayerWW(uuid);
+
+        if (playerWW == null) return;
+
+        Roles guardianAngel = playerWW.getRole();
 
 
         if (((LimitedUse) guardianAngel).getUse() >= 3) {
@@ -45,7 +49,7 @@ public class CommandAngelRegen implements Commands {
         }
 
         Player playerProtected = Bukkit.getPlayer(((AffectedPlayers) guardianAngel)
-                .getAffectedPlayers().get(0));
+                .getAffectedPlayers().get(0).getUUID());
 
         if (playerProtected == null) {
             player.sendMessage(
@@ -53,7 +57,17 @@ public class CommandAngelRegen implements Commands {
                             "werewolf.role.guardian_angel.disconnected_protege"));
             return;
         }
+
+
         ((LimitedUse) guardianAngel).setUse(((LimitedUse) guardianAngel).getUse() + 1);
+
+        RegenerationEvent event = new RegenerationEvent(playerWW, ((AffectedPlayers) guardianAngel)
+                .getAffectedPlayers().get(0));
+
+        if (event.isCancelled()) {
+            player.sendMessage(game.translate("werewolf.check.cancel"));
+            return;
+        }
 
         playerProtected.removePotionEffect(PotionEffectType.REGENERATION);
         playerProtected.addPotionEffect(new PotionEffect(

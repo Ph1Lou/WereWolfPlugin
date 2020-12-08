@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.tasks;
 
+import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.StateGame;
 import io.github.ph1lou.werewolfapi.enumlg.TimersBase;
@@ -15,7 +16,10 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -135,7 +139,7 @@ public class TransportationTask implements Listener {
 
         for (Player player : Bukkit.getOnlinePlayers()) {
 
-            if (game.getPlayersWW().containsKey(player.getUniqueId())) {
+            if (game.getPlayerWW(player.getUniqueId()) != null) {
                 player.setGameMode(GameMode.SURVIVAL);
                 player.sendMessage(game.translate("werewolf.announcement.start.message", game.getScore().conversion(game.getConfig().getTimerValues().get(TimersBase.INVULNERABILITY.getKey()))));
             } else {
@@ -165,9 +169,9 @@ public class TransportationTask implements Listener {
 
         actionBar = game.translate("werewolf.action_bar.tp", i + 1, game.getScore().getPlayerSize());
 
-        UUID uuid = (UUID) game.getPlayersWW().keySet().toArray()[i];
-        game.getPlayersWW().get(uuid).setSpawn(spawns.get(i));
-        Player player = Bukkit.getPlayer(uuid);
+        PlayerWW playerWW = (PlayerWW) game.getPlayerWW().toArray()[i];
+        playerWW.setSpawn(spawns.get(i));
+        Player player = Bukkit.getPlayer(playerWW.getUUID());
 
         if (player != null) {
 
@@ -199,7 +203,8 @@ public class TransportationTask implements Listener {
             Sounds.DIG_GRASS.play(p);
         }
 
-        actionBar = game.translate("werewolf.action_bar.create_tp_point", i + 1, game.getPlayersWW().size());
+        actionBar = game.translate("werewolf.action_bar.create_tp_point", i + 1,
+                game.getScore().getPlayerSize());
 
         double a = i * 2 * Math.PI / game.getScore().getPlayerSize();
         int x = (int) (Math.round(wb.getSize() / 3 * Math.cos(a) + world.getSpawnLocation().getX()));

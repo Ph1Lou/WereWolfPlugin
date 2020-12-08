@@ -1,0 +1,249 @@
+package io.github.ph1lou.werewolfplugin.roles.lovers;
+
+import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enumlg.RolesBase;
+import io.github.ph1lou.werewolfapi.enumlg.Sounds;
+import io.github.ph1lou.werewolfapi.enumlg.StateGame;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
+import io.github.ph1lou.werewolfapi.events.*;
+import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.LoverAPI;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+
+public class Lover implements LoverAPI, Listener {
+
+    private final List<PlayerWW> lovers;
+    private final List<PlayerWW> loversAnnounce = new ArrayList<>();
+    private final WereWolfAPI game;
+    private boolean death = false;
+
+    public Lover(WereWolfAPI game, List<PlayerWW> lovers) {
+        this.game = game;
+        this.lovers = lovers;
+        lovers.forEach(playerWW -> playerWW.getLovers().add(this));
+    }
+
+    public List<? extends PlayerWW> getLovers() {
+        return lovers;
+    }
+
+
+    public void announceLovers() {
+        lovers.stream().map(PlayerWW::getUUID)
+                .map(Bukkit::getPlayer)
+                .filter(Objects::nonNull)
+                .forEach(this::announceLovers);
+    }
+
+    public void announceLovers(Player player) {
+
+        if (death) return;
+
+        PlayerWW playerWW = game.getPlayerWW(player.getUniqueId());
+
+        if (playerWW == null) return;
+
+        if (!loversAnnounce.contains(playerWW)) return;
+
+        if (!lovers.contains(playerWW)) return;
+
+        loversAnnounce.add(playerWW);
+        StringBuilder couple = new StringBuilder();
+
+        for (PlayerWW playerWW1 : lovers) {
+            couple.append(playerWW1.getName()).append(" ");
+        }
+        player.sendMessage(game.translate("werewolf.role.lover.description", couple.toString()));
+        Sounds.SHEEP_SHEAR.play(player);
+    }
+
+
+    @EventHandler
+    public void onActionBarGameLoverEvent(ActionBarEvent event) {
+
+        if (!game.isState(StateGame.GAME)) return;
+
+        UUID uuid = event.getPlayerUUID();
+        PlayerWW playerWW = game.getPlayerWW(uuid);
+
+        if (!lovers.contains(playerWW)) return;
+
+        StringBuilder sb = new StringBuilder(event.getActionBar());
+        Player player = Bukkit.getPlayer(uuid);
+
+        if (player == null) return;
+
+        if (playerWW == null) return;
+
+        if (!playerWW.isState(StatePlayer.ALIVE)) return;
+
+        buildActionbarLover(player, sb, lovers);
+
+        event.setActionBar(sb.toString());
+
+    }
+
+    private void buildActionbarLover(Player player, StringBuilder sb, List<PlayerWW> list) {
+
+        list
+                .stream()
+                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                .peek(playerWW -> sb.append(" §d♥ ")
+                        .append(playerWW.getName())
+                        .append(" "))
+                .map(PlayerWW::getUUID)
+                .filter(uuid -> !uuid.equals(player.getUniqueId()))
+                .map(Bukkit::getPlayer)
+                .filter(Objects::nonNull)
+                .forEach(player1 -> sb
+                        .append(game.getScore()
+                                .updateArrow(player,
+                                        player1.getLocation())));
+    }
+
+    @EventHandler
+    public void onModeratorScoreBoard(UpdateModeratorNameTag event) {
+
+        StringBuilder sb = new StringBuilder(event.getSuffix());
+
+        PlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID());
+
+        if (playerWW == null) return;
+
+        if (!lovers.contains(playerWW)) return;
+
+        if (playerWW.isState(StatePlayer.DEATH)) {
+            return;
+        }
+
+        sb.append(ChatColor.LIGHT_PURPLE).append("♥ ");
+
+        event.setSuffix(sb.toString());
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onJoin(PlayerJoinEvent event) {
+
+        Player player = event.getPlayer();
+
+        announceLovers(player);
+    }
+
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onFinalDeath(FinalDeathEvent event) {
+
+        if (death) return;
+
+        if (!lovers.contains(event.getPlayerWW())) return;
+
+        death = true;
+        lovers.stream()
+                .filter(playerWW1 -> !playerWW1.equals(event.getPlayerWW()))
+                .forEach(playerWW1 -> {
+                    Bukkit.broadcastMessage(
+                            game.translate("werewolf.role.lover.lover_death",
+                                    playerWW1.getName()));
+                    Bukkit.getPluginManager().callEvent(
+                            new LoverDeathEvent(event.getPlayerWW(), playerWW1));
+                    game.death(playerWW1);
+                });
+
+        game.getConfig().setLoverSize(game.getConfig().getLoverSize() - 1);
+
+    }
+
+    @EventHandler
+    public void onEndPlayerMessage(EndPlayerMessageEvent event) {
+
+        PlayerWW playerWW = event.getPlayerWW();
+
+        if (!lovers.contains(playerWW)) return;
+
+        StringBuilder sb = event.getEndMessage();
+        StringBuilder sb2 = new StringBuilder();
+        lovers.stream()
+                .filter(playerWW1 -> !playerWW.equals(playerWW1))
+                .forEach(playerWW1 -> sb2.append(playerWW1.getName()).append(" "));
+
+        sb.append(game.translate("werewolf.end.lover", sb2.toString()));
+    }
+
+
+    @Override
+    public String getKey() {
+        return RolesBase.LOVER.getKey();
+    }
+
+    @Override
+    public boolean isAlive() {
+        return !death;
+    }
+
+    @Override
+    public void swap(PlayerWW playerWW, PlayerWW playerWW1) {
+        lovers.remove(playerWW);
+        lovers.add(playerWW1);
+        loversAnnounce.clear();
+
+        for (PlayerWW playerWW2 : lovers) {
+            Player player = Bukkit.getPlayer(playerWW2.getUUID());
+            if (player != null) {
+                announceLovers(player);
+            }
+        }
+
+        game.getPlayerWW()
+                .stream().map(PlayerWW::getRole)
+                .filter(roles -> roles.isKey(RolesBase.CUPID.getKey()))
+                .map(roles -> (AffectedPlayers) roles)
+                .filter(affectedPlayers -> affectedPlayers.getAffectedPlayers().contains(playerWW))
+                .forEach(affectedPlayers -> {
+                    affectedPlayers.removeAffectedPlayer(playerWW);
+                    affectedPlayers.addAffectedPlayer(playerWW1);
+                });
+    }
+
+    @Override
+    public boolean isKey(String key) {
+        return getKey().equals(key);
+    }
+
+/*
+    public void thiefLoversRange(UUID playerUUID) {
+
+
+        int cp = -1;
+        int ck = -1;
+
+
+        for (int i = 0; i < game.getLoversRange().size(); i++) {
+            List<UUID> loverList = game.getLoversRange().get(i);
+            if (loverList.contains(playerUUID) && !loverList.contains(getPlayerUUID())) {
+                loverList.remove(playerUUID);
+                loverList.add(getPlayerUUID());
+                cp = i;
+            } else if (!loverList.contains(playerUUID) &&
+                    loverList.contains(getPlayerUUID())) {
+                ck = i;
+            }
+        }
+        if (cp != -1 && ck != -1) {
+            game.getLoversRange().get(ck).remove(getPlayerUUID());
+            game.getLoversRange().get(cp).addAll(game.getLoversRange().get(ck));
+            game.getLoversRange().remove(ck);
+        }
+    }*/
+}

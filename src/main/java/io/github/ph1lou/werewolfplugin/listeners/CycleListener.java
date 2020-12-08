@@ -26,7 +26,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 
 public class CycleListener implements Listener {
@@ -176,7 +175,7 @@ public class CycleListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLoverRepartition(LoversRepartitionEvent event) {
-        game.getLoversManage().autoLovers();
+        game.getLoversManager().repartition(main);
 
     }
 
@@ -237,7 +236,7 @@ public class CycleListener implements Listener {
 
                     if (roleRegister.getKey().equals(game.getConfig().getTrollKey())) {
 
-                        game.getPlayersWW().values()
+                        game.getPlayerWW()
                                 .forEach(playerWW -> {
                                     try {
                                         Roles role = (Roles) roleRegister.getConstructors()
@@ -260,22 +259,26 @@ public class CycleListener implements Listener {
                 });
 
 
-        game.getPlayersWW().values()
+        game.getPlayerWW()
                 .forEach(playerWW -> playerWW.getRole().roleAnnouncement());
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
             if (!game.isState(StateGame.END)) {
                 Bukkit.getOnlinePlayers()
                         .forEach(player -> {
+
+                            PlayerWW playerWW = game.getPlayerWW(player.getUniqueId());
+
                             if (game.getConfig().isTrollSV() &&
-                                    game.getPlayersWW().containsKey(player.getUniqueId())) {
+                                    playerWW != null) {
+
                                 Sounds.PORTAL_TRIGGER.play(player);
                                 for (PotionEffect po : player.getActivePotionEffects()) {
                                     player.removePotionEffect(po.getType());
                                 }
                                 VersionUtils.getVersionUtils().setPlayerMaxHealth(player, 20);
                                 player.sendMessage(game.translate("werewolf.announcement.troll"));
-                                PlayerWW playerWW = game.getPlayersWW().get(player.getUniqueId());
+
                                 HandlerList.unregisterAll((Listener) playerWW.getRole());
                                 playerWW.setKit(false);
                             }
@@ -299,14 +302,14 @@ public class CycleListener implements Listener {
 
         game.setState(StateGame.GAME);
 
-        List<UUID> playersUUID = new ArrayList<>(game.getPlayersWW().keySet());
+        List<PlayerWW> playerWWS = new ArrayList<>(game.getPlayerWW());
         List<RoleRegister> config = new ArrayList<>();
         game.getConfig().getConfigValues().put(ConfigsBase.CHAT.getKey(), false);
         game.getConfig().getRoleCount().put(RolesBase.VILLAGER.getKey(),
                 game.getConfig()
                         .getRoleCount()
                         .get(RolesBase.VILLAGER.getKey()) +
-                        playersUUID.size() -
+                        playerWWS.size() -
                         game.getScore().getRole());
         main.getRegisterManager().getRolesRegister()
                 .forEach(roleRegister -> {
@@ -318,28 +321,26 @@ public class CycleListener implements Listener {
                 });
 
 
-        while (!playersUUID.isEmpty()) {
+        while (!playerWWS.isEmpty()) {
 
-            int n = (int) Math.floor(game.getRandom().nextFloat() * playersUUID.size());
-            UUID playerUUID = playersUUID.get(n);
-            PlayerWW plg = game.getPlayersWW().get(playerUUID);
+            int n = (int) Math.floor(game.getRandom().nextFloat() * playerWWS.size());
+            PlayerWW playerWW = playerWWS.get(n);
 
             try {
                 Roles role = (Roles) config.get(0).getConstructors().newInstance(game.getMain(),
-                        game,
-                        playerUUID,
+                        playerWW,
                         config.get(0).getKey());
 
                 Bukkit.getPluginManager().registerEvents((Listener) role, game.getMain());
-                plg.setRole(role);
-
-            } catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
-                e.printStackTrace();
+                playerWW.setRole(role);
+            } catch (IllegalAccessException | InstantiationException | InvocationTargetException exception) {
+                exception.printStackTrace();
             }
+
             config.remove(0);
-            playersUUID.remove(n);
+            playerWWS.remove(n);
         }
-        game.getPlayersWW().values()
+        game.getPlayerWW()
                 .forEach(playerWW -> playerWW.getRole().roleAnnouncement());
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(game.getMain(), game::checkVictory);

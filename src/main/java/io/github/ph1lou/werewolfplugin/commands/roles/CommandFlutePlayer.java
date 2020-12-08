@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
+import com.google.common.collect.Sets;
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
@@ -29,25 +30,28 @@ public class CommandFlutePlayer implements Commands {
 
         WereWolfAPI game = api.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        PlayerWW plg = game.getPlayersWW().get(uuid);
-        Roles flutePlayer = plg.getRole();
+        PlayerWW playerWW = game.getPlayerWW(uuid);
+
+        if (playerWW == null) return;
+
+        Roles flutePlayer = playerWW.getRole();
 
         if (args.length != 2 && args.length != 1) {
             player.sendMessage(game.translate("werewolf.check.parameters", 2));
             return;
         }
 
-            if(!((Power)flutePlayer).hasPower()) {
-                player.sendMessage(game.translate("werewolf.check.power"));
-                return ;
-            }
+        if (!((Power) flutePlayer).hasPower()) {
+            player.sendMessage(game.translate("werewolf.check.power"));
+            return;
+        }
 
             if(args.length==2 && args[0].equals(args[1])) {
                 player.sendMessage(game.translate("werewolf.check.two_distinct_player"));
                 return ;
             }
 
-            List<UUID> listUUIDs = new ArrayList<>();
+        List<PlayerWW> listWWs = new ArrayList<>();
 
             for(String p:args) {
 
@@ -59,23 +63,19 @@ public class CommandFlutePlayer implements Commands {
                 }
 
                 UUID playerUUID = playerArg.getUniqueId();
+                PlayerWW playerWW1 = game.getPlayerWW(playerUUID);
 
-                if (!game.getPlayersWW().containsKey(playerUUID) || game.getPlayersWW().get(playerUUID).isState(StatePlayer.DEATH)) {
+                if (playerWW1 == null || playerWW1.isState(StatePlayer.DEATH)) {
                     player.sendMessage(game.translate("werewolf.check.player_not_found"));
                     return;
                 }
 
-                if(p.equals(plg.getName())) {
+                if (p.equals(playerWW.getName())) {
                     player.sendMessage(game.translate("werewolf.check.not_yourself"));
-                    return ;
-                }
-
-                if (!game.getPlayersWW().containsKey(playerUUID)) {
-                    player.sendMessage(game.translate("werewolf.check.not_in_game_player"));
                     return;
                 }
 
-                if (((AffectedPlayers) flutePlayer).getAffectedPlayers().contains(playerUUID)) {
+                if (((AffectedPlayers) flutePlayer).getAffectedPlayers().contains(playerWW)) {
                     player.sendMessage(game.translate("werewolf.role.flute_player.already_enchant", playerArg.getName()));
                     return;
                 }
@@ -90,12 +90,12 @@ public class CommandFlutePlayer implements Commands {
                 }
 
 
-                listUUIDs.add(playerUUID);
+                listWWs.add(playerWW1);
             }
 
         ((Power) flutePlayer).setPower(false);
 
-        EnchantedEvent enchantedEvent = new EnchantedEvent(uuid, listUUIDs);
+        EnchantedEvent enchantedEvent = new EnchantedEvent(playerWW, Sets.newHashSet(listWWs));
 
         Bukkit.getPluginManager().callEvent(enchantedEvent);
 
@@ -104,12 +104,12 @@ public class CommandFlutePlayer implements Commands {
             return;
         }
 
-        for (UUID uuid1 : enchantedEvent.getPlayersUUID()) {
+        for (PlayerWW playerWW1 : enchantedEvent.getPlayerWWS()) {
 
-            Player enchanted = Bukkit.getPlayer(uuid1);
+            Player enchanted = Bukkit.getPlayer(playerWW1.getUUID());
             if (enchanted == null) return;
 
-            ((AffectedPlayers) flutePlayer).addAffectedPlayer(uuid1);
+            ((AffectedPlayers) flutePlayer).addAffectedPlayer(playerWW1);
             enchanted.sendMessage(game.translate("werewolf.role.flute_player.enchanted"));
             player.sendMessage(game.translate("werewolf.role.flute_player.perform", enchanted.getName()));
         }

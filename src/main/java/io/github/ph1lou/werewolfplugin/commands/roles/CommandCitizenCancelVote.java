@@ -26,8 +26,11 @@ public class CommandCitizenCancelVote implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        PlayerWW plg = game.getPlayersWW().get(uuid);
-        Citizen citizen = (Citizen) plg.getRole();
+        PlayerWW playerWW = game.getPlayerWW(uuid);
+
+        if (playerWW == null) return;
+
+        Citizen citizen = (Citizen) playerWW.getRole();
 
         if (!citizen.hasPower()) {
             player.sendMessage(game.translate("werewolf.check.power"));
@@ -40,8 +43,9 @@ public class CommandCitizenCancelVote implements Commands {
         }
 
         citizen.setPower(false);
-        UUID vote = game.getVote().getResult();
-        CancelVoteEvent cancelVoteEvent = new CancelVoteEvent(uuid, vote);
+        PlayerWW voteWW = game.getVote().getResult();
+
+        CancelVoteEvent cancelVoteEvent = new CancelVoteEvent(playerWW, voteWW);
         Bukkit.getPluginManager().callEvent(cancelVoteEvent);
 
         if (cancelVoteEvent.isCancelled()) {
@@ -53,12 +57,12 @@ public class CommandCitizenCancelVote implements Commands {
         Bukkit.broadcastMessage(game.translate(
                 "werewolf.role.citizen.cancelling_broadcast"));
 
-        if (vote == null) return;
+        if (voteWW == null) return;
 
         player.sendMessage(game.translate(
                 "werewolf.role.citizen.cancelling_vote_perform",
-                game.getPlayersWW().get(vote).getName()));
-        citizen.addAffectedPlayer(vote);
+                voteWW.getName()));
+        citizen.addAffectedPlayer(voteWW);
 
 
     }

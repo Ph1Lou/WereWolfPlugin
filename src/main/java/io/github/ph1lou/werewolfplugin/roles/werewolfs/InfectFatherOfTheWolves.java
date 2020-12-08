@@ -3,7 +3,6 @@ package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.InfectionEvent;
@@ -21,38 +20,36 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class InfectFatherOfTheWolves extends RolesWereWolf implements AffectedPlayers, Power {
 
-    private final List<UUID> affectedPlayer = new ArrayList<>();
+    private final List<PlayerWW> affectedPlayer = new ArrayList<>();
     private boolean power = true;
 
     public InfectFatherOfTheWolves(GetWereWolfAPI main,
-                                   WereWolfAPI game,
-                                   UUID uuid,
+                                   PlayerWW playerWW,
                                    String key) {
-        super(main, game, uuid, key);
+        super(main, playerWW, key);
     }
 
     @Override
-    public void setPower(Boolean power) {
+    public void setPower(boolean power) {
         this.power = power;
     }
 
     @Override
-    public Boolean hasPower() {
-        return(this.power);
+    public boolean hasPower() {
+        return (this.power);
     }
 
     @Override
-    public void addAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.add(uuid);
+    public void addAffectedPlayer(PlayerWW playerWW) {
+        this.affectedPlayer.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.remove(uuid);
+    public void removeAffectedPlayer(PlayerWW playerWW) {
+        this.affectedPlayer.remove(playerWW);
     }
 
     @Override
@@ -61,7 +58,7 @@ public class InfectFatherOfTheWolves extends RolesWereWolf implements AffectedPl
     }
 
     @Override
-    public List<UUID> getAffectedPlayers() {
+    public List<PlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
@@ -71,6 +68,12 @@ public class InfectFatherOfTheWolves extends RolesWereWolf implements AffectedPl
         return game.translate("werewolf.role.infect_father_of_the_wolves.description");
     }
 
+
+    @Override
+    public void recoverPower() {
+
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onSecondDeathEvent(SecondDeathEvent event) {
 
@@ -78,38 +81,38 @@ public class InfectFatherOfTheWolves extends RolesWereWolf implements AffectedPl
 
         if (!hasPower()) return;
 
-        PlayerWW plg = game.getPlayersWW().get(event.getUuid());
-        UUID killerUUID = plg.getLastKiller();
+        PlayerWW playerWW = event.getPlayerWW();
+
+
+        PlayerWW killerWW = playerWW.getLastKiller();
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
         if (player == null) return;
 
-
-        if (!game.getPlayersWW().containsKey(killerUUID)) {
+        if (killerWW == null) {
             return;
         }
 
-        if (!game.getPlayersWW().get(killerUUID).getRole().isWereWolf()) {
+        if (!killerWW.getRole().isWereWolf()) {
             return;
         }
 
-        if (event.getUuid().equals(getPlayerUUID())) {
+        if (playerWW.equals(getPlayerWW())) {
             event.setCancelled(autoResurrection(player));
             return;
         }
 
-        if (!game.getPlayersWW().get(getPlayerUUID())
-                .isState(StatePlayer.ALIVE)) return;
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         TextComponent infect_msg = new TextComponent(
                 game.translate(
                         "werewolf.role.infect_father_of_the_wolves.infection_message",
-                        plg.getName()));
+                        playerWW.getName()));
         infect_msg.setClickEvent(
                 new ClickEvent(ClickEvent.Action.RUN_COMMAND,
                         String.format("/ww %s %s",
                                 game.translate("werewolf.role.infect_father_of_the_wolves.command"),
-                                event.getUuid())));
+                                playerWW)));
         player.spigot().sendMessage(infect_msg);
     }
 
@@ -122,12 +125,12 @@ public class InfectFatherOfTheWolves extends RolesWereWolf implements AffectedPl
         }
 
         InfectionEvent infectionEvent =
-                new InfectionEvent(getPlayerUUID(), getPlayerUUID());
+                new InfectionEvent(getPlayerWW(), getPlayerWW());
         Bukkit.getPluginManager().callEvent(infectionEvent);
         setPower(false);
 
         if (!infectionEvent.isCancelled()) {
-            game.resurrection(getPlayerUUID());
+            game.resurrection(getPlayerWW());
             return true;
         }
 

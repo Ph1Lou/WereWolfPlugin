@@ -7,6 +7,7 @@ import io.github.ph1lou.werewolfapi.RoleRegister;
 import io.github.ph1lou.werewolfapi.ScoreAPI;
 import io.github.ph1lou.werewolfapi.enumlg.*;
 import io.github.ph1lou.werewolfapi.events.*;
+import io.github.ph1lou.werewolfapi.rolesattributs.LoverAPI;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
@@ -21,10 +22,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 
 public class ScoreBoard implements ScoreAPI, Listener {
@@ -73,17 +73,16 @@ public class ScoreBoard implements ScoreAPI, Listener {
 
 		UUID playerUUID = board.getPlayer().getUniqueId();
 		List<String> score = new ArrayList<>(scoreboard2);
+		PlayerWW playerWW = game.getPlayerWW(playerUUID);
 		ModerationManagerAPI moderationManager = game.getModerationManager();
 		String role;
-		if (game.getPlayersWW().containsKey(playerUUID)) {
+		if (playerWW != null) {
 
-			PlayerWW plg = game.getPlayersWW().get(playerUUID);
-
-			if (!plg.isState(StatePlayer.DEATH)) {
+			if (!playerWW.isState(StatePlayer.DEATH)) {
 
 				if (!game.isState(StateGame.GAME)) {
 					role = conversion(game.getConfig().getTimerValues().get(TimersBase.ROLE_DURATION.getKey()));
-				} else role = game.translate(plg.getRole().getKey());
+				} else role = game.translate(playerWW.getRole().getKey());
 			} else role = game.translate("werewolf.score_board.death");
 		} else if (moderationManager.getModerators().contains(playerUUID)) {
 			role = game.translate("werewolf.commands.admin.moderator.name");
@@ -185,17 +184,27 @@ public class ScoreBoard implements ScoreAPI, Listener {
 	@Override
 	public void getKillCounter() {
 
-		for (UUID uuid : game.getPlayersWW().keySet()) {
+		for (PlayerWW playerWW1 : game.getPlayerWW()) {
 			int i = 0;
-			while (i < kill_score.size() && game.getPlayersWW().get(uuid).getNbKill() < game.getPlayersWW().get(kill_score.get(i)).getNbKill()) {
+			while (i < kill_score.size() && playerWW1.getNbKill() <
+					Objects.requireNonNull(game.getPlayerWW(kill_score.get(i))).getNbKill()) {
 				i++;
 			}
-			kill_score.add(i, uuid);
+			kill_score.add(i, playerWW1.getUUID());
 		}
 
-		scoreboard3.add(game.translate("werewolf.score_board.score").substring(0, Math.min(30, game.translate("werewolf.score_board.score").length())));
-		for (int i = 0; i < Math.min(game.getPlayersWW().size(), 10); i++) {
-			scoreboard3.add(game.getPlayersWW().get(kill_score.get(i)).getName() + "§3 " + game.getPlayersWW().get(kill_score.get(i)).getNbKill());
+		scoreboard3.add(game.translate("werewolf.score_board.score")
+				.substring(0, Math.min(30, game.translate("werewolf.score_board.score").length())));
+
+		for (int i = 0; i < Math.min(game.getPlayerWW().size(), 10); i++) {
+
+			PlayerWW playerWW1 = game.getPlayerWW(kill_score.get(i));
+
+			if (playerWW1 != null) {
+				scoreboard3.add(playerWW1.getName() + "§3 " +
+						playerWW1.getNbKill());
+			}
+
 		}
 		String line = game.translate("werewolf.score_board.game_name");
 		scoreboard3.add(line.substring(0, Math.min(30, line.length())));
@@ -399,7 +408,7 @@ public class ScoreBoard implements ScoreAPI, Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onNewWereWolf(NewWereWolfEvent event) {
 
-		Player player = Bukkit.getPlayer(event.getUuid());
+		Player player = Bukkit.getPlayer(event.getPlayerWW().getUUID());
 
 		if (player == null) return;
 
@@ -413,17 +422,17 @@ public class ScoreBoard implements ScoreAPI, Listener {
 
 	@EventHandler
 	public void onFinalJoinEvent(FinalJoinEvent event) {
-		tabManager.updatePlayerForOthers(event.getPlayerUUID());
+		tabManager.updatePlayerForOthers(event.getPlayerWW().getUUID());
 	}
 
 	@EventHandler
 	public void onRevive(ResurrectionEvent event) {
-		tabManager.updatePlayerForOthers(event.getPlayerUUID());
+		tabManager.updatePlayerForOthers(event.getPlayerWW().getUUID());
 	}
 
 	@EventHandler
 	public void onFinalDeath(FinalDeathEvent event) {
-		tabManager.updatePlayerForOthers(event.getUuid());
+		tabManager.updatePlayerForOthers(event.getPlayerWW().getUUID());
 	}
 
 	@EventHandler
@@ -433,7 +442,7 @@ public class ScoreBoard implements ScoreAPI, Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onInvisible(InvisibleEvent event) {
-		tabManager.updatePlayerForOthers(event.getPlayerUUID());
+		tabManager.updatePlayerForOthers(event.getPlayerWW().getUUID());
 	}
 
 
@@ -454,7 +463,10 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		for (UUID uuid : game.getModerationManager().getModerators()) {
 			Player player = Bukkit.getPlayer(uuid);
 			if (player != null) {
-				tabManager.updatePlayerScoreBoard(player, event.getPlayersUUID());
+				for (PlayerWW playerWW : event.getPlayerWWS()) {
+					tabManager.updatePlayerScoreBoard(player, Collections.singletonList(playerWW.getUUID()));
+				}
+
 			}
 		}
 	}
@@ -464,11 +476,13 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		for (UUID uuid : game.getModerationManager().getModerators()) {
 			Player player = Bukkit.getPlayer(uuid);
 			if (player != null) {
-				for (List<UUID> lovers : game.getLoversRange()) {
-					tabManager.updatePlayerScoreBoard(player, lovers);
-				}
-				for (List<UUID> cursedLovers : game.getCursedLoversRange()) {
-					tabManager.updatePlayerScoreBoard(player, cursedLovers);
+				for (LoverAPI loverAPI : game.getLoversManager().getLovers()) {
+					if (!loverAPI.isKey(RolesBase.AMNESIAC_WEREWOLF.getKey())) {
+						tabManager.updatePlayerScoreBoard(player, loverAPI.getLovers()
+								.stream()
+								.map(PlayerWW::getUUID)
+								.collect(Collectors.toList()));
+					}
 				}
 			}
 		}

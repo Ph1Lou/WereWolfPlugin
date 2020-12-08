@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -32,13 +33,14 @@ public class CommandTPGroup implements Commands {
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
+        PlayerWW playerWW = game.getPlayerWW(argUUID);
 
-        if (!game.getPlayersWW().containsKey(argUUID)) {
+        if (playerWW == null) {
             player.sendMessage(game.translate("werewolf.check.player_not_found"));
             return;
         }
 
-        if (!game.getPlayersWW().get(argUUID).isState(StatePlayer.ALIVE)) {
+        if (!playerWW.isState(StatePlayer.ALIVE)) {
             return;
         }
         int d = 20;
@@ -55,13 +57,15 @@ public class CommandTPGroup implements Commands {
         }
         for (Player p : Bukkit.getOnlinePlayers()) {
             UUID uuid = p.getUniqueId();
-            if (size > 0 && game.getPlayersWW().containsKey(uuid) && game.getPlayersWW().get(uuid).isState(StatePlayer.ALIVE)) {
+            PlayerWW playerWW1 = game.getPlayerWW(uuid);
+
+            if (size > 0 && playerWW1 != null && playerWW1.isState(StatePlayer.ALIVE)) {
 
                 try {
                     if (p.getLocation().distance(location) <= d) {
                         size--;
                         sb.append(p.getName()).append(" ");
-                        game.getMapManager().transportation(uuid, r, game.translate("werewolf.commands.admin.tp_group.perform", playerName));
+                        game.getMapManager().transportation(playerWW1, r, game.translate("werewolf.commands.admin.tp_group.perform", playerName));
                     }
                 } catch (Exception ignored) {
 

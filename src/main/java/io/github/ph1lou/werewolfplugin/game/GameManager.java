@@ -26,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class GameManager implements WereWolfAPI {
 
@@ -81,7 +82,7 @@ public class GameManager implements WereWolfAPI {
 
         if (moderationManager.getWhiteListedPlayers().contains(uuid)) {
             finalJoin(player);
-        } else if (getPlayersWW().size() >= configuration.getPlayerMax()) {
+        } else if (score.getPlayerSize() >= configuration.getPlayerMax()) {
             player.sendMessage(translate("werewolf.check.full"));
             moderationManager.addQueue(player);
         } else if (configuration.isWhiteList()) {
@@ -95,14 +96,14 @@ public class GameManager implements WereWolfAPI {
     public void finalJoin(Player player) {
 
         UUID uuid = player.getUniqueId();
-        Bukkit.getPluginManager().callEvent(new FinalJoinEvent(uuid));
         moderationManager.getQueue().remove(uuid);
         score.addPlayerSize();
         Bukkit.broadcastMessage(translate("werewolf.announcement.join", score.getPlayerSize(), score.getRole(), player.getName()));
         clearPlayer(player);
         player.setGameMode(GameMode.ADVENTURE);
-        PlayerWW plg = new PlayerLG(main, this, player);
+        PlayerWW plg = new PlayerLG(main, player);
         playerLG.put(uuid, plg);
+        Bukkit.getPluginManager().callEvent(new FinalJoinEvent(plg));
         player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 0, false, false));
         player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
 
@@ -124,7 +125,7 @@ public class GameManager implements WereWolfAPI {
         Inventory inventory = player.getInventory();
 
         player.setGameMode(GameMode.SURVIVAL);
-        PlayerWW plg = new PlayerLG(main, this, player);
+        PlayerWW plg = new PlayerLG(main, player);
         playerLG.put(uuid, plg);
         Location spawn = mapManager.getWorld().getSpawnLocation();
         plg.setSpawn(spawn);
@@ -134,7 +135,7 @@ public class GameManager implements WereWolfAPI {
             inventory.setItem(j, stuff.getStartLoot().getItem(j));
         }
 
-        mapManager.transportation(player.getUniqueId(), 0, "");
+        mapManager.transportation(plg, 0, "");
     }
 
     public void clearPlayer(Player player) {
@@ -232,8 +233,8 @@ public class GameManager implements WereWolfAPI {
     }
 
     @Override
-    public Map<UUID, PlayerWW> getPlayersWW() {
-        return this.playerLG;
+    public Collection<? extends PlayerWW> getPlayerWW() {
+        return this.playerLG.values();
     }
 
 
@@ -289,17 +290,18 @@ public class GameManager implements WereWolfAPI {
     }
 
     @Override
-    public UUID autoSelect(UUID playerUUID) {
+    public PlayerWW autoSelect(PlayerWW playerWW) {
 
-        List<UUID> players = new ArrayList<>();
-        for (UUID uuid : getPlayersWW().keySet()) {
-            if (getPlayersWW().get(uuid).isState(StatePlayer.ALIVE) && !uuid.equals(playerUUID)) {
-                players.add(uuid);
-            }
-        }
+        List<PlayerWW> players = playerLG.values()
+                .stream()
+                .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
+                .filter(playerWW1 -> !playerWW1.equals(playerWW))
+                .collect(Collectors.toList());
+
         if (players.isEmpty()) {
-            return playerUUID;
+            return playerWW;
         }
+
         return players.get((int) Math.floor(getRandom().nextFloat() * players.size()));
     }
 
@@ -309,29 +311,13 @@ public class GameManager implements WereWolfAPI {
     }
 
     @Override
-    public void resurrection(UUID uuid) {
-        if (getPlayersWW().containsKey(uuid)) {
-            Bukkit.getPluginManager().callEvent(new ResurrectionEvent(uuid));
-        }
+    public void resurrection(PlayerWW playerWW) {
+        Bukkit.getPluginManager().callEvent(new ResurrectionEvent(playerWW));
     }
 
     @Override
-    public void death(UUID uuid) {
-        if (getPlayersWW().containsKey(uuid)) {
-            Bukkit.getPluginManager().callEvent(new FinalDeathEvent(uuid));
-        }
-    }
-    @Override
-    public List<List<UUID>> getLoversRange(){
-        return loversManage.getLoversRange();
-    }
-    @Override
-    public List<List<UUID>> getAmnesiacLoversRange(){
-        return loversManage.getAmnesiacLoversRange();
-    }
-    @Override
-    public List<List<UUID>> getCursedLoversRange(){
-        return loversManage.getCursedLoversRange();
+    public void death(PlayerWW playerWW) {
+        Bukkit.getPluginManager().callEvent(new FinalDeathEvent(playerWW));
     }
 
 
@@ -340,8 +326,8 @@ public class GameManager implements WereWolfAPI {
         return stuff;
     }
 
-
-    public LoversManagement getLoversManage() {
+    @Override
+    public LoverManagerAPI getLoversManager() {
         return loversManage;
     }
 
@@ -380,5 +366,9 @@ public class GameManager implements WereWolfAPI {
 
     public void setDebug(boolean debug) {
         this.debug = debug;
+    }
+
+    public void remove(UUID uuid) {
+        playerLG.remove(uuid);
     }
 }

@@ -3,10 +3,10 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.RolesBase;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
+import io.github.ph1lou.werewolfapi.events.StealEvent;
 import io.github.ph1lou.werewolfapi.events.UpdateEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
@@ -17,12 +17,11 @@ import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
-import java.util.UUID;
 
 public class SiameseTwin extends RolesVillage {
 
-    public SiameseTwin(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
-        super(main,game,uuid, key);
+    public SiameseTwin(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+        super(main, playerWW, key);
     }
 
     @Override
@@ -30,7 +29,7 @@ public class SiameseTwin extends RolesVillage {
 
         StringBuilder list = new StringBuilder();
 
-        game.getPlayersWW().values()
+        game.getPlayerWW()
                 .stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> !playerWW.getRole().equals(this))
@@ -45,8 +44,10 @@ public class SiameseTwin extends RolesVillage {
     }
 
 
-    @Override
-    public void recoverPowerAfterStolen() {
+    @EventHandler
+    public void onStealEvent(StealEvent event) {
+
+        if (!event.getThiefWW().equals(getPlayerWW())) return;
 
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
@@ -68,7 +69,7 @@ public class SiameseTwin extends RolesVillage {
     @EventHandler
     public void onUpdate(UpdateEvent event) {
 
-        double health = game.getPlayersWW().values()
+        double health = game.getPlayerWW()
                 .stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .map(PlayerWW::getRole)
@@ -81,7 +82,7 @@ public class SiameseTwin extends RolesVillage {
                 .average()
                 .orElse(0);
 
-        game.getPlayersWW().values()
+        game.getPlayerWW()
                 .stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .map(PlayerWW::getRole)

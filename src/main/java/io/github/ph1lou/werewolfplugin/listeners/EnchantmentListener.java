@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.listeners;
 
+import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.events.EnchantmentEvent;
 import org.bukkit.Bukkit;
@@ -53,17 +54,20 @@ public class EnchantmentListener implements Listener {
     }
 
 
-    private ItemStack checkEnchant(Map<Enchantment,Integer> enchant, Player player, ItemStack item){
+    private ItemStack checkEnchant(Map<Enchantment,Integer> enchant, Player player, ItemStack item) {
 
-        Map<Enchantment,Integer> tempEnchant = new HashMap<>();
+        Map<Enchantment, Integer> tempEnchant = new HashMap<>();
         ItemStack result = new ItemStack(item);
         UUID uuid = player.getUniqueId();
+        PlayerWW playerWW = game.getPlayerWW(uuid);
 
-        for(Enchantment e:enchant.keySet()){
+        if (playerWW == null) return result;
+
+        for (Enchantment e : enchant.keySet()) {
 
             result.removeEnchantment(e);
 
-            if(Enchantment.KNOCKBACK.equals(e)){
+            if (Enchantment.KNOCKBACK.equals(e)) {
                 if (game.getConfig().getKnockBackMode() == 1) {
                     tempEnchant.put(e, Math.min(enchant.get(e),
                             game.getConfig().getLimitKnockBack()));
@@ -105,7 +109,7 @@ public class EnchantmentListener implements Listener {
             else tempEnchant.put(e,enchant.get(e));
         }
 
-        EnchantmentEvent enchantEvent = new EnchantmentEvent(uuid,result,enchant,tempEnchant);
+        EnchantmentEvent enchantEvent = new EnchantmentEvent(playerWW, result, enchant, tempEnchant);
         Bukkit.getPluginManager().callEvent(enchantEvent);
 
         if(!result.getType().equals(Material.ENCHANTED_BOOK) && !result.getType().equals(Material.BOOK)){

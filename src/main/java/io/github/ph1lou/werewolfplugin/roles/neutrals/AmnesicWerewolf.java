@@ -2,7 +2,6 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.Day;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.*;
@@ -16,27 +15,23 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.UUID;
-
 public class AmnesicWerewolf extends RolesNeutral implements Transformed {
 
 
-    public AmnesicWerewolf(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
-        super(main,game,uuid, key);
-    }
+    private boolean transformed = false;
 
-    private Boolean transformed=false;
+    public AmnesicWerewolf(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+        super(main, playerWW, key);
+    }
 
     @EventHandler
     public void onNight(NightEvent event) {
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
-            return;
-        }
+        if (player == null) return;
 
-        if (player == null) {
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -53,10 +48,9 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
-            return;
-        }
-        if (player == null) {
+        if (player == null) return;
+
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -66,18 +60,18 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 
-        UUID uuid = event.getUuid();
-        PlayerWW target = game.getPlayersWW().get(uuid);
+        PlayerWW playerWW = event.getPlayerWW();
+
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (target.getLastKiller() == null) return;
+        if (playerWW.getLastKiller() == null) return;
 
-        if (!target.getLastKiller().equals(getPlayerUUID())) return;
+        if (!playerWW.getLastKiller().equals(getPlayerWW())) return;
 
         if (transformed) return;
 
         AmnesiacTransformationEvent amnesiacTransformationEvent =
-                new AmnesiacTransformationEvent(getPlayerUUID(), uuid);
+                new AmnesiacTransformationEvent(getPlayerWW(), playerWW);
 
         Bukkit.getPluginManager().callEvent(amnesiacTransformationEvent);
 
@@ -92,7 +86,7 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
 
         if (!super.isWereWolf()) {
             Bukkit.getPluginManager().callEvent(
-                    new NewWereWolfEvent(getPlayerUUID()));
+                    new NewWereWolfEvent(getPlayerWW()));
         }
 
     }
@@ -126,14 +120,20 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
 
 
     @Override
+    public void recoverPower() {
+
+    }
+
+
+    @Override
     public boolean getTransformed() {
         return this.transformed;
     }
 
     @EventHandler
-    public void onEndPlayerMessage(EndPlayerMessageEvent event){
+    public void onEndPlayerMessage(EndPlayerMessageEvent event) {
 
-        if(!event.getPlayerUUID().equals(getPlayerUUID())) return;
+        if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         StringBuilder sb = event.getEndMessage();
         if(transformed){

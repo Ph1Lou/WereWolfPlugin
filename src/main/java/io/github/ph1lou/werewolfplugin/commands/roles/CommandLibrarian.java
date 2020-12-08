@@ -31,8 +31,11 @@ public class CommandLibrarian implements Commands {
         WereWolfAPI game = main.getWereWolfAPI();
         String playername = player.getName();
         UUID uuid = player.getUniqueId();
-        PlayerWW plg = game.getPlayersWW().get(uuid);
-        Roles librarian = plg.getRole();
+        PlayerWW playerWW = game.getPlayerWW(uuid);
+
+        if (playerWW == null) return;
+
+        Roles librarian = playerWW.getRole();
 
         if (args.length != 1) {
             player.sendMessage(game.translate("werewolf.check.player_input"));
@@ -52,15 +55,16 @@ public class CommandLibrarian implements Commands {
         }
 
         UUID argUUID = selectionPlayer.getUniqueId();
+        PlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
-        if (!game.getPlayersWW().containsKey(argUUID) ||
-                !game.getPlayersWW().get(argUUID).isState(StatePlayer.ALIVE)) {
+        if (playerWW1 == null ||
+                !playerWW1.isState(StatePlayer.ALIVE)) {
 
             player.sendMessage(game.translate("werewolf.check.player_not_found"));
             return;
         }
 
-        if (((AffectedPlayers) librarian).getAffectedPlayers().contains(argUUID)) {
+        if (((AffectedPlayers) librarian).getAffectedPlayers().contains(playerWW1)) {
             player.sendMessage(game.translate("werewolf.role.librarian.waiting"));
             return;
         }
@@ -72,7 +76,7 @@ public class CommandLibrarian implements Commands {
         }
 
         ((LimitedUse) librarian).setUse(((LimitedUse) librarian).getUse() + 1);
-        LibrarianRequestEvent librarianRequestEvent = new LibrarianRequestEvent(uuid, argUUID);
+        LibrarianRequestEvent librarianRequestEvent = new LibrarianRequestEvent(playerWW, playerWW1);
         Bukkit.getPluginManager().callEvent(librarianRequestEvent);
 
         if (librarianRequestEvent.isCancelled()) {
@@ -80,7 +84,7 @@ public class CommandLibrarian implements Commands {
             return;
         }
 
-        ((AffectedPlayers) librarian).addAffectedPlayer(argUUID);
+        ((AffectedPlayers) librarian).addAffectedPlayer(playerWW1);
 
         TextComponent contributionMessage = new TextComponent(game.translate(
                 "werewolf.role.librarian.message"));

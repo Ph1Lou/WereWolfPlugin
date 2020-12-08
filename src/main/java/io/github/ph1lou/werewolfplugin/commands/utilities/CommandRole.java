@@ -22,9 +22,11 @@ public class CommandRole implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        PlayerWW plg = game.getPlayersWW().get(uuid);
+        PlayerWW playerWW = game.getPlayerWW(uuid);
 
-        player.sendMessage(plg.getRole().getDescription());
+        if (playerWW == null) return;
+
+        player.sendMessage(playerWW.getRole().getDescription());
 
     }
 }

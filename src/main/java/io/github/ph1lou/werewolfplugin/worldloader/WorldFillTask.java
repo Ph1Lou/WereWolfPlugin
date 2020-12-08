@@ -340,8 +340,5 @@ public class WorldFillTask implements Runnable {
 		return AvailableMemory() < 500;
 	}
 
-	public BorderData getBorder() {
-		return border;
-	}
 
 }

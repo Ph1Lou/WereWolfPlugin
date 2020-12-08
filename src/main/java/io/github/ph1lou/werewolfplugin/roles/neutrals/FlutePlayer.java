@@ -3,13 +3,9 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.enumlg.TimersBase;
-import io.github.ph1lou.werewolfapi.events.DayEvent;
-import io.github.ph1lou.werewolfapi.events.EnchantedEvent;
-import io.github.ph1lou.werewolfapi.events.SelectionEndEvent;
-import io.github.ph1lou.werewolfapi.events.WinConditionsCheckEvent;
+import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
@@ -20,16 +16,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers {
 
 
-    private boolean power=false;
-    private final List<UUID> affectedPlayer = new ArrayList<>();
+    private boolean power = false;
+    private final List<PlayerWW> affectedPlayer = new ArrayList<>();
 
-    public FlutePlayer(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
-        super(main,game,uuid, key);
+    public FlutePlayer(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+        super(main, playerWW, key);
     }
 
     @EventHandler
@@ -39,7 +34,7 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -53,15 +48,14 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
     }
 
 
-
     @Override
-    public void addAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.add(uuid);
+    public void addAffectedPlayer(PlayerWW playerWW) {
+        this.affectedPlayer.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.remove(uuid);
+    public void removeAffectedPlayer(PlayerWW playerWW) {
+        this.affectedPlayer.remove(playerWW);
     }
 
     @Override
@@ -70,14 +64,14 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
     }
 
     @Override
-    public List<UUID> getAffectedPlayers() {
+    public List<PlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -104,33 +98,30 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
 
         if(event.isCancelled()) return;
 
-        if(!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) return;
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
-        int counter=1;
-        int playerAlive=0;
+        int counter = 1;
+        int playerAlive = 0;
 
-        for(PlayerWW playerWW:game.getPlayersWW().values()){
-            if(playerWW.isState(StatePlayer.ALIVE)){
+        for (PlayerWW playerWW : game.getPlayerWW()) {
+            if (playerWW.isState(StatePlayer.ALIVE)) {
                 playerAlive++;
             }
         }
 
-
-        for(UUID uuid1:affectedPlayer){
-            if(game.getPlayersWW().get(uuid1).isState(StatePlayer.ALIVE)){
+        for (PlayerWW playerWW : affectedPlayer) {
+            if (playerWW.isState(StatePlayer.ALIVE)) {
                 counter++;
             }
         }
 
-        if(counter==playerAlive){
+        if (counter == playerAlive) {
 
-            if(!affectedPlayer.isEmpty()){
-                UUID uuid1=affectedPlayer.get(0);
-
-                if(game.getPlayersWW().get(uuid1).isState(StatePlayer.ALIVE)){
-
-                    affectedPlayer.remove(uuid1);
-                    game.death(uuid1);
+            if (!affectedPlayer.isEmpty()) {
+                PlayerWW playerWW1 = affectedPlayer.get(0);
+                if (playerWW1.isState(StatePlayer.ALIVE)) {
+                    affectedPlayer.remove(playerWW1);
+                    game.death(playerWW1);
                 }
             }
             if(playerAlive==1){
@@ -142,48 +133,58 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
     }
 
     @EventHandler
-    public void onEnchantedPlayer(EnchantedEvent event){
+    public void onEnchantedPlayer(EnchantedEvent event) {
 
-        if(!event.getPlayerUUID().equals(getPlayerUUID())) return;
+        if (!getPlayerWW().equals(event.getPlayerWW())) return;
 
-        for(UUID uuid:affectedPlayer) {
-            Player player = Bukkit.getPlayer(uuid);
+        String enchantedList = enchantedList();
+
+        for (PlayerWW playerWW : affectedPlayer) {
+            Player player = Bukkit.getPlayer(playerWW.getUUID());
             if (player != null) {
-                player.sendMessage(enchantedList());
+                player.sendMessage(enchantedList);
             }
         }
     }
 
 
-    public String enchantedList(){
+    public String enchantedList() {
         StringBuilder sb = new StringBuilder(game.translate("werewolf.role.flute_player.list"));
 
-        for(UUID uuid1:affectedPlayer){
-            sb.append(game.getPlayersWW().get(uuid1).getName()).append(" ");
+        for (PlayerWW playerWW : affectedPlayer) {
+            if (playerWW.isState(StatePlayer.ALIVE)) {
+                sb.append(playerWW.getName()).append(" ");
+            }
         }
         return sb.toString();
     }
 
     @Override
-    public void recoverPowerAfterStolen() {
+    public void recoverPower() {
+
+    }
+
+    @Override
+    public void setPower(boolean aBoolean) {
+        this.power = aBoolean;
+    }
+
+    @Override
+    public boolean hasPower() {
+        return this.power;
+    }
+
+    @EventHandler
+    public void onStealEvent(StealEvent event) {
+
+        if (!event.getThiefWW().equals(getPlayerWW())) return;
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
         if (player == null) return;
 
-        if (!enchantedList().isEmpty()) {
-            player.sendMessage(enchantedList());
-        }
+        if (enchantedList().isEmpty()) return;
 
-    }
-
-    @Override
-    public void setPower(Boolean aBoolean) {
-        this.power=aBoolean;
-    }
-
-    @Override
-    public Boolean hasPower() {
-        return this.power;
+        player.sendMessage(enchantedList());
     }
 }

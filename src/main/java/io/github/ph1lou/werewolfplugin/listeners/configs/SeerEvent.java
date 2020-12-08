@@ -50,11 +50,11 @@ public class SeerEvent extends ListenerManager {
         Chest chest = (Chest) block1.getState();
         Sign sign = (Sign) block2.getState();
 
-        for (PlayerWW plg : game.getPlayersWW().values()) {
-            Roles role = plg.getRole();
-            if (plg.isState(StatePlayer.ALIVE)) {
+        for (PlayerWW playerWW1 : game.getPlayerWW()) {
+            Roles role = playerWW1.getRole();
+            if (playerWW1.isState(StatePlayer.ALIVE)) {
                 if (role.isWereWolf() || role.isWereWolf()) {
-                    danger.add(plg);
+                    danger.add(playerWW1);
                 }
             }
         }

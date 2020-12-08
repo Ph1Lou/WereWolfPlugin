@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.game;
 
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.rolesattributs.LoverAPI;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.listeners.*;
 import org.bukkit.Bukkit;
@@ -45,8 +46,12 @@ public class ScenariosLoader {
             HandlerList.unregisterAll(listener);
         }
 
-        for (PlayerWW plg : main.getWereWolfAPI().getPlayersWW().values()) {
-            HandlerList.unregisterAll((Listener) plg.getRole());
+        for (PlayerWW playerWW1 : main.getWereWolfAPI().getPlayerWW()) {
+            HandlerList.unregisterAll((Listener) playerWW1.getRole());
+        }
+
+        for (LoverAPI loverAPI : main.getWereWolfAPI().getLoversManager().getLovers()) {
+            HandlerList.unregisterAll((Listener) loverAPI);
         }
     }
 

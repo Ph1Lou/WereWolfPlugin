@@ -1,7 +1,7 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.enumlg.TimersBase;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
@@ -15,14 +15,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class Comedian extends RolesWithLimitedSelectionDuration implements PotionEffects {
 
     private final List<PotionEffectType> comedianEffects = new ArrayList<>();
 
-    public Comedian(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
-        super(main,game,uuid, key);
+    public Comedian(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+        super(main, playerWW, key);
         setPower(false);
     }
 
@@ -58,7 +57,7 @@ public class Comedian extends RolesWithLimitedSelectionDuration implements Potio
 
         player.removePotionEffect(getLastPotionEffect());
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -76,6 +75,12 @@ public class Comedian extends RolesWithLimitedSelectionDuration implements Potio
     @Override
     public @NotNull String getDescription() {
         return game.translate("werewolf.role.comedian.description");
+    }
+
+
+    @Override
+    public void recoverPower() {
+
     }
 
 }

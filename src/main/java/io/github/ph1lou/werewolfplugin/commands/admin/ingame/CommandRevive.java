@@ -33,15 +33,14 @@ public class CommandRevive implements Commands {
         }
 
         UUID uuid = player1.getUniqueId();
+        PlayerWW playerWW1 = game.getPlayerWW(uuid);
 
-        if (!game.getPlayersWW().containsKey(uuid)) {
+        if (playerWW1 == null) {
             player.sendMessage(game.translate("werewolf.check.not_in_game_player"));
             return;
         }
 
-        PlayerWW plg = game.getPlayersWW().get(uuid);
-
-        if (!plg.isState(StatePlayer.DEATH)) {
+        if (!playerWW1.isState(StatePlayer.DEATH)) {
             player.sendMessage(game.translate("werewolf.commands.admin.revive.not_death"));
             return;
         }
@@ -50,10 +49,10 @@ public class CommandRevive implements Commands {
             Bukkit.dispatchCommand(player, "a moderator " + player1.getName());
         }
 
-        Roles role = plg.getRole();
+        Roles role = playerWW1.getRole();
         game.getConfig().getRoleCount().put(role.getKey(), game.getConfig().getRoleCount().get(role.getKey()) + 1);
         game.getScore().addPlayerSize();
-        game.resurrection(uuid);
+        game.resurrection(playerWW1);
 
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.sendMessage(game.translate("werewolf.commands.admin.revive.perform", player1.getName(), player.getName()));

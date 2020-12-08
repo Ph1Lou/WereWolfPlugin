@@ -28,8 +28,11 @@ public class CommandTrapper implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        PlayerWW plg = game.getPlayersWW().get(uuid);
-        Roles trapper = plg.getRole();
+        PlayerWW playerWW = game.getPlayerWW(uuid);
+
+        if (playerWW == null) return;
+
+        Roles trapper = playerWW.getRole();
 
         if (args.length != 1) {
             player.sendMessage(game.translate("werewolf.check.player_input"));
@@ -49,23 +52,24 @@ public class CommandTrapper implements Commands {
         }
 
         UUID argUUID = playerArg.getUniqueId();
+        PlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
         if (uuid.equals(argUUID)) {
             player.sendMessage(game.translate("werewolf.check.not_yourself"));
             return;
         }
 
-        if (!game.getPlayersWW().containsKey(argUUID) || !game.getPlayersWW().get(argUUID).isState(StatePlayer.ALIVE)) {
+        if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
             player.sendMessage(game.translate("werewolf.check.player_not_found"));
             return;
         }
 
-        if (((AffectedPlayers) trapper).getAffectedPlayers().contains(argUUID)) {
+        if (((AffectedPlayers) trapper).getAffectedPlayers().contains(playerWW1)) {
             player.sendMessage(game.translate("werewolf.check.already_get_power"));
             return;
         }
 
-        TrackEvent trackEvent=new TrackEvent(uuid,argUUID);
+        TrackEvent trackEvent = new TrackEvent(playerWW, playerWW1);
         ((Power) trapper).setPower(false);
         Bukkit.getPluginManager().callEvent(trackEvent);
 
@@ -75,7 +79,7 @@ public class CommandTrapper implements Commands {
         }
 
         ((AffectedPlayers) trapper).clearAffectedPlayer();
-        ((AffectedPlayers) trapper).addAffectedPlayer(argUUID);
+        ((AffectedPlayers) trapper).addAffectedPlayer(playerWW1);
 
         playerArg.sendMessage(game.translate("werewolf.role.trapper.get_track"));
         player.sendMessage(game.translate("werewolf.role.trapper.tracking_perform", playerArg.getName()));

@@ -30,15 +30,18 @@ public class CommandSuccubus implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        PlayerWW plg = game.getPlayersWW().get(uuid);
-        Roles succubus = plg.getRole();
+        PlayerWW playerWW = game.getPlayerWW(uuid);
+
+        if (playerWW == null) return;
+
+        Roles succubus = playerWW.getRole();
 
         if (args.length != 1) {
             player.sendMessage(game.translate("werewolf.check.player_input"));
             return;
         }
 
-        if (!((AffectedPlayers)succubus).getAffectedPlayers().isEmpty()) {
+        if (!((AffectedPlayers) succubus).getAffectedPlayers().isEmpty()) {
             player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
@@ -55,13 +58,14 @@ public class CommandSuccubus implements Commands {
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
+        PlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
         if (argUUID.equals(uuid)) {
             player.sendMessage(game.translate("werewolf.check.not_yourself"));
             return;
         }
 
-        if (!game.getPlayersWW().containsKey(argUUID) || !game.getPlayersWW().get(argUUID).isState(StatePlayer.ALIVE)) {
+        if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
             player.sendMessage(game.translate("werewolf.check.player_not_found"));
             return;
         }
@@ -78,7 +82,7 @@ public class CommandSuccubus implements Commands {
             return;
         }
 
-        BeginCharmEvent beginCharmEvent = new BeginCharmEvent(uuid, argUUID);
+        BeginCharmEvent beginCharmEvent = new BeginCharmEvent(playerWW, playerWW1);
 
         Bukkit.getPluginManager().callEvent(beginCharmEvent);
 
@@ -87,7 +91,7 @@ public class CommandSuccubus implements Commands {
             return;
         }
 
-        ((AffectedPlayers) succubus).addAffectedPlayer(argUUID);
+        ((AffectedPlayers) succubus).addAffectedPlayer(playerWW1);
         player.sendMessage(game.translate("werewolf.role.succubus.charming_beginning", playerArg.getName()));
     }
 }

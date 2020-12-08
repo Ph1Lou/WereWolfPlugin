@@ -1,7 +1,7 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.LibrarianDeathEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
@@ -14,26 +14,25 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class Librarian extends RolesVillage implements LimitedUse, AffectedPlayers, Storage {
 
     private int use = 0;
-    private final List<UUID> affectedPlayer = new ArrayList<>();
-    private final List<String> storage= new ArrayList<>();
+    private final List<PlayerWW> affectedPlayer = new ArrayList<>();
+    private final List<String> storage = new ArrayList<>();
 
-    public Librarian(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
-        super(main,game,uuid, key);
+    public Librarian(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+        super(main, playerWW, key);
     }
 
     @Override
-    public void addAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.add(uuid);
+    public void addAffectedPlayer(PlayerWW playerWW) {
+        this.affectedPlayer.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.remove(uuid);
+    public void removeAffectedPlayer(PlayerWW playerWW) {
+        this.affectedPlayer.remove(playerWW);
     }
 
     @Override
@@ -42,7 +41,7 @@ public class Librarian extends RolesVillage implements LimitedUse, AffectedPlaye
     }
 
     @Override
-    public List<UUID> getAffectedPlayers() {
+    public List<PlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
@@ -62,15 +61,21 @@ public class Librarian extends RolesVillage implements LimitedUse, AffectedPlaye
         return game.translate("werewolf.role.librarian.description");
     }
 
+
+    @Override
+    public void recoverPower() {
+
+    }
+
     @Override
     public List<String> getStorage() {
         return this.storage;
     }
 
     @EventHandler
-    public void onFinalDeath(FinalDeathEvent event){
+    public void onFinalDeath(FinalDeathEvent event) {
 
-        if (!event.getUuid().equals(getPlayerUUID())) return;
+        if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         if (this.storage.isEmpty()) return;
 
@@ -82,6 +87,6 @@ public class Librarian extends RolesVillage implements LimitedUse, AffectedPlaye
             i++;
         }
 
-        Bukkit.getPluginManager().callEvent(new LibrarianDeathEvent(getPlayerUUID()));
+        Bukkit.getPluginManager().callEvent(new LibrarianDeathEvent(getPlayerWW()));
     }
 }

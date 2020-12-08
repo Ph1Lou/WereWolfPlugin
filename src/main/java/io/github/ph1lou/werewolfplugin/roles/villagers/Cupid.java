@@ -2,11 +2,12 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.enumlg.TimersBase;
 import io.github.ph1lou.werewolfapi.events.AroundLover;
 import io.github.ph1lou.werewolfapi.events.EnchantmentEvent;
+import io.github.ph1lou.werewolfapi.events.StealEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
@@ -18,36 +19,34 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
 public class Cupid extends RolesVillage implements AffectedPlayers, Power {
 
-    private final List<UUID> affectedPlayer = new ArrayList<>();
+    private final List<PlayerWW> affectedPlayer = new ArrayList<>();
     private boolean power = true;
 
-    public Cupid(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
-        super(main,game,uuid, key);
+    public Cupid(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+        super(main, playerWW, key);
     }
 
     @Override
-    public void setPower(Boolean power) {
-        this.power=power;
+    public void setPower(boolean power) {
+        this.power = power;
     }
 
     @Override
-    public Boolean hasPower() {
-        return(this.power);
+    public boolean hasPower() {
+        return (this.power);
     }
 
     @Override
-    public void addAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.add(uuid);
+    public void addAffectedPlayer(PlayerWW playerWW) {
+        this.affectedPlayer.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.remove(uuid);
+    public void removeAffectedPlayer(PlayerWW playerWW) {
+        this.affectedPlayer.remove(playerWW);
     }
 
     @Override
@@ -56,7 +55,7 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
     }
 
     @Override
-    public List<UUID> getAffectedPlayers() {
+    public List<PlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
@@ -66,8 +65,10 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
     }
 
 
-    @Override
-    public void recoverPowerAfterStolen() {
+    @EventHandler
+    public void onStealEvent(StealEvent event) {
+
+        if (!event.getThiefWW().equals(getPlayerWW())) return;
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -80,35 +81,36 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
                                     game.getConfig()
                                             .getTimerValues()
                                             .get("werewolf.menu.timers.lover_duration"))));
-        } else {
-            player.sendMessage(
-                    game.translate("werewolf.role.cupid.designation_perform",
-                            game.getPlayersWW().get(
-                                    getAffectedPlayers().get(0))
-                                    .getName(),
-                            game.getPlayersWW().get(
-                                    getAffectedPlayers().get(1))
-                                    .getName()));
+            return;
         }
+
+        if (affectedPlayer.size() < 2) return;
+
+        PlayerWW loverWW1 = affectedPlayer.get(0);
+        PlayerWW loverWW2 = affectedPlayer.get(1);
+
+
+        player.sendMessage(
+                game.translate("werewolf.role.cupid.designation_perform",
+                        loverWW1.getName(),
+                        loverWW2.getName()));
     }
 
     @EventHandler
     public void onLover(AroundLover event) {
 
-        if (!Objects.requireNonNull(
-                game.getPlayerWW(
-                        getPlayerUUID())).isState(StatePlayer.ALIVE)) return;
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
-        if (event.getUuidS().contains(getPlayerUUID())) {
-            for (UUID uuid : affectedPlayer) {
-                event.addPlayer(uuid);
+        if (event.getPlayerWWS().contains(getPlayerWW())) {
+            for (PlayerWW playerWW : affectedPlayer) {
+                event.addPlayer(playerWW);
             }
             return;
         }
 
-        for (UUID uuid : event.getUuidS()) {
-            if (affectedPlayer.contains(uuid)) {
-                event.addPlayer(getPlayerUUID());
+        for (PlayerWW playerWW : event.getPlayerWWS()) {
+            if (affectedPlayer.contains(playerWW)) {
+                event.addPlayer(getPlayerWW());
                 break;
             }
         }
@@ -117,7 +119,7 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
     @EventHandler
     public void onEnchantment(EnchantmentEvent event) {
 
-        if (!event.getPlayerUUID().equals(getPlayerUUID())) return;
+        if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         if (event.getEnchants().containsKey(Enchantment.ARROW_DAMAGE)) {
             event.getFinalEnchants().put(Enchantment.ARROW_DAMAGE,

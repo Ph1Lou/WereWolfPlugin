@@ -2,7 +2,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.enumlg.TimersBase;
@@ -20,27 +20,25 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class Seer extends RolesWithLimitedSelectionDuration implements AffectedPlayers {
 
-    private int dayNumber=-8;
-    private final List<UUID> affectedPlayer = new ArrayList<>();
+    private int dayNumber = -8;
+    private final List<PlayerWW> affectedPlayer = new ArrayList<>();
 
-    public Seer(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
-
-        super(main,game,uuid, key);
+    public Seer(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+        super(main, playerWW, key);
         setPower(false);
     }
 
     @Override
-    public void addAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.add(uuid);
+    public void addAffectedPlayer(PlayerWW playerWW) {
+        this.affectedPlayer.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.remove(uuid);
+    public void removeAffectedPlayer(PlayerWW playerWW) {
+        this.affectedPlayer.remove(playerWW);
     }
 
     @Override
@@ -49,14 +47,14 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
     }
 
     @Override
-    public List<UUID> getAffectedPlayers() {
+    public List<PlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -91,6 +89,12 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
 
 
     @Override
+    public void recoverPower() {
+
+    }
+
+
+    @Override
     public void recoverPotionEffect() {
 
         super.recoverPotionEffect();
@@ -110,9 +114,8 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 
-        UUID uuid = event.getUuid();
 
-        if (!uuid.equals(getPlayerUUID())) return;
+        if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         Bukkit.getPluginManager().callEvent(new ChestEvent());
 

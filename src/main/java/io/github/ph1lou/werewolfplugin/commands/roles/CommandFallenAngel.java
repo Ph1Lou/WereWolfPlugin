@@ -29,8 +29,11 @@ public class CommandFallenAngel implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        PlayerWW plg = game.getPlayersWW().get(uuid);
-        Roles role = plg.getRole();
+        PlayerWW playerWW = game.getPlayerWW(uuid);
+
+        if (playerWW == null) return;
+
+        Roles role = playerWW.getRole();
 
         if (!((AngelRole) role).isChoice(AngelForm.ANGEL)) {
             player.sendMessage(game.translate("werewolf.check.power"));
@@ -38,7 +41,7 @@ public class CommandFallenAngel implements Commands {
         }
 
         ((AngelRole) role).setChoice(AngelForm.FALLEN_ANGEL);
-        Bukkit.getPluginManager().callEvent(new AngelChoiceEvent(uuid, AngelForm.FALLEN_ANGEL));
+        Bukkit.getPluginManager().callEvent(new AngelChoiceEvent(playerWW, AngelForm.FALLEN_ANGEL));
         player.sendMessage(game.translate("werewolf.role.angel.angel_choice_perform", game.translate(RolesBase.FALLEN_ANGEL.getKey())));
     }
 }

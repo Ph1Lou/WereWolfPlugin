@@ -32,15 +32,18 @@ public class CommandSeer implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        PlayerWW plg = game.getPlayersWW().get(uuid);
-        Roles seer = plg.getRole();
+        PlayerWW playerWW = game.getPlayerWW(uuid);
+
+        if (playerWW == null) return;
+
+        Roles seer = playerWW.getRole();
 
         if (args.length != 1) {
             player.sendMessage(game.translate("werewolf.check.player_input"));
             return;
         }
 
-        if(!((Power)seer).hasPower()) {
+        if (!((Power) seer).hasPower()) {
             player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
@@ -51,8 +54,9 @@ public class CommandSeer implements Commands {
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
+        PlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
-        if(!game.getPlayersWW().containsKey(argUUID) || !game.getPlayersWW().get(argUUID).isState(StatePlayer.ALIVE)){
+        if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
             player.sendMessage(game.translate("werewolf.check.player_not_found"));
             return;
         }
@@ -63,8 +67,7 @@ public class CommandSeer implements Commands {
             player.sendMessage(game.translate("werewolf.role.seer.not_enough_life"));
         }
         else {
-            PlayerWW plg1 = game.getPlayersWW().get(argUUID);
-            Roles role1 = plg1.getRole();
+            Roles role1 = playerWW1.getRole();
 
             String camp = "werewolf.categories.villager";
 
@@ -75,7 +78,7 @@ public class CommandSeer implements Commands {
             }
 
 
-            SeerEvent seerEvent = new SeerEvent(uuid, argUUID, camp);
+            SeerEvent seerEvent = new SeerEvent(playerWW, playerWW1, camp);
             ((Power) seer).setPower(false);
             Bukkit.getPluginManager().callEvent(seerEvent);
 
@@ -84,7 +87,7 @@ public class CommandSeer implements Commands {
                 return;
             }
 
-            ((AffectedPlayers) seer).addAffectedPlayer(argUUID);
+            ((AffectedPlayers) seer).addAffectedPlayer(playerWW1);
 
             if (seerEvent.getCamp().equals("werewolf.categories.villager")) {
                 VersionUtils.getVersionUtils().setPlayerMaxHealth(player, life - 6);
@@ -95,7 +98,7 @@ public class CommandSeer implements Commands {
                 if (seer.isKey(RolesBase.CHATTY_SEER.getKey())) {
                     Bukkit.broadcastMessage(game.translate("werewolf.role.chatty_seer.see_perform", game.translate("werewolf.categories.villager")));
                 }
-                plg.addKLostHeart(6);
+                playerWW.addKLostHeart(6);
             } else if (seerEvent.getCamp().equals("werewolf.categories.werewolf")) {
                 player.sendMessage(game.translate("werewolf.role.seer.see_perform", game.translate("werewolf.categories.werewolf")));
                 if (seer.isKey(RolesBase.CHATTY_SEER.getKey())) {

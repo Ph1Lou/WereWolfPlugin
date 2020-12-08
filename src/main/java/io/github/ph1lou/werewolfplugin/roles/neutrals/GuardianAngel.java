@@ -2,20 +2,18 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.AngelForm;
 import io.github.ph1lou.werewolfapi.events.AngelChoiceEvent;
 import org.bukkit.Bukkit;
 
-import java.util.UUID;
-
-public class GuardianAngel extends Angel  {
+public class GuardianAngel extends Angel {
 
 
-    public GuardianAngel(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
-        super(main, game, uuid, key);
+    public GuardianAngel(GetWereWolfAPI main, PlayerWW pLayerWW, String key) {
+        super(main, pLayerWW, key);
         setChoice(AngelForm.GUARDIAN_ANGEL);
         Bukkit.getPluginManager().callEvent(
-                new AngelChoiceEvent(getPlayerUUID(), AngelForm.GUARDIAN_ANGEL));
+                new AngelChoiceEvent(getPlayerWW(), AngelForm.GUARDIAN_ANGEL));
     }
 }

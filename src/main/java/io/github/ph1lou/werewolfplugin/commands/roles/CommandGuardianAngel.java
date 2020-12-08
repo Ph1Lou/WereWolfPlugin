@@ -28,15 +28,18 @@ public class CommandGuardianAngel implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        PlayerWW plg = game.getPlayersWW().get(uuid);
-        Roles angel = plg.getRole();
+        PlayerWW playerWW = game.getPlayerWW(uuid);
+
+        if (playerWW == null) return;
+
+        Roles angel = playerWW.getRole();
 
         if (!((AngelRole) angel).isChoice(AngelForm.ANGEL)) {
             player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
 
-        Bukkit.getPluginManager().callEvent(new AngelChoiceEvent(uuid, AngelForm.GUARDIAN_ANGEL));
+        Bukkit.getPluginManager().callEvent(new AngelChoiceEvent(playerWW, AngelForm.GUARDIAN_ANGEL));
         ((AngelRole) angel).setChoice(AngelForm.GUARDIAN_ANGEL);
         player.sendMessage(game.translate("werewolf.role.angel.angel_choice_perform", game.translate(RolesBase.GUARDIAN_ANGEL.getKey())));
     }

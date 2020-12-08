@@ -2,7 +2,6 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.Camp;
 import io.github.ph1lou.werewolfapi.enumlg.Sounds;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
@@ -18,15 +17,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class BearTrainer extends RolesVillage {
 
-    public BearTrainer(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
-        super(main,game,uuid, key);
+    public BearTrainer(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+        super(main, playerWW, key);
     }
 
     @EventHandler
@@ -34,13 +32,13 @@ public class BearTrainer extends RolesVillage {
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
         if (player == null) return;
 
         Location oursLocation = player.getLocation();
-        List<UUID> growled = Bukkit.getOnlinePlayers()
+        Set<PlayerWW> growled = Bukkit.getOnlinePlayers()
                 .stream()
                 .filter(player1 -> {
                     try {
@@ -58,22 +56,22 @@ public class BearTrainer extends RolesVillage {
                 .filter(roles -> roles.isWereWolf() || roles instanceof Display)
                 .filter(roles -> !(roles instanceof Display) ||
                         ((Display) roles).isDisplayCamp(Camp.WEREWOLF))
-                .map(Roles::getPlayerUUID)
-                .collect(Collectors.toList());
+                .map(Roles::getPlayerWW)
+                .collect(Collectors.toSet());
 
-        GrowlEvent growlEvent = new GrowlEvent(getPlayerUUID(), growled);
+        GrowlEvent growlEvent = new GrowlEvent(getPlayerWW(), growled);
         Bukkit.getPluginManager().callEvent(growlEvent);
     }
 
     @EventHandler
     public void onGrowl(GrowlEvent event) {
 
-        if (event.getPlayersUUID().isEmpty()) {
+        if (event.getPlayerWWS().isEmpty()) {
             event.setCancelled(true);
             return;
         }
 
-        if (!event.getPlayerUUID().equals(getPlayerUUID())) return;
+        if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -84,7 +82,7 @@ public class BearTrainer extends RolesVillage {
             return;
         }
 
-        String builder = event.getPlayersUUID().stream().map(ignored ->
+        String builder = event.getPlayerWWS().stream().map(ignored ->
                 game.translate("werewolf.role.bear_trainer.growling"))
                 .collect(Collectors.joining());
 
@@ -97,6 +95,12 @@ public class BearTrainer extends RolesVillage {
     @Override
     public @NotNull String getDescription() {
         return game.translate("werewolf.role.bear_trainer.description");
+    }
+
+
+    @Override
+    public void recoverPower() {
+
     }
 
 }

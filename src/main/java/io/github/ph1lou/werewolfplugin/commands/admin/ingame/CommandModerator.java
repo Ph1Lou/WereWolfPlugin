@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
+import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.StateGame;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.ModeratorEvent;
@@ -36,6 +37,7 @@ public class CommandModerator implements Commands {
         }
 
         UUID argUUID = moderator.getUniqueId();
+        PlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
         if (moderationManager.getModerators().contains(argUUID)) {
             Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.moderator.remove", moderator.getName()));
@@ -49,14 +51,14 @@ public class CommandModerator implements Commands {
         }
 
         if (!game.isState(StateGame.LOBBY)) {
-            if (game.getPlayersWW().containsKey(argUUID) && !game.getPlayersWW().get(argUUID).isState(StatePlayer.DEATH)) {
+            if (playerWW1 != null && !playerWW1.isState(StatePlayer.DEATH)) {
                 player.sendMessage(game.translate("werewolf.commands.admin.moderator.player_living"));
                 return;
             }
         } else {
-            if (game.getPlayersWW().containsKey(argUUID)) {
+            if (playerWW1 != null) {
                 game.getScore().removePlayerSize();
-                game.getPlayersWW().remove(argUUID);
+                game.remove(argUUID);
             } else {
                 moderationManager.getQueue().remove(argUUID);
             }

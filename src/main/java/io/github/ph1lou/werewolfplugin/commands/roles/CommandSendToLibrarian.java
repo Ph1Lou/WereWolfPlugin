@@ -29,6 +29,9 @@ public class CommandSendToLibrarian implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
+        PlayerWW playerWW = game.getPlayerWW(uuid);
+
+        if (playerWW == null) return;
 
         if (!game.isState(StateGame.GAME)) {
             player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
@@ -36,7 +39,7 @@ public class CommandSendToLibrarian implements Commands {
         }
 
         if (args.length == 0) {
-            player.sendMessage(game.translate("werewolf.check.parameters",1));
+            player.sendMessage(game.translate("werewolf.check.parameters", 1));
             return;
         }
 
@@ -47,18 +50,18 @@ public class CommandSendToLibrarian implements Commands {
         for (String w : args) {
             sb2.append(w).append(" ");
         }
-        game.getPlayersWW().values()
+        game.getPlayerWW()
                 .stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
-                .filter(playerWW -> playerWW.isKey(RolesBase.LIBRARIAN.getKey()))
+                .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
+                .filter(playerWW1 -> playerWW1.isKey(RolesBase.LIBRARIAN.getKey()))
                 .map(PlayerWW::getRole)
-                .filter(roles -> ((AffectedPlayers) roles).getAffectedPlayers().contains(uuid))
+                .filter(roles -> ((AffectedPlayers) roles).getAffectedPlayers().contains(playerWW))
                 .forEach(roles -> {
 
-                    ((AffectedPlayers) roles).removeAffectedPlayer(uuid);
+                    ((AffectedPlayers) roles).removeAffectedPlayer(playerWW);
                     LibrarianGiveBackEvent librarianGiveBackEvent =
-                            new LibrarianGiveBackEvent(uuid,
-                                    roles.getPlayerUUID(),
+                            new LibrarianGiveBackEvent(playerWW,
+                                    roles.getPlayerWW(),
                                     sb2.toString());
 
                     Bukkit.getPluginManager().callEvent(librarianGiveBackEvent);
@@ -72,7 +75,7 @@ public class CommandSendToLibrarian implements Commands {
 
                     player.sendMessage(game.translate("werewolf.role.librarian.contribute"));
                     find.set(true);
-                    Player librarian = Bukkit.getPlayer(librarianGiveBackEvent.getTargetUUID());
+                    Player librarian = Bukkit.getPlayer(librarianGiveBackEvent.getTargetWW().getUUID());
                     if (librarian != null) {
                         librarian.sendMessage(game.translate(
                                 "werewolf.role.librarian.contribution",

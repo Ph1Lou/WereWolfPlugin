@@ -28,15 +28,16 @@ public class CommandAdminRole implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
+        PlayerWW playerWW = game.getPlayerWW(uuid);
 
-        if (game.getPlayersWW().containsKey(uuid) &&
-                game.getPlayersWW().get(uuid).isState(StatePlayer.ALIVE)) {
+        if (playerWW != null &&
+                playerWW.isState(StatePlayer.ALIVE)) {
             player.sendMessage(game.translate("werewolf.commands.admin.role.in_game"));
             return;
         }
 
         if (args.length == 0) {
-            game.getPlayersWW().values()
+            game.getPlayerWW()
                     .stream()
                     .map(PlayerWW::getName)
                     .forEach(s -> Bukkit.dispatchCommand(player,
@@ -46,10 +47,10 @@ public class CommandAdminRole implements Commands {
 
         AtomicReference<UUID> playerAtomicUUID = new AtomicReference<>();
 
-        game.getPlayersWW().values()
+        game.getPlayerWW()
                 .stream()
-                .filter(playerWW -> playerWW.getName().equalsIgnoreCase(args[0]))
-                .forEach(playerWW -> playerAtomicUUID.set(playerWW.getRole().getPlayerUUID()));
+                .filter(playerWW1 -> playerWW1.getName().equalsIgnoreCase(args[0]))
+                .forEach(playerWW1 -> playerAtomicUUID.set(playerWW1.getUUID()));
 
         if (playerAtomicUUID.get() == null) {
             player.sendMessage(game.translate("werewolf.check.not_in_game_player"));
@@ -57,15 +58,14 @@ public class CommandAdminRole implements Commands {
         }
 
         UUID playerUUID = playerAtomicUUID.get();
+        PlayerWW targetWW = game.getPlayerWW(playerUUID);
 
-        if (!game.getPlayersWW().containsKey(playerUUID)) {
+        if (targetWW == null) {
             player.sendMessage(game.translate("werewolf.check.not_in_game_player"));
             return;
         }
-        PlayerWW plg = game.getPlayersWW().get(playerUUID);
 
-
-        Roles role = plg.getRole();
+        Roles role = targetWW.getRole();
         player.sendMessage(game.translate("werewolf.commands.admin.role.role",
                 args[0],
                 game.translate(role.getKey())));
@@ -88,29 +88,37 @@ public class CommandAdminRole implements Commands {
                             "werewolf.commands.admin.role.yes" :
                             "werewolf.commands.admin.role.no")));
         }
+
+
+        for (LoverAPI loverAPI : targetWW.getLovers()) {
+
+            StringBuilder sb = new StringBuilder();
+
+            if (!loverAPI.isKey(RolesBase.CURSED_LOVER.getKey())) {
+                for (PlayerWW playerWW1 : loverAPI.getLovers()) {
+                    sb.append(playerWW1.getName()).append(" ");
+                }
+                if (sb.length() != 0) {
+                    player.sendMessage(game.translate("werewolf.commands.admin.role.lover", sb.toString()));
+                }
+            } else {
+                for (PlayerWW playerWW1 : loverAPI.getLovers()) {
+                    sb.append(playerWW1.getName()).append(" ");
+                }
+                if (sb.length() != 0) {
+                    player.sendMessage(game.translate("werewolf.commands.admin.role.cursed_lover", sb.toString()));
+                }
+            }
+        }
+
+
         StringBuilder sb = new StringBuilder();
-        for (UUID uuid1 : plg.getLovers()) {
-            sb.append(game.getPlayersWW().get(uuid1).getName()).append(" ");
-        }
-        if (sb.length() != 0) {
-            player.sendMessage(game.translate("werewolf.commands.admin.role.lover", sb.toString()));
-        }
 
-        if (plg.getCursedLovers() != null) {
-            player.sendMessage(game.translate("werewolf.commands.admin.role.cursed_lover", game.getPlayersWW().get(plg.getCursedLovers()).getName()));
-        }
+        if (targetWW.getRole() instanceof AffectedPlayers) {
+            AffectedPlayers affectedPlayers = (AffectedPlayers) targetWW.getRole();
 
-        if (plg.getAmnesiacLoverUUID() != null) {
-            player.sendMessage(game.translate("werewolf.commands.admin.role.lover", game.getPlayersWW().get(plg.getAmnesiacLoverUUID()).getName()));
-        }
-
-        sb= new StringBuilder();
-
-        if(plg.getRole() instanceof AffectedPlayers) {
-            AffectedPlayers affectedPlayers = (AffectedPlayers) plg.getRole();
-
-            for (UUID uuid1 : affectedPlayers.getAffectedPlayers()) {
-                sb.append(game.getPlayersWW().get(uuid1).getName()).append(" ");
+            for (PlayerWW playerWW1 : affectedPlayers.getAffectedPlayers()) {
+                sb.append(playerWW1.getName()).append(" ");
             }
             if (sb.length() != 0) {
                 player.sendMessage(game.translate("werewolf.commands.admin.role.affected", sb.toString()));
@@ -120,9 +128,9 @@ public class CommandAdminRole implements Commands {
         if (role.isKey(RolesBase.SISTER.getKey())) {
             sb = new StringBuilder();
 
-            for (UUID uuid1 : game.getPlayersWW().keySet()) {
-                if (game.getPlayersWW().get(uuid1).isKey(RolesBase.SISTER.getKey()) && !uuid1.equals(playerUUID)) {
-                    sb.append(game.getPlayersWW().get(uuid1).getName()).append(" ");
+            for (PlayerWW playerWW1 : game.getPlayerWW()) {
+                if (playerWW1.isKey(RolesBase.SISTER.getKey()) && !playerWW1.equals(targetWW)) {
+                    sb.append(playerWW1.getName()).append(" ");
                 }
             }
             if (sb.length() != 0) {
@@ -134,9 +142,9 @@ public class CommandAdminRole implements Commands {
         if (role.isKey(RolesBase.SIAMESE_TWIN.getKey())) {
             sb = new StringBuilder();
 
-            for (UUID uuid1 : game.getPlayersWW().keySet()) {
-                if (game.getPlayersWW().get(uuid1).getRole().isKey(RolesBase.SIAMESE_TWIN.getKey()) && !uuid1.equals(playerUUID)) {
-                    sb.append(game.getPlayersWW().get(uuid1).getName()).append(" ");
+            for (PlayerWW playerWW1 : game.getPlayerWW()) {
+                if (playerWW1.getRole().isKey(RolesBase.SIAMESE_TWIN.getKey()) && !playerWW1.equals(targetWW)) {
+                    sb.append(playerWW1.getName()).append(" ");
                 }
             }
             if (sb.length() != 0) {
@@ -147,13 +155,9 @@ public class CommandAdminRole implements Commands {
 
         sb = new StringBuilder();
 
-        for (UUID uuid1 : plg.getKillers()) {
-            if (uuid1 != null) {
-                PlayerWW playerWW = game.getPlayerWW(uuid1);
-                if (playerWW != null) { //si tué par un joueur externe à la game
-                    sb.append(playerWW.getName()).append(" ");
-                }
-
+        for (PlayerWW playerWW1 : targetWW.getKillers()) {
+            if (playerWW1 != null) {
+                sb.append(playerWW1.getName()).append(" ");
             } else sb.append(game.translate("werewolf.utils.pve")).append(" ");
         }
 

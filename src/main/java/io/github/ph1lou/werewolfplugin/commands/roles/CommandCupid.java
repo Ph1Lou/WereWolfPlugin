@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
+import com.google.common.collect.Sets;
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -28,11 +29,14 @@ public class CommandCupid implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        PlayerWW plg = game.getPlayersWW().get(uuid);
-        Roles cupid = plg.getRole();
+        PlayerWW playerWW = game.getPlayerWW(uuid);
+
+        if (playerWW == null) return;
+
+        Roles cupid = playerWW.getRole();
 
 
-        if(!((Power)cupid).hasPower()) {
+        if (!((Power) cupid).hasPower()) {
             player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
@@ -53,8 +57,9 @@ public class CommandCupid implements Commands {
             }
 
             UUID uuid1 = playerArg.getUniqueId();
+            PlayerWW playerWW1 = game.getPlayerWW(uuid1);
 
-            if (!game.getPlayersWW().containsKey(uuid1) || game.getPlayersWW().get(uuid).isState(StatePlayer.DEATH)) {
+            if (playerWW1 == null || playerWW1.isState(StatePlayer.DEATH)) {
                 player.sendMessage(game.translate("werewolf.check.player_not_found"));
                 return;
             }
@@ -68,12 +73,16 @@ public class CommandCupid implements Commands {
 
         for(String p:args) {
             Player playerArg = Bukkit.getPlayer(p);
+
             if (playerArg != null) {
-                ((AffectedPlayers) cupid).addAffectedPlayer(playerArg.getUniqueId());
+                PlayerWW playerWW1 = game.getPlayerWW(playerArg.getUniqueId());
+                if (playerWW1 != null) {
+                    ((AffectedPlayers) cupid).addAffectedPlayer(playerWW1);
+                }
             }
         }
         ((Power) cupid).setPower(false);
-        Bukkit.getPluginManager().callEvent(new CupidLoversEvent(uuid, ((AffectedPlayers) cupid).getAffectedPlayers()));
+        Bukkit.getPluginManager().callEvent(new CupidLoversEvent(playerWW, Sets.newHashSet(((AffectedPlayers) cupid).getAffectedPlayers())));
         player.sendMessage(game.translate("werewolf.role.cupid.designation_perform", args[0], args[1]));
     }
 }

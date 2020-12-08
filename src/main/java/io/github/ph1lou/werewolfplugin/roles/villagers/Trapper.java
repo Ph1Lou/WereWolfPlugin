@@ -3,7 +3,6 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
@@ -19,36 +18,36 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 public class Trapper extends RolesVillage implements AffectedPlayers, Power {
 
-    private final List<UUID> affectedPlayer = new ArrayList<>();
+    private final List<PlayerWW> affectedPlayer = new ArrayList<>();
 
-    public Trapper(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
-        super(main,game,uuid, key);
+    public Trapper(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+        super(main, playerWW, key);
         setPower(false);
     }
 
-    private boolean power=true;
+    private boolean power = true;
+
     @Override
-    public void setPower(Boolean power) {
-        this.power=power;
+    public void setPower(boolean power) {
+        this.power = power;
     }
 
     @Override
-    public Boolean hasPower() {
-        return(this.power);
+    public boolean hasPower() {
+        return (this.power);
     }
 
     @Override
-    public void addAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.add(uuid);
+    public void addAffectedPlayer(PlayerWW playerWW) {
+        this.affectedPlayer.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.remove(uuid);
+    public void removeAffectedPlayer(PlayerWW playerWW) {
+        this.affectedPlayer.remove(playerWW);
     }
 
     @Override
@@ -57,14 +56,14 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
     }
 
     @Override
-    public List<UUID> getAffectedPlayers() {
+    public List<PlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
         Player player = Bukkit.getPlayer(getPlayerUUID());
@@ -84,6 +83,12 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
         return game.translate("werewolf.role.trapper.description");
     }
 
+
+    @Override
+    public void recoverPower() {
+
+    }
+
     @EventHandler
     public void onActionBarRequest(ActionBarEvent event) {
 
@@ -91,18 +96,16 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
 
         StringBuilder stringBuilder = new StringBuilder(event.getActionBar());
 
-        if (Bukkit.getPlayer(event.getPlayerUUID()) == null) return;
-
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) return;
-
         Player player = Bukkit.getPlayer(event.getPlayerUUID());
+
+        if (player == null) return;
+
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (hasPower()) return;
 
         getAffectedPlayers()
                 .stream()
-                .map(game::getPlayerWW)
-                .filter(Objects::nonNull)
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .peek(playerWW -> stringBuilder.append("§b ")
                         .append(playerWW.getName())

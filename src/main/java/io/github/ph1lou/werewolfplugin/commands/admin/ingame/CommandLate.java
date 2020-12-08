@@ -31,7 +31,7 @@ public class CommandLate implements Commands {
             return;
         }
 
-        if (game.getPlayersWW().containsKey(argUUID)) {
+        if (game.getPlayerWW(argUUID) != null) {
             player.sendMessage(game.translate("werewolf.commands.late.in_game"));
             return;
         }

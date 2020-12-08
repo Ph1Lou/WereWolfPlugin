@@ -3,7 +3,6 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.Day;
 import io.github.ph1lou.werewolfapi.enumlg.StateGame;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
@@ -31,15 +30,15 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
 
     private boolean invisible = false;
 
-    public LittleGirl(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
-        super(main,game,uuid, key);
+    public LittleGirl(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+        super(main, playerWW, key);
     }
 
 
     @EventHandler
     public void onNight(NightEvent event) {
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -56,7 +55,7 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -72,7 +71,7 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
         player.removePotionEffect(PotionEffectType.WEAKNESS);
         setInvisible(false);
         Bukkit.getPluginManager().callEvent(
-                new InvisibleEvent(getPlayerUUID(),
+                new InvisibleEvent(getPlayerWW(),
                         false));
         player.sendMessage(game.translate("werewolf.role.little_girl.visible"));
     }
@@ -92,7 +91,7 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
 
         event.setCancelled(true);
 
-        if (!event.getPlayerUUID().equals(getPlayerUUID())) return;
+        if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         if (!isInvisible()) return;
 
@@ -107,7 +106,7 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
     public void onDayWillCome(DayWillComeEvent event) {
 
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) {
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -134,9 +133,7 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
             return;
         }
 
-        PlayerWW plg = game.getPlayersWW().get(getPlayerUUID());
-
-        if (!plg.isState(StatePlayer.ALIVE)) {
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -144,7 +141,7 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
             return;
         }
 
-        game.getPlayersWW().values()
+        game.getPlayerWW()
                 .stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .map(PlayerWW::getRole)
@@ -176,9 +173,17 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
     }
 
 
-    @Override
-    public void recoverPowerAfterStolen() {
+    @EventHandler
+    public void onStealEvent(StealEvent event) {
+
+        if (!event.getThiefWW().equals(getPlayerWW())) return;
+
         setInvisible(false);
+    }
+
+    @Override
+    public void recoverPower() {
+
     }
 
     @Override
@@ -188,7 +193,7 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
 
     @Override
     public void setInvisible(boolean invisible) {
-        this.invisible=invisible;
+        this.invisible = invisible;
     }
 
     @Override
@@ -210,15 +215,13 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 
-        if (!event.getUuid().equals(getPlayerUUID())) return;
-
-        PlayerWW plg = game.getPlayersWW().get(getPlayerUUID());
+        if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         setInvisible(false);
 
         if(game.getConfig().getLimitKnockBack()==2) return;
 
-        for (ItemStack i : plg.getItemDeath()) {
+        for (ItemStack i : getPlayerWW().getItemDeath()) {
             if (i != null) {
                 i.removeEnchantment(Enchantment.KNOCKBACK);
             }
@@ -228,7 +231,7 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
     @EventHandler
     public void onEnchantment(EnchantmentEvent event){
 
-        if (!event.getPlayerUUID().equals(getPlayerUUID())) return;
+        if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         if (event.getEnchants().containsKey(Enchantment.KNOCKBACK)) {
             event.getFinalEnchants().put(Enchantment.KNOCKBACK,
@@ -249,7 +252,8 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
 
         if (!game.isState(StateGame.GAME)) return;
         if (!game.isDay(Day.NIGHT)) return;
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) return;
+
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (inventory.getItem(36) == null &&
                 inventory.getItem(37) == null &&
@@ -275,7 +279,7 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
                 }
                 setInvisible(true);
                 Bukkit.getPluginManager().callEvent(
-                        new InvisibleEvent(uuid, true));
+                        new InvisibleEvent(getPlayerWW(), true));
             }
         } else if (isInvisible()) {
             player.sendMessage(game.translate(
@@ -292,7 +296,7 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
             player.removePotionEffect(PotionEffectType.WEAKNESS);
             setInvisible(false);
             Bukkit.getPluginManager().callEvent(
-                    new InvisibleEvent(uuid, false));
+                    new InvisibleEvent(getPlayerWW(), false));
         }
     }
 
@@ -300,7 +304,7 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
     @EventHandler
     public void onResurrection(ResurrectionEvent event){
 
-        if(!event.getPlayerUUID().equals(getPlayerUUID())) return;
+        if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         setInvisible(false);
     }

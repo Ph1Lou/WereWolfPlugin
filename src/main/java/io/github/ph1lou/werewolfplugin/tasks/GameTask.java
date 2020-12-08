@@ -37,7 +37,7 @@ public class GameTask extends BukkitRunnable {
 						game.getConfig().getTimerValues().get(
 								"werewolf.menu.timers.day_duration") - 1)));
 
-		game.getLoversManage().detectionAmnesiacLover();
+
 		game.getScore().addTimer();
 
 		if (game.getConfig().getTimerValues().get(TimersBase.INVULNERABILITY.getKey()) == 0) {

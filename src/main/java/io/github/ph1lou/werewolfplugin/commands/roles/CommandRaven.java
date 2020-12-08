@@ -30,8 +30,11 @@ public class CommandRaven implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        PlayerWW plg = game.getPlayersWW().get(uuid);
-        Roles raven = plg.getRole();
+        PlayerWW playerWW = game.getPlayerWW(uuid);
+
+        if (playerWW == null) return;
+
+        Roles raven = playerWW.getRole();
 
         if (args.length != 1) {
             player.sendMessage(game.translate("werewolf.check.player_input"));
@@ -50,18 +53,19 @@ public class CommandRaven implements Commands {
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
+        PlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
-        if (!game.getPlayersWW().containsKey(argUUID) || !game.getPlayersWW().get(argUUID).isState(StatePlayer.ALIVE)) {
+        if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
             player.sendMessage(game.translate("werewolf.check.player_not_found"));
             return;
         }
 
-        if(((AffectedPlayers)raven).getAffectedPlayers().contains(argUUID)){
+        if (((AffectedPlayers) raven).getAffectedPlayers().contains(playerWW1)) {
             player.sendMessage(game.translate("werewolf.check.already_get_power"));
             return;
         }
 
-        CurseEvent curseEvent=new CurseEvent(uuid,argUUID);
+        CurseEvent curseEvent = new CurseEvent(playerWW, playerWW1);
         ((Power) raven).setPower(false);
         Bukkit.getPluginManager().callEvent(curseEvent);
 
@@ -71,7 +75,7 @@ public class CommandRaven implements Commands {
         }
 
         ((AffectedPlayers) raven).clearAffectedPlayer();
-        ((AffectedPlayers) raven).addAffectedPlayer(argUUID);
+        ((AffectedPlayers) raven).addAffectedPlayer(playerWW1);
         playerArg.removePotionEffect(PotionEffectType.JUMP);
         playerArg.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 1, false, false));
         playerArg.sendMessage(game.translate("werewolf.role.raven.get_curse"));

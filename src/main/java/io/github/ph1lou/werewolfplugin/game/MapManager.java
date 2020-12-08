@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.game;
 
 import io.github.ph1lou.werewolfapi.MapManagerAPI;
+import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.worldloader.WorldFillTask;
@@ -15,7 +16,6 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
-import java.util.UUID;
 
 
 public class MapManager implements MapManagerAPI {
@@ -170,9 +170,9 @@ public class MapManager implements MapManagerAPI {
 
 
     @Override
-    public void transportation(UUID playerUUID, double d, String message) {
+    public void transportation(PlayerWW playerWW, double d, String message) {
 
-        Player player = Bukkit.getPlayer(playerUUID);
+        Player player = Bukkit.getPlayer(playerWW.getUUID());
 
         if (player != null) {
 

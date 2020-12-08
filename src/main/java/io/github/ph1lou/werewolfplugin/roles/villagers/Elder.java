@@ -2,7 +2,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.Camp;
 import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
@@ -20,29 +20,33 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.UUID;
-
 public class Elder extends RolesVillage implements Power {
 
     private boolean power = true;
 
-    public Elder(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
-        super(main, game, uuid, key);
+    public Elder(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+        super(main, playerWW, key);
     }
 
     @Override
-    public void setPower(Boolean power) {
+    public void setPower(boolean power) {
         this.power = power;
     }
 
     @Override
-    public Boolean hasPower() {
-        return(this.power);
+    public boolean hasPower() {
+        return (this.power);
     }
 
     @Override
     public @NotNull String getDescription() {
         return game.translate("werewolf.role.elder.description");
+    }
+
+
+    @Override
+    public void recoverPower() {
+
     }
 
 
@@ -81,7 +85,7 @@ public class Elder extends RolesVillage implements Power {
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) return;
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (player == null) return;
 
@@ -99,18 +103,18 @@ public class Elder extends RolesVillage implements Power {
 
         if (event.isCancelled()) return;
 
-        if (!event.getUuid().equals(getPlayerUUID())) return;
+        if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         if (!hasPower()) return;
 
-        UUID killerUUID = game.getPlayersWW().get(getPlayerUUID()).getLastKiller();
-
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
+        PlayerWW killerWW = getPlayerWW().getLastKiller();
+
         ElderResurrectionEvent elderResurrectionEvent =
-                new ElderResurrectionEvent(getPlayerUUID(),
-                        game.getPlayersWW().containsKey(killerUUID)
-                                && game.getPlayersWW().get(killerUUID)
+                new ElderResurrectionEvent(getPlayerWW(),
+                        killerWW != null
+                                && killerWW
                                 .getRole().isCamp(Camp.VILLAGER));
 
         Bukkit.getPluginManager().callEvent(elderResurrectionEvent);
@@ -121,13 +125,16 @@ public class Elder extends RolesVillage implements Power {
             player.sendMessage(game.translate("werewolf.check.cancel"));
         } else {
             if (elderResurrectionEvent.isKillerAVillager()) {
-                VersionUtils.getVersionUtils().setPlayerMaxHealth(player,
-                        Math.max(1,
-                                VersionUtils.getVersionUtils()
-                                        .getPlayerMaxHealth(player) - 6));
+                if (player != null) {
+                    VersionUtils.getVersionUtils().setPlayerMaxHealth(player,
+                            Math.max(1,
+                                    VersionUtils.getVersionUtils()
+                                            .getPlayerMaxHealth(player) - 6));
+                }
+
             }
             event.setCancelled(true);
-            game.resurrection(getPlayerUUID());
+            game.resurrection(getPlayerWW());
         }
 
     }

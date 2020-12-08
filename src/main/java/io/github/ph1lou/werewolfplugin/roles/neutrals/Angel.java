@@ -3,7 +3,6 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enumlg.*;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.rolesattributs.*;
@@ -19,25 +18,26 @@ import org.bukkit.plugin.Plugin;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, AngelRole, Transformed {
 
     private int use = 0;
-    private AngelForm choice=AngelForm.ANGEL;
-    private final List<UUID> affectedPlayer = new ArrayList<>();
-    private boolean transformed=false;
+    private AngelForm choice = AngelForm.ANGEL;
+    private final List<PlayerWW> affectedPlayer = new ArrayList<>();
+    private boolean transformed = false;
 
-    public Angel(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
-        super(main,game,uuid, key);
+    public Angel(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+        super(main, playerWW, key);
     }
-
 
     @Override
     public int getUse() {
         return use;
     }
-
 
     @Override
     public void setUse(int use) {
@@ -45,13 +45,13 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
     }
 
     @Override
-    public void addAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.add(uuid);
+    public void addAffectedPlayer(PlayerWW playerWW) {
+        this.affectedPlayer.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.remove(uuid);
+    public void removeAffectedPlayer(PlayerWW playerWW) {
+        this.affectedPlayer.remove(playerWW);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
     }
 
     @Override
-    public List<UUID> getAffectedPlayers() {
+    public List<PlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
@@ -87,6 +87,7 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
         if (choice.equals(AngelForm.FALLEN_ANGEL))
             sb.append(game.translate("werewolf.role.fallen_angel.description"));
         else if (choice.equals(AngelForm.GUARDIAN_ANGEL)) {
+
             if (game.getConfig().getConfigValues().get(ConfigsBase.SWEET_ANGEL.getKey())) {
                 sb.append(game.translate("werewolf.role.guardian_angel.description"));
             } else {
@@ -100,9 +101,10 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
         return sb.toString();
     }
 
+    @EventHandler
+    public void onStealEvent(StealEvent event) {
 
-    @Override
-    public void recoverPowerAfterStolen() {
+        if (!event.getThiefWW().equals(getPlayerWW())) return;
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -118,7 +120,6 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
 
         player.sendMessage(pair.getValue1());
     }
-
 
     /**
      * @return nb de coeur en plus qu'a l'ange plus le texte
@@ -141,45 +142,47 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
 
         } else if (!getAffectedPlayers().isEmpty()) {
 
-            UUID targetUUID = getAffectedPlayers().get(0);
-            PlayerWW target = game.getPlayersWW().get(targetUUID);
+            PlayerWW targetWW = getAffectedPlayers().get(0);
 
-            if (target.isState(StatePlayer.DEATH)) {
+            if (targetWW != null) {
 
-                if (isChoice(AngelForm.FALLEN_ANGEL)) {
-                    if (target.getKillers().contains(getPlayerUUID())) {
-                        extraHearts += 10;
-                        sb.append(game.translate(
-                                "werewolf.role.fallen_angel.deadly_target"));
+                if (targetWW.isState(StatePlayer.DEATH)) {
+
+                    if (isChoice(AngelForm.FALLEN_ANGEL)) {
+                        if (targetWW.getKillers().contains(getPlayerWW())) {
+                            extraHearts += 10;
+                            sb.append(game.translate(
+                                    "werewolf.role.fallen_angel.deadly_target"));
+                        } else {
+                            extraHearts += 4;
+                            sb.append(game.translate(
+                                    "werewolf.role.fallen_angel.deadly_target_by_other"));
+                        }
+
                     } else {
                         extraHearts += 4;
-                        sb.append(game.translate(
-                                "werewolf.role.fallen_angel.deadly_target_by_other"));
+                        if (game.getConfig().getConfigValues()
+                                .get(ConfigsBase.SWEET_ANGEL.getKey())) {
+                            sb.append(game.translate(
+                                    "werewolf.role.guardian_angel.protege_death"));
+                        } else {
+                            sb.append(game.translate(
+                                    "werewolf.role.guardian_angel.protege_death_patch"));
+                        }
                     }
 
-                } else {
+
+                } else if (isChoice(AngelForm.FALLEN_ANGEL)) {
                     extraHearts += 4;
-                    if (game.getConfig().getConfigValues()
-                            .get(ConfigsBase.SWEET_ANGEL.getKey())) {
-                        sb.append(game.translate(
-                                "werewolf.role.guardian_angel.protege_death"));
-                    } else {
-                        sb.append(game.translate(
-                                "werewolf.role.guardian_angel.protege_death_patch"));
-                    }
+                    sb.append(game.translate(
+                            "werewolf.role.fallen_angel.reveal_target",
+                            targetWW.getName()));
+                } else {
+                    extraHearts += 10;
+                    sb.append(game.translate(
+                            "werewolf.role.guardian_angel.reveal_protege",
+                            targetWW.getName()));
                 }
-
-
-            } else if (isChoice(AngelForm.FALLEN_ANGEL)) {
-                extraHearts += 4;
-                sb.append(game.translate(
-                        "werewolf.role.fallen_angel.reveal_target",
-                        target.getName()));
-            } else {
-                extraHearts += 10;
-                sb.append(game.translate(
-                        "werewolf.role.guardian_angel.reveal_protege",
-                        target.getName()));
             }
         }
 
@@ -253,10 +256,9 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
     @EventHandler
     public void onAutoAngel(AutoAngelEvent event){
 
-        PlayerWW plg = game.getPlayersWW().get(getPlayerUUID());
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (!plg.isState(StatePlayer.ALIVE)) {
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -279,19 +281,18 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
                 }
                 setChoice(AngelForm.GUARDIAN_ANGEL);
             }
-            Bukkit.getPluginManager().callEvent(new AngelChoiceEvent(getPlayerUUID(), getChoice()));
+            Bukkit.getPluginManager().callEvent(new AngelChoiceEvent(getPlayerWW(), getChoice()));
         }
 
-        UUID targetUUID = game.autoSelect(getPlayerUUID());
-        addAffectedPlayer(targetUUID);
-        PlayerWW target = game.getPlayersWW().get(targetUUID);
+        PlayerWW targetWW = game.autoSelect(getPlayerWW());
+        addAffectedPlayer(targetWW);
 
         if (player != null) {
 
             if (isChoice(AngelForm.FALLEN_ANGEL)) {
                 player.sendMessage(game.translate(
                         "werewolf.role.fallen_angel.reveal_target",
-                        target.getName()));
+                        targetWW.getName()));
             } else {
                 VersionUtils.getVersionUtils()
                         .setPlayerMaxHealth(player,
@@ -300,13 +301,13 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
                                         .getPlayerMaxHealth(player) + 6);
                 player.sendMessage(game.translate(
                         "werewolf.role.guardian_angel.reveal_protege",
-                        target.getName()));
+                        targetWW.getName()));
             }
             Sounds.PORTAL_TRIGGER.play(player);
         }
 
         Bukkit.getPluginManager().callEvent(
-                new AngelTargetEvent(getPlayerUUID(), targetUUID));
+                new AngelTargetEvent(getPlayerWW(), targetWW));
 
         game.checkVictory();
     }
@@ -317,7 +318,7 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
     @EventHandler
     public void onEndPlayerMessage(EndPlayerMessageEvent event){
 
-        if(!event.getPlayerUUID().equals(getPlayerUUID())) return;
+        if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         StringBuilder sb = event.getEndMessage();
         if (isKey(RolesBase.ANGEL.getKey()) && !isChoice(AngelForm.ANGEL)) {
@@ -329,29 +330,29 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 
-        UUID uuid = event.getUuid();
+        PlayerWW playerWW = event.getPlayerWW();
 
-        PlayerWW plg = game.getPlayersWW().get(getPlayerUUID());
+        if (!getAffectedPlayers().contains(playerWW)) return;
 
-        if (!getAffectedPlayers().contains(uuid)) return;
-
-        PlayerWW target = game.getPlayersWW().get(uuid);
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (!plg.isState(StatePlayer.ALIVE)) return;
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (player == null) return;
 
-
-        Bukkit.getPluginManager().callEvent(new AngelTargetDeathEvent(getPlayerUUID(), uuid));
+        Bukkit.getPluginManager().callEvent(new AngelTargetDeathEvent(getPlayerWW(),
+                playerWW));
         if (isChoice(AngelForm.FALLEN_ANGEL)) {
-            if (getPlayerUUID().equals(target.getLastKiller())) {
-                Bukkit.getPluginManager().callEvent(new FallenAngelTargetDeathEvent(getPlayerUUID(), uuid));
-                VersionUtils.getVersionUtils().setPlayerMaxHealth(player, VersionUtils.getVersionUtils().getPlayerMaxHealth(player) + 6);
+            if (getPlayerWW().equals(playerWW.getLastKiller())) {
+                Bukkit.getPluginManager().callEvent(
+                        new FallenAngelTargetDeathEvent(getPlayerWW(), playerWW));
+                VersionUtils.getVersionUtils().setPlayerMaxHealth(player,
+                        VersionUtils.getVersionUtils().getPlayerMaxHealth(player) + 6);
                 player.sendMessage(game.translate("werewolf.role.fallen_angel.deadly_target"));
             }
         } else if (isChoice(AngelForm.GUARDIAN_ANGEL)) {
-            VersionUtils.getVersionUtils().setPlayerMaxHealth(player, VersionUtils.getVersionUtils().getPlayerMaxHealth(player) - 6);
+            VersionUtils.getVersionUtils().setPlayerMaxHealth(player,
+                    VersionUtils.getVersionUtils().getPlayerMaxHealth(player) - 6);
 
             if (game.getConfig().getConfigValues().get(
                     ConfigsBase.SWEET_ANGEL.getKey())) {
@@ -370,25 +371,27 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
     @EventHandler
     public void onTargetIsStolen(StealEvent event) {
 
-        UUID newUUID = event.getKiller();
-        UUID oldUUID = event.getPlayer();
-        PlayerWW plg = game.getPlayersWW().get(getPlayerUUID());
+
         Player player = Bukkit.getPlayer(getPlayerUUID());
-        String targetName = game.getPlayersWW().get(newUUID).getName();
+        PlayerWW playerWW = event.getPlayerWW();
+        PlayerWW thiefWW = event.getThiefWW();
 
-        if (!getAffectedPlayers().contains(oldUUID)) return;
 
-        removeAffectedPlayer(oldUUID);
-        addAffectedPlayer(newUUID);
+        String targetName = thiefWW.getName();
 
-        if (!plg.isState(StatePlayer.ALIVE)) return;
+        if (!getAffectedPlayers().contains(playerWW)) return;
+
+        removeAffectedPlayer(playerWW);
+        addAffectedPlayer(thiefWW);
+
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (player == null) return;
 
         if (isChoice(AngelForm.FALLEN_ANGEL)) {
             player.sendMessage(game.translate("werewolf.role.fallen_angel.new_target", targetName));
         } else if (isChoice(AngelForm.GUARDIAN_ANGEL)) {
-            player.sendMessage(game.translate("werewolf.role.guardian_angel.new_protege",targetName));
+            player.sendMessage(game.translate("werewolf.role.guardian_angel.new_protege", targetName));
         }
     }
 
@@ -398,21 +401,28 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
         if (!getPlayerUUID().equals(event.getPlayerUUID())) return;
 
         StringBuilder stringBuilder = new StringBuilder(event.getActionBar());
-
-        if (Bukkit.getPlayer(event.getPlayerUUID()) == null) return;
-
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) return;
-
         Player player = Bukkit.getPlayer(event.getPlayerUUID());
 
-        if(!isChoice(AngelForm.GUARDIAN_ANGEL)) {
+        if (player == null) return;
+
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+
+        if (!isChoice(AngelForm.GUARDIAN_ANGEL)) {
             return;
         }
 
-        for (UUID uuid : getAffectedPlayers()) {
-            Player playerAffected = Bukkit.getPlayer(uuid);
-            if (game.getPlayersWW().get(uuid).isState(StatePlayer.ALIVE) && playerAffected != null) {
-                stringBuilder.append("§b ").append(game.getPlayersWW().get(uuid).getName()).append(" ").append(game.getScore().updateArrow(player, playerAffected.getLocation()));
+        for (PlayerWW playerWW : getAffectedPlayers()) {
+            Player playerAffected = Bukkit.getPlayer(playerWW.getUUID());
+
+            if (playerWW.isState(StatePlayer.ALIVE) &&
+                    playerAffected != null) {
+
+                stringBuilder.append("§b ")
+                        .append(playerWW.getName())
+                        .append(" ")
+                        .append(game.getScore()
+                                .updateArrow(player,
+                                        playerAffected.getLocation()));
             }
         }
 
@@ -445,16 +455,16 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
                 game.getPlayerWW(
                         getPlayerUUID())).isState(StatePlayer.ALIVE)) return;
 
-        if (event.getUuidS().contains(getPlayerUUID())) {
-            for (UUID uuid : affectedPlayer) {
-                event.addPlayer(uuid);
+        if (event.getPlayerWWS().contains(getPlayerWW())) {
+            for (PlayerWW playerWW : affectedPlayer) {
+                event.addPlayer(playerWW);
             }
             return;
         }
 
-        for (UUID uuid : event.getUuidS()) {
-            if (affectedPlayer.contains(uuid)) {
-                event.addPlayer(getPlayerUUID());
+        for (PlayerWW playerWW : event.getPlayerWWS()) {
+            if (affectedPlayer.contains(playerWW)) {
+                event.addPlayer(getPlayerWW());
                 break;
             }
         }
@@ -472,21 +482,21 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
         if (affectedPlayer.isEmpty()) return;
 
 
-        PlayerWW playerWW = game.getPlayerWW(affectedPlayer.get(0));
+        PlayerWW playerWW = affectedPlayer.get(0);
 
         if (playerWW == null) return;
 
         if (!playerWW.isState(StatePlayer.ALIVE)) return;
 
 
-        List<UUID> list = new ArrayList<>(Collections.singleton(affectedPlayer.get(0)));
+        List<PlayerWW> list = new ArrayList<>(Collections.singleton(affectedPlayer.get(0)));
 
 
         for (int i = 0; i < list.size(); i++) {
 
-            UUID uuid = list.get(i);
+            PlayerWW playerWW2 = list.get(i);
 
-            game.getPlayersWW().values()
+            game.getPlayerWW()
                     .stream()
                     .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                     .map(PlayerWW::getRole)
@@ -494,9 +504,9 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
                             || roles.isKey(RolesBase.GUARDIAN_ANGEL.getKey()))
                     .filter(roles -> ((AngelRole) roles).isChoice(AngelForm.GUARDIAN_ANGEL))
                     .forEach(role -> {
-                        if (((AffectedPlayers) role).getAffectedPlayers().contains(uuid)) {
-                            if (!list.contains(role.getPlayerUUID())) {
-                                list.add(role.getPlayerUUID());
+                        if (((AffectedPlayers) role).getAffectedPlayers().contains(playerWW2)) {
+                            if (!list.contains(role.getPlayerWW())) {
+                                list.add(role.getPlayerWW());
                             }
                         }
                     });

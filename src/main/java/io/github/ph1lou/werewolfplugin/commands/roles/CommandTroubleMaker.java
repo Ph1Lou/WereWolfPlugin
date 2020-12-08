@@ -28,8 +28,11 @@ public class CommandTroubleMaker implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        PlayerWW plg = game.getPlayersWW().get(uuid);
-        Roles troublemaker = plg.getRole();
+        PlayerWW playerWW = game.getPlayerWW(uuid);
+
+        if (playerWW == null) return;
+
+        Roles troublemaker = playerWW.getRole();
 
         if (args.length != 1) {
             player.sendMessage(game.translate("werewolf.check.player_input"));
@@ -48,13 +51,14 @@ public class CommandTroubleMaker implements Commands {
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
+        PlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
-        if (!game.getPlayersWW().containsKey(argUUID) || !game.getPlayersWW().get(argUUID).isState(StatePlayer.ALIVE)) {
+        if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
             player.sendMessage(game.translate("werewolf.check.player_not_found"));
             return;
         }
 
-        TroubleMakerEvent troubleMakerEvent = new TroubleMakerEvent(uuid,argUUID);
+        TroubleMakerEvent troubleMakerEvent = new TroubleMakerEvent(playerWW, playerWW1);
         ((Power) troublemaker).setPower(false);
         Bukkit.getPluginManager().callEvent(troubleMakerEvent);
 
@@ -63,9 +67,9 @@ public class CommandTroubleMaker implements Commands {
             return;
         }
 
-        ((AffectedPlayers)troublemaker).addAffectedPlayer(argUUID);
+        ((AffectedPlayers) troublemaker).addAffectedPlayer(playerWW1);
 
-        game.getMapManager().transportation(argUUID, Math.random() * 2 * Math.PI, game.translate("werewolf.role.troublemaker.get_switch"));
+        game.getMapManager().transportation(playerWW1, Math.random() * 2 * Math.PI, game.translate("werewolf.role.troublemaker.get_switch"));
         player.sendMessage(game.translate("werewolf.role.troublemaker.troublemaker_perform", playerArg.getName()));
     }
 }

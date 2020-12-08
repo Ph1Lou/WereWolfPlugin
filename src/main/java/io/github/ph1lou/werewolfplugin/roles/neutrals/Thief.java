@@ -3,14 +3,12 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.*;
+import io.github.ph1lou.werewolfapi.enumlg.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enumlg.RolesBase;
+import io.github.ph1lou.werewolfapi.enumlg.StateGame;
+import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.*;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
-import io.github.ph1lou.werewolfapi.versions.VersionUtils;
+import io.github.ph1lou.werewolfapi.rolesattributs.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,35 +24,35 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 public class Thief extends RolesNeutral implements AffectedPlayers, Power {
 
-    private final List<UUID> affectedPlayer = new ArrayList<>();
+    private final List<PlayerWW> affectedPlayer = new ArrayList<>();
 
-    public Thief(GetWereWolfAPI main, WereWolfAPI game, UUID uuid, String key) {
-        super(main,game,uuid, key);
+    public Thief(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+        super(main, playerWW, key);
     }
 
-    private boolean power=true;
-    @Override
-    public void setPower(Boolean power) {
-        this.power=power;
-    }
+    private boolean power = true;
 
     @Override
-    public Boolean hasPower() {
-        return(this.power);
+    public void setPower(boolean power) {
+        this.power = power;
     }
 
     @Override
-    public void addAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.add(uuid);
+    public boolean hasPower() {
+        return (this.power);
     }
 
     @Override
-    public void removeAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.remove(uuid);
+    public void addAffectedPlayer(PlayerWW playerWW) {
+        this.affectedPlayer.add(playerWW);
+    }
+
+    @Override
+    public void removeAffectedPlayer(PlayerWW playerWW) {
+        this.affectedPlayer.remove(playerWW);
     }
 
     @Override
@@ -63,7 +61,7 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
     }
 
     @Override
-    public List<UUID> getAffectedPlayers() {
+    public List<PlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
@@ -71,6 +69,12 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
     @Override
     public @NotNull String getDescription() {
         return game.translate("werewolf.role.thief.description");
+    }
+
+
+    @Override
+    public void recoverPower() {
+
     }
 
     @Override
@@ -118,13 +122,12 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onFirstDeathEvent(FirstDeathEvent event){
 
-        UUID uuid = event.getUuid();
 
-        PlayerWW plg = game.getPlayersWW().get(uuid);
+        PlayerWW playerWW = event.getPlayerWW();
 
-        if(plg.getLastKiller()==null) return;
+        if (playerWW.getLastKiller() == null) return;
 
-        if(!plg.getLastKiller().equals(getPlayerUUID())) return;
+        if (!playerWW.getLastKiller().equals(getPlayerWW())) return;
 
         if(!hasPower())return;
 
@@ -132,16 +135,14 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
 
         Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
             if (!game.isState(StateGame.END)) {
-                if (game.getPlayersWW()
-                        .get(getPlayerUUID())
-                        .isState(StatePlayer.ALIVE)
+                if (getPlayerWW().isState(StatePlayer.ALIVE)
                         && hasPower()) {
-                    thief_recover_role(getPlayerUUID(), uuid);
+                    thiefRecoverRole(playerWW);
                 } else {
                     Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
                         if (!game.isState(StateGame.END)) {
                             Bukkit.getPluginManager().callEvent(
-                                    new FirstDeathEvent(uuid));
+                                    new FirstDeathEvent(playerWW));
                         }
 
                     }, 20L);
@@ -152,30 +153,27 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
     }
 
 
-    public void thief_recover_role(UUID killerUUID,UUID playerUUID) {
+    public void thiefRecoverRole(PlayerWW playerWW) {
 
-        PlayerWW plg = game.getPlayersWW().get(playerUUID);
-        Roles role = plg.getRole();
-        PlayerWW klg = game.getPlayersWW().get(killerUUID);
-        String killerName = klg.getName();
-        Player killer = Bukkit.getPlayer(killerUUID);
-        boolean isInfected = klg.getRole().getInfected();
+        Roles role = playerWW.getRole();
+        Player killer = Bukkit.getPlayer(getPlayerUUID());
+        boolean isInfected = getInfected();
 
 
         if (killer != null) {
 
             setPower(false);
-            klg.setThief(true);
-            HandlerList.unregisterAll((Listener) klg.getRole());
+            getPlayerWW().setThief(true);
+            HandlerList.unregisterAll((Listener) getPlayerWW().getRole());
             Roles roleClone = role.publicClone();
-            klg.setRole(roleClone);
-            Objects.requireNonNull(roleClone).setPlayerUUID(killerUUID);
+            getPlayerWW().setRole(roleClone);
+            Objects.requireNonNull(roleClone).setPlayerWW(getPlayerWW());
             Bukkit.getPluginManager().registerEvents((Listener) roleClone, (Plugin) main);
 
             if (isInfected) {
                 roleClone.setInfected();
             } else if (roleClone.isWereWolf()) {
-                Bukkit.getPluginManager().callEvent(new NewWereWolfEvent(killerUUID));
+                Bukkit.getPluginManager().callEvent(new NewWereWolfEvent(getPlayerWW()));
             }
 
             killer.sendMessage(game.translate("werewolf.role.thief.realized_theft",
@@ -183,166 +181,35 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
             killer.sendMessage(game.translate("werewolf.announcement.review_role"));
 
             killer.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-            Bukkit.getPluginManager().callEvent(new StealEvent(killerUUID,
-                    playerUUID,
+            Bukkit.getPluginManager().callEvent(new StealEvent(getPlayerWW(),
+                    playerWW,
                     roleClone.getKey()));
 
 
-            klg.getRole().recoverPotionEffect();
-            klg.getRole().recoverPowerAfterStolen();
+            getPlayerWW().getRole().recoverPotionEffect();
 
-            if (klg.getCursedLovers() != null ||
-                    klg.getAmnesiacLoverUUID() != null) {
-                Bukkit.getConsoleSender()
-                        .sendMessage("[WereWolfPlugin] Thief in special lover");
-            } else if (!klg.getLovers().isEmpty() &&
-                    !game.getConfig().getConfigValues()
-                            .get(ConfigsBase.POLYGAMY.getKey())) {
-                Bukkit.getConsoleSender()
-                        .sendMessage("[WereWolfPlugin] Thief in lover & no polygamy");
-            } else if (!klg.getLovers().isEmpty() || !plg.getLovers().isEmpty()) {
+            boolean ok = true;
 
-                if (!klg.getLovers().contains(playerUUID)) {
-
-                    plg.getLovers()
-                            .stream()
-                            .map(game::getPlayerWW)
-                            .filter(Objects::nonNull)
-                            .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
-                            .peek(playerWW -> {
-                                playerWW.addLover(killerUUID);
-                                playerWW.removeLover(playerUUID);
-                                killer.sendMessage(game.translate(
-                                        "werewolf.role.lover.description",
-                                        playerWW.getName()));
-                                Sounds.SHEEP_SHEAR.play(killer);
-                            })
-                            .map(PlayerWW::getRole)
-                            .map(Roles::getPlayerUUID)
-                            .map(Bukkit::getPlayer)
-                            .filter(Objects::nonNull)
-                            .findFirst()
-                            .ifPresent(player -> {
-                                player.sendMessage(game.translate(
-                                        "werewolf.role.lover.description",
-                                        killerName));
-                                Sounds.SHEEP_SHEAR.play(player);
-                            });
-
-                    plg.clearLovers();
-
-                    game.getPlayersWW().values()
-                            .stream()
-                            .map(PlayerWW::getRole)
-                            .filter(roles -> roles.isKey(RolesBase.CUPID.getKey()))
-                            .map(roles -> (AffectedPlayers) roles)
-                            .filter(affectedPlayers -> affectedPlayers
-                                    .getAffectedPlayers().contains(playerUUID))
-                            .findFirst()
-                            .ifPresent(affectedPlayers -> {
-                                affectedPlayers.addAffectedPlayer(killerUUID);
-                                affectedPlayers.removeAffectedPlayer(playerUUID);
-                            });
-                    thiefLoversRange(killerUUID, playerUUID);
+            for (LoverAPI loverAPI : getPlayerWW().getLovers()) {
+                if (!loverAPI.isKey(RolesBase.LOVER.getKey())) {
+                    ok = false;
+                } else if (!game.getConfig().getConfigValues()
+                        .get(ConfigsBase.POLYGAMY.getKey())) {
+                    ok = false;
                 }
             }
-            else if (plg.getAmnesiacLoverUUID()!=null) {
 
-                UUID uuid = plg.getAmnesiacLoverUUID();
-                plg.setAmnesiacLoverUUID(null);
-                Player pc = Bukkit.getPlayer(uuid);
-                PlayerWW llg = game.getPlayersWW().get(uuid);
-
-                if(llg.isState(StatePlayer.ALIVE)){
-
-                    klg.setAmnesiacLoverUUID(uuid);
-                    llg.setAmnesiacLoverUUID(killerUUID);
-
-                    if(plg.getRevealAmnesiacLover()) {
-                        klg.setRevealAmnesiacLover(true);
-                        if (pc != null) {
-                            pc.sendMessage(game.translate("werewolf.role.lover.description",
-                                    killerName));
-                            Sounds.PORTAL_TRAVEL.play(pc);
-                        }
-                        killer.sendMessage(game.translate("werewolf.role.lover.description",
-                                llg.getName()));
-
-                        game.getAmnesiacLoversRange()
-                                .stream()
-                                .filter(uuids -> uuids.contains(playerUUID))
-                                .findFirst()
-                                .ifPresent(uuids -> {
-                                    uuids.add(killerUUID);
-                                    uuids.remove(playerUUID);
-                                });
-                    }
+            if (ok) {
+                for (LoverAPI loverAPI : playerWW.getLovers()) {
+                    loverAPI.swap(playerWW, getPlayerWW());
+                    getPlayerWW().getLovers().add(loverAPI);
                 }
-            }
-            else if (plg.getCursedLovers()!=null) {
-
-                UUID uuid = plg.getCursedLovers();
-                plg.setCursedLover(null);
-                PlayerWW llg = game.getPlayersWW().get(uuid);
-                Player pc = Bukkit.getPlayer(uuid);
-
-                if(llg.isState(StatePlayer.ALIVE)) {
-
-                    klg.setCursedLover(uuid);
-                    llg.setCursedLover(killerUUID);
-
-                    if (pc != null) {
-                        pc.sendMessage(game.translate(
-                                "werewolf.role.cursed_lover.description",
-                                killerName));
-                        Sounds.SHEEP_SHEAR.play(pc);
-                    }
-                    killer.sendMessage(game.translate(
-                            "werewolf.role.cursed_lover.description",
-                            llg.getName()));
-                    Sounds.SHEEP_SHEAR.play(killer);
-                    VersionUtils.getVersionUtils().setPlayerMaxHealth(killer,
-                            VersionUtils.getVersionUtils()
-                                    .getPlayerMaxHealth(killer) + 2);
-
-                    game.getCursedLoversRange()
-                            .stream()
-                            .filter(uuids -> uuids.contains(playerUUID))
-                            .findFirst()
-                            .ifPresent(uuids -> {
-                                uuids.add(killerUUID);
-                                uuids.remove(playerUUID);
-                            });
-                }
+                playerWW.getLovers().clear();
             }
         }
-        game.death(playerUUID);
+        game.death(playerWW);
     }
 
-    public void thiefLoversRange(UUID killerUUID, UUID playerUUID) {
-
-
-        int cp = -1;
-        int ck = -1;
-
-
-        for (int i = 0; i < game.getLoversRange().size(); i++) {
-            List<UUID> loverList = game.getLoversRange().get(i);
-            if (loverList.contains(playerUUID) && !loverList.contains(killerUUID)) {
-                loverList.remove(playerUUID);
-                loverList.add(killerUUID);
-                cp = i;
-            } else if (!loverList.contains(playerUUID) &&
-                    loverList.contains(killerUUID)) {
-                ck = i;
-            }
-        }
-        if (cp != -1 && ck != -1) {
-            game.getLoversRange().get(ck).remove(killerUUID);
-            game.getLoversRange().get(cp).addAll(game.getLoversRange().get(ck));
-            game.getLoversRange().remove(ck);
-        }
-    }
     
     @EventHandler
     public void onDay(DayEvent event) {
@@ -361,7 +228,7 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
 
         if (!hasPower()) return;
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(StatePlayer.ALIVE)) return;
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (player == null) return;
 

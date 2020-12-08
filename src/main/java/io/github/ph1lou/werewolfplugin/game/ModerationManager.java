@@ -33,7 +33,7 @@ public class ModerationManager implements ModerationManagerAPI {
         int i = 0;
 
 
-        while (!temp.isEmpty() && game.getConfig().getPlayerMax() > game.getPlayersWW().size()) {
+        while (!temp.isEmpty() && game.getConfig().getPlayerMax() > game.getScore().getPlayerSize()) {
 
             Player player = Bukkit.getPlayer(temp.get(0));
             if (player != null && (!game.getConfig().isWhiteList() || getWhiteListedPlayers().contains(temp.get(0)))) {

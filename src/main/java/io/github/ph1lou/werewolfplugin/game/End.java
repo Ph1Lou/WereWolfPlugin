@@ -1,8 +1,10 @@
 package io.github.ph1lou.werewolfplugin.game;
 
+import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enumlg.*;
 import io.github.ph1lou.werewolfapi.events.*;
+import io.github.ph1lou.werewolfapi.rolesattributs.LoverAPI;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -10,7 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
-import java.util.UUID;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class End {
@@ -29,48 +31,42 @@ public class End {
 
         if (game.isState(StateGame.END)) return;
 
-        if (!game.getCursedLoversRange().isEmpty()) {
-            return; //Si il y a encore un couple maudit, comme ils ne peuvent pas gagner ensemble on cancel
-        }
-
         if (game.getScore().getPlayerSize() == 0) {
             winner = "werewolf.end.death";
             fin();
             return;
         }
 
-        if (game.getLoversRange().size() == 1) {
-            AroundLover aroundLover = new AroundLover(new HashSet<>(game.getLoversRange().get(0)));
-            Bukkit.getPluginManager().callEvent(aroundLover);
+        ConfigWereWolfAPI config = game.getConfig();
 
-            if (aroundLover.getUuidS().size() == game.getScore().getPlayerSize()) {
-                winner = RolesBase.LOVER.getKey();
-                fin();
-                return;
+        if (config.getAmnesiacLoverSize() *
+                config.getLoverSize() <= 1) {
+
+            for (LoverAPI loverAPI : game.getLoversManager().getLovers()) {
+                Set<PlayerWW> lovers = new HashSet<>(loverAPI.getLovers());
+
+                if (loverAPI.isAlive()) {
+                    AroundLover aroundLover = new AroundLover(lovers);
+                    Bukkit.getPluginManager().callEvent(aroundLover);
+
+                    if (aroundLover.getPlayerWWS().size() == game.getScore().getPlayerSize()) {
+                        winner = loverAPI.getKey();
+                        fin();
+                        return;
+                    }
+                }
             }
         }
 
-        if (game.getAmnesiacLoversRange().size() == 1) {
-            AroundLover aroundLover = new AroundLover(new HashSet<>(game.getAmnesiacLoversRange().get(0)));
-            Bukkit.getPluginManager().callEvent(aroundLover);
-
-            if (aroundLover.getUuidS().size() == game.getScore().getPlayerSize()) {
-                winner = RolesBase.AMNESIAC_LOVER.getKey();
-                fin();
-                return;
-            }
-        }
-
-        if (game.getConfig().getConfigValues().get(ConfigsBase.VICTORY_LOVERS.getKey())
-                && (!game.getLoversRange().isEmpty() ||
-                !game.getAmnesiacLoversRange().isEmpty())) {
-            return;
-        }
 
         WinConditionsCheckEvent winConditionsCheckEvent = new WinConditionsCheckEvent();
         Bukkit.getPluginManager().callEvent(winConditionsCheckEvent);
 
         if (winConditionsCheckEvent.isCancelled()) {
+            String winnerTeam = winConditionsCheckEvent.getVictoryTeam();
+
+            if (winnerTeam.isEmpty()) return;
+
             winner = winConditionsCheckEvent.getVictoryTeam();
             fin();
             return;
@@ -97,11 +93,10 @@ public class End {
     public void fin() {
 
         Bukkit.getPluginManager().callEvent(new WinEvent(winner,
-                game.getPlayersWW().values()
+                game.getPlayerWW()
                         .stream()
                         .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
-                        .map(playerWW -> playerWW.getRole().getPlayerUUID())
-                        .collect(Collectors.toList())));
+                        .collect(Collectors.toSet())));
 
         String subtitles_victory = game.translate(winner);
 
@@ -111,42 +106,28 @@ public class End {
 
         game.getConfig().getConfigValues().put(ConfigsBase.CHAT.getKey(), true);
 
-        for (UUID uuid : game.getPlayersWW().keySet()) {
+        for (PlayerWW playerWW1 : game.getPlayerWW()) {
 
-            PlayerWW plg = game.getPlayersWW().get(uuid);
-            String role = game.translate(plg.getRole().getKey());
-            String playerName = plg.getName();
+            String role = game.translate(playerWW1.getRole().getKey());
+            String playerName = playerWW1.getName();
             StringBuilder sb = new StringBuilder();
 
-            if(plg.isThief()){
+            if (playerWW1.isThief()) {
                 role = game.translate(RolesBase.THIEF.getKey());
             }
-            if (plg.isState(StatePlayer.DEATH)) {
+            if (playerWW1.isState(StatePlayer.DEATH)) {
                 sb.append(game.translate("werewolf.end.reveal_death", playerName, role));
             } else {
                 sb.append(game.translate("werewolf.end.reveal", playerName, role));
             }
-            if(plg.isThief()){
-                role = game.translate(plg.getRole().getKey());
+            if (playerWW1.isThief()) {
+                role = game.translate(playerWW1.getRole().getKey());
                 sb.append(game.translate("werewolf.end.thief", role));
             }
 
-            EndPlayerMessageEvent endPlayerMessageEvent = new EndPlayerMessageEvent(uuid,sb);
+            EndPlayerMessageEvent endPlayerMessageEvent = new EndPlayerMessageEvent(playerWW1, sb);
             Bukkit.getPluginManager().callEvent(endPlayerMessageEvent);
 
-            if(!plg.getLovers().isEmpty()){
-                StringBuilder sb2 = new StringBuilder();
-                for(UUID lover:plg.getLovers()){
-                    sb2.append(game.getPlayersWW().get(lover).getName()).append(" ");
-                }
-                sb.append(game.translate("werewolf.end.lover",sb2.toString()));
-            }
-            if(plg.getCursedLovers()!=null){
-                sb.append(game.translate("werewolf.end.cursed_lover",game.getPlayersWW().get(plg.getCursedLovers()).getName()));
-            }
-            if(plg.getAmnesiacLoverUUID()!=null){
-                sb.append(game.translate("werewolf.end.lover",game.getPlayersWW().get(plg.getAmnesiacLoverUUID()).getName()));
-            }
             Bukkit.broadcastMessage(sb.toString());
         }
 

@@ -24,8 +24,11 @@ public class CommandCitizenSeeVote implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        PlayerWW plg = game.getPlayersWW().get(uuid);
-        Citizen citizen = (Citizen) plg.getRole();
+        PlayerWW playerWW = game.getPlayerWW(uuid);
+
+        if (playerWW == null) return;
+
+        Citizen citizen = (Citizen) playerWW.getRole();
 
         if (citizen.getUse() >= 2) {
             player.sendMessage(game.translate("werewolf.check.power"));
@@ -38,6 +41,6 @@ public class CommandCitizenSeeVote implements Commands {
         }
 
         citizen.setUse(citizen.getUse() + 1);
-        game.getVote().seeVote(player);
+        game.getVote().seeVote(playerWW);
     }
 }

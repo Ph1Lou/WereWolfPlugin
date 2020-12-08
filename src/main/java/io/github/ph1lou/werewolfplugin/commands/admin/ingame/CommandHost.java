@@ -42,14 +42,10 @@ public class CommandHost implements Commands {
             }
             Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.host.remove", host.getName()));
             moderationManager.getHosts().remove(uuid);
-            if (moderationManager.getModerators().contains(uuid)) {
-                if (game.isState(StateGame.LOBBY) && game.getPlayersWW().containsKey(uuid)) {
-                    game.getScore().removePlayerSize();
-                    game.getPlayersWW().remove(uuid);
-                }
-            }
+
         } else {
-            if (game.isState(StateGame.LOBBY) && !game.getPlayersWW().containsKey(uuid)) {
+            if (game.isState(StateGame.LOBBY) && game.getPlayerWW(uuid) == null &&
+                    !game.getModerationManager().getModerators().contains(uuid)) {
                 game.finalJoin(host);
             }
             moderationManager.getHosts().add(uuid);

@@ -27,6 +27,9 @@ public class CommandWereWolf implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
+        PlayerWW playerWW = game.getPlayerWW(uuid);
+
+        if (playerWW == null) return;
 
         if (game.getConfig().getTimerValues().get(TimersBase.WEREWOLF_LIST.getKey()) > 0) {
             player.sendMessage(game.translate("werewolf.role.werewolf.list_not_revealed"));
@@ -43,14 +46,14 @@ public class CommandWereWolf implements Commands {
 
         StringBuilder list = new StringBuilder();
 
-        for (UUID playerUUID : game.getPlayersWW().keySet()) {
+        for (PlayerWW playerWW1 : game.getPlayerWW()) {
 
-            PlayerWW lg = game.getPlayersWW().get(playerUUID);
-            AppearInWereWolfListEvent appearInWereWolfListEvent = new AppearInWereWolfListEvent(playerUUID);
+            AppearInWereWolfListEvent appearInWereWolfListEvent =
+                    new AppearInWereWolfListEvent(playerWW1.getUUID());
             Bukkit.getPluginManager().callEvent(appearInWereWolfListEvent);
 
-            if (lg.isState(StatePlayer.ALIVE) && appearInWereWolfListEvent.isAppear()) {
-                list.append(lg.getName()).append(" ");
+            if (playerWW1.isState(StatePlayer.ALIVE) && appearInWereWolfListEvent.isAppear()) {
+                list.append(playerWW1.getName()).append(" ");
             }
         }
         player.sendMessage(game.translate("werewolf.role.werewolf.werewolf_list", list.toString()));
