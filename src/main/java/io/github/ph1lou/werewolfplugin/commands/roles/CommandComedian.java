@@ -35,16 +35,6 @@ public class CommandComedian implements Commands {
 
         Roles comedian = playerWW.getRole();
 
-        if (args.length != 1) {
-            player.sendMessage(game.translate("werewolf.check.parameters",
-                    1));
-            return;
-        }
-
-        if (!((Power) comedian).hasPower()) {
-            player.sendMessage(game.translate("werewolf.check.power"));
-            return;
-        }
         PotionEffectType[] potionsType = {
                 PotionEffectType.DAMAGE_RESISTANCE,
                 PotionEffectType.SPEED,

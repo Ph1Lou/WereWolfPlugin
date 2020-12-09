@@ -3,7 +3,7 @@ package io.github.ph1lou.werewolfplugin.commands.roles;
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.BeginSniffEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.*;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -32,11 +32,6 @@ public class CommandFox implements Commands {
         if (playerWW == null) return;
 
         Roles fox = playerWW.getRole();
-
-        if (!((Power) fox).hasPower()) {
-            player.sendMessage(game.translate("werewolf.check.power"));
-            return;
-        }
 
         Player playerArg = Bukkit.getPlayer(args[0]);
 

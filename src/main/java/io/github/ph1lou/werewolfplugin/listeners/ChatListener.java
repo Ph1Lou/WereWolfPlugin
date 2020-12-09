@@ -3,9 +3,9 @@ package io.github.ph1lou.werewolfplugin.listeners;
 
 import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.ConfigsBase;
-import io.github.ph1lou.werewolfapi.enumlg.Sounds;
-import io.github.ph1lou.werewolfapi.enumlg.StateGame;
+import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enums.Sounds;
+import io.github.ph1lou.werewolfapi.enums.StateGame;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

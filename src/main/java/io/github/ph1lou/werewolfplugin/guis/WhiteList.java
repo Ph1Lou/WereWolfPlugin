@@ -7,7 +7,7 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
+import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.entity.Player;

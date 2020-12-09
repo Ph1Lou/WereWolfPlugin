@@ -1,9 +1,9 @@
 package io.github.ph1lou.werewolfplugin.commands;
 
-import io.github.ph1lou.werewolfapi.CommandRegister;
 import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.registers.CommandRegister;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

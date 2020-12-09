@@ -36,6 +36,10 @@ public class CommandLate implements Commands {
             return;
         }
 
+        if(game.getModerationManager().getModerators().contains(argUUID)){
+            return;
+        }
+
         Bukkit.broadcastMessage(game.translate("werewolf.commands.late.launch"));
 
         game.addLatePlayer(player1);

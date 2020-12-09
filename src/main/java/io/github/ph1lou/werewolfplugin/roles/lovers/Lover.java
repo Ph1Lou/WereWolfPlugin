@@ -1,14 +1,14 @@
 package io.github.ph1lou.werewolfplugin.roles.lovers;
 
+import io.github.ph1lou.werewolfapi.LoverAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.RolesBase;
-import io.github.ph1lou.werewolfapi.enumlg.Sounds;
-import io.github.ph1lou.werewolfapi.enumlg.StateGame;
-import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.RolesBase;
+import io.github.ph1lou.werewolfapi.enums.Sounds;
+import io.github.ph1lou.werewolfapi.enums.StateGame;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.LoverAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -55,7 +55,7 @@ public class Lover implements LoverAPI, Listener {
 
         if (playerWW == null) return;
 
-        if (!loversAnnounce.contains(playerWW)) return;
+        if (loversAnnounce.contains(playerWW)) return;
 
         if (!lovers.contains(playerWW)) return;
 
@@ -63,7 +63,9 @@ public class Lover implements LoverAPI, Listener {
         StringBuilder couple = new StringBuilder();
 
         for (PlayerWW playerWW1 : lovers) {
-            couple.append(playerWW1.getName()).append(" ");
+            if(!playerWW.equals(playerWW1)){
+                couple.append(playerWW1.getName()).append(" ");
+            }
         }
         player.sendMessage(game.translate("werewolf.role.lover.description", couple.toString()));
         Sounds.SHEEP_SHEAR.play(player);
@@ -100,11 +102,11 @@ public class Lover implements LoverAPI, Listener {
         list
                 .stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                .filter(playerWW -> !playerWW.getUUID().equals(player.getUniqueId()))
                 .peek(playerWW -> sb.append(" §d♥ ")
                         .append(playerWW.getName())
                         .append(" "))
                 .map(PlayerWW::getUUID)
-                .filter(uuid -> !uuid.equals(player.getUniqueId()))
                 .map(Bukkit::getPlayer)
                 .filter(Objects::nonNull)
                 .forEach(player1 -> sb
@@ -194,6 +196,9 @@ public class Lover implements LoverAPI, Listener {
 
     @Override
     public void swap(PlayerWW playerWW, PlayerWW playerWW1) {
+
+        if(death) return;
+
         lovers.remove(playerWW);
         lovers.add(playerWW1);
         loversAnnounce.clear();

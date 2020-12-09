@@ -1,10 +1,11 @@
 package io.github.ph1lou.werewolfplugin.commands;
 
 
-import io.github.ph1lou.werewolfapi.CommandRegister;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.RolesBase;
+import io.github.ph1lou.werewolfapi.enums.RolesBase;
+import io.github.ph1lou.werewolfapi.registers.CommandRegister;
+import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -75,21 +76,21 @@ public class Command implements TabExecutor {
                 return;
             }
 
-
             if (!commandRegister.isStateAccess(playerWW.getState())) {
-
                 player.sendMessage(game.translate("werewolf.check.death"));
                 return;
-
             }
 
             if (commandRegister.isRoleOnly()) {
-
                 if (!commandRegister.isRoleKey(playerWW.getRole().getKey())) {
                     player.sendMessage(game.translate("werewolf.check.role", game.translate(RolesBase.COMEDIAN.getKey())));
                     return;
                 }
+            }
 
+            if(commandRegister.isRequiredPower() && (!(playerWW.getRole() instanceof Power) || !((Power)playerWW.getRole()).hasPower())){
+                player.sendMessage(game.translate("werewolf.check.power"));
+                return;
             }
         }
 

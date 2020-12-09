@@ -2,8 +2,8 @@ package io.github.ph1lou.werewolfplugin.scoreboards;
 
 import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.ConfigsBase;
-import io.github.ph1lou.werewolfapi.enumlg.StateGame;
+import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.events.AppearInWereWolfListEvent;
 import io.github.ph1lou.werewolfapi.events.RequestSeeWereWolfListEvent;
 import io.github.ph1lou.werewolfapi.events.UpdateModeratorNameTag;

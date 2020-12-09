@@ -5,7 +5,7 @@ import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.EnchantedEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
@@ -36,20 +36,10 @@ public class CommandFlutePlayer implements Commands {
 
         Roles flutePlayer = playerWW.getRole();
 
-        if (args.length != 2 && args.length != 1) {
-            player.sendMessage(game.translate("werewolf.check.parameters", 2));
-            return;
+        if(args.length==2 && args[0].equals(args[1])) {
+            player.sendMessage(game.translate("werewolf.check.two_distinct_player"));
+            return ;
         }
-
-        if (!((Power) flutePlayer).hasPower()) {
-            player.sendMessage(game.translate("werewolf.check.power"));
-            return;
-        }
-
-            if(args.length==2 && args[0].equals(args[1])) {
-                player.sendMessage(game.translate("werewolf.check.two_distinct_player"));
-                return ;
-            }
 
         List<PlayerWW> listWWs = new ArrayList<>();
 

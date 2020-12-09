@@ -1,8 +1,8 @@
 package io.github.ph1lou.werewolfplugin.game;
 
+import io.github.ph1lou.werewolfapi.LoverAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.rolesattributs.LoverAPI;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.listeners.*;
 import org.bukkit.Bukkit;

@@ -1,14 +1,14 @@
 package io.github.ph1lou.werewolfplugin.roles.lovers;
 
 import com.google.common.collect.Sets;
+import io.github.ph1lou.werewolfapi.LoverAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.RolesBase;
-import io.github.ph1lou.werewolfapi.enumlg.Sounds;
-import io.github.ph1lou.werewolfapi.enumlg.StateGame;
-import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.RolesBase;
+import io.github.ph1lou.werewolfapi.enums.Sounds;
+import io.github.ph1lou.werewolfapi.enums.StateGame;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.*;
-import io.github.ph1lou.werewolfapi.rolesattributs.LoverAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -41,7 +41,7 @@ public class AmnesiacLover implements LoverAPI, Listener {
     }
 
     public PlayerWW getOtherLover(PlayerWW playerWW) {
-        return playerWW.equals(amnesiacLover1) ? amnesiacLover1 : amnesiacLover2;
+        return playerWW.equals(amnesiacLover1) ? amnesiacLover2 : amnesiacLover1;
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -65,9 +65,13 @@ public class AmnesiacLover implements LoverAPI, Listener {
         game.getConfig().setAmnesiacLoverSize(game.getConfig().getAmnesiacLoverSize() - 1);
     }
 
-    public void detectionAmnesiacLover() {
+
+    @EventHandler
+    public void onDetectionAmnesiacLover(UpdateEvent event) {
 
         if (find) return;
+
+        if(death) return;
 
         Player player1 = Bukkit.getPlayer(amnesiacLover1.getUUID());
         Player player2 = Bukkit.getPlayer(amnesiacLover2.getUUID());
@@ -120,8 +124,6 @@ public class AmnesiacLover implements LoverAPI, Listener {
     @EventHandler
     public void onModeratorScoreBoard(UpdateModeratorNameTag event) {
 
-        if (!find) return;
-
         StringBuilder sb = new StringBuilder(event.getSuffix());
 
         PlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID());
@@ -144,11 +146,11 @@ public class AmnesiacLover implements LoverAPI, Listener {
         list
                 .stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                .filter(playerWW -> !playerWW.getUUID().equals(player.getUniqueId()))
                 .peek(playerWW -> sb.append(" §d♥ ")
                         .append(playerWW.getName())
                         .append(" "))
                 .map(PlayerWW::getUUID)
-                .filter(uuid -> !uuid.equals(player.getUniqueId()))
                 .map(Bukkit::getPlayer)
                 .filter(Objects::nonNull)
                 .forEach(player1 -> sb
@@ -159,6 +161,10 @@ public class AmnesiacLover implements LoverAPI, Listener {
 
     @EventHandler
     public void onActionBarGameLoverEvent(ActionBarEvent event) {
+
+        if(!find) return;
+
+        if(death) return;
 
         if (!game.isState(StateGame.GAME)) return;
 
@@ -225,12 +231,13 @@ public class AmnesiacLover implements LoverAPI, Listener {
     @Override
     public void swap(PlayerWW playerWW, PlayerWW playerWW1) {
 
+        if(death) return;
+
         if (amnesiacLover1.equals(playerWW)) {
             amnesiacLover1 = playerWW1;
         } else {
             amnesiacLover2 = playerWW1;
         }
-
 
         announce1 = false;
         announce2 = false;

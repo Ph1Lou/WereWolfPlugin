@@ -1,7 +1,7 @@
 package io.github.ph1lou.werewolfplugin.game;
 
 import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
-import io.github.ph1lou.werewolfapi.enumlg.StateGame;
+import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfplugin.commands.Admin;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

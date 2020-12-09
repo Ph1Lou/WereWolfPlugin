@@ -3,8 +3,8 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enumlg.Day;
-import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.Day;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.events.EnchantmentEvent;
 import io.github.ph1lou.werewolfapi.events.NightEvent;

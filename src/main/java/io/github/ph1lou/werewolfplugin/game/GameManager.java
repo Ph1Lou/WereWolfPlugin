@@ -2,9 +2,9 @@ package io.github.ph1lou.werewolfplugin.game;
 
 import fr.mrmicky.fastboard.FastBoard;
 import io.github.ph1lou.werewolfapi.*;
-import io.github.ph1lou.werewolfapi.enumlg.Day;
-import io.github.ph1lou.werewolfapi.enumlg.StateGame;
-import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.Day;
+import io.github.ph1lou.werewolfapi.enums.StateGame;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;

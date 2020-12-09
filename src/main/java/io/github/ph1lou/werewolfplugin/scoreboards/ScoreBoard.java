@@ -1,13 +1,13 @@
 package io.github.ph1lou.werewolfplugin.scoreboards;
 
 import fr.mrmicky.fastboard.FastBoard;
+import io.github.ph1lou.werewolfapi.LoverAPI;
 import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.RoleRegister;
 import io.github.ph1lou.werewolfapi.ScoreAPI;
-import io.github.ph1lou.werewolfapi.enumlg.*;
+import io.github.ph1lou.werewolfapi.enums.*;
 import io.github.ph1lou.werewolfapi.events.*;
-import io.github.ph1lou.werewolfapi.rolesattributs.LoverAPI;
+import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;

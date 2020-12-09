@@ -3,8 +3,8 @@ package io.github.ph1lou.werewolfplugin.commands.roles;
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.ConfigsBase;
-import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.WitchResurrectionEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
@@ -35,15 +35,6 @@ public class CommandWitch implements Commands {
 
         Roles witch = playerWW.getRole();
 
-        if (args.length != 1) {
-            player.sendMessage(game.translate("werewolf.check.player_input"));
-            return;
-        }
-
-        if (!((Power) witch).hasPower()) {
-            player.sendMessage(game.translate("werewolf.check.power"));
-            return;
-        }
 
         if (Bukkit.getPlayer(UUID.fromString(args[0])) == null) {
             player.sendMessage(game.translate("werewolf.check.offline_player"));

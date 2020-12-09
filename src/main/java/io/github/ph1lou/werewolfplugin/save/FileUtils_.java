@@ -2,7 +2,8 @@ package io.github.ph1lou.werewolfplugin.save;
 
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.WriterConfig;
-import io.github.ph1lou.werewolfapi.*;
+import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
+import io.github.ph1lou.werewolfapi.registers.*;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 

@@ -3,7 +3,7 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enumlg.*;
+import io.github.ph1lou.werewolfapi.enums.*;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.rolesattributs.*;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;

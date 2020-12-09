@@ -2,7 +2,7 @@ package io.github.ph1lou.werewolfplugin.listeners;
 
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
+import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.events.GoldenAppleParticleEvent;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;

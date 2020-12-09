@@ -853,7 +853,9 @@
       "display": "%s (§b%s§r)",
       "pve": "§bPVE",
       "on": "§bON",
-      "debug": "§fMode §4debug"
+      "debug": "§fMode §4debug",
+      "none": "§4Aucun",
+      "author": "§fAuteur(s) :"
     },
     "categories": {
       "villager": "Villageois",

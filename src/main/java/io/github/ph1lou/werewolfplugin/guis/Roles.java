@@ -7,10 +7,14 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
-import io.github.ph1lou.werewolfapi.*;
-import io.github.ph1lou.werewolfapi.enumlg.Category;
-import io.github.ph1lou.werewolfapi.enumlg.RolesBase;
-import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
+import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
+import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
+import io.github.ph1lou.werewolfapi.StuffManager;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Category;
+import io.github.ph1lou.werewolfapi.enums.RolesBase;
+import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
+import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.Main;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -25,6 +29,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Roles implements InventoryProvider {
 
@@ -181,10 +186,10 @@ public class Roles implements InventoryProvider {
 
                 String key = roleRegister.getKey();
                 List<String> lore2 = new ArrayList<>(lore);
-                lore2.addAll(roleRegister.getLore());
+                lore2.addAll(roleRegister.getLoreKey().stream().map(game::translate).collect(Collectors.toList()));
 
                 if (config.getRoleCount().get(key) > 0) {
-                    items.add(ClickableItem.of((new ItemBuilder(UniversalMaterial.GREEN_TERRACOTTA.getStack(config.getRoleCount().get(key))).setLore(lore2).setDisplayName(game.translate(roleRegister.getKey())).build()), e -> {
+                    items.add(ClickableItem.of((new ItemBuilder(roleRegister.getItem()!=null?roleRegister.getItem():UniversalMaterial.GREEN_TERRACOTTA.getStack()).setAmount(config.getRoleCount().get(key)).setLore(lore2).setDisplayName(game.translate(roleRegister.getKey())).build()), e -> {
 
                         if (e.isShiftClick()) {
                             manageStuff(main, player, key);
@@ -196,8 +201,13 @@ public class Roles implements InventoryProvider {
 
 
                     }));
-                } else
-                    items.add(ClickableItem.of((new ItemBuilder(UniversalMaterial.RED_TERRACOTTA.getStack()).setLore(lore2).setDisplayName(game.translate(roleRegister.getKey())).build()), e -> {
+                } else{
+
+                    if(roleRegister.getItem()!=null){
+                        lore2.add(0,game.translate("werewolf.utils.none"));
+                    }
+
+                    items.add(ClickableItem.of((new ItemBuilder(roleRegister.getItem()!=null?roleRegister.getItem():UniversalMaterial.RED_TERRACOTTA.getStack()).setLore(lore2).setDisplayName(game.translate(roleRegister.getKey())).build()), e -> {
 
                         if (e.isShiftClick()) {
                             manageStuff(main, player, key);
@@ -205,6 +215,8 @@ public class Roles implements InventoryProvider {
                             selectPlus(game, roleRegister.getKey());
                         }
                     }));
+                }
+
             }
         }
         if (items.size() > 36) {

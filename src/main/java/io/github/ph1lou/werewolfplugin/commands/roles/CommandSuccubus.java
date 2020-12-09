@@ -3,10 +3,9 @@ package io.github.ph1lou.werewolfplugin.commands.roles;
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.BeginCharmEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
@@ -36,17 +35,8 @@ public class CommandSuccubus implements Commands {
 
         Roles succubus = playerWW.getRole();
 
-        if (args.length != 1) {
-            player.sendMessage(game.translate("werewolf.check.player_input"));
-            return;
-        }
 
         if (!((AffectedPlayers) succubus).getAffectedPlayers().isEmpty()) {
-            player.sendMessage(game.translate("werewolf.check.power"));
-            return;
-        }
-
-        if (!(((Power) succubus).hasPower())) {
             player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }

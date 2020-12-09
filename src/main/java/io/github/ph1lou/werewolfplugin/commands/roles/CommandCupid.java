@@ -4,7 +4,7 @@ import com.google.common.collect.Sets;
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.CupidLoversEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
@@ -34,12 +34,6 @@ public class CommandCupid implements Commands {
         if (playerWW == null) return;
 
         Roles cupid = playerWW.getRole();
-
-
-        if (!((Power) cupid).hasPower()) {
-            player.sendMessage(game.translate("werewolf.check.power"));
-            return;
-        }
 
         if (args[0].equalsIgnoreCase(args[1])) {
             player.sendMessage(game.translate(

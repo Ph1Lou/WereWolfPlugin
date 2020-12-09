@@ -9,7 +9,7 @@ import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
 import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
+import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
@@ -20,6 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GlobalConfigs implements InventoryProvider {
 
@@ -56,7 +57,7 @@ public class GlobalConfigs implements InventoryProvider {
                 .filter(config1 -> config1.isAppearInMenu() || game.isDebug())
                 .forEach(configRegister -> {
                     String key = configRegister.getKey();
-                    List<String> lore = new ArrayList<>(configRegister.getLore());
+                    List<String> lore = configRegister.getLoreKey().stream().map(game::translate).collect(Collectors.toList());
                     ItemStack itemStack;
 
                     if (game.getConfig().getConfigValues().get(configRegister.getKey())) {

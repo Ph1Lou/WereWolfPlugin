@@ -4,8 +4,8 @@ import com.google.common.collect.Sets;
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.Camp;
-import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.Camp;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.InvestigateEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Display;
@@ -39,11 +39,6 @@ public class CommandDetective implements Commands {
 
         if (args.length != 2) {
             player.sendMessage(game.translate("werewolf.check.parameters", 2));
-            return;
-        }
-
-        if (!((Power) detective).hasPower()) {
-            player.sendMessage(game.translate("werewolf.check.power"));
             return;
         }
 

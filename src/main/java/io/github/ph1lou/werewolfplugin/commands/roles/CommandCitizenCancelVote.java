@@ -3,7 +3,7 @@ package io.github.ph1lou.werewolfplugin.commands.roles;
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.VoteStatus;
+import io.github.ph1lou.werewolfapi.enums.VoteStatus;
 import io.github.ph1lou.werewolfapi.events.CancelVoteEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Citizen;
@@ -31,11 +31,6 @@ public class CommandCitizenCancelVote implements Commands {
         if (playerWW == null) return;
 
         Citizen citizen = (Citizen) playerWW.getRole();
-
-        if (!citizen.hasPower()) {
-            player.sendMessage(game.translate("werewolf.check.power"));
-            return;
-        }
 
         if (!game.getVote().isStatus(VoteStatus.WAITING_CITIZEN)) {
             player.sendMessage(game.translate("werewolf.check.power"));

@@ -1,8 +1,8 @@
 package io.github.ph1lou.werewolfplugin.commands.utilities;
 
 import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.ConfigRegister;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.registers.ConfigRegister;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.entity.Player;
 

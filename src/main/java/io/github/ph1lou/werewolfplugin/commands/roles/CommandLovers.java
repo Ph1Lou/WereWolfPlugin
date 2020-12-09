@@ -1,14 +1,14 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
 import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.LoverAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.RolesBase;
-import io.github.ph1lou.werewolfapi.enumlg.Sounds;
-import io.github.ph1lou.werewolfapi.enumlg.StateGame;
-import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.RolesBase;
+import io.github.ph1lou.werewolfapi.enums.Sounds;
+import io.github.ph1lou.werewolfapi.enums.StateGame;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.DonEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.LoverAPI;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.roles.lovers.AmnesiacLover;
@@ -78,11 +78,11 @@ public class CommandLovers implements Commands {
 
                             player.setHealth(life - heart);
                             int temp = heart;
-                            int don = heart / loverAPI1.getLovers().size();
+                            int don = heart / (loverAPI1.getLovers().size()-1);
 
                             for (PlayerWW playerWW1 : loverAPI1.getLovers()) {
 
-                                if (playerWW1.isState(StatePlayer.ALIVE)) {
+                                if (playerWW1.isState(StatePlayer.ALIVE) && !playerWW1.equals(playerWW)) {
 
                                     Player playerCouple = Bukkit.getPlayer(playerWW1.getUUID());
 

@@ -1,6 +1,6 @@
 package io.github.ph1lou.werewolfplugin.tasks;
 
-import io.github.ph1lou.werewolfapi.enumlg.StateGame;
+import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.events.UpdateEvent;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;

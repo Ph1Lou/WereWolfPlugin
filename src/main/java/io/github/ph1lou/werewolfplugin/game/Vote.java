@@ -4,10 +4,10 @@ package io.github.ph1lou.werewolfplugin.game;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.VoteAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.ConfigsBase;
-import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
-import io.github.ph1lou.werewolfapi.enumlg.TimersBase;
-import io.github.ph1lou.werewolfapi.enumlg.VoteStatus;
+import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.enums.VoteStatus;
 import io.github.ph1lou.werewolfapi.events.SeeVoteEvent;
 import io.github.ph1lou.werewolfapi.events.VoteEndEvent;
 import io.github.ph1lou.werewolfapi.events.VoteEvent;
@@ -80,10 +80,10 @@ public class Vote implements Listener, VoteAPI {
 	public void onVoteResult(VoteResultEvent event) {
         if (!event.isCancelled()) {
 			event.setPlayerWW(getResult());
-            if (event.getPlayerVoteUUID() == null) {
+            if (event.getPlayerWW() == null) {
                 Bukkit.broadcastMessage(game.translate("werewolf.vote.no_result"));
                 event.setCancelled(true);
-            } else showResultVote(event.getPlayerVoteUUID());
+            } else showResultVote(event.getPlayerWW());
         }
         resetVote();
     }

@@ -1,10 +1,10 @@
 package io.github.ph1lou.werewolfplugin.game;
 
 import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
+import io.github.ph1lou.werewolfapi.LoverAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enumlg.*;
+import io.github.ph1lou.werewolfapi.enums.*;
 import io.github.ph1lou.werewolfapi.events.*;
-import io.github.ph1lou.werewolfapi.rolesattributs.LoverAPI;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;

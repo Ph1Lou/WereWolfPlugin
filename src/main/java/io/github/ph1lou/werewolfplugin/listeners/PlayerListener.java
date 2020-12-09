@@ -3,7 +3,7 @@ package io.github.ph1lou.werewolfplugin.listeners;
 import fr.mrmicky.fastboard.FastBoard;
 import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enumlg.*;
+import io.github.ph1lou.werewolfapi.enums.*;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;

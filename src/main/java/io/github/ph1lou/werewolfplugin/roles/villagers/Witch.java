@@ -3,8 +3,8 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enumlg.ConfigsBase;
-import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.ThirdDeathEvent;
 import io.github.ph1lou.werewolfapi.events.WitchResurrectionEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
@@ -101,7 +101,7 @@ public class Witch extends RolesVillage implements AffectedPlayers, Power {
                 ClickEvent.Action.RUN_COMMAND,
                 String.format("/ww %s %s",
                         game.translate("werewolf.role.witch.command"),
-                        playerWW)));
+                        playerWW.getUUID())));
         player.spigot().sendMessage(textComponent);
     }
 

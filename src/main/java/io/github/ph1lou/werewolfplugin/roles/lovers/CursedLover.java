@@ -1,12 +1,12 @@
 package io.github.ph1lou.werewolfplugin.roles.lovers;
 
+import io.github.ph1lou.werewolfapi.LoverAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.RolesBase;
-import io.github.ph1lou.werewolfapi.enumlg.Sounds;
-import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.RolesBase;
+import io.github.ph1lou.werewolfapi.enums.Sounds;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.*;
-import io.github.ph1lou.werewolfapi.rolesattributs.LoverAPI;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -42,7 +42,7 @@ public class CursedLover implements LoverAPI, Listener {
     }
 
     public PlayerWW getOtherLover(PlayerWW playerWW) {
-        return playerWW.equals(cursedLover1) ? cursedLover1 : cursedLover2;
+        return playerWW.equals(cursedLover1) ? cursedLover2 : cursedLover1;
     }
 
     public List<? extends PlayerWW> getLovers() {
@@ -117,6 +117,12 @@ public class CursedLover implements LoverAPI, Listener {
     @EventHandler
     private void onPlayerDamage(EntityDamageEvent event) {
 
+        if(death) return;
+
+        if(!event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) return;
+
+        if(!(event.getEntity() instanceof Player)) return;
+
         Player player = (Player) event.getEntity();
         UUID uuid = player.getUniqueId();
         PlayerWW playerWW = game.getPlayerWW(uuid);
@@ -128,6 +134,8 @@ public class CursedLover implements LoverAPI, Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onJoin(PlayerJoinEvent event) {
+
+        if(death) return;
 
         Player player = event.getPlayer();
         announceCursedLoversOnJoin(player);
@@ -195,6 +203,8 @@ public class CursedLover implements LoverAPI, Listener {
 
     @Override
     public void swap(PlayerWW playerWW, PlayerWW playerWW1) {
+
+        if(death) return;
 
         if (cursedLover1.equals(playerWW)) {
             cursedLover1 = playerWW1;

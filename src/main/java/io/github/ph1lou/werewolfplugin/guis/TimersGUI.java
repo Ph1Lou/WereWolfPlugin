@@ -8,9 +8,9 @@ import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
 import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
-import io.github.ph1lou.werewolfapi.TimerRegister;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
+import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
+import io.github.ph1lou.werewolfapi.registers.TimerRegister;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
@@ -20,6 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TimersGUI implements InventoryProvider {
 
@@ -147,7 +148,7 @@ public class TimersGUI implements InventoryProvider {
 
 
         for (TimerRegister timer : main.getRegisterManager().getTimersRegister()) {
-            List<String> lore = new ArrayList<>(timer.getLore());
+            List<String> lore = timer.getLoreKey().stream().map(game::translate).collect(Collectors.toList());
 
             if (game.getConfig().getTimerValues().get(timer.getKey()) >= 0 || game.isDebug()) {
 

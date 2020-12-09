@@ -2,16 +2,12 @@ package io.github.ph1lou.werewolfplugin.game;
 
 
 import com.google.common.collect.Sets;
-import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.LoverManagerAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.ConfigsBase;
-import io.github.ph1lou.werewolfapi.enumlg.RolesBase;
-import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
+import io.github.ph1lou.werewolfapi.*;
+import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enums.RolesBase;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.CupidLoversEvent;
 import io.github.ph1lou.werewolfapi.events.RevealLoversEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.LoverAPI;
 import io.github.ph1lou.werewolfplugin.roles.lovers.AmnesiacLover;
 import io.github.ph1lou.werewolfplugin.roles.lovers.CursedLover;
 import io.github.ph1lou.werewolfplugin.roles.lovers.Lover;
@@ -40,7 +36,7 @@ public class LoversManagement implements LoverManagerAPI {
 	}
 
 
-	public void autoCursedLovers() {
+	private void autoCursedLovers() {
 
 		List<PlayerWW> cursedLovers = new ArrayList<>();
 
@@ -81,7 +77,7 @@ public class LoversManagement implements LoverManagerAPI {
 		}
 	}
 
-	public void autoAmnesiacLovers() {
+	private void autoAmnesiacLovers() {
 
 		List<PlayerWW> amnesiacLovers = new ArrayList<>();
 
@@ -114,6 +110,21 @@ public class LoversManagement implements LoverManagerAPI {
 
 
 	public void repartition(GetWereWolfAPI main) {
+		autoLovers();
+		rangeLovers();
+		game.getConfig().setLoverSize(lovers.size());
+		Bukkit.getPluginManager().callEvent(new RevealLoversEvent(this.lovers));
+		autoAmnesiacLovers();
+		autoCursedLovers();
+		lovers
+				.forEach(loverAPI -> Bukkit.getPluginManager()
+						.registerEvents((Listener) loverAPI, (Plugin) main));
+
+
+		game.checkVictory();
+	}
+
+	private void autoLovers() {
 
 		List<PlayerWW> loversAvailable = new ArrayList<>();
 		for (PlayerWW playerWW1 : game.getPlayerWW()) {
@@ -151,36 +162,33 @@ public class LoversManagement implements LoverManagerAPI {
 				UUID uuid = playerWW.getUUID();
 				Cupid cupid = (Cupid) playerWW.getRole();
 
-				if (cupid.hasPower()) {
+				if (cupid.hasPower() ||
+						cupid.getAffectedPlayers().size() < 2 ||
+						!cupid.getAffectedPlayers().get(0).isState(StatePlayer.ALIVE) ||
+						!cupid.getAffectedPlayers().get(1).isState(StatePlayer.ALIVE)) {
 
-					playerWW1 = cupid.getAffectedPlayers().get(0);
-					playerWW2 = cupid.getAffectedPlayers().get(1);
+					if (loversAvailable.contains(playerWW)) {
+						loversAvailable.remove(playerWW);
+						playerWW1 = loversAvailable.get((int) Math.floor(game.getRandom().nextFloat() * loversAvailable.size()));
+						loversAvailable.remove(playerWW1);
+						playerWW2 = loversAvailable.get((int) Math.floor(game.getRandom().nextFloat() * loversAvailable.size()));
+						loversAvailable.add(playerWW1);
+						loversAvailable.add(playerWW);
+					} else {
+						playerWW1 = loversAvailable.get((int) Math.floor(game.getRandom().nextFloat() * loversAvailable.size()));
+						loversAvailable.remove(playerWW1);
+						playerWW2 = loversAvailable.get((int) Math.floor(game.getRandom().nextFloat() * loversAvailable.size()));
+						loversAvailable.add(playerWW1);
+					}
 
-					if (!playerWW1.isState(StatePlayer.ALIVE) ||
-							!playerWW2.isState(StatePlayer.ALIVE)) {
-						if (loversAvailable.contains(playerWW)) {
-							loversAvailable.remove(playerWW);
-							playerWW1 = loversAvailable.get((int) Math.floor(game.getRandom().nextFloat() * loversAvailable.size()));
-							loversAvailable.remove(playerWW1);
-							playerWW2 = loversAvailable.get((int) Math.floor(game.getRandom().nextFloat() * loversAvailable.size()));
-							loversAvailable.add(playerWW1);
-							loversAvailable.add(playerWW);
-						} else {
-							playerWW1 = loversAvailable.get((int) Math.floor(game.getRandom().nextFloat() * loversAvailable.size()));
-							loversAvailable.remove(playerWW1);
-							playerWW2 = loversAvailable.get((int) Math.floor(game.getRandom().nextFloat() * loversAvailable.size()));
-							loversAvailable.add(playerWW1);
-						}
-
-						cupid.clearAffectedPlayer();
-						cupid.addAffectedPlayer(playerWW1);
-						cupid.addAffectedPlayer(playerWW2);
-						cupid.setPower(false);
-						Bukkit.getPluginManager().callEvent(new CupidLoversEvent(playerWW, Sets.newHashSet(cupid.getAffectedPlayers())));
-						Player player1 = Bukkit.getPlayer(uuid);
-						if (player1 != null) {
-							player1.sendMessage(game.translate("werewolf.role.cupid.designation_perform", playerWW1.getName(), playerWW2.getName()));
-						}
+					cupid.clearAffectedPlayer();
+					cupid.addAffectedPlayer(playerWW1);
+					cupid.addAffectedPlayer(playerWW2);
+					cupid.setPower(false);
+					Bukkit.getPluginManager().callEvent(new CupidLoversEvent(playerWW, Sets.newHashSet(cupid.getAffectedPlayers())));
+					Player player1 = Bukkit.getPlayer(uuid);
+					if (player1 != null) {
+						player1.sendMessage(game.translate("werewolf.role.cupid.designation_perform", playerWW1.getName(), playerWW2.getName()));
 					}
 
 				} else {
@@ -209,20 +217,7 @@ public class LoversManagement implements LoverManagerAPI {
 
 			lovers.add(new Lover(game, new ArrayList<>(Arrays.asList(playerWW1, playerWW2))));
 		}
-
-		rangeLovers();
-		game.getConfig().setLoverSize(lovers.size());
-		Bukkit.getPluginManager().callEvent(new RevealLoversEvent(this.lovers));
-		autoAmnesiacLovers();
-		autoCursedLovers();
-		lovers
-				.forEach(loverAPI -> Bukkit.getPluginManager()
-						.registerEvents((Listener) loverAPI, (Plugin) main));
-
-
-		game.checkVictory();
 	}
-
 
 
 	private void rangeLovers() {

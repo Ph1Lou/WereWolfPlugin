@@ -1,10 +1,10 @@
 package io.github.ph1lou.werewolfplugin.listeners;
 
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.RoleRegister;
 import io.github.ph1lou.werewolfapi.ScoreAPI;
-import io.github.ph1lou.werewolfapi.enumlg.*;
+import io.github.ph1lou.werewolfapi.enums.*;
 import io.github.ph1lou.werewolfapi.events.*;
+import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -241,8 +241,7 @@ public class CycleListener implements Listener {
                                     try {
                                         Roles role = (Roles) roleRegister.getConstructors()
                                                 .newInstance(main,
-                                                        game,
-                                                        playerWW.getRole().getPlayerUUID(),
+                                                        playerWW,
                                                         roleRegister.getKey());
 
                                         Bukkit.getPluginManager().registerEvents((Listener) role,
@@ -264,21 +263,20 @@ public class CycleListener implements Listener {
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
             if (!game.isState(StateGame.END)) {
-                Bukkit.getOnlinePlayers()
-                        .forEach(player -> {
+                game.getPlayerWW()
+                        .forEach(playerWW -> {
 
-                            PlayerWW playerWW = game.getPlayerWW(player.getUniqueId());
+                            Player player = Bukkit.getPlayer(playerWW.getUUID());
 
-                            if (game.getConfig().isTrollSV() &&
-                                    playerWW != null) {
-
-                                Sounds.PORTAL_TRIGGER.play(player);
-                                for (PotionEffect po : player.getActivePotionEffects()) {
-                                    player.removePotionEffect(po.getType());
+                            if (game.getConfig().isTrollSV()) {
+                                if(player!=null){
+                                    Sounds.PORTAL_TRIGGER.play(player);
+                                    for (PotionEffect po : player.getActivePotionEffects()) {
+                                        player.removePotionEffect(po.getType());
+                                    }
+                                    VersionUtils.getVersionUtils().setPlayerMaxHealth(player, 20);
+                                    player.sendMessage(game.translate("werewolf.announcement.troll"));
                                 }
-                                VersionUtils.getVersionUtils().setPlayerMaxHealth(player, 20);
-                                player.sendMessage(game.translate("werewolf.announcement.troll"));
-
                                 HandlerList.unregisterAll((Listener) playerWW.getRole());
                                 playerWW.setKit(false);
                             }

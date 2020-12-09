@@ -1,8 +1,8 @@
 package io.github.ph1lou.werewolfplugin.save;
 
-import io.github.ph1lou.werewolfapi.AddonRegister;
-import io.github.ph1lou.werewolfapi.RoleRegister;
 import io.github.ph1lou.werewolfapi.StuffManager;
+import io.github.ph1lou.werewolfapi.registers.AddonRegister;
+import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;

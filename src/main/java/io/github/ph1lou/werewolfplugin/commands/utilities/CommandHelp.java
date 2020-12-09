@@ -1,10 +1,11 @@
 package io.github.ph1lou.werewolfplugin.commands.utilities;
 
-import io.github.ph1lou.werewolfapi.CommandRegister;
 import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.RegisterManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.registers.CommandRegister;
+import io.github.ph1lou.werewolfapi.registers.RegisterManager;
 import io.github.ph1lou.werewolfplugin.Main;
+import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -29,8 +30,7 @@ public class CommandHelp implements Commands {
         TextComponent textComponent1 = new TextComponent(game.translate("werewolf.commands.admin.help.help"));
 
         for (CommandRegister command : registerManager.getCommandsRegister()) {
-            if (!command.getDescription().isEmpty() &&
-                    command.isStateWW(game.getState())) {
+            if (!command.getDescription().isEmpty()) {
 
                 TextComponent textComponent = new TextComponent(
                         String.format("/ww §b%s ",
@@ -42,6 +42,8 @@ public class CommandHelp implements Commands {
                                 new ComponentBuilder(
                                         game.translate(command.getDescription()))
                                         .create()));
+                textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,String.format("/ww %s ",
+                        game.translate(command.getKey()))));
                 textComponent1.addExtra(textComponent);
             }
 

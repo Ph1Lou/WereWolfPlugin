@@ -3,7 +3,7 @@ package io.github.ph1lou.werewolfplugin.commands.roles;
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.LibrarianRequestEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.LimitedUse;
@@ -36,11 +36,6 @@ public class CommandLibrarian implements Commands {
         if (playerWW == null) return;
 
         Roles librarian = playerWW.getRole();
-
-        if (args.length != 1) {
-            player.sendMessage(game.translate("werewolf.check.player_input"));
-            return;
-        }
 
         if (args[0].toLowerCase().equals(playername.toLowerCase())) {
             player.sendMessage(game.translate("werewolf.check.not_yourself"));

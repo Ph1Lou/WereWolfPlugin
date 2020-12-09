@@ -8,9 +8,9 @@ import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
 import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
-import io.github.ph1lou.werewolfapi.ScenarioRegister;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
+import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
+import io.github.ph1lou.werewolfapi.registers.ScenarioRegister;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
@@ -21,6 +21,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ScenariosGUI implements InventoryProvider {
 
@@ -55,7 +56,7 @@ public class ScenariosGUI implements InventoryProvider {
         for (ScenarioRegister scenarioRegister : main.getRegisterManager()
                 .getScenariosRegister()) {
 
-            List<String> lore = new ArrayList<>(scenarioRegister.getLore());
+            List<String> lore = scenarioRegister.getLoreKey().stream().map(game::translate).collect(Collectors.toList());
             ItemStack itemStack;
 
             if (config.getScenarioValues().get(scenarioRegister.getKey())) {
@@ -67,7 +68,7 @@ public class ScenariosGUI implements InventoryProvider {
                         ""));
                 itemStack = UniversalMaterial.RED_TERRACOTTA.getStack();
             }
-            items.add(ClickableItem.of((new ItemBuilder(itemStack)
+            items.add(ClickableItem.of((new ItemBuilder(scenarioRegister.getItem()!=null?scenarioRegister.getItem():itemStack)
                     .setDisplayName(game.translate(scenarioRegister.getKey()))
                     .setLore(lore).build()), e -> {
 

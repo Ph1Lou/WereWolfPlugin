@@ -3,7 +3,7 @@ package io.github.ph1lou.werewolfplugin.commands.roles;
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.TroubleMakerEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
@@ -33,17 +33,6 @@ public class CommandTroubleMaker implements Commands {
         if (playerWW == null) return;
 
         Roles troublemaker = playerWW.getRole();
-
-        if (args.length != 1) {
-            player.sendMessage(game.translate("werewolf.check.player_input"));
-            return;
-        }
-
-        if (!((Power) troublemaker).hasPower()) {
-            player.sendMessage(game.translate("werewolf.check.power"));
-            return;
-        }
-
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {

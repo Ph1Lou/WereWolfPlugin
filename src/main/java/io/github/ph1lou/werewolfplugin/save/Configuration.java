@@ -1,7 +1,7 @@
 package io.github.ph1lou.werewolfplugin.save;
 
 import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.RolesBase;
+import io.github.ph1lou.werewolfapi.enums.RolesBase;
 
 import java.util.HashMap;
 import java.util.Map;

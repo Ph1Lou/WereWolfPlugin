@@ -8,10 +8,10 @@ import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
 import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
-import io.github.ph1lou.werewolfapi.RoleRegister;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.Category;
-import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
+import io.github.ph1lou.werewolfapi.enums.Category;
+import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
+import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.Material;
@@ -19,6 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TrollChoice implements InventoryProvider {
 
@@ -86,7 +87,7 @@ public class TrollChoice implements InventoryProvider {
             if (roleRegister.getCategories().contains(categories.getOrDefault(uuid, Category.WEREWOLF))) {
 
                 String key = roleRegister.getKey();
-                List<String> lore = new ArrayList<>(roleRegister.getLore());
+                List<String> lore = roleRegister.getLoreKey().stream().map(game::translate).collect(Collectors.toList());
 
                 if (config.getTrollKey().equals(key)) {
                     items.add(ClickableItem.empty(new ItemBuilder(UniversalMaterial.GREEN_TERRACOTTA.getStack()).setLore(lore).setDisplayName(game.translate(roleRegister.getKey())).build()));

@@ -2,7 +2,7 @@ package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.Sounds;
+import io.github.ph1lou.werewolfapi.enums.Sounds;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
