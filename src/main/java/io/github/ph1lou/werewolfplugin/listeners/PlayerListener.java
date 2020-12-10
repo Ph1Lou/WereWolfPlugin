@@ -413,7 +413,6 @@ public class PlayerListener implements Listener {
 			}
 
 			playerWW.setDeathTime(game.getScore().getTimer());
-
 		}
 
 		if (playerWW.isState(StatePlayer.DEATH)) return;
@@ -424,8 +423,7 @@ public class PlayerListener implements Listener {
 
 		game.getConfig().getRoleCount().put(roleLG, game.getConfig().getRoleCount().get(roleLG) - 1);
 
-		AnnouncementDeathEvent announcementDeathEvent = new AnnouncementDeathEvent(playerWW.getName(),
-				game.translate(roleLG),
+		AnnouncementDeathEvent announcementDeathEvent = new AnnouncementDeathEvent(playerWW,
 				game.translate("werewolf.announcement.death_message"));
 
 		Bukkit.getPluginManager().callEvent(announcementDeathEvent);
@@ -436,7 +434,7 @@ public class PlayerListener implements Listener {
 			deathMessage = deathMessage.replace("&player&",
 					announcementDeathEvent.getPlayerName());
 			deathMessage = deathMessage.replace("&role&",
-					announcementDeathEvent.getRole());
+					game.translate(announcementDeathEvent.getRole()));
 
 			Bukkit.broadcastMessage(deathMessage);
 		}

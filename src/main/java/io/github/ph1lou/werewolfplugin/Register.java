@@ -9,10 +9,7 @@ import io.github.ph1lou.werewolfplugin.commands.admin.CommandStop;
 import io.github.ph1lou.werewolfplugin.commands.admin.ingame.*;
 import io.github.ph1lou.werewolfplugin.commands.roles.*;
 import io.github.ph1lou.werewolfplugin.commands.utilities.*;
-import io.github.ph1lou.werewolfplugin.listeners.configs.CompassMiddle;
-import io.github.ph1lou.werewolfplugin.listeners.configs.RedNameTag;
-import io.github.ph1lou.werewolfplugin.listeners.configs.SeerEvent;
-import io.github.ph1lou.werewolfplugin.listeners.configs.ShowDeathRole;
+import io.github.ph1lou.werewolfplugin.listeners.configs.*;
 import io.github.ph1lou.werewolfplugin.listeners.scenarios.*;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.*;
 import io.github.ph1lou.werewolfplugin.roles.villagers.*;
@@ -695,7 +692,8 @@ public class Register implements RegisterManager {
         scenariosRegister
                 .add(new ScenarioRegister("werewolf.name",
                         ScenariosBase.COMPASS_TARGET_LAST_DEATH.getKey(),
-                        new CompassTargetLastDeath(main)));
+                        new CompassTargetLastDeath(main))
+                        .addIncompatibleScenario(ScenariosBase.COMPASS_MIDDLE.getKey()));
         scenariosRegister
                 .add(new ScenarioRegister("werewolf.name",
                         ScenariosBase.CUT_CLEAN.getKey(),
@@ -779,6 +777,14 @@ public class Register implements RegisterManager {
                         new VanillaPlus(main))
                         .setDefaultValue());
 
+        scenariosRegister
+                .add(new ScenarioRegister("werewolf.name",
+                        ScenariosBase.COMPASS_MIDDLE.getKey(),
+                        new CompassMiddle(main))
+                        .setDefaultValue()
+                        .addIncompatibleScenario(ScenariosBase.COMPASS_TARGET_LAST_DEATH.getKey())
+                );
+
     }
 
     private void registerConfigs() {
@@ -795,16 +801,20 @@ public class Register implements RegisterManager {
                         ConfigsBase.CHAT.getKey())
                         .setDefaultValue()
                         .unSetAppearInMenu());
-        configsRegister
-                .add(new ConfigRegister("werewolf.name",
-                        ConfigsBase.COMPASS_MIDDLE.getKey())
-                        .setDefaultValue()
-                        .addConfig(new CompassMiddle(main)));
+
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.SHOW_ROLE_TO_DEATH.getKey())
                         .setDefaultValue()
+                        .addIncompatibleConfig(ConfigsBase.SHOW_ROLE_CATEGORY_TO_DEATH.getKey())
                         .addConfig(new ShowDeathRole(main)));
+
+        configsRegister
+                .add(new ConfigRegister("werewolf.name",
+                        ConfigsBase.SHOW_ROLE_CATEGORY_TO_DEATH.getKey())
+                        .addIncompatibleConfig(ConfigsBase.SHOW_ROLE_TO_DEATH.getKey())
+                        .addConfig(new ShowDeathCategoryRole(main)));
+
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.AUTO_REZ_INFECT.getKey()));

@@ -199,7 +199,6 @@ public class Roles implements InventoryProvider {
                             selectMinus(game, roleRegister.getKey());
                         }
 
-
                     }));
                 } else{
 
@@ -207,7 +206,7 @@ public class Roles implements InventoryProvider {
                         lore2.add(0,game.translate("werewolf.utils.none"));
                     }
 
-                    items.add(ClickableItem.of((new ItemBuilder(roleRegister.getItem()!=null?roleRegister.getItem():UniversalMaterial.RED_TERRACOTTA.getStack()).setLore(lore2).setDisplayName(game.translate(roleRegister.getKey())).build()), e -> {
+                    items.add(ClickableItem.of((new ItemBuilder(roleRegister.getItem() != null ? roleRegister.getItem() : UniversalMaterial.RED_TERRACOTTA.getStack()).setAmount(1).setLore(lore2).setDisplayName(game.translate(roleRegister.getKey())).build()), e -> {
 
                         if (e.isShiftClick()) {
                             manageStuff(main, player, key);

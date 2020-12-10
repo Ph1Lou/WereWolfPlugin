@@ -337,6 +337,7 @@
       "mining": "[§6LG UHC§r] Minage Désactivé",
       "day": "[§6LG UHC§r] C'est le Jour §b%s§r ✸ ",
       "death_message_with_role": "§b§m§l-+-----------------------------------+-\n§f        [§cLG UHC§r] §b&player&§r est mort, il était §b&role&§r\n§r§b§m§l-+-----------------------------------+-",
+      "death_message_with_camp": "§b§m§l-+-----------------------------------+-\n§f        [§cLG UHC§r] §b&player&§r est mort, il était dans le camp des §b&role&§r\n§r§b§m§l-+-----------------------------------+-",
       "death_message": "§b§m§l-+-----------------------------------+-\n§f                 [§cLG UHC§r] §b&player&§r est mort\n§r§b§m§l-+-----------------------------------+-",
       "review_role": "[§eLG UHC§r] Pour revoir la description §6/ww role",
       "troll": "§6LOUP-GAROU §7➽§4§l Bon ok, la blague a assez duré ! Voici ton vrai role : ",
@@ -656,7 +657,8 @@
         "slow_bow": "SlowBow",
         "no_fire_weapons": "NoFireWeapons",
         "timber": "Timber",
-        "double_jump": "Double Jump"
+        "double_jump": "Double Jump",
+        "incompatible": "§cScénario incompatible chargé : §b%s"
       },
       "rank": {
         "command": "rang",
@@ -734,6 +736,7 @@
         "chat": "Chat",
         "compass_middle": "La boussole pointe vers le centre",
         "show_role_to_death": "Affiche le Rôle à la Mort",
+        "show_role_category_to_death": "Affiche la Catégorie du Rôle à la Mort",
         "auto_rez_infect": "L'infect peut s'infecter",
         "auto_rez_witch": "la Sorcière peut s'autorez",
         "polygamy": "Polygamie",
@@ -743,7 +746,8 @@
         "red_name_tag": "Pseudo des Loups Garous en rouge",
         "seer_every_other_day": "Voyante tous les deux jours",
         "proximity_chat": "Chat de Proximité",
-        "double_troll": "Double Troll"
+        "double_troll": "Double Troll",
+        "incompatible": "§cConfig incompatible chargée : §b%s"
       },
       "border": {
         "name": "Configuration §bBordure",

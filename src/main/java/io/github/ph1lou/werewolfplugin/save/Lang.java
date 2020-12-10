@@ -40,14 +40,14 @@ public class Lang implements LangManager, Listener {
             // For each child
             for (JsonObject.Member member : jsonValue.asObject()) {
 
-                final String newPath = String.format("%s%s%s", currentPath, currentPath.equals("") ? "" : ".", member.getName());
+                String newPath = String.format("%s%s%s", currentPath, currentPath.equals("") ? "" : ".", member.getName());
 
                 this.loadTranslationsRec(newPath, member.getValue(), keys);
             }
         }
 
         else if (!jsonValue.isNull()) {
-            keys.put(currentPath, jsonValue.asString());
+            keys.put(currentPath.toLowerCase(), jsonValue.asString());
         }
 
         return keys;

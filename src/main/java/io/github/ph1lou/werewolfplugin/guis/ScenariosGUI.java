@@ -21,6 +21,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ScenariosGUI implements InventoryProvider {
@@ -68,15 +69,29 @@ public class ScenariosGUI implements InventoryProvider {
                         ""));
                 itemStack = UniversalMaterial.RED_TERRACOTTA.getStack();
             }
-            items.add(ClickableItem.of((new ItemBuilder(scenarioRegister.getItem()!=null?scenarioRegister.getItem():itemStack)
+
+            Optional<String> incompatible = scenarioRegister
+                    .getIncompatibleScenarios()
+                    .stream()
+                    .filter(s -> game.getConfig().getScenarioValues()
+                            .get(s))
+                    .map(game::translate).findFirst();
+
+            incompatible
+                    .ifPresent(s -> lore.add(game.translate("werewolf.menu.scenarios.incompatible", s)));
+
+
+            items.add(ClickableItem.of((new ItemBuilder(scenarioRegister.getItem() != null ? scenarioRegister.getItem() : itemStack)
                     .setDisplayName(game.translate(scenarioRegister.getKey()))
                     .setLore(lore).build()), e -> {
 
-                config.getScenarioValues().put(scenarioRegister.getKey(),
-                        !config.getScenarioValues()
-                                .get(scenarioRegister.getKey()));
-                scenarioRegister.getScenario().register(config.getScenarioValues()
-                        .get(scenarioRegister.getKey()));
+                if (!incompatible.isPresent() || config.getScenarioValues().get(scenarioRegister.getKey())) {
+                    config.getScenarioValues().put(scenarioRegister.getKey(),
+                            !config.getScenarioValues()
+                                    .get(scenarioRegister.getKey()));
+                    scenarioRegister.getScenario().register(config.getScenarioValues()
+                            .get(scenarioRegister.getKey()));
+                }
             }));
         }
 

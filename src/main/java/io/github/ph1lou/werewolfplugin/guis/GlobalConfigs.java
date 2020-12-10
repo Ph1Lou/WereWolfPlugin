@@ -20,6 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class GlobalConfigs implements InventoryProvider {
@@ -67,12 +68,27 @@ public class GlobalConfigs implements InventoryProvider {
                         lore.add(0, game.translate("werewolf.utils.disable", ""));
                         itemStack = UniversalMaterial.RED_TERRACOTTA.getStack();
                     }
-                    items.add(ClickableItem.of((new ItemBuilder(itemStack).setDisplayName(game.translate(configRegister.getKey())).setLore(lore).build()), e -> {
-                        config.getConfigValues().put(key, !config.getConfigValues().get(key));
 
-                        if (configRegister.getConfig() != null) {
-                            configRegister.getConfig().register(config.getConfigValues().get(key));
+                    Optional<String> incompatible = configRegister
+                            .getIncompatibleConfigs()
+                            .stream()
+                            .filter(s -> game.getConfig().getConfigValues()
+                                    .get(s))
+                            .map(game::translate).findFirst();
+
+                    incompatible
+                            .ifPresent(s -> lore.add(game.translate("werewolf.menu.global.incompatible", s)));
+
+                    items.add(ClickableItem.of((new ItemBuilder(itemStack).setDisplayName(game.translate(configRegister.getKey())).setLore(lore).build()), e -> {
+
+                        if (!incompatible.isPresent() || config.getConfigValues().get(key)) {
+                            config.getConfigValues().put(key, !config.getConfigValues().get(key));
+
+                            if (configRegister.getConfig() != null) {
+                                configRegister.getConfig().register(config.getConfigValues().get(key));
+                            }
                         }
+
 
                     }));
 
