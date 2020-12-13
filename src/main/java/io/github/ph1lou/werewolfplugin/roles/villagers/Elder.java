@@ -11,12 +11,9 @@ import io.github.ph1lou.werewolfapi.events.NightEvent;
 import io.github.ph1lou.werewolfapi.events.SecondDeathEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
-import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
@@ -55,25 +52,17 @@ public class Elder extends RolesVillage implements Power {
 
         super.recoverPotionEffect();
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) return;
-
         if (!hasPower()) return;
-        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,
-                Integer.MAX_VALUE,
-                0,
-                false,
-                false));
 
+        getPlayerWW().addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onDay(DayEvent event) {
         restoreResistance();
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onNight(NightEvent event){
         restoreResistance();
     }
@@ -83,19 +72,9 @@ public class Elder extends RolesVillage implements Power {
 
         if (!hasPower()) return;
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
-        if (player == null) return;
-
-        player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-        player.addPotionEffect(new PotionEffect(
-                PotionEffectType.DAMAGE_RESISTANCE,
-                Integer.MAX_VALUE,
-                0,
-                false,
-                false));
+        getPlayerWW().addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -106,8 +85,6 @@ public class Elder extends RolesVillage implements Power {
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         if (!hasPower()) return;
-
-        Player player = Bukkit.getPlayer(getPlayerUUID());
 
         PlayerWW killerWW = getPlayerWW().getLastKiller();
 
@@ -121,16 +98,10 @@ public class Elder extends RolesVillage implements Power {
         setPower(false);
 
         if (elderResurrectionEvent.isCancelled()) {
-            if (player == null) return;
-            player.sendMessage(game.translate("werewolf.check.cancel"));
+            getPlayerWW().sendMessage(game.translate("werewolf.check.cancel"));
         } else {
             if (elderResurrectionEvent.isKillerAVillager()) {
-                if (player != null) {
-                    VersionUtils.getVersionUtils().setPlayerMaxHealth(player,
-                            Math.max(1,
-                                    VersionUtils.getVersionUtils()
-                                            .getPlayerMaxHealth(player) - 6));
-                }
+                getPlayerWW().removePlayerMaxHealth(6);
 
             }
             event.setCancelled(true);

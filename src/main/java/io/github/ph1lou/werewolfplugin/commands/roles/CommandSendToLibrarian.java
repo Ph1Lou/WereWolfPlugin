@@ -75,13 +75,10 @@ public class CommandSendToLibrarian implements Commands {
 
                     player.sendMessage(game.translate("werewolf.role.librarian.contribute"));
                     find.set(true);
-                    Player librarian = Bukkit.getPlayer(librarianGiveBackEvent.getTargetWW().getUUID());
-                    if (librarian != null) {
-                        librarian.sendMessage(game.translate(
-                                "werewolf.role.librarian.contribution",
-                                player.getName(),
-                                librarianGiveBackEvent.getInfo()));
-                    }
+                    librarianGiveBackEvent.getTargetWW().sendMessage(game.translate(
+                            "werewolf.role.librarian.contribution",
+                            player.getName(),
+                            librarianGiveBackEvent.getInfo()));
                 });
 
 

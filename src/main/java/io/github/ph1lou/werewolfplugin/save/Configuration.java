@@ -2,6 +2,10 @@ package io.github.ph1lou.werewolfplugin.save;
 
 import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
+import io.github.ph1lou.werewolfapi.registers.ConfigRegister;
+import io.github.ph1lou.werewolfapi.registers.RegisterManager;
+import io.github.ph1lou.werewolfapi.registers.ScenarioRegister;
+import io.github.ph1lou.werewolfapi.registers.TimerRegister;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +16,7 @@ public class Configuration implements ConfigWereWolfAPI {
     private final Map<String, Boolean> configValues = new HashMap<>();
     private final Map<String, Integer> roleCount = new HashMap<>();
     private final Map<String, Boolean> scenarioValues = new HashMap<>();
-
+    private transient RegisterManager registerManager;
     private int strengthRate = 30;
     private int resistanceRate = 20;
     private int appleRate = 10;
@@ -47,6 +51,9 @@ public class Configuration implements ConfigWereWolfAPI {
     private boolean whiteList = false;
     private int playerMax = 30;
 
+    public Configuration(RegisterManager registerManager) {
+        this.registerManager = registerManager;
+    }
 
     @Override
     public int getLimitDepthStrider() {
@@ -54,12 +61,17 @@ public class Configuration implements ConfigWereWolfAPI {
     }
 
     @Override
-    public void setLimitDepthStrider(int i) {
-        this.limitDepthStrider=i;
+    public void setTimerValue(String key, int value) {
+        timerValues.put(key, value);
     }
 
     @Override
-	public int getDiamondLimit() {
+    public void setLimitDepthStrider(int i) {
+        this.limitDepthStrider = i;
+    }
+
+    @Override
+    public int getDiamondLimit() {
         return this.diamondLimit;
     }
 
@@ -299,6 +311,53 @@ public class Configuration implements ConfigWereWolfAPI {
     }
 
     @Override
+    public int getTimerValue(String key) {
+        return timerValues.getOrDefault(key, registerManager.getTimersRegister().stream().filter(timerRegister -> timerRegister.getKey().equals(key)).findFirst().map(TimerRegister::getDefaultValue).orElse(0));
+    }
+
+    @Override
+    public boolean isConfigActive(String key) {
+        return configValues.getOrDefault(key, registerManager.getConfigsRegister().stream().filter(configRegister -> configRegister.getKey().equals(key)).findFirst().map(ConfigRegister::getDefaultValue).orElse(false));
+    }
+
+    @Override
+    public int getRoleCount(String key) {
+        return roleCount.getOrDefault(key, 0);
+    }
+
+    @Override
+    public boolean isScenarioActive(String key) {
+        return scenarioValues.getOrDefault(key, registerManager.getScenariosRegister().stream().filter(scenarioRegister -> scenarioRegister.getKey().equals(key)).findFirst().map(ScenarioRegister::getDefaultValue).orElse(false));
+    }
+
+    @Override
+    public void switchConfigValue(String key) {
+        configValues.put(key, !isConfigActive(key));
+    }
+
+    @Override
+    public void switchScenarioValue(String key) {
+        scenarioValues.put(key, !isScenarioActive(key));
+    }
+
+    @Override
+    public void removeOneRole(String key) {
+        if (getRoleCount(key) > 0) {
+            roleCount.put(key, getRoleCount(key) - 1);
+        }
+    }
+
+    @Override
+    public void addOneRole(String key) {
+        roleCount.put(key, getRoleCount(key) + 1);
+    }
+
+    @Override
+    public void setRole(String key, int i) {
+        roleCount.put(key, i);
+    }
+
+    @Override
     public Map<String, Integer> getTimerValues() {
         return timerValues;
     }
@@ -319,6 +378,20 @@ public class Configuration implements ConfigWereWolfAPI {
     }
 
     @Override
+    public void decreaseTimer(String key) {
+        if (getTimerValue(key) > 0) {
+            timerValues.put(key, getTimerValue(key) - 1);
+        }
+    }
+
+    @Override
+    public void moveTimer(String key, int i) {
+        if (getTimerValue(key) + i > 0) {
+            timerValues.put(key, getTimerValue(key) + i);
+        }
+    }
+
+    @Override
     public int getLoverSize() {
         return loverSize;
     }
@@ -331,6 +404,16 @@ public class Configuration implements ConfigWereWolfAPI {
     @Override
     public int getAmnesiacLoverSize() {
         return amnesiacLoverSize;
+    }
+
+    @Override
+    public void setConfig(String key, boolean value) {
+        configValues.put(key, value);
+    }
+
+    @Override
+    public void setScenario(String key, boolean value) {
+        scenarioValues.put(key, value);
     }
 
     @Override
@@ -399,4 +482,8 @@ public class Configuration implements ConfigWereWolfAPI {
         this.knockBackMode = knockBackMode;
     }
 
+
+    public void addRegister(RegisterManager registerManager) {
+        this.registerManager = registerManager;
+    }
 }

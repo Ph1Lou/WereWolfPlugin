@@ -133,7 +133,7 @@ public class CommandLovers implements Commands {
                 return;
             }
 
-            Optional<LoverAPI> loverAPI = playerWW.getLovers().stream()
+            Optional<? extends LoverAPI> loverAPI = playerWW.getLovers().stream()
                     .filter(loverAPI1 -> !loverAPI1.isKey(RolesBase.CURSED_LOVER.getKey()))
                     .filter(loverAPI1 -> loverAPI1.getLovers().contains(playerWW1))
                     .filter(loverAPI1 -> !loverAPI1.isKey(RolesBase.AMNESIAC_LOVER.getKey()) || ((AmnesiacLover) loverAPI1).isRevealed())

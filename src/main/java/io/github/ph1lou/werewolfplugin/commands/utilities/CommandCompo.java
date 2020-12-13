@@ -22,7 +22,7 @@ public class CommandCompo implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
 
-        if (game.getConfig().getConfigValues().get(ConfigsBase.HIDE_COMPOSITION.getKey())) {
+        if (game.getConfig().isConfigActive(ConfigsBase.HIDE_COMPOSITION.getKey())) {
 
             player.sendMessage(game.translate("werewolf.commands.compo.composition_hide"));
         } else {
@@ -39,8 +39,8 @@ public class CommandCompo implements Commands {
             }
             for (RoleRegister roleRegister : main.getRegisterManager().getRolesRegister()) {
                 String key = roleRegister.getKey();
-                if (game.getConfig().getRoleCount().get(key) > 0) {
-                    sb.append("§3").append(game.getConfig().getRoleCount().get(key)).append("§r ").append(game.translate(roleRegister.getKey())).append("\n");
+                if (game.getConfig().getRoleCount(key) > 0) {
+                    sb.append("§3").append(game.getConfig().getRoleCount(key)).append("§r ").append(game.translate(roleRegister.getKey())).append("\n");
                 }
             }
             player.sendMessage(sb.toString());

@@ -34,18 +34,18 @@ public class GameTask extends BukkitRunnable {
 		pm.callEvent(new UpdateEvent());
 		world.setTime((long) (world.getTime() + 20 *
 				(600f /
-						game.getConfig().getTimerValues().get(
+						game.getConfig().getTimerValue(
 								"werewolf.menu.timers.day_duration") - 1)));
 
 
 		game.getScore().addTimer();
 
-		if (game.getConfig().getTimerValues().get(TimersBase.INVULNERABILITY.getKey()) == 0) {
+		if (game.getConfig().getTimerValue(TimersBase.INVULNERABILITY.getKey()) == 0) {
 			pm.callEvent(new InvulnerabilityEvent());
 		}
-		game.getConfig().getTimerValues().put(TimersBase.INVULNERABILITY.getKey(), game.getConfig().getTimerValues().get(TimersBase.INVULNERABILITY.getKey()) - 1);
+		game.getConfig().decreaseTimer(TimersBase.INVULNERABILITY.getKey());
 
-		if (game.getConfig().getTimerValues().get(TimersBase.ROLE_DURATION.getKey()) == 0) {
+		if (game.getConfig().getTimerValue(TimersBase.ROLE_DURATION.getKey()) == 0) {
 
 			if (game.getConfig().isTrollSV()) {
 				pm.callEvent(new TrollEvent());
@@ -53,63 +53,61 @@ public class GameTask extends BukkitRunnable {
 				pm.callEvent(new RepartitionEvent());
 			}
 		}
-		game.getConfig().getTimerValues().put(TimersBase.ROLE_DURATION.getKey(), game.getConfig().getTimerValues().get(TimersBase.ROLE_DURATION.getKey()) - 1);
+		game.getConfig().decreaseTimer(TimersBase.ROLE_DURATION.getKey());
 
-		if (game.getConfig().getTimerValues().get(TimersBase.PVP.getKey()) == 0) {
+		if (game.getConfig().getTimerValue(TimersBase.PVP.getKey()) == 0) {
 			pm.callEvent(new PVPEvent());
 		}
-		game.getConfig().getTimerValues().put(TimersBase.PVP.getKey(), game.getConfig().getTimerValues().get(TimersBase.PVP.getKey()) - 1);
+		game.getConfig().decreaseTimer(TimersBase.PVP.getKey());
 
-		if (game.getConfig().getTimerValues().get(TimersBase.ROLE_DURATION.getKey()) < 0 && !game.getConfig().isTrollSV()) {
+		if (game.getConfig().getTimerValue(TimersBase.ROLE_DURATION.getKey()) < 0 && !game.getConfig().isTrollSV()) {
 
-			if (game.getConfig().getTimerValues().get(TimersBase.MODEL_DURATION.getKey()) == 0) {
+			if (game.getConfig().getTimerValue(TimersBase.MODEL_DURATION.getKey()) == 0) {
 				pm.callEvent(new AutoModelEvent());
 			}
-			game.getConfig().getTimerValues().put(TimersBase.MODEL_DURATION.getKey(), game.getConfig().getTimerValues().get(TimersBase.MODEL_DURATION.getKey()) - 1);
+			game.getConfig().decreaseTimer(TimersBase.MODEL_DURATION.getKey());
 
-			if (game.getConfig().getTimerValues().get(TimersBase.LOVER_DURATION.getKey()) == 0) {
+			if (game.getConfig().getTimerValue(TimersBase.LOVER_DURATION.getKey()) == 0) {
 				pm.callEvent(new LoversRepartitionEvent());
 
 			}
-			game.getConfig().getTimerValues().put(TimersBase.LOVER_DURATION.getKey(), game.getConfig().getTimerValues().get(TimersBase.LOVER_DURATION.getKey()) - 1);
+			game.getConfig().decreaseTimer(TimersBase.LOVER_DURATION.getKey());
 
-			if (game.getConfig().getTimerValues().get(TimersBase.ANGEL_DURATION.getKey()) == 0) {
+			if (game.getConfig().getTimerValue(TimersBase.ANGEL_DURATION.getKey()) == 0) {
 				pm.callEvent(new AutoAngelEvent());
 			}
-			game.getConfig().getTimerValues().put(TimersBase.ANGEL_DURATION.getKey(), game.getConfig().getTimerValues().get(TimersBase.ANGEL_DURATION.getKey()) - 1);
+			game.getConfig().decreaseTimer(TimersBase.ANGEL_DURATION.getKey());
 
-			if (game.getConfig().getTimerValues().get(TimersBase.WEREWOLF_LIST.getKey()) == 0) {
+			if (game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey()) == 0) {
 				pm.callEvent(new WereWolfListEvent());
 
 			}
-			game.getConfig().getTimerValues().put(TimersBase.WEREWOLF_LIST.getKey(), game.getConfig().getTimerValues().get(TimersBase.WEREWOLF_LIST.getKey()) - 1);
+			game.getConfig().decreaseTimer(TimersBase.WEREWOLF_LIST.getKey());
 		}
 
-		if (game.getConfig().getTimerValues().get(TimersBase.BORDER_BEGIN.getKey()) == 0) {
+		if (game.getConfig().getTimerValue(TimersBase.BORDER_BEGIN.getKey()) == 0) {
 
 			if (wb.getSize() != game.getConfig().getBorderMin()) {
 				pm.callEvent(new BorderStartEvent());
 			}
-		} else if (game.getConfig().getTimerValues().get(TimersBase.BORDER_BEGIN.getKey()) < 0) {
+		} else if (game.getConfig().getTimerValue(TimersBase.BORDER_BEGIN.getKey()) < 0) {
 
 			if (game.getConfig().getBorderMax() != game.getConfig().getBorderMin()) {
-				wb.setSize(game.getConfig().getBorderMin(), (long) Math.abs(wb.getSize() - game.getConfig().getBorderMin()) * game.getConfig().getTimerValues().get(TimersBase.BORDER_DURATION.getKey()) / 100);
+				wb.setSize(game.getConfig().getBorderMin(), (long) Math.abs(wb.getSize() - game.getConfig().getBorderMin()) * game.getConfig().getTimerValue(TimersBase.BORDER_DURATION.getKey()) / 100);
 				game.getConfig().setBorderMax((int) (wb.getSize()));
 			}
 
 		}
 
-		game.getConfig().getTimerValues().put(TimersBase.BORDER_BEGIN.getKey(), game.getConfig().getTimerValues().get(TimersBase.BORDER_BEGIN.getKey()) - 1);
+		game.getConfig().decreaseTimer(TimersBase.BORDER_BEGIN.getKey());
 
-		if (game.getConfig().getTimerValues().get(TimersBase.DIGGING.getKey()) == 0) {
+		if (game.getConfig().getTimerValue(TimersBase.DIGGING.getKey()) == 0) {
 			pm.callEvent(new DiggingEndEvent());
 
 		}
-		game.getConfig().getTimerValues().put(TimersBase.DIGGING.getKey(), game.getConfig().getTimerValues().get(TimersBase.DIGGING.getKey()) - 1);
+		game.getConfig().decreaseTimer(TimersBase.DIGGING.getKey());
 
-
-		game.getConfig().getTimerValues().put(TimersBase.VOTE_BEGIN.getKey(), game.getConfig().getTimerValues().get(TimersBase.VOTE_BEGIN.getKey()) - 1);
-
+		game.getConfig().decreaseTimer(TimersBase.VOTE_BEGIN.getKey());
 	}
 
 }

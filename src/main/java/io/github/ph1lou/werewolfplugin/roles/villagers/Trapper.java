@@ -8,7 +8,6 @@ import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -17,7 +16,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class Trapper extends RolesVillage implements AffectedPlayers, Power {
 
@@ -66,14 +64,10 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
-        Player player = Bukkit.getPlayer(getPlayerUUID());
+
         setPower(true);
 
-        if (player == null) {
-            return;
-        }
-
-        player.sendMessage(game.translate(
+        getPlayerWW().sendMessage(game.translate(
                 "werewolf.role.trapper.tracking_message"));
     }
 
@@ -110,12 +104,8 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
                 .peek(playerWW -> stringBuilder.append("§b ")
                         .append(playerWW.getName())
                         .append(" "))
-                .map(PlayerWW::getRole)
-                .map(Roles::getPlayerUUID)
-                .map(Bukkit::getPlayer)
-                .filter(Objects::nonNull)
-                .forEach(player1 -> stringBuilder.append(game.getScore()
-                        .updateArrow(player, player1.getLocation())));
+                .forEach(playerWW -> stringBuilder.append(game.getScore()
+                        .updateArrow(player, playerWW.getLocation())));
 
         event.setActionBar(stringBuilder.toString());
     }

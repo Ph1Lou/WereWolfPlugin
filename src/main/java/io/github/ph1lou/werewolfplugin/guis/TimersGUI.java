@@ -150,15 +150,14 @@ public class TimersGUI implements InventoryProvider {
         for (TimerRegister timer : main.getRegisterManager().getTimersRegister()) {
             List<String> lore = timer.getLoreKey().stream().map(game::translate).collect(Collectors.toList());
 
-            if (game.getConfig().getTimerValues().get(timer.getKey()) >= 0 || game.isDebug()) {
+            if (game.getConfig().getTimerValue(timer.getKey()) >= 0 || game.isDebug()) {
 
                 items.add(ClickableItem.of((new ItemBuilder(timer.getKey().equals(key) ?
                                 Material.FEATHER :
                                 Material.ANVIL)
                                 .setLore(lore)
                                 .setDisplayName(game.translate(timer.getKey(),
-                                        game.getScore().conversion(config.getTimerValues()
-                                                .get(timer.getKey())))).build()),
+                                        game.getScore().conversion(config.getTimerValue(timer.getKey())))).build()),
                         e -> this.key = timer.getKey()));
             }
 
@@ -206,25 +205,23 @@ public class TimersGUI implements InventoryProvider {
 
     public void selectMinusTimer(WereWolfAPI game, String key, int value) {
         ConfigWereWolfAPI config = game.getConfig();
-        int j = config.getTimerValues().get(key);
+        int j = config.getTimerValue(key);
 
         if (j >= value) {
-            config.getTimerValues().put(key, j - value);
+            config.moveTimer(key, -value);
         }
     }
 
     public void selectPlusTimer(WereWolfAPI game, String key, int value) {
         ConfigWereWolfAPI config = game.getConfig();
-        int j = config.getTimerValues().get(key);
-        config.getTimerValues().put(key, j + value);
+        config.moveTimer(key, value);
     }
 
     public String getConversion(WereWolfAPI game, String key) {
         return game.getScore()
                 .conversion(game
                         .getConfig()
-                        .getTimerValues()
-                        .get(key));
+                        .getTimerValue(key));
     }
 }
 

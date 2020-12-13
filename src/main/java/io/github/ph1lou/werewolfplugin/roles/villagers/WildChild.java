@@ -78,8 +78,6 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     public void onNight(NightEvent event) {
 
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
@@ -88,17 +86,13 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
             return;
         }
 
-        if (player == null) return;
-
-        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, -1, false, false));
+        getPlayerWW().addPotionEffect(PotionEffectType.INCREASE_DAMAGE);
     }
 
     @EventHandler
     public void onDay(DayEvent event) {
 
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
@@ -107,9 +101,8 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
             return;
         }
 
-        if (player == null) return;
 
-        player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+        getPlayerWW().removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
     }
 
     @EventHandler
@@ -117,9 +110,6 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
 
 
         PlayerWW model = game.autoSelect(getPlayerWW());
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (model == null) return;
 
         if (!hasPower()) return;
 
@@ -127,14 +117,12 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
         setPower(false);
         Bukkit.getPluginManager().callEvent(new ModelEvent(getPlayerWW(), model));
 
-        if (player == null) return;
-
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        player.sendMessage(game.translate("werewolf.role.wild_child.reveal_model", model.getName()));
-        Sounds.BAT_IDLE.play(player);
+        getPlayerWW().sendMessage(game.translate("werewolf.role.wild_child.reveal_model", model.getName()));
+        Sounds.BAT_IDLE.play(getPlayerWW());
     }
 
     @Override
@@ -148,17 +136,12 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
 
         if (!event.getThiefWW().equals(getPlayerWW())) return;
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) return;
-
         if (!transformed) {
-            player.sendMessage(game.translate(
+            getPlayerWW().sendMessage(game.translate(
                     "werewolf.role.wild_child.design_model",
                     game.getScore().conversion(
                             game.getConfig()
-                                    .getTimerValues()
-                                    .get(TimersBase.MODEL_DURATION
+                                    .getTimerValue(TimersBase.MODEL_DURATION
                                             .getKey()))));
         } else {
             PlayerWW model = getAffectedPlayers().get(0);
@@ -173,7 +156,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
                 Bukkit.getPluginManager().callEvent(wildChildTransformationEvent);
 
                 if (wildChildTransformationEvent.isCancelled()) {
-                    player.sendMessage(game.translate(
+                    getPlayerWW().sendMessage(game.translate(
                             "werewolf.check.transformation"));
                     return;
                 }
@@ -186,7 +169,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
                 }
 
             } else
-                player.sendMessage(game.translate(
+                getPlayerWW().sendMessage(game.translate(
                         "werewolf.role.wild_child.reveal_model",
                         model.getName()));
         }
@@ -199,29 +182,17 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
         super.recoverPotionEffect();
         if (!transformed) return;
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) return;
-
-        player.addPotionEffect(new PotionEffect(
-                PotionEffectType.NIGHT_VISION,
-                Integer.MAX_VALUE,
-                0,
-                false,
-                false));
+        getPlayerWW().addPotionEffect(PotionEffectType.NIGHT_VISION);
     }
 
     @Override
     public void recoverPower() {
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-        if (player == null) return;
-        player.sendMessage(game.translate(
+        getPlayerWW().sendMessage(game.translate(
                 "werewolf.role.wild_child.design_model",
                 game.getScore().conversion(
                         game.getConfig()
-                                .getTimerValues()
-                                .get(TimersBase.MODEL_DURATION
+                                .getTimerValue(TimersBase.MODEL_DURATION
                                         .getKey()))));
     }
 
@@ -260,7 +231,6 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
 
 
         PlayerWW playerWW = event.getPlayerWW();
-        Player player = Bukkit.getPlayer(getPlayerUUID());
 
         if (!getAffectedPlayers().contains(playerWW)) return;
 
@@ -274,10 +244,8 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
         Bukkit.getPluginManager().callEvent(wildChildTransformationEvent);
 
         if (wildChildTransformationEvent.isCancelled()) {
-            if (player != null) {
-                player.sendMessage(game.translate(
-                        "werewolf.check.transformation"));
-            }
+            getPlayerWW().sendMessage(game.translate(
+                    "werewolf.check.transformation"));
             return;
         }
 
@@ -295,7 +263,6 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
 
         PlayerWW playerWW = event.getPlayerWW();
         PlayerWW thiefWW = event.getThiefWW();
-        Player player = Bukkit.getPlayer(getPlayerUUID());
 
         if (!getAffectedPlayers().contains(playerWW)) return;
 
@@ -304,9 +271,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
 
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
-        if (player == null) return;
-
-        player.sendMessage(game.translate(
+        getPlayerWW().sendMessage(game.translate(
                 "werewolf.role.wild_child.change",
                 thiefWW.getName()));
     }

@@ -50,7 +50,7 @@ public class CommandRevive implements Commands {
         }
 
         Roles role = playerWW1.getRole();
-        game.getConfig().getRoleCount().put(role.getKey(), game.getConfig().getRoleCount().get(role.getKey()) + 1);
+        game.getConfig().addOneRole(role.getKey());
         game.getScore().addPlayerSize();
         game.resurrection(playerWW1);
 

@@ -61,7 +61,7 @@ public class GlobalConfigs implements InventoryProvider {
                     List<String> lore = configRegister.getLoreKey().stream().map(game::translate).collect(Collectors.toList());
                     ItemStack itemStack;
 
-                    if (game.getConfig().getConfigValues().get(configRegister.getKey())) {
+                    if (game.getConfig().isConfigActive(configRegister.getKey())) {
                         lore.add(0, game.translate("werewolf.utils.enable", ""));
                         itemStack = UniversalMaterial.GREEN_TERRACOTTA.getStack();
                     } else {
@@ -72,8 +72,7 @@ public class GlobalConfigs implements InventoryProvider {
                     Optional<String> incompatible = configRegister
                             .getIncompatibleConfigs()
                             .stream()
-                            .filter(s -> game.getConfig().getConfigValues()
-                                    .get(s))
+                            .filter(s -> game.getConfig().isConfigActive(s))
                             .map(game::translate).findFirst();
 
                     incompatible
@@ -81,11 +80,11 @@ public class GlobalConfigs implements InventoryProvider {
 
                     items.add(ClickableItem.of((new ItemBuilder(itemStack).setDisplayName(game.translate(configRegister.getKey())).setLore(lore).build()), e -> {
 
-                        if (!incompatible.isPresent() || config.getConfigValues().get(key)) {
-                            config.getConfigValues().put(key, !config.getConfigValues().get(key));
+                        if (!incompatible.isPresent() || config.isConfigActive(key)) {
+                            config.switchConfigValue(key);
 
                             if (configRegister.getConfig() != null) {
-                                configRegister.getConfig().register(config.getConfigValues().get(key));
+                                configRegister.getConfig().register(config.isConfigActive(key));
                             }
                         }
 

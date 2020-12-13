@@ -42,13 +42,7 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
             return;
         }
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) {
-            return;
-        }
-
-        player.sendMessage(game.translate(
+        getPlayerWW().sendMessage(game.translate(
                 "werewolf.role.little_girl.remove_armor"));
     }
 
@@ -59,21 +53,15 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
             return;
         }
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) {
-            return;
-        }
-
         if (!isInvisible()) return;
 
-        player.removePotionEffect(PotionEffectType.INVISIBILITY);
-        player.removePotionEffect(PotionEffectType.WEAKNESS);
+        getPlayerWW().removePotionEffect(PotionEffectType.INVISIBILITY);
+        getPlayerWW().removePotionEffect(PotionEffectType.WEAKNESS);
         setInvisible(false);
         Bukkit.getPluginManager().callEvent(
                 new InvisibleEvent(getPlayerWW(),
                         false));
-        player.sendMessage(game.translate("werewolf.role.little_girl.visible"));
+        getPlayerWW().sendMessage(game.translate("werewolf.role.little_girl.visible"));
     }
 
     @EventHandler
@@ -110,13 +98,7 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
             return;
         }
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) {
-            return;
-        }
-
-        player.sendMessage(game.translate(
+        getPlayerWW().sendMessage(game.translate(
                 "werewolf.role.little_girl.soon_to_be_day"));
     }
 
@@ -201,15 +183,8 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
 
         super.recoverPotionEffect();
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (player == null) return;
-
-        player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION,
-                Integer.MAX_VALUE,
-                0,
-                false,
-                false));
+        getPlayerWW().addPotionEffect(PotionEffectType.NIGHT_VISION);
     }
 
     @EventHandler

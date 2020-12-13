@@ -13,7 +13,6 @@ import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -79,14 +78,10 @@ public class Witch extends RolesVillage implements AffectedPlayers, Power {
         if (!hasPower()) return;
 
         PlayerWW playerWW = event.getPlayerWW();
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-
-        if (player == null) return;
 
 
         if (playerWW.equals(getPlayerWW())) {
-            event.setCancelled(autoResurrection(player));
+            event.setCancelled(autoResurrection(playerWW));
             return;
         }
 
@@ -102,13 +97,12 @@ public class Witch extends RolesVillage implements AffectedPlayers, Power {
                 String.format("/ww %s %s",
                         game.translate("werewolf.role.witch.command"),
                         playerWW.getUUID())));
-        player.spigot().sendMessage(textComponent);
+        getPlayerWW().sendMessage(textComponent);
     }
 
-    private boolean autoResurrection(Player player) {
+    private boolean autoResurrection(PlayerWW player) {
 
-        if (!game.getConfig().getConfigValues()
-                .get(ConfigsBase.AUTO_REZ_WITCH.getKey())) {
+        if (!game.getConfig().isConfigActive(ConfigsBase.AUTO_REZ_WITCH.getKey())) {
             return false;
         }
 

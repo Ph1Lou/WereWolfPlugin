@@ -27,42 +27,28 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
     @EventHandler
     public void onNight(NightEvent event) {
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) return;
-
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,
-                Integer.MAX_VALUE,
-                -1,
-                false,
-                false));
+        getPlayerWW().addPotionEffect(PotionEffectType.INCREASE_DAMAGE);
     }
 
 
     @EventHandler
     public void onDay(DayEvent event) {
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) return;
-
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+        getPlayerWW().removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
     }
 
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 
         PlayerWW playerWW = event.getPlayerWW();
-
-        Player player = Bukkit.getPlayer(getPlayerUUID());
 
         if (playerWW.getLastKiller() == null) return;
 
@@ -76,9 +62,7 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
         Bukkit.getPluginManager().callEvent(amnesiacTransformationEvent);
 
         if (amnesiacTransformationEvent.isCancelled()) {
-            if (player != null) {
-                player.sendMessage(game.translate("werewolf.check.transformation"));
-            }
+            getPlayerWW().sendMessage(game.translate("werewolf.check.transformation"));
             return;
         }
 
@@ -96,21 +80,11 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
 
         super.recoverPotionEffect();
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
+        getPlayerWW().addPotionEffect(PotionEffectType.NIGHT_VISION);
 
-        if (player == null) return;
-
-        player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION,
-                Integer.MAX_VALUE,
-                0,
-                false,
-                false));
         if (game.isDay(Day.DAY)) return;
-        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,
-                Integer.MAX_VALUE,
-                -1,
-                false,
-                false));
+
+        getPlayerWW().addPotionEffect(PotionEffectType.INCREASE_DAMAGE);
     }
 
     @Override

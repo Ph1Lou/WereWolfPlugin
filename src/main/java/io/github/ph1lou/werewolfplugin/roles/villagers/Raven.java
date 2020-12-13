@@ -9,7 +9,6 @@ import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.events.VoteEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesWithLimitedSelectionDuration;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -57,30 +56,22 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
     public void onDay(DayEvent event) {
 
         if (last != null) {
-            Player player = Bukkit.getPlayer(last.getUUID());
-
-            if (player != null) {
-                player.removePotionEffect(PotionEffectType.JUMP);
-                player.sendMessage(game.translate("werewolf.role.raven.no_longer_curse"));
-            }
+            last.removePotionEffect(PotionEffectType.JUMP);
+            last.sendMessage(game.translate("werewolf.role.raven.no_longer_curse"));
             last = null;
         }
 
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
-        Player player = Bukkit.getPlayer(getPlayerUUID());
+
         setPower(true);
 
-        if (player == null) {
-            return;
-        }
 
-        player.sendMessage(game.translate("werewolf.role.raven.curse_message",
+        getPlayerWW().sendMessage(game.translate("werewolf.role.raven.curse_message",
                 game.getScore().conversion(
                         game.getConfig()
-                                .getTimerValues()
-                                .get(TimersBase.POWER_DURATION.getKey()))));
+                                .getTimerValue(TimersBase.POWER_DURATION.getKey()))));
     }
 
 

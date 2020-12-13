@@ -145,8 +145,7 @@ public class TabManager {
             Bukkit.getPluginManager().callEvent(requestSeeWereWolfListEvent);
 
             if (appear && requestSeeWereWolfListEvent.isAccept()) {
-                if (game.getConfig().getConfigValues()
-                        .get(ConfigsBase.RED_NAME_TAG.getKey())) {
+                if (game.getConfig().isConfigActive(ConfigsBase.RED_NAME_TAG.getKey())) {
                     sb.append(ChatColor.DARK_RED);
                 }
             }

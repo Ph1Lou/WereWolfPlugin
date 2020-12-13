@@ -6,7 +6,6 @@ import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.*;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.rolesattributs.*;
-import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -88,7 +87,7 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
             sb.append(game.translate("werewolf.role.fallen_angel.description"));
         else if (choice.equals(AngelForm.GUARDIAN_ANGEL)) {
 
-            if (game.getConfig().getConfigValues().get(ConfigsBase.SWEET_ANGEL.getKey())) {
+            if (game.getConfig().isConfigActive(ConfigsBase.SWEET_ANGEL.getKey())) {
                 sb.append(game.translate("werewolf.role.guardian_angel.description"));
             } else {
                 sb.append(game.translate("werewolf.role.guardian_angel.description_patch"));
@@ -106,19 +105,11 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
 
         if (!event.getThiefWW().equals(getPlayerWW())) return;
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) {
-            return;
-        }
-
         Pair<Integer, String> pair = heartAndMessageTargetManagement();
 
-        VersionUtils.getVersionUtils().setPlayerMaxHealth(player,
-                VersionUtils.getVersionUtils().getPlayerMaxHealth(player)
-                        + pair.getValue0());
+        getPlayerWW().addPlayerMaxHealth(pair.getValue0());
 
-        player.sendMessage(pair.getValue1());
+        getPlayerWW().sendMessage(pair.getValue1());
     }
 
     /**
@@ -133,12 +124,9 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
 
         if (isChoice(AngelForm.ANGEL)) {
             extraHearts += 4;
-            Player player = Bukkit.getPlayer(getPlayerUUID());
 
-            if (player != null) {
-                Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> player.spigot().sendMessage(choiceAngel()), 1);
+            Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> getPlayerWW().sendMessage(choiceAngel()), 1);
 
-            }
 
         } else if (!getAffectedPlayers().isEmpty()) {
 
@@ -161,8 +149,7 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
 
                     } else {
                         extraHearts += 4;
-                        if (game.getConfig().getConfigValues()
-                                .get(ConfigsBase.SWEET_ANGEL.getKey())) {
+                        if (game.getConfig().isConfigActive(ConfigsBase.SWEET_ANGEL.getKey())) {
                             sb.append(game.translate(
                                     "werewolf.role.guardian_angel.protege_death"));
                         } else {
@@ -203,7 +190,7 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
                         HoverEvent.Action.SHOW_TEXT,
                         new ComponentBuilder(
                                 game.translate(
-                                        game.getConfig().getConfigValues().get(
+                                        game.getConfig().isConfigActive(
                                                 ConfigsBase.SWEET_ANGEL.getKey())
                                                 ? "werewolf.role.angel.guardian_choice" :
                                                 "werewolf.role.angel.guardian_choice_patch"))
@@ -233,7 +220,7 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
         choice.addExtra(new TextComponent(
                 game.translate("werewolf.role.angel.time",
                         game.getScore().conversion(
-                                game.getConfig().getTimerValues().get(
+                                game.getConfig().getTimerValue(
                                         TimersBase.ANGEL_DURATION.getKey()))
                 )));
 
@@ -245,18 +232,13 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
     @Override
     public void recoverPower() {
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-        if (player == null) return;
-
-        VersionUtils.getVersionUtils().setPlayerMaxHealth(player, 24);
-        player.setHealth(24);
+        getPlayerWW().addPlayerMaxHealth(4);
+        getPlayerWW().addPlayerHealth(4);
     }
 
 
     @EventHandler
     public void onAutoAngel(AutoAngelEvent event){
-
-        Player player = Bukkit.getPlayer(getPlayerUUID());
 
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
@@ -265,20 +247,16 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
         if (isChoice(AngelForm.ANGEL)) {
 
             if (game.getRandom().nextBoolean()) {
-                if (player != null) {
-                    player.sendMessage(
-                            game.translate(
-                                    "werewolf.role.angel.angel_choice_perform",
-                                    game.translate(RolesBase.FALLEN_ANGEL.getKey())));
-                }
+                getPlayerWW().sendMessage(
+                        game.translate(
+                                "werewolf.role.angel.angel_choice_perform",
+                                game.translate(RolesBase.FALLEN_ANGEL.getKey())));
                 setChoice(AngelForm.FALLEN_ANGEL);
             } else {
-                if (player != null) {
-                    player.sendMessage(
-                            game.translate(
-                                    "werewolf.role.angel.angel_choice_perform",
-                                    game.translate(RolesBase.FALLEN_ANGEL.getKey())));
-                }
+                getPlayerWW().sendMessage(
+                        game.translate(
+                                "werewolf.role.angel.angel_choice_perform",
+                                game.translate(RolesBase.FALLEN_ANGEL.getKey())));
                 setChoice(AngelForm.GUARDIAN_ANGEL);
             }
             Bukkit.getPluginManager().callEvent(new AngelChoiceEvent(getPlayerWW(), getChoice()));
@@ -287,24 +265,17 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
         PlayerWW targetWW = game.autoSelect(getPlayerWW());
         addAffectedPlayer(targetWW);
 
-        if (player != null) {
-
-            if (isChoice(AngelForm.FALLEN_ANGEL)) {
-                player.sendMessage(game.translate(
-                        "werewolf.role.fallen_angel.reveal_target",
-                        targetWW.getName()));
-            } else {
-                VersionUtils.getVersionUtils()
-                        .setPlayerMaxHealth(player,
-                                VersionUtils
-                                        .getVersionUtils()
-                                        .getPlayerMaxHealth(player) + 6);
-                player.sendMessage(game.translate(
-                        "werewolf.role.guardian_angel.reveal_protege",
-                        targetWW.getName()));
-            }
-            Sounds.PORTAL_TRIGGER.play(player);
+        if (isChoice(AngelForm.FALLEN_ANGEL)) {
+            getPlayerWW().sendMessage(game.translate(
+                    "werewolf.role.fallen_angel.reveal_target",
+                    targetWW.getName()));
+        } else {
+            getPlayerWW().addPlayerMaxHealth(6);
+            getPlayerWW().sendMessage(game.translate(
+                    "werewolf.role.guardian_angel.reveal_protege",
+                    targetWW.getName()));
         }
+        Sounds.PORTAL_TRIGGER.play(getPlayerWW());
 
         Bukkit.getPluginManager().callEvent(
                 new AngelTargetEvent(getPlayerWW(), targetWW));
@@ -334,11 +305,7 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
 
         if (!getAffectedPlayers().contains(playerWW)) return;
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
-
-        if (player == null) return;
 
         Bukkit.getPluginManager().callEvent(new AngelTargetDeathEvent(getPlayerWW(),
                 playerWW));
@@ -346,20 +313,18 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
             if (getPlayerWW().equals(playerWW.getLastKiller())) {
                 Bukkit.getPluginManager().callEvent(
                         new FallenAngelTargetDeathEvent(getPlayerWW(), playerWW));
-                VersionUtils.getVersionUtils().setPlayerMaxHealth(player,
-                        VersionUtils.getVersionUtils().getPlayerMaxHealth(player) + 6);
-                player.sendMessage(game.translate("werewolf.role.fallen_angel.deadly_target"));
+                getPlayerWW().addPlayerMaxHealth(6);
+                getPlayerWW().sendMessage(game.translate("werewolf.role.fallen_angel.deadly_target"));
             }
         } else if (isChoice(AngelForm.GUARDIAN_ANGEL)) {
-            VersionUtils.getVersionUtils().setPlayerMaxHealth(player,
-                    VersionUtils.getVersionUtils().getPlayerMaxHealth(player) - 6);
+            getPlayerWW().removePlayerMaxHealth(6);
 
-            if (game.getConfig().getConfigValues().get(
+            if (game.getConfig().isConfigActive(
                     ConfigsBase.SWEET_ANGEL.getKey())) {
-                player.sendMessage(game.translate(
+                getPlayerWW().sendMessage(game.translate(
                         "werewolf.role.guardian_angel.protege_death"));
             } else {
-                player.sendMessage(game.translate(
+                getPlayerWW().sendMessage(game.translate(
                         "werewolf.role.guardian_angel.protege_death_patch"));
             }
 
@@ -372,10 +337,8 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
     public void onTargetIsStolen(StealEvent event) {
 
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
         PlayerWW playerWW = event.getPlayerWW();
         PlayerWW thiefWW = event.getThiefWW();
-
 
         String targetName = thiefWW.getName();
 
@@ -386,12 +349,11 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
 
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
-        if (player == null) return;
 
         if (isChoice(AngelForm.FALLEN_ANGEL)) {
-            player.sendMessage(game.translate("werewolf.role.fallen_angel.new_target", targetName));
+            getPlayerWW().sendMessage(game.translate("werewolf.role.fallen_angel.new_target", targetName));
         } else if (isChoice(AngelForm.GUARDIAN_ANGEL)) {
-            player.sendMessage(game.translate("werewolf.role.guardian_angel.new_protege", targetName));
+            getPlayerWW().sendMessage(game.translate("werewolf.role.guardian_angel.new_protege", targetName));
         }
     }
 
@@ -401,6 +363,7 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
         if (!getPlayerUUID().equals(event.getPlayerUUID())) return;
 
         StringBuilder stringBuilder = new StringBuilder(event.getActionBar());
+
         Player player = Bukkit.getPlayer(event.getPlayerUUID());
 
         if (player == null) return;
@@ -442,7 +405,7 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
     @Override
     public boolean isNeutral() {
         return super.isNeutral() &&
-                (!game.getConfig().getConfigValues().get(ConfigsBase.SWEET_ANGEL.getKey())
+                (!game.getConfig().isConfigActive(ConfigsBase.SWEET_ANGEL.getKey())
                         || !transformed);
     }
 

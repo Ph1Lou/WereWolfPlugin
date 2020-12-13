@@ -60,7 +60,7 @@ public class ScenariosGUI implements InventoryProvider {
             List<String> lore = scenarioRegister.getLoreKey().stream().map(game::translate).collect(Collectors.toList());
             ItemStack itemStack;
 
-            if (config.getScenarioValues().get(scenarioRegister.getKey())) {
+            if (config.isScenarioActive(scenarioRegister.getKey())) {
                 lore.add(0, game.translate("werewolf.utils.enable",
                         ""));
                 itemStack = UniversalMaterial.GREEN_TERRACOTTA.getStack();
@@ -73,8 +73,7 @@ public class ScenariosGUI implements InventoryProvider {
             Optional<String> incompatible = scenarioRegister
                     .getIncompatibleScenarios()
                     .stream()
-                    .filter(s -> game.getConfig().getScenarioValues()
-                            .get(s))
+                    .filter(s -> game.getConfig().isScenarioActive(s))
                     .map(game::translate).findFirst();
 
             incompatible
@@ -85,12 +84,9 @@ public class ScenariosGUI implements InventoryProvider {
                     .setDisplayName(game.translate(scenarioRegister.getKey()))
                     .setLore(lore).build()), e -> {
 
-                if (!incompatible.isPresent() || config.getScenarioValues().get(scenarioRegister.getKey())) {
-                    config.getScenarioValues().put(scenarioRegister.getKey(),
-                            !config.getScenarioValues()
-                                    .get(scenarioRegister.getKey()));
-                    scenarioRegister.getScenario().register(config.getScenarioValues()
-                            .get(scenarioRegister.getKey()));
+                if (!incompatible.isPresent() || config.isScenarioActive(scenarioRegister.getKey())) {
+                    config.switchScenarioValue(scenarioRegister.getKey());
+                    scenarioRegister.getScenario().register(config.isScenarioActive(scenarioRegister.getKey()));
                 }
             }));
         }

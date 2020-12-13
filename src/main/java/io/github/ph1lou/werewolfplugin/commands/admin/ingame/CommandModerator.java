@@ -65,7 +65,7 @@ public class CommandModerator implements Commands {
             game.getModerationManager().checkQueue();
         }
         moderator.setGameMode(GameMode.SPECTATOR);
-        moderationManager.getModerators().add(argUUID);
+        moderationManager.addModerator(argUUID);
         Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.moderator.add", moderator.getName()));
         Bukkit.getPluginManager().callEvent(new ModeratorEvent(argUUID, true));
     }

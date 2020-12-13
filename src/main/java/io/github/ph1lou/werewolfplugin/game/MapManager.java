@@ -9,7 +9,6 @@ import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
 
@@ -175,20 +174,20 @@ public class MapManager implements MapManagerAPI {
         Player player = Bukkit.getPlayer(playerWW.getUUID());
 
         if (player != null) {
-
-            World world = player.getWorld();
-            WorldBorder wb = world.getWorldBorder();
-
-            int x = (int) (Math.round(wb.getSize() / 3 * Math.cos(d) + world.getSpawnLocation().getX()));
-            int z = (int) (Math.round(wb.getSize() / 3 * Math.sin(d) + world.getSpawnLocation().getZ()));
             player.setFoodLevel(20);
             player.setSaturation(20);
             player.setGameMode(GameMode.SURVIVAL);
-            player.sendMessage(message);
-            player.removePotionEffect(PotionEffectType.WITHER);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 700, -1, false, false));
-            player.teleport(new Location(world, x, world.getHighestBlockYAt(x, z) + 100, z));
         }
+
+        WorldBorder wb = world.getWorldBorder();
+
+        int x = (int) (Math.round(wb.getSize() / 3 * Math.cos(d) + world.getSpawnLocation().getX()));
+        int z = (int) (Math.round(wb.getSize() / 3 * Math.sin(d) + world.getSpawnLocation().getZ()));
+
+        playerWW.sendMessage(message);
+        playerWW.removePotionEffect(PotionEffectType.WITHER);
+        playerWW.addPotionEffect(PotionEffectType.WITHER, 700, -1);
+        playerWW.teleport(new Location(world, x, world.getHighestBlockYAt(x, z) + 100, z));
     }
 
     @Override

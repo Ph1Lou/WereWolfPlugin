@@ -93,7 +93,7 @@ public class PlayerListener implements Listener {
 		//Wither effect = NO_FALL
 
 		if (world.equals(game.getMapManager().getWorld()) &&
-				game.getConfig().getTimerValues().get(TimersBase.INVULNERABILITY.getKey()) > 0) {
+				game.getConfig().getTimerValue(TimersBase.INVULNERABILITY.getKey()) > 0) {
 			event.setCancelled(true);
 			return;
 		}
@@ -260,16 +260,12 @@ public class PlayerListener implements Listener {
 				playerWW.setName(playerName);
 			}
 
+			playerWW.updateAfterReconnect(player);
+
 			if (playerWW.isState(StatePlayer.ALIVE)) {
 
 				event.setJoinMessage(game.translate("werewolf.announcement.join_in_game",
 						playerName));
-
-				if (game.isState(StateGame.GAME)) {
-					if (!playerWW.hasKit()) {
-						playerWW.getRole().roleAnnouncement();
-					}
-				}
 			} else if (playerWW.isState(StatePlayer.DEATH)) {
 
 				if (game.getConfig().getSpectatorMode() > 0 ||
@@ -330,6 +326,8 @@ public class PlayerListener implements Listener {
 		}
 
 		if (playerWW != null) {
+
+			playerWW.setDisconnectedLocation(player.getLocation().clone());
 
 			if (game.isState(StateGame.LOBBY)) {
 				game.getScore().removePlayerSize();
@@ -421,7 +419,7 @@ public class PlayerListener implements Listener {
 			roleLG = RolesBase.THIEF.getKey();
 		}
 
-		game.getConfig().getRoleCount().put(roleLG, game.getConfig().getRoleCount().get(roleLG) - 1);
+		game.getConfig().removeOneRole(roleLG);
 
 		AnnouncementDeathEvent announcementDeathEvent = new AnnouncementDeathEvent(playerWW,
 				game.translate("werewolf.announcement.death_message"));

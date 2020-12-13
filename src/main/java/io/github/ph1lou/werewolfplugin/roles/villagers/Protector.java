@@ -9,12 +9,10 @@ import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.events.StealEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesWithLimitedSelectionDuration;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
@@ -60,14 +58,11 @@ public class Protector extends RolesWithLimitedSelectionDuration implements Affe
 
         if (this.last != null) {
 
-            Player player = Bukkit.getPlayer(this.last.getUUID());
 
-            if (player != null) {
-                player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-                player.sendMessage(
-                        game.translate(
-                                "werewolf.role.protector.no_longer_protected"));
-            }
+            this.last.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+            this.last.sendMessage(
+                    game.translate(
+                            "werewolf.role.protector.no_longer_protected"));
             this.last = null;
         }
 
@@ -76,18 +71,12 @@ public class Protector extends RolesWithLimitedSelectionDuration implements Affe
             return;
         }
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
         setPower(true);
 
-        if (player == null) {
-            return;
-        }
-
-        player.sendMessage(game.translate(
+        getPlayerWW().sendMessage(game.translate(
                 "werewolf.role.protector.protection_message",
                 game.getScore().conversion(
-                        game.getConfig().getTimerValues()
-                                .get(TimersBase.POWER_DURATION.getKey()))));
+                        game.getConfig().getTimerValue(TimersBase.POWER_DURATION.getKey()))));
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -97,17 +86,7 @@ public class Protector extends RolesWithLimitedSelectionDuration implements Affe
 
         if (!event.getThiefWW().equals(this.last)) return;
 
-        Player player = Bukkit.getPlayer(this.last.getUUID());
-
-        if (player == null) return;
-
-        player.addPotionEffect(new PotionEffect(
-                PotionEffectType.DAMAGE_RESISTANCE,
-                Integer.MAX_VALUE,
-                0,
-                false,
-                false));
-
+        this.last.addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
     }
 
     @Override

@@ -11,9 +11,7 @@ import io.github.ph1lou.werewolfapi.events.StealEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
-import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -70,17 +68,12 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
 
         if (!event.getThiefWW().equals(getPlayerWW())) return;
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) return;
-
         if (hasPower()) {
-            player.sendMessage(
+            getPlayerWW().sendMessage(
                     game.translate("werewolf.role.cupid.lover_designation_message",
                             game.getScore().conversion(
                                     game.getConfig()
-                                            .getTimerValues()
-                                            .get("werewolf.menu.timers.lover_duration"))));
+                                            .getTimerValue("werewolf.menu.timers.lover_duration"))));
             return;
         }
 
@@ -90,7 +83,7 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
         PlayerWW loverWW2 = affectedPlayer.get(1);
 
 
-        player.sendMessage(
+        getPlayerWW().sendMessage(
                 game.translate("werewolf.role.cupid.designation_perform",
                         loverWW1.getName(),
                         loverWW2.getName()));
@@ -132,14 +125,10 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
     @Override
     public void recoverPower() {
 
-
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-        if (player == null) return;
-        player.sendMessage(game.translate(
+        getPlayerWW().sendMessage(game.translate(
                 "werewolf.role.cupid.lover_designation_message",
                 game.getScore().conversion(
-                        game.getConfig().getTimerValues()
-                                .get(TimersBase.LOVER_DURATION
-                                        .getKey()))));
+                        game.getConfig().getTimerValue(TimersBase.LOVER_DURATION
+                                .getKey()))));
     }
 }

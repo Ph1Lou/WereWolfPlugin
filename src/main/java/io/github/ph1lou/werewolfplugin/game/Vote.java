@@ -5,14 +5,12 @@ import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.VoteAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
-import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.enums.VoteStatus;
 import io.github.ph1lou.werewolfapi.events.SeeVoteEvent;
 import io.github.ph1lou.werewolfapi.events.VoteEndEvent;
 import io.github.ph1lou.werewolfapi.events.VoteEvent;
 import io.github.ph1lou.werewolfapi.events.VoteResultEvent;
-import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -41,23 +39,23 @@ public class Vote implements Listener, VoteAPI {
 	@Override
 	public void setUnVote(PlayerWW voterWW, PlayerWW vote) {
 
-		Player voter = Bukkit.getPlayer(voterWW.getUUID());
+        Player voter = Bukkit.getPlayer(voterWW.getUUID());
 
-		if (voter == null) return;
+        if (voter == null) return;
 
-		if (game.getConfig().getTimerValues().get(TimersBase.VOTE_BEGIN.getKey()) > 0) {
-			voter.sendMessage(game.translate("werewolf.vote.vote_not_yet_activated"));
-		} else if (!game.getConfig().getConfigValues().get(ConfigsBase.VOTE.getKey())) {
-			voter.sendMessage(game.translate("werewolf.vote.vote_disable"));
-		} else if (!currentStatus.equals(VoteStatus.IN_PROGRESS)) {
-			voter.sendMessage(game.translate("werewolf.vote.not_vote_time"));
-		} else if (voters.containsKey(voterWW)) {
-			voter.sendMessage(game.translate("werewolf.vote.already_voted"));
-		} else if (tempPlayer.contains(vote)) {
-			voter.sendMessage(game.translate("werewolf.vote.player_already_voted"));
-		} else {
-			VoteEvent voteEvent = new VoteEvent(voterWW, vote);
-			Bukkit.getPluginManager().callEvent(voteEvent);
+        if (game.getConfig().getTimerValue(TimersBase.VOTE_BEGIN.getKey()) > 0) {
+            voter.sendMessage(game.translate("werewolf.vote.vote_not_yet_activated"));
+        } else if (!game.getConfig().isConfigActive(ConfigsBase.VOTE.getKey())) {
+            voter.sendMessage(game.translate("werewolf.vote.vote_disable"));
+        } else if (!currentStatus.equals(VoteStatus.IN_PROGRESS)) {
+            voter.sendMessage(game.translate("werewolf.vote.not_vote_time"));
+        } else if (voters.containsKey(voterWW)) {
+            voter.sendMessage(game.translate("werewolf.vote.already_voted"));
+        } else if (tempPlayer.contains(vote)) {
+            voter.sendMessage(game.translate("werewolf.vote.player_already_voted"));
+        } else {
+            VoteEvent voteEvent = new VoteEvent(voterWW, vote);
+            Bukkit.getPluginManager().callEvent(voteEvent);
 
 			if (voteEvent.isCancelled()) {
 				voter.sendMessage(game.translate("werewolf.check.cancel"));
@@ -152,22 +150,12 @@ public class Vote implements Listener, VoteAPI {
 
 		if (playerWW != null) {
 
-			Player player = Bukkit.getPlayer(playerWW.getUUID());
+            tempPlayer.add(playerWW);
+            playerWW.removePlayerMaxHealth(10);
 
-			if (playerWW.isState(StatePlayer.ALIVE)) {
-
-				tempPlayer.add(playerWW);
-				if (player != null) {
-					double life = VersionUtils.getVersionUtils().getPlayerMaxHealth(player);
-					VersionUtils.getVersionUtils().setPlayerMaxHealth(player, life - 10);
-					if (player.getHealth() > VersionUtils.getVersionUtils().getPlayerMaxHealth(player)) {
-						player.setHealth(life - 10);
-					}
-					Bukkit.broadcastMessage(game.translate("werewolf.vote.vote_result", playerWW.getName(), this.votes.get(playerWW)));
-					playerWW.addKLostHeart(10);
-				}
-            }
-		}
+            Bukkit.broadcastMessage(game.translate("werewolf.vote.vote_result", playerWW.getName(), this.votes.get(playerWW)));
+            playerWW.addKLostHeart(10);
+        }
 	}
 
 	@Override

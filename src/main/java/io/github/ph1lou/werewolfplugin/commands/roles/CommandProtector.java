@@ -11,7 +11,6 @@ import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.UUID;
@@ -70,11 +69,8 @@ public class CommandProtector implements Commands {
         ((AffectedPlayers) protector).clearAffectedPlayer();
         ((AffectedPlayers) protector).addAffectedPlayer(playerWW1);
 
-        Player playerProtected = Bukkit.getPlayer(args[0]);
-        if (playerProtected == null) return;
-        playerProtected.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-        playerProtected.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,Integer.MAX_VALUE,0,false,false));
-        playerProtected.sendMessage(game.translate("werewolf.role.protector.get_protection"));
+        playerWW1.addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+        playerWW1.sendMessage(game.translate("werewolf.role.protector.get_protection"));
         player.sendMessage(game.translate("werewolf.role.protector.protection_perform", playerArg.getName()));
     }
 }

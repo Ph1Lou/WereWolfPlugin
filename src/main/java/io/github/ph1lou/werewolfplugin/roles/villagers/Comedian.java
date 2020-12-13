@@ -7,8 +7,6 @@ import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.PotionEffects;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesWithLimitedSelectionDuration;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -51,11 +49,8 @@ public class Comedian extends RolesWithLimitedSelectionDuration implements Potio
     @EventHandler
     public void onDay(DayEvent event) {
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (player == null) return;
-
-        player.removePotionEffect(getLastPotionEffect());
+        getPlayerWW().removePotionEffect(getLastPotionEffect());
 
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
@@ -65,9 +60,9 @@ public class Comedian extends RolesWithLimitedSelectionDuration implements Potio
 
         setPower(true);
 
-        player.sendMessage(game.translate("werewolf.role.comedian.wear_mask_message",
+        getPlayerWW().sendMessage(game.translate("werewolf.role.comedian.wear_mask_message",
                 game.getScore().conversion(
-                        game.getConfig().getTimerValues().get(
+                        game.getConfig().getTimerValue(
                                 TimersBase.POWER_DURATION.getKey()))));
 
     }

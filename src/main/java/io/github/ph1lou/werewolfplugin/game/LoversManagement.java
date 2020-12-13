@@ -58,22 +58,14 @@ public class LoversManagement implements LoverManagerAPI {
 		while (cursedLovers.size() >= 2 && i < game.getConfig().getCursedLoverSize()) {
 
 			PlayerWW playerWW1 = cursedLovers.get((int) Math.floor(game.getRandom().nextFloat() * cursedLovers.size()));
-			UUID uuid1 = playerWW1.getUUID();
 			cursedLovers.remove(playerWW1);
 			PlayerWW playerWW2 = cursedLovers.get((int) Math.floor(game.getRandom().nextFloat() * cursedLovers.size()));
-			UUID uuid2 = playerWW2.getUUID();
 			cursedLovers.remove(playerWW2);
 			CursedLover cursedLover = new CursedLover(game, playerWW1, playerWW2);
 			i++;
 			lovers.add(cursedLover);
-			Player player1 = Bukkit.getPlayer(uuid1);
-			Player player2 = Bukkit.getPlayer(uuid2);
-			if (player1 != null) {
-				cursedLover.announceCursedLoversOnJoin(player1);
-			}
-			if (player2 != null) {
-				cursedLover.announceCursedLoversOnJoin(player2);
-			}
+			cursedLover.announceCursedLoversOnJoin(playerWW1);
+			cursedLover.announceCursedLoversOnJoin(playerWW2);
 		}
 	}
 
@@ -132,19 +124,19 @@ public class LoversManagement implements LoverManagerAPI {
 				loversAvailable.add(playerWW1);
 			}
 		}
-		if (loversAvailable.size() < 2 && game.getConfig().getRoleCount().get(RolesBase.CUPID.getKey()) +
+		if (loversAvailable.size() < 2 && game.getConfig().getRoleCount(RolesBase.CUPID.getKey()) +
 				game.getConfig().getLoverSize() > 0) {
 			Bukkit.broadcastMessage(game.translate("werewolf.role.lover.not_enough_players"));
 			return;
 		}
 
-		boolean polygamy = game.getConfig().getConfigValues().get(ConfigsBase.POLYGAMY.getKey());
+		boolean polygamy = game.getConfig().isConfigActive(ConfigsBase.POLYGAMY.getKey());
 
 		if (!polygamy && (game.getConfig().getLoverSize() == 0 &&
-				game.getConfig().getRoleCount().get(RolesBase.CUPID.getKey()) * 2 >=
+				game.getConfig().getRoleCount(RolesBase.CUPID.getKey()) * 2 >=
 						game.getScore().getPlayerSize()) ||
 				(game.getConfig().getLoverSize() != 0 &&
-						(game.getConfig().getRoleCount().get(RolesBase.CUPID.getKey()) +
+						(game.getConfig().getRoleCount(RolesBase.CUPID.getKey()) +
 								game.getConfig().getLoverSize()) * 2 >
 								game.getScore().getPlayerSize())) {
 
@@ -258,7 +250,12 @@ public class LoversManagement implements LoverManagerAPI {
 
 
 	@Override
-	public List<LoverAPI> getLovers() {
+	public List<? extends LoverAPI> getLovers() {
 		return lovers;
+	}
+
+	@Override
+	public void removeLover(LoverAPI loverAPI) {
+		lovers.remove(loverAPI);
 	}
 }

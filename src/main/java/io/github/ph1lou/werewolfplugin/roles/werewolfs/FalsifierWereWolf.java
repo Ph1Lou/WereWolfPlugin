@@ -11,7 +11,6 @@ import io.github.ph1lou.werewolfapi.rolesattributs.Display;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesWereWolf;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -61,12 +60,6 @@ public class FalsifierWereWolf extends RolesWereWolf implements Display {
             return;
         }
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) {
-            return;
-        }
-
         List<UUID> players = new ArrayList<>();
         for (PlayerWW playerWW1 : game.getPlayerWW()) {
             if (playerWW1.isState(StatePlayer.ALIVE) && !playerWW1.equals(getPlayerWW())) {
@@ -84,14 +77,14 @@ public class FalsifierWereWolf extends RolesWereWolf implements Display {
         Bukkit.getPluginManager().callEvent(newDisplayRole);
 
         if (newDisplayRole.isCancelled()) {
-            player.sendMessage(game.translate("werewolf.check.cancel"));
+            getPlayerWW().sendMessage(game.translate("werewolf.check.cancel"));
             setDisplayCamp(Camp.WEREWOLF);
             setDisplayRole(this);
         } else {
             setDisplayRole(roles);
             setDisplayCamp(newDisplayRole.getNewDisplayCamp());
         }
-        player.sendMessage(game.translate("werewolf.role.falsifier_werewolf.display_role_message", game.translate(getDisplayRole().getKey())));
+        getPlayerWW().sendMessage(game.translate("werewolf.role.falsifier_werewolf.display_role_message", game.translate(getDisplayRole().getKey())));
     }
 
 
@@ -106,14 +99,7 @@ public class FalsifierWereWolf extends RolesWereWolf implements Display {
 
         if (!event.getThiefWW().equals(getPlayerWW())) return;
 
-
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) {
-            return;
-        }
-
-        player.sendMessage(game.translate("werewolf.role.falsifier_werewolf.display_role_message", game.translate(getDisplayRole().getKey())));
+        getPlayerWW().sendMessage(game.translate("werewolf.role.falsifier_werewolf.display_role_message", game.translate(getDisplayRole().getKey())));
     }
 
     @Override

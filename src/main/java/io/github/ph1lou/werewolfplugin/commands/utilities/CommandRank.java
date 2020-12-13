@@ -24,7 +24,7 @@ public class CommandRank implements Commands {
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
 
-        List<UUID> queue = game.getModerationManager().getQueue();
+        List<? extends UUID> queue = game.getModerationManager().getQueue();
 
         if (!game.isState(StateGame.LOBBY)) {
             player.sendMessage(game.translate("werewolf.check.already_begin"));

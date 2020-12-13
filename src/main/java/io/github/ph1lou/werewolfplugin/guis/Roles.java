@@ -55,7 +55,7 @@ public class Roles implements InventoryProvider {
         contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType()).setDisplayName(game.translate("werewolf.menu.return")).build()), e -> Config.INVENTORY.open(player)));
         contents.set(0, 8, ClickableItem.of((new ItemBuilder(UniversalMaterial.BARRIER.getType()).setDisplayName(game.translate("werewolf.menu.roles.zero")).build()), e -> {
             for (RoleRegister roleRegister : main.getRegisterManager().getRolesRegister()) {
-                config.getRoleCount().put(roleRegister.getKey(), 0);
+                config.setRole(roleRegister.getKey(), 0);
             }
             config.setAmnesiacLoverSize(0);
             config.setLoverSize(0);
@@ -188,8 +188,15 @@ public class Roles implements InventoryProvider {
                 List<String> lore2 = new ArrayList<>(lore);
                 lore2.addAll(roleRegister.getLoreKey().stream().map(game::translate).collect(Collectors.toList()));
 
-                if (config.getRoleCount().get(key) > 0) {
-                    items.add(ClickableItem.of((new ItemBuilder(roleRegister.getItem()!=null?roleRegister.getItem():UniversalMaterial.GREEN_TERRACOTTA.getStack()).setAmount(config.getRoleCount().get(key)).setLore(lore2).setDisplayName(game.translate(roleRegister.getKey())).build()), e -> {
+                if (config.getRoleCount(key) > 0) {
+                    items.add(ClickableItem.of((
+                            new ItemBuilder(roleRegister.getItem() != null ?
+                                    roleRegister.getItem() :
+                                    UniversalMaterial.GREEN_TERRACOTTA.getStack())
+                                    .setAmount(config.getRoleCount(key))
+                                    .setLore(lore2)
+                                    .setDisplayName(game.translate(roleRegister.getKey()))
+                                    .build()), e -> {
 
                         if (e.isShiftClick()) {
                             manageStuff(main, player, key);
@@ -289,18 +296,15 @@ public class Roles implements InventoryProvider {
 
     public void selectMinus(WereWolfAPI game, String key) {
         ConfigWereWolfAPI config = game.getConfig();
-        int j = config.getRoleCount().get(key);
-        if (j > 0) {
+        if (config.getRoleCount(key) > 0) {
             game.getScore().setRole(game.getScore().getRole() - 1);
-            config.getRoleCount().put(key, j - 1);
+            config.removeOneRole(key);
         }
     }
 
     public void selectPlus(WereWolfAPI game, String key) {
         ConfigWereWolfAPI config = game.getConfig();
-        int j = config.getRoleCount().get(key);
-
-        config.getRoleCount().put(key, j + 1);
+        config.addOneRole(key);
         game.getScore().setRole(game.getScore().getRole() + 1);
     }
 
@@ -308,7 +312,7 @@ public class Roles implements InventoryProvider {
         int i = 0;
         for (RoleRegister roleRegister : main.getRegisterManager().getRolesRegister()) {
             if (roleRegister.getCategories().contains(category)) {
-                i += main.getWereWolfAPI().getConfig().getRoleCount().get(roleRegister.getKey());
+                i += main.getWereWolfAPI().getConfig().getRoleCount(roleRegister.getKey());
             }
 
         }

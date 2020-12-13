@@ -5,7 +5,6 @@ import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 import io.github.ph1lou.werewolfapi.LangManager;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.events.UpdateLanguageEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.event.EventHandler;
@@ -22,13 +21,18 @@ public class Lang implements LangManager, Listener {
     private final Main main;
     private final Map<String, String> extraTexts = new HashMap<>();
 
+    private final Map<String, String> language = new HashMap<>();
+
+    public Map<String, String> getLanguage() {
+        return language;
+    }
+
     public Lang(Main main) {
         this.main = main;
     }
 
-
     private Map<String, String> loadTranslations(String file) {
-        final JsonObject jsonObject = Json.parse(file).asObject();
+        JsonObject jsonObject = Json.parse(file).asObject();
 
         return this.loadTranslationsRec("", jsonObject, new HashMap<>());
     }
@@ -56,10 +60,8 @@ public class Lang implements LangManager, Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     private void updateLanguage(UpdateLanguageEvent event) {
-
-        WereWolfAPI game = main.getWereWolfAPI();
-        game.getLanguage().clear();
-        game.getLanguage().putAll(loadTranslations(FileUtils_.loadContent(buildLanguageFile(main, "fr"))));
+        language.clear();
+        language.putAll(loadTranslations(FileUtils_.loadContent(buildLanguageFile(main, "fr"))));
         extraTexts.clear();
 
         main.getRegisterManager().getAddonsRegister().forEach(addon -> {
@@ -83,7 +85,7 @@ public class Lang implements LangManager, Listener {
         } else {
             Map<String, String> fr = loadTranslations(defaultText);
             Map<String, String> custom = loadTranslations(FileUtils_.loadContent(file));
-            final JsonObject jsonObject = Json.parse(FileUtils_.loadContent(file)).asObject();
+            JsonObject jsonObject = Json.parse(FileUtils_.loadContent(file)).asObject();
 
             for (String string : fr.keySet()) {
                 if (!custom.containsKey(string)) {
@@ -111,5 +113,14 @@ public class Lang implements LangManager, Listener {
     @Override
     public Map<String, String> getExtraTexts() {
         return extraTexts;
+    }
+
+
+    public String getTranslation(String key) {
+
+        if (!language.containsKey(key)) {
+            return String.format("Message error (%s) ", key.toLowerCase());
+        }
+        return language.get(key);
     }
 }

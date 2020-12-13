@@ -50,7 +50,7 @@ public class DiamondLimit extends ListenerManager {
                 block.getLocation().getBlockY() + 0.5,
                 block.getLocation().getBlockZ() + 0.5);
 
-        if (game.getConfig().getTimerValues().get(TimersBase.DIGGING.getKey()) < 0) {
+        if (game.getConfig().getTimerValue(TimersBase.DIGGING.getKey()) < 0) {
             block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop());
             block.setType(Material.AIR);
             return;

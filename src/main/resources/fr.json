@@ -6,12 +6,12 @@
     "role": {
       "serial_killer": {
         "display": "Tueur en Série",
-        "description": "§6LOUP-GAROU §7➽§9  Vous êtes §1Tueur en Série§9. Votre objectif est de gagner seul.\nPour ce faire, vous disposez de 3 livres : un livre Sharpness III, un livre Protection III et un livre Power III.\nLorsque vous tuez un joueur, vous gagnez un slot de coeur supplémentaire et une pomme d'or.\nVous avez Force avant votre premier kill. \nVous pouvez aussi contourner la limite d'armure, d'arc et d'épée (+1)"
+        "description": "§6LOUP-GAROU §7➽§9  Vous êtes §1Tueur en Série§9. Votre objectif est de gagner seul.\n§9Pour ce faire, vous disposez de 3 livres : un livre Sharpness III, un livre Protection III et un livre Power III.\n§9Lorsque vous tuez un joueur, vous gagnez un slot de coeur supplémentaire et une pomme d'or.\n§9Vous avez Force avant votre premier kill. \n§9Vous pouvez aussi contourner la limite d'armure, d'arc et d'épée (+1)"
       },
       "guardian_angel": {
         "display": "Ange Gardien",
-        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Ange Gardien§9. Vous avez 15 coeurs et devez protéger une personne choisie aléatoirement et gagner avec elle. Si celle-ci meurt, vous passez à 12 coeurs et §ldevez gagner avec le Village§r§9.\nVous pouvez, trois fois au cours de la partie, lui donner Régeneration pendant 20 secondes §b/ww regen",
-        "description_patch": "§6LOUP-GAROU §7➽§9 Vous êtes §1Ange Gardien§9. Vous avez 15 coeurs et devez protéger une personne choisie aléatoirement et gagner avec elle. Si celle-ci meurt, vous passez à 12 coeurs et §ldevez gagner Seule§r§9.\nVous pouvez, trois fois au cours de la partie, lui donner Régeneration pendant 20 secondes §b/ww regen",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Ange Gardien§9. Vous avez 15 coeurs et devez protéger une personne choisie aléatoirement et gagner avec elle. Si celle-ci meurt, vous passez à 12 coeurs et §ldevez gagner avec le Village§r§9.\n§9Vous pouvez, trois fois au cours de la partie, lui donner Régeneration pendant 20 secondes §b/ww regen",
+        "description_patch": "§6LOUP-GAROU §7➽§9 Vous êtes §1Ange Gardien§9. Vous avez 15 coeurs et devez protéger une personne choisie aléatoirement et gagner avec elle. Si celle-ci meurt, vous passez à 12 coeurs et §ldevez gagner Seule§r§9.\n§9Vous pouvez, trois fois au cours de la partie, lui donner Régeneration pendant 20 secondes §b/ww regen",
         "protege_death": "[§eLG UHC§r] Votre protégé a été tué, vous perdez 3 coeurs et devez maintenant gagner avec le Village",
         "protege_death_patch": "[§eLG UHC§r] Votre protégé a été tué, vous perdez 3 coeurs et devez maintenant gagner Seule",
         "reveal_protege": "[§eLG UHC§r] Votre protégé est §b%s",
@@ -24,11 +24,11 @@
       },
       "amnesiac_werewolf": {
         "display": "Loup Garou Amnésique",
-        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Loup Garou Amnésique§9. Votre objectif est de tuer les Villageois. \nPour ce faire, vous disposez des effets Force (la nuit) et Vision Nocturne. A chaque  kill, vous gagnez Vitesse et 2 coeurs d’absorption pendant 2 minutes. Cependant, vous n'avez pas accès à la liste des Loups et les autres Loups ne pourront pas vous voir dans leur liste tant que vous n’avez pas tuer un Villageois.\nAttention vous n'êtes pas dans la camp des Loups-Garous tant que vous n'avez pas tué un Villageois"
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Loup Garou Amnésique§9. Votre objectif est de tuer les Villageois. \n§9Pour ce faire, vous disposez des effets Force (la nuit) et Vision Nocturne. A chaque  kill, vous gagnez Vitesse et 2 coeurs d’absorption pendant 2 minutes. Cependant, vous n'avez pas accès à la liste des Loups et les autres Loups ne pourront pas vous voir dans leur liste tant que vous n’avez pas tuer un Villageois.\n§9Attention vous n'êtes pas dans la camp des Loups-Garous tant que vous n'avez pas tué un Villageois"
       },
       "werewolf": {
         "display": "Loup Garou",
-        "description":  "§6LOUP-GAROU §7➽§9 Vous êtes §1Loup-Garou§9. Votre objectif est de tuer les Villageois. \nPour ce faire, vous disposez des effets Force (la nuit) et Vision Nocturne. Chaque fois que vous tuez un joueur, vous gagnez l'effet Vitesse et 2 coeur d'absorption pendant 2 minutes. \nFaites §b/ww lg§9 pour voir la liste des Loups-Garous.",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Loup-Garou§9. Votre objectif est de tuer les Villageois. \n§9Pour ce faire, vous disposez des effets Force (la nuit) et Vision Nocturne. Chaque fois que vous tuez un joueur, vous gagnez l'effet Vitesse et 2 coeur d'absorption pendant 2 minutes. \n§9Faites §b/ww lg§9 pour voir la liste des Loups-Garous.",
         "go_to_the_werewolf_camp": "[§eLG UHC§r] Vous passez dans le camp des §4Loups Garous §6/ww lg",
         "new_werewolf": "[§6LG UHC§r] Un nouveau joueur a rejoint la meute §6/ww lg",
         "see_others": "[§eLG UHC§r] Vous distinguez maintenant les Loups Garous §6/ww lg",
@@ -39,7 +39,7 @@
       },
       "wild_child": {
         "display": "Enfant Sauvage",
-        "description":  "§6LOUP-GAROU §7➽§9 Vous êtes §1Enfant Sauvage§9. Votre objectif est d’éliminer les Loups-Garous. \nEn début de partie, vous choisissez un modèle avec §1/ww modele§9. Si celui ci meurt, vous devenez un Loup-Garou.",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Enfant Sauvage§9. Votre objectif est d’éliminer les Loups-Garous. \n§9En début de partie, vous choisissez un modèle avec §1/ww modele§9. Si celui ci meurt, vous devenez un Loup-Garou.",
         "design_model": "[§eLG UHC§r] Vous devez désigner un modèle §6/ww modele§r. Vous avez §b%s",
         "reveal_model": "[§eLG UHC§r] Votre modèle est §b%s",
         "command": "modele",
@@ -47,24 +47,24 @@
       },
       "sister": {
         "display": "Soeur",
-        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Soeur§9. Votre objectif est d’éliminer les Loups-Garous. \nVous possédez un effet de Résistance lorsque vous vous trouvez à moins de 20 blocs d'une de vos soeurs. Lorsqu'une soeur meurt vous connaîtrez son assassin.",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Soeur§9. Votre objectif est d’éliminer les Loups-Garous. \n§9Vous possédez un effet de Résistance lorsque vous vous trouvez à moins de 20 blocs d'une de vos soeurs. Lorsqu'une soeur meurt vous connaîtrez son assassin.",
         "reveal_killer": "[§eLG UHC§r] §b%s§r a été tué par §b%s",
         "sisters_list": "Liste de vos Soeurs : §b%s"
       },
       "metamorph": {
         "display": "Metamorphe",
-        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Metamorphe§9. Votre objectif est d’éliminer les Loups-Garous. \n Grâce à vos capacité de métamorphose, les Loups Garous vous voient dans leur liste. Cependant, vous ne connaissez pas les loups garous"
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Metamorphe§9. Votre objectif est d’éliminer les Loups-Garous. \n§9 Grâce à vos capacité de métamorphose, les Loups Garous vous voient dans leur liste. Cependant, vous ne connaissez pas les loups garous"
       },
       "witch": {
         "display": "Sorcière",
-        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Sorcière§9. Votre objectif est d’éliminer les Loups-Garous.\nPour cela, vous recevez 3 potions de Soins, 3 potions de Dégats et 1 potion de Régénération. Une fois dans la partie, vous pouvez ressusciter un joueur (ou vous même si l'option est activé).",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Sorcière§9. Votre objectif est d’éliminer les Loups-Garous.\n§9Pour cela, vous recevez 3 potions de Soins, 3 potions de Dégats et 1 potion de Régénération. Une fois dans la partie, vous pouvez ressusciter un joueur (ou vous même si l'option est activé).",
         "resuscitation_message": "[§eLG UHC§r] §b%s§r est mort, pour le ressusciter, §6Cliquez ici §r(Vous avez §b7sec§r)",
         "resuscitation_perform": "[§eLG UHC§r] Vous venez de ressusciter §b%s",
         "command": "sauver"
       },
       "little_girl": {
         "display": "Petite Fille",
-        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Petite-Fille§9. Vous objectif est d’éliminer les Loups-Garous. \nDurant la nuit, vous pouvez devenir invisible en enlevant votre armure. Mais attention, vous laissez des particules bleues derrière vous visible par les Loups Garous Perfides. \nHeureusement vous pouvez repérer les Loups Garous Perfides par leurs particules rouges.",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Petite-Fille§9. Vous objectif est d’éliminer les Loups-Garous. \n§9Durant la nuit, vous pouvez devenir invisible en enlevant votre armure. Mais attention, vous laissez des particules bleues derrière vous visible par les Loups Garous Perfides. \n§9Heureusement vous pouvez repérer les Loups Garous Perfides par leurs particules rouges.",
         "remove_armor": "[§eLG UHC§r] C'est la nuit, enlevez votre armure pour devenir invisible",
         "visible": "[§eLG UHC§r] Vous redevenez visible",
         "remove_armor_perform": "[§aLG UHC§r] Vous devenez invisible. Remettez votre armure pour redevenir visible",
@@ -72,7 +72,7 @@
       },
       "troublemaker": {
         "display": "Trublion",
-        "description":  "§6LOUP-GAROU §7➽§9 Vous êtes §1Trublion§9. Votre objectif est d’éliminer les Loups-Garous.\nUne fois dans la partie, vous pouvez téléporter un joueur aléatoirement sur la map avec §b/ww switch§9. Lorsque vous mourrez tous les joueurs sont téléportées aux quatres coins de la carte.",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Trublion§9. Votre objectif est d’éliminer les Loups-Garous.\n§9Une fois dans la partie, vous pouvez téléporter un joueur aléatoirement sur la map avec §b/ww switch§9. Lorsque vous mourrez tous les joueurs sont téléportées aux quatres coins de la carte.",
         "troublemaker_perform": "[§eLG UHC§r] Vous venez de trublionner §b%s",
         "troublemaker_death": "[§eLG UHC§r] Un Trublion vient de mourir, tous les joueurs sont téléportés aléatoirement",
         "get_switch": "[§eLG UHC§r] Vous venez d'être téléporté par un trublion",
@@ -80,7 +80,7 @@
       },
       "citizen": {
         "display": "Citoyen",
-        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Citoyen§9. Votre objectif est d’éliminer les Loups-Garous.\nVous pouvez, deux fois dans le partie, décider de voir les Votes, et une fois seulement de les annuler.",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Citoyen§9. Votre objectif est d’éliminer les Loups-Garous.\n§9Vous pouvez, deux fois dans le partie, décider de voir les Votes, et une fois seulement de les annuler.",
         "cancel_vote_message": "[§eLG UHC§r] Vous pouvez encore annuler le vote §b%d§r fois. ",
         "see_vote_message": "[§eLG UHC§r] Vous pouvez encore dépouiller les votes §b%d§r fois. ",
         "click": "§bCliquez ici ",
@@ -96,7 +96,7 @@
       },
       "angel": {
         "display": "Ange",
-        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Ange§9. Votre objectif est de gagner seul. \nEn début de partie, vous pouvez faire un choix.",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Ange§9. Votre objectif est de gagner seul. \n§9En début de partie, vous pouvez faire un choix.",
         "angel_choice": "§9 Vous pouvez décider d'être soit ",
         "or": "§9 soit ",
         "time": "§9, vous avez §b%s §9(Cliquez pour choisir)",
@@ -110,7 +110,7 @@
       },
       "fox": {
         "display": "Renard",
-        "description":  "§6LOUP-GAROU §7➽§9 Vous êtes §1Renard§9. Votre objectif est d’éliminer les Loups-Garous. \nVous avez Vitesse constamment, de plus vous pouvez flairer les joueurs avec §b/ww flairer§9 afin de savoir si ils sont Loup-Garou. Les joueurs devront se situer à coté de vous. La durée et le nombre de flair dépend des paramètres de la partie.",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Renard§9. Votre objectif est d’éliminer les Loups-Garous. \n§9Vous avez Vitesse constamment, de plus vous pouvez flairer les joueurs avec §b/ww flairer§9 afin de savoir si ils sont Loup-Garou. Les joueurs devront se situer à coté de vous. La durée et le nombre de flair dépend des paramètres de la partie.",
         "smell_message": "[§eLG UHC§r] Vous pouvez flairer un joueur. Si vous êtes déjà en train de flairer quelqu'un, il sera remplacer par le nouveau joueur et la progression sera remis à 0. Il vous reste §b%d§r flair(s) §6/ww flairer",
         "smell_beginning": "[§eLG UHC§r] Vous commencez à flairer §b%s",
         "not_werewolf": "[§eLG UHC§r] %s §2n'est pas dans le camp des Loups Garous",
@@ -121,11 +121,11 @@
       },
       "miner": {
         "display": "Mineur",
-        "description":  "§6LOUP-GAROU §7➽§9 Vous êtes §1Mineur§9. Votre objectif est d’éliminer les Loups-Garous.\nVous possédez une pioche en diamant et l'effet Célérité."
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Mineur§9. Votre objectif est d’éliminer les Loups-Garous.\n§9Vous possédez une pioche en diamant et l'effet Célérité."
       },
       "raven": {
         "display": "Corbeau",
-        "description":  "§6LOUP-GAROU §7➽§9 Vous êtes §1Corbeau§9. Votre objectif est d’éliminer les Loups-Garous.\nVous possédez l'effet Chute Amortie et votre vote compte double.\nVous pouvez maudire un joueur avec la commande §b/ww maudire§9, il obtiendra un effet de Jump Boost II pendant une journée.",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Corbeau§9. Votre objectif est d’éliminer les Loups-Garous.\n§9Vous possédez l'effet Chute Amortie et votre vote compte double.\n§9Vous pouvez maudire un joueur avec la commande §b/ww maudire§9, il obtiendra un effet de Jump Boost II pendant une journée.",
         "curse_message": "[§eLG UHC§r] Maudissez un joueur pour la journée §6/ww maudire§r, vous avez §b%s",
         "curse_perform": "[§eLG UHC§r] Vous venez de maudire §b%s",
         "get_curse": "[§eLG UHC§r] Vous venez d'être maudit par le corbeau. Vous obtenez Jump Boost jusqu'au matin",
@@ -134,25 +134,25 @@
       },
       "villager": {
         "display": "Simple Villageois",
-        "description":  "§6LOUP-GAROU §7➽§9 Vous êtes §1Simple Villageois§9. Votre objectif est d’éliminer les Loups-Garous.\nVous n'avez aucun pouvoir"
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Simple Villageois§9. Votre objectif est d’éliminer les Loups-Garous.\n§9Vous n'avez aucun pouvoir"
       },
       "assassin": {
         "display": "Assassin",
-        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Assassin§9. Votre objectif est de gagner seul.\nPour ce faire, vous disposez de 3 livres : un livre Sharpness III, un livre Protection III et un livre Power III. \nVous disposez aussi de l’effet Force (le jour) et vous êtes infiltré dans le camp des Villageois.\nVous pouvez aussi contourner la limite d'armure, d'arc et d'épée (+1)"
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Assassin§9. Votre objectif est de gagner seul.\n§9Pour ce faire, vous disposez de 3 livres : un livre Sharpness III, un livre Protection III et un livre Power III. \n§9Vous disposez aussi de l’effet Force (le jour) et vous êtes infiltré dans le camp des Villageois.\n§9Vous pouvez aussi contourner la limite d'armure, d'arc et d'épée (+1)"
       },
       "falsifier_werewolf": {
         "display": "Loup Garou Feutré",
-        "description":  "§6LOUP-GAROU §7➽§9 Vous êtes §1Loup Garou Feutré§9. Votre objectif est de tuer les Villageois.\nVous avez un rôle d’affichage différent chaque jour parmi ceux encore en vie pour tromper le Village. Vous disposez des effets Force (la nuit) et Vision Nocturne. Après chaque kill, vous gagnez l'effet Vitesse et 2 coeurs d’absorption pendant 2 minutes. \nFaites §b/ww lg§9 pour voir la liste des Loups-Garous.",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Loup Garou Feutré§9. Votre objectif est de tuer les Villageois.\n§9Vous avez un rôle d’affichage différent chaque jour parmi ceux encore en vie pour tromper le Village. Vous disposez des effets Force (la nuit) et Vision Nocturne. Après chaque kill, vous gagnez l'effet Vitesse et 2 coeurs d’absorption pendant 2 minutes. \n§9Faites §b/ww lg§9 pour voir la liste des Loups-Garous.",
         "display_role_message": "[§eLG UHC§r] Votre Rôle d'affichage aujourd'hui est §b%s"
       },
       "thief": {
         "display": "Voleur",
-        "description":  "§6LOUP-GAROU §7➽§9 Vous êtes §1Voleur§9. En début de partie vous ne faites parti d'aucun camp jusqu'à ce que vous tuez un joueur. \nVous récupérez son rôle et devrez gagner avec son Camp. Vous possédez l’effet Résistance avant d'avoir fait votre premier meurtre et l'effet Vitesse et 2 coeurs d’absorptions pendant 2 min après.",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Voleur§9. En début de partie vous ne faites parti d'aucun camp jusqu'à ce que vous tuez un joueur. \n§9Vous récupérez son rôle et devrez gagner avec son Camp. Vous possédez l’effet Résistance avant d'avoir fait votre premier meurtre et l'effet Vitesse et 2 coeurs d’absorptions pendant 2 min après.",
         "realized_theft": "[§eLG UHC§r] Vous devenez §b%s"
       },
       "detective": {
         "display": "Détective",
-        "description":   "§6LOUP-GAROU §7➽§9 Vous êtes §1Détective§9. Votre objectif est d’éliminer les Loups-Garous. \nChaque jour, vous pouvez tester 2 joueurs avec §b/ww inspecter§9 afin de savoir s'ils appartiennent, ou non, au même camp. \nAttention, L'Assassin, la Succube, le Tueur en Série, le Voleur qui n'a pas volé, le Loup-Garou-Blanc et le Loup Amnésique non transformé appartiennent au camp des Neutres.",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Détective§9. Votre objectif est d’éliminer les Loups-Garous. \n§9Chaque jour, vous pouvez tester 2 joueurs avec §b/ww inspecter§9 afin de savoir s'ils appartiennent, ou non, au même camp. \n§9Attention, L'Assassin, la Succube, le Tueur en Série, le Voleur qui n'a pas volé, le Loup-Garou-Blanc et le Loup Amnésique non transformé appartiennent au camp des Neutres.",
         "inspection_message": "[§eLG UHC§r] Inspectez deux joueurs §6/ww inspecter§r vous avez §b%s",
         "same_camp": "[§eLG UHC§r] %s et %s §2sont dans le même camp",
         "opposing_camp": "[§eLG UHC§r] %s et %s §4ne sont pas dans le même camp",
@@ -161,16 +161,16 @@
       },
       "naughty_little_wolf": {
         "display": "Vilain Petit Loup",
-        "description":   "§6LOUP-GAROU §7➽§9 Vous êtes §1Vilain Petit Loup§9. Votre objectif est de tuer les Villageois. \nPour ce faire, vous disposez des effets Force (la nuit), Vision Nocturne et Vitesse constamment. Après chaque kill vous gagnez 2 coeurs d’absorption pendant 2 minutes. \nFaites §b/ww lg§9 pour voir la liste des Loups-Garous."
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Vilain Petit Loup§9. Votre objectif est de tuer les Villageois. \n§9Pour ce faire, vous disposez des effets Force (la nuit), Vision Nocturne et Vitesse constamment. Après chaque kill vous gagnez 2 coeurs d’absorption pendant 2 minutes. \n§9Faites §b/ww lg§9 pour voir la liste des Loups-Garous."
       },
       "chatty_seer": {
         "display": "Voyante Bavarde",
-        "description":   "§6LOUP-GAROU §7➽§9 Vous êtes §1Voyante Bavarde§9. Votre objectif est d’éliminer les Loups-Garous. \nVous obtenez 4 obsidiennes et 4 bibliothèques. Le Jour, Vous pouvez connaître le camp d'un joueur avec §b/ww voir§9. \nCependant si c'est un Villageois, vous perdrez 3 coeurs jusqu'au matin. \nLe camp sera affiché dans le chat global.",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Voyante Bavarde§9. Votre objectif est d’éliminer les Loups-Garous. \n§9Vous obtenez 4 obsidiennes et 4 bibliothèques. Le Jour, Vous pouvez connaître le camp d'un joueur avec §b/ww voir§9. \n§9Cependant si c'est un Villageois, vous perdrez 3 coeurs jusqu'au matin. \n§9Le camp sera affiché dans le chat global.",
         "see_perform": "[§eLG UHC§r] Une Voyante Bavarde vient d'espionner un membre du camp des §b%s"
       },
       "infect_father_of_the_wolves": {
         "display": "Infect Père des Loups",
-        "description":   "§6LOUP-GAROU §7➽§9 Vous êtes §1Infect Père des Loups§9. Votre objectif est de tuer les Villageois.\nPour ce faire,vous disposez des effets Force (la nuit) et Vision Nocturne. Vous pouvez ressusciter un joueur de votre choix, tué par les Loups-Garous. Ce joueur rejoindra votre Camp, tout en gardant ses pouvoirs d’origines. Après chaque kill vous gagnez l'effet Vitesse et 2 coeurs d’absorption pendant 2 minutes. \nFaites §b/ww lg§9 pour voir la liste des Loups-Garous.\n",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Infect Père des Loups§9. Votre objectif est de tuer les Villageois.\n§9Pour ce faire,vous disposez des effets Force (la nuit) et Vision Nocturne. Vous pouvez ressusciter un joueur de votre choix, tué par les Loups-Garous. Ce joueur rejoindra votre Camp, tout en gardant ses pouvoirs d’origines. Après chaque kill vous gagnez l'effet Vitesse et 2 coeurs d’absorption pendant 2 minutes. \n§9Faites §b/ww lg§9 pour voir la liste des Loups-Garous.",
         "infection_message": "[§eLG UHC§r] §b%s§r est mort, pour l'infecter §6Cliquez ici §r(Vous avez §b7sec§r)",
         "infection_perform": "[§eLG UHC§r] Vous venez d'infecter §b%s",
         "player_cannot_be_infected": "[§cLG UHC§r] Le joueur ne peut pas (plus) être infecté",
@@ -178,7 +178,7 @@
       },
       "seer": {
         "display": "Voyante",
-        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Voyante§9. Votre objectif est d’éliminer les Loups-Garous\nVous obtenez 4 obsidiennes et 4 bibliothèques. Le Jour, Vous pouvez connaître le camp d'un joueur avec §b/ww voir§9.\nCependant si c'est un Villageois, vous perdrez 3 coeurs jusqu'au matin.",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Voyante§9. Votre objectif est d’éliminer les Loups-Garous\n§9Vous obtenez 4 obsidiennes et 4 bibliothèques. Le Jour, Vous pouvez connaître le camp d'un joueur avec §b/ww voir§9.\n§9Cependant si c'est un Villageois, vous perdrez 3 coeurs jusqu'au matin.",
         "see_camp_message": "[§eLG UHC§r] Découvrez le camp d'un joueur §6/ww voir§r vous avez §b%s",
         "see_perform": "[§eLG UHC§r] Vous venez d'espionner un membre du camp des §b%s",
         "not_enough_life": "[§cLG UHC§r] Vous n'avez plus assez de vie pour espionner un joueur",
@@ -187,7 +187,7 @@
       },
       "protector": {
         "display": "Salvateur",
-        "description":  "§6LOUP-GAROU §7➽§9 Vous êtes §1Salvateur§9. Votre objectif est d’éliminer les Loups-Garous. \nVous recevrez 3 potions de Heals. Chaque jour, vous pouvez décider de protéger un joueur avec §b/ww proteger§9, il recevra les effets Résistance et Chute Amortie",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Salvateur§9. Votre objectif est d’éliminer les Loups-Garous. \n§9Vous recevrez 3 potions de Heals. Chaque jour, vous pouvez décider de protéger un joueur avec §b/ww proteger§9, il recevra les effets Résistance et Chute Amortie",
         "protection_message": "[§eLG UHC§r] Protégez un joueur pour la journée §6/ww proteger§r vous avez §b%s",
         "protection_perform": "[§eLG UHC§r] Vous venez de protéger §b%s",
         "get_protection": "[§eLG UHC§r] Le Salvateur vous protège pour la journée, vous avez Résistance et Nofall",
@@ -196,13 +196,13 @@
       },
       "bear_trainer": {
         "display": "Montreur d'Ours",
-        "description":  "§6LOUP-GAROU §7➽§9 Vous êtes §1Montreur d’ours§9. Votre objectif est d’éliminer les Loups-Garous. \nVous avez la particularité de grogner au début du jour si un Loup-Garou se trouve dans votre voisinage. Un message sera envoyé dans le chat global.",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Montreur d’ours§9. Votre objectif est d’éliminer les Loups-Garous. \n§9Vous avez la particularité de grogner au début du jour si un Loup-Garou se trouve dans votre voisinage. Un message sera envoyé dans le chat global.",
         "growling_message": "[§eLG UHC§r] %s",
         "growling": "Grrrr "
       },
       "fallen_angel": {
         "display": "Ange Déchu",
-        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Ange Déchu§9. Vous devez gagner seul. \nVous possédez 2 coeurs supplémentaires. Une cible vous est assignée aléatoirement, si vous la tuez, vous gagnez trois coeurs supplémentaires jusqu'à la fin de la partie.",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Ange Déchu§9. Vous devez gagner seul. \n§9Vous possédez 2 coeurs supplémentaires. Une cible vous est assignée aléatoirement, si vous la tuez, vous gagnez trois coeurs supplémentaires jusqu'à la fin de la partie.",
         "deadly_target": "[§eLG UHC§r] Vous avez tué votre cible, vous gagnez 3 coeurs",
         "deadly_target_by_other": "[§cLG UHC§r] Votre cible a été tué par un autre joueur, vous ne pouvez plus gagner de coeurs supplémentaires",
         "reveal_target": "[§eLG UHC§r] Votre cible est §b%s",
@@ -210,23 +210,23 @@
       },
       "white_werewolf": {
         "display": "Loup Garou Blanc",
-        "description":  "§6LOUP-GAROU §7➽§9 Vous êtes §1Loup-Garou Blanc§9. Votre objectif est de gagner seul en étant infiltré parmi les Loups-Garous.\nPour ce faire, vous disposez des effets Force (la nuit) et de Vision Nocturne, ainsi que 5 coeurs supplémentaires. Après chaque kill, vous gagnez Vitesse et 2 coeurs d’absorption pendant 1 minute.\nFaites §b/ww lg§9 pour voir la liste des Loups-Garous."
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Loup-Garou Blanc§9. Votre objectif est de gagner seul en étant infiltré parmi les Loups-Garous.\n§9Pour ce faire, vous disposez des effets Force (la nuit) et de Vision Nocturne, ainsi que 5 coeurs supplémentaires. Après chaque kill, vous gagnez Vitesse et 2 coeurs d’absorption pendant 1 minute.\n§9Faites §b/ww lg§9 pour voir la liste des Loups-Garous."
       },
       "cupid": {
         "display": "Cupidon",
-        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Cupidon§9. Votre objectif est d’éliminer les Loups-Garous.\nVous avez la possibilité de mettre deux joueurs en couple avec la commande §b/ww couple§9.\n Vous devez gagner avec le Couple puis avec le Village. Vous avez le droit à un arc avec une plus grande puissance que la limite (+1)",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Cupidon§9. Votre objectif est d’éliminer les Loups-Garous.\n§9Vous avez la possibilité de mettre deux joueurs en couple avec la commande §b/ww couple§9.\n§9 Vous devez gagner avec le Couple puis avec le Village. Vous avez le droit à un arc avec une plus grande puissance que la limite (+1)",
         "lover_designation_message": "[§eLG UHC§r] Vous devez désigner un Couple, §6/ww couple§r, vous avez §b%s",
         "designation_perform": "[§eLG UHC§r] Votre couple associé est §b%s§r et §b%s",
         "command": "couple"
       },
       "siamese_twin": {
         "display": "Frère Siamois",
-        "description":  "§6LOUP-GAROU §7➽§9 Vous êtes §1Frère Siamois§9. Votre objectif est d’éliminer les Loups-Garous. \nVous avez été séparé de votre frère à la naissance, cependant vous avez gardé un lien très fort avec lui. En plus de disposez de 2 coeurs supplémentaires, vos coeurs au dela du cinquième sont liées.",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Frère Siamois§9. Votre objectif est d’éliminer les Loups-Garous. \n§9Vous avez été séparé de votre frère à la naissance, cependant vous avez gardé un lien très fort avec lui. En plus de disposez de 2 coeurs supplémentaires, vos coeurs au dela du cinquième sont liées.",
         "siamese_twin_list": "Liste de vos Frères Siamois: §b%s"
       },
       "lover": {
         "display": "Couple",
-        "description":  "§6LOUP-GAROU §7➽§d Vous tombez éperdument amoureux de §b%s§d.\nSi l'un meurt, l'autre le rejoindra par amour.\nVous pouvez envoyer de la vie à votre âme soeur avec §b/ww don §d[nombre de demi-coeurs à envoyer] [facultatif:joueur à qui l'envoyer]",
+        "description": "§6LOUP-GAROU §7➽§d Vous tombez éperdument amoureux de §b%s§d.\n§dSi l'un meurt, l'autre le rejoindra par amour.\n§dVous pouvez envoyer de la vie à votre âme soeur avec §b/ww don §d[nombre de demi-coeurs à envoyer] [facultatif:joueur à qui l'envoyer]",
         "not_in_pairs": "[§cLG UHC§r] Vous n'ëtes pas en couple",
         "lover_death": "§d%s par amour, le rejoint dans sa tombe",
         "not_enough_players": "[§cLG UHC§r] il n'y a pas assez de personnes pour former un couple",
@@ -242,7 +242,7 @@
       },
       "cursed_lover": {
         "display": "Couple Maudit",
-        "description": "§6LOUP-GAROU §7➽§c Une liaison destructive entre §6%s§c et vous vient de naitre, même si vous êtes dans le même camp, vous ne pouvez gagner ensemble.\n Vous possédez un coeur supplémentaire permanent et chute Amortie tant que vous êtes les deux en vie.",
+        "description": "§6LOUP-GAROU §7➽§c Une liaison destructive entre §6%s§c et vous vient de naitre, même si vous êtes dans le même camp, vous ne pouvez gagner ensemble.\n§c Vous possédez un coeur supplémentaire permanent et chute Amortie tant que vous êtes les deux en vie.",
         "death_cursed_lover": "[§cLG UHC§r] Votre Couple Maudit est Mort, vous perdez vos Bonus associés",
         "not_enough_players": "[§cLG UHC§r] Il n'y a pas assez de personnes pour former un couple maudit"
       },
@@ -252,15 +252,15 @@
       },
       "mischievous_werewolf": {
         "display": "Loup Garou Perfide",
-        "description":   "§6LOUP-GAROU §7➽§9 Vous êtes §1Loup Garou Perfide§9. Votre objectif est de tuer les Villageois. \nContrairement aux Loups Garous, vous disposez d’un effet d’invisibilité et de faiblesse la nuit lorsque vous enlevez votre armure.\nVous laissez des particules rouges derrière vous et vous pouvez repérer les Petites Filles par leurs particules bleues. Après chaque kill vous gagnez l'effet Vitesse et 2 coeurs d’absorption pendant 2 minutes.\nFaites §b/ww lg§9 pour voir la liste des Loups-Garous."
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Loup Garou Perfide§9. Votre objectif est de tuer les Villageois. \n§9Contrairement aux Loups Garous, vous disposez d’un effet d’invisibilité et de faiblesse la nuit lorsque vous enlevez votre armure.\n§9Vous laissez des particules rouges derrière vous et vous pouvez repérer les Petites Filles par leurs particules bleues. Après chaque kill vous gagnez l'effet Vitesse et 2 coeurs d’absorption pendant 2 minutes.\n§9Faites §b/ww lg§9 pour voir la liste des Loups-Garous."
       },
       "elder": {
         "display": "Ancien",
-        "description":   "§6LOUP-GAROU §7➽ §9Vous êtes §1Ancien§9. Votre objectif est d’éliminer les Loups-Garous.\nPour cela, vous possédez l’effet Résistance et une seconde vie.\nVous perdrez votre Résistance à votre première mort, mais attention, si c’est un Villageois qui vous tue, vous perdrez également 1/3 de votre vie."
+        "description": "§6LOUP-GAROU §7➽ §9Vous êtes §1Ancien§9. Votre objectif est d’éliminer les Loups-Garous.\n§9Pour cela, vous possédez l’effet Résistance et une seconde vie.\n§9Vous perdrez votre Résistance à votre première mort, mais attention, si c’est un Villageois qui vous tue, vous perdrez également 1/3 de votre vie."
       },
       "flute_player": {
         "display": "Joueur de Flûte",
-        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Joueur de Flûte§9. Vous devez gagner seul. Chaque Jour, vous pourrez enchanter 2 personnes se trouvant à moins de 100 blocs de vous. Si vous enchantez tous les vivants, vous avez gagné.\nLes personnes enchantées se connaissent entre elles",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Joueur de Flûte§9. Vous devez gagner seul. Chaque Jour, vous pourrez enchanter 2 personnes se trouvant à moins de 100 blocs de vous. Si vous enchantez tous les vivants, vous avez gagné.\n§9Les personnes enchantées se connaissent entre elles",
         "list": "[§eLG UHC§r] Liste des Personnes Enchantées : §b",
         "power": "[§eLG UHC§r] Enchantez deux joueurs §6/ww enchanter§r vous avez §b%s",
         "already_enchant": "[§eLG UHC§r] Vous avez déjà enchanté §b%s",
@@ -271,7 +271,7 @@
       },
       "librarian": {
         "display": "Bibliothécaire",
-        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Bibliothécaire§9. Votre objectif est d’éliminer les Loups-Garous.\nVous obtenez 4 bibliothèques.\n Vous pouvez trois fois au cours de la partie, demander à une personne d'écrire dans votre livre §b/ww livre§9. \nQuand vous mourrez, votre livre est publié",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Bibliothécaire§9. Votre objectif est d’éliminer les Loups-Garous.\n§9Vous obtenez 4 bibliothèques.\n§9 Vous pouvez trois fois au cours de la partie, demander à une personne d'écrire dans votre livre §b/ww livre§9. \n§9Quand vous mourrez, votre livre est publié",
         "perform": "[§eLG UHC§r] Vous venez d'envoyer un livre à §b%s",
         "message": "[§eLG UHC§r] Le §bBibliothécaire§r souhaite que vous contribuez à son livre. Cliquez ici",
         "contribute": "[§aLG UHC§r] Vous venez de contribuer",
@@ -285,19 +285,19 @@
       },
       "comedian": {
         "display": "Comédien",
-        "description":   "§6LOUP-GAROU §7➽ §9Vous êtes §1Comedien§9. Votre objectif est d’éliminer les Loups-Garous.\nPour cela, vous possédez trois masques, un de Force, un de Résistance et un de Vitesse. Chaque matin, vous pouvez choisir (ou non) d'en mettre un pour la journée.\nAttention, ces masques sont à usage unique. Ainsi, un masque, une fois utilisé, ne pourra pas être réutilisé.",
-        "wear_mask_message": "[§eLG UHC§r] Vous pouvez mettre choisir de mettre un masque pour la journée.\n Faites /ww masque 1, 2 ou 3 (respectivememt  Résistance, Vitesse et Force). Vous avez §b%s",
+        "description": "§6LOUP-GAROU §7➽ §9Vous êtes §1Comedien§9. Votre objectif est d’éliminer les Loups-Garous.\n§9Pour cela, vous possédez trois masques, un de Force, un de Résistance et un de Vitesse. Chaque matin, vous pouvez choisir (ou non) d'en mettre un pour la journée.\n§9Attention, ces masques sont à usage unique. Ainsi, un masque, une fois utilisé, ne pourra pas être réutilisé.",
+        "wear_mask_message": "[§eLG UHC§r] Vous pouvez mettre choisir de mettre un masque pour la journée.\n§f Faites /ww masque 1, 2 ou 3 (respectivememt  Résistance, Vitesse et Force). Vous avez §b%s",
         "wear_mask_perform": "[§eLG UHC§r] Vous venez de mettre le masque de §b%s",
         "used_mask": "[§cLG UHC§r] Vous avez déjà utilisé ce masque",
         "mask_unknown": "[§cLG UHC§r] Masque inconnu",
-        "1":"Résistance",
-        "2":"Vitesse",
-        "3":"Force",
+        "1": "Résistance",
+        "2": "Vitesse",
+        "3": "Force",
         "command": "masque"
       },
       "trapper": {
         "display": "Trappeur",
-        "description":   "§6LOUP-GAROU §7➽ §9Vous êtes §1Trappeur§9. Votre objectif est d’éliminer les Loups-Garous.\nChaque matin, vous pourrez pister un joueur différent.",
+        "description": "§6LOUP-GAROU §7➽ §9Vous êtes §1Trappeur§9. Votre objectif est d’éliminer les Loups-Garous.\n§9Chaque matin, vous pourrez pister un joueur différent.",
         "tracking_message": "[§eLG UHC§r] Vous pouvez pister une nouvelle personne §6/ww pister",
         "tracking_perform": "[§eLG UHC§r] Vous commencez à pister §b%s",
         "get_track": "[§eLG UHC§r] Un Trappeur vous piste aujourd'hui",
@@ -305,11 +305,11 @@
       },
       "succubus": {
         "display": "Succube",
-        "description": "§6LOUP-GAROU §7➽ §9Vous êtes §1Succube§9. Votre objectif est de gagner seul avec la personne que vous aurez charmé.\nVous pouvez charmer un joueur avec §b/ww charmer§9. \nSi vous mourrez, votre personne charmée mourra à votre place.",
+        "description": "§6LOUP-GAROU §7➽ §9Vous êtes §1Succube§9. Votre objectif est de gagner seul avec la personne que vous aurez charmé.\n§9Vous pouvez charmer un joueur avec §b/ww charmer§9. \n§9Si vous mourrez, votre personne charmée mourra à votre place.",
         "charming_message": "[§eLG UHC§r] Vous pouvez désigner une personne à charmer §6/ww charmer",
         "charming_beginning": "[§eLG UHC§r] Vous commencez à charmer §b%s",
         "charming_perform": "[§aLG UHC§r] §b%s§r est totalement charmé, si vous mourrez il mourra à votre place",
-        "get_charmed": "[§eLG UHC§r] Le Succube §b%s§r vous a charmé, vous devez maintenant gagner avec lui.\nSi le Succube vient à mourir, vous mourrez à sa place.",
+        "get_charmed": "[§eLG UHC§r] Le Succube §b%s§r vous a charmé, vous devez maintenant gagner avec lui.\n§fSi le Succube vient à mourir, vous mourrez à sa place.",
         "free_of_succubus": "[§eLG UHC§r] Vous êtes libéré de votre Succube, mais à quel prix...",
         "not_enough_near": "[§cLG UHC§r] Vous n'êtes pas assez proche de la personne que vous voulez charmer",
         "progress_charm": "[§eLG UHC§r] Progression du Charme §b%s%%",
@@ -343,7 +343,7 @@
       "troll": "§6LOUP-GAROU §7➽§4§l Bon ok, la blague a assez duré ! Voici ton vrai role : ",
       "night": "[§eLG UHC§r] C'est la Nuit §b%s§r ☼",
       "start": {
-        "message": "[§eLG UHC§r] Vous avez §b%s§r d'invulnérabilité\n Plus d'infos sur la partie §6/ww h",
+        "message": "[§eLG UHC§r] Vous avez §b%s§r d'invulnérabilité\n§f Plus d'infos sur la partie §6/ww h",
         "top_title": "Début de Partie",
         "bot_title": "§bBonne Game",
         "launch": "Lancer la §bPartie"
@@ -407,7 +407,7 @@
           "command": "?",
           "send": "[§b%s§r] %s (Cliquez pour répondre)",
           "anonyme": "Anonyme",
-          "failure": "[§cLG UHC§r] Votre message n'a pas pu être envoyé.\n Aucun Staff de connecté",
+          "failure": "[§cLG UHC§r] Votre message n'a pas pu être envoyé. Aucun Staff de connecté",
           "description": "Pour envoyer un message anonyme"
         },
         "info": {

@@ -12,7 +12,6 @@ import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -49,21 +48,12 @@ public class SiameseTwin extends RolesVillage {
 
         if (!event.getThiefWW().equals(getPlayerWW())) return;
 
-
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) {
-            return;
-        }
-        VersionUtils.getVersionUtils().setPlayerMaxHealth(player, 24);
+        getPlayerWW().addPlayerMaxHealth(4);
     }
 
     @Override
     public void recoverPower() {
-
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-        if (player == null) return;
-        VersionUtils.getVersionUtils().setPlayerMaxHealth(player, 24);
+        getPlayerWW().addPlayerMaxHealth(4);
     }
 
     @EventHandler

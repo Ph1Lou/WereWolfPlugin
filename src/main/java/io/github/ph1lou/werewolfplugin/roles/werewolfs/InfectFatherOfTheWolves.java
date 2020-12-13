@@ -13,7 +13,6 @@ import io.github.ph1lou.werewolfapi.rolesattributs.RolesWereWolf;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.NotNull;
@@ -85,9 +84,7 @@ public class InfectFatherOfTheWolves extends RolesWereWolf implements AffectedPl
 
 
         PlayerWW killerWW = playerWW.getLastKiller();
-        Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (player == null) return;
 
         if (killerWW == null) {
             return;
@@ -98,7 +95,7 @@ public class InfectFatherOfTheWolves extends RolesWereWolf implements AffectedPl
         }
 
         if (playerWW.equals(getPlayerWW())) {
-            event.setCancelled(autoResurrection(player));
+            event.setCancelled(autoResurrection(playerWW));
             return;
         }
 
@@ -113,14 +110,13 @@ public class InfectFatherOfTheWolves extends RolesWereWolf implements AffectedPl
                         String.format("/ww %s %s",
                                 game.translate("werewolf.role.infect_father_of_the_wolves.command"),
                                 playerWW.getUUID())));
-        player.spigot().sendMessage(infect_msg);
+        getPlayerWW().sendMessage(infect_msg);
     }
 
-    private boolean autoResurrection(Player player) {
+    private boolean autoResurrection(PlayerWW player) {
 
         if (!game.getConfig()
-                .getConfigValues()
-                .get(ConfigsBase.AUTO_REZ_INFECT.getKey())) {
+                .isConfigActive(ConfigsBase.AUTO_REZ_INFECT.getKey())) {
             return false;
         }
 

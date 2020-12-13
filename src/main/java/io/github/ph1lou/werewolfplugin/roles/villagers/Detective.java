@@ -8,8 +8,6 @@ import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesWithLimitedSelectionDuration;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -55,14 +53,11 @@ public class Detective extends RolesWithLimitedSelectionDuration implements Affe
             return;
         }
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
         setPower(true);
 
-        if (player == null) {
-            return;
-        }
 
-        player.sendMessage(game.translate("werewolf.role.detective.inspection_message", game.getScore().conversion(game.getConfig().getTimerValues().get(TimersBase.POWER_DURATION.getKey()))));
+        getPlayerWW().sendMessage(game.translate("werewolf.role.detective.inspection_message",
+                game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.POWER_DURATION.getKey()))));
     }
 
 

@@ -31,7 +31,7 @@ public class CommandWereWolf implements Commands {
 
         if (playerWW == null) return;
 
-        if (game.getConfig().getTimerValues().get(TimersBase.WEREWOLF_LIST.getKey()) > 0) {
+        if (game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey()) > 0) {
             player.sendMessage(game.translate("werewolf.role.werewolf.list_not_revealed"));
             return;
         }

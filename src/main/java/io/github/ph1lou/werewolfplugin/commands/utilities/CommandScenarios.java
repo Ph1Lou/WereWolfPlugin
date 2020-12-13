@@ -21,7 +21,7 @@ public class CommandScenarios implements Commands {
         WereWolfAPI game = main.getWereWolfAPI();
 
         for (ScenarioRegister scenarioRegister : main.getRegisterManager().getScenariosRegister()) {
-            if (game.getConfig().getScenarioValues().get(scenarioRegister.getKey())) {
+            if (game.getConfig().isScenarioActive(scenarioRegister.getKey())) {
                 player.sendMessage(game.translate("werewolf.utils.enable", game.translate(scenarioRegister.getKey())));
             }
         }

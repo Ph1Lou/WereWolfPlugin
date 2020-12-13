@@ -7,14 +7,11 @@ import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
-import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,14 +45,8 @@ public class SerialKiller extends RolesNeutral implements Power {
 
         if (!event.getThiefWW().equals(getPlayerWW())) return;
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (player == null) {
-            return;
-        }
-
-        VersionUtils.getVersionUtils().setPlayerMaxHealth(player,
-                20 + extraHeart);
+        getPlayerWW().addPlayerMaxHealth(extraHeart);
 
     }
 
@@ -124,16 +115,8 @@ public class SerialKiller extends RolesNeutral implements Power {
 
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) return;
-
-        player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,
-                Integer.MAX_VALUE,
-                0,
-                false,
-                false));
+        getPlayerWW().removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+        getPlayerWW().addPotionEffect(PotionEffectType.INCREASE_DAMAGE);
     }
 
 
@@ -144,42 +127,28 @@ public class SerialKiller extends RolesNeutral implements Power {
 
         if (!hasPower()) return;
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) return;
-
-        player.addPotionEffect(
-                new PotionEffect(PotionEffectType.INCREASE_DAMAGE,
-                        Integer.MAX_VALUE,
-                        -1,
-                        false,
-                        false));
+        getPlayerWW().addPotionEffect(PotionEffectType.INCREASE_DAMAGE);
     }
 
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 
 
-        Player killer = Bukkit.getPlayer(getPlayerUUID());
         PlayerWW playerWW = event.getPlayerWW();
 
         if (playerWW.getLastKiller() == null) return;
 
         if (!playerWW.getLastKiller().equals(getPlayerWW())) return;
 
-        if (killer != null) {
-            Bukkit.getPluginManager().callEvent(new SerialKillerEvent(
-                    getPlayerWW(),
-                    playerWW));
-            VersionUtils.getVersionUtils().setPlayerMaxHealth(
-                    killer,
-                    VersionUtils.getVersionUtils().getPlayerMaxHealth(killer) + 2);
-            extraHeart += 2;
-            killer.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE));
-            if (hasPower()) {
-                killer.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-                setPower(false);
-            }
+        Bukkit.getPluginManager().callEvent(new SerialKillerEvent(
+                getPlayerWW(),
+                playerWW));
+        getPlayerWW().addPlayerMaxHealth(2);
+        extraHeart += 2;
+        getPlayerWW().addItem(new ItemStack(Material.GOLDEN_APPLE));
+        if (hasPower()) {
+            getPlayerWW().removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+            setPower(false);
         }
     }
 

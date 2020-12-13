@@ -52,20 +52,9 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
             return;
         }
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) {
-            return;
-        }
-
-        player.sendMessage(game.translate(
+        getPlayerWW().sendMessage(game.translate(
                 "werewolf.role.little_girl.remove_armor"));
-        player.addPotionEffect(new PotionEffect(
-                PotionEffectType.INCREASE_DAMAGE,
-                Integer.MAX_VALUE,
-                -1,
-                false,
-                false));
+        getPlayerWW().addPotionEffect(PotionEffectType.INCREASE_DAMAGE);
     }
 
     @EventHandler
@@ -117,27 +106,21 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
     public void onDay(DayEvent event) {
 
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        if (player == null) {
-            return;
-        }
 
         if (isInvisible()) {
-            player.removePotionEffect(PotionEffectType.INVISIBILITY);
-            player.removePotionEffect(PotionEffectType.WEAKNESS);
+            getPlayerWW().removePotionEffect(PotionEffectType.INVISIBILITY);
+            getPlayerWW().removePotionEffect(PotionEffectType.WEAKNESS);
             setInvisible(false);
             Bukkit.getPluginManager().callEvent(new InvisibleEvent(
                     getPlayerWW(),
                     false));
-            player.sendMessage(game.translate(
+            getPlayerWW().sendMessage(game.translate(
                     "werewolf.role.little_girl.visible"));
-        }
-        else player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+        } else getPlayerWW().removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
     }
 
 
@@ -171,17 +154,12 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
     @EventHandler
     public void onDayWillCome(DayWillComeEvent event) {
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        if (player == null) {
-            return;
-        }
 
-        player.sendMessage(game.translate(
+        getPlayerWW().sendMessage(game.translate(
                 "werewolf.role.little_girl.soon_to_be_day"));
     }
 

@@ -96,12 +96,9 @@ public class CommandFlutePlayer implements Commands {
 
         for (PlayerWW playerWW1 : enchantedEvent.getPlayerWWS()) {
 
-            Player enchanted = Bukkit.getPlayer(playerWW1.getUUID());
-            if (enchanted == null) return;
-
             ((AffectedPlayers) flutePlayer).addAffectedPlayer(playerWW1);
-            enchanted.sendMessage(game.translate("werewolf.role.flute_player.enchanted"));
-            player.sendMessage(game.translate("werewolf.role.flute_player.perform", enchanted.getName()));
+            playerWW1.sendMessage(game.translate("werewolf.role.flute_player.enchanted"));
+            player.sendMessage(game.translate("werewolf.role.flute_player.perform", playerWW1.getName()));
         }
 
 

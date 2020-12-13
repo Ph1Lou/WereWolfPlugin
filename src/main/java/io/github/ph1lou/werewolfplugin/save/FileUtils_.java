@@ -3,7 +3,8 @@ package io.github.ph1lou.werewolfplugin.save;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.WriterConfig;
 import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
-import io.github.ph1lou.werewolfapi.registers.*;
+import io.github.ph1lou.werewolfapi.registers.RegisterManager;
+import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 
@@ -36,6 +37,7 @@ public class FileUtils_ {
             game.setConfig(Serializer.deserialize(loadContent(file)));
             game.getScore().setRole(0);
             game.getModerationManager().checkQueue();
+            ((Configuration) game.getConfig()).addRegister(main.getRegisterManager());
         }
 
         ConfigWereWolfAPI config = game.getConfig();
@@ -43,23 +45,7 @@ public class FileUtils_ {
 
         for (RoleRegister roleRegister : register.getRolesRegister()) {
             String key = roleRegister.getKey();
-            config.getRoleCount().put(key, config.getRoleCount().getOrDefault(key, 0));
-            game.getScore().setRole(game.getScore().getRole() + config.getRoleCount().get(key));
-        }
-
-        for (TimerRegister timerRegister : register.getTimersRegister()) {
-            String key = timerRegister.getKey();
-            config.getTimerValues().put(key, config.getTimerValues().getOrDefault(key, timerRegister.getDefaultValue()));
-        }
-
-        for (ConfigRegister configRegister : register.getConfigsRegister()) {
-            String key = configRegister.getKey();
-            config.getConfigValues().put(key, config.getConfigValues().getOrDefault(key, configRegister.getDefaultValue()));
-        }
-
-        for (ScenarioRegister scenarioRegister : register.getScenariosRegister()) {
-            String key = scenarioRegister.getKey();
-            config.getScenarioValues().put(key, config.getScenarioValues().getOrDefault(key, scenarioRegister.getDefaultValue()));
+            game.getScore().setRole(game.getScore().getRole() + config.getRoleCount(key));
         }
 
         save(file, Serializer.serialize(game.getConfig()));

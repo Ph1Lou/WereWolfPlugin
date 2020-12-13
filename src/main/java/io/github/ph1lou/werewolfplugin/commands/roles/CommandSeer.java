@@ -52,12 +52,9 @@ public class CommandSeer implements Commands {
             return;
         }
 
-        double life = VersionUtils.getVersionUtils().getPlayerMaxHealth(player);
-
-        if (life<7) {
+        if (VersionUtils.getVersionUtils().getPlayerMaxHealth(player) < 7) {
             player.sendMessage(game.translate("werewolf.role.seer.not_enough_life"));
-        }
-        else {
+        } else {
             Roles role1 = playerWW1.getRole();
 
             String camp = "werewolf.categories.villager";
@@ -67,7 +64,6 @@ public class CommandSeer implements Commands {
             } else if ((role1 instanceof Display && ((Display) role1).isDisplayCamp(Camp.WEREWOLF)) || (!(role1 instanceof Display) && role1.isWereWolf())) {
                 camp = "werewolf.categories.werewolf";
             }
-
 
             SeerEvent seerEvent = new SeerEvent(playerWW, playerWW1, camp);
             ((Power) seer).setPower(false);
@@ -81,10 +77,8 @@ public class CommandSeer implements Commands {
             ((AffectedPlayers) seer).addAffectedPlayer(playerWW1);
 
             if (seerEvent.getCamp().equals("werewolf.categories.villager")) {
-                VersionUtils.getVersionUtils().setPlayerMaxHealth(player, life - 6);
-                if (player.getHealth() > life - 6) {
-                    player.setHealth(life - 6);
-                }
+                playerWW.removePlayerMaxHealth(6);
+
                 player.sendMessage(game.translate("werewolf.role.seer.see_villager"));
                 if (seer.isKey(RolesBase.CHATTY_SEER.getKey())) {
                     Bukkit.broadcastMessage(game.translate("werewolf.role.chatty_seer.see_perform", game.translate("werewolf.categories.villager")));

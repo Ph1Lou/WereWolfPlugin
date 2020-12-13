@@ -141,7 +141,8 @@ public class TransportationTask implements Listener {
 
             if (game.getPlayerWW(player.getUniqueId()) != null) {
                 player.setGameMode(GameMode.SURVIVAL);
-                player.sendMessage(game.translate("werewolf.announcement.start.message", game.getScore().conversion(game.getConfig().getTimerValues().get(TimersBase.INVULNERABILITY.getKey()))));
+                player.sendMessage(game.translate("werewolf.announcement.start.message",
+                        game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.INVULNERABILITY.getKey()))));
             } else {
                 player.teleport(game.getMapManager().getWorld().getSpawnLocation());
                 player.setGameMode(GameMode.SPECTATOR);

@@ -21,8 +21,8 @@ public class CommandChat implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
 
-        game.getConfig().getConfigValues().put(ConfigsBase.CHAT.getKey(), !game.getConfig().getConfigValues().get(ConfigsBase.CHAT.getKey()));
+        game.getConfig().switchConfigValue(ConfigsBase.CHAT.getKey());
 
-        Bukkit.broadcastMessage(game.getConfig().getConfigValues().get(ConfigsBase.CHAT.getKey()) ? game.translate("werewolf.commands.admin.chat.on") : game.translate("werewolf.commands.admin.chat.off"));
+        Bukkit.broadcastMessage(game.getConfig().isConfigActive(ConfigsBase.CHAT.getKey()) ? game.translate("werewolf.commands.admin.chat.on") : game.translate("werewolf.commands.admin.chat.off"));
     }
 }

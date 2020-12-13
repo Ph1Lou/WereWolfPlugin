@@ -10,6 +10,7 @@ import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
+import io.github.ph1lou.werewolfplugin.save.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -52,9 +53,11 @@ public class ScoreBoard implements ScoreAPI, Listener {
 
 		scoreboard1.clear();
 
-		int i =0;
+		int i = 0;
 
-		while(game.getLanguage().containsKey("werewolf.score_board.scoreboard_1."+i)) {
+		Lang lang = (Lang) game.getMain().getLangManager();
+
+		while (lang.getLanguage().containsKey("werewolf.score_board.scoreboard_1." + i)) {
 			String line = game.translate("werewolf.score_board.scoreboard_1." + i);
 			line = line.replace("&players&", String.valueOf(player));
 			line = line.replace("&roles&", String.valueOf(role));
@@ -81,7 +84,7 @@ public class ScoreBoard implements ScoreAPI, Listener {
 			if (!playerWW.isState(StatePlayer.DEATH)) {
 
 				if (!game.isState(StateGame.GAME)) {
-					role = conversion(game.getConfig().getTimerValues().get(TimersBase.ROLE_DURATION.getKey()));
+					role = conversion(game.getConfig().getTimerValue(TimersBase.ROLE_DURATION.getKey()));
 				} else role = game.translate(playerWW.getRole().getKey());
 			} else role = game.translate("werewolf.score_board.death");
 		} else if (moderationManager.getModerators().contains(playerUUID)) {
@@ -102,9 +105,10 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		WorldBorder wb = game.getMapManager().getWorld().getWorldBorder();
 		String border_size = String.valueOf(Math.round(wb.getSize()));
 		String border;
+		Lang lang = (Lang) game.getMain().getLangManager();
 
-		if (game.getConfig().getTimerValues().get(TimersBase.BORDER_BEGIN.getKey()) > 0) {
-			border = conversion(game.getConfig().getTimerValues().get(TimersBase.BORDER_BEGIN.getKey()));
+		if (game.getConfig().getTimerValue(TimersBase.BORDER_BEGIN.getKey()) > 0) {
+			border = conversion(game.getConfig().getTimerValue(TimersBase.BORDER_BEGIN.getKey()));
 		} else {
 			border = game.translate("werewolf.utils.on");
 			if (wb.getSize() > game.getConfig().getBorderMin()) {
@@ -115,10 +119,10 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		scoreboard2.clear();
 
 		int i = 0;
-		this.day = timer / game.getConfig().getTimerValues().get(TimersBase.DAY_DURATION.getKey()) / 2 + 1;
+		this.day = timer / game.getConfig().getTimerValue(TimersBase.DAY_DURATION.getKey()) / 2 + 1;
 		this.dayState = game.translate(game.isDay(Day.DAY) ? "werewolf.score_board.day" : "werewolf.score_board.night");
 
-		while (game.getLanguage().containsKey("werewolf.score_board.scoreboard_2." + i)) {
+		while (lang.getLanguage().containsKey("werewolf.score_board.scoreboard_2." + i)) {
 			String line = game.translate("werewolf.score_board.scoreboard_2." + i);
 			line = line.replace("&timer&", conversion(timer));
 			line = line.replace("&day&", String.valueOf(this.day));
@@ -154,9 +158,9 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		}
 		for (RoleRegister roleRegister : game.getMain().getRegisterManager().getRolesRegister()) {
 			String key = roleRegister.getKey();
-			if (game.getConfig().getRoleCount().get(key) > 0) {
+			if (game.getConfig().getRoleCount(key) > 0) {
 				StringBuilder sb = new StringBuilder();
-				sb.append("§3").append(game.getConfig().getRoleCount().get(key)).append("§f ").append(game.translate(roleRegister.getKey()));
+				sb.append("§3").append(game.getConfig().getRoleCount(key)).append("§f ").append(game.translate(roleRegister.getKey()));
 				roles.add(sb.substring(0, Math.min(30, sb.length())));
 			}
 		}
@@ -256,7 +260,7 @@ public class ScoreBoard implements ScoreAPI, Listener {
 
 		roles.clear();
 
-		if (!game.getConfig().getConfigValues().get(ConfigsBase.HIDE_COMPOSITION.getKey())
+		if (!game.getConfig().isConfigActive(ConfigsBase.HIDE_COMPOSITION.getKey())
 				&& TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) % 60 >= 30) {
 			updateScoreBoardRole();
 		}

@@ -10,6 +10,7 @@ import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.save.Configuration;
 import io.github.ph1lou.werewolfplugin.save.FileUtils_;
+import io.github.ph1lou.werewolfplugin.save.Lang;
 import io.github.ph1lou.werewolfplugin.save.Stuff;
 import io.github.ph1lou.werewolfplugin.scoreboards.ScoreBoard;
 import io.github.ph1lou.werewolfplugin.tasks.LobbyTask;
@@ -41,18 +42,18 @@ public class GameManager implements WereWolfAPI {
     private final LoversManagement loversManage = new LoversManagement(this);
     private final ModerationManager moderationManager = new ModerationManager(this);
     private final MapManager mapManager;
-    private Configuration configuration = new Configuration();
+    private Configuration configuration;
     private final End end = new End(this);
     private final Stuff stuff;
     private final ScenariosLoader scenarios;
     private final Random r = new Random(System.currentTimeMillis());
-    private final Map<String, String> language = new HashMap<>();
     private final UUID uuid = UUID.randomUUID();
     private String gameName = "@Ph1Lou_";
 
 
     public GameManager(Main main) {
         this.main = main;
+        this.configuration = new Configuration(main.getRegisterManager());
         mapManager = new MapManager(main);
         stuff = new Stuff(main);
         scenarios = new ScenariosLoader(main);
@@ -184,10 +185,6 @@ public class GameManager implements WereWolfAPI {
         return this.day == day;
     }
 
-    @Override
-    public Map<String, String> getLanguage() {
-        return this.language;
-    }
 
     @Override
     public void checkVictory() {
@@ -262,14 +259,11 @@ public class GameManager implements WereWolfAPI {
 
     @Override
     public String translate(String key, Object... args) {
-        final String translation;
-        if (!main.getLangManager().getExtraTexts().containsKey(key.toLowerCase())) {
-            if (!this.language.containsKey(key.toLowerCase())) {
-                return String.format("Message error (%s) ", key.toLowerCase());
-            }
-            translation = this.language.get(key.toLowerCase());
-        }
-        else translation = main.getLangManager().getExtraTexts().get(key.toLowerCase());
+        String translation;
+        Lang lang = (Lang) main.getLangManager();
+        if (!lang.getExtraTexts().containsKey(key.toLowerCase())) {
+            translation = lang.getTranslation(key.toLowerCase());
+        } else translation = lang.getExtraTexts().get(key.toLowerCase());
         try {
             return String.format(translation, args);
         } catch (IllegalFormatException e) {

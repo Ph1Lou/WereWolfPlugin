@@ -7,7 +7,6 @@ import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.Sounds;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.*;
-import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -15,7 +14,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,8 +25,6 @@ public class CursedLover implements LoverAPI, Listener {
     private final WereWolfAPI game;
     private PlayerWW cursedLover1;
     private PlayerWW cursedLover2;
-    private boolean announce1 = false;
-    private boolean announce2 = false;
     private boolean power1 = false;
     private boolean power2 = false;
     private boolean death = false;
@@ -38,7 +34,7 @@ public class CursedLover implements LoverAPI, Listener {
         this.game = game;
         this.cursedLover1 = cursedLover1;
         this.cursedLover2 = cursedLover2;
-        getLovers().forEach(playerWW -> playerWW.getLovers().add(this));
+        getLovers().forEach(playerWW -> playerWW.addLover(this));
     }
 
     public PlayerWW getOtherLover(PlayerWW playerWW) {
@@ -62,54 +58,38 @@ public class CursedLover implements LoverAPI, Listener {
         Bukkit.getPluginManager().callEvent(
                 new CursedLoverDeathEvent(event.getPlayerWW(), playerWW1));
 
-        Player cursedLover = Bukkit.getPlayer(playerWW1.getUUID());
+        playerWW1.sendMessage(game.translate("werewolf.role.cursed_lover.death_cursed_lover"));
 
-        if (cursedLover != null) {
-
-            cursedLover.sendMessage(game.translate("werewolf.role.cursed_lover.death_cursed_lover"));
-            VersionUtils.getVersionUtils()
-                    .setPlayerMaxHealth(cursedLover,
-                            Math.max(VersionUtils.getVersionUtils()
-                                    .getPlayerMaxHealth(cursedLover) - 2, 1));
-        }
+        playerWW1.removePlayerMaxHealth(2);
 
         game.getConfig().setCursedLoverSize(game.getConfig().getCursedLoverSize() - 1);
     }
 
-    public void announceCursedLoversOnJoin(Player player) {
+    public void announceCursedLoversOnJoin(PlayerWW playerWW) {
 
-
-        UUID uuid = player.getUniqueId();
-        if (cursedLover1.getUUID().equals(uuid)) {
-            if (!announce1) {
-                if (!power1) {
-                    setPower(player);
-                }
-                power1 = true;
-                player.sendMessage(game.translate("werewolf.role.cursed_lover.description",
-                        cursedLover2.getName()));
-                Sounds.SHEEP_SHEAR.play(player);
-                announce1 = true;
+        if (cursedLover1.equals(playerWW)) {
+            if (!power1) {
+                setPower(playerWW);
             }
-        } else if (cursedLover2.getUUID().equals(uuid)) {
-            if (!announce2) {
-                if (!power2) {
-                    setPower(player);
-                }
-                power2 = true;
-                setPower(player);
-                player.sendMessage(game.translate("werewolf.role.cursed_lover.description",
-                        cursedLover1.getName()));
-                Sounds.SHEEP_SHEAR.play(player);
-                announce2 = true;
+            power1 = true;
+            playerWW.sendMessage(game.translate("werewolf.role.cursed_lover.description",
+                    cursedLover2.getName()));
+            Sounds.SHEEP_SHEAR.play(playerWW);
+        } else if (cursedLover2.equals(playerWW)) {
+            if (!power2) {
+                setPower(playerWW);
             }
+            power2 = true;
+            setPower(playerWW);
+            playerWW.sendMessage(game.translate("werewolf.role.cursed_lover.description",
+                    cursedLover1.getName()));
+            Sounds.SHEEP_SHEAR.play(playerWW);
         }
     }
 
-    public void setPower(Player player) {
+    public void setPower(PlayerWW player) {
 
-        VersionUtils.getVersionUtils().setPlayerMaxHealth(player,
-                VersionUtils.getVersionUtils().getPlayerMaxHealth(player) + 2);
+        player.addPlayerMaxHealth(2);
 
         Sounds.SHEEP_SHEAR.play(player);
     }
@@ -117,9 +97,9 @@ public class CursedLover implements LoverAPI, Listener {
     @EventHandler
     private void onPlayerDamage(EntityDamageEvent event) {
 
-        if(death) return;
+        if (death) return;
 
-        if(!event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) return;
+        if (!event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) return;
 
         if(!(event.getEntity() instanceof Player)) return;
 
@@ -132,14 +112,6 @@ public class CursedLover implements LoverAPI, Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
-    public void onJoin(PlayerJoinEvent event) {
-
-        if(death) return;
-
-        Player player = event.getPlayer();
-        announceCursedLoversOnJoin(player);
-    }
 
     @EventHandler
     public void onModeratorScoreBoard(UpdateModeratorNameTag event) {
@@ -202,9 +174,9 @@ public class CursedLover implements LoverAPI, Listener {
     }
 
     @Override
-    public void swap(PlayerWW playerWW, PlayerWW playerWW1) {
+    public boolean swap(PlayerWW playerWW, PlayerWW playerWW1) {
 
-        if(death) return;
+        if (death) return false;
 
         if (cursedLover1.equals(playerWW)) {
             cursedLover1 = playerWW1;
@@ -214,15 +186,12 @@ public class CursedLover implements LoverAPI, Listener {
             power2 = false;
         }
 
-        announce1 = false;
-        announce2 = false;
-
         for (PlayerWW playerWW2 : getLovers()) {
-            Player player = Bukkit.getPlayer(playerWW2.getUUID());
-            if (player != null) {
-                announceCursedLoversOnJoin(player);
-            }
+            announceCursedLoversOnJoin(playerWW2);
         }
+
+        return true;
     }
+
 
 }

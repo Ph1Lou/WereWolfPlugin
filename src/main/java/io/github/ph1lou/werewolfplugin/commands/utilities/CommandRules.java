@@ -23,7 +23,7 @@ public class CommandRules implements Commands {
         for (ConfigRegister configRegister : main.getRegisterManager().getConfigsRegister()) {
 
             if (configRegister.isAppearInMenu()) {
-                if (game.getConfig().getConfigValues().get(configRegister.getKey())) {
+                if (game.getConfig().isConfigActive(configRegister.getKey())) {
                     player.sendMessage(game.translate("werewolf.utils.enable", game.translate(configRegister.getKey())));
                 } else {
                     player.sendMessage(game.translate("werewolf.utils.disable", game.translate(configRegister.getKey())));

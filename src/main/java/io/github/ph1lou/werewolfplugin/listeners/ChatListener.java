@@ -100,11 +100,11 @@ public class ChatListener implements Listener {
             event.setFormat(game.translate("werewolf.commands.admin.moderator.tag") + format);
         } else event.setFormat(format);
 
-        if (!game.getConfig().getConfigValues().get(ConfigsBase.CHAT.getKey())) {
+        if (!game.getConfig().isConfigActive(ConfigsBase.CHAT.getKey())) {
             event.setCancelled(true);
             event.getPlayer().sendMessage(game.translate("werewolf.commands.admin.chat.off"));
 
-        } else if (game.getConfig().getConfigValues().get(ConfigsBase.PROXIMITY_CHAT.getKey()) &&
+        } else if (game.getConfig().isConfigActive(ConfigsBase.PROXIMITY_CHAT.getKey()) &&
                 !game.isState(StateGame.LOBBY)) {
             event.setCancelled(true);
 

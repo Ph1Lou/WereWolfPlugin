@@ -12,9 +12,7 @@ import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesWithLimitedSelectionDuration;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
@@ -58,27 +56,19 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
             return;
         }
 
-        if (game.getConfig().getConfigValues()
-                .get(ConfigsBase.SEER_EVERY_OTHER_DAY.getKey()) &&
+        if (game.getConfig().isConfigActive(ConfigsBase.SEER_EVERY_OTHER_DAY.getKey()) &&
                 event.getNumber() == dayNumber + 1) {
             return;
         }
 
         setPower(true);
         dayNumber = event.getNumber();
-        Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (player == null) {
-            return;
-        }
-
-
-        player.sendMessage(game.translate(
+        getPlayerWW().sendMessage(game.translate(
                 "werewolf.role.seer.see_camp_message",
                 game.getScore().conversion(
                         game.getConfig()
-                                .getTimerValues()
-                                .get(TimersBase.POWER_DURATION.getKey()))));
+                                .getTimerValue(TimersBase.POWER_DURATION.getKey()))));
     }
 
 
@@ -99,16 +89,7 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
 
         super.recoverPotionEffect();
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) return;
-
-        player.addPotionEffect(
-                new PotionEffect(PotionEffectType.NIGHT_VISION,
-                        Integer.MAX_VALUE,
-                        0,
-                        false,
-                        false));
+        getPlayerWW().addPotionEffect(PotionEffectType.NIGHT_VISION);
     }
 
     @EventHandler
@@ -120,6 +101,5 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
         Bukkit.getPluginManager().callEvent(new ChestEvent());
 
     }
-
 
 }

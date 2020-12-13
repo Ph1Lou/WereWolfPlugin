@@ -104,7 +104,7 @@ public class End {
 
         game.getScore().getKillCounter();
 
-        game.getConfig().getConfigValues().put(ConfigsBase.CHAT.getKey(), true);
+        game.getConfig().setConfig(ConfigsBase.CHAT.getKey(), true);
 
         for (PlayerWW playerWW1 : game.getPlayerWW()) {
 

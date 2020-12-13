@@ -62,13 +62,12 @@ public class ScenariosLoader {
         main.getRegisterManager().getScenariosRegister()
                 .forEach(scenarioRegister -> scenarioRegister.getScenario()
                         .register(game.getConfig()
-                                .getScenarioValues()
-                                .get(scenarioRegister.getKey())));
+                                .isScenarioActive(scenarioRegister.getKey())));
 
         main.getRegisterManager().getConfigsRegister()
                 .stream()
                 .filter(configRegister -> configRegister.getConfig() != null)
                 .forEach(configRegister -> configRegister.getConfig().register(game.getConfig()
-                        .getConfigValues().get(configRegister.getKey())));
+                        .isConfigActive(configRegister.getKey())));
     }
 }

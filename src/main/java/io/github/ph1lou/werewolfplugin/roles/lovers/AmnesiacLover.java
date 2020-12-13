@@ -15,17 +15,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 public class AmnesiacLover implements LoverAPI, Listener {
 
     private final WereWolfAPI game;
     private PlayerWW amnesiacLover1;
     private PlayerWW amnesiacLover2;
-    private boolean announce1 = false;
-    private boolean announce2 = false;
     private boolean find = false;
     private boolean death = false;
 
@@ -33,7 +33,7 @@ public class AmnesiacLover implements LoverAPI, Listener {
         this.game = game;
         this.amnesiacLover1 = amnesiacLover1;
         this.amnesiacLover2 = amnesiacLover2;
-        getLovers().forEach(playerWW -> playerWW.getLovers().add(this));
+        getLovers().forEach(playerWW -> playerWW.addLover(this));
     }
 
     public List<? extends PlayerWW> getLovers() {
@@ -86,8 +86,8 @@ public class AmnesiacLover implements LoverAPI, Listener {
                         Sets.newHashSet(amnesiacLover1, amnesiacLover2)));
 
                 find = true;
-                announceAmnesiacLoversOnJoin(player1);
-                announceAmnesiacLoversOnJoin(player2);
+                announceAmnesiacLoversOnJoin(amnesiacLover1);
+                announceAmnesiacLoversOnJoin(amnesiacLover2);
                 game.getConfig().setAmnesiacLoverSize(
                         game.getConfig().getAmnesiacLoverSize() + 1);
                 game.checkVictory();
@@ -98,25 +98,18 @@ public class AmnesiacLover implements LoverAPI, Listener {
         }
     }
 
-    public void announceAmnesiacLoversOnJoin(Player player) {
+    public void announceAmnesiacLoversOnJoin(PlayerWW player) {
 
         if (!find) return;
 
-        UUID uuid = player.getUniqueId();
-        if (amnesiacLover1.getUUID().equals(uuid)) {
-            if (!announce1) {
-                player.sendMessage(game.translate("werewolf.role.lover.description",
-                        amnesiacLover2.getName()));
-                Sounds.PORTAL_TRAVEL.play(player);
-            }
-            announce1 = true;
-        } else if (amnesiacLover2.getUUID().equals(uuid)) {
-            if (!announce2) {
-                player.sendMessage(game.translate("werewolf.role.lover.description",
-                        amnesiacLover1.getName()));
-                Sounds.PORTAL_TRAVEL.play(player);
-            }
-            announce2 = true;
+        if (amnesiacLover1.equals(player)) {
+            player.sendMessage(game.translate("werewolf.role.lover.description",
+                    amnesiacLover2.getName()));
+            Sounds.PORTAL_TRAVEL.play(player);
+        } else if (amnesiacLover2.equals(player)) {
+            player.sendMessage(game.translate("werewolf.role.lover.description",
+                    amnesiacLover1.getName()));
+            Sounds.PORTAL_TRAVEL.play(player);
         }
     }
 
@@ -150,13 +143,10 @@ public class AmnesiacLover implements LoverAPI, Listener {
                 .peek(playerWW -> sb.append(" §d♥ ")
                         .append(playerWW.getName())
                         .append(" "))
-                .map(PlayerWW::getUUID)
-                .map(Bukkit::getPlayer)
-                .filter(Objects::nonNull)
-                .forEach(player1 -> sb
+                .forEach(playerWW -> sb
                         .append(game.getScore()
                                 .updateArrow(player,
-                                        player1.getLocation())));
+                                        playerWW.getLocation())));
     }
 
     @EventHandler
@@ -229,9 +219,9 @@ public class AmnesiacLover implements LoverAPI, Listener {
     }
 
     @Override
-    public void swap(PlayerWW playerWW, PlayerWW playerWW1) {
+    public boolean swap(PlayerWW playerWW, PlayerWW playerWW1) {
 
-        if(death) return;
+        if (death) return false;
 
         if (amnesiacLover1.equals(playerWW)) {
             amnesiacLover1 = playerWW1;
@@ -239,24 +229,11 @@ public class AmnesiacLover implements LoverAPI, Listener {
             amnesiacLover2 = playerWW1;
         }
 
-        announce1 = false;
-        announce2 = false;
+
 
         for (PlayerWW playerWW2 : getLovers()) {
-            Player player = Bukkit.getPlayer(playerWW2.getUUID());
-            if (player != null) {
-                announceAmnesiacLoversOnJoin(player);
-            }
+            announceAmnesiacLoversOnJoin(playerWW2);
         }
-
+        return true;
     }
-
-    @EventHandler(priority = EventPriority.HIGH)
-    public void onJoin(PlayerJoinEvent event) {
-
-        Player player = event.getPlayer();
-        announceAmnesiacLoversOnJoin(player);
-    }
-
-
 }

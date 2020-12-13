@@ -13,8 +13,6 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -75,22 +73,17 @@ public class Citizen extends RolesVillage implements LimitedUse, AffectedPlayers
     public void onVoteEnd(VoteEndEvent event) {
 
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        if (player == null) return;
-
 
         if (getUse() < 2) {
-            player.spigot().sendMessage(seeVote());
+            getPlayerWW().sendMessage(seeVote());
         }
 
         if (hasPower()) {
-            player.spigot().sendMessage(cancelVote());
+            getPlayerWW().sendMessage(cancelVote());
         }
     }
 
@@ -129,7 +122,7 @@ public class Citizen extends RolesVillage implements LimitedUse, AffectedPlayers
 
         cancel.addExtra(new TextComponent(game.translate("werewolf.role.citizen.time_left",
                 game.getScore().conversion(
-                        game.getConfig().getTimerValues().get(
+                        game.getConfig().getTimerValue(
                                 TimersBase.CITIZEN_DURATION.getKey())))));
 
 
@@ -160,7 +153,7 @@ public class Citizen extends RolesVillage implements LimitedUse, AffectedPlayers
 
         see.addExtra(new TextComponent(game.translate("werewolf.role.citizen.time_left",
                 game.getScore().conversion(
-                        game.getConfig().getTimerValues().get(
+                        game.getConfig().getTimerValue(
                                 TimersBase.CITIZEN_DURATION.getKey())))));
 
 

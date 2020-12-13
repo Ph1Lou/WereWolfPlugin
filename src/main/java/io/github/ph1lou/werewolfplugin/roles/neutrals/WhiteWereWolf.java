@@ -8,8 +8,6 @@ import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.events.NightEvent;
 import io.github.ph1lou.werewolfapi.events.StealEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
-import io.github.ph1lou.werewolfapi.versions.VersionUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -31,18 +29,7 @@ public class WhiteWereWolf extends RolesNeutral {
             return;
         }
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) {
-            return;
-        }
-
-        player.addPotionEffect(
-                new PotionEffect(PotionEffectType.INCREASE_DAMAGE,
-                        Integer.MAX_VALUE,
-                        -1,
-                        false,
-                        false));
+        getPlayerWW().addPotionEffect(PotionEffectType.INCREASE_DAMAGE);
     }
 
     @EventHandler
@@ -53,13 +40,8 @@ public class WhiteWereWolf extends RolesNeutral {
             return;
         }
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (player == null) {
-            return;
-        }
-
-        player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+        getPlayerWW().removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
     }
 
     @EventHandler
@@ -67,24 +49,12 @@ public class WhiteWereWolf extends RolesNeutral {
 
         if (!event.getThiefWW().equals(getPlayerWW())) return;
 
-
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) {
-            return;
-        }
-
-        VersionUtils.getVersionUtils().setPlayerMaxHealth(player,
-                VersionUtils.getVersionUtils().getPlayerMaxHealth(player) + 10);
+        getPlayerWW().addPlayerMaxHealth(10);
     }
 
     @Override
     public void recoverPower() {
-
-
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-        if (player == null) return;
-        VersionUtils.getVersionUtils().setPlayerMaxHealth(player, 30);
+        getPlayerWW().addPlayerMaxHealth(10);
     }
 
     @Override
@@ -92,25 +62,12 @@ public class WhiteWereWolf extends RolesNeutral {
 
         super.recoverPotionEffect();
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (player == null) return;
-
-        player.addPotionEffect(
-                new PotionEffect(PotionEffectType.NIGHT_VISION,
-                        Integer.MAX_VALUE,
-                        0,
-                        false,
-                        false));
+        getPlayerWW().addPotionEffect(PotionEffectType.NIGHT_VISION);
 
         if (game.isDay(Day.DAY)) return;
 
-        player.addPotionEffect(new PotionEffect(
-                PotionEffectType.INCREASE_DAMAGE,
-                Integer.MAX_VALUE,
-                -1,
-                false,
-                false));
+        getPlayerWW().addPotionEffect(PotionEffectType.INCREASE_DAMAGE);
     }
 
     @Override

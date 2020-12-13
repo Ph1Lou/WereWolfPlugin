@@ -111,19 +111,15 @@ public class Sister extends RolesVillage {
 
         if (event.isCancelled()) return;
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         event.getAllSisters().add(getPlayerWW());
-
-        if (player == null) return;
 
         PlayerWW sisterWW = event.getSister();
         PlayerWW killerWW = event.getKiller();
 
 
-        player.sendMessage(game.translate("werewolf.role.sister.reveal_killer",
+        getPlayerWW().sendMessage(game.translate("werewolf.role.sister.reveal_killer",
                 sisterWW.getName(),
                 killerWW != null ?
                         killerWW.getName() :

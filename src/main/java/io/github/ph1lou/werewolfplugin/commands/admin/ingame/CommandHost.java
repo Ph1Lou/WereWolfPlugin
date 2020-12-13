@@ -48,7 +48,7 @@ public class CommandHost implements Commands {
                     !game.getModerationManager().getModerators().contains(uuid)) {
                 game.finalJoin(host);
             }
-            moderationManager.getHosts().add(uuid);
+            moderationManager.addHost(uuid);
             Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.host.add", host.getName()));
         }
         Bukkit.getPluginManager().callEvent(new HostEvent(uuid, moderationManager.getHosts().contains(uuid)));

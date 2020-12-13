@@ -22,7 +22,7 @@ public class CommandTimer implements Commands {
         WereWolfAPI game = main.getWereWolfAPI();
 
         for (TimerRegister timer : main.getRegisterManager().getTimersRegister()) {
-            String time = game.getScore().conversion(game.getConfig().getTimerValues().get(timer.getKey()));
+            String time = game.getScore().conversion(game.getConfig().getTimerValue(timer.getKey()));
             if (time.charAt(0) != '-') {
                 player.sendMessage(game.translate(timer.getKey(), time));
             }

@@ -45,7 +45,7 @@ public class AddonMenu implements InventoryProvider {
             lore.addAll(addon.getAuthors());
 
             contents.set(i / 9, i % 9, ClickableItem.of((new ItemBuilder(addon.getItem()).setDisplayName(game.translate(addon.getAddonKey())).setLore(lore).build()), e ->
-                    addon.getAction().make(player,INVENTORY.open(player))));
+                    addon.getAction().make(player, INVENTORY)));
             i++;
         }
         contents.set(0, 0, ClickableItem.of((new ItemBuilder(

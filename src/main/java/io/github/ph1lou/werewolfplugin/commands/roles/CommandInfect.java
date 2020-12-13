@@ -44,7 +44,7 @@ public class CommandInfect implements Commands {
         UUID argUUID = UUID.fromString(args[0]);
         PlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
-        if (!game.getConfig().getConfigValues().get(ConfigsBase.AUTO_REZ_INFECT.getKey()) && argUUID.equals(uuid)) {
+        if (!game.getConfig().isConfigActive(ConfigsBase.AUTO_REZ_INFECT.getKey()) && argUUID.equals(uuid)) {
             player.sendMessage(game.translate("werewolf.check.not_yourself"));
             return;
         }

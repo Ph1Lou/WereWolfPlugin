@@ -15,24 +15,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 public class Lover implements LoverAPI, Listener {
 
     private final List<PlayerWW> lovers;
-    private final List<PlayerWW> loversAnnounce = new ArrayList<>();
     private final WereWolfAPI game;
     private boolean death = false;
 
     public Lover(WereWolfAPI game, List<PlayerWW> lovers) {
         this.game = game;
         this.lovers = lovers;
-        lovers.forEach(playerWW -> playerWW.getLovers().add(this));
+        lovers.forEach(playerWW -> playerWW.addLover(this));
     }
 
     public List<? extends PlayerWW> getLovers() {
@@ -41,34 +37,25 @@ public class Lover implements LoverAPI, Listener {
 
 
     public void announceLovers() {
-        lovers.stream().map(PlayerWW::getUUID)
-                .map(Bukkit::getPlayer)
-                .filter(Objects::nonNull)
-                .forEach(this::announceLovers);
+        lovers.forEach(this::announceLovers);
     }
 
-    public void announceLovers(Player player) {
+    public void announceLovers(PlayerWW playerWW) {
 
         if (death) return;
 
-        PlayerWW playerWW = game.getPlayerWW(player.getUniqueId());
-
-        if (playerWW == null) return;
-
-        if (loversAnnounce.contains(playerWW)) return;
 
         if (!lovers.contains(playerWW)) return;
 
-        loversAnnounce.add(playerWW);
         StringBuilder couple = new StringBuilder();
 
         for (PlayerWW playerWW1 : lovers) {
-            if(!playerWW.equals(playerWW1)){
+            if (!playerWW.equals(playerWW1)) {
                 couple.append(playerWW1.getName()).append(" ");
             }
         }
-        player.sendMessage(game.translate("werewolf.role.lover.description", couple.toString()));
-        Sounds.SHEEP_SHEAR.play(player);
+        playerWW.sendMessage(game.translate("werewolf.role.lover.description", couple.toString()));
+        Sounds.SHEEP_SHEAR.play(playerWW);
     }
 
 
@@ -106,13 +93,10 @@ public class Lover implements LoverAPI, Listener {
                 .peek(playerWW -> sb.append(" §d♥ ")
                         .append(playerWW.getName())
                         .append(" "))
-                .map(PlayerWW::getUUID)
-                .map(Bukkit::getPlayer)
-                .filter(Objects::nonNull)
-                .forEach(player1 -> sb
+                .forEach(playerWW -> sb
                         .append(game.getScore()
                                 .updateArrow(player,
-                                        player1.getLocation())));
+                                        playerWW.getLocation())));
     }
 
     @EventHandler
@@ -135,13 +119,6 @@ public class Lover implements LoverAPI, Listener {
         event.setSuffix(sb.toString());
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
-    public void onJoin(PlayerJoinEvent event) {
-
-        Player player = event.getPlayer();
-
-        announceLovers(player);
-    }
 
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -195,19 +172,15 @@ public class Lover implements LoverAPI, Listener {
     }
 
     @Override
-    public void swap(PlayerWW playerWW, PlayerWW playerWW1) {
+    public boolean swap(PlayerWW playerWW, PlayerWW playerWW1) {
 
-        if(death) return;
+        if (death) return false;
 
         lovers.remove(playerWW);
         lovers.add(playerWW1);
-        loversAnnounce.clear();
 
         for (PlayerWW playerWW2 : lovers) {
-            Player player = Bukkit.getPlayer(playerWW2.getUUID());
-            if (player != null) {
-                announceLovers(player);
-            }
+            announceLovers(playerWW2);
         }
 
         game.getPlayerWW()
@@ -219,6 +192,8 @@ public class Lover implements LoverAPI, Listener {
                     affectedPlayers.removeAffectedPlayer(playerWW);
                     affectedPlayers.addAffectedPlayer(playerWW1);
                 });
+
+        return true;
     }
 
     @Override

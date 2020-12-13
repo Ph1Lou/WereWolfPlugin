@@ -48,7 +48,7 @@ public class CommandWitch implements Commands {
             return;
         }
 
-        if (!game.getConfig().getConfigValues().get(ConfigsBase.AUTO_REZ_WITCH.getKey()) && argUUID.equals(uuid)) {
+        if (!game.getConfig().isConfigActive(ConfigsBase.AUTO_REZ_WITCH.getKey()) && argUUID.equals(uuid)) {
             player.sendMessage(game.translate("werewolf.check.not_yourself"));
             return;
         }

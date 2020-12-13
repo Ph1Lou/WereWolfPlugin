@@ -86,17 +86,7 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
 
         super.recoverPotionEffect();
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) return;
-
-        player.addPotionEffect(
-                new PotionEffect(
-                        PotionEffectType.DAMAGE_RESISTANCE,
-                        Integer.MAX_VALUE,
-                        0,
-                        false,
-                        false));
+        getPlayerWW().addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
     }
 
     @EventHandler
@@ -160,55 +150,53 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
     public void thiefRecoverRole(PlayerWW playerWW) {
 
         Roles role = playerWW.getRole();
-        Player killer = Bukkit.getPlayer(getPlayerUUID());
         boolean isInfected = getInfected();
 
+        setPower(false);
+        getPlayerWW().setThief(true);
+        HandlerList.unregisterAll((Listener) getPlayerWW().getRole());
+        Roles roleClone = role.publicClone();
+        getPlayerWW().setRole(roleClone);
+        Objects.requireNonNull(roleClone).setPlayerWW(getPlayerWW());
+        Bukkit.getPluginManager().registerEvents((Listener) roleClone, (Plugin) main);
 
-        if (killer != null) {
+        if (isInfected) {
+            roleClone.setInfected();
+        } else if (roleClone.isWereWolf()) {
+            Bukkit.getPluginManager().callEvent(new NewWereWolfEvent(getPlayerWW()));
+        }
 
-            setPower(false);
-            getPlayerWW().setThief(true);
-            HandlerList.unregisterAll((Listener) getPlayerWW().getRole());
-            Roles roleClone = role.publicClone();
-            getPlayerWW().setRole(roleClone);
-            Objects.requireNonNull(roleClone).setPlayerWW(getPlayerWW());
-            Bukkit.getPluginManager().registerEvents((Listener) roleClone, (Plugin) main);
+        getPlayerWW().sendMessage(game.translate("werewolf.role.thief.realized_theft",
+                game.translate(role.getKey())));
+        getPlayerWW().sendMessage(game.translate("werewolf.announcement.review_role"));
 
-            if (isInfected) {
-                roleClone.setInfected();
-            } else if (roleClone.isWereWolf()) {
-                Bukkit.getPluginManager().callEvent(new NewWereWolfEvent(getPlayerWW()));
+        getPlayerWW().removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+        Bukkit.getPluginManager().callEvent(new StealEvent(getPlayerWW(),
+                playerWW,
+                roleClone.getKey()));
+
+
+        getPlayerWW().getRole().recoverPotionEffect();
+
+        boolean ok = true;
+
+        for (LoverAPI loverAPI : getPlayerWW().getLovers()) {
+            if (!loverAPI.isKey(RolesBase.LOVER.getKey())) {
+                ok = false;
+            } else if (!game.getConfig().isConfigActive(ConfigsBase.POLYGAMY.getKey())) {
+                ok = false;
             }
+        }
 
-            killer.sendMessage(game.translate("werewolf.role.thief.realized_theft",
-                    game.translate(role.getKey())));
-            killer.sendMessage(game.translate("werewolf.announcement.review_role"));
+        if (ok) {
 
-            killer.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-            Bukkit.getPluginManager().callEvent(new StealEvent(getPlayerWW(),
-                    playerWW,
-                    roleClone.getKey()));
-
-
-            getPlayerWW().getRole().recoverPotionEffect();
-
-            boolean ok = true;
-
-            for (LoverAPI loverAPI : getPlayerWW().getLovers()) {
-                if (!loverAPI.isKey(RolesBase.LOVER.getKey())) {
-                    ok = false;
-                } else if (!game.getConfig().getConfigValues()
-                        .get(ConfigsBase.POLYGAMY.getKey())) {
-                    ok = false;
+            for (int i = 0; i < playerWW.getLovers().size(); i++) {
+                LoverAPI loverAPI = playerWW.getLovers().get(i);
+                if (loverAPI.swap(playerWW, getPlayerWW())) {
+                    getPlayerWW().addLover(loverAPI);
+                    playerWW.removeLover(loverAPI);
+                    i--;
                 }
-            }
-
-            if (ok) {
-                for (LoverAPI loverAPI : playerWW.getLovers()) {
-                    loverAPI.swap(playerWW, getPlayerWW());
-                    getPlayerWW().getLovers().add(loverAPI);
-                }
-                playerWW.getLovers().clear();
             }
         }
         game.death(playerWW);
@@ -228,20 +216,10 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
 
     public void restoreResistance() {
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
         if (!hasPower()) return;
 
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
-        if (player == null) return;
-
-        player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-        player.addPotionEffect(new PotionEffect(
-                PotionEffectType.DAMAGE_RESISTANCE,
-                Integer.MAX_VALUE,
-                0,
-                false,
-                false));
+        getPlayerWW().addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
     }
 }

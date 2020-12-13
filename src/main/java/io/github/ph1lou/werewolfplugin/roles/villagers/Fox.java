@@ -7,6 +7,7 @@ import io.github.ph1lou.werewolfapi.enums.Camp;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
+import io.github.ph1lou.werewolfapi.events.NightEvent;
 import io.github.ph1lou.werewolfapi.events.SniffEvent;
 import io.github.ph1lou.werewolfapi.events.UpdateEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.*;
@@ -14,6 +15,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -83,25 +85,31 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
         this.progress = progress;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onNight(NightEvent event) {
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
+            return;
+        }
+
+        getPlayerWW().addPotionEffect(PotionEffectType.SPEED);
+    }
+
+
+    @EventHandler(priority = EventPriority.HIGH)
     public void onDay(DayEvent event) {
 
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) {
-            return;
-        }
+        getPlayerWW().addPotionEffect(PotionEffectType.SPEED);
 
         if (getUse() >= game.getConfig().getUseOfFlair()) {
             return;
         }
 
         setPower(true);
-        player.sendMessage(game.translate("werewolf.role.fox.smell_message", game.getConfig().getUseOfFlair() - getUse()));
+        getPlayerWW().sendMessage(game.translate("werewolf.role.fox.smell_message", game.getConfig().getUseOfFlair() - getUse()));
     }
 
 
@@ -176,14 +184,12 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
         }
 
         float temp = getProgress() + 100f /
-                (game.getConfig().getTimerValues()
-                        .get(TimersBase.FOX_SMELL_DURATION.getKey()) + 1);
+                (game.getConfig().getTimerValue(TimersBase.FOX_SMELL_DURATION.getKey()) + 1);
 
         setProgress(temp);
 
         if (temp % 10 > 0 && temp % 10 <= 100f /
-                (game.getConfig().getTimerValues()
-                        .get(TimersBase.FOX_SMELL_DURATION.getKey()) + 1)) {
+                (game.getConfig().getTimerValue(TimersBase.FOX_SMELL_DURATION.getKey()) + 1)) {
             player.sendMessage(game.translate("werewolf.role.fox.progress",
                     Math.min(100, Math.floor(temp))));
         }
