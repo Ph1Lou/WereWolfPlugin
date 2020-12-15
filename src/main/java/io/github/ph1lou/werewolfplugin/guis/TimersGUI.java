@@ -66,7 +66,7 @@ public class TimersGUI implements InventoryProvider {
                                 "-10m", c))
                         .build()), e -> {
 
-            config.moveTimer(key, 600);
+            config.moveTimer(key, -600);
 
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setDisplayName(game.translate("werewolf.utils.display",
@@ -80,7 +80,7 @@ public class TimersGUI implements InventoryProvider {
                                 "-1m", c))
                         .build()), e -> {
 
-            config.moveTimer(key, 60);
+            config.moveTimer(key, -60);
 
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setDisplayName(game.translate("werewolf.utils.display",
@@ -94,7 +94,7 @@ public class TimersGUI implements InventoryProvider {
                                 "-10s", c))
                         .build()), e -> {
 
-            config.moveTimer(key, 10);
+            config.moveTimer(key, -10);
 
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setDisplayName(game.translate("werewolf.utils.display",

@@ -47,7 +47,7 @@ public class GameManager implements WereWolfAPI {
     private final Stuff stuff;
     private final ScenariosLoader scenarios;
     private final Random r = new Random(System.currentTimeMillis());
-    private final UUID uuid = UUID.randomUUID();
+    private final UUID gameUUID = UUID.randomUUID();
     private String gameName = "@Ph1Lou_";
 
 
@@ -128,8 +128,9 @@ public class GameManager implements WereWolfAPI {
 
         player.setGameMode(GameMode.SURVIVAL);
         PlayerWW playerWW = new PlayerLG(main, player);
-        playerLG.put(uuid, playerWW);
+        playerLG.put(player.getUniqueId(), playerWW);
         Location spawn = mapManager.getWorld().getSpawnLocation();
+        spawn.setY(spawn.getBlockY() - 4);
         playerWW.setSpawn(spawn);
         score.addPlayerSize();
 
@@ -276,7 +277,7 @@ public class GameManager implements WereWolfAPI {
 
     @Override
     public UUID getGameUUID() {
-        return uuid;
+        return gameUUID;
     }
 
     @Override

@@ -9,7 +9,6 @@ import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.rolesattributs.*;
 import io.github.ph1lou.werewolfplugin.Main;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -40,9 +39,10 @@ public class CommandAdminRole implements Commands {
         if (args.length == 0) {
             game.getPlayerWW()
                     .stream()
-                    .map(PlayerWW::getName)
-                    .forEach(s -> Bukkit.dispatchCommand(player,
-                            String.format("a role %s", s)));
+                    .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
+                    .forEach(playerWW1 -> player.sendMessage(game.translate("werewolf.commands.admin.role.role",
+                            playerWW1.getName(),
+                            game.translate(playerWW1.getRole().getKey()))));
             return;
         }
 

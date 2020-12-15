@@ -183,9 +183,13 @@ public class TransportationTask implements Listener {
             for (int j = 0; j < 40; j++) {
                 inventory.setItem(j, game.getStuffs().getStartLoot().getItem(j));
             }
-
-            player.teleport(spawns.get(i));
+        } else {
+            for (int j = 0; j < 40; j++) {
+                playerWW.addItem(game.getStuffs().getStartLoot().getItem(j));
+            }
         }
+
+        playerWW.teleport(spawns.get(i));
     }
 
     private void taskIdManager(int step, int taskId) {

@@ -2,9 +2,12 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
+import io.github.ph1lou.werewolfapi.LoverAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.SecondDeathEvent;
+import io.github.ph1lou.werewolfapi.events.StudLoverEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
 import io.github.ph1lou.werewolfplugin.roles.lovers.Lover;
@@ -50,6 +53,15 @@ public class Stud extends RolesVillage implements Power {
         if (killerWW == null) return;
 
         if (!killerWW.isState(StatePlayer.ALIVE)) return;
+
+        for (LoverAPI loverAPI : getPlayerWW().getLovers()) {
+
+            if (!loverAPI.isKey(RolesBase.CURSED_LOVER.getKey())) {
+                if (loverAPI.getLovers().contains(killerWW)) return;
+            }
+        }
+
+        Bukkit.getPluginManager().callEvent(new StudLoverEvent(getPlayerWW(), killerWW));
 
         setPower(false);
 

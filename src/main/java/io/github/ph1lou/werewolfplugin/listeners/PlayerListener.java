@@ -104,6 +104,7 @@ public class PlayerListener implements Listener {
 
 		if (playerWW.isState(StatePlayer.JUDGEMENT)) {
 			event.setCancelled(true);
+			return;
 		}
 
 		if (event.getCause().equals(EntityDamageEvent.DamageCause.WITHER)) {
