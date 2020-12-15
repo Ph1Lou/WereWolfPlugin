@@ -50,6 +50,7 @@ public class Configuration implements ConfigWereWolfAPI {
     private int spectatorMode = 2;  // 0 no Spectators, 1 allowed for death players, 2 for all players;
     private boolean whiteList = false;
     private int playerMax = 30;
+    private double borderSpeed = 0.3;
 
     public Configuration(RegisterManager registerManager) {
         this.registerManager = registerManager;
@@ -76,8 +77,8 @@ public class Configuration implements ConfigWereWolfAPI {
     }
 
     @Override
-	public void setDiamondLimit(int diamond_limit) {
-        this.diamondLimit = diamond_limit;
+    public void setDiamondLimit(int diamondLimit) {
+        this.diamondLimit = diamondLimit;
     }
 
     @Override
@@ -86,8 +87,8 @@ public class Configuration implements ConfigWereWolfAPI {
     }
 
     @Override
-	public void setStrengthRate(int strength_rate) {
-        this.strengthRate = strength_rate;
+    public void setStrengthRate(int strengthRate) {
+        this.strengthRate = strengthRate;
     }
 
     @Override
@@ -96,8 +97,8 @@ public class Configuration implements ConfigWereWolfAPI {
     }
 
     @Override
-    public void setPlayerRequiredVoteEnd(int player_required_before_voting_ends) {
-        this.playerRequiredBeforeVotingEnds = player_required_before_voting_ends;
+    public void setPlayerRequiredVoteEnd(int playerRequiredBeforeVotingEnds) {
+        this.playerRequiredBeforeVotingEnds = playerRequiredBeforeVotingEnds;
     }
 
     @Override
@@ -331,6 +332,16 @@ public class Configuration implements ConfigWereWolfAPI {
     }
 
     @Override
+    public double getBorderSpeed() {
+        return borderSpeed;
+    }
+
+    @Override
+    public void setBorderSpeed(double borderSpeed) {
+        this.borderSpeed = borderSpeed;
+    }
+
+    @Override
     public void switchConfigValue(String key) {
         configValues.put(key, !isConfigActive(key));
     }
@@ -357,21 +368,25 @@ public class Configuration implements ConfigWereWolfAPI {
         roleCount.put(key, i);
     }
 
+    @Deprecated
     @Override
     public Map<String, Integer> getTimerValues() {
         return timerValues;
     }
 
+    @Deprecated
     @Override
     public Map<String, Boolean> getConfigValues() {
         return configValues;
     }
 
+    @Deprecated
     @Override
     public Map<String, Integer> getRoleCount() {
         return roleCount;
     }
 
+    @Deprecated
     @Override
     public Map<String, Boolean> getScenarioValues() {
         return scenarioValues;
@@ -379,14 +394,12 @@ public class Configuration implements ConfigWereWolfAPI {
 
     @Override
     public void decreaseTimer(String key) {
-        if (getTimerValue(key) > 0) {
-            timerValues.put(key, getTimerValue(key) - 1);
-        }
+        timerValues.put(key, getTimerValue(key) - 1);
     }
 
     @Override
     public void moveTimer(String key, int i) {
-        if (getTimerValue(key) + i > 0) {
+        if (getTimerValue(key) + i >= 0) {
             timerValues.put(key, getTimerValue(key) + i);
         }
     }

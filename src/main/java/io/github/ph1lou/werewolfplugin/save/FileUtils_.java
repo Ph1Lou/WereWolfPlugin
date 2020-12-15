@@ -88,29 +88,31 @@ public class FileUtils_ {
     }
 
     public static void copy(InputStream source, String destination) {
+
+        if (source == null) return;
+
         System.out.println("[WereWolfPlugin] Copying ->" + source + "\n\tto ->" + destination);
         File file = new File(destination);
+
         try {
             createFile(file);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (source != null) {
-            try (OutputStream out = new FileOutputStream(file)) {
-                byte[] buf = new byte[1024];
-                int len;
-                while ((len = source.read(buf)) > 0) {
-                    out.write(buf, 0, len);
-                }
+        try (OutputStream out = new FileOutputStream(file)) {
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = source.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                source.close();
             } catch (IOException e) {
                 e.printStackTrace();
-            } finally {
-                try {
-                    source.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         }
     }

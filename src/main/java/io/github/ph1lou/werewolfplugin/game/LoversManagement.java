@@ -101,6 +101,7 @@ public class LoversManagement implements LoverManagerAPI {
 	}
 
 
+	@Override
 	public void repartition(GetWereWolfAPI main) {
 		autoLovers();
 		rangeLovers();
@@ -257,5 +258,10 @@ public class LoversManagement implements LoverManagerAPI {
 	@Override
 	public void removeLover(LoverAPI loverAPI) {
 		lovers.remove(loverAPI);
+	}
+
+	@Override
+	public void addLover(LoverAPI loverAPI) {
+		lovers.add(loverAPI);
 	}
 }

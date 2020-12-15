@@ -52,8 +52,6 @@ public class Stuff implements StuffManager {
         startLoot.clear();
     }
 
-
-
     @Override
     public void addDeathLoot(ItemStack i) {
         deathLoot.add(i);

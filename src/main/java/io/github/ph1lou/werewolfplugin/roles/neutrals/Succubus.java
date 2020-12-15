@@ -232,7 +232,7 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onThirdDeathEvent(SecondDeathEvent event) {
+    public void onSecondDeathEvent(SecondDeathEvent event) {
 
         if (event.isCancelled()) return;
 

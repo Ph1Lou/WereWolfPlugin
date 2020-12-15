@@ -119,6 +119,7 @@ public class GameManager implements WereWolfAPI {
 
     }
 
+
     public void addLatePlayer(Player player) {
 
         clearPlayer(player);
@@ -126,17 +127,17 @@ public class GameManager implements WereWolfAPI {
         Inventory inventory = player.getInventory();
 
         player.setGameMode(GameMode.SURVIVAL);
-        PlayerWW plg = new PlayerLG(main, player);
-        playerLG.put(uuid, plg);
+        PlayerWW playerWW = new PlayerLG(main, player);
+        playerLG.put(uuid, playerWW);
         Location spawn = mapManager.getWorld().getSpawnLocation();
-        plg.setSpawn(spawn);
+        playerWW.setSpawn(spawn);
         score.addPlayerSize();
 
         for (int j = 0; j < 40; j++) {
             inventory.setItem(j, stuff.getStartLoot().getItem(j));
         }
 
-        mapManager.transportation(plg, 0, "");
+        mapManager.transportation(playerWW, 0, "");
     }
 
     public void clearPlayer(Player player) {

@@ -93,7 +93,7 @@ public class GameTask extends BukkitRunnable {
 		} else if (game.getConfig().getTimerValue(TimersBase.BORDER_BEGIN.getKey()) < 0) {
 
 			if (game.getConfig().getBorderMax() != game.getConfig().getBorderMin()) {
-				wb.setSize(game.getConfig().getBorderMin(), (long) Math.abs(wb.getSize() - game.getConfig().getBorderMin()) * game.getConfig().getTimerValue(TimersBase.BORDER_DURATION.getKey()) / 100);
+				wb.setSize(game.getConfig().getBorderMin(), (long) ((long) Math.abs(wb.getSize() - game.getConfig().getBorderMin()) / game.getConfig().getBorderSpeed()));
 				game.getConfig().setBorderMax((int) (wb.getSize()));
 			}
 

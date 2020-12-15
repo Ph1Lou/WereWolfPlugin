@@ -28,7 +28,7 @@
       },
       "werewolf": {
         "display": "Loup Garou",
-        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Loup-Garou§9. Votre objectif est de tuer les Villageois. \n§9Pour ce faire, vous disposez des effets Force (la nuit) et Vision Nocturne. Chaque fois que vous tuez un joueur, vous gagnez l'effet Vitesse et 2 coeur d'absorption pendant 2 minutes. \n§9Faites §b/ww lg§9 pour voir la liste des Loups-Garous.",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Loup-Garou§9. Votre gagnez avec les Loups Garous. \n§9Pour ce faire, vous disposez des effets Force (la nuit) et Vision Nocturne. Chaque fois que vous tuez un joueur, vous gagnez l'effet Vitesse et 2 coeur d'absorption pendant 2 minutes. \n§9Faites §b/ww lg§9 pour voir la liste des Loups-Garous.",
         "go_to_the_werewolf_camp": "[§eLG UHC§r] Vous passez dans le camp des §4Loups Garous §6/ww lg",
         "new_werewolf": "[§6LG UHC§r] Un nouveau joueur a rejoint la meute §6/ww lg",
         "see_others": "[§eLG UHC§r] Vous distinguez maintenant les Loups Garous §6/ww lg",
@@ -39,7 +39,7 @@
       },
       "wild_child": {
         "display": "Enfant Sauvage",
-        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Enfant Sauvage§9. Votre objectif est d’éliminer les Loups-Garous. \n§9En début de partie, vous choisissez un modèle avec §1/ww modele§9. Si celui ci meurt, vous devenez un Loup-Garou.",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Enfant Sauvage§9. Votre gagnez avec le Village. \n§9En début de partie, vous choisissez un modèle avec §1/ww modele§9. Si celui ci meurt, vous devenez un Loup-Garou.",
         "design_model": "[§eLG UHC§r] Vous devez désigner un modèle §6/ww modele§r. Vous avez §b%s",
         "reveal_model": "[§eLG UHC§r] Votre modèle est §b%s",
         "command": "modele",
@@ -47,13 +47,17 @@
       },
       "sister": {
         "display": "Soeur",
-        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Soeur§9. Votre objectif est d’éliminer les Loups-Garous. \n§9Vous possédez un effet de Résistance lorsque vous vous trouvez à moins de 20 blocs d'une de vos soeurs. Lorsqu'une soeur meurt vous connaîtrez son assassin.",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Soeur§9. Votre gagnez avec le Village. \n§9Vous possédez un effet de Résistance lorsque vous vous trouvez à moins de 20 blocs d'une de vos soeurs. Lorsqu'une soeur meurt vous connaîtrez son assassin.",
         "reveal_killer": "[§eLG UHC§r] §b%s§r a été tué par §b%s",
         "sisters_list": "Liste de vos Soeurs : §b%s"
       },
       "metamorph": {
         "display": "Metamorphe",
-        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Metamorphe§9. Votre objectif est d’éliminer les Loups-Garous. \n§9 Grâce à vos capacité de métamorphose, les Loups Garous vous voient dans leur liste. Cependant, vous ne connaissez pas les loups garous"
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Metamorphe§9. Votre gagnez avec le Village. \n§9 Grâce à vos capacité de métamorphose, les Loups Garous vous voient dans leur liste. Cependant, vous ne connaissez pas les loups garous"
+      },
+      "stud": {
+        "display": "Tombeur",
+        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Tombeur§9. Votre gagnez avec le Village. \n§9 Si vous mourrez, vous ressusciterez en couple avec la personne qui vous a tué"
       },
       "witch": {
         "display": "Sorcière",
@@ -690,7 +694,6 @@
         "pvp": "PVP (§b%s§r)",
         "vote_duration": "Durée du Vote (§b%s§r)",
         "citizen_duration": "Durée pour le choix du Citoyen (§b%s§r)",
-        "border_duration": "Durée de réduction de 100 blocs de la bordure (§b%s§r)",
         "border_begin": "Début de la Bordure (§b%s§r)",
         "model_duration": "Durée pour le choix d'un Modèle (§b%s§r)",
         "fox_smell_duration": "Durée du Flair du Renard (§b%s§r)",
@@ -747,12 +750,13 @@
         "seer_every_other_day": "Voyante tous les deux jours",
         "proximity_chat": "Chat de Proximité",
         "double_troll": "Double Troll",
-        "incompatible": "§cConfig incompatible chargée : §b%s"
+        "incompatible": "§cConfiguration incompatible chargée : §b%s"
       },
       "border": {
         "name": "Configuration §bBordure",
-        "radius_border_max": "Taille Bordure Actuelle (§b%s§r)",
-        "radius_border_min": "Taille Bordure Finale (§b%s§r)"
+        "radius_border_max": "Taille Bordure Initiale (§b%s§r)",
+        "radius_border_min": "Taille Bordure Finale (§b%s§r)",
+        "speed": "Vitesse de la bordure (§b%s§r) bloc(s) par seconde"
       },
       "maps": {
         "name": "Configuration §bMaps",

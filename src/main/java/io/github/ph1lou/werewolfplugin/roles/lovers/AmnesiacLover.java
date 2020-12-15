@@ -230,10 +230,22 @@ public class AmnesiacLover implements LoverAPI, Listener {
         }
 
 
-
         for (PlayerWW playerWW2 : getLovers()) {
             announceAmnesiacLoversOnJoin(playerWW2);
         }
         return true;
+    }
+
+    @EventHandler
+    public void onAroundLover(AroundLover event) {
+
+        if (death) return;
+
+        for (PlayerWW playerWW : event.getPlayerWWS()) {
+            if (getLovers().contains(playerWW)) {
+                event.addPlayer(getOtherLover(playerWW));
+                break;
+            }
+        }
     }
 }

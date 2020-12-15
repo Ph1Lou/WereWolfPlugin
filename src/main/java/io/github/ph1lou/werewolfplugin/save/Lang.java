@@ -32,9 +32,17 @@ public class Lang implements LangManager, Listener {
     }
 
     private Map<String, String> loadTranslations(String file) {
-        JsonObject jsonObject = Json.parse(file).asObject();
 
-        return this.loadTranslationsRec("", jsonObject, new HashMap<>());
+        try {
+            JsonObject jsonObject = Json.parse(file).asObject();
+            return this.loadTranslationsRec("", jsonObject, new HashMap<>());
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+        return new HashMap<>();
+
+
     }
 
     private Map<String, String> loadTranslationsRec(String currentPath, JsonValue jsonValue, Map<String, String> keys) {
@@ -74,15 +82,16 @@ public class Lang implements LangManager, Listener {
 
         String lang = main.getConfig().getString("lang");
         File file = new File(plugin.getDataFolder() + File.separator + "languages" + File.separator, lang + ".json");
-        String defaultText = FileUtils_.convert(plugin.getResource(defaultLang + ".json"));
+
 
         if (!file.exists()) {
             FileUtils_.copy(plugin.getResource(lang + ".json"), plugin.getDataFolder() + File.separator + "languages" + File.separator + lang + ".json");
         }
         if (!file.exists()) {
-            assert defaultText != null;
-            FileUtils_.saveJson(file, Json.parse(defaultText).asObject());
+            FileUtils_.copy(plugin.getResource(defaultLang + ".json"), plugin.getDataFolder() + File.separator + "languages" + File.separator + defaultLang + ".json");
+            return new File(plugin.getDataFolder() + File.separator + "languages" + File.separator, defaultLang + ".json");
         } else {
+            String defaultText = FileUtils_.convert(plugin.getResource(defaultLang + ".json"));
             Map<String, String> fr = loadTranslations(defaultText);
             Map<String, String> custom = loadTranslations(FileUtils_.loadContent(file));
             JsonObject jsonObject = Json.parse(FileUtils_.loadContent(file)).asObject();

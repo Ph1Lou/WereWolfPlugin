@@ -201,6 +201,21 @@ public class Lover implements LoverAPI, Listener {
         return getKey().equals(key);
     }
 
+    @EventHandler
+    public void onAroundLover(AroundLover event) {
+
+        if (death) return;
+
+        for (PlayerWW playerWW : event.getPlayerWWS()) {
+            if (getLovers().contains(playerWW)) {
+                for (PlayerWW playerWW1 : getLovers()) {
+                    event.addPlayer(playerWW1);
+                }
+                break;
+            }
+        }
+    }
+
 /*
     public void thiefLoversRange(UUID playerUUID) {
 

@@ -190,7 +190,6 @@ public class Register implements RegisterManager {
                         .setHostAccess()
                         .setModeratorAccess()
                         .addArgNumbers(1)
-                        .addStateWW(StateGame.LOBBY)
                         .addStateWW(StateGame.START)
                         .setDescription("werewolf.commands.late.description")
                         .addStateWW(StateGame.TRANSPORTATION));
@@ -583,6 +582,11 @@ public class Register implements RegisterManager {
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.SISTER.getKey(), Sister.class)
                             .addCategory(Category.VILLAGER));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.STUD.getKey(), Stud.class)
+                            .addCategory(Category.VILLAGER));
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.SIAMESE_TWIN.getKey(), SiameseTwin.class)
@@ -888,11 +892,6 @@ public class Register implements RegisterManager {
                 .add(new TimerRegister("werewolf.name",
                         TimersBase.DIGGING.getKey())
                         .setDefaultValue(4200));
-
-        timersRegister
-                .add(new TimerRegister("werewolf.name",
-                        TimersBase.BORDER_DURATION.getKey())
-                        .setDefaultValue(280));
 
         timersRegister
                 .add(new TimerRegister("werewolf.name",

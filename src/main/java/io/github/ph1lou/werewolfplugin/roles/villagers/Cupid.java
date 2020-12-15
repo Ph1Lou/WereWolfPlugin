@@ -90,7 +90,7 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
     }
 
     @EventHandler
-    public void onLover(AroundLover event) {
+    public void onAroundLover(AroundLover event) {
 
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 

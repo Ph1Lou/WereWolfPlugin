@@ -22,25 +22,25 @@ public class CommandLate implements Commands {
 
         GameManager game = (GameManager) main.getWereWolfAPI();
 
-
-        UUID argUUID = UUID.fromString(args[0]);
-        Player player1 = Bukkit.getPlayer(argUUID);
+        Player player1 = Bukkit.getPlayer(args[0]);
 
         if (player1 == null) {
             player.sendMessage(game.translate("werewolf.check.offline_player"));
             return;
         }
 
-        if (game.getPlayerWW(argUUID) != null) {
+        UUID uuid = player1.getUniqueId();
+
+        if (game.getPlayerWW(uuid) != null) {
             player.sendMessage(game.translate("werewolf.commands.late.in_game"));
             return;
         }
 
-        if(game.getModerationManager().getModerators().contains(argUUID)){
+        if (game.getModerationManager().getModerators().contains(uuid)) {
             return;
         }
 
-        Bukkit.broadcastMessage(game.translate("werewolf.commands.late.launch"));
+        Bukkit.broadcastMessage(game.translate("werewolf.commands.late.launch", player1.getName()));
 
         game.addLatePlayer(player1);
     }

@@ -184,7 +184,9 @@ public class MapManager implements MapManagerAPI {
         int x = (int) (Math.round(wb.getSize() / 3 * Math.cos(d) + world.getSpawnLocation().getX()));
         int z = (int) (Math.round(wb.getSize() / 3 * Math.sin(d) + world.getSpawnLocation().getZ()));
 
-        playerWW.sendMessage(message);
+        if (!message.isEmpty()) {
+            playerWW.sendMessage(message);
+        }
         playerWW.removePotionEffect(PotionEffectType.WITHER);
         playerWW.addPotionEffect(PotionEffectType.WITHER, 700, -1);
         playerWW.teleport(new Location(world, x, world.getHighestBlockYAt(x, z) + 100, z));

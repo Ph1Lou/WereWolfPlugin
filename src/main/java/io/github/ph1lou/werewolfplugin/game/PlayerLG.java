@@ -395,6 +395,8 @@ public class PlayerLG implements PlayerWW {
     @Override
     public void addItem(ItemStack itemStack) {
 
+        if (itemStack == null) return;
+
         Player player = Bukkit.getPlayer(uuid);
 
         if (player != null) {
