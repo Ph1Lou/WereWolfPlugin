@@ -1,6 +1,8 @@
 package io.github.ph1lou.werewolfplugin;
 
+import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.*;
+import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.registers.*;
 import io.github.ph1lou.werewolfplugin.commands.admin.CommandChange;
 import io.github.ph1lou.werewolfplugin.commands.admin.CommandGeneration;
@@ -9,12 +11,14 @@ import io.github.ph1lou.werewolfplugin.commands.admin.CommandStop;
 import io.github.ph1lou.werewolfplugin.commands.admin.ingame.*;
 import io.github.ph1lou.werewolfplugin.commands.roles.*;
 import io.github.ph1lou.werewolfplugin.commands.utilities.*;
+import io.github.ph1lou.werewolfplugin.listeners.configs.SeerEvent;
 import io.github.ph1lou.werewolfplugin.listeners.configs.*;
 import io.github.ph1lou.werewolfplugin.listeners.scenarios.*;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.*;
 import io.github.ph1lou.werewolfplugin.roles.villagers.*;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.*;
 import org.bukkit.Bukkit;
+import org.bukkit.WorldBorder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -865,32 +869,70 @@ public class Register implements RegisterManager {
         timersRegister
                 .add(new TimerRegister("werewolf.name",
                         TimersBase.INVULNERABILITY.getKey())
-                        .setDefaultValue(30));
+                        .setDefaultValue(30)
+                        .onZero(wereWolfAPI -> Bukkit.getPluginManager().callEvent(new InvulnerabilityEvent()))
+                        .addPredicate(wereWolfAPI -> true));
         timersRegister
                 .add(new TimerRegister("werewolf.name",
                         TimersBase.ROLE_DURATION.getKey())
-                        .setDefaultValue(1200));
+                        .setDefaultValue(1200)
+                        .addPredicate(wereWolfAPI -> true)
+                        .onZero((wereWolfAPI) -> {
+                            if (wereWolfAPI.getConfig().isTrollSV()) {
+                                Bukkit.getPluginManager().callEvent(new TrollEvent());
+                            } else {
+                                Bukkit.getPluginManager().callEvent(new RepartitionEvent());
+                            }
+                        }));
         timersRegister
                 .add(new TimerRegister("werewolf.name",
                         TimersBase.PVP.getKey())
-                        .setDefaultValue(1500));
+                        .setDefaultValue(1500)
+                        .onZero(wereWolfAPI -> Bukkit.getPluginManager().callEvent(new PVPEvent()))
+                        .addPredicate(wereWolfAPI -> true));
         timersRegister
                 .add(new TimerRegister("werewolf.name",
                         TimersBase.WEREWOLF_LIST.getKey())
+                        .addPredicate(wereWolfAPI -> wereWolfAPI.getConfig().getTimerValue(TimersBase.ROLE_DURATION.getKey()) < 0
+                                && !wereWolfAPI.getConfig().isTrollSV())
+                        .onZero(wereWolfAPI -> Bukkit.getPluginManager().callEvent(new WereWolfListEvent()))
                         .setDefaultValue(600));
 
         timersRegister
                 .add(new TimerRegister("werewolf.name",
                         TimersBase.VOTE_BEGIN.getKey())
+                        .addPredicate(wereWolfAPI -> true)
                         .setDefaultValue(2400));
         timersRegister
                 .add(new TimerRegister("werewolf.name",
                         TimersBase.BORDER_BEGIN.getKey())
-                        .setDefaultValue(3600));
+                        .setDefaultValue(3600)
+                        .onZero(wereWolfAPI -> {
+                            Bukkit.getPluginManager().callEvent(new BorderStartEvent());
+                        })
+                        .addPredicate(wereWolfAPI -> {
+
+                            if (wereWolfAPI.getConfig().getTimerValue(TimersBase.BORDER_BEGIN.getKey()) >= 0)
+                                return true;
+
+                            ConfigWereWolfAPI config = wereWolfAPI.getConfig();
+                            WorldBorder worldBorder = wereWolfAPI.getMapManager().getWorld().getWorldBorder();
+
+                            if (config.getBorderMax() !=
+                                    config.getBorderMin()) {
+
+                                worldBorder.setSize(config.getBorderMin(), (long) ((long) Math.abs(worldBorder.getSize() - config.getBorderMin()) / config.getBorderSpeed()));
+                                config.setBorderMax((int) (worldBorder.getSize()));
+                            }
+
+                            return true;
+                        }));
 
         timersRegister
                 .add(new TimerRegister("werewolf.name",
                         TimersBase.DIGGING.getKey())
+                        .addPredicate(wereWolfAPI -> true)
+                        .onZero(wereWolfAPI -> Bukkit.getPluginManager().callEvent(new DiggingEndEvent()))
                         .setDefaultValue(4200));
 
         timersRegister
@@ -904,14 +946,23 @@ public class Register implements RegisterManager {
         timersRegister
                 .add(new TimerRegister("werewolf.name",
                         TimersBase.MODEL_DURATION.getKey())
+                        .addPredicate(wereWolfAPI -> wereWolfAPI.getConfig().getTimerValue(TimersBase.ROLE_DURATION.getKey()) < 0
+                                && !wereWolfAPI.getConfig().isTrollSV())
+                        .onZero(wereWolfAPI -> Bukkit.getPluginManager().callEvent(new AutoModelEvent()))
                         .setDefaultValue(240));
         timersRegister
                 .add(new TimerRegister("werewolf.name",
                         TimersBase.LOVER_DURATION.getKey())
+                        .addPredicate(wereWolfAPI -> wereWolfAPI.getConfig().getTimerValue(TimersBase.ROLE_DURATION.getKey()) < 0
+                                && !wereWolfAPI.getConfig().isTrollSV())
+                        .onZero(wereWolfAPI -> Bukkit.getPluginManager().callEvent(new LoversRepartitionEvent()))
                         .setDefaultValue(240));
         timersRegister
                 .add(new TimerRegister("werewolf.name",
                         TimersBase.ANGEL_DURATION.getKey())
+                        .addPredicate(wereWolfAPI -> wereWolfAPI.getConfig().getTimerValue(TimersBase.ROLE_DURATION.getKey()) < 0
+                                && !wereWolfAPI.getConfig().isTrollSV())
+                        .onZero(wereWolfAPI -> Bukkit.getPluginManager().callEvent(new AutoAngelEvent()))
                         .setDefaultValue(240));
         timersRegister
                 .add(new TimerRegister("werewolf.name",

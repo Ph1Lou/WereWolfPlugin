@@ -58,7 +58,6 @@ public class End {
             }
         }
 
-
         WinConditionsCheckEvent winConditionsCheckEvent = new WinConditionsCheckEvent();
         Bukkit.getPluginManager().callEvent(winConditionsCheckEvent);
 
@@ -81,8 +80,6 @@ public class End {
             winner = Category.WEREWOLF.getKey();
             fin();
             return;
-
-
         }
         if (event.getVillager() == game.getScore().getPlayerSize()) {
             winner = Category.VILLAGER.getKey();

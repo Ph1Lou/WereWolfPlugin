@@ -23,17 +23,13 @@ public class VictoryLovers extends ListenerManager {
         WereWolfAPI game = main.getWereWolfAPI();
 
         if (game.getLoversManager().getLovers().stream()
-                .filter(LoverAPI::isAlive)
-                .filter(loverAPI -> loverAPI.isKey(RolesBase.LOVER.getKey()))
-                .count() > 1) {
+                .filter(LoverAPI::isAlive).anyMatch(loverAPI -> loverAPI.isKey(RolesBase.LOVER.getKey()))) {
             event.setCancelled(true);
             return;
         }
 
         if (game.getLoversManager().getLovers().stream()
-                .filter(LoverAPI::isAlive)
-                .filter(loverAPI -> loverAPI.isKey(RolesBase.AMNESIAC_WEREWOLF.getKey()))
-                .count() > 1) {
+                .filter(LoverAPI::isAlive).anyMatch(loverAPI -> loverAPI.isKey(RolesBase.AMNESIAC_WEREWOLF.getKey()))) {
             event.setCancelled(true);
         }
     }

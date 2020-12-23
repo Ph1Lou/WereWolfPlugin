@@ -411,6 +411,7 @@ public class PlayerListener implements Listener {
 				playerWW.setItemDeath(inv.getContents());
 			}
 
+
 			playerWW.setDeathTime(game.getScore().getTimer());
 		}
 
