@@ -38,10 +38,11 @@ public class GameTask extends BukkitRunnable {
 
 		game.getMain().getRegisterManager().getTimersRegister()
 				.forEach(timerRegister -> {
-					if (game.getConfig().getTimerValue(timerRegister.getKey()) == 0) {
-						timerRegister.getConsumer().accept(game);
-					}
+
 					if (timerRegister.getPredicate().test(game)) {
+						if (game.getConfig().getTimerValue(timerRegister.getKey()) == 0) {
+							timerRegister.getConsumer().accept(game);
+						}
 						game.getConfig().decreaseTimer(timerRegister.getKey());
 					}
 				});

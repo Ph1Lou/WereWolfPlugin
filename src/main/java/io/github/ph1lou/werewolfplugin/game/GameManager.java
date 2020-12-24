@@ -15,6 +15,8 @@ import io.github.ph1lou.werewolfplugin.save.Stuff;
 import io.github.ph1lou.werewolfplugin.scoreboards.ScoreBoard;
 import io.github.ph1lou.werewolfplugin.tasks.LobbyTask;
 import io.github.ph1lou.werewolfplugin.utils.UpdateChecker;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -114,6 +116,12 @@ public class GameManager implements WereWolfAPI {
                 player.sendMessage(translate("werewolf.update.up_to_date"));
             } else {
                 player.sendMessage(translate("werewolf.update.out_of_date"));
+            }
+            if (Bukkit.getPluginManager().getPlugin("Statistiks") == null) {
+                TextComponent msg = new TextComponent(translate("werewolf.utils.stat"));
+                msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
+                        "https://www.spigotmc.org/resources/statistiks-for-loup-garou-uhc-werewolf-uhc.81472/"));
+                player.spigot().sendMessage(msg);
             }
         });
 

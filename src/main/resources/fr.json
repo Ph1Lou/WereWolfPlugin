@@ -863,7 +863,8 @@
       "on": "§bON",
       "debug": "§fMode §4debug",
       "none": "§4Aucun",
-      "author": "§fAuteur(s) :"
+      "author": "§fAuteur(s) :",
+      "stat": "[§cLG UHC§r] L'addon de statistique n'est pas installé, cliquez ici pour le télécharger"
     },
     "categories": {
       "villager": "Villageois",

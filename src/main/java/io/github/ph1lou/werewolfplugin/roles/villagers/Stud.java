@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.LoverAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.SecondDeathEvent;
 import io.github.ph1lou.werewolfapi.events.StudLoverEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
@@ -36,6 +37,16 @@ public class Stud extends RolesVillage implements Power {
     @Override
     public void recoverPower() {
 
+    }
+
+    @EventHandler
+    public void onDeath(FinalDeathEvent event) {
+
+        if (!event.getPlayerWW().equals(getPlayerWW())) return;
+
+        if (power) return;
+
+        game.getConfig().setLoverSize(game.getConfig().getLoverSize() + 1);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
