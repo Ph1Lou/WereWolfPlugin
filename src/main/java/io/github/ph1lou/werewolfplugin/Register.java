@@ -11,8 +11,10 @@ import io.github.ph1lou.werewolfplugin.commands.admin.CommandStop;
 import io.github.ph1lou.werewolfplugin.commands.admin.ingame.*;
 import io.github.ph1lou.werewolfplugin.commands.roles.*;
 import io.github.ph1lou.werewolfplugin.commands.utilities.*;
+import io.github.ph1lou.werewolfplugin.listeners.configs.RedNameTag;
 import io.github.ph1lou.werewolfplugin.listeners.configs.SeerEvent;
-import io.github.ph1lou.werewolfplugin.listeners.configs.*;
+import io.github.ph1lou.werewolfplugin.listeners.configs.ShowDeathCategoryRole;
+import io.github.ph1lou.werewolfplugin.listeners.configs.ShowDeathRole;
 import io.github.ph1lou.werewolfplugin.listeners.scenarios.*;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.*;
 import io.github.ph1lou.werewolfplugin.roles.villagers.*;
@@ -823,9 +825,7 @@ public class Register implements RegisterManager {
                         .addIncompatibleConfig(ConfigsBase.SHOW_ROLE_TO_DEATH.getKey())
                         .addConfig(new ShowDeathCategoryRole(main)));
 
-        configsRegister
-                .add(new ConfigRegister("werewolf.name",
-                        ConfigsBase.AUTO_REZ_INFECT.getKey()));
+
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.AUTO_REZ_WITCH.getKey()));
@@ -907,9 +907,7 @@ public class Register implements RegisterManager {
                 .add(new TimerRegister("werewolf.name",
                         TimersBase.BORDER_BEGIN.getKey())
                         .setDefaultValue(3600)
-                        .onZero(wereWolfAPI -> {
-                            Bukkit.getPluginManager().callEvent(new BorderStartEvent());
-                        })
+                        .onZero(wereWolfAPI -> Bukkit.getPluginManager().callEvent(new BorderStartEvent()))
                         .addPredicate(wereWolfAPI -> {
 
                             if (wereWolfAPI.getConfig().getTimerValue(TimersBase.BORDER_BEGIN.getKey()) >= 0)

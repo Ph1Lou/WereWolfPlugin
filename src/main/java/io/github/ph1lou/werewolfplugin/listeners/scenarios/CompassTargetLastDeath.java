@@ -13,7 +13,6 @@ public class CompassTargetLastDeath extends ListenerManager {
         super(main);
     }
 
-
     @EventHandler
     private void onPlayerDeath(PlayerDeathEvent event) {
 
@@ -24,6 +23,5 @@ public class CompassTargetLastDeath extends ListenerManager {
         Bukkit.getOnlinePlayers()
                 .forEach(player -> player.setCompassTarget(event.getEntity().getLocation()));
     }
-
 
 }

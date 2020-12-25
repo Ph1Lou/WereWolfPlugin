@@ -1,4 +1,4 @@
-package io.github.ph1lou.werewolfplugin.listeners.configs;
+package io.github.ph1lou.werewolfplugin.listeners.scenarios;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.ListenerManager;

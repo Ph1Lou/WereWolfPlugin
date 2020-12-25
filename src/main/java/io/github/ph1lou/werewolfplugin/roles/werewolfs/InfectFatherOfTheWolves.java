@@ -3,16 +3,13 @@ package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.events.InfectionEvent;
 import io.github.ph1lou.werewolfapi.events.SecondDeathEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesWereWolf;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.NotNull;
@@ -95,7 +92,6 @@ public class InfectFatherOfTheWolves extends RolesWereWolf implements AffectedPl
         }
 
         if (playerWW.equals(getPlayerWW())) {
-            event.setCancelled(autoResurrection(playerWW));
             return;
         }
 
@@ -112,28 +108,4 @@ public class InfectFatherOfTheWolves extends RolesWereWolf implements AffectedPl
                                 playerWW.getUUID())));
         getPlayerWW().sendMessage(infect_msg);
     }
-
-    private boolean autoResurrection(PlayerWW player) {
-
-        if (!game.getConfig()
-                .isConfigActive(ConfigsBase.AUTO_REZ_INFECT.getKey())) {
-            return false;
-        }
-
-        InfectionEvent infectionEvent =
-                new InfectionEvent(getPlayerWW(), getPlayerWW());
-        Bukkit.getPluginManager().callEvent(infectionEvent);
-        setPower(false);
-
-        if (!infectionEvent.isCancelled()) {
-            game.resurrection(getPlayerWW());
-            return true;
-        }
-
-        player.sendMessage(game.translate("werewolf.check.cancel"));
-
-        return false;
-    }
-
-
 }

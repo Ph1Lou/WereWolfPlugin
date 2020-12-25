@@ -3,7 +3,6 @@ package io.github.ph1lou.werewolfplugin.commands.roles;
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.InfectionEvent;
 import io.github.ph1lou.werewolfapi.events.NewWereWolfEvent;
@@ -44,7 +43,7 @@ public class CommandInfect implements Commands {
         UUID argUUID = UUID.fromString(args[0]);
         PlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
-        if (!game.getConfig().isConfigActive(ConfigsBase.AUTO_REZ_INFECT.getKey()) && argUUID.equals(uuid)) {
+        if (argUUID.equals(uuid)) {
             player.sendMessage(game.translate("werewolf.check.not_yourself"));
             return;
         }
