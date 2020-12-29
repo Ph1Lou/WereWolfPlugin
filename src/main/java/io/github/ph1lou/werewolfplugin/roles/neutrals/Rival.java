@@ -1,0 +1,233 @@
+package io.github.ph1lou.werewolfplugin.roles.neutrals;
+
+import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
+import io.github.ph1lou.werewolfapi.LoverAPI;
+import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.enums.RolesBase;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.events.*;
+import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.Power;
+import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
+import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
+import io.github.ph1lou.werewolfplugin.roles.lovers.Lover;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class Rival extends RolesNeutral implements Power {
+
+    @Nullable
+    private PlayerWW cupidWW = null;
+
+    @Nullable
+    private LoverAPI loverAPI = null;
+
+    private boolean power = true;
+
+    public Rival(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+        super(main, playerWW, key);
+    }
+
+    @Override
+    public @NotNull String getDescription() {
+        return super.getDescription() +
+                game.translate("werewolf.description.description", game.translate("werewolf.role.rival.description", game.getScore().conversion(Math.abs(game.getConfig().getTimerValue(TimersBase.ROLE_DURATION.getKey())) + Math.abs(game.getConfig().getTimerValue(TimersBase.RIVAL_DURATION.getKey()))))) +
+                game.translate("werewolf.description.item", game.translate("werewolf.role.rival.item")) +
+                game.translate("werewolf.description._");
+
+    }
+
+    @EventHandler
+    public void onLoverReveal(RevealLoversEvent event) {
+
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+
+        if (event.getLovers().isEmpty()) return;
+
+        List<LoverAPI> loverAPIs = event.getLovers().stream()
+                .filter(loverAPI -> !loverAPI.isKey(RolesBase.CURSED_LOVER.getKey()))
+                .filter(loverAPI1 -> !loverAPI1.getLovers().contains(getPlayerWW()))
+                .collect(Collectors.toList());
+
+        if (loverAPIs.isEmpty()) return;
+
+        this.loverAPI = loverAPIs.get((int) game.getRandom().nextFloat() * loverAPIs.size());
+
+        if (loverAPI instanceof Lover) {
+            this.cupidWW = game.getPlayerWW()
+                    .stream().map(PlayerWW::getRole)
+                    .filter(roles -> roles.isKey(RolesBase.CUPID.getKey()))
+                    .map(roles -> (AffectedPlayers) roles)
+                    .filter(affectedPlayers -> affectedPlayers.getAffectedPlayers().contains(loverAPI.getLovers().get(0)))
+                    .map(affectedPlayers -> ((Roles) affectedPlayers).getPlayerWW())
+                    .findFirst()
+                    .orElse(null);
+        }
+
+        List<PlayerWW> lovers = new ArrayList<>(loverAPI.getLovers());
+
+        getPlayerWW().sendMessage(game.translate("werewolf.role.rival.lover", lovers.isEmpty() ? "" : game.translate(lovers.get(0).getRole().getKey()), lovers.size() == 2 ? game.translate(lovers.get(1).getRole().getKey()) : ""));
+    }
+
+    @EventHandler
+    public void onMultiChoice(RivalEvent event) {
+
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+
+        if (loverAPI == null) return;
+
+        List<PlayerWW> playerWWS = game.getPlayerWW()
+                .stream()
+                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                .filter(playerWW -> !playerWW.equals(getPlayerWW()))
+                .filter(playerWW -> !loverAPI.getLovers().contains(playerWW))
+                .collect(Collectors.toList());
+
+        Collections.shuffle(playerWWS);
+
+        List<PlayerWW> playerWWS1 = new ArrayList<>(playerWWS.subList(0, Math.min(3, playerWWS.size())));
+
+
+        playerWWS1.addAll(loverAPI.getLovers());
+
+        Collections.shuffle(playerWWS1);
+
+        if (playerWWS1.isEmpty()) return;
+
+        RivalAnnouncementEvent rivalAnnouncementEvent = new RivalAnnouncementEvent(getPlayerWW(), playerWWS1);
+
+        Bukkit.getPluginManager().callEvent(rivalAnnouncementEvent);
+
+        if (rivalAnnouncementEvent.isCancelled()) {
+            getPlayerWW().sendMessage(game.translate("werewolf.check.cancel"));
+            return;
+        }
+
+        getPlayerWW().sendMessage(game.translate("werewolf.role.rival.find_lovers", playerWWS1.get(0).getName(), playerWWS1.size() >= 2 ? playerWWS1.get(1).getName() : "", playerWWS1.size() >= 3 ? playerWWS1.get(2).getName() : "", playerWWS1.size() >= 4 ? playerWWS1.get(3).getName() : "", playerWWS1.size() >= 5 ? playerWWS1.get(4).getName() : ""));
+    }
+
+    @EventHandler
+    public void onLoverDeath(LoverDeathEvent event) {
+        loverDeath(event.getPlayerWW1(), event.getPlayerWW2());
+    }
+
+    private void loverDeath(PlayerWW playerWW1, PlayerWW playerWW2) {
+
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+
+        if (!power) return;
+
+        if (loverAPI == null) return;
+
+        if (!loverAPI.getLovers().contains(playerWW1) || !loverAPI.getLovers().contains(playerWW2)) return;
+
+        getPlayerWW().removePlayerMaxHealth(4);
+        getPlayerWW().sendMessage(game.translate("werewolf.role.rival.lover_death"));
+        Bukkit.getPluginManager().callEvent(new RivalLoverDeathEvent(getPlayerWW(), new ArrayList<>(loverAPI.getLovers())));
+        loverAPI = null;
+    }
+
+    @EventHandler
+    public void onAmnesiacLoverDeath(AmnesiacLoverDeathEvent event) {
+        loverDeath(event.getPlayerWW1(), event.getPlayerWW2());
+    }
+
+    @EventHandler
+    public void onSteal(StealEvent event) {
+
+        if (!event.getPlayerWW().equals(cupidWW)) return;
+
+        cupidWW = event.getThiefWW();
+
+        getPlayerWW().sendMessage(game.translate("werewolf.role.rival.cupid"));
+    }
+
+    @Override
+    public void recoverPower() {
+
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onLoverDeath(FinalDeathEvent event) {
+
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+
+        if (loverAPI == null) return;
+
+        if (!loverAPI.getLovers().contains(event.getPlayerWW())) return;
+
+        PlayerWW playerWW = event.getPlayerWW();
+
+        PlayerWW killerWW = playerWW.getLastKiller();
+
+        if (killerWW == null) {
+            return;
+        }
+
+        if (!killerWW.equals(getPlayerWW())) return;
+
+        RivalLoverEvent rivalLoverEvent = new RivalLoverEvent(getPlayerWW(), playerWW);
+
+        Bukkit.getPluginManager().callEvent(rivalLoverEvent);
+
+        if (rivalLoverEvent.isCancelled()) {
+            getPlayerWW().sendMessage(game.translate("werewolf.check.cancel"));
+            return;
+        }
+
+        if (loverAPI.swap(playerWW, getPlayerWW())) {
+            getPlayerWW().addLover(loverAPI);
+            playerWW.removeLover(loverAPI);
+            power = false;
+        }
+    }
+
+
+    @EventHandler
+    public void onActionBarRequest(ActionBarEvent event) {
+
+        if (!getPlayerUUID().equals(event.getPlayerUUID())) return;
+
+        StringBuilder stringBuilder = new StringBuilder(event.getActionBar());
+
+        Player player = Bukkit.getPlayer(event.getPlayerUUID());
+
+        if (player == null) return;
+
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+
+        if (cupidWW == null) return;
+
+        if (cupidWW.isState(StatePlayer.ALIVE)) {
+
+            stringBuilder.append("§bCupidon§f ")
+                    .append(cupidWW.getName())
+                    .append(" ")
+                    .append(game.getScore()
+                            .updateArrow(player,
+                                    cupidWW.getLocation()));
+        }
+
+        event.setActionBar(stringBuilder.toString());
+    }
+
+    @Override
+    public void setPower(boolean power) {
+        this.power = power;
+    }
+
+    @Override
+    public boolean hasPower() {
+        return power;
+    }
+}

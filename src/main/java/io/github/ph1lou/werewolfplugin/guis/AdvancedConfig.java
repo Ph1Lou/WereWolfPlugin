@@ -26,7 +26,7 @@ public class AdvancedConfig implements InventoryProvider {
             .id("advancedConfig")
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
             .provider(new AdvancedConfig())
-            .size(4, 9)
+            .size(5, 9)
             .title(JavaPlugin.getPlugin(Main.class)
                     .getWereWolfAPI().translate("werewolf.menu.advanced_tool.name"))
             .closeable(true)
@@ -197,7 +197,194 @@ public class AdvancedConfig implements InventoryProvider {
                     .build());
 
         }));
+
         contents.set(2, 0, ClickableItem.of((
+                new ItemBuilder(UniversalMaterial.BLUE_WOOL.getStack())
+                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.priestess",
+                                config.getDistancePriestess()))
+                        .setLore(lore).build()), e -> {
+
+            if (e.isLeftClick()) {
+                config.setDistancePriestess((config.getDistancePriestess() + 2));
+            } else if (config.getDistancePriestess() - 2 > 0) {
+                config.setDistancePriestess(config.getDistancePriestess() - 2);
+            }
+
+
+            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                    .setLore(lore)
+                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.priestess",
+                            config.getDistancePriestess()))
+                    .build());
+
+        }));
+
+
+        contents.set(2, 2, ClickableItem.of((
+                new ItemBuilder(UniversalMaterial.GRAY_WOOL.getStack())
+                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.sister",
+                                config.getDistanceSister()))
+                        .setLore(lore).build()), e -> {
+
+            if (e.isLeftClick()) {
+                config.setDistanceSister((config.getDistanceSister() + 2));
+            } else if (config.getDistanceSister() - 2 > 0) {
+                config.setDistanceSister(config.getDistanceSister() - 2);
+            }
+
+
+            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                    .setLore(lore)
+                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.sister",
+                            config.getDistanceSister()))
+                    .build());
+
+        }));
+
+        contents.set(2, 4, ClickableItem.of((
+                new ItemBuilder(UniversalMaterial.ORANGE_WOOL.getStack())
+                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.fox",
+                                config.getDistanceFox()))
+                        .setLore(lore).build()), e -> {
+
+            if (e.isLeftClick()) {
+                config.setDistanceFox((config.getDistanceFox() + 5));
+            } else if (config.getDistanceFox() - 5 > 0) {
+                config.setDistanceFox(config.getDistanceFox() - 5);
+            }
+
+
+            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                    .setLore(lore)
+                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.fox",
+                            config.getDistanceFox()))
+                    .build());
+
+        }));
+        contents.set(2, 6, ClickableItem.of((
+                new ItemBuilder(UniversalMaterial.BROWN_WOOL.getStack())
+                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.bear_trainer",
+                                config.getDistanceBearTrainer()))
+                        .setLore(lore).build()), e -> {
+            if (e.isLeftClick()) {
+                config.setDistanceBearTrainer((config.getDistanceBearTrainer() + 5));
+            } else if (config.getDistanceBearTrainer() - 5 > 0) {
+                config.setDistanceBearTrainer(config.getDistanceBearTrainer() - 5);
+            }
+
+
+            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                    .setLore(lore)
+                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.bear_trainer",
+                            config.getDistanceBearTrainer()))
+                    .build());
+
+        }));
+        contents.set(2, 8, ClickableItem.of((new ItemBuilder(
+                UniversalMaterial.PURPLE_WOOL.getStack())
+                .setDisplayName(game.translate("werewolf.menu.advanced_tool.succubus",
+                        config.getDistanceSuccubus()))
+                .setLore(lore).build()), e -> {
+            if (e.isLeftClick()) {
+                config.setDistanceSuccubus((config.getDistanceSuccubus() + 5));
+            } else if (config.getDistanceSuccubus() - 5 > 0) {
+                config.setDistanceSuccubus(config.getDistanceSuccubus() - 5);
+            }
+
+
+            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                    .setLore(lore)
+                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.succubus",
+                            config.getDistanceSuccubus()))
+                    .build());
+
+        }));
+        contents.set(3, 1, ClickableItem.of((
+                new ItemBuilder(Material.POTION)
+                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.strength",
+                                config.getStrengthRate()))
+                        .setLore(lore).build()), e -> {
+            if (e.isLeftClick()) {
+                config.setStrengthRate(config.getStrengthRate() + 10);
+            } else if (config.getStrengthRate() - 10 >= 0) {
+                config.setStrengthRate(config.getStrengthRate() - 10);
+            }
+
+
+            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                    .setLore(lore)
+                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.strength",
+                            config.getStrengthRate()))
+                    .build());
+
+        }));
+        contents.set(3, 3, ClickableItem.of((new ItemBuilder(Material.POTION)
+                .setDisplayName(game.translate("werewolf.menu.advanced_tool.resistance",
+                        config.getResistanceRate()))
+                .setLore(lore).build()), e -> {
+            if (e.isLeftClick()) {
+                config.setResistanceRate(config.getResistanceRate() + 2);
+            } else if (config.getResistanceRate() - 2 >= 0) {
+                config.setResistanceRate(config.getResistanceRate() - 2);
+            }
+
+            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                    .setLore(lore)
+                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.resistance",
+                            config.getResistanceRate()))
+                    .build());
+
+        }));
+        contents.set(3, 5, ClickableItem.of((
+                new ItemBuilder(UniversalMaterial.BOOK.getStack())
+                        .setLore(lore).setDisplayName(
+                        game.translate("werewolf.commands.admin.ww_chat.number",
+                                config.getWereWolfChatMaxMessage()))
+                        .build()), e -> {
+            if (e.isLeftClick()) {
+                config.setWereWolfChatMaxMessage(config.getWereWolfChatMaxMessage() + 1);
+            } else if (config.getWereWolfChatMaxMessage() > 1) {
+                config.setWereWolfChatMaxMessage(config.getWereWolfChatMaxMessage() - 1);
+            }
+
+
+            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                    .setLore(lore).setDisplayName(
+                            game.translate("werewolf.commands.admin.ww_chat.number",
+                                    config.getWereWolfChatMaxMessage()))
+                    .build());
+
+        }));
+
+        contents.set(3, 7, ClickableItem.of((
+                new ItemBuilder(Material.BREAD)
+                        .setDisplayName(game.translate(config.isTrollSV() ?
+                                "werewolf.menu.advanced_tool.troll_on" :
+                                "werewolf.menu.advanced_tool.troll_off"))
+                        .setLore(Arrays.asList(game.translate(config.getTrollKey()),
+                                game.translate("werewolf.menu.advanced_tool.troll_set")))
+                        .build()), e -> {
+
+            if (!game.isState(StateGame.GAME)) {
+                if (e.isShiftClick()) {
+                    TrollChoice.INVENTORY.open(player);
+                } else {
+                    config.setTrollSV(!config.isTrollSV());
+                }
+
+                e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                        .setDisplayName(game.translate(config.isTrollSV() ?
+                                "werewolf.menu.advanced_tool.troll_on" :
+                                "werewolf.menu.advanced_tool.troll_off"))
+                        .setLore(Arrays.asList(game.translate(config.getTrollKey()),
+                                game.translate("werewolf.menu.advanced_tool.troll_set")))
+                        .build());
+            }
+
+
+        }));
+
+        contents.set(4, 0, ClickableItem.of((
                 new ItemBuilder(Material.GOLD_NUGGET)
                         .setDisplayName(game.translate("werewolf.menu.advanced_tool.particles"))
                         .setLore(Collections.singletonList(
@@ -225,123 +412,9 @@ public class AdvancedConfig implements InventoryProvider {
                     .build());
 
         }));
-        contents.set(2, 2, ClickableItem.of((
-                new ItemBuilder(Material.BREAD)
-                        .setDisplayName(game.translate(config.isTrollSV() ?
-                                "werewolf.menu.advanced_tool.troll_on" :
-                                "werewolf.menu.advanced_tool.troll_off"))
-                        .setLore(Arrays.asList(game.translate(config.getTrollKey()),
-                                game.translate("werewolf.menu.advanced_tool.troll_set")))
-                        .build()), e -> {
-
-            if (!game.isState(StateGame.GAME)) {
-                if (e.isShiftClick()) {
-                    TrollChoice.INVENTORY.open(player);
-                } else {
-                    config.setTrollSV(!config.isTrollSV());
-                }
-
-                e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                        .setDisplayName(game.translate(config.isTrollSV() ?
-                                "werewolf.menu.advanced_tool.troll_on" :
-                                "werewolf.menu.advanced_tool.troll_off"))
-                        .setLore(Arrays.asList(game.translate(config.getTrollKey()),
-                                game.translate("werewolf.menu.advanced_tool.troll_set")))
-                        .build());
-            }
-
-
-        }));
-        contents.set(2, 4, ClickableItem.of((
-                new ItemBuilder(UniversalMaterial.ORANGE_WOOL.getStack())
-                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.fox",
-                                config.getDistanceFox()))
-                        .setLore(lore).build()), e -> {
-
-            if (e.isLeftClick()) {
-                config.setDistanceFox((config.getDistanceFox() + 5));
-            } else if (config.getDistanceFox() - 5 > 0) {
-                config.setDistanceFox(config.getDistanceFox() - 5);
-            }
-
-
-            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.fox",
-                            config.getDistanceFox()))
-                    .build());
-
-        }));
-        contents.set(2, 6, ClickableItem.of((
-                new ItemBuilder(UniversalMaterial.BROWN_WOOL.getStack())
-                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.bear_trainer",
-                                config.getDistanceBearTrainer()))
-                        .setLore(lore).build()), e -> {
-            if (e.isLeftClick()) {
-                config.setDistanceBearTrainer((config.getDistanceBearTrainer() + 5));
-            } else if (config.getDistanceBearTrainer() - 5 > 0) {
-                config.setDistanceBearTrainer(config.getDistanceBearTrainer() - 5);
-            }
-
-
-            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.bear_trainer",
-                            config.getDistanceBearTrainer()))
-                    .build());
-
-        }));
-        contents.set(2, 8, ClickableItem.of((new ItemBuilder(
-                UniversalMaterial.PURPLE_WOOL.getStack())
-                .setDisplayName(game.translate("werewolf.menu.advanced_tool.succubus",
-                        config.getDistanceSuccubus()))
-                .setLore(lore).build()), e -> {
-            if (e.isLeftClick()) {
-                config.setDistanceSuccubus((config.getDistanceSuccubus() + 5));
-            } else if (config.getDistanceSuccubus() - 5 > 0) {
-                config.setDistanceSuccubus(config.getDistanceSuccubus() - 5);
-            }
-
-
-            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.succubus",
-                            config.getDistanceSuccubus()))
-                    .build());
-
-        }));
-        contents.set(3, 1, ClickableItem.of((
-                new ItemBuilder(Material.POTION)
-                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.strength",
-                                config.getStrengthRate()))
-                        .setLore(lore).build()), e -> {
-            if (e.isLeftClick()) {
-                config.setStrengthRate(config.getStrengthRate() + 10);
-            } else if (config.getStrengthRate() - 10 >= 0) {
-                config.setStrengthRate(config.getStrengthRate() - 10);
-            }
-
-
-            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.strength",
-                            config.getStrengthRate()))
-                    .build());
-
-        }));
-        contents.set(3, 3, ClickableItem.of((new ItemBuilder(Material.POTION)
-                .setDisplayName(game.translate("werewolf.menu.advanced_tool.resistance",
-                        config.getResistanceRate()))
-                .setLore(lore).build()), e -> {
-            if (e.isLeftClick()) {
-                config.setResistanceRate(config.getResistanceRate() + 2);
-            } else if (config.getResistanceRate() - 2 >= 0) {
-                config.setResistanceRate(config.getResistanceRate() - 2);
-            }
-
-            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.resistance",
-                            config.getResistanceRate()))
-                    .build());
-
-        }));
     }
+
+
 
 
 }

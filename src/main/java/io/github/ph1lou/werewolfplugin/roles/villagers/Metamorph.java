@@ -20,7 +20,9 @@ public class Metamorph extends RolesVillage {
 
     @Override
     public @NotNull String getDescription() {
-        return game.translate("werewolf.role.metamorph.description");
+        return super.getDescription() +
+                game.translate("werewolf.description.description", game.translate("werewolf.role.metamorph.description")) +
+                game.translate("werewolf.description._");
     }
 
 

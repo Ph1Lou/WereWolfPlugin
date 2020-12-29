@@ -6,7 +6,6 @@ import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.Sounds;
-import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.DonEvent;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
@@ -36,11 +35,6 @@ public class CommandLovers implements Commands {
         PlayerWW playerWW = game.getPlayerWW(uuid);
 
         if (playerWW == null) return;
-
-        if (!game.isState(StateGame.GAME)) {
-            player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
-            return;
-        }
 
         if (playerWW.getLovers().isEmpty()) {
             player.sendMessage(game.translate("werewolf.role.lover.not_in_pairs"));

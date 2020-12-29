@@ -15,7 +15,8 @@ public class WereWolf extends RolesWereWolf {
 
     @Override
     public @NotNull String getDescription() {
-        return game.translate("werewolf.role.werewolf.description");
+        return super.getDescription() +
+                game.translate("werewolf.description._");
     }
 
 

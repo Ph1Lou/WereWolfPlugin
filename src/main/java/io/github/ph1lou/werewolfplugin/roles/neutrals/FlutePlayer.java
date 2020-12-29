@@ -78,7 +78,11 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
 
     @Override
     public @NotNull String getDescription() {
-        return game.translate("werewolf.role.flute_player.description");
+
+        return super.getDescription() +
+                game.translate("werewolf.description.description", game.translate("werewolf.role.flute_player.description")) +
+                (affectedPlayer.isEmpty() ? "" : game.translate("werewolf.role.flute_player.affected", enchantedList())) +
+                game.translate("werewolf.description._");
     }
 
 

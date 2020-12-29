@@ -100,7 +100,12 @@ public class Assassin extends RolesNeutral {
 
     @Override
     public @NotNull String getDescription() {
-        return game.translate("werewolf.role.assassin.description");
+
+        return super.getDescription() +
+                game.translate("werewolf.description.equipment", game.translate("werewolf.role.assassin.limit")) +
+                game.translate("werewolf.description.item", game.translate("werewolf.role.assassin.items")) +
+                game.translate("werewolf.description.effect", game.translate("werewolf.role.assassin.effect")) +
+                game.translate("werewolf.description._");
     }
 
 
@@ -115,13 +120,8 @@ public class Assassin extends RolesNeutral {
 
         super.recoverPotionEffect();
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) return;
-
         if (game.isDay(Day.NIGHT)) return;
 
-        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,
-                Integer.MAX_VALUE, -1, false, false));
+        getPlayerWW().addPotionEffect(PotionEffectType.INCREASE_DAMAGE);
     }
 }

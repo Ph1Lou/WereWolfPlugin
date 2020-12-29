@@ -280,6 +280,12 @@ public class Register implements RegisterManager {
 
         commandsRegister
                 .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.admin.ww_chat.name", new CommandWereWolfChat(main))
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME));
+
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
                         "werewolf.role.seer.command", new CommandSeer(main))
                         .addRoleKey(RolesBase.SEER.getKey())
                         .addRoleKey(RolesBase.CHATTY_SEER.getKey())
@@ -287,6 +293,8 @@ public class Register implements RegisterManager {
                         .addStateWW(StateGame.GAME)
                         .setRequiredPower()
                         .addArgNumbers(1));
+
+
         commandsRegister
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.role.cupid.command", new CommandCupid(main))
@@ -353,6 +361,25 @@ public class Register implements RegisterManager {
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
                         .addArgNumbers(1));
+
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.sister.command_name", new CommandSisterSeeName(main))
+                        .addRoleKey(RolesBase.SISTER.getKey())
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .unsetAutoCompletion()
+                        .addArgNumbers(1));
+
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.sister.command_role", new CommandSisterSeeRole(main))
+                        .addRoleKey(RolesBase.SISTER.getKey())
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .unsetAutoCompletion()
+                        .addArgNumbers(1));
+
         commandsRegister
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.role.raven.command", new CommandRaven(main))
@@ -441,6 +468,16 @@ public class Register implements RegisterManager {
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
                         .addArgNumbers(1));
+
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.priestess.command", new CommandPriestess(main))
+                        .addRoleKey(RolesBase.PRIESTESS.getKey())
+                        .setRequiredPower()
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(1));
+
         commandsRegister
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.role.flute_player.command", new CommandFlutePlayer(main))
@@ -502,6 +539,8 @@ public class Register implements RegisterManager {
                         "werewolf.menu.timers.command", new CommandTimer(main))
                         .setDescription("werewolf.menu.timers.description")
                         .addArgNumbers(0));
+
+
         commandsRegister
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.vote.command", new CommandVote(main))
@@ -579,10 +618,6 @@ public class Register implements RegisterManager {
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.COMEDIAN.getKey(), Comedian.class)
                             .addCategory(Category.VILLAGER));
-            rolesRegister
-                    .add(new RoleRegister("werewolf.name",
-                            RolesBase.MINER.getKey(), Miner.class)
-                            .addCategory(Category.VILLAGER));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
@@ -636,10 +671,12 @@ public class Register implements RegisterManager {
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.SUCCUBUS.getKey(), Succubus.class)
                             .addCategory(Category.NEUTRAL));
+
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.ANGEL.getKey(), Angel.class)
                             .addCategory(Category.NEUTRAL));
+
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.FALLEN_ANGEL.getKey(), FallenAngel.class)
@@ -688,6 +725,27 @@ public class Register implements RegisterManager {
                             RolesBase.METAMORPH.getKey(),
                             Metamorph.class)
                             .addCategory(Category.VILLAGER));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.RIVAL.getKey(), Rival.class)
+                            .addCategory(Category.NEUTRAL));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.VILLAGE_IDIOT.getKey(), VillageIdiot.class)
+                            .addCategory(Category.VILLAGER));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.PRIESTESS.getKey(), Priestess.class)
+                            .addCategory(Category.VILLAGER));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.MYSTICAL_WEREWOLF.getKey(), MysticalWereWolf.class)
+                            .addCategory(Category.WEREWOLF));
+
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
@@ -806,6 +864,11 @@ public class Register implements RegisterManager {
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.EVENT_SEER_DEATH.getKey())
                         .addConfig(new SeerEvent(main)));
+
+        configsRegister
+                .add(new ConfigRegister("werewolf.name",
+                        ConfigsBase.EVIL_THIEF.getKey()));
+
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.CHAT.getKey())
@@ -846,10 +909,15 @@ public class Register implements RegisterManager {
                         .setDefaultValue()
                         .addConfig(new RedNameTag(main)));
 
-
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.SWEET_ANGEL.getKey()));
+
+        configsRegister
+                .add(new ConfigRegister("werewolf.name",
+                        ConfigsBase.WEREWOLF_CHAT.getKey())
+                        .setDefaultValue());
+
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.DOUBLE_TROLL.getKey())
@@ -872,6 +940,7 @@ public class Register implements RegisterManager {
                         .setDefaultValue(30)
                         .onZero(wereWolfAPI -> Bukkit.getPluginManager().callEvent(new InvulnerabilityEvent()))
                         .addPredicate(wereWolfAPI -> true));
+
         timersRegister
                 .add(new TimerRegister("werewolf.name",
                         TimersBase.ROLE_DURATION.getKey())
@@ -941,6 +1010,14 @@ public class Register implements RegisterManager {
                 .add(new TimerRegister("werewolf.name",
                         TimersBase.CITIZEN_DURATION.getKey())
                         .setDefaultValue(60));
+
+        timersRegister
+                .add(new TimerRegister("werewolf.name",
+                        TimersBase.RIVAL_DURATION.getKey())
+                        .setDefaultValue(2400)
+                        .onZero(wereWolfAPI -> Bukkit.getPluginManager().callEvent(new RivalEvent()))
+                        .addPredicate(wereWolfAPI -> wereWolfAPI.getConfig().getTimerValue(TimersBase.ROLE_DURATION.getKey()) < 0
+                                && !wereWolfAPI.getConfig().isTrollSV()));
         timersRegister
                 .add(new TimerRegister("werewolf.name",
                         TimersBase.MODEL_DURATION.getKey())
@@ -975,6 +1052,11 @@ public class Register implements RegisterManager {
                 .add(new TimerRegister("werewolf.name",
                         TimersBase.SUCCUBUS_DURATION.getKey())
                         .setDefaultValue(180));
+
+        timersRegister
+                .add(new TimerRegister("werewolf.name",
+                        TimersBase.WEREWOLF_CHAT_DURATION.getKey())
+                        .setDefaultValue(30));
 
         timersRegister
                 .add(new TimerRegister("werewolf.name",

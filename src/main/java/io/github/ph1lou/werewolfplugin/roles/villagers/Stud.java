@@ -30,7 +30,9 @@ public class Stud extends RolesVillage implements Power {
 
     @Override
     public @NotNull String getDescription() {
-        return game.translate("werewolf.role.stud.description");
+        return super.getDescription() +
+                game.translate("werewolf.description.description", game.translate("werewolf.role.stud.description")) +
+                game.translate("werewolf.description._");
     }
 
 

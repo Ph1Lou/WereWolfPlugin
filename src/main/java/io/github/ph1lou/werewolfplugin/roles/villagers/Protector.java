@@ -91,7 +91,10 @@ public class Protector extends RolesWithLimitedSelectionDuration implements Affe
 
     @Override
     public @NotNull String getDescription() {
-        return game.translate("werewolf.role.protector.description");
+        return super.getDescription() +
+                game.translate("werewolf.description.description", game.translate("werewolf.role.protector.description")) +
+                game.translate("werewolf.description.item", game.translate("werewolf.role.protector.items")) +
+                game.translate("werewolf.description._");
     }
 
 

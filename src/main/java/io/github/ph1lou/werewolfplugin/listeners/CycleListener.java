@@ -8,6 +8,7 @@ import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandWereWolfChat;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -95,8 +96,10 @@ public class CycleListener implements Listener {
         long duration3 = game.getConfig().getTimerValue(TimersBase.DAY_DURATION.getKey());
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
-            if(!game.isState(StateGame.END)){
-                Bukkit.getPluginManager().callEvent(new NightEvent( event.getNumber()));
+            if(!game.isState(StateGame.END)) {
+                Bukkit.getPluginManager().callEvent(new NightEvent(event.getNumber()));
+                CommandWereWolfChat.enable();
+                Bukkit.getScheduler().scheduleSyncDelayedTask(main, CommandWereWolfChat::disable, game.getConfig().getTimerValue(TimersBase.WEREWOLF_CHAT_DURATION.getKey()) * 20);
             }
 
         },duration3*20);

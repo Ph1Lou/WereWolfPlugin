@@ -3,7 +3,6 @@ package io.github.ph1lou.werewolfplugin.commands;
 
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.registers.CommandRegister;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -83,7 +82,7 @@ public class Command implements TabExecutor {
 
             if (commandRegister.isRoleOnly()) {
                 if (!commandRegister.isRoleKey(playerWW.getRole().getKey())) {
-                    player.sendMessage(game.translate("werewolf.check.role", game.translate(RolesBase.COMEDIAN.getKey())));
+                    player.sendMessage(game.translate("werewolf.check.role", game.translate(commandRegister.getOneRoleKey())));
                     return;
                 }
             }

@@ -63,7 +63,9 @@ public class Detective extends RolesWithLimitedSelectionDuration implements Affe
 
     @Override
     public @NotNull String getDescription() {
-        return game.translate("werewolf.role.detective.description");
+        return super.getDescription() +
+                game.translate("werewolf.description.description", game.translate("werewolf.role.detective.description")) +
+                game.translate("werewolf.description._");
     }
 
 

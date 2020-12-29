@@ -36,7 +36,13 @@ public class SerialKiller extends RolesNeutral implements Power {
 
     @Override
     public @NotNull String getDescription() {
-        return game.translate("werewolf.role.serial_killer.description");
+
+        return super.getDescription() +
+                game.translate("werewolf.description.power", game.translate("werewolf.role.serial_killer.power")) +
+                game.translate("werewolf.description.equipment", game.translate("werewolf.role.serial_killer.limit")) +
+                game.translate("werewolf.description.item", game.translate("werewolf.role.serial_killer.items")) +
+                game.translate("werewolf.description.effect", game.translate("werewolf.role.serial_killer.effect")) +
+                game.translate("werewolf.description._");
     }
 
 

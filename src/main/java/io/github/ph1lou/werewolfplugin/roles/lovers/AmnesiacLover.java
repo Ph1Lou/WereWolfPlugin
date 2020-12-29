@@ -221,6 +221,8 @@ public class AmnesiacLover implements LoverAPI, Listener {
     @Override
     public boolean swap(PlayerWW playerWW, PlayerWW playerWW1) {
 
+        if (playerWW.equals(playerWW1)) return false;
+
         if (death) return false;
 
         if (amnesiacLover1.equals(playerWW)) {

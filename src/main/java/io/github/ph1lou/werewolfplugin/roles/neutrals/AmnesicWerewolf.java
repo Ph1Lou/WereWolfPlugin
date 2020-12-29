@@ -89,15 +89,16 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
 
     @Override
     public @NotNull String getDescription() {
-        return game.translate("werewolf.role.amnesiac_werewolf.description");
-    }
 
+        return super.getDescription() +
+                game.translate("werewolf.description.description", game.translate("werewolf.role.amnesiac_werewolf.description")) +
+                game.translate("werewolf.description.werewolf") +
+                game.translate("werewolf.description._");
+    }
 
     @Override
     public void recoverPower() {
-
     }
-
 
     @Override
     public boolean getTransformed() {

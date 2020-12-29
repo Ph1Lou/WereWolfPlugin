@@ -106,14 +106,12 @@ public class LoversManagement implements LoverManagerAPI {
 		autoLovers();
 		rangeLovers();
 		game.getConfig().setLoverSize(lovers.size());
-		Bukkit.getPluginManager().callEvent(new RevealLoversEvent(this.lovers));
 		autoAmnesiacLovers();
 		autoCursedLovers();
 		lovers
 				.forEach(loverAPI -> Bukkit.getPluginManager()
 						.registerEvents((Listener) loverAPI, (Plugin) main));
-
-
+		Bukkit.getPluginManager().callEvent(new RevealLoversEvent(this.lovers));
 		game.checkVictory();
 	}
 

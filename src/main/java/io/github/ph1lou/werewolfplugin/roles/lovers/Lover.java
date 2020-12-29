@@ -174,6 +174,8 @@ public class Lover implements LoverAPI, Listener {
     @Override
     public boolean swap(PlayerWW playerWW, PlayerWW playerWW1) {
 
+        if (playerWW.equals(playerWW1)) return false;
+
         if (death) return false;
 
         lovers.remove(playerWW);
@@ -203,6 +205,7 @@ public class Lover implements LoverAPI, Listener {
 
     @EventHandler
     public void onAroundLover(AroundLover event) {
+
 
         if (death) return;
 

@@ -26,6 +26,7 @@ public class SiameseTwin extends RolesVillage {
     @Override
     public @NotNull String getDescription() {
 
+
         StringBuilder list = new StringBuilder();
 
         game.getPlayerWW()
@@ -36,23 +37,25 @@ public class SiameseTwin extends RolesVillage {
                         RolesBase.SIAMESE_TWIN.getKey()))
                 .forEach(playerWW -> list.append(playerWW.getName()).append(" "));
 
-        return game.translate("werewolf.role.siamese_twin.description") +
-                "\n§f" +
+        return super.getDescription() +
+                game.translate("werewolf.description.description", game.translate("werewolf.role.siamese_twin.description")) +
+                game.translate("werewolf.description.power", game.translate("werewolf.role.siamese_twin.power")) +
                 game.translate("werewolf.role.siamese_twin.siamese_twin_list",
-                        list.toString());
+                        list.toString()) +
+                game.translate("werewolf.description._");
     }
 
+
+    @Override
+    public void recoverPower() {
+        getPlayerWW().addPlayerMaxHealth(4);
+    }
 
     @EventHandler
     public void onStealEvent(StealEvent event) {
 
         if (!event.getThiefWW().equals(getPlayerWW())) return;
 
-        getPlayerWW().addPlayerMaxHealth(4);
-    }
-
-    @Override
-    public void recoverPower() {
         getPlayerWW().addPlayerMaxHealth(4);
     }
 

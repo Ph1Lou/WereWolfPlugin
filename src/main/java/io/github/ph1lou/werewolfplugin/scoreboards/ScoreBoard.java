@@ -319,20 +319,20 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		angle = angle * Math.signum(det);
 
 		if (angle > -Math.PI / 8 && angle < Math.PI / 8) {
-			arrow = "⬆";
+			arrow = "↑";
 		} else if (angle > -3 * Math.PI / 8 && angle < -Math.PI / 8) {
-			arrow="⬈";
+			arrow = "↗";
 		} else if (angle<3*Math.PI/8 && angle>Math.PI/8) {
-			arrow="⬉";
+			arrow = "↖";
 		} else if (angle>3*Math.PI/8 && angle<5*Math.PI/8) {
 			arrow="←";
 		} else if (angle<-3*Math.PI/8 && angle>-5*Math.PI/8) {
-			arrow="➡";
+			arrow = "→";
 		} else if (angle<-5*Math.PI/8 && angle>-7*Math.PI/8) {
-			arrow = "⬊";
+			arrow = "↘";
 		} else if (angle > 5 * Math.PI / 8 && angle < 7 * Math.PI / 8) {
-			arrow = "⬋";
-		} else arrow = "⬇";
+			arrow = "↙";
+		} else arrow = "↓";
 
 		return distance + " §l" + arrow;
 	}

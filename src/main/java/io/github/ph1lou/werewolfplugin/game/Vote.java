@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.VoteAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.enums.VoteStatus;
 import io.github.ph1lou.werewolfapi.events.SeeVoteEvent;
@@ -79,9 +80,11 @@ public class Vote implements Listener, VoteAPI {
         if (!event.isCancelled()) {
 			event.setPlayerWW(getResult());
             if (event.getPlayerWW() == null) {
-                Bukkit.broadcastMessage(game.translate("werewolf.vote.no_result"));
-                event.setCancelled(true);
-            } else showResultVote(event.getPlayerWW());
+				if (currentStatus == VoteStatus.WAITING_CITIZEN) {
+					Bukkit.broadcastMessage(game.translate("werewolf.vote.no_result"));
+				}
+				event.setCancelled(true);
+			} else showResultVote(event.getPlayerWW());
         }
         resetVote();
     }
@@ -150,12 +153,20 @@ public class Vote implements Listener, VoteAPI {
 
 		if (playerWW != null) {
 
-            tempPlayer.add(playerWW);
-            playerWW.removePlayerMaxHealth(10);
+			tempPlayer.add(playerWW);
+			playerWW.removePlayerMaxHealth(10);
 
-            Bukkit.broadcastMessage(game.translate("werewolf.vote.vote_result", playerWW.getName(), this.votes.get(playerWW)));
-            playerWW.addKLostHeart(10);
-        }
+			Bukkit.broadcastMessage(game.translate("werewolf.vote.vote_result", playerWW.getName(), this.votes.get(playerWW)));
+
+			int task = Bukkit.getScheduler().scheduleSyncRepeatingTask(((GameManager) game).getMain(), () -> {
+				if (game.isState(StateGame.GAME)) {
+					playerWW.addPlayerMaxHealth(2);
+				}
+			}, 1200, 1200);
+
+			Bukkit.getScheduler().scheduleSyncDelayedTask(((GameManager) game).getMain(), () -> Bukkit.getScheduler().cancelTask(task), 5 * 62 * 20);
+
+		}
 	}
 
 	@Override

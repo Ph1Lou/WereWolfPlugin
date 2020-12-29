@@ -12,11 +12,7 @@ import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
 import io.github.ph1lou.werewolfapi.rolesattributs.Transformed;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -74,36 +70,6 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
         return (this.affectedPlayer);
     }
 
-    @EventHandler
-    public void onNight(NightEvent event) {
-
-
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
-
-        if (!transformed) {
-            return;
-        }
-
-        getPlayerWW().addPotionEffect(PotionEffectType.INCREASE_DAMAGE);
-    }
-
-    @EventHandler
-    public void onDay(DayEvent event) {
-
-
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
-
-        if (!transformed) {
-            return;
-        }
-
-
-        getPlayerWW().removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-    }
 
     @EventHandler
     public void onAutoModel(AutoModelEvent event) {
@@ -121,13 +87,17 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
             return;
         }
 
-        getPlayerWW().sendMessage(game.translate("werewolf.role.wild_child.reveal_model", model.getName()));
+        getPlayerWW().sendMessage(game.translate("werewolf.role.wild_child.reveal_model",
+                model.getName()));
         Sounds.BAT_IDLE.play(getPlayerWW());
     }
 
     @Override
     public @NotNull String getDescription() {
-        return game.translate("werewolf.role.wild_child.description");
+        return super.getDescription() +
+                game.translate("werewolf.description.description", game.translate("werewolf.role.wild_child.description")) +
+                (affectedPlayer.isEmpty() ? "" : game.translate("werewolf.description.power", game.translate(transformed ? "werewolf.role.wild_child.model_death" : "werewolf.role.wild_child.model_alive", affectedPlayer.get(0).getName()))) +
+                game.translate("werewolf.description._");
     }
 
 
@@ -177,15 +147,6 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
 
 
     @Override
-    public void recoverPotionEffect() {
-
-        super.recoverPotionEffect();
-        if (!transformed) return;
-
-        getPlayerWW().addPotionEffect(PotionEffectType.NIGHT_VISION);
-    }
-
-    @Override
     public void recoverPower() {
 
         getPlayerWW().sendMessage(game.translate(
@@ -201,34 +162,9 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
         return this.transformed || super.isWereWolf();
     }
 
-    @EventHandler
-    private void onPlayerDeath(PlayerDeathEvent event) {
-
-        if (!transformed) return;
-
-        if (event.getEntity().getKiller() == null) return;
-        Player killer = event.getEntity().getKiller();
-
-        if (!killer.getUniqueId().equals(getPlayerUUID())) return;
-
-        killer.removePotionEffect(PotionEffectType.ABSORPTION);
-        killer.addPotionEffect(
-                new PotionEffect(PotionEffectType.SPEED,
-                        1200,
-                        0,
-                        false,
-                        false));
-        killer.addPotionEffect(new PotionEffect(
-                PotionEffectType.ABSORPTION,
-                1200,
-                0,
-                false,
-                false));
-    }
 
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
-
 
         PlayerWW playerWW = event.getPlayerWW();
 
@@ -259,7 +195,6 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
 
     @EventHandler
     public void onTargetIsStolen(StealEvent event) {
-
 
         PlayerWW playerWW = event.getPlayerWW();
         PlayerWW thiefWW = event.getThiefWW();

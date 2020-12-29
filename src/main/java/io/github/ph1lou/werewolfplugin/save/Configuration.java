@@ -37,6 +37,8 @@ public class Configuration implements ConfigWereWolfAPI {
     private int distanceBearTrainer = 50;
     private int distanceSuccubus = 20;
     private int distanceAmnesiacLovers = 15;
+    private int distancePriestess = 10;
+    private int distanceSister = 20;
     private int distanceFox = 20;
     private boolean trollSV = false;
     private int borderMax = 2000;
@@ -51,6 +53,7 @@ public class Configuration implements ConfigWereWolfAPI {
     private boolean whiteList = false;
     private int playerMax = 30;
     private double borderSpeed = 0.3;
+    private int werewolfChatMaxMessage = 1;
 
     public Configuration(RegisterManager registerManager) {
         this.registerManager = registerManager;
@@ -368,30 +371,6 @@ public class Configuration implements ConfigWereWolfAPI {
         roleCount.put(key, i);
     }
 
-    @Deprecated
-    @Override
-    public Map<String, Integer> getTimerValues() {
-        return timerValues;
-    }
-
-    @Deprecated
-    @Override
-    public Map<String, Boolean> getConfigValues() {
-        return configValues;
-    }
-
-    @Deprecated
-    @Override
-    public Map<String, Integer> getRoleCount() {
-        return roleCount;
-    }
-
-    @Deprecated
-    @Override
-    public Map<String, Boolean> getScenarioValues() {
-        return scenarioValues;
-    }
-
     @Override
     public void decreaseTimer(String key) {
         timerValues.put(key, getTimerValue(key) - 1);
@@ -493,6 +472,36 @@ public class Configuration implements ConfigWereWolfAPI {
     @Override
     public void setKnockBackMode(int knockBackMode) {
         this.knockBackMode = knockBackMode;
+    }
+
+    @Override
+    public int getWereWolfChatMaxMessage() {
+        return werewolfChatMaxMessage;
+    }
+
+    @Override
+    public void setWereWolfChatMaxMessage(int nbMessage) {
+        this.werewolfChatMaxMessage = nbMessage;
+    }
+
+    @Override
+    public int getDistanceSister() {
+        return distanceSister;
+    }
+
+    @Override
+    public void setDistanceSister(int i) {
+        this.distanceSister = i;
+    }
+
+    @Override
+    public int getDistancePriestess() {
+        return distancePriestess;
+    }
+
+    @Override
+    public void setDistancePriestess(int i) {
+        this.distancePriestess = i;
     }
 
 

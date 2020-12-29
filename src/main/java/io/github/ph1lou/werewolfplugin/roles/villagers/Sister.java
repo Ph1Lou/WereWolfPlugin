@@ -8,8 +8,13 @@ import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.SisterDeathEvent;
 import io.github.ph1lou.werewolfapi.events.UpdateEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -19,10 +24,14 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 
-public class Sister extends RolesVillage {
+public class Sister extends RolesVillage implements AffectedPlayers {
+
+    List<PlayerWW> killerWWS = new ArrayList<>();
 
     public Sister(GetWereWolfAPI main, PlayerWW playerWW, String key) {
         super(main, playerWW, key);
@@ -41,9 +50,11 @@ public class Sister extends RolesVillage {
                 .filter(playerWW -> playerWW.isKey(RolesBase.SISTER.getKey()))
                 .forEach(playerWW -> list.append(playerWW.getName()).append(" "));
 
-        return game.translate("werewolf.role.sister.description") +
-                "\n§f" +
-                game.translate("werewolf.role.sister.sisters_list", list.toString());
+        return super.getDescription() +
+                game.translate("werewolf.description.description", game.translate("werewolf.role.sister.description")) +
+                game.translate("werewolf.description.effect", game.translate("werewolf.role.sister.effect", game.getConfig().getDistanceSister())) +
+                game.translate("werewolf.role.sister.sisters_list", list.toString()) +
+                game.translate("werewolf.description._");
     }
 
 
@@ -117,13 +128,46 @@ public class Sister extends RolesVillage {
 
         PlayerWW sisterWW = event.getSister();
         PlayerWW killerWW = event.getKiller();
+        TextComponent textComponent = new TextComponent(game.translate("werewolf.role.sister.choice"));
+
+        TextComponent name = new TextComponent(
+                game.translate("werewolf.role.sister.name"));
+        name.setClickEvent(
+                new ClickEvent(ClickEvent.Action.RUN_COMMAND,
+                        String.format("/ww %s %s",
+                                game.translate("werewolf.role.sister.command_name"),
+                                killerWW == null ? "pve" : killerWW.getUUID().toString())));
+        name.setHoverEvent(
+                new HoverEvent(
+                        HoverEvent.Action.SHOW_TEXT,
+                        new ComponentBuilder(game.translate("werewolf.role.sister.see_name"))
+                                .create()));
+
+        textComponent.addExtra(name);
+
+        textComponent.addExtra(game.translate("werewolf.role.sister.or"));
+
+        TextComponent role =
+                new TextComponent(game.translate("werewolf.role.sister.role"));
+
+        role.setClickEvent(
+                new ClickEvent(ClickEvent.Action.RUN_COMMAND,
+                        String.format("/ww %s %s",
+                                game.translate("werewolf.role.sister.command_role"),
+                                killerWW == null ? "pve" : killerWW.getUUID().toString())));
+
+        role.setHoverEvent(
+                new HoverEvent(
+                        HoverEvent.Action.SHOW_TEXT,
+                        new ComponentBuilder(game.translate("werewolf.role.sister.see_role"))
+                                .create()));
+
+        textComponent.addExtra(role);
+
+        getPlayerWW().sendMessage(textComponent);
 
 
-        getPlayerWW().sendMessage(game.translate("werewolf.role.sister.reveal_killer",
-                sisterWW.getName(),
-                killerWW != null ?
-                        killerWW.getName() :
-                        game.translate("werewolf.utils.pve")));
+        killerWWS.add(sisterWW.getLastKiller());
 
     }
 
@@ -142,5 +186,25 @@ public class Sister extends RolesVillage {
         Bukkit.getPluginManager().callEvent(new SisterDeathEvent(playerWW,
                 new HashSet<>(), getPlayerWW().getLastKiller()));
 
+    }
+
+    @Override
+    public void addAffectedPlayer(PlayerWW playerWW) {
+        killerWWS.add(playerWW);
+    }
+
+    @Override
+    public void removeAffectedPlayer(PlayerWW playerWW) {
+        killerWWS.remove(playerWW);
+    }
+
+    @Override
+    public void clearAffectedPlayer() {
+        killerWWS.clear();
+    }
+
+    @Override
+    public List<PlayerWW> getAffectedPlayers() {
+        return killerWWS;
     }
 }

@@ -3,9 +3,13 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.NightEvent;
 import io.github.ph1lou.werewolfapi.events.TroubleMakerDeathEvent;
+import io.github.ph1lou.werewolfapi.events.WereWolfCanSpeakInChatEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
@@ -77,13 +81,35 @@ public class Troublemaker extends RolesVillage implements AffectedPlayers, Power
 
     @Override
     public @NotNull String getDescription() {
-        return game.translate("werewolf.role.troublemaker.description");
+        return super.getDescription() +
+                game.translate("werewolf.description.description", game.translate("werewolf.role.troublemaker.description")) +
+                game.translate("werewolf.description.power", game.translate("werewolf.role.troublemaker.chat")) +
+                game.translate("werewolf.description._");
     }
 
 
     @Override
     public void recoverPower() {
 
+    }
+
+    @EventHandler
+    public void onNightAnnounceWereWOlfChat(NightEvent event) {
+
+        if (!game.getConfig().isConfigActive(ConfigsBase.WEREWOLF_CHAT.getKey())) return;
+
+        getPlayerWW().sendMessage(game.translate("werewolf.commands.admin.ww_chat.announce", game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.WEREWOLF_CHAT_DURATION.getKey())), game.getConfig().getWereWolfChatMaxMessage()));
+
+    }
+
+    @EventHandler
+    public void onRequestAccessWereWolfChat(WereWolfCanSpeakInChatEvent event) {
+
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+
+        if (!event.getPlayerWW().equals(getPlayerWW())) return;
+
+        event.setCanSpeak(true);
     }
 
 

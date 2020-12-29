@@ -11,9 +11,9 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.plugin.Plugin;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
 
@@ -81,21 +81,29 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
     @Override
     public @NotNull String getDescription() {
 
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder(super.getDescription());
 
-        if (choice.equals(AngelForm.FALLEN_ANGEL))
-            sb.append(game.translate("werewolf.role.fallen_angel.description"));
-        else if (choice.equals(AngelForm.GUARDIAN_ANGEL)) {
+        if (choice.equals(AngelForm.FALLEN_ANGEL)) {
+            sb.append(game.translate("werewolf.description.effect", game.translate("werewolf.role.fallen_angel.effect")));
+            if (affectedPlayer.isEmpty()) {
+                sb.append(game.translate("werewolf.description.power", game.translate("werewolf.role.fallen_angel.wait", game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.ANGEL_DURATION.getKey())))));
+            }
+        } else if (choice.equals(AngelForm.GUARDIAN_ANGEL)) {
+
+            sb.append(game.translate("werewolf.description.effect", game.translate("werewolf.role.guardian_angel.effect")));
 
             if (game.getConfig().isConfigActive(ConfigsBase.SWEET_ANGEL.getKey())) {
-                sb.append(game.translate("werewolf.role.guardian_angel.description"));
+                sb.append(game.translate("werewolf.description.description", game.translate("werewolf.role.guardian_angel.description")));
             } else {
-                sb.append(game.translate("werewolf.role.guardian_angel.description_patch"));
+                sb.append(game.translate("werewolf.description.description", game.translate("werewolf.role.guardian_angel.description_patch")));
             }
-        } else {
-            sb.append(game.translate("werewolf.role.angel.description"));
+            if (affectedPlayer.isEmpty()) {
+                sb.append(game.translate("werewolf.description.power", game.translate("werewolf.role.guardian_angel.wait", game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.ANGEL_DURATION.getKey())))));
+            }
+            sb.append(game.translate("werewolf.description.command", game.translate("werewolf.role.guardian_angel.show_command")));
         }
-        sb.append("\n§f").append(heartAndMessageTargetManagement().getValue1());
+
+        sb.append(game.translate("werewolf.description._"));
 
         return sb.toString();
     }
@@ -105,7 +113,7 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
 
         if (!event.getThiefWW().equals(getPlayerWW())) return;
 
-        Pair<Integer, String> pair = heartAndMessageTargetManagement();
+        Pair<Integer, TextComponent> pair = heartAndMessageTargetManagement();
 
         getPlayerWW().addPlayerMaxHealth(pair.getValue0());
 
@@ -116,16 +124,16 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
      * @return nb de coeur en plus qu'a l'ange plus le texte
      */
 
-    private Pair<Integer, String> heartAndMessageTargetManagement() {
+    private Pair<Integer, TextComponent> heartAndMessageTargetManagement() {
 
 
         int extraHearts = 0;
         StringBuilder sb = new StringBuilder();
+        TextComponent textComponent = new TextComponent();
 
         if (isChoice(AngelForm.ANGEL)) {
             extraHearts += 4;
-
-            Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> getPlayerWW().sendMessage(choiceAngel()), 1);
+            textComponent.addExtra(choiceAngel());
 
 
         } else if (!getAffectedPlayers().isEmpty()) {
@@ -173,14 +181,17 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
             }
         }
 
-        return new Pair<>(extraHearts, sb.toString());
+        textComponent.addExtra(sb.toString());
+
+        return new Pair<>(extraHearts, textComponent);
     }
 
 
     public TextComponent choiceAngel() {
 
+
         TextComponent guardian = new TextComponent(
-                game.translate(RolesBase.GUARDIAN_ANGEL.getKey()));
+                ChatColor.AQUA + game.translate(RolesBase.GUARDIAN_ANGEL.getKey()));
         guardian.setClickEvent(new ClickEvent(
                 ClickEvent.Action.RUN_COMMAND,
                 String.format("/ww %s",
@@ -197,7 +208,7 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
                                 .create()));
 
         TextComponent fallen = new TextComponent(
-                game.translate(RolesBase.FALLEN_ANGEL.getKey()));
+                ChatColor.AQUA + game.translate(RolesBase.FALLEN_ANGEL.getKey()));
         fallen.setClickEvent(new ClickEvent(
                 ClickEvent.Action.RUN_COMMAND,
                 String.format("/ww %s",
@@ -231,7 +242,7 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
 
     @Override
     public void recoverPower() {
-
+        getPlayerWW().sendMessage(choiceAngel());
         getPlayerWW().addPlayerMaxHealth(4);
         getPlayerWW().addPlayerHealth(4);
     }
@@ -375,17 +386,15 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
         }
 
         for (PlayerWW playerWW : getAffectedPlayers()) {
-            Player playerAffected = Bukkit.getPlayer(playerWW.getUUID());
 
-            if (playerWW.isState(StatePlayer.ALIVE) &&
-                    playerAffected != null) {
+            if (playerWW.isState(StatePlayer.ALIVE)) {
 
                 stringBuilder.append("§b ")
                         .append(playerWW.getName())
                         .append(" ")
                         .append(game.getScore()
                                 .updateArrow(player,
-                                        playerAffected.getLocation()));
+                                        playerWW.getLocation()));
             }
         }
 

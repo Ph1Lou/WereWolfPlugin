@@ -11,8 +11,8 @@ import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Display;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
-import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Seer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -52,7 +52,7 @@ public class CommandSeer implements Commands {
             return;
         }
 
-        if (VersionUtils.getVersionUtils().getPlayerMaxHealth(player) < 7) {
+        if (player.getHealth() < 7) {
             player.sendMessage(game.translate("werewolf.role.seer.not_enough_life"));
         } else {
             Roles role1 = playerWW1.getRole();
@@ -78,12 +78,12 @@ public class CommandSeer implements Commands {
 
             if (seerEvent.getCamp().equals("werewolf.categories.villager")) {
                 playerWW.removePlayerMaxHealth(6);
-
+                ((Seer) seer).setDisablePower();
                 player.sendMessage(game.translate("werewolf.role.seer.see_villager"));
                 if (seer.isKey(RolesBase.CHATTY_SEER.getKey())) {
                     Bukkit.broadcastMessage(game.translate("werewolf.role.chatty_seer.see_perform", game.translate("werewolf.categories.villager")));
                 }
-                playerWW.addKLostHeart(6);
+                playerWW.removePlayerHealth(6);
             } else if (seerEvent.getCamp().equals("werewolf.categories.werewolf")) {
                 player.sendMessage(game.translate("werewolf.role.seer.see_perform", game.translate("werewolf.categories.werewolf")));
                 if (seer.isKey(RolesBase.CHATTY_SEER.getKey())) {

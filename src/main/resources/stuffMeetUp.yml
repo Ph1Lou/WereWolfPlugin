@@ -118,8 +118,12 @@ death_loot:
       meta-type: ENCHANTED
       repair-cost: 1
       stored-enchants:
-        ARROW_DAMAGE: 1
+        ARROW_DAMAGE: 2
         ARROW_KNOCKBACK: 1
+  '1':
+    ==: org.bukkit.inventory.ItemStack
+      type: ARROW
+      amount: 64
 "werewolf.role.mischievous_werewolf.display":
   '0':
     ==: org.bukkit.inventory.ItemStack
@@ -130,16 +134,19 @@ death_loot:
     ==: org.bukkit.inventory.ItemStack
     type: POTION
     damage: 16389
-    amount: 3
-  '1':
-    ==: org.bukkit.inventory.ItemStack
-    type: POTION
-    damage: 16396
-    amount: 3
   '2':
     ==: org.bukkit.inventory.ItemStack
     type: POTION
     damage: 16385
+  '3':
+    ==: org.bukkit.inventory.ItemStack
+    type: POTION
+    damage: 16393
+  '4':
+    ==: org.bukkit.inventory.ItemStack
+    type: POTION
+    damage: 16460
+    amount: 2
 "werewolf.role.little_girl.display":
   '0':
     ==: org.bukkit.inventory.ItemStack
@@ -202,3 +209,19 @@ death_loot:
       meta-type: ENCHANTED
       stored-enchants:
         ARROW_DAMAGE: 3
+
+"werewolf.role.infect_father_of_the_wolves.display":
+  '0':
+    ==: org.bukkit.inventory.ItemStack
+    type: POTION
+    damage: 16453
+    amount: 2
+
+"werewolf.role.rival.display":
+  '0':
+    ==: org.bukkit.inventory.ItemStack
+    type: POTION
+    damage: 16460
+    amount: 2
+
+

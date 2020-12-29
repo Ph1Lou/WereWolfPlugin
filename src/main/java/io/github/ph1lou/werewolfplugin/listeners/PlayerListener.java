@@ -424,13 +424,13 @@ public class PlayerListener implements Listener {
 		game.getConfig().removeOneRole(roleLG);
 
 		AnnouncementDeathEvent announcementDeathEvent = new AnnouncementDeathEvent(playerWW,
-				game.translate("werewolf.announcement.death_message"));
+				"werewolf.announcement.death_message");
 
 		Bukkit.getPluginManager().callEvent(announcementDeathEvent);
 
 		if (!announcementDeathEvent.isCancelled()) {
 
-			String deathMessage = announcementDeathEvent.getFormat();
+			String deathMessage = game.translate(announcementDeathEvent.getFormat());
 			deathMessage = deathMessage.replace("&player&",
 					announcementDeathEvent.getPlayerName());
 			deathMessage = deathMessage.replace("&role&",
@@ -521,6 +521,17 @@ public class PlayerListener implements Listener {
 		event.setActionBar(event.getActionBar() +
 				game.translate("werewolf.action_bar.complete"));
 
+
+	}
+
+	@EventHandler
+	public void onCHatWW(WereWolfChatEvent event) {
+		if (event.isCancelled()) return;
+
+		game.getModerationManager().getModerators().stream()
+				.map(Bukkit::getPlayer)
+				.filter(Objects::nonNull)
+				.forEach(player -> player.sendMessage(game.translate("werewolf.commands.admin.ww_chat.prefix", event.getMessage())));
 
 	}
 

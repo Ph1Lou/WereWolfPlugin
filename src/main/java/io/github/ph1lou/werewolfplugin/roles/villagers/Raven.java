@@ -77,7 +77,11 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
 
     @Override
     public @NotNull String getDescription() {
-        return game.translate("werewolf.role.raven.description");
+        return super.getDescription() +
+                game.translate("werewolf.description.description", game.translate("werewolf.role.raven.description")) +
+                game.translate("werewolf.description.item", game.translate("werewolf.role.raven.item")) +
+                game.translate("werewolf.description.effect", game.translate("werewolf.role.raven.effect")) +
+                game.translate("werewolf.description._");
     }
 
 

@@ -89,7 +89,10 @@ public class Citizen extends RolesVillage implements LimitedUse, AffectedPlayers
 
     @Override
     public @NotNull String getDescription() {
-        return game.translate("werewolf.role.citizen.description");
+
+        return super.getDescription() +
+                game.translate("werewolf.description.description", game.translate("werewolf.role.citizen.description")) +
+                game.translate("werewolf.description._");
     }
 
 

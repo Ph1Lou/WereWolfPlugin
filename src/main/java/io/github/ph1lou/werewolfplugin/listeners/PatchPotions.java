@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class PatchPotions implements Listener {
@@ -26,7 +27,11 @@ public class PatchPotions implements Listener {
         Player player = (Player) event.getEntity();
 
         if (damager.hasPotionEffect(PotionEffectType.INCREASE_DAMAGE)) {
-            event.setDamage(event.getDamage() *
+
+            if (damager.getActivePotionEffects().stream().filter(potionEffect -> potionEffect.getType().equals(PotionEffectType.INCREASE_DAMAGE)).map(PotionEffect::getAmplifier).findFirst().orElse(-1) == 0) {
+                event.setDamage(event.getDamage() / 2.3f *
+                        (1 + game.getConfig().getStrengthRate() / 100f));
+            } else event.setDamage(event.getDamage() *
                     (1 + game.getConfig().getStrengthRate() / 100f));
         }
         if (player.hasPotionEffect(PotionEffectType.DAMAGE_RESISTANCE)) {

@@ -176,6 +176,8 @@ public class CursedLover implements LoverAPI, Listener {
     @Override
     public boolean swap(PlayerWW playerWW, PlayerWW playerWW1) {
 
+        if (playerWW.equals(playerWW1)) return false;
+
         if (death) return false;
 
         if (cursedLover1.equals(playerWW)) {

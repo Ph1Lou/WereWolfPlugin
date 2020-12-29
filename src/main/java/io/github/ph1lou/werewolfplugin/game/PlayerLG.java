@@ -45,7 +45,6 @@ public class PlayerLG implements PlayerWW {
     private transient Location spawn;
     private int deathTime = 0;
     private int disconnectedTime = 0;
-    private int lostHeart = 0;
     private int kill = 0;
     private boolean thief = false;
     private String name;
@@ -241,16 +240,6 @@ public class PlayerLG implements PlayerWW {
 	}
 
 	@Override
-	public void addKLostHeart(int k) {
-		this.lostHeart +=k;
-	}
-
-	@Override
-	public int getLostHeart() {
-		return(this.lostHeart);
-	}
-
-	@Override
 	public void setRole(Roles role) {
 		this.role = role;
 	}
@@ -309,12 +298,6 @@ public class PlayerLG implements PlayerWW {
 	public int getDeathTime() {
 		return(this.deathTime);
 	}
-
-
-	@Override
-    public void clearLostHeart() {
-        this.lostHeart = 0;
-    }
 
     @Nullable
     @Override

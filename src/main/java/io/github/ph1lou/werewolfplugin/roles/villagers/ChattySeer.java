@@ -13,7 +13,7 @@ public class ChattySeer extends Seer {
 
     @Override
     public @NotNull String getDescription() {
-        return game.translate("werewolf.role.chatty_seer.description");
+        return super.getDescription().replace(game.translate("werewolf.role.seer.description"), game.translate("werewolf.role.chatty_seer.description"));
     }
 
 

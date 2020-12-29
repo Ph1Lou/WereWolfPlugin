@@ -69,7 +69,9 @@ public class Comedian extends RolesWithLimitedSelectionDuration implements Potio
 
     @Override
     public @NotNull String getDescription() {
-        return game.translate("werewolf.role.comedian.description");
+        return super.getDescription() +
+                game.translate("werewolf.description.description", game.translate("werewolf.role.comedian.description")) +
+                game.translate("werewolf.description._");
     }
 
 

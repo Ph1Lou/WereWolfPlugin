@@ -24,6 +24,8 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
     private int dayNumber = -8;
     private final List<PlayerWW> affectedPlayer = new ArrayList<>();
 
+    private boolean disablePower = false;
+
     public Seer(GetWereWolfAPI main, PlayerWW playerWW, String key) {
         super(main, playerWW, key);
         setPower(false);
@@ -61,8 +63,14 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
             return;
         }
 
-        setPower(true);
         dayNumber = event.getNumber();
+
+        if (disablePower) {
+            disablePower = false;
+            return;
+        }
+
+        setPower(true);
 
         getPlayerWW().sendMessage(game.translate(
                 "werewolf.role.seer.see_camp_message",
@@ -74,7 +82,11 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
 
     @Override
     public @NotNull String getDescription() {
-        return game.translate("werewolf.role.seer.description");
+        return super.getDescription() +
+                game.translate("werewolf.description.description", game.translate("werewolf.role.seer.description")) +
+                game.translate("werewolf.description.item", game.translate("werewolf.role.seer.items")) +
+                game.translate("werewolf.description.effect", game.translate("werewolf.role.seer.effect")) +
+                game.translate("werewolf.description._");
     }
 
 
@@ -100,6 +112,10 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
 
         Bukkit.getPluginManager().callEvent(new ChestEvent());
 
+    }
+
+    public void setDisablePower() {
+        this.disablePower = true;
     }
 
 }

@@ -5,7 +5,6 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.LoverAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
-import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.*;
@@ -72,7 +71,11 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
 
     @Override
     public @NotNull String getDescription() {
-        return game.translate("werewolf.role.thief.description");
+        return super.getDescription() +
+                game.translate("werewolf.description.description", (game.getConfig().isConfigActive(ConfigsBase.EVIL_THIEF.getKey()) ?
+                        game.translate("werewolf.role.thief.description2") : game.translate("werewolf.role.thief.description"))) +
+                game.translate("werewolf.description._");
+
     }
 
 
@@ -115,7 +118,6 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onFirstDeathEvent(FirstDeathEvent event){
-
 
         PlayerWW playerWW = event.getPlayerWW();
 
@@ -165,6 +167,7 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
         } else if (roleClone.isWereWolf()) {
             Bukkit.getPluginManager().callEvent(new NewWereWolfEvent(getPlayerWW()));
         }
+        roleClone.setTransformedToNeutral(game.getConfig().isConfigActive(ConfigsBase.EVIL_THIEF.getKey()));
 
         getPlayerWW().sendMessage(game.translate("werewolf.role.thief.realized_theft",
                 game.translate(role.getKey())));
@@ -178,25 +181,12 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
 
         getPlayerWW().getRole().recoverPotionEffect();
 
-        boolean ok = true;
-
-        for (LoverAPI loverAPI : getPlayerWW().getLovers()) {
-            if (!loverAPI.isKey(RolesBase.LOVER.getKey())) {
-                ok = false;
-            } else if (!game.getConfig().isConfigActive(ConfigsBase.POLYGAMY.getKey())) {
-                ok = false;
-            }
-        }
-
-        if (ok) {
-
-            for (int i = 0; i < playerWW.getLovers().size(); i++) {
-                LoverAPI loverAPI = playerWW.getLovers().get(i);
-                if (loverAPI.swap(playerWW, getPlayerWW())) {
-                    getPlayerWW().addLover(loverAPI);
-                    playerWW.removeLover(loverAPI);
-                    i--;
-                }
+        for (int i = 0; i < playerWW.getLovers().size(); i++) {
+            LoverAPI loverAPI = playerWW.getLovers().get(i);
+            if (loverAPI.swap(playerWW, getPlayerWW())) {
+                getPlayerWW().addLover(loverAPI);
+                playerWW.removeLover(loverAPI);
+                i--;
             }
         }
         game.death(playerWW);
@@ -222,4 +212,5 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
 
         getPlayerWW().addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
     }
+
 }
