@@ -59,7 +59,7 @@ public class MysticalWereWolf extends RolesWereWolf {
 
         if (roles.isEmpty()) return;
 
-        PlayerWW roleWW = roles.get((int) game.getRandom().nextFloat() * roles.size());
+        PlayerWW roleWW = roles.get((int) Math.floor(game.getRandom().nextFloat() * roles.size()));
 
         Bukkit.getPluginManager().callEvent(new MysticalWerewolfRevelationEvent(getPlayerWW(), roleWW));
 

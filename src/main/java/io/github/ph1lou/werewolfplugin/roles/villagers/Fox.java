@@ -90,8 +90,6 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerDeathByFox(PlayerDeathEvent event) {
 
-        if (!isWereWolf()) return;
-
         if (event.getEntity().getKiller() == null) return;
 
         Player killer = event.getEntity().getKiller();

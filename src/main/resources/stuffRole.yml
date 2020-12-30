@@ -10,12 +10,12 @@
         ARROW_DAMAGE: 2
   '1':
     ==: org.bukkit.inventory.ItemStack
-      type: ARROW
-      amount: 64
+    type: ARROW
+    amount: 64
   '2':
     ==: org.bukkit.inventory.ItemStack
-      type: STRING
-      amount: 64
+    type: STRING
+    amount: 64
 "werewolf.role.mischievous_werewolf.display":
   '0':
     ==: org.bukkit.inventory.ItemStack

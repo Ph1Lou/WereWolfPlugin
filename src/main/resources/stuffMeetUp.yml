@@ -122,8 +122,8 @@ death_loot:
         ARROW_KNOCKBACK: 1
   '1':
     ==: org.bukkit.inventory.ItemStack
-      type: ARROW
-      amount: 64
+    type: ARROW
+    amount: 64
 "werewolf.role.mischievous_werewolf.display":
   '0':
     ==: org.bukkit.inventory.ItemStack
