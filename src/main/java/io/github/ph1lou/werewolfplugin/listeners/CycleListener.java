@@ -265,6 +265,7 @@ public class CycleListener implements Listener {
                 .forEach(playerWW -> playerWW.getRole().roleAnnouncement());
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
+            
             if (!game.isState(StateGame.END)) {
                 game.getPlayerWW()
                         .forEach(playerWW -> {

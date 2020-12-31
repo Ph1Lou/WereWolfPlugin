@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.enums.VillagerKit;
 import io.github.ph1lou.werewolfapi.events.EndPlayerMessageEvent;
@@ -16,10 +17,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class Villager extends RolesVillage {
 
-    private final VillagerKit villagerKit;
+    private VillagerKit villagerKit;
 
     public Villager(GetWereWolfAPI main, PlayerWW playerWW, String key) {
         super(main, playerWW, key);
+        if (game.isState(StateGame.LOBBY)) return;
         villagerKit = VillagerKit.values()[(int) (game.getRandom().nextFloat() * VillagerKit.values().length)];
         Bukkit.getPluginManager().callEvent(new VillagerKitEvent(getPlayerWW(), villagerKit.getKey()));
     }
