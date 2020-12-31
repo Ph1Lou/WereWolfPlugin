@@ -38,6 +38,8 @@ public class Villager extends RolesVillage {
     @Override
     public void recoverPower() {
 
+        if (game.getConfig().isTrollSV()) return;
+
         switch (villagerKit) {
             case GOLEM:
                 getPlayerWW().addItem(UniversalMaterial.IRON_INGOT.getStack(15));

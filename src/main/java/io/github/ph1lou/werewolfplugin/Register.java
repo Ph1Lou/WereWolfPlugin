@@ -491,7 +491,6 @@ public class Register implements RegisterManager {
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.role.librarian.command", new CommandLibrarian(main))
                         .addRoleKey(RolesBase.LIBRARIAN.getKey())
-                       
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
                         .addArgNumbers(1));

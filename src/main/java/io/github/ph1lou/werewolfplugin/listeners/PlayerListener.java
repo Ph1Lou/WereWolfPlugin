@@ -439,7 +439,6 @@ public class PlayerListener implements Listener {
 			Bukkit.broadcastMessage(deathMessage);
 		}
 
-
 		playerWW.setState(StatePlayer.DEATH);
 		game.getScore().removePlayerSize();
 

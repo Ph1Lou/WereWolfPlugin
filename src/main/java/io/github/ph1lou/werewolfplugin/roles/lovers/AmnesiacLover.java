@@ -129,7 +129,7 @@ public class AmnesiacLover implements LoverAPI, Listener {
             return;
         }
 
-        sb.append(ChatColor.DARK_PURPLE).append("♥ ");
+        sb.append(ChatColor.DARK_PURPLE).append(" ♥");
 
         event.setSuffix(sb.toString());
     }

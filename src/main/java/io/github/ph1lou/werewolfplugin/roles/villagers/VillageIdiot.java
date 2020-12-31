@@ -53,7 +53,7 @@ public class VillageIdiot extends RolesVillage implements Power {
 
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
-        event.setSuffix(event.getSuffix() + game.translate(getKey()));
+        event.setSuffix(event.getSuffix() + game.translate("werewolf.role.village_idiot.suffix"));
     }
 
 

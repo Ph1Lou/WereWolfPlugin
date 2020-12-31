@@ -1,7 +1,6 @@
 package io.github.ph1lou.werewolfplugin.game;
 
 import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
-import io.github.ph1lou.werewolfapi.LoverAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.*;
 import io.github.ph1lou.werewolfapi.events.*;
@@ -42,20 +41,21 @@ public class End {
         if (config.getAmnesiacLoverSize() *
                 config.getLoverSize() <= 1) {
 
-            for (LoverAPI loverAPI : game.getLoversManager().getLovers()) {
-                Set<PlayerWW> lovers = new HashSet<>(loverAPI.getLovers());
+            game.getLoversManager().getLovers().stream()
+                    .filter(loverAPI -> !loverAPI.isKey(RolesBase.CURSED_LOVER.getKey()))
+                    .forEach(loverAPI -> {
+                        Set<PlayerWW> lovers = new HashSet<>(loverAPI.getLovers());
 
-                if (loverAPI.isAlive()) {
-                    AroundLover aroundLover = new AroundLover(lovers);
-                    Bukkit.getPluginManager().callEvent(aroundLover);
+                        if (loverAPI.isAlive()) {
+                            AroundLover aroundLover = new AroundLover(lovers);
+                            Bukkit.getPluginManager().callEvent(aroundLover);
 
-                    if (aroundLover.getPlayerWWS().size() == game.getScore().getPlayerSize()) {
-                        winner = loverAPI.getKey();
-                        fin();
-                        return;
-                    }
-                }
-            }
+                            if (aroundLover.getPlayerWWS().size() == game.getScore().getPlayerSize()) {
+                                winner = loverAPI.getKey();
+                                fin();
+                            }
+                        }
+                    });
         }
 
         WinConditionsCheckEvent winConditionsCheckEvent = new WinConditionsCheckEvent();

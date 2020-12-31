@@ -114,7 +114,7 @@ public class Lover implements LoverAPI, Listener {
             return;
         }
 
-        sb.append(ChatColor.LIGHT_PURPLE).append("♥ ");
+        sb.append(ChatColor.LIGHT_PURPLE).append(" ♥");
 
         event.setSuffix(sb.toString());
     }

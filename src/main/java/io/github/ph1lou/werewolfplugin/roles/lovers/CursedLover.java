@@ -128,7 +128,7 @@ public class CursedLover implements LoverAPI, Listener {
             return;
         }
 
-        sb.append(ChatColor.BLACK).append("♥ ");
+        sb.append(ChatColor.BLACK).append(" ♥");
 
         event.setSuffix(sb.toString());
     }
