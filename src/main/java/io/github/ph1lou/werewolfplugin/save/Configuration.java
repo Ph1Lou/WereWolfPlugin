@@ -2,10 +2,7 @@ package io.github.ph1lou.werewolfplugin.save;
 
 import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
-import io.github.ph1lou.werewolfapi.registers.ConfigRegister;
-import io.github.ph1lou.werewolfapi.registers.RegisterManager;
-import io.github.ph1lou.werewolfapi.registers.ScenarioRegister;
-import io.github.ph1lou.werewolfapi.registers.TimerRegister;
+import io.github.ph1lou.werewolfapi.registers.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +13,7 @@ public class Configuration implements ConfigWereWolfAPI {
     private final Map<String, Boolean> configValues = new HashMap<>();
     private final Map<String, Integer> roleCount = new HashMap<>();
     private final Map<String, Boolean> scenarioValues = new HashMap<>();
+    private final Map<String, Integer> randomEventsValues = new HashMap<>();
     private transient RegisterManager registerManager;
     private int strengthRate = 30;
     private int resistanceRate = 20;
@@ -371,7 +369,6 @@ public class Configuration implements ConfigWereWolfAPI {
         roleCount.put(key, i);
     }
 
-    @Override
     public void decreaseTimer(String key) {
         timerValues.put(key, getTimerValue(key) - 1);
     }
@@ -467,6 +464,16 @@ public class Configuration implements ConfigWereWolfAPI {
     @Override
     public int getKnockBackMode() {
         return knockBackMode;
+    }
+
+    @Override
+    public int getProbability(String key) {
+        return randomEventsValues.getOrDefault(key, registerManager.getRandomEventsRegister().stream().filter(randomEventRegister -> randomEventRegister.getKey().equals(key)).findFirst().map(RandomEventRegister::getDefaultValue).orElse(0));
+    }
+
+    @Override
+    public void setProbability(String key, int probability) {
+        randomEventsValues.put(key, probability);
     }
 
     @Override

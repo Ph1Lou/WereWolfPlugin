@@ -361,4 +361,11 @@ public class CycleListener implements Listener {
                     Sounds.GLASS.play(player);
                 });
     }
+
+    @EventHandler
+    public void onStart(StartEvent event) {
+        main.getRegisterManager().getRandomEventsRegister()
+                .forEach(randomEventRegister -> randomEventRegister.getRandomEvent()
+                        .register(game.getRandom().nextDouble() * 100 < randomEventRegister.getDefaultValue()));
+    }
 }

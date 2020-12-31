@@ -108,6 +108,7 @@ public class Priestess extends RolesWithLimitedSelectionDuration implements Affe
                 .filter(Objects::nonNull)
                 .forEach(player -> player.sendMessage(game.translate("werewolf.announcement.death_message_with_role").replace("&player&", event.getPlayerName()).replace("&role&", game.translate(event.getPlayerWW().getRole().getKey()))));
 
+        Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.announcement.death_message_with_role").replace("&player&", event.getPlayerName()).replace("&role&", game.translate(event.getPlayerWW().getRole().getKey())));
         event.setRole(event.getPlayerWW().getRole().getCamp().getKey());
     }
 

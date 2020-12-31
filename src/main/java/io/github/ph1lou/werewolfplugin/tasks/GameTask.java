@@ -4,6 +4,7 @@ package io.github.ph1lou.werewolfplugin.tasks;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.events.UpdateEvent;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
+import io.github.ph1lou.werewolfplugin.save.Configuration;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.PluginManager;
@@ -43,7 +44,7 @@ public class GameTask extends BukkitRunnable {
 						if (game.getConfig().getTimerValue(timerRegister.getKey()) == 0) {
 							timerRegister.getConsumer().accept(game);
 						}
-						game.getConfig().decreaseTimer(timerRegister.getKey());
+						((Configuration) game.getConfig()).decreaseTimer(timerRegister.getKey());
 					}
 				});
 

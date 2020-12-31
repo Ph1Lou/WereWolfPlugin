@@ -15,6 +15,7 @@ import io.github.ph1lou.werewolfplugin.listeners.configs.RedNameTag;
 import io.github.ph1lou.werewolfplugin.listeners.configs.SeerEvent;
 import io.github.ph1lou.werewolfplugin.listeners.configs.ShowDeathCategoryRole;
 import io.github.ph1lou.werewolfplugin.listeners.configs.ShowDeathRole;
+import io.github.ph1lou.werewolfplugin.listeners.random_events.Exposed;
 import io.github.ph1lou.werewolfplugin.listeners.scenarios.*;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.*;
 import io.github.ph1lou.werewolfplugin.roles.villagers.*;
@@ -36,6 +37,7 @@ public class Register implements RegisterManager {
     private final List<CommandRegister> commandsRegister = new ArrayList<>();
     private final List<CommandRegister> adminCommandsRegister = new ArrayList<>();
     private final List<AddonRegister> addonsRegister = new ArrayList<>();
+    private final List<RandomEventRegister> eventRandomsRegister = new ArrayList<>();
 
     public Register(Main main) {
         this.main = main;
@@ -45,6 +47,7 @@ public class Register implements RegisterManager {
         registerConfigs();
         registerCommands();
         registerAdminCommands();
+        registerRandomEvents();
     }
 
     private void registerAdminCommands() {
@@ -931,6 +934,14 @@ public class Register implements RegisterManager {
                         ConfigsBase.PROXIMITY_CHAT.getKey()));
     }
 
+    private void registerRandomEvents() {
+        eventRandomsRegister
+                .add(new RandomEventRegister("werewolf.name",
+                        RandomEvent.EXPOSED.getKey(), new Exposed(main))
+                        .setLoreKey("werewolf.random_events.exposed.description")
+                        .setDefaultValue(10));
+    }
+
     private void registerTimers() {
 
         timersRegister
@@ -1100,13 +1111,18 @@ public class Register implements RegisterManager {
     }
 
     @Override
+    public List<? extends RandomEventRegister> getRandomEventsRegister() {
+        return eventRandomsRegister;
+    }
+
+    @Override
     public void registerAddon(AddonRegister addonRegister) {
         register(addonRegister, addonsRegister);
     }
 
     @Override
     public void registerRole(RoleRegister roleRegister) {
-       register(roleRegister,rolesRegister);
+        register(roleRegister, rolesRegister);
     }
 
     @Override
@@ -1121,23 +1137,28 @@ public class Register implements RegisterManager {
 
     @Override
     public void registerTimer(TimerRegister timerRegister) {
-        register(timerRegister,timersRegister);
+        register(timerRegister, timersRegister);
     }
 
     @Override
     public void registerCommands(CommandRegister commandRegister) {
-        register(commandRegister,commandsRegister);
+        register(commandRegister, commandsRegister);
+    }
+
+    @Override
+    public void registerRandomEvents(RandomEventRegister randomEventRegister) {
+        register(randomEventRegister, eventRandomsRegister);
     }
 
     @Override
     public void registerAdminCommands(CommandRegister commandRegister) {
-        register(commandRegister,adminCommandsRegister);
+        register(commandRegister, adminCommandsRegister);
     }
 
-    private <A extends RegisterAPI> void register(A register, List<A> registers ){
-        if(registers.removeAll(registers.stream()
+    private <A extends RegisterAPI> void register(A register, List<A> registers) {
+        if (registers.removeAll(registers.stream()
                 .filter(register1 -> register1.getKey().equalsIgnoreCase(register.getKey()))
-                .collect(Collectors.toList()))){
+                .collect(Collectors.toList()))) {
             Bukkit.getLogger().warning(String.format("[WereWolfPlugin] L'élément %s a été écrasé par l'addon %s",register.getKey(),register.getAddonKey()));
         }
         registers.add(register);

@@ -67,7 +67,6 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
 
         setPower(true);
 
-
         getPlayerWW().sendMessage(game.translate("werewolf.role.raven.curse_message",
                 game.getScore().conversion(
                         game.getConfig()
@@ -87,7 +86,6 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
 
     @Override
     public void recoverPower() {
-
     }
 
 
@@ -95,11 +93,9 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
     public void onVoteEvent(VoteEvent event) {
 
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
-        game.getVote().getVotes().put(event.getTargetWW(),
-                game.getVote().getVotes()
-                        .getOrDefault(event.getTargetWW(),
-                                0
-                        ) + 1);
+
+        game.getVote().getVotes().merge(event.getTargetWW(), 1, Integer::sum);
+
     }
 
     @EventHandler
@@ -111,7 +107,6 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
         UUID uuid = player.getUniqueId();
 
         if (!getPlayerUUID().equals(uuid)) return;
-
 
         if (event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
             event.setCancelled(true);

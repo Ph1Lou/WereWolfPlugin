@@ -819,6 +819,10 @@
         "invulnerability": "Invulnérabilité (§b%s§r)",
         "succubus_duration": "Durée du Charme du Succube (§b%s§r)"
       },
+      "random_events": {
+        "name": "Configuration §bEvents Aléatoires",
+        "probability": "§fProbabilité : §b%d§f%%"
+      },
       "save": {
         "name": "Configuration §bSauvegarde",
         "new": "Créer une nouvelle sauvegarde",
@@ -924,7 +928,13 @@
         "8": "Bordure §b&border&",
         "9": "Taille §b&border_size&"
       }
-
+    },
+    "random_events": {
+      "exposed": {
+        "name": "Exposed",
+        "message": "[§5Exposed§r] Le rôle de §B%s§f se trouve dans la liste suivante §b%s §f%s §b%s",
+        "description": "Deux fois dans la partie (dans les intervalles [65~80 min] et [100~115 min]), un joueur choisi aléatoirement voit son pseudo affiché dans le chat à côté de 3 rôles toujours représentés dans la partie. Parmi ces 3 rôles se trouvent : son rôle, un rôle d’un camp différent, un rôle aléatoire parmi tous les autres.\nUn joueur ne peut pas être “exposé” deux fois dans la même partie."
+      }
     },
     "check": {
       "death": "[§cLG UHC§r] Vous n'êtes pas Vivant",
