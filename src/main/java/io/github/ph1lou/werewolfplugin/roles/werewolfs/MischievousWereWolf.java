@@ -183,8 +183,7 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
         return super.getDescription() +
                 game.translate("werewolf.description.description", game.translate("werewolf.role.mischievous_werewolf.description")) +
                 game.translate("werewolf.description.item", game.translate("werewolf.role.mischievous_werewolf.items")) +
-                game.translate("werewolf.description.effect", game.translate("werewolf.role.mischievous_werewolf.effect")) +
-                game.translate("werewolf.description._");
+                game.translate("werewolf.description.effect", game.translate("werewolf.role.mischievous_werewolf.effect"));
     }
 
 

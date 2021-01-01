@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Cupid extends RolesVillage implements AffectedPlayers, Power {
 
@@ -63,7 +64,7 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
                 game.translate("werewolf.description.description", game.translate("werewolf.role.cupid.description")) +
                 game.translate("werewolf.description.equipment", game.translate("werewolf.role.cupid.extra", game.getConfig().getLimitPowerBow() + 1)) +
                 game.translate("werewolf.description.item", game.translate("werewolf.role.cupid.items")) +
-                game.translate("werewolf.description._");
+                game.translate("werewolf.role.cupid.lover", affectedPlayer.isEmpty() ? game.translate("werewolf.role.cupid.none") : affectedPlayer.stream().map(PlayerWW::getName).collect(Collectors.joining(" ")));
     }
 
 

@@ -2,21 +2,22 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.enums.ComedianMasks;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.PotionEffects;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesWithLimitedSelectionDuration;
 import org.bukkit.event.EventHandler;
-import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class Comedian extends RolesWithLimitedSelectionDuration implements PotionEffects {
+public class Comedian extends RolesWithLimitedSelectionDuration {
 
-    private final List<PotionEffectType> comedianEffects = new ArrayList<>();
+    private final List<ComedianMasks> comedianMasks = new ArrayList<>();
 
     public Comedian(GetWereWolfAPI main, PlayerWW playerWW, String key) {
         super(main, playerWW, key);
@@ -24,39 +25,39 @@ public class Comedian extends RolesWithLimitedSelectionDuration implements Potio
     }
 
 
-    @Override
-    public List<PotionEffectType> getPotionEffects() {
-        return comedianEffects;
+    public List<ComedianMasks> getMasks() {
+        return comedianMasks;
     }
 
-    @Override
-    public PotionEffectType getLastPotionEffect() {
-        if (comedianEffects.isEmpty()) return PotionEffectType.BLINDNESS;
-        return comedianEffects.get(comedianEffects.size() - 1);
+    @Nullable
+    public ComedianMasks getLastMask() {
+        if (comedianMasks.isEmpty()) return null;
+        return comedianMasks.get(comedianMasks.size() - 1);
     }
 
-    @Override
-    public void addPotionEffect(PotionEffectType comedianEffect) {
-        this.comedianEffects.add(comedianEffect);
+
+    public void addMask(ComedianMasks mask) {
+        this.comedianMasks.add(mask);
     }
 
-    @Override
-    public void removePotionEffect(PotionEffectType potionEffectType) {
-        this.comedianEffects.remove(potionEffectType);
+
+    public void removeMask(ComedianMasks mask) {
+        this.comedianMasks.remove(mask);
     }
 
 
     @EventHandler
     public void onDay(DayEvent event) {
 
-
-        getPlayerWW().removePotionEffect(getLastPotionEffect());
+        if (getLastMask() != null) {
+            getPlayerWW().removePotionEffect(getLastMask().getPotionEffectType());
+        }
 
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        if (getPotionEffects().size() >= 3) return;
+        if (getMasks().size() >= 3) return;
 
         setPower(true);
 
@@ -71,7 +72,7 @@ public class Comedian extends RolesWithLimitedSelectionDuration implements Potio
     public @NotNull String getDescription() {
         return super.getDescription() +
                 game.translate("werewolf.description.description", game.translate("werewolf.role.comedian.description")) +
-                game.translate("werewolf.description._");
+                game.translate("werewolf.role.comedian.masks", comedianMasks.isEmpty() ? game.translate("werewolf.role.comedian.none") : comedianMasks.stream().map(comedianMasks1 -> game.translate(comedianMasks1.getKey())).collect(Collectors.joining(" ")));
     }
 
 

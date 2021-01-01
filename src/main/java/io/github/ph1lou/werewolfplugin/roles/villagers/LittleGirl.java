@@ -154,8 +154,7 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
         return super.getDescription() +
                 game.translate("werewolf.description.description", game.translate("werewolf.role.little_girl.description")) +
                 game.translate("werewolf.description.item", game.translate("werewolf.role.little_girl.item")) +
-                game.translate("werewolf.description.effect", game.translate("werewolf.role.little_girl.effect")) +
-                game.translate("werewolf.description._");
+                game.translate("werewolf.description.effect", game.translate("werewolf.role.little_girl.effect"));
     }
 
 
@@ -267,7 +266,7 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
     }
 
     @EventHandler
-    public void onWWChat(WereWolfChatEvent event) {
+    public void onWWChatLittleGirl(WereWolfChatEvent event) {
 
         if (event.isCancelled()) return;
 

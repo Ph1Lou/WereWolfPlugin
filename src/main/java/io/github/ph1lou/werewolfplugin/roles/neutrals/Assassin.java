@@ -104,8 +104,7 @@ public class Assassin extends RolesNeutral {
         return super.getDescription() +
                 game.translate("werewolf.description.equipment", game.translate("werewolf.role.assassin.limit")) +
                 game.translate("werewolf.description.item", game.translate("werewolf.role.assassin.items")) +
-                game.translate("werewolf.description.effect", game.translate("werewolf.role.assassin.effect")) +
-                game.translate("werewolf.description._");
+                game.translate("werewolf.description.effect", game.translate("werewolf.role.assassin.effect"));
     }
 
 

@@ -65,8 +65,7 @@ public class Witch extends RolesVillage implements AffectedPlayers, Power {
                 game.translate("werewolf.description.description", game.translate("werewolf.role.witch.description")) +
                 game.translate("werewolf.description.power", (game.translate(game.getConfig().isConfigActive(ConfigsBase.AUTO_REZ_WITCH.getKey()) ? "werewolf.role.witch.himself" : "werewolf.role.witch.not_himself"))) +
                 game.translate("werewolf.description.power", game.translate(power ? "werewolf.role.witch.power_available" : "werewolf.role.witch.power_not_available")) +
-                game.translate("werewolf.description.item", game.translate("werewolf.role.witch.items")) +
-                game.translate("werewolf.description._");
+                game.translate("werewolf.description.item", game.translate("werewolf.role.witch.items"));
     }
 
 

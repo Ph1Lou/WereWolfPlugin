@@ -26,7 +26,7 @@ public class CommandRole implements Commands {
 
         if (playerWW == null) return;
 
-        player.sendMessage(playerWW.getRole().getDescription());
+        player.sendMessage(playerWW.getRole().getBetterDescription());
 
     }
 }

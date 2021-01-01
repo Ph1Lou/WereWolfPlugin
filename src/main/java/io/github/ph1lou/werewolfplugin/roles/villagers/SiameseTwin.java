@@ -41,8 +41,7 @@ public class SiameseTwin extends RolesVillage {
                 game.translate("werewolf.description.description", game.translate("werewolf.role.siamese_twin.description")) +
                 game.translate("werewolf.description.power", game.translate("werewolf.role.siamese_twin.power")) +
                 game.translate("werewolf.role.siamese_twin.siamese_twin_list",
-                        list.toString()) +
-                game.translate("werewolf.description._");
+                        list.toString());
     }
 
 

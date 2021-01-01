@@ -75,8 +75,7 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
     @Override
     public @NotNull String getDescription() {
         return super.getDescription() +
-                game.translate("werewolf.description.description", game.translate("werewolf.role.trapper.description")) +
-                game.translate("werewolf.description._");
+                game.translate("werewolf.description.description", game.translate("werewolf.role.trapper.description"));
     }
 
 

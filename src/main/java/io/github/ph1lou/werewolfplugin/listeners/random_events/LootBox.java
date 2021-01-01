@@ -1,14 +1,12 @@
-package io.github.ph1lou.werewolfplugin.listeners.configs;
+package io.github.ph1lou.werewolfplugin.listeners.random_events;
 
 import io.github.ph1lou.werewolfapi.ListenerManager;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Camp;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
-import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
-import io.github.ph1lou.werewolfapi.events.ChestEvent;
-import io.github.ph1lou.werewolfapi.events.StopEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
+import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -24,23 +22,42 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-public class SeerEvent extends ListenerManager {
+public class LootBox extends ListenerManager {
 
 
     private final Map<Location, Boolean> chestHasBeenOpen = new HashMap<>();
     private final List<Location> chestLocation = new ArrayList<>();
+    private boolean eventActive = false;
 
-    public SeerEvent(Main main) {
+    public LootBox(Main main) {
         super(main);
     }
 
-    private void createTarget(Location location, Boolean active) {
+    @EventHandler
+    public void onVillagerDeath(FinalDeathEvent event) {
+
+        WereWolfAPI game = main.getWereWolfAPI();
+
+        if (eventActive) return;
+
+        if (!event.getPlayerWW().getRole().isCamp(Camp.VILLAGER)) return;
+
+        if (game.getScore().getPlayerSize() > 16) return;
+
+        if (game.getRandom().nextFloat() * 5 > 3) return;
+
+        launchEvent(event.getPlayerWW().getName());
+
+    }
+
+    private void createTarget(Location location, Boolean active, String name) {
 
         WereWolfAPI game = main.getWereWolfAPI();
         Location location2 = location.clone();
         location2.setY(location2.getY() + 1);
-        List<PlayerWW> danger = new ArrayList<>();
+
         Block block1 = location.getBlock();
         Block block2 = location2.getBlock();
 
@@ -50,23 +67,12 @@ public class SeerEvent extends ListenerManager {
         Chest chest = (Chest) block1.getState();
         Sign sign = (Sign) block2.getState();
 
-        for (PlayerWW playerWW1 : game.getPlayerWW()) {
-            Roles role = playerWW1.getRole();
-            if (playerWW1.isState(StatePlayer.ALIVE)) {
-                if (role.isWereWolf() || role.isWereWolf()) {
-                    danger.add(playerWW1);
-                }
-            }
-        }
-
-        if (active && !danger.isEmpty()) {
+        if (active) {
             chest.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE, 2));
-            PlayerWW plg = danger.get((int) Math.floor(
-                    game.getRandom().nextFloat() * danger.size()));
-            sign.setLine(1, plg.getName());
+            sign.setLine(1, name);
         } else {
             chest.getInventory().addItem(new ItemStack(Material.BONE, 8));
-            sign.setLine(1, game.translate("werewolf.event.on_sign"));
+            sign.setLine(1, game.translate("werewolf.random_events.loot_box.on_sign"));
         }
         sign.update();
         location.getBlock().setType(chest.getType());
@@ -77,6 +83,14 @@ public class SeerEvent extends ListenerManager {
     public void onGameStop(StopEvent event) {
         chestHasBeenOpen.clear();
         chestLocation.clear();
+        eventActive = false;
+    }
+
+    @EventHandler
+    public void onGameStart(StartEvent event) {
+        chestHasBeenOpen.clear();
+        chestLocation.clear();
+        eventActive = false;
     }
 
     @EventHandler
@@ -103,17 +117,35 @@ public class SeerEvent extends ListenerManager {
         event.setActionBar(stringBuilder.toString());
     }
 
-    @EventHandler
-    public void onSeerEvent(ChestEvent event) {
+
+    public void launchEvent(String deathName) {
 
         WereWolfAPI game = main.getWereWolfAPI();
         World world = game.getMapManager().getWorld();
         WorldBorder wb = world.getWorldBorder();
-        int nb_target = game.getScore().getPlayerSize() / 3;
-        if (nb_target < 2) {
-            nb_target = 2;
+
+        List<PlayerWW> playerWWS = game.getPlayerWW().stream()
+                .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
+                .filter(playerWW1 -> !playerWW1.getRole().isCamp(Camp.VILLAGER))
+                .collect(Collectors.toList());
+
+        if (playerWWS.isEmpty()) return;
+
+        PlayerWW playerWW = playerWWS.get((int) Math.floor(
+                game.getRandom().nextFloat() * playerWWS.size()));
+
+        int nbTarget = game.getScore().getPlayerSize() / 3;
+        if (nbTarget < 2) {
+            nbTarget = 2;
         }
-        for (int i = 0; i < nb_target; i++) {
+
+        LootBoxEvent lootBoxEvent = new LootBoxEvent(playerWW, nbTarget);
+
+        if (lootBoxEvent.isCancelled()) return;
+
+        eventActive = true;
+
+        for (int i = 0; i < nbTarget; i++) {
 
             double a = Math.random() * 2 * Math.PI;
             int x = (int) (Math.round(wb.getSize() / 3 *
@@ -122,13 +154,13 @@ public class SeerEvent extends ListenerManager {
                     Math.sin(a) + world.getSpawnLocation().getBlockZ()));
             Location location = new Location(world, x, world.getHighestBlockYAt(x, z), z);
 
-            createTarget(location, i == 0);
+            createTarget(location, i == 0, playerWW.getName());
 
             chestLocation.add(location);
             chestHasBeenOpen.put(location, false);
         }
 
-        Bukkit.broadcastMessage(game.translate("werewolf.event.seer_death", nb_target));
+        Bukkit.broadcastMessage(game.translate("werewolf.random_events.loot_box.villager_death", deathName, nbTarget));
     }
 
     @EventHandler
@@ -155,6 +187,7 @@ public class SeerEvent extends ListenerManager {
         }
 
         Location location = ((Chest) event.getInventory().getHolder()).getLocation();
+
         if (!chestLocation.contains(location)) {
             return;
         }
@@ -167,6 +200,8 @@ public class SeerEvent extends ListenerManager {
 
         chestLocation.clear();
         chestHasBeenOpen.clear();
-        Bukkit.broadcastMessage(game.translate("werewolf.event.all_chest_find"));
+        Bukkit.broadcastMessage(game.translate("werewolf.random_events.loot_box.all_chest_find"));
+
+        Bukkit.getPluginManager().callEvent(new FindAllLootBoxEvent());
     }
 }

@@ -5,7 +5,10 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.*;
 import io.github.ph1lou.werewolfapi.events.*;
-import io.github.ph1lou.werewolfapi.rolesattributs.*;
+import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.AngelRole;
+import io.github.ph1lou.werewolfapi.rolesattributs.LimitedUse;
+import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -22,12 +25,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, AngelRole, Transformed {
+public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, AngelRole {
 
     private int use = 0;
     private AngelForm choice = AngelForm.ANGEL;
     private final List<PlayerWW> affectedPlayer = new ArrayList<>();
-    private boolean transformed = false;
+
 
     public Angel(GetWereWolfAPI main, PlayerWW playerWW, String key) {
         super(main, playerWW, key);
@@ -87,6 +90,8 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
             sb.append(game.translate("werewolf.description.effect", game.translate("werewolf.role.fallen_angel.effect")));
             if (affectedPlayer.isEmpty()) {
                 sb.append(game.translate("werewolf.description.power", game.translate("werewolf.role.fallen_angel.wait", game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.ANGEL_DURATION.getKey())))));
+            } else {
+                sb.append(game.translate("werewolf.role.angel.target", affectedPlayer.get(0).getName()));
             }
         } else if (choice.equals(AngelForm.GUARDIAN_ANGEL)) {
 
@@ -99,11 +104,11 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
             }
             if (affectedPlayer.isEmpty()) {
                 sb.append(game.translate("werewolf.description.power", game.translate("werewolf.role.guardian_angel.wait", game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.ANGEL_DURATION.getKey())))));
+            } else {
+                sb.append(game.translate("werewolf.role.guardian_angel.protege", affectedPlayer.get(0).getName()));
             }
             sb.append(game.translate("werewolf.description.command", game.translate("werewolf.role.guardian_angel.show_command")));
         }
-
-        sb.append(game.translate("werewolf.description._"));
 
         return sb.toString();
     }
@@ -338,8 +343,6 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
                 getPlayerWW().sendMessage(game.translate(
                         "werewolf.role.guardian_angel.protege_death_patch"));
             }
-
-            transformed = true;
         }
 
     }
@@ -402,20 +405,10 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
     }
 
     @Override
-    public boolean getTransformed() {
-        return this.transformed;
-    }
-
-    @Override
-    public void setTransformed(boolean b) {
-        this.transformed = b;
-    }
-
-    @Override
     public boolean isNeutral() {
         return super.isNeutral() &&
                 (!game.getConfig().isConfigActive(ConfigsBase.SWEET_ANGEL.getKey())
-                        || !transformed);
+                        || !choice.equals(AngelForm.GUARDIAN_ANGEL) || affectedPlayer.isEmpty() || !affectedPlayer.get(0).isState(StatePlayer.DEATH));
     }
 
     @EventHandler

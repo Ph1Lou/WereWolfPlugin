@@ -12,10 +12,10 @@ import io.github.ph1lou.werewolfplugin.commands.admin.ingame.*;
 import io.github.ph1lou.werewolfplugin.commands.roles.*;
 import io.github.ph1lou.werewolfplugin.commands.utilities.*;
 import io.github.ph1lou.werewolfplugin.listeners.configs.RedNameTag;
-import io.github.ph1lou.werewolfplugin.listeners.configs.SeerEvent;
 import io.github.ph1lou.werewolfplugin.listeners.configs.ShowDeathCategoryRole;
 import io.github.ph1lou.werewolfplugin.listeners.configs.ShowDeathRole;
 import io.github.ph1lou.werewolfplugin.listeners.random_events.Exposed;
+import io.github.ph1lou.werewolfplugin.listeners.random_events.LootBox;
 import io.github.ph1lou.werewolfplugin.listeners.scenarios.*;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.*;
 import io.github.ph1lou.werewolfplugin.roles.villagers.*;
@@ -862,10 +862,6 @@ public class Register implements RegisterManager {
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.VICTORY_LOVERS.getKey()));
-        configsRegister
-                .add(new ConfigRegister("werewolf.name",
-                        ConfigsBase.EVENT_SEER_DEATH.getKey())
-                        .addConfig(new SeerEvent(main)));
 
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
@@ -939,6 +935,11 @@ public class Register implements RegisterManager {
                 .add(new RandomEventRegister("werewolf.name",
                         RandomEvent.EXPOSED.getKey(), new Exposed(main))
                         .setLoreKey("werewolf.random_events.exposed.description")
+                        .setDefaultValue(10));
+
+        eventRandomsRegister
+                .add(new RandomEventRegister("werewolf.name",
+                        RandomEvent.LOOT_BOX.getKey(), new LootBox(main))
                         .setDefaultValue(10));
     }
 

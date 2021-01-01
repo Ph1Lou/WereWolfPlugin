@@ -22,8 +22,7 @@ public class NaughtyLittleWolf extends RolesWereWolf {
     @Override
     public @NotNull String getDescription() {
         return super.getDescription().replace(game.translate("werewolf.description.werewolf"), "") +
-                game.translate("werewolf.role.naughty_little_wolf.effect") +
-                game.translate("werewolf.description._");
+                game.translate("werewolf.role.naughty_little_wolf.effect");
     }
 
 

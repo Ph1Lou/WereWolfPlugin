@@ -42,8 +42,7 @@ public class Rival extends RolesNeutral implements Power {
     public @NotNull String getDescription() {
         return super.getDescription() +
                 game.translate("werewolf.description.description", game.translate("werewolf.role.rival.description", game.getScore().conversion(Math.abs(game.getConfig().getTimerValue(TimersBase.ROLE_DURATION.getKey())) + Math.abs(game.getConfig().getTimerValue(TimersBase.RIVAL_DURATION.getKey()))))) +
-                game.translate("werewolf.description.item", game.translate("werewolf.role.rival.item")) +
-                game.translate("werewolf.description._");
+                game.translate("werewolf.description.item", game.translate("werewolf.role.rival.item"));
 
     }
 

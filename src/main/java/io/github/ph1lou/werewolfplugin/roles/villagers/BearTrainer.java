@@ -95,8 +95,7 @@ public class BearTrainer extends RolesVillage {
     @Override
     public @NotNull String getDescription() {
         return super.getDescription() +
-                game.translate("werewolf.description.description", game.translate("werewolf.role.bear_trainer.description", game.getConfig().getDistanceBearTrainer())) +
-                game.translate("werewolf.description._");
+                game.translate("werewolf.description.description", game.translate("werewolf.role.bear_trainer.description", game.getConfig().getDistanceBearTrainer()));
     }
 
 

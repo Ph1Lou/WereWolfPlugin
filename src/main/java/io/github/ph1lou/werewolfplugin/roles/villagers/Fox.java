@@ -123,9 +123,8 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
                                 game.getConfig().getDistanceFox(),
                                 game.getScore().conversion(game.getConfig()
                                         .getTimerValue(TimersBase.FOX_SMELL_DURATION.getKey())),
-                                game.getConfig().getUseOfFlair())) +
-                game.translate("werewolf.description.effect", game.translate("werewolf.role.fox.effect")) +
-                game.translate("werewolf.description._");
+                                game.getConfig().getUseOfFlair() - use)) +
+                game.translate("werewolf.description.effect", game.translate("werewolf.role.fox.effect"));
     }
 
 

@@ -28,7 +28,7 @@ public class VillageIdiot extends RolesVillage implements Power {
 
         return super.getDescription() +
                 game.translate("werewolf.description.description", game.translate("werewolf.role.village_idiot.description")) +
-                game.translate("werewolf.description._");
+                game.translate("werewolf.description.power", game.translate(power ? "werewolf.role.village_idiot.power_on" : "werewolf.role.village_idiot.power_off"));
     }
 
     public void recoverPower() {

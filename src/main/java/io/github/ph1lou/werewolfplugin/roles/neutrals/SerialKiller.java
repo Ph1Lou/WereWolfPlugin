@@ -42,7 +42,7 @@ public class SerialKiller extends RolesNeutral implements Power {
                 game.translate("werewolf.description.equipment", game.translate("werewolf.role.serial_killer.limit")) +
                 game.translate("werewolf.description.item", game.translate("werewolf.role.serial_killer.items")) +
                 game.translate("werewolf.description.effect", game.translate("werewolf.role.serial_killer.effect")) +
-                game.translate("werewolf.description._");
+                game.translate("werewolf.role.serial_killer.hearts", extraHeart / 2);
     }
 
 

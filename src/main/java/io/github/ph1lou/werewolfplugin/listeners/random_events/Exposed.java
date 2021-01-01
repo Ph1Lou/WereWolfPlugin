@@ -8,6 +8,8 @@ import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.ExposedEvent;
 import io.github.ph1lou.werewolfapi.events.RepartitionEvent;
+import io.github.ph1lou.werewolfapi.events.StartEvent;
+import io.github.ph1lou.werewolfapi.events.StopEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -92,7 +94,7 @@ public class Exposed extends ListenerManager {
         List<String> roles = new ArrayList<>(Arrays.asList(role1.getKey(), role2.getKey(), playerWW.getRole().getKey()));
         Collections.shuffle(roles);
 
-        ExposedEvent exposedEvent = new ExposedEvent(playerWW, roles);
+        ExposedEvent exposedEvent = new ExposedEvent(playerWW, new ArrayList<>(Arrays.asList(role1.getPlayerWW(), role2.getPlayerWW(), playerWW)));
 
         Bukkit.getPluginManager().callEvent(exposedEvent);
 
@@ -104,5 +106,14 @@ public class Exposed extends ListenerManager {
         return playerWW;
     }
 
+    @EventHandler
+    public void onGameStop(StopEvent event) {
+        temp = null;
+    }
+
+    @EventHandler
+    public void onGameStart(StartEvent event) {
+        temp = null;
+    }
 
 }

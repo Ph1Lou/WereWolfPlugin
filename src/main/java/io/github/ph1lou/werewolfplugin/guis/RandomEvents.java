@@ -9,6 +9,7 @@ import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
 import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -64,7 +65,9 @@ public class RandomEvents implements InventoryProvider {
                             int probability = config.getProbability(key);
                             config.setProbability(key, probability + 1);
                             if (probability == 0) {
-                                randomEventRegister.getRandomEvent().register(true);
+                                if (!game.isState(StateGame.LOBBY)) {
+                                    randomEventRegister.getRandomEvent().register(game.getRandom().nextDouble() * 100 < game.getConfig().getProbability(key));
+                                }
                             }
                             e.setCurrentItem(getItemStack(game, key, randomEventRegister.getLoreKey()));
                         }

@@ -79,8 +79,8 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
     @Override
     public @NotNull String getDescription() {
         return super.getDescription() +
-                game.translate("werewolf.description.description", game.translate("werewolf.role.succubus.description")) +
-                game.translate("werewolf.description._");
+                game.translate("werewolf.description.description", game.translate("werewolf.role.succubus.description", game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.SUCCUBUS_DURATION.getKey())))) +
+                game.translate("werewolf.role.succubus.charm", affectedPlayer.isEmpty() ? game.translate("werewolf.role.succubus.none") : affectedPlayer.get(0).getName());
     }
 
     @EventHandler

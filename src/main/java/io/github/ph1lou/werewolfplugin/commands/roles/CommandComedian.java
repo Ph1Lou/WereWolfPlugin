@@ -3,15 +3,15 @@ package io.github.ph1lou.werewolfplugin.commands.roles;
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.ComedianMasks;
 import io.github.ph1lou.werewolfapi.events.UseMaskEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.PotionEffects;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Comedian;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.UUID;
 
@@ -35,17 +35,6 @@ public class CommandComedian implements Commands {
 
         Roles comedian = playerWW.getRole();
 
-        PotionEffectType[] potionsType = {
-                PotionEffectType.DAMAGE_RESISTANCE,
-                PotionEffectType.SPEED,
-                PotionEffectType.INCREASE_DAMAGE
-        };
-
-        String[] maskName = {
-                game.translate("werewolf.role.comedian.1"),
-                game.translate("werewolf.role.comedian.2"),
-                game.translate("werewolf.role.comedian.3")
-        };
 
         try {
             int i = Integer.parseInt(args[0]) - 1;
@@ -55,15 +44,15 @@ public class CommandComedian implements Commands {
                 return;
             }
 
-            if (((PotionEffects) comedian).getPotionEffects()
-                    .contains(potionsType[i])) {
+            if (((Comedian) comedian).getMasks()
+                    .contains(ComedianMasks.values()[i])) {
 
                 player.sendMessage(game.translate(
                         "werewolf.role.comedian.used_mask"));
                 return;
             }
             ((Power) comedian).setPower(false);
-            ((PotionEffects) comedian).addPotionEffect(potionsType[i]);
+            ((Comedian) comedian).addMask(ComedianMasks.values()[i]);
 
             UseMaskEvent useMaskEvent = new UseMaskEvent(playerWW, i);
             Bukkit.getPluginManager().callEvent(useMaskEvent);
@@ -75,10 +64,10 @@ public class CommandComedian implements Commands {
 
             player.sendMessage(game.translate(
                     "werewolf.role.comedian.wear_mask_perform",
-                    maskName[i]));
-            player.removePotionEffect(potionsType[i]);
+                    game.translate(ComedianMasks.values()[i].getKey())));
+            player.removePotionEffect(ComedianMasks.values()[i].getPotionEffectType());
             player.addPotionEffect(new PotionEffect(
-                    potionsType[i],
+                    ComedianMasks.values()[i].getPotionEffectType(),
                     Integer.MAX_VALUE,
                     i == 2 ? -1 : 0,
                     false,

@@ -96,8 +96,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     public @NotNull String getDescription() {
         return super.getDescription() +
                 game.translate("werewolf.description.description", game.translate("werewolf.role.wild_child.description")) +
-                (affectedPlayer.isEmpty() ? "" : game.translate("werewolf.description.power", game.translate(transformed ? "werewolf.role.wild_child.model_death" : "werewolf.role.wild_child.model_alive", affectedPlayer.get(0).getName()))) +
-                game.translate("werewolf.description._");
+                (affectedPlayer.isEmpty() ? game.translate("werewolf.role.wild_child.model") : game.translate("werewolf.description.power", game.translate(transformed ? "werewolf.role.wild_child.model_death" : "werewolf.role.wild_child.model_alive", affectedPlayer.get(0).getName())));
     }
 
 

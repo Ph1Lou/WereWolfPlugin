@@ -30,8 +30,7 @@ public class Villager extends RolesVillage {
     @Override
     public @NotNull String getDescription() {
         return super.getDescription() +
-                game.translate("werewolf.description.equipment", game.translate(villagerKit.getDescription())) +
-                game.translate("werewolf.description._");
+                game.translate("werewolf.description.equipment", game.translate(villagerKit.getDescription()));
     }
 
 

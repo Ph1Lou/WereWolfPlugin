@@ -92,8 +92,7 @@ public class FalsifierWereWolf extends RolesWereWolf implements Display {
     public @NotNull String getDescription() {
         return super.getDescription() +
                 game.translate("werewolf.description.description", game.translate("werewolf.role.falsifier_werewolf.description")) +
-                game.translate("werewolf.role.falsifier_werewolf.role", game.translate(displayRole.getKey())) +
-                game.translate("werewolf.description._");
+                game.translate("werewolf.role.falsifier_werewolf.role", game.translate(displayRole.getKey()));
     }
 
 

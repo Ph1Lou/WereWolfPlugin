@@ -53,8 +53,7 @@ public class Sister extends RolesVillage implements AffectedPlayers {
         return super.getDescription() +
                 game.translate("werewolf.description.description", game.translate("werewolf.role.sister.description")) +
                 game.translate("werewolf.description.effect", game.translate("werewolf.role.sister.effect", game.getConfig().getDistanceSister())) +
-                game.translate("werewolf.role.sister.sisters_list", list.toString()) +
-                game.translate("werewolf.description._");
+                game.translate("werewolf.role.sister.sisters_list", list.toString());
     }
 
 

@@ -366,6 +366,6 @@ public class CycleListener implements Listener {
     public void onStart(StartEvent event) {
         main.getRegisterManager().getRandomEventsRegister()
                 .forEach(randomEventRegister -> randomEventRegister.getRandomEvent()
-                        .register(game.getRandom().nextDouble() * 100 < randomEventRegister.getDefaultValue()));
+                        .register(game.getRandom().nextDouble() * 100 < game.getConfig().getProbability(randomEventRegister.getKey())));
     }
 }

@@ -6,12 +6,9 @@ import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
-import io.github.ph1lou.werewolfapi.events.ChestEvent;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
-import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesWithLimitedSelectionDuration;
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -85,8 +82,7 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
         return super.getDescription() +
                 game.translate("werewolf.description.description", game.translate("werewolf.role.seer.description")) +
                 game.translate("werewolf.description.item", game.translate("werewolf.role.seer.items")) +
-                game.translate("werewolf.description.effect", game.translate("werewolf.role.seer.effect")) +
-                game.translate("werewolf.description._");
+                game.translate("werewolf.description.effect", game.translate("werewolf.role.seer.effect"));
     }
 
 
@@ -102,16 +98,6 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
         super.recoverPotionEffect();
 
         getPlayerWW().addPotionEffect(PotionEffectType.NIGHT_VISION);
-    }
-
-    @EventHandler
-    public void onFinalDeath(FinalDeathEvent event) {
-
-
-        if (!event.getPlayerWW().equals(getPlayerWW())) return;
-
-        Bukkit.getPluginManager().callEvent(new ChestEvent());
-
     }
 
     public void setDisablePower() {

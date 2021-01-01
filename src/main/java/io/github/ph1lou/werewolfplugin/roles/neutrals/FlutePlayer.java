@@ -81,8 +81,7 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
 
         return super.getDescription() +
                 game.translate("werewolf.description.description", game.translate("werewolf.role.flute_player.description")) +
-                (affectedPlayer.isEmpty() ? "" : game.translate("werewolf.role.flute_player.affected", enchantedList())) +
-                game.translate("werewolf.description._");
+                (affectedPlayer.isEmpty() ? "" : game.translate("werewolf.role.flute_player.affected", enchantedList()));
     }
 
 

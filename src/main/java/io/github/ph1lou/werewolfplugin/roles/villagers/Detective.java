@@ -19,12 +19,10 @@ public class Detective extends RolesWithLimitedSelectionDuration implements Affe
 
     private final List<PlayerWW> affectedPlayer = new ArrayList<>();
 
-
     public Detective(GetWereWolfAPI main, PlayerWW playerWW, String key) {
         super(main, playerWW, key);
         setPower(false);
     }
-
 
     @Override
     public void addAffectedPlayer(PlayerWW playerWW) {
@@ -64,8 +62,7 @@ public class Detective extends RolesWithLimitedSelectionDuration implements Affe
     @Override
     public @NotNull String getDescription() {
         return super.getDescription() +
-                game.translate("werewolf.description.description", game.translate("werewolf.role.detective.description")) +
-                game.translate("werewolf.description._");
+                game.translate("werewolf.description.description", game.translate("werewolf.role.detective.description"));
     }
 
 
