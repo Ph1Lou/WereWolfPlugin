@@ -67,7 +67,7 @@ public class Exposed extends ListenerManager {
 
         if (playerWWList.isEmpty()) return null;
 
-        PlayerWW playerWW = playerWWList.get((int) (game.getRandom().nextDouble() * playerWWList.size()));
+        PlayerWW playerWW = playerWWList.get((int) Math.floor(game.getRandom().nextDouble() * playerWWList.size()));
 
         List<Roles> role1List = game.getPlayerWW().stream()
                 .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
@@ -78,7 +78,7 @@ public class Exposed extends ListenerManager {
 
         if (role1List.isEmpty()) return null;
 
-        Roles role1 = role1List.get((int) (game.getRandom().nextDouble() * role1List.size()));
+        Roles role1 = role1List.get((int) Math.floor(game.getRandom().nextDouble() * role1List.size()));
 
         List<Roles> role2List = game.getPlayerWW().stream()
                 .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
@@ -89,7 +89,7 @@ public class Exposed extends ListenerManager {
 
         if (role2List.isEmpty()) return null;
 
-        Roles role2 = role2List.get((int) (game.getRandom().nextDouble() * role2List.size()));
+        Roles role2 = role2List.get((int) Math.floor(game.getRandom().nextDouble() * role2List.size()));
 
         List<String> roles = new ArrayList<>(Arrays.asList(role1.getKey(), role2.getKey(), playerWW.getRole().getKey()));
         Collections.shuffle(roles);

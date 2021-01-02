@@ -63,18 +63,20 @@ public class RandomEvents implements InventoryProvider {
 
                         if (e.isLeftClick()) {
                             int probability = config.getProbability(key);
-                            config.setProbability(key, probability + 1);
-                            if (probability == 0) {
-                                if (!game.isState(StateGame.LOBBY)) {
-                                    randomEventRegister.getRandomEvent().register(game.getRandom().nextDouble() * 100 < game.getConfig().getProbability(key));
+                            if (probability < 100) {
+                                config.setProbability(key, (probability + 1) % 101);
+                                if (probability == 0) {
+                                    if (!game.isState(StateGame.LOBBY)) {
+                                        randomEventRegister.getRandomEvent().register(game.getRandom().nextDouble() * 100 < game.getConfig().getProbability(key));
+                                    }
                                 }
+                                e.setCurrentItem(getItemStack(game, key, randomEventRegister.getLoreKey()));
                             }
-                            e.setCurrentItem(getItemStack(game, key, randomEventRegister.getLoreKey()));
                         }
                         if (e.isRightClick()) {
                             int probability = config.getProbability(key);
                             if (probability > 0) {
-                                config.setProbability(key, probability - 1);
+                                config.setProbability(key, (probability - 1) % 101);
                                 if (probability == 1) {
                                     randomEventRegister.getRandomEvent().register(false);
                                 }
@@ -116,7 +118,8 @@ public class RandomEvents implements InventoryProvider {
 
         ConfigWereWolfAPI config = game.getConfig();
         List<String> lore2 = new ArrayList<>(Arrays.asList(game.translate("werewolf.menu.left"), game.translate("werewolf.menu.right")));
-        List<String> lore = loreKey.stream().map(game::translate).collect(Collectors.toList());
+        List<String> lore = new ArrayList<>();
+        loreKey.stream().map(game::translate).map(s -> Arrays.stream(s.split("\\n")).collect(Collectors.toList())).forEach(lore::addAll);
         ItemStack itemStack;
 
         if (config.getProbability(key) > 0) {

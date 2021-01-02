@@ -45,7 +45,7 @@ public class Villager extends RolesVillage {
                 getPlayerWW().addItem(new ItemBuilder(UniversalMaterial.ENCHANTED_BOOK.getStack()).addEnchant(Enchantment.DURABILITY, 3).setAmount(3).build());
                 break;
             case MINER:
-                getPlayerWW().addItem(new ItemBuilder(UniversalMaterial.IRON_PICKAXE.getStack()).addEnchant(Enchantment.DIG_SPEED, 2).build());
+                getPlayerWW().addItem(new ItemBuilder(UniversalMaterial.DIAMOND_PICKAXE.getStack()).addEnchant(Enchantment.DIG_SPEED, 2).build());
                 break;
             case ARCHER:
                 getPlayerWW().addItem(UniversalMaterial.ARROW.getStack(64));

@@ -30,7 +30,7 @@ public class Configuration implements ConfigWereWolfAPI {
     private int limitPowerBow = 3;
     private int limitPunch = 1;
     private int limitKnockBack = 1;
-    private int useOfFlair = 4;
+    private int useOfFlair = 3;
     private int goldenAppleParticles = 1;
     private int distanceBearTrainer = 50;
     private int distanceSuccubus = 20;

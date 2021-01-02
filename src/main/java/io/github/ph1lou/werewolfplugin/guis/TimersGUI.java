@@ -19,6 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -148,7 +149,8 @@ public class TimersGUI implements InventoryProvider {
 
 
         for (TimerRegister timer : main.getRegisterManager().getTimersRegister()) {
-            List<String> lore = timer.getLoreKey().stream().map(game::translate).collect(Collectors.toList());
+            List<String> lore = new ArrayList<>();
+            timer.getLoreKey().stream().map(game::translate).map(s -> Arrays.stream(s.split("\\n")).collect(Collectors.toList())).forEach(lore::addAll);
 
             if (game.getConfig().getTimerValue(timer.getKey()) >= 0 || game.isDebug()) {
 

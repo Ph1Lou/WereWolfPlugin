@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.AngelForm;
+import io.github.ph1lou.werewolfapi.enums.Day;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.events.AngelChoiceEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AngelRole;
@@ -12,6 +13,7 @@ import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.UUID;
 
@@ -43,5 +45,9 @@ public class CommandFallenAngel implements Commands {
         ((AngelRole) role).setChoice(AngelForm.FALLEN_ANGEL);
         Bukkit.getPluginManager().callEvent(new AngelChoiceEvent(playerWW, AngelForm.FALLEN_ANGEL));
         player.sendMessage(game.translate("werewolf.role.angel.angel_choice_perform", game.translate(RolesBase.FALLEN_ANGEL.getKey())));
+
+        if (game.isDay(Day.NIGHT)) {
+            playerWW.addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+        }
     }
 }

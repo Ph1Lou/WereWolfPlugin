@@ -19,11 +19,15 @@ public class CommandScenarios implements Commands {
     public void execute(Player player, String[] args) {
 
         WereWolfAPI game = main.getWereWolfAPI();
-
+        StringBuilder sb = new StringBuilder(game.translate("werewolf.menu.scenarios.list"));
+        int i = 0;
         for (ScenarioRegister scenarioRegister : main.getRegisterManager().getScenariosRegister()) {
             if (game.getConfig().isScenarioActive(scenarioRegister.getKey())) {
-                player.sendMessage(game.translate("werewolf.utils.enable", game.translate(scenarioRegister.getKey())));
+                sb.append(i % 2 == 0 ? "§b" : "").append(game.translate(scenarioRegister.getKey())).append("§f, ");
+                i++;
             }
         }
+
+        player.sendMessage(sb.toString());
     }
 }

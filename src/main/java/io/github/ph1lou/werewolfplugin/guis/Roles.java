@@ -186,8 +186,7 @@ public class Roles implements InventoryProvider {
 
                 String key = roleRegister.getKey();
                 List<String> lore2 = new ArrayList<>(lore);
-                lore2.addAll(roleRegister.getLoreKey().stream().map(game::translate).collect(Collectors.toList()));
-
+                roleRegister.getLoreKey().stream().map(game::translate).map(s -> Arrays.stream(s.split("\\n")).collect(Collectors.toList())).forEach(lore2::addAll);
                 if (config.getRoleCount(key) > 0) {
                     items.add(ClickableItem.of((
                             new ItemBuilder(roleRegister.getItem() != null ?
@@ -205,7 +204,6 @@ public class Roles implements InventoryProvider {
                         } else if (e.isRightClick()) {
                             selectMinus(game, roleRegister.getKey());
                         }
-
                     }));
                 } else{
 

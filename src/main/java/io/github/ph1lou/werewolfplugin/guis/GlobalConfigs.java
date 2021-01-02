@@ -19,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -58,7 +59,8 @@ public class GlobalConfigs implements InventoryProvider {
                 .filter(config1 -> config1.isAppearInMenu() || game.isDebug())
                 .forEach(configRegister -> {
                     String key = configRegister.getKey();
-                    List<String> lore = configRegister.getLoreKey().stream().map(game::translate).collect(Collectors.toList());
+                    List<String> lore = new ArrayList<>();
+                    configRegister.getLoreKey().stream().map(game::translate).map(s -> Arrays.stream(s.split("\\n")).collect(Collectors.toList())).forEach(lore::addAll);
                     ItemStack itemStack;
 
                     if (game.getConfig().isConfigActive(configRegister.getKey())) {

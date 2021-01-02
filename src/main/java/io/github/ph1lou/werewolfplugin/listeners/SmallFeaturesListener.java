@@ -17,7 +17,6 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
@@ -36,16 +35,6 @@ public class SmallFeaturesListener implements Listener {
         this.game = main.getWereWolfAPI();
     }
 
-    @EventHandler
-    private void onPlayerTeleport(PlayerTeleportEvent event) {
-
-        if (event.getCause().equals(PlayerTeleportEvent.TeleportCause.NETHER_PORTAL)) {
-            event.setCancelled(true);
-        }
-        else if(event.getCause().equals(PlayerTeleportEvent.TeleportCause.END_PORTAL)){
-            event.setCancelled(true);
-        }
-    }
 
     @EventHandler
     public void onDrinkMilk(PlayerInteractEvent event) {

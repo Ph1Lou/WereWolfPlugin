@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.listeners.scenarios;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.ListenerManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.events.RepartitionEvent;
 import io.github.ph1lou.werewolfapi.events.ResurrectionEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -36,6 +37,19 @@ public class CatEyes extends ListenerManager {
                         0,
                         false,
                         false));
+    }
+
+    @EventHandler
+    public void onRepartition(RepartitionEvent event) {
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+            player.addPotionEffect(
+                    new PotionEffect(PotionEffectType.NIGHT_VISION,
+                            Integer.MAX_VALUE,
+                            0,
+                            false,
+                            false));
+        });
     }
 
     @EventHandler

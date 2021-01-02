@@ -15,6 +15,7 @@ import io.github.ph1lou.werewolfplugin.listeners.configs.RedNameTag;
 import io.github.ph1lou.werewolfplugin.listeners.configs.ShowDeathCategoryRole;
 import io.github.ph1lou.werewolfplugin.listeners.configs.ShowDeathRole;
 import io.github.ph1lou.werewolfplugin.listeners.random_events.Exposed;
+import io.github.ph1lou.werewolfplugin.listeners.random_events.Infection;
 import io.github.ph1lou.werewolfplugin.listeners.random_events.LootBox;
 import io.github.ph1lou.werewolfplugin.listeners.scenarios.*;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.*;
@@ -541,7 +542,11 @@ public class Register implements RegisterManager {
                         "werewolf.menu.timers.command", new CommandTimer(main))
                         .setDescription("werewolf.menu.timers.description")
                         .addArgNumbers(0));
-
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.menu.random_events.command", new CommandRandomEvents(main))
+                        .setDescription("werewolf.menu.random_events.description")
+                        .addArgNumbers(0));
 
         commandsRegister
                 .add(new CommandRegister("werewolf.name",
@@ -552,6 +557,12 @@ public class Register implements RegisterManager {
         commandsRegister
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.commands.help.command", new CommandHelp(main)));
+
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.doc.command", new CommandDoc(main))
+                        .setDescription("werewolf.commands.doc.description"));
+
         commandsRegister
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.commands.admin.anonymous_chat.command", new CommandAnonymeChat(main))
@@ -855,6 +866,19 @@ public class Register implements RegisterManager {
                         .addIncompatibleScenario(ScenariosBase.COMPASS_TARGET_LAST_DEATH.getKey())
                 );
 
+        scenariosRegister
+                .add(new ScenarioRegister("werewolf.name",
+                        ScenariosBase.NO_NETHER.getKey(),
+                        new NoNether(main))
+                        .setDefaultValue()
+                );
+        scenariosRegister
+                .add(new ScenarioRegister("werewolf.name",
+                        ScenariosBase.NO_END.getKey(),
+                        new NoEnd(main))
+                        .setDefaultValue()
+                );
+
     }
 
     private void registerConfigs() {
@@ -940,6 +964,13 @@ public class Register implements RegisterManager {
         eventRandomsRegister
                 .add(new RandomEventRegister("werewolf.name",
                         RandomEvent.LOOT_BOX.getKey(), new LootBox(main))
+                        .setLoreKey("werewolf.random_events.loot_box.description")
+                        .setDefaultValue(10));
+
+        eventRandomsRegister
+                .add(new RandomEventRegister("werewolf.name",
+                        RandomEvent.INFECTION.getKey(), new Infection(main))
+                        .setLoreKey("werewolf.random_events.infection.description")
                         .setDefaultValue(10));
     }
 

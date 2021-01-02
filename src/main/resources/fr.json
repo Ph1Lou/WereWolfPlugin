@@ -14,7 +14,7 @@
       },
       "guardian_angel": {
         "display": "Ange Gardien",
-        "protege": "Protégé : §b%s",
+        "protege": "Protégé : §b%s\n",
         "wait": "Vous obtiendrez votre protégé dans §b%s§f",
         "effect": "15 coeurs puis 12 si votre protégé meurt",
         "show_command": "Vous pouvez, trois fois au cours de la partie, donner Regeneration à votre protégé pendant 20 secondes §b/ww regen",
@@ -133,7 +133,7 @@
         "display": "Ange",
         "angel_choice": "[§eLG UHC§r] Vous pouvez décider d'être soit ",
         "or": " soit ",
-        "target": "Cible : §b%s",
+        "target": "Cible : §b%s\n",
         "time": ", vous avez §b%s §f(Cliquez pour choisir)",
         "fallen_choice": "Si vous choisissez §bAnge Déchu§f,\n vous obtiendrez 12 coeurs, une cible vous sera assignée aléatoirement si vous la tuez,\n vous passerez à 15 coeurs jusqu'à la fin de la partie.",
         "guardian_choice": "Si vous choisissez §bAnge Gardien§f,\n vous obtiendrez 15 coeurs et devrez protéger une personne choisie aléatoirement et gagner avec elle.\n Si celle-ci meurt, vous repasserez à 12 coeurs \net devrez gagner avec le Village.",
@@ -204,7 +204,7 @@
         "golem": "Golem",
         "archer": "Archer",
         "priest": "Prêtre",
-        "miner_desc": "Vous avez le kit §bMineur§f : une pioche efficiency II",
+        "miner_desc": "Vous avez le kit §bMineur§f : une pioche en diamant efficiency II",
         "black_smith_desc": "Vous avez le kit §bForgeron§f : une enclume et 10 bouteilles d'Xp",
         "book_seller_desc": "Vous avez le kit §bLibraire§f : 8 livres et 10 bouteilles d'Xp",
         "golem_desc": "Vous avez le kit §bGolem§f : 15 fers 3 livres Unbreaking III",
@@ -299,8 +299,9 @@
       },
       "fallen_angel": {
         "display": "Ange Déchu",
+        "effect": "Résistance la nuit",
         "wait": "Vous obtiendrez votre cible dans §b%s§f",
-        "effect": "12 coeurs puis 15 si vous tuez votre cible.",
+        "power": "12 coeurs puis 15 si vous tuez votre cible.",
         "deadly_target": "[§eLG UHC§r] Vous avez tué votre cible, vous gagnez 3 coeurs",
         "deadly_target_by_other": "[§cLG UHC§r] Votre cible a été tué par un autre joueur, vous ne pouvez plus gagner de coeurs supplémentaires",
         "reveal_target": "[§eLG UHC§r] Votre cible est §b%s",
@@ -684,7 +685,13 @@
       },
       "compo": {
         "composition_hide": "[§cLG UHC§r] La Composition est cachée",
-        "description": "Pour voir la composition"
+        "description": "Pour voir la composition",
+        "message": "[§aLG UHC§r] Composition :\n"
+      },
+      "doc": {
+        "command": "doc",
+        "description": "Pour avoir le doc des rôles",
+        "link": "[§6LG UHC§r] Cliquez ici pour avoir accès au document des rôles"
       },
       "kill": {
         "command": "kill",
@@ -761,7 +768,10 @@
         "enable": "§2Activé§f pour tous"
       },
       "scenarios": {
+        "list": "[§aLG UHC§r] Liste des Scénarios §bd'activés§f :\n",
         "command": "scenarios",
+        "no_nether": "NoNether",
+        "no_end": "NoEnd",
         "description": "Pour voir les scénarios",
         "name": "Configuration §bScenarios",
         "diamond_limit": "DiamondLimit",
@@ -833,7 +843,11 @@
         "succubus_duration": "Durée du Charme du Succube (§b%s§r)"
       },
       "random_events": {
-        "name": "Configuration §bEvents Aléatoires",
+        "list": "[§aLG UHC§r] Liste des évènements aléatoires §bactivés§f :\n",
+        "name": "Configuration §bEvents",
+        "command": "events",
+        "description": "Pour voir les Events Aléatoires",
+        "command_message": "§b%s §f(probabilité §b%d%%§f)",
         "probability": "§fProbabilité : §b%d§f%%"
       },
       "save": {
@@ -859,7 +873,7 @@
         "start":"Configuration §bStuff de Départ"
       },
       "global": {
-        "command": "règles",
+        "command": "regles",
         "evil_thief": "Le voleur gagne Neutre",
         "description": "Pour voir la configuration générale",
         "name": "Configuration §bGlobale",
@@ -945,14 +959,19 @@
       "exposed": {
         "name": "Exposed",
         "message": "[§5Exposed§r] Le rôle de §B%s§f se trouve dans la liste suivante §b%s §f%s §b%s",
-        "description": "Deux fois dans la partie (dans les intervalles [65~80 min] et [100~115 min]), un joueur choisi aléatoirement voit son pseudo affiché dans le chat à côté de 3 rôles toujours représentés dans la partie. Parmi ces 3 rôles se trouvent : son rôle, un rôle d’un camp différent, un rôle aléatoire parmi tous les autres.\nUn joueur ne peut pas être “exposé” deux fois dans la même partie."
+        "description": "Deux fois dans la partie \n(dans les intervalles [65~80 min] et [100~115 min]), \nun joueur choisi aléatoirement voit son pseudo \naffiché dans le chat à côté de 3 rôles\n toujours représentés dans la partie. \nParmi ces 3 rôles se trouvent : son rôle, un rôle d’un camp différent, \nun rôle aléatoire parmi tous les autres.\nUn joueur ne peut pas être “exposé” deux fois dans la même partie."
       },
       "loot_box": {
         "name": "Loot Box",
-        "description": "Une fois dans la partie, à la mort d'un Villageois, des caches apparaissent. Une seule contient le nom d'un Ennemi du Village",
+        "description": "Une fois dans la partie, à la mort \nd'un Villageois, des caches apparaissent.\n Une seule contient le nom d'un Ennemi du Village",
         "on_sign": "Bon toutou",
         "all_chest_find": "[§aLG UHC§r] Toutes les caches ont été trouvées",
-        "villager_death": "[§eLG UHC§r] Avant de mourir, §b%s§r a fait apparaitre §b%s§r caches sur la map, une seule renferme le nom d'un Ennemi du Village"
+        "villager_death": "[§5Loot-Box§r] Avant de mourir, §b%s§r a fait apparaitre §b%s§r caches sur la map, une seule renferme le nom d'un Ennemi du Village"
+      },
+      "infection": {
+        "name": "Infection",
+        "description": "Une fois dans la partie infecte un joueur au hasard.\nL'infection se déroule entre 1h et 1h15, \nsi il y a moins de la moitié des joueurs \nqui sont Loups Garous.",
+        "message": "[§5Infection§r] Un joueur aléatoire vient d'être infecté"
       }
     },
     "check": {

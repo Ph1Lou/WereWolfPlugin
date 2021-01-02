@@ -17,6 +17,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.potion.PotionEffectType;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
 
@@ -87,7 +89,10 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
         StringBuilder sb = new StringBuilder(super.getDescription());
 
         if (choice.equals(AngelForm.FALLEN_ANGEL)) {
+            sb.append(game.translate("werewolf.description.power", game.translate("werewolf.role.fallen_angel.power")));
+
             sb.append(game.translate("werewolf.description.effect", game.translate("werewolf.role.fallen_angel.effect")));
+
             if (affectedPlayer.isEmpty()) {
                 sb.append(game.translate("werewolf.description.power", game.translate("werewolf.role.fallen_angel.wait", game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.ANGEL_DURATION.getKey())))));
             } else {
@@ -247,7 +252,10 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
 
     @Override
     public void recoverPower() {
-        getPlayerWW().sendMessage(choiceAngel());
+
+        if (isChoice(AngelForm.ANGEL)) {
+            getPlayerWW().sendMessage(choiceAngel());
+        }
         getPlayerWW().addPlayerMaxHealth(4);
         getPlayerWW().addPlayerHealth(4);
     }
@@ -268,6 +276,9 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
                                 "werewolf.role.angel.angel_choice_perform",
                                 game.translate(RolesBase.FALLEN_ANGEL.getKey())));
                 setChoice(AngelForm.FALLEN_ANGEL);
+                if (game.isDay(Day.NIGHT)) {
+                    getPlayerWW().addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+                }
             } else {
                 getPlayerWW().sendMessage(
                         game.translate(
@@ -482,6 +493,22 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
             event.setCancelled(true);
             event.setVictoryTeam(RolesBase.GUARDIAN_ANGEL.getKey());
         }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onDay(DayEvent event) {
+
+        if (!choice.equals(AngelForm.FALLEN_ANGEL)) return;
+
+        getPlayerWW().removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onNight(NightEvent event) {
+
+        if (!choice.equals(AngelForm.FALLEN_ANGEL)) return;
+
+        getPlayerWW().addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
     }
 
 }

@@ -20,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -57,7 +58,8 @@ public class ScenariosGUI implements InventoryProvider {
         for (ScenarioRegister scenarioRegister : main.getRegisterManager()
                 .getScenariosRegister()) {
 
-            List<String> lore = scenarioRegister.getLoreKey().stream().map(game::translate).collect(Collectors.toList());
+            List<String> lore = new ArrayList<>();
+            scenarioRegister.getLoreKey().stream().map(game::translate).map(s -> Arrays.stream(s.split("\\n")).collect(Collectors.toList())).forEach(lore::addAll);
             ItemStack itemStack;
 
             if (config.isScenarioActive(scenarioRegister.getKey())) {

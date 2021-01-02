@@ -1,11 +1,9 @@
 package io.github.ph1lou.werewolfplugin;
 
-
 import fr.minuskube.inv.InventoryManager;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.LangManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
 import io.github.ph1lou.werewolfapi.registers.RegisterManager;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
@@ -13,17 +11,13 @@ import io.github.ph1lou.werewolfplugin.commands.Admin;
 import io.github.ph1lou.werewolfplugin.commands.Command;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import io.github.ph1lou.werewolfplugin.game.MapManager;
-import io.github.ph1lou.werewolfplugin.save.FileUtils_;
 import io.github.ph1lou.werewolfplugin.save.Lang;
-import io.github.ph1lou.werewolfplugin.save.Serializer;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.util.Objects;
 
 public class Main extends JavaPlugin implements GetWereWolfAPI {
-
 
     private final Lang lang = new Lang(this);
     private GameManager currentGame;
@@ -56,20 +50,6 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
                 }), 0, 4);
     }
 
-    @Override
-    public void onDisable() {
-
-        if (currentGame.isState(StateGame.LOBBY)) {
-            File file = new File(
-                    getDataFolder() +
-                            File.separator +
-                            "configs" +
-                            File.separator,
-                    "saveCurrent.json");
-            FileUtils_.save(file, Serializer.serialize(currentGame.getConfig()));
-            currentGame.getStuffs().save("saveCurrent");
-        }
-    }
 
     @Override
     public void onLoad() {
