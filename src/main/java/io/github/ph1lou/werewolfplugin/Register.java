@@ -489,7 +489,6 @@ public class Register implements RegisterManager {
                         .setRequiredPower()
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
-                        .addArgNumbers(1)
                         .addArgNumbers(2));
         commandsRegister
                 .add(new CommandRegister("werewolf.name",

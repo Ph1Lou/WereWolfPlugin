@@ -11,7 +11,6 @@ import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Comedian;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 
 import java.util.UUID;
 
@@ -65,13 +64,7 @@ public class CommandComedian implements Commands {
             player.sendMessage(game.translate(
                     "werewolf.role.comedian.wear_mask_perform",
                     game.translate(ComedianMasks.values()[i].getKey())));
-            player.removePotionEffect(ComedianMasks.values()[i].getPotionEffectType());
-            player.addPotionEffect(new PotionEffect(
-                    ComedianMasks.values()[i].getPotionEffectType(),
-                    Integer.MAX_VALUE,
-                    i == 2 ? -1 : 0,
-                    false,
-                    false));
+            playerWW.addPotionEffect(ComedianMasks.values()[i].getPotionEffectType());
 
         } catch (NumberFormatException ignored) {
         }

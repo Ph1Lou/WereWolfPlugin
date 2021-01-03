@@ -141,6 +141,8 @@ public class LootBox extends ListenerManager {
 
         LootBoxEvent lootBoxEvent = new LootBoxEvent(playerWW, nbTarget);
 
+        Bukkit.getPluginManager().callEvent(lootBoxEvent);
+
         if (lootBoxEvent.isCancelled()) return;
 
         eventActive = true;

@@ -6,6 +6,7 @@ import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.events.InfectionRandomEvent;
 import io.github.ph1lou.werewolfapi.events.NewWereWolfEvent;
 import io.github.ph1lou.werewolfapi.events.RepartitionEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
@@ -41,9 +42,15 @@ public class Infection extends ListenerManager {
 
                     Roles role1 = roles1.get((int) Math.floor(game.getRandom().nextDouble() * roles1.size()));
 
-                    role1.setInfected();
+                    InfectionRandomEvent infectionRandomEvent = new InfectionRandomEvent(role1.getPlayerWW());
+
+                    Bukkit.getPluginManager().callEvent(infectionRandomEvent);
+
+                    if (infectionRandomEvent.isCancelled()) return;
+
+                    infectionRandomEvent.getPlayerWW().getRole().setInfected();
                     Bukkit.getPluginManager().callEvent(
-                            new NewWereWolfEvent(role1.getPlayerWW()));
+                            new NewWereWolfEvent(infectionRandomEvent.getPlayerWW()));
 
                     game.checkVictory();
 

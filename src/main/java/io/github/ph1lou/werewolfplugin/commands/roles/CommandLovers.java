@@ -67,7 +67,7 @@ public class CommandLovers implements Commands {
 
                         double don = health / (float) (loverAPI1.getLovers().size() - 1);
                         String showDon = new DecimalFormat("0.00")
-                                .format(don);
+                                .format(don * 100);
 
                         loverAPI1.getLovers()
                                 .stream()
