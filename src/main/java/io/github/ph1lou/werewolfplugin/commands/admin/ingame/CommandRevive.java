@@ -3,7 +3,7 @@ package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enums.Sounds;
+import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -56,7 +56,7 @@ public class CommandRevive implements Commands {
 
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.sendMessage(game.translate("werewolf.commands.admin.revive.perform", player1.getName(), player.getName()));
-            Sounds.AMBIENCE_THUNDER.play(p);
+            Sound.AMBIENCE_THUNDER.play(p);
         }
 
     }

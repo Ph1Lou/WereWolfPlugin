@@ -3,10 +3,7 @@ package io.github.ph1lou.werewolfplugin.roles.lovers;
 import io.github.ph1lou.werewolfapi.LoverAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enums.RolesBase;
-import io.github.ph1lou.werewolfapi.enums.Sounds;
-import io.github.ph1lou.werewolfapi.enums.StateGame;
-import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.*;
 import io.github.ph1lou.werewolfapi.events.*;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import org.bukkit.Bukkit;
@@ -18,6 +15,7 @@ import org.bukkit.event.Listener;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class Lover implements LoverAPI, Listener {
 
@@ -55,7 +53,7 @@ public class Lover implements LoverAPI, Listener {
             }
         }
         playerWW.sendMessage(game.translate("werewolf.role.lover.description", couple.toString()));
-        Sounds.SHEEP_SHEAR.play(playerWW);
+        Sound.SHEEP_SHEAR.play(playerWW);
     }
 
 
@@ -163,7 +161,7 @@ public class Lover implements LoverAPI, Listener {
 
     @Override
     public String getKey() {
-        return RolesBase.LOVER.getKey();
+        return LoverType.LOVER.getKey();
     }
 
     @Override
@@ -181,9 +179,7 @@ public class Lover implements LoverAPI, Listener {
         lovers.remove(playerWW);
         lovers.add(playerWW1);
 
-        for (PlayerWW playerWW2 : lovers) {
-            announceLovers(playerWW2);
-        }
+        lovers.forEach(this::announceLovers);
 
         game.getPlayerWW()
                 .stream().map(PlayerWW::getRole)
@@ -217,6 +213,20 @@ public class Lover implements LoverAPI, Listener {
                 break;
             }
         }
+    }
+
+    public void addLover(PlayerWW playerWW) {
+
+        if (lovers.contains(playerWW)) return;
+
+        lovers.forEach(playerWW1 -> playerWW1.sendMessage(game.translate("werewolf.random_events.triple.lover_join", playerWW.getName())));
+
+        playerWW.sendMessage(game.translate("werewolf.random_events.triple.join", getLovers().stream()
+                .map(PlayerWW::getName)
+                .collect(Collectors.joining(" "))));
+
+        lovers.add(playerWW);
+
     }
 
 /*

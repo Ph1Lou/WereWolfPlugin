@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.LoverAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
@@ -41,8 +42,12 @@ public class Rival extends RolesNeutral implements Power {
     @Override
     public @NotNull String getDescription() {
         return super.getDescription() +
-                game.translate("werewolf.description.description", game.translate("werewolf.role.rival.description", game.getScore().conversion(Math.abs(game.getConfig().getTimerValue(TimersBase.ROLE_DURATION.getKey())) + Math.abs(game.getConfig().getTimerValue(TimersBase.RIVAL_DURATION.getKey()))))) +
-                game.translate("werewolf.description.item", game.translate("werewolf.role.rival.item"));
+                game.translate("werewolf.description.description",
+                        game.translate("werewolf.role.rival.description",
+                                game.getScore().conversion(
+                                        Math.abs(game.getConfig().getTimerValue(TimersBase.ROLE_DURATION.getKey()))
+                                                + Math.abs(game.getConfig().getTimerValue(TimersBase.RIVAL_DURATION.getKey())))))
+                + game.translate("werewolf.description.item", game.translate("werewolf.role.rival.item"));
 
     }
 
@@ -54,13 +59,13 @@ public class Rival extends RolesNeutral implements Power {
         if (event.getLovers().isEmpty()) return;
 
         List<LoverAPI> loverAPIs = event.getLovers().stream()
-                .filter(loverAPI -> !loverAPI.isKey(RolesBase.CURSED_LOVER.getKey()))
+                .filter(loverAPI -> !loverAPI.isKey(LoverType.CURSED_LOVER.getKey()))
                 .filter(loverAPI1 -> !loverAPI1.getLovers().contains(getPlayerWW()))
                 .collect(Collectors.toList());
 
         if (loverAPIs.isEmpty()) return;
 
-        this.loverAPI = loverAPIs.get((int) game.getRandom().nextFloat() * loverAPIs.size());
+        this.loverAPI = loverAPIs.get((int) Math.floor(game.getRandom().nextFloat() * loverAPIs.size()));
 
         if (loverAPI instanceof Lover) {
             this.cupidWW = game.getPlayerWW()
@@ -95,7 +100,6 @@ public class Rival extends RolesNeutral implements Power {
         Collections.shuffle(playerWWS);
 
         List<PlayerWW> playerWWS1 = new ArrayList<>(playerWWS.subList(0, Math.min(3, playerWWS.size())));
-
 
         playerWWS1.addAll(loverAPI.getLovers());
 

@@ -4,8 +4,8 @@ import com.google.common.collect.Sets;
 import io.github.ph1lou.werewolfapi.LoverAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enums.RolesBase;
-import io.github.ph1lou.werewolfapi.enums.Sounds;
+import io.github.ph1lou.werewolfapi.enums.LoverType;
+import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.*;
@@ -105,11 +105,11 @@ public class AmnesiacLover implements LoverAPI, Listener {
         if (amnesiacLover1.equals(player)) {
             player.sendMessage(game.translate("werewolf.role.lover.description",
                     amnesiacLover2.getName()));
-            Sounds.PORTAL_TRAVEL.play(player);
+            Sound.PORTAL_TRAVEL.play(player);
         } else if (amnesiacLover2.equals(player)) {
             player.sendMessage(game.translate("werewolf.role.lover.description",
                     amnesiacLover1.getName()));
-            Sounds.PORTAL_TRAVEL.play(player);
+            Sound.PORTAL_TRAVEL.play(player);
         }
     }
 
@@ -201,7 +201,7 @@ public class AmnesiacLover implements LoverAPI, Listener {
 
     @Override
     public String getKey() {
-        return RolesBase.AMNESIAC_LOVER.getKey();
+        return LoverType.AMNESIAC_LOVER.getKey();
     }
 
     @Override

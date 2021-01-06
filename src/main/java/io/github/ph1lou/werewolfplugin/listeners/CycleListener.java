@@ -60,7 +60,7 @@ public class CycleListener implements Listener {
             game.getVote().setStatus(VoteStatus.ENDED);
         }
 
-        if (2 * game.getConfig().getTimerValue(TimersBase.DAY_DURATION.getKey())
+        if (2L * game.getConfig().getTimerValue(TimersBase.DAY_DURATION.getKey())
                 - duration
                 - game.getConfig().getTimerValue(TimersBase.CITIZEN_DURATION.getKey()) > 0) {
 
@@ -81,7 +81,7 @@ public class CycleListener implements Listener {
         }
         long duration2 = game.getConfig().getTimerValue(TimersBase.POWER_DURATION.getKey());
 
-        if (2 * game.getConfig().getTimerValue(TimersBase.DAY_DURATION.getKey())
+        if (2L * game.getConfig().getTimerValue(TimersBase.DAY_DURATION.getKey())
                 - duration2 > 0) {
 
             Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
@@ -99,7 +99,7 @@ public class CycleListener implements Listener {
             if(!game.isState(StateGame.END)) {
                 Bukkit.getPluginManager().callEvent(new NightEvent(event.getNumber()));
                 CommandWereWolfChat.enable();
-                Bukkit.getScheduler().scheduleSyncDelayedTask(main, CommandWereWolfChat::disable, game.getConfig().getTimerValue(TimersBase.WEREWOLF_CHAT_DURATION.getKey()) * 20);
+                Bukkit.getScheduler().scheduleSyncDelayedTask(main, CommandWereWolfChat::disable, game.getConfig().getTimerValue(TimersBase.WEREWOLF_CHAT_DURATION.getKey()) * 20L);
             }
 
         },duration3*20);
@@ -188,7 +188,7 @@ public class CycleListener implements Listener {
         game.getMapManager().getWorld().setPVP(true);
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.sendMessage(game.translate("werewolf.announcement.pvp"));
-            Sounds.DONKEY_ANGRY.play(p);
+            Sound.DONKEY_ANGRY.play(p);
         }
     }
 
@@ -197,7 +197,7 @@ public class CycleListener implements Listener {
         Bukkit.getOnlinePlayers()
                 .forEach(player -> {
                     player.sendMessage(game.translate("werewolf.announcement.mining"));
-                    Sounds.ANVIL_BREAK.play(player);
+                    Sound.ANVIL_BREAK.play(player);
                 });
     }
 
@@ -273,7 +273,7 @@ public class CycleListener implements Listener {
                             Player player = Bukkit.getPlayer(playerWW.getUUID());
 
                             if (player != null) {
-                                Sounds.PORTAL_TRIGGER.play(player);
+                                Sound.PORTAL_TRIGGER.play(player);
                                 for (PotionEffect po : player.getActivePotionEffects()) {
                                     player.removePotionEffect(po.getType());
                                 }
@@ -349,7 +349,7 @@ public class CycleListener implements Listener {
         Bukkit.getOnlinePlayers()
                 .forEach(player -> {
                     player.sendMessage(game.translate("werewolf.announcement.border"));
-                    Sounds.FIREWORK_LAUNCH.play(player);
+                    Sound.FIREWORK_LAUNCH.play(player);
                 });
     }
 
@@ -358,7 +358,7 @@ public class CycleListener implements Listener {
         Bukkit.getOnlinePlayers()
                 .forEach(player -> {
                     player.sendMessage(game.translate("werewolf.announcement.invulnerability"));
-                    Sounds.GLASS.play(player);
+                    Sound.GLASS.play(player);
                 });
     }
 

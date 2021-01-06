@@ -12,7 +12,7 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.StuffManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Category;
-import io.github.ph1lou.werewolfapi.enums.RolesBase;
+import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
@@ -81,7 +81,7 @@ public class Roles implements InventoryProvider {
                             new ItemBuilder(
                                     UniversalMaterial.GREEN_TERRACOTTA
                                             .getStack(config.getLoverSize()))
-                                    .setDisplayName(game.translate(RolesBase.LOVER.getKey()))
+                                    .setDisplayName(game.translate(LoverType.LOVER.getKey()) + game.translate("werewolf.role.lover.random"))
                                     .setLore(lore).build()), e -> {
 
                         if (e.isLeftClick()) {
@@ -99,7 +99,7 @@ public class Roles implements InventoryProvider {
                             new ItemBuilder(
                                     UniversalMaterial.RED_TERRACOTTA
                                             .getStack())
-                                    .setDisplayName(game.translate(RolesBase.LOVER.getKey()))
+                                    .setDisplayName(game.translate(LoverType.LOVER.getKey()))
                                     .setLore(lore).build()), e -> {
                         if (e.isLeftClick()) {
                             config.setLoverSize(config.getLoverSize() + 1);
@@ -113,7 +113,7 @@ public class Roles implements InventoryProvider {
                             new ItemBuilder(
                                     UniversalMaterial.GREEN_TERRACOTTA
                                             .getStack(config.getAmnesiacLoverSize()))
-                                    .setDisplayName(game.translate(RolesBase.AMNESIAC_LOVER.getKey()))
+                                    .setDisplayName(game.translate(LoverType.AMNESIAC_LOVER.getKey()))
                                     .setLore(lore).build()), e -> {
                         if (e.isLeftClick()) {
                             config.setAmnesiacLoverSize(config.getAmnesiacLoverSize() + 1);
@@ -129,7 +129,7 @@ public class Roles implements InventoryProvider {
                     ClickableItem.of((
                             new ItemBuilder(UniversalMaterial.RED_TERRACOTTA
                                     .getStack())
-                                    .setDisplayName(game.translate(RolesBase.AMNESIAC_LOVER.getKey()))
+                                    .setDisplayName(game.translate(LoverType.AMNESIAC_LOVER.getKey()))
                                     .setLore(lore).build()), e -> {
                         if (e.isLeftClick()) {
                             config.setAmnesiacLoverSize(config.getAmnesiacLoverSize() + 1);
@@ -143,7 +143,7 @@ public class Roles implements InventoryProvider {
                             new ItemBuilder(
                                     UniversalMaterial.GREEN_TERRACOTTA
                                             .getStack(config.getCursedLoverSize()))
-                                    .setDisplayName(game.translate(RolesBase.CURSED_LOVER.getKey()))
+                                    .setDisplayName(game.translate(LoverType.CURSED_LOVER.getKey()))
                                     .setLore(lore).build()), e -> {
                         if (e.isLeftClick()) {
                             config.setCursedLoverSize(config.getCursedLoverSize() + 1);
@@ -160,7 +160,7 @@ public class Roles implements InventoryProvider {
                             new ItemBuilder(
                                     UniversalMaterial.RED_TERRACOTTA
                                             .getStack())
-                                    .setDisplayName(game.translate(RolesBase.CURSED_LOVER.getKey()))
+                                    .setDisplayName(game.translate(LoverType.CURSED_LOVER.getKey()))
                                     .setLore(lore).build()), e -> {
 
                         if (e.isLeftClick()) {

@@ -3,7 +3,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.Camp;
-import io.github.ph1lou.werewolfapi.enums.Sounds;
+import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.events.GrowlEvent;
@@ -87,7 +87,7 @@ public class BearTrainer extends RolesVillage {
                 .collect(Collectors.joining());
 
         Bukkit.getOnlinePlayers()
-                .forEach(Sounds.WOLF_GROWL::play);
+                .forEach(Sound.WOLF_GROWL::play);
 
         Bukkit.broadcastMessage(game.translate("werewolf.role.bear_trainer.growling_message", builder));
     }
@@ -95,7 +95,9 @@ public class BearTrainer extends RolesVillage {
     @Override
     public @NotNull String getDescription() {
         return super.getDescription() +
-                game.translate("werewolf.description.description", game.translate("werewolf.role.bear_trainer.description", game.getConfig().getDistanceBearTrainer()));
+                game.translate("werewolf.description.description",
+                        game.translate("werewolf.role.bear_trainer.description",
+                                game.getConfig().getDistanceBearTrainer()));
     }
 
 

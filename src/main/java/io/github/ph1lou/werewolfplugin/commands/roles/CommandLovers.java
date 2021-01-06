@@ -4,8 +4,8 @@ import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.LoverAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enums.RolesBase;
-import io.github.ph1lou.werewolfapi.enums.Sounds;
+import io.github.ph1lou.werewolfapi.enums.LoverType;
+import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.DonEvent;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -59,15 +59,15 @@ public class CommandLovers implements Commands {
         if (args.length == 1) {
 
             playerWW.getLovers().stream()
-                    .filter(loverAPI1 -> !loverAPI1.isKey(RolesBase.CURSED_LOVER.getKey()))
-                    .filter(loverAPI1 -> !loverAPI1.isKey(RolesBase.AMNESIAC_LOVER.getKey()) || ((AmnesiacLover) loverAPI1).isRevealed())
+                    .filter(loverAPI1 -> !loverAPI1.isKey(LoverType.CURSED_LOVER.getKey()))
+                    .filter(loverAPI1 -> !loverAPI1.isKey(LoverType.AMNESIAC_LOVER.getKey()) || ((AmnesiacLover) loverAPI1).isRevealed())
                     .forEach(loverAPI1 -> {
                         double health = player.getHealth() * heart / 100f;
                         AtomicReference<Double> temp = new AtomicReference<>((double) 0);
 
                         double don = health / (float) (loverAPI1.getLovers().size() - 1);
                         String showDon = new DecimalFormat("0.00")
-                                .format(don * 100);
+                                .format(don);
 
                         loverAPI1.getLovers()
                                 .stream()
@@ -86,7 +86,7 @@ public class CommandLovers implements Commands {
                                                 temp.updateAndGet(v -> v + don);
                                                 playerCouple.sendMessage(game.translate("werewolf.role.lover.received", showDon, playername));
                                                 player.sendMessage((game.translate("werewolf.role.lover.complete", showDon, playerCouple.getName())));
-                                                Sounds.PORTAL.play(playerCouple);
+                                                Sound.PORTAL.play(playerCouple);
                                             } else {
                                                 player.sendMessage(game.translate("werewolf.check.cancel"));
                                             }
@@ -97,8 +97,6 @@ public class CommandLovers implements Commands {
 
                         player.setHealth(player.getHealth() - temp.get());
                     });
-
-
         }
         else {
             if (args[1].equals(playername)) {
@@ -127,9 +125,9 @@ public class CommandLovers implements Commands {
                     .format(don);
 
             Optional<? extends LoverAPI> loverAPI = playerWW.getLovers().stream()
-                    .filter(loverAPI1 -> !loverAPI1.isKey(RolesBase.CURSED_LOVER.getKey()))
+                    .filter(loverAPI1 -> !loverAPI1.isKey(LoverType.CURSED_LOVER.getKey()))
                     .filter(loverAPI1 -> loverAPI1.getLovers().contains(playerWW1))
-                    .filter(loverAPI1 -> !loverAPI1.isKey(RolesBase.AMNESIAC_LOVER.getKey()) || ((AmnesiacLover) loverAPI1).isRevealed())
+                    .filter(loverAPI1 -> !loverAPI1.isKey(LoverType.AMNESIAC_LOVER.getKey()) || ((AmnesiacLover) loverAPI1).isRevealed())
                     .findFirst();
 
             if (loverAPI.isPresent()) {

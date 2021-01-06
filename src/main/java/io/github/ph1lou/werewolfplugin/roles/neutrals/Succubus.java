@@ -4,7 +4,7 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
-import io.github.ph1lou.werewolfapi.enums.Sounds;
+import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.*;
@@ -79,8 +79,13 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
     @Override
     public @NotNull String getDescription() {
         return super.getDescription() +
-                game.translate("werewolf.description.description", game.translate("werewolf.role.succubus.description", game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.SUCCUBUS_DURATION.getKey())))) +
-                game.translate("werewolf.role.succubus.charm", affectedPlayer.isEmpty() ? game.translate("werewolf.role.succubus.none") : affectedPlayer.get(0).getName());
+                game.translate("werewolf.description.description",
+                        game.translate("werewolf.role.succubus.description",
+                                game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.SUCCUBUS_DURATION.getKey())))) +
+                game.translate("werewolf.role.succubus.charm",
+                        affectedPlayer.isEmpty() ?
+                                game.translate("werewolf.role.succubus.none") :
+                                affectedPlayer.get(0).getName());
     }
 
     @EventHandler
@@ -181,7 +186,7 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
             Bukkit.getPluginManager().callEvent(charmEvent);
 
             if (!charmEvent.isCancelled()) {
-                Sounds.PORTAL_TRAVEL.play(charmed);
+                Sound.PORTAL_TRAVEL.play(charmed);
                 charmed.sendMessage(game.translate(
                         "werewolf.role.succubus.get_charmed",
                         getPlayerWW().getName()));

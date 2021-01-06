@@ -15,7 +15,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
@@ -50,7 +49,7 @@ public class Assassin extends RolesNeutral {
             return;
         }
 
-        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, -1, false, false));
+        getPlayerWW().addPotionEffect(PotionEffectType.INCREASE_DAMAGE);
     }
 
     @EventHandler
@@ -70,7 +69,9 @@ public class Assassin extends RolesNeutral {
                     item.getType().equals(Material.DIAMOND_LEGGINGS) ||
                     item.getType().equals(Material.DIAMOND_HELMET) ||
                     item.getType().equals(Material.DIAMOND_CHESTPLATE)) {
-                event.getFinalEnchants().put(Enchantment.PROTECTION_ENVIRONMENTAL, Math.min(event.getEnchants().get(Enchantment.PROTECTION_ENVIRONMENTAL), game.getConfig().getLimitProtectionDiamond() + 1));
+                event.getFinalEnchants().put(Enchantment.PROTECTION_ENVIRONMENTAL,
+                        Math.min(event.getEnchants().get(Enchantment.PROTECTION_ENVIRONMENTAL),
+                                game.getConfig().getLimitProtectionDiamond() + 1));
             } else {
                 event.getFinalEnchants().put(
                         Enchantment.PROTECTION_ENVIRONMENTAL,
@@ -102,9 +103,12 @@ public class Assassin extends RolesNeutral {
     public @NotNull String getDescription() {
 
         return super.getDescription() +
-                game.translate("werewolf.description.equipment", game.translate("werewolf.role.assassin.limit")) +
-                game.translate("werewolf.description.item", game.translate("werewolf.role.assassin.items")) +
-                game.translate("werewolf.description.effect", game.translate("werewolf.role.assassin.effect"));
+                game.translate("werewolf.description.equipment",
+                        game.translate("werewolf.role.assassin.limit")) +
+                game.translate("werewolf.description.item",
+                        game.translate("werewolf.role.assassin.items")) +
+                game.translate("werewolf.description.effect",
+                        game.translate("werewolf.role.assassin.effect"));
     }
 
 

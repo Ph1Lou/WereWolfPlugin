@@ -96,7 +96,11 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
 
         if (!getPlayerUUID().equals(killer.getUniqueId())) return;
 
-        killer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 3600, 0, false, false));
+        killer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,
+                3600,
+                0,
+                false,
+                false));
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -111,7 +115,8 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
         }
 
         setPower(true);
-        getPlayerWW().sendMessage(game.translate("werewolf.role.fox.smell_message", game.getConfig().getUseOfFlair() - getUse()));
+        getPlayerWW().sendMessage(game.translate("werewolf.role.fox.smell_message",
+                game.getConfig().getUseOfFlair() - getUse()));
     }
 
 

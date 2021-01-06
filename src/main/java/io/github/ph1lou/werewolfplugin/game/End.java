@@ -42,7 +42,7 @@ public class End {
                 config.getLoverSize() <= 1) {
 
             game.getLoversManager().getLovers().stream()
-                    .filter(loverAPI -> !loverAPI.isKey(RolesBase.CURSED_LOVER.getKey()))
+                    .filter(loverAPI -> !loverAPI.isKey(LoverType.CURSED_LOVER.getKey()))
                     .forEach(loverAPI -> {
                         Set<PlayerWW> lovers = new HashSet<>(loverAPI.getLovers());
 

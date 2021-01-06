@@ -59,8 +59,10 @@ public class Librarian extends RolesVillage implements LimitedUse, AffectedPlaye
     @Override
     public @NotNull String getDescription() {
         return super.getDescription() +
-                game.translate("werewolf.description.description", game.translate("werewolf.role.librarian.description", 3 - use)) +
-                game.translate("werewolf.description.item", game.translate("werewolf.role.librarian.items"));
+                game.translate("werewolf.description.description",
+                        game.translate("werewolf.role.librarian.description", 3 - use)) +
+                game.translate("werewolf.description.item",
+                        game.translate("werewolf.role.librarian.items"));
     }
 
 

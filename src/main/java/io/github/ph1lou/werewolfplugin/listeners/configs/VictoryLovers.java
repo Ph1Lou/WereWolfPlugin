@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.ListenerManager;
 import io.github.ph1lou.werewolfapi.LoverAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.events.WinConditionsCheckEvent;
 import org.bukkit.event.EventHandler;
@@ -23,7 +24,7 @@ public class VictoryLovers extends ListenerManager {
         WereWolfAPI game = main.getWereWolfAPI();
 
         if (game.getLoversManager().getLovers().stream()
-                .filter(LoverAPI::isAlive).anyMatch(loverAPI -> loverAPI.isKey(RolesBase.LOVER.getKey()))) {
+                .filter(LoverAPI::isAlive).anyMatch(loverAPI -> loverAPI.isKey(LoverType.LOVER.getKey()))) {
             event.setCancelled(true);
             return;
         }

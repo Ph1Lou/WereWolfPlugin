@@ -13,6 +13,7 @@ import io.github.ph1lou.werewolfplugin.game.GameManager;
 import io.github.ph1lou.werewolfplugin.game.MapManager;
 import io.github.ph1lou.werewolfplugin.save.Lang;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
@@ -41,6 +42,11 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
 
         MapManager mapManager = currentGame.getMapManager();
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, mapManager::init);
+        Bukkit.getServicesManager()
+                .register(GetWereWolfAPI.class,
+                        this,
+                        this,
+                        ServicePriority.Normal);
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> Bukkit.getOnlinePlayers()
                 .forEach(player -> {

@@ -38,9 +38,12 @@ public class Elder extends RolesVillage implements Power {
     @Override
     public @NotNull String getDescription() {
         return super.getDescription() +
-                game.translate("werewolf.description.description", game.translate("werewolf.role.elder.description")) +
-                game.translate("werewolf.description.power", game.translate(power ? "werewolf.role.elder.available" : "werewolf.role.elder.not_available")) +
-                game.translate("werewolf.description.effect", game.translate("werewolf.role.elder.effect"));
+                game.translate("werewolf.description.description",
+                        game.translate("werewolf.role.elder.description")) +
+                game.translate("werewolf.description.power",
+                        game.translate(power ? "werewolf.role.elder.available" : "werewolf.role.elder.not_available")) +
+                game.translate("werewolf.description.effect",
+                        game.translate("werewolf.role.elder.effect"));
     }
 
 

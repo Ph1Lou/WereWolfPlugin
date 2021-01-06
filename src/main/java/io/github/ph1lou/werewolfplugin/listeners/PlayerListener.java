@@ -450,7 +450,7 @@ public class PlayerListener implements Listener {
 				.forEach(itemStack -> world.dropItem(playerWW.getSpawn(), itemStack));
 
 		Bukkit.getOnlinePlayers()
-				.forEach(Sounds.AMBIENCE_THUNDER::play);
+				.forEach(Sound.AMBIENCE_THUNDER::play);
 
 		if (player != null) {
 

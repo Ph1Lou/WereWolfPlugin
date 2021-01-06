@@ -4,7 +4,7 @@ package io.github.ph1lou.werewolfplugin.listeners;
 import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
-import io.github.ph1lou.werewolfapi.enums.Sounds;
+import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -75,7 +75,7 @@ public class ChatListener implements Listener {
             player.sendMessage(game.translate("werewolf.commands.message.send",
                     args[1],
                     sb.toString()));
-            Sounds.ANVIL_USE.play(recipient);
+            Sound.ANVIL_USE.play(recipient);
         }
 
 

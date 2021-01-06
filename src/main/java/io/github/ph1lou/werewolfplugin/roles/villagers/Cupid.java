@@ -61,10 +61,17 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
     @Override
     public @NotNull String getDescription() {
         return super.getDescription() +
-                game.translate("werewolf.description.description", game.translate("werewolf.role.cupid.description")) +
-                game.translate("werewolf.description.equipment", game.translate("werewolf.role.cupid.extra", game.getConfig().getLimitPowerBow() + 1)) +
-                game.translate("werewolf.description.item", game.translate("werewolf.role.cupid.items")) +
-                game.translate("werewolf.role.cupid.lover", affectedPlayer.isEmpty() ? game.translate("werewolf.role.cupid.none") : affectedPlayer.stream().map(PlayerWW::getName).collect(Collectors.joining(" ")));
+                game.translate("werewolf.description.description",
+                        game.translate("werewolf.role.cupid.description")) +
+                game.translate("werewolf.description.equipment",
+                        game.translate("werewolf.role.cupid.extra", game.getConfig().getLimitPowerBow() + 1)) +
+                game.translate("werewolf.description.item",
+                        game.translate("werewolf.role.cupid.items")) +
+                game.translate("werewolf.role.cupid.lover",
+                        affectedPlayer.isEmpty() ?
+                                game.translate("werewolf.role.cupid.none") :
+                                affectedPlayer.stream().map(PlayerWW::getName)
+                                        .collect(Collectors.joining(" ")));
     }
 
 

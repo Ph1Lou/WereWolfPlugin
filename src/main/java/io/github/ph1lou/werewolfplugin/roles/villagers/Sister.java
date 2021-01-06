@@ -31,7 +31,7 @@ import java.util.Objects;
 
 public class Sister extends RolesVillage implements AffectedPlayers {
 
-    List<PlayerWW> killerWWS = new ArrayList<>();
+    final List<PlayerWW> killerWWS = new ArrayList<>();
 
     public Sister(GetWereWolfAPI main, PlayerWW playerWW, String key) {
         super(main, playerWW, key);

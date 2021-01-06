@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.LoverAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.AngelForm;
+import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.rolesattributs.*;
@@ -95,7 +96,7 @@ public class CommandAdminRole implements Commands {
 
             StringBuilder sb = new StringBuilder();
 
-            if (!loverAPI.isKey(RolesBase.CURSED_LOVER.getKey())) {
+            if (!loverAPI.isKey(LoverType.CURSED_LOVER.getKey())) {
                 for (PlayerWW playerWW1 : loverAPI.getLovers()) {
                     sb.append(playerWW1.getName()).append(" ");
                 }

@@ -6,7 +6,7 @@ import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enums.Sounds;
+import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
@@ -105,14 +105,14 @@ public class Config implements InventoryProvider {
                         Bukkit.getOfflinePlayer(UUID.fromString("056be797-2a0b-4807-9af5-37faf5384396")))
                 .build()), e -> {
             if (e.isShiftClick()) {
-                Sounds.NOTE_BASS.play(player);
+                Sound.NOTE_BASS.play(player);
                 surprise++;
                 if (surprise == 10) {
                     game.setDebug(true);
-                    Sounds.SUCCESSFUL_HIT.play(player);
+                    Sound.SUCCESSFUL_HIT.play(player);
                 } else if (surprise >= 20) {
                     game.setDebug(false);
-                    Sounds.ANVIL_BREAK.play(player);
+                    Sound.ANVIL_BREAK.play(player);
                     surprise = 0;
                 }
                 e.setCurrentItem(new ItemBuilder(UniversalMaterial.PLAYER_HEAD.getStack())

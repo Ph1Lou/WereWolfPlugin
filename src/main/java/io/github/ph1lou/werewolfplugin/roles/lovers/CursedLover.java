@@ -3,8 +3,8 @@ package io.github.ph1lou.werewolfplugin.roles.lovers;
 import io.github.ph1lou.werewolfapi.LoverAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enums.RolesBase;
-import io.github.ph1lou.werewolfapi.enums.Sounds;
+import io.github.ph1lou.werewolfapi.enums.LoverType;
+import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.*;
 import org.bukkit.Bukkit;
@@ -74,7 +74,7 @@ public class CursedLover implements LoverAPI, Listener {
             power1 = true;
             playerWW.sendMessage(game.translate("werewolf.role.cursed_lover.description",
                     cursedLover2.getName()));
-            Sounds.SHEEP_SHEAR.play(playerWW);
+            Sound.SHEEP_SHEAR.play(playerWW);
         } else if (cursedLover2.equals(playerWW)) {
             if (!power2) {
                 setPower(playerWW);
@@ -83,7 +83,7 @@ public class CursedLover implements LoverAPI, Listener {
             setPower(playerWW);
             playerWW.sendMessage(game.translate("werewolf.role.cursed_lover.description",
                     cursedLover1.getName()));
-            Sounds.SHEEP_SHEAR.play(playerWW);
+            Sound.SHEEP_SHEAR.play(playerWW);
         }
     }
 
@@ -91,7 +91,7 @@ public class CursedLover implements LoverAPI, Listener {
 
         player.addPlayerMaxHealth(2);
 
-        Sounds.SHEEP_SHEAR.play(player);
+        Sound.SHEEP_SHEAR.play(player);
     }
 
     @EventHandler
@@ -160,7 +160,7 @@ public class CursedLover implements LoverAPI, Listener {
 
     @Override
     public String getKey() {
-        return RolesBase.CURSED_LOVER.getKey();
+        return LoverType.CURSED_LOVER.getKey();
     }
 
     @Override

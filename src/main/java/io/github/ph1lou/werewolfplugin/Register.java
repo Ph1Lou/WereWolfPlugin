@@ -14,9 +14,7 @@ import io.github.ph1lou.werewolfplugin.commands.utilities.*;
 import io.github.ph1lou.werewolfplugin.listeners.configs.RedNameTag;
 import io.github.ph1lou.werewolfplugin.listeners.configs.ShowDeathCategoryRole;
 import io.github.ph1lou.werewolfplugin.listeners.configs.ShowDeathRole;
-import io.github.ph1lou.werewolfplugin.listeners.random_events.Exposed;
-import io.github.ph1lou.werewolfplugin.listeners.random_events.Infection;
-import io.github.ph1lou.werewolfplugin.listeners.random_events.LootBox;
+import io.github.ph1lou.werewolfplugin.listeners.random_events.*;
 import io.github.ph1lou.werewolfplugin.listeners.scenarios.*;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.*;
 import io.github.ph1lou.werewolfplugin.roles.villagers.*;
@@ -889,7 +887,6 @@ public class Register implements RegisterManager {
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.EVIL_THIEF.getKey()));
-
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.CHAT.getKey())
@@ -909,13 +906,9 @@ public class Register implements RegisterManager {
                         .addIncompatibleConfig(ConfigsBase.SHOW_ROLE_TO_DEATH.getKey())
                         .addConfig(new ShowDeathCategoryRole(main)));
 
-
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.AUTO_REZ_WITCH.getKey()));
-        configsRegister
-                .add(new ConfigRegister("werewolf.name",
-                        ConfigsBase.POLYGAMY.getKey()));
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.VOTE.getKey())
@@ -958,6 +951,36 @@ public class Register implements RegisterManager {
                 .add(new RandomEventRegister("werewolf.name",
                         RandomEvent.EXPOSED.getKey(), new Exposed(main))
                         .setLoreKey("werewolf.random_events.exposed.description")
+                        .setDefaultValue(10));
+
+        eventRandomsRegister
+                .add(new RandomEventRegister("werewolf.name",
+                        RandomEvent.TRIPLE.getKey(), new Triple(main))
+                        .setLoreKey("werewolf.random_events.triple.description")
+                        .setDefaultValue(10));
+
+        eventRandomsRegister
+                .add(new RandomEventRegister("werewolf.name",
+                        RandomEvent.BEARING_RITUAL.getKey(), new BearingRitual(main))
+                        .setLoreKey("werewolf.random_events.bearing_ritual.description")
+                        .setDefaultValue(10));
+
+        eventRandomsRegister
+                .add(new RandomEventRegister("werewolf.name",
+                        RandomEvent.PUTREFACTION.getKey(), new Putrefaction(main))
+                        .setLoreKey("werewolf.random_events.putrefaction.description")
+                        .setDefaultValue(10));
+
+        eventRandomsRegister
+                .add(new RandomEventRegister("werewolf.name",
+                        RandomEvent.GOD_MIRACLE.getKey(), new GodMiracle(main))
+                        .setLoreKey("werewolf.random_events.god_miracle.description")
+                        .setDefaultValue(10));
+
+        eventRandomsRegister
+                .add(new RandomEventRegister("werewolf.name",
+                        RandomEvent.SWAP.getKey(), new Swap(main))
+                        .setLoreKey("werewolf.random_events.swap.description")
                         .setDefaultValue(10));
 
         eventRandomsRegister

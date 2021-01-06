@@ -3,7 +3,6 @@ package io.github.ph1lou.werewolfplugin.game;
 
 import com.google.common.collect.Sets;
 import io.github.ph1lou.werewolfapi.*;
-import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.CupidLoversEvent;
@@ -38,14 +37,11 @@ public class LoversManagement implements LoverManagerAPI {
 
 	private void autoCursedLovers() {
 
-		List<PlayerWW> cursedLovers = new ArrayList<>();
+		List<PlayerWW> cursedLovers = game.getPlayerWW().stream()
+				.filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+				.filter(playerWW -> playerWW.getLovers().isEmpty())
+				.collect(Collectors.toList());
 
-		for (PlayerWW playerWW1 : game.getPlayerWW()) {
-			if (playerWW1.isState(StatePlayer.ALIVE) &&
-					playerWW1.getLovers().isEmpty()) {
-				cursedLovers.add(playerWW1);
-			}
-		}
 
 		if (cursedLovers.size() < 2 && game.getConfig().getCursedLoverSize() > 0) {
 			Bukkit.broadcastMessage(game.translate("werewolf.role.cursed_lover.not_enough_players"));
@@ -71,14 +67,10 @@ public class LoversManagement implements LoverManagerAPI {
 
 	private void autoAmnesiacLovers() {
 
-		List<PlayerWW> amnesiacLovers = new ArrayList<>();
-
-		for (PlayerWW playerWW1 : game.getPlayerWW()) {
-
-			if (playerWW1.isState(StatePlayer.ALIVE) && playerWW1.getLovers().isEmpty()) {
-				amnesiacLovers.add(playerWW1);
-			}
-		}
+		List<PlayerWW> amnesiacLovers = game.getPlayerWW().stream()
+				.filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+				.filter(playerWW -> playerWW.getLovers().isEmpty())
+				.collect(Collectors.toList());
 
 		if (amnesiacLovers.size() < 2 && game.getConfig().getAmnesiacLoverSize() > 0) {
 			Bukkit.broadcastMessage(game.translate("werewolf.role.amnesiac_lover.not_enough_players"));
@@ -117,21 +109,19 @@ public class LoversManagement implements LoverManagerAPI {
 
 	private void autoLovers() {
 
-		List<PlayerWW> loversAvailable = new ArrayList<>();
-		for (PlayerWW playerWW1 : game.getPlayerWW()) {
-			if (playerWW1.isState(StatePlayer.ALIVE)) {
-				loversAvailable.add(playerWW1);
-			}
-		}
+		List<PlayerWW> loversAvailable = game.getPlayerWW().stream()
+				.filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+				.collect(Collectors.toList());
+
 		if (loversAvailable.size() < 2 && game.getConfig().getRoleCount(RolesBase.CUPID.getKey()) +
 				game.getConfig().getLoverSize() > 0) {
 			Bukkit.broadcastMessage(game.translate("werewolf.role.lover.not_enough_players"));
 			return;
 		}
 
-		boolean polygamy = game.getConfig().isConfigActive(ConfigsBase.POLYGAMY.getKey());
+		boolean polygamy = false;
 
-		if (!polygamy && (game.getConfig().getLoverSize() == 0 &&
+		if ((game.getConfig().getLoverSize() == 0 &&
 				game.getConfig().getRoleCount(RolesBase.CUPID.getKey()) * 2 >=
 						game.getScore().getPlayerSize()) ||
 				(game.getConfig().getLoverSize() != 0 &&

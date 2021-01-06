@@ -10,6 +10,7 @@ import io.github.ph1lou.werewolfapi.events.ExposedEvent;
 import io.github.ph1lou.werewolfapi.events.RepartitionEvent;
 import io.github.ph1lou.werewolfapi.events.StartEvent;
 import io.github.ph1lou.werewolfapi.events.StopEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.Display;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -91,16 +92,25 @@ public class Exposed extends ListenerManager {
 
         Roles role2 = role2List.get((int) Math.floor(game.getRandom().nextDouble() * role2List.size()));
 
-        List<String> roles = new ArrayList<>(Arrays.asList(role1.getKey(), role2.getKey(), playerWW.getRole().getKey()));
+        List<String> roles = new ArrayList<>(Arrays.asList(role1.getKey(),
+                role2.getKey(),
+                playerWW.getRole() instanceof Display ?
+                        ((Display) playerWW.getRole()).getDisplayRole().getKey() :
+                        playerWW.getRole().getKey()));
+
         Collections.shuffle(roles);
 
-        ExposedEvent exposedEvent = new ExposedEvent(playerWW, new ArrayList<>(Arrays.asList(role1.getPlayerWW(), role2.getPlayerWW(), playerWW)));
+        ExposedEvent exposedEvent = new ExposedEvent(playerWW,
+                new ArrayList<>(Arrays.asList(role1.getPlayerWW(),
+                        role2.getPlayerWW(),
+                        playerWW)));
 
         Bukkit.getPluginManager().callEvent(exposedEvent);
 
         if (!exposedEvent.isCancelled()) {
             roles = roles.stream().map(game::translate).collect(Collectors.toList());
-            Bukkit.broadcastMessage(game.translate("werewolf.random_events.exposed.message", playerWW.getName(), roles.get(0), roles.get(1), roles.get(2)));
+            Bukkit.broadcastMessage(game.translate("werewolf.random_events.exposed.message",
+                    playerWW.getName(), roles.get(0), roles.get(1), roles.get(2)));
         }
 
         return playerWW;

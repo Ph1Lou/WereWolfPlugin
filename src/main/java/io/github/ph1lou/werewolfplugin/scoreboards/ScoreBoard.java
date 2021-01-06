@@ -143,17 +143,17 @@ public class ScoreBoard implements ScoreAPI, Listener {
 
 		if(game.getConfig().getLoverSize()>0) {
 			StringBuilder sb = new StringBuilder();
-			sb.append("§3").append(game.getConfig().getLoverSize()).append("§f ").append(game.translate(RolesBase.LOVER.getKey()));
+			sb.append("§3").append(game.getConfig().getLoverSize()).append("§f ").append(game.translate(LoverType.LOVER.getKey()));
 			roles.add(sb.substring(0, Math.min(30, sb.length())));
 		}
 		if (game.getConfig().getAmnesiacLoverSize() > 0) {
 			StringBuilder sb = new StringBuilder();
-			sb.append("§3").append(game.getConfig().getAmnesiacLoverSize()).append("§f ").append(game.translate(RolesBase.AMNESIAC_LOVER.getKey()));
+			sb.append("§3").append(game.getConfig().getAmnesiacLoverSize()).append("§f ").append(game.translate(LoverType.AMNESIAC_LOVER.getKey()));
 			roles.add(sb.substring(0, Math.min(30, sb.length())));
 		}
 		if (game.getConfig().getCursedLoverSize() > 0) {
 			StringBuilder sb = new StringBuilder();
-			sb.append("§3").append(game.getConfig().getCursedLoverSize()).append("§f ").append(game.translate(RolesBase.CURSED_LOVER.getKey()));
+			sb.append("§3").append(game.getConfig().getCursedLoverSize()).append("§f ").append(game.translate(LoverType.CURSED_LOVER.getKey()));
 			roles.add(sb.substring(0, Math.min(30, sb.length())));
 		}
 		for (RoleRegister roleRegister : game.getMain().getRegisterManager().getRolesRegister()) {

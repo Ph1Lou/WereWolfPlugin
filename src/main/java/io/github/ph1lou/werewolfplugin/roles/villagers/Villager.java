@@ -22,7 +22,7 @@ public class Villager extends RolesVillage {
     public Villager(GetWereWolfAPI main, PlayerWW playerWW, String key) {
         super(main, playerWW, key);
         if (game.isState(StateGame.LOBBY)) return;
-        villagerKit = VillagerKit.values()[(int) (game.getRandom().nextFloat() * VillagerKit.values().length)];
+        villagerKit = VillagerKit.values()[(int) Math.floor(game.getRandom().nextFloat() * VillagerKit.values().length)];
         Bukkit.getPluginManager().callEvent(new VillagerKitEvent(getPlayerWW(), villagerKit.getKey()));
     }
 

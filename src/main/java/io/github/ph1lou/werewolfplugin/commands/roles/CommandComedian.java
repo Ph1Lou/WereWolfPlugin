@@ -3,7 +3,7 @@ package io.github.ph1lou.werewolfplugin.commands.roles;
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enums.ComedianMasks;
+import io.github.ph1lou.werewolfapi.enums.ComedianMask;
 import io.github.ph1lou.werewolfapi.events.UseMaskEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
@@ -44,14 +44,14 @@ public class CommandComedian implements Commands {
             }
 
             if (((Comedian) comedian).getMasks()
-                    .contains(ComedianMasks.values()[i])) {
+                    .contains(ComedianMask.values()[i])) {
 
                 player.sendMessage(game.translate(
                         "werewolf.role.comedian.used_mask"));
                 return;
             }
             ((Power) comedian).setPower(false);
-            ((Comedian) comedian).addMask(ComedianMasks.values()[i]);
+            ((Comedian) comedian).addMask(ComedianMask.values()[i]);
 
             UseMaskEvent useMaskEvent = new UseMaskEvent(playerWW, i);
             Bukkit.getPluginManager().callEvent(useMaskEvent);
@@ -63,8 +63,8 @@ public class CommandComedian implements Commands {
 
             player.sendMessage(game.translate(
                     "werewolf.role.comedian.wear_mask_perform",
-                    game.translate(ComedianMasks.values()[i].getKey())));
-            playerWW.addPotionEffect(ComedianMasks.values()[i].getPotionEffectType());
+                    game.translate(ComedianMask.values()[i].getKey())));
+            playerWW.addPotionEffect(ComedianMask.values()[i].getPotionEffectType());
 
         } catch (NumberFormatException ignored) {
         }

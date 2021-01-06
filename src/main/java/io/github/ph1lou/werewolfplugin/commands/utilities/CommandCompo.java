@@ -3,7 +3,7 @@ package io.github.ph1lou.werewolfplugin.commands.utilities;
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
-import io.github.ph1lou.werewolfapi.enums.RolesBase;
+import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.entity.Player;
@@ -30,13 +30,13 @@ public class CommandCompo implements Commands {
 
             StringBuilder sb = new StringBuilder(game.translate("werewolf.commands.compo.message"));
             if (game.getConfig().getLoverSize() > 0) {
-                sb.append("§3").append(game.getConfig().getLoverSize()).append("§r ").append(game.translate(RolesBase.LOVER.getKey())).append(", ");
+                sb.append("§3").append(game.getConfig().getLoverSize()).append("§r ").append(game.translate(LoverType.LOVER.getKey())).append(", ");
             }
             if (game.getConfig().getAmnesiacLoverSize() > 0) {
-                sb.append("§3").append(game.getConfig().getAmnesiacLoverSize()).append("§r ").append(game.translate(RolesBase.AMNESIAC_LOVER.getKey())).append(", ");
+                sb.append("§3").append(game.getConfig().getAmnesiacLoverSize()).append("§r ").append(game.translate(LoverType.AMNESIAC_LOVER.getKey())).append(", ");
             }
             if (game.getConfig().getCursedLoverSize() > 0) {
-                sb.append("§3").append(game.getConfig().getCursedLoverSize()).append("§r ").append(game.translate(RolesBase.CURSED_LOVER.getKey())).append(", ");
+                sb.append("§3").append(game.getConfig().getCursedLoverSize()).append("§r ").append(game.translate(LoverType.CURSED_LOVER.getKey())).append(", ");
             }
             for (RoleRegister roleRegister : main.getRegisterManager().getRolesRegister()) {
                 String key = roleRegister.getKey();

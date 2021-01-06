@@ -331,6 +331,7 @@
       },
       "lover": {
         "display": "Couple",
+        "random": " Aléatoire",
         "description": "§6LOUP-GAROU §7➽§d Vous tombez éperdument amoureux de §b%s§d.\n§dSi l'un meurt, l'autre le rejoindra par amour.\n§dVous pouvez envoyer de la vie à votre âme soeur avec §b/ww don §d[nombre de demi-coeurs à envoyer] [facultatif:joueur à qui l'envoyer]",
         "not_in_pairs": "[§cLG UHC§r] Vous n'ëtes pas en couple",
         "lover_death": "§d%s par amour, le rejoint dans sa tombe",
@@ -884,7 +885,6 @@
         "show_role_to_death": "Affiche le Rôle à la Mort",
         "show_role_category_to_death": "Affiche la Catégorie du Rôle à la Mort",
         "auto_rez_witch": "la Sorcière peut s'autorez",
-        "polygamy": "Polygamie",
         "sweet_angel": "L'ange Gardien gagne Village quand son protégé meurt",
         "vote": "Vote",
         "hide_composition": "Composition Cachée",
@@ -972,6 +972,31 @@
         "name": "Infection",
         "description": "Une fois dans la partie infecte un joueur au hasard.\nL'infection se déroule entre 1h et 1h15, \nsi il y a moins de la moitié des joueurs \nqui sont Loups Garous.",
         "message": "[§5Infection§r] Un joueur aléatoire vient d'être infecté"
+      },
+      "triple": {
+        "name": "Trouple",
+        "description": "Une troisième personne s'ajoute sur un couple",
+        "lover_join": "[§aLG UHC§r] §b%s§f rejoint votre couple",
+        "join": "[§aLG UHC§r] Vous rejoignez le couple constitué de §b%s",
+        "message": "[§5Trouple§r] Une troisième personne vient de rejoindre un couple"
+      },
+      "bearing_ritual": {
+        "name": "Rituel du coussinet",
+        "description": "Une fois dans la partie, pendant un jour \ntout le monde à Nofall. \nL'évenement se déclenche entre 1h et 1h40"
+      },
+      "putrefaction": {
+        "name": "Putréfaction",
+        "description": "Une fois dans la partie, pendant un jour \nl'eau fait prendre des dégats.\nL'évenement se déclenche entre 1h et 1h20"
+      },
+      "god_miracle": {
+        "name": "God Miracle",
+        "message": "[§5God-Miracle§r] Un joueur vient d'être ressusciter",
+        "description": "Une fois dans la partie,\n un joueur tué est resssuscité"
+      },
+      "swap": {
+        "name": "Swap",
+        "message": "[§5Swap§r] Deux personnes ont leur rôle inversées",
+        "description": "Une fois dans la partie,\n avant l'annonce de la liste des loups\n 2 roles sont échangés"
       }
     },
     "check": {
@@ -1019,7 +1044,8 @@
       "debug": "§fMode §4debug",
       "none": "§4Aucun",
       "author": "§fAuteur(s) :",
-      "stat": "[§cLG UHC§r] L'addon de statistique n'est pas installé, cliquez ici pour le télécharger"
+      "stat": "[§cLG UHC§r] L'addon de statistique n'est pas installé, cliquez ici pour le télécharger",
+      "stat_out_of_date": "[§cLG UHC§r] L'addon de statistique n'est pas à jours, cliquez ici pour télécharger la mise à jours"
     },
     "categories": {
       "villager": "Villageois",

@@ -1,7 +1,7 @@
 package io.github.ph1lou.werewolfplugin.tasks;
 
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enums.Sounds;
+import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
@@ -105,7 +105,7 @@ public class TransportationTask implements Listener {
             }
             for (Player p : Bukkit.getOnlinePlayers()) {
                 VersionUtils.getVersionUtils().sendTitle(p, "Start", "§b" + i.get(), 25, 20, 25);
-                Sounds.NOTE_PIANO.play(p);
+                Sound.NOTE_PIANO.play(p);
             }
             i.getAndDecrement();
 
@@ -149,7 +149,7 @@ public class TransportationTask implements Listener {
             }
 
             VersionUtils.getVersionUtils().sendTitle(player, game.translate("werewolf.announcement.start.top_title"), game.translate("werewolf.announcement.start.bot_title"), 20, 20, 20);
-            Sounds.NOTE_BASS.play(player);
+            Sound.NOTE_BASS.play(player);
         }
 
         game.setState(StateGame.START);
@@ -166,7 +166,7 @@ public class TransportationTask implements Listener {
     private void teleportPlayer(int i) {
 
         Bukkit.getOnlinePlayers()
-                .forEach(Sounds.ORB_PICKUP::play);
+                .forEach(Sound.ORB_PICKUP::play);
 
         actionBar = game.translate("werewolf.action_bar.tp", i + 1, game.getScore().getPlayerSize());
 
@@ -205,7 +205,7 @@ public class TransportationTask implements Listener {
         WorldBorder wb = world.getWorldBorder();
 
         for (Player p : Bukkit.getOnlinePlayers()) {
-            Sounds.DIG_GRASS.play(p);
+            Sound.DIG_GRASS.play(p);
         }
 
         actionBar = game.translate("werewolf.action_bar.create_tp_point", i + 1,

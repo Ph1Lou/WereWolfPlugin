@@ -4,7 +4,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
-import io.github.ph1lou.werewolfapi.enums.Sounds;
+import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.StealEvent;
 import io.github.ph1lou.werewolfapi.events.UpdateEvent;
@@ -89,7 +89,7 @@ public class SiameseTwin extends RolesVillage {
                     if (health * VersionUtils.getVersionUtils()
                             .getPlayerMaxHealth(player) + 1
                             < player.getHealth()) {
-                        Sounds.BURP.play(player);
+                        Sound.BURP.play(player);
                     }
                     player.setHealth(health *
                             VersionUtils.getVersionUtils()

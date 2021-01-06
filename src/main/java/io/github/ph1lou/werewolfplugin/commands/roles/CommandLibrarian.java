@@ -37,7 +37,7 @@ public class CommandLibrarian implements Commands {
 
         Roles librarian = playerWW.getRole();
 
-        if (args[0].toLowerCase().equals(playername.toLowerCase())) {
+        if (args[0].equalsIgnoreCase(playername)) {
             player.sendMessage(game.translate("werewolf.check.not_yourself"));
             return;
         }

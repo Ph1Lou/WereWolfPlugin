@@ -31,8 +31,10 @@ public class WhiteWereWolf extends RolesNeutral {
     @Override
     public @NotNull String getDescription() {
         return super.getDescription() +
-                game.translate("werewolf.description.description", game.translate("werewolf.role.white_werewolf.description")) +
-                game.translate("werewolf.description.power", game.translate("werewolf.role.white_werewolf.heart"));
+                game.translate("werewolf.description.description",
+                        game.translate("werewolf.role.white_werewolf.description")) +
+                game.translate("werewolf.description.power",
+                        game.translate("werewolf.role.white_werewolf.heart"));
     }
 
 

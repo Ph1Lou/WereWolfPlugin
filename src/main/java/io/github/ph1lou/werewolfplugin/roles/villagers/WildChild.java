@@ -3,7 +3,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enums.Sounds;
+import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.*;
@@ -89,7 +89,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
 
         getPlayerWW().sendMessage(game.translate("werewolf.role.wild_child.reveal_model",
                 model.getName()));
-        Sounds.BAT_IDLE.play(getPlayerWW());
+        Sound.BAT_IDLE.play(getPlayerWW());
     }
 
     @Override

@@ -2,7 +2,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enums.ComedianMasks;
+import io.github.ph1lou.werewolfapi.enums.ComedianMask;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class Comedian extends RolesWithLimitedSelectionDuration {
 
-    private final List<ComedianMasks> comedianMasks = new ArrayList<>();
+    private final List<ComedianMask> comedianMasks = new ArrayList<>();
 
     public Comedian(GetWereWolfAPI main, PlayerWW playerWW, String key) {
         super(main, playerWW, key);
@@ -25,23 +25,23 @@ public class Comedian extends RolesWithLimitedSelectionDuration {
     }
 
 
-    public List<ComedianMasks> getMasks() {
+    public List<ComedianMask> getMasks() {
         return comedianMasks;
     }
 
     @Nullable
-    public ComedianMasks getLastMask() {
+    public ComedianMask getLastMask() {
         if (comedianMasks.isEmpty()) return null;
         return comedianMasks.get(comedianMasks.size() - 1);
     }
 
 
-    public void addMask(ComedianMasks mask) {
+    public void addMask(ComedianMask mask) {
         this.comedianMasks.add(mask);
     }
 
 
-    public void removeMask(ComedianMasks mask) {
+    public void removeMask(ComedianMask mask) {
         this.comedianMasks.remove(mask);
     }
 
@@ -71,8 +71,14 @@ public class Comedian extends RolesWithLimitedSelectionDuration {
     @Override
     public @NotNull String getDescription() {
         return super.getDescription() +
-                game.translate("werewolf.description.description", game.translate("werewolf.role.comedian.description")) +
-                game.translate("werewolf.role.comedian.masks", comedianMasks.isEmpty() ? game.translate("werewolf.role.comedian.none") : comedianMasks.stream().map(comedianMasks1 -> game.translate(comedianMasks1.getKey())).collect(Collectors.joining(" ")));
+                game.translate("werewolf.description.description",
+                        game.translate("werewolf.role.comedian.description")) +
+                game.translate("werewolf.role.comedian.masks",
+                        comedianMasks.isEmpty() ?
+                                game.translate("werewolf.role.comedian.none") :
+                                comedianMasks.stream()
+                                        .map(comedianMasks1 -> game.translate(comedianMasks1.getKey()))
+                                        .collect(Collectors.joining(" ")));
     }
 
 
