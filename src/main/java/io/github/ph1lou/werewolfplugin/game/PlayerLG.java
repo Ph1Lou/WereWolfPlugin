@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 public class PlayerLG implements PlayerWW {
@@ -187,6 +188,13 @@ public class PlayerLG implements PlayerWW {
         }
 
         disconnectedPotionActions.add(new PotionAction(potionEffectType, false));
+    }
+
+    @Override
+    public List<? extends PotionEffectType> getPotionEffects() {
+        return disconnectedPotionActions.stream().filter(PotionAction::isAdd)
+                .map(PotionAction::getPotionEffectType)
+                .collect(Collectors.toList());
     }
 
     @Override
