@@ -202,6 +202,7 @@ public class LootBox extends ListenerManager {
 
         chestLocation.clear();
         chestHasBeenOpen.clear();
+        register(false);
         Bukkit.broadcastMessage(game.translate("werewolf.random_events.loot_box.all_chest_find"));
 
         Bukkit.getPluginManager().callEvent(new FindAllLootBoxEvent());

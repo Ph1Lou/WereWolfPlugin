@@ -44,6 +44,10 @@ public class MysticalWereWolf extends RolesWereWolf {
         event.setCancelled(true);
     }
 
+    @Override
+    protected void openWereWolfChat() {
+    }
+
     @EventHandler
     public void onWereWolfDeath(FinalDeathEvent event) {
 
@@ -65,8 +69,5 @@ public class MysticalWereWolf extends RolesWereWolf {
         getPlayerWW().sendMessage(game.translate("werewolf.role.mystical_werewolf.werewolf_death", roleWW.getName(), game.translate(roleWW.getRole().getKey())));
     }
 
-    @EventHandler
-    @Override
-    public void onWWChat(WereWolfChatEvent event) {
-    }
+
 }

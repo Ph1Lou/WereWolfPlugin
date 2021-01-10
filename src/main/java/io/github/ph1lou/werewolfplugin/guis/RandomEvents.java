@@ -63,25 +63,21 @@ public class RandomEvents implements InventoryProvider {
 
                         if (e.isLeftClick()) {
                             int probability = config.getProbability(key);
-                            if (probability < 100) {
-                                config.setProbability(key, (probability + 1) % 101);
-                                if (probability == 0) {
-                                    if (!game.isState(StateGame.LOBBY)) {
-                                        randomEventRegister.getRandomEvent().register(game.getRandom().nextDouble() * 100 < game.getConfig().getProbability(key));
-                                    }
+                            config.setProbability(key, (probability + 1) % 101);
+                            if (probability == 0) {
+                                if (!game.isState(StateGame.LOBBY)) {
+                                    randomEventRegister.getRandomEvent().register(game.getRandom().nextDouble() * 100 < game.getConfig().getProbability(key));
                                 }
-                                e.setCurrentItem(getItemStack(game, key, randomEventRegister.getLoreKey()));
                             }
+                            e.setCurrentItem(getItemStack(game, key, randomEventRegister.getLoreKey()));
                         }
                         if (e.isRightClick()) {
                             int probability = config.getProbability(key);
-                            if (probability > 0) {
-                                config.setProbability(key, (probability - 1) % 101);
-                                if (probability == 1) {
-                                    randomEventRegister.getRandomEvent().register(false);
-                                }
-                                e.setCurrentItem(getItemStack(game, key, randomEventRegister.getLoreKey()));
+                            config.setProbability(key, ((probability - 1) + 101) % 101);
+                            if (probability == 1) {
+                                randomEventRegister.getRandomEvent().register(false);
                             }
+                            e.setCurrentItem(getItemStack(game, key, randomEventRegister.getLoreKey()));
                         }
                     }));
 

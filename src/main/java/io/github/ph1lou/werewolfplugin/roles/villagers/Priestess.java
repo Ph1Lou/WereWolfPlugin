@@ -12,6 +12,7 @@ import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTag;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesWithLimitedSelectionDuration;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.NotNull;
@@ -72,8 +73,10 @@ public class Priestess extends RolesWithLimitedSelectionDuration implements Affe
     public @NotNull String getDescription() {
 
         return super.getDescription() +
-                game.translate("werewolf.description.description", game.translate("werewolf.role.priestess.description")) +
-                game.translate("werewolf.description.item", game.translate("werewolf.role.priestess.items"));
+                game.translate("werewolf.description.description",
+                        game.translate("werewolf.role.priestess.description")) +
+                game.translate("werewolf.description.item",
+                        game.translate("werewolf.role.priestess.items"));
     }
 
 
@@ -96,18 +99,27 @@ public class Priestess extends RolesWithLimitedSelectionDuration implements Affe
                 .map(PlayerWW::getRole)
                 .forEach(roles -> {
                     if (roles.isNeutral()) {
-                        roles.getPlayerWW().sendMessage(game.translate(event.getFormat()).replace("&player&", event.getPlayerName()).replace("&role&", game.translate(event.getRole())));
+                        roles.getPlayerWW().sendMessage(game.translate(event.getFormat())
+                                .replace("&player&", event.getPlayerName())
+                                .replace("&role&", game.translate(event.getRole())));
                     } else
-                        sendDeathMessage(roles.getPlayerWW(), event.getPlayerWW(), roles.isWereWolf(), event.getFormat(), event.getRole());
+                        sendDeathMessage(roles.getPlayerWW(), event.getPlayerWW(),
+                                roles.isWereWolf(), event.getFormat(), event.getRole());
                 });
 
         game.getModerationManager().getModerators().stream()
                 .filter(uuid -> game.getPlayerWW(uuid) == null)
                 .map(Bukkit::getPlayer)
                 .filter(Objects::nonNull)
-                .forEach(player -> player.sendMessage(game.translate("werewolf.announcement.death_message_with_role").replace("&player&", event.getPlayerName()).replace("&role&", game.translate(event.getPlayerWW().getRole().getKey()))));
+                .forEach(player -> player.sendMessage(game.translate("werewolf.announcement.death_message_with_role")
+                        .replace("&player&", event.getPlayerName())
+                        .replace("&role&", game.translate(event.getPlayerWW().getRole().getKey()))));
 
-        Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.announcement.death_message_with_role").replace("&player&", event.getPlayerName()).replace("&role&", game.translate(event.getPlayerWW().getRole().getKey())));
+        Bukkit.getConsoleSender()
+                .sendMessage(game.translate("werewolf.announcement.death_message_with_role")
+                        .replace("&player&", event.getPlayerName())
+                        .replace("&role&",
+                                game.translate(event.getPlayerWW().getRole().getKey())));
         event.setRole(event.getPlayerWW().getRole().getCamp().getKey());
     }
 
@@ -118,7 +130,7 @@ public class Priestess extends RolesWithLimitedSelectionDuration implements Affe
         if (game.getRandom().nextFloat() < 0.8) {
 
             if (getPlayerWW().isState(StatePlayer.ALIVE) && isWerewolf) {
-                playerWW.sendMessage(message.replace("&role&", "§kCoucou"));
+                playerWW.sendMessage(message.replace("&role&", ChatColor.MAGIC + "Coucou"));
             } else {
                 playerWW.sendMessage(message.replace("&role&", game.translate(role)));
             }
@@ -127,7 +139,7 @@ public class Priestess extends RolesWithLimitedSelectionDuration implements Affe
             if (getPlayerWW().isState(StatePlayer.ALIVE) && isWerewolf) {
                 playerWW.sendMessage(message.replace("&role&", game.translate(role)));
             } else {
-                playerWW.sendMessage(message.replace("&role&", "§kCoucou"));
+                playerWW.sendMessage(message.replace("&role&", ChatColor.MAGIC + "Coucou"));
             }
         }
     }

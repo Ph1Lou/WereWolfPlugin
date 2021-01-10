@@ -95,24 +95,20 @@ public class CommandAdminRole implements Commands {
         for (LoverAPI loverAPI : targetWW.getLovers()) {
 
             StringBuilder sb = new StringBuilder();
+            loverAPI.getLovers().stream()
+                    .filter(playerWW1 -> !targetWW.equals(playerWW1))
+                    .forEach(playerWW1 -> sb.append(playerWW1.getName()).append(" "));
 
             if (!loverAPI.isKey(LoverType.CURSED_LOVER.getKey())) {
-                for (PlayerWW playerWW1 : loverAPI.getLovers()) {
-                    sb.append(playerWW1.getName()).append(" ");
-                }
                 if (sb.length() != 0) {
                     player.sendMessage(game.translate("werewolf.commands.admin.role.lover", sb.toString()));
                 }
             } else {
-                for (PlayerWW playerWW1 : loverAPI.getLovers()) {
-                    sb.append(playerWW1.getName()).append(" ");
-                }
                 if (sb.length() != 0) {
                     player.sendMessage(game.translate("werewolf.commands.admin.role.cursed_lover", sb.toString()));
                 }
             }
         }
-
 
         StringBuilder sb = new StringBuilder();
 

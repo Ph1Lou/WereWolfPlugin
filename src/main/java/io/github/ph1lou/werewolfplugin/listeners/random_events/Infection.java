@@ -54,6 +54,8 @@ public class Infection extends ListenerManager {
 
                     game.checkVictory();
 
+                    register(false);
+
                     Bukkit.broadcastMessage(game.translate("werewolf.random_events.infection.message"));
                 }
             }

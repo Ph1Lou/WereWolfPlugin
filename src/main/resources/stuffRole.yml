@@ -147,7 +147,7 @@
     type: POTION
     damage: 16460
     amount: 2
-"werewolf.role.priestess":
+"werewolf.role.priestess.display":
   '0':
     ==: org.bukkit.inventory.ItemStack
     type: OBSIDIAN

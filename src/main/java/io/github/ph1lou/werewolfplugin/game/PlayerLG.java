@@ -241,8 +241,9 @@ public class PlayerLG implements PlayerWW {
 
 	@Override
 	public void setRole(Roles role) {
-		this.role = role;
-	}
+        this.role = role;
+        this.role.setPlayerWW(this);
+    }
 
 	@Override
 	public Roles getRole() {

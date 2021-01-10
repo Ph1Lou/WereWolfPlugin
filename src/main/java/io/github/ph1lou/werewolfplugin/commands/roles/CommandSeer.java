@@ -77,7 +77,6 @@ public class CommandSeer implements Commands {
             ((AffectedPlayers) seer).addAffectedPlayer(playerWW1);
 
             if (seerEvent.getCamp().equals("werewolf.categories.villager")) {
-                playerWW.removePlayerMaxHealth(6);
                 ((Seer) seer).setDisablePower();
                 player.sendMessage(game.translate("werewolf.role.seer.see_villager"));
                 if (seer.isKey(RolesBase.CHATTY_SEER.getKey())) {

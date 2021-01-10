@@ -42,10 +42,6 @@ public class CommandWereWolfChat implements Commands {
 
         if (playerWW == null) return;
 
-        if (!playerWW.getRole().isWereWolf()) {
-            return;
-        }
-
         if (!game.getConfig().isConfigActive(ConfigsBase.WEREWOLF_CHAT.getKey())) {
             player.sendMessage(game.translate("werewolf.commands.admin.ww_chat.disable"));
             return;

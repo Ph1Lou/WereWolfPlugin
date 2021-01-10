@@ -82,8 +82,10 @@ public class Troublemaker extends RolesVillage implements AffectedPlayers, Power
     @Override
     public @NotNull String getDescription() {
         return super.getDescription() +
-                game.translate("werewolf.description.description", game.translate("werewolf.role.troublemaker.description")) +
-                game.translate("werewolf.description.power", game.translate("werewolf.role.troublemaker.chat"));
+                game.translate("werewolf.description.description",
+                        game.translate("werewolf.role.troublemaker.description")) +
+                game.translate("werewolf.description.power",
+                        game.translate("werewolf.role.troublemaker.chat"));
     }
 
 

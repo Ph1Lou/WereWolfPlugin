@@ -33,6 +33,7 @@ public class GodMiracle extends ListenerManager {
             if (godMiracle.isCancelled()) return;
 
             event.setCancelled(true);
+            register(false);
             game.resurrection(playerWW);
             Bukkit.broadcastMessage(game.translate("werewolf.random_events.god_miracle.message"));
         }

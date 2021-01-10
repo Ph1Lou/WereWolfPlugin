@@ -38,11 +38,14 @@ public class Putrefaction extends ListenerManager {
                     if (putrefactionEvent.isCancelled()) return;
 
                     active = true;
+
+                    Bukkit.broadcastMessage(game.translate("werewolf.random_events.putrefaction.message"));
+
                     Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
                         if (game.isState(StateGame.GAME)) {
                             if (isRegister()) {
                                 active = false;
-                                setRegister(false);
+                                register(false);
                             }
                         }
                     }, game.getConfig().getTimerValue(TimersBase.DAY_DURATION.getKey()) * 40L);
@@ -57,7 +60,7 @@ public class Putrefaction extends ListenerManager {
         if (!active) return;
 
         if (Objects.requireNonNull(event.getTo()).getBlock().isLiquid()) {
-            event.getPlayer().damage(1);
+            event.getPlayer().damage(0.5);
         }
     }
 

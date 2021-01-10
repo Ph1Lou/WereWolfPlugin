@@ -338,7 +338,7 @@
         "not_enough_players": "[§cLG UHC§r] il n'y a pas assez de personnes pour former un couple",
         "not_lover": "[§cLG UHC§r] Vous ne pouvez partager des coeurs qu'avec un amant",
         "polygamy": "[§6LG UHC§r] En raison du trop faible nombre de joueur par rapport au nombre de couples la polygamie est activée",
-        "received": "[§eLG UHC§r] Vous recevez §b%d§r %% de la vie de §b%s",
+        "received": "[§eLG UHC§r] Vous recevez §b%s§r %% de la vie de §b%s",
         "disconnected": "[§cLG UHC§r] Votre amant n'est pas connecté",
         "complete": "[§aLG UHC§r] Vous venez d'envoyer §b%s§r %% de votre vie à §b%s",
         "100": "[§aLG UHC§r] Vous ne pouvez pas envoyer 100%% ou plus de votre vie",
@@ -982,10 +982,12 @@
       },
       "bearing_ritual": {
         "name": "Rituel du coussinet",
+        "message": "[§5Rituel du Coussinet§r] Pendant un jour, tout le monde à §bNoFall",
         "description": "Une fois dans la partie, pendant un jour \ntout le monde à Nofall. \nL'évenement se déclenche entre 1h et 1h40"
       },
       "putrefaction": {
         "name": "Putréfaction",
+        "message": "[§5Putrefaction§r] Pendant un jour, l'eau fait prendre des dégats",
         "description": "Une fois dans la partie, pendant un jour \nl'eau fait prendre des dégats.\nL'évenement se déclenche entre 1h et 1h20"
       },
       "god_miracle": {

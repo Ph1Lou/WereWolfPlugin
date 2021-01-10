@@ -8,8 +8,6 @@ import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.RepartitionEvent;
-import io.github.ph1lou.werewolfapi.events.StartEvent;
-import io.github.ph1lou.werewolfapi.events.StopEvent;
 import io.github.ph1lou.werewolfapi.events.SwapEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import org.bukkit.Bukkit;
@@ -60,6 +58,11 @@ public class Swap extends ListenerManager {
                     playerWW1.setRole(roles2);
                     playerWW2.setRole(roles1);
                     Bukkit.broadcastMessage(game.translate("werewolf.random_events.swap.message"));
+                    register(false);
+                    playerWW1.addPlayerMaxHealth(20 - playerWW1.getMaxHealth());
+                    playerWW2.addPlayerMaxHealth(20 - playerWW2.getMaxHealth());
+                    playerWW1.getPotionEffects().forEach(playerWW1::removePotionEffect);
+                    playerWW2.getPotionEffects().forEach(playerWW2::removePotionEffect);
                     playerWW1.sendMessage(roles2.getBetterDescription());
                     playerWW2.sendMessage(roles1.getBetterDescription());
                     roles1.recoverPower();
@@ -67,14 +70,6 @@ public class Swap extends ListenerManager {
                 }
             }
         }, (long) (game.getRandom().nextDouble() * game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey()) * 20));
-    }
-
-    @EventHandler
-    public void onGameStop(StopEvent event) {
-    }
-
-    @EventHandler
-    public void onGameStart(StartEvent event) {
     }
 
 }

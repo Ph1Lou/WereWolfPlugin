@@ -89,10 +89,9 @@ public class ChatListener implements Listener {
         ModerationManagerAPI moderationManager = game.getModerationManager();
         String format;
 
-        if(player.getName().equals("Ph1Lou")){
-            format=game.translate("werewolf.commands.admin.chat.template","§5✦§r %s","%s");
-        }
-        else format=game.translate("werewolf.commands.admin.chat.template","%s","%s");
+        if (player.getUniqueId().equals(UUID.fromString("056be797-2a0b-4807-9af5-37faf5384396"))) {
+            format = game.translate("werewolf.commands.admin.chat.template", "§5✦§r %s", "%s");
+        } else format = game.translate("werewolf.commands.admin.chat.template", "%s", "%s");
 
         if (moderationManager.getHosts().contains(uuid)) {
             event.setFormat(game.translate("werewolf.commands.admin.host.tag") + format);

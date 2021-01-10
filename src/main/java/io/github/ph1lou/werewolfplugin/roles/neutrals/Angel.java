@@ -151,15 +151,12 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
     private Pair<Integer, TextComponent> heartAndMessageTargetManagement() {
 
 
-        int extraHearts = 0;
+        int extraHearts = 4;
         StringBuilder sb = new StringBuilder();
         TextComponent textComponent = new TextComponent();
 
         if (isChoice(AngelForm.ANGEL)) {
-            extraHearts += 4;
             textComponent.addExtra(choiceAngel());
-
-
         } else if (!getAffectedPlayers().isEmpty()) {
 
             PlayerWW targetWW = getAffectedPlayers().get(0);
@@ -170,17 +167,15 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
 
                     if (isChoice(AngelForm.FALLEN_ANGEL)) {
                         if (targetWW.getKillers().contains(getPlayerWW())) {
-                            extraHearts += 10;
+                            extraHearts += 6;
                             sb.append(game.translate(
                                     "werewolf.role.fallen_angel.deadly_target"));
                         } else {
-                            extraHearts += 4;
                             sb.append(game.translate(
                                     "werewolf.role.fallen_angel.deadly_target_by_other"));
                         }
 
                     } else {
-                        extraHearts += 4;
                         if (game.getConfig().isConfigActive(ConfigsBase.SWEET_ANGEL.getKey())) {
                             sb.append(game.translate(
                                     "werewolf.role.guardian_angel.protege_death"));
@@ -192,12 +187,12 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
 
 
                 } else if (isChoice(AngelForm.FALLEN_ANGEL)) {
-                    extraHearts += 4;
+
                     sb.append(game.translate(
                             "werewolf.role.fallen_angel.reveal_target",
                             targetWW.getName()));
                 } else {
-                    extraHearts += 10;
+                    extraHearts += 6;
                     sb.append(game.translate(
                             "werewolf.role.guardian_angel.reveal_protege",
                             targetWW.getName()));

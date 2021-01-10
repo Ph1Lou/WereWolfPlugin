@@ -46,6 +46,8 @@ public class Exposed extends ListenerManager {
                             if (game.isState(StateGame.GAME)) {
                                 if (isRegister()) {
                                     announce();
+                                    temp = null;
+                                    register(false);
                                 }
                             }
                         }, 35 * 60 * 20);

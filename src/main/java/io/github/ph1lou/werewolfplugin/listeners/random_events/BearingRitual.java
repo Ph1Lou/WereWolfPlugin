@@ -35,11 +35,14 @@ public class BearingRitual extends ListenerManager {
                     if (bearingRitualEvent.isCancelled()) return;
 
                     active = true;
+
+                    Bukkit.broadcastMessage(game.translate("werewolf.random_events.bearing_ritual.message"));
+
                     Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
                         if (game.isState(StateGame.GAME)) {
                             if (isRegister()) {
                                 active = false;
-                                setRegister(false);
+                                register(false);
                             }
                         }
                     }, game.getConfig().getTimerValue(TimersBase.DAY_DURATION.getKey()) * 40L);
