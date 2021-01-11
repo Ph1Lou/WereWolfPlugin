@@ -7,7 +7,11 @@ import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.events.*;
+import io.github.ph1lou.werewolfapi.events.DayEvent;
+import io.github.ph1lou.werewolfapi.events.FirstDeathEvent;
+import io.github.ph1lou.werewolfapi.events.NewWereWolfEvent;
+import io.github.ph1lou.werewolfapi.events.NightEvent;
+import io.github.ph1lou.werewolfapi.events.StealEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
@@ -26,7 +30,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class Thief extends RolesNeutral implements AffectedPlayers, Power {
 
@@ -160,7 +163,7 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
         HandlerList.unregisterAll((Listener) getPlayerWW().getRole());
         Roles roleClone = role.publicClone();
         getPlayerWW().setRole(roleClone);
-        Objects.requireNonNull(roleClone).setPlayerWW(getPlayerWW());
+        assert roleClone != null;
         Bukkit.getPluginManager().registerEvents((Listener) roleClone, (Plugin) main);
 
         if (isInfected) {
