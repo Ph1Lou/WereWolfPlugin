@@ -66,7 +66,7 @@ public class Vote implements Listener, VoteAPI {
 			this.votes.merge(vote, 1, Integer::sum);
 
 			voter.sendMessage(game.translate("werewolf.vote.perform_vote", vote.getName()));
-        }
+		}
 
 	}
 
@@ -75,17 +75,17 @@ public class Vote implements Listener, VoteAPI {
 		this.currentStatus = VoteStatus.WAITING_CITIZEN;
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onVoteResult(VoteResultEvent event) {
-        if (!event.isCancelled()) {
+		if (!event.isCancelled()) {
 			event.setPlayerWW(getResult());
-            if (event.getPlayerWW() == null) {
+			if (event.getPlayerWW() == null) {
 				if (currentStatus == VoteStatus.WAITING_CITIZEN) {
 					Bukkit.broadcastMessage(game.translate("werewolf.vote.no_result"));
 				}
 				event.setCancelled(true);
 			} else showResultVote(event.getPlayerWW());
-        }
+		}
         resetVote();
     }
 
@@ -154,6 +154,11 @@ public class Vote implements Listener, VoteAPI {
 		if (playerWW != null) {
 
 			tempPlayer.add(playerWW);
+
+			int health = 5;
+			if (playerWW.getMaxHealth() < 10) { //si le joueur a moins de coeurs ont réduit le temps de récupération de coeurs
+				health = playerWW.getMaxHealth() / 2 - 1; //-1 car le joueur aura un coeur minimum quand il prend les votes
+			}
 			playerWW.removePlayerMaxHealth(10);
 
 			Bukkit.broadcastMessage(game.translate("werewolf.vote.vote_result", playerWW.getName(), this.votes.get(playerWW)));
@@ -164,7 +169,7 @@ public class Vote implements Listener, VoteAPI {
 				}
 			}, 1200, 1200);
 
-			Bukkit.getScheduler().scheduleSyncDelayedTask(((GameManager) game).getMain(), () -> Bukkit.getScheduler().cancelTask(task), 5 * 62 * 20);
+			Bukkit.getScheduler().scheduleSyncDelayedTask(((GameManager) game).getMain(), () -> Bukkit.getScheduler().cancelTask(task), (long) health * 62 * 20);
 
 		}
 	}

@@ -3,14 +3,24 @@ package io.github.ph1lou.werewolfplugin.roles.lovers;
 import io.github.ph1lou.werewolfapi.LoverAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enums.*;
-import io.github.ph1lou.werewolfapi.events.*;
+import io.github.ph1lou.werewolfapi.enums.LoverType;
+import io.github.ph1lou.werewolfapi.enums.RolesBase;
+import io.github.ph1lou.werewolfapi.enums.Sound;
+import io.github.ph1lou.werewolfapi.enums.StateGame;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
+import io.github.ph1lou.werewolfapi.events.AroundLover;
+import io.github.ph1lou.werewolfapi.events.EndPlayerMessageEvent;
+import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.LoverDeathEvent;
+import io.github.ph1lou.werewolfapi.events.UpdateModeratorNameTag;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 
 import java.util.List;
@@ -139,6 +149,8 @@ public class Lover implements LoverAPI, Listener {
                 });
 
         game.getConfig().setLoverSize(game.getConfig().getLoverSize() - 1);
+
+        HandlerList.unregisterAll(this);
 
     }
 

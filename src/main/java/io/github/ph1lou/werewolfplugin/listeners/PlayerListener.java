@@ -3,8 +3,20 @@ package io.github.ph1lou.werewolfplugin.listeners;
 import fr.mrmicky.fastboard.FastBoard;
 import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enums.*;
-import io.github.ph1lou.werewolfapi.events.*;
+import io.github.ph1lou.werewolfapi.enums.RolesBase;
+import io.github.ph1lou.werewolfapi.enums.Sound;
+import io.github.ph1lou.werewolfapi.enums.StateGame;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
+import io.github.ph1lou.werewolfapi.events.AnnouncementDeathEvent;
+import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.FirstDeathEvent;
+import io.github.ph1lou.werewolfapi.events.ResurrectionEvent;
+import io.github.ph1lou.werewolfapi.events.SecondDeathEvent;
+import io.github.ph1lou.werewolfapi.events.ThirdDeathEvent;
+import io.github.ph1lou.werewolfapi.events.UpdateLanguageEvent;
+import io.github.ph1lou.werewolfapi.events.WereWolfChatEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -244,8 +256,8 @@ public class PlayerListener implements Listener {
 
 			} else if (moderationManager.getQueue().contains(uuid)) {
 
-                moderationManager.checkQueue();
-
+				moderationManager.checkQueue();
+				player.setGameMode(GameMode.ADVENTURE);
 				if (moderationManager.getQueue().contains(uuid)) {
 					event.setJoinMessage(game.translate("werewolf.announcement.queue_rejoin",
 							playerName, game.getModerationManager().getQueue().indexOf(uuid) + 1));

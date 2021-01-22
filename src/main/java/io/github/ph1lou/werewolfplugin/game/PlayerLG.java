@@ -192,9 +192,15 @@ public class PlayerLG implements PlayerWW {
 
     @Override
     public List<? extends PotionEffectType> getPotionEffects() {
-        return disconnectedPotionActions.stream().filter(PotionAction::isAdd)
+        List<PotionEffectType> potionEffectTypes = disconnectedPotionActions.stream().filter(PotionAction::isAdd)
                 .map(PotionAction::getPotionEffectType)
                 .collect(Collectors.toList());
+
+        Player player = Bukkit.getPlayer(this.uuid);
+        if (player != null) {
+            potionEffectTypes.addAll(player.getActivePotionEffects().stream().map(PotionEffect::getType).collect(Collectors.toSet()));
+        }
+        return potionEffectTypes;
     }
 
     @Override

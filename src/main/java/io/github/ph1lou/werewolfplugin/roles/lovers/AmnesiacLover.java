@@ -8,12 +8,20 @@ import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.events.*;
+import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
+import io.github.ph1lou.werewolfapi.events.AmnesiacLoverDeathEvent;
+import io.github.ph1lou.werewolfapi.events.AroundLover;
+import io.github.ph1lou.werewolfapi.events.EndPlayerMessageEvent;
+import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.RevealAmnesiacLoversEvent;
+import io.github.ph1lou.werewolfapi.events.UpdateEvent;
+import io.github.ph1lou.werewolfapi.events.UpdateModeratorNameTag;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
@@ -52,6 +60,8 @@ public class AmnesiacLover implements LoverAPI, Listener {
         if (!getLovers().contains(event.getPlayerWW())) return;
 
         death = true;
+
+        HandlerList.unregisterAll(this);
 
         if (!find) return;
 

@@ -3,12 +3,12 @@ package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.events.DayEvent;
+import io.github.ph1lou.werewolfapi.events.NightEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesWereWolf;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,17 +31,20 @@ public class NaughtyLittleWolf extends RolesWereWolf {
 
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerDeathByNaughtyWereWolf(PlayerDeathEvent event) {
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onNight(NightEvent event) {
 
-        if (!isWereWolf()) return;
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
+            return;
+        }
 
-        if (event.getEntity().getKiller() == null) return;
-
-        Player killer = event.getEntity().getKiller();
-
-        if (!getPlayerUUID().equals(killer.getUniqueId())) return;
-
-        killer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 3600, 0, false, false));
+        getPlayerWW().addPotionEffect(PotionEffectType.SPEED);
     }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onDay(DayEvent event) {
+        getPlayerWW().removePotionEffect(PotionEffectType.SPEED);
+    }
+
+
 }

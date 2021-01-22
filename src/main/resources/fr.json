@@ -152,7 +152,7 @@
       "rival": {
         "display": "Rival",
         "item": "Deux potions de dégats",
-        "description": "Lors de l'annonce du couple vous obtiendrez le rôle de deux personnes formant un couple. A §b%s§r, vous obtiendrez une liste de 5 joueurs contenant les noms des deux amoureux. \nSi vous tuez un membre du couple, vous prendrez sa place et devrez gagner avec son couple. \nEn revanche, si le couple meurt, vous devrez gagner seul avec une barre de vie réduite de 2 coeurs permanents. Vous connaissez la direction du cupidon si il est présent dans la partie.",
+        "description": "Lors de l'annonce du couple vous obtiendrez le rôle de deux personnes formant un couple. Dans §b%s§r, vous obtiendrez une liste de 5 joueurs contenant les noms des deux amoureux. \nSi vous tuez un membre du couple, vous prendrez sa place et devrez gagner avec son couple. \nEn revanche, si le couple meurt, vous devrez gagner seul avec une barre de vie réduite de 2 coeurs permanents. Vous connaissez la direction du cupidon si il est présent dans la partie.",
         "lover": "[§eLG UHC§r] Votre couple associé de la partie se compose d'un §b%s§f et d'un §b%s§f.",
         "find_lovers": "[§eLG UHC§r] Le couple se trouve parmi les joueurs suivants : %s, %s, %s, %s, %s",
         "lover_death": "[§cLG UHC§r] Le couple est mort, vous êtes maintenant forcé de gagner seul, votre barre de vie est réduite de 2 coeurs.",
@@ -242,7 +242,7 @@
       },
       "naughty_little_wolf": {
         "display": "Vilain Petit Loup",
-        "effect": "§bEffet : §fForce (la nuit), Vision Nocturne. trois minutes de Vitesse et 2 coeur d'absorption après chaque kill"
+        "effect": "§bEffet : §fForce et Speed (la nuit), Vision Nocturne. 2 coeur d'absorption après chaque kill"
       },
       "chatty_seer": {
         "display": "Voyante Bavarde",
@@ -333,14 +333,14 @@
         "display": "Couple",
         "random": " Aléatoire",
         "description": "§6LOUP-GAROU §7➽§d Vous tombez éperdument amoureux de §b%s§d.\n§dSi l'un meurt, l'autre le rejoindra par amour.\n§dVous pouvez envoyer de la vie à votre âme soeur avec §b/ww don §d[nombre de demi-coeurs à envoyer] [facultatif:joueur à qui l'envoyer]",
-        "not_in_pairs": "[§cLG UHC§r] Vous n'ëtes pas en couple",
+        "not_in_pairs": "[§cLG UHC§r] Vous n'êtes pas en couple",
         "lover_death": "§d%s par amour, le rejoint dans sa tombe",
         "not_enough_players": "[§cLG UHC§r] il n'y a pas assez de personnes pour former un couple",
         "not_lover": "[§cLG UHC§r] Vous ne pouvez partager des coeurs qu'avec un amant",
         "polygamy": "[§6LG UHC§r] En raison du trop faible nombre de joueur par rapport au nombre de couples la polygamie est activée",
-        "received": "[§eLG UHC§r] Vous recevez §b%s§r %% de la vie de §b%s",
+        "received": "[§eLG UHC§r] Vous recevez §b%d§r %% de la vie de §b%s",
         "disconnected": "[§cLG UHC§r] Votre amant n'est pas connecté",
-        "complete": "[§aLG UHC§r] Vous venez d'envoyer §b%s§r %% de votre vie à §b%s",
+        "complete": "[§aLG UHC§r] Vous venez d'envoyer §b%d§r %% de votre vie à §b%s",
         "100": "[§aLG UHC§r] Vous ne pouvez pas envoyer 100%% ou plus de votre vie",
         "command": "don",
         "too_many_heart": "[§cLG UHC§r] §b%s§r a trop de vie"
@@ -365,7 +365,7 @@
         "display": "Ancien",
         "effect": "Résistance pour sa première vie",
         "available": "Vous avez §aencore§f votre seconde Vie.",
-        "not_available": "Vous n'avez §cplusf votre seconde Vie.",
+        "not_available": "Vous n'avez §cplus§f votre seconde Vie.",
         "description": "Vous possédez une seconde vie. Vous perdrez votre Résistance à votre première mort, mais attention, si c’est un Villageois qui vous tue, vous perdrez également trois coeurs permanents."
       },
       "flute_player": {
@@ -376,7 +376,7 @@
         "power": "[§eLG UHC§r] Enchantez deux joueurs §b/ww enchanter§r vous avez §b%s",
         "already_enchant": "[§eLG UHC§r] Vous avez déjà enchanté §b%s",
         "distance": "[§cLG UHC§r] Vous êtes à plus de 100 blocs de §b%s",
-        "enchanted": "[§eLG UHC§r] Vous venez d'être enchanté par le joueur de Flüte",
+        "enchanted": "[§eLG UHC§r] Vous venez d'être enchanté par le joueur de Flute",
         "perform": "[§eLG UHC§r] Vous venez d'enchanter §b%s§r",
         "command": "enchanter"
       },
@@ -730,7 +730,7 @@
         "resistance": "Resistance §b%d%%",
         "succubus": "Champ d'action du Succube §b%s",
         "sister": "Champ d'action des Soeurs §b%s",
-        "priestess": "Champ d'action de la Prëtresse §b%s",
+        "priestess": "Champ d'action de la Prêtresse §b%s",
         "fox_smell_number": "Nombre de Flair du Renard §b%d",
         "ender_pearl": "Taux de Drop EnderPearl §b%d%%",
         "flint": "Taux de Drop des Silex §b%d%%",
@@ -769,7 +769,7 @@
         "enable": "§2Activé§f pour tous"
       },
       "scenarios": {
-        "list": "[§aLG UHC§r] Liste des Scénarios §bd'activés§f :\n",
+        "list": "[§aLG UHC§r] Liste des Scénarios §bactivés§f :\n",
         "command": "scenarios",
         "no_nether": "NoNether",
         "no_end": "NoEnd",
@@ -812,8 +812,8 @@
         "iron_protection": "Limite de Protection sur le fer : §b%d",
         "diamond_protection": "Limite de Protection sur le diamant : §b%d",
         "power": "Power §b%d",
-        "sharpness_iron": "Epée en fer : Max Tranchant §b%d",
-        "sharpness_diamond": "Epée en diamant : Max Tranchant §b%d",
+        "sharpness_iron": "Epee en fer : Max Tranchant §b%d",
+        "sharpness_diamond": "Epee en diamant : Max Tranchant §b%d",
         "knock_back": "KnockBack §b%s",
         "knock_back_invisible": "§4KnockBack seulement \n§4pour la Petite Fille\n§4 et le Perfide",
         "knock_back_normal": "§bShift§f-Clique >> configurer",
@@ -884,7 +884,7 @@
         "compass_middle": "La boussole pointe vers le centre",
         "show_role_to_death": "Affiche le Rôle à la Mort",
         "show_role_category_to_death": "Affiche la Catégorie du Rôle à la Mort",
-        "auto_rez_witch": "la Sorcière peut s'autorez",
+        "auto_rez_witch": "la Sorcière peut se ressusciter elle même",
         "sweet_angel": "L'ange Gardien gagne Village quand son protégé meurt",
         "vote": "Vote",
         "hide_composition": "Composition Cachée",
@@ -915,7 +915,7 @@
       "bot": "§7Plugin réalisé par §b"
     },
     "action_bar": {
-      "generation": "Carte §4non génerée§r /a generation",
+      "generation": "Carte §4non générée§r /a generation",
       "progress": "Generation §b%s%%",
       "in_game": "§7Centre §b%d §7à§b %d §7blocs | Y §b%d",
       "create_tp_point": "Création des points de TP : §b%d§r/§b%d§r",
@@ -959,7 +959,7 @@
       "exposed": {
         "name": "Exposed",
         "message": "[§5Exposed§r] Le rôle de §B%s§f se trouve dans la liste suivante §b%s §f%s §b%s",
-        "description": "Deux fois dans la partie \n(dans les intervalles [65~80 min] et [100~115 min]), \nun joueur choisi aléatoirement voit son pseudo \naffiché dans le chat à côté de 3 rôles\n toujours représentés dans la partie. \nParmi ces 3 rôles se trouvent : son rôle, un rôle d’un camp différent, \nun rôle aléatoire parmi tous les autres.\nUn joueur ne peut pas être “exposé” deux fois dans la même partie."
+        "description": "Deux fois dans la partie \n(dans les intervalles [65~80 min] et [100~115 min]), \nun joueur choisi aléatoirement voit son pseudo \naffiché dans le chat à côté de 3 rôles\n toujours représentés dans la partie. \nParmi ces 3 rôles se trouvent : son rôle, un rôle d’un camp différent, \nun rôle aléatoire parmi tous les autres.\nUn joueur ne peut pas être exposé deux fois dans la même partie."
       },
       "loot_box": {
         "name": "Loot Box",
@@ -983,17 +983,19 @@
       "bearing_ritual": {
         "name": "Rituel du coussinet",
         "message": "[§5Rituel du Coussinet§r] Pendant un jour, tout le monde à §bNoFall",
-        "description": "Une fois dans la partie, pendant un jour \ntout le monde à Nofall. \nL'évenement se déclenche entre 1h et 1h40"
+        "end": "[§5Rituel du Coussinet§r] Fin de l'évènement aléatoire",
+        "description": "Une fois dans la partie, pendant un jour \ntout le monde à Nofall. \nL'évènement se déclenche entre 1h et 1h40"
       },
       "putrefaction": {
         "name": "Putréfaction",
-        "message": "[§5Putrefaction§r] Pendant un jour, l'eau fait prendre des dégats",
-        "description": "Une fois dans la partie, pendant un jour \nl'eau fait prendre des dégats.\nL'évenement se déclenche entre 1h et 1h20"
+        "message": "[§5Putrefaction§r] Pendant un jour, l'eau fait prendre des dégâts",
+        "end": "[§5Putrefaction§r] Fin de l'évènement",
+        "description": "Une fois dans la partie, pendant un jour \nl'eau fait prendre des dégâts.\nL'évènement se déclenche entre 1h et 1h20"
       },
       "god_miracle": {
         "name": "God Miracle",
-        "message": "[§5God-Miracle§r] Un joueur vient d'être ressusciter",
-        "description": "Une fois dans la partie,\n un joueur tué est resssuscité"
+        "message": "[§5God-Miracle§r] Un joueur vient d'être ressuscité",
+        "description": "Une fois dans la partie,\n un joueur tué est ressuscité"
       },
       "swap": {
         "name": "Swap",

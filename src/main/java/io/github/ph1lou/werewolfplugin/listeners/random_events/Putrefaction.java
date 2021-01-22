@@ -46,6 +46,7 @@ public class Putrefaction extends ListenerManager {
                             if (isRegister()) {
                                 active = false;
                                 register(false);
+                                Bukkit.broadcastMessage(game.translate("werewolf.random_events.putrefaction.end"));
                             }
                         }
                     }, game.getConfig().getTimerValue(TimersBase.DAY_DURATION.getKey()) * 40L);

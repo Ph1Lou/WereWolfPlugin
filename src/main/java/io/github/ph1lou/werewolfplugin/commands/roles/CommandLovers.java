@@ -13,7 +13,6 @@ import io.github.ph1lou.werewolfplugin.roles.lovers.AmnesiacLover;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.text.DecimalFormat;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
@@ -66,8 +65,6 @@ public class CommandLovers implements Commands {
                         AtomicReference<Double> temp = new AtomicReference<>((double) 0);
 
                         double don = health / (float) (loverAPI1.getLovers().size() - 1);
-                        String showDon = new DecimalFormat("0.00")
-                                .format(don);
 
                         loverAPI1.getLovers()
                                 .stream()
@@ -78,14 +75,14 @@ public class CommandLovers implements Commands {
                                     if (playerCouple != null) {
 
                                         if (playerWW1.getMaxHealth() - playerCouple.getHealth() >= don) {
-                                            DonEvent donEvent = new DonEvent(playerWW, playerWW1, showDon);
+                                            DonEvent donEvent = new DonEvent(playerWW, playerWW1, heart);
                                             Bukkit.getPluginManager().callEvent(donEvent);
 
                                             if (!donEvent.isCancelled()) {
                                                 playerCouple.setHealth(playerCouple.getHealth() + don);
                                                 temp.updateAndGet(v -> v + don);
-                                                playerCouple.sendMessage(game.translate("werewolf.role.lover.received", showDon, playername));
-                                                player.sendMessage((game.translate("werewolf.role.lover.complete", showDon, playerCouple.getName())));
+                                                playerCouple.sendMessage(game.translate("werewolf.role.lover.received", heart, playername));
+                                                player.sendMessage((game.translate("werewolf.role.lover.complete", heart, playerCouple.getName())));
                                                 Sound.PORTAL.play(playerCouple);
                                             } else {
                                                 player.sendMessage(game.translate("werewolf.check.cancel"));
@@ -121,8 +118,7 @@ public class CommandLovers implements Commands {
             }
 
             double don = player.getHealth() * heart / 100f;
-            String showDon = new DecimalFormat("0.00")
-                    .format(don);
+
 
             Optional<? extends LoverAPI> loverAPI = playerWW.getLovers().stream()
                     .filter(loverAPI1 -> !loverAPI1.isKey(LoverType.CURSED_LOVER.getKey()))
@@ -135,14 +131,14 @@ public class CommandLovers implements Commands {
 
                     if (playerWW1.getMaxHealth() - playerCouple.getHealth() >= heart) {
 
-                        DonEvent donEvent = new DonEvent(playerWW, playerWW1, showDon);
+                        DonEvent donEvent = new DonEvent(playerWW, playerWW1, heart);
                         Bukkit.getPluginManager().callEvent(donEvent);
 
                         if (!donEvent.isCancelled()) {
                             playerCouple.setHealth(playerCouple.getHealth() + don);
                             player.setHealth(player.getHealth() - don);
-                            playerCouple.sendMessage(game.translate("werewolf.role.lover.received", showDon, playername));
-                            player.sendMessage((game.translate("werewolf.role.lover.complete", showDon, playerCouple.getName())));
+                            playerCouple.sendMessage(game.translate("werewolf.role.lover.received", heart, playername));
+                            player.sendMessage((game.translate("werewolf.role.lover.complete", heart, playerCouple.getName())));
                         } else {
                             player.sendMessage(game.translate("werewolf.check.cancel"));
                         }

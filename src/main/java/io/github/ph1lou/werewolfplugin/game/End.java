@@ -2,8 +2,17 @@ package io.github.ph1lou.werewolfplugin.game;
 
 import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enums.*;
-import io.github.ph1lou.werewolfapi.events.*;
+import io.github.ph1lou.werewolfapi.enums.Category;
+import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enums.LoverType;
+import io.github.ph1lou.werewolfapi.enums.RolesBase;
+import io.github.ph1lou.werewolfapi.enums.StateGame;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.events.AroundLover;
+import io.github.ph1lou.werewolfapi.events.CountRemainingRolesCategoriesEvent;
+import io.github.ph1lou.werewolfapi.events.EndPlayerMessageEvent;
+import io.github.ph1lou.werewolfapi.events.WinConditionsCheckEvent;
+import io.github.ph1lou.werewolfapi.events.WinEvent;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -57,6 +66,8 @@ public class End {
                         }
                     });
         }
+
+        if (winner != null) return;
 
         WinConditionsCheckEvent winConditionsCheckEvent = new WinConditionsCheckEvent();
         Bukkit.getPluginManager().callEvent(winConditionsCheckEvent);

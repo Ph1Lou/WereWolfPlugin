@@ -56,7 +56,7 @@ public class ChatListener implements Listener {
                 return;
             }
 
-            if (!recipient.hasPermission("a.use") && !player.hasPermission("tell.use")) {
+            if (!recipient.hasPermission("a.tell") && !player.hasPermission("a.tell")) {
 
                 if (!moderationManager.isStaff(recipient.getUniqueId()) &&
                         !moderationManager.isStaff(player.getUniqueId())) {

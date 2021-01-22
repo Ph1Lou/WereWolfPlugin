@@ -7,7 +7,17 @@ import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
-import io.github.ph1lou.werewolfapi.events.*;
+import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
+import io.github.ph1lou.werewolfapi.events.AmnesiacLoverDeathEvent;
+import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.LoverDeathEvent;
+import io.github.ph1lou.werewolfapi.events.RevealLoversEvent;
+import io.github.ph1lou.werewolfapi.events.RivalAnnouncementEvent;
+import io.github.ph1lou.werewolfapi.events.RivalEvent;
+import io.github.ph1lou.werewolfapi.events.RivalLoverDeathEvent;
+import io.github.ph1lou.werewolfapi.events.RivalLoverEvent;
+import io.github.ph1lou.werewolfapi.events.StealEvent;
+import io.github.ph1lou.werewolfapi.events.SwapEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
@@ -38,6 +48,17 @@ public class Rival extends RolesNeutral implements Power {
     public Rival(GetWereWolfAPI main, PlayerWW playerWW, String key) {
         super(main, playerWW, key);
     }
+
+
+    @EventHandler
+    public void onSwapEvent(SwapEvent event) {
+        if (event.getPlayerWW1().equals(this.cupidWW)) {
+            this.cupidWW = event.getPlayerWW2();
+        } else if (event.getPlayerWW2().equals(this.cupidWW)) {
+            this.cupidWW = event.getPlayerWW1();
+        }
+    }
+
 
     @Override
     public @NotNull String getDescription() {

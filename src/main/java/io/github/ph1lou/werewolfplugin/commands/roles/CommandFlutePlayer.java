@@ -66,10 +66,8 @@ public class CommandFlutePlayer implements Commands {
             }
 
             if (((AffectedPlayers) flutePlayer).getAffectedPlayers().contains(playerWW)) {
-                if (game.getScore().getPlayerSize() != ((AffectedPlayers) flutePlayer).getAffectedPlayers().stream().filter(playerWW2 -> playerWW2.isState(StatePlayer.ALIVE)).count() + 2) {
-                    player.sendMessage(game.translate("werewolf.role.flute_player.already_enchant", playerArg.getName()));
-                    return;
-                }
+                player.sendMessage(game.translate("werewolf.role.flute_player.already_enchant", playerArg.getName()));
+                return;
             }
 
             try {

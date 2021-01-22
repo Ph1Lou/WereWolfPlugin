@@ -107,8 +107,8 @@ public class SmallFeaturesListener implements Listener {
                     player.removePotionEffect(PotionEffectType.REGENERATION);
                     player.addPotionEffect(new PotionEffect(
                             PotionEffectType.REGENERATION,
-                            180,
-                            0,
+                            90,
+                            1,
                             false,
                             false));
                 }

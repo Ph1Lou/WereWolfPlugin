@@ -5,8 +5,30 @@ import io.github.ph1lou.werewolfapi.LoverAPI;
 import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.ScoreAPI;
-import io.github.ph1lou.werewolfapi.enums.*;
-import io.github.ph1lou.werewolfapi.events.*;
+import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enums.Day;
+import io.github.ph1lou.werewolfapi.enums.LoverType;
+import io.github.ph1lou.werewolfapi.enums.RolesBase;
+import io.github.ph1lou.werewolfapi.enums.StateGame;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
+import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.FinalJoinEvent;
+import io.github.ph1lou.werewolfapi.events.HostEvent;
+import io.github.ph1lou.werewolfapi.events.InvisibleEvent;
+import io.github.ph1lou.werewolfapi.events.LoversRepartitionEvent;
+import io.github.ph1lou.werewolfapi.events.ModeratorEvent;
+import io.github.ph1lou.werewolfapi.events.NewWereWolfEvent;
+import io.github.ph1lou.werewolfapi.events.RepartitionEvent;
+import io.github.ph1lou.werewolfapi.events.ResurrectionEvent;
+import io.github.ph1lou.werewolfapi.events.RevealAmnesiacLoversEvent;
+import io.github.ph1lou.werewolfapi.events.StopEvent;
+import io.github.ph1lou.werewolfapi.events.StudLoverEvent;
+import io.github.ph1lou.werewolfapi.events.UpdateEvent;
+import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
+import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTag;
+import io.github.ph1lou.werewolfapi.events.WereWolfListEvent;
 import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
@@ -23,7 +45,11 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -471,6 +497,17 @@ public class ScoreBoard implements ScoreAPI, Listener {
 					tabManager.updatePlayerScoreBoard(player, Collections.singletonList(playerWW.getUUID()));
 				}
 
+			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onLoverStudRepartition(StudLoverEvent event) {
+		for (UUID uuid : game.getModerationManager().getModerators()) {
+			Player player = Bukkit.getPlayer(uuid);
+			if (player != null) {
+				tabManager.updatePlayerScoreBoard(player, Collections.singletonList(event.getPlayerWW().getUUID()));
+				tabManager.updatePlayerScoreBoard(player, Collections.singletonList(event.getTargetWW().getUUID()));
 			}
 		}
 	}
