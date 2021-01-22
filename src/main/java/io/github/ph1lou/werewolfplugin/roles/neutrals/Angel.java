@@ -170,12 +170,14 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
 
 
         int extraHearts = 4;
-        StringBuilder sb = new StringBuilder();
+
         TextComponent textComponent = new TextComponent();
 
         if (isChoice(AngelForm.ANGEL)) {
-            textComponent.addExtra(choiceAngel());
+            textComponent = choiceAngel();
         } else if (!getAffectedPlayers().isEmpty()) {
+
+            StringBuilder sb = new StringBuilder();
 
             PlayerWW targetWW = getAffectedPlayers().get(0);
 
@@ -216,9 +218,11 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
                             targetWW.getName()));
                 }
             }
+
+
+            textComponent = new TextComponent(sb.toString());
         }
 
-        textComponent.addExtra(sb.toString());
 
         return new Pair<>(extraHearts, textComponent);
     }

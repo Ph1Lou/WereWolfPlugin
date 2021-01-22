@@ -687,7 +687,8 @@
       "compo": {
         "composition_hide": "[§cLG UHC§r] La Composition est cachée",
         "description": "Pour voir la composition",
-        "message": "[§aLG UHC§r] Composition :\n"
+        "message": "[§aLG UHC§r] Composition :\n",
+        "_": "§6================================\n"
       },
       "doc": {
         "command": "doc",
