@@ -3,8 +3,26 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enums.*;
-import io.github.ph1lou.werewolfapi.events.*;
+import io.github.ph1lou.werewolfapi.enums.AngelForm;
+import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enums.Day;
+import io.github.ph1lou.werewolfapi.enums.RolesBase;
+import io.github.ph1lou.werewolfapi.enums.Sound;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
+import io.github.ph1lou.werewolfapi.events.AngelChoiceEvent;
+import io.github.ph1lou.werewolfapi.events.AngelTargetDeathEvent;
+import io.github.ph1lou.werewolfapi.events.AngelTargetEvent;
+import io.github.ph1lou.werewolfapi.events.AroundLover;
+import io.github.ph1lou.werewolfapi.events.AutoAngelEvent;
+import io.github.ph1lou.werewolfapi.events.DayEvent;
+import io.github.ph1lou.werewolfapi.events.EndPlayerMessageEvent;
+import io.github.ph1lou.werewolfapi.events.FallenAngelTargetDeathEvent;
+import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.NightEvent;
+import io.github.ph1lou.werewolfapi.events.StealEvent;
+import io.github.ph1lou.werewolfapi.events.WinConditionsCheckEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.AngelRole;
 import io.github.ph1lou.werewolfapi.rolesattributs.LimitedUse;
@@ -262,11 +280,11 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
     @Override
     public void recoverPower() {
 
-        if (isChoice(AngelForm.ANGEL)) {
-            getPlayerWW().sendMessage(choiceAngel());
-        }
-        getPlayerWW().addPlayerMaxHealth(4);
-        getPlayerWW().addPlayerHealth(4);
+        Pair<Integer, TextComponent> pair = heartAndMessageTargetManagement();
+
+        getPlayerWW().addPlayerMaxHealth(pair.getValue0());
+
+        getPlayerWW().sendMessage(pair.getValue1());
     }
 
 
