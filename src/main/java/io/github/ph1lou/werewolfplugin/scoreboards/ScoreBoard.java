@@ -418,7 +418,7 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		tabManager.updatePlayerOthersAndHimself(player);
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onUpdate(UpdatePlayerNameTag event) {
 
 		StringBuilder sb = new StringBuilder(event.getSuffix());
@@ -430,7 +430,7 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		}
 
 		if (playerWW.isState(StatePlayer.DEATH)) {
-			sb.append(game.translate("werewolf.score_board.death"));
+			sb.append(" ").append(game.translate("werewolf.score_board.death"));
 			event.setSuffix(sb.toString());
 		}
 	}

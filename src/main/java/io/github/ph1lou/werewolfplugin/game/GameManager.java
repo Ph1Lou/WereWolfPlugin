@@ -1,11 +1,22 @@
 package io.github.ph1lou.werewolfplugin.game;
 
 import fr.mrmicky.fastboard.FastBoard;
-import io.github.ph1lou.werewolfapi.*;
+import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
+import io.github.ph1lou.werewolfapi.LoverManagerAPI;
+import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.ScoreAPI;
+import io.github.ph1lou.werewolfapi.StuffManager;
+import io.github.ph1lou.werewolfapi.VoteAPI;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Day;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.events.*;
+import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.FinalJoinEvent;
+import io.github.ph1lou.werewolfapi.events.LoadEvent;
+import io.github.ph1lou.werewolfapi.events.ResurrectionEvent;
+import io.github.ph1lou.werewolfapi.events.StopEvent;
+import io.github.ph1lou.werewolfapi.events.UpdateLanguageEvent;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.save.Configuration;
@@ -29,7 +40,13 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.IllegalFormatException;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class GameManager implements WereWolfAPI {
@@ -100,6 +117,9 @@ public class GameManager implements WereWolfAPI {
     public void finalJoin(Player player) {
 
         UUID uuid = player.getUniqueId();
+
+        if (this.getPlayerWW(uuid) != null) return;
+
         moderationManager.getQueue().remove(uuid);
         score.addPlayerSize();
         Bukkit.broadcastMessage(translate("werewolf.announcement.join", score.getPlayerSize(), score.getRole(), player.getName()));

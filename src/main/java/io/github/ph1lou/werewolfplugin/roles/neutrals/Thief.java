@@ -156,7 +156,6 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
     public void thiefRecoverRole(PlayerWW playerWW) {
 
         Roles role = playerWW.getRole();
-        boolean isInfected = getInfected();
 
         setPower(false);
         getPlayerWW().setThief(true);
@@ -165,8 +164,7 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
         getPlayerWW().setRole(roleClone);
         assert roleClone != null;
         Bukkit.getPluginManager().registerEvents((Listener) roleClone, (Plugin) main);
-
-        if (isInfected) {
+        if (this.getInfected()) {
             roleClone.setInfected();
         } else if (roleClone.isWereWolf()) {
             Bukkit.getPluginManager().callEvent(new NewWereWolfEvent(getPlayerWW()));

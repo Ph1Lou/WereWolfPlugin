@@ -22,8 +22,6 @@ public class ShowDeathRole extends ListenerManager {
     @EventHandler
     public void onAnnounceDeath(AnnouncementDeathEvent event) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
-
         event.setFormat("werewolf.announcement.death_message_with_role");
     }
 

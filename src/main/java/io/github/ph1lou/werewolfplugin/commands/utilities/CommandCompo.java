@@ -25,45 +25,49 @@ public class CommandCompo implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
 
-
         if (game.getConfig().isConfigActive(ConfigsBase.HIDE_COMPOSITION.getKey())) {
 
             player.sendMessage(game.translate("werewolf.commands.compo.composition_hide"));
-        } else {
 
-            StringBuilder sb = new StringBuilder(game.translate("werewolf.commands.compo._"));
-            sb.append(ChatColor.WHITE);
-            if (game.getConfig().getLoverSize() > 0) {
-                sb.append(LoverType.LOVER.getChatColor()).append(game.translate(LoverType.LOVER.getKey())).append(ChatColor.WHITE);
-                if (game.getConfig().getLoverSize() == 1) {
-                    sb.append(", ");
-                } else {
-                    sb.append(" (§b").append(game.getConfig().getLoverSize()).append("§f), ");
-                }
-            }
-            if (game.getConfig().getAmnesiacLoverSize() > 0) {
-                sb.append(LoverType.AMNESIAC_LOVER.getChatColor()).append(game.translate(LoverType.AMNESIAC_LOVER.getKey())).append(ChatColor.WHITE);
-                if (game.getConfig().getAmnesiacLoverSize() == 1) {
-                    sb.append(", ");
-                } else {
-                    sb.append(" (§b").append(game.getConfig().getAmnesiacLoverSize()).append("§f), ");
-                }
-            }
-            if (game.getConfig().getCursedLoverSize() > 0) {
-                sb.append(LoverType.CURSED_LOVER.getChatColor()).append(game.translate(LoverType.CURSED_LOVER.getKey())).append(ChatColor.WHITE);
-                if (game.getConfig().getLoverSize() != 1) {
-                    sb.append(" (§b").append(game.getConfig().getCursedLoverSize()).append("§f");
-                }
-                sb.append("\n");
-            }
-
-            sb.append(getCompo(game, Category.WEREWOLF));
-            sb.append(getCompo(game, Category.VILLAGER));
-            sb.append(getCompo(game, Category.NEUTRAL));
-
-            sb.append(game.translate("werewolf.commands.compo._"));
-            player.sendMessage(sb.toString());
+            return;
         }
+
+        StringBuilder sb = new StringBuilder(game.translate("werewolf.commands.compo._"));
+        sb.append(ChatColor.WHITE);
+        if (game.getConfig().getLoverSize() > 0) {
+            sb.append(LoverType.LOVER.getChatColor()).append(game.translate(LoverType.LOVER.getKey())).append(ChatColor.WHITE);
+            if (game.getConfig().getLoverSize() == 1) {
+                sb.append(", ");
+            } else {
+                sb.append(" (§b").append(game.getConfig().getLoverSize()).append("§f), ");
+            }
+        }
+        if (game.getConfig().getAmnesiacLoverSize() > 0) {
+            sb.append(LoverType.AMNESIAC_LOVER.getChatColor()).append(game.translate(LoverType.AMNESIAC_LOVER.getKey())).append(ChatColor.WHITE);
+            if (game.getConfig().getAmnesiacLoverSize() == 1) {
+                sb.append(", ");
+            } else {
+                sb.append(" (§b").append(game.getConfig().getAmnesiacLoverSize()).append("§f), ");
+            }
+        } else {
+            sb.replace(sb.length() - 2, sb.length(), "");
+        }
+        if (game.getConfig().getCursedLoverSize() > 0) {
+            sb.append(LoverType.CURSED_LOVER.getChatColor()).append(game.translate(LoverType.CURSED_LOVER.getKey())).append(ChatColor.WHITE);
+            if (game.getConfig().getCursedLoverSize() != 1) {
+                sb.append(" (§b").append(game.getConfig().getCursedLoverSize()).append("§f)");
+            }
+        } else {
+            sb.replace(sb.length() - 2, sb.length(), "");
+        }
+        sb.append("\n");
+
+        sb.append(getCompo(game, Category.WEREWOLF));
+        sb.append(getCompo(game, Category.VILLAGER));
+        sb.append(getCompo(game, Category.NEUTRAL));
+
+        sb.append(game.translate("werewolf.commands.compo._"));
+        player.sendMessage(sb.toString());
     }
 
     public String getCompo(WereWolfAPI game, Category category) {

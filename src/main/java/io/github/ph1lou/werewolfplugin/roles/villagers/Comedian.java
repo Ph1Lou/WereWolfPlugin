@@ -41,11 +41,6 @@ public class Comedian extends RolesWithLimitedSelectionDuration {
     }
 
 
-    public void removeMask(ComedianMask mask) {
-        this.comedianMasks.remove(mask);
-    }
-
-
     @EventHandler
     public void onDay(DayEvent event) {
 

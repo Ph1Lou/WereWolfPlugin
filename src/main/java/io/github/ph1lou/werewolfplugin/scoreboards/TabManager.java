@@ -15,7 +15,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class TabManager {
@@ -120,10 +124,10 @@ public class TabManager {
             }
         }
 
-        UpdatePlayerNameTag event = new UpdatePlayerNameTag(uuid, sb.toString(), " ", true);
+        UpdatePlayerNameTag event = new UpdatePlayerNameTag(uuid, sb.toString(), "", true);
         AppearInWereWolfListEvent appearInWereWolfListEvent = new AppearInWereWolfListEvent(uuid);
         UpdateModeratorNameTag updateModeratorNameTag =
-                new UpdateModeratorNameTag(uuid, "", " ");
+                new UpdateModeratorNameTag(uuid, "", "");
 
         Bukkit.getPluginManager().callEvent(event);
         Bukkit.getPluginManager().callEvent(appearInWereWolfListEvent);
