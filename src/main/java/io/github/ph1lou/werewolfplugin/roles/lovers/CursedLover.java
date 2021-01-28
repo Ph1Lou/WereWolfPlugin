@@ -67,7 +67,7 @@ public class CursedLover implements LoverAPI, Listener {
 
         playerWW1.removePlayerMaxHealth(2);
 
-        game.getConfig().setCursedLoverSize(game.getConfig().getCursedLoverSize() - 1);
+        game.getConfig().removeOneLover(LoverType.CURSED_LOVER.getKey());
 
         HandlerList.unregisterAll(this);
     }
@@ -87,7 +87,6 @@ public class CursedLover implements LoverAPI, Listener {
                 setPower(playerWW);
             }
             power2 = true;
-            setPower(playerWW);
             playerWW.sendMessage(game.translate("werewolf.role.cursed_lover.description",
                     cursedLover1.getName()));
             Sound.SHEEP_SHEAR.play(playerWW);

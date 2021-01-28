@@ -51,8 +51,11 @@ public class Sister extends RolesVillage implements AffectedPlayers {
                 .forEach(playerWW -> list.append(playerWW.getName()).append(" "));
 
         return super.getDescription() +
-                game.translate("werewolf.description.description", game.translate("werewolf.role.sister.description")) +
-                game.translate("werewolf.description.effect", game.translate("werewolf.role.sister.effect", game.getConfig().getDistanceSister())) +
+                game.translate("werewolf.description.description",
+                        game.translate("werewolf.role.sister.description")) +
+                game.translate("werewolf.description.effect",
+                        game.translate("werewolf.role.sister.effect",
+                                game.getConfig().getDistanceSister())) +
                 game.translate("werewolf.role.sister.sisters_list", list.toString());
     }
 
@@ -100,7 +103,7 @@ public class Sister extends RolesVillage implements AffectedPlayers {
             sister.getActivePotionEffects()
                     .stream()
                     .filter(potionEffect -> potionEffect.getDuration()
-                            != Integer.MAX_VALUE)
+                            < 100)
                     .map(PotionEffect::getType)
                     .filter(potionEffectType -> potionEffectType.equals(
                             PotionEffectType.DAMAGE_RESISTANCE))

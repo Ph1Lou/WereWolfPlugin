@@ -4,6 +4,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.LoverAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.SecondDeathEvent;
@@ -47,7 +48,7 @@ public class Stud extends RolesVillage implements Power {
 
         if (power) return;
 
-        game.getConfig().setLoverSize(game.getConfig().getLoverSize() + 1);
+        game.getConfig().addOneLover(LoverType.LOVER.getKey()); //pour rajouter dans la compo le couple à la mort du tombeur (puisque le couple du tombeur est pas affiché dans la compo)
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

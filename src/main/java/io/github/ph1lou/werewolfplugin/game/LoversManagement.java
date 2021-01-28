@@ -2,7 +2,12 @@ package io.github.ph1lou.werewolfplugin.game;
 
 
 import com.google.common.collect.Sets;
-import io.github.ph1lou.werewolfapi.*;
+import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
+import io.github.ph1lou.werewolfapi.LoverAPI;
+import io.github.ph1lou.werewolfapi.LoverManagerAPI;
+import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.CupidLoversEvent;
@@ -43,15 +48,15 @@ public class LoversManagement implements LoverManagerAPI {
 				.collect(Collectors.toList());
 
 
-		if (cursedLovers.size() < 2 && game.getConfig().getCursedLoverSize() > 0) {
+		if (cursedLovers.size() < 2 && game.getConfig().getLoverCount(LoverType.CURSED_LOVER.getKey()) > 0) {
 			Bukkit.broadcastMessage(game.translate("werewolf.role.cursed_lover.not_enough_players"));
-			game.getConfig().setCursedLoverSize(0);
+			game.getConfig().setLoverCount(LoverType.CURSED_LOVER.getKey(), 0);
 			return;
 		}
 
 		int i = 0;
 
-		while (cursedLovers.size() >= 2 && i < game.getConfig().getCursedLoverSize()) {
+		while (cursedLovers.size() >= 2 && i < game.getConfig().getLoverCount(LoverType.CURSED_LOVER.getKey())) {
 
 			PlayerWW playerWW1 = cursedLovers.get((int) Math.floor(game.getRandom().nextFloat() * cursedLovers.size()));
 			cursedLovers.remove(playerWW1);
@@ -72,15 +77,15 @@ public class LoversManagement implements LoverManagerAPI {
 				.filter(playerWW -> playerWW.getLovers().isEmpty())
 				.collect(Collectors.toList());
 
-		if (amnesiacLovers.size() < 2 && game.getConfig().getAmnesiacLoverSize() > 0) {
+		if (amnesiacLovers.size() < 2 && game.getConfig().getLoverCount(LoverType.AMNESIAC_LOVER.getKey()) > 0) {
 			Bukkit.broadcastMessage(game.translate("werewolf.role.amnesiac_lover.not_enough_players"));
-			game.getConfig().setAmnesiacLoverSize(0);
+			game.getConfig().setLoverCount(LoverType.AMNESIAC_LOVER.getKey(), 0);
 			return;
 		}
 
 		int i = 0;
 
-		while (amnesiacLovers.size() >= 2 && i < game.getConfig().getAmnesiacLoverSize()) {
+		while (amnesiacLovers.size() >= 2 && i < game.getConfig().getLoverCount(LoverType.AMNESIAC_LOVER.getKey())) {
 
 			PlayerWW playerWW1 = amnesiacLovers.get((int) Math.floor(game.getRandom().nextFloat() * amnesiacLovers.size()));
 			amnesiacLovers.remove(playerWW1);
@@ -89,7 +94,7 @@ public class LoversManagement implements LoverManagerAPI {
 			lovers.add(new AmnesiacLover(game, playerWW1, playerWW2));
 			i++;
 		}
-		game.getConfig().setAmnesiacLoverSize(0);
+		game.getConfig().setLoverCount(LoverType.AMNESIAC_LOVER.getKey(), 0);
 	}
 
 
@@ -97,7 +102,7 @@ public class LoversManagement implements LoverManagerAPI {
 	public void repartition(GetWereWolfAPI main) {
 		autoLovers();
 		rangeLovers();
-		game.getConfig().setLoverSize(lovers.size());
+		game.getConfig().setLoverCount(LoverType.LOVER.getKey(), lovers.size());
 		autoAmnesiacLovers();
 		autoCursedLovers();
 		lovers
@@ -114,19 +119,19 @@ public class LoversManagement implements LoverManagerAPI {
 				.collect(Collectors.toList());
 
 		if (loversAvailable.size() < 2 && game.getConfig().getRoleCount(RolesBase.CUPID.getKey()) +
-				game.getConfig().getLoverSize() > 0) {
+				game.getConfig().getLoverCount(LoverType.LOVER.getKey()) > 0) {
 			Bukkit.broadcastMessage(game.translate("werewolf.role.lover.not_enough_players"));
 			return;
 		}
 
 		boolean polygamy = false;
 
-		if ((game.getConfig().getLoverSize() == 0 &&
+		if ((game.getConfig().getLoverCount(LoverType.LOVER.getKey()) == 0 &&
 				game.getConfig().getRoleCount(RolesBase.CUPID.getKey()) * 2 >=
 						game.getScore().getPlayerSize()) ||
-				(game.getConfig().getLoverSize() != 0 &&
+				(game.getConfig().getLoverCount(LoverType.LOVER.getKey()) != 0 &&
 						(game.getConfig().getRoleCount(RolesBase.CUPID.getKey()) +
-								game.getConfig().getLoverSize()) * 2 >
+								game.getConfig().getLoverCount(LoverType.LOVER.getKey())) * 2 >
 								game.getScore().getPlayerSize())) {
 
 			polygamy = true;
@@ -184,7 +189,7 @@ public class LoversManagement implements LoverManagerAPI {
 			}
 		}
 
-		for (int i = 0; i < game.getConfig().getLoverSize(); i++) {
+		for (int i = 0; i < game.getConfig().getLoverCount(LoverType.LOVER.getKey()); i++) {
 
 			playerWW1 = loversAvailable.get((int) Math.floor(game.getRandom().nextFloat() * loversAvailable.size()));
 			loversAvailable.remove(playerWW1);

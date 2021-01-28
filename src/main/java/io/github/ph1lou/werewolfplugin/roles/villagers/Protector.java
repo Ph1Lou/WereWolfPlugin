@@ -6,6 +6,7 @@ import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
+import io.github.ph1lou.werewolfapi.events.NightEvent;
 import io.github.ph1lou.werewolfapi.events.StealEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesWithLimitedSelectionDuration;
@@ -35,6 +36,13 @@ public class Protector extends RolesWithLimitedSelectionDuration implements Affe
     public void addAffectedPlayer(PlayerWW playerWW) {
         this.affectedPlayer.add(playerWW);
         this.last = playerWW;
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onNight(NightEvent event) {
+        if (this.last == null) return;
+
+        this.last.addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
     }
 
     @Override

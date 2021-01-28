@@ -6,7 +6,13 @@ import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
-import io.github.ph1lou.werewolfapi.events.*;
+import io.github.ph1lou.werewolfapi.events.AutoModelEvent;
+import io.github.ph1lou.werewolfapi.events.EndPlayerMessageEvent;
+import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.ModelEvent;
+import io.github.ph1lou.werewolfapi.events.NewWereWolfEvent;
+import io.github.ph1lou.werewolfapi.events.StealEvent;
+import io.github.ph1lou.werewolfapi.events.WildChildTransformationEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
@@ -96,7 +102,14 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     public @NotNull String getDescription() {
         return super.getDescription() +
                 game.translate("werewolf.description.description", game.translate("werewolf.role.wild_child.description")) +
-                (affectedPlayer.isEmpty() ? game.translate("werewolf.role.wild_child.model") : game.translate("werewolf.description.power", game.translate(transformed ? "werewolf.role.wild_child.model_death" : "werewolf.role.wild_child.model_alive", affectedPlayer.get(0).getName())));
+
+                game.translate("werewolf.role.wild_child.model", (affectedPlayer.isEmpty() ?
+                        game.translate("werewolf.role.wild_child.model_none") :
+                        transformed ? game.translate(
+                                "werewolf.role.wild_child.model_death")
+                                : affectedPlayer.get(0).getName())
+                );
+
     }
 
 

@@ -34,28 +34,27 @@ public class CommandCompo implements Commands {
 
         StringBuilder sb = new StringBuilder(game.translate("werewolf.commands.compo._"));
         sb.append(ChatColor.WHITE);
-        if (game.getConfig().getLoverSize() > 0) {
+        if (game.getConfig().getLoverCount(LoverType.LOVER.getKey()) > 0) {
             sb.append(LoverType.LOVER.getChatColor()).append(game.translate(LoverType.LOVER.getKey())).append(ChatColor.WHITE);
-            if (game.getConfig().getLoverSize() == 1) {
+            if (game.getConfig().getLoverCount(LoverType.LOVER.getKey()) == 1) {
                 sb.append(", ");
             } else {
-                sb.append(" (§b").append(game.getConfig().getLoverSize()).append("§f), ");
+                sb.append(" (§b").append(game.getConfig().getLoverCount(LoverType.LOVER.getKey())).append("§f), ");
             }
         }
-        if (game.getConfig().getAmnesiacLoverSize() > 0) {
+        if (game.getConfig().getLoverCount(LoverType.AMNESIAC_LOVER.getKey()) > 0) {
             sb.append(LoverType.AMNESIAC_LOVER.getChatColor()).append(game.translate(LoverType.AMNESIAC_LOVER.getKey())).append(ChatColor.WHITE);
-            if (game.getConfig().getAmnesiacLoverSize() == 1) {
+            if (game.getConfig().getLoverCount(LoverType.AMNESIAC_LOVER.getKey()) == 1) {
                 sb.append(", ");
             } else {
-                sb.append(" (§b").append(game.getConfig().getAmnesiacLoverSize()).append("§f), ");
+                sb.append(" (§b").append(game.getConfig().getLoverCount(LoverType.AMNESIAC_LOVER.getKey())).append("§f), ");
             }
-        } else {
-            sb.replace(sb.length() - 2, sb.length(), "");
         }
-        if (game.getConfig().getCursedLoverSize() > 0) {
+
+        if (game.getConfig().getLoverCount(LoverType.CURSED_LOVER.getKey()) > 0) {
             sb.append(LoverType.CURSED_LOVER.getChatColor()).append(game.translate(LoverType.CURSED_LOVER.getKey())).append(ChatColor.WHITE);
-            if (game.getConfig().getCursedLoverSize() != 1) {
-                sb.append(" (§b").append(game.getConfig().getCursedLoverSize()).append("§f)");
+            if (game.getConfig().getLoverCount(LoverType.CURSED_LOVER.getKey()) != 1) {
+                sb.append(" (§b").append(game.getConfig().getLoverCount(LoverType.CURSED_LOVER.getKey())).append("§f)");
             }
         } else {
             sb.replace(sb.length() - 2, sb.length(), "");

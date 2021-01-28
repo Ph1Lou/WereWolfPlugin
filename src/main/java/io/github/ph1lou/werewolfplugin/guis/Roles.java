@@ -28,7 +28,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class Roles implements InventoryProvider {
@@ -48,18 +53,29 @@ public class Roles implements InventoryProvider {
 
     @Override
     public void init(Player player, InventoryContents contents) {
-        Main main =JavaPlugin.getPlugin(Main.class);
+        Main main = JavaPlugin.getPlugin(Main.class);
         WereWolfAPI game = main.getWereWolfAPI();
         ConfigWereWolfAPI config = game.getConfig();
 
-        contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType()).setDisplayName(game.translate("werewolf.menu.return")).build()), e -> Config.INVENTORY.open(player)));
+        contents.set(0, 0, ClickableItem.of((
+                new ItemBuilder(UniversalMaterial.COMPASS.getType())
+                        .setDisplayName(game.translate("werewolf.menu.return"))
+                        .build()), e -> Config.INVENTORY.open(player)));
+
+        /*contents.set(0, 5, ClickableItem.of((new ItemBuilder(UniversalMaterial.ARROW.getType())
+                .setDisplayName(game.translate("werewolf.menu.return")).build()),
+                e -> {
+                    ((Configuration)game.getConfig()).setComposition(((GameManager)game).getRandomConfig().createRandomConfig(game.getConfig().getLoverCount(LoverType.CURSED_LOVER.getKey()),new HashSet<>()));
+                    game.getScore().setRole(game.getScore().getPlayerSize());
+                }));*/
+
         contents.set(0, 8, ClickableItem.of((new ItemBuilder(UniversalMaterial.BARRIER.getType()).setDisplayName(game.translate("werewolf.menu.roles.zero")).build()), e -> {
             for (RoleRegister roleRegister : main.getRegisterManager().getRolesRegister()) {
                 config.setRole(roleRegister.getKey(), 0);
             }
-            config.setAmnesiacLoverSize(0);
-            config.setLoverSize(0);
-            config.setCursedLoverSize(0);
+            config.setLoverCount(LoverType.LOVER.getKey(), 0);
+            config.setLoverCount(LoverType.AMNESIAC_LOVER.getKey(), 0);
+            config.setLoverCount(LoverType.CURSED_LOVER.getKey(), 0);
             game.getScore().setRole(0);
         }));
     }
@@ -75,21 +91,21 @@ public class Roles implements InventoryProvider {
 
         List<String> lore = new ArrayList<>(Arrays.asList(game.translate("werewolf.menu.left"), game.translate("werewolf.menu.right")));
 
-        if (config.getLoverSize() > 0) {
+        if (config.getLoverCount(LoverType.LOVER.getKey()) > 0) {
             contents.set(0, 2,
                     ClickableItem.of((
                             new ItemBuilder(
                                     UniversalMaterial.GREEN_TERRACOTTA
-                                            .getStack(config.getLoverSize()))
+                                            .getStack(config.getLoverCount(LoverType.LOVER.getKey())))
                                     .setDisplayName(game.translate(LoverType.LOVER.getKey()) + game.translate("werewolf.role.lover.random"))
                                     .setLore(lore).build()), e -> {
 
                         if (e.isLeftClick()) {
-                            config.setLoverSize(config.getLoverSize() + 1);
+                            config.addOneLover(LoverType.LOVER.getKey());
                         } else if (e.isRightClick()) {
-                            int LoverNumber = config.getLoverSize();
+                            int LoverNumber = config.getLoverCount(LoverType.LOVER.getKey());
                             if (LoverNumber > 0) {
-                                config.setLoverSize(LoverNumber - 1);
+                                config.removeOneLover(LoverType.LOVER.getKey());
                             }
                         }
                     }));
@@ -102,25 +118,25 @@ public class Roles implements InventoryProvider {
                                     .setDisplayName(game.translate(LoverType.LOVER.getKey()))
                                     .setLore(lore).build()), e -> {
                         if (e.isLeftClick()) {
-                            config.setLoverSize(config.getLoverSize() + 1);
+                            config.addOneLover(LoverType.LOVER.getKey());
                         }
 
                     }));
 
-        if (config.getAmnesiacLoverSize() > 0) {
+        if (config.getLoverCount(LoverType.AMNESIAC_LOVER.getKey()) > 0) {
             contents.set(0, 4,
                     ClickableItem.of((
                             new ItemBuilder(
                                     UniversalMaterial.GREEN_TERRACOTTA
-                                            .getStack(config.getAmnesiacLoverSize()))
+                                            .getStack(config.getLoverCount(LoverType.AMNESIAC_LOVER.getKey())))
                                     .setDisplayName(game.translate(LoverType.AMNESIAC_LOVER.getKey()))
                                     .setLore(lore).build()), e -> {
                         if (e.isLeftClick()) {
-                            config.setAmnesiacLoverSize(config.getAmnesiacLoverSize() + 1);
+                            config.addOneLover(LoverType.AMNESIAC_LOVER.getKey());
                         } else if (e.isRightClick()) {
-                            int AmnesiacLoverNumber = config.getAmnesiacLoverSize();
+                            int AmnesiacLoverNumber = config.getLoverCount(LoverType.AMNESIAC_LOVER.getKey());
                             if (AmnesiacLoverNumber > 0) {
-                                config.setAmnesiacLoverSize(AmnesiacLoverNumber - 1);
+                                config.removeOneLover(LoverType.AMNESIAC_LOVER.getKey());
                             }
                         }
                     }));
@@ -132,25 +148,25 @@ public class Roles implements InventoryProvider {
                                     .setDisplayName(game.translate(LoverType.AMNESIAC_LOVER.getKey()))
                                     .setLore(lore).build()), e -> {
                         if (e.isLeftClick()) {
-                            config.setAmnesiacLoverSize(config.getAmnesiacLoverSize() + 1);
+                            config.addOneLover(LoverType.AMNESIAC_LOVER.getKey());
                         }
 
                     }));
 
-        if (config.getCursedLoverSize() > 0) {
+        if (config.getLoverCount(LoverType.CURSED_LOVER.getKey()) > 0) {
             contents.set(0, 6,
                     ClickableItem.of((
                             new ItemBuilder(
                                     UniversalMaterial.GREEN_TERRACOTTA
-                                            .getStack(config.getCursedLoverSize()))
+                                            .getStack(config.getLoverCount(LoverType.CURSED_LOVER.getKey())))
                                     .setDisplayName(game.translate(LoverType.CURSED_LOVER.getKey()))
                                     .setLore(lore).build()), e -> {
                         if (e.isLeftClick()) {
-                            config.setCursedLoverSize(config.getCursedLoverSize() + 1);
+                            config.addOneLover(LoverType.CURSED_LOVER.getKey());
                         } else if (e.isRightClick()) {
-                            int cursedLoverNumber = config.getCursedLoverSize();
+                            int cursedLoverNumber = config.getLoverCount(LoverType.CURSED_LOVER.getKey());
                             if (cursedLoverNumber > 0) {
-                                config.setCursedLoverSize(cursedLoverNumber - 1);
+                                config.removeOneLover(LoverType.CURSED_LOVER.getKey());
                             }
                         }
                     }));
@@ -164,7 +180,7 @@ public class Roles implements InventoryProvider {
                                     .setLore(lore).build()), e -> {
 
                         if (e.isLeftClick()) {
-                            config.setCursedLoverSize(config.getCursedLoverSize() + 1);
+                            config.addOneLover(LoverType.CURSED_LOVER.getKey());
                         }
                     }));
 

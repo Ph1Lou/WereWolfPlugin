@@ -14,6 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +25,7 @@ public class Assassin extends RolesNeutral {
         super(main, playerWW, key);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onNight(NightEvent event) {
 
         Player player = Bukkit.getPlayer(getPlayerUUID());

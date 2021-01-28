@@ -27,8 +27,11 @@ public class VillageIdiot extends RolesVillage implements Power {
     public @NotNull String getDescription() {
 
         return super.getDescription() +
-                game.translate("werewolf.description.description", game.translate("werewolf.role.village_idiot.description")) +
-                game.translate("werewolf.description.power", game.translate(power ? "werewolf.role.village_idiot.power_on" : "werewolf.role.village_idiot.power_off"));
+                game.translate("werewolf.description.description",
+                        game.translate("werewolf.role.village_idiot.description")) +
+                game.translate("werewolf.description.power",
+                        game.translate(power ? "werewolf.role.village_idiot.power_on" :
+                                "werewolf.role.village_idiot.power_off"));
     }
 
     public void recoverPower() {
@@ -91,11 +94,9 @@ public class VillageIdiot extends RolesVillage implements Power {
             }
             getPlayerWW().removePlayerMaxHealth(4);
             event.setCancelled(true);
-            Bukkit.broadcastMessage(game.translate("werewolf.role.village_idiot.announce", getPlayerWW().getName()));
+            Bukkit.broadcastMessage(game.translate("werewolf.role.village_idiot.announce",
+                    getPlayerWW().getName()));
         }
-
     }
-
-
 }
 

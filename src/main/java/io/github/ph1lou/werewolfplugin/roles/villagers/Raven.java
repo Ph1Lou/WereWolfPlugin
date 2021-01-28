@@ -6,6 +6,7 @@ import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
+import io.github.ph1lou.werewolfapi.events.NightEvent;
 import io.github.ph1lou.werewolfapi.events.VoteEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesWithLimitedSelectionDuration;
@@ -52,6 +53,14 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
         return (this.affectedPlayer);
     }
 
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onNight(NightEvent event) {
+        if (this.last == null) return;
+
+        this.last.addPotionEffect(PotionEffectType.JUMP);
+    }
+
+
     @EventHandler(priority = EventPriority.LOWEST)
     public void onDay(DayEvent event) {
 
@@ -77,9 +86,12 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
     @Override
     public @NotNull String getDescription() {
         return super.getDescription() +
-                game.translate("werewolf.description.description", game.translate("werewolf.role.raven.description")) +
-                game.translate("werewolf.description.item", game.translate("werewolf.role.raven.item")) +
-                game.translate("werewolf.description.effect", game.translate("werewolf.role.raven.effect"));
+                game.translate("werewolf.description.description",
+                        game.translate("werewolf.role.raven.description")) +
+                game.translate("werewolf.description.item",
+                        game.translate("werewolf.role.raven.item")) +
+                game.translate("werewolf.description.effect",
+                        game.translate("werewolf.role.raven.effect"));
     }
 
 

@@ -84,7 +84,6 @@ public class Witch extends RolesVillage implements AffectedPlayers, Power {
 
         PlayerWW playerWW = event.getPlayerWW();
 
-
         if (playerWW.equals(getPlayerWW())) {
             event.setCancelled(autoResurrection(playerWW));
             return;

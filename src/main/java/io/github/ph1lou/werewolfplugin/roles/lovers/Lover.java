@@ -148,7 +148,7 @@ public class Lover implements LoverAPI, Listener {
                     game.death(playerWW1);
                 });
 
-        game.getConfig().setLoverSize(game.getConfig().getLoverSize() - 1);
+        game.getConfig().removeOneLover(LoverType.LOVER.getKey());
 
         HandlerList.unregisterAll(this);
 

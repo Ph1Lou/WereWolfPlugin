@@ -2,7 +2,11 @@ package io.github.ph1lou.werewolfplugin.save;
 
 import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
-import io.github.ph1lou.werewolfapi.registers.*;
+import io.github.ph1lou.werewolfapi.registers.ConfigRegister;
+import io.github.ph1lou.werewolfapi.registers.RandomEventRegister;
+import io.github.ph1lou.werewolfapi.registers.RegisterManager;
+import io.github.ph1lou.werewolfapi.registers.ScenarioRegister;
+import io.github.ph1lou.werewolfapi.registers.TimerRegister;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +15,8 @@ public class Configuration implements ConfigWereWolfAPI {
 
     private final Map<String, Integer> timerValues = new HashMap<>();
     private final Map<String, Boolean> configValues = new HashMap<>();
-    private final Map<String, Integer> roleCount = new HashMap<>();
+    private final Map<String, Integer> loverCount = new HashMap<>();
+    private Map<String, Integer> roleCount = new HashMap<>();
     private final Map<String, Boolean> scenarioValues = new HashMap<>();
     private final Map<String, Integer> randomEventsValues = new HashMap<>();
     private transient RegisterManager registerManager;
@@ -41,9 +46,6 @@ public class Configuration implements ConfigWereWolfAPI {
     private boolean trollSV = false;
     private int borderMax = 2000;
     private int borderMin = 300;
-    private int loverSize = 0;
-    private int amnesiacLoverSize = 0;
-    private int cursedLoverSize = 0;
     private int limitDepthStrider = 0;
     private int knockBackMode = 0;
     private String trollKey = RolesBase.VILLAGER.getKey();
@@ -328,6 +330,26 @@ public class Configuration implements ConfigWereWolfAPI {
     }
 
     @Override
+    public int getLoverCount(String key) {
+        return this.loverCount.getOrDefault(key, 0);
+    }
+
+    @Override
+    public void setLoverCount(String key, int i) {
+        this.loverCount.put(key, i);
+    }
+
+    @Override
+    public void addOneLover(String key) {
+        this.loverCount.put(key, this.loverCount.getOrDefault(key, 0) + 1);
+    }
+
+    @Override
+    public void removeOneLover(String key) {
+        this.loverCount.put(key, this.loverCount.getOrDefault(key, 0) - 1);
+    }
+
+    @Override
     public boolean isScenarioActive(String key) {
         return scenarioValues.getOrDefault(key, registerManager.getScenariosRegister().stream().filter(scenarioRegister -> scenarioRegister.getKey().equals(key)).findFirst().map(ScenarioRegister::getDefaultValue).orElse(false));
     }
@@ -381,21 +403,6 @@ public class Configuration implements ConfigWereWolfAPI {
     }
 
     @Override
-    public int getLoverSize() {
-        return loverSize;
-    }
-
-    @Override
-    public void setLoverSize(int loverSize) {
-        this.loverSize = loverSize;
-    }
-
-    @Override
-    public int getAmnesiacLoverSize() {
-        return amnesiacLoverSize;
-    }
-
-    @Override
     public void setConfig(String key, boolean value) {
         configValues.put(key, value);
     }
@@ -403,21 +410,6 @@ public class Configuration implements ConfigWereWolfAPI {
     @Override
     public void setScenario(String key, boolean value) {
         scenarioValues.put(key, value);
-    }
-
-    @Override
-    public void setAmnesiacLoverSize(int amnesiacLoverSize) {
-        this.amnesiacLoverSize = amnesiacLoverSize;
-    }
-
-    @Override
-    public int getCursedLoverSize() {
-        return cursedLoverSize;
-    }
-
-    @Override
-    public void setCursedLoverSize(int cursedLoverSize) {
-        this.cursedLoverSize = cursedLoverSize;
     }
 
     @Override
@@ -514,5 +506,9 @@ public class Configuration implements ConfigWereWolfAPI {
 
     public void addRegister(RegisterManager registerManager) {
         this.registerManager = registerManager;
+    }
+
+    public void setComposition(Map<String, Integer> composition) {
+        this.roleCount = composition;
     }
 }

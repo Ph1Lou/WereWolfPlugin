@@ -72,7 +72,7 @@ public class AmnesiacLover implements LoverAPI, Listener {
         Bukkit.getPluginManager().callEvent(
                 new AmnesiacLoverDeathEvent(event.getPlayerWW(), playerWW1));
         game.death(playerWW1);
-        game.getConfig().setAmnesiacLoverSize(game.getConfig().getAmnesiacLoverSize() - 1);
+        game.getConfig().removeOneLover(LoverType.AMNESIAC_LOVER.getKey());
     }
 
 
@@ -98,8 +98,7 @@ public class AmnesiacLover implements LoverAPI, Listener {
                 find = true;
                 announceAmnesiacLoversOnJoin(amnesiacLover1);
                 announceAmnesiacLoversOnJoin(amnesiacLover2);
-                game.getConfig().setAmnesiacLoverSize(
-                        game.getConfig().getAmnesiacLoverSize() + 1);
+                game.getConfig().addOneLover(LoverType.AMNESIAC_LOVER.getKey());
                 game.checkVictory();
 
             }

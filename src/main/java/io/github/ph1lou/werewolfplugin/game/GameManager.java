@@ -26,6 +26,7 @@ import io.github.ph1lou.werewolfplugin.save.Stuff;
 import io.github.ph1lou.werewolfplugin.scoreboards.ScoreBoard;
 import io.github.ph1lou.werewolfplugin.tasks.LobbyTask;
 import io.github.ph1lou.werewolfplugin.utils.UpdateChecker;
+import io.github.ph1lou.werewolfplugin.utils.random_config.RandomConfig;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -65,6 +66,7 @@ public class GameManager implements WereWolfAPI {
     private Configuration configuration;
     private final End end = new End(this);
     private final Stuff stuff;
+    private final RandomConfig randomConfig;
     private final ScenariosLoader scenarios;
     private final Random r = new Random(System.currentTimeMillis());
     private final UUID gameUUID = UUID.randomUUID();
@@ -73,6 +75,7 @@ public class GameManager implements WereWolfAPI {
 
     public GameManager(Main main) {
         this.main = main;
+        this.randomConfig = new RandomConfig(main);
         this.configuration = new Configuration(main.getRegisterManager());
         mapManager = new MapManager(main);
         stuff = new Stuff(main);
@@ -408,5 +411,9 @@ public class GameManager implements WereWolfAPI {
 
     public void remove(UUID uuid) {
         playerLG.remove(uuid);
+    }
+
+    public RandomConfig getRandomConfig() {
+        return randomConfig;
     }
 }

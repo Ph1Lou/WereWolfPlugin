@@ -143,6 +143,7 @@ public class TabManager {
         Scoreboard scoreboard = player.getScoreboard();
         Team team = scoreboard.getTeam(name);
         StringBuilder sb = new StringBuilder(event1.getPrefix());
+
         if (team != null) {
             UUID uuid1 = player.getUniqueId();
             RequestSeeWereWolfListEvent requestSeeWereWolfListEvent = new RequestSeeWereWolfListEvent(uuid1);

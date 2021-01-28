@@ -8,7 +8,7 @@
         "display": "Tueur en Série",
         "items": "Un livre Sharpness III, un livre Protection III et un livre Power III",
         "effect": "Force avant son premier kill",
-        "hearts": "Coeur(s) en Plus : §b%d",
+        "hearts": "Coeur(s) en Plus : §b%d\n",
         "power": "Lorsque vous tuez un joueur, vous gagnez un coeur permanent supplémentaire et une pomme d'or.",
         "limit": "Limite d'armure, d'arc et d'épée (§b+1§f)"
       },
@@ -32,7 +32,7 @@
       },
       "amnesiac_werewolf": {
         "display": "Loup Garou Amnésique",
-        "description": "Vous n'avez pas accès à la liste des Loups et les autres Loups ne pourront pas vous voir dans leur liste tant que vous n’avez pas tué un Villageois. Attention vous n'êtes pas dans la camp des Loups-Garous tant que vous n'avez pas tué un Villageois"
+        "description": "Vous n'avez pas accès à la liste des Loups et les autres Loups ne pourront pas vous voir dans leur liste tant que vous n’avez pas tué un Villageois. Attention vous n'êtes pas dans le camp des Loups-Garous tant que vous n'avez pas tué un Villageois"
       },
       "werewolf": {
         "display": "Loup Garou",
@@ -46,12 +46,12 @@
       },
       "wild_child": {
         "display": "Enfant Sauvage",
-        "model": "§cAucun§f désigner un modèle §b/ww modele",
+        "model_none": "§cAucun§f désigner un modèle §b/ww modele",
         "description": "En début de partie, vous choisissez un modèle. Si celui ci meurt, vous passez dans le camp des Loups Garous.",
         "design_model": "[§eLG UHC§r] Vous devez désigner un modèle §b/ww modele§r. Vous avez §b%s",
         "reveal_model": "[§eLG UHC§r] Votre modèle est §b%s",
-        "model_alive": "Votre modèle est §b%s",
-        "model_death": "Votre modèle est mort",
+        "model_death": "§cMort§f",
+        "model": "§bModele§f : %s\n",
         "command": "modele",
         "change": "[§6LG UHC§r] Votre modèle est maintenant §b%s"
       },
@@ -447,7 +447,7 @@
       "command": "vote"
     },
     "announcement": {
-      "restart": "[§6LG UHC§r] Redémarrage de la partie dans 30 secondes",
+      "restart": "[§6LG UHC§r] Redémarrage de la partie dans §b%s§f secondes",
       "pvp": "[§6LG UHC§r] PVP activé",
       "border": "[§6LG UHC§r] La bordure commence à se déplacer",
       "mining": "[§6LG UHC§r] Minage Désactivé",
@@ -841,6 +841,7 @@
         "angel_duration": "Durée pour le choix de l'Ange (§b%s§r)",
         "power_duration": "Durée d'utilisation des pouvoirs le Matin (§b%s§r)",
         "vote_begin": "Début des Votes (§b%s§r)",
+        "auto_restart_duration": "Durée de redémarrage du serveur (§b%s§r)",
         "invulnerability": "Invulnérabilité (§b%s§r)",
         "succubus_duration": "Durée du Charme du Succube (§b%s§r)"
       },
@@ -1050,7 +1051,7 @@
       "none": "§4Aucun",
       "author": "§fAuteur(s) :",
       "stat": "[§cLG UHC§r] L'addon de statistique n'est pas installé, cliquez ici pour le télécharger",
-      "stat_out_of_date": "[§cLG UHC§r] L'addon de statistique n'est pas à jours, cliquez ici pour télécharger la mise à jours"
+      "stat_out_of_date": "[§cLG UHC§r] L'addon de statistique n'est pas à jours, cliquez ici pour le télécharger"
     },
     "categories": {
       "villager": "Villageois",
@@ -1068,7 +1069,7 @@
       "effect": "§bEffet : §f%s\n",
       "equipment": "§bÉquipement : §f%s\n",
       "command": "§bCommande : §f%s\n",
-      "transformed": "Transformé : §b%s",
+      "transformed": "Transformé : §b%s\n",
       "no": "Non",
       "yes": "Oui",
       "werewolf": "§bEffet : §fForce (la nuit), Vision Nocturne. 1 minute de Vitesse et 2 coeur d'absorption après chaque kill\n"

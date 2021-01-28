@@ -8,6 +8,7 @@ import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.AroundLover;
 import io.github.ph1lou.werewolfapi.events.CountRemainingRolesCategoriesEvent;
 import io.github.ph1lou.werewolfapi.events.EndPlayerMessageEvent;
@@ -47,8 +48,8 @@ public class End {
 
         ConfigWereWolfAPI config = game.getConfig();
 
-        if (config.getAmnesiacLoverSize() *
-                config.getLoverSize() <= 1) {
+        if (config.getLoverCount(LoverType.AMNESIAC_LOVER.getKey()) *
+                config.getLoverCount(LoverType.LOVER.getKey()) <= 1) {
 
             game.getLoversManager().getLovers().stream()
                     .filter(loverAPI -> !loverAPI.isKey(LoverType.CURSED_LOVER.getKey()))
@@ -147,8 +148,8 @@ public class End {
             p.spigot().sendMessage(msg);
         }
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(game.getMain(), game::stopGame, 600);
-        Bukkit.broadcastMessage(game.translate("werewolf.announcement.restart"));
+        Bukkit.getScheduler().scheduleSyncDelayedTask(game.getMain(), game::stopGame, 20L * game.getConfig().getTimerValue(TimersBase.AUTO_RESTART_DURATION.getKey()));
+        Bukkit.broadcastMessage(game.translate("werewolf.announcement.restart", game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.AUTO_RESTART_DURATION.getKey()))));
     }
 
 

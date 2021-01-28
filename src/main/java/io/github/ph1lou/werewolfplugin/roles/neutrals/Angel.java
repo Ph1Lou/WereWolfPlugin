@@ -171,10 +171,11 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
 
         int extraHearts = 4;
 
-        TextComponent textComponent = new TextComponent();
+        TextComponent textComponent = new TextComponent(" ");
 
         if (isChoice(AngelForm.ANGEL)) {
             textComponent = choiceAngel();
+
         } else if (!getAffectedPlayers().isEmpty()) {
 
             StringBuilder sb = new StringBuilder();
@@ -222,7 +223,6 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
 
             textComponent = new TextComponent(sb.toString());
         }
-
 
         return new Pair<>(extraHearts, textComponent);
     }

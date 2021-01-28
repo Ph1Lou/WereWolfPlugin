@@ -180,7 +180,6 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
                 playerWW,
                 roleClone.getKey()));
 
-
         getPlayerWW().getRole().recoverPotionEffect();
 
         for (int i = 0; i < playerWW.getLovers().size(); i++) {
