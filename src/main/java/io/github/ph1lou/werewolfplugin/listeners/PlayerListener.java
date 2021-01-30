@@ -378,20 +378,34 @@ public class PlayerListener implements Listener {
 		PlayerWW playerWW = event.getPlayerWW();
 		SecondDeathEvent secondDeathEvent = new SecondDeathEvent(playerWW);
 		Bukkit.getPluginManager().callEvent(secondDeathEvent);
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onSecondDeathEvent(SecondDeathEvent event) {
+
+		if (event.isCancelled()) return;
+
 		Bukkit.getScheduler().scheduleSyncDelayedTask(game.getMain(), () -> {
 			if (!game.isState(StateGame.END)) {
-				if (playerWW != null && playerWW.isState(StatePlayer.JUDGEMENT) && !secondDeathEvent.isCancelled()) {
+				if (event.getPlayerWW().isState(StatePlayer.JUDGEMENT)) {
 
-					ThirdDeathEvent thirdDeathEvent = new ThirdDeathEvent(playerWW);
+					ThirdDeathEvent thirdDeathEvent = new ThirdDeathEvent(event.getPlayerWW());
 					Bukkit.getPluginManager().callEvent(thirdDeathEvent);
-					Bukkit.getScheduler().scheduleSyncDelayedTask(game.getMain(), () -> {
-						if (!game.isState(StateGame.END)) {
-							if (playerWW.isState(StatePlayer.JUDGEMENT) && !thirdDeathEvent.isCancelled()) {
-								game.death(playerWW);
-							}
-						}
+				}
+			}
 
-					}, 7 * 20);
+		}, 7 * 20);
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onThirdDeath(ThirdDeathEvent event) {
+
+		if (event.isCancelled()) return;
+
+		Bukkit.getScheduler().scheduleSyncDelayedTask(game.getMain(), () -> {
+			if (!game.isState(StateGame.END)) {
+				if (event.getPlayerWW().isState(StatePlayer.JUDGEMENT)) {
+					game.death(event.getPlayerWW());
 				}
 			}
 

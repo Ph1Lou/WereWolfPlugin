@@ -455,7 +455,7 @@
       "command": "vote"
     },
     "lone_wolf": {
-      "message": "[§cLG UHC§r] Vous êtes le Loup Solitaire. A partir de maintenant,vous devez gagner Seul. Pour cela, vous bénéficiez de quatres coeurs permanents supplémentaires (dans la limite de 15 coeurs max)"
+      "message": "[§cLG UHC§r] Vous devenez Solitaire. A partir de maintenant,vous devez gagner Seul. Pour cela, vous bénéficiez de quatres coeurs permanents supplémentaires (dans la limite de 15 coeurs max)"
     },
     "announcement": {
       "restart": "[§6LG UHC§r] Redémarrage de la partie dans §b%s",
@@ -496,8 +496,8 @@
     },
     "end": {
       "thief": "§e il a volé un(e) %s",
-      "infect": " infecté(e)",
-      "solitary": " solitaire",
+      "infect": " Infecté(e)",
+      "solitary": " Solitaire",
       "reveal_death": "§e§m%s était %s",
       "transform": " transformé",
       "reveal": "§e%s était %s",

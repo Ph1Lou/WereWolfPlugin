@@ -45,7 +45,6 @@ public class End {
             fin();
             return;
         }
-
         ConfigWereWolfAPI config = game.getConfig();
 
         if (config.getLoverCount(LoverType.AMNESIAC_LOVER.getKey()) *

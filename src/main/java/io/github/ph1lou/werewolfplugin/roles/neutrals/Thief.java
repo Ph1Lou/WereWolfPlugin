@@ -10,6 +10,7 @@ import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.events.FirstDeathEvent;
 import io.github.ph1lou.werewolfapi.events.NewWereWolfEvent;
 import io.github.ph1lou.werewolfapi.events.NightEvent;
+import io.github.ph1lou.werewolfapi.events.SecondDeathEvent;
 import io.github.ph1lou.werewolfapi.events.StealEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
@@ -100,20 +101,12 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
 
         if (!killer.getUniqueId().equals(getPlayerUUID())) return;
 
-        killer.removePotionEffect(PotionEffectType.ABSORPTION);
         killer.addPotionEffect(new PotionEffect(
                 PotionEffectType.SPEED,
                 1200,
                 0,
                 false,
                 false));
-        killer.addPotionEffect(
-                new PotionEffect(
-                        PotionEffectType.ABSORPTION,
-                        1200,
-                        0,
-                        false,
-                        false));
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -138,7 +131,7 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
                     Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
                         if (!game.isState(StateGame.END)) {
                             Bukkit.getPluginManager().callEvent(
-                                    new FirstDeathEvent(playerWW));
+                                    new SecondDeathEvent(playerWW));
                         }
 
                     }, 20L);

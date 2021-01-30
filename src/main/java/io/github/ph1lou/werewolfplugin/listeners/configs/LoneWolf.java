@@ -32,7 +32,7 @@ public class LoneWolf extends ListenerManager {
             if (!game.isState(StateGame.END) && isRegister()) {
                 designSolitary();
             }
-        }, (long) (game.getRandom().nextFloat() * 3600 * 20));
+        }, 1L/*(long) (game.getRandom().nextFloat() * 3600 * 20)*/);
     }
 
     private void designSolitary() {
