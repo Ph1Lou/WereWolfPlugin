@@ -1,15 +1,38 @@
 package io.github.ph1lou.werewolfplugin.listeners;
 
+import io.github.ph1lou.werewolfapi.LoverAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.ScoreAPI;
-import io.github.ph1lou.werewolfapi.enums.*;
-import io.github.ph1lou.werewolfapi.events.*;
+import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enums.Day;
+import io.github.ph1lou.werewolfapi.enums.RolesBase;
+import io.github.ph1lou.werewolfapi.enums.Sound;
+import io.github.ph1lou.werewolfapi.enums.StateGame;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.enums.VoteStatus;
+import io.github.ph1lou.werewolfapi.events.BorderStartEvent;
+import io.github.ph1lou.werewolfapi.events.DayEvent;
+import io.github.ph1lou.werewolfapi.events.DayWillComeEvent;
+import io.github.ph1lou.werewolfapi.events.DiggingEndEvent;
+import io.github.ph1lou.werewolfapi.events.InvulnerabilityEvent;
+import io.github.ph1lou.werewolfapi.events.LoversRepartitionEvent;
+import io.github.ph1lou.werewolfapi.events.NightEvent;
+import io.github.ph1lou.werewolfapi.events.PVPEvent;
+import io.github.ph1lou.werewolfapi.events.RepartitionEvent;
+import io.github.ph1lou.werewolfapi.events.SelectionEndEvent;
+import io.github.ph1lou.werewolfapi.events.StartEvent;
+import io.github.ph1lou.werewolfapi.events.TrollEvent;
+import io.github.ph1lou.werewolfapi.events.TrollLoverEvent;
+import io.github.ph1lou.werewolfapi.events.VoteEndEvent;
+import io.github.ph1lou.werewolfapi.events.VoteResultEvent;
 import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.commands.roles.CommandWereWolfChat;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
+import io.github.ph1lou.werewolfplugin.roles.lovers.FakeLover;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -27,6 +50,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class CycleListener implements Listener {
@@ -291,6 +315,50 @@ public class CycleListener implements Listener {
                     Bukkit.getPluginManager().callEvent(new RepartitionEvent());
                 }
             }
+
+        }, 1800L);
+    }
+
+    @EventHandler
+    public void onTrollLover(TrollLoverEvent event) {
+
+        List<LoverAPI> loverAPIS = new ArrayList<>();
+
+        List<PlayerWW> playerWWs = game.getPlayerWW().stream()
+                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                .collect(Collectors.toList());
+
+        if (playerWWs.isEmpty()) return;
+
+        while (playerWWs.size() > 3) {
+            loverAPIS.add(new FakeLover(game,
+                    Arrays.asList(playerWWs.remove(0),
+                            playerWWs.remove(0))));
+        }
+        if (playerWWs.size() == 3) {
+            loverAPIS.add(new FakeLover(game,
+                    Arrays.asList(playerWWs.remove(0),
+                            playerWWs.remove(0),
+                            playerWWs.remove(0))));
+        } else if (playerWWs.size() == 2) {
+            loverAPIS.add(new FakeLover(game,
+                    Arrays.asList(playerWWs.remove(0),
+                            playerWWs.remove(0))));
+        }
+
+        loverAPIS.forEach(loverAPI -> Bukkit.getPluginManager()
+                .registerEvents((Listener) loverAPI, main));
+
+        Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
+
+            if (!game.isState(StateGame.END)) {
+                game.getPlayerWW()
+                        .forEach(playerWW -> playerWW
+                                .sendMessageWithKey("werewolf.announcement.lover_troll"));
+                game.getConfig().setTrollLover(false);
+                Bukkit.getPluginManager().callEvent(new LoversRepartitionEvent());
+            }
+            loverAPIS.forEach(loverAPI -> HandlerList.unregisterAll((Listener) loverAPI));
 
         }, 1800L);
     }

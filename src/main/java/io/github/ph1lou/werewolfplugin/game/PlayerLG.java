@@ -137,8 +137,8 @@ public class PlayerLG implements PlayerWW {
     }
 
     @Override
-    public void sendMessageWithKey(String key) {
-        this.sendMessage(game.translate(key));
+    public void sendMessageWithKey(String key, Object... args) {
+        this.sendMessage(game.translate(key, args));
     }
 
     @Override

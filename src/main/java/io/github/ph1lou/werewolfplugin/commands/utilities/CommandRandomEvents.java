@@ -33,8 +33,9 @@ public class CommandRandomEvents implements Commands {
         for (RandomEventRegister randomEventRegister : main.getRegisterManager().getRandomEventsRegister()) {
 
             if (game.getConfig().getProbability(randomEventRegister.getKey()) > 0) {
-                sb.append(game.translate("werewolf.menu.random_events.command_message", game.translate(randomEventRegister.getKey()), game.getConfig().getProbability(randomEventRegister.getKey()))).append(", ");
-
+                sb.append(game.translate("werewolf.menu.random_events.command_message",
+                        game.translate(randomEventRegister.getKey()),
+                        game.getConfig().getProbability(randomEventRegister.getKey()))).append(", ");
             }
         }
 

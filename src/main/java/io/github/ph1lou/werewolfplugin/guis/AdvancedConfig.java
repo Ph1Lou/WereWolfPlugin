@@ -412,6 +412,24 @@ public class AdvancedConfig implements InventoryProvider {
                     .build());
 
         }));
+
+        contents.set(4, 2, ClickableItem.of((
+                        new ItemBuilder(Material.ARROW)
+                                .setDisplayName(game.translate(config.isTrollLover() ?
+                                        "werewolf.menu.advanced_tool.troll_lover_on" :
+                                        "werewolf.menu.advanced_tool.troll_lover_off"))
+                                .build())
+                , e -> {
+
+                    config.setTrollLover(!config.isTrollLover());
+
+                    e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                            .setDisplayName(game.translate(config.isTrollLover() ?
+                                    "werewolf.menu.advanced_tool.troll_lover_on" :
+                                    "werewolf.menu.advanced_tool.troll_lover_off"))
+                            .build());
+
+                }));
     }
 
 

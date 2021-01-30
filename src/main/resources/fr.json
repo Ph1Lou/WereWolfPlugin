@@ -132,6 +132,7 @@
       "angel": {
         "display": "Ange",
         "angel_choice": "[§eLG UHC§r] Vous pouvez décider d'être soit ",
+        "angle_choice_click": "[§eLG UHC§r] Vous venez de choisir §b%s§b§f. Vous obtiendrez votre cible dans §b%s",
         "or": " soit ",
         "target": "Cible : §b%s\n",
         "time": ", vous avez §b%s §f(Cliquez pour choisir)",
@@ -463,6 +464,7 @@
       "death_message": "§b§m§l-+-----------------------------------+-\n§f                 [§cLG UHC§r] §b&player&§r est mort\n§r§b§m§l-+-----------------------------------+-",
       "review_role": "[§eLG UHC§r] Pour revoir la description §b/ww role",
       "troll": "[§5LG UHC§r] Bon ok, la blague a assez duré ! Voici ton vrai role : ",
+      "lover_troll": "[§aLG UHC§r] Le troll Saint Valentin est fini, votre couple était faux",
       "night": "[§eLG UHC§r] C'est la Nuit §b%s§r ☼",
       "start": {
         "message": "[§eLG UHC§r] Vous avez §b%s§r d'invulnérabilité\n§f Plus d'infos sur la partie §b/ww h",
@@ -733,6 +735,8 @@
         "name": "Configuration §bAvancée",
         "troll_on": "Troll §2Activé",
         "troll_off": "Troll §4Désactivé",
+        "troll_lover_on": "Troll Saint Valentin §2Activé",
+        "troll_lover_off": "Troll Saint Valentin §4Désactivé",
         "troll_set": "§bShift§f-Clique pour configurer",
         "resistance": "Resistance §b%d%%",
         "succubus": "Champ d'action du Succube §b%s",

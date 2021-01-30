@@ -54,6 +54,7 @@ public class Configuration implements ConfigWereWolfAPI {
     private int playerMax = 30;
     private double borderSpeed = 0.3;
     private int werewolfChatMaxMessage = 1;
+    private boolean trollLover = false;
 
     public Configuration(RegisterManager registerManager) {
         this.registerManager = registerManager;
@@ -501,6 +502,16 @@ public class Configuration implements ConfigWereWolfAPI {
     @Override
     public void setDistancePriestess(int i) {
         this.distancePriestess = i;
+    }
+
+    @Override
+    public boolean isTrollLover() {
+        return this.trollLover;
+    }
+
+    @Override
+    public void setTrollLover(boolean trollLover) {
+        this.trollLover = trollLover;
     }
 
 

@@ -20,6 +20,7 @@ import io.github.ph1lou.werewolfapi.events.PVPEvent;
 import io.github.ph1lou.werewolfapi.events.RepartitionEvent;
 import io.github.ph1lou.werewolfapi.events.RivalEvent;
 import io.github.ph1lou.werewolfapi.events.TrollEvent;
+import io.github.ph1lou.werewolfapi.events.TrollLoverEvent;
 import io.github.ph1lou.werewolfapi.events.WereWolfListEvent;
 import io.github.ph1lou.werewolfapi.registers.AddonRegister;
 import io.github.ph1lou.werewolfapi.registers.CommandRegister;
@@ -1360,7 +1361,14 @@ public class Register implements RegisterManager {
                         TimersBase.LOVER_DURATION.getKey())
                         .addPredicate(wereWolfAPI -> wereWolfAPI.getConfig().getTimerValue(TimersBase.ROLE_DURATION.getKey()) < 0
                                 && !wereWolfAPI.getConfig().isTrollSV())
-                        .onZero(wereWolfAPI -> Bukkit.getPluginManager().callEvent(new LoversRepartitionEvent()))
+                        .onZero(wereWolfAPI -> {
+                            if (wereWolfAPI.getConfig().isTrollLover()) {
+                                Bukkit.getPluginManager().callEvent(new TrollLoverEvent());
+                            } else {
+                                Bukkit.getPluginManager().callEvent(new LoversRepartitionEvent());
+                            }
+
+                        })
                         .setDefaultValue(240));
 
         timersRegister

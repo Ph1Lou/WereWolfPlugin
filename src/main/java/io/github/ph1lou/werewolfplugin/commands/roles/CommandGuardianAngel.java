@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.AngelForm;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
+import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.AngelChoiceEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AngelRole;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
@@ -41,6 +42,8 @@ public class CommandGuardianAngel implements Commands {
 
         Bukkit.getPluginManager().callEvent(new AngelChoiceEvent(playerWW, AngelForm.GUARDIAN_ANGEL));
         ((AngelRole) angel).setChoice(AngelForm.GUARDIAN_ANGEL);
-        player.sendMessage(game.translate("werewolf.role.angel.angel_choice_perform", game.translate(RolesBase.GUARDIAN_ANGEL.getKey())));
+        player.sendMessage(game.translate("werewolf.role.angel.angle_choice_click",
+                game.translate(RolesBase.GUARDIAN_ANGEL.getKey())
+                , game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.ANGEL_DURATION.getKey()))));
     }
 }
