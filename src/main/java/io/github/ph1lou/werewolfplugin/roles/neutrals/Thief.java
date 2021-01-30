@@ -78,14 +78,12 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
                 game.translate("werewolf.description.description",
                         (game.getConfig().isConfigActive(ConfigsBase.EVIL_THIEF.getKey()) ?
                                 game.translate("werewolf.role.thief.description2") :
-                                game.translate("werewolf.role.thief.description")));
-
+                                game.translate("werewolf.role.thief.description"))) +
+                game.translate("werewolf.role.thief.effect");
     }
-
 
     @Override
     public void recoverPower() {
-
     }
 
     @Override

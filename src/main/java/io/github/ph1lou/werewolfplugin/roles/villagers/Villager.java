@@ -13,6 +13,7 @@ import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class Villager extends RolesVillage {
@@ -41,11 +42,16 @@ public class Villager extends RolesVillage {
 
         switch (villagerKit) {
             case GOLEM:
+                ItemStack book = new ItemBuilder(UniversalMaterial.ENCHANTED_BOOK.getStack())
+                        .addEnchant(Enchantment.DURABILITY, 3).build();
                 getPlayerWW().addItem(UniversalMaterial.IRON_INGOT.getStack(15));
-                getPlayerWW().addItem(new ItemBuilder(UniversalMaterial.ENCHANTED_BOOK.getStack()).addEnchant(Enchantment.DURABILITY, 3).setAmount(3).build());
+                getPlayerWW().addItem(book);
+                getPlayerWW().addItem(book);
+                getPlayerWW().addItem(book);
                 break;
             case MINER:
-                getPlayerWW().addItem(new ItemBuilder(UniversalMaterial.DIAMOND_PICKAXE.getStack()).addEnchant(Enchantment.DIG_SPEED, 2).build());
+                getPlayerWW().addItem(new ItemBuilder(UniversalMaterial.DIAMOND_PICKAXE.getStack())
+                        .addEnchant(Enchantment.DIG_SPEED, 2).build());
                 break;
             case ARCHER:
                 getPlayerWW().addItem(UniversalMaterial.ARROW.getStack(64));

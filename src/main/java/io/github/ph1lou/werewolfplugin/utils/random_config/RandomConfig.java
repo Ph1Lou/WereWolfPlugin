@@ -20,7 +20,7 @@ public class RandomConfig {
         this.main = main;
     }
 
-    public Map<String, Integer> createRandomConfig(int playerSize, Set<String> blackList) {
+    public Map<String, Integer> createRandomConfig(int playerSize, Set<String> blackList, boolean multipleRole) {
 
         WereWolfAPI game = main.getWereWolfAPI();
 
@@ -28,95 +28,66 @@ public class RandomConfig {
                 .stream()
                 .filter(roleRegister -> !blackList.contains(roleRegister.getKey()))
                 .collect(Collectors.toSet());
-        List<RoleRegister> villager = roles
-                .stream()
-                .filter(roleRegister -> roleRegister.getRandomCompositionAttribute()
-                        .equals(RandomCompositionAttribute.VILLAGER))
-                .collect(Collectors.toList());
-        List<RoleRegister> werewolf = roles
-                .stream()
-                .filter(roleRegister -> roleRegister.getRandomCompositionAttribute()
-                        .equals(RandomCompositionAttribute.WEREWOLF))
-                .collect(Collectors.toList());
-        List<RoleRegister> information = roles
-                .stream()
-                .filter(roleRegister -> roleRegister.getRandomCompositionAttribute()
-                        .equals(RandomCompositionAttribute.INFORMATION))
-                .collect(Collectors.toList());
-        List<RoleRegister> hybrid = roles
-                .stream()
-                .filter(roleRegister -> roleRegister.getRandomCompositionAttribute()
-                        .equals(RandomCompositionAttribute.HYBRID))
-                .collect(Collectors.toList());
-        List<RoleRegister> neutral = roles
-                .stream()
-                .filter(roleRegister -> roleRegister.getRandomCompositionAttribute()
-                        .equals(RandomCompositionAttribute.NEUTRAL))
-                .collect(Collectors.toList());
+
 
         Map<String, Integer> composition = new HashMap<>();
 
         int werewolfWeight = 0;
-        int numberWereWolf = game.getRandom().nextInt(3) + 1;
 
-        while (playerSize / 3 > werewolfWeight && numberWereWolf > 0) {
-            werewolfWeight += 1;
-            numberWereWolf--;
-            composition.merge(RolesBase.WEREWOLF.getKey(), 1, Integer::sum);
+        int numberWereWolf = game.getRandom().nextInt(2) + 1;
+        if (playerSize / 3 > 6 + numberWereWolf && !multipleRole) {
+            numberWereWolf = playerSize / 3 - 6;
         }
 
-        while (playerSize / 3 > werewolfWeight) {
-            int n = (int) Math.floor(game.getRandom().nextFloat() * werewolf.size());
-            werewolfWeight += werewolf.get(n).getWeight();
-            composition.merge(werewolf.get(n).getKey(), 1, Integer::sum);
-        }
+        composition.merge(RolesBase.WEREWOLF.getKey(), numberWereWolf, Integer::sum);
+        werewolfWeight += numberWereWolf;
 
-        int hybridWeight = 0;
+        onComposition(playerSize, 3, werewolfWeight, roles, RandomCompositionAttribute.WEREWOLF, composition, multipleRole);
 
-        while (playerSize / 12 > hybridWeight) {
-            int n = (int) Math.floor(game.getRandom().nextFloat() * hybrid.size());
-            hybridWeight += hybrid.get(n).getWeight();
-            composition.merge(hybrid.get(n).getKey(), 1, Integer::sum);
-        }
+        onComposition(playerSize, 8, 0, roles, RandomCompositionAttribute.HYBRID, composition, multipleRole);
 
-        int neutralWeight = 0;
+        onComposition(playerSize, 8, 0, roles, RandomCompositionAttribute.NEUTRAL, composition, multipleRole);
 
-        while (playerSize / 9 > neutralWeight) {
-            int n = (int) Math.floor(game.getRandom().nextFloat() * neutral.size());
-            neutralWeight += neutral.get(n).getWeight();
-            composition.merge(neutral.get(n).getKey(), 1, Integer::sum);
-        }
+        onComposition(playerSize, 10, 0, roles, RandomCompositionAttribute.INFORMATION, composition, multipleRole);
 
-        int infoWeight = 0;
-
-        while (playerSize / 10 > infoWeight) {
-            int n = (int) Math.floor(game.getRandom().nextFloat() * information.size());
-            infoWeight += information.get(n).getWeight();
-            composition.merge(information.get(n).getKey(), 1, Integer::sum);
-        }
-
-        int villagerWeight = 0;
-
-        while (playerSize > villagerWeight && composition.values().stream().mapToInt(value -> value).sum() < playerSize) {
-            int n = (int) Math.floor(game.getRandom().nextFloat() * villager.size());
-            villagerWeight += villager.get(n).getWeight();
-            composition.merge(villager.get(n).getKey(), 1, Integer::sum);
-            if (composition.values().stream().mapToInt(value -> value).sum() < playerSize) {
-                if (!composition.containsKey(villager.get(n).getKey()) && (villager.get(n).getKey().equals(RolesBase.SISTER.getKey()) || villager.get(n).getKey().equals(RolesBase.SIAMESE_TWIN.getKey()))) {
-                    composition.merge(villager.get(n).getKey(), 1, Integer::sum);
-                    villagerWeight += villager.get(n).getWeight();
-                }
-            } else {
-                villagerWeight -= villager.get(n).getWeight();
-                composition.merge(villager.get(n).getKey(), -1, Integer::sum);
-            }
-
-        }
+        onComposition(playerSize, 3, 0, roles, RandomCompositionAttribute.VILLAGER, composition, multipleRole);
 
         while (composition.values().stream().mapToInt(value -> value).sum() < playerSize) {
             composition.merge(RolesBase.VILLAGER.getKey(), 1, Integer::sum);
         }
 
         return composition;
+    }
+
+
+    private void onComposition(int playerSize, int proportion, int weight, Set<RoleRegister> pool, RandomCompositionAttribute randomCompositionAttribute, Map<String, Integer> composition, boolean multipleRole) {
+
+        List<RoleRegister> poolAttribute = pool
+                .stream()
+                .filter(roleRegister -> roleRegister.getRandomCompositionAttribute()
+                        .equals(randomCompositionAttribute))
+                .collect(Collectors.toList());
+
+        while (playerSize > composition.values().stream().mapToInt(value -> value).sum() && playerSize / proportion > weight && !poolAttribute.isEmpty()) {
+
+            int n = (int) Math.floor(main.getWereWolfAPI().getRandom().nextFloat() * poolAttribute.size());
+
+            int number = poolAttribute.get(n)
+                    .isRequireDouble() ? playerSize > composition.values().stream().mapToInt(value -> value).sum() + 1 ? 2 : 0 : 1;
+
+            weight += poolAttribute.get(n).getWeight() * number;
+            composition.merge(poolAttribute.get(n).getKey(), number, Integer::sum);
+            if (poolAttribute.get(n).getRequireRole().isPresent() && composition.get(poolAttribute.get(n).getRequireRole().get()) == 0) {
+                if (playerSize > composition.values().stream().mapToInt(value -> value).sum()) {
+                    composition.merge(poolAttribute.get(n).getRequireRole().get(), 1, Integer::sum);
+                } else {
+                    composition.remove(poolAttribute.get(n).getKey());
+                }
+            }
+
+            if (!multipleRole) {
+                poolAttribute.remove(n);
+            }
+        }
     }
 }

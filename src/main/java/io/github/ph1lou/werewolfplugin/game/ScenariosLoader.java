@@ -4,7 +4,12 @@ import io.github.ph1lou.werewolfapi.LoverAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.listeners.*;
+import io.github.ph1lou.werewolfplugin.listeners.ChatListener;
+import io.github.ph1lou.werewolfplugin.listeners.CycleListener;
+import io.github.ph1lou.werewolfplugin.listeners.EnchantmentListener;
+import io.github.ph1lou.werewolfplugin.listeners.PatchPotions;
+import io.github.ph1lou.werewolfplugin.listeners.PlayerListener;
+import io.github.ph1lou.werewolfplugin.listeners.SmallFeaturesListener;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -66,8 +71,8 @@ public class ScenariosLoader {
 
         main.getRegisterManager().getConfigsRegister()
                 .stream()
-                .filter(configRegister -> configRegister.getConfig() != null)
-                .forEach(configRegister -> configRegister.getConfig().register(game.getConfig()
+                .filter(configRegister -> configRegister.getConfig().isPresent())
+                .forEach(configRegister -> configRegister.getConfig().get().register(game.getConfig()
                         .isConfigActive(configRegister.getKey())));
     }
 }

@@ -397,7 +397,7 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		tabManager.unregisterPlayer(event.getPlayer());
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onJoin(PlayerJoinEvent event) {
 		tabManager.registerPlayer(event.getPlayer());
 	}

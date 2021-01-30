@@ -34,6 +34,7 @@ public class EnchantmentListener implements Listener {
         if(!event.getInventory().getType().equals(InventoryType.ANVIL)) return;
         if(event.getSlot()!=2) return;
         ItemStack current = event.getCurrentItem();
+
         if (current == null) return;
         if (current.getEnchantments().isEmpty()) {
             if (current.getType().equals(Material.ENCHANTED_BOOK)) {

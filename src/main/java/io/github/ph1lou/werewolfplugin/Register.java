@@ -786,32 +786,28 @@ public class Register implements RegisterManager {
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.FALSIFIER_WEREWOLF.getKey(), FalsifierWereWolf.class)
-                            .addCategory(Category.WEREWOLF)
-                            .setWeight(1.5f));
+                            .addCategory(Category.WEREWOLF));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.NAUGHTY_LITTLE_WOLF.getKey(), NaughtyLittleWolf.class)
-                            .addCategory(Category.WEREWOLF)
-                            .setWeight(1.5f));
+                            .addCategory(Category.WEREWOLF));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.INFECT.getKey(), InfectFatherOfTheWolves.class)
                             .addCategory(Category.WEREWOLF)
-                            .setWeight(2f));
+                            .setWeight(1.5f));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.MISCHIEVOUS_WEREWOLF.getKey(), MischievousWereWolf.class)
-                            .addCategory(Category.WEREWOLF)
-                            .setWeight(1.5f));
+                            .addCategory(Category.WEREWOLF));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.MYSTICAL_WEREWOLF.getKey(), MysticalWereWolf.class)
-                            .addCategory(Category.WEREWOLF)
-                            .setWeight(1.5f));
+                            .addCategory(Category.WEREWOLF));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
@@ -820,26 +816,22 @@ public class Register implements RegisterManager {
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.WITCH.getKey(), Witch.class)
-                            .addCategory(Category.VILLAGER)
-                            .setWeight(2f));
+                            .addCategory(Category.VILLAGER));
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.ELDER.getKey(), Elder.class)
-                            .addCategory(Category.VILLAGER)
-                            .setWeight(2f));
+                            .addCategory(Category.VILLAGER));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.FOX.getKey(), Fox.class)
                             .addCategory(Category.VILLAGER)
-                            .setWeight(1f)
                             .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.LITTLE_GIRL.getKey(), LittleGirl.class)
-                            .addCategory(Category.VILLAGER)
-                            .setWeight(1.2f));
+                            .addCategory(Category.VILLAGER));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
@@ -854,7 +846,8 @@ public class Register implements RegisterManager {
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.SISTER.getKey(), Sister.class)
-                            .addCategory(Category.VILLAGER));
+                            .addCategory(Category.VILLAGER)
+                            .setRequireDouble());
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
@@ -864,7 +857,8 @@ public class Register implements RegisterManager {
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.SIAMESE_TWIN.getKey(), SiameseTwin.class)
-                            .addCategory(Category.VILLAGER));
+                            .addCategory(Category.VILLAGER)
+                            .setRequireDouble());
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",

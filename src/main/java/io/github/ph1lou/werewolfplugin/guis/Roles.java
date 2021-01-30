@@ -65,8 +65,8 @@ public class Roles implements InventoryProvider {
         /*contents.set(0, 5, ClickableItem.of((new ItemBuilder(UniversalMaterial.ARROW.getType())
                 .setDisplayName(game.translate("werewolf.menu.return")).build()),
                 e -> {
-                    ((Configuration)game.getConfig()).setComposition(((GameManager)game).getRandomConfig().createRandomConfig(game.getConfig().getLoverCount(LoverType.CURSED_LOVER.getKey()),new HashSet<>()));
-                    game.getScore().setRole(game.getScore().getPlayerSize());
+                    ((Configuration)game.getConfig()).setComposition(((GameManager)game).getRandomConfig().createRandomConfig(game.getConfig().getLoverCount(LoverType.CURSED_LOVER.getKey()),new HashSet<>(),false));
+                    game.getScore().setRole(game.getConfig().getLoverCount(LoverType.CURSED_LOVER.getKey()));
                 }));*/
 
         contents.set(0, 8, ClickableItem.of((new ItemBuilder(UniversalMaterial.BARRIER.getType()).setDisplayName(game.translate("werewolf.menu.roles.zero")).build()), e -> {
@@ -205,8 +205,8 @@ public class Roles implements InventoryProvider {
                 roleRegister.getLoreKey().stream().map(game::translate).map(s -> Arrays.stream(s.split("\\n")).collect(Collectors.toList())).forEach(lore2::addAll);
                 if (config.getRoleCount(key) > 0) {
                     items.add(ClickableItem.of((
-                            new ItemBuilder(roleRegister.getItem() != null ?
-                                    roleRegister.getItem() :
+                            new ItemBuilder(roleRegister.getItem().isPresent() ?
+                                    roleRegister.getItem().get() :
                                     UniversalMaterial.GREEN_TERRACOTTA.getStack())
                                     .setAmount(config.getRoleCount(key))
                                     .setLore(lore2)
@@ -221,13 +221,18 @@ public class Roles implements InventoryProvider {
                             selectMinus(game, roleRegister.getKey());
                         }
                     }));
-                } else{
+                } else {
 
-                    if(roleRegister.getItem()!=null){
-                        lore2.add(0,game.translate("werewolf.utils.none"));
+                    if (roleRegister.getItem().isPresent()) {
+                        lore2.add(0, game.translate("werewolf.utils.none"));
                     }
 
-                    items.add(ClickableItem.of((new ItemBuilder(roleRegister.getItem() != null ? roleRegister.getItem() : UniversalMaterial.RED_TERRACOTTA.getStack()).setAmount(1).setLore(lore2).setDisplayName(game.translate(roleRegister.getKey())).build()), e -> {
+                    items.add(ClickableItem.of((new ItemBuilder(roleRegister.getItem().isPresent() ?
+                            roleRegister.getItem().get() :
+                            UniversalMaterial.RED_TERRACOTTA.getStack())
+                            .setAmount(1)
+                            .setLore(lore2)
+                            .setDisplayName(game.translate(roleRegister.getKey())).build()), e -> {
 
                         if (e.isShiftClick()) {
                             manageStuff(main, player, key);

@@ -151,6 +151,7 @@
       },
       "rival": {
         "display": "Rival",
+        "extra": "Vous avez le droit à un arc Puissance §b%d",
         "item": "Deux potions de dégats",
         "description": "Lors de l'annonce du couple vous obtiendrez le rôle de deux personnes formant un couple. Dans §b%s§r, vous obtiendrez une liste de 5 joueurs contenant les noms des deux amoureux. \nSi vous tuez un membre du couple, vous prendrez sa place et devrez gagner avec son couple. \nEn revanche, si le couple meurt, vous devrez gagner seul avec une barre de vie réduite de 2 coeurs permanents. Vous connaissez la direction du cupidon si il est présent dans la partie.",
         "lover": "[§eLG UHC§r] Votre couple associé de la partie se compose d'un §b%s§f et d'un §b%s§f.",
@@ -229,6 +230,7 @@
         "thief": "Voleur §fvolé §b%s",
         "description": "Vous récupérez le rôle de la première personne que vous tuez et devrez gagner avec son Camp.",
         "description2": "Vous récupérez le rôle de la première personne que vous tuez.",
+        "effect": "§bEffet§f : Résistance jusqu’au nouveau rôle\n",
         "realized_theft": "[§eLG UHC§r] Vous devenez §b%s"
       },
       "detective": {
@@ -447,7 +449,7 @@
       "command": "vote"
     },
     "announcement": {
-      "restart": "[§6LG UHC§r] Redémarrage de la partie dans §b%s§f secondes",
+      "restart": "[§6LG UHC§r] Redémarrage de la partie dans §b%s",
       "pvp": "[§6LG UHC§r] PVP activé",
       "border": "[§6LG UHC§r] La bordure commence à se déplacer",
       "mining": "[§6LG UHC§r] Minage Désactivé",

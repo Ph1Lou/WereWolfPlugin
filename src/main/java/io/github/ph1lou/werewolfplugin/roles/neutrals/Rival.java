@@ -9,6 +9,7 @@ import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
 import io.github.ph1lou.werewolfapi.events.AmnesiacLoverDeathEvent;
+import io.github.ph1lou.werewolfapi.events.EnchantmentEvent;
 import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.LoverDeathEvent;
 import io.github.ph1lou.werewolfapi.events.RevealLoversEvent;
@@ -24,6 +25,7 @@ import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
 import io.github.ph1lou.werewolfplugin.roles.lovers.Lover;
 import org.bukkit.Bukkit;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -68,7 +70,9 @@ public class Rival extends RolesNeutral implements Power {
                                 game.getScore().conversion(
                                         Math.abs(game.getConfig().getTimerValue(TimersBase.ROLE_DURATION.getKey()))
                                                 + Math.abs(game.getConfig().getTimerValue(TimersBase.RIVAL_DURATION.getKey())))))
-                + game.translate("werewolf.description.item", game.translate("werewolf.role.rival.item"));
+                + game.translate("werewolf.description.item", game.translate("werewolf.role.rival.item")) +
+                game.translate("werewolf.description.equipment",
+                        game.translate("werewolf.role.rival.extra", game.getConfig().getLimitPowerBow() + 1));
 
     }
 
@@ -102,6 +106,18 @@ public class Rival extends RolesNeutral implements Power {
         List<PlayerWW> lovers = new ArrayList<>(loverAPI.getLovers());
 
         getPlayerWW().sendMessage(game.translate("werewolf.role.rival.lover", lovers.isEmpty() ? "" : game.translate(lovers.get(0).getRole().getKey()), lovers.size() == 2 ? game.translate(lovers.get(1).getRole().getKey()) : ""));
+    }
+
+    @EventHandler
+    public void onEnchantment(EnchantmentEvent event) {
+
+        if (!event.getPlayerWW().equals(getPlayerWW())) return;
+
+        if (event.getEnchants().containsKey(Enchantment.ARROW_DAMAGE)) {
+            event.getFinalEnchants().put(Enchantment.ARROW_DAMAGE,
+                    Math.min(event.getEnchants().get(Enchantment.ARROW_DAMAGE),
+                            game.getConfig().getLimitPowerBow() + 1));
+        }
     }
 
     @EventHandler

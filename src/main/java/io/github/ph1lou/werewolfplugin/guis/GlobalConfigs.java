@@ -85,8 +85,8 @@ public class GlobalConfigs implements InventoryProvider {
                         if (!incompatible.isPresent() || config.isConfigActive(key)) {
                             config.switchConfigValue(key);
 
-                            if (configRegister.getConfig() != null) {
-                                configRegister.getConfig().register(config.isConfigActive(key));
+                            if (configRegister.getConfig().isPresent()) {
+                                configRegister.getConfig().get().register(config.isConfigActive(key));
                             }
                         }
 

@@ -82,7 +82,7 @@ public class ScenariosGUI implements InventoryProvider {
                     .ifPresent(s -> lore.add(game.translate("werewolf.menu.scenarios.incompatible", s)));
 
 
-            items.add(ClickableItem.of((new ItemBuilder(scenarioRegister.getItem() != null ? scenarioRegister.getItem() : itemStack)
+            items.add(ClickableItem.of((new ItemBuilder(scenarioRegister.getItem().isPresent() ? scenarioRegister.getItem().get() : itemStack)
                     .setDisplayName(game.translate(scenarioRegister.getKey()))
                     .setLore(lore).build()), e -> {
 

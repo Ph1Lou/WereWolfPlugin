@@ -37,6 +37,8 @@ public class Triple extends ListenerManager {
                             .map(loverAPI -> (Lover) loverAPI)
                             .collect(Collectors.toList());
 
+                    if (lovers.isEmpty()) return;
+
                     Lover lover = lovers.get((int) Math.floor(
                             game.getRandom().nextFloat() * lovers.size()));
 

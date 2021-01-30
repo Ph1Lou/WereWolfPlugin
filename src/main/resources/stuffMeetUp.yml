@@ -223,5 +223,16 @@ death_loot:
     type: POTION
     damage: 16460
     amount: 2
-
-
+  '1':
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        ARROW_KNOCKBACK: 1
+        ARROW_DAMAGE: 2
+  '2':
+    ==: org.bukkit.inventory.ItemStack
+    type: ARROW
+    amount: 64

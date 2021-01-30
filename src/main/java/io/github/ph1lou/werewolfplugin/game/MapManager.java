@@ -6,7 +6,14 @@ import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.worldloader.WorldFillTask;
 import org.apache.commons.io.FileUtils;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.WorldBorder;
+import org.bukkit.WorldCreator;
+import org.bukkit.WorldType;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
@@ -14,7 +21,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 
 
 public class MapManager implements MapManagerAPI {
@@ -45,7 +51,9 @@ public class MapManager implements MapManagerAPI {
             wft = new WorldFillTask(world, chunksPerRun, mapRadius);
             wft.setTaskID(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(game.getMain(), wft, 1, 1));
             sender.sendMessage(game.translate("werewolf.commands.admin.generation.perform"));
-        } else sender.sendMessage(game.translate("werewolf.commands.admin.generation.already_start"));
+        } else {
+            sender.sendMessage(game.translate("werewolf.commands.admin.generation.already_start"));
+        }
     }
 
 
@@ -56,7 +64,7 @@ public class MapManager implements MapManagerAPI {
 
     public void createMap(boolean roofed) {
         Bukkit.broadcastMessage(main.getWereWolfAPI().translate("werewolf.commands.admin.preview.create"));
-        WorldCreator wc = new WorldCreator("werewolf");
+        WorldCreator wc = new WorldCreator("werewolf_map");
         wc.environment(World.Environment.NORMAL);
         wc.type(WorldType.NORMAL);
         this.world = wc.createWorld();
@@ -71,9 +79,7 @@ public class MapManager implements MapManagerAPI {
     @Override
     public void loadMap(@Nullable File map) throws IOException {
 
-        File werewolfWorld = Objects.requireNonNull(
-                Bukkit.getWorld("werewolf")).getWorldFolder();
-
+        File werewolfWorld = this.world.getWorldFolder();
 
         deleteMap();
 
