@@ -87,10 +87,10 @@ public class CatEyes extends ListenerManager {
                                             false));
                         });
                 Bukkit.getPluginManager().registerEvents(this, (Plugin) main);
-                setRegister(true);
+                register = true;
             }
         } else if (isRegister()) {
-            setRegister(false);
+            register = false;
             HandlerList.unregisterAll(this);
 
             Bukkit.getOnlinePlayers()

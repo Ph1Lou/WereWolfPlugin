@@ -230,9 +230,13 @@
         "display": "Voleur",
         "thief": "Voleur §fvolé §b%s",
         "description": "Vous récupérez le rôle de la première personne que vous tuez et devrez gagner avec son Camp.",
-        "description2": "Vous récupérez le rôle de la première personne que vous tuez.",
-        "effect": "§bEffet§f : Résistance jusqu’au nouveau rôle\n",
+        "effect": "§bEffet§f : Résistance jusqu’à son premier meurtre\n",
         "realized_theft": "[§eLG UHC§r] Vous devenez §b%s"
+      },
+      "imitator": {
+        "display": "Imitateur",
+        "effect": "§bEffet§f : Force jusqu’à son premier meurtre\n",
+        "description": "Vous récupérez le rôle de la première personne que vous tuez."
       },
       "detective": {
         "display": "Détective",
@@ -451,7 +455,7 @@
       "command": "vote"
     },
     "lone_wolf": {
-      "message": "[§cLG UHC§r] Vous êtes le Loup Solitaire, vous devez gagner Seul. Pour cela, vous gagnez cinq coeurs permanents supplémentaires"
+      "message": "[§cLG UHC§r] Vous êtes le Loup Solitaire. A partir de maintenant,vous devez gagner Seul. Pour cela, vous bénéficiez de quatres coeurs permanents supplémentaires (dans la limite de 15 coeurs max)"
     },
     "announcement": {
       "restart": "[§6LG UHC§r] Redémarrage de la partie dans §b%s",
@@ -492,11 +496,12 @@
     },
     "end": {
       "thief": "§e il a volé un(e) %s",
-      "infect": " infecté(e) ",
+      "infect": " infecté(e)",
+      "solitary": " solitaire",
       "reveal_death": "§e§m%s était %s",
-      "transform": "transformé ",
+      "transform": " transformé",
       "reveal": "§e%s était %s",
-      "model": " modèle %s ",
+      "model": " modèle %s",
       "death": "§cDe la Mort",
       "lover": " en couple avec %s",
       "cursed_lover": " en couple maudit avec %s",
@@ -890,7 +895,6 @@
       },
       "global": {
         "command": "regles",
-        "evil_thief": "Le voleur gagne Neutre",
         "description": "Pour voir la configuration générale",
         "name": "Configuration §bGlobale",
         "victory_couple": "Les Couples ne peuvent gagner qu'en Couple",
@@ -1077,7 +1081,7 @@
     },
     "description": {
       "_": "§b================================\n",
-      "role": "§fVous êtes §b%s\n",
+      "role": "§fVous êtes §b%s",
       "description": "§bDescription :§f %s\n",
       "camp": "§fCamp des §b%s\n",
       "power": "§bPouvoir : §f%s\n",

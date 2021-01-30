@@ -40,11 +40,11 @@ public class CompassMiddle extends ListenerManager {
                         .forEach(player -> player.setCompassTarget(player
                                 .getWorld()
                                 .getSpawnLocation()));
-                setRegister(true);
+                register = true;
             }
         } else if (isRegister()) {
 
-            setRegister(false);
+            register = false;
             HandlerList.unregisterAll(this);
             Bukkit.getOnlinePlayers()
                     .stream()

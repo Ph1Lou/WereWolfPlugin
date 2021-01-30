@@ -141,6 +141,7 @@ import io.github.ph1lou.werewolfplugin.roles.neutrals.Assassin;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.FallenAngel;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.FlutePlayer;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.GuardianAngel;
+import io.github.ph1lou.werewolfplugin.roles.neutrals.Imitator;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.Rival;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.SerialKiller;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.Succubus;
@@ -994,6 +995,11 @@ public class Register implements RegisterManager {
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
+                            RolesBase.IMITATOR.getKey(), Imitator.class)
+                            .addCategory(Category.NEUTRAL));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
                             RolesBase.PRIESTESS.getKey(), Priestess.class)
                             .addCategory(Category.VILLAGER)
                             .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION));
@@ -1126,10 +1132,6 @@ public class Register implements RegisterManager {
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.VICTORY_LOVERS.getKey())
                         .addConfig(new VictoryLovers(main)));
-
-        configsRegister
-                .add(new ConfigRegister("werewolf.name",
-                        ConfigsBase.EVIL_THIEF.getKey()));
 
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
