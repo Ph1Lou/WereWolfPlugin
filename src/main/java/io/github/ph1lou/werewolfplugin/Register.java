@@ -1129,6 +1129,14 @@ public class Register implements RegisterManager {
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.EVIL_THIEF.getKey()));
+
+        configsRegister
+                .add(new ConfigRegister("werewolf.name",
+                        ConfigsBase.HIDE_SCENARIOS.getKey()));
+
+        configsRegister
+                .add(new ConfigRegister("werewolf.name",
+                        ConfigsBase.HIDE_EVENTS.getKey()));
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.CHAT.getKey())

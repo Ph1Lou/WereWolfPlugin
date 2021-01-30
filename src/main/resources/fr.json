@@ -776,6 +776,7 @@
         "enable": "§2Activé§f pour tous"
       },
       "scenarios": {
+        "disable": "[§cLG UHC§r] L'affichage des scénarios est désactivés",
         "list": "[§aLG UHC§r] Liste des Scénarios §bactivés§f :\n",
         "command": "scenarios",
         "no_nether": "NoNether",
@@ -795,6 +796,7 @@
         "fast_smelting": "FastMelting",
         "compass_target_last_death": "DeathCompass",
         "xp_boost": "XPBoost",
+        "compass_middle": "MiddleCompass",
         "hastey_boys": "HasteyBoys",
         "no_name_tag": "NoNameTag",
         "rod_less": "RodLess",
@@ -855,6 +857,7 @@
         "list": "[§aLG UHC§r] Liste des évènements aléatoires §bactivés§f :\n",
         "name": "Configuration §bEvents",
         "command": "events",
+        "disable": "[§cLG UHC§r] L'affichage des events aléatoires est désactivés",
         "description": "Pour voir les Events Aléatoires",
         "command_message": "§b%s §f(probabilité §b%d%%§f)",
         "probability": "§fProbabilité : §b%d§f%%"
@@ -889,7 +892,6 @@
         "victory_couple": "Les Couples ne peuvent gagner qu'en Couple",
         "chat": "Chat",
         "werewolf_chat": "Chat des Loups Garous",
-        "compass_middle": "La boussole pointe vers le centre",
         "show_role_to_death": "Affiche le Rôle à la Mort",
         "show_role_category_to_death": "Affiche la Catégorie du Rôle à la Mort",
         "auto_rez_witch": "la Sorcière peut se ressusciter elle même",
@@ -897,6 +899,8 @@
         "vote": "Vote",
         "hide_composition": "Composition Cachée",
         "red_name_tag": "Pseudo des Loups Garous en rouge",
+        "hide_scenarios": "Cache les Scenarios",
+        "hide_events": "Cache les Events",
         "seer_every_other_day": "Voyante tous les deux jours",
         "detective_every_other_day": "Detective tous les deux jours",
         "proximity_chat": "Chat de Proximité",

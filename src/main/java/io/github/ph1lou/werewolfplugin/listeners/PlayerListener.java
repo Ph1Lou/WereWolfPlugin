@@ -422,8 +422,6 @@ public class PlayerListener implements Listener {
 				}
 				playerWW.setItemDeath(inv.getContents());
 			}
-
-
 			playerWW.setDeathTime(game.getScore().getTimer());
 		}
 
@@ -432,8 +430,6 @@ public class PlayerListener implements Listener {
 		if (playerWW.isThief()) {
 			roleLG = RolesBase.THIEF.getKey();
 		}
-
-		game.getConfig().removeOneRole(roleLG);
 
 		AnnouncementDeathEvent announcementDeathEvent = new AnnouncementDeathEvent(playerWW,
 				"werewolf.announcement.death_message");
@@ -449,6 +445,10 @@ public class PlayerListener implements Listener {
 					game.translate(announcementDeathEvent.getRole()));
 
 			Bukkit.broadcastMessage(deathMessage);
+
+			game.getConfig().removeOneRole(announcementDeathEvent.getRole());
+		} else {
+			game.getConfig().removeOneRole(roleLG);
 		}
 
 		playerWW.setState(StatePlayer.DEATH);
