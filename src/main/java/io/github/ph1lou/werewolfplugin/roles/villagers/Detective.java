@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
@@ -18,6 +19,7 @@ public class Detective extends RolesWithLimitedSelectionDuration implements Affe
 
 
     private final List<PlayerWW> affectedPlayer = new ArrayList<>();
+    private int dayNumber = -8;
 
     public Detective(GetWereWolfAPI main, PlayerWW playerWW, String key) {
         super(main, playerWW, key);
@@ -50,6 +52,13 @@ public class Detective extends RolesWithLimitedSelectionDuration implements Affe
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
+
+        if (game.getConfig().isConfigActive(ConfigsBase.DETECTIVE_EVERY_OTHER_DAY.getKey()) &&
+                event.getNumber() == dayNumber + 1) {
+            return;
+        }
+
+        dayNumber = event.getNumber();
 
         setPower(true);
 

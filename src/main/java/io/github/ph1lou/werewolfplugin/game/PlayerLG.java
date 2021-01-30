@@ -4,6 +4,7 @@ package io.github.ph1lou.werewolfplugin.game;
 import io.github.ph1lou.werewolfapi.LoverAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.PotionAction;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
@@ -49,6 +50,7 @@ public class PlayerLG implements PlayerWW {
     private int kill = 0;
     private boolean thief = false;
     private String name;
+    private final WereWolfAPI game;
 
 
     public PlayerLG(Main main, Player player) {
@@ -57,6 +59,7 @@ public class PlayerLG implements PlayerWW {
         this.name = player.getName();
         this.role = new Villager(main, this,
                 RolesBase.VILLAGER.getKey());
+        this.game = main.getWereWolfAPI();
     }
 
     @Override
@@ -131,6 +134,11 @@ public class PlayerLG implements PlayerWW {
         }
 
         disconnectedMessages.add(new TextComponent(message));
+    }
+
+    @Override
+    public void sendMessageWithKey(String key) {
+        this.sendMessage(game.translate(key));
     }
 
     @Override

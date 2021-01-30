@@ -8,6 +8,7 @@ import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.AnnouncementDeathEvent;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
+import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTag;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesWithLimitedSelectionDuration;
@@ -49,6 +50,21 @@ public class Priestess extends RolesWithLimitedSelectionDuration implements Affe
     @Override
     public List<PlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
+    }
+
+
+    @EventHandler
+    public void onDeath(FinalDeathEvent event) {
+
+        if (!this.affectedPlayer.contains(event.getPlayerWW())) return;
+
+        if (!event.getPlayerWW().getRole().isWereWolf()) return;
+
+        getPlayerWW().sendMessageWithKey("werewolf.role.priestess.werewolf_death");
+
+        this.affectedPlayer.remove(event.getPlayerWW());
+
+        getPlayerWW().addPlayerMaxHealth(2);
     }
 
     @EventHandler

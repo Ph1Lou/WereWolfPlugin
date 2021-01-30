@@ -280,6 +280,7 @@
         "items": "Quatre Obsidiennes",
         "is_werewolf": "[§cLG UHC§r] §b%s§r est dans le camp des Loups Garous",
         "is_not_werewolf": "[§aLG UHC§r] §b%s§r n'est pas dans le camp des Loups Garous",
+        "werewolf_death": "[§aLG UHC§r] Un Loup Garou que vous avez espionné est mort, vous regagnez 1 coeur",
         "perform": "[§eLG UHC§r] Découvrez le camp d'un joueur à moins de §b%d§r blocs de vous avec §b/ww spec§r vous avez §b%s",
         "distance": "[§cLG UHC§r] Vous devez être à moins de 10 blocs du joueur"
       },
@@ -447,6 +448,9 @@
       "no_result": "[§6LG UHC§r] Aucun joueur n'a été voté plus d'une fois",
       "vote_time": "§b§m§l-+-----------------------------------+-\n§f[§6LG UHC§r] C'est l'heure de voter §b/ww vote§r Vous avez §b%s\n§r§b§m§l-+-----------------------------------+-",
       "command": "vote"
+    },
+    "lone_wolf": {
+      "message": "[§cLG UHC§r] Vous êtes le Loup Solitaire, vous devez gagner Seul. Pour cela, vous gagnez cinq coeurs permanents supplémentaires"
     },
     "announcement": {
       "restart": "[§6LG UHC§r] Redémarrage de la partie dans §b%s",
@@ -894,8 +898,10 @@
         "hide_composition": "Composition Cachée",
         "red_name_tag": "Pseudo des Loups Garous en rouge",
         "seer_every_other_day": "Voyante tous les deux jours",
+        "detective_every_other_day": "Detective tous les deux jours",
         "proximity_chat": "Chat de Proximité",
         "double_troll": "Double Troll",
+        "lone_wolf": "Loup Solitaire",
         "incompatible": "§cConfiguration incompatible chargée : §b%s"
       },
       "border": {

@@ -98,6 +98,7 @@ import io.github.ph1lou.werewolfplugin.commands.utilities.CommandRules;
 import io.github.ph1lou.werewolfplugin.commands.utilities.CommandScenarios;
 import io.github.ph1lou.werewolfplugin.commands.utilities.CommandTimer;
 import io.github.ph1lou.werewolfplugin.commands.utilities.CommandVote;
+import io.github.ph1lou.werewolfplugin.listeners.configs.LoneWolf;
 import io.github.ph1lou.werewolfplugin.listeners.configs.RedNameTag;
 import io.github.ph1lou.werewolfplugin.listeners.configs.ShowDeathCategoryRole;
 import io.github.ph1lou.werewolfplugin.listeners.configs.ShowDeathRole;
@@ -1182,6 +1183,16 @@ public class Register implements RegisterManager {
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.SEER_EVERY_OTHER_DAY.getKey())
                         .setDefaultValue());
+
+        configsRegister
+                .add(new ConfigRegister("werewolf.name",
+                        ConfigsBase.DETECTIVE_EVERY_OTHER_DAY.getKey()));
+
+        configsRegister
+                .add(new ConfigRegister("werewolf.name",
+                        ConfigsBase.LONE_WOLF.getKey())
+                        .addConfig(new LoneWolf(main)));
+
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.PROXIMITY_CHAT.getKey()));
