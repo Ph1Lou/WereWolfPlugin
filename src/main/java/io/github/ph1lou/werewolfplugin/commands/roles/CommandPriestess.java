@@ -39,24 +39,24 @@ public class CommandPriestess implements Commands {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            player.sendMessage(game.translate("werewolf.check.offline_player"));
+            playerWW.sendMessageWithKey("werewolf.check.offline_player");
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         PlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            player.sendMessage(game.translate("werewolf.check.player_not_found"));
+            playerWW.sendMessageWithKey("werewolf.check.player_not_found");
             return;
         }
 
         if (!player.getWorld().equals(playerArg.getWorld()) || player.getLocation().distance(playerArg.getLocation()) > game.getConfig().getDistancePriestess()) {
-            player.sendMessage(game.translate("werewolf.role.priestess.distance"));
+            playerWW.sendMessageWithKey("werewolf.role.priestess.distance");
             return;
         }
 
         if (player.getHealth() < 5) {
-            player.sendMessage(game.translate("werewolf.role.seer.not_enough_life"));
+            playerWW.sendMessageWithKey("werewolf.role.seer.not_enough_life");
         } else {
             Roles role1 = playerWW1.getRole();
 
@@ -71,7 +71,7 @@ public class CommandPriestess implements Commands {
             Bukkit.getPluginManager().callEvent(priestessEvent);
 
             if (priestessEvent.isCancelled()) {
-                player.sendMessage(game.translate("werewolf.check.cancel"));
+                playerWW.sendMessageWithKey("werewolf.check.cancel");
                 return;
             }
 
@@ -79,7 +79,7 @@ public class CommandPriestess implements Commands {
 
             playerWW.removePlayerMaxHealth(4);
 
-            player.sendMessage(game.translate(priestessEvent.getCamp(), playerArg.getName()));
+            playerWW.sendMessageWithKey(priestessEvent.getCamp(), playerArg.getName());
 
         }
     }

@@ -35,40 +35,39 @@ public class CommandSuccubus implements Commands {
 
         Roles succubus = playerWW.getRole();
 
-
         if (!((AffectedPlayers) succubus).getAffectedPlayers().isEmpty()) {
-            player.sendMessage(game.translate("werewolf.check.power"));
+            playerWW.sendMessageWithKey("werewolf.check.power");
             return;
         }
 
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            player.sendMessage(game.translate("werewolf.check.offline_player"));
+            playerWW.sendMessageWithKey("werewolf.check.offline_player");
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         PlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
         if (argUUID.equals(uuid)) {
-            player.sendMessage(game.translate("werewolf.check.not_yourself"));
+            playerWW.sendMessageWithKey("werewolf.check.not_yourself");
             return;
         }
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            player.sendMessage(game.translate("werewolf.check.player_not_found"));
+            playerWW.sendMessageWithKey("werewolf.check.player_not_found");
             return;
         }
 
         Location location = player.getLocation();
         Location locationTarget = playerArg.getLocation();
 
-        try {
+        if (player.getWorld().equals(playerArg.getWorld())) {
             if (location.distance(locationTarget) > game.getConfig().getDistanceSuccubus()) {
-                player.sendMessage(game.translate("werewolf.role.succubus.not_enough_near"));
+                playerWW.sendMessageWithKey("werewolf.role.succubus.not_enough_near");
                 return;
             }
-        } catch (Exception ignored) {
+        } else {
             return;
         }
 
@@ -77,11 +76,11 @@ public class CommandSuccubus implements Commands {
         Bukkit.getPluginManager().callEvent(beginCharmEvent);
 
         if (beginCharmEvent.isCancelled()) {
-            player.sendMessage(game.translate("werewolf.check.cancel"));
+            playerWW.sendMessageWithKey("werewolf.check.cancel");
             return;
         }
 
         ((AffectedPlayers) succubus).addAffectedPlayer(playerWW1);
-        player.sendMessage(game.translate("werewolf.role.succubus.charming_beginning", playerArg.getName()));
+        playerWW.sendMessageWithKey("werewolf.role.succubus.charming_beginning", playerArg.getName());
     }
 }

@@ -63,8 +63,8 @@ public class Detective extends RolesWithLimitedSelectionDuration implements Affe
         setPower(true);
 
 
-        getPlayerWW().sendMessage(game.translate("werewolf.role.detective.inspection_message",
-                game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.POWER_DURATION.getKey()))));
+        getPlayerWW().sendMessageWithKey("werewolf.role.detective.inspection_message",
+                game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.POWER_DURATION.getKey())));
     }
 
 

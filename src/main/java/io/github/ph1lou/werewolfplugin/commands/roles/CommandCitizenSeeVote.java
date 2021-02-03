@@ -31,12 +31,12 @@ public class CommandCitizenSeeVote implements Commands {
         Citizen citizen = (Citizen) playerWW.getRole();
 
         if (citizen.getUse() >= 2) {
-            player.sendMessage(game.translate("werewolf.check.power"));
+            playerWW.sendMessageWithKey("werewolf.check.power");
             return;
         }
 
         if (!game.getVote().isStatus(VoteStatus.WAITING_CITIZEN)) {
-            player.sendMessage(game.translate("werewolf.check.power"));
+            playerWW.sendMessageWithKey("werewolf.check.power");
             return;
         }
 

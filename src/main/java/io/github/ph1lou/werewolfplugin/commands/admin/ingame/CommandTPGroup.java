@@ -65,7 +65,8 @@ public class CommandTPGroup implements Commands {
                     if (p.getLocation().distance(location) <= d) {
                         size--;
                         sb.append(p.getName()).append(" ");
-                        game.getMapManager().transportation(playerWW1, r, game.translate("werewolf.commands.admin.tp_group.perform", playerName));
+                        playerWW1.sendMessageWithKey("werewolf.commands.admin.tp_group.perform", playerName);
+                        game.getMapManager().transportation(playerWW1, r);
                     }
                 } catch (Exception ignored) {
 

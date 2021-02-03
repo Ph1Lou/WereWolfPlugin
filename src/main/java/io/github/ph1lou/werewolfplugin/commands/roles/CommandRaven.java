@@ -11,7 +11,6 @@ import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.UUID;
@@ -38,19 +37,19 @@ public class CommandRaven implements Commands {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            player.sendMessage(game.translate("werewolf.check.offline_player"));
+            playerWW.sendMessageWithKey("werewolf.check.offline_player");
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         PlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            player.sendMessage(game.translate("werewolf.check.player_not_found"));
+            playerWW.sendMessageWithKey("werewolf.check.player_not_found");
             return;
         }
 
         if (((AffectedPlayers) raven).getAffectedPlayers().contains(playerWW1)) {
-            player.sendMessage(game.translate("werewolf.check.already_get_power"));
+            playerWW.sendMessageWithKey("werewolf.check.already_get_power");
             return;
         }
 
@@ -59,15 +58,14 @@ public class CommandRaven implements Commands {
         Bukkit.getPluginManager().callEvent(curseEvent);
 
         if (curseEvent.isCancelled()) {
-            player.sendMessage(game.translate("werewolf.check.cancel"));
+            playerWW.sendMessageWithKey("werewolf.check.cancel");
             return;
         }
 
         ((AffectedPlayers) raven).clearAffectedPlayer();
         ((AffectedPlayers) raven).addAffectedPlayer(playerWW1);
-        playerArg.removePotionEffect(PotionEffectType.JUMP);
-        playerArg.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 1, false, false));
-        playerArg.sendMessage(game.translate("werewolf.role.raven.get_curse"));
-        player.sendMessage(game.translate("werewolf.role.raven.curse_perform", playerArg.getName()));
+        playerWW1.addPotionEffect(PotionEffectType.JUMP);
+        playerWW1.sendMessageWithKey("werewolf.role.raven.get_curse");
+        playerWW.sendMessageWithKey("werewolf.role.raven.curse_perform", playerArg.getName());
     }
 }

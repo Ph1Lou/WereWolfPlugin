@@ -5,7 +5,10 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
-import io.github.ph1lou.werewolfapi.events.*;
+import io.github.ph1lou.werewolfapi.events.DayEvent;
+import io.github.ph1lou.werewolfapi.events.EnchantedEvent;
+import io.github.ph1lou.werewolfapi.events.SelectionEndEvent;
+import io.github.ph1lou.werewolfapi.events.WinConditionsCheckEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
@@ -37,7 +40,7 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
 
         setPower(false);
 
-        getPlayerWW().sendMessage(game.translate("werewolf.check.end_selection"));
+        getPlayerWW().sendMessageWithKey("werewolf.check.end_selection");
     }
 
 
@@ -70,9 +73,9 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
 
         setPower(true);
 
-        getPlayerWW().sendMessage(game.translate("werewolf.role.flute_player.power",
+        getPlayerWW().sendMessageWithKey("werewolf.role.flute_player.power",
                 game.getScore()
-                        .conversion(game.getConfig().getTimerValue(TimersBase.POWER_DURATION.getKey()))));
+                        .conversion(game.getConfig().getTimerValue(TimersBase.POWER_DURATION.getKey())));
     }
 
 
@@ -132,13 +135,13 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
         String enchantedList = enchantedList();
 
         for (PlayerWW playerWW : affectedPlayer) {
-            playerWW.sendMessage(enchantedList);
+            playerWW.sendMessageWithKey("werewolf.role.flute_player.list", enchantedList);
         }
     }
 
 
     public String enchantedList() {
-        StringBuilder sb = new StringBuilder(game.translate("werewolf.role.flute_player.list"));
+        StringBuilder sb = new StringBuilder();
 
         for (PlayerWW playerWW : affectedPlayer) {
             if (playerWW.isState(StatePlayer.ALIVE)) {
@@ -163,13 +166,5 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
         return this.power;
     }
 
-    @EventHandler
-    public void onStealEvent(StealEvent event) {
 
-        if (!event.getThiefWW().equals(getPlayerWW())) return;
-
-        if (enchantedList().isEmpty()) return;
-
-        getPlayerWW().sendMessage(enchantedList());
-    }
 }

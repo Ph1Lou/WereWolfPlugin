@@ -10,7 +10,12 @@ import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.events.SniffEvent;
 import io.github.ph1lou.werewolfapi.events.UpdateEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.*;
+import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.Display;
+import io.github.ph1lou.werewolfapi.rolesattributs.LimitedUse;
+import io.github.ph1lou.werewolfapi.rolesattributs.Power;
+import io.github.ph1lou.werewolfapi.rolesattributs.Progress;
+import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -115,8 +120,8 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
         }
 
         setPower(true);
-        getPlayerWW().sendMessage(game.translate("werewolf.role.fox.smell_message",
-                game.getConfig().getUseOfFlair() - getUse()));
+        getPlayerWW().sendMessageWithKey("werewolf.role.fox.smell_message",
+                game.getConfig().getUseOfFlair() - getUse());
     }
 
 
@@ -217,7 +222,7 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
                 player.sendMessage(game.translate("werewolf.role.fox.warn"));
                 Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
                     if (game.isState(StateGame.GAME)) {
-                        playerWW.sendMessage(game.translate("werewolf.role.fox.smell"));
+                        playerWW.sendMessageWithKey("werewolf.role.fox.smell");
                     }
                 }, 20 * 60 * 5);
             } else player.sendMessage(game.translate("werewolf.check.cancel"));

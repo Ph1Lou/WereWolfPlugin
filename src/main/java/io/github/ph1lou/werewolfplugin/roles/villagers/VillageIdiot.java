@@ -15,6 +15,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
+
 public class VillageIdiot extends RolesVillage implements Power {
 
     private boolean power = true;
@@ -73,17 +75,17 @@ public class VillageIdiot extends RolesVillage implements Power {
             return;
         }
 
-        PlayerWW killerWW = this.getPlayerWW().getLastKiller();
+        Optional<PlayerWW> killerWW = this.getPlayerWW().getLastKiller();
 
-        if (killerWW != null && !killerWW.getRole().isWereWolf()) {
+        if (killerWW.isPresent() && !killerWW.get().getRole().isWereWolf()) {
 
             setPower(false);
 
-            VillageIdiotEvent villageIdiotEvent = new VillageIdiotEvent(getPlayerWW(), killerWW);
+            VillageIdiotEvent villageIdiotEvent = new VillageIdiotEvent(getPlayerWW(), killerWW.get());
             Bukkit.getPluginManager().callEvent(villageIdiotEvent);
 
             if (villageIdiotEvent.isCancelled()) {
-                getPlayerWW().sendMessage(game.translate("werewolf.check.cancel"));
+                getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
                 return;
             }
             game.resurrection(getPlayerWW());

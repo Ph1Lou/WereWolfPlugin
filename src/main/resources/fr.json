@@ -48,7 +48,7 @@
         "display": "Enfant Sauvage",
         "model_none": "§cAucun§f désigner un modèle §b/ww modele",
         "description": "En début de partie, vous choisissez un modèle. Si celui ci meurt, vous passez dans le camp des Loups Garous.",
-        "design_model": "[§eLG UHC§r] Vous devez désigner un modèle §b/ww modele§r. Vous avez §b%s",
+        "design_model": "Vous devez désigner un modèle §b/ww modele§r. Vous avez §b%s",
         "reveal_model": "[§eLG UHC§r] Votre modèle est §b%s",
         "model_death": "§cMort§f",
         "model": "§bModele§f : %s\n",
@@ -157,8 +157,7 @@
         "description": "Lors de l'annonce du couple vous obtiendrez le rôle de deux personnes formant un couple. Dans §b%s§r, vous obtiendrez une liste de 5 joueurs contenant les noms des deux amoureux. \nSi vous tuez un membre du couple, vous prendrez sa place et devrez gagner avec son couple. \nEn revanche, si le couple meurt, vous devrez gagner seul avec une barre de vie réduite de 2 coeurs permanents. Vous connaissez la direction du cupidon si il est présent dans la partie.",
         "lover": "[§eLG UHC§r] Votre couple associé de la partie se compose d'un §b%s§f et d'un §b%s§f.",
         "find_lovers": "[§eLG UHC§r] Le couple se trouve parmi les joueurs suivants : %s, %s, %s, %s, %s",
-        "lover_death": "[§cLG UHC§r] Le couple est mort, vous êtes maintenant forcé de gagner seul, votre barre de vie est réduite de 2 coeurs.",
-        "cupid": "[§eLG UHC§r] Le cupidon a été volé ! Vous disposez maintenant de la position du nouveau cupidon."
+        "lover_death": "[§cLG UHC§r] Le couple est mort, vous êtes maintenant forcé de gagner seul, votre barre de vie est réduite de 2 coeurs."
       },
       "fox": {
         "display": "Renard",
@@ -228,7 +227,8 @@
       },
       "thief": {
         "display": "Voleur",
-        "thief": "Voleur §fvolé §b%s",
+        "thief": "vous avez §fvolé un(e) §b%s§f",
+        "details": "[§eLG UHC§r] Pour voir les détails de votre rôle §b/ww role",
         "description": "Vous récupérez le rôle de la première personne que vous tuez et devrez gagner avec son Camp.",
         "effect": "§bEffet§f : Résistance jusqu’à son premier meurtre\n",
         "realized_theft": "[§eLG UHC§r] Vous devenez §b%s"
@@ -271,11 +271,12 @@
         "display": "Voyante",
         "items": "4 Obsidiennes et 4 Bibliothèques",
         "effect": "Vision Nocturne",
+        "disable": "[§cLG UHC§r] Vous avez espionné un Villageois la dernière fois. Votre pouvoir sera réactivé pour le prochain cycle",
         "description": "Le Matin, Vous pouvez connaître le camp d'un joueur. Cependant si c'est un Villageois, vous perdrez 3 coeurs et ne pourrez pas utiliser votre pouvoir le tour suivant.",
         "see_camp_message": "[§eLG UHC§r] Découvrez le camp d'un joueur §b/ww voir§r vous avez §b%s",
         "see_perform": "[§eLG UHC§r] Vous venez d'espionner un membre du camp des §b%s",
         "not_enough_life": "[§cLG UHC§r] Vous n'avez plus assez de vie pour espionner un joueur",
-        "see_villager": "[§cLG UHC§r] Vous venez d'espionner un membre du Village vous perdez 3 coeurs et vous ne pourrez pas utiliser votre pouvoir demain",
+        "see_villager": "[§cLG UHC§r] Vous venez d'espionner un membre du Village vous perdez 3 coeurs et vous ne pourrez pas utiliser votre pouvoir pour la prochaine fois",
         "command": "voir"
       },
       "priestess": {
@@ -322,12 +323,12 @@
       },
       "cupid": {
         "display": "Cupidon",
-        "lover": "Couple : §b%s",
+        "lover": "§bCouple%f : %s\n",
         "none": "§cAucun§f, pour désigner §b/ww couple",
         "items": "Un Livre Power II, Punch I, 64 flèches, 2 fils",
         "description": "Vous devez gagner avec votre couple puis avec le Village.",
         "extra": "Vous avez le droit à un arc Puissance §b%d",
-        "lover_designation_message": "[§eLG UHC§r] Vous devez désigner un Couple, §b/ww couple§r, vous avez §b%s",
+        "lover_designation_message": "Vous devez désigner un Couple, §b/ww couple§r, vous avez §b%s",
         "designation_perform": "[§eLG UHC§r] Votre couple associé est §b%s§r et §b%s",
         "command": "couple"
       },
@@ -427,8 +428,9 @@
       },
       "succubus": {
         "display": "Succube",
-        "charm": "Charmé : §b%s",
-        "none": "§cAucun§f, pour charmer §b/ww charmer",
+        "charm": "Charmé : §b%s\n",
+        "charm_command": "pour charmer §b/ww charmer§b",
+        "none": "§cAucun§f",
         "description": "Vous pouvez charmer un joueur qui gagnera avec vous. Si vous mourrez, la personne charmée mourra à votre place. Le temps de charme est de §b%s",
         "charming_message": "[§eLG UHC§r] Vous pouvez désigner une personne à charmer §b/ww charmer",
         "charming_beginning": "[§eLG UHC§r] Vous commencez à charmer §b%s",
@@ -1022,6 +1024,7 @@
       "swap": {
         "name": "Swap",
         "message": "[§5Swap§r] Deux personnes ont leur rôle inversées",
+        "concerned": "[§cLG UHC§r] Votre rôle a été échangé §b/ww role§f pour découvrir le nouveau",
         "description": "Une fois dans la partie,\n avant l'annonce de la liste des loups\n 2 roles sont échangés"
       }
     },

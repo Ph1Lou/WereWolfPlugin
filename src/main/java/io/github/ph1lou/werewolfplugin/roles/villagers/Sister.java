@@ -168,8 +168,7 @@ public class Sister extends RolesVillage implements AffectedPlayers {
 
         getPlayerWW().sendMessage(textComponent);
 
-
-        killerWWS.add(sisterWW.getLastKiller());
+        sisterWW.getLastKiller().ifPresent(killerWWS::add);
 
     }
 
@@ -186,7 +185,7 @@ public class Sister extends RolesVillage implements AffectedPlayers {
         if (!playerWW.equals(getPlayerWW())) return;
 
         Bukkit.getPluginManager().callEvent(new SisterDeathEvent(playerWW,
-                new HashSet<>(), getPlayerWW().getLastKiller()));
+                new HashSet<>(), getPlayerWW().getLastKiller().isPresent() ? getPlayerWW().getLastKiller().get() : null));
 
     }
 

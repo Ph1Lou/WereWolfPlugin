@@ -8,6 +8,7 @@ import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.LoneWolfEvent;
 import io.github.ph1lou.werewolfapi.events.WereWolfListEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import org.bukkit.Bukkit;
@@ -32,7 +33,7 @@ public class LoneWolf extends ListenerManager {
             if (!game.isState(StateGame.END) && isRegister()) {
                 designSolitary();
             }
-        }, 1L/*(long) (game.getRandom().nextFloat() * 3600 * 20)*/);
+        }, (long) (game.getRandom().nextFloat() * 3600 * 20));
     }
 
     private void designSolitary() {
@@ -49,12 +50,17 @@ public class LoneWolf extends ListenerManager {
 
         Roles role = roleWWs.get((int) Math.floor(game.getRandom().nextDouble() * roleWWs.size()));
 
+        LoneWolfEvent event = new LoneWolfEvent((role.getPlayerWW()));
+
+        Bukkit.getPluginManager().callEvent(event);
+
+        if (event.isCancelled()) return;
+
         role.getPlayerWW().sendMessageWithKey("werewolf.lone_wolf.message");
 
         if (role.getPlayerWW().getMaxHealth() < 30) {
             role.getPlayerWW().addPlayerMaxHealth(Math.min(8, 30 - role.getPlayerWW().getMaxHealth()));
         }
-
         role.setSolitary(true);
         register(false);
     }

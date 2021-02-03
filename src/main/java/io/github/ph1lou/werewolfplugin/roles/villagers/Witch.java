@@ -121,7 +121,7 @@ public class Witch extends RolesVillage implements AffectedPlayers, Power {
             return true;
         }
 
-        player.sendMessage(game.translate("werewolf.check.cancel"));
+        player.sendMessageWithKey("werewolf.check.cancel");
 
         return false;
     }

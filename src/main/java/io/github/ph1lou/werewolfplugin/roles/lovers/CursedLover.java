@@ -63,7 +63,7 @@ public class CursedLover implements LoverAPI, Listener {
         Bukkit.getPluginManager().callEvent(
                 new CursedLoverDeathEvent(event.getPlayerWW(), playerWW1));
 
-        playerWW1.sendMessage(game.translate("werewolf.role.cursed_lover.death_cursed_lover"));
+        playerWW1.sendMessageWithKey("werewolf.role.cursed_lover.death_cursed_lover");
 
         playerWW1.removePlayerMaxHealth(2);
 
@@ -79,16 +79,16 @@ public class CursedLover implements LoverAPI, Listener {
                 setPower(playerWW);
             }
             power1 = true;
-            playerWW.sendMessage(game.translate("werewolf.role.cursed_lover.description",
-                    cursedLover2.getName()));
+            playerWW.sendMessageWithKey("werewolf.role.cursed_lover.description",
+                    cursedLover2.getName());
             Sound.SHEEP_SHEAR.play(playerWW);
         } else if (cursedLover2.equals(playerWW)) {
             if (!power2) {
                 setPower(playerWW);
             }
             power2 = true;
-            playerWW.sendMessage(game.translate("werewolf.role.cursed_lover.description",
-                    cursedLover1.getName()));
+            playerWW.sendMessageWithKey("werewolf.role.cursed_lover.description",
+                    cursedLover1.getName());
             Sound.SHEEP_SHEAR.play(playerWW);
         }
     }

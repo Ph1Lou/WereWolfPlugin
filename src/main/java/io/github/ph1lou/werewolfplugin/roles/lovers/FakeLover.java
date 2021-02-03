@@ -20,7 +20,6 @@ public class FakeLover implements LoverAPI, Listener {
 
     private final List<PlayerWW> lovers;
     private final WereWolfAPI game;
-    private final boolean death = false;
 
     public FakeLover(WereWolfAPI game, List<PlayerWW> lovers) {
         this.game = game;
@@ -39,9 +38,6 @@ public class FakeLover implements LoverAPI, Listener {
 
     public void announceLovers(PlayerWW playerWW) {
 
-        if (death) return;
-
-
         if (!lovers.contains(playerWW)) return;
 
         StringBuilder couple = new StringBuilder();
@@ -51,7 +47,7 @@ public class FakeLover implements LoverAPI, Listener {
                 couple.append(playerWW1.getName()).append(" ");
             }
         }
-        playerWW.sendMessage(game.translate("werewolf.role.lover.description", couple.toString()));
+        playerWW.sendMessageWithKey("werewolf.role.lover.description", couple.toString());
         Sound.SHEEP_SHEAR.play(playerWW);
     }
 

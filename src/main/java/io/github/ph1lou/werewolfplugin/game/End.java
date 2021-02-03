@@ -5,7 +5,6 @@ import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.Category;
 import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
-import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
@@ -116,21 +115,17 @@ public class End {
 
         for (PlayerWW playerWW1 : game.getPlayerWW()) {
 
-            String role = game.translate(playerWW1.getRole().getKey());
+            String role = game.translate(playerWW1.getRole().getDeathRole());
             String playerName = playerWW1.getName();
             StringBuilder sb = new StringBuilder();
 
-            if (playerWW1.isThief()) {
-                role = game.translate(RolesBase.THIEF.getKey());
-            }
             if (playerWW1.isState(StatePlayer.DEATH)) {
                 sb.append(game.translate("werewolf.end.reveal_death", playerName, role));
             } else {
                 sb.append(game.translate("werewolf.end.reveal", playerName, role));
             }
-            if (playerWW1.isThief()) {
-                role = game.translate(playerWW1.getRole().getKey());
-                sb.append(game.translate("werewolf.end.thief", role));
+            if (!playerWW1.getRole().getKey().equals(playerWW1.getRole().getDeathRole())) {
+                sb.append(game.translate("werewolf.end.thief", game.translate(playerWW1.getRole().getKey())));
             }
 
             EndPlayerMessageEvent endPlayerMessageEvent = new EndPlayerMessageEvent(playerWW1, sb);

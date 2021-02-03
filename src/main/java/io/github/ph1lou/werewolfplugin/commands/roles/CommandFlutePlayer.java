@@ -99,8 +99,8 @@ public class CommandFlutePlayer implements Commands {
         for (PlayerWW playerWW1 : enchantedEvent.getPlayerWWS()) {
 
             ((AffectedPlayers) flutePlayer).addAffectedPlayer(playerWW1);
-            playerWW1.sendMessage(game.translate("werewolf.role.flute_player.enchanted"));
-            player.sendMessage(game.translate("werewolf.role.flute_player.perform", playerWW1.getName()));
+            playerWW1.sendMessageWithKey("werewolf.role.flute_player.enchanted");
+            playerWW.sendMessageWithKey("werewolf.role.flute_player.perform", playerWW1.getName());
         }
 
         game.checkVictory();

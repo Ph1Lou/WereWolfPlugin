@@ -67,8 +67,8 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
 
         setPower(true);
 
-        getPlayerWW().sendMessage(game.translate(
-                "werewolf.role.trapper.tracking_message"));
+        getPlayerWW().sendMessageWithKey(
+                "werewolf.role.trapper.tracking_message");
     }
 
 

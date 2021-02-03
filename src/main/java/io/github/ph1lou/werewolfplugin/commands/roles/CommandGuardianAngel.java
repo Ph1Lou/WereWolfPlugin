@@ -36,14 +36,14 @@ public class CommandGuardianAngel implements Commands {
         Roles angel = playerWW.getRole();
 
         if (!((AngelRole) angel).isChoice(AngelForm.ANGEL)) {
-            player.sendMessage(game.translate("werewolf.check.power"));
+            playerWW.sendMessageWithKey("werewolf.check.power");
             return;
         }
 
         Bukkit.getPluginManager().callEvent(new AngelChoiceEvent(playerWW, AngelForm.GUARDIAN_ANGEL));
         ((AngelRole) angel).setChoice(AngelForm.GUARDIAN_ANGEL);
-        player.sendMessage(game.translate("werewolf.role.angel.angle_choice_click",
+        playerWW.sendMessageWithKey("werewolf.role.angel.angle_choice_click",
                 game.translate(RolesBase.GUARDIAN_ANGEL.getKey())
-                , game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.ANGEL_DURATION.getKey()))));
+                , game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.ANGEL_DURATION.getKey())));
     }
 }

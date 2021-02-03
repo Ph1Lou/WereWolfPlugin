@@ -48,7 +48,7 @@ public class Metamorph extends RolesVillage {
             return;
         }
 
-        getPlayerWW().sendMessage(game.translate("werewolf.commands.admin.ww_chat.prefix", event.getMessage()));
+        getPlayerWW().sendMessageWithKey("werewolf.commands.admin.ww_chat.prefix", event.getMessage());
 
     }
 
@@ -57,7 +57,7 @@ public class Metamorph extends RolesVillage {
 
         if (!game.getConfig().isConfigActive(ConfigsBase.WEREWOLF_CHAT.getKey())) return;
 
-        getPlayerWW().sendMessage(game.translate("werewolf.commands.admin.ww_chat.announce", game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.WEREWOLF_CHAT_DURATION.getKey())), game.getConfig().getWereWolfChatMaxMessage()));
+        getPlayerWW().sendMessageWithKey("werewolf.commands.admin.ww_chat.announce", game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.WEREWOLF_CHAT_DURATION.getKey())), game.getConfig().getWereWolfChatMaxMessage());
 
     }
 

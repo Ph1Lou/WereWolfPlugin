@@ -183,7 +183,7 @@ public class GameManager implements WereWolfAPI {
             inventory.setItem(j, stuff.getStartLoot().getItem(j));
         }
 
-        mapManager.transportation(playerWW, 0, "");
+        mapManager.transportation(playerWW, 0);
     }
 
     public void clearPlayer(Player player) {

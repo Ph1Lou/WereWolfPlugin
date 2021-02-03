@@ -64,16 +64,17 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
 
         if (disablePower) {
             disablePower = false;
+            getPlayerWW().sendMessageWithKey("werewolf.role.seer.disable");
             return;
         }
 
         setPower(true);
 
-        getPlayerWW().sendMessage(game.translate(
+        getPlayerWW().sendMessageWithKey(
                 "werewolf.role.seer.see_camp_message",
                 game.getScore().conversion(
                         game.getConfig()
-                                .getTimerValue(TimersBase.POWER_DURATION.getKey()))));
+                                .getTimerValue(TimersBase.POWER_DURATION.getKey())));
     }
 
 

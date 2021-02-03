@@ -5,7 +5,11 @@ import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.BeginSniffEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.*;
+import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.LimitedUse;
+import io.github.ph1lou.werewolfapi.rolesattributs.Power;
+import io.github.ph1lou.werewolfapi.rolesattributs.Progress;
+import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -36,37 +40,37 @@ public class CommandFox implements Commands {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            player.sendMessage(game.translate("werewolf.check.offline_player"));
+            playerWW.sendMessageWithKey("werewolf.check.offline_player");
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         PlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
         if (argUUID.equals(uuid)) {
-            player.sendMessage(game.translate("werewolf.check.not_yourself"));
+            playerWW.sendMessageWithKey("werewolf.check.not_yourself");
             return;
         }
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            player.sendMessage(game.translate("werewolf.check.player_not_found"));
+            playerWW.sendMessageWithKey("werewolf.check.player_not_found");
             return;
         }
 
         Location location = player.getLocation();
         Location locationTarget = playerArg.getLocation();
 
-        try {
+        if (player.getWorld().equals(playerArg.getWorld())) {
             if (location.distance(locationTarget) > game.getConfig().getDistanceFox()) {
-                player.sendMessage(game.translate("werewolf.role.fox.not_enough_near"));
+                playerWW.sendMessageWithKey("werewolf.role.fox.not_enough_near");
                 return;
             }
-        } catch (Exception ignored) {
+        } else {
             return;
         }
 
 
         if (((LimitedUse) fox).getUse() >= game.getConfig().getUseOfFlair()) {
-            player.sendMessage(game.translate("werewolf.check.power"));
+            playerWW.sendMessageWithKey("werewolf.check.power");
             return;
         }
 
@@ -77,7 +81,7 @@ public class CommandFox implements Commands {
         Bukkit.getPluginManager().callEvent(beginSniffEvent);
 
         if (beginSniffEvent.isCancelled()) {
-            player.sendMessage(game.translate("werewolf.check.cancel"));
+            playerWW.sendMessageWithKey("werewolf.check.cancel");
             return;
         }
 
@@ -85,6 +89,6 @@ public class CommandFox implements Commands {
         ((AffectedPlayers) fox).addAffectedPlayer(playerWW1);
         ((Progress) fox).setProgress(0f);
 
-        player.sendMessage(game.translate("werewolf.role.fox.smell_beginning", playerArg.getName()));
+        playerWW.sendMessageWithKey("werewolf.role.fox.smell_beginning", playerArg.getName());
     }
 }

@@ -62,7 +62,7 @@ public class Lover implements LoverAPI, Listener {
                 couple.append(playerWW1.getName()).append(" ");
             }
         }
-        playerWW.sendMessage(game.translate("werewolf.role.lover.description", couple.toString()));
+        playerWW.sendMessageWithKey("werewolf.role.lover.description", couple.toString());
         Sound.SHEEP_SHEAR.play(playerWW);
     }
 
@@ -231,11 +231,11 @@ public class Lover implements LoverAPI, Listener {
 
         if (lovers.contains(playerWW)) return;
 
-        lovers.forEach(playerWW1 -> playerWW1.sendMessage(game.translate("werewolf.random_events.triple.lover_join", playerWW.getName())));
+        lovers.forEach(playerWW1 -> playerWW1.sendMessageWithKey("werewolf.random_events.triple.lover_join", playerWW.getName()));
 
-        playerWW.sendMessage(game.translate("werewolf.random_events.triple.join", getLovers().stream()
+        playerWW.sendMessageWithKey("werewolf.random_events.triple.join", getLovers().stream()
                 .map(PlayerWW::getName)
-                .collect(Collectors.joining(" "))));
+                .collect(Collectors.joining(" ")));
 
         lovers.add(playerWW);
 

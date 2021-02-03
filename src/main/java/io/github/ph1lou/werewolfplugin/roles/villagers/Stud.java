@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 
 public class Stud extends RolesVillage implements Power {
     private boolean power = true;
@@ -60,21 +61,21 @@ public class Stud extends RolesVillage implements Power {
 
         if (!hasPower()) return;
 
-        PlayerWW killerWW = getPlayerWW().getLastKiller();
+        Optional<PlayerWW> killerWW = getPlayerWW().getLastKiller();
 
-        if (killerWW == null) return;
+        if (!killerWW.isPresent()) return;
 
-        if (!killerWW.isState(StatePlayer.ALIVE)) return;
+        if (!killerWW.get().isState(StatePlayer.ALIVE)) return;
 
         for (LoverAPI loverAPI : getPlayerWW().getLovers()) {
-            if (loverAPI.getLovers().contains(killerWW)) return;
+            if (loverAPI.getLovers().contains(killerWW.get())) return;
         }
 
-        Bukkit.getPluginManager().callEvent(new StudLoverEvent(getPlayerWW(), killerWW));
+        Bukkit.getPluginManager().callEvent(new StudLoverEvent(getPlayerWW(), killerWW.get()));
 
         setPower(false);
 
-        Lover lover = new Lover(game, new ArrayList<>(Arrays.asList(getPlayerWW(), killerWW)));
+        Lover lover = new Lover(game, new ArrayList<>(Arrays.asList(getPlayerWW(), killerWW.get())));
 
         Bukkit.getPluginManager().registerEvents(lover, (Plugin) main);
 

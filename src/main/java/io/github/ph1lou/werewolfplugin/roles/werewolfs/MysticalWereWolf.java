@@ -40,7 +40,7 @@ public class MysticalWereWolf extends RolesWereWolf {
 
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
-        getPlayerWW().sendMessage(game.translate("werewolf.role.mystical_werewolf.no_message"));
+        getPlayerWW().sendMessageWithKey("werewolf.role.mystical_werewolf.no_message");
         event.setCancelled(true);
     }
 
@@ -66,7 +66,7 @@ public class MysticalWereWolf extends RolesWereWolf {
 
         Bukkit.getPluginManager().callEvent(new MysticalWerewolfRevelationEvent(getPlayerWW(), roleWW));
 
-        getPlayerWW().sendMessage(game.translate("werewolf.role.mystical_werewolf.werewolf_death", roleWW.getName(), game.translate(roleWW.getRole().getKey())));
+        getPlayerWW().sendMessageWithKey("werewolf.role.mystical_werewolf.werewolf_death", roleWW.getName(), game.translate(roleWW.getRole().getKey()));
     }
 
 

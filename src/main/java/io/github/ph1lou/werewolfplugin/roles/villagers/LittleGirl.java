@@ -54,8 +54,8 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
             return;
         }
 
-        getPlayerWW().sendMessage(game.translate(
-                "werewolf.role.little_girl.remove_armor"));
+        getPlayerWW().sendMessageWithKey(
+                "werewolf.role.little_girl.remove_armor");
     }
 
     @EventHandler
@@ -73,7 +73,7 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
         Bukkit.getPluginManager().callEvent(
                 new InvisibleEvent(getPlayerWW(),
                         false));
-        getPlayerWW().sendMessage(game.translate("werewolf.role.little_girl.visible"));
+        getPlayerWW().sendMessageWithKey("werewolf.role.little_girl.visible");
     }
 
     @EventHandler
@@ -110,8 +110,8 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
             return;
         }
 
-        getPlayerWW().sendMessage(game.translate(
-                "werewolf.role.little_girl.soon_to_be_day"));
+        getPlayerWW().sendMessageWithKey(
+                "werewolf.role.little_girl.soon_to_be_day");
     }
 
     @EventHandler
@@ -288,7 +288,7 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
             return;
         }
 
-        getPlayerWW().sendMessage(game.translate("werewolf.commands.admin.ww_chat.prefix", event.getMessage()));
+        getPlayerWW().sendMessageWithKey("werewolf.commands.admin.ww_chat.prefix", event.getMessage());
 
     }
 

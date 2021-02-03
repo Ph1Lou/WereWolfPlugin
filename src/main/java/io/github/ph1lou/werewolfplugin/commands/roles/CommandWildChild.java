@@ -36,25 +36,25 @@ public class CommandWildChild implements Commands {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            player.sendMessage(game.translate("werewolf.check.offline_player"));
+            playerWW.sendMessageWithKey("werewolf.check.offline_player");
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         PlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            player.sendMessage(game.translate("werewolf.check.player_not_found"));
+            playerWW.sendMessageWithKey("werewolf.check.player_not_found");
             return;
         }
 
         if (argUUID.equals(uuid)) {
-            player.sendMessage(game.translate("werewolf.check.not_yourself"));
+            playerWW.sendMessageWithKey("werewolf.check.not_yourself");
             return;
         }
 
         ((AffectedPlayers) wildChild).addAffectedPlayer(playerWW1);
         ((Power) wildChild).setPower(false);
         Bukkit.getPluginManager().callEvent(new ModelEvent(playerWW, playerWW1));
-        player.sendMessage(game.translate("werewolf.role.wild_child.reveal_model", playerArg.getName()));
+        playerWW.sendMessageWithKey("werewolf.role.wild_child.reveal_model", playerArg.getName());
     }
 }

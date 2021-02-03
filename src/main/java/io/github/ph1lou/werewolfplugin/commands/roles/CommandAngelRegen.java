@@ -37,24 +37,22 @@ public class CommandAngelRegen implements Commands {
 
 
         if (((LimitedUse) guardianAngel).getUse() >= 3) {
-            player.sendMessage(game.translate("werewolf.check.power"));
+            playerWW.sendMessageWithKey("werewolf.check.power");
             return;
         }
 
         if (((AffectedPlayers) guardianAngel)
                 .getAffectedPlayers().isEmpty()) {
-            player.sendMessage(game.translate(
-                    "werewolf.role.guardian_angel.no_protege"));
+            playerWW.sendMessageWithKey("werewolf.role.guardian_angel.no_protege");
             return;
         }
 
-        Player playerProtected = Bukkit.getPlayer(((AffectedPlayers) guardianAngel)
-                .getAffectedPlayers().get(0).getUUID());
+        PlayerWW playerWW1 = ((AffectedPlayers) guardianAngel).getAffectedPlayers().get(0);
+
+        Player playerProtected = Bukkit.getPlayer(playerWW1.getUUID());
 
         if (playerProtected == null) {
-            player.sendMessage(
-                    game.translate(
-                            "werewolf.role.guardian_angel.disconnected_protege"));
+            playerWW.sendMessageWithKey("werewolf.role.guardian_angel.disconnected_protege");
             return;
         }
 
@@ -65,7 +63,7 @@ public class CommandAngelRegen implements Commands {
                 .getAffectedPlayers().get(0));
 
         if (event.isCancelled()) {
-            player.sendMessage(game.translate("werewolf.check.cancel"));
+            playerWW.sendMessageWithKey("werewolf.check.cancel");
             return;
         }
 
@@ -77,10 +75,9 @@ public class CommandAngelRegen implements Commands {
                 false,
                 false));
 
-        playerProtected.sendMessage(
-                game.translate("werewolf.role.guardian_angel.get_regeneration"));
-        player.sendMessage(
-                game.translate("werewolf.role.guardian_angel.perform",
-                        3 - ((LimitedUse) guardianAngel).getUse()));
+        playerWW1.sendMessageWithKey("werewolf.role.guardian_angel.get_regeneration");
+        playerWW.sendMessageWithKey(
+                "werewolf.role.guardian_angel.perform",
+                3 - ((LimitedUse) guardianAngel).getUse());
     }
 }

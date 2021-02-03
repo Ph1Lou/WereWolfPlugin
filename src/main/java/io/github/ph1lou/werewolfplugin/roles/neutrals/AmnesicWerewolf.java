@@ -4,7 +4,12 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.Day;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.events.*;
+import io.github.ph1lou.werewolfapi.events.AmnesiacTransformationEvent;
+import io.github.ph1lou.werewolfapi.events.DayEvent;
+import io.github.ph1lou.werewolfapi.events.EndPlayerMessageEvent;
+import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.NewWereWolfEvent;
+import io.github.ph1lou.werewolfapi.events.NightEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
 import io.github.ph1lou.werewolfapi.rolesattributs.Transformed;
 import org.bukkit.Bukkit;
@@ -50,9 +55,9 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
 
         PlayerWW playerWW = event.getPlayerWW();
 
-        if (playerWW.getLastKiller() == null) return;
+        if (!playerWW.getLastKiller().isPresent()) return;
 
-        if (!playerWW.getLastKiller().equals(getPlayerWW())) return;
+        if (!playerWW.getLastKiller().get().equals(getPlayerWW())) return;
 
         if (transformed) return;
 
@@ -62,7 +67,7 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
         Bukkit.getPluginManager().callEvent(amnesiacTransformationEvent);
 
         if (amnesiacTransformationEvent.isCancelled()) {
-            getPlayerWW().sendMessage(game.translate("werewolf.check.transformation"));
+            getPlayerWW().sendMessageWithKey("werewolf.check.transformation");
             return;
         }
 

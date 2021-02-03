@@ -38,16 +38,14 @@ public class CommandComedian implements Commands {
         try {
             int i = Integer.parseInt(args[0]) - 1;
             if (i < 0 || i > 2) {
-                player.sendMessage(game.translate(
-                        "werewolf.role.comedian.mask_unknown"));
+                playerWW.sendMessageWithKey("werewolf.role.comedian.mask_unknown");
                 return;
             }
 
             if (((Comedian) comedian).getMasks()
                     .contains(ComedianMask.values()[i])) {
 
-                player.sendMessage(game.translate(
-                        "werewolf.role.comedian.used_mask"));
+                playerWW.sendMessageWithKey("werewolf.role.comedian.used_mask");
                 return;
             }
             ((Power) comedian).setPower(false);
@@ -57,13 +55,13 @@ public class CommandComedian implements Commands {
             Bukkit.getPluginManager().callEvent(useMaskEvent);
 
             if (useMaskEvent.isCancelled()) {
-                player.sendMessage(game.translate("werewolf.check.cancel"));
+                playerWW.sendMessageWithKey("werewolf.check.cancel");
                 return;
             }
 
-            player.sendMessage(game.translate(
+            playerWW.sendMessageWithKey(
                     "werewolf.role.comedian.wear_mask_perform",
-                    game.translate(ComedianMask.values()[i].getKey())));
+                    ComedianMask.values()[i].getKey());
             playerWW.addPotionEffect(ComedianMask.values()[i].getPotionEffectType());
 
         } catch (NumberFormatException ignored) {

@@ -24,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -48,7 +49,6 @@ public class PlayerLG implements PlayerWW {
     private int deathTime = 0;
     private int disconnectedTime = 0;
     private int kill = 0;
-    private boolean thief = false;
     private String name;
     private final WereWolfAPI game;
 
@@ -324,18 +324,8 @@ public class PlayerLG implements PlayerWW {
 
     @Nullable
     @Override
-    public PlayerWW getLastKiller() {
-        return this.killer.isEmpty() ? null : this.killer.get(this.killer.size() - 1);
-    }
-
-    @Override
-    public boolean isThief() {
-        return (this.thief);
-    }
-
-    @Override
-    public void setThief(boolean thief) {
-        this.thief = thief;
+    public Optional<PlayerWW> getLastKiller() {
+        return this.killer.isEmpty() ? Optional.empty() : Optional.of(this.killer.get(this.killer.size() - 1));
     }
 
     @Override

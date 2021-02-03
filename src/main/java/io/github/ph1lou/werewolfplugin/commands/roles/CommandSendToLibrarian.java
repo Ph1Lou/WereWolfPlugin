@@ -34,7 +34,7 @@ public class CommandSendToLibrarian implements Commands {
 
 
         if (args.length == 0) {
-            player.sendMessage(game.translate("werewolf.check.parameters", 1));
+            playerWW.sendMessageWithKey("werewolf.check.parameters", 1);
             return;
         }
 
@@ -62,23 +62,23 @@ public class CommandSendToLibrarian implements Commands {
                     Bukkit.getPluginManager().callEvent(librarianGiveBackEvent);
 
                     if (librarianGiveBackEvent.isCancelled()) {
-                        player.sendMessage(game.translate("werewolf.check.cancel"));
+                        playerWW.sendMessageWithKey("werewolf.check.cancel");
                         return;
                     }
 
                     ((Storage) roles).getStorage().add(sb2.toString());
 
-                    player.sendMessage(game.translate("werewolf.role.librarian.contribute"));
+                    playerWW.sendMessageWithKey("werewolf.role.librarian.contribute");
                     find.set(true);
-                    librarianGiveBackEvent.getTargetWW().sendMessage(game.translate(
+                    librarianGiveBackEvent.getTargetWW().sendMessageWithKey(
                             "werewolf.role.librarian.contribution",
                             player.getName(),
-                            librarianGiveBackEvent.getInfo()));
+                            librarianGiveBackEvent.getInfo());
                 });
 
 
         if (!find.get()) {
-            player.sendMessage(game.translate("werewolf.role.librarian.prohibit"));
+            playerWW.sendMessageWithKey("werewolf.role.librarian.prohibit");
         }
 
 

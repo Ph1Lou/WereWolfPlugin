@@ -37,24 +37,24 @@ public class CommandWitch implements Commands {
 
 
         if (Bukkit.getPlayer(UUID.fromString(args[0])) == null) {
-            player.sendMessage(game.translate("werewolf.check.offline_player"));
+            playerWW.sendMessageWithKey("werewolf.check.offline_player");
             return;
         }
         UUID argUUID = UUID.fromString(args[0]);
         PlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
         if (playerWW1 == null) {
-            player.sendMessage(game.translate("werewolf.check.player_not_found"));
+            playerWW.sendMessageWithKey("werewolf.check.player_not_found");
             return;
         }
 
         if (!game.getConfig().isConfigActive(ConfigsBase.AUTO_REZ_WITCH.getKey()) && argUUID.equals(uuid)) {
-            player.sendMessage(game.translate("werewolf.check.not_yourself"));
+            playerWW.sendMessageWithKey("werewolf.check.not_yourself");
             return;
         }
 
         if (!playerWW1.isState(StatePlayer.JUDGEMENT)) {
-            player.sendMessage(game.translate("werewolf.check.not_in_judgement"));
+            playerWW.sendMessageWithKey("werewolf.check.not_in_judgement");
             return;
         }
 
@@ -67,13 +67,13 @@ public class CommandWitch implements Commands {
         Bukkit.getPluginManager().callEvent(witchResurrectionEvent);
 
         if (witchResurrectionEvent.isCancelled()) {
-            player.sendMessage(game.translate("werewolf.check.cancel"));
+            playerWW.sendMessageWithKey("werewolf.check.cancel");
             return;
         }
 
         ((AffectedPlayers) witch).addAffectedPlayer(playerWW1);
         game.resurrection(playerWW1);
-        player.sendMessage(game.translate("werewolf.role.witch.resuscitation_perform",
-                playerWW1.getName()));
+        playerWW.sendMessageWithKey("werewolf.role.witch.resuscitation_perform",
+                playerWW1.getName());
     }
 }

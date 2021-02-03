@@ -31,7 +31,7 @@ public class CommandSisterSeeRole implements Commands {
         AffectedPlayers affectedPlayers = (AffectedPlayers) playerWW.getRole();
 
         if (!affectedPlayers.getAffectedPlayers().contains(killerWW)) {
-            player.sendMessage(game.translate("werewolf.role.sister.already"));
+            playerWW.sendMessageWithKey("werewolf.role.sister.already");
             return;
         }
 
@@ -40,14 +40,14 @@ public class CommandSisterSeeRole implements Commands {
         SisterSeeRoleEvent sisterSeeRoleEvent = new SisterSeeRoleEvent(playerWW, killerWW);
 
         if (sisterSeeRoleEvent.isCancelled()) {
-            player.sendMessage(game.translate("werewolf.check.cancel"));
+            playerWW.sendMessageWithKey("werewolf.check.cancel");
             return;
         }
 
 
-        player.sendMessage(game.translate("werewolf.role.sister.reveal_killer_role",
+        playerWW.sendMessageWithKey("werewolf.role.sister.reveal_killer_role",
                 killerWW != null ?
                         game.translate(killerWW.getRole().getKey()) :
-                        game.translate("werewolf.utils.pve")));
+                        game.translate("werewolf.utils.pve"));
     }
 }

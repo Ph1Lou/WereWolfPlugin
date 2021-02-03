@@ -36,8 +36,7 @@ public class CommandCupid implements Commands {
         Roles cupid = playerWW.getRole();
 
         if (args[0].equalsIgnoreCase(args[1])) {
-            player.sendMessage(game.translate(
-                    "werewolf.check.two_distinct_player"));
+            playerWW.sendMessageWithKey("werewolf.check.two_distinct_player");
             return;
         }
 
@@ -46,7 +45,7 @@ public class CommandCupid implements Commands {
             Player playerArg = Bukkit.getPlayer(p);
 
             if (playerArg == null) {
-                player.sendMessage(game.translate("werewolf.check.offline_player"));
+                playerWW.sendMessageWithKey("werewolf.check.offline_player");
                 return;
             }
 
@@ -54,12 +53,12 @@ public class CommandCupid implements Commands {
             PlayerWW playerWW1 = game.getPlayerWW(uuid1);
 
             if (playerWW1 == null || playerWW1.isState(StatePlayer.DEATH)) {
-                player.sendMessage(game.translate("werewolf.check.player_not_found"));
+                playerWW.sendMessageWithKey("werewolf.check.player_not_found");
                 return;
             }
 
             if (uuid.equals(uuid1)) {
-                player.sendMessage(game.translate("werewolf.check.not_yourself"));
+                playerWW.sendMessageWithKey("werewolf.check.not_yourself");
                 return;
             }
         }
@@ -77,6 +76,6 @@ public class CommandCupid implements Commands {
         }
         ((Power) cupid).setPower(false);
         Bukkit.getPluginManager().callEvent(new CupidLoversEvent(playerWW, Sets.newHashSet(((AffectedPlayers) cupid).getAffectedPlayers())));
-        player.sendMessage(game.translate("werewolf.role.cupid.designation_perform", args[0], args[1]));
+        playerWW.sendMessageWithKey("werewolf.role.cupid.designation_perform", args[0], args[1]);
     }
 }

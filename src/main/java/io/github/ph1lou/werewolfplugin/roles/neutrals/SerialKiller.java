@@ -4,7 +4,11 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.events.*;
+import io.github.ph1lou.werewolfapi.events.DayEvent;
+import io.github.ph1lou.werewolfapi.events.EnchantmentEvent;
+import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.NightEvent;
+import io.github.ph1lou.werewolfapi.events.SerialKillerEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
 import org.bukkit.Bukkit;
@@ -50,19 +54,9 @@ public class SerialKiller extends RolesNeutral implements Power {
     }
 
 
-    @EventHandler
-    public void onStealEvent(StealEvent event) {
-
-        if (!event.getThiefWW().equals(getPlayerWW())) return;
-
-
-        getPlayerWW().addPlayerMaxHealth(extraHeart);
-
-    }
-
     @Override
     public void recoverPower() {
-
+        getPlayerWW().addPlayerMaxHealth(extraHeart);
     }
 
     @EventHandler
@@ -146,9 +140,9 @@ public class SerialKiller extends RolesNeutral implements Power {
 
         PlayerWW playerWW = event.getPlayerWW();
 
-        if (playerWW.getLastKiller() == null) return;
+        if (!playerWW.getLastKiller().isPresent()) return;
 
-        if (!playerWW.getLastKiller().equals(getPlayerWW())) return;
+        if (!playerWW.getLastKiller().get().equals(getPlayerWW())) return;
 
         Bukkit.getPluginManager().callEvent(new SerialKillerEvent(
                 getPlayerWW(),

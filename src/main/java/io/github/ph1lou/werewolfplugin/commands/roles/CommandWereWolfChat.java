@@ -43,7 +43,7 @@ public class CommandWereWolfChat implements Commands {
         if (playerWW == null) return;
 
         if (!game.getConfig().isConfigActive(ConfigsBase.WEREWOLF_CHAT.getKey())) {
-            player.sendMessage(game.translate("werewolf.commands.admin.ww_chat.disable"));
+            playerWW.sendMessageWithKey("werewolf.commands.admin.ww_chat.disable");
             return;
         }
 
@@ -66,13 +66,13 @@ public class CommandWereWolfChat implements Commands {
                     WereWolfChatEvent wereWolfChatEvent = new WereWolfChatEvent(playerWW, sb.toString());
                     Bukkit.getPluginManager().callEvent(wereWolfChatEvent);
                 } else {
-                    player.sendMessage(game.translate("werewolf.commands.admin.ww_chat.timer"));
+                    playerWW.sendMessageWithKey("werewolf.commands.admin.ww_chat.timer");
                 }
             } else {
-                player.sendMessage((game.translate("werewolf.commands.admin.ww_chat.speak_number", game.getConfig().getWereWolfChatMaxMessage())));
+                playerWW.sendMessageWithKey("werewolf.commands.admin.ww_chat.speak_number", game.getConfig().getWereWolfChatMaxMessage());
             }
 
 
-        } else player.sendMessage(game.translate("werewolf.commands.admin.ww_chat.not_access"));
+        } else playerWW.sendMessageWithKey("werewolf.commands.admin.ww_chat.not_access");
     }
 }

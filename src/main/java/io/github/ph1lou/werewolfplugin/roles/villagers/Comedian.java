@@ -56,10 +56,10 @@ public class Comedian extends RolesWithLimitedSelectionDuration {
 
         setPower(true);
 
-        getPlayerWW().sendMessage(game.translate("werewolf.role.comedian.wear_mask_message",
+        getPlayerWW().sendMessageWithKey("werewolf.role.comedian.wear_mask_message",
                 game.getScore().conversion(
                         game.getConfig().getTimerValue(
-                                TimersBase.POWER_DURATION.getKey()))));
+                                TimersBase.POWER_DURATION.getKey())));
 
     }
 

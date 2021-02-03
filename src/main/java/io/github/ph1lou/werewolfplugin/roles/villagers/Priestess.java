@@ -76,12 +76,12 @@ public class Priestess extends RolesWithLimitedSelectionDuration implements Affe
 
         setPower(true);
 
-        getPlayerWW().sendMessage(game.translate(
+        getPlayerWW().sendMessageWithKey(
                 "werewolf.role.priestess.perform",
                 game.getConfig().getDistancePriestess(),
                 game.getScore().conversion(
                         game.getConfig()
-                                .getTimerValue(TimersBase.POWER_DURATION.getKey()))));
+                                .getTimerValue(TimersBase.POWER_DURATION.getKey())));
     }
 
 
@@ -115,7 +115,7 @@ public class Priestess extends RolesWithLimitedSelectionDuration implements Affe
                 .map(PlayerWW::getRole)
                 .forEach(roles -> {
                     if (roles.isNeutral()) {
-                        roles.getPlayerWW().sendMessage(game.translate(event.getFormat())
+                        roles.getPlayerWW().sendMessageWithKey(event.getFormat()
                                 .replace("&player&", event.getPlayerName())
                                 .replace("&role&", game.translate(event.getRole())));
                     } else
@@ -175,5 +175,4 @@ public class Priestess extends RolesWithLimitedSelectionDuration implements Affe
 
         event.setSuffix("");
     }
-
 }

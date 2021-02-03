@@ -17,6 +17,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
+
 public class Elder extends RolesVillage implements Power {
 
     private boolean power = true;
@@ -92,19 +94,19 @@ public class Elder extends RolesVillage implements Power {
 
         if (!hasPower()) return;
 
-        PlayerWW killerWW = getPlayerWW().getLastKiller();
+        Optional<PlayerWW> killerWW = getPlayerWW().getLastKiller();
 
         ElderResurrectionEvent elderResurrectionEvent =
                 new ElderResurrectionEvent(getPlayerWW(),
-                        killerWW != null
-                                && killerWW
+                        killerWW.isPresent()
+                                && killerWW.get()
                                 .getRole().isCamp(Camp.VILLAGER));
 
         Bukkit.getPluginManager().callEvent(elderResurrectionEvent);
         setPower(false);
 
         if (elderResurrectionEvent.isCancelled()) {
-            getPlayerWW().sendMessage(game.translate("werewolf.check.cancel"));
+            getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
         } else {
             if (elderResurrectionEvent.isKillerAVillager()) {
                 getPlayerWW().removePlayerMaxHealth(6);

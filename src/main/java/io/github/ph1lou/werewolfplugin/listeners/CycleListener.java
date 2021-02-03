@@ -89,7 +89,7 @@ public class CycleListener implements Listener {
                 - game.getConfig().getTimerValue(TimersBase.CITIZEN_DURATION.getKey()) > 0) {
 
             if (game.getConfig().isConfigActive(ConfigsBase.VOTE.getKey())
-                    && game.getConfig().getTimerValue(TimersBase.VOTE_BEGIN.getKey()) < 0) {
+                    && !game.getVote().isStatus(VoteStatus.NOT_BEGIN)) {
                 Bukkit.broadcastMessage(game.translate("werewolf.vote.vote_time",
                         game.getScore().conversion((int) duration)));
 
@@ -302,7 +302,7 @@ public class CycleListener implements Listener {
                                     player.removePotionEffect(po.getType());
                                 }
                             }
-                            playerWW.sendMessage(game.translate("werewolf.announcement.troll"));
+                            playerWW.sendMessageWithKey("werewolf.announcement.troll");
                             playerWW.addPlayerMaxHealth(20 - playerWW.getMaxHealth());
                             HandlerList.unregisterAll((Listener) playerWW.getRole());
                         });

@@ -68,9 +68,7 @@ public class Protector extends RolesWithLimitedSelectionDuration implements Affe
 
 
             this.last.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-            this.last.sendMessage(
-                    game.translate(
-                            "werewolf.role.protector.no_longer_protected"));
+            this.last.sendMessageWithKey("werewolf.role.protector.no_longer_protected");
             this.last = null;
         }
 
@@ -81,13 +79,13 @@ public class Protector extends RolesWithLimitedSelectionDuration implements Affe
 
         setPower(true);
 
-        getPlayerWW().sendMessage(game.translate(
+        getPlayerWW().sendMessageWithKey(
                 "werewolf.role.protector.protection_message",
                 game.getScore().conversion(
-                        game.getConfig().getTimerValue(TimersBase.POWER_DURATION.getKey()))));
+                        game.getConfig().getTimerValue(TimersBase.POWER_DURATION.getKey())));
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onStealProtection(StealEvent event) {
 
         if (this.last == null) return;

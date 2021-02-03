@@ -38,19 +38,19 @@ public class CommandProtector implements Commands {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            player.sendMessage(game.translate("werewolf.check.offline_player"));
+            playerWW.sendMessageWithKey("werewolf.check.offline_player");
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         PlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            player.sendMessage(game.translate("werewolf.check.player_not_found"));
+            playerWW.sendMessageWithKey("werewolf.check.player_not_found");
             return;
         }
 
         if (((AffectedPlayers) protector).getAffectedPlayers().contains(playerWW1)) {
-            player.sendMessage(game.translate("werewolf.check.already_get_power"));
+            playerWW.sendMessageWithKey("werewolf.check.already_get_power");
             return;
         }
 
@@ -62,7 +62,7 @@ public class CommandProtector implements Commands {
         Bukkit.getPluginManager().callEvent(protectionEvent);
 
         if (protectionEvent.isCancelled()) {
-            player.sendMessage(game.translate("werewolf.check.cancel"));
+            playerWW.sendMessageWithKey("werewolf.check.cancel");
             return;
         }
 
@@ -70,7 +70,7 @@ public class CommandProtector implements Commands {
         ((AffectedPlayers) protector).addAffectedPlayer(playerWW1);
 
         playerWW1.addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-        playerWW1.sendMessage(game.translate("werewolf.role.protector.get_protection"));
-        player.sendMessage(game.translate("werewolf.role.protector.protection_perform", playerArg.getName()));
+        playerWW1.sendMessageWithKey("werewolf.role.protector.get_protection");
+        playerWW.sendMessageWithKey("werewolf.role.protector.protection_perform", playerArg.getName());
     }
 }

@@ -37,10 +37,10 @@ public class Troublemaker extends RolesVillage implements AffectedPlayers, Power
         int i = 0;
         for (PlayerWW playerWW1 : game.getPlayerWW()) {
 
+            playerWW1.sendMessageWithKey("werewolf.role.troublemaker.troublemaker_death");
             if (playerWW1.isState(StatePlayer.ALIVE)) {
                 game.getMapManager().transportation(playerWW1,
-                        i * 2 * Math.PI / game.getScore().getPlayerSize(),
-                        game.translate("werewolf.role.troublemaker.troublemaker_death"));
+                        i * 2 * Math.PI / game.getScore().getPlayerSize());
                 i++;
             }
         }
@@ -99,7 +99,7 @@ public class Troublemaker extends RolesVillage implements AffectedPlayers, Power
 
         if (!game.getConfig().isConfigActive(ConfigsBase.WEREWOLF_CHAT.getKey())) return;
 
-        getPlayerWW().sendMessage(game.translate("werewolf.commands.admin.ww_chat.announce", game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.WEREWOLF_CHAT_DURATION.getKey())), game.getConfig().getWereWolfChatMaxMessage()));
+        getPlayerWW().sendMessageWithKey("werewolf.commands.admin.ww_chat.announce", game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.WEREWOLF_CHAT_DURATION.getKey())), game.getConfig().getWereWolfChatMaxMessage());
 
     }
 

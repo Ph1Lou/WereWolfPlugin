@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class InfectFatherOfTheWolves extends RolesWereWolf implements AffectedPlayers, Power {
 
@@ -83,14 +84,14 @@ public class InfectFatherOfTheWolves extends RolesWereWolf implements AffectedPl
         PlayerWW playerWW = event.getPlayerWW();
 
 
-        PlayerWW killerWW = playerWW.getLastKiller();
+        Optional<PlayerWW> killerWW = playerWW.getLastKiller();
 
 
-        if (killerWW == null) {
+        if (!killerWW.isPresent()) {
             return;
         }
 
-        if (!killerWW.getRole().isWereWolf()) {
+        if (!killerWW.get().getRole().isWereWolf()) {
             return;
         }
 

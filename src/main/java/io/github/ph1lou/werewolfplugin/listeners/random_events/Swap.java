@@ -63,8 +63,8 @@ public class Swap extends ListenerManager {
                     playerWW2.addPlayerMaxHealth(20 - playerWW2.getMaxHealth());
                     playerWW1.getPotionEffects().forEach(playerWW1::removePotionEffect);
                     playerWW2.getPotionEffects().forEach(playerWW2::removePotionEffect);
-                    playerWW1.sendMessage(roles2.getBetterDescription());
-                    playerWW2.sendMessage(roles1.getBetterDescription());
+                    playerWW1.sendMessageWithKey("werewolf.random_events.swap.concerned");
+                    playerWW2.sendMessageWithKey("werewolf.random_events.swap.concerned");
                     roles1.recoverPower();
                     roles2.recoverPower();
                 }

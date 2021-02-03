@@ -38,12 +38,12 @@ public class CommandDetective implements Commands {
         Roles detective = playerWW.getRole();
 
         if (args.length != 2) {
-            player.sendMessage(game.translate("werewolf.check.parameters", 2));
+            playerWW.sendMessageWithKey("werewolf.check.parameters", 2);
             return;
         }
 
         if (args[0].equalsIgnoreCase(args[1])) {
-            player.sendMessage(game.translate("werewolf.check.two_distinct_player"));
+            playerWW.sendMessageWithKey("werewolf.check.two_distinct_player");
             return;
         }
 
@@ -52,7 +52,7 @@ public class CommandDetective implements Commands {
             Player playerArg = Bukkit.getPlayer(p);
 
             if (playerArg == null) {
-                player.sendMessage(game.translate("werewolf.check.offline_player"));
+                playerWW.sendMessageWithKey("werewolf.check.offline_player");
                 return;
             }
 
@@ -60,17 +60,17 @@ public class CommandDetective implements Commands {
             PlayerWW playerWW1 = game.getPlayerWW(uuid1);
 
             if (playerWW1 == null || playerWW1.isState(StatePlayer.DEATH)) {
-                player.sendMessage(game.translate("werewolf.check.player_not_found"));
+                playerWW.sendMessageWithKey("werewolf.check.player_not_found");
                 return;
             }
 
             if (uuid.equals(uuid1)) {
-                player.sendMessage(game.translate("werewolf.check.not_yourself"));
+                playerWW.sendMessageWithKey("werewolf.check.not_yourself");
                 return;
             }
 
             if (((AffectedPlayers) detective).getAffectedPlayers().contains(playerWW1)) {
-                player.sendMessage(game.translate("werewolf.role.detective.already_inspect"));
+                playerWW.sendMessageWithKey("werewolf.role.detective.already_inspect");
                 return;
             }
         }
@@ -104,7 +104,7 @@ public class CommandDetective implements Commands {
         Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
-            player.sendMessage(game.translate("werewolf.check.cancel"));
+            playerWW.sendMessageWithKey("werewolf.check.cancel");
             return;
         }
 
@@ -112,8 +112,8 @@ public class CommandDetective implements Commands {
         ((AffectedPlayers) detective).addAffectedPlayer(playerWW2);
 
         if (event.isSameCamp()) {
-            player.sendMessage(game.translate("werewolf.role.detective.same_camp", player1.getName(), player2.getName()));
+            playerWW.sendMessageWithKey("werewolf.role.detective.same_camp", player1.getName(), player2.getName());
         } else
-            player.sendMessage(game.translate("werewolf.role.detective.opposing_camp", player1.getName(), player2.getName()));
+            playerWW.sendMessageWithKey("werewolf.role.detective.opposing_camp", player1.getName(), player2.getName());
     }
 }

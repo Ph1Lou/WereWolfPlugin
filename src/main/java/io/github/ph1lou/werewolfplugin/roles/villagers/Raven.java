@@ -66,7 +66,7 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
 
         if (last != null) {
             last.removePotionEffect(PotionEffectType.JUMP);
-            last.sendMessage(game.translate("werewolf.role.raven.no_longer_curse"));
+            last.sendMessageWithKey("werewolf.role.raven.no_longer_curse");
             last = null;
         }
 
@@ -76,10 +76,10 @@ public class Raven extends RolesWithLimitedSelectionDuration implements Affected
 
         setPower(true);
 
-        getPlayerWW().sendMessage(game.translate("werewolf.role.raven.curse_message",
+        getPlayerWW().sendMessageWithKey("werewolf.role.raven.curse_message",
                 game.getScore().conversion(
                         game.getConfig()
-                                .getTimerValue(TimersBase.POWER_DURATION.getKey()))));
+                                .getTimerValue(TimersBase.POWER_DURATION.getKey())));
     }
 
 

@@ -21,6 +21,7 @@ import io.github.ph1lou.werewolfapi.events.RepartitionEvent;
 import io.github.ph1lou.werewolfapi.events.RivalEvent;
 import io.github.ph1lou.werewolfapi.events.TrollEvent;
 import io.github.ph1lou.werewolfapi.events.TrollLoverEvent;
+import io.github.ph1lou.werewolfapi.events.VoteBeginEvent;
 import io.github.ph1lou.werewolfapi.events.WereWolfListEvent;
 import io.github.ph1lou.werewolfapi.registers.AddonRegister;
 import io.github.ph1lou.werewolfapi.registers.CommandRegister;
@@ -1300,6 +1301,7 @@ public class Register implements RegisterManager {
                 .add(new TimerRegister("werewolf.name",
                         TimersBase.VOTE_BEGIN.getKey())
                         .addPredicate(wereWolfAPI -> true)
+                        .onZero(wereWolfAPI -> Bukkit.getPluginManager().callEvent(new VoteBeginEvent()))
                         .setDefaultValue(2400));
 
         timersRegister

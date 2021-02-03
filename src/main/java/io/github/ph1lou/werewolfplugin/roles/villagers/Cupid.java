@@ -4,10 +4,8 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.AroundLover;
 import io.github.ph1lou.werewolfapi.events.EnchantmentEvent;
-import io.github.ph1lou.werewolfapi.events.StealEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
@@ -68,38 +66,20 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
                 game.translate("werewolf.description.item",
                         game.translate("werewolf.role.cupid.items")) +
                 game.translate("werewolf.role.cupid.lover",
-                        affectedPlayer.isEmpty() ?
+                        affectedPlayer.isEmpty() ? hasPower() ? game.translate("werewolf.role.cupid.lover_designation_message",
+                                game.getScore().conversion(
+                                        game.getConfig()
+                                                .getTimerValue("werewolf.menu.timers.lover_duration"))) :
                                 game.translate("werewolf.role.cupid.none") :
                                 affectedPlayer.stream().map(PlayerWW::getName)
                                         .collect(Collectors.joining(" ")));
     }
 
+    @Override
+    public void recoverPower() {
 
-    @EventHandler
-    public void onStealEvent(StealEvent event) {
-
-        if (!event.getThiefWW().equals(getPlayerWW())) return;
-
-        if (hasPower()) {
-            getPlayerWW().sendMessage(
-                    game.translate("werewolf.role.cupid.lover_designation_message",
-                            game.getScore().conversion(
-                                    game.getConfig()
-                                            .getTimerValue("werewolf.menu.timers.lover_duration"))));
-            return;
-        }
-
-        if (affectedPlayer.size() < 2) return;
-
-        PlayerWW loverWW1 = affectedPlayer.get(0);
-        PlayerWW loverWW2 = affectedPlayer.get(1);
-
-
-        getPlayerWW().sendMessage(
-                game.translate("werewolf.role.cupid.designation_perform",
-                        loverWW1.getName(),
-                        loverWW2.getName()));
     }
+
 
     @EventHandler
     public void onAroundLover(AroundLover event) {
@@ -133,14 +113,4 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
         }
     }
 
-
-    @Override
-    public void recoverPower() {
-
-        getPlayerWW().sendMessage(game.translate(
-                "werewolf.role.cupid.lover_designation_message",
-                game.getScore().conversion(
-                        game.getConfig().getTimerValue(TimersBase.LOVER_DURATION
-                                .getKey()))));
-    }
 }

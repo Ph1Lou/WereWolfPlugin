@@ -107,18 +107,18 @@ public class AmnesiacLover implements LoverAPI, Listener {
         }
     }
 
-    public void announceAmnesiacLoversOnJoin(PlayerWW player) {
+    public void announceAmnesiacLoversOnJoin(PlayerWW playerWW) {
 
         if (!find) return;
 
-        if (amnesiacLover1.equals(player)) {
-            player.sendMessage(game.translate("werewolf.role.lover.description",
-                    amnesiacLover2.getName()));
-            Sound.PORTAL_TRAVEL.play(player);
-        } else if (amnesiacLover2.equals(player)) {
-            player.sendMessage(game.translate("werewolf.role.lover.description",
-                    amnesiacLover1.getName()));
-            Sound.PORTAL_TRAVEL.play(player);
+        if (amnesiacLover1.equals(playerWW)) {
+            playerWW.sendMessageWithKey("werewolf.role.lover.description",
+                    amnesiacLover2.getName());
+            Sound.PORTAL_TRAVEL.play(playerWW);
+        } else if (amnesiacLover2.equals(playerWW)) {
+            playerWW.sendMessageWithKey("werewolf.role.lover.description",
+                    amnesiacLover1.getName());
+            Sound.PORTAL_TRAVEL.play(playerWW);
         }
     }
 

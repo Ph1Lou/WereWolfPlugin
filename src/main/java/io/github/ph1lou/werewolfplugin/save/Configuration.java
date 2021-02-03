@@ -22,7 +22,7 @@ public class Configuration implements ConfigWereWolfAPI {
     private transient RegisterManager registerManager;
     private int strengthRate = 30;
     private int resistanceRate = 20;
-    private int appleRate = 10;
+    private int appleRate = 2;
     private int flintRate = 10;
     private int pearlRate = 30;
     private int xpBoost = 500;

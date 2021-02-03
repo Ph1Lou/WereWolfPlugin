@@ -3,7 +3,6 @@ package io.github.ph1lou.werewolfplugin.listeners;
 import fr.mrmicky.fastboard.FastBoard;
 import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
@@ -420,8 +419,6 @@ public class PlayerListener implements Listener {
 		Player player = Bukkit.getPlayer(playerWW.getUUID());
 		World world = game.getMapManager().getWorld();
 
-		String roleLG = playerWW.getRole().getKey();
-
 		if (playerWW.isState(StatePlayer.ALIVE)) {
 
 			playerWW.clearItemDeath();
@@ -441,10 +438,6 @@ public class PlayerListener implements Listener {
 
 		if (playerWW.isState(StatePlayer.DEATH)) return;
 
-		if (playerWW.isThief()) {
-			roleLG = RolesBase.THIEF.getKey();
-		}
-
 		AnnouncementDeathEvent announcementDeathEvent = new AnnouncementDeathEvent(playerWW,
 				"werewolf.announcement.death_message");
 
@@ -461,8 +454,6 @@ public class PlayerListener implements Listener {
 			Bukkit.broadcastMessage(deathMessage);
 
 			game.getConfig().removeOneRole(announcementDeathEvent.getRole());
-		} else {
-			game.getConfig().removeOneRole(roleLG);
 		}
 
 		playerWW.setState(StatePlayer.DEATH);
@@ -501,8 +492,8 @@ public class PlayerListener implements Listener {
 		if (playerWW.isState(StatePlayer.ALIVE)) return;
 
 		playerWW.getRole().recoverPotionEffect();
-		game.getMapManager().transportation(playerWW, Math.random() * Math.PI * 2,
-				game.translate("werewolf.announcement.resurrection"));
+		playerWW.sendMessageWithKey("werewolf.announcement.resurrection");
+		game.getMapManager().transportation(playerWW, Math.random() * Math.PI * 2);
 		playerWW.setState(StatePlayer.ALIVE);
 
 		Bukkit.getScheduler().scheduleSyncDelayedTask(game.getMain(), game::checkVictory);

@@ -9,6 +9,7 @@ import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.enums.VoteStatus;
 import io.github.ph1lou.werewolfapi.events.SeeVoteEvent;
+import io.github.ph1lou.werewolfapi.events.VoteBeginEvent;
 import io.github.ph1lou.werewolfapi.events.VoteEndEvent;
 import io.github.ph1lou.werewolfapi.events.VoteEvent;
 import io.github.ph1lou.werewolfapi.events.VoteResultEvent;
@@ -44,30 +45,35 @@ public class Vote implements Listener, VoteAPI {
 
         if (voter == null) return;
 
-        if (game.getConfig().getTimerValue(TimersBase.VOTE_BEGIN.getKey()) > 0) {
-            voter.sendMessage(game.translate("werewolf.vote.vote_not_yet_activated"));
-        } else if (!game.getConfig().isConfigActive(ConfigsBase.VOTE.getKey())) {
-            voter.sendMessage(game.translate("werewolf.vote.vote_disable"));
-        } else if (!currentStatus.equals(VoteStatus.IN_PROGRESS)) {
-            voter.sendMessage(game.translate("werewolf.vote.not_vote_time"));
-        } else if (voters.containsKey(voterWW)) {
-            voter.sendMessage(game.translate("werewolf.vote.already_voted"));
-        } else if (tempPlayer.contains(vote)) {
-            voter.sendMessage(game.translate("werewolf.vote.player_already_voted"));
-        } else {
-            VoteEvent voteEvent = new VoteEvent(voterWW, vote);
-            Bukkit.getPluginManager().callEvent(voteEvent);
+		if (game.getConfig().getTimerValue(TimersBase.VOTE_BEGIN.getKey()) > 0) {
+			voterWW.sendMessageWithKey("werewolf.vote.vote_not_yet_activated");
+		} else if (!game.getConfig().isConfigActive(ConfigsBase.VOTE.getKey())) {
+			voterWW.sendMessageWithKey("werewolf.vote.vote_disable");
+		} else if (!currentStatus.equals(VoteStatus.IN_PROGRESS)) {
+			voterWW.sendMessageWithKey("werewolf.vote.not_vote_time");
+		} else if (voters.containsKey(voterWW)) {
+			voterWW.sendMessageWithKey("werewolf.vote.already_voted");
+		} else if (tempPlayer.contains(vote)) {
+			voterWW.sendMessageWithKey("werewolf.vote.player_already_voted");
+		} else {
+			VoteEvent voteEvent = new VoteEvent(voterWW, vote);
+			Bukkit.getPluginManager().callEvent(voteEvent);
 
 			if (voteEvent.isCancelled()) {
-				voter.sendMessage(game.translate("werewolf.check.cancel"));
+				voterWW.sendMessageWithKey("werewolf.check.cancel");
 				return;
-            }
+			}
 			this.voters.put(voteEvent.getPlayerWW(), voteEvent.getTargetWW());
 			this.votes.merge(vote, 1, Integer::sum);
 
-			voter.sendMessage(game.translate("werewolf.vote.perform_vote", vote.getName()));
+			voterWW.sendMessageWithKey("werewolf.vote.perform_vote", vote.getName());
 		}
 
+	}
+
+	@EventHandler
+	public void onVoteBegin(VoteBeginEvent event) {
+		this.currentStatus = VoteStatus.NOT_IN_PROGRESS;
 	}
 
 	@EventHandler

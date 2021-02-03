@@ -35,6 +35,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Rival extends RolesNeutral implements Power {
@@ -105,7 +106,7 @@ public class Rival extends RolesNeutral implements Power {
 
         List<PlayerWW> lovers = new ArrayList<>(loverAPI.getLovers());
 
-        getPlayerWW().sendMessage(game.translate("werewolf.role.rival.lover", lovers.isEmpty() ? "" : game.translate(lovers.get(0).getRole().getKey()), lovers.size() == 2 ? game.translate(lovers.get(1).getRole().getKey()) : ""));
+        getPlayerWW().sendMessageWithKey("werewolf.role.rival.lover", lovers.isEmpty() ? "" : game.translate(lovers.get(0).getRole().getKey()), lovers.size() == 2 ? game.translate(lovers.get(1).getRole().getKey()) : "");
     }
 
     @EventHandler
@@ -149,11 +150,11 @@ public class Rival extends RolesNeutral implements Power {
         Bukkit.getPluginManager().callEvent(rivalAnnouncementEvent);
 
         if (rivalAnnouncementEvent.isCancelled()) {
-            getPlayerWW().sendMessage(game.translate("werewolf.check.cancel"));
+            getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
             return;
         }
 
-        getPlayerWW().sendMessage(game.translate("werewolf.role.rival.find_lovers", playerWWS1.get(0).getName(), playerWWS1.size() >= 2 ? playerWWS1.get(1).getName() : "", playerWWS1.size() >= 3 ? playerWWS1.get(2).getName() : "", playerWWS1.size() >= 4 ? playerWWS1.get(3).getName() : "", playerWWS1.size() >= 5 ? playerWWS1.get(4).getName() : ""));
+        getPlayerWW().sendMessageWithKey("werewolf.role.rival.find_lovers", playerWWS1.get(0).getName(), playerWWS1.size() >= 2 ? playerWWS1.get(1).getName() : "", playerWWS1.size() >= 3 ? playerWWS1.get(2).getName() : "", playerWWS1.size() >= 4 ? playerWWS1.get(3).getName() : "", playerWWS1.size() >= 5 ? playerWWS1.get(4).getName() : "");
     }
 
     @EventHandler
@@ -172,7 +173,7 @@ public class Rival extends RolesNeutral implements Power {
         if (!loverAPI.getLovers().contains(playerWW1) || !loverAPI.getLovers().contains(playerWW2)) return;
 
         getPlayerWW().removePlayerMaxHealth(4);
-        getPlayerWW().sendMessage(game.translate("werewolf.role.rival.lover_death"));
+        getPlayerWW().sendMessageWithKey("werewolf.role.rival.lover_death");
         Bukkit.getPluginManager().callEvent(new RivalLoverDeathEvent(getPlayerWW(), new ArrayList<>(loverAPI.getLovers())));
         loverAPI = null;
     }
@@ -188,8 +189,6 @@ public class Rival extends RolesNeutral implements Power {
         if (!event.getPlayerWW().equals(cupidWW)) return;
 
         cupidWW = event.getThiefWW();
-
-        getPlayerWW().sendMessage(game.translate("werewolf.role.rival.cupid"));
     }
 
     @Override
@@ -208,20 +207,20 @@ public class Rival extends RolesNeutral implements Power {
 
         PlayerWW playerWW = event.getPlayerWW();
 
-        PlayerWW killerWW = playerWW.getLastKiller();
+        Optional<PlayerWW> killerWW = playerWW.getLastKiller();
 
-        if (killerWW == null) {
+        if (!killerWW.isPresent()) {
             return;
         }
 
-        if (!killerWW.equals(getPlayerWW())) return;
+        if (!killerWW.get().equals(getPlayerWW())) return;
 
         RivalLoverEvent rivalLoverEvent = new RivalLoverEvent(getPlayerWW(), playerWW);
 
         Bukkit.getPluginManager().callEvent(rivalLoverEvent);
 
         if (rivalLoverEvent.isCancelled()) {
-            getPlayerWW().sendMessage(game.translate("werewolf.check.cancel"));
+            getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
             return;
         }
 

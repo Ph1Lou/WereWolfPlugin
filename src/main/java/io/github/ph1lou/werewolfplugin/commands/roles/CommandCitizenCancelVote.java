@@ -33,7 +33,7 @@ public class CommandCitizenCancelVote implements Commands {
         Citizen citizen = (Citizen) playerWW.getRole();
 
         if (!game.getVote().isStatus(VoteStatus.WAITING_CITIZEN)) {
-            player.sendMessage(game.translate("werewolf.check.power"));
+            playerWW.sendMessageWithKey("werewolf.check.power");
             return;
         }
 
@@ -44,7 +44,7 @@ public class CommandCitizenCancelVote implements Commands {
         Bukkit.getPluginManager().callEvent(cancelVoteEvent);
 
         if (cancelVoteEvent.isCancelled()) {
-            player.sendMessage(game.translate("werewolf.check.cancel"));
+            playerWW.sendMessageWithKey("werewolf.check.cancel");
             return;
         }
 
@@ -54,9 +54,9 @@ public class CommandCitizenCancelVote implements Commands {
 
         if (voteWW == null) return;
 
-        player.sendMessage(game.translate(
+        playerWW.sendMessageWithKey(
                 "werewolf.role.citizen.cancelling_vote_perform",
-                voteWW.getName()));
+                voteWW.getName());
         citizen.addAffectedPlayer(voteWW);
 
 

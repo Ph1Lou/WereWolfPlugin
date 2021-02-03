@@ -41,19 +41,19 @@ public class CommandSeer implements Commands {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            player.sendMessage(game.translate("werewolf.check.offline_player"));
+            playerWW.sendMessageWithKey("werewolf.check.offline_player");
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         PlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            player.sendMessage(game.translate("werewolf.check.player_not_found"));
+            playerWW.sendMessageWithKey("werewolf.check.player_not_found");
             return;
         }
 
         if (player.getHealth() < 7) {
-            player.sendMessage(game.translate("werewolf.role.seer.not_enough_life"));
+            playerWW.sendMessageWithKey("werewolf.role.seer.not_enough_life");
         } else {
             Roles role1 = playerWW1.getRole();
 
@@ -70,7 +70,7 @@ public class CommandSeer implements Commands {
             Bukkit.getPluginManager().callEvent(seerEvent);
 
             if (seerEvent.isCancelled()) {
-                player.sendMessage(game.translate("werewolf.check.cancel"));
+                playerWW.sendMessageWithKey("werewolf.check.cancel");
                 return;
             }
 
@@ -78,18 +78,18 @@ public class CommandSeer implements Commands {
 
             if (seerEvent.getCamp().equals("werewolf.categories.villager")) {
                 ((Seer) seer).setDisablePower();
-                player.sendMessage(game.translate("werewolf.role.seer.see_villager"));
+                playerWW.sendMessageWithKey("werewolf.role.seer.see_villager");
                 if (seer.isKey(RolesBase.CHATTY_SEER.getKey())) {
                     Bukkit.broadcastMessage(game.translate("werewolf.role.chatty_seer.see_perform", game.translate("werewolf.categories.villager")));
                 }
                 playerWW.removePlayerHealth(6);
             } else if (seerEvent.getCamp().equals("werewolf.categories.werewolf")) {
-                player.sendMessage(game.translate("werewolf.role.seer.see_perform", game.translate("werewolf.categories.werewolf")));
+                playerWW.sendMessageWithKey("werewolf.role.seer.see_perform", game.translate("werewolf.categories.werewolf"));
                 if (seer.isKey(RolesBase.CHATTY_SEER.getKey())) {
                     Bukkit.broadcastMessage(game.translate("werewolf.role.chatty_seer.see_perform", game.translate("werewolf.categories.werewolf")));
                 }
             } else {
-                player.sendMessage(game.translate("werewolf.role.seer.see_perform", game.translate("werewolf.categories.neutral")));
+                playerWW.sendMessageWithKey("werewolf.role.seer.see_perform", game.translate("werewolf.categories.neutral"));
                 if (seer.isKey(RolesBase.CHATTY_SEER.getKey())) {
                     Bukkit.broadcastMessage(game.translate("werewolf.role.chatty_seer.see_perform", game.translate("werewolf.categories.neutral")));
                 }

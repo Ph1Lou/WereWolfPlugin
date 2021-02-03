@@ -32,7 +32,7 @@ public class CommandWereWolf implements Commands {
         if (playerWW == null) return;
 
         if (game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey()) > 0) {
-            player.sendMessage(game.translate("werewolf.role.werewolf.list_not_revealed"));
+            playerWW.sendMessageWithKey("werewolf.role.werewolf.list_not_revealed");
             return;
         }
 
@@ -40,7 +40,7 @@ public class CommandWereWolf implements Commands {
         Bukkit.getPluginManager().callEvent(requestSeeWereWolfListEvent);
 
         if (!requestSeeWereWolfListEvent.isAccept()) {
-            player.sendMessage(game.translate("werewolf.role.werewolf.not_werewolf"));
+            playerWW.sendMessageWithKey("werewolf.role.werewolf.not_werewolf");
             return;
         }
 
@@ -56,6 +56,6 @@ public class CommandWereWolf implements Commands {
                 list.append(playerWW1.getName()).append(" ");
             }
         }
-        player.sendMessage(game.translate("werewolf.role.werewolf.werewolf_list", list.toString()));
+        playerWW.sendMessageWithKey("werewolf.role.werewolf.werewolf_list", list.toString());
     }
 }

@@ -95,7 +95,7 @@ public class Imitator extends RolesNeutral implements AffectedPlayers, Power {
 
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
-        getPlayerWW().addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+        getPlayerWW().addPotionEffect(PotionEffectType.INCREASE_DAMAGE);
     }
 
     @EventHandler
@@ -120,9 +120,9 @@ public class Imitator extends RolesNeutral implements AffectedPlayers, Power {
 
         PlayerWW playerWW = event.getPlayerWW();
 
-        if (playerWW.getLastKiller() == null) return;
+        if (!playerWW.getLastKiller().isPresent()) return;
 
-        if (!playerWW.getLastKiller().equals(getPlayerWW())) return;
+        if (!playerWW.getLastKiller().get().equals(getPlayerWW())) return;
 
         if (!hasPower()) return;
 
@@ -152,7 +152,7 @@ public class Imitator extends RolesNeutral implements AffectedPlayers, Power {
         Roles role = playerWW.getRole();
 
         setPower(false);
-        getPlayerWW().setThief(true);
+
         HandlerList.unregisterAll((Listener) getPlayerWW().getRole());
         Roles roleClone = role.publicClone();
         getPlayerWW().setRole(roleClone);
@@ -164,17 +164,19 @@ public class Imitator extends RolesNeutral implements AffectedPlayers, Power {
             Bukkit.getPluginManager().callEvent(new NewWereWolfEvent(getPlayerWW()));
         }
         roleClone.setTransformedToNeutral(true);
+        roleClone.setDeathRole(this.getKey());
 
-        getPlayerWW().sendMessage(game.translate("werewolf.role.thief.realized_theft",
-                game.translate(role.getKey())));
-        getPlayerWW().sendMessage(game.translate("werewolf.announcement.review_role"));
+        getPlayerWW().sendMessageWithKey("werewolf.role.thief.realized_theft",
+                game.translate(role.getKey()));
+        getPlayerWW().sendMessageWithKey("werewolf.role.thief.details");
 
         getPlayerWW().removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
         Bukkit.getPluginManager().callEvent(new StealEvent(getPlayerWW(),
                 playerWW,
                 roleClone.getKey()));
 
-        getPlayerWW().getRole().recoverPotionEffect();
+        roleClone.recoverPower();
+        roleClone.recoverPotionEffect();
 
         for (int i = 0; i < playerWW.getLovers().size(); i++) {
             LoverAPI loverAPI = playerWW.getLovers().get(i);

@@ -51,14 +51,15 @@ public class CommandTroubleMaker implements Commands {
         ((Power) troublemaker).setPower(false);
         Bukkit.getPluginManager().callEvent(troubleMakerEvent);
 
-        if(troubleMakerEvent.isCancelled()){
+        if (troubleMakerEvent.isCancelled()) {
             player.sendMessage(game.translate("werewolf.check.cancel"));
             return;
         }
 
         ((AffectedPlayers) troublemaker).addAffectedPlayer(playerWW1);
 
-        game.getMapManager().transportation(playerWW1, Math.random() * 2 * Math.PI, game.translate("werewolf.role.troublemaker.get_switch"));
+        playerWW1.sendMessageWithKey("werewolf.role.troublemaker.get_switch");
+        game.getMapManager().transportation(playerWW1, Math.random() * 2 * Math.PI);
         player.sendMessage(game.translate("werewolf.role.troublemaker.troublemaker_perform", playerArg.getName()));
     }
 }
