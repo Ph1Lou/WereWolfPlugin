@@ -52,20 +52,18 @@ public class Lover implements LoverAPI, Listener {
 
         if (death) return;
 
-
         if (!lovers.contains(playerWW)) return;
 
         StringBuilder couple = new StringBuilder();
 
-        for (PlayerWW playerWW1 : lovers) {
-            if (!playerWW.equals(playerWW1)) {
-                couple.append(playerWW1.getName()).append(" ");
-            }
-        }
-        playerWW.sendMessageWithKey("werewolf.role.lover.description", couple.toString());
-        Sound.SHEEP_SHEAR.play(playerWW);
-    }
+        lovers.stream()
+                .filter(playerWW1 -> !playerWW.equals(playerWW1))
+                .forEach(playerWW1 -> couple.append(playerWW1.getName()).append(" "));
 
+        playerWW.sendMessageWithKey("werewolf.role.lover.description",
+                Sound.SHEEP_SHEAR,
+                couple.toString());
+    }
 
     @EventHandler
     public void onActionBarGameLoverEvent(ActionBarEvent event) {

@@ -407,7 +407,7 @@
         },
         "final_heal": {
           "command": "fh",
-          "send ": "[§6LG UHC§r] Final Heal !"
+          "send": "[§6LG UHC§r] Final Heal !"
         },
         "generation": {
           "already_start": "[§cWW UHC§r] Generation has already been launched",

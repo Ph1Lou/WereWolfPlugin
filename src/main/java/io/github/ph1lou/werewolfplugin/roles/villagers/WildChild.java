@@ -93,9 +93,8 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
             return;
         }
 
-        getPlayerWW().sendMessageWithKey("werewolf.role.wild_child.reveal_model",
+        getPlayerWW().sendMessageWithKey("werewolf.role.wild_child.reveal_model", Sound.BAT_IDLE,
                 model.getName());
-        Sound.BAT_IDLE.play(getPlayerWW());
     }
 
     @Override

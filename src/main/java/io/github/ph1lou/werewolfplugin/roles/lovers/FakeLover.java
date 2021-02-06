@@ -47,8 +47,7 @@ public class FakeLover implements LoverAPI, Listener {
                 couple.append(playerWW1.getName()).append(" ");
             }
         }
-        playerWW.sendMessageWithKey("werewolf.role.lover.description", couple.toString());
-        Sound.SHEEP_SHEAR.play(playerWW);
+        playerWW.sendMessageWithKey("werewolf.role.lover.description", Sound.SHEEP_SHEAR, couple.toString());
     }
 
 

@@ -4,6 +4,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.Camp;
+import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
@@ -50,7 +51,6 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
     public boolean hasPower() {
         return (this.power);
     }
-
 
     @Override
     public void addAffectedPlayer(PlayerWW playerWW) {
@@ -222,7 +222,7 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
                 player.sendMessage(game.translate("werewolf.role.fox.warn"));
                 Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
                     if (game.isState(StateGame.GAME)) {
-                        playerWW.sendMessageWithKey("werewolf.role.fox.smell");
+                        playerWW.sendMessageWithKey("werewolf.role.fox.smell", Sound.DONKEY_ANGRY);
                     }
                 }, 20 * 60 * 5);
             } else player.sendMessage(game.translate("werewolf.check.cancel"));

@@ -91,7 +91,7 @@ public class SmallFeaturesListener implements Listener {
 
                     Bukkit.getPluginManager().callEvent(goldenAppleParticleEvent);
 
-                    if (event.isCancelled()) return;
+                    if (!event.isCancelled()) return;
                 }
 
                 if (player.hasPotionEffect(PotionEffectType.ABSORPTION)) {

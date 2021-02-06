@@ -170,9 +170,9 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
 
         if (temp % 10 > 0 && temp % 10 <= 100f /
                 (game.getConfig().getTimerValue(TimersBase.SUCCUBUS_DURATION.getKey()) + 1)) {
-            player.sendMessage(game.translate(
+            getPlayerWW().sendMessageWithKey(
                     "werewolf.role.succubus.progress_charm",
-                    Math.min(100, Math.floor(temp))));
+                    Math.min(100, Math.floor(temp)));
         }
 
         if (temp >= 100) {
@@ -182,16 +182,15 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
             Bukkit.getPluginManager().callEvent(charmEvent);
 
             if (!charmEvent.isCancelled()) {
-                Sound.PORTAL_TRAVEL.play(charmed);
-                charmed.sendMessage(game.translate(
-                        "werewolf.role.succubus.get_charmed",
-                        getPlayerWW().getName()));
-                player.sendMessage(game.translate(
+                charmedWW.sendMessageWithKey(
+                        "werewolf.role.succubus.get_charmed", Sound.PORTAL_TRAVEL,
+                        getPlayerWW().getName());
+                getPlayerWW().sendMessageWithKey(
                         "werewolf.role.succubus.charming_perform",
-                        charmed.getName()));
+                        charmed.getName());
                 game.checkVictory(); //pose soucis quand que 2 joueurs
             } else {
-                player.sendMessage(game.translate("werewolf.check.cancel"));
+                getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
             }
 
             setProgress(0f);

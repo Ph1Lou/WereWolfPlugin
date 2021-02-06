@@ -112,13 +112,11 @@ public class AmnesiacLover implements LoverAPI, Listener {
         if (!find) return;
 
         if (amnesiacLover1.equals(playerWW)) {
-            playerWW.sendMessageWithKey("werewolf.role.lover.description",
+            playerWW.sendMessageWithKey("werewolf.role.lover.description", Sound.PORTAL_TRAVEL,
                     amnesiacLover2.getName());
-            Sound.PORTAL_TRAVEL.play(playerWW);
         } else if (amnesiacLover2.equals(playerWW)) {
-            playerWW.sendMessageWithKey("werewolf.role.lover.description",
+            playerWW.sendMessageWithKey("werewolf.role.lover.description", Sound.PORTAL_TRAVEL,
                     amnesiacLover1.getName());
-            Sound.PORTAL_TRAVEL.play(playerWW);
         }
     }
 

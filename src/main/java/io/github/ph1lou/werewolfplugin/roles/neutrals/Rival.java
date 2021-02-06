@@ -25,6 +25,7 @@ import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
 import io.github.ph1lou.werewolfplugin.roles.lovers.Lover;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -249,8 +250,9 @@ public class Rival extends RolesNeutral implements Power {
 
         if (cupidWW.isState(StatePlayer.ALIVE)) {
 
-            stringBuilder.append("§bCupidon§f ")
-                    .append(cupidWW.getName())
+            stringBuilder
+                    .append(ChatColor.WHITE)
+                    .append(game.translate(RolesBase.CUPID.getKey()))
                     .append(" ")
                     .append(game.getScore()
                             .updateArrow(player,

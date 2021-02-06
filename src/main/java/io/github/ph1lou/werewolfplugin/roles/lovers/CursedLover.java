@@ -76,28 +76,19 @@ public class CursedLover implements LoverAPI, Listener {
 
         if (cursedLover1.equals(playerWW)) {
             if (!power1) {
-                setPower(playerWW);
+                playerWW.addPlayerMaxHealth(2);
             }
             power1 = true;
-            playerWW.sendMessageWithKey("werewolf.role.cursed_lover.description",
+            playerWW.sendMessageWithKey("werewolf.role.cursed_lover.description", Sound.SHEEP_SHEAR,
                     cursedLover2.getName());
-            Sound.SHEEP_SHEAR.play(playerWW);
         } else if (cursedLover2.equals(playerWW)) {
             if (!power2) {
-                setPower(playerWW);
+                playerWW.addPlayerMaxHealth(2);
             }
             power2 = true;
-            playerWW.sendMessageWithKey("werewolf.role.cursed_lover.description",
+            playerWW.sendMessageWithKey("werewolf.role.cursed_lover.description", Sound.SHEEP_SHEAR,
                     cursedLover1.getName());
-            Sound.SHEEP_SHEAR.play(playerWW);
         }
-    }
-
-    public void setPower(PlayerWW player) {
-
-        player.addPlayerMaxHealth(2);
-
-        Sound.SHEEP_SHEAR.play(player);
     }
 
     @EventHandler

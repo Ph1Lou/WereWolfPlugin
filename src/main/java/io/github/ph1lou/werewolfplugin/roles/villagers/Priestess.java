@@ -115,7 +115,7 @@ public class Priestess extends RolesWithLimitedSelectionDuration implements Affe
                 .map(PlayerWW::getRole)
                 .forEach(roles -> {
                     if (roles.isNeutral()) {
-                        roles.getPlayerWW().sendMessageWithKey(event.getFormat()
+                        roles.getPlayerWW().sendMessage(game.translate(event.getFormat())
                                 .replace("&player&", event.getPlayerName())
                                 .replace("&role&", game.translate(event.getRole())));
                     } else

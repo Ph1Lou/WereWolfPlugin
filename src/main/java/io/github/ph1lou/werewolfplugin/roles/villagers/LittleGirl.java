@@ -89,15 +89,13 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
     @EventHandler
     public void onGoldenAppleEat(GoldenAppleParticleEvent event) {
 
-        event.setCancelled(true);
-
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         if (!isInvisible()) return;
 
         if (game.isDay(Day.DAY)) return;
 
-        event.setCancelled(false);
+        event.setCancelled(true);
 
     }
 

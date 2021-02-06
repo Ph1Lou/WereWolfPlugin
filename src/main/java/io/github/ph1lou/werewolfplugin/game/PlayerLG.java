@@ -2,10 +2,12 @@ package io.github.ph1lou.werewolfplugin.game;
 
 
 import io.github.ph1lou.werewolfapi.LoverAPI;
+import io.github.ph1lou.werewolfapi.MessageAction;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.PotionAction;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
+import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
@@ -34,7 +36,7 @@ public class PlayerLG implements PlayerWW {
     private StatePlayer state = StatePlayer.ALIVE;
     private Roles role;
     private final List<PotionAction> disconnectedPotionActions = new ArrayList<>();
-    private final List<TextComponent> disconnectedMessages = new ArrayList<>();
+    private final List<MessageAction> disconnectedMessages = new ArrayList<>();
     private final List<ItemStack> decoItems = new ArrayList<>();
     private int maxHealth = 20;
     private Location disconnectedLocation = null;
@@ -125,15 +127,7 @@ public class PlayerLG implements PlayerWW {
 
     @Override
     public void sendMessage(String message) {
-
-        Player player = Bukkit.getPlayer(uuid);
-
-        if (player != null) {
-            player.sendMessage(message);
-            return;
-        }
-
-        disconnectedMessages.add(new TextComponent(message));
+        this.sendMessage(new TextComponent(message));
     }
 
     @Override
@@ -142,7 +136,17 @@ public class PlayerLG implements PlayerWW {
     }
 
     @Override
+    public void sendMessageWithKey(String key, Sound sound, Object... args) {
+        this.sendMessage(new TextComponent(game.translate(key, args)), sound);
+    }
+
+    @Override
     public void sendMessage(TextComponent textComponent) {
+        this.sendMessage(textComponent, null);
+    }
+
+    @Override
+    public void sendMessage(TextComponent textComponent, Sound sound) {
 
         Player player = Bukkit.getPlayer(uuid);
 
@@ -151,8 +155,7 @@ public class PlayerLG implements PlayerWW {
             return;
         }
 
-        disconnectedMessages.add(textComponent);
-
+        disconnectedMessages.add(new MessageAction(textComponent, sound));
     }
 
     @Override
@@ -371,8 +374,11 @@ public class PlayerLG implements PlayerWW {
         for (PotionAction potionAction : disconnectedPotionActions) {
             potionAction.executePotionAction(player);
         }
-        for (TextComponent message : disconnectedMessages) {
-            player.spigot().sendMessage(message);
+        for (MessageAction message : disconnectedMessages) {
+            player.spigot().sendMessage(message.getMessage());
+            if (message.getSound().isPresent()) {
+                message.getSound().get().play(player);
+            }
         }
         player.teleport(disconnectedLocation);
 

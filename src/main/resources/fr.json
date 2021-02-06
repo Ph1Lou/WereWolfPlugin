@@ -170,7 +170,7 @@
         "werewolf": "[§eLG UHC§r] %s §4est dans le camp des Loups Garous",
         "not_enough_near": "[§cLG UHC§r] Vous n'êtes pas assez proche de la personne que vous voulez flairer",
         "progress": "[§eLG UHC§r] Progression du Flair §b%s%%",
-        "smell": "[§cLG UHC§r] Vous avez été flairé par un renard il y a 5 minutes",
+        "smell": "[§cLG UHC§r] Vous avez été flairé par un §bRenard§f il y a 5 minutes",
         "command": "flairer"
       },
       "miner": {

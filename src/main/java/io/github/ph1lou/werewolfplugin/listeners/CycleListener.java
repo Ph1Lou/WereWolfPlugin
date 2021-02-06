@@ -210,10 +210,11 @@ public class CycleListener implements Listener {
     public void onPVP(PVPEvent event) {
 
         game.getMapManager().getWorld().setPVP(true);
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            p.sendMessage(game.translate("werewolf.announcement.pvp"));
-            Sound.DONKEY_ANGRY.play(p);
-        }
+        Bukkit.getOnlinePlayers()
+                .forEach(player -> {
+                    player.sendMessage(game.translate("werewolf.announcement.pvp"));
+                    Sound.DONKEY_ANGRY.play(player);
+                });
     }
 
     @EventHandler

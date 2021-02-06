@@ -312,15 +312,14 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
 
         if (isChoice(AngelForm.FALLEN_ANGEL)) {
             getPlayerWW().sendMessageWithKey(
-                    "werewolf.role.fallen_angel.reveal_target",
+                    "werewolf.role.fallen_angel.reveal_target", Sound.PORTAL_TRIGGER,
                     targetWW.getName());
         } else {
             getPlayerWW().addPlayerMaxHealth(6);
             getPlayerWW().sendMessageWithKey(
-                    "werewolf.role.guardian_angel.reveal_protege",
+                    "werewolf.role.guardian_angel.reveal_protege", Sound.PORTAL_TRIGGER,
                     targetWW.getName());
         }
-        Sound.PORTAL_TRIGGER.play(getPlayerWW());
 
         Bukkit.getPluginManager().callEvent(
                 new AngelTargetEvent(getPlayerWW(), targetWW));

@@ -22,10 +22,10 @@ public class CommandFinalHeal implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
 
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            p.setHealth(VersionUtils.getVersionUtils().getPlayerMaxHealth(p));
-            Sound.NOTE_STICKS.play(p);
-            p.sendMessage(game.translate("werewolf.commands.admin.final_heal.send "));
-        }
+        Bukkit.getOnlinePlayers().forEach(player1 -> {
+            player1.setHealth(VersionUtils.getVersionUtils().getPlayerMaxHealth(player1));
+            Sound.NOTE_STICKS.play(player1);
+            player1.sendMessage(game.translate("werewolf.commands.admin.final_heal.send"));
+        });
     }
 }

@@ -37,7 +37,7 @@ public class CommandLovers implements Commands {
         if (playerWW == null) return;
 
         if (playerWW.getLovers().isEmpty()) {
-            player.sendMessage(game.translate("werewolf.role.lover.not_in_pairs"));
+            playerWW.sendMessageWithKey("werewolf.role.lover.not_in_pairs");
             return;
         }
 
@@ -46,12 +46,12 @@ public class CommandLovers implements Commands {
         try {
             heart = Integer.parseInt(args[0]);
         } catch (NumberFormatException ignored) {
-            player.sendMessage(game.translate("werewolf.check.number_required"));
+            playerWW.sendMessageWithKey("werewolf.check.number_required");
             return;
         }
 
         if (heart >= 100) {
-            player.sendMessage(game.translate("werewolf.role.lover.100"));
+            playerWW.sendMessageWithKey("werewolf.role.lover.100");
             return;
         }
 
@@ -82,13 +82,13 @@ public class CommandLovers implements Commands {
                                                 playerCouple.setHealth(playerCouple.getHealth() + don);
                                                 temp.updateAndGet(v -> v + don);
                                                 playerCouple.sendMessage(game.translate("werewolf.role.lover.received", heart, playername));
-                                                player.sendMessage((game.translate("werewolf.role.lover.complete", heart, playerCouple.getName())));
-                                                Sound.PORTAL.play(playerCouple);
+                                                playerWW.sendMessageWithKey("werewolf.role.lover.complete", Sound.PORTAL, heart, playerCouple.getName());
                                             } else {
-                                                player.sendMessage(game.translate("werewolf.check.cancel"));
+                                                playerWW.sendMessageWithKey("werewolf.check.cancel");
                                             }
-                                        } else
-                                            player.sendMessage(game.translate("werewolf.role.lover.too_many_heart", playerCouple.getName()));
+                                        } else {
+                                            playerWW.sendMessageWithKey("werewolf.role.lover.too_many_heart", playerCouple.getName());
+                                        }
                                     }
                                 });
 
@@ -97,13 +97,13 @@ public class CommandLovers implements Commands {
         }
         else {
             if (args[1].equals(playername)) {
-                player.sendMessage(game.translate("werewolf.check.not_yourself"));
+                playerWW.sendMessageWithKey("werewolf.check.not_yourself");
                 return;
             }
             Player playerCouple = Bukkit.getPlayer(args[1]);
 
             if (playerCouple == null) {
-                player.sendMessage(game.translate("werewolf.check.offline_player"));
+                playerWW.sendMessageWithKey("werewolf.check.offline_player");
                 return;
             }
 
@@ -113,12 +113,11 @@ public class CommandLovers implements Commands {
             if (playerWW1 == null) return;
 
             if (!playerWW1.isState(StatePlayer.ALIVE)) {
-                player.sendMessage(game.translate("werewolf.check.offline_player"));
+                playerWW.sendMessageWithKey("werewolf.check.offline_player");
                 return;
             }
 
             double don = player.getHealth() * heart / 100f;
-
 
             Optional<? extends LoverAPI> loverAPI = playerWW.getLovers().stream()
                     .filter(loverAPI1 -> !loverAPI1.isKey(LoverType.CURSED_LOVER.getKey()))
@@ -137,17 +136,17 @@ public class CommandLovers implements Commands {
                         if (!donEvent.isCancelled()) {
                             playerCouple.setHealth(playerCouple.getHealth() + don);
                             player.setHealth(player.getHealth() - don);
-                            playerCouple.sendMessage(game.translate("werewolf.role.lover.received", heart, playername));
-                            player.sendMessage((game.translate("werewolf.role.lover.complete", heart, playerCouple.getName())));
+                            playerWW1.sendMessageWithKey("werewolf.role.lover.received", heart, playername);
+                            playerWW.sendMessageWithKey("werewolf.role.lover.complete", Sound.PORTAL, heart, playerCouple.getName());
                         } else {
-                            player.sendMessage(game.translate("werewolf.check.cancel"));
+                            playerWW.sendMessageWithKey("werewolf.check.cancel");
                         }
                     } else {
-                        player.sendMessage(game.translate("werewolf.role.lover.too_many_heart", args[1]));
+                        playerWW.sendMessageWithKey("werewolf.role.lover.too_many_heart", playerCouple.getName());
                     }
                 });
             } else {
-                player.sendMessage(game.translate("werewolf.role.lover.not_lover"));
+                playerWW.sendMessageWithKey("werewolf.role.lover.not_lover");
             }
 
         }
