@@ -13,25 +13,25 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Lang implements LangManager, Listener {
 
     private final Main main;
-    private final Map<String, String> extraTexts = new HashMap<>();
+    private final Map<String, JsonValue> extraTexts = new HashMap<>();
 
-    private final Map<String, String> language = new HashMap<>();
+    private final Map<String, JsonValue> language = new HashMap<>();
 
-    public Map<String, String> getLanguage() {
-        return language;
-    }
 
     public Lang(Main main) {
         this.main = main;
     }
 
-    private Map<String, String> loadTranslations(String file) {
+    private Map<String, JsonValue> loadTranslations(String file) {
 
         try {
             JsonObject jsonObject = Json.parse(file).asObject();
@@ -45,7 +45,7 @@ public class Lang implements LangManager, Listener {
 
     }
 
-    private Map<String, String> loadTranslationsRec(String currentPath, JsonValue jsonValue, Map<String, String> keys) {
+    private Map<String, JsonValue> loadTranslationsRec(String currentPath, JsonValue jsonValue, Map<String, JsonValue> keys) {
         // This value is an object - it means she contains sub-section that should be analyzed
         if (jsonValue.isObject()) {
 
@@ -59,7 +59,7 @@ public class Lang implements LangManager, Listener {
         }
 
         else if (!jsonValue.isNull()) {
-            keys.put(currentPath.toLowerCase(), jsonValue.asString());
+            keys.put(currentPath.toLowerCase(), jsonValue);
         }
 
         return keys;
@@ -92,8 +92,8 @@ public class Lang implements LangManager, Listener {
             return new File(plugin.getDataFolder() + File.separator + "languages" + File.separator, defaultLang + ".json");
         } else {
             String defaultText = FileUtils_.convert(plugin.getResource(defaultLang + ".json"));
-            Map<String, String> fr = loadTranslations(defaultText);
-            Map<String, String> custom = loadTranslations(FileUtils_.loadContent(file));
+            Map<String, JsonValue> fr = loadTranslations(defaultText);
+            Map<String, JsonValue> custom = loadTranslations(FileUtils_.loadContent(file));
             JsonObject jsonObject = Json.parse(FileUtils_.loadContent(file)).asObject();
 
             for (String string : fr.keySet()) {
@@ -109,9 +109,9 @@ public class Lang implements LangManager, Listener {
 
                     for (int i=0;i<strings.length-1;i++){
                         temp.set(strings[i],new JsonObject());
-                        temp=temp.get(strings[i]).asObject();
+                        temp = temp.get(strings[i]).asObject();
                     }
-                    temp.set(strings[strings.length-1],fr.get(string));
+                    temp.set(strings[strings.length - 1], fr.get(string));
                 }
             }
             FileUtils_.saveJson(file, jsonObject);
@@ -119,17 +119,30 @@ public class Lang implements LangManager, Listener {
         return file;
     }
 
-    @Override
-    public Map<String, String> getExtraTexts() {
-        return extraTexts;
+    public List<String> getTranslationList(String key) {
+
+        if (!language.containsKey(key) || !language.get(key).isArray()) {
+            return Collections.singletonList("Array Message error");
+        }
+        return language.get(key)
+                .asArray().values()
+                .stream().filter(JsonValue::isString)
+                .map(JsonValue::asString)
+                .collect(Collectors.toList());
     }
 
 
     public String getTranslation(String key) {
 
-        if (!language.containsKey(key)) {
+        if (!language.containsKey(key) || !language.get(key).isString()) {
+
+            if (this.extraTexts.containsKey(key) && this.extraTexts.get(key).isString()) {
+                return this.extraTexts.get(key).asString();
+            }
             return String.format("Message error (%s) ", key.toLowerCase());
         }
-        return language.get(key);
+        return language.get(key).asString();
     }
+
+
 }

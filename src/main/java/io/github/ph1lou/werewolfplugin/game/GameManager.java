@@ -306,17 +306,20 @@ public class GameManager implements WereWolfAPI {
 
     @Override
     public String translate(String key, Object... args) {
-        String translation;
         Lang lang = (Lang) main.getLangManager();
-        if (!lang.getExtraTexts().containsKey(key.toLowerCase())) {
-            translation = lang.getTranslation(key.toLowerCase());
-        } else translation = lang.getExtraTexts().get(key.toLowerCase());
+        String translation = lang.getTranslation(key);
         try {
             return String.format(translation, args);
         } catch (IllegalFormatException e) {
             Bukkit.getConsoleSender().sendMessage(String.format("Error while formatting translation (%s)", key.toLowerCase()));
             return translation + " (Format error)";
         }
+    }
+
+    @Override
+    public List<String> translateArray(String key) {
+        Lang lang = (Lang) main.getLangManager();
+        return lang.getTranslationList(key);
     }
 
 

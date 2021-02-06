@@ -225,8 +225,9 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
                         playerWW.sendMessageWithKey("werewolf.role.fox.smell", Sound.DONKEY_ANGRY);
                     }
                 }, 20 * 60 * 5);
-            } else player.sendMessage(game.translate("werewolf.check.cancel"));
-
+            } else {
+                player.sendMessage(game.translate("werewolf.check.cancel"));
+            }
 
             clearAffectedPlayer();
             setProgress(0f);

@@ -22,7 +22,7 @@ public class Villager extends RolesVillage {
 
     public Villager(GetWereWolfAPI main, PlayerWW playerWW, String key) {
         super(main, playerWW, key);
-        if (game.isState(StateGame.LOBBY)) return;
+        if (!game.isState(StateGame.GAME)) return;
         villagerKit = VillagerKit.values()[(int) Math.floor(game.getRandom().nextFloat() * VillagerKit.values().length)];
         Bukkit.getPluginManager().callEvent(new VillagerKitEvent(getPlayerWW(), villagerKit.getKey()));
     }
@@ -31,7 +31,8 @@ public class Villager extends RolesVillage {
     @Override
     public @NotNull String getDescription() {
         return super.getDescription() +
-                game.translate("werewolf.description.equipment", game.translate(villagerKit.getDescription()));
+                game.translate("werewolf.description.equipment",
+                        game.translate(villagerKit.getDescription()));
     }
 
 

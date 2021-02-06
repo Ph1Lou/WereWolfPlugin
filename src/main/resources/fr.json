@@ -300,6 +300,16 @@
         "no_longer_protected": "[§eLG UHC§r] Vous n'avez plus la salvation",
         "command": "proteger"
       },
+      "guard": {
+        "display": "Garde",
+        "description": "Chaque matin, vous pouvez décider de protéger un joueur. S'il se fait tuer par un Loup Garou, il ressuscitera et vous ne pourrez plus utiliser votre pouvoir. Vous ne pouvez protéger qu'une fois chaque joueur",
+        "items": "Une Potion Splash de Force",
+        "command": "proteger",
+        "perform": "[§aLG UHC§r] Vous venez de protéger §b%s",
+        "protect": "[§aLG UHC§r] Le garde vous avait protégé, de ce fait vous ressuscitez",
+        "resurrection": "[§cLG UHC§r] La personne que vous avez protégé vient de ressusciter. Vous n'avez plus de pouvoirs",
+        "message": "[§eLG UHC§r] Protégez un joueur pour la journée §b/ww proteger§r vous avez §b%s"
+      },
       "bear_trainer": {
         "display": "Montreur d'Ours",
         "description": "Vous avez la particularité de grogner au début du jour si un Loup-Garou se trouve dans votre voisinage de §b%s§f blocs. Un message sera envoyé dans le chat global.",
@@ -323,7 +333,7 @@
       },
       "cupid": {
         "display": "Cupidon",
-        "lover": "§bCouple%f : %s\n",
+        "lover": "§bCouple§f : %s\n",
         "none": "§cAucun§f, pour désigner §b/ww couple",
         "items": "Un Livre Power II, Punch I, 64 flèches, 2 fils",
         "description": "Vous devez gagner avec votre couple puis avec le Village.",
@@ -602,7 +612,7 @@
         },
         "final_heal": {
           "command": "fh",
-          "send ": "[§6LG UHC§r] Final Heal !",
+          "send": "[§6LG UHC§r] Final Heal !",
           "description": "Pour soigner tout les joueurs"
         },
         "generation": {
@@ -957,27 +967,26 @@
       "score": "§3§m-----↠§8score§3§m↞------",
       "game_name": "§3§m-----↠§8game§3§m↞------",
       "name": "§b%s",
-      "scoreboard_1": {
-        "0": "§3§m-----↠§8infos§3§m↞------",
-        "1": "En attente de joueurs ",
-        "2":"§3§m------------------",
-        "3":"Joueurs : §b&players&§r/§b&roles&",
-        "4":"§3§m------------------",
-        "5":"Joueurs Max : §b&max&"
-
-      },
-      "scoreboard_2": {
-        "0": "§3§m-----↠§8role§3§m↞-----",
-        "1": "Role §b&role&",
-        "2": "§3§m----↠§8infos§3§m↞-----",
-        "3": "Timer §b&timer&",
-        "4": "Jour §b&day& §r(§b&daystate&§r)",
-        "5": "Survivants §b&players&",
-        "6": "Groupe de §b&group&",
-        "7": "§3§m---↠§8bordure§3§m↞----",
-        "8": "Bordure §b&border&",
-        "9": "Taille §b&border_size&"
-      }
+      "scoreboard_1": [
+        "§3§m-----↠§8infos§3§m↞------",
+        "En attente de joueurs ",
+        "§3§m------------------",
+        "Joueurs : §b&players&§r/§b&roles&",
+        "§3§m------------------",
+        "Joueurs Max : §b&max&"
+      ],
+      "scoreboard_2": [
+        "§3§m-----↠§8role§3§m↞-----",
+        "Role §b&role&",
+        "§3§m----↠§8infos§3§m↞-----",
+        "Timer §b&timer&",
+        "Jour §b&day& §r(§b&daystate&§r)",
+        "Survivants §b&players&",
+        "Groupe de §b&group&",
+        "§3§m---↠§8bordure§3§m↞----",
+        "Bordure §b&border&",
+        "Taille §b&border_size&"
+      ]
     },
     "random_events": {
       "exposed": {
@@ -1030,6 +1039,7 @@
     },
     "check": {
       "death": "[§cLG UHC§r] Vous n'êtes pas Vivant",
+      "state_player": "[§cLG UHC§r] Vous ne pouvez pas accéder à cette commande dans cet état",
       "game_not_in_progress": "[§cLG UHC§r] La partie est déjà finie ou les rôles n'ont pas encore été annoncés",
       "game_in_progress": "[§cLG UHC§r] La partie est en cours",
       "end_selection": "[§cLG UHC§r] Vous ne pouvez plus utiliser votre pouvoir aujourd'hui",
@@ -1085,7 +1095,7 @@
     "description": {
       "_": "§b================================\n",
       "role": "§fVous êtes §b%s",
-      "description": "§bDescription :§f %s\n",
+      "description": "§bDescription :§f %s",
       "camp": "§fCamp des §b%s\n",
       "power": "§bPouvoir : §f%s\n",
       "item": "§bItems : §f%s\n",

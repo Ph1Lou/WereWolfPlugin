@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -51,59 +52,65 @@ public class Command implements TabExecutor {
 
     private void execute(String commandName, Player player, String[] args) {
 
-        CommandRegister commandRegister = null;
         WereWolfAPI game = main.getWereWolfAPI();
-        UUID uuid = player.getUniqueId();
+        List<String> messages = new ArrayList<>();
 
-        for (CommandRegister commandRegister1 : main.getRegisterManager().getCommandsRegister()) {
-            if (game.translate(commandRegister1.getKey()).equalsIgnoreCase(commandName)) {
-                commandRegister = commandRegister1;
-            }
-        }
+        main.getRegisterManager().getCommandsRegister()
+                .stream()
+                .filter(commandRegister1 -> game.translate(commandRegister1.getKey()).equalsIgnoreCase(commandName))
+                .forEach(commandRegister1 -> messages.add(checkCommands(game, player, commandRegister1, args)));
 
-        if (commandRegister == null) {
+        if (messages.isEmpty()) {
             execute("h", player, new String[0]);
             return;
         }
+
+        if (messages.stream().anyMatch(String::isEmpty)) {
+            return;
+        }
+
+        player.sendMessage(messages.stream().filter(s -> !s.equals("ignored")).findFirst().orElse(""));
+
+    }
+
+    private String checkCommands(WereWolfAPI game, Player player, CommandRegister commandRegister, String[] args) {
+
+        UUID uuid = player.getUniqueId();
 
         if (commandRegister.isRequiredPlayerInGame()) {
 
             PlayerWW playerWW = game.getPlayerWW(uuid);
 
             if (playerWW == null) {
-                player.sendMessage(game.translate("werewolf.check.not_in_game"));
-                return;
-            }
-
-            if (!commandRegister.isStateAccess(playerWW.getState())) {
-                player.sendMessage(game.translate("werewolf.check.death"));
-                return;
+                return game.translate("werewolf.check.not_in_game");
             }
 
             if (commandRegister.isRoleOnly()) {
                 if (!commandRegister.isRoleKey(playerWW.getRole().getKey())) {
-                    player.sendMessage(game.translate("werewolf.check.role", game.translate(commandRegister.getOneRoleKey())));
-                    return;
+                    return "ignored";
                 }
             }
 
-            if(commandRegister.isRequiredPower() && (!(playerWW.getRole() instanceof Power) || !((Power)playerWW.getRole()).hasPower())){
-                player.sendMessage(game.translate("werewolf.check.power"));
-                return;
+            if (!commandRegister.isStateAccess(playerWW.getState())) {
+                return game.translate("werewolf.check.state_player");
+            }
+
+            if (commandRegister.isRequiredPower() && (!(playerWW.getRole() instanceof Power) || !((Power) playerWW.getRole()).hasPower())) {
+                return game.translate("werewolf.check.power");
             }
         }
 
         if (!commandRegister.isStateWW(game.getState())) {
-            player.sendMessage(game.translate("werewolf.check.state"));
-            return;
+            return game.translate("werewolf.check.state");
         }
 
         if (!commandRegister.isArgNumbers(args.length)) {
-            player.sendMessage(game.translate("werewolf.check.parameters", commandRegister.getMinArgNumbers()));
-            return;
+            return game.translate("werewolf.check.parameters", commandRegister.getMinArgNumbers());
         }
 
         commandRegister.getCommand().execute(player, args);
+
+        return "";
     }
 
 

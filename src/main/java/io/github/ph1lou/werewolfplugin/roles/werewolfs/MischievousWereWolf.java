@@ -62,9 +62,7 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
             return;
         }
 
-        getPlayerWW().sendMessageWithKey(
-                "werewolf.role.little_girl.remove_armor");
-        getPlayerWW().addPotionEffect(PotionEffectType.INCREASE_DAMAGE);
+        getPlayerWW().sendMessageWithKey("werewolf.role.little_girl.remove_armor");
     }
 
     @EventHandler

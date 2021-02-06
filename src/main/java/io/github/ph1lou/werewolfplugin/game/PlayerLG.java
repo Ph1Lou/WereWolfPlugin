@@ -328,7 +328,11 @@ public class PlayerLG implements PlayerWW {
     @Nullable
     @Override
     public Optional<PlayerWW> getLastKiller() {
-        return this.killer.isEmpty() ? Optional.empty() : Optional.of(this.killer.get(this.killer.size() - 1));
+        return this.killer.isEmpty() ?
+                Optional.empty() :
+                this.killer.get(this.killer.size() - 1) == null ?
+                        Optional.empty() :
+                        Optional.of(this.killer.get(this.killer.size() - 1));
     }
 
     @Override

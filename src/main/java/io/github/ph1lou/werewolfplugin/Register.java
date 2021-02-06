@@ -70,6 +70,7 @@ import io.github.ph1lou.werewolfplugin.commands.roles.CommandDetective;
 import io.github.ph1lou.werewolfplugin.commands.roles.CommandFallenAngel;
 import io.github.ph1lou.werewolfplugin.commands.roles.CommandFlutePlayer;
 import io.github.ph1lou.werewolfplugin.commands.roles.CommandFox;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandGuard;
 import io.github.ph1lou.werewolfplugin.commands.roles.CommandGuardianAngel;
 import io.github.ph1lou.werewolfplugin.commands.roles.CommandInfect;
 import io.github.ph1lou.werewolfplugin.commands.roles.CommandLibrarian;
@@ -156,6 +157,7 @@ import io.github.ph1lou.werewolfplugin.roles.villagers.Cupid;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Detective;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Elder;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Fox;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Guard;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Librarian;
 import io.github.ph1lou.werewolfplugin.roles.villagers.LittleGirl;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Metamorph;
@@ -502,7 +504,6 @@ public class Register implements RegisterManager {
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.role.angel.command_2", new CommandFallenAngel(main))
                         .addRoleKey(RolesBase.ANGEL.getKey())
-                       
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
                         .unsetAutoCompletion()
@@ -512,7 +513,6 @@ public class Register implements RegisterManager {
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.role.angel.command_1", new CommandGuardianAngel(main))
                         .addRoleKey(RolesBase.ANGEL.getKey())
-                       
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
                         .unsetAutoCompletion()
@@ -598,6 +598,16 @@ public class Register implements RegisterManager {
                         .addStateWW(StateGame.GAME)
                         .unsetAutoCompletion()
                         .addArgNumbers(0));
+
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.guard.command", new CommandGuard(main))
+                        .addRoleKey(RolesBase.GUARD.getKey())
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .setRequiredPower()
+                        .addArgNumbers(1));
+
 
         commandsRegister
                 .add(new CommandRegister("werewolf.name",
@@ -791,6 +801,11 @@ public class Register implements RegisterManager {
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.FALSIFIER_WEREWOLF.getKey(), FalsifierWereWolf.class)
                             .addCategory(Category.WEREWOLF));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.GUARD.getKey(), Guard.class)
+                            .addCategory(Category.VILLAGER));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",

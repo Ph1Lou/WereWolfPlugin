@@ -66,6 +66,11 @@
     ==: org.bukkit.inventory.ItemStack
     type: OBSIDIAN
     amount: 4
+"werewolf.role.guard.display":
+  '0':
+    ==: org.bukkit.inventory.ItemStack
+    type: POTION
+    damage: 16393
 "werewolf.role.seer.display":
   '0':
     ==: org.bukkit.inventory.ItemStack

@@ -32,7 +32,6 @@ import io.github.ph1lou.werewolfapi.events.WereWolfListEvent;
 import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
-import io.github.ph1lou.werewolfplugin.save.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -79,18 +78,13 @@ public class ScoreBoard implements ScoreAPI, Listener {
 
 		scoreboard1.clear();
 
-		int i = 0;
+		for (String line : game.translateArray("werewolf.score_board.scoreboard_1")) {
 
-		Lang lang = (Lang) game.getMain().getLangManager();
-
-		while (lang.getLanguage().containsKey("werewolf.score_board.scoreboard_1." + i)) {
-			String line = game.translate("werewolf.score_board.scoreboard_1." + i);
 			line = line.replace("&players&", String.valueOf(player));
 			line = line.replace("&roles&", String.valueOf(role));
 			line = line.replace("&max&", String.valueOf(game.getConfig().getPlayerMax()));
 			line = line.substring(0, Math.min(30, line.length()));
 			scoreboard1.add(line);
-			i++;
 		}
 		String line = game.translate("werewolf.score_board.game_name");
 		scoreboard1.add(line.substring(0, Math.min(30, line.length())));
@@ -131,7 +125,6 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		WorldBorder wb = game.getMapManager().getWorld().getWorldBorder();
 		String border_size = String.valueOf(Math.round(wb.getSize()));
 		String border;
-		Lang lang = (Lang) game.getMain().getLangManager();
 
 		if (game.getConfig().getTimerValue(TimersBase.BORDER_BEGIN.getKey()) > 0) {
 			border = conversion(game.getConfig().getTimerValue(TimersBase.BORDER_BEGIN.getKey()));
@@ -144,12 +137,11 @@ public class ScoreBoard implements ScoreAPI, Listener {
 
 		scoreboard2.clear();
 
-		int i = 0;
 		this.day = timer / game.getConfig().getTimerValue(TimersBase.DAY_DURATION.getKey()) / 2 + 1;
 		this.dayState = game.translate(game.isDay(Day.DAY) ? "werewolf.score_board.day" : "werewolf.score_board.night");
 
-		while (lang.getLanguage().containsKey("werewolf.score_board.scoreboard_2." + i)) {
-			String line = game.translate("werewolf.score_board.scoreboard_2." + i);
+		for (String line : game.translateArray("werewolf.score_board.scoreboard_2")) {
+
 			line = line.replace("&timer&", conversion(timer));
 			line = line.replace("&day&", String.valueOf(this.day));
 			line = line.replace("&players&", String.valueOf(player));
@@ -158,8 +150,8 @@ public class ScoreBoard implements ScoreAPI, Listener {
 			line = line.replace("&daystate&", this.dayState);
 			line = line.replace("&border_size&", border_size);
 			scoreboard2.add(line);
-			i++;
 		}
+
 		scoreboard2.add(game.translate("werewolf.score_board.game_name"));
 		scoreboard2.add(game.translate("werewolf.score_board.name", game.getGameName()));
 	}

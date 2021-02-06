@@ -31,7 +31,7 @@ public class LoneWolf extends ListenerManager {
 
         Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
             if (!game.isState(StateGame.END) && isRegister()) {
-                designSolitary();
+                this.designSolitary();
             }
         }, (long) (game.getRandom().nextFloat() * 3600 * 20));
     }
