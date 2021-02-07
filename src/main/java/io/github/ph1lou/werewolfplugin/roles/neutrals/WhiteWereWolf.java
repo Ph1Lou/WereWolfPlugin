@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
@@ -20,11 +21,11 @@ public class WhiteWereWolf extends RolesNeutral {
 
     @Override
     public @NotNull String getDescription() {
-        return super.getDescription() +
-                game.translate("werewolf.description.description",
-                        game.translate("werewolf.role.white_werewolf.description")) +
-                game.translate("werewolf.description.power",
-                        game.translate("werewolf.role.white_werewolf.heart"));
+
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.white_werewolf.description"))
+                .setPower(() -> game.translate("werewolf.role.white_werewolf.heart"))
+                .build();
     }
 
 

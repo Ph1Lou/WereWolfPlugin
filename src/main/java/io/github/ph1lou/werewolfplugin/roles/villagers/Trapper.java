@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
@@ -74,8 +75,9 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
 
     @Override
     public @NotNull String getDescription() {
-        return super.getDescription() +
-                game.translate("werewolf.description.description", game.translate("werewolf.role.trapper.description"));
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.trapper.description"))
+                .build();
     }
 
 

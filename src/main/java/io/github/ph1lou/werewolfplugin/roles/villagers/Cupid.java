@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
@@ -58,21 +59,21 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
 
     @Override
     public @NotNull String getDescription() {
-        return super.getDescription() +
-                game.translate("werewolf.description.description",
-                        game.translate("werewolf.role.cupid.description")) +
-                game.translate("werewolf.description.equipment",
-                        game.translate("werewolf.role.cupid.extra", game.getConfig().getLimitPowerBow() + 1)) +
-                game.translate("werewolf.description.item",
-                        game.translate("werewolf.role.cupid.items")) +
-                game.translate("werewolf.role.cupid.lover",
-                        affectedPlayer.isEmpty() ? hasPower() ? game.translate("werewolf.role.cupid.lover_designation_message",
-                                game.getScore().conversion(
-                                        game.getConfig()
-                                                .getTimerValue("werewolf.menu.timers.lover_duration"))) :
-                                game.translate("werewolf.role.cupid.none") :
+
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.cupid.description"))
+                .setEquipments(() -> game.translate("werewolf.role.cupid.extra", game.getConfig().getLimitPowerBow() + 1))
+                .addExtraLines(() -> game.translate("werewolf.role.cupid.lover",
+                        this.affectedPlayer.isEmpty() ?
+                                this.hasPower() ?
+                                        game.translate("werewolf.role.cupid.lover_designation_message",
+                                                game.getScore().conversion(
+                                                        game.getConfig()
+                                                                .getTimerValue("werewolf.menu.timers.lover_duration"))) :
+                                        game.translate("werewolf.role.cupid.none") :
                                 affectedPlayer.stream().map(PlayerWW::getName)
-                                        .collect(Collectors.joining(" ")));
+                                        .collect(Collectors.joining(" "))))
+                .build();
     }
 
     @Override

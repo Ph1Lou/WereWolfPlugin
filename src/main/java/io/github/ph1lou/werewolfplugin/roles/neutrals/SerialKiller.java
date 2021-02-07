@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
@@ -41,16 +42,13 @@ public class SerialKiller extends RolesNeutral implements Power {
     @Override
     public @NotNull String getDescription() {
 
-        return super.getDescription() +
-                game.translate("werewolf.description.power",
-                        game.translate("werewolf.role.serial_killer.power")) +
-                game.translate("werewolf.description.equipment",
-                        game.translate("werewolf.role.serial_killer.limit")) +
-                game.translate("werewolf.description.item",
-                        game.translate("werewolf.role.serial_killer.items")) +
-                game.translate("werewolf.description.effect",
-                        game.translate("werewolf.role.serial_killer.effect")) +
-                game.translate("werewolf.role.serial_killer.hearts", extraHeart / 2);
+        return new DescriptionBuilder(game, this)
+                .setPower(() -> game.translate("werewolf.role.serial_killer.power"))
+                .setEquipments(() -> game.translate("werewolf.role.serial_killer.limit"))
+                .setItems(() -> game.translate("werewolf.role.serial_killer.items"))
+                .setEffects(() -> game.translate("werewolf.role.serial_killer.effect"))
+                .addExtraLines(() -> game.translate("werewolf.role.serial_killer.hearts", extraHeart / 2))
+                .build();
     }
 
 

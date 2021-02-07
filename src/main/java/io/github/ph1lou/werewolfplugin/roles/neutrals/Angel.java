@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.AngelForm;
@@ -104,50 +105,40 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
     @Override
     public @NotNull String getDescription() {
 
-        StringBuilder sb = new StringBuilder(super.getDescription());
-
         if (choice.equals(AngelForm.FALLEN_ANGEL)) {
-            sb.append(game.translate("werewolf.description.power",
-                    game.translate("werewolf.role.fallen_angel.power")));
 
-            sb.append(game.translate("werewolf.description.effect",
-                    game.translate("werewolf.role.fallen_angel.effect")));
+            return new DescriptionBuilder(game, this)
+                    .setPower(() -> game.translate("werewolf.role.fallen_angel.power"))
+                    .setEffects(() -> game.translate("werewolf.role.fallen_angel.effect"))
+                    .addExtraLines(() -> affectedPlayer.isEmpty() ?
+                            game.translate("werewolf.description.power",
+                                    game.translate("werewolf.role.fallen_angel.wait",
+                                            game.getScore().conversion(game.getConfig()
+                                                    .getTimerValue(TimersBase.ANGEL_DURATION.getKey()))))
+                            : game.translate("werewolf.role.angel.target", affectedPlayer.get(0).getName()))
+                    .build();
 
-            if (affectedPlayer.isEmpty()) {
-                sb.append(game.translate("werewolf.description.power",
-                        game.translate("werewolf.role.fallen_angel.wait",
-                                game.getScore().conversion(game.getConfig()
-                                        .getTimerValue(TimersBase.ANGEL_DURATION.getKey())))));
-            } else {
-                sb.append(game.translate("werewolf.role.angel.target",
-                        affectedPlayer.get(0).getName()));
-            }
+
         } else if (choice.equals(AngelForm.GUARDIAN_ANGEL)) {
 
-            sb.append(game.translate("werewolf.description.effect",
-                    game.translate("werewolf.role.guardian_angel.effect")));
-
-            if (game.getConfig().isConfigActive(ConfigsBase.SWEET_ANGEL.getKey())) {
-                sb.append(game.translate("werewolf.description.description",
-                        game.translate("werewolf.role.guardian_angel.description")));
-            } else {
-                sb.append(game.translate("werewolf.description.description",
-                        game.translate("werewolf.role.guardian_angel.description_patch")));
-            }
-            if (affectedPlayer.isEmpty()) {
-                sb.append(game.translate("werewolf.description.power",
-                        game.translate("werewolf.role.guardian_angel.wait",
-                                game.getScore().conversion(
-                                        game.getConfig().getTimerValue(TimersBase.ANGEL_DURATION.getKey())))));
-            } else {
-                sb.append(game.translate("werewolf.role.guardian_angel.protege",
-                        affectedPlayer.get(0).getName()));
-            }
-            sb.append(game.translate("werewolf.description.command",
-                    game.translate("werewolf.role.guardian_angel.show_command")));
+            return new DescriptionBuilder(game, this)
+                    .setEffects(() -> game.translate("werewolf.role.guardian_angel.effect"))
+                    .setDescription(() -> game.getConfig().isConfigActive(ConfigsBase.SWEET_ANGEL.getKey()) ?
+                            game.translate("werewolf.role.guardian_angel.description") :
+                            game.translate("werewolf.role.guardian_angel.description_patch"))
+                    .addExtraLines(() -> affectedPlayer.isEmpty() ?
+                            game.translate("werewolf.description.power",
+                                    game.translate("werewolf.role.guardian_angel.wait",
+                                            game.getScore().conversion(
+                                                    game.getConfig().getTimerValue(TimersBase.ANGEL_DURATION.getKey())))) :
+                            game.translate("werewolf.role.guardian_angel.protege", affectedPlayer.get(0).getName()))
+                    .setCommand(() -> game.translate("werewolf.role.guardian_angel.show_command"))
+                    .build();
+        } else {
+            return new DescriptionBuilder(game, this).build();
         }
 
-        return sb.toString();
+
     }
 
 

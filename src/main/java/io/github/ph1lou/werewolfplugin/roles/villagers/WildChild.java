@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.Sound;
@@ -99,20 +100,24 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
 
     @Override
     public @NotNull String getDescription() {
-        return super.getDescription() +
-                game.translate("werewolf.description.description", game.translate("werewolf.role.wild_child.description")) +
 
-                game.translate("werewolf.role.wild_child.model", (affectedPlayer.isEmpty() ?
-                        !transformed ? game.translate("werewolf.role.wild_child.design_model",
-                                game.getScore().conversion(
-                                        game.getConfig()
-                                                .getTimerValue(TimersBase.MODEL_DURATION
-                                                        .getKey()))) :
-                                game.translate("werewolf.role.wild_child.model_none") :
-                        transformed ? game.translate(
-                                "werewolf.role.wild_child.model_death")
-                                : affectedPlayer.get(0).getName())
-                );
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.wild_child.description"))
+                .addExtraLines(() -> game.translate("werewolf.role.wild_child.model",
+                        affectedPlayer.isEmpty() ?
+                                !transformed ?
+                                        game.translate("werewolf.role.wild_child.design_model",
+                                                game.getScore().conversion(game.getConfig()
+                                                        .getTimerValue(TimersBase.MODEL_DURATION.getKey())))
+                                        :
+                                        game.translate("werewolf.role.wild_child.model_none")
+                                :
+                                transformed ?
+                                        game.translate("werewolf.role.wild_child.model_death")
+                                        :
+                                        affectedPlayer.get(0).getName()))
+                .build();
+
 
     }
 

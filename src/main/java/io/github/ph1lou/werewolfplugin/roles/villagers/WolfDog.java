@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.Camp;
@@ -32,10 +33,17 @@ public class WolfDog extends RolesVillage implements Display, Transformed, Power
 
     @Override
     public @NotNull String getDescription() {
-        return super.getDescription() +
-                game.translate("werewolf.description.description", power ? game.translate("werewolf.role.wolf_dog.description")
-                        + '\n' + game.translate("werewolf.role.wolf_dog.description_2") :
-                        game.translate(this.transformed ? "werewolf.role.wolf_dog.description_2" : "werewolf.role.wolf_dog.description"));
+
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> power ?
+                        game.translate("werewolf.role.wolf_dog.description")
+                                + '\n' + game.translate("werewolf.role.wolf_dog.description_2")
+                        :
+                        game.translate(this.transformed ? "werewolf.role.wolf_dog.description_2"
+                                :
+                                "werewolf.role.wolf_dog.description"))
+                .build();
+
     }
 
 

@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.ComedianMask;
@@ -65,15 +66,17 @@ public class Comedian extends RolesWithLimitedSelectionDuration {
 
     @Override
     public @NotNull String getDescription() {
-        return super.getDescription() +
-                game.translate("werewolf.description.description",
-                        game.translate("werewolf.role.comedian.description")) +
-                game.translate("werewolf.role.comedian.masks",
+
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.comedian.description"))
+                .addExtraLines(() -> game.translate("werewolf.role.comedian.masks",
                         comedianMasks.isEmpty() ?
                                 game.translate("werewolf.role.comedian.none") :
                                 comedianMasks.stream()
                                         .map(comedianMasks1 -> game.translate(comedianMasks1.getKey()))
-                                        .collect(Collectors.joining(" ")));
+                                        .collect(Collectors.joining(" "))))
+                .build();
+
     }
 
 

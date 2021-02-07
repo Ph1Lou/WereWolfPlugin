@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
@@ -81,11 +82,10 @@ public class Troublemaker extends RolesVillage implements AffectedPlayers, Power
 
     @Override
     public @NotNull String getDescription() {
-        return super.getDescription() +
-                game.translate("werewolf.description.description",
-                        game.translate("werewolf.role.troublemaker.description")) +
-                game.translate("werewolf.description.power",
-                        game.translate("werewolf.role.troublemaker.chat"));
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.troublemaker.description"))
+                .setPower(() -> game.translate("werewolf.role.troublemaker.chat"))
+                .build();
     }
 
     @Override

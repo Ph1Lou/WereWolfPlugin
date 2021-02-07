@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
@@ -50,13 +51,12 @@ public class Sister extends RolesVillage implements AffectedPlayers {
                 .filter(playerWW -> playerWW.isKey(RolesBase.SISTER.getKey()))
                 .forEach(playerWW -> list.append(playerWW.getName()).append(" "));
 
-        return super.getDescription() +
-                game.translate("werewolf.description.description",
-                        game.translate("werewolf.role.sister.description")) +
-                game.translate("werewolf.description.effect",
-                        game.translate("werewolf.role.sister.effect",
-                                game.getConfig().getDistanceSister())) +
-                game.translate("werewolf.role.sister.sisters_list", list.toString());
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.sister.description"))
+                .setEffects(() -> game.translate("werewolf.role.sister.effect",
+                        game.getConfig().getDistanceSister()))
+                .addExtraLines(() -> game.translate("werewolf.role.sister.sisters_list", list.toString()))
+                .build();
     }
 
 

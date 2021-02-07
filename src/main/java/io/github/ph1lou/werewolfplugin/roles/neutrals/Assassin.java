@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.Day;
@@ -103,13 +104,11 @@ public class Assassin extends RolesNeutral {
     @Override
     public @NotNull String getDescription() {
 
-        return super.getDescription() +
-                game.translate("werewolf.description.equipment",
-                        game.translate("werewolf.role.assassin.limit")) +
-                game.translate("werewolf.description.item",
-                        game.translate("werewolf.role.assassin.items")) +
-                game.translate("werewolf.description.effect",
-                        game.translate("werewolf.role.assassin.effect"));
+        return new DescriptionBuilder(game, this)
+                .setEquipments(() -> game.translate("werewolf.role.assassin.limit"))
+                .setItems(() -> game.translate("werewolf.role.assassin.items"))
+                .setEffects(() -> game.translate("werewolf.role.assassin.effect"))
+                .build();
     }
 
 

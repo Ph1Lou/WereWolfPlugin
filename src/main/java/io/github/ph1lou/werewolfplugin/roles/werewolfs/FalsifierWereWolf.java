@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.Camp;
@@ -91,9 +92,13 @@ public class FalsifierWereWolf extends RolesWereWolf implements Display {
 
     @Override
     public @NotNull String getDescription() {
-        return super.getDescription() +
-                game.translate("werewolf.description.description", game.translate("werewolf.role.falsifier_werewolf.description")) +
-                game.translate("werewolf.role.falsifier_werewolf.role", game.translate(this.displayRole));
+
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.falsifier_werewolf.description"))
+                .setEffects(() -> game.translate("werewolf.description.werewolf"))
+                .addExtraLines(() -> game.translate("werewolf.role.falsifier_werewolf.role",
+                        game.translate(this.displayRole)))
+                .build();
     }
 
 

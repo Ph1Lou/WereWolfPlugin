@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
@@ -28,12 +29,12 @@ public class VillageIdiot extends RolesVillage implements Power {
 
     public @NotNull String getDescription() {
 
-        return super.getDescription() +
-                game.translate("werewolf.description.description",
-                        game.translate("werewolf.role.village_idiot.description")) +
-                game.translate("werewolf.description.power",
-                        game.translate(power ? "werewolf.role.village_idiot.power_on" :
-                                "werewolf.role.village_idiot.power_off"));
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.village_idiot.description"))
+                .setPower(() -> game.translate(power ?
+                        "werewolf.role.village_idiot.power_on" :
+                        "werewolf.role.village_idiot.power_off"))
+                .build();
     }
 
     public void recoverPower() {

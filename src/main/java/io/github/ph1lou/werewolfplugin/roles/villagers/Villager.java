@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
@@ -30,9 +31,9 @@ public class Villager extends RolesVillage {
 
     @Override
     public @NotNull String getDescription() {
-        return super.getDescription() +
-                game.translate("werewolf.description.equipment",
-                        game.translate(villagerKit.getDescription()));
+        return new DescriptionBuilder(game, this)
+                .setEquipments(() -> game.translate(villagerKit.getDescription()))
+                .build();
     }
 
 

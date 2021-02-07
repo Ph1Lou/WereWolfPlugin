@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.Camp;
@@ -127,14 +128,15 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
 
     @Override
     public @NotNull String getDescription() {
-        return super.getDescription() +
-                game.translate("werewolf.description.description",
-                        game.translate("werewolf.role.fox.description",
-                                game.getConfig().getDistanceFox(),
-                                game.getScore().conversion(game.getConfig()
-                                        .getTimerValue(TimersBase.FOX_SMELL_DURATION.getKey())),
-                                game.getConfig().getUseOfFlair() - use)) +
-                game.translate("werewolf.description.effect", game.translate("werewolf.role.fox.effect"));
+
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.fox.description",
+                        game.getConfig().getDistanceFox(),
+                        game.getScore().conversion(game.getConfig()
+                                .getTimerValue(TimersBase.FOX_SMELL_DURATION.getKey())),
+                        game.getConfig().getUseOfFlair() - use))
+                .setEffects(() -> game.translate("werewolf.role.fox.effect"))
+                .build();
     }
 
 

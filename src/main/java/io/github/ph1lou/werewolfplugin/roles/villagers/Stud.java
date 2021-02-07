@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.LoverAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
@@ -32,8 +33,9 @@ public class Stud extends RolesVillage implements Power {
 
     @Override
     public @NotNull String getDescription() {
-        return super.getDescription() +
-                game.translate("werewolf.description.description", game.translate("werewolf.role.stud.description"));
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.stud.description"))
+                .build();
     }
 
 

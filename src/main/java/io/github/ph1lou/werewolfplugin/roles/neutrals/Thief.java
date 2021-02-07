@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.LoverAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
@@ -73,10 +74,12 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
 
     @Override
     public @NotNull String getDescription() {
-        return super.getDescription() +
-                game.translate("werewolf.description.description",
-                        game.translate("werewolf.role.thief.description")) +
-                game.translate("werewolf.role.thief.effect");
+
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.thief.description"))
+                .setEffects(() -> game.translate("werewolf.role.thief.effect"))
+                .build();
+
     }
 
     @Override

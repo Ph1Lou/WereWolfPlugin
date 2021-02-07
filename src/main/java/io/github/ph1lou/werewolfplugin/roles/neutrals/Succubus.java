@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
@@ -85,15 +86,15 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
 
     @Override
     public @NotNull String getDescription() {
-        return super.getDescription() +
-                game.translate("werewolf.description.description",
-                        game.translate("werewolf.role.succubus.description",
-                                game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.SUCCUBUS_DURATION.getKey())))) +
-                game.translate("werewolf.role.succubus.charm",
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.succubus.description",
+                        game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.SUCCUBUS_DURATION.getKey()))))
+                .addExtraLines(() -> game.translate("werewolf.role.succubus.charm",
                         affectedPlayer.isEmpty() ? this.power ?
                                 game.translate("werewolf.role.succubus.charm_command")
                                 : game.translate("werewolf.role.succubus.none") :
-                                affectedPlayer.get(0).getName());
+                                affectedPlayer.get(0).getName()))
+                .build();
     }
 
     @EventHandler

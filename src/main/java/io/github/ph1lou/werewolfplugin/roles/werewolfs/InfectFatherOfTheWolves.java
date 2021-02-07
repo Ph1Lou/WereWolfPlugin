@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
@@ -62,10 +63,13 @@ public class InfectFatherOfTheWolves extends RolesWereWolf implements AffectedPl
 
     @Override
     public @NotNull String getDescription() {
-        return super.getDescription() +
-                game.translate("werewolf.description.description", game.translate("werewolf.role.infect_father_of_the_wolves.description")) +
-                game.translate("werewolf.description.power", game.translate(power ? "werewolf.role.infect_father_of_the_wolves.power_available" : "werewolf.role.infect_father_of_the_wolves.power_not_available")) +
-                game.translate("werewolf.description.item", game.translate("werewolf.role.infect_father_of_the_wolves.items"));
+
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.infect_father_of_the_wolves.description"))
+                .setEffects(() -> game.translate("werewolf.description.werewolf"))
+                .setPower(() -> game.translate(power ? "werewolf.role.infect_father_of_the_wolves.power_available" : "werewolf.role.infect_father_of_the_wolves.power_not_available"))
+                .setItems(() -> game.translate("werewolf.role.infect_father_of_the_wolves.items"))
+                .build();
     }
 
 

@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.Day;
@@ -186,10 +187,11 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
     @Override
     public @NotNull String getDescription() {
 
-        return super.getDescription() +
-                game.translate("werewolf.description.description", game.translate("werewolf.role.mischievous_werewolf.description")) +
-                game.translate("werewolf.description.item", game.translate("werewolf.role.mischievous_werewolf.items")) +
-                game.translate("werewolf.description.effect", game.translate("werewolf.role.mischievous_werewolf.effect"));
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.mischievous_werewolf.description"))
+                .setItems(() -> game.translate("werewolf.role.mischievous_werewolf.items"))
+                .setEffects(() -> game.translate("werewolf.role.mischievous_werewolf.effect"))
+                .build();
     }
 
 

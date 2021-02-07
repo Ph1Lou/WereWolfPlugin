@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.Day;
@@ -95,10 +96,10 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
     @Override
     public @NotNull String getDescription() {
 
-        return super.getDescription() +
-                game.translate("werewolf.description.description",
-                        game.translate("werewolf.role.amnesiac_werewolf.description")) +
-                game.translate("werewolf.description.werewolf");
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.amnesiac_werewolf.description"))
+                .setEffects(() -> game.translate("werewolf.description.werewolf"))
+                .build();
     }
 
     @Override

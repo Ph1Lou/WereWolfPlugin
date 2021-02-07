@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
@@ -25,8 +26,10 @@ public class MysticalWereWolf extends RolesWereWolf {
 
     @Override
     public @NotNull String getDescription() {
-        return super.getDescription() +
-                game.translate("werewolf.description.description", game.translate("werewolf.role.mystical_werewolf.description"));
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.mystical_werewolf.description"))
+                .setEffects(() -> game.translate("werewolf.description.werewolf"))
+                .build();
     }
 
 

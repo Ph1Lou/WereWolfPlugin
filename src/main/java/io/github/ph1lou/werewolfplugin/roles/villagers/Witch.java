@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
@@ -61,11 +62,17 @@ public class Witch extends RolesVillage implements AffectedPlayers, Power {
     @Override
     public @NotNull String getDescription() {
 
-        return super.getDescription() +
-                game.translate("werewolf.description.description", game.translate("werewolf.role.witch.description")) +
-                game.translate("werewolf.description.power", (game.translate(game.getConfig().isConfigActive(ConfigsBase.AUTO_REZ_WITCH.getKey()) ? "werewolf.role.witch.himself" : "werewolf.role.witch.not_himself"))) +
-                game.translate("werewolf.description.power", game.translate(power ? "werewolf.role.witch.power_available" : "werewolf.role.witch.power_not_available")) +
-                game.translate("werewolf.description.item", game.translate("werewolf.role.witch.items"));
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.witch.description"))
+                .setPower(() -> game.translate(power ? "werewolf.role.witch.power_available" : "werewolf.role.witch.power_not_available"))
+                .setItems(() -> game.translate("werewolf.role.witch.items"))
+                .addExtraLines(() -> game.translate("werewolf.description.power",
+                        game.translate(game.getConfig().isConfigActive(ConfigsBase.AUTO_REZ_WITCH.getKey())
+                                ?
+                                "werewolf.role.witch.himself"
+                                :
+                                "werewolf.role.witch.not_himself")))
+                .build();
     }
 
 

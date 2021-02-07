@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
@@ -80,10 +81,11 @@ public class Seer extends RolesWithLimitedSelectionDuration implements AffectedP
 
     @Override
     public @NotNull String getDescription() {
-        return super.getDescription() +
-                game.translate("werewolf.description.description", game.translate("werewolf.role.seer.description")) +
-                game.translate("werewolf.description.item", game.translate("werewolf.role.seer.items")) +
-                game.translate("werewolf.description.effect", game.translate("werewolf.role.seer.effect"));
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.seer.description"))
+                .setItems(() -> game.translate("werewolf.role.seer.items"))
+                .setEffects(() -> game.translate("werewolf.role.seer.effect"))
+                .build();
     }
 
 

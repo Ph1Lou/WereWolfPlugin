@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
@@ -90,9 +91,9 @@ public class Citizen extends RolesVillage implements LimitedUse, AffectedPlayers
     @Override
     public @NotNull String getDescription() {
 
-        return super.getDescription() +
-                game.translate("werewolf.description.description",
-                        game.translate("werewolf.role.citizen.description"));
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.citizen.description"))
+                .build();
     }
 
 

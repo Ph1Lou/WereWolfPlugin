@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.LoverAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
@@ -41,10 +42,11 @@ public class Imitator extends RolesNeutral implements AffectedPlayers, Power {
 
     @Override
     public @NotNull String getDescription() {
-        return super.getDescription() +
-                game.translate("werewolf.description.description",
-                        game.translate("werewolf.role.imitator.description")) +
-                game.translate("werewolf.role.imitator.effect");
+
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.imitator.description"))
+                .setEffects(() -> game.translate("werewolf.role.imitator.effect"))
+                .build();
     }
 
 

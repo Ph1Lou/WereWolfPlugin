@@ -79,8 +79,8 @@
         "description": "Forme §aVillageois§f : Les Loups Garous vous voient dans leur liste, cependant, vous ne connaissez pas les Loups Garous. Attention, les rôles à informations vous voient dans le camp des Loups Garous. Vous pouvez lire et envoyer des messages dans le chat des Loups Garous",
         "transform": "[§aLG UHC§r] Vous pouvez passer dans votre forme Loup Garou avec la commande §b/ww changer§f (irreversible), vous avez §b%s",
         "time_over": "[§cLG UHC§r] Vous ne pouvez plus choisir votre forme, vous gardez donc votre forme Village",
-        "perform": "[§cLG UHC§r] Vous venez de choisir la forme Loup garou",
-        "description_2": "Forme §cLoup Garou§f : Les Loups Garous ne vous voient pas dans leur liste. Cependant, vous connaissez les Loups Garous. Les rôles à informations vous voient dans le camp des Villageois."
+        "perform": "[§cLG UHC§r] Vous venez de choisir la forme Loup Garou",
+        "description_2": "Forme §cLoup Garou§f : Les Loups Garous ne vous voient pas dans leur liste. Cependant, vous connaissez les Loups Garous. Les rôles à informations vous voient dans le camp des Villageois. Vous n'avez pas Force la nuit."
       },
       "stud": {
         "display": "Tombeur",
@@ -226,7 +226,7 @@
       "falsifier_werewolf": {
         "display": "Loup Garou Feutré",
         "description": "§fVous avez un rôle d’affichage différent chaque jour parmi ceux encore en vie pour tromper le Village.",
-        "role": "§fRole d'Affichage Actuel : §b%s",
+        "role": "§fRole d'Affichage Actuel : §b%s\n",
         "display_role_message": "[§eLG UHC§r] Votre Rôle d'affichage aujourd'hui est §b%s"
       },
       "thief": {
@@ -234,12 +234,12 @@
         "thief": "vous avez §fvolé un(e) §b%s§f",
         "details": "[§eLG UHC§r] Pour voir les détails de votre rôle §b/ww role",
         "description": "Vous récupérez le rôle de la première personne que vous tuez et devrez gagner avec son Camp.",
-        "effect": "§bEffet§f : Résistance jusqu’à son premier meurtre\n",
+        "effect": "Résistance jusqu’à son premier meurtre",
         "realized_theft": "[§eLG UHC§r] Vous devenez §b%s"
       },
       "imitator": {
         "display": "Imitateur",
-        "effect": "§bEffet§f : Force jusqu’à son premier meurtre\n",
+        "effect": "Force jusqu’à son premier meurtre",
         "description": "Vous récupérez le rôle de la première personne que vous tuez."
       },
       "detective": {
@@ -253,7 +253,7 @@
       },
       "naughty_little_wolf": {
         "display": "Vilain Petit Loup",
-        "effect": "§bEffet : §fForce et Speed (la nuit), Vision Nocturne. 2 coeur d'absorption après chaque kill"
+        "effect": "Force et Speed (la nuit), Vision Nocturne. 2 coeur d'absorption après chaque kill"
       },
       "chatty_seer": {
         "display": "Voyante Bavarde",
@@ -381,7 +381,7 @@
       "mischievous_werewolf": {
         "display": "Loup Garou Perfide",
         "items": "5 Tnt",
-        "effect": "Invisible en enlevant votre armure, la Nuit.",
+        "effect": "Invisibilité en enlevant votre armure la Nuit, Force la nuit sinon",
         "description": "Lorsque vous êtes invisible, vous laissez des particules rouges derrière vous visible par les §bPetites Filles§f. Inversement vous pouvez les repérer par leurs particules bleues."
       },
       "elder": {
@@ -393,7 +393,7 @@
       },
       "flute_player": {
         "display": "Joueur de Flûte",
-        "affected": "§bPersonne affectée§f : §f%s",
+        "affected": "§bPersonne affectée§f : §f%s\n",
         "description": "Chaque Matin, vous pourrez enchanter deux personnes se trouvant à moins de 100 blocs de vous. Si vous enchantez tous les vivants, vous avez gagné. Les personnes enchantées se connaissent entre elles",
         "list": "[§eLG UHC§r] Liste des Personnes Enchantées : §b",
         "power": "[§eLG UHC§r] Enchantez deux joueurs §b/ww enchanter§r vous avez §b%s",
@@ -1098,7 +1098,7 @@
     },
     "description": {
       "_": "§b================================\n",
-      "role": "§fVous êtes §b%s",
+      "role": "§fVous êtes §b%s\n",
       "description": "§bDescription :§f %s\n",
       "camp": "§fCamp des §b%s\n",
       "power": "§bPouvoir : §f%s\n",
@@ -1109,7 +1109,7 @@
       "transformed": "Transformé : §b%s\n",
       "no": "Non",
       "yes": "Oui",
-      "werewolf": "§bEffet : §fForce (la nuit), Vision Nocturne. 1 minute de Vitesse et 2 coeur d'absorption après chaque kill\n"
+      "werewolf": "Force (la nuit), Vision Nocturne. 1 minute de Vitesse et 2 coeur d'absorption après chaque kill"
     }
   }
 

@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
@@ -36,11 +37,12 @@ public class SiameseTwin extends RolesVillage {
                         RolesBase.SIAMESE_TWIN.getKey()))
                 .forEach(playerWW -> list.append(playerWW.getName()).append(" "));
 
-        return super.getDescription() +
-                game.translate("werewolf.description.description", game.translate("werewolf.role.siamese_twin.description")) +
-                game.translate("werewolf.description.power", game.translate("werewolf.role.siamese_twin.power")) +
-                game.translate("werewolf.role.siamese_twin.siamese_twin_list",
-                        list.toString());
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.siamese_twin.description"))
+                .setPower(() -> game.translate("werewolf.role.siamese_twin.power"))
+                .addExtraLines(() -> game.translate("werewolf.role.siamese_twin.siamese_twin_list",
+                        list.toString()))
+                .build();
     }
 
 
