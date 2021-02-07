@@ -62,7 +62,7 @@ public class CommandPriestess implements Commands {
 
             String message = "werewolf.role.priestess.is_not_werewolf";
 
-            if ((role1 instanceof Display && ((Display) role1).isDisplayCamp(Camp.WEREWOLF)) || (!(role1 instanceof Display) && role1.isWereWolf())) {
+            if ((role1 instanceof Display && ((Display) role1).isDisplayCamp(Camp.WEREWOLF.getKey())) || (!(role1 instanceof Display) && role1.isWereWolf())) {
                 message = "werewolf.role.priestess.is_werewolf";
             }
 

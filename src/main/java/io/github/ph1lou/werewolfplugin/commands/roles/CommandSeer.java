@@ -59,9 +59,9 @@ public class CommandSeer implements Commands {
 
             String camp = "werewolf.categories.villager";
 
-            if ((role1 instanceof Display && ((Display) role1).isDisplayCamp(Camp.NEUTRAL)) || role1.isNeutral()) {
+            if ((role1 instanceof Display && ((Display) role1).isDisplayCamp(Camp.NEUTRAL.getKey())) || role1.isNeutral()) {
                 camp = "werewolf.categories.neutral";
-            } else if ((role1 instanceof Display && ((Display) role1).isDisplayCamp(Camp.WEREWOLF)) || (!(role1 instanceof Display) && role1.isWereWolf())) {
+            } else if ((role1 instanceof Display && ((Display) role1).isDisplayCamp(Camp.WEREWOLF.getKey())) || (!(role1 instanceof Display) && role1.isWereWolf())) {
                 camp = "werewolf.categories.werewolf";
             }
 

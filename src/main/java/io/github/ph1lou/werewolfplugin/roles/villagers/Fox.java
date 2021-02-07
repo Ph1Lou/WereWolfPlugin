@@ -198,7 +198,7 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
             boolean isWereWolf = true;
 
             if (playerWW.getRole() instanceof Display &&
-                    (!((Display) playerWW.getRole()).isDisplayCamp(Camp.WEREWOLF))) {
+                    (!((Display) playerWW.getRole()).isDisplayCamp(Camp.WEREWOLF.getKey()))) {
                 isWereWolf = false;
             } else if (!playerWW.getRole().isWereWolf()) {
                 isWereWolf = false;

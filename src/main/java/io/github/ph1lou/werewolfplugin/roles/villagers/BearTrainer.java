@@ -55,7 +55,7 @@ public class BearTrainer extends RolesVillage {
                 .map(PlayerWW::getRole)
                 .filter(roles -> roles.isWereWolf() || roles instanceof Display)
                 .filter(roles -> !(roles instanceof Display) ||
-                        ((Display) roles).isDisplayCamp(Camp.WEREWOLF))
+                        ((Display) roles).isDisplayCamp(Camp.WEREWOLF.getKey()))
                 .map(Roles::getPlayerWW)
                 .collect(Collectors.toSet());
 

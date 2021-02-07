@@ -97,7 +97,7 @@ public class Exposed extends ListenerManager {
         List<String> roles = new ArrayList<>(Arrays.asList(role1.getKey(),
                 role2.getKey(),
                 playerWW.getRole() instanceof Display ?
-                        ((Display) playerWW.getRole()).getDisplayRole().getKey() :
+                        ((Display) playerWW.getRole()).getDisplayRole() :
                         playerWW.getRole().getKey()));
 
         Collections.shuffle(roles);

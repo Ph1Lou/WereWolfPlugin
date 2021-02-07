@@ -4,7 +4,6 @@ import com.google.common.collect.Sets;
 import io.github.ph1lou.werewolfapi.Commands;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enums.Camp;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.InvestigateEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
@@ -88,8 +87,8 @@ public class CommandDetective implements Commands {
 
         if (playerWW1 == null || playerWW2 == null) return;
 
-        Camp isLG1 = playerWW1.getRole().getCamp();
-        Camp isLG2 = playerWW2.getRole().getCamp();
+        String isLG1 = playerWW1.getRole().getCamp().getKey();
+        String isLG2 = playerWW2.getRole().getCamp().getKey();
 
         if (playerWW1.getRole() instanceof Display) {
             isLG1 = ((Display) playerWW1.getRole()).getDisplayCamp();
@@ -100,7 +99,7 @@ public class CommandDetective implements Commands {
 
         ((Power) detective).setPower(false);
 
-        InvestigateEvent event = new InvestigateEvent(playerWW, Sets.newHashSet(playerWW1, playerWW2), isLG1 == isLG2);
+        InvestigateEvent event = new InvestigateEvent(playerWW, Sets.newHashSet(playerWW1, playerWW2), isLG1.equals(isLG2));
         Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {

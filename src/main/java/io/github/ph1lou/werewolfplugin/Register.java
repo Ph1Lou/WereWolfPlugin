@@ -89,6 +89,7 @@ import io.github.ph1lou.werewolfplugin.commands.roles.CommandWereWolf;
 import io.github.ph1lou.werewolfplugin.commands.roles.CommandWereWolfChat;
 import io.github.ph1lou.werewolfplugin.commands.roles.CommandWildChild;
 import io.github.ph1lou.werewolfplugin.commands.roles.CommandWitch;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandWolfDog;
 import io.github.ph1lou.werewolfplugin.commands.utilities.CommandAnonymeChat;
 import io.github.ph1lou.werewolfplugin.commands.utilities.CommandCompo;
 import io.github.ph1lou.werewolfplugin.commands.utilities.CommandDoc;
@@ -160,7 +161,6 @@ import io.github.ph1lou.werewolfplugin.roles.villagers.Fox;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Guard;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Librarian;
 import io.github.ph1lou.werewolfplugin.roles.villagers.LittleGirl;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Metamorph;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Priestess;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Protector;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Raven;
@@ -174,6 +174,7 @@ import io.github.ph1lou.werewolfplugin.roles.villagers.VillageIdiot;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Villager;
 import io.github.ph1lou.werewolfplugin.roles.villagers.WildChild;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Witch;
+import io.github.ph1lou.werewolfplugin.roles.villagers.WolfDog;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.FalsifierWereWolf;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.InfectFatherOfTheWolves;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.MischievousWereWolf;
@@ -667,7 +668,16 @@ public class Register implements RegisterManager {
                         "werewolf.role.guardian_angel.command", new CommandAngelRegen(main))
                         .addRoleKey(RolesBase.ANGEL.getKey())
                         .addRoleKey(RolesBase.GUARDIAN_ANGEL.getKey())
-                       .addStateAccess(StatePlayer.ALIVE)
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(0));
+
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.wolf_dog.command", new CommandWolfDog(main))
+                        .addRoleKey(RolesBase.WOLF_DOG.getKey())
+                        .setRequiredPower()
+                        .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
                         .addArgNumbers(0));
 
@@ -995,8 +1005,8 @@ public class Register implements RegisterManager {
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
-                            RolesBase.METAMORPH.getKey(),
-                            Metamorph.class)
+                            RolesBase.WOLF_DOG.getKey(),
+                            WolfDog.class)
                             .addCategory(Category.VILLAGER));
 
             rolesRegister

@@ -50,7 +50,7 @@ public class VillageIdiot extends RolesVillage implements Power {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void onUpdate(UpdatePlayerNameTag event) {
+    public void onUpdateNameTag(UpdatePlayerNameTag event) {
 
         if (!event.getPlayerUUID().equals(getPlayerUUID())) return;
 
@@ -77,28 +77,34 @@ public class VillageIdiot extends RolesVillage implements Power {
 
         Optional<PlayerWW> killerWW = this.getPlayerWW().getLastKiller();
 
-        if (killerWW.isPresent() && !killerWW.get().getRole().isWereWolf()) {
-
-            setPower(false);
-
-            VillageIdiotEvent villageIdiotEvent = new VillageIdiotEvent(getPlayerWW(), killerWW.get());
-            Bukkit.getPluginManager().callEvent(villageIdiotEvent);
-
-            if (villageIdiotEvent.isCancelled()) {
-                getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
-                return;
-            }
-            game.resurrection(getPlayerWW());
-            Player player = Bukkit.getPlayer(getPlayerUUID());
-            if (player != null) {
-                Bukkit.getPluginManager().callEvent(
-                        new UpdateNameTagEvent(player));
-            }
-            getPlayerWW().removePlayerMaxHealth(4);
-            event.setCancelled(true);
-            Bukkit.broadcastMessage(game.translate("werewolf.role.village_idiot.announce",
-                    getPlayerWW().getName()));
+        if (!killerWW.isPresent()) {
+            return;
         }
+
+        if (killerWW.get().getRole().isWereWolf()) {
+            return;
+        }
+
+        setPower(false);
+
+        VillageIdiotEvent villageIdiotEvent =
+                new VillageIdiotEvent(getPlayerWW(), killerWW.get());
+        Bukkit.getPluginManager().callEvent(villageIdiotEvent);
+
+        if (villageIdiotEvent.isCancelled()) {
+            getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
+            return;
+        }
+        game.resurrection(getPlayerWW());
+        Player player = Bukkit.getPlayer(getPlayerUUID());
+        if (player != null) {
+            Bukkit.getPluginManager().callEvent(
+                    new UpdateNameTagEvent(player));
+        }
+        getPlayerWW().removePlayerMaxHealth(4);
+        event.setCancelled(true);
+        Bukkit.broadcastMessage(game.translate("werewolf.role.village_idiot.announce",
+                getPlayerWW().getName()));
     }
 }
 

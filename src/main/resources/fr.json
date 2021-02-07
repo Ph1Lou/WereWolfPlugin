@@ -73,10 +73,14 @@
         "reveal_killer_role": "[§eLG UHC§r] Votre soeur a été tué par un §b%s",
         "sisters_list": "Liste de vos Soeurs : §b%s\n"
       },
-      "metamorph": {
-        "display": "Metamorphe",
-        "chat": "Vous pouvez lire et envoyer des messages dans le chat des Loups Garous",
-        "description": "Grâce à vos capacité de métamorphose, les Loups Garous vous voient dans leur liste. Cependant, vous ne connaissez pas les Loups Garous."
+      "wolf_dog": {
+        "display": "Chien Loup",
+        "command": "changer",
+        "description": "Forme §aVillageois§f : Les Loups Garous vous voient dans leur liste, cependant, vous ne connaissez pas les Loups Garous. Attention, les rôles à informations vous voient dans le camp des Loups Garous. Vous pouvez lire et envoyer des messages dans le chat des Loups Garous",
+        "transform": "[§aLG UHC§r] Vous pouvez passer dans votre forme Loup Garou avec la commande §b/ww changer§f (irreversible), vous avez §b%s",
+        "time_over": "[§cLG UHC§r] Vous ne pouvez plus choisir votre forme, vous gardez donc votre forme Village",
+        "perform": "[§cLG UHC§r] Vous venez de choisir la forme Loup garou",
+        "description_2": "Forme §cLoup Garou§f : Les Loups Garous ne vous voient pas dans leur liste. Cependant, vous connaissez les Loups Garous. Les rôles à informations vous voient dans le camp des Villageois."
       },
       "stud": {
         "display": "Tombeur",
@@ -1095,7 +1099,7 @@
     "description": {
       "_": "§b================================\n",
       "role": "§fVous êtes §b%s",
-      "description": "§bDescription :§f %s",
+      "description": "§bDescription :§f %s\n",
       "camp": "§fCamp des §b%s\n",
       "power": "§bPouvoir : §f%s\n",
       "item": "§bItems : §f%s\n",

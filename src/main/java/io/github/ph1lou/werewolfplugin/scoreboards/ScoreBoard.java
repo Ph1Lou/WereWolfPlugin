@@ -396,8 +396,7 @@ public class ScoreBoard implements ScoreAPI, Listener {
 
 	@EventHandler
 	public void onStop(StopEvent event) {
-		Bukkit.getOnlinePlayers()
-				.forEach(tabManager::registerPlayer);
+		Bukkit.getOnlinePlayers().forEach(tabManager::registerPlayer);
 	}
 
 	@EventHandler

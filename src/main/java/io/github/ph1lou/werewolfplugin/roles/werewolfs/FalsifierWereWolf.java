@@ -10,7 +10,6 @@ import io.github.ph1lou.werewolfapi.events.SelectionEndEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.Display;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesWereWolf;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Villager;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
@@ -21,37 +20,36 @@ import java.util.UUID;
 
 public class FalsifierWereWolf extends RolesWereWolf implements Display {
 
-    private Camp displayCamp = Camp.VILLAGER;
-    private Roles displayRole;
+    private String displayCamp = Camp.VILLAGER.getKey();
+    private String displayRole = RolesBase.VILLAGER.getKey();
 
     public FalsifierWereWolf(GetWereWolfAPI main, PlayerWW playerWW, String key) {
         super(main, playerWW, key);
-        this.displayRole = new Villager(main, playerWW, RolesBase.VILLAGER.getKey());
     }
 
     @Override
-    public void setDisplayCamp(Camp camp) {
-        this.displayCamp = camp;
-    }
-
-    @Override
-    public boolean isDisplayCamp(Camp camp) {
+    public boolean isDisplayCamp(String camp) {
         return (this.displayCamp.equals(camp));
     }
 
     @Override
-    public Camp getDisplayCamp() {
-        return(this.displayCamp);
+    public String getDisplayCamp() {
+        return (this.displayCamp);
     }
 
     @Override
-    public Roles getDisplayRole() {
-        return(this.displayRole);
+    public void setDisplayCamp(String camp) {
+        this.displayCamp = camp;
     }
 
     @Override
-    public void setDisplayRole(Roles role) {
-        this.displayRole =role;
+    public String getDisplayRole() {
+        return (this.displayRole);
+    }
+
+    @Override
+    public void setDisplayRole(String role) {
+        this.displayRole = role;
     }
 
     @EventHandler
@@ -75,19 +73,19 @@ public class FalsifierWereWolf extends RolesWereWolf implements Display {
         PlayerWW displayWW = game.autoSelect(getPlayerWW());
 
         Roles roles = displayWW.getRole();
-        NewDisplayRole newDisplayRole = new NewDisplayRole(getPlayerWW(), roles.getKey(), roles.getCamp());
+        NewDisplayRole newDisplayRole = new NewDisplayRole(getPlayerWW(), roles.getKey(), roles.getCamp().getKey());
         Bukkit.getPluginManager().callEvent(newDisplayRole);
 
         if (newDisplayRole.isCancelled()) {
             getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
-            setDisplayCamp(Camp.WEREWOLF);
-            setDisplayRole(this);
+            setDisplayCamp(Camp.WEREWOLF.getKey());
+            setDisplayRole(RolesBase.FALSIFIER_WEREWOLF.getKey());
         } else {
-            setDisplayRole(roles);
+            setDisplayRole(roles.getKey());
             setDisplayCamp(newDisplayRole.getNewDisplayCamp());
         }
         getPlayerWW().sendMessageWithKey("werewolf.role.falsifier_werewolf.display_role_message",
-                game.translate(getDisplayRole().getKey()));
+                game.translate(getDisplayRole()));
     }
 
 
@@ -95,7 +93,7 @@ public class FalsifierWereWolf extends RolesWereWolf implements Display {
     public @NotNull String getDescription() {
         return super.getDescription() +
                 game.translate("werewolf.description.description", game.translate("werewolf.role.falsifier_werewolf.description")) +
-                game.translate("werewolf.role.falsifier_werewolf.role", game.translate(displayRole.getKey()));
+                game.translate("werewolf.role.falsifier_werewolf.role", game.translate(this.displayRole));
     }
 
 

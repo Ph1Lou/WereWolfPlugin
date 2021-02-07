@@ -19,10 +19,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Troublemaker extends RolesVillage implements AffectedPlayers, Power {
 
     private final List<PlayerWW> affectedPlayer = new ArrayList<>();
+    private boolean power = true;
 
     public Troublemaker(GetWereWolfAPI main, PlayerWW playerWW, String key) {
         super(main, playerWW, key);
@@ -34,19 +36,18 @@ public class Troublemaker extends RolesVillage implements AffectedPlayers, Power
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         Bukkit.getPluginManager().callEvent(new TroubleMakerDeathEvent(getPlayerWW()));
-        int i = 0;
-        for (PlayerWW playerWW1 : game.getPlayerWW()) {
+        Bukkit.broadcastMessage("werewolf.role.troublemaker.troublemaker_death");
 
-            playerWW1.sendMessageWithKey("werewolf.role.troublemaker.troublemaker_death");
-            if (playerWW1.isState(StatePlayer.ALIVE)) {
-                game.getMapManager().transportation(playerWW1,
-                        i * 2 * Math.PI / game.getScore().getPlayerSize());
-                i++;
-            }
-        }
+        AtomicInteger i = new AtomicInteger();
+
+        game.getPlayerWW().stream()
+                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                .forEach(playerWW -> {
+                    game.getMapManager().transportation(playerWW,
+                            i.get() * 2 * Math.PI / game.getScore().getPlayerSize());
+                    i.getAndIncrement();
+                });
     }
-
-    private boolean power=true;
 
     @Override
     public void setPower(boolean power) {
@@ -78,7 +79,6 @@ public class Troublemaker extends RolesVillage implements AffectedPlayers, Power
         return (this.affectedPlayer);
     }
 
-
     @Override
     public @NotNull String getDescription() {
         return super.getDescription() +
@@ -88,10 +88,8 @@ public class Troublemaker extends RolesVillage implements AffectedPlayers, Power
                         game.translate("werewolf.role.troublemaker.chat"));
     }
 
-
     @Override
     public void recoverPower() {
-
     }
 
     @EventHandler
@@ -112,6 +110,4 @@ public class Troublemaker extends RolesVillage implements AffectedPlayers, Power
 
         event.setCanSpeak(true);
     }
-
-
 }
