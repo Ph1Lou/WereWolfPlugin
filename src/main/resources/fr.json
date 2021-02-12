@@ -355,7 +355,7 @@
       "lover": {
         "display": "Couple",
         "random": " Aléatoire",
-        "description": "§6LOUP-GAROU §7➽§d Vous tombez éperdument amoureux de §b%s§d.\n§dSi l'un meurt, l'autre le rejoindra par amour.\n§dVous pouvez envoyer de la vie à votre âme soeur avec §b/ww don §d[nombre de demi-coeurs à envoyer] [facultatif:joueur à qui l'envoyer]",
+        "description": "§6LOUP-GAROU §7➽§d Vous tombez éperdument amoureux de §b%s§d.\n§dSi l'un meurt, l'autre le rejoindra par amour.\n§dVous pouvez envoyer de la vie à votre âme soeur avec §b/ww don §d[%% de vie à envoyer] [facultatif:joueur à qui l'envoyer]",
         "not_in_pairs": "[§cLG UHC§r] Vous n'êtes pas en couple",
         "lover_death": "§d%s par amour, le rejoint dans sa tombe",
         "not_enough_players": "[§cLG UHC§r] il n'y a pas assez de personnes pour former un couple",

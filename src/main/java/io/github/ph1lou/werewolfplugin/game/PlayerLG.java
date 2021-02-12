@@ -152,6 +152,7 @@ public class PlayerLG implements PlayerWW {
 
         if (player != null) {
             player.spigot().sendMessage(textComponent);
+            sound.play(player);
             return;
         }
 
