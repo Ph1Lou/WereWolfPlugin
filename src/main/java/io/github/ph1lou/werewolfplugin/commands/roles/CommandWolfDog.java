@@ -47,5 +47,7 @@ public class CommandWolfDog implements Commands {
         playerWW.sendMessageWithKey("werewolf.role.wolf_dog.perform");
 
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(player));
+
+        game.checkVictory();
     }
 }

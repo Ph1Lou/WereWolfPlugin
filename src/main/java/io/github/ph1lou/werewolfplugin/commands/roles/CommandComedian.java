@@ -61,7 +61,7 @@ public class CommandComedian implements Commands {
 
             playerWW.sendMessageWithKey(
                     "werewolf.role.comedian.wear_mask_perform",
-                    ComedianMask.values()[i].getKey());
+                    game.translate(ComedianMask.values()[i].getKey()));
             playerWW.addPotionEffect(ComedianMask.values()[i].getPotionEffectType());
 
         } catch (NumberFormatException ignored) {

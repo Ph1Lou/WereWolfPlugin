@@ -37,7 +37,7 @@ public class Troublemaker extends RolesVillage implements AffectedPlayers, Power
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         Bukkit.getPluginManager().callEvent(new TroubleMakerDeathEvent(getPlayerWW()));
-        Bukkit.broadcastMessage("werewolf.role.troublemaker.troublemaker_death");
+        Bukkit.broadcastMessage(game.translate("werewolf.role.troublemaker.troublemaker_death"));
 
         AtomicInteger i = new AtomicInteger();
 

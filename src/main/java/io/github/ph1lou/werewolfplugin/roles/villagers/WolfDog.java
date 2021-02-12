@@ -50,7 +50,7 @@ public class WolfDog extends RolesVillage implements Display, Transformed, Power
     @Override
     public void recoverPower() {
         getPlayerWW().sendMessageWithKey("werewolf.role.wolf_dog.transform",
-                game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey()));
+                game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey())));
     }
 
     @Override
