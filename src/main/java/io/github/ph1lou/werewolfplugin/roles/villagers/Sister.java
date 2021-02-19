@@ -6,9 +6,11 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.SisterDeathEvent;
 import io.github.ph1lou.werewolfapi.events.UpdateEvent;
+import io.github.ph1lou.werewolfapi.events.WereWolfListEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
@@ -42,6 +44,36 @@ public class Sister extends RolesVillage implements AffectedPlayers {
     @Override
     public @NotNull String getDescription() {
 
+
+
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.sister.description"))
+                .setEffects(() -> game.translate("werewolf.role.sister.effect",
+                        game.getConfig().getDistanceSister()))
+                .addExtraLines(() -> {
+                    if (game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey()) > 0) {
+                        return game.translate("werewolf.role.sister.sisters_list", game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey())));
+                    } else {
+                        return game.translate("werewolf.role.sister.sisters_list", this.getSister());
+                    }
+                })
+                .build();
+    }
+
+
+    @Override
+    public void recoverPower() {
+
+    }
+
+
+    @EventHandler
+    public void onWerewolfList(WereWolfListEvent event) {
+        getPlayerWW().sendMessageWithKey("werewolf.role.sister.sisters_list", this.getSister());
+    }
+
+    private String getSister() {
+
         StringBuilder list = new StringBuilder();
 
         game.getPlayerWW()
@@ -50,19 +82,7 @@ public class Sister extends RolesVillage implements AffectedPlayers {
                 .filter(playerWW -> !playerWW.getRole().equals(this))
                 .filter(playerWW -> playerWW.isKey(RolesBase.SISTER.getKey()))
                 .forEach(playerWW -> list.append(playerWW.getName()).append(" "));
-
-        return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.sister.description"))
-                .setEffects(() -> game.translate("werewolf.role.sister.effect",
-                        game.getConfig().getDistanceSister()))
-                .addExtraLines(() -> game.translate("werewolf.role.sister.sisters_list", list.toString()))
-                .build();
-    }
-
-
-    @Override
-    public void recoverPower() {
-
+        return list.toString();
     }
 
     @EventHandler
@@ -100,6 +120,7 @@ public class Sister extends RolesVillage implements AffectedPlayers {
 
 
         if (recoverResistance) {
+            
             sister.getActivePotionEffects()
                     .stream()
                     .filter(potionEffect -> potionEffect.getDuration()

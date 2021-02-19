@@ -7,7 +7,9 @@ import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.UpdateEvent;
+import io.github.ph1lou.werewolfapi.events.WereWolfListEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
@@ -26,6 +28,26 @@ public class SiameseTwin extends RolesVillage {
     @Override
     public @NotNull String getDescription() {
 
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.siamese_twin.description"))
+                .setPower(() -> game.translate("werewolf.role.siamese_twin.power"))
+                .addExtraLines(() -> {
+                    if (game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey()) > 0) {
+                        return game.translate("werewolf.role.siamese_twin.siamese_twin_list", game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey())));
+                    } else {
+                        return game.translate("werewolf.role.siamese_twin.siamese_twin_list", this.getBrother());
+                    }
+                })
+                .build();
+    }
+
+    @EventHandler
+    public void onWerewolfList(WereWolfListEvent event) {
+        getPlayerWW().sendMessageWithKey("werewolf.role.siamese_twin.siamese_twin_list", this.getBrother());
+    }
+
+
+    private String getBrother() {
 
         StringBuilder list = new StringBuilder();
 
@@ -37,12 +59,7 @@ public class SiameseTwin extends RolesVillage {
                         RolesBase.SIAMESE_TWIN.getKey()))
                 .forEach(playerWW -> list.append(playerWW.getName()).append(" "));
 
-        return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.siamese_twin.description"))
-                .setPower(() -> game.translate("werewolf.role.siamese_twin.power"))
-                .addExtraLines(() -> game.translate("werewolf.role.siamese_twin.siamese_twin_list",
-                        list.toString()))
-                .build();
+        return list.toString();
     }
 
 

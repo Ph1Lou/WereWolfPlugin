@@ -54,7 +54,7 @@ public class Guard extends RolesWithLimitedSelectionDuration implements Affected
 
         if (!this.last.getLastKiller().get().getRole().isWereWolf()) return;
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+        if (!this.last.equals(getPlayerWW()) && !getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         game.resurrection(this.last);
 
