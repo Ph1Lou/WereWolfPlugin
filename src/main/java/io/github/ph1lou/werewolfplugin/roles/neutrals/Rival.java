@@ -6,6 +6,7 @@ import io.github.ph1lou.werewolfapi.LoverAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
+import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
@@ -24,6 +25,7 @@ import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.Power;
 import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
+import io.github.ph1lou.werewolfplugin.game.GameManager;
 import io.github.ph1lou.werewolfplugin.roles.lovers.Lover;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -173,7 +175,22 @@ public class Rival extends RolesNeutral implements Power {
 
         if (!loverAPI.getLovers().contains(playerWW1) || !loverAPI.getLovers().contains(playerWW2)) return;
 
-        getPlayerWW().removePlayerMaxHealth(4);
+
+        int health = 5;
+        if (getPlayerWW().getMaxHealth() < 10) { //si le joueur a moins de coeurs ont réduit le temps de récupération de coeurs
+            health = getPlayerWW().getMaxHealth() / 2 - 1; //-1 car le joueur aura un coeur minimum quand il prend les votes
+        }
+        getPlayerWW().removePlayerMaxHealth(10);
+
+        int task = Bukkit.getScheduler().scheduleSyncRepeatingTask(((GameManager) game).getMain(), () -> {
+            if (game.isState(StateGame.GAME)) {
+                getPlayerWW().addPlayerMaxHealth(2);
+            }
+        }, 1200, 1200);
+
+        Bukkit.getScheduler().scheduleSyncDelayedTask(((GameManager) game).getMain(), () -> Bukkit.getScheduler().cancelTask(task), (long) health * 62 * 20);
+
+
         getPlayerWW().sendMessageWithKey("werewolf.role.rival.lover_death");
         Bukkit.getPluginManager().callEvent(new RivalLoverDeathEvent(getPlayerWW(), new ArrayList<>(loverAPI.getLovers())));
         loverAPI = null;

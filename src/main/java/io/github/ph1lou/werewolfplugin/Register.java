@@ -176,6 +176,7 @@ import io.github.ph1lou.werewolfplugin.roles.villagers.WildChild;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Witch;
 import io.github.ph1lou.werewolfplugin.roles.villagers.WolfDog;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.FalsifierWereWolf;
+import io.github.ph1lou.werewolfplugin.roles.werewolfs.GrimyWereWolf;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.InfectFatherOfTheWolves;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.MischievousWereWolf;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.MysticalWereWolf;
@@ -1023,6 +1024,11 @@ public class Register implements RegisterManager {
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.IMITATOR.getKey(), Imitator.class)
                             .addCategory(Category.NEUTRAL));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.GRIMY_WEREWOLF.getKey(), GrimyWereWolf.class)
+                            .addCategory(Category.WEREWOLF));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",

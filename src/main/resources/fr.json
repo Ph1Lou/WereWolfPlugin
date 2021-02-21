@@ -44,6 +44,12 @@
         "werewolf_list": "[§eLG UHC§r] Liste des Loups Garous : §b%s",
         "command": "lg"
       },
+      "grimy_werewolf": {
+        "display": "Loup Garou Grimeur",
+        "description": "La première personne que vous tuerez apparaitra comme étant Loup Garou à l'annonce de sa mort",
+        "perform": "[§aLG UHC§r] Le joueur §b%s§f était §b%s§f. Grâce à votre pouvoir, son rôle à l'annonce de sa mort a été maquillé en Loup Garou",
+        "actualize": "[§aLG UHC§r] Un Loup Garou Grimeur vient de mourir. Il avait maquillé la mort d'un §b%s"
+      },
       "wild_child": {
         "display": "Enfant Sauvage",
         "model_none": "§cAucun§f désigner un modèle §b/ww modele",
@@ -158,7 +164,7 @@
         "display": "Rival",
         "extra": "Vous avez le droit à un arc Puissance §b%d",
         "item": "Deux potions de dégats",
-        "description": "Lors de l'annonce du couple vous obtiendrez le rôle de deux personnes formant un couple. Dans §b%s§r, vous obtiendrez une liste de 5 joueurs contenant les noms des deux amoureux. \nSi vous tuez un membre du couple, vous prendrez sa place et devrez gagner avec son couple. \nEn revanche, si le couple meurt, vous devrez gagner seul avec une barre de vie réduite de 2 coeurs permanents. Vous connaissez la direction du cupidon si il est présent dans la partie.",
+        "description": "Lors de l'annonce du couple vous obtiendrez le rôle de deux personnes formant un couple. Dans §b%s§r, vous obtiendrez une liste de 5 joueurs contenant les noms des deux amoureux. \nSi vous tuez un membre du couple, vous prendrez sa place et devrez gagner avec son couple. \nEn revanche, si le couple meurt, vous devrez gagner seul et vous perdrez 5 coeurs (vous récupèrerez un coeurs par minute). Vous connaissez la direction du cupidon si il est présent dans la partie.",
         "lover": "[§eLG UHC§r] Votre couple associé de la partie se compose d'un §b%s§f et d'un §b%s§f.",
         "find_lovers": "[§eLG UHC§r] Le couple se trouve parmi les joueurs suivants : %s, %s, %s, %s, %s",
         "lover_death": "[§cLG UHC§r] Le couple est mort, vous êtes maintenant forcé de gagner seul, votre barre de vie est réduite de 2 coeurs."
