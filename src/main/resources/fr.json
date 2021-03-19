@@ -177,7 +177,7 @@
         "smell_beginning": "[§eLG UHC§r] Vous commencez à flairer §b%s",
         "not_werewolf": "[§eLG UHC§r] %s §2n'est pas dans le camp des Loups Garous",
         "warn": "Il sera prévenu dans 5 minutes que vous l'avez flairé",
-        "werewolf": "[§eLG UHC§r] %s §4est dans le camp des Loups Garous",
+        "werewolf": "[§eLG UHC§r] %s §4est dans le camp des Loups Garous.§f Il sera prévenu qu'il a été flairé dans 5 minutes",
         "not_enough_near": "[§cLG UHC§r] Vous n'êtes pas assez proche de la personne que vous voulez flairer",
         "progress": "[§eLG UHC§r] Progression du Flair §b%s%%",
         "smell": "[§cLG UHC§r] Vous avez été flairé par un §bRenard§f il y a 5 minutes",
@@ -291,7 +291,7 @@
       },
       "priestess": {
         "display": "Prêtresse",
-        "description": "Le Jour, Vous pouvez connaître le camp d'un joueur en échange de deux coeurs permanents. Tant que vous êtes en vie les Loups Garous ont 20%% de chance de voir le rôles des joueurs morts contre 80%% pour les Villageois. Quand vous mourrez, ces probabilités s'inversent",
+        "description": "Le Jour, Vous pouvez connaître le camp d'un joueur en échange de deux coeurs permanents. Tant que vous êtes en vie les Loups Garous ont 20%% de chance de voir le rôles des joueurs morts contre 80%% pour les Villageois. Quand vous mourrez, ces probabilités s'inversent. Les Neutres ont 95%% de chance de le voir",
         "command": "spec",
         "items": "Quatre Obsidiennes",
         "is_werewolf": "[§cLG UHC§r] §b%s§r est dans le camp des Loups Garous",

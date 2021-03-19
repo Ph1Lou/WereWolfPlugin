@@ -114,13 +114,12 @@ public class Priestess extends RolesWithLimitedSelectionDuration implements Affe
                 .stream()
                 .map(PlayerWW::getRole)
                 .forEach(roles -> {
-                    if (roles.isNeutral()) {
-                        roles.getPlayerWW().sendMessage(game.translate(event.getFormat())
-                                .replace("&player&", event.getPlayerName())
-                                .replace("&role&", game.translate(event.getRole())));
-                    } else
-                        sendDeathMessage(roles.getPlayerWW(), event.getPlayerWW(),
-                                roles.isWereWolf(), event.getFormat(), event.getRole());
+                    sendDeathMessage(roles.getPlayerWW(),
+                            event.getPlayerWW(),
+                            roles.isNeutral(),
+                            roles.isWereWolf(),
+                            event.getFormat(),
+                            event.getRole());
                 });
 
         game.getModerationManager().getModerators().stream()
@@ -139,20 +138,26 @@ public class Priestess extends RolesWithLimitedSelectionDuration implements Affe
         event.setRole(event.getPlayerWW().getRole().getCamp().getKey());
     }
 
-    private void sendDeathMessage(PlayerWW playerWW, PlayerWW targetWW, boolean isWerewolf, String format, String role) {
+    private void sendDeathMessage(PlayerWW playerWW, PlayerWW targetWW, boolean neutral, boolean werewolf, String format, String role) {
 
         String message = game.translate(format).replace("&player&", targetWW.getName());
 
-        if (game.getRandom().nextFloat() < 0.8) {
+        if (neutral) {
+            if (getPlayerWW().isState(StatePlayer.ALIVE) && game.getRandom().nextFloat() > 0.95) {
+                playerWW.sendMessage(message.replace("&role&", ChatColor.MAGIC + "Coucou"));
+            } else {
+                playerWW.sendMessage(message.replace("&role&", game.translate(role)));
+            }
+        } else if (game.getRandom().nextFloat() < 0.8) {
 
-            if (getPlayerWW().isState(StatePlayer.ALIVE) && isWerewolf) {
+            if (getPlayerWW().isState(StatePlayer.ALIVE) && werewolf) {
                 playerWW.sendMessage(message.replace("&role&", ChatColor.MAGIC + "Coucou"));
             } else {
                 playerWW.sendMessage(message.replace("&role&", game.translate(role)));
             }
         } else {
 
-            if (getPlayerWW().isState(StatePlayer.ALIVE) && isWerewolf) {
+            if (getPlayerWW().isState(StatePlayer.ALIVE) && werewolf) {
                 playerWW.sendMessage(message.replace("&role&", game.translate(role)));
             } else {
                 playerWW.sendMessage(message.replace("&role&", ChatColor.MAGIC + "Coucou"));

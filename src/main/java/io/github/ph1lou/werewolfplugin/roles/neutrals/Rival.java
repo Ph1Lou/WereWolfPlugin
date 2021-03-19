@@ -268,6 +268,7 @@ public class Rival extends RolesNeutral implements Power {
         if (cupidWW.isState(StatePlayer.ALIVE)) {
 
             stringBuilder
+                    .append(" ")
                     .append(ChatColor.WHITE)
                     .append(game.translate(RolesBase.CUPID.getKey()))
                     .append(" ")

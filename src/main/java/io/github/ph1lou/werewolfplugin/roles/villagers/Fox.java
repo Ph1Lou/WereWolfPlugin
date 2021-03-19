@@ -222,11 +222,15 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
                             playerWW.getName()));
                 }
                 player.sendMessage(game.translate("werewolf.role.fox.warn"));
-                Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
-                    if (game.isState(StateGame.GAME)) {
-                        playerWW.sendMessageWithKey("werewolf.role.fox.smell", Sound.DONKEY_ANGRY);
-                    }
-                }, 20 * 60 * 5);
+
+                if (playerWW.getRole().isWereWolf()) {
+                    Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
+                        if (game.isState(StateGame.GAME)) {
+                            playerWW.sendMessageWithKey("werewolf.role.fox.smell", Sound.DONKEY_ANGRY);
+                        }
+                    }, 20 * 60 * 5);
+                }
+
             } else {
                 player.sendMessage(game.translate("werewolf.check.cancel"));
             }

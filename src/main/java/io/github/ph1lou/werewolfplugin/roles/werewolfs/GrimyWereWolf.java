@@ -31,7 +31,6 @@ public class GrimyWereWolf extends RolesWereWolf implements AffectedPlayers, Pow
 
     public GrimyWereWolf(GetWereWolfAPI main, PlayerWW playerWW, String key) {
         super(main, playerWW, key);
-        game.getConfig().addOneRole(RolesBase.WEREWOLF.getKey());
     }
 
     @Override
@@ -67,7 +66,9 @@ public class GrimyWereWolf extends RolesWereWolf implements AffectedPlayers, Pow
 
     @Override
     public void recoverPower() {
-
+        if (!game.getConfig().isTrollSV()) {
+            game.getConfig().addOneRole(RolesBase.WEREWOLF.getKey());
+        }
     }
 
 
@@ -90,6 +91,10 @@ public class GrimyWereWolf extends RolesWereWolf implements AffectedPlayers, Pow
 
         if (event.isCancelled()) return;
 
+        if (!event.getPlayerWW().getLastKiller().isPresent()) return;
+
+        if (!event.getPlayerWW().getLastKiller().get().equals(this.getPlayerWW())) return;
+
         if (!this.power) return;
 
         this.power = false;
@@ -105,6 +110,7 @@ public class GrimyWereWolf extends RolesWereWolf implements AffectedPlayers, Pow
 
         getPlayerWW().sendMessageWithKey("werewolf.role.grimy_werewolf.perform", event.getPlayerName(), game.translate(event.getRole()));
 
+        this.affectedPlayer.add(event.getPlayerWW());
 
         event.setRole(RolesBase.WEREWOLF.getKey());
     }
@@ -125,9 +131,15 @@ public class GrimyWereWolf extends RolesWereWolf implements AffectedPlayers, Pow
         if (!this.affectedPlayer.contains(playerWW)) return;
 
         if (game.getConfig().isConfigActive(ConfigsBase.SHOW_ROLE_TO_DEATH.getKey())) {
-            event.setSuffix(game.translate(RolesBase.WEREWOLF.getKey()));
+            event.setSuffix(event.getSuffix()
+                    .replace(game.translate(playerWW.getRole().getKey()),
+                            "")
+                    + game.translate(RolesBase.WEREWOLF.getKey()));
         } else if (game.getConfig().isConfigActive(ConfigsBase.SHOW_ROLE_CATEGORY_TO_DEATH.getKey())) {
-            event.setSuffix(game.translate(Camp.WEREWOLF.getKey()));
+            event.setSuffix(event.getSuffix()
+                    .replace(game.translate(playerWW.getRole().getCamp().getKey()),
+                            "")
+                    + game.translate(Camp.WEREWOLF.getKey()));
         }
 
     }

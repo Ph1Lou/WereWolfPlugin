@@ -184,6 +184,8 @@ public class Lover implements LoverAPI, Listener {
 
         if (playerWW.equals(playerWW1)) return false;
 
+        if (this.getLovers().contains(playerWW1)) return false;
+
         if (death) return false;
 
         lovers.remove(playerWW);
@@ -238,30 +240,4 @@ public class Lover implements LoverAPI, Listener {
         lovers.add(playerWW);
 
     }
-
-/*
-    public void thiefLoversRange(UUID playerUUID) {
-
-
-        int cp = -1;
-        int ck = -1;
-
-
-        for (int i = 0; i < game.getLoversRange().size(); i++) {
-            List<UUID> loverList = game.getLoversRange().get(i);
-            if (loverList.contains(playerUUID) && !loverList.contains(getPlayerUUID())) {
-                loverList.remove(playerUUID);
-                loverList.add(getPlayerUUID());
-                cp = i;
-            } else if (!loverList.contains(playerUUID) &&
-                    loverList.contains(getPlayerUUID())) {
-                ck = i;
-            }
-        }
-        if (cp != -1 && ck != -1) {
-            game.getLoversRange().get(ck).remove(getPlayerUUID());
-            game.getLoversRange().get(cp).addAll(game.getLoversRange().get(ck));
-            game.getLoversRange().remove(ck);
-        }
-    }*/
 }

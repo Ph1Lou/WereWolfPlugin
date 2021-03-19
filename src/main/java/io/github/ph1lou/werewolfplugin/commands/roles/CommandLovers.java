@@ -69,6 +69,7 @@ public class CommandLovers implements Commands {
                         loverAPI1.getLovers()
                                 .stream()
                                 .filter(playerWW1 -> !playerWW.equals(playerWW1))
+                                .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                                 .forEach(playerWW1 -> {
                                     Player playerCouple = Bukkit.getPlayer(playerWW1.getUUID());
 

@@ -175,6 +175,8 @@ public class CursedLover implements LoverAPI, Listener {
 
         if (playerWW.equals(playerWW1)) return false;
 
+        if (this.getLovers().contains(playerWW1)) return false;
+
         if (death) return false;
 
         if (cursedLover1.equals(playerWW)) {

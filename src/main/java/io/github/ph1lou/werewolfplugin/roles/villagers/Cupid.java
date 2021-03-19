@@ -62,6 +62,7 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
 
         return new DescriptionBuilder(game, this)
                 .setDescription(() -> game.translate("werewolf.role.cupid.description"))
+                .setItems(() -> game.translate("werewolf.role.cupid.items"))
                 .setEquipments(() -> game.translate("werewolf.role.cupid.extra", game.getConfig().getLimitPowerBow() + 1))
                 .addExtraLines(() -> game.translate("werewolf.role.cupid.lover",
                         this.affectedPlayer.isEmpty() ?

@@ -40,12 +40,12 @@ public class Timber extends ListenerManager {
                             List<ItemStack> items = new ArrayList<>(block.getDrops());
                             block.setType(Material.AIR);
                             finalItems.addAll(items);
-                        }
-                        BlockFace[] values;
-                        for (int length = (values = BlockFace.values()).length, j = 0; j < length; ++j) {
-                            BlockFace face = values[j];
-                            if (UniversalMaterial.isLog(block.getRelative(face).getType())) {
-                                bList.add(block.getRelative(face));
+                            BlockFace[] values;
+                            for (int length = (values = BlockFace.values()).length, j = 0; j < length; ++j) {
+                                BlockFace face = values[j];
+                                if (UniversalMaterial.isLog(block.getRelative(face).getType())) {
+                                    bList.add(block.getRelative(face));
+                                }
                             }
                         }
                         bList.remove(block);
