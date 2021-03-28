@@ -326,6 +326,13 @@
         "growling_message": "[§eLG UHC§r] %s",
         "growling": "Grrrr "
       },
+      "avenger_werewolf": {
+        "display": "Loup Garou Vengeur",
+        "power": "7 cœurs au départ. Lorsque un Loup Garou enregistré meurt, vous gagnez 1 cœur permanent supplémentaire.",
+        "description": "Lorsque vous croisez d'autres Loup Garou à moins de §b%d§f blocs, ceux-ci sont enregistrés.",
+        "add": "[§eLG UHC§r] §b%s§f a été enregistré",
+        "remove": "[§aLG UHC§r] §b%s§f était dans votre liste d'enregistrement, vous récupérez un coeur permanent supplémentaire"
+      },
       "fallen_angel": {
         "display": "Ange Déchu",
         "effect": "Résistance la nuit",
@@ -782,6 +789,7 @@
         "particles_off": "§4Désactivé§r pour tous les joueurs",
         "exception": "§6Désactivé pour la Petite Fille et le Loup Garou Perfide invisible",
         "fox": "Champ d'action du Renard §b%d",
+        "avenger_werewolf": "Champ d'action du Loup Garou Vengeur §b%d",
         "bear_trainer": "Champ d'action du Montreur d'Ours §b%d"
       },
       "troll": "Configuration §bTroll",
@@ -1116,6 +1124,9 @@
       "no": "Non",
       "yes": "Oui",
       "werewolf": "Force (la nuit), Vision Nocturne. 1 minute de Vitesse et 2 coeur d'absorption après chaque kill"
+    },
+    "statistics": {
+      "message": "[§eLG UHC§r] Découvrez le récapitulatif de la partie précédente en §bCliquant ici"
     }
   }
 

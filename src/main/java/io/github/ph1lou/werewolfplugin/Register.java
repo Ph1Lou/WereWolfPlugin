@@ -175,6 +175,7 @@ import io.github.ph1lou.werewolfplugin.roles.villagers.Villager;
 import io.github.ph1lou.werewolfplugin.roles.villagers.WildChild;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Witch;
 import io.github.ph1lou.werewolfplugin.roles.villagers.WolfDog;
+import io.github.ph1lou.werewolfplugin.roles.werewolfs.AvengerWereWolf;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.FalsifierWereWolf;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.GrimyWereWolf;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.InfectFatherOfTheWolves;
@@ -1036,6 +1037,12 @@ public class Register implements RegisterManager {
                             .addCategory(Category.VILLAGER)
                             .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION));
 
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.AVENGER_WEREWOLF.getKey(), AvengerWereWolf.class)
+                            .addCategory(Category.WEREWOLF)
+                            .setRandomCompositionAttribute(RandomCompositionAttribute.WEREWOLF));
+
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
@@ -1422,7 +1429,7 @@ public class Register implements RegisterManager {
         timersRegister
                 .add(new TimerRegister("werewolf.name",
                         TimersBase.FOX_SMELL_DURATION.getKey())
-                        .setDefaultValue(120));
+                        .setDefaultValue(90));
 
         timersRegister
                 .add(new TimerRegister("werewolf.name",

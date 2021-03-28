@@ -12,11 +12,14 @@ import io.github.ph1lou.werewolfplugin.commands.Command;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import io.github.ph1lou.werewolfplugin.game.MapManager;
 import io.github.ph1lou.werewolfplugin.save.Lang;
+import io.github.ph1lou.werewolfplugin.statistiks.Events;
+import io.github.ph1lou.werewolfplugin.statistiks.GameReview;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class Main extends JavaPlugin implements GetWereWolfAPI {
 
@@ -24,6 +27,8 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
     private GameManager currentGame;
     private final Register register = new Register(this);
     private final InventoryManager invManager = new InventoryManager(this);
+    private GameReview currentGameReview;
+    private UUID serverUUID;
 
     @Override
     public InventoryManager getInvManager() {
@@ -34,7 +39,14 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
     public void onEnable() {
 
         saveDefaultConfig();
+        if (getConfig().getString("server_uuid").isEmpty()) {
+            getConfig().set("server_uuid", UUID.randomUUID().toString());
+            saveConfig();
+        }
+        this.serverUUID = UUID.fromString(Objects.requireNonNull(getConfig().getString("server_uuid")));
+
         this.invManager.init();
+        Bukkit.getPluginManager().registerEvents(new Events(this), this);
         Bukkit.getPluginManager().registerEvents(lang, this);
         currentGame = new GameManager(this);
         Objects.requireNonNull(getCommand("a")).setExecutor(new Admin(this));
@@ -82,5 +94,16 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
         this.currentGame = new GameManager(this);
     }
 
+    public GameReview getCurrentGameReview() {
+        return currentGameReview;
+    }
+
+    public void setCurrentGameReview(GameReview currentGameReview) {
+        this.currentGameReview = currentGameReview;
+    }
+
+    public UUID getServerUUID() {
+        return serverUUID;
+    }
 }
 

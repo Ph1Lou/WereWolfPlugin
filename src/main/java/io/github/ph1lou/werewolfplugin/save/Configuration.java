@@ -43,6 +43,7 @@ public class Configuration implements ConfigWereWolfAPI {
     private int distancePriestess = 10;
     private int distanceSister = 20;
     private int distanceFox = 20;
+    private int distanceAvengerWerewolf = 10;
     private boolean trollSV = false;
     private int borderMax = 2000;
     private int borderMin = 300;
@@ -502,6 +503,16 @@ public class Configuration implements ConfigWereWolfAPI {
     @Override
     public void setDistancePriestess(int i) {
         this.distancePriestess = i;
+    }
+
+    @Override
+    public int getDistanceAvengerWerewolf() {
+        return this.distanceAvengerWerewolf;
+    }
+
+    @Override
+    public void setDistanceAvengerWerewolf(int i) {
+        this.distanceAvengerWerewolf = i;
     }
 
     @Override

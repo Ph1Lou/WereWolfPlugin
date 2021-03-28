@@ -27,15 +27,12 @@ import io.github.ph1lou.werewolfplugin.scoreboards.ScoreBoard;
 import io.github.ph1lou.werewolfplugin.tasks.LobbyTask;
 import io.github.ph1lou.werewolfplugin.utils.UpdateChecker;
 import io.github.ph1lou.werewolfplugin.utils.random_config.RandomConfig;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
@@ -141,25 +138,6 @@ public class GameManager implements WereWolfAPI {
             } else {
                 player.sendMessage(translate("werewolf.update.out_of_date"));
             }
-            Plugin plugin = Bukkit.getPluginManager().getPlugin("Statistiks");
-
-            if (plugin == null) {
-                TextComponent msg = new TextComponent(translate("werewolf.utils.stat"));
-                msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
-                        "https://www.spigotmc.org/resources/statistiks-for-loup-garou-uhc-werewolf-uhc.81472/"));
-                player.spigot().sendMessage(msg);
-            } else {
-                new UpdateChecker(plugin, 81472).getVersion(version2 -> {
-
-                    if (!plugin.getDescription().getVersion().equalsIgnoreCase(version2)) {
-                        TextComponent msg = new TextComponent(translate("werewolf.utils.stat_out_of_date"));
-                        msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
-                                "https://www.spigotmc.org/resources/statistiks-for-loup-garou-uhc-werewolf-uhc.81472/"));
-                        player.spigot().sendMessage(msg);
-                    }
-                });
-            }
-
         });
 
     }

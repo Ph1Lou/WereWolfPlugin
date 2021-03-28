@@ -4,7 +4,7 @@
 
 # Link : https://www.spigotmc.org/resources/loup-garou-uhc.73113/
 
-# Version 1.6.1 Snapshot
+# Version 1.7 Snapshot
 
 # You are not allowed to claim this plugin as your own.
 
@@ -13,5 +13,5 @@
 
 lang: fr
 default_lobby: true
-
+server_uuid: ''
 
