@@ -4,7 +4,9 @@ import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.events.DeathAvengerListEvent;
 import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.RegisterAvengerListEvent;
 import io.github.ph1lou.werewolfapi.events.UpdateEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.RolesWereWolf;
@@ -48,6 +50,16 @@ public class AvengerWereWolf extends RolesWereWolf implements AffectedPlayers {
             return;
         }
 
+        DeathAvengerListEvent event1 = new DeathAvengerListEvent(this.getPlayerWW(), event.getPlayerWW());
+
+        Bukkit.getPluginManager().callEvent(event1);
+
+        if (event1.isCancelled()) {
+            getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
+            return;
+        }
+
+
         this.getPlayerWW().sendMessageWithKey("werewolf.role.avenger_werewolf.remove", event.getPlayerWW().getName());
         this.getPlayerWW().addPlayerMaxHealth(2);
     }
@@ -78,6 +90,14 @@ public class AvengerWereWolf extends RolesWereWolf implements AffectedPlayers {
                 })
                 .forEach(playerWW -> {
                     if (!this.affectedPlayers.contains(playerWW)) {
+                        RegisterAvengerListEvent event1 = new RegisterAvengerListEvent(this.getPlayerWW(), playerWW);
+
+                        Bukkit.getPluginManager().callEvent(event1);
+
+                        if (event1.isCancelled()) {
+                            return;
+                        }
+
                         this.affectedPlayers.add(playerWW);
                         this.getPlayerWW().sendMessageWithKey("werewolf.role.avenger_werewolf.add", playerWW.getName());
                     }

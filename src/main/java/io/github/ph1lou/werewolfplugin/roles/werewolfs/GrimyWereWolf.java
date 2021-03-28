@@ -81,6 +81,7 @@ public class GrimyWereWolf extends RolesWereWolf implements AffectedPlayers, Pow
             game.getConfig().removeOneRole(RolesBase.WEREWOLF.getKey());
             this.power = false;
         } else if (!this.affectedPlayer.isEmpty()) {
+            game.getConfig().removeOneRole(this.affectedPlayer.get(0).getRole().getKey());
             Bukkit.broadcastMessage(game.translate("werewolf.role.grimy_werewolf.actualize", game.translate(this.affectedPlayer.get(0).getRole().getKey())));
         }
 
