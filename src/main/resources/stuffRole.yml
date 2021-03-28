@@ -15,7 +15,7 @@
   '2':
     ==: org.bukkit.inventory.ItemStack
     type: STRING
-    amount: 64
+    amount: 3
 
 "werewolf.role.mischievous_werewolf.display":
   '0':

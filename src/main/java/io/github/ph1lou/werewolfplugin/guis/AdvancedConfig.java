@@ -7,7 +7,6 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -365,21 +364,19 @@ public class AdvancedConfig implements InventoryProvider {
                                 game.translate("werewolf.menu.advanced_tool.troll_set")))
                         .build()), e -> {
 
-            if (!game.isState(StateGame.GAME)) {
-                if (e.isShiftClick()) {
-                    TrollChoice.INVENTORY.open(player);
-                } else {
-                    config.setTrollSV(!config.isTrollSV());
-                }
-
-                e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                        .setDisplayName(game.translate(config.isTrollSV() ?
-                                "werewolf.menu.advanced_tool.troll_on" :
-                                "werewolf.menu.advanced_tool.troll_off"))
-                        .setLore(Arrays.asList(game.translate(config.getTrollKey()),
-                                game.translate("werewolf.menu.advanced_tool.troll_set")))
-                        .build());
+            if (e.isShiftClick()) {
+                TrollChoice.INVENTORY.open(player);
+            } else {
+                config.setTrollSV(!config.isTrollSV());
             }
+
+            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                    .setDisplayName(game.translate(config.isTrollSV() ?
+                            "werewolf.menu.advanced_tool.troll_on" :
+                            "werewolf.menu.advanced_tool.troll_off"))
+                    .setLore(Arrays.asList(game.translate(config.getTrollKey()),
+                            game.translate("werewolf.menu.advanced_tool.troll_set")))
+                    .build());
 
 
         }));

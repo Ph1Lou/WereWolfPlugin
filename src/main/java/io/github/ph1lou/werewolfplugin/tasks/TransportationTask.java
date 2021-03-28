@@ -9,7 +9,12 @@ import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.WorldBorder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -58,7 +63,7 @@ public class TransportationTask implements Listener {
             }
             initStructure(world, i.getAndIncrement());
 
-        }, 0, 20));
+        }, 0, 5));
 
     }
 
@@ -83,7 +88,7 @@ public class TransportationTask implements Listener {
             }
             teleportPlayer(i.getAndIncrement());
 
-        }, 0, 20));
+        }, 0, 5));
 
     }
 

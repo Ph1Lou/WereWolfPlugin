@@ -375,6 +375,9 @@ public class PlayerListener implements Listener {
 		if (event.isCancelled()) return;
 
 		PlayerWW playerWW = event.getPlayerWW();
+
+		if (!playerWW.isState(StatePlayer.JUDGEMENT)) return;
+
 		SecondDeathEvent secondDeathEvent = new SecondDeathEvent(playerWW);
 		Bukkit.getPluginManager().callEvent(secondDeathEvent);
 	}

@@ -109,7 +109,6 @@ public class Elder extends RolesVillage implements Power {
         } else {
             if (elderResurrectionEvent.isKillerAVillager()) {
                 getPlayerWW().removePlayerMaxHealth(6);
-
             }
             event.setCancelled(true);
             game.resurrection(getPlayerWW());
