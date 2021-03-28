@@ -99,6 +99,13 @@
         </dependency>
 
 
+        <dependency>
+            <groupId>com.github.KevinPriv</groupId>
+            <artifactId>MojangAPI</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+
     </dependencies>
 
 

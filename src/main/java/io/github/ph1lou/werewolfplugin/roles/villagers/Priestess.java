@@ -113,14 +113,12 @@ public class Priestess extends RolesWithLimitedSelectionDuration implements Affe
         game.getPlayerWW()
                 .stream()
                 .map(PlayerWW::getRole)
-                .forEach(roles -> {
-                    sendDeathMessage(roles.getPlayerWW(),
-                            event.getPlayerWW(),
-                            roles.isNeutral(),
-                            roles.isWereWolf(),
-                            event.getFormat(),
-                            event.getRole());
-                });
+                .forEach(roles -> sendDeathMessage(roles.getPlayerWW(),
+                        event.getPlayerWW(),
+                        roles.isNeutral(),
+                        roles.isWereWolf(),
+                        event.getFormat(),
+                        event.getRole()));
 
         game.getModerationManager().getModerators().stream()
                 .filter(uuid -> game.getPlayerWW(uuid) == null)

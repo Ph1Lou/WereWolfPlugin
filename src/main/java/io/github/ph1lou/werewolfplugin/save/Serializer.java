@@ -3,7 +3,7 @@ package io.github.ph1lou.werewolfplugin.save;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
-import io.github.ph1lou.werewolfplugin.statistiks.GameReview;
+import io.github.ph1lou.werewolfapi.statistics.GameReview;
 
 public class Serializer {
 

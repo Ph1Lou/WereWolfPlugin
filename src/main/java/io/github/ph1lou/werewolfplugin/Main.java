@@ -6,6 +6,7 @@ import io.github.ph1lou.werewolfapi.LangManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
 import io.github.ph1lou.werewolfapi.registers.RegisterManager;
+import io.github.ph1lou.werewolfapi.statistics.GameReview;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.commands.Admin;
 import io.github.ph1lou.werewolfplugin.commands.Command;
@@ -13,13 +14,11 @@ import io.github.ph1lou.werewolfplugin.game.GameManager;
 import io.github.ph1lou.werewolfplugin.game.MapManager;
 import io.github.ph1lou.werewolfplugin.save.Lang;
 import io.github.ph1lou.werewolfplugin.statistiks.Events;
-import io.github.ph1lou.werewolfplugin.statistiks.GameReview;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
-import java.util.UUID;
 
 public class Main extends JavaPlugin implements GetWereWolfAPI {
 
@@ -28,7 +27,6 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
     private final Register register = new Register(this);
     private final InventoryManager invManager = new InventoryManager(this);
     private GameReview currentGameReview;
-    private UUID serverUUID;
 
     @Override
     public InventoryManager getInvManager() {
@@ -39,11 +37,6 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
     public void onEnable() {
 
         saveDefaultConfig();
-        if (getConfig().getString("server_uuid").isEmpty()) {
-            getConfig().set("server_uuid", UUID.randomUUID().toString());
-            saveConfig();
-        }
-        this.serverUUID = UUID.fromString(Objects.requireNonNull(getConfig().getString("server_uuid")));
 
         this.invManager.init();
         Bukkit.getPluginManager().registerEvents(new Events(this), this);
@@ -102,8 +95,5 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
         this.currentGameReview = currentGameReview;
     }
 
-    public UUID getServerUUID() {
-        return serverUUID;
-    }
 }
 

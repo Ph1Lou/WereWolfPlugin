@@ -13,6 +13,8 @@ import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Villager;
+import me.kbrewster.exceptions.APIException;
+import me.kbrewster.mojangapi.MojangAPI;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -23,6 +25,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,7 +44,8 @@ public class PlayerLG implements PlayerWW {
     private int maxHealth = 20;
     private Location disconnectedLocation = null;
     private int disconnectedChangeHealth = 0;
-
+    @Nullable
+    private UUID mojangUUID = null;
     private final List<LoverAPI> lovers = new ArrayList<>();
     private final UUID uuid;
     private final List<PlayerWW> killer = new ArrayList<>();
@@ -62,6 +66,10 @@ public class PlayerLG implements PlayerWW {
         this.role = new Villager(main, this,
                 RolesBase.VILLAGER.getKey());
         this.game = main.getWereWolfAPI();
+        try {
+            this.mojangUUID = MojangAPI.getUUID(this.name);
+        } catch (IOException | APIException ignored) {
+        }
     }
 
     @Override
@@ -257,26 +265,40 @@ public class PlayerLG implements PlayerWW {
 		return(this.state==state);
 	}
 
-	@Override
-	public void addOneKill() {
-		this.kill +=1;
-	}
+    @Override
+    public void addOneKill() {
+        this.kill += 1;
+    }
 
-	@Override
-	public int getNbKill() {
-		return(this.kill);
-	}
+    @Override
+    public int getNbKill() {
+        return (this.kill);
+    }
 
-	@Override
-	public void setRole(Roles role) {
+    @Override
+    public UUID getMojangUUID() {
+
+        if (this.mojangUUID != null) {
+            return this.mojangUUID;
+        }
+        try {
+            return this.mojangUUID = MojangAPI.getUUID(this.name);
+        } catch (IOException | APIException ignored) {
+        }
+
+        return this.uuid;
+    }
+
+    @Override
+    public void setRole(Roles role) {
         this.role = role;
         this.role.setPlayerWW(this);
     }
 
-	@Override
-	public Roles getRole() {
-		return (this.role);
-	}
+    @Override
+    public Roles getRole() {
+        return (this.role);
+    }
 
     @Override
     public boolean isKey(String role) {

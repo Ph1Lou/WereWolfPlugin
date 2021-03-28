@@ -96,7 +96,10 @@ import io.github.ph1lou.werewolfapi.events.WildChildTransformationEvent;
 import io.github.ph1lou.werewolfapi.events.WinEvent;
 import io.github.ph1lou.werewolfapi.events.WitchResurrectionEvent;
 import io.github.ph1lou.werewolfapi.events.WolfDogChooseWereWolfForm;
+import io.github.ph1lou.werewolfapi.statistics.GameReview;
+import io.github.ph1lou.werewolfapi.statistics.RegisteredAction;
 import io.github.ph1lou.werewolfplugin.Main;
+import io.github.ph1lou.werewolfplugin.game.GameManager;
 import io.github.ph1lou.werewolfplugin.save.FileUtils_;
 import io.github.ph1lou.werewolfplugin.save.Serializer;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -139,24 +142,27 @@ public class Events implements Listener {
 
         FileUtils_.save(file, jsonInputString);
 
-        if (event.getWereWolfAPI().getScore().getPlayerSize() < 17) {
-            Bukkit.getLogger().warning("[WereWolfPlugin] Statistiks no send because player size <17 ");
-            return;
-        }
+        if (!((GameManager) main.getWereWolfAPI()).isDebug()) {
+            if (event.getWereWolfAPI().getScore().getPlayerSize() < 17) {
+                Bukkit.getLogger().warning("[WereWolfPlugin] Statistiks no send because player size < 17");
+                return;
+            }
 
-        if (event.getWereWolfAPI().getScore().getTimer() < 3600) {
-            Bukkit.getLogger().warning("[WereWolfPlugin] Statistiks no send because game duration < 1h ");
-            return;
+            if (event.getWereWolfAPI().getScore().getTimer() < 3600) {
+                Bukkit.getLogger().warning("[WereWolfPlugin] Statistiks no send because game duration < 1h");
+                return;
+            }
         }
 
         try {
 
-            URL url = new URL("http://ph1lou.fr:4567/infos");
+            URL url = new URL("http://ph1lou.fr:15000/infos2");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("POST");
             con.setRequestProperty("Content-Type", "application/json; utf-8");
             con.setRequestProperty("Accept", "application/json");
             con.setDoOutput(true);
+
 
             try (OutputStream os = con.getOutputStream()) {
                 byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
@@ -175,10 +181,8 @@ public class Events implements Listener {
                 TextComponent msg = new TextComponent(main.getWereWolfAPI().translate("werewolf.statistics.message"));
                 msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
                         String.format("https://ph1lou.fr/werewolfstat/detail.php?id=%s", response.toString().replaceAll("\"", ""))));
-
-                Bukkit.getOnlinePlayers()
-                        .forEach(player -> player.spigot().sendMessage(msg));
-
+                Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> Bukkit.getOnlinePlayers()
+                        .forEach(player -> player.spigot().sendMessage(msg)), 100);
             } catch (Exception ignored) {
 
             }
@@ -196,7 +200,14 @@ public class Events implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onGameStart(StartEvent event) {
-        main.setCurrentGameReview(new GameReview(main));
+        main.setCurrentGameReview(new GameReview(main.getWereWolfAPI()));
+        String serverUUID = main.getConfig().getString("server_uuid");
+        if (serverUUID != null) {
+            try {
+                main.getCurrentGameReview().setServerUUID(UUID.fromString(serverUUID));
+            } catch (Exception ignored) {
+            }
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
