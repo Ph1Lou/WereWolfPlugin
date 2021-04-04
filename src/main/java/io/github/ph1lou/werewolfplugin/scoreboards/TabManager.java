@@ -1,13 +1,13 @@
 package io.github.ph1lou.werewolfplugin.scoreboards;
 
-import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
+import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
-import io.github.ph1lou.werewolfapi.events.AppearInWereWolfListEvent;
-import io.github.ph1lou.werewolfapi.events.RequestSeeWereWolfListEvent;
-import io.github.ph1lou.werewolfapi.events.UpdateModeratorNameTag;
 import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTag;
+import io.github.ph1lou.werewolfapi.events.game.permissions.UpdateModeratorNameTag;
+import io.github.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
+import io.github.ph1lou.werewolfapi.events.werewolf.RequestSeeWereWolfListEvent;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -108,7 +108,7 @@ public class TabManager {
 
     public void updatePlayerForOthers(Player player, Collection<? extends Player> players) {
 
-        ModerationManagerAPI moderationManager = game.getModerationManager();
+        IModerationManager moderationManager = game.getModerationManager();
 
         StringBuilder sb = new StringBuilder();
         UUID uuid = player.getUniqueId();

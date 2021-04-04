@@ -3,15 +3,15 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.LoverAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.ILover;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
-import io.github.ph1lou.werewolfapi.events.SecondDeathEvent;
-import io.github.ph1lou.werewolfapi.events.StudLoverEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
+import io.github.ph1lou.werewolfapi.events.roles.stud.StudLoverEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
 import io.github.ph1lou.werewolfplugin.roles.lovers.Lover;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -23,10 +23,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 
-public class Stud extends RolesVillage implements Power {
+public class Stud extends RoleVillage implements IPower {
     private boolean power = true;
 
-    public Stud(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+    public Stud(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
     }
 
@@ -63,14 +63,14 @@ public class Stud extends RolesVillage implements Power {
 
         if (!hasPower()) return;
 
-        Optional<PlayerWW> killerWW = getPlayerWW().getLastKiller();
+        Optional<IPlayerWW> killerWW = getPlayerWW().getLastKiller();
 
         if (!killerWW.isPresent()) return;
 
         if (!killerWW.get().isState(StatePlayer.ALIVE)) return;
 
-        for (LoverAPI loverAPI : getPlayerWW().getLovers()) {
-            if (loverAPI.getLovers().contains(killerWW.get())) return;
+        for (ILover ILover : getPlayerWW().getLovers()) {
+            if (ILover.getLovers().contains(killerWW.get())) return;
         }
 
         Bukkit.getPluginManager().callEvent(new StudLoverEvent(getPlayerWW(), killerWW.get()));

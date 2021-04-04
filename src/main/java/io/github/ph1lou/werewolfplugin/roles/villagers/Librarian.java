@@ -2,13 +2,13 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
-import io.github.ph1lou.werewolfapi.events.LibrarianDeathEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.LimitedUse;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
-import io.github.ph1lou.werewolfapi.rolesattributs.Storage;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.roles.librarian.LibrarianDeathEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.ILimitedUse;
+import io.github.ph1lou.werewolfapi.rolesattributs.IStorage;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
@@ -16,23 +16,23 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Librarian extends RolesVillage implements LimitedUse, AffectedPlayers, Storage {
+public class Librarian extends RoleVillage implements ILimitedUse, IAffectedPlayers, IStorage {
 
     private int use = 0;
-    private final List<PlayerWW> affectedPlayer = new ArrayList<>();
+    private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private final List<String> storage = new ArrayList<>();
 
-    public Librarian(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+    public Librarian(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
     }
 
     @Override
-    public void addAffectedPlayer(PlayerWW playerWW) {
+    public void addAffectedPlayer(IPlayerWW playerWW) {
         this.affectedPlayer.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(PlayerWW playerWW) {
+    public void removeAffectedPlayer(IPlayerWW playerWW) {
         this.affectedPlayer.remove(playerWW);
     }
 
@@ -42,7 +42,7 @@ public class Librarian extends RolesVillage implements LimitedUse, AffectedPlaye
     }
 
     @Override
-    public List<PlayerWW> getAffectedPlayers() {
+    public List<IPlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
@@ -77,6 +77,16 @@ public class Librarian extends RolesVillage implements LimitedUse, AffectedPlaye
         return this.storage;
     }
 
+    @Override
+    public void addStorage(String message) {
+        this.storage.add(message);
+    }
+
+    @Override
+    public void clearStorage() {
+        this.storage.clear();
+    }
+
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 
@@ -91,6 +101,8 @@ public class Librarian extends RolesVillage implements LimitedUse, AffectedPlaye
                     "werewolf.role.librarian.book", i, s));
             i++;
         }
+
+        this.getStorage().clear();
 
         Bukkit.getPluginManager().callEvent(new LibrarianDeathEvent(getPlayerWW()));
     }

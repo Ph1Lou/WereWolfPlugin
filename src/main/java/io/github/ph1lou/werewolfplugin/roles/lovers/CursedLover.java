@@ -1,16 +1,16 @@
 package io.github.ph1lou.werewolfplugin.roles.lovers;
 
-import io.github.ph1lou.werewolfapi.LoverAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.ILover;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.events.CursedLoverDeathEvent;
-import io.github.ph1lou.werewolfapi.events.EndPlayerMessageEvent;
-import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
-import io.github.ph1lou.werewolfapi.events.UpdateModeratorNameTag;
-import io.github.ph1lou.werewolfapi.events.WinConditionsCheckEvent;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.game.permissions.UpdateModeratorNameTag;
+import io.github.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
+import io.github.ph1lou.werewolfapi.events.game.utils.WinConditionsCheckEvent;
+import io.github.ph1lou.werewolfapi.events.lovers.CursedLoverDeathEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -25,28 +25,28 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-public class CursedLover implements LoverAPI, Listener {
+public class CursedLover implements ILover, Listener {
 
     private final WereWolfAPI game;
-    private PlayerWW cursedLover1;
-    private PlayerWW cursedLover2;
+    private IPlayerWW cursedLover1;
+    private IPlayerWW cursedLover2;
     private boolean power1 = false;
     private boolean power2 = false;
     private boolean death = false;
 
 
-    public CursedLover(WereWolfAPI game, PlayerWW cursedLover1, PlayerWW cursedLover2) {
+    public CursedLover(WereWolfAPI game, IPlayerWW cursedLover1, IPlayerWW cursedLover2) {
         this.game = game;
         this.cursedLover1 = cursedLover1;
         this.cursedLover2 = cursedLover2;
         getLovers().forEach(playerWW -> playerWW.addLover(this));
     }
 
-    public PlayerWW getOtherLover(PlayerWW playerWW) {
+    public IPlayerWW getOtherLover(IPlayerWW playerWW) {
         return playerWW.equals(cursedLover1) ? cursedLover2 : cursedLover1;
     }
 
-    public List<? extends PlayerWW> getLovers() {
+    public List<? extends IPlayerWW> getLovers() {
         return new ArrayList<>(Arrays.asList(cursedLover1, cursedLover2));
     }
 
@@ -58,7 +58,7 @@ public class CursedLover implements LoverAPI, Listener {
         if (!getLovers().contains(event.getPlayerWW())) return;
 
         death = true;
-        PlayerWW playerWW1 = getOtherLover(event.getPlayerWW());
+        IPlayerWW playerWW1 = getOtherLover(event.getPlayerWW());
 
         Bukkit.getPluginManager().callEvent(
                 new CursedLoverDeathEvent(event.getPlayerWW(), playerWW1));
@@ -72,7 +72,7 @@ public class CursedLover implements LoverAPI, Listener {
         HandlerList.unregisterAll(this);
     }
 
-    public void announceCursedLoversOnJoin(PlayerWW playerWW) {
+    public void announceCursedLoversOnJoin(IPlayerWW playerWW) {
 
         if (cursedLover1.equals(playerWW)) {
             if (!power1) {
@@ -102,7 +102,7 @@ public class CursedLover implements LoverAPI, Listener {
 
         Player player = (Player) event.getEntity();
         UUID uuid = player.getUniqueId();
-        PlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
         if (getLovers().contains(playerWW)) {
             event.setCancelled(true);
@@ -115,7 +115,7 @@ public class CursedLover implements LoverAPI, Listener {
 
         StringBuilder sb = new StringBuilder(event.getSuffix());
 
-        PlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID());
+        IPlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID());
 
         if (playerWW == null) return;
 
@@ -133,11 +133,11 @@ public class CursedLover implements LoverAPI, Listener {
     @EventHandler
     public void onEndPlayerMessage(EndPlayerMessageEvent event) {
 
-        PlayerWW playerWW = event.getPlayerWW();
+        IPlayerWW playerWW = event.getPlayerWW();
 
         if (!getLovers().contains(playerWW)) return;
 
-        PlayerWW playerWW1 = getOtherLover(playerWW);
+        IPlayerWW playerWW1 = getOtherLover(playerWW);
 
         StringBuilder sb = event.getEndMessage();
 
@@ -171,7 +171,7 @@ public class CursedLover implements LoverAPI, Listener {
     }
 
     @Override
-    public boolean swap(PlayerWW playerWW, PlayerWW playerWW1) {
+    public boolean swap(IPlayerWW playerWW, IPlayerWW playerWW1) {
 
         if (playerWW.equals(playerWW1)) return false;
 
@@ -187,11 +187,15 @@ public class CursedLover implements LoverAPI, Listener {
             power2 = false;
         }
 
-        for (PlayerWW playerWW2 : getLovers()) {
+        for (IPlayerWW playerWW2 : getLovers()) {
             announceCursedLoversOnJoin(playerWW2);
         }
 
         return true;
+    }
+
+    @Override
+    public void second() {
     }
 
 

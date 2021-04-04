@@ -1,7 +1,6 @@
 package io.github.ph1lou.werewolfplugin.tasks;
 
 import io.github.ph1lou.werewolfapi.enums.StateGame;
-import io.github.ph1lou.werewolfapi.events.UpdateEvent;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -24,7 +23,7 @@ public class LobbyTask extends BukkitRunnable {
             return;
         }
 
-        Bukkit.getPluginManager().callEvent(new UpdateEvent());
+        game.getScore().updateBoard();
 
         if (game.isState(StateGame.TRANSPORTATION)) {
             cancel();

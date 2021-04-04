@@ -2,13 +2,24 @@ package io.github.ph1lou.werewolfplugin.save;
 
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.WriterConfig;
-import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
-import io.github.ph1lou.werewolfapi.registers.RegisterManager;
+import io.github.ph1lou.werewolfapi.IConfiguration;
+import io.github.ph1lou.werewolfapi.registers.IRegisterManager;
 import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfplugin.Main;
+import io.github.ph1lou.werewolfplugin.RegisterManager;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
@@ -37,11 +48,11 @@ public class FileUtils_ {
             game.setConfig(Serializer.deserialize(loadContent(file)));
             game.getScore().setRole(0);
             game.getModerationManager().checkQueue();
-            ((Configuration) game.getConfig()).addRegister(main.getRegisterManager());
+            ((Configuration) game.getConfig()).addRegister((RegisterManager) main.getRegisterManager());
         }
 
-        ConfigWereWolfAPI config = game.getConfig();
-        RegisterManager register = main.getRegisterManager();
+        IConfiguration config = game.getConfig();
+        IRegisterManager register = main.getRegisterManager();
 
         for (RoleRegister roleRegister : register.getRolesRegister()) {
             String key = roleRegister.getKey();

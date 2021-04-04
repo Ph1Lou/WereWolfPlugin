@@ -1,8 +1,8 @@
 package io.github.ph1lou.werewolfplugin.listeners;
 
-import io.github.ph1lou.werewolfapi.LoverAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.ScoreAPI;
+import io.github.ph1lou.werewolfapi.ILover;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.IScoreBoard;
 import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enums.Day;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
@@ -11,23 +11,24 @@ import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.enums.VoteStatus;
-import io.github.ph1lou.werewolfapi.events.BorderStartEvent;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.events.DayWillComeEvent;
-import io.github.ph1lou.werewolfapi.events.DiggingEndEvent;
-import io.github.ph1lou.werewolfapi.events.InvulnerabilityEvent;
-import io.github.ph1lou.werewolfapi.events.LoversRepartitionEvent;
 import io.github.ph1lou.werewolfapi.events.NightEvent;
 import io.github.ph1lou.werewolfapi.events.PVPEvent;
-import io.github.ph1lou.werewolfapi.events.RepartitionEvent;
-import io.github.ph1lou.werewolfapi.events.SelectionEndEvent;
-import io.github.ph1lou.werewolfapi.events.StartEvent;
 import io.github.ph1lou.werewolfapi.events.TrollEvent;
 import io.github.ph1lou.werewolfapi.events.TrollLoverEvent;
-import io.github.ph1lou.werewolfapi.events.VoteEndEvent;
-import io.github.ph1lou.werewolfapi.events.VoteResultEvent;
+import io.github.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
+import io.github.ph1lou.werewolfapi.events.game.timers.BorderStartEvent;
+import io.github.ph1lou.werewolfapi.events.game.timers.DiggingEndEvent;
+import io.github.ph1lou.werewolfapi.events.game.timers.InvulnerabilityEvent;
+import io.github.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
+import io.github.ph1lou.werewolfapi.events.game.vote.VoteEndEvent;
+import io.github.ph1lou.werewolfapi.events.game.vote.VoteResultEvent;
+import io.github.ph1lou.werewolfapi.events.lovers.LoversRepartitionEvent;
+import io.github.ph1lou.werewolfapi.events.roles.SelectionEndEvent;
 import io.github.ph1lou.werewolfapi.registers.RoleRegister;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.commands.roles.CommandWereWolfChat;
@@ -91,7 +92,7 @@ public class CycleListener implements Listener {
             if (game.getConfig().isConfigActive(ConfigsBase.VOTE.getKey())
                     && !game.getVote().isStatus(VoteStatus.NOT_BEGIN)) {
                 Bukkit.broadcastMessage(game.translate("werewolf.vote.vote_time",
-                        game.getScore().conversion((int) duration)));
+                        Utils.conversion((int) duration)));
 
                 game.getVote().setStatus(VoteStatus.IN_PROGRESS);
 
@@ -176,7 +177,7 @@ public class CycleListener implements Listener {
 
     public void groupSizeChange() {
 
-        ScoreAPI score = game.getScore();
+        IScoreBoard score = game.getScore();
 
         if (score.getPlayerSize() <= score.getGroup() * 3 && score.getGroup() > 3) {
             score.setGroup(score.getGroup() - 1);
@@ -267,7 +268,7 @@ public class CycleListener implements Listener {
                         game.getPlayerWW()
                                 .forEach(playerWW -> {
                                     try {
-                                        Roles role = (Roles) roleRegister.getConstructors()
+                                        IRole role = (IRole) roleRegister.getConstructors()
                                                 .newInstance(main,
                                                         playerWW,
                                                         roleRegister.getKey());
@@ -323,32 +324,32 @@ public class CycleListener implements Listener {
     @EventHandler
     public void onTrollLover(TrollLoverEvent event) {
 
-        List<LoverAPI> loverAPIS = new ArrayList<>();
+        List<ILover> loverAPIS = new ArrayList<>();
 
-        List<PlayerWW> playerWWs = game.getPlayerWW().stream()
+        List<IPlayerWW> IPlayerWWs = game.getPlayerWW().stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .collect(Collectors.toList());
 
-        if (playerWWs.isEmpty()) return;
+        if (IPlayerWWs.isEmpty()) return;
 
-        while (playerWWs.size() > 3) {
+        while (IPlayerWWs.size() > 3) {
             loverAPIS.add(new FakeLover(game,
-                    Arrays.asList(playerWWs.remove(0),
-                            playerWWs.remove(0))));
+                    Arrays.asList(IPlayerWWs.remove(0),
+                            IPlayerWWs.remove(0))));
         }
-        if (playerWWs.size() == 3) {
+        if (IPlayerWWs.size() == 3) {
             loverAPIS.add(new FakeLover(game,
-                    Arrays.asList(playerWWs.remove(0),
-                            playerWWs.remove(0),
-                            playerWWs.remove(0))));
-        } else if (playerWWs.size() == 2) {
+                    Arrays.asList(IPlayerWWs.remove(0),
+                            IPlayerWWs.remove(0),
+                            IPlayerWWs.remove(0))));
+        } else if (IPlayerWWs.size() == 2) {
             loverAPIS.add(new FakeLover(game,
-                    Arrays.asList(playerWWs.remove(0),
-                            playerWWs.remove(0))));
+                    Arrays.asList(IPlayerWWs.remove(0),
+                            IPlayerWWs.remove(0))));
         }
 
-        loverAPIS.forEach(loverAPI -> Bukkit.getPluginManager()
-                .registerEvents((Listener) loverAPI, main));
+        loverAPIS.forEach(ILover -> Bukkit.getPluginManager()
+                .registerEvents((Listener) ILover, main));
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
 
@@ -359,7 +360,7 @@ public class CycleListener implements Listener {
                 game.getConfig().setTrollLover(false);
                 Bukkit.getPluginManager().callEvent(new LoversRepartitionEvent());
             }
-            loverAPIS.forEach(loverAPI -> HandlerList.unregisterAll((Listener) loverAPI));
+            loverAPIS.forEach(ILover -> HandlerList.unregisterAll((Listener) ILover));
 
         }, 1800L);
     }
@@ -369,7 +370,7 @@ public class CycleListener implements Listener {
 
         game.setState(StateGame.GAME);
 
-        List<PlayerWW> playerWWS = new ArrayList<>(game.getPlayerWW());
+        List<IPlayerWW> iPlayerWWS = new ArrayList<>(game.getPlayerWW());
         List<RoleRegister> config = new ArrayList<>();
 
         game.getConfig().setConfig(ConfigsBase.CHAT.getKey(), false);
@@ -378,7 +379,7 @@ public class CycleListener implements Listener {
                 Math.max(0,
                         game.getConfig()
                                 .getRoleCount(RolesBase.VILLAGER.getKey()) +
-                                playerWWS.size() -
+                                iPlayerWWS.size() -
                                 game.getScore().getRole()));
 
         main.getRegisterManager().getRolesRegister()
@@ -389,13 +390,13 @@ public class CycleListener implements Listener {
                 });
 
 
-        while (!playerWWS.isEmpty()) {
+        while (!iPlayerWWS.isEmpty()) {
 
-            int n = (int) Math.floor(game.getRandom().nextFloat() * playerWWS.size());
-            PlayerWW playerWW = playerWWS.get(n);
+            int n = (int) Math.floor(game.getRandom().nextFloat() * iPlayerWWS.size());
+            IPlayerWW playerWW = iPlayerWWS.get(n);
 
             try {
-                Roles role = (Roles) config.get(0).getConstructors().newInstance(game.getMain(),
+                IRole role = (IRole) config.get(0).getConstructors().newInstance(game.getMain(),
                         playerWW,
                         config.get(0).getKey());
                 Bukkit.getPluginManager().registerEvents((Listener) role, game.getMain());
@@ -405,7 +406,7 @@ public class CycleListener implements Listener {
             }
 
             config.remove(0);
-            playerWWS.remove(n);
+            iPlayerWWS.remove(n);
         }
         game.getPlayerWW()
                 .forEach(playerWW -> playerWW.getRole().roleAnnouncement());

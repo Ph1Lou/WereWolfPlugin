@@ -2,15 +2,15 @@ package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.Camp;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.events.NewDisplayRole;
-import io.github.ph1lou.werewolfapi.events.SelectionEndEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.Display;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesWereWolf;
+import io.github.ph1lou.werewolfapi.events.roles.SelectionEndEvent;
+import io.github.ph1lou.werewolfapi.events.roles.falsifier_werewolf.NewDisplayRole;
+import io.github.ph1lou.werewolfapi.rolesattributs.IDisplay;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleWereWolf;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
@@ -19,12 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class FalsifierWereWolf extends RolesWereWolf implements Display {
+public class FalsifierWereWolf extends RoleWereWolf implements IDisplay {
 
     private String displayCamp = Camp.VILLAGER.getKey();
     private String displayRole = RolesBase.VILLAGER.getKey();
 
-    public FalsifierWereWolf(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+    public FalsifierWereWolf(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
     }
 
@@ -62,7 +62,7 @@ public class FalsifierWereWolf extends RolesWereWolf implements Display {
         }
 
         List<UUID> players = new ArrayList<>();
-        for (PlayerWW playerWW1 : game.getPlayerWW()) {
+        for (IPlayerWW playerWW1 : game.getPlayerWW()) {
             if (playerWW1.isState(StatePlayer.ALIVE) && !playerWW1.equals(getPlayerWW())) {
                 players.add(playerWW1.getUUID());
             }
@@ -71,9 +71,9 @@ public class FalsifierWereWolf extends RolesWereWolf implements Display {
             return;
         }
 
-        PlayerWW displayWW = game.autoSelect(getPlayerWW());
+        IPlayerWW displayWW = game.autoSelect(getPlayerWW());
 
-        Roles roles = displayWW.getRole();
+        IRole roles = displayWW.getRole();
         NewDisplayRole newDisplayRole = new NewDisplayRole(getPlayerWW(), roles.getKey(), roles.getCamp().getKey());
         Bukkit.getPluginManager().callEvent(newDisplayRole);
 

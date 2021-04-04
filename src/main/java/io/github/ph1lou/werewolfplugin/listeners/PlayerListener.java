@@ -1,21 +1,21 @@
 package io.github.ph1lou.werewolfplugin.listeners;
 
 import fr.mrmicky.fastboard.FastBoard;
-import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IModerationManager;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
-import io.github.ph1lou.werewolfapi.events.AnnouncementDeathEvent;
-import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
-import io.github.ph1lou.werewolfapi.events.FirstDeathEvent;
-import io.github.ph1lou.werewolfapi.events.ResurrectionEvent;
-import io.github.ph1lou.werewolfapi.events.SecondDeathEvent;
-import io.github.ph1lou.werewolfapi.events.ThirdDeathEvent;
 import io.github.ph1lou.werewolfapi.events.UpdateLanguageEvent;
-import io.github.ph1lou.werewolfapi.events.WereWolfChatEvent;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.FirstDeathEvent;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.ResurrectionEvent;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.ThirdDeathEvent;
+import io.github.ph1lou.werewolfapi.events.werewolf.WereWolfChatEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -60,7 +60,7 @@ public class PlayerListener implements Listener {
 	private void onDropItem(PlayerDropItemEvent event) {
 
 		Player player = event.getPlayer();
-		PlayerWW playerWW = game.getPlayerWW(player.getUniqueId());
+		IPlayerWW playerWW = game.getPlayerWW(player.getUniqueId());
 
 		if (player.getGameMode().equals(GameMode.SPECTATOR)) {
 			event.setCancelled(true);
@@ -109,7 +109,7 @@ public class PlayerListener implements Listener {
 			return;
 		}
 
-		PlayerWW playerWW = game.getPlayerWW(uuid);
+		IPlayerWW playerWW = game.getPlayerWW(uuid);
 
 		if (playerWW == null) return;
 
@@ -136,7 +136,7 @@ public class PlayerListener implements Listener {
 	private void onPlayerRespawn(PlayerRespawnEvent event) {
 
 		Player player = event.getPlayer();
-		PlayerWW playerWW = game.getPlayerWW(player.getUniqueId());
+		IPlayerWW playerWW = game.getPlayerWW(player.getUniqueId());
 
 		if (game.isState(StateGame.LOBBY)) {
 			Bukkit.getScheduler().scheduleSyncDelayedTask(main, () ->
@@ -184,7 +184,7 @@ public class PlayerListener implements Listener {
 			event.setDeathMessage(null);
 			event.setKeepLevel(true);
 
-			PlayerWW playerWW = game.getPlayerWW(uuid);
+			IPlayerWW playerWW = game.getPlayerWW(uuid);
 
 			if (playerWW == null) return;
 
@@ -210,7 +210,7 @@ public class PlayerListener implements Listener {
 
 				Player killer = player.getKiller();
 				UUID killerUUID = killer.getUniqueId();
-				PlayerWW killerWW = game.getPlayerWW(killerUUID);
+				IPlayerWW killerWW = game.getPlayerWW(killerUUID);
 				playerWW.addKiller(killerWW);
 
 				if (killerWW != null) {
@@ -236,8 +236,8 @@ public class PlayerListener implements Listener {
 
 		Player player = event.getPlayer();
 		UUID uuid = player.getUniqueId();
-		PlayerWW playerWW = game.getPlayerWW(uuid);
-		ModerationManagerAPI moderationManager = game.getModerationManager();
+		IPlayerWW playerWW = game.getPlayerWW(uuid);
+		IModerationManager moderationManager = game.getModerationManager();
 		String playerName = player.getName();
 
 		FastBoard fastboard = new FastBoard(player);
@@ -328,7 +328,7 @@ public class PlayerListener implements Listener {
 
 		Player player = event.getPlayer();
 		UUID uuid = player.getUniqueId();
-		PlayerWW playerWW = game.getPlayerWW(uuid);
+		IPlayerWW playerWW = game.getPlayerWW(uuid);
 		String playerName = player.getName();
 
 		event.setQuitMessage(null);
@@ -374,7 +374,7 @@ public class PlayerListener implements Listener {
 
 		if (event.isCancelled()) return;
 
-		PlayerWW playerWW = event.getPlayerWW();
+		IPlayerWW playerWW = event.getPlayerWW();
 
 		if (!playerWW.isState(StatePlayer.JUDGEMENT)) return;
 
@@ -418,7 +418,7 @@ public class PlayerListener implements Listener {
 	@EventHandler
 	public void onFinalDeath(FinalDeathEvent event) {
 
-		PlayerWW playerWW = event.getPlayerWW();
+		IPlayerWW playerWW = event.getPlayerWW();
 		Player player = Bukkit.getPlayer(playerWW.getUUID());
 		World world = game.getMapManager().getWorld();
 
@@ -489,7 +489,7 @@ public class PlayerListener implements Listener {
 	@EventHandler
 	public void onResurrection(ResurrectionEvent event) {
 
-		PlayerWW playerWW = event.getPlayerWW();
+		IPlayerWW playerWW = event.getPlayerWW();
 
 		if (playerWW.isState(StatePlayer.ALIVE)) return;
 

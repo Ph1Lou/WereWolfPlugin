@@ -2,14 +2,15 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
-import io.github.ph1lou.werewolfapi.events.VoteEndEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.LimitedUse;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
+import io.github.ph1lou.werewolfapi.events.game.vote.VoteEndEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.ILimitedUse;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -20,13 +21,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Citizen extends RolesVillage implements LimitedUse, AffectedPlayers, Power {
+public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayers, IPower {
 
     private int use = 0;
-    private final List<PlayerWW> affectedPlayer = new ArrayList<>();
+    private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private boolean power = true;
 
-    public Citizen(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+    public Citizen(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
     }
 
@@ -41,12 +42,12 @@ public class Citizen extends RolesVillage implements LimitedUse, AffectedPlayers
     }
 
     @Override
-    public void addAffectedPlayer(PlayerWW playerWW) {
+    public void addAffectedPlayer(IPlayerWW playerWW) {
         this.affectedPlayer.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(PlayerWW playerWW) {
+    public void removeAffectedPlayer(IPlayerWW playerWW) {
         this.affectedPlayer.remove(playerWW);
     }
 
@@ -56,7 +57,7 @@ public class Citizen extends RolesVillage implements LimitedUse, AffectedPlayers
     }
 
     @Override
-    public List<PlayerWW> getAffectedPlayers() {
+    public List<IPlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
@@ -125,7 +126,7 @@ public class Citizen extends RolesVillage implements LimitedUse, AffectedPlayers
         cancel.addExtra(cancelVote);
 
         cancel.addExtra(new TextComponent(game.translate("werewolf.role.citizen.time_left",
-                game.getScore().conversion(
+                Utils.conversion(
                         game.getConfig().getTimerValue(
                                 TimersBase.CITIZEN_DURATION.getKey())))));
 
@@ -156,7 +157,7 @@ public class Citizen extends RolesVillage implements LimitedUse, AffectedPlayers
 
 
         see.addExtra(new TextComponent(game.translate("werewolf.role.citizen.time_left",
-                game.getScore().conversion(
+                Utils.conversion(
                         game.getConfig().getTimerValue(
                                 TimersBase.CITIZEN_DURATION.getKey())))));
 

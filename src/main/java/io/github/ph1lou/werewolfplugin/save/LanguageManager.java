@@ -4,7 +4,7 @@ package io.github.ph1lou.werewolfplugin.save;
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
-import io.github.ph1lou.werewolfapi.LangManager;
+import io.github.ph1lou.werewolfapi.ILanguageManager;
 import io.github.ph1lou.werewolfapi.events.UpdateLanguageEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.event.EventHandler;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class Lang implements LangManager, Listener {
+public class LanguageManager implements ILanguageManager, Listener {
 
     private final Main main;
     private final Map<String, JsonValue> extraTexts = new HashMap<>();
@@ -27,7 +27,7 @@ public class Lang implements LangManager, Listener {
     private final Map<String, JsonValue> language = new HashMap<>();
 
 
-    public Lang(Main main) {
+    public LanguageManager(Main main) {
         this.main = main;
     }
 

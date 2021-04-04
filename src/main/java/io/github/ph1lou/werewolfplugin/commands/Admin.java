@@ -1,7 +1,7 @@
 package io.github.ph1lou.werewolfplugin.commands;
 
-import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IModerationManager;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.registers.CommandRegister;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -113,7 +113,7 @@ public class Admin implements TabExecutor {
     private boolean checkPermission(CommandRegister commandRegister, Player player) {
 
         WereWolfAPI game = main.getWereWolfAPI();
-        ModerationManagerAPI moderationManager = game.getModerationManager();
+        IModerationManager moderationManager = game.getModerationManager();
         UUID uuid = player.getUniqueId();
 
         boolean pass = false;
@@ -142,7 +142,7 @@ public class Admin implements TabExecutor {
         Player player = (Player) sender;
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        PlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
         if (args.length > 1) {
             return null;

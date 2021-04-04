@@ -1,21 +1,25 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.LoverAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.ILover;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.AngelForm;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.rolesattributs.*;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
+import io.github.ph1lou.werewolfapi.rolesattributs.ITransformed;
 import io.github.ph1lou.werewolfplugin.Main;
+import io.github.ph1lou.werewolfplugin.roles.neutrals.Angel;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class CommandAdminRole implements Commands {
+public class CommandAdminRole implements ICommands {
 
 
     private final Main main;
@@ -29,7 +33,7 @@ public class CommandAdminRole implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        PlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
         if (playerWW != null &&
                 playerWW.isState(StatePlayer.ALIVE)) {
@@ -60,46 +64,46 @@ public class CommandAdminRole implements Commands {
         }
 
         UUID playerUUID = playerAtomicUUID.get();
-        PlayerWW targetWW = game.getPlayerWW(playerUUID);
+        IPlayerWW targetWW = game.getPlayerWW(playerUUID);
 
         if (targetWW == null) {
             player.sendMessage(game.translate("werewolf.check.not_in_game_player"));
             return;
         }
 
-        Roles role = targetWW.getRole();
+        IRole role = targetWW.getRole();
         player.sendMessage(game.translate("werewolf.commands.admin.role.role",
                 args[0],
                 game.translate(role.getKey())));
 
-        if (role instanceof AngelRole && role.isKey(RolesBase.ANGEL.getKey()) &&
-                !((AngelRole) role).isChoice(AngelForm.ANGEL)) {
+        if (role instanceof Angel && role.isKey(RolesBase.ANGEL.getKey()) &&
+                !((Angel) role).isChoice(AngelForm.ANGEL)) {
 
             player.sendMessage(game.translate("werewolf.commands.admin.role.angel",
-                    game.translate(((AngelRole) role).isChoice(AngelForm.FALLEN_ANGEL) ?
+                    game.translate(((Angel) role).isChoice(AngelForm.FALLEN_ANGEL) ?
                             RolesBase.FALLEN_ANGEL.getKey() :
                             RolesBase.GUARDIAN_ANGEL.getKey())));
         }
-        if (role instanceof Power) {
+        if (role instanceof IPower) {
             player.sendMessage(game.translate("werewolf.commands.admin.role.power",
-                    ((Power) role).hasPower()));
+                    ((IPower) role).hasPower()));
         }
-        if (role instanceof Transformed) {
+        if (role instanceof ITransformed) {
             player.sendMessage(game.translate("werewolf.commands.admin.role.transformed",
-                    game.translate(((Transformed) role).getTransformed() ?
+                    game.translate(((ITransformed) role).getTransformed() ?
                             "werewolf.commands.admin.role.yes" :
                             "werewolf.commands.admin.role.no")));
         }
 
 
-        for (LoverAPI loverAPI : targetWW.getLovers()) {
+        for (ILover ILover : targetWW.getLovers()) {
 
             StringBuilder sb = new StringBuilder();
-            loverAPI.getLovers().stream()
+            ILover.getLovers().stream()
                     .filter(playerWW1 -> !targetWW.equals(playerWW1))
                     .forEach(playerWW1 -> sb.append(playerWW1.getName()).append(" "));
 
-            if (!loverAPI.isKey(LoverType.CURSED_LOVER.getKey())) {
+            if (!ILover.isKey(LoverType.CURSED_LOVER.getKey())) {
                 if (sb.length() != 0) {
                     player.sendMessage(game.translate("werewolf.commands.admin.role.lover", sb.toString()));
                 }
@@ -112,10 +116,10 @@ public class CommandAdminRole implements Commands {
 
         StringBuilder sb = new StringBuilder();
 
-        if (targetWW.getRole() instanceof AffectedPlayers) {
-            AffectedPlayers affectedPlayers = (AffectedPlayers) targetWW.getRole();
+        if (targetWW.getRole() instanceof IAffectedPlayers) {
+            IAffectedPlayers affectedPlayers = (IAffectedPlayers) targetWW.getRole();
 
-            for (PlayerWW playerWW1 : affectedPlayers.getAffectedPlayers()) {
+            for (IPlayerWW playerWW1 : affectedPlayers.getAffectedPlayers()) {
                 sb.append(playerWW1.getName()).append(" ");
             }
             if (sb.length() != 0) {
@@ -126,7 +130,7 @@ public class CommandAdminRole implements Commands {
         if (role.isKey(RolesBase.SISTER.getKey())) {
             sb = new StringBuilder();
 
-            for (PlayerWW playerWW1 : game.getPlayerWW()) {
+            for (IPlayerWW playerWW1 : game.getPlayerWW()) {
                 if (playerWW1.isKey(RolesBase.SISTER.getKey()) && !playerWW1.equals(targetWW)) {
                     sb.append(playerWW1.getName()).append(" ");
                 }
@@ -140,7 +144,7 @@ public class CommandAdminRole implements Commands {
         if (role.isKey(RolesBase.SIAMESE_TWIN.getKey())) {
             sb = new StringBuilder();
 
-            for (PlayerWW playerWW1 : game.getPlayerWW()) {
+            for (IPlayerWW playerWW1 : game.getPlayerWW()) {
                 if (playerWW1.getRole().isKey(RolesBase.SIAMESE_TWIN.getKey()) && !playerWW1.equals(targetWW)) {
                     sb.append(playerWW1.getName()).append(" ");
                 }
@@ -153,7 +157,7 @@ public class CommandAdminRole implements Commands {
 
         sb = new StringBuilder();
 
-        for (PlayerWW playerWW1 : targetWW.getKillers()) {
+        for (IPlayerWW playerWW1 : targetWW.getKillers()) {
             if (playerWW1 != null) {
                 sb.append(playerWW1.getName()).append(" ");
             } else sb.append(game.translate("werewolf.utils.pve")).append(" ");

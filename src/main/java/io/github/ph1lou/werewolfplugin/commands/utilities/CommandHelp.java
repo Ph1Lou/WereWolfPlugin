@@ -1,9 +1,9 @@
 package io.github.ph1lou.werewolfplugin.commands.utilities;
 
-import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.ICommands;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.registers.CommandRegister;
-import io.github.ph1lou.werewolfapi.registers.RegisterManager;
+import io.github.ph1lou.werewolfapi.registers.IRegisterManager;
 import io.github.ph1lou.werewolfplugin.Main;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -11,7 +11,7 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 
-public class CommandHelp implements Commands {
+public class CommandHelp implements ICommands {
 
 
     private final Main main;
@@ -25,7 +25,7 @@ public class CommandHelp implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
 
-        RegisterManager registerManager = main.getRegisterManager();
+        IRegisterManager registerManager = main.getRegisterManager();
 
         TextComponent textComponent1 = new TextComponent(game.translate("werewolf.commands.admin.help.help"));
 

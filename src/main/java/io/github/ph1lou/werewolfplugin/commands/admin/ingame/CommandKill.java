@@ -1,7 +1,7 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandKill implements Commands {
+public class CommandKill implements ICommands {
 
 
     private final Main main;
@@ -28,9 +28,9 @@ public class CommandKill implements Commands {
         boolean find = false;
 
         UUID argUUID = null;
-        PlayerWW playerWW1 = null;
+        IPlayerWW playerWW1 = null;
 
-        for (PlayerWW playerWW : game.getPlayerWW()) {
+        for (IPlayerWW playerWW : game.getPlayerWW()) {
             if (playerWW.getName().equalsIgnoreCase(args[0])) {
                 find = true;
                 argUUID = playerWW.getUUID();

@@ -3,15 +3,15 @@ package io.github.ph1lou.werewolfplugin.game;
 
 import com.google.common.collect.Sets;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.LoverAPI;
-import io.github.ph1lou.werewolfapi.LoverManagerAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.ILover;
+import io.github.ph1lou.werewolfapi.ILoverManager;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.events.CupidLoversEvent;
-import io.github.ph1lou.werewolfapi.events.RevealLoversEvent;
+import io.github.ph1lou.werewolfapi.events.lovers.CupidLoversEvent;
+import io.github.ph1lou.werewolfapi.events.lovers.RevealLoversEvent;
 import io.github.ph1lou.werewolfplugin.roles.lovers.AmnesiacLover;
 import io.github.ph1lou.werewolfplugin.roles.lovers.CursedLover;
 import io.github.ph1lou.werewolfplugin.roles.lovers.Lover;
@@ -28,10 +28,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 
-public class LoversManagement implements LoverManagerAPI {
+public class LoversManagement implements ILoverManager {
 
 
-	private final List<LoverAPI> lovers = new ArrayList<>();
+	private final List<ILover> lovers = new ArrayList<>();
 
 	private final WereWolfAPI game;
 
@@ -42,7 +42,7 @@ public class LoversManagement implements LoverManagerAPI {
 
 	private void autoCursedLovers() {
 
-		List<PlayerWW> cursedLovers = game.getPlayerWW().stream()
+		List<IPlayerWW> cursedLovers = game.getPlayerWW().stream()
 				.filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
 				.filter(playerWW -> playerWW.getLovers().isEmpty())
 				.collect(Collectors.toList());
@@ -58,9 +58,9 @@ public class LoversManagement implements LoverManagerAPI {
 
 		while (cursedLovers.size() >= 2 && i < game.getConfig().getLoverCount(LoverType.CURSED_LOVER.getKey())) {
 
-			PlayerWW playerWW1 = cursedLovers.get((int) Math.floor(game.getRandom().nextFloat() * cursedLovers.size()));
+			IPlayerWW playerWW1 = cursedLovers.get((int) Math.floor(game.getRandom().nextFloat() * cursedLovers.size()));
 			cursedLovers.remove(playerWW1);
-			PlayerWW playerWW2 = cursedLovers.get((int) Math.floor(game.getRandom().nextFloat() * cursedLovers.size()));
+			IPlayerWW playerWW2 = cursedLovers.get((int) Math.floor(game.getRandom().nextFloat() * cursedLovers.size()));
 			cursedLovers.remove(playerWW2);
 			CursedLover cursedLover = new CursedLover(game, playerWW1, playerWW2);
 			i++;
@@ -72,7 +72,7 @@ public class LoversManagement implements LoverManagerAPI {
 
 	private void autoAmnesiacLovers() {
 
-		List<PlayerWW> amnesiacLovers = game.getPlayerWW().stream()
+		List<IPlayerWW> amnesiacLovers = game.getPlayerWW().stream()
 				.filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
 				.filter(playerWW -> playerWW.getLovers().isEmpty())
 				.collect(Collectors.toList());
@@ -87,9 +87,9 @@ public class LoversManagement implements LoverManagerAPI {
 
 		while (amnesiacLovers.size() >= 2 && i < game.getConfig().getLoverCount(LoverType.AMNESIAC_LOVER.getKey())) {
 
-			PlayerWW playerWW1 = amnesiacLovers.get((int) Math.floor(game.getRandom().nextFloat() * amnesiacLovers.size()));
+			IPlayerWW playerWW1 = amnesiacLovers.get((int) Math.floor(game.getRandom().nextFloat() * amnesiacLovers.size()));
 			amnesiacLovers.remove(playerWW1);
-			PlayerWW playerWW2 = amnesiacLovers.get((int) Math.floor(game.getRandom().nextFloat() * amnesiacLovers.size()));
+			IPlayerWW playerWW2 = amnesiacLovers.get((int) Math.floor(game.getRandom().nextFloat() * amnesiacLovers.size()));
 			amnesiacLovers.remove(playerWW2);
 			lovers.add(new AmnesiacLover(game, playerWW1, playerWW2));
 			i++;
@@ -106,15 +106,15 @@ public class LoversManagement implements LoverManagerAPI {
 		autoAmnesiacLovers();
 		autoCursedLovers();
 		lovers
-				.forEach(loverAPI -> Bukkit.getPluginManager()
-						.registerEvents((Listener) loverAPI, (Plugin) main));
+				.forEach(ILover -> Bukkit.getPluginManager()
+						.registerEvents((Listener) ILover, (Plugin) main));
 		Bukkit.getPluginManager().callEvent(new RevealLoversEvent(this.lovers));
 		game.checkVictory();
 	}
 
 	private void autoLovers() {
 
-		List<PlayerWW> loversAvailable = game.getPlayerWW().stream()
+		List<IPlayerWW> loversAvailable = game.getPlayerWW().stream()
 				.filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
 				.collect(Collectors.toList());
 
@@ -138,10 +138,11 @@ public class LoversManagement implements LoverManagerAPI {
 			Bukkit.broadcastMessage(game.translate("werewolf.role.lover.polygamy"));
 		}
 
-		PlayerWW playerWW1;
-		PlayerWW playerWW2;
+		IPlayerWW playerWW1;
+		IPlayerWW playerWW2;
 
-		for (PlayerWW playerWW : game.getPlayerWW()) {
+
+		for (IPlayerWW playerWW : game.getPlayerWW()) {
 
 			if (playerWW.isKey(RolesBase.CUPID.getKey())) {
 
@@ -155,35 +156,35 @@ public class LoversManagement implements LoverManagerAPI {
 
 					if (loversAvailable.contains(playerWW)) {
 						loversAvailable.remove(playerWW);
-						playerWW1 = loversAvailable.get((int) Math.floor(game.getRandom().nextFloat() * loversAvailable.size()));
-						loversAvailable.remove(playerWW1);
 						playerWW2 = loversAvailable.get((int) Math.floor(game.getRandom().nextFloat() * loversAvailable.size()));
-						loversAvailable.add(playerWW1);
+						loversAvailable.remove(playerWW2);
+						playerWW1 = loversAvailable.get((int) Math.floor(game.getRandom().nextFloat() * loversAvailable.size()));
+						loversAvailable.add(playerWW2);
 						loversAvailable.add(playerWW);
 					} else {
-						playerWW1 = loversAvailable.get((int) Math.floor(game.getRandom().nextFloat() * loversAvailable.size()));
-						loversAvailable.remove(playerWW1);
 						playerWW2 = loversAvailable.get((int) Math.floor(game.getRandom().nextFloat() * loversAvailable.size()));
-						loversAvailable.add(playerWW1);
+						loversAvailable.remove(playerWW2);
+						playerWW1 = loversAvailable.get((int) Math.floor(game.getRandom().nextFloat() * loversAvailable.size()));
+						loversAvailable.add(playerWW2);
 					}
 
 					cupid.clearAffectedPlayer();
-					cupid.addAffectedPlayer(playerWW1);
 					cupid.addAffectedPlayer(playerWW2);
+					cupid.addAffectedPlayer(playerWW1);
 					cupid.setPower(false);
 					Bukkit.getPluginManager().callEvent(new CupidLoversEvent(playerWW, Sets.newHashSet(cupid.getAffectedPlayers())));
 					Player player1 = Bukkit.getPlayer(uuid);
 					if (player1 != null) {
-						player1.sendMessage(game.translate("werewolf.role.cupid.designation_perform", playerWW1.getName(), playerWW2.getName()));
+						player1.sendMessage(game.translate("werewolf.role.cupid.designation_perform", playerWW2.getName(), playerWW1.getName()));
 					}
 
 				} else {
-					playerWW1 = cupid.getAffectedPlayers().get(0);
-					playerWW2 = cupid.getAffectedPlayers().get(1);
+					playerWW2 = cupid.getAffectedPlayers().get(0);
+					playerWW1 = cupid.getAffectedPlayers().get(1);
 				}
 				if (!polygamy) {
-					loversAvailable.remove(playerWW1);
 					loversAvailable.remove(playerWW2);
+					loversAvailable.remove(playerWW1);
 				}
 				lovers.add(new Lover(game, cupid.getAffectedPlayers()));
 			}
@@ -191,17 +192,17 @@ public class LoversManagement implements LoverManagerAPI {
 
 		for (int i = 0; i < game.getConfig().getLoverCount(LoverType.LOVER.getKey()); i++) {
 
-			playerWW1 = loversAvailable.get((int) Math.floor(game.getRandom().nextFloat() * loversAvailable.size()));
-			loversAvailable.remove(playerWW1);
 			playerWW2 = loversAvailable.get((int) Math.floor(game.getRandom().nextFloat() * loversAvailable.size()));
-			loversAvailable.add(playerWW1);
+			loversAvailable.remove(playerWW2);
+			playerWW1 = loversAvailable.get((int) Math.floor(game.getRandom().nextFloat() * loversAvailable.size()));
+			loversAvailable.add(playerWW2);
 
 			if (!polygamy) {
-				loversAvailable.remove(playerWW1);
 				loversAvailable.remove(playerWW2);
+				loversAvailable.remove(playerWW1);
 			}
 
-			lovers.add(new Lover(game, new ArrayList<>(Arrays.asList(playerWW1, playerWW2))));
+			lovers.add(new Lover(game, new ArrayList<>(Arrays.asList(playerWW2, playerWW1))));
 		}
 	}
 
@@ -209,19 +210,19 @@ public class LoversManagement implements LoverManagerAPI {
 	private void rangeLovers() {
 
 		List<Lover> loverAPIS = new ArrayList<>();
-		List<PlayerWW> loversAvailable = game.getPlayerWW().stream()
+		List<IPlayerWW> loversAvailable = game.getPlayerWW().stream()
 				.filter(playerWW -> !playerWW.getLovers().isEmpty())
 				.collect(Collectors.toList());
 
 		while (!loversAvailable.isEmpty()) {
 
-			List<PlayerWW> linkCouple = new ArrayList<>();
+			List<IPlayerWW> linkCouple = new ArrayList<>();
 			linkCouple.add(loversAvailable.remove(0));
 
 			for (int j = 0; j < linkCouple.size(); j++) {
-				for (PlayerWW playerWW : game.getPlayerWW()) {
-					for (LoverAPI loverAPI : playerWW.getLovers()) {
-						if (loverAPI.getLovers().contains(linkCouple.get(j))) {
+				for (IPlayerWW playerWW : game.getPlayerWW()) {
+					for (ILover ILover : playerWW.getLovers()) {
+						if (ILover.getLovers().contains(linkCouple.get(j))) {
 							if (!linkCouple.contains(playerWW)) {
 								linkCouple.add(playerWW);
 								loversAvailable.remove(playerWW);
@@ -232,10 +233,10 @@ public class LoversManagement implements LoverManagerAPI {
 			}
 			loverAPIS.add(new Lover(game, linkCouple));
 		}
-		for (LoverAPI loverAPI : lovers) {
-			loverAPI.getLovers()
+		for (ILover ILover : lovers) {
+			ILover.getLovers()
 					.forEach(playerWW -> playerWW.getLovers()
-							.remove(loverAPI));
+							.remove(ILover));
 		}
 		lovers.clear();
 		lovers.addAll(loverAPIS);
@@ -244,17 +245,17 @@ public class LoversManagement implements LoverManagerAPI {
 
 
 	@Override
-	public List<? extends LoverAPI> getLovers() {
+	public List<? extends ILover> getLovers() {
 		return lovers;
 	}
 
 	@Override
-	public void removeLover(LoverAPI loverAPI) {
-		lovers.remove(loverAPI);
+	public void removeLover(ILover ILover) {
+		lovers.remove(ILover);
 	}
 
 	@Override
-	public void addLover(LoverAPI loverAPI) {
-		lovers.add(loverAPI);
+	public void addLover(ILover ILover) {
+		lovers.add(ILover);
 	}
 }

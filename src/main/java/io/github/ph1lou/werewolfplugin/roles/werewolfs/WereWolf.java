@@ -3,13 +3,13 @@ package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesWereWolf;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleWereWolf;
 import org.jetbrains.annotations.NotNull;
 
-public class WereWolf extends RolesWereWolf {
+public class WereWolf extends RoleWereWolf {
 
-    public WereWolf(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+    public WereWolf(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
     }
 

@@ -3,12 +3,12 @@ package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.events.SecondDeathEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesWereWolf;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleWereWolf;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.event.EventHandler;
@@ -19,13 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class InfectFatherOfTheWolves extends RolesWereWolf implements AffectedPlayers, Power {
+public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPlayers, IPower {
 
-    private final List<PlayerWW> affectedPlayer = new ArrayList<>();
+    private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private boolean power = true;
 
     public InfectFatherOfTheWolves(GetWereWolfAPI main,
-                                   PlayerWW playerWW,
+                                   IPlayerWW playerWW,
                                    String key) {
         super(main, playerWW, key);
     }
@@ -41,12 +41,12 @@ public class InfectFatherOfTheWolves extends RolesWereWolf implements AffectedPl
     }
 
     @Override
-    public void addAffectedPlayer(PlayerWW playerWW) {
+    public void addAffectedPlayer(IPlayerWW playerWW) {
         this.affectedPlayer.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(PlayerWW playerWW) {
+    public void removeAffectedPlayer(IPlayerWW playerWW) {
         this.affectedPlayer.remove(playerWW);
     }
 
@@ -56,7 +56,7 @@ public class InfectFatherOfTheWolves extends RolesWereWolf implements AffectedPl
     }
 
     @Override
-    public List<PlayerWW> getAffectedPlayers() {
+    public List<IPlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
@@ -85,10 +85,10 @@ public class InfectFatherOfTheWolves extends RolesWereWolf implements AffectedPl
 
         if (!hasPower()) return;
 
-        PlayerWW playerWW = event.getPlayerWW();
+        IPlayerWW playerWW = event.getPlayerWW();
 
 
-        Optional<PlayerWW> killerWW = playerWW.getLastKiller();
+        Optional<IPlayerWW> killerWW = playerWW.getLastKiller();
 
 
         if (!killerWW.isPresent()) {

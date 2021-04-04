@@ -3,13 +3,13 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.enums.VillagerKit;
-import io.github.ph1lou.werewolfapi.events.EndPlayerMessageEvent;
-import io.github.ph1lou.werewolfapi.events.VillagerKitEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
+import io.github.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
+import io.github.ph1lou.werewolfapi.events.roles.villager.VillagerKitEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
@@ -17,14 +17,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class Villager extends RolesVillage {
+public class Villager extends RoleVillage {
 
     private VillagerKit villagerKit;
 
-    public Villager(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+    public Villager(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
         if (!game.isState(StateGame.GAME)) return;
         villagerKit = VillagerKit.values()[(int) Math.floor(game.getRandom().nextFloat() * VillagerKit.values().length)];
+        if (game.getConfig().isTrollSV()) return;
         Bukkit.getPluginManager().callEvent(new VillagerKitEvent(getPlayerWW(), villagerKit.getKey()));
     }
 

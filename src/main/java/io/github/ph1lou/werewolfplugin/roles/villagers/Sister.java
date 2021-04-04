@@ -3,17 +3,17 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
-import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
-import io.github.ph1lou.werewolfapi.events.SisterDeathEvent;
-import io.github.ph1lou.werewolfapi.events.UpdateEvent;
 import io.github.ph1lou.werewolfapi.events.WereWolfListEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.roles.sister.SisterDeathEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -32,11 +32,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
-public class Sister extends RolesVillage implements AffectedPlayers {
+public class Sister extends RoleVillage implements IAffectedPlayers {
 
-    final List<PlayerWW> killerWWS = new ArrayList<>();
+    final List<IPlayerWW> killerWWS = new ArrayList<>();
 
-    public Sister(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+    public Sister(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
     }
 
@@ -52,7 +52,7 @@ public class Sister extends RolesVillage implements AffectedPlayers {
                         game.getConfig().getDistanceSister()))
                 .addExtraLines(() -> {
                     if (game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey()) > 0) {
-                        return game.translate("werewolf.role.sister.sisters_list", game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey())));
+                        return game.translate("werewolf.role.sister.sisters_list", Utils.conversion(game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey())));
                     } else {
                         return game.translate("werewolf.role.sister.sisters_list", this.getSister());
                     }
@@ -85,8 +85,8 @@ public class Sister extends RolesVillage implements AffectedPlayers {
         return list.toString();
     }
 
-    @EventHandler
-    public void onUpdate(UpdateEvent event) {
+    @Override
+    public void second() {
 
         Player sister = Bukkit.getPlayer(getPlayerUUID());
 
@@ -102,10 +102,10 @@ public class Sister extends RolesVillage implements AffectedPlayers {
         boolean recoverResistance = game.getPlayerWW()
                 .stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
-                .map(PlayerWW::getRole)
+                .map(IPlayerWW::getRole)
                 .filter(roles -> !roles.equals(this))
                 .filter(roles -> roles.isKey(RolesBase.SISTER.getKey()))
-                .map(Roles::getPlayerUUID)
+                .map(IRole::getPlayerUUID)
                 .map(Bukkit::getPlayer)
                 .filter(Objects::nonNull)
                 .filter(player -> {
@@ -149,8 +149,8 @@ public class Sister extends RolesVillage implements AffectedPlayers {
 
         event.getAllSisters().add(getPlayerWW());
 
-        PlayerWW sisterWW = event.getSister();
-        PlayerWW killerWW = event.getKiller();
+        IPlayerWW sisterWW = event.getSister();
+        IPlayerWW killerWW = event.getKiller();
         TextComponent textComponent = new TextComponent(game.translate("werewolf.role.sister.choice"));
 
         TextComponent name = new TextComponent(
@@ -201,7 +201,7 @@ public class Sister extends RolesVillage implements AffectedPlayers {
     @EventHandler
     public void onSisterDeath(FinalDeathEvent event) {
 
-        PlayerWW playerWW = event.getPlayerWW();
+        IPlayerWW playerWW = event.getPlayerWW();
 
         if (!playerWW.equals(getPlayerWW())) return;
 
@@ -211,12 +211,12 @@ public class Sister extends RolesVillage implements AffectedPlayers {
     }
 
     @Override
-    public void addAffectedPlayer(PlayerWW playerWW) {
+    public void addAffectedPlayer(IPlayerWW playerWW) {
         killerWWS.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(PlayerWW playerWW) {
+    public void removeAffectedPlayer(IPlayerWW playerWW) {
         killerWWS.remove(playerWW);
     }
 
@@ -226,7 +226,7 @@ public class Sister extends RolesVillage implements AffectedPlayers {
     }
 
     @Override
-    public List<PlayerWW> getAffectedPlayers() {
+    public List<IPlayerWW> getAffectedPlayers() {
         return killerWWS;
     }
 }

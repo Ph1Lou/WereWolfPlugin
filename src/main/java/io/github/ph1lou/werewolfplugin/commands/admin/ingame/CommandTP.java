@@ -1,7 +1,7 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandTP implements Commands {
+public class CommandTP implements ICommands {
 
 
     private final Main main;
@@ -24,7 +24,7 @@ public class CommandTP implements Commands {
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
         Player playerArg1 = Bukkit.getPlayer(args[0]);
-        ModerationManagerAPI moderationManager = game.getModerationManager();
+        IModerationManager moderationManager = game.getModerationManager();
 
 
         if (args.length == 1) {

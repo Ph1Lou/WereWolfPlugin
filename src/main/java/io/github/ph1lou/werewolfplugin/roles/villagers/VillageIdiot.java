@@ -2,14 +2,14 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.events.SecondDeathEvent;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTag;
-import io.github.ph1lou.werewolfapi.events.VillageIdiotEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
+import io.github.ph1lou.werewolfapi.events.roles.village_idiot.VillageIdiotEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,12 +18,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
-public class VillageIdiot extends RolesVillage implements Power {
+public class VillageIdiot extends RoleVillage implements IPower {
 
     private boolean power = true;
 
 
-    public VillageIdiot(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+    public VillageIdiot(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
     }
 
@@ -76,7 +76,7 @@ public class VillageIdiot extends RolesVillage implements Power {
             return;
         }
 
-        Optional<PlayerWW> killerWW = this.getPlayerWW().getLastKiller();
+        Optional<IPlayerWW> killerWW = this.getPlayerWW().getLastKiller();
 
         if (!killerWW.isPresent()) {
             return;

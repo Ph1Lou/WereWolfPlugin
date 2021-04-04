@@ -1,14 +1,24 @@
 package io.github.ph1lou.werewolfplugin.listeners.random_events;
 
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.ListenerManager;
-import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Camp;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
-import io.github.ph1lou.werewolfapi.events.*;
+import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
+import io.github.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
+import io.github.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.random_events.FindAllLootBoxEvent;
+import io.github.ph1lou.werewolfapi.events.random_events.LootBoxEvent;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import io.github.ph1lou.werewolfplugin.Main;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.WorldBorder;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
@@ -111,7 +121,7 @@ public class LootBox extends ListenerManager {
             } else {
                 stringBuilder.append("§6");
             }
-            stringBuilder.append(" ").append(game.getScore().updateArrow(player,
+            stringBuilder.append(" ").append(Utils.updateArrow(player,
                     location));
         }
         event.setActionBar(stringBuilder.toString());
@@ -124,14 +134,14 @@ public class LootBox extends ListenerManager {
         World world = game.getMapManager().getWorld();
         WorldBorder wb = world.getWorldBorder();
 
-        List<PlayerWW> playerWWS = game.getPlayerWW().stream()
+        List<IPlayerWW> playerWWS = game.getPlayerWW().stream()
                 .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                 .filter(playerWW1 -> !playerWW1.getRole().isCamp(Camp.VILLAGER))
                 .collect(Collectors.toList());
 
         if (playerWWS.isEmpty()) return;
 
-        PlayerWW playerWW = playerWWS.get((int) Math.floor(
+        IPlayerWW playerWW = playerWWS.get((int) Math.floor(
                 game.getRandom().nextFloat() * playerWWS.size()));
 
         int nbTarget = game.getScore().getPlayerSize() / 3;
@@ -174,7 +184,7 @@ public class LootBox extends ListenerManager {
             return;
         }
         Player player = (Player) event.getPlayer();
-        PlayerWW playerWW = game.getPlayerWW(player.getUniqueId());
+        IPlayerWW playerWW = game.getPlayerWW(player.getUniqueId());
 
         if (playerWW == null) return;
 

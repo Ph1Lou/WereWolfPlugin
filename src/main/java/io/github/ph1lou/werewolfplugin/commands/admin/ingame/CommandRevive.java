@@ -1,18 +1,18 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandRevive implements Commands {
+public class CommandRevive implements ICommands {
 
 
     private final Main main;
@@ -33,7 +33,7 @@ public class CommandRevive implements Commands {
         }
 
         UUID uuid = player1.getUniqueId();
-        PlayerWW playerWW1 = game.getPlayerWW(uuid);
+        IPlayerWW playerWW1 = game.getPlayerWW(uuid);
 
         if (playerWW1 == null) {
             player.sendMessage(game.translate("werewolf.check.not_in_game_player"));
@@ -49,7 +49,7 @@ public class CommandRevive implements Commands {
             Bukkit.dispatchCommand(player, "a moderator " + player1.getName());
         }
 
-        Roles role = playerWW1.getRole();
+        IRole role = playerWW1.getRole();
         game.getConfig().addOneRole(role.getKey());
         game.getScore().addPlayerSize();
         game.resurrection(playerWW1);

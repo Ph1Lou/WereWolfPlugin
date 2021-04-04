@@ -5,7 +5,7 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
-import io.github.ph1lou.werewolfapi.StuffManager;
+import io.github.ph1lou.werewolfapi.IStuffManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
@@ -68,7 +68,7 @@ public class Stuffs implements InventoryProvider {
                 return;
             }
 
-            StuffManager stuffManager = game.getStuffs();
+            IStuffManager stuffManager = game.getStuffs();
             PlayerInventory inventory = player.getInventory();
             player.setGameMode(GameMode.CREATIVE);
 
@@ -101,7 +101,7 @@ public class Stuffs implements InventoryProvider {
                 return;
             }
 
-            StuffManager stuffManager = game.getStuffs();
+            IStuffManager stuffManager = game.getStuffs();
             PlayerInventory inventory = player.getInventory();
             player.setGameMode(GameMode.CREATIVE);
 

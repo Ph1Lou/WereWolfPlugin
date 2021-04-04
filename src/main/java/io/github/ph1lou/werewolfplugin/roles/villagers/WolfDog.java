@@ -3,31 +3,32 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.Camp;
 import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
-import io.github.ph1lou.werewolfapi.events.AppearInWereWolfListEvent;
-import io.github.ph1lou.werewolfapi.events.NightEvent;
-import io.github.ph1lou.werewolfapi.events.WereWolfCanSpeakInChatEvent;
-import io.github.ph1lou.werewolfapi.events.WereWolfChatEvent;
 import io.github.ph1lou.werewolfapi.events.WereWolfListEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.Display;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
+import io.github.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
+import io.github.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
+import io.github.ph1lou.werewolfapi.events.werewolf.WereWolfCanSpeakInChatEvent;
+import io.github.ph1lou.werewolfapi.events.werewolf.WereWolfChatEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IDisplay;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
 import io.github.ph1lou.werewolfapi.rolesattributs.Transformed;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
-public class WolfDog extends RolesVillage implements Display, Transformed, Power {
+public class WolfDog extends RoleVillage implements IDisplay, Transformed, IPower {
 
     private boolean transformed = false;
     private boolean power = true;
 
-    public WolfDog(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+    public WolfDog(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
     }
 
@@ -50,7 +51,7 @@ public class WolfDog extends RolesVillage implements Display, Transformed, Power
     @Override
     public void recoverPower() {
         getPlayerWW().sendMessageWithKey("werewolf.role.wolf_dog.transform",
-                game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey())));
+                Utils.conversion(game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey())));
     }
 
     @Override
@@ -153,9 +154,9 @@ public class WolfDog extends RolesVillage implements Display, Transformed, Power
         if (transformed) {
             return game.getPlayerWW().stream()
                     .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
-                    .map(PlayerWW::getRole)
+                    .map(IPlayerWW::getRole)
                     .filter(roles -> roles.isCamp(Camp.VILLAGER))
-                    .map(Roles::getKey)
+                    .map(IRole::getKey)
                     .findFirst()
                     .orElse(this.getKey());
         }
@@ -163,11 +164,11 @@ public class WolfDog extends RolesVillage implements Display, Transformed, Power
 
         return game.getPlayerWW().stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
-                .map(PlayerWW::getRole)
-                .filter(roles -> roles.isWereWolf() || roles instanceof Display)
-                .filter(roles -> !(roles instanceof Display) ||
-                        ((Display) roles).isDisplayCamp(Camp.WEREWOLF.getKey()))
-                .map(Roles::getKey)
+                .map(IPlayerWW::getRole)
+                .filter(role -> role.isWereWolf() || role instanceof IDisplay)
+                .filter(role -> !(role instanceof IDisplay) ||
+                        ((IDisplay) role).isDisplayCamp(Camp.WEREWOLF.getKey()))
+                .map(IRole::getKey)
                 .findFirst()
                 .orElse(this.getKey());
     }

@@ -7,11 +7,12 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
-import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
+import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.registers.TimerRegister;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Material;
@@ -54,7 +55,7 @@ public class TimersGUI implements InventoryProvider {
 
         Main main = JavaPlugin.getPlugin(Main.class);
         GameManager game = (GameManager) main.getWereWolfAPI();
-        ConfigWereWolfAPI config = game.getConfig();
+        IConfiguration config = game.getConfig();
         Pagination pagination = contents.pagination();
         List<ClickableItem> items = new ArrayList<>();
 
@@ -159,7 +160,7 @@ public class TimersGUI implements InventoryProvider {
                                 Material.ANVIL)
                                 .setLore(lore)
                                 .setDisplayName(game.translate(timer.getKey(),
-                                        game.getScore().conversion(config.getTimerValue(timer.getKey())))).build()),
+                                        Utils.conversion(config.getTimerValue(timer.getKey())))).build()),
                         e -> this.key = timer.getKey()));
             }
 
@@ -206,10 +207,9 @@ public class TimersGUI implements InventoryProvider {
     }
 
     public String getConversion(WereWolfAPI game, String key) {
-        return game.getScore()
-                .conversion(game
-                        .getConfig()
-                        .getTimerValue(key));
+        return Utils.conversion(game
+                .getConfig()
+                .getTimerValue(key));
     }
 }
 

@@ -3,19 +3,19 @@ package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Camp;
 import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.events.AnnouncementDeathEvent;
-import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
-import io.github.ph1lou.werewolfapi.events.GrimEvent;
 import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTag;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesWereWolf;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.roles.grim_werewolf.GrimEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleWereWolf;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -24,22 +24,22 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GrimyWereWolf extends RolesWereWolf implements AffectedPlayers, Power {
+public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPower {
 
-    private final List<PlayerWW> affectedPlayer = new ArrayList<>();
+    private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private boolean power = true;
 
-    public GrimyWereWolf(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+    public GrimyWereWolf(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
     }
 
     @Override
-    public void addAffectedPlayer(PlayerWW playerWW) {
+    public void addAffectedPlayer(IPlayerWW playerWW) {
         this.affectedPlayer.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(PlayerWW playerWW) {
+    public void removeAffectedPlayer(IPlayerWW playerWW) {
         this.affectedPlayer.remove(playerWW);
     }
 
@@ -49,7 +49,7 @@ public class GrimyWereWolf extends RolesWereWolf implements AffectedPlayers, Pow
     }
 
     @Override
-    public List<PlayerWW> getAffectedPlayers() {
+    public List<IPlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
@@ -121,7 +121,7 @@ public class GrimyWereWolf extends RolesWereWolf implements AffectedPlayers, Pow
 
         WereWolfAPI game = main.getWereWolfAPI();
 
-        PlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID());
+        IPlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID());
 
         if (playerWW == null) {
             return;

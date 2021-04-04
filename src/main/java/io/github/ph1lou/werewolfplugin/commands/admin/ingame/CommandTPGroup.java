@@ -1,7 +1,7 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandTPGroup implements Commands {
+public class CommandTPGroup implements ICommands {
 
 
     private final Main main;
@@ -33,7 +33,7 @@ public class CommandTPGroup implements Commands {
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
-        PlayerWW playerWW = game.getPlayerWW(argUUID);
+        IPlayerWW playerWW = game.getPlayerWW(argUUID);
 
         if (playerWW == null) {
             player.sendMessage(game.translate("werewolf.check.player_not_found"));
@@ -57,7 +57,7 @@ public class CommandTPGroup implements Commands {
         }
         for (Player p : Bukkit.getOnlinePlayers()) {
             UUID uuid = p.getUniqueId();
-            PlayerWW playerWW1 = game.getPlayerWW(uuid);
+            IPlayerWW playerWW1 = game.getPlayerWW(uuid);
 
             if (size > 0 && playerWW1 != null && playerWW1.isState(StatePlayer.ALIVE)) {
 

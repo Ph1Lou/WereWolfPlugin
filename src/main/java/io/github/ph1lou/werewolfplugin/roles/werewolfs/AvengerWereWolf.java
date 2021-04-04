@@ -2,14 +2,13 @@ package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.events.DeathAvengerListEvent;
-import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
-import io.github.ph1lou.werewolfapi.events.RegisterAvengerListEvent;
-import io.github.ph1lou.werewolfapi.events.UpdateEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesWereWolf;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.roles.avenger_werewolf.DeathAvengerListEvent;
+import io.github.ph1lou.werewolfapi.events.roles.avenger_werewolf.RegisterAvengerListEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleWereWolf;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,11 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class AvengerWereWolf extends RolesWereWolf implements AffectedPlayers {
+public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
 
-    private final List<PlayerWW> affectedPlayers = new ArrayList<>();
+    private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
 
-    public AvengerWereWolf(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+    public AvengerWereWolf(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
     }
 
@@ -64,8 +63,8 @@ public class AvengerWereWolf extends RolesWereWolf implements AffectedPlayers {
         this.getPlayerWW().addPlayerMaxHealth(2);
     }
 
-    @EventHandler
-    public void onUpdate(UpdateEvent event) {
+    @Override
+    public void second() {
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -80,6 +79,7 @@ public class AvengerWereWolf extends RolesWereWolf implements AffectedPlayers {
                 .stream()
                 .map(player1 -> game.getPlayerWW(player1.getUniqueId()))
                 .filter(Objects::nonNull)
+                .filter(playerWW -> !playerWW.getRole().equals(this))
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> playerWW.getRole().isWereWolf())
                 .filter(playerWW -> {
@@ -111,12 +111,12 @@ public class AvengerWereWolf extends RolesWereWolf implements AffectedPlayers {
     }
 
     @Override
-    public void addAffectedPlayer(PlayerWW playerWW) {
+    public void addAffectedPlayer(IPlayerWW playerWW) {
         this.affectedPlayers.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(PlayerWW playerWW) {
+    public void removeAffectedPlayer(IPlayerWW playerWW) {
         this.affectedPlayers.remove(playerWW);
     }
 
@@ -126,7 +126,7 @@ public class AvengerWereWolf extends RolesWereWolf implements AffectedPlayers {
     }
 
     @Override
-    public List<PlayerWW> getAffectedPlayers() {
+    public List<IPlayerWW> getAffectedPlayers() {
         return new ArrayList<>(this.affectedPlayers);
     }
 }

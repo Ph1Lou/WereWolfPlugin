@@ -1,11 +1,11 @@
 package io.github.ph1lou.werewolfplugin.commands.admin;
 
-import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.ICommands;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.entity.Player;
 
-public class CommandGeneration implements Commands {
+public class CommandGeneration implements ICommands {
 
     private final Main main;
 

@@ -1,6 +1,6 @@
 package io.github.ph1lou.werewolfplugin.save;
 
-import io.github.ph1lou.werewolfapi.StuffManager;
+import io.github.ph1lou.werewolfapi.IStuffManager;
 import io.github.ph1lou.werewolfapi.registers.AddonRegister;
 import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -15,10 +15,15 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 
-public class Stuff implements StuffManager {
+public class Stuff implements IStuffManager {
 
     private final Map<String, List<ItemStack>> stuffRoles = new HashMap<>();
 

@@ -3,20 +3,20 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.LoverAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.ILover;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
-import io.github.ph1lou.werewolfapi.events.FirstDeathEvent;
-import io.github.ph1lou.werewolfapi.events.NewWereWolfEvent;
 import io.github.ph1lou.werewolfapi.events.NightEvent;
-import io.github.ph1lou.werewolfapi.events.SecondDeathEvent;
-import io.github.ph1lou.werewolfapi.events.StealEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.FirstDeathEvent;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
+import io.github.ph1lou.werewolfapi.events.roles.StealEvent;
+import io.github.ph1lou.werewolfapi.events.werewolf.NewWereWolfEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleNeutral;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -32,12 +32,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Thief extends RolesNeutral implements AffectedPlayers, Power {
+public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
 
-    private final List<PlayerWW> affectedPlayer = new ArrayList<>();
+    private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private boolean power = true;
 
-    public Thief(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+    public Thief(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
     }
 
@@ -52,12 +52,12 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
     }
 
     @Override
-    public void addAffectedPlayer(PlayerWW playerWW) {
+    public void addAffectedPlayer(IPlayerWW playerWW) {
         this.affectedPlayer.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(PlayerWW playerWW) {
+    public void removeAffectedPlayer(IPlayerWW playerWW) {
         this.affectedPlayer.remove(playerWW);
     }
 
@@ -67,7 +67,7 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
     }
 
     @Override
-    public List<PlayerWW> getAffectedPlayers() {
+    public List<IPlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
@@ -113,7 +113,7 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onFirstDeathEvent(FirstDeathEvent event){
 
-        PlayerWW playerWW = event.getPlayerWW();
+        IPlayerWW playerWW = event.getPlayerWW();
 
         if (!playerWW.getLastKiller().isPresent()) return;
 
@@ -143,13 +143,13 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
     }
 
 
-    public void thiefRecoverRole(PlayerWW playerWW) {
+    public void thiefRecoverRole(IPlayerWW playerWW) {
 
-        Roles role = playerWW.getRole();
+        IRole role = playerWW.getRole();
 
         setPower(false);
         HandlerList.unregisterAll((Listener) getPlayerWW().getRole());
-        Roles roleClone = role.publicClone();
+        IRole roleClone = role.publicClone();
         getPlayerWW().setRole(roleClone);
         assert roleClone != null;
         Bukkit.getPluginManager().registerEvents((Listener) roleClone, (Plugin) main);
@@ -173,10 +173,10 @@ public class Thief extends RolesNeutral implements AffectedPlayers, Power {
         roleClone.recoverPotionEffect();
 
         for (int i = 0; i < playerWW.getLovers().size(); i++) {
-            LoverAPI loverAPI = playerWW.getLovers().get(i);
-            if (loverAPI.swap(playerWW, getPlayerWW())) {
-                getPlayerWW().addLover(loverAPI);
-                playerWW.removeLover(loverAPI);
+            ILover ILover = playerWW.getLovers().get(i);
+            if (ILover.swap(playerWW, getPlayerWW())) {
+                getPlayerWW().addLover(ILover);
+                playerWW.removeLover(ILover);
                 i--;
             }
         }

@@ -7,7 +7,7 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
-import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
+import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
@@ -50,7 +50,7 @@ public class RandomEvents implements InventoryProvider {
 
         Main main = JavaPlugin.getPlugin(Main.class);
         GameManager game = (GameManager) main.getWereWolfAPI();
-        ConfigWereWolfAPI config = game.getConfig();
+        IConfiguration config = game.getConfig();
         Pagination pagination = contents.pagination();
         List<ClickableItem> items = new ArrayList<>();
 
@@ -112,7 +112,7 @@ public class RandomEvents implements InventoryProvider {
 
     private ItemStack getItemStack(GameManager game, String key, List<String> loreKey) {
 
-        ConfigWereWolfAPI config = game.getConfig();
+        IConfiguration config = game.getConfig();
         List<String> lore2 = new ArrayList<>(Arrays.asList(game.translate("werewolf.menu.left"), game.translate("werewolf.menu.right")));
         List<String> lore = new ArrayList<>();
         loreKey.stream().map(game::translate).map(s -> Arrays.stream(s.split("\\n")).collect(Collectors.toList())).forEach(lore::addAll);

@@ -1,13 +1,13 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.LoverAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.ILover;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.events.DonEvent;
+import io.github.ph1lou.werewolfapi.events.lovers.DonEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.roles.lovers.AmnesiacLover;
 import org.bukkit.Bukkit;
@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class CommandLovers implements Commands {
+public class CommandLovers implements ICommands {
 
 
     private final Main main;
@@ -32,7 +32,7 @@ public class CommandLovers implements Commands {
         WereWolfAPI game = main.getWereWolfAPI();
         String playername = player.getName();
         UUID uuid = player.getUniqueId();
-        PlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
         if (playerWW == null) return;
 
@@ -109,7 +109,7 @@ public class CommandLovers implements Commands {
             }
 
             UUID argUUID = playerCouple.getUniqueId();
-            PlayerWW playerWW1 = game.getPlayerWW(argUUID);
+            IPlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
             if (playerWW1 == null) return;
 
@@ -120,14 +120,14 @@ public class CommandLovers implements Commands {
 
             double don = player.getHealth() * heart / 100f;
 
-            Optional<? extends LoverAPI> loverAPI = playerWW.getLovers().stream()
+            Optional<? extends ILover> ILover = playerWW.getLovers().stream()
                     .filter(loverAPI1 -> !loverAPI1.isKey(LoverType.CURSED_LOVER.getKey()))
                     .filter(loverAPI1 -> loverAPI1.getLovers().contains(playerWW1))
                     .filter(loverAPI1 -> !loverAPI1.isKey(LoverType.AMNESIAC_LOVER.getKey()) || ((AmnesiacLover) loverAPI1).isRevealed())
                     .findFirst();
 
-            if (loverAPI.isPresent()) {
-                loverAPI.ifPresent(loverAPI1 -> {
+            if (ILover.isPresent()) {
+                ILover.ifPresent(loverAPI1 -> {
 
                     if (playerWW1.getMaxHealth() - playerCouple.getHealth() >= heart) {
 

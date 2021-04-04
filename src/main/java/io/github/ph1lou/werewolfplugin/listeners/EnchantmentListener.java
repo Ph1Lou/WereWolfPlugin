@@ -1,8 +1,8 @@
 package io.github.ph1lou.werewolfplugin.listeners;
 
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.events.EnchantmentEvent;
+import io.github.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -60,7 +60,7 @@ public class EnchantmentListener implements Listener {
         Map<Enchantment, Integer> tempEnchant = new HashMap<>();
         ItemStack result = new ItemStack(item);
         UUID uuid = player.getUniqueId();
-        PlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
         if (playerWW == null) return result;
 

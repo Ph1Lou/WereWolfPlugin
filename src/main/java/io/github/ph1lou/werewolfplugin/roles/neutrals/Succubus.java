@@ -3,23 +3,23 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
-import io.github.ph1lou.werewolfapi.events.AroundLover;
-import io.github.ph1lou.werewolfapi.events.CharmEvent;
-import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
-import io.github.ph1lou.werewolfapi.events.SecondDeathEvent;
-import io.github.ph1lou.werewolfapi.events.StealEvent;
-import io.github.ph1lou.werewolfapi.events.SuccubusResurrectionEvent;
-import io.github.ph1lou.werewolfapi.events.UpdateEvent;
-import io.github.ph1lou.werewolfapi.events.WinConditionsCheckEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.Progress;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
+import io.github.ph1lou.werewolfapi.events.game.utils.WinConditionsCheckEvent;
+import io.github.ph1lou.werewolfapi.events.lovers.AroundLover;
+import io.github.ph1lou.werewolfapi.events.roles.StealEvent;
+import io.github.ph1lou.werewolfapi.events.roles.succubus.CharmEvent;
+import io.github.ph1lou.werewolfapi.events.roles.succubus.SuccubusResurrectionEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.IProgress;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleNeutral;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -31,12 +31,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Succubus extends RolesNeutral implements Progress, AffectedPlayers, Power {
+public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers, IPower {
 
     private float progress = 0;
-    private final List<PlayerWW> affectedPlayer = new ArrayList<>();
+    private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
 
-    public Succubus(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+    public Succubus(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
     }
 
@@ -54,12 +54,12 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
     }
 
     @Override
-    public void addAffectedPlayer(PlayerWW playerWW) {
+    public void addAffectedPlayer(IPlayerWW playerWW) {
         this.affectedPlayer.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(PlayerWW playerWW) {
+    public void removeAffectedPlayer(IPlayerWW playerWW) {
         this.affectedPlayer.remove(playerWW);
     }
 
@@ -69,7 +69,7 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
     }
 
     @Override
-    public List<PlayerWW> getAffectedPlayers() {
+    public List<IPlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
@@ -88,7 +88,7 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
                 .setDescription(() -> game.translate("werewolf.role.succubus.description",
-                        game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.SUCCUBUS_DURATION.getKey()))))
+                        Utils.conversion(game.getConfig().getTimerValue(TimersBase.SUCCUBUS_DURATION.getKey()))))
                 .addExtraLines(() -> game.translate("werewolf.role.succubus.charm",
                         affectedPlayer.isEmpty() ? this.power ?
                                 game.translate("werewolf.role.succubus.charm_command")
@@ -111,7 +111,7 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
             return;
         }
 
-        PlayerWW affectedWW = getAffectedPlayers().get(0);
+        IPlayerWW affectedWW = getAffectedPlayers().get(0);
 
         affectedWW.sendMessageWithKey("werewolf.role.succubus.get_charmed",
                 getPlayerWW().getName());
@@ -122,8 +122,8 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
         getPlayerWW().sendMessageWithKey("werewolf.role.succubus.charming_message");
     }
 
-    @EventHandler
-    public void onUpdate(UpdateEvent event) {
+    @Override
+    public void second() {
 
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
@@ -143,7 +143,7 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
             return;
         }
 
-        PlayerWW charmedWW = getAffectedPlayers().get(0);
+        IPlayerWW charmedWW = getAffectedPlayers().get(0);
         Player charmed = Bukkit.getPlayer(charmedWW.getUUID());
 
         if (charmed == null) return;
@@ -203,8 +203,8 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
     public void onTargetIsStolen(StealEvent event) {
 
 
-        PlayerWW playerWW = event.getPlayerWW();
-        PlayerWW thiefWW = event.getThiefWW();
+        IPlayerWW playerWW = event.getPlayerWW();
+        IPlayerWW thiefWW = event.getThiefWW();
 
         if (!getAffectedPlayers().contains(playerWW)) return;
 
@@ -245,7 +245,7 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
         if (hasPower()) return;
 
 
-        PlayerWW targetWW = getAffectedPlayers().get(0);
+        IPlayerWW targetWW = getAffectedPlayers().get(0);
         Player target = Bukkit.getPlayer(targetWW.getUUID());
 
         if (!targetWW.isState(StatePlayer.ALIVE)) return;
@@ -283,24 +283,24 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
 
         if (affectedPlayer.isEmpty()) return;
 
-        PlayerWW affectedWW = affectedPlayer.get(0);
+        IPlayerWW affectedWW = affectedPlayer.get(0);
 
         if (!affectedWW.isState(StatePlayer.ALIVE)) return;
 
-        List<PlayerWW> list = new ArrayList<>(Collections.singleton(affectedPlayer.get(0)));
+        List<IPlayerWW> list = new ArrayList<>(Collections.singleton(affectedPlayer.get(0)));
 
 
         for (int i = 0; i < list.size(); i++) {
 
-            PlayerWW playerWW = list.get(i);
+            IPlayerWW playerWW = list.get(i);
 
             game.getPlayerWW()
                     .stream()
                     .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
-                    .map(PlayerWW::getRole)
+                    .map(IPlayerWW::getRole)
                     .filter(roles -> roles.isKey(RolesBase.SUCCUBUS.getKey()))
                     .forEach(role -> {
-                        if (((AffectedPlayers) role).getAffectedPlayers().contains(playerWW)) {
+                        if (((IAffectedPlayers) role).getAffectedPlayers().contains(playerWW)) {
                             if (!list.contains(role.getPlayerWW())) {
                                 list.add(role.getPlayerWW());
                             }
@@ -321,13 +321,13 @@ public class Succubus extends RolesNeutral implements Progress, AffectedPlayers,
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (event.getPlayerWWS().contains(getPlayerWW())) {
-            for (PlayerWW playerWW : affectedPlayer) {
+            for (IPlayerWW playerWW : affectedPlayer) {
                 event.addPlayer(playerWW);
             }
             return;
         }
 
-        for (PlayerWW playerWW : event.getPlayerWWS()) {
+        for (IPlayerWW playerWW : event.getPlayerWWS()) {
             if (affectedPlayer.contains(playerWW)) {
                 event.addPlayer(getPlayerWW());
                 break;

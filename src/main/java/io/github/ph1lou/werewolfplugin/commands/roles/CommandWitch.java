@@ -1,21 +1,21 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.events.WitchResurrectionEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
+import io.github.ph1lou.werewolfapi.events.roles.witch.WitchResurrectionEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandWitch implements Commands {
+public class CommandWitch implements ICommands {
 
 
     private final Main main;
@@ -29,11 +29,11 @@ public class CommandWitch implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        PlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
         if (playerWW == null) return;
 
-        Roles witch = playerWW.getRole();
+        IRole witch = playerWW.getRole();
 
 
         if (Bukkit.getPlayer(UUID.fromString(args[0])) == null) {
@@ -41,7 +41,7 @@ public class CommandWitch implements Commands {
             return;
         }
         UUID argUUID = UUID.fromString(args[0]);
-        PlayerWW playerWW1 = game.getPlayerWW(argUUID);
+        IPlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
         if (playerWW1 == null) {
             playerWW.sendMessageWithKey("werewolf.check.player_not_found");
@@ -62,7 +62,7 @@ public class CommandWitch implements Commands {
             return;
         }
 
-        ((Power) witch).setPower(false);
+        ((IPower) witch).setPower(false);
         WitchResurrectionEvent witchResurrectionEvent = new WitchResurrectionEvent(playerWW, playerWW1);
         Bukkit.getPluginManager().callEvent(witchResurrectionEvent);
 
@@ -71,7 +71,7 @@ public class CommandWitch implements Commands {
             return;
         }
 
-        ((AffectedPlayers) witch).addAffectedPlayer(playerWW1);
+        ((IAffectedPlayers) witch).addAffectedPlayer(playerWW1);
         game.resurrection(playerWW1);
         playerWW.sendMessageWithKey("werewolf.role.witch.resuscitation_perform",
                 playerWW1.getName());

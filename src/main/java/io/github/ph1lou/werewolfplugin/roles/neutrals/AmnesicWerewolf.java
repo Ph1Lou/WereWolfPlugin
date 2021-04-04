@@ -2,16 +2,16 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.Day;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.events.AmnesiacTransformationEvent;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
-import io.github.ph1lou.werewolfapi.events.EndPlayerMessageEvent;
-import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
-import io.github.ph1lou.werewolfapi.events.NewWereWolfEvent;
 import io.github.ph1lou.werewolfapi.events.NightEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
+import io.github.ph1lou.werewolfapi.events.roles.amnesiac.AmnesiacTransformationEvent;
+import io.github.ph1lou.werewolfapi.events.werewolf.NewWereWolfEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleNeutral;
 import io.github.ph1lou.werewolfapi.rolesattributs.Transformed;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -21,12 +21,12 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
-public class AmnesicWerewolf extends RolesNeutral implements Transformed {
+public class AmnesicWerewolf extends RoleNeutral implements Transformed {
 
 
     private boolean transformed = false;
 
-    public AmnesicWerewolf(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+    public AmnesicWerewolf(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
     }
 
@@ -54,7 +54,7 @@ public class AmnesicWerewolf extends RolesNeutral implements Transformed {
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 
-        PlayerWW playerWW = event.getPlayerWW();
+        IPlayerWW playerWW = event.getPlayerWW();
 
         if (!playerWW.getLastKiller().isPresent()) return;
 

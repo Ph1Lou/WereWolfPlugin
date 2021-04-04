@@ -1,7 +1,7 @@
 package io.github.ph1lou.werewolfplugin.commands.utilities;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfplugin.Main;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class CommandAnonymeChat implements Commands {
+public class CommandAnonymeChat implements ICommands {
 
 
     private final Main main;
@@ -34,7 +34,7 @@ public class CommandAnonymeChat implements Commands {
         for (String w : args) {
             sb.append(w).append(" ");
         }
-        ModerationManagerAPI moderationManager = game.getModerationManager();
+        IModerationManager moderationManager = game.getModerationManager();
 
         if (args.length > 2 && args[0].charAt(0) == '?') {
 

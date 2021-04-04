@@ -2,29 +2,30 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.LoverAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.ILover;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
-import io.github.ph1lou.werewolfapi.events.AmnesiacLoverDeathEvent;
-import io.github.ph1lou.werewolfapi.events.EnchantmentEvent;
-import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
-import io.github.ph1lou.werewolfapi.events.LoverDeathEvent;
-import io.github.ph1lou.werewolfapi.events.RevealLoversEvent;
-import io.github.ph1lou.werewolfapi.events.RivalAnnouncementEvent;
-import io.github.ph1lou.werewolfapi.events.RivalEvent;
-import io.github.ph1lou.werewolfapi.events.RivalLoverDeathEvent;
-import io.github.ph1lou.werewolfapi.events.RivalLoverEvent;
-import io.github.ph1lou.werewolfapi.events.StealEvent;
-import io.github.ph1lou.werewolfapi.events.SwapEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
+import io.github.ph1lou.werewolfapi.events.lovers.AmnesiacLoverDeathEvent;
+import io.github.ph1lou.werewolfapi.events.lovers.LoverDeathEvent;
+import io.github.ph1lou.werewolfapi.events.lovers.RevealLoversEvent;
+import io.github.ph1lou.werewolfapi.events.random_events.SwapEvent;
+import io.github.ph1lou.werewolfapi.events.roles.StealEvent;
+import io.github.ph1lou.werewolfapi.events.roles.rival.RivalAnnouncementEvent;
+import io.github.ph1lou.werewolfapi.events.roles.rival.RivalEvent;
+import io.github.ph1lou.werewolfapi.events.roles.rival.RivalLoverDeathEvent;
+import io.github.ph1lou.werewolfapi.events.roles.rival.RivalLoverEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleNeutral;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import io.github.ph1lou.werewolfplugin.roles.lovers.Lover;
 import org.bukkit.Bukkit;
@@ -42,17 +43,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class Rival extends RolesNeutral implements Power {
+public class Rival extends RoleNeutral implements IPower {
 
     @Nullable
-    private PlayerWW cupidWW = null;
+    private IPlayerWW cupidWW = null;
 
     @Nullable
-    private LoverAPI loverAPI = null;
+    private ILover lover = null;
 
     private boolean power = true;
 
-    public Rival(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+    public Rival(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
     }
 
@@ -72,7 +73,7 @@ public class Rival extends RolesNeutral implements Power {
 
         return new DescriptionBuilder(game, this)
                 .setDescription(() -> game.translate("werewolf.role.rival.description",
-                        game.getScore().conversion(
+                        Utils.conversion(
                                 Math.abs(game.getConfig().getTimerValue(TimersBase.ROLE_DURATION.getKey()))
                                         + Math.abs(game.getConfig().getTimerValue(TimersBase.RIVAL_DURATION.getKey())))))
                 .setItems(() -> game.translate("werewolf.role.rival.item"))
@@ -87,27 +88,27 @@ public class Rival extends RolesNeutral implements Power {
 
         if (event.getLovers().isEmpty()) return;
 
-        List<LoverAPI> loverAPIs = event.getLovers().stream()
-                .filter(loverAPI -> !loverAPI.isKey(LoverType.CURSED_LOVER.getKey()))
+        List<ILover> loverAPIs = event.getLovers().stream()
+                .filter(ILover -> !ILover.isKey(LoverType.CURSED_LOVER.getKey()))
                 .filter(loverAPI1 -> !loverAPI1.getLovers().contains(getPlayerWW()))
                 .collect(Collectors.toList());
 
         if (loverAPIs.isEmpty()) return;
 
-        this.loverAPI = loverAPIs.get((int) Math.floor(game.getRandom().nextFloat() * loverAPIs.size()));
+        this.lover = loverAPIs.get((int) Math.floor(game.getRandom().nextFloat() * loverAPIs.size()));
 
-        if (loverAPI instanceof Lover) {
+        if (lover instanceof Lover) {
             this.cupidWW = game.getPlayerWW()
-                    .stream().map(PlayerWW::getRole)
+                    .stream().map(IPlayerWW::getRole)
                     .filter(roles -> roles.isKey(RolesBase.CUPID.getKey()))
-                    .map(roles -> (AffectedPlayers) roles)
-                    .filter(affectedPlayers -> affectedPlayers.getAffectedPlayers().contains(loverAPI.getLovers().get(0)))
-                    .map(affectedPlayers -> ((Roles) affectedPlayers).getPlayerWW())
+                    .map(roles -> (IAffectedPlayers) roles)
+                    .filter(affectedPlayers -> affectedPlayers.getAffectedPlayers().contains(lover.getLovers().get(0)))
+                    .map(affectedPlayers -> ((IRole) affectedPlayers).getPlayerWW())
                     .findFirst()
                     .orElse(null);
         }
 
-        List<PlayerWW> lovers = new ArrayList<>(loverAPI.getLovers());
+        List<IPlayerWW> lovers = new ArrayList<>(lover.getLovers());
 
         getPlayerWW().sendMessageWithKey("werewolf.role.rival.lover", lovers.isEmpty() ? "" : game.translate(lovers.get(0).getRole().getKey()), lovers.size() == 2 ? game.translate(lovers.get(1).getRole().getKey()) : "");
     }
@@ -129,26 +130,26 @@ public class Rival extends RolesNeutral implements Power {
 
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
-        if (loverAPI == null) return;
+        if (lover == null) return;
 
-        List<PlayerWW> playerWWS = game.getPlayerWW()
+        List<IPlayerWW> IPlayerWWS = game.getPlayerWW()
                 .stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> !playerWW.equals(getPlayerWW()))
-                .filter(playerWW -> !loverAPI.getLovers().contains(playerWW))
+                .filter(playerWW -> !lover.getLovers().contains(playerWW))
                 .collect(Collectors.toList());
 
-        Collections.shuffle(playerWWS);
+        Collections.shuffle(IPlayerWWS);
 
-        List<PlayerWW> playerWWS1 = new ArrayList<>(playerWWS.subList(0, Math.min(3, playerWWS.size())));
+        List<IPlayerWW> IPlayerWWS1 = new ArrayList<>(IPlayerWWS.subList(0, Math.min(3, IPlayerWWS.size())));
 
-        playerWWS1.addAll(loverAPI.getLovers());
+        IPlayerWWS1.addAll(lover.getLovers());
 
-        Collections.shuffle(playerWWS1);
+        Collections.shuffle(IPlayerWWS1);
 
-        if (playerWWS1.isEmpty()) return;
+        if (IPlayerWWS1.isEmpty()) return;
 
-        RivalAnnouncementEvent rivalAnnouncementEvent = new RivalAnnouncementEvent(getPlayerWW(), playerWWS1);
+        RivalAnnouncementEvent rivalAnnouncementEvent = new RivalAnnouncementEvent(getPlayerWW(), IPlayerWWS1);
 
         Bukkit.getPluginManager().callEvent(rivalAnnouncementEvent);
 
@@ -157,7 +158,7 @@ public class Rival extends RolesNeutral implements Power {
             return;
         }
 
-        getPlayerWW().sendMessageWithKey("werewolf.role.rival.find_lovers", playerWWS1.get(0).getName(), playerWWS1.size() >= 2 ? playerWWS1.get(1).getName() : "", playerWWS1.size() >= 3 ? playerWWS1.get(2).getName() : "", playerWWS1.size() >= 4 ? playerWWS1.get(3).getName() : "", playerWWS1.size() >= 5 ? playerWWS1.get(4).getName() : "");
+        getPlayerWW().sendMessageWithKey("werewolf.role.rival.find_lovers", IPlayerWWS1.get(0).getName(), IPlayerWWS1.size() >= 2 ? IPlayerWWS1.get(1).getName() : "", IPlayerWWS1.size() >= 3 ? IPlayerWWS1.get(2).getName() : "", IPlayerWWS1.size() >= 4 ? IPlayerWWS1.get(3).getName() : "", IPlayerWWS1.size() >= 5 ? IPlayerWWS1.get(4).getName() : "");
     }
 
     @EventHandler
@@ -165,15 +166,15 @@ public class Rival extends RolesNeutral implements Power {
         loverDeath(event.getPlayerWW1(), event.getPlayerWW2());
     }
 
-    private void loverDeath(PlayerWW playerWW1, PlayerWW playerWW2) {
+    private void loverDeath(IPlayerWW playerWW1, IPlayerWW playerWW2) {
 
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (!power) return;
 
-        if (loverAPI == null) return;
+        if (lover == null) return;
 
-        if (!loverAPI.getLovers().contains(playerWW1) || !loverAPI.getLovers().contains(playerWW2)) return;
+        if (!lover.getLovers().contains(playerWW1) || !lover.getLovers().contains(playerWW2)) return;
 
 
         int health = 5;
@@ -192,8 +193,8 @@ public class Rival extends RolesNeutral implements Power {
 
 
         getPlayerWW().sendMessageWithKey("werewolf.role.rival.lover_death");
-        Bukkit.getPluginManager().callEvent(new RivalLoverDeathEvent(getPlayerWW(), new ArrayList<>(loverAPI.getLovers())));
-        loverAPI = null;
+        Bukkit.getPluginManager().callEvent(new RivalLoverDeathEvent(getPlayerWW(), new ArrayList<>(lover.getLovers())));
+        lover = null;
     }
 
     @EventHandler
@@ -219,13 +220,13 @@ public class Rival extends RolesNeutral implements Power {
 
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
-        if (loverAPI == null) return;
+        if (lover == null) return;
 
-        if (!loverAPI.getLovers().contains(event.getPlayerWW())) return;
+        if (!lover.getLovers().contains(event.getPlayerWW())) return;
 
-        PlayerWW playerWW = event.getPlayerWW();
+        IPlayerWW playerWW = event.getPlayerWW();
 
-        Optional<PlayerWW> killerWW = playerWW.getLastKiller();
+        Optional<IPlayerWW> killerWW = playerWW.getLastKiller();
 
         if (!killerWW.isPresent()) {
             return;
@@ -242,9 +243,9 @@ public class Rival extends RolesNeutral implements Power {
             return;
         }
 
-        if (loverAPI.swap(playerWW, getPlayerWW())) {
-            getPlayerWW().addLover(loverAPI);
-            playerWW.removeLover(loverAPI);
+        if (lover.swap(playerWW, getPlayerWW())) {
+            getPlayerWW().addLover(lover);
+            playerWW.removeLover(lover);
             power = false;
         }
     }
@@ -272,9 +273,8 @@ public class Rival extends RolesNeutral implements Power {
                     .append(ChatColor.WHITE)
                     .append(game.translate(RolesBase.CUPID.getKey()))
                     .append(" ")
-                    .append(game.getScore()
-                            .updateArrow(player,
-                                    cupidWW.getLocation()));
+                    .append(Utils.updateArrow(player,
+                            cupidWW.getLocation()));
         }
 
         event.setActionBar(stringBuilder.toString());

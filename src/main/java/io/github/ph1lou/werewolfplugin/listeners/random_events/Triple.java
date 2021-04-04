@@ -1,14 +1,14 @@
 package io.github.ph1lou.werewolfplugin.listeners.random_events;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.ListenerManager;
-import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.events.RevealLoversEvent;
-import io.github.ph1lou.werewolfapi.events.TroupleEvent;
+import io.github.ph1lou.werewolfapi.events.lovers.RevealLoversEvent;
+import io.github.ph1lou.werewolfapi.events.random_events.TroupleEvent;
 import io.github.ph1lou.werewolfplugin.roles.lovers.Lover;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -33,8 +33,8 @@ public class Triple extends ListenerManager {
             if (game.isState(StateGame.GAME)) {
                 if (isRegister()) {
                     List<Lover> lovers = game.getLoversManager().getLovers().stream()
-                            .filter(loverAPI -> loverAPI.isKey(LoverType.LOVER.getKey()))
-                            .map(loverAPI -> (Lover) loverAPI)
+                            .filter(ILover -> ILover.isKey(LoverType.LOVER.getKey()))
+                            .map(ILover -> (Lover) ILover)
                             .collect(Collectors.toList());
 
                     if (lovers.isEmpty()) return;
@@ -42,14 +42,14 @@ public class Triple extends ListenerManager {
                     Lover lover = lovers.get((int) Math.floor(
                             game.getRandom().nextFloat() * lovers.size()));
 
-                    List<PlayerWW> playerWWList = game.getPlayerWW().stream()
+                    List<IPlayerWW> IPlayerWWList = game.getPlayerWW().stream()
                             .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                             .filter(playerWW -> playerWW.getLovers().isEmpty())
                             .collect(Collectors.toList());
 
-                    if (playerWWList.isEmpty()) return;
+                    if (IPlayerWWList.isEmpty()) return;
 
-                    PlayerWW playerWW = playerWWList.get((int) Math.floor(game.getRandom().nextDouble() * playerWWList.size()));
+                    IPlayerWW playerWW = IPlayerWWList.get((int) Math.floor(game.getRandom().nextDouble() * IPlayerWWList.size()));
 
                     TroupleEvent troupleEvent = new TroupleEvent(playerWW, new HashSet<>(lover.getLovers()));
                     Bukkit.getPluginManager().callEvent(troupleEvent);

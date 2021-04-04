@@ -1,9 +1,9 @@
 package io.github.ph1lou.werewolfplugin.listeners;
 
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
-import io.github.ph1lou.werewolfapi.events.GoldenAppleParticleEvent;
+import io.github.ph1lou.werewolfapi.events.game.utils.GoldenAppleParticleEvent;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
@@ -67,7 +67,7 @@ public class SmallFeaturesListener implements Listener {
     public void onAppleEat(PlayerItemConsumeEvent event) {
 
         Player player = event.getPlayer();
-        PlayerWW playerWW = game.getPlayerWW(player.getUniqueId());
+        IPlayerWW playerWW = game.getPlayerWW(player.getUniqueId());
 
         if (playerWW == null) return;
 
@@ -86,12 +86,14 @@ public class SmallFeaturesListener implements Listener {
                 }
 
                 if (game.getConfig().getGoldenAppleParticles() == 1) {
+
                     GoldenAppleParticleEvent goldenAppleParticleEvent =
                             new GoldenAppleParticleEvent(playerWW);
 
                     Bukkit.getPluginManager().callEvent(goldenAppleParticleEvent);
 
-                    if (!event.isCancelled()) return;
+                    if (!goldenAppleParticleEvent.isCancelled()) return;
+
                 }
 
                 if (player.hasPotionEffect(PotionEffectType.ABSORPTION)) {

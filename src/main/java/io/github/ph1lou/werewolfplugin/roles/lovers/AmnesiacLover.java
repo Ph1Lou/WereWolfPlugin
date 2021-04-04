@@ -1,21 +1,21 @@
 package io.github.ph1lou.werewolfplugin.roles.lovers;
 
 import com.google.common.collect.Sets;
-import io.github.ph1lou.werewolfapi.LoverAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.ILover;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
-import io.github.ph1lou.werewolfapi.events.AmnesiacLoverDeathEvent;
-import io.github.ph1lou.werewolfapi.events.AroundLover;
-import io.github.ph1lou.werewolfapi.events.EndPlayerMessageEvent;
-import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
-import io.github.ph1lou.werewolfapi.events.RevealAmnesiacLoversEvent;
-import io.github.ph1lou.werewolfapi.events.UpdateEvent;
-import io.github.ph1lou.werewolfapi.events.UpdateModeratorNameTag;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.game.permissions.UpdateModeratorNameTag;
+import io.github.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
+import io.github.ph1lou.werewolfapi.events.lovers.AmnesiacLoverDeathEvent;
+import io.github.ph1lou.werewolfapi.events.lovers.AroundLover;
+import io.github.ph1lou.werewolfapi.events.lovers.RevealAmnesiacLoversEvent;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -29,26 +29,26 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-public class AmnesiacLover implements LoverAPI, Listener {
+public class AmnesiacLover implements ILover, Listener {
 
     private final WereWolfAPI game;
-    private PlayerWW amnesiacLover1;
-    private PlayerWW amnesiacLover2;
+    private IPlayerWW amnesiacLover1;
+    private IPlayerWW amnesiacLover2;
     private boolean find = false;
     private boolean death = false;
 
-    public AmnesiacLover(WereWolfAPI game, PlayerWW amnesiacLover1, PlayerWW amnesiacLover2) {
+    public AmnesiacLover(WereWolfAPI game, IPlayerWW amnesiacLover1, IPlayerWW amnesiacLover2) {
         this.game = game;
         this.amnesiacLover1 = amnesiacLover1;
         this.amnesiacLover2 = amnesiacLover2;
         getLovers().forEach(playerWW -> playerWW.addLover(this));
     }
 
-    public List<? extends PlayerWW> getLovers() {
+    public List<? extends IPlayerWW> getLovers() {
         return new ArrayList<>(Arrays.asList(amnesiacLover1, amnesiacLover2));
     }
 
-    public PlayerWW getOtherLover(PlayerWW playerWW) {
+    public IPlayerWW getOtherLover(IPlayerWW playerWW) {
         return playerWW.equals(amnesiacLover1) ? amnesiacLover2 : amnesiacLover1;
     }
 
@@ -65,7 +65,7 @@ public class AmnesiacLover implements LoverAPI, Listener {
 
         if (!find) return;
 
-        PlayerWW playerWW1 = getOtherLover(event.getPlayerWW());
+        IPlayerWW playerWW1 = getOtherLover(event.getPlayerWW());
 
         Bukkit.broadcastMessage(game.translate("werewolf.role.lover.lover_death",
                 playerWW1.getName()));
@@ -76,38 +76,38 @@ public class AmnesiacLover implements LoverAPI, Listener {
     }
 
 
-    @EventHandler
-    public void onDetectionAmnesiacLover(UpdateEvent event) {
+    @Override
+    public void second() {
 
         if (find) return;
 
-        if(death) return;
+        if (death) return;
 
         Player player1 = Bukkit.getPlayer(amnesiacLover1.getUUID());
         Player player2 = Bukkit.getPlayer(amnesiacLover2.getUUID());
 
         if (player1 == null || player2 == null) return;
 
-        try {
-            if (player1.getLocation().distance(player2.getLocation()) <
-                    game.getConfig().getDistanceAmnesiacLovers()) {
+        if (!player1.getWorld().equals(player2.getWorld())) {
+            return;
+        }
 
-                Bukkit.getPluginManager().callEvent(new RevealAmnesiacLoversEvent(
-                        Sets.newHashSet(amnesiacLover1, amnesiacLover2)));
+        if (player1.getLocation().distance(player2.getLocation()) <
+                game.getConfig().getDistanceAmnesiacLovers()) {
 
-                find = true;
-                announceAmnesiacLoversOnJoin(amnesiacLover1);
-                announceAmnesiacLoversOnJoin(amnesiacLover2);
-                game.getConfig().addOneLover(LoverType.AMNESIAC_LOVER.getKey());
-                game.checkVictory();
+            Bukkit.getPluginManager().callEvent(new RevealAmnesiacLoversEvent(
+                    Sets.newHashSet(amnesiacLover1, amnesiacLover2)));
 
-            }
-        } catch (Exception ignored) {
+            find = true;
+            announceAmnesiacLoversOnJoin(amnesiacLover1);
+            announceAmnesiacLoversOnJoin(amnesiacLover2);
+            game.getConfig().addOneLover(LoverType.AMNESIAC_LOVER.getKey());
+            game.checkVictory();
 
         }
     }
 
-    public void announceAmnesiacLoversOnJoin(PlayerWW playerWW) {
+    public void announceAmnesiacLoversOnJoin(IPlayerWW playerWW) {
 
         if (!find) return;
 
@@ -126,7 +126,7 @@ public class AmnesiacLover implements LoverAPI, Listener {
 
         StringBuilder sb = new StringBuilder(event.getSuffix());
 
-        PlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID());
+        IPlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID());
 
         if (playerWW == null) return;
 
@@ -141,7 +141,7 @@ public class AmnesiacLover implements LoverAPI, Listener {
         event.setSuffix(sb.toString());
     }
 
-    private void buildActionbarLover(Player player, StringBuilder sb, List<PlayerWW> list) {
+    private void buildActionbarLover(Player player, StringBuilder sb, List<IPlayerWW> list) {
 
         list
                 .stream()
@@ -151,9 +151,8 @@ public class AmnesiacLover implements LoverAPI, Listener {
                         .append(playerWW.getName())
                         .append(" "))
                 .forEach(playerWW -> sb
-                        .append(game.getScore()
-                                .updateArrow(player,
-                                        playerWW.getLocation())));
+                        .append(Utils.updateArrow(player,
+                                playerWW.getLocation())));
     }
 
     @EventHandler
@@ -166,7 +165,7 @@ public class AmnesiacLover implements LoverAPI, Listener {
         if (!game.isState(StateGame.GAME)) return;
 
         UUID uuid = event.getPlayerUUID();
-        PlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
         if (!getLovers().contains(playerWW)) return;
 
@@ -194,11 +193,11 @@ public class AmnesiacLover implements LoverAPI, Listener {
     @EventHandler
     public void onEndPlayerMessage(EndPlayerMessageEvent event) {
 
-        PlayerWW playerWW = event.getPlayerWW();
+        IPlayerWW playerWW = event.getPlayerWW();
 
         if (!getLovers().contains(playerWW)) return;
 
-        PlayerWW playerWW1 = getOtherLover(playerWW);
+        IPlayerWW playerWW1 = getOtherLover(playerWW);
 
         StringBuilder sb = event.getEndMessage();
 
@@ -226,7 +225,7 @@ public class AmnesiacLover implements LoverAPI, Listener {
     }
 
     @Override
-    public boolean swap(PlayerWW playerWW, PlayerWW playerWW1) {
+    public boolean swap(IPlayerWW playerWW, IPlayerWW playerWW1) {
 
         if (playerWW.equals(playerWW1)) return false;
 
@@ -241,7 +240,7 @@ public class AmnesiacLover implements LoverAPI, Listener {
         }
 
 
-        for (PlayerWW playerWW2 : getLovers()) {
+        for (IPlayerWW playerWW2 : getLovers()) {
             announceAmnesiacLoversOnJoin(playerWW2);
         }
         return true;
@@ -252,7 +251,7 @@ public class AmnesiacLover implements LoverAPI, Listener {
 
         if (death) return;
 
-        for (PlayerWW playerWW : event.getPlayerWWS()) {
+        for (IPlayerWW playerWW : event.getPlayerWWS()) {
             if (getLovers().contains(playerWW)) {
                 event.addPlayer(getOtherLover(playerWW));
                 break;

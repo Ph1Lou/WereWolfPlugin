@@ -2,17 +2,17 @@ package io.github.ph1lou.werewolfplugin;
 
 import fr.minuskube.inv.InventoryManager;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.LangManager;
+import io.github.ph1lou.werewolfapi.ILanguageManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
-import io.github.ph1lou.werewolfapi.registers.RegisterManager;
+import io.github.ph1lou.werewolfapi.registers.IRegisterManager;
 import io.github.ph1lou.werewolfapi.statistics.GameReview;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.commands.Admin;
 import io.github.ph1lou.werewolfplugin.commands.Command;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import io.github.ph1lou.werewolfplugin.game.MapManager;
-import io.github.ph1lou.werewolfplugin.save.Lang;
+import io.github.ph1lou.werewolfplugin.save.LanguageManager;
 import io.github.ph1lou.werewolfplugin.statistiks.Events;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
@@ -22,9 +22,9 @@ import java.util.Objects;
 
 public class Main extends JavaPlugin implements GetWereWolfAPI {
 
-    private final Lang lang = new Lang(this);
+    private final LanguageManager languageManager = new LanguageManager(this);
     private GameManager currentGame;
-    private final Register register = new Register(this);
+    private final RegisterManager registerManager = new RegisterManager(this);
     private final InventoryManager invManager = new InventoryManager(this);
     private GameReview currentGameReview;
 
@@ -40,12 +40,12 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
 
         this.invManager.init();
         Bukkit.getPluginManager().registerEvents(new Events(this), this);
-        Bukkit.getPluginManager().registerEvents(lang, this);
+        Bukkit.getPluginManager().registerEvents(languageManager, this);
         currentGame = new GameManager(this);
         Objects.requireNonNull(getCommand("a")).setExecutor(new Admin(this));
         Objects.requireNonNull(getCommand("ww")).setExecutor(new Command(this));
 
-        MapManager mapManager = currentGame.getMapManager();
+        MapManager mapManager = (MapManager) currentGame.getMapManager();
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, mapManager::init);
         Bukkit.getServicesManager()
                 .register(GetWereWolfAPI.class,
@@ -73,13 +73,13 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
     }
 
     @Override
-    public RegisterManager getRegisterManager() {
-        return register;
+    public IRegisterManager getRegisterManager() {
+        return registerManager;
     }
 
     @Override
-    public LangManager getLangManager() {
-        return lang;
+    public ILanguageManager getLangManager() {
+        return languageManager;
     }
 
 

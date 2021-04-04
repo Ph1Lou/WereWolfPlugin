@@ -1,13 +1,13 @@
 package io.github.ph1lou.werewolfplugin.commands.admin;
 
-import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.ICommands;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
 
-public class CommandChange implements Commands {
+public class CommandChange implements ICommands {
 
 
     private final Main main;

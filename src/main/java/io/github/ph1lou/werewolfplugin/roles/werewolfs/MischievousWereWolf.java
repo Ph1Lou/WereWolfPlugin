@@ -3,24 +3,23 @@ package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.Day;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.events.DayWillComeEvent;
-import io.github.ph1lou.werewolfapi.events.EnchantmentEvent;
-import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
-import io.github.ph1lou.werewolfapi.events.GoldenAppleParticleEvent;
-import io.github.ph1lou.werewolfapi.events.InvisibleEvent;
 import io.github.ph1lou.werewolfapi.events.NightEvent;
-import io.github.ph1lou.werewolfapi.events.ResurrectionEvent;
-import io.github.ph1lou.werewolfapi.events.StealEvent;
-import io.github.ph1lou.werewolfapi.events.UpdateEvent;
 import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTag;
-import io.github.ph1lou.werewolfapi.rolesattributs.InvisibleState;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesWereWolf;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.ResurrectionEvent;
+import io.github.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
+import io.github.ph1lou.werewolfapi.events.game.utils.GoldenAppleParticleEvent;
+import io.github.ph1lou.werewolfapi.events.roles.InvisibleEvent;
+import io.github.ph1lou.werewolfapi.events.roles.StealEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IInvisible;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleWereWolf;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Material;
@@ -37,11 +36,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class MischievousWereWolf extends RolesWereWolf implements InvisibleState {
+public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
 
     private boolean invisible = false;
 
-    public MischievousWereWolf(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+    public MischievousWereWolf(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
     }
 
@@ -66,8 +65,8 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
         getPlayerWW().sendMessageWithKey("werewolf.role.little_girl.remove_armor");
     }
 
-    @EventHandler
-    public void onUpdate(UpdateEvent event) {
+    @Override
+    public void second() {
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -90,17 +89,17 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
         game.getPlayerWW()
                 .stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
-                .map(PlayerWW::getRole)
+                .map(IPlayerWW::getRole)
                 .filter(roles -> !roles.equals(this))
-                .filter(roles -> roles instanceof InvisibleState)
-                .map(roles -> (InvisibleState) roles)
-                .filter(InvisibleState::isInvisible)
+                .filter(roles -> roles instanceof IInvisible)
+                .map(roles -> (IInvisible) roles)
+                .filter(IInvisible::isInvisible)
                 .map(invisibleState -> {
-                    if (((Roles) invisibleState).isWereWolf()) {
+                    if (((IRole) invisibleState).isWereWolf()) {
                         return new Pair<>(Material.REDSTONE_BLOCK,
-                                ((Roles) invisibleState).getPlayerUUID());
+                                ((IRole) invisibleState).getPlayerUUID());
                     } else return new Pair<>(Material.LAPIS_BLOCK,
-                            ((Roles) invisibleState).getPlayerUUID());
+                            ((IRole) invisibleState).getPlayerUUID());
                 })
                 .map(objects -> new Pair<>(objects.getValue0(),
                         Bukkit.getPlayer(objects.getValue1())))
@@ -142,6 +141,7 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
         if (game.isDay(Day.DAY)) return;
 
         event.setCancelled(true);
+
     }
 
     @EventHandler
@@ -223,7 +223,7 @@ public class MischievousWereWolf extends RolesWereWolf implements InvisibleState
 
         Player player = (Player) event.getPlayer();
         UUID uuid = player.getUniqueId();
-        PlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
         if (!uuid.equals(getPlayerUUID())) return;
 

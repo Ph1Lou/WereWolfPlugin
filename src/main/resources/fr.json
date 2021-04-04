@@ -592,7 +592,7 @@
           "timer": "[§cLG UHC§r] Le temps pour parler dans le chat des Loups Garous est écoulé",
           "not_access": "[§cLG UHC§r] Vous ne pouvez pas parler dans le chat des Loups Garous",
           "disable": "[§cLG UHC§r] Le chat des Loups Garous est désactivé",
-          "number": "§b%d§r messages par cycle \ndans le chat Loup Garou",
+          "number": "§b%d§r messages par cycle dans le chat Loup Garou",
           "speak_number": "[§cLG UHC§r] Vous ne pouvez parler que §b%s§r fois par cycle"
         },
         "stuff_start": {

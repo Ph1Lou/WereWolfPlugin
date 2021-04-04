@@ -1,7 +1,7 @@
 package io.github.ph1lou.werewolfplugin.game;
 
-import io.github.ph1lou.werewolfapi.MapManagerAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IMapManager;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.worldloader.WorldFillTask;
@@ -23,7 +23,7 @@ import java.io.File;
 import java.io.IOException;
 
 
-public class MapManager implements MapManagerAPI {
+public class MapManager implements IMapManager {
 
     private final Main main;
     private World world;
@@ -175,7 +175,7 @@ public class MapManager implements MapManagerAPI {
 
 
     @Override
-    public void transportation(PlayerWW playerWW, double d) {
+    public void transportation(IPlayerWW playerWW, double d) {
 
         Player player = Bukkit.getPlayer(playerWW.getUUID());
 

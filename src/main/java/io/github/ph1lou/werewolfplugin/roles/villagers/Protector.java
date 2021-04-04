@@ -3,14 +3,15 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.events.NightEvent;
-import io.github.ph1lou.werewolfapi.events.StealEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesWithLimitedSelectionDuration;
+import io.github.ph1lou.werewolfapi.events.roles.StealEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleWithLimitedSelectionDuration;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -22,19 +23,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Protector extends RolesWithLimitedSelectionDuration implements AffectedPlayers {
+public class Protector extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
-    private final List<PlayerWW> affectedPlayer = new ArrayList<>();
-    private PlayerWW last;
+    private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
+    private IPlayerWW last;
 
 
-    public Protector(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+    public Protector(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
         setPower(false);
     }
 
     @Override
-    public void addAffectedPlayer(PlayerWW playerWW) {
+    public void addAffectedPlayer(IPlayerWW playerWW) {
         this.affectedPlayer.add(playerWW);
         this.last = playerWW;
     }
@@ -47,7 +48,7 @@ public class Protector extends RolesWithLimitedSelectionDuration implements Affe
     }
 
     @Override
-    public void removeAffectedPlayer(PlayerWW playerWW) {
+    public void removeAffectedPlayer(IPlayerWW playerWW) {
         this.affectedPlayer.remove(playerWW);
     }
 
@@ -57,7 +58,7 @@ public class Protector extends RolesWithLimitedSelectionDuration implements Affe
     }
 
     @Override
-    public List<PlayerWW> getAffectedPlayers() {
+    public List<IPlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
@@ -82,7 +83,7 @@ public class Protector extends RolesWithLimitedSelectionDuration implements Affe
 
         getPlayerWW().sendMessageWithKey(
                 "werewolf.role.protector.protection_message",
-                game.getScore().conversion(
+                Utils.conversion(
                         game.getConfig().getTimerValue(TimersBase.POWER_DURATION.getKey())));
     }
 
@@ -117,7 +118,7 @@ public class Protector extends RolesWithLimitedSelectionDuration implements Affe
         if (!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
         UUID uuid = player.getUniqueId();
-        PlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
         if (playerWW == null) return;
 

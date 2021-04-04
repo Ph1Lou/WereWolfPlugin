@@ -1,16 +1,16 @@
 package io.github.ph1lou.werewolfplugin.listeners.configs;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.ListenerManager;
-import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
-import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
-import io.github.ph1lou.werewolfapi.events.LoneWolfEvent;
 import io.github.ph1lou.werewolfapi.events.WereWolfListEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
+import io.github.ph1lou.werewolfapi.events.game.configs.LoneWolfEvent;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.plugin.Plugin;
@@ -40,15 +40,15 @@ public class LoneWolf extends ListenerManager {
 
         WereWolfAPI game = main.getWereWolfAPI();
 
-        List<Roles> roleWWs = game.getPlayerWW().stream()
+        List<IRole> roleWWs = game.getPlayerWW().stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
-                .map(PlayerWW::getRole)
-                .filter(Roles::isWereWolf)
+                .map(IPlayerWW::getRole)
+                .filter(IRole::isWereWolf)
                 .collect(Collectors.toList());
 
         if (roleWWs.isEmpty()) return;
 
-        Roles role = roleWWs.get((int) Math.floor(game.getRandom().nextDouble() * roleWWs.size()));
+        IRole role = roleWWs.get((int) Math.floor(game.getRandom().nextDouble() * roleWWs.size()));
 
         LoneWolfEvent event = new LoneWolfEvent((role.getPlayerWW()));
 

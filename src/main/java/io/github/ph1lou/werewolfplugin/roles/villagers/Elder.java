@@ -3,15 +3,15 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.Camp;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
-import io.github.ph1lou.werewolfapi.events.ElderResurrectionEvent;
 import io.github.ph1lou.werewolfapi.events.NightEvent;
-import io.github.ph1lou.werewolfapi.events.SecondDeathEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
+import io.github.ph1lou.werewolfapi.events.roles.elder.ElderResurrectionEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,11 +20,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
-public class Elder extends RolesVillage implements Power {
+public class Elder extends RoleVillage implements IPower {
 
     private boolean power = true;
 
-    public Elder(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+    public Elder(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
     }
 
@@ -93,7 +93,7 @@ public class Elder extends RolesVillage implements Power {
 
         if (!hasPower()) return;
 
-        Optional<PlayerWW> killerWW = getPlayerWW().getLastKiller();
+        Optional<IPlayerWW> killerWW = getPlayerWW().getLastKiller();
 
         ElderResurrectionEvent elderResurrectionEvent =
                 new ElderResurrectionEvent(getPlayerWW(),

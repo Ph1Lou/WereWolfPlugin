@@ -3,25 +3,24 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.Day;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
 import io.github.ph1lou.werewolfapi.events.DayWillComeEvent;
-import io.github.ph1lou.werewolfapi.events.EnchantmentEvent;
-import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
-import io.github.ph1lou.werewolfapi.events.GoldenAppleParticleEvent;
-import io.github.ph1lou.werewolfapi.events.InvisibleEvent;
 import io.github.ph1lou.werewolfapi.events.NightEvent;
-import io.github.ph1lou.werewolfapi.events.ResurrectionEvent;
-import io.github.ph1lou.werewolfapi.events.StealEvent;
-import io.github.ph1lou.werewolfapi.events.UpdateEvent;
 import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTag;
-import io.github.ph1lou.werewolfapi.events.WereWolfChatEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.InvisibleState;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.ResurrectionEvent;
+import io.github.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
+import io.github.ph1lou.werewolfapi.events.game.utils.GoldenAppleParticleEvent;
+import io.github.ph1lou.werewolfapi.events.roles.InvisibleEvent;
+import io.github.ph1lou.werewolfapi.events.roles.StealEvent;
+import io.github.ph1lou.werewolfapi.events.werewolf.WereWolfChatEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IInvisible;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Material;
@@ -39,11 +38,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class LittleGirl extends RolesVillage implements InvisibleState {
+public class LittleGirl extends RoleVillage implements IInvisible {
 
     private boolean invisible = false;
 
-    public LittleGirl(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+    public LittleGirl(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
     }
 
@@ -65,7 +64,6 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
-
         if (!isInvisible()) return;
 
         getPlayerWW().removePotionEffect(PotionEffectType.INVISIBILITY);
@@ -97,7 +95,6 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
         if (game.isDay(Day.DAY)) return;
 
         event.setCancelled(true);
-
     }
 
 
@@ -113,8 +110,8 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
                 "werewolf.role.little_girl.soon_to_be_day");
     }
 
-    @EventHandler
-    public void onUpdate(UpdateEvent event) {
+    @Override
+    public void second() {
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -137,17 +134,17 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
         game.getPlayerWW()
                 .stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
-                .map(PlayerWW::getRole)
+                .map(IPlayerWW::getRole)
                 .filter(roles -> !roles.equals(this))
-                .filter(roles -> roles instanceof InvisibleState)
-                .map(roles -> (InvisibleState) roles)
-                .filter(InvisibleState::isInvisible)
-                .map(invisibleState -> {
-                    if (((Roles) invisibleState).isWereWolf()) {
+                .filter(roles -> roles instanceof IInvisible)
+                .map(roles -> (IInvisible) roles)
+                .filter(IInvisible::isInvisible)
+                .map(IInvisible -> {
+                    if (((IRole) IInvisible).isWereWolf()) {
                         return new Pair<>(Material.REDSTONE_BLOCK,
-                                ((Roles) invisibleState).getPlayerUUID());
+                                ((IRole) IInvisible).getPlayerUUID());
                     } else return new Pair<>(Material.LAPIS_BLOCK,
-                            ((Roles) invisibleState).getPlayerUUID());
+                            ((IRole) IInvisible).getPlayerUUID());
                 })
                 .map(objects -> new Pair<>(objects.getValue0(),
                         Bukkit.getPlayer(objects.getValue1())))
@@ -271,7 +268,7 @@ public class LittleGirl extends RolesVillage implements InvisibleState {
                         false));
             }
             player.removePotionEffect(PotionEffectType.INVISIBILITY);
-            setInvisible(false);
+            this.setInvisible(false);
             Bukkit.getPluginManager().callEvent(
                     new InvisibleEvent(getPlayerWW(), false));
         }

@@ -1,9 +1,9 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
-import io.github.ph1lou.werewolfapi.events.HostEvent;
+import io.github.ph1lou.werewolfapi.events.game.permissions.HostEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandHost implements Commands {
+public class CommandHost implements ICommands {
 
 
     private final Main main;
@@ -24,7 +24,7 @@ public class CommandHost implements Commands {
     public void execute(Player player, String[] args) {
 
         GameManager game = (GameManager) main.getWereWolfAPI();
-        ModerationManagerAPI moderationManager = game.getModerationManager();
+        IModerationManager moderationManager = game.getModerationManager();
         Player host = Bukkit.getPlayer(args[0]);
 
         if (host == null) {

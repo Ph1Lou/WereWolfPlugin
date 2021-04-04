@@ -1,15 +1,15 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.events.BeginSniffEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.LimitedUse;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.Progress;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
+import io.github.ph1lou.werewolfapi.events.roles.fox.BeginSniffEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.ILimitedUse;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.IProgress;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandFox implements Commands {
+public class CommandFox implements ICommands {
 
 
     private final Main main;
@@ -31,11 +31,11 @@ public class CommandFox implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        PlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
         if (playerWW == null) return;
 
-        Roles fox = playerWW.getRole();
+        IRole fox = playerWW.getRole();
 
         Player playerArg = Bukkit.getPlayer(args[0]);
 
@@ -44,7 +44,7 @@ public class CommandFox implements Commands {
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
-        PlayerWW playerWW1 = game.getPlayerWW(argUUID);
+        IPlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
         if (argUUID.equals(uuid)) {
             playerWW.sendMessageWithKey("werewolf.check.not_yourself");
@@ -69,13 +69,13 @@ public class CommandFox implements Commands {
         }
 
 
-        if (((LimitedUse) fox).getUse() >= game.getConfig().getUseOfFlair()) {
+        if (((ILimitedUse) fox).getUse() >= game.getConfig().getUseOfFlair()) {
             playerWW.sendMessageWithKey("werewolf.check.power");
             return;
         }
 
-        ((Power) fox).setPower(false);
-        ((LimitedUse) fox).setUse(((LimitedUse) fox).getUse() + 1);
+        ((IPower) fox).setPower(false);
+        ((ILimitedUse) fox).setUse(((ILimitedUse) fox).getUse() + 1);
 
         BeginSniffEvent beginSniffEvent = new BeginSniffEvent(playerWW, playerWW1);
         Bukkit.getPluginManager().callEvent(beginSniffEvent);
@@ -85,9 +85,9 @@ public class CommandFox implements Commands {
             return;
         }
 
-        ((AffectedPlayers) fox).clearAffectedPlayer();
-        ((AffectedPlayers) fox).addAffectedPlayer(playerWW1);
-        ((Progress) fox).setProgress(0f);
+        ((IAffectedPlayers) fox).clearAffectedPlayer();
+        ((IAffectedPlayers) fox).addAffectedPlayer(playerWW1);
+        ((IProgress) fox).setProgress(0f);
 
         playerWW.sendMessageWithKey("werewolf.role.fox.smell_beginning", playerArg.getName());
     }

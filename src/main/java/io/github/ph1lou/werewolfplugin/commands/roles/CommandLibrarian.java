@@ -1,13 +1,13 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.events.LibrarianRequestEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.LimitedUse;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
+import io.github.ph1lou.werewolfapi.events.roles.librarian.LibrarianRequestEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.ILimitedUse;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfplugin.Main;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandLibrarian implements Commands {
+public class CommandLibrarian implements ICommands {
 
 
     private final Main main;
@@ -31,11 +31,11 @@ public class CommandLibrarian implements Commands {
         WereWolfAPI game = main.getWereWolfAPI();
         String playername = player.getName();
         UUID uuid = player.getUniqueId();
-        PlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
         if (playerWW == null) return;
 
-        Roles librarian = playerWW.getRole();
+        IRole librarian = playerWW.getRole();
 
         if (args[0].equalsIgnoreCase(playername)) {
             playerWW.sendMessageWithKey("werewolf.check.not_yourself");
@@ -50,7 +50,7 @@ public class CommandLibrarian implements Commands {
         }
 
         UUID argUUID = selectionPlayer.getUniqueId();
-        PlayerWW playerWW1 = game.getPlayerWW(argUUID);
+        IPlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
         if (playerWW1 == null ||
                 !playerWW1.isState(StatePlayer.ALIVE)) {
@@ -59,18 +59,18 @@ public class CommandLibrarian implements Commands {
             return;
         }
 
-        if (((AffectedPlayers) librarian).getAffectedPlayers().contains(playerWW1)) {
+        if (((IAffectedPlayers) librarian).getAffectedPlayers().contains(playerWW1)) {
             playerWW.sendMessageWithKey("werewolf.role.librarian.waiting");
             return;
         }
 
 
-       if (((LimitedUse)librarian).getUse() >= 3) {
-           playerWW.sendMessageWithKey("werewolf.check.power");
+        if (((ILimitedUse) librarian).getUse() >= 3) {
+            playerWW.sendMessageWithKey("werewolf.check.power");
             return;
         }
 
-        ((LimitedUse) librarian).setUse(((LimitedUse) librarian).getUse() + 1);
+        ((ILimitedUse) librarian).setUse(((ILimitedUse) librarian).getUse() + 1);
         LibrarianRequestEvent librarianRequestEvent = new LibrarianRequestEvent(playerWW, playerWW1);
         Bukkit.getPluginManager().callEvent(librarianRequestEvent);
 
@@ -79,7 +79,7 @@ public class CommandLibrarian implements Commands {
             return;
         }
 
-        ((AffectedPlayers) librarian).addAffectedPlayer(playerWW1);
+        ((IAffectedPlayers) librarian).addAffectedPlayer(playerWW1);
 
         TextComponent contributionMessage = new TextComponent(game.translate(
                 "werewolf.role.librarian.message"));

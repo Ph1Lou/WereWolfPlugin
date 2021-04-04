@@ -1,7 +1,7 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandWhitelist implements Commands {
+public class CommandWhitelist implements ICommands {
 
     private final Main main;
 
@@ -23,7 +23,7 @@ public class CommandWhitelist implements Commands {
 
 
         GameManager game = (GameManager) main.getWereWolfAPI();
-        ModerationManagerAPI moderationManager = game.getModerationManager();
+        IModerationManager moderationManager = game.getModerationManager();
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {

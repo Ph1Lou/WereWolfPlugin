@@ -2,15 +2,15 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.Camp;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
-import io.github.ph1lou.werewolfapi.events.GrowlEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.Display;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
+import io.github.ph1lou.werewolfapi.events.roles.bear_trainer.GrowlEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IDisplay;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -22,9 +22,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class BearTrainer extends RolesVillage {
+public class BearTrainer extends RoleVillage {
 
-    public BearTrainer(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+    public BearTrainer(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
     }
 
@@ -39,7 +39,7 @@ public class BearTrainer extends RolesVillage {
         if (player == null) return;
 
         Location oursLocation = player.getLocation();
-        Set<PlayerWW> growled = Bukkit.getOnlinePlayers()
+        Set<IPlayerWW> growled = Bukkit.getOnlinePlayers()
                 .stream()
                 .filter(player1 -> {
                     try {
@@ -53,11 +53,11 @@ public class BearTrainer extends RolesVillage {
                 .map(game::getPlayerWW)
                 .filter(Objects::nonNull)
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
-                .map(PlayerWW::getRole)
-                .filter(roles -> roles.isWereWolf() || roles instanceof Display)
-                .filter(roles -> !(roles instanceof Display) ||
-                        ((Display) roles).isDisplayCamp(Camp.WEREWOLF.getKey()))
-                .map(Roles::getPlayerWW)
+                .map(IPlayerWW::getRole)
+                .filter(roles -> roles.isWereWolf() || roles instanceof IDisplay)
+                .filter(roles -> !(roles instanceof IDisplay) ||
+                        ((IDisplay) roles).isDisplayCamp(Camp.WEREWOLF.getKey()))
+                .map(IRole::getPlayerWW)
                 .collect(Collectors.toSet());
 
         GrowlEvent growlEvent = new GrowlEvent(getPlayerWW(), growled);

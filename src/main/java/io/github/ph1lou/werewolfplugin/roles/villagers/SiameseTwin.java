@@ -3,15 +3,15 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
-import io.github.ph1lou.werewolfapi.events.UpdateEvent;
 import io.github.ph1lou.werewolfapi.events.WereWolfListEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -19,9 +19,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class SiameseTwin extends RolesVillage {
+public class SiameseTwin extends RoleVillage {
 
-    public SiameseTwin(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+    public SiameseTwin(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
     }
 
@@ -33,7 +33,7 @@ public class SiameseTwin extends RolesVillage {
                 .setPower(() -> game.translate("werewolf.role.siamese_twin.power"))
                 .addExtraLines(() -> {
                     if (game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey()) > 0) {
-                        return game.translate("werewolf.role.siamese_twin.siamese_twin_list", game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey())));
+                        return game.translate("werewolf.role.siamese_twin.siamese_twin_list", Utils.conversion(game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey())));
                     } else {
                         return game.translate("werewolf.role.siamese_twin.siamese_twin_list", this.getBrother());
                     }
@@ -69,15 +69,15 @@ public class SiameseTwin extends RolesVillage {
     }
 
 
-    @EventHandler
-    public void onUpdate(UpdateEvent event) {
+    @Override
+    public void second() {
 
         double health = game.getPlayerWW()
                 .stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
-                .map(PlayerWW::getRole)
+                .map(IPlayerWW::getRole)
                 .filter(roles -> roles.isKey(RolesBase.SIAMESE_TWIN.getKey()))
-                .map(Roles::getPlayerUUID)
+                .map(IRole::getPlayerUUID)
                 .map(Bukkit::getPlayer)
                 .filter(Objects::nonNull)
                 .mapToDouble(player -> player.getHealth() /
@@ -88,9 +88,9 @@ public class SiameseTwin extends RolesVillage {
         game.getPlayerWW()
                 .stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
-                .map(PlayerWW::getRole)
+                .map(IPlayerWW::getRole)
                 .filter(roles -> roles.isKey(RolesBase.SIAMESE_TWIN.getKey()))
-                .map(Roles::getPlayerUUID)
+                .map(IRole::getPlayerUUID)
                 .map(Bukkit::getPlayer)
                 .filter(Objects::nonNull)
                 .filter(player -> health *

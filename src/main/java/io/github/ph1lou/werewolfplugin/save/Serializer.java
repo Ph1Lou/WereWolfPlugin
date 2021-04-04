@@ -2,7 +2,7 @@ package io.github.ph1lou.werewolfplugin.save;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
+import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.statistics.GameReview;
 
 public class Serializer {
@@ -15,7 +15,7 @@ public class Serializer {
                 .create();
     }
 
-    public static String serialize(ConfigWereWolfAPI config) {
+    public static String serialize(IConfiguration config) {
         return gson().toJson(config);
     }
 

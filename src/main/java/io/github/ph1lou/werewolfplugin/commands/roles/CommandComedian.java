@@ -1,12 +1,12 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.ComedianMask;
-import io.github.ph1lou.werewolfapi.events.UseMaskEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
+import io.github.ph1lou.werewolfapi.events.roles.comedian.UseMaskEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Comedian;
 import org.bukkit.Bukkit;
@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandComedian implements Commands {
+public class CommandComedian implements ICommands {
 
 
     private final Main main;
@@ -28,11 +28,11 @@ public class CommandComedian implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        PlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
         if (playerWW == null) return;
 
-        Roles comedian = playerWW.getRole();
+        IRole comedian = playerWW.getRole();
 
 
         try {
@@ -48,7 +48,7 @@ public class CommandComedian implements Commands {
                 playerWW.sendMessageWithKey("werewolf.role.comedian.used_mask");
                 return;
             }
-            ((Power) comedian).setPower(false);
+            ((IPower) comedian).setPower(false);
             ((Comedian) comedian).addMask(ComedianMask.values()[i]);
 
             UseMaskEvent useMaskEvent = new UseMaskEvent(playerWW, i);

@@ -2,25 +2,26 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.ComedianMask;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesWithLimitedSelectionDuration;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleWithLimitedSelectionDuration;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class Comedian extends RolesWithLimitedSelectionDuration {
+public class Comedian extends RoleWithLimitedSelectionDuration {
 
     private final List<ComedianMask> comedianMasks = new ArrayList<>();
 
-    public Comedian(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+    public Comedian(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
         setPower(false);
     }
@@ -30,10 +31,9 @@ public class Comedian extends RolesWithLimitedSelectionDuration {
         return comedianMasks;
     }
 
-    @Nullable
-    public ComedianMask getLastMask() {
-        if (comedianMasks.isEmpty()) return null;
-        return comedianMasks.get(comedianMasks.size() - 1);
+    public Optional<ComedianMask> getLastMask() {
+
+        return Optional.ofNullable(comedianMasks.get(comedianMasks.size() - 1));
     }
 
 
@@ -45,9 +45,7 @@ public class Comedian extends RolesWithLimitedSelectionDuration {
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if (getLastMask() != null) {
-            getPlayerWW().removePotionEffect(getLastMask().getPotionEffectType());
-        }
+        getLastMask().ifPresent(comedianMask -> getPlayerWW().removePotionEffect(comedianMask.getPotionEffectType()));
 
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
@@ -58,7 +56,7 @@ public class Comedian extends RolesWithLimitedSelectionDuration {
         setPower(true);
 
         getPlayerWW().sendMessageWithKey("werewolf.role.comedian.wear_mask_message",
-                game.getScore().conversion(
+                Utils.conversion(
                         game.getConfig().getTimerValue(
                                 TimersBase.POWER_DURATION.getKey())));
 

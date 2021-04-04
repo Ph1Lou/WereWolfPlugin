@@ -1,11 +1,11 @@
 package io.github.ph1lou.werewolfplugin.listeners.random_events;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.ListenerManager;
-import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.events.GodMiracleEvent;
-import io.github.ph1lou.werewolfapi.events.ThirdDeathEvent;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.ThirdDeathEvent;
+import io.github.ph1lou.werewolfapi.events.random_events.GodMiracleEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -26,7 +26,7 @@ public class GodMiracle extends ListenerManager {
 
         if (game.getRandom().nextFloat() * 5 < 1) {
 
-            PlayerWW playerWW = event.getPlayerWW();
+            IPlayerWW playerWW = event.getPlayerWW();
             GodMiracleEvent godMiracle = new GodMiracleEvent(playerWW);
             Bukkit.getPluginManager().callEvent(godMiracle);
 

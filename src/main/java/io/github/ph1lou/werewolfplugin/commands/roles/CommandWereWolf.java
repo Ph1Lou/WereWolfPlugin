@@ -1,19 +1,19 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
-import io.github.ph1lou.werewolfapi.events.AppearInWereWolfListEvent;
-import io.github.ph1lou.werewolfapi.events.RequestSeeWereWolfListEvent;
+import io.github.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
+import io.github.ph1lou.werewolfapi.events.werewolf.RequestSeeWereWolfListEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandWereWolf implements Commands {
+public class CommandWereWolf implements ICommands {
 
 
     private final Main main;
@@ -27,7 +27,7 @@ public class CommandWereWolf implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        PlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
         if (playerWW == null) return;
 
@@ -46,7 +46,7 @@ public class CommandWereWolf implements Commands {
 
         StringBuilder list = new StringBuilder();
 
-        for (PlayerWW playerWW1 : game.getPlayerWW()) {
+        for (IPlayerWW playerWW1 : game.getPlayerWW()) {
 
             AppearInWereWolfListEvent appearInWereWolfListEvent =
                     new AppearInWereWolfListEvent(playerWW1.getUUID());

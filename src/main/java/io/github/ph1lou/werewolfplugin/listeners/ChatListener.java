@@ -1,7 +1,7 @@
 package io.github.ph1lou.werewolfplugin.listeners;
 
 
-import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
+import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enums.Sound;
@@ -28,7 +28,7 @@ public class ChatListener implements Listener {
 
         Player player = event.getPlayer();
         String[] args = event.getMessage().split(" ");
-        ModerationManagerAPI moderationManager = game.getModerationManager();
+        IModerationManager moderationManager = game.getModerationManager();
 
         if (args[0].equalsIgnoreCase("/rl") ||
                 args[0].equalsIgnoreCase("/reload") ||
@@ -86,7 +86,7 @@ public class ChatListener implements Listener {
 
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
-        ModerationManagerAPI moderationManager = game.getModerationManager();
+        IModerationManager moderationManager = game.getModerationManager();
         String format;
 
         if (player.getUniqueId().equals(UUID.fromString("056be797-2a0b-4807-9af5-37faf5384396"))) {

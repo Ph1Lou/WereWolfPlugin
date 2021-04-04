@@ -1,14 +1,14 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.events.InfectionEvent;
-import io.github.ph1lou.werewolfapi.events.NewWereWolfEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
+import io.github.ph1lou.werewolfapi.events.roles.infect_father_of_the_wolves.InfectionEvent;
+import io.github.ph1lou.werewolfapi.events.werewolf.NewWereWolfEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 import java.util.Optional;
 import java.util.UUID;
 
-public class CommandInfect implements Commands {
+public class CommandInfect implements ICommands {
 
 
     private final Main main;
@@ -31,18 +31,18 @@ public class CommandInfect implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        PlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
         if (playerWW == null) return;
 
-        Roles infect = playerWW.getRole();
+        IRole infect = playerWW.getRole();
 
         if(Bukkit.getPlayer(UUID.fromString(args[0]))==null){
             playerWW.sendMessageWithKey("werewolf.check.offline_player");
             return;
         }
         UUID argUUID = UUID.fromString(args[0]);
-        PlayerWW playerWW1 = game.getPlayerWW(argUUID);
+        IPlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
         if (argUUID.equals(uuid)) {
             playerWW.sendMessageWithKey("werewolf.check.not_yourself");
@@ -60,7 +60,7 @@ public class CommandInfect implements Commands {
         }
 
 
-        Optional<PlayerWW> killerWW = playerWW1.getLastKiller();
+        Optional<IPlayerWW> killerWW = playerWW1.getLastKiller();
 
         if (!killerWW.isPresent() ||
                 !killerWW.get()
@@ -73,7 +73,7 @@ public class CommandInfect implements Commands {
         }
 
 
-        ((Power) infect).setPower(false);
+        ((IPower) infect).setPower(false);
 
         InfectionEvent infectionEvent = new InfectionEvent(playerWW, playerWW1);
         Bukkit.getPluginManager().callEvent(infectionEvent);
@@ -83,7 +83,7 @@ public class CommandInfect implements Commands {
             return;
         }
 
-        ((AffectedPlayers) infect).addAffectedPlayer(playerWW1);
+        ((IAffectedPlayers) infect).addAffectedPlayer(playerWW1);
 
         playerWW.sendMessageWithKey("werewolf.role.infect_father_of_the_wolves.infection_perform",
                 playerWW1.getName());

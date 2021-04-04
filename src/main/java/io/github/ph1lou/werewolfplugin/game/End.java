@@ -1,18 +1,20 @@
 package io.github.ph1lou.werewolfplugin.game;
 
-import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+
+import io.github.ph1lou.werewolfapi.IConfiguration;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.Category;
 import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
-import io.github.ph1lou.werewolfapi.events.AroundLover;
-import io.github.ph1lou.werewolfapi.events.CountRemainingRolesCategoriesEvent;
-import io.github.ph1lou.werewolfapi.events.EndPlayerMessageEvent;
-import io.github.ph1lou.werewolfapi.events.WinConditionsCheckEvent;
-import io.github.ph1lou.werewolfapi.events.WinEvent;
+import io.github.ph1lou.werewolfapi.events.game.game_cycle.WinEvent;
+import io.github.ph1lou.werewolfapi.events.game.utils.CountRemainingRolesCategoriesEvent;
+import io.github.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
+import io.github.ph1lou.werewolfapi.events.game.utils.WinConditionsCheckEvent;
+import io.github.ph1lou.werewolfapi.events.lovers.AroundLover;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -44,22 +46,22 @@ public class End {
             fin();
             return;
         }
-        ConfigWereWolfAPI config = game.getConfig();
+        IConfiguration config = game.getConfig();
 
         if (config.getLoverCount(LoverType.AMNESIAC_LOVER.getKey()) *
                 config.getLoverCount(LoverType.LOVER.getKey()) <= 1) {
 
             game.getLoversManager().getLovers().stream()
-                    .filter(loverAPI -> !loverAPI.isKey(LoverType.CURSED_LOVER.getKey()))
-                    .forEach(loverAPI -> {
-                        Set<PlayerWW> lovers = new HashSet<>(loverAPI.getLovers());
+                    .filter(ILover -> !ILover.isKey(LoverType.CURSED_LOVER.getKey()))
+                    .forEach(ILover -> {
+                        Set<IPlayerWW> lovers = new HashSet<>(ILover.getLovers());
 
-                        if (loverAPI.isAlive()) {
+                        if (ILover.isAlive()) {
                             AroundLover aroundLover = new AroundLover(lovers);
                             Bukkit.getPluginManager().callEvent(aroundLover);
 
                             if (aroundLover.getPlayerWWS().size() == game.getScore().getPlayerSize()) {
-                                winner = loverAPI.getKey();
+                                winner = ILover.getKey();
                                 fin();
                             }
                         }
@@ -76,7 +78,7 @@ public class End {
 
             if (winnerTeam.isEmpty()) return;
 
-            winner = winConditionsCheckEvent.getVictoryTeam();
+            winner = winnerTeam;
             fin();
             return;
         }
@@ -113,7 +115,7 @@ public class End {
 
         game.getConfig().setConfig(ConfigsBase.CHAT.getKey(), true);
 
-        for (PlayerWW playerWW1 : game.getPlayerWW()) {
+        for (IPlayerWW playerWW1 : game.getPlayerWW()) {
 
             String role = game.translate(playerWW1.getRole().getDeathRole());
             String playerName = playerWW1.getName();
@@ -143,7 +145,7 @@ public class End {
         }
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(game.getMain(), game::stopGame, 20L * game.getConfig().getTimerValue(TimersBase.AUTO_RESTART_DURATION.getKey()));
-        Bukkit.broadcastMessage(game.translate("werewolf.announcement.restart", game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.AUTO_RESTART_DURATION.getKey()))));
+        Bukkit.broadcastMessage(game.translate("werewolf.announcement.restart", Utils.conversion(game.getConfig().getTimerValue(TimersBase.AUTO_RESTART_DURATION.getKey()))));
     }
 
 

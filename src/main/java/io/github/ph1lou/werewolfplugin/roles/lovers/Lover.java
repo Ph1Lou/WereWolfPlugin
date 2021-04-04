@@ -1,7 +1,7 @@
 package io.github.ph1lou.werewolfplugin.roles.lovers;
 
-import io.github.ph1lou.werewolfapi.LoverAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.ILover;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
@@ -9,12 +9,13 @@ import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
-import io.github.ph1lou.werewolfapi.events.AroundLover;
-import io.github.ph1lou.werewolfapi.events.EndPlayerMessageEvent;
-import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
-import io.github.ph1lou.werewolfapi.events.LoverDeathEvent;
-import io.github.ph1lou.werewolfapi.events.UpdateModeratorNameTag;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.game.permissions.UpdateModeratorNameTag;
+import io.github.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
+import io.github.ph1lou.werewolfapi.events.lovers.AroundLover;
+import io.github.ph1lou.werewolfapi.events.lovers.LoverDeathEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -27,19 +28,19 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class Lover implements LoverAPI, Listener {
+public class Lover implements ILover, Listener {
 
-    private final List<PlayerWW> lovers;
+    private final List<IPlayerWW> lovers;
     private final WereWolfAPI game;
     private boolean death = false;
 
-    public Lover(WereWolfAPI game, List<PlayerWW> lovers) {
+    public Lover(WereWolfAPI game, List<IPlayerWW> lovers) {
         this.game = game;
         this.lovers = lovers;
         lovers.forEach(playerWW -> playerWW.addLover(this));
     }
 
-    public List<? extends PlayerWW> getLovers() {
+    public List<? extends IPlayerWW> getLovers() {
         return lovers;
     }
 
@@ -48,7 +49,7 @@ public class Lover implements LoverAPI, Listener {
         lovers.forEach(this::announceLovers);
     }
 
-    public void announceLovers(PlayerWW playerWW) {
+    public void announceLovers(IPlayerWW playerWW) {
 
         if (death) return;
 
@@ -71,7 +72,7 @@ public class Lover implements LoverAPI, Listener {
         if (!game.isState(StateGame.GAME)) return;
 
         UUID uuid = event.getPlayerUUID();
-        PlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
         if (!lovers.contains(playerWW)) return;
 
@@ -90,7 +91,7 @@ public class Lover implements LoverAPI, Listener {
 
     }
 
-    private void buildActionbarLover(Player player, StringBuilder sb, List<PlayerWW> list) {
+    private void buildActionbarLover(Player player, StringBuilder sb, List<IPlayerWW> list) {
 
         list
                 .stream()
@@ -100,9 +101,8 @@ public class Lover implements LoverAPI, Listener {
                         .append(playerWW.getName())
                         .append(" "))
                 .forEach(playerWW -> sb
-                        .append(game.getScore()
-                                .updateArrow(player,
-                                        playerWW.getLocation())));
+                        .append(Utils.updateArrow(player,
+                                playerWW.getLocation())));
     }
 
     @EventHandler
@@ -110,7 +110,7 @@ public class Lover implements LoverAPI, Listener {
 
         StringBuilder sb = new StringBuilder(event.getSuffix());
 
-        PlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID());
+        IPlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID());
 
         if (playerWW == null) return;
 
@@ -155,7 +155,7 @@ public class Lover implements LoverAPI, Listener {
     @EventHandler
     public void onEndPlayerMessage(EndPlayerMessageEvent event) {
 
-        PlayerWW playerWW = event.getPlayerWW();
+        IPlayerWW playerWW = event.getPlayerWW();
 
         if (!lovers.contains(playerWW)) return;
 
@@ -180,7 +180,7 @@ public class Lover implements LoverAPI, Listener {
     }
 
     @Override
-    public boolean swap(PlayerWW playerWW, PlayerWW playerWW1) {
+    public boolean swap(IPlayerWW playerWW, IPlayerWW playerWW1) {
 
         if (playerWW.equals(playerWW1)) return false;
 
@@ -194,9 +194,9 @@ public class Lover implements LoverAPI, Listener {
         lovers.forEach(this::announceLovers);
 
         game.getPlayerWW()
-                .stream().map(PlayerWW::getRole)
+                .stream().map(IPlayerWW::getRole)
                 .filter(roles -> roles.isKey(RolesBase.CUPID.getKey()))
-                .map(roles -> (AffectedPlayers) roles)
+                .map(roles -> (IAffectedPlayers) roles)
                 .filter(affectedPlayers -> affectedPlayers.getAffectedPlayers().contains(playerWW))
                 .forEach(affectedPlayers -> {
                     affectedPlayers.removeAffectedPlayer(playerWW);
@@ -204,6 +204,10 @@ public class Lover implements LoverAPI, Listener {
                 });
 
         return true;
+    }
+
+    @Override
+    public void second() {
     }
 
     @Override
@@ -217,9 +221,9 @@ public class Lover implements LoverAPI, Listener {
 
         if (death) return;
 
-        for (PlayerWW playerWW : event.getPlayerWWS()) {
+        for (IPlayerWW playerWW : event.getPlayerWWS()) {
             if (getLovers().contains(playerWW)) {
-                for (PlayerWW playerWW1 : getLovers()) {
+                for (IPlayerWW playerWW1 : getLovers()) {
                     event.addPlayer(playerWW1);
                 }
                 break;
@@ -227,14 +231,14 @@ public class Lover implements LoverAPI, Listener {
         }
     }
 
-    public void addLover(PlayerWW playerWW) {
+    public void addLover(IPlayerWW playerWW) {
 
         if (lovers.contains(playerWW)) return;
 
         lovers.forEach(playerWW1 -> playerWW1.sendMessageWithKey("werewolf.random_events.triple.lover_join", playerWW.getName()));
 
         playerWW.sendMessageWithKey("werewolf.random_events.triple.join", getLovers().stream()
-                .map(PlayerWW::getName)
+                .map(IPlayerWW::getName)
                 .collect(Collectors.joining(" ")));
 
         lovers.add(playerWW);

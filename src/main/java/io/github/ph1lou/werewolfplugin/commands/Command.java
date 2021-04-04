@@ -1,10 +1,10 @@
 package io.github.ph1lou.werewolfplugin.commands;
 
 
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.registers.CommandRegister;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -79,7 +79,7 @@ public class Command implements TabExecutor {
 
         if (commandRegister.isRequiredPlayerInGame()) {
 
-            PlayerWW playerWW = game.getPlayerWW(uuid);
+            IPlayerWW playerWW = game.getPlayerWW(uuid);
 
             if (playerWW == null) {
                 return game.translate("werewolf.check.not_in_game");
@@ -95,7 +95,7 @@ public class Command implements TabExecutor {
                 return game.translate("werewolf.check.state_player");
             }
 
-            if (commandRegister.isRequiredPower() && (!(playerWW.getRole() instanceof Power) || !((Power) playerWW.getRole()).hasPower())) {
+            if (commandRegister.isRequiredPower() && (!(playerWW.getRole() instanceof IPower) || !((IPower) playerWW.getRole()).hasPower())) {
                 return game.translate("werewolf.check.power");
             }
         }
@@ -122,7 +122,7 @@ public class Command implements TabExecutor {
         Player player = (Player) sender;
         UUID uuid = player.getUniqueId();
         WereWolfAPI game = main.getWereWolfAPI();
-        PlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
         if (args.length > 1) {
             return null;

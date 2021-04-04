@@ -3,13 +3,14 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,11 +19,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Trapper extends RolesVillage implements AffectedPlayers, Power {
+public class Trapper extends RoleVillage implements IAffectedPlayers, IPower {
 
-    private final List<PlayerWW> affectedPlayer = new ArrayList<>();
+    private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
 
-    public Trapper(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+    public Trapper(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
         setPower(false);
     }
@@ -40,12 +41,12 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
     }
 
     @Override
-    public void addAffectedPlayer(PlayerWW playerWW) {
+    public void addAffectedPlayer(IPlayerWW playerWW) {
         this.affectedPlayer.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(PlayerWW playerWW) {
+    public void removeAffectedPlayer(IPlayerWW playerWW) {
         this.affectedPlayer.remove(playerWW);
     }
 
@@ -55,7 +56,7 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
     }
 
     @Override
-    public List<PlayerWW> getAffectedPlayers() {
+    public List<IPlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
@@ -107,8 +108,7 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
                 .peek(playerWW -> stringBuilder.append("§b ")
                         .append(playerWW.getName())
                         .append(" "))
-                .forEach(playerWW -> stringBuilder.append(game.getScore()
-                        .updateArrow(player, playerWW.getLocation())));
+                .forEach(playerWW -> stringBuilder.append(Utils.updateArrow(player, playerWW.getLocation())));
 
         event.setActionBar(stringBuilder.toString());
     }

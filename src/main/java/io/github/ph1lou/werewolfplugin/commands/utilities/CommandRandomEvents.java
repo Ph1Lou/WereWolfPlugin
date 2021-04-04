@@ -1,13 +1,13 @@
 package io.github.ph1lou.werewolfplugin.commands.utilities;
 
-import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.ICommands;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
 import io.github.ph1lou.werewolfapi.registers.RandomEventRegister;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.entity.Player;
 
-public class CommandRandomEvents implements Commands {
+public class CommandRandomEvents implements ICommands {
 
 
     private final Main main;

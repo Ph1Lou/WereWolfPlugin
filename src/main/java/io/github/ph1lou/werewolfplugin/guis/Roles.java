@@ -7,9 +7,9 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
-import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.StuffManager;
+import io.github.ph1lou.werewolfapi.IConfiguration;
+import io.github.ph1lou.werewolfapi.IStuffManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Category;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
@@ -55,7 +55,7 @@ public class Roles implements InventoryProvider {
     public void init(Player player, InventoryContents contents) {
         Main main = JavaPlugin.getPlugin(Main.class);
         WereWolfAPI game = main.getWereWolfAPI();
-        ConfigWereWolfAPI config = game.getConfig();
+        IConfiguration config = game.getConfig();
 
         contents.set(0, 0, ClickableItem.of((
                 new ItemBuilder(UniversalMaterial.COMPASS.getType())
@@ -85,7 +85,7 @@ public class Roles implements InventoryProvider {
 
         Main main=JavaPlugin.getPlugin(Main.class);
         WereWolfAPI game = main.getWereWolfAPI();
-        ConfigWereWolfAPI config = game.getConfig();
+        IConfiguration config = game.getConfig();
         Pagination pagination = contents.pagination();
         UUID uuid = player.getUniqueId();
 
@@ -284,7 +284,7 @@ public class Roles implements InventoryProvider {
             return;
         }
 
-        StuffManager stuffManager = game.getStuffs();
+        IStuffManager stuffManager = game.getStuffs();
         PlayerInventory inventory = player.getInventory();
         player.setGameMode(GameMode.CREATIVE);
 
@@ -314,7 +314,7 @@ public class Roles implements InventoryProvider {
 
 
     public void selectMinus(WereWolfAPI game, String key) {
-        ConfigWereWolfAPI config = game.getConfig();
+        IConfiguration config = game.getConfig();
         if (config.getRoleCount(key) > 0) {
             game.getScore().setRole(game.getScore().getRole() - 1);
             config.removeOneRole(key);
@@ -322,7 +322,7 @@ public class Roles implements InventoryProvider {
     }
 
     public void selectPlus(WereWolfAPI game, String key) {
-        ConfigWereWolfAPI config = game.getConfig();
+        IConfiguration config = game.getConfig();
         config.addOneRole(key);
         game.getScore().setRole(game.getScore().getRole() + 1);
     }

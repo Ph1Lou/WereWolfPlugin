@@ -1,13 +1,14 @@
 package io.github.ph1lou.werewolfplugin.roles.lovers;
 
-import io.github.ph1lou.werewolfapi.LoverAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.ILover;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,18 +17,18 @@ import org.bukkit.event.Listener;
 import java.util.List;
 import java.util.UUID;
 
-public class FakeLover implements LoverAPI, Listener {
+public class FakeLover implements ILover, Listener {
 
-    private final List<PlayerWW> lovers;
+    private final List<IPlayerWW> lovers;
     private final WereWolfAPI game;
 
-    public FakeLover(WereWolfAPI game, List<PlayerWW> lovers) {
+    public FakeLover(WereWolfAPI game, List<IPlayerWW> lovers) {
         this.game = game;
         this.lovers = lovers;
         announceLovers();
     }
 
-    public List<? extends PlayerWW> getLovers() {
+    public List<? extends IPlayerWW> getLovers() {
         return lovers;
     }
 
@@ -36,13 +37,13 @@ public class FakeLover implements LoverAPI, Listener {
         lovers.forEach(this::announceLovers);
     }
 
-    public void announceLovers(PlayerWW playerWW) {
+    public void announceLovers(IPlayerWW playerWW) {
 
         if (!lovers.contains(playerWW)) return;
 
         StringBuilder couple = new StringBuilder();
 
-        for (PlayerWW playerWW1 : lovers) {
+        for (IPlayerWW playerWW1 : lovers) {
             if (!playerWW.equals(playerWW1)) {
                 couple.append(playerWW1.getName()).append(" ");
             }
@@ -57,7 +58,7 @@ public class FakeLover implements LoverAPI, Listener {
         if (!game.isState(StateGame.GAME)) return;
 
         UUID uuid = event.getPlayerUUID();
-        PlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
         if (!lovers.contains(playerWW)) return;
 
@@ -76,7 +77,7 @@ public class FakeLover implements LoverAPI, Listener {
 
     }
 
-    private void buildActionbarLover(Player player, StringBuilder sb, List<PlayerWW> list) {
+    private void buildActionbarLover(Player player, StringBuilder sb, List<IPlayerWW> list) {
 
         list
                 .stream()
@@ -86,9 +87,8 @@ public class FakeLover implements LoverAPI, Listener {
                         .append(playerWW.getName())
                         .append(" "))
                 .forEach(playerWW -> sb
-                        .append(game.getScore()
-                                .updateArrow(player,
-                                        playerWW.getLocation())));
+                        .append(Utils.updateArrow(player,
+                                playerWW.getLocation())));
     }
 
     @Override
@@ -102,8 +102,12 @@ public class FakeLover implements LoverAPI, Listener {
     }
 
     @Override
-    public boolean swap(PlayerWW playerWW, PlayerWW playerWW1) {
+    public boolean swap(IPlayerWW playerWW, IPlayerWW playerWW1) {
         return false;
+    }
+
+    @Override
+    public void second() {
     }
 
     @Override

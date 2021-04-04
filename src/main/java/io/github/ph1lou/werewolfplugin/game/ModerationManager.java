@@ -1,6 +1,6 @@
 package io.github.ph1lou.werewolfplugin.game;
 
-import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
+import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfplugin.commands.Admin;
 import org.bukkit.Bukkit;
@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class ModerationManager implements ModerationManagerAPI {
+public class ModerationManager implements IModerationManager {
 
     private final List<UUID> queue = new ArrayList<>();
     private final List<UUID> whiteListedPlayers = new ArrayList<>();

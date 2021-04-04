@@ -1,32 +1,35 @@
 package io.github.ph1lou.werewolfplugin.game;
 
 import fr.mrmicky.fastboard.FastBoard;
-import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
-import io.github.ph1lou.werewolfapi.LoverManagerAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.ScoreAPI;
-import io.github.ph1lou.werewolfapi.StuffManager;
-import io.github.ph1lou.werewolfapi.VoteAPI;
+import io.github.ph1lou.werewolfapi.IConfiguration;
+import io.github.ph1lou.werewolfapi.ILoverManager;
+import io.github.ph1lou.werewolfapi.IMapManager;
+import io.github.ph1lou.werewolfapi.IModerationManager;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.IScoreBoard;
+import io.github.ph1lou.werewolfapi.IStuffManager;
+import io.github.ph1lou.werewolfapi.IVoteManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Day;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
-import io.github.ph1lou.werewolfapi.events.FinalJoinEvent;
-import io.github.ph1lou.werewolfapi.events.LoadEvent;
-import io.github.ph1lou.werewolfapi.events.ResurrectionEvent;
-import io.github.ph1lou.werewolfapi.events.StopEvent;
 import io.github.ph1lou.werewolfapi.events.UpdateLanguageEvent;
+import io.github.ph1lou.werewolfapi.events.game.game_cycle.LoadEvent;
+import io.github.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalJoinEvent;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.ResurrectionEvent;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.save.Configuration;
 import io.github.ph1lou.werewolfplugin.save.FileUtils_;
-import io.github.ph1lou.werewolfplugin.save.Lang;
+import io.github.ph1lou.werewolfplugin.save.LanguageManager;
 import io.github.ph1lou.werewolfplugin.save.Stuff;
 import io.github.ph1lou.werewolfplugin.scoreboards.ScoreBoard;
 import io.github.ph1lou.werewolfplugin.tasks.LobbyTask;
 import io.github.ph1lou.werewolfplugin.utils.UpdateChecker;
 import io.github.ph1lou.werewolfplugin.utils.random_config.RandomConfig;
+import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -51,7 +54,7 @@ public class GameManager implements WereWolfAPI {
 
     private final Main main;
     private final Map<UUID, FastBoard> boards = new HashMap<>();
-    private final Map<UUID, PlayerWW> playerLG = new HashMap<>();
+    private final Map<UUID, IPlayerWW> playerLG = new HashMap<>();
     private StateGame state;
     private Day day;
     private boolean debug = false;
@@ -80,7 +83,9 @@ public class GameManager implements WereWolfAPI {
         File mapFolder = new File(main.getDataFolder() +
                 File.separator + "maps");
         if (!mapFolder.exists()) {
-            mapFolder.mkdirs();
+            if (!mapFolder.mkdirs()) {
+                Bukkit.getLogger().warning("[WereWolfPlugin] Folder Map Creation Failed");
+            }
         }
         setDay(Day.DAY);
 
@@ -125,15 +130,16 @@ public class GameManager implements WereWolfAPI {
         Bukkit.broadcastMessage(translate("werewolf.announcement.join", score.getPlayerSize(), score.getRole(), player.getName()));
         clearPlayer(player);
         player.setGameMode(GameMode.ADVENTURE);
-        PlayerWW plg = new PlayerLG(main, player);
+        IPlayerWW plg = new PlayerWW(main, player);
         playerLG.put(uuid, plg);
         Bukkit.getPluginManager().callEvent(new FinalJoinEvent(plg));
         player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 0, false, false));
         player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
 
         new UpdateChecker(main, 73113).getVersion(version -> {
-
-            if (main.getDescription().getVersion().equalsIgnoreCase(version)) {
+            DefaultArtifactVersion siteVersion = new DefaultArtifactVersion(version);
+            DefaultArtifactVersion loadVersion = new DefaultArtifactVersion(main.getDescription().getVersion());
+            if (siteVersion.compareTo(loadVersion) >= 0) {
                 player.sendMessage(translate("werewolf.update.up_to_date"));
             } else {
                 player.sendMessage(translate("werewolf.update.out_of_date"));
@@ -150,7 +156,7 @@ public class GameManager implements WereWolfAPI {
         Inventory inventory = player.getInventory();
 
         player.setGameMode(GameMode.SURVIVAL);
-        PlayerWW playerWW = new PlayerLG(main, player);
+        IPlayerWW playerWW = new PlayerWW(main, player);
         playerLG.put(player.getUniqueId(), playerWW);
         Location spawn = mapManager.getWorld().getSpawnLocation();
         spawn.setY(spawn.getBlockY() - 4);
@@ -255,14 +261,14 @@ public class GameManager implements WereWolfAPI {
     }
 
     @Override
-    public Collection<? extends PlayerWW> getPlayerWW() {
+    public Collection<? extends IPlayerWW> getPlayerWW() {
         return this.playerLG.values();
     }
 
 
     @Override
     @Nullable
-    public PlayerWW getPlayerWW(UUID uuid) {
+    public IPlayerWW getPlayerWW(UUID uuid) {
 
         if (!this.playerLG.containsKey(uuid)) {
             return null;
@@ -273,7 +279,7 @@ public class GameManager implements WereWolfAPI {
 
 
     @Override
-    public ConfigWereWolfAPI getConfig() {
+    public IConfiguration getConfig() {
         return this.configuration;
     }
 
@@ -284,8 +290,8 @@ public class GameManager implements WereWolfAPI {
 
     @Override
     public String translate(String key, Object... args) {
-        Lang lang = (Lang) main.getLangManager();
-        String translation = lang.getTranslation(key);
+        LanguageManager languageManager = (LanguageManager) main.getLangManager();
+        String translation = languageManager.getTranslation(key);
         try {
             return String.format(translation, args);
         } catch (IllegalFormatException e) {
@@ -296,8 +302,8 @@ public class GameManager implements WereWolfAPI {
 
     @Override
     public List<String> translateArray(String key) {
-        Lang lang = (Lang) main.getLangManager();
-        return lang.getTranslationList(key);
+        LanguageManager languageManager = (LanguageManager) main.getLangManager();
+        return languageManager.getTranslationList(key);
     }
 
 
@@ -312,9 +318,9 @@ public class GameManager implements WereWolfAPI {
     }
 
     @Override
-    public PlayerWW autoSelect(PlayerWW playerWW) {
+    public IPlayerWW autoSelect(IPlayerWW playerWW) {
 
-        List<PlayerWW> players = playerLG.values()
+        List<IPlayerWW> players = playerLG.values()
                 .stream()
                 .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                 .filter(playerWW1 -> !playerWW1.equals(playerWW))
@@ -328,33 +334,33 @@ public class GameManager implements WereWolfAPI {
     }
 
     @Override
-    public VoteAPI getVote(){
+    public IVoteManager getVote() {
         return this.vote;
     }
 
     @Override
-    public void resurrection(PlayerWW playerWW) {
+    public void resurrection(IPlayerWW playerWW) {
         Bukkit.getPluginManager().callEvent(new ResurrectionEvent(playerWW));
     }
 
     @Override
-    public void death(PlayerWW playerWW) {
+    public void death(IPlayerWW playerWW) {
         Bukkit.getPluginManager().callEvent(new FinalDeathEvent(playerWW));
     }
 
 
     @Override
-    public StuffManager getStuffs() {
+    public IStuffManager getStuffs() {
         return stuff;
     }
 
     @Override
-    public LoverManagerAPI getLoversManager() {
+    public ILoverManager getLoversManager() {
         return loversManage;
     }
 
     @Override
-    public ScoreAPI getScore() {
+    public IScoreBoard getScore() {
         return score;
     }
 
@@ -367,12 +373,12 @@ public class GameManager implements WereWolfAPI {
     }
 
     @Override
-    public MapManager getMapManager() {
+    public IMapManager getMapManager() {
         return mapManager;
     }
 
     @Override
-    public ModerationManager getModerationManager() {
+    public IModerationManager getModerationManager() {
         return moderationManager;
     }
 

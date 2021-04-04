@@ -1,7 +1,7 @@
 package io.github.ph1lou.werewolfplugin.game;
 
-import io.github.ph1lou.werewolfapi.LoverAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.ILover;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.listeners.ChatListener;
@@ -51,12 +51,12 @@ public class ScenariosLoader {
             HandlerList.unregisterAll(listener);
         }
 
-        for (PlayerWW playerWW1 : main.getWereWolfAPI().getPlayerWW()) {
+        for (IPlayerWW playerWW1 : main.getWereWolfAPI().getPlayerWW()) {
             HandlerList.unregisterAll((Listener) playerWW1.getRole());
         }
 
-        for (LoverAPI loverAPI : main.getWereWolfAPI().getLoversManager().getLovers()) {
-            HandlerList.unregisterAll((Listener) loverAPI);
+        for (ILover ILover : main.getWereWolfAPI().getLoversManager().getLovers()) {
+            HandlerList.unregisterAll((Listener) ILover);
         }
     }
 

@@ -3,21 +3,22 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
-import io.github.ph1lou.werewolfapi.events.AutoModelEvent;
-import io.github.ph1lou.werewolfapi.events.EndPlayerMessageEvent;
-import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
-import io.github.ph1lou.werewolfapi.events.ModelEvent;
-import io.github.ph1lou.werewolfapi.events.NewWereWolfEvent;
-import io.github.ph1lou.werewolfapi.events.StealEvent;
-import io.github.ph1lou.werewolfapi.events.WildChildTransformationEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
+import io.github.ph1lou.werewolfapi.events.roles.StealEvent;
+import io.github.ph1lou.werewolfapi.events.roles.wild_child.AutoModelEvent;
+import io.github.ph1lou.werewolfapi.events.roles.wild_child.ModelEvent;
+import io.github.ph1lou.werewolfapi.events.roles.wild_child.WildChildTransformationEvent;
+import io.github.ph1lou.werewolfapi.events.werewolf.NewWereWolfEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
 import io.github.ph1lou.werewolfapi.rolesattributs.Transformed;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
@@ -25,12 +26,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WildChild extends RolesVillage implements AffectedPlayers, Transformed, Power {
+public class WildChild extends RoleVillage implements IAffectedPlayers, Transformed, IPower {
 
     boolean transformed = false;
-    private final List<PlayerWW> affectedPlayer = new ArrayList<>();
+    private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
 
-    public WildChild(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+    public WildChild(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
     }
 
@@ -58,12 +59,12 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     }
 
     @Override
-    public void addAffectedPlayer(PlayerWW playerWW) {
+    public void addAffectedPlayer(IPlayerWW playerWW) {
         this.affectedPlayer.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(PlayerWW playerWW) {
+    public void removeAffectedPlayer(IPlayerWW playerWW) {
         this.affectedPlayer.remove(playerWW);
     }
 
@@ -73,7 +74,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     }
 
     @Override
-    public List<PlayerWW> getAffectedPlayers() {
+    public List<IPlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
@@ -82,7 +83,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     public void onAutoModel(AutoModelEvent event) {
 
 
-        PlayerWW model = game.autoSelect(getPlayerWW());
+        IPlayerWW model = game.autoSelect(getPlayerWW());
 
         if (!hasPower()) return;
 
@@ -107,7 +108,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
                         affectedPlayer.isEmpty() ?
                                 !transformed ?
                                         game.translate("werewolf.role.wild_child.design_model",
-                                                game.getScore().conversion(game.getConfig()
+                                                Utils.conversion(game.getConfig()
                                                         .getTimerValue(TimersBase.MODEL_DURATION.getKey())))
                                         :
                                         game.translate("werewolf.role.wild_child.model_none")
@@ -133,7 +134,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
 
         if (this.affectedPlayer.isEmpty()) return;
 
-        PlayerWW model = getAffectedPlayers().get(0);
+        IPlayerWW model = getAffectedPlayers().get(0);
 
         if (model.equals(getPlayerWW())) {
 
@@ -176,7 +177,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 
-        PlayerWW playerWW = event.getPlayerWW();
+        IPlayerWW playerWW = event.getPlayerWW();
 
         if (!getAffectedPlayers().contains(playerWW)) return;
 
@@ -206,8 +207,8 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     @EventHandler
     public void onTargetIsStolen(StealEvent event) {
 
-        PlayerWW playerWW = event.getPlayerWW();
-        PlayerWW thiefWW = event.getThiefWW();
+        IPlayerWW playerWW = event.getPlayerWW();
+        IPlayerWW thiefWW = event.getThiefWW();
 
         if (!getAffectedPlayers().contains(playerWW)) return;
 
@@ -230,7 +231,7 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
 
         if(!getAffectedPlayers().isEmpty()) {
 
-            PlayerWW modelWW = getAffectedPlayers().get(0);
+            IPlayerWW modelWW = getAffectedPlayers().get(0);
 
             if (modelWW != null) {
                 sb.append(game.translate("werewolf.end.model",

@@ -1,18 +1,18 @@
 package io.github.ph1lou.werewolfplugin.game;
 
 
-import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.VoteAPI;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.IVoteManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.enums.VoteStatus;
-import io.github.ph1lou.werewolfapi.events.SeeVoteEvent;
-import io.github.ph1lou.werewolfapi.events.VoteBeginEvent;
-import io.github.ph1lou.werewolfapi.events.VoteEndEvent;
-import io.github.ph1lou.werewolfapi.events.VoteEvent;
-import io.github.ph1lou.werewolfapi.events.VoteResultEvent;
+import io.github.ph1lou.werewolfapi.events.game.vote.VoteBeginEvent;
+import io.github.ph1lou.werewolfapi.events.game.vote.VoteEndEvent;
+import io.github.ph1lou.werewolfapi.events.game.vote.VoteEvent;
+import io.github.ph1lou.werewolfapi.events.game.vote.VoteResultEvent;
+import io.github.ph1lou.werewolfapi.events.roles.seer.SeeVoteEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,13 +25,13 @@ import java.util.List;
 import java.util.Map;
 
 
-public class Vote implements Listener, VoteAPI {
+public class Vote implements Listener, IVoteManager {
 
 
 	private final WereWolfAPI game;
-	private final List<PlayerWW> tempPlayer = new ArrayList<>();
-	private final Map<PlayerWW, Integer> votes = new HashMap<>();
-	private final Map<PlayerWW, PlayerWW> voters = new HashMap<>();
+	private final List<IPlayerWW> tempPlayer = new ArrayList<>();
+	private final Map<IPlayerWW, Integer> votes = new HashMap<>();
+	private final Map<IPlayerWW, IPlayerWW> voters = new HashMap<>();
 	private VoteStatus currentStatus = VoteStatus.NOT_BEGIN;
 
 	public Vote(WereWolfAPI game) {
@@ -39,11 +39,11 @@ public class Vote implements Listener, VoteAPI {
 	}
 
 	@Override
-	public void setUnVote(PlayerWW voterWW, PlayerWW vote) {
+	public void setUnVote(IPlayerWW voterWW, IPlayerWW vote) {
 
-        Player voter = Bukkit.getPlayer(voterWW.getUUID());
+		Player voter = Bukkit.getPlayer(voterWW.getUUID());
 
-        if (voter == null) return;
+		if (voter == null) return;
 
 		if (game.getConfig().getTimerValue(TimersBase.VOTE_BEGIN.getKey()) > 0) {
 			voterWW.sendMessageWithKey("werewolf.vote.vote_not_yet_activated");
@@ -103,7 +103,7 @@ public class Vote implements Listener, VoteAPI {
     }
 
 	@Override
-	public void seeVote(PlayerWW playerWW) {
+	public void seeVote(IPlayerWW playerWW) {
 
 		Player player = Bukkit.getPlayer(playerWW.getUUID());
 		SeeVoteEvent seeVoteEvent = new SeeVoteEvent(playerWW, votes);
@@ -116,9 +116,9 @@ public class Vote implements Listener, VoteAPI {
 			return;
 		}
 		player.sendMessage(game.translate("werewolf.role.citizen.count_votes"));
-		for (PlayerWW playerWW1 : voters.keySet()) {
+		for (IPlayerWW playerWW1 : voters.keySet()) {
 
-			PlayerWW voteWW = this.voters.get(playerWW1);
+			IPlayerWW voteWW = this.voters.get(playerWW1);
 
 			String voterName = playerWW1.getName();
 			String voteName = voteWW.getName();
@@ -127,21 +127,21 @@ public class Vote implements Listener, VoteAPI {
 	}
 
 	@Override
-	public Map<PlayerWW, Integer> getVotes() {
+	public Map<IPlayerWW, Integer> getVotes() {
 		return this.votes;
 	}
 
 	@Override
-	public Map<PlayerWW, PlayerWW> getPlayerVotes() {
+	public Map<IPlayerWW, IPlayerWW> getPlayerVotes() {
 		return voters;
 	}
 
 	@Override
-	public PlayerWW getResult() {
+	public IPlayerWW getResult() {
 		int maxVote = 0;
-		PlayerWW playerVote = null;
+		IPlayerWW playerVote = null;
 
-		for (PlayerWW playerWW : this.votes.keySet()) {
+		for (IPlayerWW playerWW : this.votes.keySet()) {
 
 			if (this.votes.get(playerWW) > maxVote) {
 				maxVote = this.votes.get(playerWW);
@@ -155,7 +155,7 @@ public class Vote implements Listener, VoteAPI {
 	}
 
 	@Override
-	public void showResultVote(PlayerWW playerWW) {
+	public void showResultVote(IPlayerWW playerWW) {
 
 		if (playerWW != null) {
 

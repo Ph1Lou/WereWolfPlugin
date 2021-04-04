@@ -1,13 +1,11 @@
 package io.github.ph1lou.werewolfplugin.tasks;
 
 
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
-import io.github.ph1lou.werewolfapi.events.UpdateEvent;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import io.github.ph1lou.werewolfplugin.save.Configuration;
-import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitRunnable;
 
 
@@ -28,8 +26,25 @@ public class GameTask extends BukkitRunnable {
 		}
 
 		World world = game.getMapManager().getWorld();
-		PluginManager pm = Bukkit.getPluginManager();
-		pm.callEvent(new UpdateEvent());
+		game.getScore().updateBoard();
+
+		game.getPlayerWW().stream().map(IPlayerWW::getRole).forEach(role -> {
+			try {
+				role.second();
+			} catch (Exception exception) {
+				exception.printStackTrace();
+			}
+		});
+
+		game.getLoversManager().getLovers().forEach(lover -> {
+			try {
+				lover.second();
+			} catch (Exception exception) {
+				exception.printStackTrace();
+			}
+		});
+
+
 		world.setTime((long) (world.getTime() + 20 *
 				(600f /
 						game.getConfig().getTimerValue(

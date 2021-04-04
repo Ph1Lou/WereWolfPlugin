@@ -1,8 +1,13 @@
 package io.github.ph1lou.werewolfplugin.worldloader;
 
-import io.github.ph1lou.werewolfapi.events.GenerationStartEvent;
+
 import io.github.ph1lou.werewolfapi.events.GenerationStopEvent;
-import org.bukkit.*;
+import io.github.ph1lou.werewolfapi.events.game.GenerationStartEvent;
+import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
+import org.bukkit.Server;
+import org.bukkit.World;
 
 import java.text.DecimalFormat;
 import java.util.HashSet;

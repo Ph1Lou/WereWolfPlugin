@@ -1,12 +1,12 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.events.BeginCharmEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
+import io.github.ph1lou.werewolfapi.events.roles.succubus.BeginCharmEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandSuccubus implements Commands {
+public class CommandSuccubus implements ICommands {
 
 
     private final Main main;
@@ -29,13 +29,13 @@ public class CommandSuccubus implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        PlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
         if (playerWW == null) return;
 
-        Roles succubus = playerWW.getRole();
+        IRole succubus = playerWW.getRole();
 
-        if (!((AffectedPlayers) succubus).getAffectedPlayers().isEmpty()) {
+        if (!((IAffectedPlayers) succubus).getAffectedPlayers().isEmpty()) {
             playerWW.sendMessageWithKey("werewolf.check.power");
             return;
         }
@@ -47,7 +47,7 @@ public class CommandSuccubus implements Commands {
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
-        PlayerWW playerWW1 = game.getPlayerWW(argUUID);
+        IPlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
         if (argUUID.equals(uuid)) {
             playerWW.sendMessageWithKey("werewolf.check.not_yourself");
@@ -80,7 +80,7 @@ public class CommandSuccubus implements Commands {
             return;
         }
 
-        ((AffectedPlayers) succubus).addAffectedPlayer(playerWW1);
+        ((IAffectedPlayers) succubus).addAffectedPlayer(playerWW1);
         playerWW.sendMessageWithKey("werewolf.role.succubus.charming_beginning", playerArg.getName());
     }
 }

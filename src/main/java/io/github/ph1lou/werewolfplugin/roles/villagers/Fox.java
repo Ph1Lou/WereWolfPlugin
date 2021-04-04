@@ -3,21 +3,21 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.Camp;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
-import io.github.ph1lou.werewolfapi.events.SniffEvent;
-import io.github.ph1lou.werewolfapi.events.UpdateEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Display;
-import io.github.ph1lou.werewolfapi.rolesattributs.LimitedUse;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.Progress;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
+import io.github.ph1lou.werewolfapi.events.roles.fox.SniffEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.IDisplay;
+import io.github.ph1lou.werewolfapi.rolesattributs.ILimitedUse;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.IProgress;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -32,14 +32,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedPlayers, Power {
+public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffectedPlayers, IPower {
 
     private float progress = 0;
     private int use = 0;
     private boolean power = false;
-    private final List<PlayerWW> affectedPlayer = new ArrayList<>();
+    private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
 
-    public Fox(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+    public Fox(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
     }
 
@@ -54,12 +54,12 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
     }
 
     @Override
-    public void addAffectedPlayer(PlayerWW playerWW) {
+    public void addAffectedPlayer(IPlayerWW playerWW) {
         this.affectedPlayer.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(PlayerWW playerWW) {
+    public void removeAffectedPlayer(IPlayerWW playerWW) {
         this.affectedPlayer.remove(playerWW);
     }
 
@@ -69,7 +69,7 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
     }
 
     @Override
-    public List<PlayerWW> getAffectedPlayers() {
+    public List<IPlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
@@ -132,7 +132,7 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
         return new DescriptionBuilder(game, this)
                 .setDescription(() -> game.translate("werewolf.role.fox.description",
                         game.getConfig().getDistanceFox(),
-                        game.getScore().conversion(game.getConfig()
+                        Utils.conversion(game.getConfig()
                                 .getTimerValue(TimersBase.FOX_SMELL_DURATION.getKey())),
                         game.getConfig().getUseOfFlair() - use))
                 .setEffects(() -> game.translate("werewolf.role.fox.effect"))
@@ -146,8 +146,8 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
     }
 
 
-    @EventHandler
-    public void onUpdate(UpdateEvent event) {
+    @Override
+    public void second() {
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
@@ -161,7 +161,7 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
             return;
         }
 
-        PlayerWW playerWW = getAffectedPlayers().get(0);
+        IPlayerWW playerWW = getAffectedPlayers().get(0);
         Player flair = Bukkit.getPlayer(playerWW.getUUID());
 
         if (!playerWW.isState(StatePlayer.ALIVE)) {
@@ -199,8 +199,8 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
 
             boolean isWereWolf = true;
 
-            if (playerWW.getRole() instanceof Display &&
-                    (!((Display) playerWW.getRole()).isDisplayCamp(Camp.WEREWOLF.getKey()))) {
+            if (playerWW.getRole() instanceof IDisplay &&
+                    (!((IDisplay) playerWW.getRole()).isDisplayCamp(Camp.WEREWOLF.getKey()))) {
                 isWereWolf = false;
             } else if (!playerWW.getRole().isWereWolf()) {
                 isWereWolf = false;

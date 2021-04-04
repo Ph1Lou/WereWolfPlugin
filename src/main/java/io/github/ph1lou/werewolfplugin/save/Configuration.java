@@ -1,17 +1,19 @@
 package io.github.ph1lou.werewolfplugin.save;
 
-import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
+
+import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.registers.ConfigRegister;
+import io.github.ph1lou.werewolfapi.registers.IRegisterManager;
 import io.github.ph1lou.werewolfapi.registers.RandomEventRegister;
-import io.github.ph1lou.werewolfapi.registers.RegisterManager;
 import io.github.ph1lou.werewolfapi.registers.ScenarioRegister;
 import io.github.ph1lou.werewolfapi.registers.TimerRegister;
+import io.github.ph1lou.werewolfplugin.RegisterManager;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Configuration implements ConfigWereWolfAPI {
+public class Configuration implements IConfiguration {
 
     private final Map<String, Integer> timerValues = new HashMap<>();
     private final Map<String, Boolean> configValues = new HashMap<>();
@@ -19,7 +21,7 @@ public class Configuration implements ConfigWereWolfAPI {
     private Map<String, Integer> roleCount = new HashMap<>();
     private final Map<String, Boolean> scenarioValues = new HashMap<>();
     private final Map<String, Integer> randomEventsValues = new HashMap<>();
-    private transient RegisterManager registerManager;
+    private transient IRegisterManager registerManager;
     private int strengthRate = 30;
     private int resistanceRate = 20;
     private int appleRate = 2;
@@ -57,7 +59,7 @@ public class Configuration implements ConfigWereWolfAPI {
     private int werewolfChatMaxMessage = 1;
     private boolean trollLover = false;
 
-    public Configuration(RegisterManager registerManager) {
+    public Configuration(IRegisterManager registerManager) {
         this.registerManager = registerManager;
     }
 

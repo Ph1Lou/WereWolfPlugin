@@ -1,22 +1,22 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
 import com.google.common.collect.Sets;
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.events.InvestigateEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Display;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
+import io.github.ph1lou.werewolfapi.events.roles.detective.InvestigateEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.IDisplay;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandDetective implements Commands {
+public class CommandDetective implements ICommands {
 
 
     private final Main main;
@@ -30,11 +30,11 @@ public class CommandDetective implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        PlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
         if (playerWW == null) return;
 
-        Roles detective = playerWW.getRole();
+        IRole detective = playerWW.getRole();
 
         if (args.length != 2) {
             playerWW.sendMessageWithKey("werewolf.check.parameters", 2);
@@ -56,7 +56,7 @@ public class CommandDetective implements Commands {
             }
 
             UUID uuid1 = playerArg.getUniqueId();
-            PlayerWW playerWW1 = game.getPlayerWW(uuid1);
+            IPlayerWW playerWW1 = game.getPlayerWW(uuid1);
 
             if (playerWW1 == null || playerWW1.isState(StatePlayer.DEATH)) {
                 playerWW.sendMessageWithKey("werewolf.check.player_not_found");
@@ -68,7 +68,7 @@ public class CommandDetective implements Commands {
                 return;
             }
 
-            if (((AffectedPlayers) detective).getAffectedPlayers().contains(playerWW1)) {
+            if (((IAffectedPlayers) detective).getAffectedPlayers().contains(playerWW1)) {
                 playerWW.sendMessageWithKey("werewolf.role.detective.already_inspect");
                 return;
             }
@@ -82,22 +82,22 @@ public class CommandDetective implements Commands {
         UUID uuid1 = player1.getUniqueId();
         UUID uuid2 = player2.getUniqueId();
 
-        PlayerWW playerWW1 = game.getPlayerWW(uuid1);
-        PlayerWW playerWW2 = game.getPlayerWW(uuid2);
+        IPlayerWW playerWW1 = game.getPlayerWW(uuid1);
+        IPlayerWW playerWW2 = game.getPlayerWW(uuid2);
 
         if (playerWW1 == null || playerWW2 == null) return;
 
         String isLG1 = playerWW1.getRole().getCamp().getKey();
         String isLG2 = playerWW2.getRole().getCamp().getKey();
 
-        if (playerWW1.getRole() instanceof Display) {
-            isLG1 = ((Display) playerWW1.getRole()).getDisplayCamp();
+        if (playerWW1.getRole() instanceof IDisplay) {
+            isLG1 = ((IDisplay) playerWW1.getRole()).getDisplayCamp();
         }
-        if (playerWW2.getRole() instanceof Display) {
-            isLG2 = ((Display) playerWW2.getRole()).getDisplayCamp();
+        if (playerWW2.getRole() instanceof IDisplay) {
+            isLG2 = ((IDisplay) playerWW2.getRole()).getDisplayCamp();
         }
 
-        ((Power) detective).setPower(false);
+        ((IPower) detective).setPower(false);
 
         InvestigateEvent event = new InvestigateEvent(playerWW, Sets.newHashSet(playerWW1, playerWW2), isLG1.equals(isLG2));
         Bukkit.getPluginManager().callEvent(event);
@@ -107,8 +107,8 @@ public class CommandDetective implements Commands {
             return;
         }
 
-        ((AffectedPlayers) detective).addAffectedPlayer(playerWW1);
-        ((AffectedPlayers) detective).addAffectedPlayer(playerWW2);
+        ((IAffectedPlayers) detective).addAffectedPlayer(playerWW1);
+        ((IAffectedPlayers) detective).addAffectedPlayer(playerWW2);
 
         if (event.isSameCamp()) {
             playerWW.sendMessageWithKey("werewolf.role.detective.same_camp", player1.getName(), player2.getName());

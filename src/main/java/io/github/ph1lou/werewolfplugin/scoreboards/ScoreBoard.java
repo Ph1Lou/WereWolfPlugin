@@ -1,10 +1,10 @@
 package io.github.ph1lou.werewolfplugin.scoreboards;
 
 import fr.mrmicky.fastboard.FastBoard;
-import io.github.ph1lou.werewolfapi.LoverAPI;
-import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.ScoreAPI;
+import io.github.ph1lou.werewolfapi.ILover;
+import io.github.ph1lou.werewolfapi.IModerationManager;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.IScoreBoard;
 import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enums.Day;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
@@ -13,28 +13,26 @@ import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
-import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
-import io.github.ph1lou.werewolfapi.events.FinalJoinEvent;
-import io.github.ph1lou.werewolfapi.events.HostEvent;
-import io.github.ph1lou.werewolfapi.events.InvisibleEvent;
-import io.github.ph1lou.werewolfapi.events.LoversRepartitionEvent;
-import io.github.ph1lou.werewolfapi.events.ModeratorEvent;
-import io.github.ph1lou.werewolfapi.events.NewWereWolfEvent;
-import io.github.ph1lou.werewolfapi.events.RepartitionEvent;
-import io.github.ph1lou.werewolfapi.events.ResurrectionEvent;
-import io.github.ph1lou.werewolfapi.events.RevealAmnesiacLoversEvent;
-import io.github.ph1lou.werewolfapi.events.StopEvent;
-import io.github.ph1lou.werewolfapi.events.StudLoverEvent;
-import io.github.ph1lou.werewolfapi.events.UpdateEvent;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTag;
 import io.github.ph1lou.werewolfapi.events.WereWolfListEvent;
+import io.github.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalJoinEvent;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.ResurrectionEvent;
+import io.github.ph1lou.werewolfapi.events.game.permissions.HostEvent;
+import io.github.ph1lou.werewolfapi.events.game.permissions.ModeratorEvent;
+import io.github.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
+import io.github.ph1lou.werewolfapi.events.lovers.LoversRepartitionEvent;
+import io.github.ph1lou.werewolfapi.events.lovers.RevealAmnesiacLoversEvent;
+import io.github.ph1lou.werewolfapi.events.roles.InvisibleEvent;
+import io.github.ph1lou.werewolfapi.events.roles.stud.StudLoverEvent;
+import io.github.ph1lou.werewolfapi.events.werewolf.NewWereWolfEvent;
 import io.github.ph1lou.werewolfapi.registers.RoleRegister;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.WorldBorder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -42,7 +40,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,7 +50,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 
-public class ScoreBoard implements ScoreAPI, Listener {
+public class ScoreBoard implements IScoreBoard, Listener {
 
 	private final GameManager game;
 	private int group_size = 5;
@@ -96,15 +93,15 @@ public class ScoreBoard implements ScoreAPI, Listener {
 
 		UUID playerUUID = board.getPlayer().getUniqueId();
 		List<String> score = new ArrayList<>(scoreboard2);
-		PlayerWW playerWW = game.getPlayerWW(playerUUID);
-		ModerationManagerAPI moderationManager = game.getModerationManager();
+		IPlayerWW playerWW = game.getPlayerWW(playerUUID);
+		IModerationManager moderationManager = game.getModerationManager();
 		String role;
 		if (playerWW != null) {
 
 			if (!playerWW.isState(StatePlayer.DEATH)) {
 
 				if (!game.isState(StateGame.GAME)) {
-					role = conversion(game.getConfig().getTimerValue(TimersBase.ROLE_DURATION.getKey()));
+					role = Utils.conversion(game.getConfig().getTimerValue(TimersBase.ROLE_DURATION.getKey()));
 				} else role = game.translate(playerWW.getRole().getKey());
 			} else role = game.translate("werewolf.score_board.death");
 		} else if (moderationManager.getModerators().contains(playerUUID)) {
@@ -127,7 +124,7 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		String border;
 
 		if (game.getConfig().getTimerValue(TimersBase.BORDER_BEGIN.getKey()) > 0) {
-			border = conversion(game.getConfig().getTimerValue(TimersBase.BORDER_BEGIN.getKey()));
+			border = Utils.conversion(game.getConfig().getTimerValue(TimersBase.BORDER_BEGIN.getKey()));
 		} else {
 			border = game.translate("werewolf.utils.on");
 			if (wb.getSize() > game.getConfig().getBorderMin()) {
@@ -142,7 +139,7 @@ public class ScoreBoard implements ScoreAPI, Listener {
 
 		for (String line : game.translateArray("werewolf.score_board.scoreboard_2")) {
 
-			line = line.replace("&timer&", conversion(timer));
+			line = line.replace("&timer&", Utils.conversion(timer));
 			line = line.replace("&day&", String.valueOf(this.day));
 			line = line.replace("&players&", String.valueOf(player));
 			line = line.replace("&group&", String.valueOf(group_size));
@@ -206,7 +203,7 @@ public class ScoreBoard implements ScoreAPI, Listener {
 	@Override
 	public void getKillCounter() {
 
-		for (PlayerWW playerWW1 : game.getPlayerWW()) {
+		for (IPlayerWW playerWW1 : game.getPlayerWW()) {
 			int i = 0;
 			while (i < kill_score.size() && playerWW1.getNbKill() <
 					Objects.requireNonNull(game.getPlayerWW(kill_score.get(i))).getNbKill()) {
@@ -220,7 +217,7 @@ public class ScoreBoard implements ScoreAPI, Listener {
 
 		for (int i = 0; i < Math.min(game.getPlayerWW().size(), 10); i++) {
 
-			PlayerWW playerWW1 = game.getPlayerWW(kill_score.get(i));
+			IPlayerWW playerWW1 = game.getPlayerWW(kill_score.get(i));
 
 			if (playerWW1 != null) {
 				scoreboard3.add(playerWW1.getName() + "§3 " +
@@ -233,24 +230,9 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		line = game.translate("werewolf.score_board.name", game.getGameName());
 		scoreboard3.add(line.substring(0, Math.min(30, line.length())));
 
-		Bukkit.getPluginManager().callEvent(new UpdateEvent());
+		this.updateBoard();
 	}
 
-	public int midDistance(Player player) {
-
-		World world = player.getWorld();
-		Location location = player.getLocation();
-		location.setY(world.getSpawnLocation().getY());
-		int distance = 0;
-
-		try {
-			distance = (int) location.distance(world.getSpawnLocation());
-		} catch (Exception ignored) {
-		}
-
-
-		return distance / 300 * 300;
-	}
 
 
 	@EventHandler(priority = EventPriority.LOW)
@@ -264,15 +246,15 @@ public class ScoreBoard implements ScoreAPI, Listener {
 
 		if (player == null) return;
 
-		int d = midDistance(player);
+		int d = Utils.midDistance(player);
 		event.setActionBar(event.getActionBar() + game.translate("werewolf.action_bar.in_game",
 				d, d + 300,
 				(int) Math.floor(player.getLocation().getY())));
 	}
 
 
-	@EventHandler
-	public void updateBoard(UpdateEvent event) {
+	@Override
+	public void updateBoard() {
 
 		if (Bukkit.getOnlinePlayers().size() == 0) return;
 
@@ -286,13 +268,15 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		if (roles.isEmpty()) {
 			if (game.isState(StateGame.LOBBY)) {
 				updateScoreBoard1();
-			} else updateGlobalScoreBoard2();
+			} else {
+				updateGlobalScoreBoard2();
+			}
 		}
 
 		String bot = "";
 
 		if (game.isState(StateGame.START) || game.isState(StateGame.GAME)) {
-			bot = game.translate("werewolf.tab.timer", conversion(timer), day, dayState);
+			bot = game.translate("werewolf.tab.timer", Utils.conversion(timer), day, dayState);
 		}
 
 		bot += game.translate("werewolf.tab.bot");
@@ -316,68 +300,7 @@ public class ScoreBoard implements ScoreAPI, Listener {
 
 	}
 
-	@Override
-	public String updateArrow(Player player, Location target) {
 
-		Location location = player.getLocation();
-		String arrow;
-		location.setY(target.getY());
-		Vector dirToMiddle = target.toVector().subtract(player.getEyeLocation().toVector()).normalize();
-
-		int distance = 0;
-		try {
-			distance = (int) Math.round(target.distance(location));
-		} catch (Exception ignored) {
-		}
-
-		Vector playerDirection = player.getEyeLocation().getDirection();
-		double angle = dirToMiddle.angle(playerDirection);
-		double det = dirToMiddle.getX() * playerDirection.getZ() - dirToMiddle.getZ() * playerDirection.getX();
-
-		angle = angle * Math.signum(det);
-
-		if (angle > -Math.PI / 8 && angle < Math.PI / 8) {
-			arrow = "↑";
-		} else if (angle > -3 * Math.PI / 8 && angle < -Math.PI / 8) {
-			arrow = "↗";
-		} else if (angle<3*Math.PI/8 && angle>Math.PI/8) {
-			arrow = "↖";
-		} else if (angle>3*Math.PI/8 && angle<5*Math.PI/8) {
-			arrow="←";
-		} else if (angle<-3*Math.PI/8 && angle>-5*Math.PI/8) {
-			arrow = "→";
-		} else if (angle<-5*Math.PI/8 && angle>-7*Math.PI/8) {
-			arrow = "↘";
-		} else if (angle > 5 * Math.PI / 8 && angle < 7 * Math.PI / 8) {
-			arrow = "↙";
-		} else arrow = "↓";
-
-		return distance + " §l" + arrow;
-	}
-
-	@Override
-	public String conversion(int timer) {
-
-		String value;
-		float sign = Math.signum(timer);
-		timer = Math.abs(timer);
-
-		if (timer % 60 > 9) {
-			value = timer % 60 + "s";
-		} else value = "0" + timer % 60 + "s";
-
-		if(timer/3600>0) {
-
-			if(timer%3600/60>9) {
-				value = timer / 3600 + "h" + timer % 3600 / 60 + "m" + value;
-			} else value = timer / 3600 + "h0" + timer % 3600 / 60 + "m" + value;
-		} else if (timer / 60 > 0) {
-			value = timer / 60 + "m" + value;
-		}
-		if (sign < 0) value = "-" + value;
-
-		return value;
-	}
 
 	@EventHandler
 	public void onNameTagUpdate(UpdateNameTagEvent event) {
@@ -414,7 +337,7 @@ public class ScoreBoard implements ScoreAPI, Listener {
 
 		StringBuilder sb = new StringBuilder(event.getSuffix());
 
-		PlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID());
+		IPlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID());
 
 		if (playerWW == null) {
 			return;
@@ -484,7 +407,7 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		for (UUID uuid : game.getModerationManager().getModerators()) {
 			Player player = Bukkit.getPlayer(uuid);
 			if (player != null) {
-				for (PlayerWW playerWW : event.getPlayerWWS()) {
+				for (IPlayerWW playerWW : event.getPlayerWWS()) {
 					tabManager.updatePlayerScoreBoard(player, Collections.singletonList(playerWW.getUUID()));
 				}
 
@@ -518,11 +441,11 @@ public class ScoreBoard implements ScoreAPI, Listener {
 		for (UUID uuid : game.getModerationManager().getModerators()) {
 			Player player = Bukkit.getPlayer(uuid);
 			if (player != null) {
-				for (LoverAPI loverAPI : game.getLoversManager().getLovers()) {
-					if (!loverAPI.isKey(RolesBase.AMNESIAC_WEREWOLF.getKey())) {
-						tabManager.updatePlayerScoreBoard(player, loverAPI.getLovers()
+				for (ILover ILover : game.getLoversManager().getLovers()) {
+					if (!ILover.isKey(RolesBase.AMNESIAC_WEREWOLF.getKey())) {
+						tabManager.updatePlayerScoreBoard(player, ILover.getLovers()
 								.stream()
-								.map(PlayerWW::getUUID)
+								.map(IPlayerWW::getUUID)
 								.collect(Collectors.toList()));
 					}
 				}
@@ -574,25 +497,4 @@ public class ScoreBoard implements ScoreAPI, Listener {
 	public void setGroup(int group) {
 		this.group_size = group;
 	}
-
-/*
-	public char getArrowChar(Player p, Location mate) {
-
-		Location ploc = p.getLocation();
-		ploc.setY(mate.getY());
-		p.setCompassTarget(mate);
-		Vector v = p.getCompassTarget().subtract(ploc).toVector().normalize();
-
-		Vector d = ploc.getDirection();
-
-		double a = Math.toDegrees(Math.atan2(d.getX(), d.getZ()));
-		a -= Math.toDegrees(Math.atan2(v.getX(), v.getZ()));
-		a = ((int) (a + 22.5D) % 360);
-
-		if (a < 0.0) a += 360.0;
-
-		return "↑↗→↘↓↙←↖".charAt((int) a / 45);
-
-	}
-*/
 }

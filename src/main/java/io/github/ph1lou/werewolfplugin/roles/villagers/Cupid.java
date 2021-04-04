@@ -3,13 +3,14 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.events.AroundLover;
-import io.github.ph1lou.werewolfapi.events.EnchantmentEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
+import io.github.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
+import io.github.ph1lou.werewolfapi.events.lovers.AroundLover;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
@@ -18,12 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Cupid extends RolesVillage implements AffectedPlayers, Power {
+public class Cupid extends RoleVillage implements IAffectedPlayers, IPower {
 
-    private final List<PlayerWW> affectedPlayer = new ArrayList<>();
+    private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private boolean power = true;
 
-    public Cupid(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+    public Cupid(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
     }
 
@@ -38,12 +39,12 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
     }
 
     @Override
-    public void addAffectedPlayer(PlayerWW playerWW) {
+    public void addAffectedPlayer(IPlayerWW playerWW) {
         this.affectedPlayer.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(PlayerWW playerWW) {
+    public void removeAffectedPlayer(IPlayerWW playerWW) {
         this.affectedPlayer.remove(playerWW);
     }
 
@@ -53,7 +54,7 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
     }
 
     @Override
-    public List<PlayerWW> getAffectedPlayers() {
+    public List<IPlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
@@ -68,11 +69,11 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
                         this.affectedPlayer.isEmpty() ?
                                 this.hasPower() ?
                                         game.translate("werewolf.role.cupid.lover_designation_message",
-                                                game.getScore().conversion(
+                                                Utils.conversion(
                                                         game.getConfig()
                                                                 .getTimerValue("werewolf.menu.timers.lover_duration"))) :
                                         game.translate("werewolf.role.cupid.none") :
-                                affectedPlayer.stream().map(PlayerWW::getName)
+                                affectedPlayer.stream().map(IPlayerWW::getName)
                                         .collect(Collectors.joining(" "))))
                 .build();
     }
@@ -89,13 +90,13 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (event.getPlayerWWS().contains(getPlayerWW())) {
-            for (PlayerWW playerWW : affectedPlayer) {
+            for (IPlayerWW playerWW : affectedPlayer) {
                 event.addPlayer(playerWW);
             }
             return;
         }
 
-        for (PlayerWW playerWW : event.getPlayerWWS()) {
+        for (IPlayerWW playerWW : event.getPlayerWWS()) {
             if (affectedPlayer.contains(playerWW)) {
                 event.addPlayer(getPlayerWW());
                 break;

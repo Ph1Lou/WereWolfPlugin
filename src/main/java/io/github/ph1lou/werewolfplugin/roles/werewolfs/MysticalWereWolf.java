@@ -3,12 +3,12 @@ package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
-import io.github.ph1lou.werewolfapi.events.MysticalWerewolfRevelationEvent;
-import io.github.ph1lou.werewolfapi.events.WereWolfChatEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesWereWolf;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.roles.mystical_werewolf.MysticalWerewolfRevelationEvent;
+import io.github.ph1lou.werewolfapi.events.werewolf.WereWolfChatEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleWereWolf;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -17,9 +17,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MysticalWereWolf extends RolesWereWolf {
+public class MysticalWereWolf extends RoleWereWolf {
 
-    public MysticalWereWolf(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+    public MysticalWereWolf(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
     }
 
@@ -58,14 +58,14 @@ public class MysticalWereWolf extends RolesWereWolf {
 
         if (!event.getPlayerWW().getRole().isWereWolf()) return;
 
-        List<PlayerWW> roles = game.getPlayerWW()
+        List<IPlayerWW> roles = game.getPlayerWW()
                 .stream().filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> !playerWW.getRole().isWereWolf())
                 .collect(Collectors.toList());
 
         if (roles.isEmpty()) return;
 
-        PlayerWW roleWW = roles.get((int) Math.floor(game.getRandom().nextFloat() * roles.size()));
+        IPlayerWW roleWW = roles.get((int) Math.floor(game.getRandom().nextFloat() * roles.size()));
 
         Bukkit.getPluginManager().callEvent(new MysticalWerewolfRevelationEvent(getPlayerWW(), roleWW));
 

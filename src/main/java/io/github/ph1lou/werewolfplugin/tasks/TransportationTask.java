@@ -1,11 +1,12 @@
 package io.github.ph1lou.werewolfplugin.tasks;
 
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
@@ -147,7 +148,7 @@ public class TransportationTask implements Listener {
             if (game.getPlayerWW(player.getUniqueId()) != null) {
                 player.setGameMode(GameMode.SURVIVAL);
                 player.sendMessage(game.translate("werewolf.announcement.start.message",
-                        game.getScore().conversion(game.getConfig().getTimerValue(TimersBase.INVULNERABILITY.getKey()))));
+                        Utils.conversion(game.getConfig().getTimerValue(TimersBase.INVULNERABILITY.getKey()))));
             } else {
                 player.teleport(game.getMapManager().getWorld().getSpawnLocation());
                 player.setGameMode(GameMode.SPECTATOR);
@@ -175,7 +176,7 @@ public class TransportationTask implements Listener {
 
         actionBar = game.translate("werewolf.action_bar.tp", i + 1, game.getScore().getPlayerSize());
 
-        PlayerWW playerWW = (PlayerWW) game.getPlayerWW().toArray()[i];
+        IPlayerWW playerWW = (IPlayerWW) game.getPlayerWW().toArray()[i];
         playerWW.setSpawn(spawns.get(i));
         Player player = Bukkit.getPlayer(playerWW.getUUID());
 

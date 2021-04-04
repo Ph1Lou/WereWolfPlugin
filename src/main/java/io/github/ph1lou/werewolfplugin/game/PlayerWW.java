@@ -1,19 +1,20 @@
 package io.github.ph1lou.werewolfplugin.game;
 
 
-import io.github.ph1lou.werewolfapi.LoverAPI;
+import io.github.ph1lou.werewolfapi.ILover;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.MessageAction;
-import io.github.ph1lou.werewolfapi.PlayerWW;
 import io.github.ph1lou.werewolfapi.PotionAction;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Villager;
 import me.kbrewster.exceptions.APIException;
+import me.kbrewster.exceptions.InvalidPlayerException;
 import me.kbrewster.mojangapi.MojangAPI;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -34,10 +35,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 
-public class PlayerLG implements PlayerWW {
+public class PlayerWW implements IPlayerWW {
 
     private StatePlayer state = StatePlayer.ALIVE;
-    private Roles role;
+    private final List<ILover> lovers = new ArrayList<>();
     private final List<PotionAction> disconnectedPotionActions = new ArrayList<>();
     private final List<MessageAction> disconnectedMessages = new ArrayList<>();
     private final List<ItemStack> decoItems = new ArrayList<>();
@@ -46,9 +47,9 @@ public class PlayerLG implements PlayerWW {
     private int disconnectedChangeHealth = 0;
     @Nullable
     private UUID mojangUUID = null;
-    private final List<LoverAPI> lovers = new ArrayList<>();
+    private final List<IPlayerWW> killer = new ArrayList<>();
     private final UUID uuid;
-    private final List<PlayerWW> killer = new ArrayList<>();
+    private IRole role;
     private int disconnectedChangeMaxHealth = 0;
     private final List<ItemStack> itemsDeath = new ArrayList<>();
     private transient Location spawn;
@@ -59,7 +60,7 @@ public class PlayerLG implements PlayerWW {
     private final WereWolfAPI game;
 
 
-    public PlayerLG(Main main, Player player) {
+    public PlayerWW(Main main, Player player) {
         this.spawn = player.getWorld().getSpawnLocation();
         this.uuid = player.getUniqueId();
         this.name = player.getName();
@@ -68,7 +69,7 @@ public class PlayerLG implements PlayerWW {
         this.game = main.getWereWolfAPI();
         try {
             this.mojangUUID = MojangAPI.getUUID(this.name);
-        } catch (IOException | APIException ignored) {
+        } catch (IOException | APIException | InvalidPlayerException ignored) {
         }
     }
 
@@ -283,21 +284,21 @@ public class PlayerLG implements PlayerWW {
         }
         try {
             return this.mojangUUID = MojangAPI.getUUID(this.name);
-        } catch (IOException | APIException ignored) {
+        } catch (IOException | APIException | InvalidPlayerException ignored) {
         }
 
         return this.uuid;
     }
 
     @Override
-    public void setRole(Roles role) {
-        this.role = role;
-        this.role.setPlayerWW(this);
+    public IRole getRole() {
+        return (this.role);
     }
 
     @Override
-    public Roles getRole() {
-        return (this.role);
+    public void setRole(IRole role) {
+        this.role = role;
+        this.role.setPlayerWW(this);
     }
 
     @Override
@@ -305,7 +306,7 @@ public class PlayerLG implements PlayerWW {
         return (role.equals(this.role.getKey()));
     }
 
-	@Override
+    @Override
 	public void setSpawn(Location spawn) {
 		this.spawn=spawn;
 	}
@@ -316,27 +317,27 @@ public class PlayerLG implements PlayerWW {
     }
 
     @Override
-    public List<LoverAPI> getLovers() {
+    public List<ILover> getLovers() {
         return (this.lovers);
     }
 
     @Override
-    public void addLover(LoverAPI loverAPI) {
-        lovers.add(loverAPI);
+    public void addLover(ILover ILover) {
+        lovers.add(ILover);
     }
 
     @Override
-    public void removeLover(LoverAPI loverAPI) {
-        lovers.remove(loverAPI);
+    public void removeLover(ILover ILover) {
+        lovers.remove(ILover);
     }
 
     @Override
-    public void addKiller(PlayerWW killerUUID) {
+    public void addKiller(IPlayerWW killerUUID) {
         this.killer.add(killerUUID);
     }
 
     @Override
-    public List<? extends PlayerWW> getKillers() {
+    public List<? extends IPlayerWW> getKillers() {
         return (this.killer);
     }
 
@@ -352,7 +353,7 @@ public class PlayerLG implements PlayerWW {
 
     @Nullable
     @Override
-    public Optional<PlayerWW> getLastKiller() {
+    public Optional<IPlayerWW> getLastKiller() {
         return this.killer.isEmpty() ?
                 Optional.empty() :
                 this.killer.get(this.killer.size() - 1) == null ?

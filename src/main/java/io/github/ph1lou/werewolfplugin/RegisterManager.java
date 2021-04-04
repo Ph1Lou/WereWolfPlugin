@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin;
 
-import io.github.ph1lou.werewolfapi.ConfigWereWolfAPI;
+
+import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.enums.Category;
 import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enums.RandomCompositionAttribute;
@@ -10,25 +11,25 @@ import io.github.ph1lou.werewolfapi.enums.ScenariosBase;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
-import io.github.ph1lou.werewolfapi.events.AutoAngelEvent;
-import io.github.ph1lou.werewolfapi.events.AutoModelEvent;
-import io.github.ph1lou.werewolfapi.events.BorderStartEvent;
-import io.github.ph1lou.werewolfapi.events.DiggingEndEvent;
-import io.github.ph1lou.werewolfapi.events.InvulnerabilityEvent;
-import io.github.ph1lou.werewolfapi.events.LoversRepartitionEvent;
 import io.github.ph1lou.werewolfapi.events.PVPEvent;
-import io.github.ph1lou.werewolfapi.events.RepartitionEvent;
-import io.github.ph1lou.werewolfapi.events.RivalEvent;
 import io.github.ph1lou.werewolfapi.events.TrollEvent;
 import io.github.ph1lou.werewolfapi.events.TrollLoverEvent;
-import io.github.ph1lou.werewolfapi.events.VoteBeginEvent;
 import io.github.ph1lou.werewolfapi.events.WereWolfListEvent;
+import io.github.ph1lou.werewolfapi.events.game.timers.BorderStartEvent;
+import io.github.ph1lou.werewolfapi.events.game.timers.DiggingEndEvent;
+import io.github.ph1lou.werewolfapi.events.game.timers.InvulnerabilityEvent;
+import io.github.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
+import io.github.ph1lou.werewolfapi.events.game.vote.VoteBeginEvent;
+import io.github.ph1lou.werewolfapi.events.lovers.LoversRepartitionEvent;
+import io.github.ph1lou.werewolfapi.events.roles.angel.AutoAngelEvent;
+import io.github.ph1lou.werewolfapi.events.roles.rival.RivalEvent;
+import io.github.ph1lou.werewolfapi.events.roles.wild_child.AutoModelEvent;
 import io.github.ph1lou.werewolfapi.registers.AddonRegister;
 import io.github.ph1lou.werewolfapi.registers.CommandRegister;
 import io.github.ph1lou.werewolfapi.registers.ConfigRegister;
+import io.github.ph1lou.werewolfapi.registers.IRegister;
+import io.github.ph1lou.werewolfapi.registers.IRegisterManager;
 import io.github.ph1lou.werewolfapi.registers.RandomEventRegister;
-import io.github.ph1lou.werewolfapi.registers.RegisterAPI;
-import io.github.ph1lou.werewolfapi.registers.RegisterManager;
 import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfapi.registers.ScenarioRegister;
 import io.github.ph1lou.werewolfapi.registers.TimerRegister;
@@ -190,7 +191,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Register implements RegisterManager {
+public class RegisterManager implements IRegisterManager {
 
     private final Main main;
     private final List<RoleRegister> rolesRegister = new ArrayList<>();
@@ -202,7 +203,7 @@ public class Register implements RegisterManager {
     private final List<AddonRegister> addonsRegister = new ArrayList<>();
     private final List<RandomEventRegister> eventRandomsRegister = new ArrayList<>();
 
-    public Register(Main main) {
+    public RegisterManager(Main main) {
         this.main = main;
         registerRoles();
         registerScenarios();
@@ -1352,7 +1353,7 @@ public class Register implements RegisterManager {
                             if (wereWolfAPI.getConfig().getTimerValue(TimersBase.BORDER_BEGIN.getKey()) >= 0)
                                 return true;
 
-                            ConfigWereWolfAPI config = wereWolfAPI.getConfig();
+                            IConfiguration config = wereWolfAPI.getConfig();
                             WorldBorder worldBorder = wereWolfAPI.getMapManager().getWorld().getWorldBorder();
 
                             if (config.getBorderMax() !=
@@ -1534,11 +1535,11 @@ public class Register implements RegisterManager {
         register(commandRegister, adminCommandsRegister);
     }
 
-    private <A extends RegisterAPI> void register(A register, List<A> registers) {
+    private <A extends IRegister> void register(A register, List<A> registers) {
         if (registers.removeAll(registers.stream()
                 .filter(register1 -> register1.getKey().equalsIgnoreCase(register.getKey()))
                 .collect(Collectors.toList()))) {
-            Bukkit.getLogger().warning(String.format("[WereWolfPlugin] L'élément %s a été écrasé par l'addon %s",register.getKey(),register.getAddonKey()));
+            Bukkit.getLogger().warning(String.format("[WereWolfPlugin] L'élément %s a été écrasé par l'addon %s", register.getKey(), register.getAddonKey()));
         }
         registers.add(register);
     }

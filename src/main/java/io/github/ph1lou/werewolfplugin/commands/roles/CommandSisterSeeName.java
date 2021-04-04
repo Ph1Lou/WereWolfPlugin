@@ -1,16 +1,16 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.events.SisterSeeNameEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
+import io.github.ph1lou.werewolfapi.events.roles.sister.SisterSeeNameEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandSisterSeeName implements Commands {
+public class CommandSisterSeeName implements ICommands {
 
 
     private final Main main;
@@ -24,11 +24,11 @@ public class CommandSisterSeeName implements Commands {
 
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        PlayerWW playerWW = game.getPlayerWW(uuid);
-        PlayerWW killerWW = args[0].equals("pve") ? null : game.getPlayerWW(UUID.fromString(args[0]));
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW killerWW = args[0].equals("pve") ? null : game.getPlayerWW(UUID.fromString(args[0]));
         if (playerWW == null) return;
 
-        AffectedPlayers affectedPlayers = (AffectedPlayers) playerWW.getRole();
+        IAffectedPlayers affectedPlayers = (IAffectedPlayers) playerWW.getRole();
 
         if (!affectedPlayers.getAffectedPlayers().contains(killerWW)) {
             playerWW.sendMessageWithKey("werewolf.role.sister.already");

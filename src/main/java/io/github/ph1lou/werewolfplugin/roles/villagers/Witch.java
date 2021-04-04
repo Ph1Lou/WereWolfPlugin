@@ -3,14 +3,14 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.events.ThirdDeathEvent;
-import io.github.ph1lou.werewolfapi.events.WitchResurrectionEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.ThirdDeathEvent;
+import io.github.ph1lou.werewolfapi.events.roles.witch.WitchResurrectionEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -20,12 +20,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Witch extends RolesVillage implements AffectedPlayers, Power {
+public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
 
-    private final List<PlayerWW> affectedPlayer = new ArrayList<>();
+    private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private boolean power = true;
 
-    public Witch(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+    public Witch(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
     }
 
@@ -40,12 +40,12 @@ public class Witch extends RolesVillage implements AffectedPlayers, Power {
     }
 
     @Override
-    public void addAffectedPlayer(PlayerWW playerWW) {
+    public void addAffectedPlayer(IPlayerWW playerWW) {
         this.affectedPlayer.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(PlayerWW playerWW) {
+    public void removeAffectedPlayer(IPlayerWW playerWW) {
         this.affectedPlayer.remove(playerWW);
     }
 
@@ -55,7 +55,7 @@ public class Witch extends RolesVillage implements AffectedPlayers, Power {
     }
 
     @Override
-    public List<PlayerWW> getAffectedPlayers() {
+    public List<IPlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
@@ -89,7 +89,7 @@ public class Witch extends RolesVillage implements AffectedPlayers, Power {
 
         if (!hasPower()) return;
 
-        PlayerWW playerWW = event.getPlayerWW();
+        IPlayerWW playerWW = event.getPlayerWW();
 
         if (playerWW.equals(getPlayerWW())) {
             event.setCancelled(autoResurrection(playerWW));
@@ -111,7 +111,7 @@ public class Witch extends RolesVillage implements AffectedPlayers, Power {
         getPlayerWW().sendMessage(textComponent);
     }
 
-    private boolean autoResurrection(PlayerWW player) {
+    private boolean autoResurrection(IPlayerWW player) {
 
         if (!game.getConfig().isConfigActive(ConfigsBase.AUTO_REZ_WITCH.getKey())) {
             return false;

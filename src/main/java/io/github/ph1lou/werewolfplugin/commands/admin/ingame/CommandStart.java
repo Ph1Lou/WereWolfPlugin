@@ -1,8 +1,8 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
-import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.ICommands;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
-import io.github.ph1lou.werewolfapi.events.StartEvent;
+import io.github.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import io.github.ph1lou.werewolfplugin.save.FileUtils_;
@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.text.DecimalFormat;
 
-public class CommandStart implements Commands {
+public class CommandStart implements ICommands {
 
 
     private final Main main;

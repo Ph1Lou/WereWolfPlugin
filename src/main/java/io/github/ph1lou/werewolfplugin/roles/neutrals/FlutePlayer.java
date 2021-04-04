@@ -3,29 +3,30 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
-import io.github.ph1lou.werewolfapi.events.EnchantedEvent;
-import io.github.ph1lou.werewolfapi.events.SelectionEndEvent;
-import io.github.ph1lou.werewolfapi.events.WinConditionsCheckEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesNeutral;
+import io.github.ph1lou.werewolfapi.events.game.utils.WinConditionsCheckEvent;
+import io.github.ph1lou.werewolfapi.events.roles.SelectionEndEvent;
+import io.github.ph1lou.werewolfapi.events.roles.flute_player.EnchantedEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleNeutral;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers {
+public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers {
 
 
     private boolean power = false;
-    private final List<PlayerWW> affectedPlayer = new ArrayList<>();
+    private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
 
-    public FlutePlayer(GetWereWolfAPI main, PlayerWW playerWW, String key) {
+    public FlutePlayer(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
     }
 
@@ -46,12 +47,12 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
 
 
     @Override
-    public void addAffectedPlayer(PlayerWW playerWW) {
+    public void addAffectedPlayer(IPlayerWW playerWW) {
         this.affectedPlayer.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(PlayerWW playerWW) {
+    public void removeAffectedPlayer(IPlayerWW playerWW) {
         this.affectedPlayer.remove(playerWW);
     }
 
@@ -61,7 +62,7 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
     }
 
     @Override
-    public List<PlayerWW> getAffectedPlayers() {
+    public List<IPlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
@@ -75,8 +76,7 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
         setPower(true);
 
         getPlayerWW().sendMessageWithKey("werewolf.role.flute_player.power",
-                game.getScore()
-                        .conversion(game.getConfig().getTimerValue(TimersBase.POWER_DURATION.getKey())));
+                Utils.conversion(game.getConfig().getTimerValue(TimersBase.POWER_DURATION.getKey())));
     }
 
 
@@ -100,13 +100,13 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
         int counter = 1;
         int playerAlive = 0;
 
-        for (PlayerWW playerWW : game.getPlayerWW()) {
+        for (IPlayerWW playerWW : game.getPlayerWW()) {
             if (playerWW.isState(StatePlayer.ALIVE)) {
                 playerAlive++;
             }
         }
 
-        for (PlayerWW playerWW : affectedPlayer) {
+        for (IPlayerWW playerWW : affectedPlayer) {
             if (playerWW.isState(StatePlayer.ALIVE)) {
                 counter++;
             }
@@ -115,7 +115,7 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
         if (counter == playerAlive) {
 
             if (!affectedPlayer.isEmpty()) {
-                PlayerWW playerWW1 = affectedPlayer.get(0);
+                IPlayerWW playerWW1 = affectedPlayer.get(0);
                 if (playerWW1.isState(StatePlayer.ALIVE)) {
                     affectedPlayer.remove(playerWW1);
                     game.death(playerWW1);
@@ -136,7 +136,7 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
 
         String enchantedList = enchantedList();
 
-        for (PlayerWW playerWW : affectedPlayer) {
+        for (IPlayerWW playerWW : affectedPlayer) {
             playerWW.sendMessageWithKey("werewolf.role.flute_player.list", enchantedList);
         }
     }
@@ -145,7 +145,7 @@ public class FlutePlayer extends RolesNeutral implements Power, AffectedPlayers 
     public String enchantedList() {
         StringBuilder sb = new StringBuilder();
 
-        for (PlayerWW playerWW : affectedPlayer) {
+        for (IPlayerWW playerWW : affectedPlayer) {
             if (playerWW.isState(StatePlayer.ALIVE)) {
                 sb.append(playerWW.getName()).append(" ");
             }
