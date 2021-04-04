@@ -1,17 +1,19 @@
 package io.github.ph1lou.werewolfplugin.listeners;
 
-import io.github.ph1lou.werewolfplugin.game.GameManager;
+
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class PatchPotions implements Listener {
 
-    private final GameManager game;
+    private final WereWolfAPI game;
 
-    public PatchPotions(GameManager game) {
+    public PatchPotions(WereWolfAPI game) {
         this.game = game;
     }
 
@@ -25,7 +27,12 @@ public class PatchPotions implements Listener {
         Player player = (Player) event.getEntity();
 
         if (damager.hasPotionEffect(PotionEffectType.INCREASE_DAMAGE)) {
-            event.setDamage(event.getDamage() * game.getConfig().getStrengthRate() / 100f);
+
+            if (damager.getActivePotionEffects().stream().filter(potionEffect -> potionEffect.getType().equals(PotionEffectType.INCREASE_DAMAGE)).map(PotionEffect::getAmplifier).findFirst().orElse(-1) == 0) {
+                event.setDamage(event.getDamage() / 2.3f *
+                        (1 + game.getConfig().getStrengthRate() / 100f));
+            } else event.setDamage(event.getDamage() *
+                    (1 + game.getConfig().getStrengthRate() / 100f));
         }
         if (player.hasPotionEffect(PotionEffectType.DAMAGE_RESISTANCE)) {
             if (game.getConfig().getResistanceRate() >= 100) {

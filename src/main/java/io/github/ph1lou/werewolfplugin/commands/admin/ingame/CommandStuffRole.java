@@ -1,17 +1,19 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
-import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IStuffManager;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.events.UpdateStuffEvent;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class CommandStuffRole implements Commands {
+import java.util.UUID;
 
+public class CommandStuffRole implements ICommands {
 
     private final Main main;
 
@@ -20,36 +22,34 @@ public class CommandStuffRole implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
+        IStuffManager stuffManager = game.getStuffs();
+        UUID uuid = player.getUniqueId();
 
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(game.translate("werewolf.check.console"));
+        if (!stuffManager.getStuffRoles().containsKey(args[0])) {
+            player.sendMessage(game.translate("werewolf.check.invalid_key"));
             return;
         }
 
-        if (!sender.hasPermission("a.stuffRole.use") && !game.getModerationManager().getHosts().contains(((Player) sender).getUniqueId())) {
-            sender.sendMessage(game.translate("werewolf.check.permission_denied"));
-            return;
+        stuffManager.getStuffRoles().get(args[0]).clear();
+        for (ItemStack i : player.getInventory().getContents()) {
+            stuffManager.getStuffRoles().get(args[0]).add(i);
+        }
+        player.sendMessage(game.translate("werewolf.commands.admin.loot_role.perform", game.translate(args[0])));
+
+        Inventory inventory;
+        if (stuffManager.getTempStuff().containsKey(uuid)) {
+            inventory = stuffManager.getTempStuff().get(uuid);
+            stuffManager.getTempStuff().remove(uuid);
+        } else inventory = Bukkit.createInventory(player, 45);
+
+        for (int j = 0; j < 40; j++) {
+            player.getInventory().setItem(j, inventory.getItem(j));
         }
 
-        if (args.length != 1) {
-            sender.sendMessage(game.translate("werewolf.check.number_required"));
-            return;
-        }
-        if(!game.getStuffs().getStuffRoles().containsKey(args[0])){
-            sender.sendMessage(game.translate("werewolf.check.invalid_key"));
-            return;
-        }
-
-        game.getStuffs().getStuffRoles().get(args[0]).clear();
-        for (ItemStack i : ((Player) sender).getInventory().getContents()) {
-            game.getStuffs().getStuffRoles().get(args[0]).add(i);
-        }
-        sender.sendMessage(game.translate("werewolf.commands.admin.loot_role.perform"));
-        ((Player) sender).getInventory().clear();
-        ((Player) sender).setGameMode(GameMode.ADVENTURE);
+        player.setGameMode(GameMode.ADVENTURE);
 
         Bukkit.getPluginManager().callEvent(new UpdateStuffEvent());
     }

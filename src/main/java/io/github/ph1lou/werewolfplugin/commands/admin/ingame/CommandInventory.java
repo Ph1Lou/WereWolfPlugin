@@ -1,14 +1,13 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
-import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-public class CommandInventory implements Commands {
+public class CommandInventory implements ICommands {
 
 
     private final Main main;
@@ -18,29 +17,13 @@ public class CommandInventory implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
-
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(game.translate("werewolf.check.console"));
-            return;
-        }
-
-        if (!sender.hasPermission("a.inv.use") && !game.getModerationManager().getModerators().contains(((Player) sender).getUniqueId()) && !game.getModerationManager().getHosts().contains(((Player) sender).getUniqueId())) {
-            sender.sendMessage(game.translate("werewolf.check.permission_denied"));
-            return;
-        }
-
-        if (args.length != 1) {
-            sender.sendMessage(game.translate("werewolf.check.player_input"));
-            return;
-        }
-
+        WereWolfAPI game = main.getWereWolfAPI();
         Player pInv = Bukkit.getPlayer(args[0]);
 
         if (pInv == null) {
-            sender.sendMessage(game.translate("werewolf.check.offline_player"));
+            player.sendMessage(game.translate("werewolf.check.offline_player"));
             return;
         }
 
@@ -50,6 +33,6 @@ public class CommandInventory implements Commands {
             inv.setItem(i, pInv.getInventory().getItem(i));
         }
 
-        ((Player) sender).openInventory(inv);
+        player.openInventory(inv);
     }
 }

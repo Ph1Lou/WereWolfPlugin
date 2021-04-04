@@ -1,14 +1,13 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
-import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CommandInfo implements Commands {
+public class CommandInfo implements ICommands {
 
 
     private final Main main;
@@ -18,22 +17,20 @@ public class CommandInfo implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
 
-        if (!sender.hasPermission("a.info.use") && !game.getModerationManager().getModerators().contains(((Player) sender).getUniqueId()) && !game.getModerationManager().getHosts().contains(((Player) sender).getUniqueId())) {
-            sender.sendMessage(game.translate("werewolf.check.permission_denied"));
+        if (args.length == 0) {
+            player.sendMessage(game.translate("werewolf.check.parameters", 1));
             return;
         }
 
-        if (args.length == 0) return;
-
-        StringBuilder sb2 = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
         for (String w : args) {
-            sb2.append(w).append(" ");
+            sb.append(w).append(" ");
         }
-        Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.info", ChatColor.translateAlternateColorCodes('&', sb2.toString())));
+        Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.info.send", ChatColor.translateAlternateColorCodes('&', sb.toString())));
     }
 }

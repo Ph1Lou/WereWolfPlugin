@@ -1,21 +1,21 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enumlg.AngelForm;
-import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
-import io.github.ph1lou.werewolfapi.events.AngelChoiceEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AngelRole;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.AngelForm;
+import io.github.ph1lou.werewolfapi.enums.RolesBase;
+import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.events.roles.angel.AngelChoiceEvent;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
+import io.github.ph1lou.werewolfplugin.roles.neutrals.Angel;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandGuardianAngel implements Commands {
+public class CommandGuardianAngel implements ICommands {
 
 
     private final Main main;
@@ -25,49 +25,25 @@ public class CommandGuardianAngel implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
-
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(game.translate("werewolf.check.console"));
-            return;
-        }
-
-        Player player = (Player) sender;
+        WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
-        if(!game.getPlayersWW().containsKey(uuid)) {
-            player.sendMessage(game.translate("werewolf.check.not_in_game"));
+        if (playerWW == null) return;
+
+        Angel angel = (Angel) playerWW.getRole();
+
+        if (!angel.isChoice(AngelForm.ANGEL)) {
+            playerWW.sendMessageWithKey("werewolf.check.power");
             return;
         }
 
-        PlayerWW plg = game.getPlayersWW().get(uuid);
-
-
-        if (!game.isState(StateLG.GAME)) {
-            player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
-            return;
-        }
-
-        if (!(plg.getRole() instanceof AngelRole)){
-            player.sendMessage(game.translate("werewolf.check.role", game.translate("werewolf.role.angel.display")));
-            return;
-        }
-
-        AngelRole angel = (AngelRole) plg.getRole();
-
-        if(!(angel.isChoice(AngelForm.ANGEL))) {
-            player.sendMessage(game.translate("werewolf.check.power"));
-            return;
-        }
-
-        if(!plg.isState(State.ALIVE)){
-            player.sendMessage(game.translate("werewolf.check.death"));
-            return;
-        }
-        Bukkit.getPluginManager().callEvent(new AngelChoiceEvent(uuid,AngelForm.GUARDIAN_ANGEL));
+        Bukkit.getPluginManager().callEvent(new AngelChoiceEvent(playerWW, AngelForm.GUARDIAN_ANGEL));
         angel.setChoice(AngelForm.GUARDIAN_ANGEL);
-        sender.sendMessage(game.translate("werewolf.role.angel.angel_choice_perform",game.translate("werewolf.role.guardian_angel.display")));
+        playerWW.sendMessageWithKey("werewolf.role.angel.angle_choice_click",
+                game.translate(RolesBase.GUARDIAN_ANGEL.getKey())
+                , Utils.conversion(game.getConfig().getTimerValue(TimersBase.ANGEL_DURATION.getKey())));
     }
 }

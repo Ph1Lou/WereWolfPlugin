@@ -1,65 +1,74 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
-import io.github.ph1lou.werewolfapi.events.TroubleMakerDeathEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.events.NightEvent;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.roles.trouble_maker.TroubleMakerDeathEvent;
+import io.github.ph1lou.werewolfapi.events.werewolf.WereWolfCanSpeakInChatEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class Troublemaker extends RolesVillage implements AffectedPlayers, Power {
+public class Troublemaker extends RoleVillage implements IAffectedPlayers, IPower {
 
-    private final List<UUID> affectedPlayer = new ArrayList<>();
+    private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
+    private boolean power = true;
 
-    public Troublemaker(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public Troublemaker(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
+        super(main, playerWW, key);
     }
 
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 
-        if(!event.getUuid().equals(getPlayerUUID())) return;
+        if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
-        Bukkit.getPluginManager().callEvent(new TroubleMakerDeathEvent(getPlayerUUID()));
-        int i = 0;
-        for (UUID uuid : game.getPlayersWW().keySet()) {
-            PlayerWW plg = game.getPlayersWW().get(uuid);
-            if (plg.isState(State.ALIVE)) {
-                game.getMapManager().transportation(uuid, i * 2 * Math.PI / game.getScore().getPlayerSize(), game.translate("werewolf.role.troublemaker.troublemaker_death"));
-                i++;
-            }
-        }
-    }
+        Bukkit.getPluginManager().callEvent(new TroubleMakerDeathEvent(getPlayerWW()));
+        Bukkit.broadcastMessage(game.translate("werewolf.role.troublemaker.troublemaker_death"));
 
-    private boolean power=true;
-    @Override
-    public void setPower(Boolean power) {
-        this.power=power;
+        AtomicInteger i = new AtomicInteger();
+
+        game.getPlayerWW().stream()
+                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                .forEach(playerWW -> {
+                    game.getMapManager().transportation(playerWW,
+                            i.get() * 2 * Math.PI / game.getScore().getPlayerSize());
+                    i.getAndIncrement();
+                });
     }
 
     @Override
-    public Boolean hasPower() {
-        return(this.power);
+    public void setPower(boolean power) {
+        this.power = power;
     }
 
     @Override
-    public void addAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.add(uuid);
+    public boolean hasPower() {
+        return (this.power);
     }
 
     @Override
-    public void removeAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.remove(uuid);
+    public void addAffectedPlayer(IPlayerWW playerWW) {
+        this.affectedPlayer.add(playerWW);
+    }
+
+    @Override
+    public void removeAffectedPlayer(IPlayerWW playerWW) {
+        this.affectedPlayer.remove(playerWW);
     }
 
     @Override
@@ -68,18 +77,38 @@ public class Troublemaker extends RolesVillage implements AffectedPlayers, Power
     }
 
     @Override
-    public List<UUID> getAffectedPlayers() {
+    public List<IPlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
-
     @Override
-    public String getDescription() {
-        return game.translate("werewolf.role.troublemaker.description");
+    public @NotNull String getDescription() {
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.troublemaker.description"))
+                .setPower(() -> game.translate("werewolf.role.troublemaker.chat"))
+                .build();
     }
 
     @Override
-    public String getDisplay() {
-        return "werewolf.role.troublemaker.display";
+    public void recoverPower() {
+    }
+
+    @EventHandler
+    public void onNightAnnounceWereWOlfChat(NightEvent event) {
+
+        if (!game.getConfig().isConfigActive(ConfigsBase.WEREWOLF_CHAT.getKey())) return;
+
+        getPlayerWW().sendMessageWithKey("werewolf.commands.admin.ww_chat.announce", Utils.conversion(game.getConfig().getTimerValue(TimersBase.WEREWOLF_CHAT_DURATION.getKey())), game.getConfig().getWereWolfChatMaxMessage());
+
+    }
+
+    @EventHandler
+    public void onRequestAccessWereWolfChat(WereWolfCanSpeakInChatEvent event) {
+
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+
+        if (!event.getPlayerWW().equals(getPlayerWW())) return;
+
+        event.setCanSpeak(true);
     }
 }

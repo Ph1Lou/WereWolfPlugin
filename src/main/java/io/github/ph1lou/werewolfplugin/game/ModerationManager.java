@@ -1,15 +1,18 @@
 package io.github.ph1lou.werewolfplugin.game;
 
-import io.github.ph1lou.werewolfapi.ModerationManagerAPI;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.IModerationManager;
+import io.github.ph1lou.werewolfapi.enums.StateGame;
+import io.github.ph1lou.werewolfplugin.commands.Admin;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
-public class ModerationManager implements ModerationManagerAPI {
+public class ModerationManager implements IModerationManager {
 
     private final List<UUID> queue = new ArrayList<>();
     private final List<UUID> whiteListedPlayers = new ArrayList<>();
@@ -24,13 +27,13 @@ public class ModerationManager implements ModerationManagerAPI {
 
     public void checkQueue() {
 
-        if (!game.isState(StateLG.LOBBY)) return;
+        if (!game.isState(StateGame.LOBBY)) return;
 
         List<UUID> temp = new ArrayList<>(queue);
         int i = 0;
 
 
-        while (!temp.isEmpty() && game.getConfig().getPlayerMax() > game.getPlayersWW().size()) {
+        while (!temp.isEmpty() && game.getConfig().getPlayerMax() > game.getScore().getPlayerSize()) {
 
             Player player = Bukkit.getPlayer(temp.get(0));
             if (player != null && (!game.getConfig().isWhiteList() || getWhiteListedPlayers().contains(temp.get(0)))) {
@@ -120,5 +123,53 @@ public class ModerationManager implements ModerationManagerAPI {
         return this.queue;
     }
 
+
+    @Override
+    public void alertModerators(String message) {
+        alert(moderators, message);
+    }
+
+    @Override
+    public void alertHostsAndModerators(String message) {
+        alert(hosts, message);
+        alert(moderators, message);
+    }
+
+    @Override
+    public void alertHosts(String message) {
+        alert(hosts, message);
+    }
+
+
+    private void alert(List<UUID> players, String message) {
+        players.stream()
+                .map(Bukkit::getPlayer)
+                .collect(Collectors.toList())
+                .forEach(player1 -> {
+                    if (player1 != null) {
+                        player1.sendMessage(message);
+                    }
+                });
+    }
+
+    @Override
+    public boolean isStaff(UUID uuid) {
+        return hosts.contains(uuid) || moderators.contains(uuid);
+    }
+
+    @Override
+    public boolean checkAccessAdminCommand(String commandKey, Player player) {
+        return checkAccessAdminCommand(commandKey, player, true);
+    }
+
+    @Override
+    public boolean checkAccessAdminCommand(String commandKey, Player player, boolean seePermissionMessages) {
+        return ((Admin) Objects.requireNonNull(
+                game
+                        .getMain()
+                        .getCommand("a"))
+                .getExecutor())
+                .checkAccess(commandKey, player, seePermissionMessages);
+    }
 
 }

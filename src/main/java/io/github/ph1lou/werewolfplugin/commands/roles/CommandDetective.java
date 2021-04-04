@@ -1,26 +1,22 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enumlg.Camp;
-import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
-import io.github.ph1lou.werewolfapi.events.InvestigateEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Display;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
+import com.google.common.collect.Sets;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.events.roles.detective.InvestigateEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.IDisplay;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.UUID;
 
-public class CommandDetective implements Commands {
+public class CommandDetective implements ICommands {
 
 
     private final Main main;
@@ -30,55 +26,23 @@ public class CommandDetective implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
-
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(game.translate("werewolf.check.console"));
-            return;
-        }
-
-        Player player = (Player) sender;
+        WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
-        if(!game.getPlayersWW().containsKey(uuid)) {
-            player.sendMessage(game.translate("werewolf.check.not_in_game"));
+        if (playerWW == null) return;
+
+        IRole detective = playerWW.getRole();
+
+        if (args.length != 2) {
+            playerWW.sendMessageWithKey("werewolf.check.parameters", 2);
             return;
         }
 
-        PlayerWW plg = game.getPlayersWW().get(uuid);
-
-
-        if (!game.isState(StateLG.GAME)) {
-            player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
-            return;
-        }
-
-        if (!(plg.getRole().isDisplay("werewolf.role.detective.display"))){
-            player.sendMessage(game.translate("werewolf.check.role", game.translate("werewolf.role.detective.display")));
-            return;
-        }
-
-        Roles detective = plg.getRole();
-
-        if (args.length!=2) {
-            player.sendMessage(game.translate("werewolf.check.parameters",2));
-            return;
-        }
-
-        if(!plg.isState(State.ALIVE)){
-            player.sendMessage(game.translate("werewolf.check.death"));
-            return;
-        }
-
-        if(!((Power)detective).hasPower()) {
-            player.sendMessage(game.translate("werewolf.check.power"));
-            return;
-        }
-
-        if(args[0].toLowerCase().equals(args[1].toLowerCase())) {
-            player.sendMessage(game.translate("werewolf.check.two_distinct_player"));
+        if (args[0].equalsIgnoreCase(args[1])) {
+            playerWW.sendMessageWithKey("werewolf.check.two_distinct_player");
             return;
         }
 
@@ -87,25 +51,25 @@ public class CommandDetective implements Commands {
             Player playerArg = Bukkit.getPlayer(p);
 
             if (playerArg == null) {
-                player.sendMessage(game.translate("werewolf.check.offline_player"));
+                playerWW.sendMessageWithKey("werewolf.check.offline_player");
                 return;
             }
 
             UUID uuid1 = playerArg.getUniqueId();
+            IPlayerWW playerWW1 = game.getPlayerWW(uuid1);
 
-
-            if (!game.getPlayersWW().containsKey(uuid1) || game.getPlayersWW().get(uuid).isState(State.DEATH)) {
-                player.sendMessage(game.translate("werewolf.check.player_not_found"));
+            if (playerWW1 == null || playerWW1.isState(StatePlayer.DEATH)) {
+                playerWW.sendMessageWithKey("werewolf.check.player_not_found");
                 return;
             }
 
             if (uuid.equals(uuid1)) {
-                player.sendMessage(game.translate("werewolf.check.not_yourself"));
+                playerWW.sendMessageWithKey("werewolf.check.not_yourself");
                 return;
             }
 
-            if (((AffectedPlayers) detective).getAffectedPlayers().contains(uuid1)) {
-                player.sendMessage(game.translate("werewolf.role.detective.already_inspect"));
+            if (((IAffectedPlayers) detective).getAffectedPlayers().contains(playerWW1)) {
+                playerWW.sendMessageWithKey("werewolf.role.detective.already_inspect");
                 return;
             }
         }
@@ -118,35 +82,37 @@ public class CommandDetective implements Commands {
         UUID uuid1 = player1.getUniqueId();
         UUID uuid2 = player2.getUniqueId();
 
-        PlayerWW plg1 = game.getPlayersWW().get(uuid1);
-        PlayerWW plg2 = game.getPlayersWW().get(uuid2);
+        IPlayerWW playerWW1 = game.getPlayerWW(uuid1);
+        IPlayerWW playerWW2 = game.getPlayerWW(uuid2);
 
-        Camp isLG1 = plg1.getRole().getCamp();
-        Camp isLG2 = plg2.getRole().getCamp();
+        if (playerWW1 == null || playerWW2 == null) return;
 
-        if (plg1.getRole() instanceof Display) {
-            isLG1 = ((Display) plg1.getRole()).getDisplayCamp();
+        String isLG1 = playerWW1.getRole().getCamp().getKey();
+        String isLG2 = playerWW2.getRole().getCamp().getKey();
+
+        if (playerWW1.getRole() instanceof IDisplay) {
+            isLG1 = ((IDisplay) playerWW1.getRole()).getDisplayCamp();
         }
-        if (plg2.getRole() instanceof Display) {
-            isLG2 = ((Display) plg2.getRole()).getDisplayCamp();
+        if (playerWW2.getRole() instanceof IDisplay) {
+            isLG2 = ((IDisplay) playerWW2.getRole()).getDisplayCamp();
         }
 
-        ((Power) detective).setPower(false);
+        ((IPower) detective).setPower(false);
 
-        InvestigateEvent event = new InvestigateEvent(uuid, new ArrayList<>(Arrays.asList(uuid1, uuid2)), isLG1 == isLG2);
+        InvestigateEvent event = new InvestigateEvent(playerWW, Sets.newHashSet(playerWW1, playerWW2), isLG1.equals(isLG2));
         Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
-            player.sendMessage(game.translate("werewolf.check.cancel"));
+            playerWW.sendMessageWithKey("werewolf.check.cancel");
             return;
         }
 
-        ((AffectedPlayers) detective).addAffectedPlayer(uuid1);
-        ((AffectedPlayers) detective).addAffectedPlayer(uuid2);
+        ((IAffectedPlayers) detective).addAffectedPlayer(playerWW1);
+        ((IAffectedPlayers) detective).addAffectedPlayer(playerWW2);
 
         if (event.isSameCamp()) {
-            player.sendMessage(game.translate("werewolf.role.detective.same_camp", player1.getName(), player2.getName()));
+            playerWW.sendMessageWithKey("werewolf.role.detective.same_camp", player1.getName(), player2.getName());
         } else
-            player.sendMessage(game.translate("werewolf.role.detective.opposing_camp", player1.getName(), player2.getName()));
+            playerWW.sendMessageWithKey("werewolf.role.detective.opposing_camp", player1.getName(), player2.getName());
     }
 }

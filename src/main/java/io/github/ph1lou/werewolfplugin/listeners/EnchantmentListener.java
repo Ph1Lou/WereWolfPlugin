@@ -1,7 +1,8 @@
 package io.github.ph1lou.werewolfplugin.listeners;
 
-import io.github.ph1lou.werewolfapi.events.EnchantmentEvent;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -20,10 +21,10 @@ import java.util.UUID;
 
 public class EnchantmentListener implements Listener {
 
-    private final GameManager game;
+    private final WereWolfAPI game;
 
 
-    public EnchantmentListener(GameManager game) {
+    public EnchantmentListener(WereWolfAPI game) {
         this.game=game;
     }
 
@@ -33,60 +34,72 @@ public class EnchantmentListener implements Listener {
         if(!event.getInventory().getType().equals(InventoryType.ANVIL)) return;
         if(event.getSlot()!=2) return;
         ItemStack current = event.getCurrentItem();
-        if (current==null) return;
-        if(current.getEnchantments().isEmpty()){
-            if(current.getType().equals(Material.ENCHANTED_BOOK)){
+
+        if (current == null) return;
+        if (current.getEnchantments().isEmpty()) {
+            if (current.getType().equals(Material.ENCHANTED_BOOK)) {
                 EnchantmentStorageMeta meta = (EnchantmentStorageMeta) current.getItemMeta();
                 if (meta != null) {
-                    event.setCurrentItem(checkEnchant(meta.getStoredEnchants(), (Player) event.getWhoClicked(), current));
+                    event.setCurrentItem(checkEnchant(meta.getStoredEnchants(),
+                            (Player) event.getWhoClicked(), current));
                 }
             }
-        }
-        else event.setCurrentItem(checkEnchant(current.getEnchantments(),(Player) event.getWhoClicked(),current));
+        } else event.setCurrentItem(checkEnchant(current.getEnchantments(),
+                (Player) event.getWhoClicked(), current));
     }
 
     @EventHandler
     public void onItemEnchant(EnchantItemEvent event) {
-        event.getInventory().setItem(0,checkEnchant(event.getEnchantsToAdd(),event.getEnchanter(),event.getItem()));
+        event.getInventory().setItem(0, checkEnchant(event.getEnchantsToAdd(),
+                event.getEnchanter(), event.getItem()));
     }
 
 
-    private ItemStack checkEnchant(Map<Enchantment,Integer> enchant, Player player, ItemStack item){
+    private ItemStack checkEnchant(Map<Enchantment,Integer> enchant, Player player, ItemStack item) {
 
-        Map<Enchantment,Integer> tempEnchant = new HashMap<>();
+        Map<Enchantment, Integer> tempEnchant = new HashMap<>();
         ItemStack result = new ItemStack(item);
         UUID uuid = player.getUniqueId();
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
-        for(Enchantment e:enchant.keySet()){
+        if (playerWW == null) return result;
+
+        for (Enchantment e : enchant.keySet()) {
 
             result.removeEnchantment(e);
 
-            if(Enchantment.KNOCKBACK.equals(e)){
-                if(game.getConfig().getLimitKnockBack()==2){
-                    tempEnchant.put(e,enchant.get(e));
+            if (Enchantment.KNOCKBACK.equals(e)) {
+                if (game.getConfig().getKnockBackMode() == 1) {
+                    tempEnchant.put(e, Math.min(enchant.get(e),
+                            game.getConfig().getLimitKnockBack()));
                 }
             }
-            else if(Enchantment.PROTECTION_ENVIRONMENTAL.equals(e)){
+            else if(Enchantment.PROTECTION_ENVIRONMENTAL.equals(e)) {
 
-                if (item.getType().equals(Material.DIAMOND_BOOTS) || item.getType().equals(Material.DIAMOND_LEGGINGS) ||  item.getType().equals(Material.DIAMOND_HELMET) ||  item.getType().equals(Material.DIAMOND_CHESTPLATE)){
-                    tempEnchant.put(e,Math.min(enchant.get(e),game.getConfig().getLimitProtectionDiamond()));
-                }
-                else {
-                    tempEnchant.put(e,Math.min(enchant.get(e),game.getConfig().getLimitProtectionIron()));
+                if (item.getType().equals(Material.DIAMOND_BOOTS) ||
+                        item.getType().equals(Material.DIAMOND_LEGGINGS) ||
+                        item.getType().equals(Material.DIAMOND_HELMET) ||
+                        item.getType().equals(Material.DIAMOND_CHESTPLATE)) {
+                    tempEnchant.put(e, Math.min(enchant.get(e),
+                            game.getConfig().getLimitProtectionDiamond()));
+                } else {
+                    tempEnchant.put(e, Math.min(enchant.get(e),
+                            game.getConfig().getLimitProtectionIron()));
                 }
             }
             else if(Enchantment.DAMAGE_ALL.equals(e)){
                 if (item.getType().equals(Material.DIAMOND_SWORD)) {
-                    tempEnchant.put(e, Math.min(enchant.get(e), game.getConfig().getLimitSharpnessDiamond()));
+                    tempEnchant.put(e, Math.min(enchant.get(e),
+                            game.getConfig().getLimitSharpnessDiamond()));
                 }
                 else {
-                    tempEnchant.put(e, Math.min(enchant.get(e), Math.min(enchant.get(e), game.getConfig().getLimitSharpnessIron())));
+                    tempEnchant.put(e, Math.min(enchant.get(e),
+                            Math.min(enchant.get(e), game.getConfig().getLimitSharpnessIron())));
                 }
             }
-            else if(Enchantment.ARROW_KNOCKBACK.equals(e)){
-                if(game.getConfig().getLimitPunch()==2){
-                    tempEnchant.put(e,enchant.get(e));
-                }
+            else if(Enchantment.ARROW_KNOCKBACK.equals(e)) {
+                tempEnchant.put(e, Math.min(enchant.get(e), game.getConfig().getLimitPunch()));
+
             }
             else if(Enchantment.ARROW_DAMAGE.equals(e)){
                 tempEnchant.put(e,Math.min(enchant.get(e),game.getConfig().getLimitPowerBow()));
@@ -97,7 +110,7 @@ public class EnchantmentListener implements Listener {
             else tempEnchant.put(e,enchant.get(e));
         }
 
-        EnchantmentEvent enchantEvent = new EnchantmentEvent(uuid,result,enchant,tempEnchant);
+        EnchantmentEvent enchantEvent = new EnchantmentEvent(playerWW, result, enchant, tempEnchant);
         Bukkit.getPluginManager().callEvent(enchantEvent);
 
         if(!result.getType().equals(Material.ENCHANTED_BOOK) && !result.getType().equals(Material.BOOK)){

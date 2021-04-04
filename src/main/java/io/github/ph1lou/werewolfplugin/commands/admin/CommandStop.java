@@ -1,14 +1,13 @@
 package io.github.ph1lou.werewolfplugin.commands.admin;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CommandStop implements Commands {
+public class CommandStop implements ICommands {
 
 
     private final Main main;
@@ -18,18 +17,12 @@ public class CommandStop implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
-
-        if (!sender.hasPermission("a.stop.use") && !game.getModerationManager().getHosts().contains(((Player) sender).getUniqueId())) {
-            sender.sendMessage(game.translate("werewolf.check.permission_denied"));
-            return;
-        }
-        if (game.isState(StateLG.LOBBY)) return;
-
-        Bukkit.broadcastMessage(game.translate("werewolf.announcement.stop",sender.getName()));
-
+        GameManager game = (GameManager) main.getWereWolfAPI();
+        Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.stop.send",
+                player.getName()));
+        game.setState(StateGame.END);
         game.stopGame();
 
     }

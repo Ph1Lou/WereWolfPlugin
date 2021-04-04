@@ -1,23 +1,20 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
-import io.github.ph1lou.werewolfapi.events.BeginCharmEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.events.roles.succubus.BeginCharmEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandSuccubus implements Commands {
+public class CommandSuccubus implements ICommands {
 
 
     private final Main main;
@@ -27,96 +24,63 @@ public class CommandSuccubus implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
 
-        GameManager game = main.getCurrentGame();
-
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(game.translate("werewolf.check.console"));
-            return;
-        }
-
-        Player player = (Player) sender;
+        WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        String playername = player.getName();
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
-        if(!game.getPlayersWW().containsKey(uuid)) {
-            player.sendMessage(game.translate("werewolf.check.not_in_game"));
-            return;
-        }
+        if (playerWW == null) return;
 
-        PlayerWW plg = game.getPlayersWW().get(uuid);
+        IRole succubus = playerWW.getRole();
 
-
-        if (!game.isState(StateLG.GAME)) {
-            player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
-            return;
-        }
-
-        if (!(plg.getRole().isDisplay("werewolf.role.succubus.display"))) {
-            player.sendMessage(game.translate("werewolf.check.role", game.translate("werewolf.role.succubus.display")));
-            return;
-        }
-
-        Roles succubus = plg.getRole();
-
-        if (args.length != 1) {
-            player.sendMessage(game.translate("werewolf.check.player_input"));
-            return;
-        }
-
-        if (!plg.isState(State.ALIVE)) {
-            player.sendMessage(game.translate("werewolf.check.death"));
-            return;
-        }
-
-        if (!((AffectedPlayers)succubus).getAffectedPlayers().isEmpty()) {
-            player.sendMessage(game.translate("werewolf.check.power"));
-            return;
-        }
-
-        if (args[0].toLowerCase().equals(playername.toLowerCase())) {
-            player.sendMessage(game.translate("werewolf.check.not_yourself"));
-            return;
-        }
-
-        if (!(((Power) succubus).hasPower())) {
-            player.sendMessage(game.translate("werewolf.check.power"));
+        if (!((IAffectedPlayers) succubus).getAffectedPlayers().isEmpty()) {
+            playerWW.sendMessageWithKey("werewolf.check.power");
             return;
         }
 
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            player.sendMessage(game.translate("werewolf.check.offline_player"));
+            playerWW.sendMessageWithKey("werewolf.check.offline_player");
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
+        IPlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
-        if (!game.getPlayersWW().containsKey(argUUID) || !game.getPlayersWW().get(argUUID).isState(State.ALIVE)) {
-            player.sendMessage(game.translate("werewolf.check.player_not_found"));
+        if (argUUID.equals(uuid)) {
+            playerWW.sendMessageWithKey("werewolf.check.not_yourself");
+            return;
+        }
+
+        if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
+            playerWW.sendMessageWithKey("werewolf.check.player_not_found");
             return;
         }
 
         Location location = player.getLocation();
         Location locationTarget = playerArg.getLocation();
 
-        if (location.distance(locationTarget) > game.getConfig().getDistanceSuccubus()) {
-            player.sendMessage(game.translate("werewolf.role.succubus.not_enough_near"));
+        if (player.getWorld().equals(playerArg.getWorld())) {
+            if (location.distance(locationTarget) > game.getConfig().getDistanceSuccubus()) {
+                playerWW.sendMessageWithKey("werewolf.role.succubus.not_enough_near");
+                return;
+            }
+        } else {
             return;
         }
 
-        BeginCharmEvent beginCharmEvent = new BeginCharmEvent(uuid,argUUID);
+        BeginCharmEvent beginCharmEvent = new BeginCharmEvent(playerWW, playerWW1);
 
         Bukkit.getPluginManager().callEvent(beginCharmEvent);
 
-        if(beginCharmEvent.isCancelled()){
-            player.sendMessage(game.translate("werewolf.check.cancel"));
+        if (beginCharmEvent.isCancelled()) {
+            playerWW.sendMessageWithKey("werewolf.check.cancel");
             return;
         }
 
-        ((AffectedPlayers) succubus).addAffectedPlayer(argUUID);
-        player.sendMessage(game.translate("werewolf.role.succubus.charming_beginning", playerArg.getName()));
+        ((IAffectedPlayers) succubus).addAffectedPlayer(playerWW1);
+        playerWW.sendMessageWithKey("werewolf.role.succubus.charming_beginning", playerArg.getName());
     }
 }

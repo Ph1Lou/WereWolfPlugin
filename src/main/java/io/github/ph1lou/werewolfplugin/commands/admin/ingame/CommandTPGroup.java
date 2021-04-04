@@ -1,18 +1,17 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandTPGroup implements Commands {
+public class CommandTPGroup implements ICommands {
 
 
     private final Main main;
@@ -22,42 +21,26 @@ public class CommandTPGroup implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
 
-        GameManager game = main.getCurrentGame();
-
-
-        if (!sender.hasPermission("a.tpGroup.use") && !game.getModerationManager().getModerators().contains(((Player) sender).getUniqueId()) && !game.getModerationManager().getHosts().contains(((Player) sender).getUniqueId())) {
-            sender.sendMessage(game.translate("werewolf.check.permission_denied"));
-            return;
-        }
-
-
-        if (args.length != 1 && args.length != 2) {
-            sender.sendMessage(game.translate("werewolf.check.player_input"));
-            return;
-        }
-
+        WereWolfAPI game = main.getWereWolfAPI();
         Player playerArg = Bukkit.getPlayer(args[0]);
+        String playerName = player.getName();
 
         if (playerArg == null) {
-            sender.sendMessage(game.translate("werewolf.check.offline_player"));
+            player.sendMessage(game.translate("werewolf.check.offline_player"));
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
+        IPlayerWW playerWW = game.getPlayerWW(argUUID);
 
-        if (!game.getPlayersWW().containsKey(argUUID)) {
-            sender.sendMessage(game.translate("werewolf.check.player_not_found"));
+        if (playerWW == null) {
+            player.sendMessage(game.translate("werewolf.check.player_not_found"));
             return;
         }
 
-        if (!game.isState(StateLG.GAME)) {
-            sender.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
-            return;
-        }
-
-        if (!game.getPlayersWW().get(argUUID).isState(State.ALIVE)) {
+        if (!playerWW.isState(StatePlayer.ALIVE)) {
             return;
         }
         int d = 20;
@@ -74,14 +57,22 @@ public class CommandTPGroup implements Commands {
         }
         for (Player p : Bukkit.getOnlinePlayers()) {
             UUID uuid = p.getUniqueId();
-            if (size > 0 && game.getPlayersWW().containsKey(uuid) && game.getPlayersWW().get(uuid).isState(State.ALIVE)) {
-                if (p.getLocation().distance(location) <= d) {
-                    size--;
-                    sb.append(p.getName()).append(" ");
-                    game.getMapManager().transportation(uuid, r, game.translate("werewolf.commands.admin.tp_group.perform"));
+            IPlayerWW playerWW1 = game.getPlayerWW(uuid);
+
+            if (size > 0 && playerWW1 != null && playerWW1.isState(StatePlayer.ALIVE)) {
+
+                try {
+                    if (p.getLocation().distance(location) <= d) {
+                        size--;
+                        sb.append(p.getName()).append(" ");
+                        playerWW1.sendMessageWithKey("werewolf.commands.admin.tp_group.perform", playerName);
+                        game.getMapManager().transportation(playerWW1, r);
+                    }
+                } catch (Exception ignored) {
+
                 }
             }
         }
-        Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.commands.admin.tp_group.broadcast",sb.toString()));
+        Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.commands.admin.tp_group.broadcast", sb.toString(), playerName));
     }
 }

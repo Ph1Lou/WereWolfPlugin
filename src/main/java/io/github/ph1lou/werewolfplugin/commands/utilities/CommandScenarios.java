@@ -1,12 +1,13 @@
 package io.github.ph1lou.werewolfplugin.commands.utilities;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.ScenarioRegister;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
+import io.github.ph1lou.werewolfapi.registers.ScenarioRegister;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
-import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
-public class CommandScenarios implements Commands {
+public class CommandScenarios implements ICommands {
 
 
     private final Main main;
@@ -16,14 +17,26 @@ public class CommandScenarios implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
 
-        for (ScenarioRegister scenarioRegister:main.getRegisterScenarios()) {
-            if (game.getConfig().getScenarioValues().get(scenarioRegister.getKey())) {
-                sender.sendMessage(game.translate("werewolf.utils.enable", game.translate(scenarioRegister.getKey())));
-            } else sender.sendMessage(game.translate("werewolf.utils.disable", game.translate(scenarioRegister.getKey())));
+        if (game.getConfig().isConfigActive(ConfigsBase.HIDE_SCENARIOS.getKey())) {
+
+            player.sendMessage(game.translate("werewolf.menu.scenarios.disable"));
+
+            return;
         }
+
+        StringBuilder sb = new StringBuilder(game.translate("werewolf.menu.scenarios.list"));
+        int i = 0;
+        for (ScenarioRegister scenarioRegister : main.getRegisterManager().getScenariosRegister()) {
+            if (game.getConfig().isScenarioActive(scenarioRegister.getKey())) {
+                sb.append(i % 2 == 0 ? "§b" : "").append(game.translate(scenarioRegister.getKey())).append("§f, ");
+                i++;
+            }
+        }
+
+        player.sendMessage(sb.toString());
     }
 }

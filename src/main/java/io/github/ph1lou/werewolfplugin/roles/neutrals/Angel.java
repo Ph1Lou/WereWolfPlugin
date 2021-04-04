@@ -1,41 +1,66 @@
 package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.AngelForm;
-import io.github.ph1lou.werewolfapi.enumlg.Sounds;
-import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.events.*;
-import io.github.ph1lou.werewolfapi.rolesattributs.*;
-import io.github.ph1lou.werewolfapi.versions.VersionUtils;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.enums.AngelForm;
+import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enums.Day;
+import io.github.ph1lou.werewolfapi.enums.RolesBase;
+import io.github.ph1lou.werewolfapi.enums.Sound;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
+import io.github.ph1lou.werewolfapi.events.DayEvent;
+import io.github.ph1lou.werewolfapi.events.NightEvent;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
+import io.github.ph1lou.werewolfapi.events.game.utils.WinConditionsCheckEvent;
+import io.github.ph1lou.werewolfapi.events.lovers.AroundLover;
+import io.github.ph1lou.werewolfapi.events.roles.StealEvent;
+import io.github.ph1lou.werewolfapi.events.roles.angel.AngelChoiceEvent;
+import io.github.ph1lou.werewolfapi.events.roles.angel.AngelTargetDeathEvent;
+import io.github.ph1lou.werewolfapi.events.roles.angel.AngelTargetEvent;
+import io.github.ph1lou.werewolfapi.events.roles.angel.AutoAngelEvent;
+import io.github.ph1lou.werewolfapi.events.roles.angel.FallenAngelTargetDeathEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.ILimitedUse;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleNeutral;
+import io.github.ph1lou.werewolfapi.utils.Utils;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.potion.PotionEffectType;
+import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
+import java.util.Objects;
 
-public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, AngelRole, Transformed {
+public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse {
 
     private int use = 0;
-    private AngelForm choice=AngelForm.ANGEL;
-    private final List<UUID> affectedPlayer = new ArrayList<>();
-    private boolean transformed=false;
+    private AngelForm choice = AngelForm.ANGEL;
+    private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
 
-    public Angel(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+
+    public Angel(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
+        super(main, playerWW, key);
     }
-
 
     @Override
     public int getUse() {
         return use;
     }
-
 
     @Override
     public void setUse(int use) {
@@ -43,13 +68,13 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
     }
 
     @Override
-    public void addAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.add(uuid);
+    public void addAffectedPlayer(IPlayerWW playerWW) {
+        this.affectedPlayer.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.remove(uuid);
+    public void removeAffectedPlayer(IPlayerWW playerWW) {
+        this.affectedPlayer.remove(playerWW);
     }
 
     @Override
@@ -58,135 +83,237 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
     }
 
     @Override
-    public List<UUID> getAffectedPlayers() {
+    public List<IPlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
-    @Override
+
     public boolean isChoice(AngelForm AngelForm) {
         return AngelForm==choice;
     }
 
-    @Override
+
     public AngelForm getChoice() {
         return this.choice;
     }
 
-    @Override
+
     public void setChoice(AngelForm choice) {
         this.choice = choice;
     }
 
     @Override
-    public String getDescription() {
-        if(choice.equals(AngelForm.FALLEN_ANGEL)) return game.translate("werewolf.role.fallen_angel.description");
-        if(choice.equals(AngelForm.GUARDIAN_ANGEL)) return game.translate("werewolf.role.guardian_angel.description");
-        return game.translate("werewolf.role.angel.description");
-    }
+    public @NotNull String getDescription() {
 
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.angel.display";
-    }
+        if (choice.equals(AngelForm.FALLEN_ANGEL)) {
 
-    @Override
-    public void stolen(@NotNull UUID uuid) {
+            return new DescriptionBuilder(game, this)
+                    .setPower(() -> game.translate("werewolf.role.fallen_angel.power"))
+                    .setEffects(() -> game.translate("werewolf.role.fallen_angel.effect"))
+                    .addExtraLines(() -> affectedPlayer.isEmpty() ?
+                            game.translate("werewolf.description.power",
+                                    game.translate("werewolf.role.fallen_angel.wait",
+                                            Utils.conversion(game.getConfig()
+                                                    .getTimerValue(TimersBase.ANGEL_DURATION.getKey()))))
+                            : game.translate("werewolf.role.angel.target", affectedPlayer.get(0).getName()))
+                    .build();
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (player == null) {
-            return;
+        } else if (choice.equals(AngelForm.GUARDIAN_ANGEL)) {
+
+            return new DescriptionBuilder(game, this)
+                    .setEffects(() -> game.translate("werewolf.role.guardian_angel.effect"))
+                    .setDescription(() -> game.getConfig().isConfigActive(ConfigsBase.SWEET_ANGEL.getKey()) ?
+                            game.translate("werewolf.role.guardian_angel.description") :
+                            game.translate("werewolf.role.guardian_angel.description_patch"))
+                    .addExtraLines(() -> affectedPlayer.isEmpty() ?
+                            game.translate("werewolf.description.power",
+                                    game.translate("werewolf.role.guardian_angel.wait",
+                                            Utils.conversion(
+                                                    game.getConfig().getTimerValue(TimersBase.ANGEL_DURATION.getKey())))) :
+                            game.translate("werewolf.role.guardian_angel.protege", affectedPlayer.get(0).getName()))
+                    .setCommand(() -> game.translate("werewolf.role.guardian_angel.show_command"))
+                    .build();
+        } else {
+            return new DescriptionBuilder(game, this).build();
         }
 
+
+    }
+
+
+    /**
+     * @return nb de coeur en plus qu'a l'ange plus le texte
+     */
+
+    private Pair<Integer, TextComponent> heartAndMessageTargetManagement() {
+
+
+        int extraHearts = 4;
+
+        TextComponent textComponent = new TextComponent(" ");
+
         if (isChoice(AngelForm.ANGEL)) {
-            player.sendMessage(game.translate("werewolf.role.angel.angel_choice", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.angel_duration"))));
-            VersionUtils.getVersionUtils().setPlayerMaxHealth(player, VersionUtils.getVersionUtils().getPlayerMaxHealth(player) + 4);
+            textComponent = choiceAngel();
 
-        } else {
-            if (!getAffectedPlayers().isEmpty()) {
-                UUID targetUUID = getAffectedPlayers().get(0);
-                PlayerWW target = game.getPlayersWW().get(targetUUID);
+        } else if (!getAffectedPlayers().isEmpty()) {
 
-                if(target.isState(State.DEATH)) {
-                    VersionUtils.getVersionUtils().setPlayerMaxHealth(player, VersionUtils.getVersionUtils().getPlayerMaxHealth(player) + 4);
+            StringBuilder sb = new StringBuilder();
+
+            IPlayerWW targetWW = getAffectedPlayers().get(0);
+
+            if (targetWW != null) {
+
+                if (targetWW.isState(StatePlayer.DEATH)) {
+
                     if (isChoice(AngelForm.FALLEN_ANGEL)) {
-                        if(target.getKillers().contains(getPlayerUUID())){
-                            player.sendMessage(game.translate("werewolf.role.fallen_angel.deadly_target"));
-                            VersionUtils.getVersionUtils().setPlayerMaxHealth(player, VersionUtils.getVersionUtils().getPlayerMaxHealth(player) + 6);
+                        if (targetWW.getKillers().contains(getPlayerWW())) {
+                            extraHearts += 6;
+                            sb.append(game.translate(
+                                    "werewolf.role.fallen_angel.deadly_target"));
+                        } else {
+                            sb.append(game.translate(
+                                    "werewolf.role.fallen_angel.deadly_target_by_other"));
+                        }
+
+                    } else {
+                        if (game.getConfig().isConfigActive(ConfigsBase.SWEET_ANGEL.getKey())) {
+                            sb.append(game.translate(
+                                    "werewolf.role.guardian_angel.protege_death"));
+                        } else {
+                            sb.append(game.translate(
+                                    "werewolf.role.guardian_angel.protege_death_patch"));
                         }
                     }
-                    else player.sendMessage(game.translate("werewolf.role.guardian_angel.protege_death"));
 
 
+                } else if (isChoice(AngelForm.FALLEN_ANGEL)) {
+
+                    sb.append(game.translate(
+                            "werewolf.role.fallen_angel.reveal_target",
+                            targetWW.getName()));
                 } else {
-                    VersionUtils.getVersionUtils().setPlayerMaxHealth(player, VersionUtils.getVersionUtils().getPlayerMaxHealth(player) + 4);
-                    if (isChoice(AngelForm.FALLEN_ANGEL)) {
-                        player.sendMessage(game.translate("werewolf.role.fallen_angel.reveal_target", target.getName()));
-                    }
-                    else {
-                        VersionUtils.getVersionUtils().setPlayerMaxHealth(player, VersionUtils.getVersionUtils().getPlayerMaxHealth(player) + 6);
-                        player.sendMessage(game.translate("werewolf.role.guardian_angel.reveal_protege", target.getName()));
-                    }
+                    extraHearts += 6;
+                    sb.append(game.translate(
+                            "werewolf.role.guardian_angel.reveal_protege",
+                            targetWW.getName()));
                 }
             }
+
+
+            textComponent = new TextComponent(sb.toString());
         }
+
+        return new Pair<>(extraHearts, textComponent);
     }
 
+
+    public TextComponent choiceAngel() {
+
+
+        TextComponent guardian = new TextComponent(
+                ChatColor.AQUA + game.translate(RolesBase.GUARDIAN_ANGEL.getKey()));
+        guardian.setClickEvent(new ClickEvent(
+                ClickEvent.Action.RUN_COMMAND,
+                String.format("/ww %s",
+                        game.translate("werewolf.role.angel.command_1"))));
+        guardian.setHoverEvent(
+                new HoverEvent(
+                        HoverEvent.Action.SHOW_TEXT,
+                        new ComponentBuilder(
+                                game.translate(
+                                        game.getConfig().isConfigActive(
+                                                ConfigsBase.SWEET_ANGEL.getKey())
+                                                ? "werewolf.role.angel.guardian_choice" :
+                                                "werewolf.role.angel.guardian_choice_patch"))
+                                .create()));
+
+        TextComponent fallen = new TextComponent(
+                ChatColor.AQUA + game.translate(RolesBase.FALLEN_ANGEL.getKey()));
+        fallen.setClickEvent(new ClickEvent(
+                ClickEvent.Action.RUN_COMMAND,
+                String.format("/ww %s",
+                        game.translate("werewolf.role.angel.command_2"))));
+        fallen.setHoverEvent(
+                new HoverEvent(
+                        HoverEvent.Action.SHOW_TEXT,
+                        new ComponentBuilder(
+                                game.translate(
+                                        "werewolf.role.angel.fallen_choice"))
+                                .create()));
+
+        TextComponent choice = new TextComponent(
+                game.translate("werewolf.role.angel.angel_choice"));
+
+        choice.addExtra(guardian);
+        choice.addExtra(new TextComponent(
+                game.translate("werewolf.role.angel.or")));
+        choice.addExtra(fallen);
+        choice.addExtra(new TextComponent(
+                game.translate("werewolf.role.angel.time",
+                        Utils.conversion(
+                                game.getConfig().getTimerValue(
+                                        TimersBase.ANGEL_DURATION.getKey()))
+                )));
+
+        return choice;
+
+    }
+
+
     @Override
-    public Player recoverPower() {
-        Player player = super.recoverPower();
-        if(player == null) return null;
-        if (isChoice(AngelForm.ANGEL)) {
-            player.sendMessage(game.translate("werewolf.role.angel.angel_choice", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.angel_duration"))));
-        }
-        VersionUtils.getVersionUtils().setPlayerMaxHealth(player, 24);
-        player.setHealth(24);
-        return player;
+    public void recoverPower() {
+
+        Pair<Integer, TextComponent> pair = heartAndMessageTargetManagement();
+
+        getPlayerWW().addPlayerMaxHealth(pair.getValue0());
+
+        getPlayerWW().sendMessage(pair.getValue1());
     }
 
 
     @EventHandler
     public void onAutoAngel(AutoAngelEvent event){
 
-        PlayerWW plg = game.getPlayersWW().get(getPlayerUUID());
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (!plg.isState(State.ALIVE)) {
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
         if (isChoice(AngelForm.ANGEL)) {
 
             if (game.getRandom().nextBoolean()) {
-                if (player != null) {
-                    player.sendMessage(game.translate("werewolf.role.angel.angel_choice_perform", game.translate("werewolf.role.fallen_angel.display")));
-                }
+                getPlayerWW().sendMessageWithKey(
+                        "werewolf.role.angel.angel_choice_perform",
+                        game.translate(RolesBase.FALLEN_ANGEL.getKey()));
                 setChoice(AngelForm.FALLEN_ANGEL);
-            } else {
-                if (player != null) {
-                    player.sendMessage(game.translate("werewolf.role.angel.angel_choice_perform", game.translate("werewolf.role.guardian_angel.display")));
+                if (game.isDay(Day.NIGHT)) {
+                    getPlayerWW().addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
                 }
+            } else {
+                getPlayerWW().sendMessageWithKey(
+                        "werewolf.role.angel.angel_choice_perform",
+                        game.translate(RolesBase.GUARDIAN_ANGEL.getKey()));
                 setChoice(AngelForm.GUARDIAN_ANGEL);
             }
-            Bukkit.getPluginManager().callEvent(new AngelChoiceEvent(getPlayerUUID(), getChoice()));
+            Bukkit.getPluginManager().callEvent(new AngelChoiceEvent(getPlayerWW(), getChoice()));
         }
 
-        UUID targetUUID = game.autoSelect(getPlayerUUID());
-        addAffectedPlayer(targetUUID);
-        PlayerWW target = game.getPlayersWW().get(targetUUID);
+        IPlayerWW targetWW = game.autoSelect(getPlayerWW());
+        addAffectedPlayer(targetWW);
 
-        if (player != null) {
-
-            if (isChoice(AngelForm.FALLEN_ANGEL)) {
-                player.sendMessage(game.translate("werewolf.role.fallen_angel.reveal_target", target.getName()));
-            } else {
-                VersionUtils.getVersionUtils().setPlayerMaxHealth(player, VersionUtils.getVersionUtils().getPlayerMaxHealth(player) + 6);
-                player.sendMessage(game.translate("werewolf.role.guardian_angel.reveal_protege", target.getName()));
-            }
-            Sounds.PORTAL_TRIGGER.play(player);
+        if (isChoice(AngelForm.FALLEN_ANGEL)) {
+            getPlayerWW().sendMessageWithKey(
+                    "werewolf.role.fallen_angel.reveal_target", Sound.PORTAL_TRIGGER,
+                    targetWW.getName());
+        } else {
+            getPlayerWW().addPlayerMaxHealth(6);
+            getPlayerWW().sendMessageWithKey(
+                    "werewolf.role.guardian_angel.reveal_protege", Sound.PORTAL_TRIGGER,
+                    targetWW.getName());
         }
 
-        Bukkit.getPluginManager().callEvent(new AngelTargetEvent(getPlayerUUID(),targetUUID));
+        Bukkit.getPluginManager().callEvent(
+                new AngelTargetEvent(getPlayerWW(), targetWW));
 
         game.checkVictory();
     }
@@ -197,11 +324,16 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
     @EventHandler
     public void onEndPlayerMessage(EndPlayerMessageEvent event){
 
-        if(!event.getPlayerUUID().equals(getPlayerUUID())) return;
+        if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         StringBuilder sb = event.getEndMessage();
-        if(isDisplay("werewolf.role.angel.display") && !isChoice(AngelForm.ANGEL)){
-            sb.append(", ").append(game.translate("werewolf.role.angel.choice",game.translate(isChoice(AngelForm.ANGEL)?"werewolf.role.angel.display":isChoice(AngelForm.FALLEN_ANGEL)?"werewolf.role.fallen_angel.display":"werewolf.role.guardian_angel.display")));
+        if (isKey(RolesBase.ANGEL.getKey()) && !isChoice(AngelForm.ANGEL)) {
+            sb.append(", ").append(game.translate("werewolf.role.angel.choice",
+                    game.translate(isChoice(AngelForm.ANGEL) ?
+                            "werewolf.role.angel.display" :
+                            isChoice(AngelForm.FALLEN_ANGEL) ?
+                                    "werewolf.role.fallen_angel.display" :
+                                    "werewolf.role.guardian_angel.display")));
         }
     }
 
@@ -209,54 +341,60 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 
-        UUID uuid = event.getUuid();
+        IPlayerWW playerWW = event.getPlayerWW();
 
-        PlayerWW plg = game.getPlayersWW().get(getPlayerUUID());
+        if (!getAffectedPlayers().contains(playerWW)) return;
 
-        if (!getAffectedPlayers().contains(uuid)) return;
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
-        PlayerWW target = game.getPlayersWW().get(uuid);
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (!plg.isState(State.ALIVE)) return;
-
-        if (player == null) return;
-
-        Bukkit.getPluginManager().callEvent(new AngelTargetDeathEvent(getPlayerUUID(), uuid));
+        Bukkit.getPluginManager().callEvent(new AngelTargetDeathEvent(getPlayerWW(),
+                playerWW));
         if (isChoice(AngelForm.FALLEN_ANGEL)) {
-            if (target.getLastKiller().equals(getPlayerUUID())) {
-                VersionUtils.getVersionUtils().setPlayerMaxHealth(player, VersionUtils.getVersionUtils().getPlayerMaxHealth(player) + 6);
-                player.sendMessage(game.translate("werewolf.role.fallen_angel.deadly_target"));
-            }
+            playerWW.getLastKiller().ifPresent(iPlayerWW -> {
+                if (getPlayerWW().equals(iPlayerWW)) {
+                    Bukkit.getPluginManager().callEvent(
+                            new FallenAngelTargetDeathEvent(getPlayerWW(), playerWW));
+                    getPlayerWW().addPlayerMaxHealth(6);
+                    getPlayerWW().sendMessageWithKey("werewolf.role.fallen_angel.deadly_target");
+                }
+            });
+
         } else if (isChoice(AngelForm.GUARDIAN_ANGEL)) {
-            VersionUtils.getVersionUtils().setPlayerMaxHealth(player, VersionUtils.getVersionUtils().getPlayerMaxHealth(player) - 6);
-            player.sendMessage(game.translate("werewolf.role.guardian_angel.protege_death"));
-            transformed=true;
+            getPlayerWW().removePlayerMaxHealth(6);
+
+            if (game.getConfig().isConfigActive(
+                    ConfigsBase.SWEET_ANGEL.getKey())) {
+                getPlayerWW().sendMessageWithKey(
+                        "werewolf.role.guardian_angel.protege_death");
+            } else {
+                getPlayerWW().sendMessageWithKey(
+                        "werewolf.role.guardian_angel.protege_death_patch");
+            }
         }
+
     }
 
     @EventHandler
     public void onTargetIsStolen(StealEvent event) {
 
-        UUID newUUID = event.getKiller();
-        UUID oldUUID = event.getPlayer();
-        PlayerWW plg = game.getPlayersWW().get(getPlayerUUID());
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-        String targetName = game.getPlayersWW().get(newUUID).getName();
 
-        if (!getAffectedPlayers().contains(oldUUID)) return;
+        IPlayerWW playerWW = event.getPlayerWW();
+        IPlayerWW thiefWW = event.getThiefWW();
 
-        removeAffectedPlayer(oldUUID);
-        addAffectedPlayer(newUUID);
+        String targetName = thiefWW.getName();
 
-        if (!plg.isState(State.ALIVE)) return;
+        if (!getAffectedPlayers().contains(playerWW)) return;
 
-        if (player == null) return;
+        removeAffectedPlayer(playerWW);
+        addAffectedPlayer(thiefWW);
+
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+
 
         if (isChoice(AngelForm.FALLEN_ANGEL)) {
-            player.sendMessage(game.translate("werewolf.role.fallen_angel.new_target", targetName));
+            getPlayerWW().sendMessageWithKey("werewolf.role.fallen_angel.new_target", targetName);
         } else if (isChoice(AngelForm.GUARDIAN_ANGEL)) {
-            player.sendMessage(game.translate("werewolf.role.guardian_angel.new_protege",targetName));
+            getPlayerWW().sendMessageWithKey("werewolf.role.guardian_angel.new_protege", targetName);
         }
     }
 
@@ -267,20 +405,25 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
 
         StringBuilder stringBuilder = new StringBuilder(event.getActionBar());
 
-        if (Bukkit.getPlayer(event.getPlayerUUID()) == null) return;
-
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) return;
-
         Player player = Bukkit.getPlayer(event.getPlayerUUID());
 
-        if(!isChoice(AngelForm.GUARDIAN_ANGEL)) {
+        if (player == null) return;
+
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+
+        if (!isChoice(AngelForm.GUARDIAN_ANGEL)) {
             return;
         }
 
-        for (UUID uuid : getAffectedPlayers()) {
-            Player playerAffected = Bukkit.getPlayer(uuid);
-            if (game.getPlayersWW().get(uuid).isState(State.ALIVE) && playerAffected != null) {
-                stringBuilder.append("§b ").append(game.getPlayersWW().get(uuid).getName()).append(" ").append(game.getScore().updateArrow(player, playerAffected.getLocation()));
+        for (IPlayerWW playerWW : getAffectedPlayers()) {
+
+            if (playerWW.isState(StatePlayer.ALIVE)) {
+
+                stringBuilder.append("§b ")
+                        .append(playerWW.getName())
+                        .append(" ")
+                        .append(Utils.updateArrow(player,
+                                playerWW.getLocation()));
             }
         }
 
@@ -288,17 +431,102 @@ public class Angel extends RolesNeutral implements AffectedPlayers, LimitedUse, 
     }
 
     @Override
-    public boolean getTransformed() {
-        return this.transformed;
-    }
-
-    @Override
-    public void setTransformed(boolean b) {
-        this.transformed=b;
-    }
-
-    @Override
     public boolean isNeutral() {
-        return super.isNeutral() && !transformed;
+        return super.isNeutral() &&
+                (!game.getConfig().isConfigActive(ConfigsBase.SWEET_ANGEL.getKey())
+                        || !choice.equals(AngelForm.GUARDIAN_ANGEL)
+                        || affectedPlayer.isEmpty()
+                        || !affectedPlayer.get(0).isState(StatePlayer.DEATH));
     }
+
+    @EventHandler
+    public void onLover(AroundLover event) {
+
+        if (!choice.equals(AngelForm.GUARDIAN_ANGEL)) return;
+
+        if (!Objects.requireNonNull(
+                game.getPlayerWW(
+                        getPlayerUUID())).isState(StatePlayer.ALIVE)) return;
+
+        if (event.getPlayerWWS().contains(getPlayerWW())) {
+            for (IPlayerWW playerWW : affectedPlayer) {
+                event.addPlayer(playerWW);
+            }
+            return;
+        }
+
+        for (IPlayerWW playerWW : event.getPlayerWWS()) {
+            if (affectedPlayer.contains(playerWW)) {
+                event.addPlayer(getPlayerWW());
+                break;
+            }
+        }
+    }
+
+    @EventHandler
+    public void onDetectVictoryWithProtege(WinConditionsCheckEvent event) {
+
+        if (event.isCancelled()) return;
+
+        if (!Objects.requireNonNull(
+                game.getPlayerWW(
+                        getPlayerUUID())).isState(StatePlayer.ALIVE)) return;
+
+        if (affectedPlayer.isEmpty()) return;
+
+
+        IPlayerWW playerWW = affectedPlayer.get(0);
+
+        if (playerWW == null) return;
+
+        if (!playerWW.isState(StatePlayer.ALIVE)) return;
+
+
+        List<IPlayerWW> list = new ArrayList<>(Collections.singleton(affectedPlayer.get(0)));
+
+
+        for (int i = 0; i < list.size(); i++) {
+
+            IPlayerWW playerWW2 = list.get(i);
+
+            game.getPlayerWW()
+                    .stream()
+                    .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
+                    .map(IPlayerWW::getRole)
+                    .filter(roles -> roles.isKey(RolesBase.ANGEL.getKey())
+                            || roles.isKey(RolesBase.GUARDIAN_ANGEL.getKey()))
+                    .map(iRole -> (Angel) iRole)
+                    .filter(roles -> roles.isChoice(AngelForm.GUARDIAN_ANGEL))
+                    .forEach(role -> {
+                        if (((IAffectedPlayers) role).getAffectedPlayers().contains(playerWW2)) {
+                            if (!list.contains(role.getPlayerWW())) {
+                                list.add(role.getPlayerWW());
+                            }
+                        }
+                    });
+
+        }
+
+        if (game.getScore().getPlayerSize() == list.size()) {
+            event.setCancelled(true);
+            event.setVictoryTeam(RolesBase.GUARDIAN_ANGEL.getKey());
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onDay(DayEvent event) {
+
+        if (!choice.equals(AngelForm.FALLEN_ANGEL)) return;
+
+        getPlayerWW().removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onNight(NightEvent event) {
+
+        if (!choice.equals(AngelForm.FALLEN_ANGEL)) return;
+
+        getPlayerWW().addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+    }
+
 }

@@ -1,49 +1,54 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.events.VoteEndEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.LimitedUse;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.events.game.vote.VoteEndEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.ILimitedUse;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
+import io.github.ph1lou.werewolfapi.utils.Utils;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.event.EventHandler;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-public class Citizen extends RolesVillage implements LimitedUse, AffectedPlayers, Power {
+public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayers, IPower {
 
     private int use = 0;
-    private final List<UUID> affectedPlayer = new ArrayList<>();
+    private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private boolean power = true;
 
-    public Citizen(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public Citizen(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
+        super(main, playerWW, key);
     }
 
     @Override
-    public void setPower(Boolean power) {
-        this.power=power;
+    public void setPower(boolean power) {
+        this.power = power;
     }
 
     @Override
-    public Boolean hasPower() {
-        return(this.power);
+    public boolean hasPower() {
+        return (this.power);
     }
 
     @Override
-    public void addAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.add(uuid);
+    public void addAffectedPlayer(IPlayerWW playerWW) {
+        this.affectedPlayer.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.remove(uuid);
+    public void removeAffectedPlayer(IPlayerWW playerWW) {
+        this.affectedPlayer.remove(playerWW);
     }
 
     @Override
@@ -52,7 +57,7 @@ public class Citizen extends RolesVillage implements LimitedUse, AffectedPlayers
     }
 
     @Override
-    public List<UUID> getAffectedPlayers() {
+    public List<IPlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
@@ -70,28 +75,96 @@ public class Citizen extends RolesVillage implements LimitedUse, AffectedPlayers
     public void onVoteEnd(VoteEndEvent event) {
 
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        if (player == null) return;
 
+        if (getUse() < 2) {
+            getPlayerWW().sendMessage(seeVote());
+        }
 
-        if (getUse() < 2 || hasPower()) {
-            player.sendMessage(game.translate("werewolf.role.citizen.affect_votes", hasPower() ? 1 : 0, 2 - getUse(), game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.citizen_duration"))));
+        if (hasPower()) {
+            getPlayerWW().sendMessage(cancelVote());
         }
     }
 
     @Override
-    public String getDescription() {
-        return game.translate("werewolf.role.citizen.description");
+    public @NotNull String getDescription() {
+
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.citizen.description"))
+                .build();
     }
 
+
     @Override
-    public String getDisplay() {
-        return "werewolf.role.citizen.display";
+    public void recoverPower() {
+
     }
+
+
+    public TextComponent cancelVote() {
+
+        TextComponent cancelVote = new TextComponent(
+                game.translate("werewolf.role.citizen.click"));
+        cancelVote.setClickEvent(
+                new ClickEvent(ClickEvent.Action.RUN_COMMAND,
+                        String.format("/ww %s",
+                                game.translate("werewolf.role.citizen.command_2"))));
+        cancelVote.setHoverEvent(
+                new HoverEvent(
+                        HoverEvent.Action.SHOW_TEXT,
+                        new ComponentBuilder(game.translate("werewolf.role.citizen.cancel"))
+                                .create()));
+
+
+        TextComponent cancel =
+                new TextComponent(game.translate("werewolf.role.citizen.cancel_vote_message",
+                        hasPower() ? 1 : 0));
+
+        cancel.addExtra(cancelVote);
+
+        cancel.addExtra(new TextComponent(game.translate("werewolf.role.citizen.time_left",
+                Utils.conversion(
+                        game.getConfig().getTimerValue(
+                                TimersBase.CITIZEN_DURATION.getKey())))));
+
+
+        return cancel;
+
+    }
+
+
+    public TextComponent seeVote() {
+
+        TextComponent seeVote = new TextComponent(
+                game.translate("werewolf.role.citizen.click"));
+        seeVote.setClickEvent(new ClickEvent(
+                ClickEvent.Action.RUN_COMMAND,
+                String.format("/ww %s",
+                        game.translate("werewolf.role.citizen.command_1"))));
+        seeVote.setHoverEvent(new HoverEvent(
+                HoverEvent.Action.SHOW_TEXT,
+                new ComponentBuilder(game.translate("werewolf.role.citizen.see"))
+                        .create()));
+
+
+        TextComponent see = new TextComponent(
+                game.translate("werewolf.role.citizen.see_vote_message",
+                        2 - getUse()));
+        see.addExtra(seeVote);
+
+
+        see.addExtra(new TextComponent(game.translate("werewolf.role.citizen.time_left",
+                Utils.conversion(
+                        game.getConfig().getTimerValue(
+                                TimersBase.CITIZEN_DURATION.getKey())))));
+
+
+        return see;
+
+    }
+
+
 }

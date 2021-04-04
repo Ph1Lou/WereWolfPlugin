@@ -1,25 +1,25 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
-
-import java.util.UUID;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import org.jetbrains.annotations.NotNull;
 
 public class ChattySeer extends Seer {
 
-    public ChattySeer(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public ChattySeer(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
+        super(main, playerWW, key);
     }
 
     @Override
-    public String getDescription() {
-        return game.translate("werewolf.role.chatty_seer.description");
+    public @NotNull String getDescription() {
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.chatty_seer.description"))
+                .setItems(() -> game.translate("werewolf.role.seer.items"))
+                .setEffects(() -> game.translate("werewolf.role.seer.effect"))
+                .build();
     }
 
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.chatty_seer.display";
-    }
 
 }

@@ -1,32 +1,42 @@
 {
   "werewolf": {
+    "name": "WereWolfPlugin",
     "role": {
       "serial_killer": {
         "display": "Serial Killer",
-        "description": "§6WEREWOLF §7➽§9 You are §1Serial Killer§9. Your objective is to win on your own.\\nIn order to do this, you will have 3 enchanted books : Sharpness III, Protection III and Power III.\\nWhen you kill someone, you receive an extra heart and a gapple. You have Strength before your first victim."
+        "items": "A Sharpness III book, a Protection III book and a Power III book",
+        "effect": "Strength before his first kill",
+        "hearts": "Additional Heart(s) : §b%d\n",
+        "power": "Whenever you kill a player, you get an additional permanent heart and a golden apple.",
+        "limit": "Armor, bow and sword enchantement limit (§b+1§f)"
       },
       "guardian_angel": {
         "display": "Guardian Angel",
-        "description": "§6WEREWOLF §7➽§9 You are §1Guardian Angel§9. You have 15 hearts and you have to protect a player chosen randomly and win with them. If your protégé dies, you will go back to 12 hearts and §lyou will have to win with the Village§r§9.\nThree times in the game you will be able to give your protégé the effect Regeneration for 20 seconds §b/ww regen",
+        "protege": "Ward : §b%s\n",
+        "wait": "You will know your ward in §b%s§f",
+        "effect": "15 hearts as long as your ward is alive, 12 if he's dead",
+        "show_command": "You may, thrice during the game, give your ward a Regeneration effect for 20 seconds §b/ww regen",
+        "description": "You have to protect a randomly picked ward and win with him. If he were to die, you §lwin as part of the village.",
+        "description_patch": "You have to protect a randomly picked ward and win with him. If he were to die, you §lhave to win alone.",
         "protege_death": "[§eWW UHC§r] Your protégé died, you lose 3 hearts and you now have to win with the Village",
+        "protege_death_patch": "[§eWW UHC§r] Your ward has been killed. You lose 3 hearts and now have to win alone",
         "reveal_protege": "[§eWW UHC§r] Your protégé is §b%s",
         "get_regeneration": "[§aWW UHC§r] You receive the effect Regeneration from your Guardian Angel for 20 secondes",
         "no_protege": "[§cWW UHC§r] You don't have a protégé yet",
         "disconnected_protege": "[§cWW UHC§r] Your protégé is not currently online",
         "command": "regen",
-        "perform": "[§aWW UHC§r] Your protégé receives regeneration, you have §b%s§r regeneration(s) left",
+        "perform": "[§aWW UHC§r] Your ward receives Regeneration, you may use this ability §b%s§r more times",
         "new_protege": "[§6WW UHC§r] Your protégé is now §b%s"
       },
       "amnesiac_werewolf": {
         "display": "Amnesiac Wolf",
-        "description": "§6WEREWOLF §7➽§9 You are §1Amnesiac Wolf§9. Your objective is to kill the Villagers.\nIn order to do this, you will have the following effects: Strength(night) and Night Vision. After a kill, you will have Speed and 2 absorption hearts for 2 minutes. However, you don'y have access at the Werewolf's list and the other Wolves won't be able to see you in their list until you have killed a Villager.\nCaution, you are not in the Werewolf's team until you have killed a Villager"
+        "description": "You do not have access to the werewolf list and the other werewolves won't see you in the list as long as you haven't killed a villager. You are NOT considered a werewolf as long as you haven't killed a villager"
       },
       "werewolf": {
         "display": "Werewolf",
-        "description": "§6WEREWOLF §7➽§9 You are §1Werewolf§9. Your objective is to kill the Villagers.\nIn order to do this, you will have the following effects: Strength(night) and Night Vision. After a kill, you will have Speed and 2 absorption hearts for 2 minutes.\nUse §b/ww ww§9 to see the Werewolf's list.",
-        "go_to_the_werewolf_camp": "[§eWW UHC§r] You are now in the team: §4Werewolf §6/ww ww",
-        "new_werewolf": "[§6WW UHC§r] A new player joined the pack §6/ww ww",
-        "see_others": "[§eWW UHC§r] You now know the Werewolves §6/ww ww",
+        "go_to_the_werewolf_camp": "[§eWW UHC§r] You are now a member of the §4Werewolves §b/ww ww",
+        "new_werewolf": "[§6WW UHC§r] A new player joined the pack §b/ww ww",
+        "see_others": "[§eWW UHC§r] You now know the Werewolves §b/ww ww",
         "not_werewolf": "[§cWW UHC§r] You are not a Werewolf",
         "list_not_revealed": "[§cWW UHC§r] The Werewolves' list has not been revealed yet",
         "werewolf_list": "[§eWW UHC§r] Werewolves' list : §b%s",
@@ -34,28 +44,63 @@
       },
       "wild_child": {
         "display": "Wild Child",
-        "description": "§6WEREWOLF §7➽§9 You are §1Wild Child§9. Your objective is to eliminate the Werewolves.\nWhen you will be shown your role, you will choose a master with §1/ww master§9. If they die, you will become a Werewolf.",
-        "design_model": "[§eWW UHC§r] You have to choose a master §6/ww master§r. You have §b%s",
+        "model_none": "§cNone§f select a master §b/ww master",
+        "description": "After receiving your role, you chose a master. If he dies, you become a member of the Werewolves.",
+        "design_model": "You have to choose a master §b/ww master§r. You have §b%s",
         "reveal_model": "[§eWW UHC§r] Your master is §b%s",
+        "model_death": "§cDead§f",
+        "model": "§bMaster§f : %s\n",
         "command": "master",
         "change": "[§eWW UHC§r] Your master is now §b%s"
       },
       "sister": {
         "display": "Sister",
-        "description": "§6WEREWOLF §7➽§9 You are §1Sister§9. Your objective is to eliminate the Werewolves.\nYou have the effect Resistance when you are at less than 20 blocks away from one of your sister. When one of your sister dies, you will know her killer.",
-        "reveal_killer": "[§eWW UHC§r] §b%s§r was killed by §b%s",
-        "sisters_list": "Sisters' List: §b%s"
+        "effect": "Resistance when you're less than §b%d§f blocs from a sister.",
+        "description": "If a sister dies, you may chose to see either the name or the role of her murderer.",
+        "choice": "[§eWW UHC§r] Click to know ",
+        "name": "§bthe name§f",
+        "role": "§bthe role§f",
+        "or": " or ",
+        "see_role": "See the role",
+        "see_name": "See the name",
+        "already": "[§cWW UHC§r] You already received the information",
+        "command_name": "commandseenamesister",
+        "command_role": "commandseerolesister",
+        "choice_2": "of §b%s§f's murderer",
+        "reveal_killer_name": "[§eWW UHC§r] Your sister has been slain by §b%s",
+        "reveal_killer_role": "[§eWW UHC§r] Your sister was slain by a §b%s",
+        "sisters_list": "List of your sisters : §b%s\n"
+      },
+      "wolf_dog": {
+        "display": "Wolf Dog",
+        "command": "change",
+        "description": "§aVillager§f form : The Werewolves see you as a werewolf in their list. However, you do not know the werewolves. Be careful, the information roles will see you as a werewolf. You can read and send messages in the werewolf chat",
+        "transform": "[§aWW UHC§r] You may change into your werewolf form through §b/ww change§f (cannot be reversed), you have §b%s",
+        "time_over": "[§cWW UHC§r] You can no longer choose your form. As such, you will stay as a Villager",
+        "perform": "[§cWW UHC§r] You chose the Werewolf form",
+        "description_2": "§cWerewolf§f form : The Werewolves do not see you in their list. However, you do know the werewolves. The information roles see you as a Villager. You do not have Strength during the night."
+      },
+      "stud": {
+        "display": "Ghost Bride",
+        "description": "The first time you die, you come back to life in love with the person who killed you"
       },
       "witch": {
         "display": "Witch",
-        "description": "§6WEREWOLF §7➽§9 You are §1Witch§9. Your objective is to eliminate the Werewolves.\nIn order to do this, you will receive 3 Instant Health potions, 3 Instant Damage potions and 1 Regeneration potion. Once during the game, you can resuscitate a player (or yourself if this option is enabled).",
+        "power_available": "You may §astill§f use your power",
+        "power_not_available": "You have §calready§f used your power",
+        "items": "one potion of healing, two potions of damage, one potion of regeneration and one potion of strength",
+        "description": "Once during the game, you may bring a player back to life.",
+        "not_himself": "You §ccannot§f save yourself",
+        "himself": "You §acan§f save yourself",
         "resuscitation_message": "[§eWW UHC§r] §b%s§r is dead, to revive them, §6Click here §r(You have §b7sec§r)",
         "resuscitation_perform": "[§eWW UHC§r] You revived §b%s",
-        "command": "save"
+        "command": "save_witch"
       },
       "little_girl": {
         "display": "Little Girl",
-        "description": "§6WEREWOLF §7➽§9 You are §1Little-Girl§9. Your objective is to eliminate the Werewolves.\nDuring nighttime, you can be invisible by removing your armor. But be ware, you will have blue particles behind you that the Mischievous Wolf can see.\nFortunately you can locate the Mischievous Wolf with their red particles.",
+        "item": "5 Tnt",
+        "effect": "When you take of your armor during the night, you become invisible.",
+        "description": "When you are Invisible, you leave a trace of blue particles visible by Mischievous Werewolves. Inversely, you can find them by the red particles they leave in their wake. You are also able to see the Werewolves' chat",
         "remove_armor": "[§eWW UHC§r] It's night, remove your armor to become invisible",
         "visible": "[§eWW UHC§r] You are now visible",
         "remove_armor_perform": "[§aWW UHC§r] You are now invisible. Put your armor back to be visible",
@@ -63,7 +108,8 @@
       },
       "troublemaker": {
         "display": "Troublemaker",
-        "description": "§6WEREWOLF §7➽§9 You are §1Troublemaker§9. Your objective is to eliminate the Werewolves.\nOnce during the game, you can teleport a player to a random location with §b/ww switch§9. When you die, all the players will be teleported all around the map.",
+        "description": "Once during the game, you may teleport a player to a random location on the map. When you die, all players are scattered around the map.",
+        "chat": "You can send messages in the werewolf chat. However, you cannot see it's content",
         "troublemaker_perform": "[§eWW UHC§r] You have troublemade §b%s",
         "troublemaker_death": "[§eWW UHC§r] A Troublemaker died, all players are randomly teleported",
         "get_switch": "[§eWW UHC§r] You have been teleported by a troublemaker",
@@ -71,70 +117,133 @@
       },
       "citizen": {
         "display": "Citizen",
-        "description": "§6WEREWOLF §7➽§9 You are §1Citizen§9. Your objective is to eliminate the Werewolves.\nOnce during the game, you will be able to look at the Votes, §b/ww countvotes§9, or cancel the Votes, §b/ww cancelvote§9.",
-        "affect_votes": "[§eWW UHC§r] You can still cancel votes §b%d§r times §6/ww cancelvote§r or look at the votes §b%d§r times §6/ww countvotes§r you have §b%s",
+        "description": "You may, twice during the game, chose to see the ballots and, once, cancel the result.",
+        "cancel_vote_message": "[§eWW UHC§r] You may cancel the vote §b%d§r time. ",
+        "see_vote_message": "[§eWW UHC§r] Youmay look at the ballots §b%d§r more time(s). ",
+        "click": "§bClick here ",
+        "cancel": "Cancel the §bVote",
+        "see": "Look at the §bBallots",
+        "time_left": ", you have §b%s",
         "cancelling_vote_perform": "[§eWW UHC§r] Vote canceled, you have saved §b%s",
         "cancelling_broadcast": "[§aWW UHC§r] A Citizen canceled the vote",
         "count_votes": "[§aWW UHC§r] Counting Votes ",
         "see_vote": "§b%s§r voted for §b%s§r",
-        "command_1": "countvotes",
-        "command_2": "cancelvote"
+        "command_1": "depouiller_citizen",
+        "command_2": "cancel_citizen"
       },
       "angel": {
         "display": "Angel",
-        "description": "§6WEREWOLF§7➽§9 You are §1Angel§9. Your objective is to win alone. \nIn the early game, you have a choice. If you chose §1Guardian Angel§9, you will obtain 15 hearts, and must protect a random chosen player and win with them. If your protégé dies, you will go back to 12 hearts and must win with the Village. If you chose §1Fallen Angel§9 you will obtain 12 hearts, a random target will be assigned to you and if you kill it, you will go to 15 hearts until the end of the game.",
-        "angel_choice": "[§eWW UHC§r] You can decide to be either Fallen Angel §6/ww fallen§r or Guardian Angel §6/ww guardian§r\nyou have §b%s",
+        "angel_choice": "[§eWW UHC§r] You can decide to be either ",
+        "angle_choice_click": "[§eWW UHC§r] You just choose §b%s§b§f. You will know your target in §b%s",
+        "or": " or ",
+        "target": "Target : §b%s\n",
+        "time": ", you have §b%s §f(Click to chose)",
+        "fallen_choice": "If you chose §bFallen Angel§f,\n you obtain 12 hearts and a random target will be given to you.\n If you kill it, you will have 15 hearts until the end of the game.",
+        "guardian_choice": "If you chose §bGuardian Angel§f,\n you obtain 15 hearts and have to protect a randomly designated ward and win with him/her.\n If your ward dies, you go down to 12 hearts and have to win with the Villagers.",
+        "guardian_choice_patch": "If you chose §bGuardian Angel§f,\n you obtain 15 hearts and have to protect a randomly designated ward and win with him/her.\n If your ward dies, you go down to 12 hearts and have to win alone.",
         "angel_choice_perform": "[§eWW UHC§r] You just chose §b%s",
         "command_1": "guardian",
         "command_2": "fallen",
         "choice": "he chose %s"
       },
+      "mystical_werewolf": {
+        "display": "Mystic Werewolf",
+        "no_message": "[§cWW UHC§r] The Mystic Werewolf is not allowed to send messages in the Werewolf chat",
+        "description": "Whenever a Werewolf died, you will obtain the role and the name of a player who isn't in your team.",
+        "werewolf_death": "[§cWW UHC§r] A Werewolf just died, you get to know that §b%s§f is §b%s"
+      },
+      "rival": {
+        "display": "Rival",
+        "extra": "You are allowed a Power §b%d bow",
+        "item": "Two potions of damage",
+        "description": "When the lovers are announced, you get to know the roles of the two lovers. In §b%s§r, you obtain a list of 5 players among whom the lovers are.\nIf you kill a lover, you take his place and have to win with his lover.\nHowever, if the lovers die, You have to win alone with two less permanent hearts. You know in which direction the cupid is if there is one in the game.",
+        "lover": "[§eWW UHC§r] The lovers are a §b%s§f and a §b%s§f.",
+        "find_lovers": "[§eWW UHC§r] The lovers are among the following players : %s, %s, %s, %s, %s",
+        "lover_death": "[§cWW UHC§r] The lovers are dead, you now have to win alone and lose two permanent hearts."
+      },
       "fox": {
         "display": "Fox",
-        "description": "§6WEREWOLF §7➽§9 You are §1Fox§9. Your objective is to eliminate the Werewolves. \\nYou will always have the effect Speed. You can smell the players with §b/ww smell§9 to know if they are Werewolves. The players need to be next to you. The time taken to smell a player will depend on the settings of the game.\",",
-        "smell_message": "[§eWW UHC§r] Smell a player, if you are already smelling a someone, they will be replaced by the new player and the progression will be zeroed. You have §b%d§r smells left §6/ww smell",
+        "effect": "Three minutes of speed after each kill",
+        "description": "You are able to sniff other players in order to know if they are a Werewolf or not. You can only sniff players who are less than §b%d§f blocks away from you for §b%s§f.\nYou have §b%d§f sniffs.",
+        "smell_message": "[§eWW UHC§r] You may sniff a player §b/ww sniff§. If you are already sniffing someone, he will be replaced by the new target and progression will be reset to 0. You have §b%d§r sniffs remaining",
         "smell_beginning": "[§eWW UHC§r] You started smelling §b%s",
         "not_werewolf": "[§eWW UHC§r] %s §2isn't in the Werewolf team",
+        "warn": "He will be informed in 5 minutes that he was sniffed",
         "werewolf": "[§eWW UHC§r] %s §4is in the Werewolf team",
         "not_enough_near": "[§cWW UHC§r] You aren't close enough to the player you are smelling",
         "progress": "[§eWW UHC§r] Smell Progression §b%s%%",
+        "smell": "[§WW UHC§r] You have been sniffed by a §bFox§f 5 minutes ago",
         "command": "smell"
       },
       "miner": {
         "display": "Miner",
-        "description": "§6WEREWOLF §7➽§9 You are §1Miner§9. Your objective is to eliminate the Werewolves.\nYou have a diamond pickaxe and the effect Haste."
+        "description": "§6Werewolves §7➽§9 You are a §1Miner§9. Your objective is to kill the Werewolves.\n§9You have a diamond pickaxe and a Haste effect."
       },
       "raven": {
         "display": "Raven",
-        "description": "§6WEREWOLF §7➽§9 You are §1Raven§9. Your objective is to eliminate the Werewolves.\nYou will have the effect Nofall and your vote counts twice.\nYou can curse a player with §b/ww curse§9, he will receive the effect Jump Boost II for one day.",
-        "curse_message": "[§eWW UHC§r] Curse a player for the day §6/ww curse§r, you have §b%s",
+        "effect": "NoFall",
+        "item": "Feather Falling III book",
+        "description": "Your vote counts double. At dawn, you may curse a player who will receive Jump Boost II for a day.",
+        "curse_message": "[§eWW UHC§r] You may curse a player for the day §b/ww curse§r, you have §b%s",
         "curse_perform": "[§eWW UHC§r] You have cursed §b%s",
         "get_curse": "[§eWW UHC§r] You have been cursed by the Raven. You now have Jump Boost until the next morning",
         "no_longer_curse": "[§eWW UHC§r] You are not cursed anymore",
         "command": "curse"
       },
+      "village_idiot": {
+        "display": "Village Idiot",
+        "suffix": "§6Idiot",
+        "power_on": "You are §aable to§f come back to life",
+        "power_off": "You §ccannot§f come back to life anymore",
+        "announce": "[§eWW UHC§r] The Village Idiot §b%s§r has come back to life.",
+        "description": "When you are killed by a player who isn't part of the Werewolves, you come back to life and all players are told your role, but you lose two permanent hearts."
+      },
       "villager": {
-        "display": "Simple Villager",
-        "description": "§6WEREWOLF §7➽§9 You are §1Villager§9. Your objective is to eliminate the Werewolves.\nYou do not have any ability"
+        "display": "Villager",
+        "kit": " Kit : %s",
+        "miner": "Miner",
+        "black_smith": "Blacksmith",
+        "book_seller": "Librarian",
+        "golem": "Golem",
+        "archer": "Bowman",
+        "priest": "Priest",
+        "miner_desc": "You have the §bMiner§f kit : a diamond pickaxe efficiency II",
+        "black_smith_desc": "You have the §bBlacksmith§f kit : an anvil and 10 bottles of xp",
+        "book_seller_desc": "You have the §bLibrarian§f kit : 8 books and 10 bottles of xp",
+        "golem_desc": "You have the §bGolem§f kit : 15 iron and 3 books Unbreaking III",
+        "archer_desc": "You have the §bBowman§f kit : 6 strings and 64 arrows",
+        "priest_desc": "You have the §bPriest§f kit : 3 golden apples",
+        "description": "You do not have any powers"
       },
       "assassin": {
         "display": "Assassin",
-        "description": "§6WEREWOLF §7➽§9 You are §1Assassin§9. Your objective is to win on your own.\nIn order to do this, you will have 3 enchanted books : Sharpness III, Protection III and Power III. \nYou will also have the effect Strength(daytime) and you have infiltrated the Villager team."
+        "effect": "Strength during daytime",
+        "items": "a Sharpness III book, a Protection III book and a Power III book",
+        "limit": "armor, bow and sword enchantement limit (+1)"
       },
       "falsifier_werewolf": {
         "display": "Falsifier Wolf",
-        "description": "§6WEREWOLF §7➽§9 You are §1Falsifier Wolf§9. Your objective is to kill the Villagers.\nYour display role(role seen if someone inspects you) is different everyday day it will be one role random among the ones still alive. Use this ability to trick the Villagers. You will have the following effects: Strength(night) and Night Vision. After a kill, you will have Speed and 2 absorption hearts for 2 minutes. \nUse §b/ww ww§9 to see the Werewolf's list.",
+        "description": "§fYou have a different display role every day in order to deceive the villagers.",
+        "role": "§fCurrent Display Role : §b%s\n",
         "display_role_message": "[§eWW UHC§r] Today, your display Role is §b%s"
       },
       "thief": {
         "display": "Thief",
-        "description": "§6WEREWOLF §7➽§9 You are §1Thief§9. At the beginning of the game, you are not in any team you are Neutral, until you kill someone.\nThe first time you will kill a player, you will take their role and you will have to win with their team. You will have the effect Resistance before your first kill and the effect Speed as well as 2 absorption hearts, 2 minutes after.",
+        "thief": "you have §fstolen a §b%s§f",
+        "details": "[§eWW UHC§r] To see the details of your role §b/ww role",
+        "description": "You obtain the role of the first person you kill and will have to win with its team.",
+        "effect": "Resistance until your first kill",
         "realized_theft": "[§eWW UHC§r] You are now §b%s"
+      },
+      "imitator": {
+        "display": "Imitator",
+        "effect": "Strength until his first kill",
+        "description": "You obtain the role of the first person you kill."
       },
       "detective": {
         "display": "Detective",
-        "description": "§6WEREWOLF §7➽§9 You are §1Detective§9. Your objective is to eliminate the Werewolves. \nEach day, you can test 2 players with §b/ww inspect§9 to know if they are in the same team(Villagers, Werewolves or Neutrals). \nBe ware, the Assassin, the Succubus, the Serial Killer, the Thief(has not stolen), the White Werewolf and the Amnesiac Wolf(not transformed) are all in the same team: Neutrals.",
-        "inspection_message": "[§eWW UHC§r] Inspect two players §6/ww inspect§r you have §b%s",
+        "description": "Every morning, you may examine two players to know if they are or not in the same team.",
+        "inspection_message": "[§eWW UHC§r] Inspect two players §b/ww inspect§r you have §b%s",
         "same_camp": "[§eWW UHC§r] %s and %s §2are in the same team",
         "opposing_camp": "[§eWW UHC§r] %s and %s §2are not in the same team",
         "already_inspect": "[§cWW UHC§r] At least one of the players has already been inspected",
@@ -142,87 +251,124 @@
       },
       "naughty_little_wolf": {
         "display": "Naughty Little Wolf",
-        "description": "§6WEREWOLF §7➽§9 You are §1Naughty Little Wolf§9. Your objective is to kill the Villagers. \nIn order to do this, you will have the following effects: Strength(night), Night Vision and Speed. After a kill, you will have Speed and 2 absorption hearts for 2 minutes. \nUse §b/ww ww§9 to see the Werewolf's list."
+        "effect": "Strength and Speed (during the night), Night Vision. 2 hearts of absorption after each kill"
       },
       "chatty_seer": {
         "display": "Chatty Seer",
-        "description": "§6WEREWOLF §7➽§9 You are §1Chatty Seer§9. Your objective is to eliminate the Werewolves. \nYou receive 4 obsidians and 4 bookshelves. During daytime, you can know the team(Villagers, Werewolves or Neutrals) of a player with §b/ww see§9. \nHowever if it is a Villager, you loose 3 hearts. \nThe team will be shown in the global chat.",
+        "description": "In the morning, you may see the team a player belongs to. However, if it's a villager, you lose 3 Hearts and won't be able to use your power the next day. The message will be displayed in the global chat.",
         "see_perform": "[§eWW UHC§r] A Chatty Seer has spied on a member of the §b%s camp"
       },
       "infect_father_of_the_wolves": {
         "display": "Infect Father of the Wolves",
-        "description": "§6WEREWOLF §7➽§9 You are §1Infect Father of the Wolves§9. Your objective is to kill the Villagers.\nIn order to do this, you will have the following effects: Strength(night) and Night Vision. You can revive a player killed by Werewolves.This player will join your team, and will keep his original abilities. After a kill, you will have Speed and 2 absorption hearts for 2 minutes. \nUse §b/ww ww§9 to see the Werewolf's list.\n",
+        "items": "Two splash potions of healing",
+        "power_available": "You may §astill§f use your power",
+        "power_not_available": "You have §calready§f used your power",
+        "description": "You may bring back to life a player who was killed by a werewolf. This player will become a part of the werewolves while keeping his original powers.",
         "infection_message": "[§eWW UHC§r] §b%s§r is dead, to infect §6Click here §r(You have §b7sec§r)",
         "infection_perform": "[§eWW UHC§r] You infected §b%s",
         "player_cannot_be_infected": "[§cWW UHC§r] The player can't (anymore) be infected",
-        "command": "infect"
+        "command": "infecter_infect"
       },
       "seer": {
         "display": "Seer",
-        "description": "§6WEREWOLF §7➽§9 You are §1Seer§9. Your objective is to eliminate the Werewolves.\nYou receive 4 obsidians and 4 bookshelves. During daytime, you can know the team(Villagers, Werewolves or Neutrals) of a player with §b/ww see§9.\nHowever if it is a Villager, you loose 3 hearts until the next morning.",
-        "see_camp_message": "[§eWW UHC§r] Discover a player's team §6/ww see§r you have §b%s",
+        "items": "4 blocks of Obsidian and 4Libraries",
+        "effect": "Night Vision",
+        "disable": "[§cWW UHC§r] You have spied on a Villager yesterday. Your power will be available again tomorrow",
+        "description": "In the morning, you may see the team a player belongs to. However, if it's a villager, you lose 3 Hearts and won't be able to use your power the next day.",
+        "see_camp_message": "[§eWW UHC§r] Discover a player's team §b/ww see§r you have §b%s",
         "see_perform": "[§eWW UHC§r] You have spied on a member of the §b%s camp",
         "not_enough_life": "[§cWW UHC§r] You don't have enough life to spy on someone",
-        "see_villager": "[§cWW UHC§r] You've seen a member of the Village, you loose 3 hearts until next morning",
+        "see_villager": "[§cWW UHC§r] You just spied on a villager and thus lose 3 hearts and cannot use your power the next time",
         "command": "see"
+      },
+      "priestess": {
+        "display": "Priestess",
+        "description": "During the day, You may chose to learn to which team a player belongs in exchange for two permanent hearts. While you are alive, the werewolves have a probability of 20%% to see the role of a dead person while this is 80%% for the villagers. After you died, those probabilities are reversed",
+        "command": "spec",
+        "items": "Four blocks of Obsidian",
+        "is_werewolf": "[§cWW UHC§r] §b%s§r is a member of the Werewolves",
+        "is_not_werewolf": "[§aWW UHC§r] §b%s§r is not a member of the Werwolves",
+        "werewolf_death": "[§aWW UHC§r] A Werewolf you discovered died. You get 1 heart back",
+        "perform": "[§eWW UHC§r] Discover the role of a player who is at less than §b%d§r blocks of you with §b/ww spec§r you have §b%s",
+        "distance": "[§cWW UHC§r] You have to be at less than 10 blocs of the player"
       },
       "protector": {
         "display": "Protector",
-        "description": "§6WEREWOLF §7➽§9 You are §1Protector§9. Your objective is to eliminate the Werewolves. \nYou will receive 3 Instant Heal potions. Everyday, you can protect a player with §b/ww protect§9, this person will receive the following effects: Resistance and NoFall",
-        "protection_message": "[§eWW UHC§r] Protect a player for the day §6/ww protect§r you have §b%s",
+        "items": "Three splash potions of healing",
+        "description": "Every morning, you may decide to protect a player. He will receive resistance and NoFall until dawn",
+        "protection_message": "[§eWW UHC§r] Protect a player for the day §b/ww protect§r you have §b%s",
         "protection_perform": "[§eWW UHC§r] You just protected §b%s",
         "get_protection": "[§eWW UHC§r] The Protector is protecting today, you now have Resistance and NoFall",
         "no_longer_protected": "[§eWW UHC§r] You aren't protected anymore",
         "command": "protect"
       },
+      "guard": {
+        "display": "Guard",
+        "description": "Every morning, you can chose to protect a player. If he is killed by a Werewolf, he'll come back to life, but you won't be able to use your power anymore. You may protect each player only once",
+        "items": "A splash potion of Strength",
+        "command": "protect",
+        "perform": "[§eWW UHC§r] You just protected §b%s",
+        "protect": "[§aWW UHC§r] The guard is protecting you. As such, you come back to life",
+        "resurrection": "[§cWW UHC§r] The player you were protecting just came back to life. You don't have your power anymore",
+        "message": "[§eWW UHC§r] Protect a player for the day §b/ww protect§r you have §b%s"
+      },
       "bear_trainer": {
         "display": "Bear Trainer",
-        "description": "§6WEREWOLF §7➽§9 You are §1Bear Trainer§9. Your objective is to eliminate the Werewolves. \nEvery sunrise, you'll growl if there's a Werewolf in near you. A message will be sent in the global chat.",
+        "description": "At dawn, you growl once for each Werewolf in a §b%s§f blocks radius around you. Growls are displayed in global chat.",
         "growling_message": "[§eWW UHC§r] %s",
         "growling": "Grrrr "
       },
       "fallen_angel": {
         "display": "Fallen Angel",
-        "description": "§6WEREWOLF §7➽§9 You are §1Fallen Angel§9. Your objective is to win on your own. \nYou have 2 extra hearts. A target is randomly given to you, if you kill it, you will receive 3 extra hearts until the end of the game.",
+        "effect": "Resistance during the Night",
+        "wait": "You will know your target in §b%s§f",
+        "power": "12 hearts, 15 if you kill your target.",
         "deadly_target": "[§eWW UHC§r] You killed your target, you gain 3 extra hearts",
+        "deadly_target_by_other": "[§cWW UHC§r] Your target has been slain by another player, you cannot obtain your additional hearts anymore",
         "reveal_target": "[§eWW UHC§r] Your target is §b%s",
         "new_target": "[§6WW UHC§r] Your target is now §b%s"
       },
       "white_werewolf": {
         "display": "White Werewolf",
-        "description": "§6WEREWOLF §7➽§9 You are §1White Werewolf§9. Your objective is to win on your own while being infiltrated in the Werewolf's team.\nIn order to do this, you will have the following effects: Strength(night) and Night Vision, as well as 5 extra hearts. After a kill, you will have Speed and 2 absorption hearts for 1 minute.\nUse §b/ww ww§9 to see the Werewolf's list."
+        "heart": "Five additional permanent hearts",
+        "description": "You are infiltrated among the Werewolves."
       },
       "cupid": {
         "display": "Cupid",
-        "description": "§6WEREWOLF §7➽§9 You are §1Cupid§9. Your objective is to eliminate the Werewolves.\nYou can make 2 player fall in love with §b/ww lovers§9.\nYou have win with the Lovers then with the Villagers.\n",
-        "lover_designation_message": "[§eWW UHC§r] You have to choose two Lovers, §6/ww lovers§r, you have §b%s",
+        "lover": "§bLovers§f : %s\n",
+        "none": "§cNone§f, to make two people fall in love §b/ww lovers",
+        "items": "A Power II book, Punch I book, 64 arrows, 2 strings",
+        "description": "You have to win with your lovers. If the were to die, you win as a villager.",
+        "extra": "You are allowed a bow Power §b%d",
+        "lover_designation_message": "You have to designate two Lovers, §b/ww lovers§r, you have §b%s",
         "designation_perform": "[§eWW UHC§r] Your chosen lovers are §b%s§r and §b%s",
         "command": "lovers"
       },
       "siamese_twin": {
         "display": "Siamese Twin",
-        "description": "§6WEREWOLF §7➽§9 You are §1Siamese Twin§9. Your objectif is to kill the Werewolves. \nYou have been separated from your twin at birth, however you still are deeply connected. As well as having two extra hearts, you share your hearts after the fifth one.",
-        "siamese_twin_list": "Siamese Twin's List: §b%s"
+        "power": "Two additional hearts",
+        "description": "You have been separated from your brother at birth, but keep a strong link to him. Your hearts above the fifth are linked.",
+        "siamese_twin_list": "List of your Siamese Brothers: §b%s"
       },
       "lover": {
         "display": "Lovers",
-        "description": "§6WEREWOLF §7➽§d You madly fall in love with §b%s§d.\nIf they die, you will kill yourself in despair.\nYou can send heart points to your soul mate with §b/ww donate §d[number of half-heart to send] [optional:player who will receive the hearts]",
-        "not_in_pairs": "[§cWW UHC§r] You are not a lover",
+        "random": " Random",
+        "description": "§6WEREWOLF §7➽§d You madly fall in love with §b%s§d.\n§dIf they die, you will kill yourself in despair.\n§dYou can send heart points to your soul mate with §b/ww donate §d[%% of life to send] [optional:player who will receive the hearts]",
+        "not_in_pairs": "[§cWW UHC§r] You are not in love",
         "lover_death": "§d%s by love, joins them in their grave",
         "not_enough_players": "[§cWW UHC§r] there aren't enough players to add lovers",
         "not_lover": "[§cWW UHC§r] You can only donate hearts to your lover",
-        "not_enough_heart_send": "[§cWW UHC§r] You didn't donate enough hearts",
         "polygamy": "[§6WW UHC§r] Due to a lack of players compared to the number of players, polygamy is disabled",
-        "not_enough_heart": "[§cWW UHC§r] You don't have enough hearts",
-        "received": "[§eWW UHC§r] You received §b%d§r half-heart(s) from §b%s",
+        "received": "[§eWW UHC§r] You receive §b%d§r %% of §b%s 's life",
         "disconnected": "[§cWW UHC§r] You lover isn't online",
-        "complete": "[§aWW UHC§r] You sent §b%s§r half-heart(s) to §b%s",
+        "complete": "[§aWW UHC§r] You sent §b%d§r %% of your life to §b%s",
+        "100": "[§aWW UHC§r] You cannot send 100%% or more of your life",
         "command": "donate",
-        "too_many_heart": "[§cWW UHC§r] You can't send as many hearts to §b%s"
+        "too_many_heart": "[§cWW UHC§r] §b%s§r has too much life"
       },
       "cursed_lover": {
         "display": "Cursed Lovers",
-        "description": "§6Werewolf §7➽§c A destructive link between §6%s§c and you has emerged. You cannot win together, even if you are in the same team.\n You have an additional heart and NoFall while both of you are alive.",
+        "description": "§6Werewolf §7➽§c A destructive link between §6%s§c and you has emerged. You cannot win together, even if you are in the same team.\n §c You have an additional heart and NoFall while both of you are alive.",
         "death_cursed_lover": "[§cWW UHC§r] Your cursed lover is dead, you loose all your bonus effects",
         "not_enough_players": "[§cWW UHC§r] There aren't enough players to add cursed lovers"
       },
@@ -232,17 +378,23 @@
       },
       "mischievous_werewolf": {
         "display": "Mischievous Wolf",
-        "description": "§6WEREWOLF §7➽§9 You are §1Mischievous Wolf§9. Your objective is to kill the Villagers. \nUnlike the Werewolves, you have the following effects: Invisibility(night) and Weakness(night). To receive these effects you will have to remove your armor.\nYou will have red particles behind you while invisible. And you will be able to locate the Little-Girls vous pouvez repérer les Petites Filles with their blue particles. After a kill, you will have Speed and 2 absorption hearts for 2 minutes.\nUse §b/ww ww§9 to see the Werewolf's list."
+        "items": "5 Tnt",
+        "effect": "Invisibility while taking off your armor during the night, Strength during the night otherwise",
+        "description": "While you are invisible, you leave a trace of red particles visible by the §bLittle Girl§f. Inversely, you can see them by the blue particles they leave behind."
       },
       "elder": {
         "display": "Elder",
-        "description": "§6WEREWOLF §7➽ §9 You are §1Elder§9. Your objective is to eliminate the Werewolves.\nIn order to do this, you have the effect Resistance and a second life.\nYou will loose your Resistance effect after your first death, but be ware, if a Villager kills you, you will loose 1/3 of your health."
+        "effect": "Resistance during his first life",
+        "available": "You do §astill have§f your second life.",
+        "not_available": "You do §cno longer§f have your second life.",
+        "description": "You do have a second life. You will lose your resistance the first time you die. But careful, if a villager kills you, you will lose three permanent hearts."
       },
       "flute_player": {
         "display": "Pied Piper",
-        "description": "§6WEREWOLF §7➽§9 You are a §1Pied Piper§9. You have to win alone. Every day, you may bewitch 2 players that are at less than 100 blocks of you. If you bewitch all living players, you win.\nBewitched players know the list of bewitched players",
+        "affected": "§bAffected player§f : §f%s\n",
+        "description": "At dawn, you may bewitch two persons who are at less than a 100 blocks from you. If you bewitch all living players, you win. The bewitched people know each other",
         "list": "[§eWW UHC§r] List of Bewitched Players : §b",
-        "power": "[§eWW UHC§r] Bewitch two players with §6/ww bewitch§r You have §b%s",
+        "power": "[§eWW UHC§r] Bewitch two players §b/ww bewitch§r you have §b%s",
         "already_enchant": "[§eWW UHC§r] You have already bewitched §b%s",
         "distance": "[§cWW UHC§r] You are at more than a 100 blocks from §b%s",
         "enchanted": "[§eWW UHC§r] You have just been bewitched by the Pied Piper",
@@ -251,9 +403,10 @@
       },
       "librarian": {
         "display": "Librarian",
-        "description": "§6WEREWOLF §7➽§9 You are a §1Librarian§9. Your objective is to eliminate the werewolves.\nYou obtain 4 bookshelves.\n Three times during the game, you can ask a player to write you a book using §b/ww book§9. \nWhen you die, the books you received are published",
+        "items": "4 Libraries",
+        "description": "§b%s§f time during the game, you may ask a player to write you a book through §b/ww book§f. When you die, all books you received are published",
         "perform": "[§eWW UHC§r] You just sent a book to §b%s",
-        "message": "[§eWW UHC§r] The §bLibrarian§r wishes for you to write him a book. Do so with §b/ww write§r followed by your message",
+        "message": "[§eWW UHC§r] The §bLibrarian§r wishes for you to write him a book. Click here",
         "contribute": "[§aWW UHC§r] You just wrote a book",
         "contribution": "[§aWW UHC§r] §b%s§r sent you a book containing §b%s",
         "prohibit": "[§cWW UHC§r] You are not authorized to write a book",
@@ -265,8 +418,10 @@
       },
       "comedian": {
         "display": "Comedian",
-        "description": "§6WEREWOLF §7➽§9 You are §1Comedian§9. Your objective is to eliminate the Werewolves.\nTo do so, you own three masks, one of strength, one of resistance, and one of speed. Each morning, you can choose (or not) to put one for the day.\nBe ware, these masks are single-use. So, a mask, once used, won't be re-usable.",
-        "wear_mask_message": "[§eWW UHC§r] You can choose to wear a mask for the day.\nDo /ww mask 1, 2 or 3 (Respectively Resistance, Speed and Strength). You have §b%s",
+        "masks": "Used Mask(s) : §b%s",
+        "none": "None",
+        "description": "You have three masks, one of Strength, one of Resistance, and one of Speed. Every morning, you may chose to put on (or not) a mask for the day. Each mask can be used only once.",
+        "wear_mask_message": "[§eWW UHC§r] You may now chose to put on a mask for the day. Use §b/ww mask§f 1, 2 or 3 (respectively : Resistance, Speed and Strength). You have §b%s",
         "wear_mask_perform": "[§eWW UHC§r] You just put the §b%s§r mask on",
         "used_mask": "[§cWW UHC§r] You already used this mask",
         "mask_unknown": "[§cWW UHC§r] Unknown mask",
@@ -277,19 +432,22 @@
       },
       "trapper": {
         "display": "Trapper",
-        "description": "§6WEREWOLF §7➽ §9You are §1Trapper§9. Your objective is to eliminate the Werewolves.\nEach morning, you can track a different player.",
-        "tracking_message": "[§eWW UHC§r] You can track a new player §6/ww track",
+        "description": "Every morning, you will be able to track the position of a different player.",
+        "tracking_message": "[§eWW UHC§r] You now track the position of a new player §b/ww track",
         "tracking_perform": "[§eWW UHC§r] You start tracking §b%s",
         "get_track": "[§eWW UHC§r] A Trapper is tracking you today",
         "command": "track"
       },
       "succubus": {
         "display": "Succubus",
-        "description": "§6WEREWOLF §7➽§9You are §1Succubus§9. Your objective is to win alone with the player that you will charm. \nYou can charm a player with §b/ww charm§9\nIf you die, your Charmed will die in your place.",
-        "charming_message": "[§eWW UHC§r] You can designate a player to charm §6/ww charm",
+        "charm": "Charmed : §b%s\n",
+        "charm_command": "to charm §b/ww charm§b",
+        "none": "§cNone§f",
+        "description": "You may charm a player who will have to win with you. If you die, the charmed players dies in your stead. The time necessary to charm is §b%s",
+        "charming_message": "[§eWW UHC§r] You may now chose a player to charm §b/ww charm",
         "charming_beginning": "[§eWW UHC§r] You started charming §b%s",
         "charming_perform": "[§aWW UHC§r] §b%s§r is totally charmed, if you die he will die in your place",
-        "get_charmed": "[§eWW UHC§r] The Succubus §b%s§r has charmed you, you now have to win with them.\nIf the Succubus dies, you will die in their place.",
+        "get_charmed": "[§eWW UHC§r] The succubus §b%s§r charmed you, you now have to win with her. If the succubus were to die, you die in her stead.",
         "free_of_succubus": "[§eWW UHC§r] You have been freed from your Succubus, but at what price...",
         "not_enough_near": "[§cWW UHC§r] You aren't close enough to the player you are trying to charm",
         "progress_charm": "[§eWW UHC§r] Charm's Progression §b%s%%",
@@ -305,27 +463,32 @@
       "vote_disable": "[§cWW UHC§r] Votes are disabled",
       "vote_deactivate": "[§6LG UHC§r] Due to the number of players, Votes are disabled",
       "vote_not_yet_activated": "[§cWW UHC§r] Votes are not enabled yet",
-      "death": "[§cWW UHC§r] Dead players can't vote",
-      "vote_result": "§b§m§l-+-----------------------------------------+-\n§f[§eWW UHC§r] §b%s§r received the more votes§r : §b%s§r. They loose 5 hearts\n§r§b§m§l-+-----------------------------------------+-",
+      "vote_result": "[§eWW UHC§r] §b%s§r is the player who was voted most often§r : §b%s§r. He loses 5 hearts",
       "no_result": "[§6WW UHC§r] No player have been voted more than ounce",
-      "vote_time": "§b§m§l-+-----------------------------------------+-\n§f[§6WW UHC§r] It's time to vote §6/ww vote§r You have §b%s\n§r§b§m§l-+-----------------------------------------+-",
+      "vote_time": "§b§m§l-+-----------------------------------+-\n§f[§6WW UHC§r] It is time to vote §b/ww vote§r You have §b%s\n§r§b§m§l-+-----------------------------------+-",
       "command": "vote"
     },
+    "lone_wolf": {
+      "message": "[§cWW UHC§r] You become a lone wolf. You now have to win alone. To help you in this task, you have 4 additional permanent hearts (within a limit of 15 hearts maximum)"
+    },
     "announcement": {
-      "restart": "[§6WW UHC§r] Restarting the game in 30 secondes",
+      "restart": "[§6WW UHC§r] Restarting the game in §b%s",
       "pvp": "[§6WW UHC§r] PVP enabled",
       "border": "[§6WW UHC§r] Borders started to shrink",
       "mining": "[§6WW UHC§r] Mining Disabled",
       "day": "[§6WW UHC§r] It is now Day §b%s§r ✸ ",
-      "death_message_with_role": "§b§m§l-+-----------------------------------------+-\n§f        [§cWW UHC§r] §b%s§r is dead, he was §b%s§r\n§r§b§m§l-+-----------------------------------------+-",
-      "death_message": "§b§m§l-+-----------------------------------------+-\n§f                 [§cWW UHC§r] §b%s§r is dead\n§r§b§m§l-+-----------------------------------------+-",
-      "review_role": "[§eWW UHC§r] To see your role's description again §6/ww role",
-      "troll": "§6WEREWOLF §7➽§4§l Ok, the joke lasted long enough ! Here's your real role : ",
+      "death_message_with_role": "§b§m§l-+-----------------------------------+-\n§f        [§cWW UHC§r] §b&player&§r died, he was a §b&role&§r\n§r§b§m§l-+-----------------------------------+-",
+      "death_message_with_camp": "§b§m§l-+-----------------------------------+-\n§f        [§cWW UHC§r] §b&player&§r died, he was a member of the §b&role&§r\n§r§b§m§l-+-----------------------------------+-",
+      "death_message": "§b§m§l-+-----------------------------------+-\n§f                 [§cWW UHC§r] §b&player&§r died\n§r§b§m§l-+-----------------------------------+-",
+      "review_role": "[§eWW UHC§r] To see your role's description again, §b/ww role",
+      "troll": "[§5WW UHC§r] Well, the joke has gone on for long enough ! Here's your real role : ",
+      "lover_troll": "[§aWW UHC§r] The Valentine's Day joke is over, your love was an illusion",
       "night": "[§eWW UHC§r] It's Night §b%s§r ☼",
       "start": {
-        "message": "[§eWW UHC§r] You have §b%s§r of invulnerability\n More info about the game §6/ww h",
+        "message": "[§eWW UHC§r] You have §b%s§r of invulnerability\n§f More informations about the game §b/ww h",
         "top_title": "Game is Starting",
-        "bot_title": "§bHave a good game"
+        "bot_title": "§bHave a good game",
+        "launch": "Start the §bGame"
       },
       "potential_revive": "[§6WW UHC§r] Waiting for a potential revive",
       "invulnerability": "[§eWW UHC§r] Invulnerability is now disabled",
@@ -334,59 +497,105 @@
       "leave": "[§c%d/%d§r] §b%s§r left the Village",
       "leave_in_game": "§b§l%s§r has a power cut in his neighborhood",
       "leave_in_spec": "§b%s§r's soul left the Village",
+      "join_in_spec": "The soul of §b%s§r joins the game",
       "queue_rejoin": "[§eWW UHC§r] §b%s§r regains its place in the queue (position: §b%d§r)",
       "queue_leave": "[§eWW UHC§r] §b%s§r leaves the game",
       "spectator_leave": "[§eWW UHC§r] §b%s§r leaves the queue",
       "leave_spec": "[§eWW UHC§r] The spectator §b%s§r leaves the Game",
+      "join_spec": "[§eWW UHX§r] The spectator §b%s§r joins the game",
+      "join_moderator": "[§eWW UHC§r] The moderator §b%s§r joins the game",
       "queue": "[§eWW UHC§r] §b%s§r has joined the queue (position: §b%d§r)",
       "rank": "§b/ww rank§r to see your position in the queue",
-      "stop": "[§cWW UHC§r] §b%s§r stopped the game",
       "resurrection": "[§eWW UHC§r] You just came back to life"
     },
     "end": {
       "thief": "§e He stole a %s",
-      "infect": " who was infected ",
+      "infect": " Infected",
+      "solitary": " Lone Wolf",
       "reveal_death": "§e§m%s was %s",
-      "transform": "transformed ",
+      "transform": " transformed",
       "reveal": "§e%s was %s",
-      "model": " with %s as master ",
+      "model": " master %s",
       "death": "§cOf Death",
       "lover": " in love with %s",
       "cursed_lover": " in a cursed relationship with %s",
       "victory": "Victory",
-      "message": "§m§l-+-----------------------------------------+-\n§f                   [§6WW UHC§r] Victory %s\n§r§m§l-+-----------------------------------------+-"
+      "message": "[§6WW UHC§r] Victory %s"
     },
     "commands": {
       "admin": {
+        "stop": {
+          "command": "stop",
+          "message": "Stop the game",
+          "send": "[§cWW UHC§r] §b%s§r stopped the game",
+          "description": "Stop the game"
+        },
         "start": {
-          "too_much_role": "[§cWW UHC§r] You have to remove roles to start the game."
+          "command": "start",
+          "too_much_role": "[§cWW UHC§r] You have to remove roles to start the game.",
+          "description": "Start the game"
         },
         "group": {
+          "command": "group",
+          "command_2": "setgroup",
           "group_change": "[§6WW UHC§r] Group's limit are now at §b%s",
-          "respect_limit": "§m§l-+-----------------------------------------+-\n§r       [§eWW UHC§r] Respect limits, groups of §b%d§r\n§r§m§l-+-----------------------------------------+-",
+          "respect_limit": "[§eWW UHC§r] Respect the limits, group of §b%d",
           "top_title": "Respect the limit",
-          "bot_title": "group of §b%s"
+          "bot_title": "group of §b%s",
+          "description1": "Send a message to remind group size",
+          "description2": "Change group size"
         },
-        "info": "§b§l[Info]§r » §b%s",
-        "set_game_name": "[§aWW UHC§r] Custom game's name",
+        "anonymous_chat": {
+          "command": "?",
+          "send": "[§b%s§r] %s (Click to answer)",
+          "anonyme": "Anonymous",
+          "failure": "[§cWW UHC§r] Your message couldn't be sent. No staff is connected",
+          "description": "To send an anonymous message"
+        },
+        "info": {
+          "command": "info",
+          "send": "§b§l[Info]§r » §b%s",
+          "description": "To send an information in the global chat"
+        },
+        "set_game_name": {
+          "send": "[§aWW UHCr] Name of the game configured",
+          "command": "name",
+          "description": "To change game name"
+        },
         "chat": {
+          "command": "chat",
           "on": "[§aWW UHC§r] Chat is §benabled",
           "off": "[§cWW UHC§r] Chat is §bdisabled",
-          "template": "%s : %s"
+          "template": "%s : %s",
+          "description": "To activate/deactivate chat"
+        },
+        "ww_chat": {
+          "name": "chatww",
+          "prefix": "[§cChat WW§r] %s",
+          "announce": "[§eWW UHC§r] You have §b%s§f seconds to write §b%d§f messages(s) in the Werwolf Chat §b/ww chatww§r <message>, but be careful, the Little Girl sees the messages as well",
+          "timer": "[§cWW UHC§r] The time to write in the Werewolf chat is over",
+          "not_access": "[§cWW UHC§r] You cannot talk in the Werewolf chat",
+          "disable": "[§cWW UHC§r] The Werewolf chat is disabled",
+          "number": "§b%d§r messages by cycle\nin the Werewolf chat",
+          "speak_number": "[§cWW UHC§r] You may talk only §b%s§r times per cycle"
         },
         "stuff_start": {
+          "command": "lootStart",
           "valid": "[§eWW UHC§r] Click here to validate the starting inventory",
           "perform": "[§aWW UHC§r] Starting inventory updated"
         },
         "loot_death": {
+          "command": "lootDeath",
           "valid": "[§eWW UHC§r] Click here to validate the items dropped at death",
           "perform": "[§aWW UHC§r] Death inventory updated"
         },
         "loot_role": {
+          "command": "stuffRole",
           "valid": "[§eWW UHC§r] Click here to validate the inventory",
-          "perform": "[§aWW UHC§r] Inventory updated"
+          "perform": "[§aWW UHC§r] Stuff §b%s§r updated"
         },
         "role": {
+          "command": "role",
           "in_game": "[§cWW UHC§r] You can't see a player's role if you are in the game",
           "affected": "Affects : §b%s",
           "cursed_lover": "In cursed relationship with : §b%s",
@@ -399,85 +608,158 @@
           "angel": "Chosen Angel : §b%s",
           "transformed": "Transformed: §b%s",
           "yes": "yes",
-          "no": "no"
+          "no": "no",
+          "description": "To see a player's role"
         },
-        "final_heal": "[§6WW UHC§r] Final Heal !",
+        "final_heal": {
+          "command": "fh",
+          "send": "[§6WW UHC§r] Final Heal !",
+          "description": "Heal all players"
+        },
         "generation": {
+          "command": "generation",
           "already_start": "[§cWW UHC§r] Generation has already been launched",
           "perform": "[§eWW UHC§r] World generation has begun",
           "not_generated": "[§cWW UHC§r] Map not generated. Do §b/a generation",
-          "not_finished": "[§cWW UHC§r] Wait for the map's generation to end (§b%s%%§r)"
+          "not_finished": "[§cWW UHC§r] Wait for the map's generation to end (§b%s%%§r)",
+          "description": "Generated the game map"
         },
         "change": {
-          "in_progress": "[§eWW UHC§r] Switching Map in progress",
-          "finished": "[§aWW UHC§r] New Map created"
+          "command": "change",
+          "in_progress": "[§eWW UHC§r] Changing map...",
+          "finished": "[§aWW UHC§r] New map created",
+          "description": "Change game map"
         },
         "preview": {
+          "command": "preview",
           "map": "[§eWW UHC§r] You have been teleported to the center of the game map\n §b/a preview§r to return to lobby",
-          "lobby": "[§eWW UHC§r] You have returned to the lobby"
+          "lobby": "[§eWW UHC§r] You have returned to the lobby",
+          "create": "[§cWW UHC§r] Creating map, please wait...",
+          "description": "Teleport to the game map"
         },
         "tp_group": {
-          "broadcast": "[§eWW UHC§r] §b%s§r were teleported by an administrator",
-          "perform": "[§eWW UHC§r] You have been teleported by an administrator"
+          "command": "tpgroup",
+          "broadcast": "[§eWW UHC§r] §b%s§r have been teleported by §b%s",
+          "perform": "[§eWW UHC§r] You have been teleported by §b%s",
+          "description": "Teleport a part of a too big group"
         },
-        "disconnected": "§b%s§r disconnected §b%s§r ago",
+        "disconnected": {
+          "command": "disc",
+          "send": "§b%s§r disconnected §b%s§r ago",
+          "description": "See disconnected players"
+        },
         "revive": {
-          "perform": "[§eWW UHC§r] §b%s§r was resuscitated by an administrator",
-          "not_death": "[§cWW UHC§r] The player isn't Dead"
+          "command": "revive",
+          "perform": "[§eWW UHC§r] §b%s§r has been revived by §b%s",
+          "not_death": "[§cWW UHC§r] The player isn't Dead",
+          "description": "Revive a player"
         },
         "size": {
+          "command": "size",
           "begin": "[§eWW UHC§r] Beginning of calculation (area of the central biome)",
           "result": "[§aWW UHC§r] The central biome has an area of §b%s§r blocks.",
-          "change": "[§eWW UHC§r] Click here to change the Map"
+          "change": "[§eWW UHC§r] Click here to change the Map",
+          "description": "Calculate size of central biome"
         },
         "host": {
+          "command": "host",
+          "name": "Host",
           "add": "[§aWW UHC§r] §b%s§r is now Host",
           "remove": "[§cWW UHC§r] §b%s§r isn't Host anymore",
-          "tag": "§cHost§r » "
+          "one": "[§cWW UHC§r] At least one host is necessary",
+          "tag": "§cHost§r » ",
+          "description": "Add a host"
         },
         "whitelist": {
+          "command": "whitelist",
           "add": "[§aWW UHC§r] The player has been added to the whitelist",
           "remove": "[§cWW UHC§r] The player was removed from the whitelist",
-          "player_not_whitelisted": "[§cWW UHC§r] You are not on the whitelist"
+          "player_not_whitelisted": "[§cWW UHC§r] You are not on the whitelist",
+          "description": "Add a player to the whitelist"
         },
         "moderator": {
+          "command": "moderator",
+          "name": "Moderator",
           "add": "[§aWW UHC§r] §b%s§r is now moderator",
           "remove": "[§cWW UHC§r] §b%s§r isn't moderator anymore",
           "player_living": "[§cWW UHC§r] You can't make a player, still alive, a moderator",
           "tag": "§bModo§r » ",
-          "message": "[§aWW UHC§r] You are in Moderator Mode"
+          "message": "[§aWW UHC§r] You are in Moderator Mode",
+          "description": "Add a moderator"
         },
-        "gamemode": "[§eWW UHC§r] §b%s§r changed his gamemode to §b%d",
-        "teleportation": "[§eWW UHC§r] Teleportation of §b%s§r to §b%s",
-        "help": "§6/a config §9 Game configuration\n§6/a host §9 Setting the game name\n§6/a start §9 To start the game\n§6/a chat §9 Enable/Disable chat\n§6/a info §9 Broadcast\n§6/a group §9 Remind players of group size\n§6/a fh §9 FinalHeal\n§6/a inv §9 Look at the inventory of a player\n§6/a kill §9 Kill an offline player\n§6/a revive §9 Revive a player\n§6/a role §9 Look at a player's role\n§6/a disc §9 List of disconnected players\n§6/a setgroup§9 Set groups size\n§6/a tpgroup§9 Teleport a group to a random position\n§6/a generation§9 Generate game map\n§6/a size§9 Obtain the size of the central biome\n§6/a moderator§9 Add a moderator\n§6/a host§9 Add a host\n§6/a change§9 Change game map\n§6/a preview§9 Look at game map"
+        "gamemode": {
+          "command": "gamemode",
+          "send": "[§eWW UHC§r] §b%s§r changed his gamemode to §b%d",
+          "description": "Change your gamemode"
+        },
+        "teleportation": {
+          "command": "tp",
+          "send": "[§eWW UHC§r] Teleporting §b%s§r to §b%s",
+          "description": "Teleport"
+        },
+        "help": {
+          "command": "h",
+          "help": "[§aWW UHC§r] Available commands :\n"
+        }
+      },
+      "inventory": {
+        "command": "inv",
+        "description": "See a players inventory"
       },
       "message": {
         "send": "[Message sent to §b%s§r] » §b%s",
         "received": "[Message from §b%s§r] » §b%s"
       },
       "compo": {
-        "composition_hide": "[§cWW UHC§r] The role's Composition is hidden"
+        "composition_hide": "[§cWW UHC§r] The role's Composition is hidden",
+        "description": "See the composition",
+        "message": "[§aWW UHC§r] Composition :\n",
+        "_": "§6================================\n"
+      },
+      "doc": {
+        "command": "doc",
+        "description": "See the role documentation",
+        "link": "[§6WW UHC§r] Click here for the roles documentation"
       },
       "kill": {
+        "command": "kill",
         "on_line": "[§cWW UHC§r] The player is connected",
         "remove_role": "[§6WW UHC§r] Remove a role in the configuration to compensate with the player",
-        "not_living": "[§cWW UHC§r] The player isn't alive"
+        "not_living": "[§cWW UHC§r] The player isn't alive",
+        "description": "Remove a player from the game"
       },
-      "help": "§6/ww timers §9To see the timers\n§6/ww rules §9To see the rules\n§6/ww role §9To see your role\n§6/ww scenarios §9To see the scenarios\n§6/ww compo §9To see the role's composition\n§6/ww enchantment §9To see the enchantment's limits\n§6/ww rank §9To see his rank in the queue"
+      "late": {
+        "command": "late",
+        "in_game": "[§cWW UHC§r] This player is already in the game",
+        "launch": "[§aWW UHC§r] §b%s§r has been added to the game",
+        "description": "Add a player while the game has already started"
+      },
+      "help": {
+        "command": "h"
+      }
     },
     "menu": {
+      "command": "config",
+      "description": "Configure the game",
       "name": "Option §bWW",
       "return": "Return to Main Menu",
       "left": "§fLeft-§bClick§f >> +",
       "right": "§fRight-§bClick§f >> -",
       "shift": "§bShift§f-Click >> Stuff",
+      "addon": {
+        "name": "Addon Settings"
+      },
       "advanced_tool": {
         "name": "§bAdvanced §rSettings",
         "troll_on": "Troll §2Enabled",
         "troll_off": "Troll §4Disabled",
+        "troll_lover_on": "Valentine's Day troll §2Enabled",
+        "troll_lover_off": "Valentine's Day troll §4Disabled",
         "troll_set": "§bShift§f-Click to configure",
         "resistance": "Resistance §b%d%%",
         "succubus": "Succubus' action zone §b%s",
+        "sister": "Sisters action range §b%s",
+        "priestess": "Priestess action radius §b%s",
         "fox_smell_number": "Fox's Number of Smell §b%d",
         "ender_pearl": "EnderPearl's Drop Rate §b%d%%",
         "flint": "Flint's Drop Rate §b%d%%",
@@ -485,7 +767,7 @@
         "vote": "End of votes at §b%d§r players",
         "diamond": "Diamond Limit §b%d",
         "xp": "XpBoost §b%d%%",
-        "strength": "Strength §b%d%%",
+        "strength": "Strength + §b%d%%",
         "particles": "Golden Apples' Particules",
         "particles_on": "§bEnabled§r for all players",
         "particles_off": "§4Disable§r for all players",
@@ -497,6 +779,8 @@
       "roles": {
         "command_1": "role",
         "command_2": "compo",
+        "description1": "See the description of your role",
+        "description2": "See the composition",
         "name": "§bRoles §rSettings",
         "zero": "Reset",
         "previous": "Previous §b%d §r»§b %d ",
@@ -514,7 +798,12 @@
         "enable": "§2Enabled§f for all"
       },
       "scenarios": {
+        "disable": "[§cWW UHC§r] Displaying the scenarios is disabled",
+        "list": "[§aWW UHC§r] List of §benabled§f scenarios :\n",
         "command": "scenarios",
+        "no_nether": "NoNether",
+        "no_end": "NoEnd",
+        "description": "See the scenarios",
         "name": "§bScenarios §rSettings",
         "diamond_limit": "DiamondLimit",
         "no_clean_up": "NoCleanUp",
@@ -529,43 +818,48 @@
         "fast_smelting": "FastMelting",
         "compass_target_last_death": "DeathCompass",
         "xp_boost": "XPBoost",
+        "compass_middle": "MiddleCompass",
         "hastey_boys": "HasteyBoys",
         "no_name_tag": "NoNameTag",
         "rod_less": "RodLess",
         "slow_bow": "SlowBow",
         "no_fire_weapons": "NoFireWeapons",
         "timber": "Timber",
-        "double_jump": "Double Jump"
+        "double_jump": "Double Jump",
+        "incompatible": "§cIncompatible scenario loaded : §b%s"
       },
       "rank": {
         "command": "rank",
+        "description": "See your position in the queue",
         "perform": "[§aWW UHC§r] You are in position §b%d§r in the queue",
         "not_in_queue": "[§cWW UHC§r] You are not in the queue",
         "tag": "§6Queue§r » "
       },
       "enchantments": {
         "command": "enchantment",
+        "description": "See enchantement limits",
         "name": "§bEnchantments §rSettings",
+        "title": "Enchantment Limits :",
         "iron_protection": "Protection's Limit on iron : §b%d",
         "diamond_protection": "Protection's Limit on diamond : §b%d",
-        "power": "Bow : Max Power §b%d",
+        "power": "Power §b%d",
         "sharpness_iron": "Iron sword : Max Sharpness §b%d",
-        "sharpness_diamond": "Diamond sword : Sharpness Max §b%d",
-        "knock_back_disable": "KnockBack §4Disabled",
-        "knock_back_invisible": "Knockback §6for Little-Girl and Mischievous Wolf",
-        "knock_back_enable": "KnockBack §2Enabled",
-        "punch_disable": "Punch §4Disabled",
-        "punch_cupid": "Punch §6for the Cupid",
-        "punch_enable": "Punch §2Enabled",
+        "sharpness_diamond": "Diamond Sword : Max Sharpness §b%d",
+        "knock_back": "KnockBack §b%s",
+        "knock_back_invisible": "§4KnockBack only\n§4for the Little Girl\n§4and the Mischievous Werewolf",
+        "knock_back_normal": "§bShift§f-Click >> configure",
+        "punch": "Punch §b%d",
         "depth_rider": "Depth Strider §b%d"
       },
       "timers": {
         "command": "timers",
+        "description": "See the timers",
         "name": "§bTimers §rSettings",
         "pvp": "PVP (§b%s§r)",
         "vote_duration": "Vote Duration (§b%s§r)",
+        "werewolf_chat_duration": "Werewolf chat duration (§b%s§r)",
+        "rival_duration": "Waiting for the rival's informations (§b%s§r)",
         "citizen_duration": "Ctizen's choice Duration (§b%s§r)",
-        "border_duration": "Duration for border's 100 blocks shrink (§b%s§r)",
         "border_begin": "Border's shrink start (§b%s§r)",
         "model_duration": "Choice of a Master Duration (§b%s§r)",
         "fox_smell_duration": "Fox's Smell Duration (§b%s§r)",
@@ -577,8 +871,18 @@
         "angel_duration": "Choice of Angel Duration (§b%s§r)",
         "power_duration": "Duration for abilities usage in the morning (§b%s§r)",
         "vote_begin": "Votes start (§b%s§r)",
+        "auto_restart_duration": "Server restart duration (§b%s§r)",
         "invulnerability": "Invulnerability (§b%s§r)",
         "succubus_duration": "Succubus' Charm Duration (§b%s§r)"
+      },
+      "random_events": {
+        "list": "[§aWW UHC§r] §bEnabled§f random events :\n",
+        "name": "§bEvents§f configuration",
+        "command": "events",
+        "disable": "[§cWW UHC§r] Displaying the random events is disabled",
+        "description": "See random events",
+        "command_message": "§b%s §f(probability §b%d%%§f)",
+        "probability": "§fProbability : §b%d§f%%"
       },
       "save": {
         "name": "§bBackup §rSettings",
@@ -586,6 +890,8 @@
         "load": "Load §b%s",
         "delete": "Delete §b%s",
         "configuration": "Configuration §b%s",
+        "load_message": "[§aWW UHC§r] Configurations §b%s§r loaded",
+        "delete_message": "[§cWW UHC§r] Configuration §b%s§r deleted",
         "success": "[§aWW UHC§r] Settings §bsaved",
         "failure": "[§cWW UHC§r] Configuration slots full",
         "delete_failed": "[§cWW UHC§r] Error while deleting §b%s",
@@ -602,25 +908,37 @@
       },
       "global": {
         "command": "rules",
+        "description": "See general configuration",
         "name": "§bGeneral §rSettings",
         "victory_couple": "Lovers can only win as Lovers",
-        "event_seer_death": "Event at a Seer's death",
         "chat": "Chat",
-        "compass_middle": "Compas points towards the center of the map",
+        "werewolf_chat": "Werewolf chat",
         "show_role_to_death": "Displays Role at Death",
-        "auto_rez_infect": "The Infect Father of Wolves can infect himself",
-        "auto_rez_witch": "the Witch can revive herself",
-        "polygamy": "Polygamy",
+        "show_role_category_to_death": "Show role category on death",
+        "auto_rez_witch": "the witch can bring herself back to life",
+        "sweet_angel": "Guardian angel wins as Villager if his ward dies",
         "vote": "Vote",
         "hide_composition": "Hidden Composition",
         "red_name_tag": "Werewolves' name in red",
+        "hide_scenarios": "Hides the scenarios",
+        "hide_events": "Hides the Events",
         "seer_every_other_day": "Seer every two days",
-        "proximity_chat": "Proximity chat"
+        "detective_every_other_day": "Detective every two days",
+        "proximity_chat": "Proximity chat",
+        "double_troll": "Double Troll",
+        "lone_wolf": "Lone Wolf",
+        "incompatible": "§cIncompatible configuration loaded : §b%s"
       },
       "border": {
         "name": "§bBorder §rSettings",
-        "radius_border_max": "Actual Border Size (§b%s§r)",
-        "radius_border_min": "Final Border Size (§b%s§r)"
+        "radius_border_max": "Initial Border size (§b%s§r)",
+        "radius_border_min": "Final Border Size (§b%s§r)",
+        "speed": "Border speed (§b%s§r) block(s) per second"
+      },
+      "maps": {
+        "name": "§bMaps§f Configuration",
+        "map": "Load World §b%s",
+        "new": "Create a new §bWorld§f with a roofed"
       },
       "languages": {
         "name": "§bLanguage §rSettings"
@@ -628,6 +946,7 @@
     },
     "tab": {
       "top": "§4§lWEREWOLF UHC",
+      "timer": "Timer §b%s§f - Day §b%d §f(§b%s§f)\n",
       "bot": "§7Plugin made by §b"
     },
     "action_bar": {
@@ -641,38 +960,89 @@
     "score_board": {
       "title": "§4§lWEREWOLF UHC",
       "death": "Dead",
+      "night": "Night",
+      "day": "Day",
       "spectator": "Spectator",
       "composition": "§3§m------↠§8compo§3§m↞------",
       "page": "§3§m-----↠§8page %d/%d§3§m↞-----",
       "score": "§3§m-----↠§8score§3§m↞------",
       "game_name": "§3§m-----↠§8game§3§m↞------",
       "name": "§b%s",
-      "scoreboard_1": {
-        "0": "§3§m-----↠§8infos§3§m↞------",
-        "1": "Waiting for players ",
-        "2": "§3§m------------------",
-        "3": "Players : §b&players&§r/§b&roles&",
-        "4": "§3§m------------------",
-        "5": "Max # of Players : §b&max&"
+      "scoreboard_1": [
+        "§3§m-----↠§8infos§3§m↞------",
+        "Waiting for players ",
+        "§3§m------------------",
+        "Players : §b&players&§r/§b&roles&",
+        "§3§m------------------",
+        "Max # of Players : §b&max&"
+      ],
+      "scoreboard_2": [
+        "§3§m-----↠§8role§3§m↞-----",
+        "Role §b&role&",
+        "§3§m----↠§8infos§3§m↞-----",
+        "Timer §b&timer&",
+        "Day §b&day& §r(§b&daystate&§r)",
+        "Player alive §b&players&",
+        "Group of §b&group&",
+        "§3§m---↠§8border§3§m↞----",
+        "Border §b&border&",
+        "Size §b&border_size&"
+      ]
+    },
+    "random_events": {
+      "exposed": {
+        "name": "Exposed",
+        "message": "[§5Exposed§r] §b%s§f's role is among the following §b%s §f%s §b%s",
+        "description": "Twice during the game \n(in the intervals [65~80 min] and [100~115 min]), \na randomly chosen player has his nickname \ndisplayed in the chat next to 3 roles\n still present in the game. \nAmong those 3 roles are : his role, a role from a different team, \na randomly chosen role among the remaining.\nA player cannot be exposed twice during a game."
       },
-      "scoreboard_2": {
-        "0": "§3§m-----↠§8role§3§m↞-----",
-        "1": "Role §b&role&",
-        "2": "§3§m----↠§8infos§3§m↞-----",
-        "3": "Timer §b&timer&",
-        "4": "Day §b&day&",
-        "5": "Player alive §b&players&",
-        "6": "Group of §b&group&",
-        "7": "§3§m---↠§8border§3§m↞----",
-        "8": "Border §b&border&",
-        "9": "Size §b&border_size&"
+      "loot_box": {
+        "name": "Loot Box",
+        "description": "Once during the game, when a Villager dies, \na series of caches appear.\nOne of them contains the name of an enemy of the Villagers",
+        "on_sign": "Good Boy",
+        "all_chest_find": "[§aWW UHC§r] All caches have been found",
+        "villager_death": "[§5Loot-Box§r] Before dying, §b%s§r spawned§b%s§r caches on the map, one of them contains the name of an enemy of the Village"
+      },
+      "infection": {
+        "name": "Infection",
+        "description": "Once during the game a random player is Infected.\nThe infection happens between 1h and 1h15, \nif less than half the players are Werewolves.",
+        "message": "[§5Infection§r] A random player has been infected"
+      },
+      "triple": {
+        "name": "Love Triangle",
+        "description": "A third person has joined the Lovers",
+        "lover_join": "[§aWW UHC§r] §b%s§f joined your couple",
+        "join": "[§aWW UHC§r] You joined the lovers, §b%s",
+        "message": "[§5Love Triangle§r] A third player has joined the lovers"
+      },
+      "bearing_ritual": {
+        "name": "Fall Guys",
+        "message": "[§5Fall Guys§r] For a day, everyone has NoFall",
+        "end": "[§5Fall Guys§r] End of the random event",
+        "description": "Once during the game, for one day, \nall players have NoFall. \nThis event triggers between 1h and 1h40"
+      },
+      "putrefaction": {
+        "name": "Putrefaction",
+        "message": "[§5Putrefaction§r] For a day, water causes damage",
+        "end": "[§5Putrefaction§r] End of the event",
+        "description": "Once during the game, for a day, \nwater deals damage.\nThis event triggers between 1h and 1h20"
+      },
+      "god_miracle": {
+        "name": "Divine Miracle",
+        "message": "[§5Divine Miracle§r] A player has been brought back to life",
+        "description": "Once during the game,\n a killed player is brought back to life"
+      },
+      "swap": {
+        "name": "Swap",
+        "message": "[§5Swap§r] Two people had their roles swapped",
+        "concerned": "[§cWW UHC§r] Your role has been swapped §b/ww role§f do discover your new one",
+        "description": "Once during the game,\n before the Werewolves know their teammates\n 2 roles are swapped"
       }
     },
     "check": {
       "death": "[§cWW UHC§r] You are not alive",
+      "state_player": "[§cWW UHC§r] You cannot access this command in this state",
       "game_not_in_progress": "[§cWW UHC§r] The game is already finished or roles have not been revealed yet",
       "game_in_progress": "[§cWW UHC§r] The game is in progress",
-      "player_input": "[§cWW UHC§r] The command takes a player as input",
       "end_selection": "[§cWW UHC§r] You can't use your ability anymore today",
       "not_in_game": "[§cWW UHC§r] You are not in the game",
       "power": "[§cWW UHC§r] Your ability can't be used yet or can't be used anymore",
@@ -696,30 +1066,46 @@
       "full": "[§cWW UHC§r] The game is full",
       "cancel": "[§cWW UHC§r] Your power has been canceled",
       "transformation": "[§cWW UHC§r] Your transformation has been canceled",
-      "invalid_key": "[§cWW UHC§r] Invalid key"
+      "invalid_key": "[§cWW UHC§r] Invalid key",
+      "state": "[§cWW UHC§r] You cannot use this command at this point of the game"
     },
     "update": {
       "up_to_date": "[§aWW UHC§r] The plugin WW UHC is updated",
       "out_of_date": "[§6WW UHC§r] A plugin's update is available"
     },
-    "bug": "§b§m§l-+-----------------------------------------+-\n§f        [§cWW UHC§f] Report bugs by clicking here\n§r§b§m§l-+-----------------------------------------+-",
-    "event": {
-      "on_sign": "Good doggy",
-      "seer_death": "[§eWW UHC§r] Before dying, the Seer has spawn §b%s§r chests on the map, only one contains the name of a Village's Ennemy",
-      "all_chest_find": "[§aWW UHC§r] All the chests have been found"
-    },
+    "bug": "§b§m§l-+-----------------------------------+-\n§f        [§cWW UHC§f] Report bugs by clicking here\n§r§b§m§l-+-----------------------------------+-",
     "utils": {
       "disable": "%s §4Disabled",
       "enable": "%s §2Enabled",
       "display": "%s (§b%s§r)",
       "pve": "§bPVE",
-      "on": "§bON"
+      "on": "§bON",
+      "debug": "§4Debug §fMode",
+      "none": "§4None",
+      "author": "§fAuthor(s) :",
+      "stat": "[§cWW UHC§r] The statistics addon is not installed, click here to download",
+      "stat_out_of_date": "[§cWW UHC§r] The statistics addon is not up to date, click here to download"
     },
     "categories": {
       "villager": "Villagers",
       "werewolf": "Werewolves",
       "neutral": "Neutrals",
       "addons": "Addons Roles"
+    },
+    "description": {
+      "_": "§b================================\n",
+      "role": "§fYou are §b%s\n",
+      "description": "§bDescription : §f %s\n",
+      "camp": "§fTeam of the §b%s\n",
+      "power": "§bPower : §f%s\n",
+      "item": "§bItems : §f%s\n",
+      "effect": "§bEffects : §f%s\n",
+      "equipment": "§bEquipment : §f%s\n",
+      "command": "§bCommand : §f%s\n",
+      "transformed": "Transformed: §b%s\n",
+      "no": "No",
+      "yes": "Yes",
+      "werewolf": "Strength (during the night), Night Vision, 2 hearts of absorption and a minute of speed after every kill"
     }
   }
 }

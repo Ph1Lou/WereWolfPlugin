@@ -1,88 +1,111 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.Sounds;
-import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.events.UpdateEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.enums.RolesBase;
+import io.github.ph1lou.werewolfapi.enums.Sound;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.events.WereWolfListEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.UUID;
+import java.util.Objects;
 
-public class SiameseTwin extends RolesVillage {
+public class SiameseTwin extends RoleVillage {
 
-    public SiameseTwin(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public SiameseTwin(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
+        super(main, playerWW, key);
     }
 
     @Override
-    public String getDescription() {
-        return game.translate("werewolf.role.siamese_twin.description");
-    }
+    public @NotNull String getDescription() {
 
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.siamese_twin.display";
-    }
-
-
-    @Override
-    public void stolen(@NotNull UUID uuid) {
-
-
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) {
-            return;
-        }
-        VersionUtils.getVersionUtils().setPlayerMaxHealth(player, 24);
-    }
-
-    @Override
-    public Player recoverPower() {
-        Player player = super.recoverPower();
-        if (player == null) return null;
-        VersionUtils.getVersionUtils().setPlayerMaxHealth(player, 24);
-        return player;
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.siamese_twin.description"))
+                .setPower(() -> game.translate("werewolf.role.siamese_twin.power"))
+                .addExtraLines(() -> {
+                    if (game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey()) > 0) {
+                        return game.translate("werewolf.role.siamese_twin.siamese_twin_list", Utils.conversion(game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey())));
+                    } else {
+                        return game.translate("werewolf.role.siamese_twin.siamese_twin_list", this.getBrother());
+                    }
+                })
+                .build();
     }
 
     @EventHandler
-    public void onUpdate(UpdateEvent event) {
+    public void onWerewolfList(WereWolfListEvent event) {
+        getPlayerWW().sendMessageWithKey("werewolf.role.siamese_twin.siamese_twin_list", this.getBrother());
+    }
 
-        int counter = 0;
-        double health = 0;
-        for (UUID uuid : game.getPlayersWW().keySet()) {
 
-            PlayerWW plg = game.getPlayersWW().get(uuid);
-            Player c = Bukkit.getPlayer(uuid);
+    private String getBrother() {
 
-            if (plg.isState(State.ALIVE) && plg.getRole().isDisplay("werewolf.role.siamese_twin.display") && c != null) {
-                counter++;
-                health += c.getHealth() / VersionUtils.getVersionUtils().getPlayerMaxHealth(c);
-            }
-        }
-        health /= counter;
-        for (UUID uuid : game.getPlayersWW().keySet()) {
+        StringBuilder list = new StringBuilder();
 
-            PlayerWW plg = game.getPlayersWW().get(uuid);
-            Player c = Bukkit.getPlayer(uuid);
+        game.getPlayerWW()
+                .stream()
+                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                .filter(playerWW -> !playerWW.getRole().equals(this))
+                .filter(playerWW -> playerWW.isKey(
+                        RolesBase.SIAMESE_TWIN.getKey()))
+                .forEach(playerWW -> list.append(playerWW.getName()).append(" "));
 
-            if (plg.isState(State.ALIVE) && plg.getRole().isDisplay("werewolf.role.siamese_twin.display") && c != null) {
+        return list.toString();
+    }
 
-                if (health * VersionUtils.getVersionUtils().getPlayerMaxHealth(c) > 10) {
-                    if (health * VersionUtils.getVersionUtils().getPlayerMaxHealth(c) + 1 < c.getHealth()) {
-                        Sounds.BURP.play(c);
+
+    @Override
+    public void recoverPower() {
+        getPlayerWW().addPlayerMaxHealth(4);
+    }
+
+
+    @Override
+    public void second() {
+
+        double health = game.getPlayerWW()
+                .stream()
+                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                .map(IPlayerWW::getRole)
+                .filter(roles -> roles.isKey(RolesBase.SIAMESE_TWIN.getKey()))
+                .map(IRole::getPlayerUUID)
+                .map(Bukkit::getPlayer)
+                .filter(Objects::nonNull)
+                .mapToDouble(player -> player.getHealth() /
+                        VersionUtils.getVersionUtils().getPlayerMaxHealth(player))
+                .average()
+                .orElse(0);
+
+        game.getPlayerWW()
+                .stream()
+                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                .map(IPlayerWW::getRole)
+                .filter(roles -> roles.isKey(RolesBase.SIAMESE_TWIN.getKey()))
+                .map(IRole::getPlayerUUID)
+                .map(Bukkit::getPlayer)
+                .filter(Objects::nonNull)
+                .filter(player -> health *
+                        VersionUtils.getVersionUtils().getPlayerMaxHealth(player)
+                        > 10)
+                .forEach(player -> {
+                    if (health * VersionUtils.getVersionUtils()
+                            .getPlayerMaxHealth(player) + 1
+                            < player.getHealth()) {
+                        Sound.BURP.play(player);
                     }
-                    c.setHealth(health * VersionUtils.getVersionUtils().getPlayerMaxHealth(c));
-                }
-            }
-        }
+                    player.setHealth(health *
+                            VersionUtils.getVersionUtils()
+                                    .getPlayerMaxHealth(player));
+                });
+
     }
 }

@@ -1,13 +1,13 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
-import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CommandChat implements Commands {
+public class CommandChat implements ICommands {
 
 
     private final Main main;
@@ -17,17 +17,12 @@ public class CommandChat implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
 
-        if (!sender.hasPermission("a.chat.use") && !game.getModerationManager().getModerators().contains(((Player) sender).getUniqueId()) && !game.getModerationManager().getHosts().contains(((Player) sender).getUniqueId())) {
-            sender.sendMessage(game.translate("werewolf.check.permission_denied"));
-            return;
-        }
+        game.getConfig().switchConfigValue(ConfigsBase.CHAT.getKey());
 
-        game.getConfig().getConfigValues().put("werewolf.menu.global.chat", !game.getConfig().getConfigValues().get("werewolf.menu.global.chat"));
-
-        Bukkit.broadcastMessage(game.getConfig().getConfigValues().get("werewolf.menu.global.chat") ? game.translate("werewolf.commands.admin.chat.on") : game.translate("werewolf.commands.admin.chat.off"));
+        Bukkit.broadcastMessage(game.getConfig().isConfigActive(ConfigsBase.CHAT.getKey()) ? game.translate("werewolf.commands.admin.chat.on") : game.translate("werewolf.commands.admin.chat.off"));
     }
 }

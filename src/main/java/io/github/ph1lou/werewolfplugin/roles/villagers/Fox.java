@@ -1,56 +1,66 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.Camp;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.enums.Camp;
+import io.github.ph1lou.werewolfapi.enums.Sound;
+import io.github.ph1lou.werewolfapi.enums.StateGame;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
-import io.github.ph1lou.werewolfapi.events.SniffEvent;
-import io.github.ph1lou.werewolfapi.events.UpdateEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.*;
+import io.github.ph1lou.werewolfapi.events.roles.fox.SniffEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.IDisplay;
+import io.github.ph1lou.werewolfapi.rolesattributs.ILimitedUse;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.IProgress;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedPlayers, Power {
+public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffectedPlayers, IPower {
 
     private float progress = 0;
     private int use = 0;
     private boolean power = false;
-    private final List<UUID> affectedPlayer = new ArrayList<>();
+    private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
 
-    public Fox(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public Fox(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
+        super(main, playerWW, key);
     }
 
     @Override
-    public void setPower(Boolean power) {
-        this.power=power;
+    public void setPower(boolean power) {
+        this.power = power;
     }
 
     @Override
-    public Boolean hasPower() {
-        return(this.power);
-    }
-
-
-    @Override
-    public void addAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.add(uuid);
+    public boolean hasPower() {
+        return (this.power);
     }
 
     @Override
-    public void removeAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.remove(uuid);
+    public void addAffectedPlayer(IPlayerWW playerWW) {
+        this.affectedPlayer.add(playerWW);
+    }
+
+    @Override
+    public void removeAffectedPlayer(IPlayerWW playerWW) {
+        this.affectedPlayer.remove(playerWW);
     }
 
     @Override
@@ -59,7 +69,7 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
     }
 
     @Override
-    public List<UUID> getAffectedPlayers() {
+    public List<IPlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
@@ -79,20 +89,30 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
     }
 
     @Override
-    public void setProgress(Float progress) {
+    public void setProgress(float progress) {
         this.progress = progress;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerDeathByFox(PlayerDeathEvent event) {
+
+        if (event.getEntity().getKiller() == null) return;
+
+        Player killer = event.getEntity().getKiller();
+
+        if (!getPlayerUUID().equals(killer.getUniqueId())) return;
+
+        killer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,
+                3600,
+                0,
+                false,
+                false));
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
     public void onDay(DayEvent event) {
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
-            return;
-        }
-
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) {
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -101,47 +121,50 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
         }
 
         setPower(true);
-        player.sendMessage(game.translate("werewolf.role.fox.smell_message", game.getConfig().getUseOfFlair() - getUse()));
+        getPlayerWW().sendMessageWithKey("werewolf.role.fox.smell_message",
+                game.getConfig().getUseOfFlair() - getUse());
     }
 
 
     @Override
-    public String getDescription() {
-        return game.translate("werewolf.role.fox.description");
+    public @NotNull String getDescription() {
+
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.fox.description",
+                        game.getConfig().getDistanceFox(),
+                        Utils.conversion(game.getConfig()
+                                .getTimerValue(TimersBase.FOX_SMELL_DURATION.getKey())),
+                        game.getConfig().getUseOfFlair() - use))
+                .setEffects(() -> game.translate("werewolf.role.fox.effect"))
+                .build();
     }
+
 
     @Override
-    public String getDisplay() {
-        return "werewolf.role.fox.display";
+    public void recoverPower() {
+
     }
+
 
     @Override
-    public void recoverPotionEffect(Player player) {
-        player.removePotionEffect(PotionEffectType.SPEED);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,Integer.MAX_VALUE,0,false,false));
-        super.recoverPotionEffect(player);
-    }
-
-    @EventHandler
-    public void onUpdate(UpdateEvent event) {
+    public void second() {
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
         if (player == null) {
             return;
         }
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
         if (getAffectedPlayers().isEmpty()) {
             return;
         }
 
-        UUID playerSmellUUID = getAffectedPlayers().get(0);
-        PlayerWW plf = game.getPlayersWW().get(playerSmellUUID);
-        Player flair = Bukkit.getPlayer(playerSmellUUID);
+        IPlayerWW playerWW = getAffectedPlayers().get(0);
+        Player flair = Bukkit.getPlayer(playerWW.getUUID());
 
-        if (!plf.isState(State.ALIVE)) {
+        if (!playerWW.isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -152,40 +175,65 @@ public class Fox extends RolesVillage implements Progress, LimitedUse, AffectedP
         Location renardLocation = player.getLocation();
         Location playerLocation = flair.getLocation();
 
-        if (renardLocation.distance(playerLocation) > game.getConfig().getDistanceFox()) {
+        try {
+            if (renardLocation.distance(playerLocation) >
+                    game.getConfig().getDistanceFox()) {
+                return;
+            }
+        } catch (Exception ignored) {
             return;
         }
 
-        float temp = getProgress() + 100f / (game.getConfig().getTimerValues().get("werewolf.menu.timers.fox_smell_duration") + 1);
+        float temp = getProgress() + 100f /
+                (game.getConfig().getTimerValue(TimersBase.FOX_SMELL_DURATION.getKey()) + 1);
 
         setProgress(temp);
 
-        if (temp % 10 > 0 && temp % 10 <= 100f / (game.getConfig().getTimerValues().get("werewolf.menu.timers.fox_smell_duration") + 1)) {
-            player.sendMessage(game.translate("werewolf.role.fox.progress", Math.min(100,Math.floor(temp))));
+        if (temp % 10 > 0 && temp % 10 <= 100f /
+                (game.getConfig().getTimerValue(TimersBase.FOX_SMELL_DURATION.getKey()) + 1)) {
+            player.sendMessage(game.translate("werewolf.role.fox.progress",
+                    Math.min(100, Math.floor(temp))));
         }
 
         if (temp >= 100) {
 
             boolean isWereWolf = true;
 
-            if (plf.getRole() instanceof Display && (!((Display) plf.getRole()).isDisplayCamp(Camp.WEREWOLF))) {
+            if (playerWW.getRole() instanceof IDisplay &&
+                    (!((IDisplay) playerWW.getRole()).isDisplayCamp(Camp.WEREWOLF.getKey()))) {
                 isWereWolf = false;
-            } else if (!plf.getRole().isWereWolf()) {
+            } else if (!playerWW.getRole().isWereWolf()) {
                 isWereWolf = false;
             }
 
-            SniffEvent sniffEvent = new SniffEvent(getPlayerUUID(), playerSmellUUID, isWereWolf);
+            SniffEvent sniffEvent = new SniffEvent(getPlayerWW(),
+                    playerWW, isWereWolf);
 
             Bukkit.getPluginManager().callEvent(sniffEvent);
 
             if (!sniffEvent.isCancelled()) {
                 if (sniffEvent.isWereWolf()) {
-                    player.sendMessage(game.translate("werewolf.role.fox.werewolf", plf.getName()));
+                    player.sendMessage(game.translate(
+                            "werewolf.role.fox.werewolf",
+                            playerWW.getName()));
                 } else {
-                    player.sendMessage(game.translate("werewolf.role.fox.not_werewolf", plf.getName()));
+                    player.sendMessage(game.translate(
+                            "werewolf.role.fox.not_werewolf",
+                            playerWW.getName()));
                 }
-            } else player.sendMessage(game.translate("werewolf.check.cancel"));
+                player.sendMessage(game.translate("werewolf.role.fox.warn"));
 
+                if (playerWW.getRole().isWereWolf()) {
+                    Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
+                        if (game.isState(StateGame.GAME)) {
+                            playerWW.sendMessageWithKey("werewolf.role.fox.smell", Sound.DONKEY_ANGRY);
+                        }
+                    }, 20 * 60 * 5);
+                }
+
+            } else {
+                player.sendMessage(game.translate("werewolf.check.cancel"));
+            }
 
             clearAffectedPlayer();
             setProgress(0f);

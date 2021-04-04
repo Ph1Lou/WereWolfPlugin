@@ -1,16 +1,17 @@
 package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.Camp;
-import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.events.NewDisplayRole;
-import io.github.ph1lou.werewolfapi.events.SelectionEndEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.Display;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesWereWolf;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.enums.Camp;
+import io.github.ph1lou.werewolfapi.enums.RolesBase;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.events.roles.SelectionEndEvent;
+import io.github.ph1lou.werewolfapi.events.roles.falsifier_werewolf.NewDisplayRole;
+import io.github.ph1lou.werewolfapi.rolesattributs.IDisplay;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleWereWolf;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,103 +19,91 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class FalsifierWereWolf extends RolesWereWolf implements Display {
+public class FalsifierWereWolf extends RoleWereWolf implements IDisplay {
 
-    private Camp displayCamp = Camp.WEREWOLF;
-    private Roles displayRole = this;
+    private String displayCamp = Camp.VILLAGER.getKey();
+    private String displayRole = RolesBase.VILLAGER.getKey();
 
-    public FalsifierWereWolf(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public FalsifierWereWolf(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
+        super(main, playerWW, key);
     }
 
     @Override
-    public void setDisplayCamp(Camp camp) {
-        this.displayCamp =camp;
+    public boolean isDisplayCamp(String camp) {
+        return (this.displayCamp.equals(camp));
     }
 
     @Override
-    public boolean isDisplayCamp(Camp camp) {
-        return(this.displayCamp.equals(camp));
+    public String getDisplayCamp() {
+        return (this.displayCamp);
     }
 
     @Override
-    public Camp getDisplayCamp() {
-        return(this.displayCamp);
+    public void setDisplayCamp(String camp) {
+        this.displayCamp = camp;
     }
 
     @Override
-    public Roles getDisplayRole() {
-        return(this.displayRole);
+    public String getDisplayRole() {
+        return (this.displayRole);
     }
 
     @Override
-    public void setDisplayRole(Roles roleLG) {
-        this.displayRole =roleLG;
+    public void setDisplayRole(String role) {
+        this.displayRole = role;
     }
 
     @EventHandler
     public void onSelectionEnd(SelectionEndEvent event) {
 
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
-            return;
-        }
-
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) {
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
         List<UUID> players = new ArrayList<>();
-        for (UUID uuid : game.getPlayersWW().keySet()) {
-            if (game.getPlayersWW().get(uuid).isState(State.ALIVE) && !uuid.equals(player.getUniqueId())) {
-                players.add(uuid);
+        for (IPlayerWW playerWW1 : game.getPlayerWW()) {
+            if (playerWW1.isState(StatePlayer.ALIVE) && !playerWW1.equals(getPlayerWW())) {
+                players.add(playerWW1.getUUID());
             }
         }
         if (players.size() <= 0) {
             return;
         }
 
-        UUID pc = players.get((int) Math.floor(Math.random() * players.size()));
-        Roles roles = game.getPlayersWW().get(pc).getRole();
-        NewDisplayRole newDisplayRole = new NewDisplayRole(getPlayerUUID(), roles.getDisplay(), roles.getCamp());
+        IPlayerWW displayWW = game.autoSelect(getPlayerWW());
+
+        IRole roles = displayWW.getRole();
+        NewDisplayRole newDisplayRole = new NewDisplayRole(getPlayerWW(), roles.getKey(), roles.getCamp().getKey());
         Bukkit.getPluginManager().callEvent(newDisplayRole);
 
         if (newDisplayRole.isCancelled()) {
-            player.sendMessage(game.translate("werewolf.check.cancel"));
-            setDisplayCamp(Camp.WEREWOLF);
-            setDisplayRole(this);
+            getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
+            setDisplayCamp(Camp.WEREWOLF.getKey());
+            setDisplayRole(RolesBase.FALSIFIER_WEREWOLF.getKey());
         } else {
-            setDisplayRole(roles);
+            setDisplayRole(roles.getKey());
             setDisplayCamp(newDisplayRole.getNewDisplayCamp());
         }
-        player.sendMessage(game.translate("werewolf.role.falsifier_werewolf.display_role_message", game.translate(getDisplayRole().getDisplay())));
+        getPlayerWW().sendMessageWithKey("werewolf.role.falsifier_werewolf.display_role_message",
+                game.translate(getDisplayRole()));
     }
 
 
-
-
     @Override
-    public String getDescription() {
-        return game.translate("werewolf.role.falsifier_werewolf.description");
+    public @NotNull String getDescription() {
+
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.falsifier_werewolf.description"))
+                .setEffects(() -> game.translate("werewolf.description.werewolf"))
+                .addExtraLines(() -> game.translate("werewolf.role.falsifier_werewolf.role",
+                        game.translate(this.displayRole)))
+                .build();
     }
 
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.falsifier_werewolf.display";
-    }
 
     @Override
-    public void stolen(@NotNull UUID uuid) {
+    public void recoverPower() {
 
-
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) {
-            return;
-        }
-
-        player.sendMessage(game.translate("werewolf.role.falsifier_werewolf.display_role_message", game.translate(getDisplayRole().getDisplay())));
     }
 }

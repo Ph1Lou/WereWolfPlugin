@@ -1,12 +1,11 @@
 package io.github.ph1lou.werewolfplugin.commands.admin;
 
-import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CommandGeneration implements Commands {
+public class CommandGeneration implements ICommands {
 
     private final Main main;
 
@@ -16,14 +15,10 @@ public class CommandGeneration implements Commands {
 
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
 
-        if (!sender.hasPermission("a.generation.use") && !game.getModerationManager().getHosts().contains(((Player) sender).getUniqueId())) {
-            sender.sendMessage(game.translate("werewolf.check.permission_denied"));
-            return;
-        }
-        game.getMapManager().generateMap(sender, game.getConfig().getBorderMax() / 2);
+        game.getMapManager().generateMap(player, game.getConfig().getBorderMax() / 2);
     }
 }

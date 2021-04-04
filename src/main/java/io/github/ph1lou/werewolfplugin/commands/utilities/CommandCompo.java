@@ -1,12 +1,17 @@
 package io.github.ph1lou.werewolfplugin.commands.utilities;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.RoleRegister;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Category;
+import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
-import org.bukkit.command.CommandSender;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
-public class CommandCompo implements Commands {
+import java.util.concurrent.atomic.AtomicBoolean;
+
+public class CommandCompo implements ICommands {
 
 
     private final Main main;
@@ -16,28 +21,79 @@ public class CommandCompo implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
 
-        if (!game.getConfig().getConfigValues().get("werewolf.menu.global.hide_composition")) {
-            StringBuilder sb = new StringBuilder();
-            if(game.getConfig().getLoverSize()>0){
-                sb.append("§3").append(game.getConfig().getLoverSize()).append("§r ").append(game.translate("werewolf.role.lover.display")).append("\n");
+        if (game.getConfig().isConfigActive(ConfigsBase.HIDE_COMPOSITION.getKey())) {
+
+            player.sendMessage(game.translate("werewolf.commands.compo.composition_hide"));
+
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder(game.translate("werewolf.commands.compo._"));
+        sb.append(ChatColor.WHITE);
+        if (game.getConfig().getLoverCount(LoverType.LOVER.getKey()) > 0) {
+            sb.append(LoverType.LOVER.getChatColor()).append(game.translate(LoverType.LOVER.getKey())).append(ChatColor.WHITE);
+            if (game.getConfig().getLoverCount(LoverType.LOVER.getKey()) == 1) {
+                sb.append(", ");
+            } else {
+                sb.append(" (§b").append(game.getConfig().getLoverCount(LoverType.LOVER.getKey())).append("§f), ");
             }
-            if(game.getConfig().getAmnesiacLoverSize()>0){
-                sb.append("§3").append(game.getConfig().getAmnesiacLoverSize()).append("§r ").append(game.translate("werewolf.role.amnesiac_lover.display")).append("\n");
+        }
+        if (game.getConfig().getLoverCount(LoverType.AMNESIAC_LOVER.getKey()) > 0) {
+            sb.append(LoverType.AMNESIAC_LOVER.getChatColor()).append(game.translate(LoverType.AMNESIAC_LOVER.getKey())).append(ChatColor.WHITE);
+            if (game.getConfig().getLoverCount(LoverType.AMNESIAC_LOVER.getKey()) == 1) {
+                sb.append(", ");
+            } else {
+                sb.append(" (§b").append(game.getConfig().getLoverCount(LoverType.AMNESIAC_LOVER.getKey())).append("§f), ");
             }
-            if(game.getConfig().getCursedLoverSize()>0){
-                sb.append("§3").append(game.getConfig().getCursedLoverSize()).append("§r ").append(game.translate("werewolf.role.cursed_lover.display")).append("\n");
+        }
+
+        if (game.getConfig().getLoverCount(LoverType.CURSED_LOVER.getKey()) > 0) {
+            sb.append(LoverType.CURSED_LOVER.getChatColor()).append(game.translate(LoverType.CURSED_LOVER.getKey())).append(ChatColor.WHITE);
+            if (game.getConfig().getLoverCount(LoverType.CURSED_LOVER.getKey()) != 1) {
+                sb.append(" (§b").append(game.getConfig().getLoverCount(LoverType.CURSED_LOVER.getKey())).append("§f)");
             }
-            for (RoleRegister roleRegister:game.getRolesRegister()) {
-                String key = roleRegister.getKey();
-                if (game.getConfig().getRoleCount().get(key) > 0) {
-                    sb.append("§3").append(game.getConfig().getRoleCount().get(key)).append("§r ").append(roleRegister.getName()).append("\n");
-                }
-            }
-            sender.sendMessage(sb.toString());
-        } else sender.sendMessage(game.translate("werewolf.commands.compo.composition_hide"));
+        } else {
+            sb.replace(sb.length() - 2, sb.length(), "");
+        }
+        sb.append("\n");
+
+        sb.append(getCompo(game, Category.WEREWOLF));
+        sb.append(getCompo(game, Category.VILLAGER));
+        sb.append(getCompo(game, Category.NEUTRAL));
+
+        sb.append(game.translate("werewolf.commands.compo._"));
+        player.sendMessage(sb.toString());
+    }
+
+    public String getCompo(WereWolfAPI game, Category category) {
+
+        StringBuilder sb = new StringBuilder(category.getChatColor() + game.translate(category.getKey()));
+        AtomicBoolean atomicBoolean = new AtomicBoolean(false);
+        sb.append("§f : ");
+
+        main.getRegisterManager().getRolesRegister().stream()
+                .filter(roleRegister -> roleRegister.getCategories().contains(category))
+                .forEach(roleRegister -> {
+                    String key = roleRegister.getKey();
+                    int number = game.getConfig().getRoleCount(key);
+                    if (number > 0) {
+                        if (number == 1) {
+                            sb.append(game.translate(roleRegister.getKey())).append(", ");
+                        } else {
+                            sb.append(game.translate(roleRegister.getKey())).append(" (§b").append(game.getConfig().getRoleCount(key)).append("§f), ");
+                        }
+                        atomicBoolean.set(true);
+                    }
+                });
+        sb.replace(sb.length() - 2, sb.length(), "");
+        sb.append("\n");
+        if (!atomicBoolean.get()) {
+            return "";
+        }
+        return sb.toString();
     }
 }

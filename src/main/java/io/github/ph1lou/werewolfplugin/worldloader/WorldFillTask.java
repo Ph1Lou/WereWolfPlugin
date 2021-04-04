@@ -1,9 +1,13 @@
 package io.github.ph1lou.werewolfplugin.worldloader;
 
-import io.github.ph1lou.werewolfapi.events.GenerationStartEvent;
+
 import io.github.ph1lou.werewolfapi.events.GenerationStopEvent;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
-import org.bukkit.*;
+import io.github.ph1lou.werewolfapi.events.game.GenerationStartEvent;
+import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
+import org.bukkit.Server;
+import org.bukkit.World;
 
 import java.text.DecimalFormat;
 import java.util.HashSet;
@@ -40,20 +44,20 @@ public class WorldFillTask implements Runnable {
 
 	// for reporting progress back to user occasionally
 	private long lastReport = System.currentTimeMillis();
-	private long lastAutosave = System.currentTimeMillis();
+	private long lastAutoSave = System.currentTimeMillis();
 	private int reportTarget = 0;
 	private int reportTotal = 0;
 	private int reportNum = 0;
 	private boolean finish = false;
 
 
-	public WorldFillTask(GameManager game, int chunksPerRun, int radius) {
+	public WorldFillTask(World world, int chunksPerRun, int radius) {
 
 		Bukkit.getPluginManager().callEvent(new GenerationStartEvent());
 		this.server = Bukkit.getServer();
 		this.chunksPerRun = chunksPerRun;
 
-		this.world = game.getMapManager().getWorld();
+		this.world = world;
 
 		Location spawn = world.getSpawnLocation();
 		this.border = new BorderData(spawn.getX(), spawn.getZ(), radius, radius);
@@ -286,8 +290,8 @@ public class WorldFillTask implements Runnable {
 
 		// go ahead and save world to disk every 30 seconds or so by default, just in case; can take a couple of seconds or more, so we don't want to run it too often
 		int fillAutoSaveFrequency = 30;
-		if (lastAutosave + (fillAutoSaveFrequency * 1000) < lastReport) {
-			lastAutosave = lastReport;
+		if (lastAutoSave + (fillAutoSaveFrequency * 1000) < lastReport) {
+			lastAutoSave = lastReport;
 			sendMessage("Saving the world to disk, just to be on the safe side.");
 			world.save();
 		}
@@ -340,4 +344,6 @@ public class WorldFillTask implements Runnable {
 	public boolean AvailableMemoryTooLow() {
 		return AvailableMemory() < 500;
 	}
+
+
 }

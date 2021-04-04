@@ -1,38 +1,39 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.events.FinalDeathEvent;
-import io.github.ph1lou.werewolfapi.events.LibrarianDeathEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.LimitedUse;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
-import io.github.ph1lou.werewolfapi.rolesattributs.Storage;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.roles.librarian.LibrarianDeathEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.ILimitedUse;
+import io.github.ph1lou.werewolfapi.rolesattributs.IStorage;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-public class Librarian extends RolesVillage implements LimitedUse, AffectedPlayers, Storage {
+public class Librarian extends RoleVillage implements ILimitedUse, IAffectedPlayers, IStorage {
 
     private int use = 0;
-    private final List<UUID> affectedPlayer = new ArrayList<>();
-    private final List<String> storage= new ArrayList<>();
+    private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
+    private final List<String> storage = new ArrayList<>();
 
-    public Librarian(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public Librarian(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
+        super(main, playerWW, key);
     }
 
     @Override
-    public void addAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.add(uuid);
+    public void addAffectedPlayer(IPlayerWW playerWW) {
+        this.affectedPlayer.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.remove(uuid);
+    public void removeAffectedPlayer(IPlayerWW playerWW) {
+        this.affectedPlayer.remove(playerWW);
     }
 
     @Override
@@ -41,7 +42,7 @@ public class Librarian extends RolesVillage implements LimitedUse, AffectedPlaye
     }
 
     @Override
-    public List<UUID> getAffectedPlayers() {
+    public List<IPlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
@@ -57,13 +58,18 @@ public class Librarian extends RolesVillage implements LimitedUse, AffectedPlaye
 
 
     @Override
-    public String getDescription() {
-        return game.translate("werewolf.role.librarian.description");
+    public @NotNull String getDescription() {
+
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.librarian.description", 3 - use))
+                .setItems(() -> game.translate("werewolf.role.librarian.items"))
+                .build();
     }
 
+
     @Override
-    public String getDisplay() {
-        return "werewolf.role.librarian.display";
+    public void recoverPower() {
+
     }
 
     @Override
@@ -71,20 +77,33 @@ public class Librarian extends RolesVillage implements LimitedUse, AffectedPlaye
         return this.storage;
     }
 
-    @EventHandler
-    public void onFinalDeath(FinalDeathEvent event){
+    @Override
+    public void addStorage(String message) {
+        this.storage.add(message);
+    }
 
-        if (!event.getUuid().equals(getPlayerUUID())) return;
+    @Override
+    public void clearStorage() {
+        this.storage.clear();
+    }
+
+    @EventHandler
+    public void onFinalDeath(FinalDeathEvent event) {
+
+        if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         if (this.storage.isEmpty()) return;
 
         Bukkit.broadcastMessage(game.translate("werewolf.role.librarian.death"));
         int i = 1;
         for (String s : this.storage) {
-            Bukkit.broadcastMessage(game.translate("werewolf.role.librarian.book", i, s));
+            Bukkit.broadcastMessage(game.translate(
+                    "werewolf.role.librarian.book", i, s));
             i++;
         }
 
-        Bukkit.getPluginManager().callEvent(new LibrarianDeathEvent(getPlayerUUID()));
+        this.getStorage().clear();
+
+        Bukkit.getPluginManager().callEvent(new LibrarianDeathEvent(getPlayerWW()));
     }
 }

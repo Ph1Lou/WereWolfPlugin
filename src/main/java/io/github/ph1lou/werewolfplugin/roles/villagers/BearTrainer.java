@@ -1,28 +1,31 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.Camp;
-import io.github.ph1lou.werewolfapi.enumlg.Sounds;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.enums.Camp;
+import io.github.ph1lou.werewolfapi.enums.Sound;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
-import io.github.ph1lou.werewolfapi.events.GrowlEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.Display;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
+import io.github.ph1lou.werewolfapi.events.roles.bear_trainer.GrowlEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IDisplay;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-public class BearTrainer extends RolesVillage {
+public class BearTrainer extends RoleVillage {
 
-    public BearTrainer(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public BearTrainer(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
+        super(main, playerWW, key);
     }
 
     @EventHandler
@@ -30,57 +33,79 @@ public class BearTrainer extends RolesVillage {
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
         if (player == null) return;
 
-        StringBuilder builder = new StringBuilder();
         Location oursLocation = player.getLocation();
-        List<UUID> growled = new ArrayList<>();
-        for (Player pls : Bukkit.getOnlinePlayers()) {
-
-            if (game.getPlayersWW().containsKey(pls.getUniqueId())) {
-
-                PlayerWW plo = game.getPlayersWW().get(pls.getUniqueId());
-
-                if (!(plo.getRole() instanceof Display) || ((Display) plo.getRole()).isDisplayCamp(Camp.WEREWOLF)) {
-                    if (plo.getRole().isWereWolf() && plo.isState(State.ALIVE)) {
-                        if (oursLocation.distance(pls.getLocation()) < game.getConfig().getDistanceBearTrainer()) {
-                            growled.add(pls.getUniqueId());
-                        }
+        Set<IPlayerWW> growled = Bukkit.getOnlinePlayers()
+                .stream()
+                .filter(player1 -> {
+                    try {
+                        return oursLocation.distance(player1.getLocation())
+                                < game.getConfig().getDistanceBearTrainer();
+                    } catch (Exception ignored) {
+                        return false;
                     }
-                }
-            }
-        }
+                })
+                .map(Entity::getUniqueId)
+                .map(game::getPlayerWW)
+                .filter(Objects::nonNull)
+                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                .map(IPlayerWW::getRole)
+                .filter(roles -> roles.isWereWolf() || roles instanceof IDisplay)
+                .filter(roles -> !(roles instanceof IDisplay) ||
+                        ((IDisplay) roles).isDisplayCamp(Camp.WEREWOLF.getKey()))
+                .map(IRole::getPlayerWW)
+                .collect(Collectors.toSet());
 
-        GrowlEvent growlEvent = new GrowlEvent(getPlayerUUID(), growled);
+        GrowlEvent growlEvent = new GrowlEvent(getPlayerWW(), growled);
         Bukkit.getPluginManager().callEvent(growlEvent);
+    }
 
-        if (!growlEvent.getPlayersUUID().isEmpty()) {
+    @EventHandler
+    public void onGrowl(GrowlEvent event) {
 
-            if (growlEvent.isCancelled()) {
-                player.sendMessage(game.translate("werewolf.check.cancel"));
-                return;
-            }
-            for (UUID ignored : growlEvent.getPlayersUUID()) {
-                builder.append(game.translate("werewolf.role.bear_trainer.growling"));
-            }
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                p.sendMessage(game.translate("werewolf.role.bear_trainer.growling_message", builder.toString()));
-                Sounds.WOLF_GROWL.play(p);
-            }
-
+        if (event.getPlayerWWS().isEmpty()) {
+            event.setCancelled(true);
+            return;
         }
+
+        if (!event.getPlayerWW().equals(getPlayerWW())) return;
+
+        Player player = Bukkit.getPlayer(getPlayerUUID());
+
+        if (player == null) return;
+
+        if (event.isCancelled()) {
+            player.sendMessage(game.translate("werewolf.check.cancel"));
+            return;
+        }
+
+        String builder = event.getPlayerWWS().stream().map(ignored ->
+                game.translate("werewolf.role.bear_trainer.growling"))
+                .collect(Collectors.joining());
+
+        Bukkit.getOnlinePlayers()
+                .forEach(Sound.WOLF_GROWL::play);
+
+        Bukkit.broadcastMessage(game.translate("werewolf.role.bear_trainer.growling_message", builder));
     }
 
     @Override
-    public String getDescription() {
-        return game.translate("werewolf.role.bear_trainer.description");
+    public @NotNull String getDescription() {
+
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.bear_trainer.description",
+                        game.getConfig().getDistanceBearTrainer()))
+                .build();
     }
 
+
     @Override
-    public String getDisplay() {
-        return "werewolf.role.bear_trainer.display";
+    public void recoverPower() {
+
     }
+
 }

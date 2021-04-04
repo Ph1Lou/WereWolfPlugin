@@ -1,17 +1,15 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
-
-public class CommandDisconnected implements Commands {
+public class CommandDisconnected implements ICommands {
 
 
     private final Main main;
@@ -21,20 +19,17 @@ public class CommandDisconnected implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
 
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
 
-        if (!sender.hasPermission("a.disc.use") && !game.getModerationManager().getModerators().contains(((Player) sender).getUniqueId()) && !game.getModerationManager().getHosts().contains(((Player) sender).getUniqueId())) {
-            sender.sendMessage(game.translate("werewolf.check.permission_denied"));
-            return;
-        }
-
-        for (UUID uuid : game.getPlayersWW().keySet()) {
-            PlayerWW plg = game.getPlayersWW().get(uuid);
-            if (plg.isState(State.ALIVE) && Bukkit.getPlayer(uuid) == null) {
-                sender.sendMessage(game.translate("werewolf.commands.admin.disconnected", plg.getName(), game.getScore().conversion(game.getScore().getTimer() - plg.getDeathTime())));
+        for (IPlayerWW playerWW : game.getPlayerWW()) {
+            Player player1 = Bukkit.getPlayer(playerWW.getUUID());
+            if (playerWW.isState(StatePlayer.ALIVE) && player1 == null) {
+                player.sendMessage(game.translate("werewolf.commands.admin.disconnected.send",
+                        playerWW.getName(),
+                        Utils.conversion(game.getScore().getTimer() - playerWW.getDisconnectedTime())));
             }
         }
     }

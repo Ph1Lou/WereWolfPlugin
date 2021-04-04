@@ -1,36 +1,52 @@
 package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesWereWolf;
-import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.events.DayEvent;
+import io.github.ph1lou.werewolfapi.events.NightEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleWereWolf;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.UUID;
+public class NaughtyLittleWolf extends RoleWereWolf {
 
-public class NaughtyLittleWolf extends RolesWereWolf {
-
-    public NaughtyLittleWolf(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public NaughtyLittleWolf(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
+        super(main, playerWW, key);
     }
 
 
     @Override
-    public String getDescription() {
-        return game.translate("werewolf.role.naughty_little_wolf.description");
+    public @NotNull String getDescription() {
+        return new DescriptionBuilder(game, this)
+                .setEffects(() -> game.translate("werewolf.role.naughty_little_wolf.effect"))
+                .build();
     }
 
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.naughty_little_wolf.display";
-    }
 
     @Override
-    public void recoverPotionEffect(Player player) {
-        player.removePotionEffect(PotionEffectType.SPEED);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,Integer.MAX_VALUE,0,false,false));
-        super.recoverPotionEffect(player);
+    public void recoverPower() {
+
     }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onNight(NightEvent event) {
+
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
+            return;
+        }
+
+        getPlayerWW().addPotionEffect(PotionEffectType.SPEED);
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onDay(DayEvent event) {
+        getPlayerWW().removePotionEffect(PotionEffectType.SPEED);
+    }
+
+
 }

@@ -1,11 +1,10 @@
-
 # WereWolfPlugin Main Configuration
 
 # Author Ph1Lou
 
 # Link : https://www.spigotmc.org/resources/loup-garou-uhc.73113/
 
-# Version 1.6
+# Version 1.7 Snapshot
 
 # You are not allowed to claim this plugin as your own.
 
@@ -13,10 +12,5 @@
 # Available (en, fr)
 
 lang: fr
-autoRoofedMiddle: true
 default_lobby: true
-
-#If a chat manager is installed, set true so that the chat is deactivated
-bungeechat: false #Automatically do /chatlock local
-multiChat: false #Automatically do /multichatbypass (This command execute execute onetime, when the plugin is loaded)
 

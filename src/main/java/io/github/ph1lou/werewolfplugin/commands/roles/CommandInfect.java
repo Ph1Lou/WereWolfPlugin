@@ -1,24 +1,22 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enumlg.Camp;
-import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
-import io.github.ph1lou.werewolfapi.events.InfectionEvent;
-import io.github.ph1lou.werewolfapi.events.NewWereWolfEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.events.roles.infect_father_of_the_wolves.InfectionEvent;
+import io.github.ph1lou.werewolfapi.events.werewolf.NewWereWolfEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Optional;
 import java.util.UUID;
 
-public class CommandInfect implements Commands {
+public class CommandInfect implements ICommands {
 
 
     private final Main main;
@@ -28,106 +26,76 @@ public class CommandInfect implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
 
-        GameManager game = main.getCurrentGame();
-
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(game.translate("werewolf.check.console"));
-            return;
-        }
-
-        Player player = (Player) sender;
+        WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
-        if(!game.getPlayersWW().containsKey(uuid)) {
-            player.sendMessage(game.translate("werewolf.check.not_in_game"));
-            return;
-        }
+        if (playerWW == null) return;
 
-        PlayerWW plg = game.getPlayersWW().get(uuid);
-
-
-        if (!game.isState(StateLG.GAME)) {
-            player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
-            return;
-        }
-
-        if (!(plg.getRole().isDisplay("werewolf.role.infect_father_of_the_wolves.display"))){
-            player.sendMessage(game.translate("werewolf.check.role", game.translate("werewolf.role.infect_father_of_the_wolves.display")));
-            return;
-        }
-
-        Roles infect = plg.getRole();
-
-        if (args.length!=1) {
-            player.sendMessage(game.translate("werewolf.check.player_input"));
-            return;
-        }
-
-        if(!plg.isState(State.ALIVE)){
-            player.sendMessage(game.translate("werewolf.check.death"));
-            return;
-        }
-
-        if(!((Power)infect).hasPower()) {
-            player.sendMessage(game.translate("werewolf.check.power"));
-            return;
-        }
+        IRole infect = playerWW.getRole();
 
         if(Bukkit.getPlayer(UUID.fromString(args[0]))==null){
-            player.sendMessage(game.translate("werewolf.check.offline_player"));
+            playerWW.sendMessageWithKey("werewolf.check.offline_player");
             return;
         }
         UUID argUUID = UUID.fromString(args[0]);
+        IPlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
-        if (!game.getConfig().getConfigValues().get("werewolf.menu.global.auto_rez_infect") && argUUID.equals(uuid)) {
-            player.sendMessage(game.translate("werewolf.check.not_yourself"));
+        if (argUUID.equals(uuid)) {
+            playerWW.sendMessageWithKey("werewolf.check.not_yourself");
             return;
         }
 
-        if(!game.getPlayersWW().containsKey(argUUID)) {
-            player.sendMessage(game.translate("werewolf.check.player_not_found"));
-            return;
-        }
-        PlayerWW plg1 = game.getPlayersWW().get(argUUID);
-
-        if (!plg1.isState(State.JUDGEMENT)) {
-            player.sendMessage(game.translate("werewolf.check.not_in_judgement"));
+        if (playerWW1 == null) {
+            playerWW.sendMessageWithKey("werewolf.check.player_not_found");
             return;
         }
 
-        if (!plg1.canBeInfect()) {
-            player.sendMessage(game.translate("werewolf.role.infect_father_of_the_wolves.player_cannot_be_infected"));
+        if (!playerWW1.isState(StatePlayer.JUDGEMENT)) {
+            playerWW.sendMessageWithKey("werewolf.check.not_in_judgement");
             return;
         }
 
-        ((Power) infect).setPower(false);
 
-        InfectionEvent infectionEvent = new InfectionEvent(uuid, argUUID);
+        Optional<IPlayerWW> killerWW = playerWW1.getLastKiller();
+
+        if (!killerWW.isPresent() ||
+                !killerWW.get()
+                        .getRole()
+                        .isWereWolf() ||
+                game.getScore().getTimer() - playerWW1.getDeathTime() > 7) {
+
+            playerWW.sendMessageWithKey("werewolf.role.infect_father_of_the_wolves.player_cannot_be_infected");
+            return;
+        }
+
+
+        ((IPower) infect).setPower(false);
+
+        InfectionEvent infectionEvent = new InfectionEvent(playerWW, playerWW1);
         Bukkit.getPluginManager().callEvent(infectionEvent);
 
         if (infectionEvent.isCancelled()) {
-            player.sendMessage(game.translate("werewolf.check.cancel"));
+            playerWW.sendMessageWithKey("werewolf.check.cancel");
             return;
         }
 
-        ((AffectedPlayers) infect).addAffectedPlayer(argUUID);
+        ((IAffectedPlayers) infect).addAffectedPlayer(playerWW1);
 
-        player.sendMessage(game.translate("werewolf.role.infect_father_of_the_wolves.infection_perform",plg1.getName()));
-        game.resurrection(argUUID);
+        playerWW.sendMessageWithKey("werewolf.role.infect_father_of_the_wolves.infection_perform",
+                playerWW1.getName());
+        game.resurrection(playerWW1);
 
-        if(!plg1.getRole().isCamp(Camp.WEREWOLF)) {
-            NewWereWolfEvent newWereWolfEvent = new NewWereWolfEvent(argUUID);
-            Bukkit.getPluginManager().callEvent(newWereWolfEvent);
-
-            if(newWereWolfEvent.isCancelled()){
-                return;
-            }
+        if (!playerWW1.getRole().isWereWolf()) { //si déjà loup
+            playerWW1.getRole().setInfected(); //pour qu'il sois actualisé en tan que loup
+            Bukkit.getPluginManager().callEvent(
+                    new NewWereWolfEvent(playerWW1));
         }
-        plg1.setCanBeInfect(false);
-        game.getPlayersWW().get(argUUID).getRole().setInfected(true);
+
+        playerWW1.getRole().setInfected(); //répétition indispensable
         game.checkVictory();
     }
 }

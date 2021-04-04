@@ -1,49 +1,51 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.events.EnchantmentEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
-import org.bukkit.Bukkit;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
+import io.github.ph1lou.werewolfapi.events.lovers.AroundLover;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
-public class Cupid extends RolesVillage implements AffectedPlayers, Power {
+public class Cupid extends RoleVillage implements IAffectedPlayers, IPower {
 
-    private final List<UUID> affectedPlayer = new ArrayList<>();
+    private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private boolean power = true;
 
-    public Cupid(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public Cupid(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
+        super(main, playerWW, key);
     }
 
     @Override
-    public void setPower(Boolean power) {
-        this.power=power;
+    public void setPower(boolean power) {
+        this.power = power;
     }
 
     @Override
-    public Boolean hasPower() {
-        return(this.power);
+    public boolean hasPower() {
+        return (this.power);
     }
 
     @Override
-    public void addAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.add(uuid);
+    public void addAffectedPlayer(IPlayerWW playerWW) {
+        this.affectedPlayer.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.remove(uuid);
+    public void removeAffectedPlayer(IPlayerWW playerWW) {
+        this.affectedPlayer.remove(playerWW);
     }
 
     @Override
@@ -52,52 +54,66 @@ public class Cupid extends RolesVillage implements AffectedPlayers, Power {
     }
 
     @Override
-    public List<UUID> getAffectedPlayers() {
+    public List<IPlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
     @Override
-    public String getDescription() {
-        return game.translate("werewolf.role.cupid.description");
+    public @NotNull String getDescription() {
+
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.cupid.description"))
+                .setItems(() -> game.translate("werewolf.role.cupid.items"))
+                .setEquipments(() -> game.translate("werewolf.role.cupid.extra", game.getConfig().getLimitPowerBow() + 1))
+                .addExtraLines(() -> game.translate("werewolf.role.cupid.lover",
+                        this.affectedPlayer.isEmpty() ?
+                                this.hasPower() ?
+                                        game.translate("werewolf.role.cupid.lover_designation_message",
+                                                Utils.conversion(
+                                                        game.getConfig()
+                                                                .getTimerValue("werewolf.menu.timers.lover_duration"))) :
+                                        game.translate("werewolf.role.cupid.none") :
+                                affectedPlayer.stream().map(IPlayerWW::getName)
+                                        .collect(Collectors.joining(" "))))
+                .build();
     }
 
     @Override
-    public String getDisplay() {
-        return "werewolf.role.cupid.display";
+    public void recoverPower() {
+
     }
 
-    @Override
-    public void stolen(@NotNull UUID uuid) {
-
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) return;
-
-        if (hasPower()) {
-            player.sendMessage(game.translate("werewolf.role.cupid.lover_designation_message", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.lover_duration"))));
-        } else {
-            player.sendMessage(game.translate("werewolf.role.cupid.designation_perform", game.getPlayersWW().get(getAffectedPlayers().get(0)).getName(), game.getPlayersWW().get(getAffectedPlayers().get(1)).getName()));
-        }
-    }
 
     @EventHandler
-    public void onEnchantment(EnchantmentEvent event){
+    public void onAroundLover(AroundLover event) {
 
-        if(!event.getPlayerUUID().equals(getPlayerUUID())) return;
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
-        if(game.getConfig().getLimitPunch()==1){
-            if(event.getEnchants().containsKey(Enchantment.ARROW_KNOCKBACK)){
-                event.getFinalEnchants().put(Enchantment.ARROW_KNOCKBACK,event.getEnchants().get(Enchantment.ARROW_KNOCKBACK));
+        if (event.getPlayerWWS().contains(getPlayerWW())) {
+            for (IPlayerWW playerWW : affectedPlayer) {
+                event.addPlayer(playerWW);
+            }
+            return;
+        }
+
+        for (IPlayerWW playerWW : event.getPlayerWWS()) {
+            if (affectedPlayer.contains(playerWW)) {
+                event.addPlayer(getPlayerWW());
+                break;
             }
         }
     }
 
+    @EventHandler
+    public void onEnchantment(EnchantmentEvent event) {
 
-    @Override
-    public Player recoverPower() {
-        Player player = super.recoverPower();
-        if(player==null) return null;
-        player.sendMessage(game.translate("werewolf.role.cupid.lover_designation_message", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.lover_duration"))));
-        return player;
+        if (!event.getPlayerWW().equals(getPlayerWW())) return;
+
+        if (event.getEnchants().containsKey(Enchantment.ARROW_DAMAGE)) {
+            event.getFinalEnchants().put(Enchantment.ARROW_DAMAGE,
+                    Math.min(event.getEnchants().get(Enchantment.ARROW_DAMAGE),
+                            game.getConfig().getLimitPowerBow() + 1));
+        }
     }
+
 }

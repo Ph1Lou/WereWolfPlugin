@@ -1,91 +1,141 @@
 package io.github.ph1lou.werewolfplugin.commands;
 
 
-import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.registers.CommandRegister;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.commands.roles.*;
-import io.github.ph1lou.werewolfplugin.commands.utilities.*;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 public class Command implements TabExecutor {
 
-    private final Map<String, Commands> listCommands = new HashMap<>();
+    private final Main main;
 
-    public Command(Main main, GameManager game) {
-
-        listCommands.put(game.translate("werewolf.role.seer.command"), new CommandSeer(main));
-        listCommands.put(game.translate("werewolf.role.cupid.command"), new CommandCupid(main));
-        listCommands.put(game.translate("werewolf.role.detective.command"), new CommandDetective(main));
-        listCommands.put(game.translate("werewolf.role.angel.command_2"), new CommandFallenAngel(main));
-        listCommands.put(game.translate("werewolf.role.fox.command"), new CommandFox(main));
-        listCommands.put(game.translate("werewolf.role.angel.command_1"), new CommandGuardianAngel(main));
-        listCommands.put(game.translate("werewolf.role.infect_father_of_the_wolves.command"), new CommandInfect(main));
-        listCommands.put(game.translate("werewolf.role.lover.command"), new CommandLovers(main));
-        listCommands.put(game.translate("werewolf.role.protector.command"), new CommandProtector(main));
-        listCommands.put(game.translate("werewolf.role.raven.command"), new CommandRaven(main));
-        listCommands.put(game.translate("werewolf.role.citizen.command_2"), new CommandCitizenCancelVote(main));
-        listCommands.put(game.translate("werewolf.role.citizen.command_1"), new CommandCitizenSeeVote(main));
-        listCommands.put(game.translate("werewolf.role.troublemaker.command"), new CommandTroubleMaker(main));
-        listCommands.put(game.translate("werewolf.role.werewolf.command"), new CommandWereWolf(main));
-        listCommands.put(game.translate("werewolf.role.wild_child.command"), new CommandWildChild(main));
-        listCommands.put(game.translate("werewolf.menu.roles.command_2"), new CommandCompo(main));
-        listCommands.put(game.translate("werewolf.role.comedian.command"), new CommandComedian(main));
-        listCommands.put("h", new CommandHelp(main));
-        listCommands.put(game.translate("werewolf.menu.roles.command_1"), new CommandRole(main));
-        listCommands.put(game.translate("werewolf.menu.global.command"), new CommandRules(main));
-        listCommands.put(game.translate("werewolf.menu.scenarios.command"), new CommandScenarios(main));
-        listCommands.put(game.translate("werewolf.menu.enchantments.command"), new CommandEnchantment(main));
-        listCommands.put(game.translate("werewolf.menu.timers.command"), new CommandTimer(main));
-        listCommands.put(game.translate("werewolf.vote.command"), new CommandVote(main));
-        listCommands.put(game.translate("werewolf.role.witch.command"), new CommandWitch(main));
-        listCommands.put(game.translate("werewolf.role.trapper.command"), new CommandTrapper(main));
-        listCommands.put(game.translate("werewolf.role.guardian_angel.command"), new CommandAngelRegen(main));
-        listCommands.put(game.translate("werewolf.role.succubus.command"), new CommandSuccubus(main));
-        listCommands.put(game.translate("werewolf.role.flute_player.command"), new CommandFlutePlayer(main));
-        listCommands.put(game.translate("werewolf.role.librarian.command"), new CommandLibrarian(main));
-        listCommands.put(game.translate("werewolf.role.librarian.request_command"), new CommandSendToLibrarian(main));
-        listCommands.put(game.translate("werewolf.menu.rank.command"), new CommandRank(main));
-
-        listCommands.putAll(main.getListCommands());
+    public Command(Main main) {
+        this.main = main;
     }
+
 
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull org.bukkit.command.Command cmd, @NotNull String label, String[] args) {
 
+        WereWolfAPI game = main.getWereWolfAPI();
+
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(game.translate("werewolf.check.console"));
+            return true;
+        }
+
+        Player player = (Player) sender;
+
         if (args.length == 0) {
-            this.listCommands.get("h").execute(sender, null);
-        } else
-            this.listCommands.getOrDefault(args[0], this.listCommands.get("h")).execute(sender, Arrays.copyOfRange(args, 1, args.length));
+            execute("h", player, new String[0]);
+        } else {
+            execute(args[0], player, Arrays.copyOfRange(args, 1, args.length));
+        }
+
         return true;
     }
 
+    private void execute(String commandName, Player player, String[] args) {
+
+        WereWolfAPI game = main.getWereWolfAPI();
+        List<String> messages = new ArrayList<>();
+
+        main.getRegisterManager().getCommandsRegister()
+                .stream()
+                .filter(commandRegister1 -> game.translate(commandRegister1.getKey()).equalsIgnoreCase(commandName))
+                .forEach(commandRegister1 -> messages.add(checkCommands(game, player, commandRegister1, args)));
+
+        if (messages.isEmpty()) {
+            execute("h", player, new String[0]);
+            return;
+        }
+
+        if (messages.stream().anyMatch(String::isEmpty)) {
+            return;
+        }
+
+        player.sendMessage(messages.stream().filter(s -> !s.equals("ignored")).findFirst().orElse(""));
+
+    }
+
+    private String checkCommands(WereWolfAPI game, Player player, CommandRegister commandRegister, String[] args) {
+
+        UUID uuid = player.getUniqueId();
+
+        if (commandRegister.isRequiredPlayerInGame()) {
+
+            IPlayerWW playerWW = game.getPlayerWW(uuid);
+
+            if (playerWW == null) {
+                return game.translate("werewolf.check.not_in_game");
+            }
+
+            if (commandRegister.isRoleOnly()) {
+                if (!commandRegister.isRoleKey(playerWW.getRole().getKey())) {
+                    return "ignored";
+                }
+            }
+
+            if (!commandRegister.isStateAccess(playerWW.getState())) {
+                return game.translate("werewolf.check.state_player");
+            }
+
+            if (commandRegister.isRequiredPower() && (!(playerWW.getRole() instanceof IPower) || !((IPower) playerWW.getRole()).hasPower())) {
+                return game.translate("werewolf.check.power");
+            }
+        }
+
+        if (!commandRegister.isStateWW(game.getState())) {
+            return game.translate("werewolf.check.state");
+        }
+
+        if (!commandRegister.isArgNumbers(args.length)) {
+            return game.translate("werewolf.check.parameters", commandRegister.getMinArgNumbers());
+        }
+
+        commandRegister.getCommand().execute(player, args);
+
+        return "";
+    }
+
+
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull org.bukkit.command.Command command, @NotNull String s, String[] args) {
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, org.bukkit.command.@NotNull Command command, @NotNull String s, @NotNull String[] args) {
 
-        List<String> temp = new ArrayList<>(this.listCommands.keySet());
+        if (!(sender instanceof Player)) return null;
 
-        if (args.length == 0) {
-            return temp;
-        } else if (args.length == 1) {
+        Player player = (Player) sender;
+        UUID uuid = player.getUniqueId();
+        WereWolfAPI game = main.getWereWolfAPI();
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
-            for (int i = 0; i < temp.size(); i++) {
-                for (int j = 0; j < temp.get(i).length() && j < args[0].length(); j++) {
-                    if (temp.get(i).charAt(j) != args[0].charAt(j)) {
-                        temp.remove(i);
-						i--;
-						break;
-					}
-				}
-			}
-			return temp;
-		}
-		return null;
-	}
+        if (args.length > 1) {
+            return null;
+        }
+
+        return main.getRegisterManager().getCommandsRegister().stream()
+                .filter(commandRegister -> (args[0].isEmpty() || game.translate(commandRegister.getKey()).contains(args[0])))
+                .filter(commandRegister -> !commandRegister.isRoleOnly() || (playerWW != null && commandRegister.isRoleKey(playerWW.getRole().getKey())))
+                .filter(CommandRegister::isAutoCompletion)
+                .filter(commandRegister -> commandRegister.isStateWW(game.getState()))
+                .filter(commandRegister -> !commandRegister.isRequiredPlayerInGame() || playerWW != null)
+                .filter(commandRegister -> playerWW == null || commandRegister.isStateAccess(playerWW.getState()))
+                .map(commandRegister -> game.translate(commandRegister.getKey()))
+                .collect(Collectors.toList());
+    }
 }

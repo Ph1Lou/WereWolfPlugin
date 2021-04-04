@@ -1,10 +1,11 @@
 package io.github.ph1lou.werewolfplugin.save;
 
-import io.github.ph1lou.werewolfapi.RoleRegister;
-import io.github.ph1lou.werewolfapi.StuffManager;
+import io.github.ph1lou.werewolfapi.IStuffManager;
+import io.github.ph1lou.werewolfapi.registers.AddonRegister;
+import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -14,89 +15,119 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
-public class Stuff implements StuffManager {
+
+public class Stuff implements IStuffManager {
 
     private final Map<String, List<ItemStack>> stuffRoles = new HashMap<>();
-    private final List<ItemStack> death_loot = new ArrayList<>();
-    private final Inventory start_loot = Bukkit.createInventory(null, 45);
-    private final GameManager game;
+
+    private final Map<UUID, Inventory> tempStuff = new HashMap<>();
+    private final List<ItemStack> deathLoot = new ArrayList<>();
+    private final Inventory startLoot = Bukkit.createInventory(null, 45);
+    private final Main main;
 
 
-    public Stuff(GameManager game) {
-        this.game = game;
+    public Stuff(Main main) {
+        this.main = main;
     }
 
     @Override
     public List<ItemStack> getDeathLoot() {
-        return this.death_loot;
+        return this.deathLoot;
     }
 
     @Override
     public Inventory getStartLoot() {
-        return this.start_loot;
+        return this.startLoot;
     }
 
     @Override
     public void clearDeathLoot() {
-        death_loot.clear();
+        deathLoot.clear();
     }
 
     @Override
     public void clearStartLoot() {
-        start_loot.clear();
+        startLoot.clear();
     }
-
-
 
     @Override
     public void addDeathLoot(ItemStack i) {
-        death_loot.add(i);
+        deathLoot.add(i);
     }
 
     @Override
     public void save(String configName) {
 
-        Main main = game.getMain();
-        for(Plugin plugin:main.getAddonsList()){
+        for(AddonRegister addon:main.getRegisterManager().getAddonsRegister()){
+            Plugin plugin = addon.getPlugin();
+            saveStuffRole(plugin,configName,addon.getAddonKey());
+        }
 
-            int pos = 0;
-            FileConfiguration config = getOrCreateCustomConfig(plugin, configName);
-            if (config == null) {
-                System.out.println("[pluginLG] backup error");
+        saveStuffRole(main,configName,"werewolf.name");
+        saveStuffStartAndDeath(configName);
+
+    }
+
+    private void saveStuffStartAndDeath(String configName) {
+
+        int pos = 0;
+        FileConfiguration config = getOrCreateCustomConfig(main, configName);
+        if (config == null) {
+            System.out.println("[pluginLG] backup error");
+            return;
+        }
+
+        for (ItemStack i : startLoot) {
+            config.set("start_loot." + pos, i);
+            pos++;
+        }
+        pos = 0;
+        for (ItemStack i : deathLoot) {
+            config.set("death_loot." + pos, i);
+            pos++;
+        }
+
+        File file = new File(main.getDataFolder() + File.separator + "stuffs" + File.separator, configName + ".yml");
+        try {
+            config.save(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void saveStuffRole(Plugin plugin,String configName, String keyAddon) {
+
+        int pos = 0;
+        FileConfiguration config = getOrCreateCustomConfig(plugin, configName);
+        if (config == null) {
+            System.out.println("[pluginLG] backup error");
+            return;
+        }
+
+        for (RoleRegister roleRegister:main.getRegisterManager().getRolesRegister()) {
+            if(roleRegister.getAddonKey().equals(keyAddon)){
+                String key = roleRegister.getKey();
+                for (ItemStack i : stuffRoles.get(key)) {
+                    config.set(key + "." + pos, i);
+                    pos++;
+                }
+                pos = 0;
             }
-            else{
+        }
 
-                for (RoleRegister roleRegister:game.getRolesRegister()) {
-                    if(roleRegister.getPlugin().equals(plugin)){
-                        String key = roleRegister.getKey();
-                        for (ItemStack i : stuffRoles.get(key)) {
-                            config.set(key + "." + pos, i);
-                            pos++;
-                        }
-                        pos = 0;
-                    }
-                }
-                if(plugin.equals(main)){
-                    for (ItemStack i : start_loot) {
-                        config.set("start_loot." + pos, i);
-                        pos++;
-                    }
-                    pos = 0;
-                    for (ItemStack i : death_loot) {
-                        config.set("death_loot." + pos, i);
-                        pos++;
-                    }
-                }
-
-                File file = new File(plugin.getDataFolder() + File.separator + "stuffs" + File.separator, configName + ".yml");
-                try {
-                    config.save(file);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+        File file = new File(plugin.getDataFolder() + File.separator + "stuffs" + File.separator, configName + ".yml");
+        try {
+            config.save(file);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
 
@@ -109,7 +140,7 @@ public class Stuff implements StuffManager {
     }
 
 
-    public Map<String, List<ItemStack>> loadStuff(Plugin plugin, String configName) {
+    public Map<String, List<ItemStack>> loadStuff(Plugin plugin, String addonKey, String configName) {
 
         Map<String, List<ItemStack>> temp = new HashMap<>();
 
@@ -118,12 +149,14 @@ public class Stuff implements StuffManager {
         }
         FileConfiguration config = getOrCreateCustomConfig(plugin, configName);
 
-        for (RoleRegister roleRegister : game.getRolesRegister()) {
-            if (roleRegister.getPlugin().equals(plugin)) {
+        for (RoleRegister roleRegister : main.getRegisterManager().getRolesRegister()) {
+
+            if (roleRegister.getAddonKey().equals(addonKey)) {
                 String key = roleRegister.getKey();
                 temp.put(key, new ArrayList<>());
-                if (config.getItemStack(key + ".0") != null) {
-                    Set<String> sl = config.getConfigurationSection(key + ".").getKeys(false);
+                ConfigurationSection configurationSection = config.getConfigurationSection(key);
+                if (configurationSection != null) {
+                    Set<String> sl = configurationSection.getKeys(false);
                     for (String s2 : sl) {
                         temp.get(key).add(config.getItemStack(key + "." + s2));
                     }
@@ -135,30 +168,35 @@ public class Stuff implements StuffManager {
 
     public void loadStuffStartAndDeath(String configName) {
 
-        Main main = game.getMain();
-        start_loot.clear();
-        death_loot.clear();
-        FileConfiguration config = getOrCreateCustomConfig(main,configName);
+        startLoot.clear();
+        deathLoot.clear();
+        FileConfiguration config = getOrCreateCustomConfig(main, configName);
 
-        if (config.getItemStack("start_loot.0") != null) {
-            Set<String> sl = config.getConfigurationSection("start_loot.").getKeys(false);
+        ConfigurationSection configurationSection = config.getConfigurationSection("start_loot");
+
+        if (configurationSection != null) {
+            Set<String> sl = configurationSection.getKeys(false);
 
             for (String s : sl) {
-                start_loot.addItem(config.getItemStack("start_loot." + s));
-            }
-        }
-        if (config.getItemStack("death_loot.0") != null) {
-            Set<String> sl = config.getConfigurationSection("death_loot").getKeys(false);
-            for (String s : sl) {
-                death_loot.add(config.getItemStack("death_loot." + s));
+                ItemStack item = config.getItemStack("start_loot." + s);
+                if (item != null) {
+                    startLoot.addItem(item);
+                }
             }
         }
 
+        configurationSection = config.getConfigurationSection("death_loot");
+
+        if(configurationSection!=null){
+            Set<String> sl = configurationSection.getKeys(false);
+            for (String s : sl) {
+                deathLoot.add(config.getItemStack("death_loot." + s));
+            }
+        }
     }
 
     @Override
     public void loadStuffChill() {
-        Main main = game.getMain();
         FileUtils_.copy(main.getResource("stuffChill.yml"), main.getDataFolder() + File.separator + "stuffs" + File.separator + "stuffChill.yml");
         loadStuffStartAndDeath("stuffChill");
     }
@@ -183,12 +221,12 @@ public class Stuff implements StuffManager {
         return customConfig;
     }
 
-    public void loadStuff(String configName){
+    public void loadStuff(String configName) {
 
         stuffRoles.clear();
-        for (Plugin plugin : game.getMain().getAddonsList()) {
-            stuffRoles.putAll(loadStuff(plugin, configName));
-        }
+
+        main.getRegisterManager().getAddonsRegister().forEach(addonRegister -> stuffRoles.putAll(loadStuff(addonRegister.getPlugin(), addonRegister.getAddonKey(), configName)));
+        stuffRoles.putAll(loadStuff(main, "werewolf.name", configName));
     }
 
 
@@ -197,7 +235,6 @@ public class Stuff implements StuffManager {
     }
 
     public void loadAllStuffMeetUP() {
-        Main main = game.getMain();
         FileUtils_.copy(main.getResource("stuffMeetUp.yml"), main.getDataFolder() + File.separator + "stuffs" + File.separator + "stuffMeetUp.yml");
         loadStuff("stuffMeetUp");
         loadStuffStartAndDeath("stuffMeetUp");
@@ -206,5 +243,10 @@ public class Stuff implements StuffManager {
     @Override
     public Map<String, List<ItemStack>> getStuffRoles() {
         return stuffRoles;
+    }
+
+    @Override
+    public Map<UUID, Inventory> getTempStuff() {
+        return tempStuff;
     }
 }

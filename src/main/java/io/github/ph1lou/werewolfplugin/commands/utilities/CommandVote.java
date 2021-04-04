@@ -1,15 +1,16 @@
 package io.github.ph1lou.werewolfplugin.commands.utilities;
 
-import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandVote implements Commands {
+public class CommandVote implements ICommands {
 
 
     private final Main main;
@@ -19,31 +20,32 @@ public class CommandVote implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
-
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(game.translate("werewolf.check.console"));
-            return;
-        }
-
-        if (args.length != 1) {
-            sender.sendMessage(game.translate("werewolf.check.player_input"));
-            return;
-        }
-        if (!game.getPlayersWW().containsKey(((Player) sender).getUniqueId())) {
-            sender.sendMessage(game.translate("werewolf.check.not_in_game"));
-            return;
-        }
-
+        WereWolfAPI game = main.getWereWolfAPI();
+        UUID uuid = player.getUniqueId();
         Player playerArg = Bukkit.getPlayer(args[0]);
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
+
+        if (playerWW == null) return;
 
         if (playerArg == null) {
-            sender.sendMessage(game.translate("werewolf.check.offline_player"));
+            player.sendMessage(game.translate("werewolf.check.offline_player"));
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
-        game.getVote().setUnVote(((Player) sender).getUniqueId(), argUUID);
+        IPlayerWW playerWW1 = game.getPlayerWW(argUUID);
+
+        if (playerWW1 == null) {
+            player.sendMessage(game.translate("werewolf.check.player_not_found"));
+            return;
+        }
+
+        if (playerWW1.isState(StatePlayer.DEATH)) {
+            player.sendMessage(game.translate("werewolf.check.player_not_found"));
+            return;
+        }
+
+        game.getVote().setUnVote(playerWW, playerWW1);
     }
 }

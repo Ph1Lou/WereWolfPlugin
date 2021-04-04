@@ -1,50 +1,53 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-public class Trapper extends RolesVillage implements AffectedPlayers, Power {
+public class Trapper extends RoleVillage implements IAffectedPlayers, IPower {
 
-    private final List<UUID> affectedPlayer = new ArrayList<>();
+    private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
 
-    public Trapper(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public Trapper(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
+        super(main, playerWW, key);
         setPower(false);
     }
 
-    private boolean power=true;
+    private boolean power = true;
+
     @Override
-    public void setPower(Boolean power) {
-        this.power=power;
+    public void setPower(boolean power) {
+        this.power = power;
     }
 
     @Override
-    public Boolean hasPower() {
-        return(this.power);
+    public boolean hasPower() {
+        return (this.power);
     }
 
     @Override
-    public void addAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.add(uuid);
+    public void addAffectedPlayer(IPlayerWW playerWW) {
+        this.affectedPlayer.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.remove(uuid);
+    public void removeAffectedPlayer(IPlayerWW playerWW) {
+        this.affectedPlayer.remove(playerWW);
     }
 
     @Override
@@ -53,35 +56,35 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
     }
 
     @Override
-    public List<UUID> getAffectedPlayers() {
+    public List<IPlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if(!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)){
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
-        Player player = Bukkit.getPlayer(getPlayerUUID());
+
         setPower(true);
 
-        if (player == null) {
-            return;
-        }
-
-        player.sendMessage(game.translate("werewolf.role.trapper.tracking_message"));
+        getPlayerWW().sendMessageWithKey(
+                "werewolf.role.trapper.tracking_message");
     }
 
 
     @Override
-    public String getDescription() {
-        return game.translate("werewolf.role.trapper.description");
+    public @NotNull String getDescription() {
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.trapper.description"))
+                .build();
     }
 
+
     @Override
-    public String getDisplay() {
-        return "werewolf.role.trapper.display";
+    public void recoverPower() {
+
     }
 
     @EventHandler
@@ -91,20 +94,21 @@ public class Trapper extends RolesVillage implements AffectedPlayers, Power {
 
         StringBuilder stringBuilder = new StringBuilder(event.getActionBar());
 
-        if (Bukkit.getPlayer(event.getPlayerUUID()) == null) return;
-
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) return;
-
         Player player = Bukkit.getPlayer(event.getPlayerUUID());
 
-        if(hasPower()) return;
+        if (player == null) return;
 
-        for (UUID uuid : getAffectedPlayers()) {
-            Player player1 = Bukkit.getPlayer(uuid);
-            if (game.getPlayersWW().get(uuid).isState(State.ALIVE) && player1 != null) {
-                stringBuilder.append("§b ").append(game.getPlayersWW().get(uuid).getName()).append(" ").append(game.getScore().updateArrow(player, player1.getLocation()));
-            }
-        }
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+
+        if (hasPower()) return;
+
+        getAffectedPlayers()
+                .stream()
+                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                .peek(playerWW -> stringBuilder.append("§b ")
+                        .append(playerWW.getName())
+                        .append(" "))
+                .forEach(playerWW -> stringBuilder.append(Utils.updateArrow(player, playerWW.getLocation())));
 
         event.setActionBar(stringBuilder.toString());
     }

@@ -1,127 +1,93 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
-import io.github.ph1lou.werewolfapi.Commands;
+import com.google.common.collect.Sets;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
-import io.github.ph1lou.werewolfapi.events.EnchantedEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.events.roles.flute_player.EnchantedEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class CommandFlutePlayer implements Commands {
+public class CommandFlutePlayer implements ICommands {
 
     final GetWereWolfAPI api;
 
     public CommandFlutePlayer(GetWereWolfAPI api) {
-        this.api=api;
+        this.api = api;
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
-            WereWolfAPI game = api.getWereWolfAPI();
+        WereWolfAPI game = api.getWereWolfAPI();
+        UUID uuid = player.getUniqueId();
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
-            if (!(sender instanceof Player)) {
-                sender.sendMessage(game.translate("werewolf.check.console"));
-                return ;
+        if (playerWW == null) return;
+
+        IRole flutePlayer = playerWW.getRole();
+
+        if (args[0].equals(args[1])) {
+            player.sendMessage(game.translate("werewolf.check.two_distinct_player"));
+            return;
+        }
+
+        List<IPlayerWW> listWWs = new ArrayList<>();
+
+        for (String p : args) {
+
+            Player playerArg = Bukkit.getPlayer(p);
+
+            if (playerArg == null) {
+                player.sendMessage(game.translate("werewolf.check.offline_player"));
+                return;
             }
 
-            Player player = (Player) sender;
-            UUID uuid = player.getUniqueId();
+            UUID playerUUID = playerArg.getUniqueId();
+            IPlayerWW playerWW1 = game.getPlayerWW(playerUUID);
 
-            if(!game.getPlayersWW().containsKey(uuid)) {
-                player.sendMessage(game.translate("werewolf.check.not_in_game"));
-                return ;
+            if (playerWW1 == null || playerWW1.isState(StatePlayer.DEATH)) {
+                player.sendMessage(game.translate("werewolf.check.player_not_found"));
+                return;
             }
 
-            PlayerWW plg = game.getPlayersWW().get(uuid);
-
-
-            if (!game.isState(StateLG.GAME)) {
-                player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
-                return ;
+            if (p.equals(playerWW.getName())) {
+                player.sendMessage(game.translate("werewolf.check.not_yourself"));
+                return;
             }
 
-            if (!(plg.getRole().isDisplay("werewolf.role.flute_player.display"))){
-                player.sendMessage(game.translate("werewolf.check.role", game.translate("werewolf.role.flute_player.display")));
-                return ;
+            if (((IAffectedPlayers) flutePlayer).getAffectedPlayers().contains(playerWW)) {
+                player.sendMessage(game.translate("werewolf.role.flute_player.already_enchant", playerArg.getName()));
+                return;
             }
 
-            Roles flutePlayer = plg.getRole();
-
-            if (args.length!=2 && args.length!=1) {
-                player.sendMessage(game.translate("werewolf.check.parameters",2));
-                return ;
-            }
-
-            if(!plg.isState(State.ALIVE)){
-                player.sendMessage(game.translate("werewolf.check.death"));
-                return ;
-            }
-
-            if(!((Power)flutePlayer).hasPower()) {
-                player.sendMessage(game.translate("werewolf.check.power"));
-                return ;
-            }
-
-            if(args.length==2 && args[0].equals(args[1])) {
-                player.sendMessage(game.translate("werewolf.check.two_distinct_player"));
-                return ;
-            }
-
-            List<UUID> listUUIDs = new ArrayList<>();
-
-            for(String p:args) {
-
-                Player playerArg = Bukkit.getPlayer(p);
-
-                if (playerArg == null) {
-                    player.sendMessage(game.translate("werewolf.check.offline_player"));
-                    return;
-                }
-
-                UUID playerUUID = playerArg.getUniqueId();
-
-                if (!game.getPlayersWW().containsKey(playerUUID) || game.getPlayersWW().get(playerUUID).isState(State.DEATH)) {
-                    player.sendMessage(game.translate("werewolf.check.player_not_found"));
-                    return;
-                }
-
-                if(p.equals(plg.getName())) {
-                    player.sendMessage(game.translate("werewolf.check.not_yourself"));
-                    return ;
-                }
-
-                if (!game.getPlayersWW().containsKey(playerUUID)) {
-                    player.sendMessage(game.translate("werewolf.check.not_in_game_player"));
-                    return;
-                }
-
-                if (((AffectedPlayers) flutePlayer).getAffectedPlayers().contains(playerUUID)) {
-                    player.sendMessage(game.translate("werewolf.role.flute_player.already_enchant", playerArg.getName()));
-                    return;
-                }
-
+            try {
                 if (player.getLocation().distance(playerArg.getLocation()) > 100) {
                     player.sendMessage(game.translate("werewolf.role.flute_player.distance", playerArg.getName()));
                     return;
                 }
-                listUUIDs.add(playerUUID);
+            } catch (Exception ignored) {
+                return;
             }
 
-        ((Power) flutePlayer).setPower(false);
 
-        EnchantedEvent enchantedEvent = new EnchantedEvent(uuid, listUUIDs);
+            listWWs.add(playerWW1);
+        }
+
+
+        ((IPower) flutePlayer).setPower(false);
+
+
+        EnchantedEvent enchantedEvent = new EnchantedEvent(playerWW, Sets.newHashSet(listWWs));
 
         Bukkit.getPluginManager().callEvent(enchantedEvent);
 
@@ -130,16 +96,12 @@ public class CommandFlutePlayer implements Commands {
             return;
         }
 
-        for (UUID uuid1 : enchantedEvent.getPlayersUUID()) {
+        for (IPlayerWW playerWW1 : enchantedEvent.getPlayerWWS()) {
 
-            Player enchanted = Bukkit.getPlayer(uuid1);
-            if (enchanted == null) return;
-
-            ((AffectedPlayers) flutePlayer).addAffectedPlayer(uuid1);
-            enchanted.sendMessage(game.translate("werewolf.role.flute_player.enchanted"));
-            player.sendMessage(game.translate("werewolf.role.flute_player.perform", enchanted.getName()));
+            ((IAffectedPlayers) flutePlayer).addAffectedPlayer(playerWW1);
+            playerWW1.sendMessageWithKey("werewolf.role.flute_player.enchanted");
+            playerWW.sendMessageWithKey("werewolf.role.flute_player.perform", playerWW1.getName());
         }
-
 
         game.checkVictory();
     }

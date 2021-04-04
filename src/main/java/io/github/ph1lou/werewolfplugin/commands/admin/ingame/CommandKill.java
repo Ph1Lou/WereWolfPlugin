@@ -1,17 +1,17 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.enums.StateGame;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandKill implements Commands {
+public class CommandKill implements ICommands {
 
 
     private final Main main;
@@ -21,55 +21,42 @@ public class CommandKill implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
+        GameManager game = (GameManager) main.getWereWolfAPI();
 
-        GameManager game = main.getCurrentGame();
+        boolean find = false;
 
-        if (!sender.hasPermission("a.kill.use") && !game.getModerationManager().getModerators().contains(((Player) sender).getUniqueId()) && !game.getModerationManager().getHosts().contains(((Player) sender).getUniqueId())) {
-            sender.sendMessage(game.translate("werewolf.check.permission_denied"));
-            return;
-        }
-        
-        if (args.length != 1) {
-            sender.sendMessage(game.translate("werewolf.check.player_input"));
-            return;
-        }
+        UUID argUUID = null;
+        IPlayerWW playerWW1 = null;
 
-        boolean find=false;
-
-        UUID argUUID=null;
-
-        for(UUID uuid:game.getPlayersWW().keySet()){
-            if (game.getPlayersWW().get(uuid).getName().equals(args[0])) {
-                find=true;
-                argUUID=uuid;
+        for (IPlayerWW playerWW : game.getPlayerWW()) {
+            if (playerWW.getName().equalsIgnoreCase(args[0])) {
+                find = true;
+                argUUID = playerWW.getUUID();
+                playerWW1 = playerWW;
             }
         }
-        if(!find){
-            sender.sendMessage(game.translate("werewolf.check.not_in_game_player"));
+        if (!find) {
+            player.sendMessage(game.translate("werewolf.check.not_in_game_player"));
             return;
         }
 
-        if (!game.getPlayersWW().get(argUUID).isState(State.ALIVE)) {
-            sender.sendMessage(game.translate("werewolf.commands.kill.not_living"));
+        if (!playerWW1.isState(StatePlayer.ALIVE)) {
+            player.sendMessage(game.translate("werewolf.commands.kill.not_living"));
             return;
         }
-        if (game.isState(StateLG.START)) {
+        if (game.isState(StateGame.START)) {
             game.getScore().removePlayerSize();
-            game.getPlayersWW().remove(argUUID);
-            sender.sendMessage(game.translate("werewolf.commands.kill.remove_role"));
+            game.remove(argUUID);
+            player.sendMessage(game.translate("werewolf.commands.kill.remove_role"));
             return;
         }
         if (Bukkit.getPlayer(args[0]) != null) {
-            sender.sendMessage(game.translate("werewolf.commands.kill.on_line"));
-            return;
-        }
-        if (!game.isState(StateLG.GAME)) {
-            sender.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
+            player.sendMessage(game.translate("werewolf.commands.kill.on_line"));
             return;
         }
 
-        game.death(argUUID);
+        game.death(playerWW1);
     }
 }

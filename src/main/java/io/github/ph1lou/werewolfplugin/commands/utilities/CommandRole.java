@@ -1,17 +1,14 @@
 package io.github.ph1lou.werewolfplugin.commands.utilities;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandRole implements Commands {
+public class CommandRole implements ICommands {
 
 
     private final Main main;
@@ -21,57 +18,15 @@ public class CommandRole implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
-
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(game.translate("werewolf.check.console"));
-            return;
-        }
-
-        Player player = (Player) sender;
+        WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
-        if(!game.getPlayersWW().containsKey(uuid)) {
-            player.sendMessage(game.translate("werewolf.check.not_in_game"));
-            return;
-        }
+        if (playerWW == null) return;
 
-        PlayerWW plg = game.getPlayersWW().get(uuid);
+        player.sendMessage(playerWW.getRole().getDescription());
 
-
-        if (!game.isState(StateLG.GAME)) {
-            player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
-            return;
-        }
-
-        if(!plg.isState(State.ALIVE)){
-            player.sendMessage(game.translate("werewolf.check.death"));
-            return;
-        }
-
-        player.sendMessage(plg.getRole().getDescription());
-
-        if(plg.getRole().isDisplay("werewolf.role.sister.display")) {
-            StringBuilder list =new StringBuilder();
-            for(UUID uuid2:game.getPlayersWW().keySet()) {
-                PlayerWW pls =game.getPlayersWW().get(uuid2);
-                if(pls.isState(State.ALIVE) && pls.getRole().isDisplay("werewolf.role.sister.display")) {
-                    list.append(pls.getName()).append(" ");
-                }
-            }
-            player.sendMessage(game.translate("werewolf.role.sister.sisters_list",list.toString()));
-        }
-        else if(plg.getRole().isDisplay("werewolf.role.siamese_twin.display")) {
-            StringBuilder list =new StringBuilder();
-            for(UUID uuid3:game.getPlayersWW().keySet()) {
-                PlayerWW plb =game.getPlayersWW().get(uuid3);
-                if(plb.isState(State.ALIVE) && plb.getRole().isDisplay("werewolf.role.siamese_twin.display")) {
-                    list.append(plb.getName()).append(" ");
-                }
-            }
-            player.sendMessage(game.translate("werewolf.role.siamese_twin.siamese_twin_list",list.toString()));
-        }
     }
 }

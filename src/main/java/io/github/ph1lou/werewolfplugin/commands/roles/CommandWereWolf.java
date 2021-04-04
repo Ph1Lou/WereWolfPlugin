@@ -1,17 +1,19 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
+import io.github.ph1lou.werewolfapi.events.werewolf.RequestSeeWereWolfListEvent;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
-import org.bukkit.command.CommandSender;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandWereWolf implements Commands {
+public class CommandWereWolf implements ICommands {
 
 
     private final Main main;
@@ -21,57 +23,39 @@ public class CommandWereWolf implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
-
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(game.translate("werewolf.check.console"));
-            return;
-        }
-
-
-        Player player = (Player) sender;
+        WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
-        if(!game.getPlayersWW().containsKey(uuid)) {
-            player.sendMessage(game.translate("werewolf.check.not_in_game"));
+        if (playerWW == null) return;
+
+        if (game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey()) > 0) {
+            playerWW.sendMessageWithKey("werewolf.role.werewolf.list_not_revealed");
             return;
         }
 
-        PlayerWW plg = game.getPlayersWW().get(uuid);
+        RequestSeeWereWolfListEvent requestSeeWereWolfListEvent = new RequestSeeWereWolfListEvent(uuid);
+        Bukkit.getPluginManager().callEvent(requestSeeWereWolfListEvent);
 
-
-        if (!game.isState(StateLG.GAME)) {
-            player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
-            return;
-        }
-
-        if (!plg.isState(State.ALIVE)) {
-            player.sendMessage(game.translate("werewolf.check.death"));
-            return;
-        }
-
-        if (!plg.getRole().isWereWolf()) {
-            sender.sendMessage(game.translate("werewolf.role.werewolf.not_werewolf"));
-            return;
-        }
-
-        if (game.getConfig().getTimerValues().get("werewolf.menu.timers.werewolf_list") > 0) {
-            sender.sendMessage(game.translate("werewolf.role.werewolf.list_not_revealed"));
+        if (!requestSeeWereWolfListEvent.isAccept()) {
+            playerWW.sendMessageWithKey("werewolf.role.werewolf.not_werewolf");
             return;
         }
 
         StringBuilder list = new StringBuilder();
 
-        for (UUID playerUUID : game.getPlayersWW().keySet()) {
+        for (IPlayerWW playerWW1 : game.getPlayerWW()) {
 
-            PlayerWW lg = game.getPlayersWW().get(playerUUID);
+            AppearInWereWolfListEvent appearInWereWolfListEvent =
+                    new AppearInWereWolfListEvent(playerWW1.getUUID());
+            Bukkit.getPluginManager().callEvent(appearInWereWolfListEvent);
 
-            if (lg.isState(State.ALIVE) && lg.getRole().isWereWolf()) {
-                list.append(lg.getName()).append(" ");
+            if (playerWW1.isState(StatePlayer.ALIVE) && appearInWereWolfListEvent.isAppear()) {
+                list.append(playerWW1.getName()).append(" ");
             }
         }
-        player.sendMessage(game.translate("werewolf.role.werewolf.werewolf_list", list.toString()));
+        playerWW.sendMessageWithKey("werewolf.role.werewolf.werewolf_list", list.toString());
     }
 }

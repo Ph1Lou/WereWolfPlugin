@@ -1,46 +1,51 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.Sounds;
-import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.events.*;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.enums.Sound;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
+import io.github.ph1lou.werewolfapi.events.roles.StealEvent;
+import io.github.ph1lou.werewolfapi.events.roles.wild_child.AutoModelEvent;
+import io.github.ph1lou.werewolfapi.events.roles.wild_child.ModelEvent;
+import io.github.ph1lou.werewolfapi.events.roles.wild_child.WildChildTransformationEvent;
+import io.github.ph1lou.werewolfapi.events.werewolf.NewWereWolfEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
 import io.github.ph1lou.werewolfapi.rolesattributs.Transformed;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-public class WildChild extends RolesVillage implements AffectedPlayers, Transformed, Power {
+public class WildChild extends RoleVillage implements IAffectedPlayers, Transformed, IPower {
 
-    boolean transformed=false;
-    private final List<UUID> affectedPlayer = new ArrayList<>();
+    boolean transformed = false;
+    private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
 
-    public WildChild(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public WildChild(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
+        super(main, playerWW, key);
     }
 
-    private boolean power=true;
-    @Override
-    public void setPower(Boolean power) {
-        this.power=power;
-    }
+    private boolean power = true;
 
     @Override
-    public Boolean hasPower() {
-        return(this.power);
+    public void setPower(boolean power) {
+        this.power = power;
+    }
+
+
+    @Override
+    public boolean hasPower() {
+        return (this.power);
     }
 
     @Override
@@ -54,13 +59,13 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     }
 
     @Override
-    public void addAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.add(uuid);
+    public void addAffectedPlayer(IPlayerWW playerWW) {
+        this.affectedPlayer.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.remove(uuid);
+    public void removeAffectedPlayer(IPlayerWW playerWW) {
+        this.affectedPlayer.remove(playerWW);
     }
 
     @Override
@@ -69,133 +74,98 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
     }
 
     @Override
-    public List<UUID> getAffectedPlayers() {
+    public List<IPlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
-    @EventHandler
-    public void onNight(NightEvent event) {
-
-
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
-            return;
-        }
-
-        if (!transformed) {
-            return;
-        }
-
-        if (player == null) return;
-
-        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, -1, false, false));
-    }
-
-    @EventHandler
-    public void onDay(DayEvent event) {
-
-
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
-            return;
-        }
-
-        if (!transformed) {
-            return;
-        }
-
-        if (player == null) return;
-
-        player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-    }
 
     @EventHandler
     public void onAutoModel(AutoModelEvent event) {
 
 
-
-        UUID modelUUID = game.autoSelect(getPlayerUUID());
-        PlayerWW model = game.getPlayersWW().get(modelUUID);
-        Player player = Bukkit.getPlayer(getPlayerUUID());
+        IPlayerWW model = game.autoSelect(getPlayerWW());
 
         if (!hasPower()) return;
 
-        addAffectedPlayer(modelUUID);
+        addAffectedPlayer(model);
         setPower(false);
-        Bukkit.getPluginManager().callEvent(new ModelEvent(getPlayerUUID(), modelUUID));
+        Bukkit.getPluginManager().callEvent(new ModelEvent(getPlayerWW(), model));
 
-        if (player == null) return;
-
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        player.sendMessage(game.translate("werewolf.role.wild_child.reveal_model", model.getName()));
-        Sounds.BAT_IDLE.play(player);
+        getPlayerWW().sendMessageWithKey("werewolf.role.wild_child.reveal_model", Sound.BAT_IDLE,
+                model.getName());
     }
 
     @Override
-    public String getDescription() {
-        return game.translate("werewolf.role.wild_child.description");
+    public @NotNull String getDescription() {
+
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.wild_child.description"))
+                .addExtraLines(() -> game.translate("werewolf.role.wild_child.model",
+                        affectedPlayer.isEmpty() ?
+                                !transformed ?
+                                        game.translate("werewolf.role.wild_child.design_model",
+                                                Utils.conversion(game.getConfig()
+                                                        .getTimerValue(TimersBase.MODEL_DURATION.getKey())))
+                                        :
+                                        game.translate("werewolf.role.wild_child.model_none")
+                                :
+                                transformed ?
+                                        game.translate("werewolf.role.wild_child.model_death")
+                                        :
+                                        affectedPlayer.get(0).getName()))
+                .build();
+
+
     }
 
-    @Override
-    public String getDisplay() {
-        return "werewolf.role.wild_child.display";
-    }
 
-    @Override
-    public void stolen(@NotNull UUID uuid) {
+    @EventHandler
+    public void onStealEvent(StealEvent event) {
 
-
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) return;
+        if (!event.getThiefWW().equals(getPlayerWW())) return;
 
         if (!transformed) {
-            player.sendMessage(game.translate("werewolf.role.wild_child.design_model", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.model_duration"))));
-        } else {
-            UUID modelUUID = getAffectedPlayers().get(0);
-            PlayerWW model = game.getPlayersWW().get(modelUUID);
-
-            if (modelUUID.equals(getPlayerUUID()) && !getInfected()) {
-
-                WildChildTransformationEvent wildChildTransformationEvent = new WildChildTransformationEvent(getPlayerUUID(),getPlayerUUID());
-
-                Bukkit.getPluginManager().callEvent(wildChildTransformationEvent);
-
-                if(wildChildTransformationEvent.isCancelled()){
-                    player.sendMessage(game.translate("werewolf.check.transformation"));
-                    return;
-                }
-
-                NewWereWolfEvent newWereWolfEvent = new NewWereWolfEvent(getPlayerUUID());
-                Bukkit.getPluginManager().callEvent(newWereWolfEvent);
-
-                if (newWereWolfEvent.isCancelled()) {
-                    player.sendMessage(game.translate("werewolf.check.transformation"));
-                } else setTransformed(true);
-
-            } else
-                player.sendMessage(game.translate("werewolf.role.wild_child.reveal_model", model.getName()));
+            return;
         }
+
+        if (this.affectedPlayer.isEmpty()) return;
+
+        IPlayerWW model = getAffectedPlayers().get(0);
+
+        if (model.equals(getPlayerWW())) {
+
+            WildChildTransformationEvent wildChildTransformationEvent =
+                    new WildChildTransformationEvent(
+                            getPlayerWW(),
+                            getPlayerWW());
+
+            Bukkit.getPluginManager().callEvent(wildChildTransformationEvent);
+
+            if (wildChildTransformationEvent.isCancelled()) {
+                getPlayerWW().sendMessageWithKey("werewolf.check.transformation");
+                return;
+            }
+
+            setTransformed(true);
+
+            if (!super.isWereWolf()) {
+                Bukkit.getPluginManager().callEvent(
+                        new NewWereWolfEvent(getPlayerWW()));
+            }
+
+        } else
+            getPlayerWW().sendMessageWithKey("werewolf.role.wild_child.reveal_model",
+                    model.getName());
+
+
     }
 
     @Override
-    public void recoverPotionEffect(@NotNull Player player) {
-        super.recoverPotionEffect(player);
-        if (!transformed) return;
-        player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0, false, false));
-    }
-
-    @Override
-    public Player recoverPower() {
-        Player player = super.recoverPower();
-        if(player==null) return null;
-        player.sendMessage(game.translate("werewolf.role.wild_child.design_model", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.model_duration"))));
-        return player;
+    public void recoverPower() {
     }
 
     @Override
@@ -203,83 +173,71 @@ public class WildChild extends RolesVillage implements AffectedPlayers, Transfor
         return this.transformed || super.isWereWolf();
     }
 
-    @EventHandler
-    private void onPlayerDeath(PlayerDeathEvent event) {
-
-        if(!transformed) return;
-
-        if(event.getEntity().getKiller()==null) return;
-        Player killer = event.getEntity().getKiller();
-
-        if(!killer.getUniqueId().equals(getPlayerUUID())) return;
-
-        killer.removePotionEffect(PotionEffectType.ABSORPTION);
-        killer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1200, 0, false, false));
-        killer.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 1200, 0, false, false));
-    }
 
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 
+        IPlayerWW playerWW = event.getPlayerWW();
 
-        UUID uuid = event.getUuid();
-        Player player = Bukkit.getPlayer(getPlayerUUID());
+        if (!getAffectedPlayers().contains(playerWW)) return;
 
-        if (!getAffectedPlayers().contains(uuid)) return;
-
-        if (game.getPlayersWW().get(getPlayerUUID()).isState(State.DEATH)) return;
+        if (getPlayerWW().isState(StatePlayer.DEATH)) return;
 
         if (transformed) return;
 
-        WildChildTransformationEvent wildChildTransformationEvent = new WildChildTransformationEvent(getPlayerUUID(), uuid);
+        WildChildTransformationEvent wildChildTransformationEvent =
+                new WildChildTransformationEvent(getPlayerWW(), playerWW);
 
         Bukkit.getPluginManager().callEvent(wildChildTransformationEvent);
 
-        if(wildChildTransformationEvent.isCancelled()) {
-            if (player != null) {
-                player.sendMessage(game.translate("werewolf.check.transformation"));
-            }
+        if (wildChildTransformationEvent.isCancelled()) {
+            getPlayerWW().sendMessageWithKey(
+                    "werewolf.check.transformation");
             return;
         }
-        NewWereWolfEvent newWereWolfEvent = new NewWereWolfEvent(getPlayerUUID());
-        Bukkit.getPluginManager().callEvent(newWereWolfEvent);
 
-        if(!newWereWolfEvent.isCancelled()){
-            setTransformed(true);
+        setTransformed(true);
+
+        if (!super.isWereWolf()) { //au cas ou il est infecté
+            Bukkit.getPluginManager().callEvent(
+                    new NewWereWolfEvent(getPlayerWW()));
         }
-
     }
 
     @EventHandler
     public void onTargetIsStolen(StealEvent event) {
 
+        IPlayerWW playerWW = event.getPlayerWW();
+        IPlayerWW thiefWW = event.getThiefWW();
 
-        UUID newUUID = event.getKiller();
-        UUID oldUUID = event.getPlayer();
-        PlayerWW plg = game.getPlayersWW().get(getPlayerUUID());
-        Player player = Bukkit.getPlayer(getPlayerUUID());
+        if (!getAffectedPlayers().contains(playerWW)) return;
 
-        if (!getAffectedPlayers().contains(oldUUID)) return;
+        removeAffectedPlayer(playerWW);
+        addAffectedPlayer(thiefWW);
 
-        removeAffectedPlayer(oldUUID);
-        addAffectedPlayer(newUUID);
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
-        if (!plg.isState(State.ALIVE)) return;
-
-        if (player != null) {
-            player.sendMessage(game.translate("werewolf.role.wild_child.change", game.getPlayersWW().get(newUUID).getName()));
-        }
+        getPlayerWW().sendMessageWithKey(
+                "werewolf.role.wild_child.change",
+                thiefWW.getName());
     }
 
     @EventHandler
     public void onEndPlayerMessage(EndPlayerMessageEvent event){
 
-        if(!event.getPlayerUUID().equals(getPlayerUUID())) return;
+        if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         StringBuilder sb = event.getEndMessage();
 
-        if(!getAffectedPlayers().isEmpty()){
-            sb.append(game.translate("werewolf.end.model",game.getPlayersWW().get(getAffectedPlayers().get(0)).getName()));
+        if(!getAffectedPlayers().isEmpty()) {
+
+            IPlayerWW modelWW = getAffectedPlayers().get(0);
+
+            if (modelWW != null) {
+                sb.append(game.translate("werewolf.end.model",
+                        modelWW.getName()));
+            }
+
         }
         if(transformed){
             sb.append(game.translate("werewolf.end.transform"));

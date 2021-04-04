@@ -1,52 +1,52 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.events.ThirdDeathEvent;
-import io.github.ph1lou.werewolfapi.events.WitchResurrectionEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesVillage;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.ThirdDeathEvent;
+import io.github.ph1lou.werewolfapi.events.roles.witch.WitchResurrectionEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-public class Witch extends RolesVillage implements AffectedPlayers, Power {
+public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
 
-    private final List<UUID> affectedPlayer = new ArrayList<>();
+    private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private boolean power = true;
 
-    public Witch(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    public Witch(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
+        super(main, playerWW, key);
     }
 
     @Override
-    public void setPower(Boolean power) {
-        this.power=power;
+    public void setPower(boolean power) {
+        this.power = power;
     }
 
     @Override
-    public Boolean hasPower() {
-        return(this.power);
+    public boolean hasPower() {
+        return (this.power);
     }
 
     @Override
-    public void addAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.add(uuid);
+    public void addAffectedPlayer(IPlayerWW playerWW) {
+        this.affectedPlayer.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.remove(uuid);
+    public void removeAffectedPlayer(IPlayerWW playerWW) {
+        this.affectedPlayer.remove(playerWW);
     }
 
     @Override
@@ -55,19 +55,32 @@ public class Witch extends RolesVillage implements AffectedPlayers, Power {
     }
 
     @Override
-    public List<UUID> getAffectedPlayers() {
+    public List<IPlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
     @Override
-    public String getDescription() {
-        return game.translate("werewolf.role.witch.description");
+    public @NotNull String getDescription() {
+
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.witch.description"))
+                .setPower(() -> game.translate(power ? "werewolf.role.witch.power_available" : "werewolf.role.witch.power_not_available"))
+                .setItems(() -> game.translate("werewolf.role.witch.items"))
+                .addExtraLines(() -> game.translate("werewolf.description.power",
+                        game.translate(game.getConfig().isConfigActive(ConfigsBase.AUTO_REZ_WITCH.getKey())
+                                ?
+                                "werewolf.role.witch.himself"
+                                :
+                                "werewolf.role.witch.not_himself")))
+                .build();
     }
 
+
     @Override
-    public String getDisplay() {
-        return "werewolf.role.witch.display";
+    public void recoverPower() {
+
     }
+
 
     @EventHandler
     public void onThirdDeathEvent(ThirdDeathEvent event) {
@@ -76,34 +89,48 @@ public class Witch extends RolesVillage implements AffectedPlayers, Power {
 
         if (!hasPower()) return;
 
-        PlayerWW plg = game.getPlayersWW().get(event.getUuid());
-        Player player = Bukkit.getPlayer(getPlayerUUID());
+        IPlayerWW playerWW = event.getPlayerWW();
 
-        if (event.getUuid().equals(getPlayerUUID())) {
-            if (game.getConfig().getConfigValues().get("werewolf.menu.global.auto_rez_witch")) {
-                WitchResurrectionEvent witchResurrectionEvent = new WitchResurrectionEvent(getPlayerUUID(), event.getUuid());
-                Bukkit.getPluginManager().callEvent(witchResurrectionEvent);
-                setPower(false);
-
-                if (witchResurrectionEvent.isCancelled()) {
-                    if (player != null) {
-                        player.sendMessage(game.translate("werewolf.check.cancel"));
-                    }
-                } else {
-                    game.resurrection(getPlayerUUID());
-                    event.setCancelled(true);
-                }
-            }
-        } else {
-
-            if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE) ) return;
-
-            if (player != null) {
-                TextComponent witch_msg = new TextComponent(game.translate("werewolf.role.witch.resuscitation_message", plg.getName()));
-                witch_msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/ww " + game.translate("werewolf.role.witch.command") + " " + event.getUuid()));
-                player.spigot().sendMessage(witch_msg);
-            }
+        if (playerWW.equals(getPlayerWW())) {
+            event.setCancelled(autoResurrection(playerWW));
+            return;
         }
+
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+
+        TextComponent textComponent =
+                new TextComponent(
+                        game.translate(
+                                "werewolf.role.witch.resuscitation_message",
+                                playerWW.getName()));
+        textComponent.setClickEvent(new ClickEvent(
+                ClickEvent.Action.RUN_COMMAND,
+                String.format("/ww %s %s",
+                        game.translate("werewolf.role.witch.command"),
+                        playerWW.getUUID())));
+        getPlayerWW().sendMessage(textComponent);
+    }
+
+    private boolean autoResurrection(IPlayerWW player) {
+
+        if (!game.getConfig().isConfigActive(ConfigsBase.AUTO_REZ_WITCH.getKey())) {
+            return false;
+        }
+
+        WitchResurrectionEvent witchResurrectionEvent =
+                new WitchResurrectionEvent(getPlayerWW(),
+                        getPlayerWW());
+        Bukkit.getPluginManager().callEvent(witchResurrectionEvent);
+        setPower(false);
+
+        if (!witchResurrectionEvent.isCancelled()) {
+            game.resurrection(getPlayerWW());
+            return true;
+        }
+
+        player.sendMessageWithKey("werewolf.check.cancel");
+
+        return false;
     }
 
 }

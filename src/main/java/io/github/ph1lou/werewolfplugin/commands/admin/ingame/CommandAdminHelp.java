@@ -1,12 +1,17 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
-import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.registers.CommandRegister;
+import io.github.ph1lou.werewolfapi.registers.IRegisterManager;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
-import org.bukkit.command.CommandSender;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 
-public class CommandAdminHelp implements Commands {
+public class CommandAdminHelp implements ICommands {
 
 
     private final Main main;
@@ -16,14 +21,34 @@ public class CommandAdminHelp implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
 
-        if (!sender.hasPermission("a.help.use") && !game.getModerationManager().getModerators().contains(((Player) sender).getUniqueId()) && !game.getModerationManager().getHosts().contains(((Player) sender).getUniqueId())) {
-            sender.sendMessage(game.translate("werewolf.check.permission_denied"));
-            return;
+        IRegisterManager registerManager = main.getRegisterManager();
+
+        TextComponent textComponent1 = new TextComponent(game.translate("werewolf.commands.admin.help.help"));
+
+        for (CommandRegister adminCommand : registerManager.getAdminCommandsRegister()) {
+            if (!adminCommand.getDescription().isEmpty()) {
+
+                TextComponent textComponent = new TextComponent(
+                        String.format("/a §b%s ",
+                                game.translate(adminCommand.getKey())));
+
+                textComponent.setHoverEvent(
+                        new HoverEvent(
+                                HoverEvent.Action.SHOW_TEXT,
+                                new ComponentBuilder(
+                                        game.translate(adminCommand.getDescription()))
+                                        .create()));
+                textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,String.format("/a %s ",
+                        game.translate(adminCommand.getKey()))));
+                textComponent1.addExtra(textComponent);
+            }
+
         }
-        sender.sendMessage(game.translate("werewolf.commands.admin.help"));
+
+        player.spigot().sendMessage(textComponent1);
     }
 }

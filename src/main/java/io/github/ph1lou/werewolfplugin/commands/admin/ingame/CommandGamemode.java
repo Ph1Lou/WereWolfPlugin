@@ -1,14 +1,14 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
-import io.github.ph1lou.werewolfapi.Commands;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CommandGamemode implements Commands {
+import java.util.UUID;
+
+public class CommandGamemode implements ICommands {
 
 
     private final Main main;
@@ -18,33 +18,28 @@ public class CommandGamemode implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
-
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(game.translate("werewolf.check.console"));
-            return;
-        }
-
-        Player player = (Player) sender;
-
-        if (!sender.hasPermission("a.gamemode.use") && !game.getModerationManager().getModerators().contains(((Player) sender).getUniqueId()) && !game.getModerationManager().getHosts().contains(((Player) sender).getUniqueId())) {
-            sender.sendMessage(game.translate("werewolf.check.permission_denied"));
-            return;
-        }
-
-        if (args.length != 1) return;
-
+        WereWolfAPI game = main.getWereWolfAPI();
+        UUID uuid = player.getUniqueId();
         try {
             int i = Integer.parseInt(args[0]);
+            int j = 2;
             if (i == 0) {
-                i = 1;
+                j = 1;
             } else if (i == 1) {
-                i = 0;
+                j = 0;
+            } else if (i == 3) {
+                j = 3;
             }
-            player.setGameMode(GameMode.values()[i]);
-            Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.commands.admin.gamemode", sender.getName(), i));
+
+            player.setGameMode(GameMode.values()[j]);
+            String message = game.translate("werewolf.commands.admin.gamemode.send", player.getName(), i);
+
+            game.getModerationManager().alertHostsAndModerators(message);
+            if (!game.getModerationManager().isStaff(uuid)) {
+                player.sendMessage(message);
+            }
         }
         catch (NumberFormatException ignored){
         }

@@ -5,10 +5,12 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
-import io.github.ph1lou.werewolfapi.enumlg.UniversalMaterial;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
+import io.github.ph1lou.werewolfapi.events.UpdateLanguageEvent;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
+import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
@@ -25,7 +27,7 @@ public class Languages implements InventoryProvider {
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
             .provider(new Languages())
             .size(2, 9)
-            .title(JavaPlugin.getPlugin(Main.class).getCurrentGame().translate("werewolf.menu.languages.name"))
+            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.languages.name"))
             .closeable(true)
             .build();
 
@@ -33,9 +35,11 @@ public class Languages implements InventoryProvider {
     @Override
     public void init(Player player, InventoryContents contents) {
         Main main = JavaPlugin.getPlugin(Main.class);
-        GameManager game = main.getCurrentGame();
+        WereWolfAPI game = main.getWereWolfAPI();
 
-        contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType()).setDisplayName(game.translate("werewolf.menu.return")).build()), e -> Config.INVENTORY.open(player)));
+        contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType())
+                        .setDisplayName(game.translate("werewolf.menu.return")).build()),
+                e -> Config.INVENTORY.open(player)));
 
         ItemBuilder fr = new ItemBuilder(UniversalMaterial.WHITE_BANNER.getStack());
         fr.addPattern(new Pattern(DyeColor.BLUE, PatternType.STRIPE_LEFT));
@@ -58,21 +62,17 @@ public class Languages implements InventoryProvider {
         en.setLore(Collections.singletonList("By Jormunth"));
         contents.set(0, 2, ClickableItem.of((en.build()), e -> {
             main.getConfig().set("lang", "en");
-            main.getLang().updateLanguage(game);
+            Bukkit.getPluginManager().callEvent(new UpdateLanguageEvent());
             Languages.INVENTORY.open(player);
         }));
         contents.set(0, 4, ClickableItem.of((fr.build()), e -> {
             main.getConfig().set("lang", "fr");
-            main.getLang().updateLanguage(game);
+            Bukkit.getPluginManager().callEvent(new UpdateLanguageEvent());
             Languages.INVENTORY.open(player);
         }));
     }
 
 
-    @Override
-    public void update(Player player, InventoryContents contents) {
 
-
-    }
 }
 

@@ -1,40 +1,41 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enumlg.State;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.DayEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.RolesWithLimitedSelectionDuration;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.RoleWithLimitedSelectionDuration;
+import io.github.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.event.EventHandler;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-public class Detective extends RolesWithLimitedSelectionDuration implements AffectedPlayers {
-
-
-    private final List<UUID> affectedPlayer = new ArrayList<>();
+public class Detective extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
 
-    public Detective(GetWereWolfAPI main, WereWolfAPI game, UUID uuid) {
-        super(main,game,uuid);
+    private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
+    private int dayNumber = -8;
+
+    public Detective(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
+        super(main, playerWW, key);
         setPower(false);
     }
 
-
     @Override
-    public void addAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.add(uuid);
+    public void addAffectedPlayer(IPlayerWW playerWW) {
+        this.affectedPlayer.add(playerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(UUID uuid) {
-        this.affectedPlayer.remove(uuid);
+    public void removeAffectedPlayer(IPlayerWW playerWW) {
+        this.affectedPlayer.remove(playerWW);
     }
 
     @Override
@@ -43,36 +44,43 @@ public class Detective extends RolesWithLimitedSelectionDuration implements Affe
     }
 
     @Override
-    public List<UUID> getAffectedPlayers() {
+    public List<IPlayerWW> getAffectedPlayers() {
         return (this.affectedPlayer);
     }
 
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if (!game.getPlayersWW().get(getPlayerUUID()).isState(State.ALIVE)) {
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
+        if (game.getConfig().isConfigActive(ConfigsBase.DETECTIVE_EVERY_OTHER_DAY.getKey()) &&
+                event.getNumber() == dayNumber + 1) {
+            return;
+        }
+
+        dayNumber = event.getNumber();
+
         setPower(true);
 
-        if (player == null) {
-            return;
-        }
 
-        player.sendMessage(game.translate("werewolf.role.detective.inspection_message", game.getScore().conversion(game.getConfig().getTimerValues().get("werewolf.menu.timers.power_duration"))));
+        getPlayerWW().sendMessageWithKey("werewolf.role.detective.inspection_message",
+                Utils.conversion(game.getConfig().getTimerValue(TimersBase.POWER_DURATION.getKey())));
     }
 
 
     @Override
-    public String getDescription() {
-        return game.translate("werewolf.role.detective.description");
+    public @NotNull String getDescription() {
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.detective.description"))
+                .build();
     }
 
+
     @Override
-    public String getDisplay() {
-        return "werewolf.role.detective.display";
+    public void recoverPower() {
+
     }
 
 

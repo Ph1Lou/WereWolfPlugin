@@ -47,10 +47,16 @@ public class BorderData {
 		this.maxX = x + radiusX;
 		this.minX = x - radiusX;
 	}
+
 	public void setRadiusZ(int radiusZ) {
 		this.radiusZ = radiusZ;
 		this.maxZ = z + radiusZ;
 		this.minZ = z - radiusZ;
+	}
+
+	public void setRadius(int radius) {
+		setRadiusX(radius);
+		setRadiusZ(radius);
 	}
 
 	@Override

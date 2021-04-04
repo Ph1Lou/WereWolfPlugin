@@ -1,22 +1,20 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
-import io.github.ph1lou.werewolfapi.events.TrackEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.events.roles.trapper.TrackEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandTrapper implements Commands {
+public class CommandTrapper implements ICommands {
 
 
     private final Main main;
@@ -26,88 +24,51 @@ public class CommandTrapper implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
-
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(game.translate("werewolf.check.console"));
-            return;
-        }
-
-        Player player = (Player) sender;
-        String playername = player.getName();
+        WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
-        if(!game.getPlayersWW().containsKey(uuid)) {
-            player.sendMessage(game.translate("werewolf.check.not_in_game"));
-            return;
-        }
+        if (playerWW == null) return;
 
-        PlayerWW plg = game.getPlayersWW().get(uuid);
-
-
-        if (!game.isState(StateLG.GAME)) {
-            player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
-            return;
-        }
-
-        if (!(plg.getRole().isDisplay("werewolf.role.trapper.display"))) {
-            player.sendMessage(game.translate("werewolf.check.role", game.translate("werewolf.role.trapper.display")));
-            return;
-        }
-
-        Roles trapper = plg.getRole();
-
-        if (args.length != 1) {
-            player.sendMessage(game.translate("werewolf.check.player_input"));
-            return;
-        }
-
-        if (!plg.isState(State.ALIVE)) {
-            player.sendMessage(game.translate("werewolf.check.death"));
-            return;
-        }
-
-        if (!((Power) trapper).hasPower()) {
-            player.sendMessage(game.translate("werewolf.check.power"));
-            return;
-        }
-
-        if (args[0].toLowerCase().equals(playername.toLowerCase())) {
-            player.sendMessage(game.translate("werewolf.check.not_yourself"));
-            return;
-        }
-
+        IRole trapper = playerWW.getRole();
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
             player.sendMessage(game.translate("werewolf.check.offline_player"));
             return;
         }
-        UUID argUUID = playerArg.getUniqueId();
 
-        if (!game.getPlayersWW().containsKey(argUUID) || !game.getPlayersWW().get(argUUID).isState(State.ALIVE)) {
+        UUID argUUID = playerArg.getUniqueId();
+        IPlayerWW playerWW1 = game.getPlayerWW(argUUID);
+
+        if (uuid.equals(argUUID)) {
+            player.sendMessage(game.translate("werewolf.check.not_yourself"));
+            return;
+        }
+
+        if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
             player.sendMessage(game.translate("werewolf.check.player_not_found"));
             return;
         }
 
-        if (((AffectedPlayers)trapper).getAffectedPlayers().contains(argUUID)) {
+        if (((IAffectedPlayers) trapper).getAffectedPlayers().contains(playerWW1)) {
             player.sendMessage(game.translate("werewolf.check.already_get_power"));
             return;
         }
 
-        TrackEvent trackEvent=new TrackEvent(uuid,argUUID);
-        ((Power) trapper).setPower(false);
+        TrackEvent trackEvent = new TrackEvent(playerWW, playerWW1);
+        ((IPower) trapper).setPower(false);
         Bukkit.getPluginManager().callEvent(trackEvent);
 
-        if(trackEvent.isCancelled()){
+        if (trackEvent.isCancelled()) {
             player.sendMessage(game.translate("werewolf.check.cancel"));
             return;
         }
 
-        ((AffectedPlayers) trapper).clearAffectedPlayer();
-        ((AffectedPlayers) trapper).addAffectedPlayer(argUUID);
+        ((IAffectedPlayers) trapper).clearAffectedPlayer();
+        ((IAffectedPlayers) trapper).addAffectedPlayer(playerWW1);
 
         playerArg.sendMessage(game.translate("werewolf.role.trapper.get_track"));
         player.sendMessage(game.translate("werewolf.role.trapper.tracking_perform", playerArg.getName()));

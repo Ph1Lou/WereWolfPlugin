@@ -2,8 +2,24 @@ package io.github.ph1lou.werewolfplugin.save;
 
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.WriterConfig;
+import io.github.ph1lou.werewolfapi.IConfiguration;
+import io.github.ph1lou.werewolfapi.registers.IRegisterManager;
+import io.github.ph1lou.werewolfapi.registers.RoleRegister;
+import io.github.ph1lou.werewolfplugin.Main;
+import io.github.ph1lou.werewolfplugin.RegisterManager;
+import io.github.ph1lou.werewolfplugin.game.GameManager;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
@@ -20,6 +36,30 @@ public class FileUtils_ {
                 System.out.println("[WereWolfPlugin] Create " + file.getName());
             }
         }
+    }
+
+    public static void loadConfig(Main main, String name){
+
+        GameManager game = (GameManager) main.getWereWolfAPI();
+
+        File file = new File(main.getDataFolder() + File.separator + "configs" + File.separator, name + ".json");
+
+        if (file.exists()) {
+            game.setConfig(Serializer.deserialize(loadContent(file)));
+            game.getScore().setRole(0);
+            game.getModerationManager().checkQueue();
+            ((Configuration) game.getConfig()).addRegister((RegisterManager) main.getRegisterManager());
+        }
+
+        IConfiguration config = game.getConfig();
+        IRegisterManager register = main.getRegisterManager();
+
+        for (RoleRegister roleRegister : register.getRolesRegister()) {
+            String key = roleRegister.getKey();
+            game.getScore().setRole(game.getScore().getRole() + config.getRoleCount(key));
+        }
+
+        save(file, Serializer.serialize(game.getConfig()));
     }
 
     public static void save(File file, String text) {
@@ -59,29 +99,31 @@ public class FileUtils_ {
     }
 
     public static void copy(InputStream source, String destination) {
+
+        if (source == null) return;
+
         System.out.println("[WereWolfPlugin] Copying ->" + source + "\n\tto ->" + destination);
         File file = new File(destination);
+
         try {
             createFile(file);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (source != null) {
-            try (OutputStream out = new FileOutputStream(file)) {
-                byte[] buf = new byte[1024];
-                int len;
-                while ((len = source.read(buf)) > 0) {
-                    out.write(buf, 0, len);
-                }
+        try (OutputStream out = new FileOutputStream(file)) {
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = source.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                source.close();
             } catch (IOException e) {
                 e.printStackTrace();
-            } finally {
-                try {
-                    source.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         }
     }

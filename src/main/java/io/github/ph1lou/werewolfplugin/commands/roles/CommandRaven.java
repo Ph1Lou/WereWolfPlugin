@@ -1,24 +1,21 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
-import io.github.ph1lou.werewolfapi.Commands;
-import io.github.ph1lou.werewolfapi.PlayerWW;
-import io.github.ph1lou.werewolfapi.enumlg.State;
-import io.github.ph1lou.werewolfapi.enumlg.StateLG;
-import io.github.ph1lou.werewolfapi.events.CurseEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.AffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.Power;
-import io.github.ph1lou.werewolfapi.rolesattributs.Roles;
+import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.events.roles.raven.CurseEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.UUID;
 
-public class CommandRaven implements Commands {
+public class CommandRaven implements ICommands {
 
 
     private final Main main;
@@ -28,85 +25,47 @@ public class CommandRaven implements Commands {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Player player, String[] args) {
 
-        GameManager game = main.getCurrentGame();
-
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(game.translate("werewolf.check.console"));
-            return;
-        }
-
-        Player player = (Player) sender;
+        WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
+        IPlayerWW playerWW = game.getPlayerWW(uuid);
 
-        if(!game.getPlayersWW().containsKey(uuid)) {
-            player.sendMessage(game.translate("werewolf.check.not_in_game"));
-            return;
-        }
+        if (playerWW == null) return;
 
-        PlayerWW plg = game.getPlayersWW().get(uuid);
-
-
-        if (!game.isState(StateLG.GAME)) {
-            player.sendMessage(game.translate("werewolf.check.game_not_in_progress"));
-            return;
-        }
-
-        if (!(plg.getRole().isDisplay("werewolf.role.raven.display"))){
-            player.sendMessage(game.translate("werewolf.check.role", game.translate("werewolf.role.raven.display")));
-            return;
-        }
-
-        Roles raven = plg.getRole();
-
-        if (args.length!=1) {
-            player.sendMessage(game.translate("werewolf.check.player_input"));
-            return;
-        }
-
-        if (!plg.isState(State.ALIVE)) {
-            player.sendMessage(game.translate("werewolf.check.death"));
-            return;
-        }
-
-        if (!((Power) raven).hasPower()) {
-            player.sendMessage(game.translate("werewolf.check.power"));
-            return;
-        }
-
+        IRole raven = playerWW.getRole();
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            player.sendMessage(game.translate("werewolf.check.offline_player"));
+            playerWW.sendMessageWithKey("werewolf.check.offline_player");
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
+        IPlayerWW playerWW1 = game.getPlayerWW(argUUID);
 
-        if (!game.getPlayersWW().containsKey(argUUID) || !game.getPlayersWW().get(argUUID).isState(State.ALIVE)) {
-            player.sendMessage(game.translate("werewolf.check.player_not_found"));
+        if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
+            playerWW.sendMessageWithKey("werewolf.check.player_not_found");
             return;
         }
 
-        if(((AffectedPlayers)raven).getAffectedPlayers().contains(argUUID)){
-            player.sendMessage(game.translate("werewolf.check.already_get_power"));
+        if (((IAffectedPlayers) raven).getAffectedPlayers().contains(playerWW1)) {
+            playerWW.sendMessageWithKey("werewolf.check.already_get_power");
             return;
         }
 
-        CurseEvent curseEvent=new CurseEvent(uuid,argUUID);
-        ((Power) raven).setPower(false);
+        CurseEvent curseEvent = new CurseEvent(playerWW, playerWW1);
+        ((IPower) raven).setPower(false);
         Bukkit.getPluginManager().callEvent(curseEvent);
 
         if (curseEvent.isCancelled()) {
-            player.sendMessage(game.translate("werewolf.check.cancel"));
+            playerWW.sendMessageWithKey("werewolf.check.cancel");
             return;
         }
 
-        ((AffectedPlayers) raven).clearAffectedPlayer();
-        ((AffectedPlayers) raven).addAffectedPlayer(argUUID);
-        playerArg.removePotionEffect(PotionEffectType.JUMP);
-        playerArg.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 1, false, false));
-        playerArg.sendMessage(game.translate("werewolf.role.raven.get_curse"));
-        player.sendMessage(game.translate("werewolf.role.raven.curse_perform", playerArg.getName()));
+        ((IAffectedPlayers) raven).clearAffectedPlayer();
+        ((IAffectedPlayers) raven).addAffectedPlayer(playerWW1);
+        playerWW1.addPotionEffect(PotionEffectType.JUMP);
+        playerWW1.sendMessageWithKey("werewolf.role.raven.get_curse");
+        playerWW.sendMessageWithKey("werewolf.role.raven.curse_perform", playerArg.getName());
     }
 }
