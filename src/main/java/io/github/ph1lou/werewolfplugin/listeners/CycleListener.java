@@ -50,6 +50,7 @@ import org.bukkit.potion.PotionEffect;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -364,13 +365,12 @@ public class CycleListener implements Listener {
 
         }, 1800L);
     }
-
     @EventHandler
     public void onRepartition(RepartitionEvent event) {
 
         game.setState(StateGame.GAME);
 
-        List<IPlayerWW> iPlayerWWS = new ArrayList<>(game.getPlayerWW());
+        List<IPlayerWW> playerWWS = new ArrayList<>(game.getPlayerWW());
         List<RoleRegister> config = new ArrayList<>();
 
         game.getConfig().setConfig(ConfigsBase.CHAT.getKey(), false);
@@ -379,7 +379,7 @@ public class CycleListener implements Listener {
                 Math.max(0,
                         game.getConfig()
                                 .getRoleCount(RolesBase.VILLAGER.getKey()) +
-                                iPlayerWWS.size() -
+                                playerWWS.size() -
                                 game.getScore().getRole()));
 
         main.getRegisterManager().getRolesRegister()
@@ -389,24 +389,20 @@ public class CycleListener implements Listener {
                     }
                 });
 
+        Collections.shuffle(playerWWS, game.getRandom());
 
-        while (!iPlayerWWS.isEmpty()) {
-
-            int n = (int) Math.floor(game.getRandom().nextFloat() * iPlayerWWS.size());
-            IPlayerWW playerWW = iPlayerWWS.get(n);
-
+        while (!playerWWS.isEmpty()) {
+            IPlayerWW playerWW = playerWWS.remove(0);
+            RoleRegister roleRegister = config.remove(0);
             try {
-                IRole role = (IRole) config.get(0).getConstructors().newInstance(game.getMain(),
+                IRole role = (IRole) roleRegister.getConstructors().newInstance(game.getMain(),
                         playerWW,
-                        config.get(0).getKey());
+                        roleRegister.getKey());
                 Bukkit.getPluginManager().registerEvents((Listener) role, game.getMain());
                 playerWW.setRole(role);
             } catch (IllegalAccessException | InstantiationException | InvocationTargetException exception) {
                 exception.printStackTrace();
             }
-
-            config.remove(0);
-            iPlayerWWS.remove(n);
         }
         game.getPlayerWW()
                 .forEach(playerWW -> playerWW.getRole().roleAnnouncement());

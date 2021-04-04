@@ -125,33 +125,38 @@ public class TabManager {
         }
 
         UpdatePlayerNameTag event = new UpdatePlayerNameTag(uuid, sb.toString(), "", true);
-        AppearInWereWolfListEvent appearInWereWolfListEvent = new AppearInWereWolfListEvent(uuid);
+
         UpdateModeratorNameTag updateModeratorNameTag =
                 new UpdateModeratorNameTag(uuid, "", "");
 
         Bukkit.getPluginManager().callEvent(event);
-        Bukkit.getPluginManager().callEvent(appearInWereWolfListEvent);
+
         Bukkit.getPluginManager().callEvent(updateModeratorNameTag);
 
-        players.forEach(player1 -> set(name, player1,
-                event, appearInWereWolfListEvent.isAppear(),
+        players.forEach(player1 -> set(player, player1,
+                event,
                 updateModeratorNameTag));
     }
 
-    public void set(String name, Player player, UpdatePlayerNameTag event1, boolean appear, UpdateModeratorNameTag event2) {
+    public void set(Player target, Player recipient, UpdatePlayerNameTag event1, UpdateModeratorNameTag event2) {
 
-        Scoreboard scoreboard = player.getScoreboard();
-        Team team = scoreboard.getTeam(name);
+        Scoreboard scoreboard = recipient.getScoreboard();
+        Team team = scoreboard.getTeam(target.getName());
         StringBuilder sb = new StringBuilder(event1.getPrefix());
 
         if (team != null) {
-            UUID uuid1 = player.getUniqueId();
+            UUID uuid1 = recipient.getUniqueId();
+
             RequestSeeWereWolfListEvent requestSeeWereWolfListEvent = new RequestSeeWereWolfListEvent(uuid1);
             Bukkit.getPluginManager().callEvent(requestSeeWereWolfListEvent);
 
-            if (appear && requestSeeWereWolfListEvent.isAccept()) {
-                if (game.getConfig().isConfigActive(ConfigsBase.RED_NAME_TAG.getKey())) {
-                    sb.append(ChatColor.DARK_RED);
+            if (requestSeeWereWolfListEvent.isAccept()) {
+                AppearInWereWolfListEvent appearInWereWolfListEvent = new AppearInWereWolfListEvent(target.getUniqueId(), uuid1);
+                Bukkit.getPluginManager().callEvent(appearInWereWolfListEvent);
+                if (appearInWereWolfListEvent.isAppear()) {
+                    if (game.getConfig().isConfigActive(ConfigsBase.RED_NAME_TAG.getKey())) {
+                        sb.append(ChatColor.DARK_RED);
+                    }
                 }
             }
 

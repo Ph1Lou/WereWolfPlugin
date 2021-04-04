@@ -49,7 +49,7 @@ public class CommandWereWolf implements ICommands {
         for (IPlayerWW playerWW1 : game.getPlayerWW()) {
 
             AppearInWereWolfListEvent appearInWereWolfListEvent =
-                    new AppearInWereWolfListEvent(playerWW1.getUUID());
+                    new AppearInWereWolfListEvent(playerWW1.getUUID(), uuid);
             Bukkit.getPluginManager().callEvent(appearInWereWolfListEvent);
 
             if (playerWW1.isState(StatePlayer.ALIVE) && appearInWereWolfListEvent.isAppear()) {
