@@ -16,8 +16,8 @@ import io.github.ph1lou.werewolfapi.events.roles.wild_child.WildChildTransformat
 import io.github.ph1lou.werewolfapi.events.werewolf.NewWereWolfEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
+import io.github.ph1lou.werewolfapi.rolesattributs.ITransformed;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
-import io.github.ph1lou.werewolfapi.rolesattributs.Transformed;
 import io.github.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WildChild extends RoleVillage implements IAffectedPlayers, Transformed, IPower {
+public class WildChild extends RoleVillage implements IAffectedPlayers, ITransformed, IPower {
 
     boolean transformed = false;
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();

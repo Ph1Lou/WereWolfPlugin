@@ -1,53 +1,28 @@
 package io.github.ph1lou.werewolfplugin.scoreboards;
 
 import fr.mrmicky.fastboard.FastBoard;
-import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.IScoreBoard;
 import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enums.Day;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
-import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
-import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
-import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
-import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTag;
-import io.github.ph1lou.werewolfapi.events.WereWolfListEvent;
-import io.github.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
-import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
-import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalJoinEvent;
-import io.github.ph1lou.werewolfapi.events.game.life_cycle.ResurrectionEvent;
-import io.github.ph1lou.werewolfapi.events.game.permissions.HostEvent;
-import io.github.ph1lou.werewolfapi.events.game.permissions.ModeratorEvent;
-import io.github.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
-import io.github.ph1lou.werewolfapi.events.lovers.LoversRepartitionEvent;
-import io.github.ph1lou.werewolfapi.events.lovers.RevealAmnesiacLoversEvent;
-import io.github.ph1lou.werewolfapi.events.roles.InvisibleEvent;
-import io.github.ph1lou.werewolfapi.events.roles.stud.StudLoverEvent;
-import io.github.ph1lou.werewolfapi.events.werewolf.NewWereWolfEvent;
 import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfapi.utils.Utils;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.WorldBorder;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 
 public class ScoreBoard implements IScoreBoard, Listener {
@@ -64,11 +39,9 @@ public class ScoreBoard implements IScoreBoard, Listener {
 	private final List<String> scoreboard3 = new ArrayList<>();
 	private List<String> roles = new ArrayList<>();
 	private final List<UUID> kill_score = new ArrayList<>();
-	private final TabManager tabManager;
 
 	public ScoreBoard(GameManager game) {
 		this.game = game;
-		this.tabManager = new TabManager(game);
 	}
 
 	public void updateScoreBoard1() {
@@ -235,22 +208,7 @@ public class ScoreBoard implements IScoreBoard, Listener {
 
 
 
-	@EventHandler(priority = EventPriority.LOW)
-	public void onActionBarEvent(ActionBarEvent event) {
 
-		if (game.isState(StateGame.LOBBY)) return;
-
-		if (game.isState(StateGame.TRANSPORTATION)) return;
-
-		Player player = Bukkit.getPlayer(event.getPlayerUUID());
-
-		if (player == null) return;
-
-		int d = Utils.midDistance(player);
-		event.setActionBar(event.getActionBar() + game.translate("werewolf.action_bar.in_game",
-				d, d + 300,
-				(int) Math.floor(player.getLocation().getY())));
-	}
 
 
 	@Override
@@ -298,159 +256,6 @@ public class ScoreBoard implements IScoreBoard, Listener {
 			}
 		}
 
-	}
-
-
-
-	@EventHandler
-	public void onNameTagUpdate(UpdateNameTagEvent event) {
-		event.getPlayers().forEach(tabManager::updatePlayerOthersAndHimself);
-	}
-
-	@EventHandler
-	public void onQuit(PlayerQuitEvent event) {
-		tabManager.unregisterPlayer(event.getPlayer());
-	}
-
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onJoin(PlayerJoinEvent event) {
-		tabManager.registerPlayer(event.getPlayer());
-	}
-
-	@EventHandler
-	public void onStop(StopEvent event) {
-		Bukkit.getOnlinePlayers().forEach(tabManager::registerPlayer);
-	}
-
-	@EventHandler
-	public void onModeratorUpdate(ModeratorEvent event) {
-
-		Player player = Bukkit.getPlayer(event.getPlayerUUID());
-
-		if (player == null) return;
-
-		tabManager.updatePlayerOthersAndHimself(player);
-	}
-
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onUpdate(UpdatePlayerNameTag event) {
-
-		StringBuilder sb = new StringBuilder(event.getSuffix());
-
-		IPlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID());
-
-		if (playerWW == null) {
-			return;
-		}
-
-		if (playerWW.isState(StatePlayer.DEATH)) {
-			sb.append(" ").append(game.translate("werewolf.score_board.death"));
-			event.setSuffix(sb.toString());
-		}
-	}
-
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onNewWereWolf(NewWereWolfEvent event) {
-
-		Player player = Bukkit.getPlayer(event.getPlayerWW().getUUID());
-
-		if (player == null) return;
-
-		tabManager.updatePlayerOthersAndHimself(player);
-	}
-
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onWereWolfList(WereWolfListEvent event) {
-		tabManager.updatePlayers();
-	}
-
-	@EventHandler
-	public void onFinalJoinEvent(FinalJoinEvent event) {
-		tabManager.updatePlayerForOthers(event.getPlayerWW().getUUID());
-	}
-
-	@EventHandler
-	public void onRevive(ResurrectionEvent event) {
-		tabManager.updatePlayerForOthers(event.getPlayerWW().getUUID());
-	}
-
-	@EventHandler
-	public void onFinalDeath(FinalDeathEvent event) {
-		tabManager.updatePlayerForOthers(event.getPlayerWW().getUUID());
-	}
-
-	@EventHandler
-	public void onHostUpdate(HostEvent event) {
-		tabManager.updatePlayerForOthers(event.getPlayerUUID());
-	}
-
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onInvisible(InvisibleEvent event) {
-		tabManager.updatePlayerForOthers(event.getPlayerWW().getUUID());
-	}
-
-
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onRepartition(RepartitionEvent event) {
-		for (UUID uuid : game.getModerationManager().getModerators()) {
-			Player player = Bukkit.getPlayer(uuid);
-			if (player != null) {
-				tabManager.updatePlayerScoreBoard(player);
-			}
-		}
-	}
-
-
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onAmnesiacReveal(RevealAmnesiacLoversEvent event) {
-
-		for (UUID uuid : game.getModerationManager().getModerators()) {
-			Player player = Bukkit.getPlayer(uuid);
-			if (player != null) {
-				for (IPlayerWW playerWW : event.getPlayerWWS()) {
-					tabManager.updatePlayerScoreBoard(player, Collections.singletonList(playerWW.getUUID()));
-				}
-
-			}
-		}
-	}
-
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onLoverStudRepartition(StudLoverEvent event) {
-		for (UUID uuid : game.getModerationManager().getModerators()) {
-			Player player = Bukkit.getPlayer(uuid);
-			if (player != null) {
-				tabManager.updatePlayerScoreBoard(player, Collections.singletonList(event.getPlayerWW().getUUID()));
-				tabManager.updatePlayerScoreBoard(player, Collections.singletonList(event.getTargetWW().getUUID()));
-			}
-		}
-	}
-
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onDeath(FinalDeathEvent event) {
-
-		Player player = Bukkit.getPlayer(event.getPlayerWW().getUUID());
-
-		if (player == null) return;
-
-		tabManager.updatePlayerOthersAndHimself(player);
-	}
-
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onLoverRepartition(LoversRepartitionEvent event) {
-		for (UUID uuid : game.getModerationManager().getModerators()) {
-			Player player = Bukkit.getPlayer(uuid);
-			if (player != null) {
-				for (ILover ILover : game.getLoversManager().getLovers()) {
-					if (!ILover.isKey(RolesBase.AMNESIAC_WEREWOLF.getKey())) {
-						tabManager.updatePlayerScoreBoard(player, ILover.getLovers()
-								.stream()
-								.map(IPlayerWW::getUUID)
-								.collect(Collectors.toList()));
-					}
-				}
-			}
-		}
 	}
 
 	@Override

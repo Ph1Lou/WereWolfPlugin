@@ -2,7 +2,6 @@ package io.github.ph1lou.werewolfplugin.game;
 
 
 import com.google.common.collect.Sets;
-import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.ILoverManager;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
@@ -19,7 +18,6 @@ import io.github.ph1lou.werewolfplugin.roles.villagers.Cupid;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -99,7 +97,7 @@ public class LoversManagement implements ILoverManager {
 
 
 	@Override
-	public void repartition(GetWereWolfAPI main) {
+	public void repartition() {
 		autoLovers();
 		rangeLovers();
 		game.getConfig().setLoverCount(LoverType.LOVER.getKey(), lovers.size());
@@ -107,7 +105,7 @@ public class LoversManagement implements ILoverManager {
 		autoCursedLovers();
 		lovers
 				.forEach(ILover -> Bukkit.getPluginManager()
-						.registerEvents((Listener) ILover, (Plugin) main));
+						.registerEvents((Listener) ILover, ((GameManager) game).getMain()));
 		Bukkit.getPluginManager().callEvent(new RevealLoversEvent(this.lovers));
 		game.checkVictory();
 	}

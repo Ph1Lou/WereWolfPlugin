@@ -8,17 +8,18 @@ import io.github.ph1lou.werewolfapi.enums.RandomCompositionAttribute;
 import io.github.ph1lou.werewolfapi.enums.RandomEvent;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.ScenariosBase;
+import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
-import io.github.ph1lou.werewolfapi.events.PVPEvent;
 import io.github.ph1lou.werewolfapi.events.TrollEvent;
 import io.github.ph1lou.werewolfapi.events.TrollLoverEvent;
-import io.github.ph1lou.werewolfapi.events.WereWolfListEvent;
 import io.github.ph1lou.werewolfapi.events.game.timers.BorderStartEvent;
 import io.github.ph1lou.werewolfapi.events.game.timers.DiggingEndEvent;
 import io.github.ph1lou.werewolfapi.events.game.timers.InvulnerabilityEvent;
+import io.github.ph1lou.werewolfapi.events.game.timers.PVPEvent;
 import io.github.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
+import io.github.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import io.github.ph1lou.werewolfapi.events.game.vote.VoteBeginEvent;
 import io.github.ph1lou.werewolfapi.events.lovers.LoversRepartitionEvent;
 import io.github.ph1lou.werewolfapi.events.roles.angel.AutoAngelEvent;
@@ -1305,7 +1306,14 @@ public class RegisterManager implements IRegisterManager {
                 .add(new TimerRegister("werewolf.name",
                         TimersBase.INVULNERABILITY.getKey())
                         .setDefaultValue(30)
-                        .onZero(wereWolfAPI -> Bukkit.getPluginManager().callEvent(new InvulnerabilityEvent()))
+                        .onZero(wereWolfAPI -> {
+                            Bukkit.getOnlinePlayers()
+                                    .forEach(player -> {
+                                        player.sendMessage(wereWolfAPI.translate("werewolf.announcement.invulnerability"));
+                                        Sound.GLASS.play(player);
+                                    });
+                            Bukkit.getPluginManager().callEvent(new InvulnerabilityEvent());
+                        })
                         .addPredicate(wereWolfAPI -> true));
 
         timersRegister
@@ -1325,7 +1333,15 @@ public class RegisterManager implements IRegisterManager {
                 .add(new TimerRegister("werewolf.name",
                         TimersBase.PVP.getKey())
                         .setDefaultValue(1500)
-                        .onZero(wereWolfAPI -> Bukkit.getPluginManager().callEvent(new PVPEvent()))
+                        .onZero(wereWolfAPI -> {
+                            Bukkit.getPluginManager().callEvent(new PVPEvent());
+                            wereWolfAPI.getMapManager().getWorld().setPVP(true);
+                            Bukkit.getOnlinePlayers()
+                                    .forEach(player -> {
+                                        player.sendMessage(wereWolfAPI.translate("werewolf.announcement.pvp"));
+                                        Sound.DONKEY_ANGRY.play(player);
+                                    });
+                        })
                         .addPredicate(wereWolfAPI -> true));
 
         timersRegister
@@ -1333,7 +1349,16 @@ public class RegisterManager implements IRegisterManager {
                         TimersBase.WEREWOLF_LIST.getKey())
                         .addPredicate(wereWolfAPI -> wereWolfAPI.getConfig().getTimerValue(TimersBase.ROLE_DURATION.getKey()) < 0
                                 && !wereWolfAPI.getConfig().isTrollSV())
-                        .onZero(wereWolfAPI -> Bukkit.getPluginManager().callEvent(new WereWolfListEvent()))
+                        .onZero(wereWolfAPI -> {
+                            wereWolfAPI.getPlayerWW().stream()
+                                    .filter(playerWW -> !playerWW.isState(StatePlayer.DEATH))
+                                    .filter(playerWW -> playerWW.getRole().isWereWolf())
+                                    .forEach(playerWW -> {
+                                        playerWW.sendMessageWithKey("werewolf.role.werewolf.see_others");
+                                        Sound.WOLF_HOWL.play(playerWW);
+                                    });
+                            Bukkit.getPluginManager().callEvent(new WereWolfListEvent());
+                        })
                         .setDefaultValue(600));
 
         timersRegister
@@ -1347,7 +1372,14 @@ public class RegisterManager implements IRegisterManager {
                 .add(new TimerRegister("werewolf.name",
                         TimersBase.BORDER_BEGIN.getKey())
                         .setDefaultValue(3600)
-                        .onZero(wereWolfAPI -> Bukkit.getPluginManager().callEvent(new BorderStartEvent()))
+                        .onZero(wereWolfAPI -> {
+                            Bukkit.getOnlinePlayers()
+                                    .forEach(player -> {
+                                        player.sendMessage(wereWolfAPI.translate("werewolf.announcement.border"));
+                                        Sound.FIREWORK_LAUNCH.play(player);
+                                    });
+                            Bukkit.getPluginManager().callEvent(new BorderStartEvent());
+                        })
                         .addPredicate(wereWolfAPI -> {
 
                             if (wereWolfAPI.getConfig().getTimerValue(TimersBase.BORDER_BEGIN.getKey()) >= 0)
@@ -1370,7 +1402,14 @@ public class RegisterManager implements IRegisterManager {
                 .add(new TimerRegister("werewolf.name",
                         TimersBase.DIGGING.getKey())
                         .addPredicate(wereWolfAPI -> true)
-                        .onZero(wereWolfAPI -> Bukkit.getPluginManager().callEvent(new DiggingEndEvent()))
+                        .onZero(wereWolfAPI -> {
+                            Bukkit.getOnlinePlayers()
+                                    .forEach(player -> {
+                                        player.sendMessage(wereWolfAPI.translate("werewolf.announcement.mining"));
+                                        Sound.ANVIL_BREAK.play(player);
+                                    });
+                            Bukkit.getPluginManager().callEvent(new DiggingEndEvent());
+                        })
                         .setDefaultValue(4200));
 
         timersRegister
@@ -1408,6 +1447,7 @@ public class RegisterManager implements IRegisterManager {
                             if (wereWolfAPI.getConfig().isTrollLover()) {
                                 Bukkit.getPluginManager().callEvent(new TrollLoverEvent());
                             } else {
+                                wereWolfAPI.getLoversManager().repartition();
                                 Bukkit.getPluginManager().callEvent(new LoversRepartitionEvent());
                             }
 

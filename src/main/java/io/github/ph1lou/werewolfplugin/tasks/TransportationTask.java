@@ -5,7 +5,7 @@ import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
-import io.github.ph1lou.werewolfapi.events.DayEvent;
+import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.utils.Utils;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -128,13 +128,13 @@ public class TransportationTask implements Listener {
                 kill(3);
                 return;
             }
-            if (spawns.isEmpty()) {
+            if (this.spawns.isEmpty()) {
                 kill(3);
                 step4();
                 return;
             }
             createStructure(Material.AIR, spawns.get(0));
-            spawns.remove(0);
+            this.spawns.remove(0);
 
         }, 0, 1));
 

@@ -11,16 +11,12 @@ import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.enums.VoteStatus;
-import io.github.ph1lou.werewolfapi.events.DayEvent;
-import io.github.ph1lou.werewolfapi.events.DayWillComeEvent;
-import io.github.ph1lou.werewolfapi.events.NightEvent;
-import io.github.ph1lou.werewolfapi.events.PVPEvent;
 import io.github.ph1lou.werewolfapi.events.TrollEvent;
 import io.github.ph1lou.werewolfapi.events.TrollLoverEvent;
+import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
+import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayWillComeEvent;
+import io.github.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
-import io.github.ph1lou.werewolfapi.events.game.timers.BorderStartEvent;
-import io.github.ph1lou.werewolfapi.events.game.timers.DiggingEndEvent;
-import io.github.ph1lou.werewolfapi.events.game.timers.InvulnerabilityEvent;
 import io.github.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
 import io.github.ph1lou.werewolfapi.events.game.vote.VoteEndEvent;
 import io.github.ph1lou.werewolfapi.events.game.vote.VoteResultEvent;
@@ -28,6 +24,7 @@ import io.github.ph1lou.werewolfapi.events.lovers.LoversRepartitionEvent;
 import io.github.ph1lou.werewolfapi.events.roles.SelectionEndEvent;
 import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
+import io.github.ph1lou.werewolfapi.rolesattributs.Role;
 import io.github.ph1lou.werewolfapi.utils.Utils;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -202,31 +199,7 @@ public class CycleListener implements Listener {
     }
 
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onLoverRepartition(LoversRepartitionEvent event) {
-        game.getLoversManager().repartition(main);
 
-    }
-
-    @EventHandler
-    public void onPVP(PVPEvent event) {
-
-        game.getMapManager().getWorld().setPVP(true);
-        Bukkit.getOnlinePlayers()
-                .forEach(player -> {
-                    player.sendMessage(game.translate("werewolf.announcement.pvp"));
-                    Sound.DONKEY_ANGRY.play(player);
-                });
-    }
-
-    @EventHandler
-    public void onDiggingEnd(DiggingEndEvent event) {
-        Bukkit.getOnlinePlayers()
-                .forEach(player -> {
-                    player.sendMessage(game.translate("werewolf.announcement.mining"));
-                    Sound.ANVIL_BREAK.play(player);
-                });
-    }
 
     @EventHandler(priority = EventPriority.LOWEST)
     private void onBlockBreak(BlockBreakEvent event) {
@@ -395,10 +368,10 @@ public class CycleListener implements Listener {
             IPlayerWW playerWW = playerWWS.remove(0);
             RoleRegister roleRegister = config.remove(0);
             try {
-                IRole role = (IRole) roleRegister.getConstructors().newInstance(game.getMain(),
+                Role role = (Role) roleRegister.getConstructors().newInstance(game.getMain(),
                         playerWW,
                         roleRegister.getKey());
-                Bukkit.getPluginManager().registerEvents((Listener) role, game.getMain());
+                Bukkit.getPluginManager().registerEvents(role, game.getMain());
                 playerWW.setRole(role);
             } catch (IllegalAccessException | InstantiationException | InvocationTargetException exception) {
                 exception.printStackTrace();
@@ -410,23 +383,6 @@ public class CycleListener implements Listener {
         Bukkit.getScheduler().scheduleSyncDelayedTask(game.getMain(), game::checkVictory);
     }
 
-    @EventHandler
-    public void onBorderStart(BorderStartEvent event) {
-        Bukkit.getOnlinePlayers()
-                .forEach(player -> {
-                    player.sendMessage(game.translate("werewolf.announcement.border"));
-                    Sound.FIREWORK_LAUNCH.play(player);
-                });
-    }
-
-    @EventHandler
-    public void onInvulnerabilityEnd(InvulnerabilityEvent event) {
-        Bukkit.getOnlinePlayers()
-                .forEach(player -> {
-                    player.sendMessage(game.translate("werewolf.announcement.invulnerability"));
-                    Sound.GLASS.play(player);
-                });
-    }
 
     @EventHandler
     public void onStart(StartEvent event) {

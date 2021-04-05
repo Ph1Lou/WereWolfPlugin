@@ -67,7 +67,7 @@ public class GameManager implements WereWolfAPI {
     private final End end = new End(this);
     private final Stuff stuff;
     private final RandomConfig randomConfig;
-    private final ScenariosLoader scenarios;
+    private final ListenersLoader scenarios;
     private final Random r = new Random(System.currentTimeMillis());
     private final UUID gameUUID = UUID.randomUUID();
     private String gameName = "@Ph1Lou_";
@@ -79,7 +79,7 @@ public class GameManager implements WereWolfAPI {
         this.configuration = new Configuration(main.getRegisterManager());
         mapManager = new MapManager(main);
         stuff = new Stuff(main);
-        scenarios = new ScenariosLoader(main);
+        scenarios = new ListenersLoader(main);
         File mapFolder = new File(main.getDataFolder() +
                 File.separator + "maps");
         if (!mapFolder.exists()) {

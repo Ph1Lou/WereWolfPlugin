@@ -100,7 +100,7 @@ public class Exposed extends ListenerManager {
                         ((IDisplay) playerWW.getRole()).getDisplayRole() :
                         playerWW.getRole().getKey()));
 
-        Collections.shuffle(roles);
+        Collections.shuffle(roles, game.getRandom());
 
         ExposedEvent exposedEvent = new ExposedEvent(playerWW,
                 new ArrayList<>(Arrays.asList(role1.getPlayerWW(),

@@ -132,24 +132,24 @@ public class Rival extends RoleNeutral implements IPower {
 
         if (lover == null) return;
 
-        List<IPlayerWW> IPlayerWWS = game.getPlayerWW()
+        List<IPlayerWW> playerWWS = game.getPlayerWW()
                 .stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> !playerWW.equals(getPlayerWW()))
                 .filter(playerWW -> !lover.getLovers().contains(playerWW))
                 .collect(Collectors.toList());
 
-        Collections.shuffle(IPlayerWWS);
+        Collections.shuffle(playerWWS, game.getRandom());
 
-        List<IPlayerWW> IPlayerWWS1 = new ArrayList<>(IPlayerWWS.subList(0, Math.min(3, IPlayerWWS.size())));
+        List<IPlayerWW> playerWW1S = new ArrayList<>(playerWWS.subList(0, Math.min(3, playerWWS.size())));
 
-        IPlayerWWS1.addAll(lover.getLovers());
+        playerWW1S.addAll(lover.getLovers());
 
-        Collections.shuffle(IPlayerWWS1);
+        Collections.shuffle(playerWW1S);
 
-        if (IPlayerWWS1.isEmpty()) return;
+        if (playerWW1S.isEmpty()) return;
 
-        RivalAnnouncementEvent rivalAnnouncementEvent = new RivalAnnouncementEvent(getPlayerWW(), IPlayerWWS1);
+        RivalAnnouncementEvent rivalAnnouncementEvent = new RivalAnnouncementEvent(getPlayerWW(), playerWW1S);
 
         Bukkit.getPluginManager().callEvent(rivalAnnouncementEvent);
 
@@ -158,7 +158,7 @@ public class Rival extends RoleNeutral implements IPower {
             return;
         }
 
-        getPlayerWW().sendMessageWithKey("werewolf.role.rival.find_lovers", IPlayerWWS1.get(0).getName(), IPlayerWWS1.size() >= 2 ? IPlayerWWS1.get(1).getName() : "", IPlayerWWS1.size() >= 3 ? IPlayerWWS1.get(2).getName() : "", IPlayerWWS1.size() >= 4 ? IPlayerWWS1.get(3).getName() : "", IPlayerWWS1.size() >= 5 ? IPlayerWWS1.get(4).getName() : "");
+        getPlayerWW().sendMessageWithKey("werewolf.role.rival.find_lovers", playerWW1S.get(0).getName(), playerWW1S.size() >= 2 ? playerWW1S.get(1).getName() : "", playerWW1S.size() >= 3 ? playerWW1S.get(2).getName() : "", playerWW1S.size() >= 4 ? playerWW1S.get(3).getName() : "", playerWW1S.size() >= 5 ? playerWW1S.get(4).getName() : "");
     }
 
     @EventHandler
