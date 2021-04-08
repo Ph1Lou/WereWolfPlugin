@@ -9,10 +9,10 @@ import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.lovers.RevealLoversEvent;
 import io.github.ph1lou.werewolfapi.events.random_events.TroupleEvent;
+import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import io.github.ph1lou.werewolfplugin.roles.lovers.Lover;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
-import org.bukkit.plugin.Plugin;
 
 import java.util.HashSet;
 import java.util.List;
@@ -29,7 +29,7 @@ public class Triple extends ListenerManager {
     public void onRevealLover(RevealLoversEvent event) {
         WereWolfAPI game = main.getWereWolfAPI();
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
+        BukkitUtils.scheduleSyncDelayedTask(() -> {
             if (game.isState(StateGame.GAME)) {
                 if (isRegister()) {
                     List<Lover> lovers = game.getLoversManager().getLovers().stream()

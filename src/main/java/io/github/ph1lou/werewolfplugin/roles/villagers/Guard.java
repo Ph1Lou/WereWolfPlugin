@@ -2,8 +2,8 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
-import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
@@ -27,8 +27,8 @@ public class Guard extends RoleWithLimitedSelectionDuration implements IAffected
     private boolean power = true;
 
 
-    public Guard(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
-        super(main, playerWW, key);
+    public Guard(WereWolfAPI api, IPlayerWW playerWW, String key) {
+        super(api, playerWW, key);
         setPower(false);
     }
 

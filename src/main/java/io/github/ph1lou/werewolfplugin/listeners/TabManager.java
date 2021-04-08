@@ -339,9 +339,9 @@ public class TabManager implements Listener {
         for (UUID uuid : game.getModerationManager().getModerators()) {
             Player player = Bukkit.getPlayer(uuid);
             if (player != null) {
-                for (io.github.ph1lou.werewolfapi.ILover ILover : game.getLoversManager().getLovers()) {
-                    if (!ILover.isKey(RolesBase.AMNESIAC_WEREWOLF.getKey())) {
-                        this.updatePlayerScoreBoard(player, ILover.getLovers()
+                for (io.github.ph1lou.werewolfapi.ILover lover : game.getLoversManager().getLovers()) {
+                    if (!lover.isKey(RolesBase.AMNESIAC_WEREWOLF.getKey())) {
+                        this.updatePlayerScoreBoard(player, lover.getLovers()
                                 .stream()
                                 .map(IPlayerWW::getUUID)
                                 .collect(Collectors.toList()));

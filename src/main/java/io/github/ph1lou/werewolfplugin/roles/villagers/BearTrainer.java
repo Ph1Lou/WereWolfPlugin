@@ -1,8 +1,8 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
-import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Camp;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
@@ -24,8 +24,8 @@ import java.util.stream.Collectors;
 
 public class BearTrainer extends RoleVillage {
 
-    public BearTrainer(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
-        super(main, playerWW, key);
+    public BearTrainer(WereWolfAPI api, IPlayerWW playerWW, String key) {
+        super(api, playerWW, key);
     }
 
     @EventHandler

@@ -3,7 +3,6 @@ package io.github.ph1lou.werewolfplugin;
 import fr.minuskube.inv.InventoryManager;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.ILanguageManager;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
 import io.github.ph1lou.werewolfapi.registers.IRegisterManager;
 import io.github.ph1lou.werewolfapi.statistics.GameReview;
@@ -35,23 +34,20 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
 
     @Override
     public void onEnable() {
-
         saveDefaultConfig();
-
+        Bukkit.getServicesManager()
+                .register(GetWereWolfAPI.class,
+                        this,
+                        this,
+                        ServicePriority.Normal);
         this.invManager.init();
         Bukkit.getPluginManager().registerEvents(new Events(this), this);
         Bukkit.getPluginManager().registerEvents(languageManager, this);
         currentGame = new GameManager(this);
         Objects.requireNonNull(getCommand("a")).setExecutor(new Admin(this));
         Objects.requireNonNull(getCommand("ww")).setExecutor(new Command(this));
-
         MapManager mapManager = (MapManager) currentGame.getMapManager();
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, mapManager::init);
-        Bukkit.getServicesManager()
-                .register(GetWereWolfAPI.class,
-                        this,
-                        this,
-                        ServicePriority.Normal);
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> Bukkit.getOnlinePlayers()
                 .forEach(player -> {
@@ -68,7 +64,7 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
     }
 
     @Override
-    public WereWolfAPI getWereWolfAPI() {
+    public io.github.ph1lou.werewolfapi.WereWolfAPI getWereWolfAPI() {
         return currentGame;
     }
 

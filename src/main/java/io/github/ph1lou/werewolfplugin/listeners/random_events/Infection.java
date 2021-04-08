@@ -10,9 +10,9 @@ import io.github.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
 import io.github.ph1lou.werewolfapi.events.random_events.InfectionRandomEvent;
 import io.github.ph1lou.werewolfapi.events.werewolf.NewWereWolfEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
+import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
-import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +27,7 @@ public class Infection extends ListenerManager {
     public void onRepartition(RepartitionEvent event) {
         WereWolfAPI game = main.getWereWolfAPI();
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
+        BukkitUtils.scheduleSyncDelayedTask(() -> {
             if (game.isState(StateGame.GAME)) {
                 if (isRegister()) {
 

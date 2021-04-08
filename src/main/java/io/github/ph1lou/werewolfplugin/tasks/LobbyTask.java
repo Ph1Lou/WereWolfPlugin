@@ -1,8 +1,8 @@
 package io.github.ph1lou.werewolfplugin.tasks;
 
 import io.github.ph1lou.werewolfapi.enums.StateGame;
+import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
-import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 
@@ -27,7 +27,7 @@ public class LobbyTask extends BukkitRunnable {
 
         if (game.isState(StateGame.TRANSPORTATION)) {
             cancel();
-            Bukkit.getPluginManager().registerEvents(new TransportationTask(game), game.getMain());
+            BukkitUtils.registerEvents(new TransportationTask(game));
         }
     }
 }

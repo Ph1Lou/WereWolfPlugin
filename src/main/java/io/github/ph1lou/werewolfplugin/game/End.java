@@ -14,6 +14,7 @@ import io.github.ph1lou.werewolfapi.events.game.utils.CountRemainingRolesCategor
 import io.github.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
 import io.github.ph1lou.werewolfapi.events.game.utils.WinConditionsCheckEvent;
 import io.github.ph1lou.werewolfapi.events.lovers.AroundLover;
+import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import io.github.ph1lou.werewolfapi.utils.Utils;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -144,7 +145,7 @@ public class End {
             p.spigot().sendMessage(msg);
         }
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(game.getMain(), game::stopGame, 20L * game.getConfig().getTimerValue(TimersBase.AUTO_RESTART_DURATION.getKey()));
+        BukkitUtils.scheduleSyncDelayedTask(game::stopGame, 20L * game.getConfig().getTimerValue(TimersBase.AUTO_RESTART_DURATION.getKey()));
         Bukkit.broadcastMessage(game.translate("werewolf.announcement.restart", Utils.conversion(game.getConfig().getTimerValue(TimersBase.AUTO_RESTART_DURATION.getKey()))));
     }
 

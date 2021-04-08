@@ -2,8 +2,8 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
-import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Camp;
 import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
@@ -28,8 +28,8 @@ public class WolfDog extends RoleVillage implements IDisplay, ITransformed, IPow
     private boolean transformed = false;
     private boolean power = true;
 
-    public WolfDog(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
-        super(main, playerWW, key);
+    public WolfDog(WereWolfAPI api, IPlayerWW playerWW, String key) {
+        super(api, playerWW, key);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class WolfDog extends RoleVillage implements IDisplay, ITransformed, IPow
 
     @Override
     public void recoverPower() {
-        getPlayerWW().sendMessageWithKey("werewolf.role.wolf_dog.transform",
+        this.getPlayerWW().sendMessageWithKey("werewolf.role.wolf_dog.transform",
                 Utils.conversion(game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey())));
     }
 
@@ -63,7 +63,7 @@ public class WolfDog extends RoleVillage implements IDisplay, ITransformed, IPow
     public void onWereWolfList(WereWolfListEvent event) {
 
         if (this.power) {
-            getPlayerWW().sendMessageWithKey("werewolf.role.wolf_dog.time_over");
+            this.getPlayerWW().sendMessageWithKey("werewolf.role.wolf_dog.time_over");
         }
         this.power = false;
     }
@@ -74,7 +74,7 @@ public class WolfDog extends RoleVillage implements IDisplay, ITransformed, IPow
 
         if (event.isCancelled()) return;
 
-        if (transformed && !super.isWereWolf()) {
+        if (this.transformed && !super.isWereWolf()) {
             event.setCancelled(true);
             return;
         }
@@ -138,7 +138,7 @@ public class WolfDog extends RoleVillage implements IDisplay, ITransformed, IPow
     @Override
     public String getDisplayCamp() {
 
-        if (transformed) {
+        if (this.transformed) {
             return Camp.VILLAGER.getKey();
         }
         return Camp.WEREWOLF.getKey();
@@ -151,8 +151,8 @@ public class WolfDog extends RoleVillage implements IDisplay, ITransformed, IPow
     @Override
     public String getDisplayRole() {
 
-        if (transformed) {
-            return game.getPlayerWW().stream()
+        if (this.transformed) {
+            return this.game.getPlayerWW().stream()
                     .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                     .map(IPlayerWW::getRole)
                     .filter(roles -> roles.isCamp(Camp.VILLAGER))
@@ -162,7 +162,7 @@ public class WolfDog extends RoleVillage implements IDisplay, ITransformed, IPow
         }
 
 
-        return game.getPlayerWW().stream()
+        return this.game.getPlayerWW().stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .map(IPlayerWW::getRole)
                 .filter(role -> role.isWereWolf() || role instanceof IDisplay)

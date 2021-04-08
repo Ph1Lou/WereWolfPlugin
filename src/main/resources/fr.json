@@ -1018,7 +1018,7 @@
       },
       "infection": {
         "name": "Infection",
-        "description": "Une fois dans la partie infecte un joueur au hasard.\nL'infection se déroule entre 1h et 1h15, \nsi il y a moins de la moitié des joueurs \nqui sont Loups Garous.",
+        "description": "Une fois dans la partie infecte un joueur au hasard.\nL'infection se déroule entre 1h et 1h15 après les rôles, \nsi il y a moins de la moitié des joueurs \nqui sont Loups Garous.",
         "message": "[§5Infection§r] Un joueur aléatoire vient d'être infecté"
       },
       "triple": {

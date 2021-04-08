@@ -1,11 +1,11 @@
 package io.github.ph1lou.werewolfplugin.listeners;
 
 import io.github.ph1lou.werewolfapi.IPlayerWW;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.events.game.utils.GoldenAppleParticleEvent;
+import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
-import io.github.ph1lou.werewolfplugin.Main;
+import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -27,12 +27,10 @@ import java.util.List;
 
 public class SmallFeaturesListener implements Listener {
 
-    private final Main main;
-    private final WereWolfAPI game;
+    private final GameManager game;
 
-    public SmallFeaturesListener(Main main) {
-        this.main = main;
-        this.game = main.getWereWolfAPI();
+    public SmallFeaturesListener(io.github.ph1lou.werewolfapi.WereWolfAPI game) {
+        this.game = (GameManager) game;
     }
 
 
@@ -74,12 +72,12 @@ public class SmallFeaturesListener implements Listener {
         if (UniversalMaterial.ENCHANTED_GOLDEN_APPLE.getStack(
                 event.getItem().getAmount()).equals(event.getItem())) {
             event.setCancelled(true);
-            Bukkit.getScheduler().scheduleSyncDelayedTask(main, () ->
+            BukkitUtils.scheduleSyncDelayedTask(() ->
                     player.getInventory().remove(event.getItem()));
 
         } else if (event.getItem().getType().equals(Material.GOLDEN_APPLE)) {
 
-            Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
+            BukkitUtils.scheduleSyncDelayedTask(() -> {
 
                 if (game.getConfig().getGoldenAppleParticles() == 2) {
                     return;

@@ -12,9 +12,9 @@ import io.github.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
 import io.github.ph1lou.werewolfapi.events.random_events.ExposedEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IDisplay;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
+import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -35,14 +35,14 @@ public class Exposed extends ListenerManager {
     public void onRepartition(RepartitionEvent event) {
         WereWolfAPI game = main.getWereWolfAPI();
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
+        BukkitUtils.scheduleSyncDelayedTask(() -> {
             if (game.isState(StateGame.GAME)) {
                 if (isRegister()) {
                     IPlayerWW playerWW = announce();
 
                     if (temp == null && playerWW != null) {
                         temp = playerWW;
-                        Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
+                        BukkitUtils.scheduleSyncDelayedTask(() -> {
                             if (game.isState(StateGame.GAME)) {
                                 if (isRegister()) {
                                     announce();

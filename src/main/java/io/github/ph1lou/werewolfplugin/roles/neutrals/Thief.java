@@ -2,9 +2,9 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
-import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
@@ -17,6 +17,7 @@ import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleNeutral;
+import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,7 +25,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -37,8 +37,8 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private boolean power = true;
 
-    public Thief(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
-        super(main, playerWW, key);
+    public Thief(WereWolfAPI api, IPlayerWW playerWW, String key) {
+        super(api, playerWW, key);
     }
 
     @Override
@@ -123,13 +123,13 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
 
         event.setCancelled(true);
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
+        BukkitUtils.scheduleSyncDelayedTask(() -> {
             if (!game.isState(StateGame.END)) {
                 if (getPlayerWW().isState(StatePlayer.ALIVE)
                         && hasPower()) {
                     thiefRecoverRole(playerWW);
                 } else {
-                    Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
+                    BukkitUtils.scheduleSyncDelayedTask(() -> {
                         if (!game.isState(StateGame.END)) {
                             Bukkit.getPluginManager().callEvent(
                                     new SecondDeathEvent(playerWW));
@@ -152,7 +152,7 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
         IRole roleClone = role.publicClone();
         getPlayerWW().setRole(roleClone);
         assert roleClone != null;
-        Bukkit.getPluginManager().registerEvents((Listener) roleClone, (Plugin) main);
+        BukkitUtils.registerEvents((Listener) roleClone);
         if (this.getInfected()) {
             roleClone.setInfected();
         } else if (roleClone.isWereWolf()) {
@@ -173,10 +173,10 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
         roleClone.recoverPotionEffect();
 
         for (int i = 0; i < playerWW.getLovers().size(); i++) {
-            ILover ILover = playerWW.getLovers().get(i);
-            if (ILover.swap(playerWW, getPlayerWW())) {
-                getPlayerWW().addLover(ILover);
-                playerWW.removeLover(ILover);
+            ILover lover = playerWW.getLovers().get(i);
+            if (lover.swap(playerWW, getPlayerWW())) {
+                getPlayerWW().addLover(lover);
+                playerWW.removeLover(lover);
                 i--;
             }
         }

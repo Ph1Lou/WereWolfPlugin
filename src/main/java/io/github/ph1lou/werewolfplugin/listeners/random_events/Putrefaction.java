@@ -9,10 +9,10 @@ import io.github.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import io.github.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
 import io.github.ph1lou.werewolfapi.events.random_events.PutrefactionEvent;
+import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.plugin.Plugin;
 
 import java.util.Objects;
 
@@ -28,7 +28,7 @@ public class Putrefaction extends ListenerManager {
     public void onRepartition(RepartitionEvent event) {
         WereWolfAPI game = main.getWereWolfAPI();
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
+        BukkitUtils.scheduleSyncDelayedTask(() -> {
             if (game.isState(StateGame.GAME)) {
                 if (isRegister()) {
 
@@ -41,7 +41,7 @@ public class Putrefaction extends ListenerManager {
 
                     Bukkit.broadcastMessage(game.translate("werewolf.random_events.putrefaction.message"));
 
-                    Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
+                    BukkitUtils.scheduleSyncDelayedTask(() -> {
                         if (game.isState(StateGame.GAME)) {
                             if (isRegister()) {
                                 active = false;

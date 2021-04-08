@@ -203,9 +203,11 @@ public class RegisterManager implements IRegisterManager {
     private final List<CommandRegister> adminCommandsRegister = new ArrayList<>();
     private final List<AddonRegister> addonsRegister = new ArrayList<>();
     private final List<RandomEventRegister> eventRandomsRegister = new ArrayList<>();
+    private static RegisterManager instance;
 
     public RegisterManager(Main main) {
         this.main = main;
+        instance = this;
         registerRoles();
         registerScenarios();
         registerTimers();
@@ -213,6 +215,10 @@ public class RegisterManager implements IRegisterManager {
         registerCommands();
         registerAdminCommands();
         registerRandomEvents();
+    }
+
+    public static IRegisterManager get() {
+        return instance;
     }
 
     private void registerAdminCommands() {

@@ -2,9 +2,9 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
-import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
@@ -12,11 +12,11 @@ import io.github.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.stud.StudLoverEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
+import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import io.github.ph1lou.werewolfplugin.roles.lovers.Lover;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -26,8 +26,8 @@ import java.util.Optional;
 public class Stud extends RoleVillage implements IPower {
     private boolean power = true;
 
-    public Stud(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
-        super(main, playerWW, key);
+    public Stud(WereWolfAPI api, IPlayerWW playerWW, String key) {
+        super(api, playerWW, key);
     }
 
 
@@ -69,8 +69,8 @@ public class Stud extends RoleVillage implements IPower {
 
         if (!killerWW.get().isState(StatePlayer.ALIVE)) return;
 
-        for (ILover ILover : getPlayerWW().getLovers()) {
-            if (ILover.getLovers().contains(killerWW.get())) return;
+        for (ILover lover : getPlayerWW().getLovers()) {
+            if (lover.getLovers().contains(killerWW.get())) return;
         }
 
         Bukkit.getPluginManager().callEvent(new StudLoverEvent(getPlayerWW(), killerWW.get()));
@@ -79,7 +79,7 @@ public class Stud extends RoleVillage implements IPower {
 
         Lover lover = new Lover(game, new ArrayList<>(Arrays.asList(getPlayerWW(), killerWW.get())));
 
-        Bukkit.getPluginManager().registerEvents(lover, (Plugin) main);
+        BukkitUtils.registerEvents(lover);
 
         game.getLoversManager().addLover(lover);
 

@@ -2,7 +2,6 @@ package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
-import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Camp;
@@ -29,7 +28,7 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private boolean power = true;
 
-    public GrimyWereWolf(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
+    public GrimyWereWolf(WereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
     }
 
@@ -118,8 +117,6 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onUpdate(UpdatePlayerNameTag event) {
-
-        WereWolfAPI game = main.getWereWolfAPI();
 
         IPlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID());
 

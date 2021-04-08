@@ -19,6 +19,7 @@ import io.github.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalJoinEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.ResurrectionEvent;
+import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.save.Configuration;
@@ -77,9 +78,9 @@ public class GameManager implements WereWolfAPI {
         this.main = main;
         this.randomConfig = new RandomConfig(main);
         this.configuration = new Configuration(main.getRegisterManager());
-        mapManager = new MapManager(main);
-        stuff = new Stuff(main);
-        scenarios = new ListenersLoader(main);
+        this.mapManager = new MapManager(main);
+        this.stuff = new Stuff(main);
+        this.scenarios = new ListenersLoader(this);
         File mapFolder = new File(main.getDataFolder() +
                 File.separator + "maps");
         if (!mapFolder.exists()) {
@@ -89,7 +90,7 @@ public class GameManager implements WereWolfAPI {
         }
         setDay(Day.DAY);
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
+        BukkitUtils.scheduleSyncDelayedTask(() -> {
             Bukkit.getPluginManager().callEvent(new UpdateLanguageEvent());
             FileUtils_.loadConfig(main, "saveCurrent");
             main.getWereWolfAPI().getStuffs().load("saveCurrent");
@@ -130,7 +131,7 @@ public class GameManager implements WereWolfAPI {
         Bukkit.broadcastMessage(translate("werewolf.announcement.join", score.getPlayerSize(), score.getRole(), player.getName()));
         clearPlayer(player);
         player.setGameMode(GameMode.ADVENTURE);
-        IPlayerWW plg = new PlayerWW(main, player);
+        IPlayerWW plg = new PlayerWW(this, player);
         playerLG.put(uuid, plg);
         Bukkit.getPluginManager().callEvent(new FinalJoinEvent(plg));
         player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 0, false, false));
@@ -156,7 +157,7 @@ public class GameManager implements WereWolfAPI {
         Inventory inventory = player.getInventory();
 
         player.setGameMode(GameMode.SURVIVAL);
-        IPlayerWW playerWW = new PlayerWW(main, player);
+        IPlayerWW playerWW = new PlayerWW(this, player);
         playerLG.put(player.getUniqueId(), playerWW);
         Location spawn = mapManager.getWorld().getSpawnLocation();
         spawn.setY(spawn.getBlockY() - 4);
@@ -236,7 +237,7 @@ public class GameManager implements WereWolfAPI {
 
         GameManager newGame = (GameManager) main.getWereWolfAPI();
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
+        BukkitUtils.scheduleSyncDelayedTask(() -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 FastBoard fastboard = new FastBoard(player);
                 fastboard.updateTitle(newGame.translate("werewolf.score_board.title"));
@@ -368,10 +369,6 @@ public class GameManager implements WereWolfAPI {
         return boards;
     }
 
-    public Main getMain() {
-        return main;
-    }
-
     @Override
     public IMapManager getMapManager() {
         return mapManager;
@@ -395,6 +392,7 @@ public class GameManager implements WereWolfAPI {
     public void setDebug(boolean debug) {
         this.debug = debug;
     }
+
 
     public void remove(UUID uuid) {
         playerLG.remove(uuid);

@@ -9,10 +9,10 @@ import io.github.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import io.github.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
 import io.github.ph1lou.werewolfapi.events.random_events.BearingRitualEvent;
+import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.plugin.Plugin;
 
 public class BearingRitual extends ListenerManager {
 
@@ -26,7 +26,7 @@ public class BearingRitual extends ListenerManager {
     public void onRepartition(RepartitionEvent event) {
         WereWolfAPI game = main.getWereWolfAPI();
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
+        BukkitUtils.scheduleSyncDelayedTask(() -> {
             if (game.isState(StateGame.GAME)) {
                 if (isRegister()) {
                     BearingRitualEvent bearingRitualEvent = new BearingRitualEvent();
@@ -38,7 +38,7 @@ public class BearingRitual extends ListenerManager {
 
                     Bukkit.broadcastMessage(game.translate("werewolf.random_events.bearing_ritual.message"));
 
-                    Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
+                    BukkitUtils.scheduleSyncDelayedTask(() -> {
                         if (game.isState(StateGame.GAME)) {
                             if (isRegister()) {
                                 active = false;

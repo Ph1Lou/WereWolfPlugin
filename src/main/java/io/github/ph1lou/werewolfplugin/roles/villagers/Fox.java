@@ -2,8 +2,8 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
-import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Camp;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
@@ -17,6 +17,7 @@ import io.github.ph1lou.werewolfapi.rolesattributs.ILimitedUse;
 import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
 import io.github.ph1lou.werewolfapi.rolesattributs.IProgress;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
+import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import io.github.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -24,7 +25,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -39,8 +39,8 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
     private boolean power = false;
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
 
-    public Fox(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
-        super(main, playerWW, key);
+    public Fox(WereWolfAPI api, IPlayerWW playerWW, String key) {
+        super(api, playerWW, key);
     }
 
     @Override
@@ -224,7 +224,7 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
                 player.sendMessage(game.translate("werewolf.role.fox.warn"));
 
                 if (playerWW.getRole().isWereWolf()) {
-                    Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) main, () -> {
+                    BukkitUtils.scheduleSyncDelayedTask(() -> {
                         if (game.isState(StateGame.GAME)) {
                             playerWW.sendMessageWithKey("werewolf.role.fox.smell", Sound.DONKEY_ANGRY);
                         }

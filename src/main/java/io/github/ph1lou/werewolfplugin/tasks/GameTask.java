@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.tasks;
 
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
+import io.github.ph1lou.werewolfplugin.RegisterManager;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import io.github.ph1lou.werewolfplugin.save.Configuration;
 import org.bukkit.World;
@@ -52,7 +53,7 @@ public class GameTask extends BukkitRunnable {
 
 		game.getScore().addTimer();
 
-		game.getMain().getRegisterManager().getTimersRegister()
+		RegisterManager.get().getTimersRegister()
 				.forEach(timerRegister -> {
 
 					if (timerRegister.getPredicate().test(game)) {

@@ -13,6 +13,7 @@ import io.github.ph1lou.werewolfapi.events.game.vote.VoteEndEvent;
 import io.github.ph1lou.werewolfapi.events.game.vote.VoteEvent;
 import io.github.ph1lou.werewolfapi.events.game.vote.VoteResultEvent;
 import io.github.ph1lou.werewolfapi.events.roles.seer.SeeVoteEvent;
+import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -169,13 +170,13 @@ public class Vote implements Listener, IVoteManager {
 
 			Bukkit.broadcastMessage(game.translate("werewolf.vote.vote_result", playerWW.getName(), this.votes.get(playerWW)));
 
-			int task = Bukkit.getScheduler().scheduleSyncRepeatingTask(((GameManager) game).getMain(), () -> {
+			int task = BukkitUtils.scheduleSyncRepeatingTask(() -> {
 				if (game.isState(StateGame.GAME)) {
 					playerWW.addPlayerMaxHealth(2);
 				}
 			}, 1200, 1200);
 
-			Bukkit.getScheduler().scheduleSyncDelayedTask(((GameManager) game).getMain(), () -> Bukkit.getScheduler().cancelTask(task), (long) health * 62 * 20);
+			BukkitUtils.scheduleSyncDelayedTask(() -> Bukkit.getScheduler().cancelTask(task), (long) health * 62 * 20);
 
 		}
 	}

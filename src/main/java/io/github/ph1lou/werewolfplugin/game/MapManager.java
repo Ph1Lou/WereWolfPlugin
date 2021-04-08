@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.game;
 
 import io.github.ph1lou.werewolfapi.IMapManager;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.worldloader.WorldFillTask;
@@ -49,7 +50,7 @@ public class MapManager implements IMapManager {
         int chunksPerRun = 20;
         if (wft == null || wft.getPercentageCompleted() == 100) {
             wft = new WorldFillTask(world, chunksPerRun, mapRadius);
-            wft.setTaskID(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(game.getMain(), wft, 1, 1));
+            wft.setTaskID(BukkitUtils.scheduleSyncRepeatingTask(wft, 1, 1));
             sender.sendMessage(game.translate("werewolf.commands.admin.generation.perform"));
         } else {
             sender.sendMessage(game.translate("werewolf.commands.admin.generation.already_start"));

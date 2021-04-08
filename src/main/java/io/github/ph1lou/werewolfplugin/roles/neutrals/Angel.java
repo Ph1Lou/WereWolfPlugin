@@ -2,8 +2,8 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
-import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.AngelForm;
 import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enums.Day;
@@ -53,8 +53,8 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
 
 
-    public Angel(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
-        super(main, playerWW, key);
+    public Angel(WereWolfAPI api, IPlayerWW playerWW, String key) {
+        super(api, playerWW, key);
     }
 
     @Override

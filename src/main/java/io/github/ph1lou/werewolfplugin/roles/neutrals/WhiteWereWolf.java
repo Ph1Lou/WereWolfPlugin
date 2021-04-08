@@ -1,15 +1,15 @@
 package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
-import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleNeutral;
 import org.jetbrains.annotations.NotNull;
 
 public class WhiteWereWolf extends RoleNeutral {
 
-    public WhiteWereWolf(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
-        super(main, playerWW, key);
+    public WhiteWereWolf(WereWolfAPI api, IPlayerWW playerWW, String key) {
+        super(api, playerWW, key);
     }
 
 

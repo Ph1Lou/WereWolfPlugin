@@ -2,8 +2,8 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
-import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Day;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
@@ -22,8 +22,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class Assassin extends RoleNeutral {
 
-    public Assassin(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
-        super(main, playerWW, key);
+    public Assassin(WereWolfAPI api, IPlayerWW playerWW, String key) {
+        super(api, playerWW, key);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

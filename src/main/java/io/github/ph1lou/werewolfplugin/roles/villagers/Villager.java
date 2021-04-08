@@ -2,8 +2,8 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
-import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.enums.VillagerKit;
@@ -21,8 +21,8 @@ public class Villager extends RoleVillage {
 
     private VillagerKit villagerKit;
 
-    public Villager(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
-        super(main, playerWW, key);
+    public Villager(WereWolfAPI api, IPlayerWW playerWW, String key) {
+        super(api, playerWW, key);
         if (!game.isState(StateGame.GAME)) return;
         villagerKit = VillagerKit.values()[(int) Math.floor(game.getRandom().nextFloat() * VillagerKit.values().length)];
         if (game.getConfig().isTrollSV()) return;

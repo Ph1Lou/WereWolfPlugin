@@ -13,6 +13,7 @@ import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfapi.utils.Utils;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
+import io.github.ph1lou.werewolfplugin.RegisterManager;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.WorldBorder;
@@ -144,7 +145,7 @@ public class ScoreBoard implements IScoreBoard, Listener {
 			sb.append("§3").append(game.getConfig().getLoverCount(LoverType.CURSED_LOVER.getKey())).append("§f ").append(game.translate(LoverType.CURSED_LOVER.getKey()));
 			roles.add(sb.substring(0, Math.min(30, sb.length())));
 		}
-		for (RoleRegister roleRegister : game.getMain().getRegisterManager().getRolesRegister()) {
+		for (RoleRegister roleRegister : RegisterManager.get().getRolesRegister()) {
 			String key = roleRegister.getKey();
 			if (game.getConfig().getRoleCount(key) > 0) {
 				StringBuilder sb = new StringBuilder();

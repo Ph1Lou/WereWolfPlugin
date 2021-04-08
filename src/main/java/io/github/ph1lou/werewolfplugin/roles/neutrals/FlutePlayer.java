@@ -2,8 +2,8 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
-import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
@@ -26,8 +26,8 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
     private boolean power = false;
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
 
-    public FlutePlayer(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
-        super(main, playerWW, key);
+    public FlutePlayer(WereWolfAPI api, IPlayerWW playerWW, String key) {
+        super(api, playerWW, key);
     }
 
     @EventHandler

@@ -6,6 +6,7 @@ import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
+import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import io.github.ph1lou.werewolfapi.utils.Utils;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -21,6 +22,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,30 +35,28 @@ public class TransportationTask implements Listener {
 
     private String actionBar;
     private final GameManager game;
-    private final Main main;
     private final List<Location> spawns = new ArrayList<>();
     private final Map<Integer, Integer> taskStep = new HashMap<>();
 
     public TransportationTask(GameManager game) {
         this.game = game;
-        this.main = game.getMain();
         step0();
     }
 
 
     private void step0() {
 
-        World world = game.getMapManager().getWorld();
+        World world = this.game.getMapManager().getWorld();
         AtomicInteger i = new AtomicInteger();
-        taskIdManager(0, Bukkit.getScheduler().scheduleSyncRepeatingTask(main, () -> {
+        taskIdManager(0, BukkitUtils.scheduleSyncRepeatingTask(() -> {
 
-            if (game.isState(StateGame.END)) {
+            if (this.game.isState(StateGame.END)) {
                 kill(0);
                 HandlerList.unregisterAll(this);
                 return;
             }
 
-            if (i.get() == game.getScore().getPlayerSize()) {
+            if (i.get() == this.game.getScore().getPlayerSize()) {
                 kill(0);
                 step1();
 
@@ -73,15 +73,15 @@ public class TransportationTask implements Listener {
 
         AtomicInteger i = new AtomicInteger();
 
-        taskIdManager(1, Bukkit.getScheduler().scheduleSyncRepeatingTask(main, () -> {
+        taskIdManager(1, BukkitUtils.scheduleSyncRepeatingTask(() -> {
 
-            if (game.isState(StateGame.END)) {
+            if (this.game.isState(StateGame.END)) {
                 kill(1);
                 HandlerList.unregisterAll(this);
                 return;
             }
 
-            if (i.get() == game.getScore().getPlayerSize()) {
+            if (i.get() == this.game.getScore().getPlayerSize()) {
                 kill(1);
                 HandlerList.unregisterAll(this);
                 step2();
@@ -97,9 +97,9 @@ public class TransportationTask implements Listener {
 
         AtomicInteger i = new AtomicInteger(10);
 
-        taskIdManager(2, Bukkit.getScheduler().scheduleSyncRepeatingTask(main, () -> {
+        taskIdManager(2, BukkitUtils.scheduleSyncRepeatingTask(() -> {
 
-            if (game.isState(StateGame.END)) {
+            if (this.game.isState(StateGame.END)) {
                 kill(2);
                 return;
             }
@@ -122,9 +122,9 @@ public class TransportationTask implements Listener {
 
     private void step3() {
 
-        taskIdManager(3, Bukkit.getScheduler().scheduleSyncRepeatingTask(main, () -> {
+        taskIdManager(3, BukkitUtils.scheduleSyncRepeatingTask(() -> {
 
-            if (game.isState(StateGame.END)) {
+            if (this.game.isState(StateGame.END)) {
                 kill(3);
                 return;
             }
@@ -145,24 +145,24 @@ public class TransportationTask implements Listener {
 
         for (Player player : Bukkit.getOnlinePlayers()) {
 
-            if (game.getPlayerWW(player.getUniqueId()) != null) {
+            if (this.game.getPlayerWW(player.getUniqueId()) != null) {
                 player.setGameMode(GameMode.SURVIVAL);
-                player.sendMessage(game.translate("werewolf.announcement.start.message",
-                        Utils.conversion(game.getConfig().getTimerValue(TimersBase.INVULNERABILITY.getKey()))));
+                player.sendMessage(this.game.translate("werewolf.announcement.start.message",
+                        Utils.conversion(this.game.getConfig().getTimerValue(TimersBase.INVULNERABILITY.getKey()))));
             } else {
-                player.teleport(game.getMapManager().getWorld().getSpawnLocation());
+                player.teleport(this.game.getMapManager().getWorld().getSpawnLocation());
                 player.setGameMode(GameMode.SPECTATOR);
             }
 
-            VersionUtils.getVersionUtils().sendTitle(player, game.translate("werewolf.announcement.start.top_title"), game.translate("werewolf.announcement.start.bot_title"), 20, 20, 20);
+            VersionUtils.getVersionUtils().sendTitle(player, this.game.translate("werewolf.announcement.start.top_title"), this.game.translate("werewolf.announcement.start.bot_title"), 20, 20, 20);
             Sound.NOTE_BASS.play(player);
         }
 
-        game.setState(StateGame.START);
-        GameTask start = new GameTask(game);
-        start.runTaskTimer(main, 0, 20);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
-            if (!game.isState(StateGame.END)) {
+        this.game.setState(StateGame.START);
+        GameTask start = new GameTask(this.game);
+        start.runTaskTimer(JavaPlugin.getPlugin(Main.class), 0, 20);
+        BukkitUtils.scheduleSyncDelayedTask(() -> {
+            if (!this.game.isState(StateGame.END)) {
                 Bukkit.getPluginManager().callEvent(new DayEvent(1));
             }
 
@@ -174,24 +174,24 @@ public class TransportationTask implements Listener {
         Bukkit.getOnlinePlayers()
                 .forEach(Sound.ORB_PICKUP::play);
 
-        actionBar = game.translate("werewolf.action_bar.tp", i + 1, game.getScore().getPlayerSize());
+        actionBar = this.game.translate("werewolf.action_bar.tp", i + 1, this.game.getScore().getPlayerSize());
 
-        IPlayerWW playerWW = (IPlayerWW) game.getPlayerWW().toArray()[i];
+        IPlayerWW playerWW = (IPlayerWW) this.game.getPlayerWW().toArray()[i];
         playerWW.setSpawn(spawns.get(i));
         Player player = Bukkit.getPlayer(playerWW.getUUID());
 
         if (player != null) {
             playerWW.setSpawn(spawns.get(i));
             player.setGameMode(GameMode.ADVENTURE);
-            game.clearPlayer(player);
+            this.game.clearPlayer(player);
             Inventory inventory = player.getInventory();
 
             for (int j = 0; j < 40; j++) {
-                inventory.setItem(j, game.getStuffs().getStartLoot().getItem(j));
+                inventory.setItem(j, this.game.getStuffs().getStartLoot().getItem(j));
             }
         } else {
             for (int j = 0; j < 40; j++) {
-                playerWW.addItem(game.getStuffs().getStartLoot().getItem(j));
+                playerWW.addItem(this.game.getStuffs().getStartLoot().getItem(j));
             }
         }
 
@@ -214,10 +214,10 @@ public class TransportationTask implements Listener {
             Sound.DIG_GRASS.play(p);
         }
 
-        actionBar = game.translate("werewolf.action_bar.create_tp_point", i + 1,
-                game.getScore().getPlayerSize());
+        actionBar = this.game.translate("werewolf.action_bar.create_tp_point", i + 1,
+                this.game.getScore().getPlayerSize());
 
-        double a = i * 2 * Math.PI / game.getScore().getPlayerSize();
+        double a = i * 2 * Math.PI / this.game.getScore().getPlayerSize();
         int x = (int) (Math.round(wb.getSize() / 3 * Math.cos(a) + world.getSpawnLocation().getX()));
         int z = (int) (Math.round(wb.getSize() / 3 * Math.sin(a) + world.getSpawnLocation().getZ()));
         Location spawn = new Location(world, x, world.getHighestBlockYAt(x, z) + 100, z);
@@ -232,7 +232,7 @@ public class TransportationTask implements Listener {
         double x = location.getX();
         double y = location.getY();
         double z = location.getZ();
-        World world = game.getMapManager().getWorld();
+        World world = this.game.getMapManager().getWorld();
         for (int i = -2; i < 3; i++) {
             for (int j = -2; j < 3; j++) {
                 if (Math.abs(j) == 2 || Math.abs(i) == 2) {

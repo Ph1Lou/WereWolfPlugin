@@ -2,7 +2,6 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
-import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
@@ -28,7 +27,7 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
 
-    public Priestess(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
+    public Priestess(WereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
 
         setPower(false);
@@ -109,8 +108,6 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
 
         event.setCancelled(true);
 
-        WereWolfAPI game = main.getWereWolfAPI();
-
         game.getPlayerWW()
                 .stream()
                 .map(IPlayerWW::getRole)
@@ -166,8 +163,6 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onUpdate(UpdatePlayerNameTag event) {
-
-        WereWolfAPI game = main.getWereWolfAPI();
 
         IPlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID());
 

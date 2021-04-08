@@ -2,8 +2,8 @@ package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
-import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
@@ -24,10 +24,10 @@ public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPl
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private boolean power = true;
 
-    public InfectFatherOfTheWolves(GetWereWolfAPI main,
+    public InfectFatherOfTheWolves(WereWolfAPI api,
                                    IPlayerWW playerWW,
                                    String key) {
-        super(main, playerWW, key);
+        super(api, playerWW, key);
     }
 
     @Override

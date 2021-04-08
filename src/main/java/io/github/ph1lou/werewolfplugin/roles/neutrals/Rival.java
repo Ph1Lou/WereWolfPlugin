@@ -1,9 +1,9 @@
 package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
-import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
@@ -25,8 +25,8 @@ import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleNeutral;
+import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import io.github.ph1lou.werewolfapi.utils.Utils;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import io.github.ph1lou.werewolfplugin.roles.lovers.Lover;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -53,8 +53,8 @@ public class Rival extends RoleNeutral implements IPower {
 
     private boolean power = true;
 
-    public Rival(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
-        super(main, playerWW, key);
+    public Rival(WereWolfAPI api, IPlayerWW playerWW, String key) {
+        super(api, playerWW, key);
     }
 
 
@@ -183,13 +183,13 @@ public class Rival extends RoleNeutral implements IPower {
         }
         getPlayerWW().removePlayerMaxHealth(10);
 
-        int task = Bukkit.getScheduler().scheduleSyncRepeatingTask(((GameManager) game).getMain(), () -> {
+        int task = BukkitUtils.scheduleSyncRepeatingTask(() -> {
             if (game.isState(StateGame.GAME)) {
                 getPlayerWW().addPlayerMaxHealth(2);
             }
         }, 1200, 1200);
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(((GameManager) game).getMain(), () -> Bukkit.getScheduler().cancelTask(task), (long) health * 62 * 20);
+        BukkitUtils.scheduleSyncDelayedTask(() -> Bukkit.getScheduler().cancelTask(task), (long) health * 62 * 20);
 
 
         getPlayerWW().sendMessageWithKey("werewolf.role.rival.lover_death");

@@ -11,7 +11,6 @@ import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
-import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Villager;
 import me.kbrewster.exceptions.APIException;
 import me.kbrewster.exceptions.InvalidPlayerException;
@@ -60,13 +59,13 @@ public class PlayerWW implements IPlayerWW {
     private final WereWolfAPI game;
 
 
-    public PlayerWW(Main main, Player player) {
+    public PlayerWW(WereWolfAPI api, Player player) {
         this.spawn = player.getWorld().getSpawnLocation();
         this.uuid = player.getUniqueId();
         this.name = player.getName();
-        this.role = new Villager(main, this,
+        this.role = new Villager(api, this,
                 RolesBase.VILLAGER.getKey());
-        this.game = main.getWereWolfAPI();
+        this.game = api;
         try {
             this.mojangUUID = MojangAPI.getUUID(this.name);
         } catch (IOException | APIException | InvalidPlayerException ignored) {
@@ -322,13 +321,13 @@ public class PlayerWW implements IPlayerWW {
     }
 
     @Override
-    public void addLover(ILover ILover) {
-        lovers.add(ILover);
+    public void addLover(ILover lover) {
+        lovers.add(lover);
     }
 
     @Override
-    public void removeLover(ILover ILover) {
-        lovers.remove(ILover);
+    public void removeLover(ILover lover) {
+        lovers.remove(lover);
     }
 
     @Override

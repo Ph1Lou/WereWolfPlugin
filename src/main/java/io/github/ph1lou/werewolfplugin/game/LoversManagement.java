@@ -11,6 +11,7 @@ import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.lovers.CupidLoversEvent;
 import io.github.ph1lou.werewolfapi.events.lovers.RevealLoversEvent;
+import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import io.github.ph1lou.werewolfplugin.roles.lovers.AmnesiacLover;
 import io.github.ph1lou.werewolfplugin.roles.lovers.CursedLover;
 import io.github.ph1lou.werewolfplugin.roles.lovers.Lover;
@@ -104,8 +105,8 @@ public class LoversManagement implements ILoverManager {
 		autoAmnesiacLovers();
 		autoCursedLovers();
 		lovers
-				.forEach(ILover -> Bukkit.getPluginManager()
-						.registerEvents((Listener) ILover, ((GameManager) game).getMain()));
+				.forEach(ILover -> BukkitUtils
+						.registerEvents((Listener) ILover));
 		Bukkit.getPluginManager().callEvent(new RevealLoversEvent(this.lovers));
 		game.checkVictory();
 	}
@@ -219,8 +220,8 @@ public class LoversManagement implements ILoverManager {
 
 			for (int j = 0; j < linkCouple.size(); j++) {
 				for (IPlayerWW playerWW : game.getPlayerWW()) {
-					for (ILover ILover : playerWW.getLovers()) {
-						if (ILover.getLovers().contains(linkCouple.get(j))) {
+					for (ILover lover : playerWW.getLovers()) {
+						if (lover.getLovers().contains(linkCouple.get(j))) {
 							if (!linkCouple.contains(playerWW)) {
 								linkCouple.add(playerWW);
 								loversAvailable.remove(playerWW);
@@ -231,10 +232,10 @@ public class LoversManagement implements ILoverManager {
 			}
 			loverAPIS.add(new Lover(game, linkCouple));
 		}
-		for (ILover ILover : lovers) {
-			ILover.getLovers()
+		for (ILover lover : lovers) {
+			lover.getLovers()
 					.forEach(playerWW -> playerWW.getLovers()
-							.remove(ILover));
+							.remove(lover));
 		}
 		lovers.clear();
 		lovers.addAll(loverAPIS);
@@ -248,12 +249,12 @@ public class LoversManagement implements ILoverManager {
 	}
 
 	@Override
-	public void removeLover(ILover ILover) {
-		lovers.remove(ILover);
+	public void removeLover(ILover lover) {
+		lovers.remove(lover);
 	}
 
 	@Override
-	public void addLover(ILover ILover) {
-		lovers.add(ILover);
+	public void addLover(ILover lover) {
+		lovers.add(lover);
 	}
 }

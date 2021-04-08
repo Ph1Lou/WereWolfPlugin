@@ -1,8 +1,8 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
-import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.ComedianMask;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
@@ -21,8 +21,8 @@ public class Comedian extends RoleWithLimitedSelectionDuration {
 
     private final List<ComedianMask> comedianMasks = new ArrayList<>();
 
-    public Comedian(GetWereWolfAPI main, IPlayerWW playerWW, String key) {
-        super(main, playerWW, key);
+    public Comedian(WereWolfAPI api, IPlayerWW playerWW, String key) {
+        super(api, playerWW, key);
         setPower(false);
     }
 
@@ -32,8 +32,10 @@ public class Comedian extends RoleWithLimitedSelectionDuration {
     }
 
     public Optional<ComedianMask> getLastMask() {
-
-        return Optional.ofNullable(comedianMasks.get(comedianMasks.size() - 1));
+        if (comedianMasks.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(comedianMasks.get(comedianMasks.size() - 1));
     }
 
 

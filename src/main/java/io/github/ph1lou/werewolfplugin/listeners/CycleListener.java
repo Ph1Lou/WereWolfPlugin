@@ -25,9 +25,10 @@ import io.github.ph1lou.werewolfapi.events.roles.SelectionEndEvent;
 import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfapi.rolesattributs.Role;
+import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import io.github.ph1lou.werewolfapi.utils.Utils;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
-import io.github.ph1lou.werewolfplugin.Main;
+import io.github.ph1lou.werewolfplugin.RegisterManager;
 import io.github.ph1lou.werewolfplugin.commands.roles.CommandWereWolfChat;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import io.github.ph1lou.werewolfplugin.roles.lovers.FakeLover;
@@ -54,12 +55,10 @@ import java.util.stream.Collectors;
 
 public class CycleListener implements Listener {
 
-    private final Main main;
     private final GameManager game;
 
-    public CycleListener(Main main) {
-        this.main = main;
-        this.game = (GameManager) main.getWereWolfAPI();
+    public CycleListener(io.github.ph1lou.werewolfapi.WereWolfAPI game) {
+        this.game = (GameManager) game;
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -94,7 +93,7 @@ public class CycleListener implements Listener {
 
                 game.getVote().setStatus(VoteStatus.IN_PROGRESS);
 
-                Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
+                BukkitUtils.scheduleSyncDelayedTask(() -> {
                     if (!game.isState(StateGame.END)) {
                         Bukkit.getPluginManager().callEvent(new VoteEndEvent());
                     }
@@ -107,7 +106,7 @@ public class CycleListener implements Listener {
         if (2L * game.getConfig().getTimerValue(TimersBase.DAY_DURATION.getKey())
                 - duration2 > 0) {
 
-            Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
+            BukkitUtils.scheduleSyncDelayedTask(() -> {
 
                 if (!game.isState(StateGame.END)) {
                     Bukkit.getPluginManager().callEvent(new SelectionEndEvent());
@@ -118,14 +117,14 @@ public class CycleListener implements Listener {
 
         long duration3 = game.getConfig().getTimerValue(TimersBase.DAY_DURATION.getKey());
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
-            if(!game.isState(StateGame.END)) {
+        BukkitUtils.scheduleSyncDelayedTask(() -> {
+            if (!game.isState(StateGame.END)) {
                 Bukkit.getPluginManager().callEvent(new NightEvent(event.getNumber()));
                 CommandWereWolfChat.enable();
-                Bukkit.getScheduler().scheduleSyncDelayedTask(main, CommandWereWolfChat::disable, game.getConfig().getTimerValue(TimersBase.WEREWOLF_CHAT_DURATION.getKey()) * 20L);
+                BukkitUtils.scheduleSyncDelayedTask(CommandWereWolfChat::disable, game.getConfig().getTimerValue(TimersBase.WEREWOLF_CHAT_DURATION.getKey()) * 20L);
             }
 
-        },duration3*20);
+        }, duration3 * 20);
     }
 
 
@@ -145,7 +144,7 @@ public class CycleListener implements Listener {
         groupSizeChange();
 
         if (duration > 0) {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
+            BukkitUtils.scheduleSyncDelayedTask(() -> {
                 if (!game.isState(StateGame.END)) {
                     Bukkit.getPluginManager().callEvent(new DayWillComeEvent());
                 }
@@ -153,19 +152,19 @@ public class CycleListener implements Listener {
             }, duration * 20);
         }
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
-            if(!game.isState(StateGame.END)){
-                Bukkit.getPluginManager().callEvent(new DayEvent(event.getNumber()+1));
+        BukkitUtils.scheduleSyncDelayedTask(() -> {
+            if (!game.isState(StateGame.END)) {
+                Bukkit.getPluginManager().callEvent(new DayEvent(event.getNumber() + 1));
             }
 
-        },(duration+30)*20);
+        }, (duration + 30) * 20);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onVoteEnd(VoteEndEvent event) {
 
         long duration = game.getConfig().getTimerValue(TimersBase.CITIZEN_DURATION.getKey());
-        Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
+        BukkitUtils.scheduleSyncDelayedTask(() -> {
             if (!game.isState(StateGame.END)) {
                 Bukkit.getPluginManager().callEvent(new VoteResultEvent());
             }
@@ -234,7 +233,7 @@ public class CycleListener implements Listener {
         game.setState(StateGame.GAME);
         game.getConfig().setConfig(ConfigsBase.CHAT.getKey(), false);
 
-        main.getRegisterManager().getRolesRegister()
+        RegisterManager.get().getRolesRegister()
                 .forEach(roleRegister -> {
 
                     if (roleRegister.getKey().equals(game.getConfig().getTrollKey())) {
@@ -243,12 +242,11 @@ public class CycleListener implements Listener {
                                 .forEach(playerWW -> {
                                     try {
                                         IRole role = (IRole) roleRegister.getConstructors()
-                                                .newInstance(main,
+                                                .newInstance(game,
                                                         playerWW,
                                                         roleRegister.getKey());
 
-                                        Bukkit.getPluginManager().registerEvents((Listener) role,
-                                                main);
+                                        BukkitUtils.registerEvents((Listener) role);
 
                                         playerWW.setRole(role);
                                     } catch (InstantiationException |
@@ -264,8 +262,8 @@ public class CycleListener implements Listener {
         game.getPlayerWW()
                 .forEach(playerWW -> playerWW.getRole().roleAnnouncement());
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
-            
+        BukkitUtils.scheduleSyncDelayedTask(() -> {
+
             if (!game.isState(StateGame.END)) {
                 game.getPlayerWW()
                         .forEach(playerWW -> {
@@ -322,10 +320,10 @@ public class CycleListener implements Listener {
                             IPlayerWWs.remove(0))));
         }
 
-        loverAPIS.forEach(ILover -> Bukkit.getPluginManager()
-                .registerEvents((Listener) ILover, main));
+        loverAPIS.forEach(ILover -> BukkitUtils
+                .registerEvents((Listener) ILover));
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> {
+        BukkitUtils.scheduleSyncDelayedTask(() -> {
 
             if (!game.isState(StateGame.END)) {
                 game.getPlayerWW()
@@ -355,7 +353,7 @@ public class CycleListener implements Listener {
                                 playerWWS.size() -
                                 game.getScore().getRole()));
 
-        main.getRegisterManager().getRolesRegister()
+        RegisterManager.get().getRolesRegister()
                 .forEach(roleRegister -> {
                     for (int i = 0; i < game.getConfig().getRoleCount(roleRegister.getKey()); i++) {
                         config.add(roleRegister);
@@ -368,10 +366,10 @@ public class CycleListener implements Listener {
             IPlayerWW playerWW = playerWWS.remove(0);
             RoleRegister roleRegister = config.remove(0);
             try {
-                Role role = (Role) roleRegister.getConstructors().newInstance(game.getMain(),
+                Role role = (Role) roleRegister.getConstructors().newInstance(game,
                         playerWW,
                         roleRegister.getKey());
-                Bukkit.getPluginManager().registerEvents(role, game.getMain());
+                BukkitUtils.registerEvents(role);
                 playerWW.setRole(role);
             } catch (IllegalAccessException | InstantiationException | InvocationTargetException exception) {
                 exception.printStackTrace();
@@ -380,13 +378,13 @@ public class CycleListener implements Listener {
         game.getPlayerWW()
                 .forEach(playerWW -> playerWW.getRole().roleAnnouncement());
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(game.getMain(), game::checkVictory);
+        BukkitUtils.scheduleSyncDelayedTask(game::checkVictory);
     }
 
 
     @EventHandler
     public void onStart(StartEvent event) {
-        main.getRegisterManager().getRandomEventsRegister()
+        RegisterManager.get().getRandomEventsRegister()
                 .forEach(randomEventRegister -> randomEventRegister.getRandomEvent()
                         .register(game.getRandom().nextDouble() * 100 < game.getConfig().getProbability(randomEventRegister.getKey())));
     }

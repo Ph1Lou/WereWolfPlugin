@@ -7,6 +7,7 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
+import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.save.FileUtils_;
@@ -80,7 +81,7 @@ public class Save implements InventoryProvider {
                 .title(game.translate("werewolf.menu.save.save_menu"))
                 .item(new ItemStack(Material.EMERALD_BLOCK))
                 .plugin(main)
-                .onClose((player2) -> Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> Save.INVENTORY.open(player)))
+                .onClose((player2) -> BukkitUtils.scheduleSyncDelayedTask(() -> Save.INVENTORY.open(player)))
                 .open(player)));
 
         if (files.length != 0) {

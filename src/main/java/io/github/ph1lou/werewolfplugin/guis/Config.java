@@ -5,7 +5,6 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
@@ -140,7 +139,7 @@ public class Config implements InventoryProvider {
     @Override
     public void update(Player player, InventoryContents contents) {
 
-        WereWolfAPI game = JavaPlugin.getPlugin(Main.class).getWereWolfAPI();
+        io.github.ph1lou.werewolfapi.WereWolfAPI game = JavaPlugin.getPlugin(Main.class).getWereWolfAPI();
 
         if (game.isState(StateGame.LOBBY)) {
             contents.set(0, 4, ClickableItem.of((new ItemBuilder(UniversalMaterial.LIME_WOOL

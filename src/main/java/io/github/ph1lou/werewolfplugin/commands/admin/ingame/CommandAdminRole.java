@@ -96,14 +96,14 @@ public class CommandAdminRole implements ICommands {
         }
 
 
-        for (ILover ILover : targetWW.getLovers()) {
+        for (ILover lover : targetWW.getLovers()) {
 
             StringBuilder sb = new StringBuilder();
-            ILover.getLovers().stream()
+            lover.getLovers().stream()
                     .filter(playerWW1 -> !targetWW.equals(playerWW1))
                     .forEach(playerWW1 -> sb.append(playerWW1.getName()).append(" "));
 
-            if (!ILover.isKey(LoverType.CURSED_LOVER.getKey())) {
+            if (!lover.isKey(LoverType.CURSED_LOVER.getKey())) {
                 if (sb.length() != 0) {
                     player.sendMessage(game.translate("werewolf.commands.admin.role.lover", sb.toString()));
                 }

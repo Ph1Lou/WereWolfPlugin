@@ -40,6 +40,7 @@ public class Timber extends ListenerManager {
                             List<ItemStack> items = new ArrayList<>(block.getDrops());
                             block.setType(Material.AIR);
                             finalItems.addAll(items);
+                        }
                             BlockFace[] values;
                             for (int length = (values = BlockFace.values()).length, j = 0; j < length; ++j) {
                                 BlockFace face = values[j];
@@ -47,7 +48,6 @@ public class Timber extends ListenerManager {
                                     bList.add(block.getRelative(face));
                                 }
                             }
-                        }
                         bList.remove(block);
                     }
                     if (bList.size() == 0) {

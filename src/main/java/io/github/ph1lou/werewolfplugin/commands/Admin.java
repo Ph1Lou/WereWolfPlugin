@@ -20,11 +20,16 @@ import java.util.stream.Collectors;
 public class Admin implements TabExecutor {
 
     private final Main main;
+    private static Admin instance;
 
     public Admin(Main main) {
         this.main = main;
+        instance = this;
     }
 
+    public static Admin get() {
+        return instance;
+    }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
