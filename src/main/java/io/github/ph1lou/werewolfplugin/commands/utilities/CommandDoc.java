@@ -23,7 +23,7 @@ public class CommandDoc implements ICommands {
 
         TextComponent textComponent1 = new TextComponent(game.translate("werewolf.commands.doc.link"));
 
-        textComponent1.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://docs.google.com/spreadsheets/d/1jkos7zslxBl6NCWy4FXuQXtFkvtPLa9e6UOlpmcsDm0/edit?usp=sharing"));
+        textComponent1.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, game.translate("werewolf.description.doc")));
 
         player.spigot().sendMessage(textComponent1);
     }

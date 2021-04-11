@@ -1124,6 +1124,7 @@
     },
     "description": {
       "_": "§b================================\n",
+      "doc": "https://docs.google.com/spreadsheets/d/1jkos7zslxBl6NCWy4FXuQXtFkvtPLa9e6UOlpmcsDm0/edit?usp=sharing",
       "role": "§fVous êtes §b%s\n",
       "description": "§bDescription :§f %s\n",
       "camp": "§fCamp des §b%s\n",
