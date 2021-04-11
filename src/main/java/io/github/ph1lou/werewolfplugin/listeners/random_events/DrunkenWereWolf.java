@@ -8,6 +8,7 @@ import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import io.github.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
+import io.github.ph1lou.werewolfapi.events.random_events.DrunkenWereWolfEvent;
 import io.github.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -47,6 +48,15 @@ public class DrunkenWereWolf extends ListenerManager {
         if (playerWWS.isEmpty()) return;
 
         this.temp = playerWWS.get((int) Math.floor(game.getRandom().nextDouble() * playerWWS.size()));
+
+        DrunkenWereWolfEvent event1 = new DrunkenWereWolfEvent(this.temp);
+
+        Bukkit.getPluginManager().callEvent(event1);
+
+        if (event1.isCancelled()) {
+            this.temp = null;
+            return;
+        }
 
         List<UUID> fakeListPool = game.getPlayerWW().stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))

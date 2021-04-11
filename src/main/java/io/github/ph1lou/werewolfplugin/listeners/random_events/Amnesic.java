@@ -10,6 +10,8 @@ import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import io.github.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
+import io.github.ph1lou.werewolfapi.events.random_events.AmnesicEvent;
+import io.github.ph1lou.werewolfapi.events.random_events.AmnesicTransformEvent;
 import io.github.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
 import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import org.bukkit.Bukkit;
@@ -52,6 +54,15 @@ public class Amnesic extends ListenerManager {
 
         this.temp = playerWWS.get((int) Math.floor(game.getRandom().nextDouble() * playerWWS.size()));
 
+        AmnesicEvent event1 = new AmnesicEvent(this.temp);
+
+        Bukkit.getPluginManager().callEvent(event1);
+
+        if (event1.isCancelled()) {
+            this.temp = null;
+            return;
+        }
+
         this.list.add(this.temp.getUUID());
     }
 
@@ -89,8 +100,15 @@ public class Amnesic extends ListenerManager {
             return;
         }
 
-        this.temp.getRole().setInfected();
+        AmnesicTransformEvent event1 = new AmnesicTransformEvent(this.temp, playerWW);
 
+        Bukkit.getPluginManager().callEvent(event1);
+
+        if (event1.isCancelled()) {
+            return;
+        }
+
+        this.temp.getRole().setInfected();
         this.temp.sendMessageWithKey("werewolf.random_events.amnesic.message");
 
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent((Player) event.getEntity()));

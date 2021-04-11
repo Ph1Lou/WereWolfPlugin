@@ -5,7 +5,9 @@ import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.ListenerManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.events.random_events.PoorlyGroomedBearEvent;
 import io.github.ph1lou.werewolfapi.events.roles.bear_trainer.GrowlEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
@@ -21,8 +23,18 @@ public class PoorlyGroomedBear extends ListenerManager {
 
         WereWolfAPI game = main.getWereWolfAPI();
 
+        int modification = game.getRandom().nextFloat() < 0.5 ? 1 : -1;
 
-        if (game.getRandom().nextFloat() < 0.5) {
+        PoorlyGroomedBearEvent event1 = new PoorlyGroomedBearEvent(modification);
+
+        Bukkit.getPluginManager().callEvent(event1);
+
+        if (event1.isCancelled()) {
+            return;
+        }
+
+
+        if (modification == -1) {
             Optional<IPlayerWW> removedPlayer = event.getPlayerWWS().stream().findFirst();
             removedPlayer.ifPresent(playerWW -> event.getPlayerWWS().remove(playerWW));
         } else {
