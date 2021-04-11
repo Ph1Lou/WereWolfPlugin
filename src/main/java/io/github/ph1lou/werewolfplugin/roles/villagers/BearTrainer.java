@@ -16,6 +16,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -64,7 +65,7 @@ public class BearTrainer extends RoleVillage {
         Bukkit.getPluginManager().callEvent(growlEvent);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onGrowl(GrowlEvent event) {
 
         if (event.getPlayerWWS().isEmpty()) {

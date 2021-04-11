@@ -63,14 +63,14 @@ public class Exposed extends ListenerManager {
 
         WereWolfAPI game = main.getWereWolfAPI();
 
-        List<IPlayerWW> IPlayerWWList = game.getPlayerWW().stream()
+        List<IPlayerWW> playerWWS = game.getPlayerWW().stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> !playerWW.equals(temp))
                 .collect(Collectors.toList());
 
-        if (IPlayerWWList.isEmpty()) return null;
+        if (playerWWS.isEmpty()) return null;
 
-        IPlayerWW playerWW = IPlayerWWList.get((int) Math.floor(game.getRandom().nextDouble() * IPlayerWWList.size()));
+        IPlayerWW playerWW = playerWWS.get((int) Math.floor(game.getRandom().nextDouble() * playerWWS.size()));
 
         List<IRole> role1List = game.getPlayerWW().stream()
                 .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))

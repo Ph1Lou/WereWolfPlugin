@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 public class Roles implements InventoryProvider {
@@ -201,8 +202,20 @@ public class Roles implements InventoryProvider {
             if (roleRegister.getCategories().contains(categories.getOrDefault(uuid, Category.WEREWOLF))) {
 
                 String key = roleRegister.getKey();
+                AtomicBoolean unRemovable = new AtomicBoolean(false);
                 List<String> lore2 = new ArrayList<>(lore);
                 roleRegister.getLoreKey().stream().map(game::translate).map(s -> Arrays.stream(s.split("\\n")).collect(Collectors.toList())).forEach(lore2::addAll);
+                roleRegister.getRequireRole().ifPresent(roleKey -> lore2.add(game.translate("werewolf.menu.roles.need", game.translate(roleKey))));
+                main.getRegisterManager().getRolesRegister().stream()
+                        .filter(roleRegister1 -> roleRegister1.getRequireRole().isPresent())
+                        .filter(roleRegister1 -> game.getConfig().getRoleCount(roleRegister1.getKey()) > 0)
+                        .filter(roleRegister1 -> roleRegister1.getRequireRole().get().equals(key))
+                        .map(RoleRegister::getKey)
+                        .findFirst().ifPresent(s -> {
+                    lore2.add(game.translate("werewolf.menu.roles.dependant_load", game.translate(s)));
+                    unRemovable.set(true);
+                });
+
                 if (config.getRoleCount(key) > 0) {
                     items.add(ClickableItem.of((
                             new ItemBuilder(roleRegister.getItem().isPresent() ?
@@ -216,9 +229,15 @@ public class Roles implements InventoryProvider {
                         if (e.isShiftClick()) {
                             manageStuff(main, player, key);
                         } else if (e.isLeftClick()) {
-                            selectPlus(game, roleRegister.getKey());
+                            selectPlus(game, key);
                         } else if (e.isRightClick()) {
-                            selectMinus(game, roleRegister.getKey());
+                            int count = game.getConfig().getRoleCount(key);
+                            if (!unRemovable.get() || count > 1) {
+                                if (roleRegister.isRequireDouble() && count == 2) {
+                                    selectMinus(game, key);
+                                }
+                                selectMinus(game, key);
+                            }
                         }
                     }));
                 } else {
@@ -237,7 +256,15 @@ public class Roles implements InventoryProvider {
                         if (e.isShiftClick()) {
                             manageStuff(main, player, key);
                         } else if (e.isLeftClick()) {
-                            selectPlus(game, roleRegister.getKey());
+                            if (roleRegister.getRequireRole().isPresent()) {
+                                if (game.getConfig().getRoleCount(roleRegister.getRequireRole().get()) == 0) {
+                                    return;
+                                }
+                            }
+                            if (roleRegister.isRequireDouble()) {
+                                selectPlus(game, key);
+                            }
+                            selectPlus(game, key);
                         }
                     }));
                 }

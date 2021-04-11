@@ -31,22 +31,22 @@ public class Swap extends ListenerManager {
             if (game.isState(StateGame.GAME)) {
                 if (isRegister()) {
 
-                    List<IPlayerWW> IPlayerWWList = game.getPlayerWW().stream()
+                    List<IPlayerWW> playerWWS = game.getPlayerWW().stream()
                             .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                             .collect(Collectors.toList());
 
-                    if (IPlayerWWList.isEmpty()) return;
+                    if (playerWWS.isEmpty()) return;
 
-                    IPlayerWW playerWW1 = IPlayerWWList.get((int) Math.floor(game.getRandom().nextDouble() * IPlayerWWList.size()));
+                    IPlayerWW playerWW1 = playerWWS.get((int) Math.floor(game.getRandom().nextDouble() * playerWWS.size()));
 
-                    IPlayerWWList = game.getPlayerWW().stream()
+                    playerWWS = game.getPlayerWW().stream()
                             .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                             .filter(playerWW -> !playerWW.equals(playerWW1))
                             .collect(Collectors.toList());
 
-                    if (IPlayerWWList.isEmpty()) return;
+                    if (playerWWS.isEmpty()) return;
 
-                    IPlayerWW playerWW2 = IPlayerWWList.get((int) Math.floor(game.getRandom().nextDouble() * IPlayerWWList.size()));
+                    IPlayerWW playerWW2 = playerWWS.get((int) Math.floor(game.getRandom().nextDouble() * playerWWS.size()));
 
                     SwapEvent swapEvent = new SwapEvent(playerWW1, playerWW2);
                     Bukkit.getPluginManager().callEvent(swapEvent);

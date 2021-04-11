@@ -585,7 +585,7 @@
         "ww_chat": {
           "name": "chatlg",
           "prefix": "[§cChat LG§r] %s",
-          "announce": "[§eLG UHC§r] Vous avez §b%s§f secondes pour écrire §b%d§f message(s) dans le chat des Loups Garous §b/ww chatlg§r <message>, attention la Petite Fille voit le contenu du chat",
+          "announce": "[§eLG UHC§r] Vous avez §b%s§f secondes pour écrire §b%d§f message(s) dans le chat des Loups Garous §b/ww chatlg§r <message>, attention des rôles peuvent voit le contenu du chat",
           "timer": "[§cLG UHC§r] Le temps pour parler dans le chat des Loups Garous est écoulé",
           "not_access": "[§cLG UHC§r] Vous ne pouvez pas parler dans le chat des Loups Garous",
           "disable": "[§cLG UHC§r] Le chat des Loups Garous est désactivé",
@@ -792,6 +792,8 @@
       "troll": "Configuration §bTroll",
       "roles": {
         "command_1": "role",
+        "need": "§cCe rôle nécessite un §f%s§c dans la compo",
+        "dependant_load": "§cRôle dépendant chargé (§f%s§c)",
         "command_2": "compo",
         "description1": "Pour voir la description de son rôle",
         "description2": "Pour voir la composition",
@@ -1016,10 +1018,20 @@
         "all_chest_find": "[§aLG UHC§r] Toutes les caches ont été trouvées",
         "villager_death": "[§5Loot-Box§r] Avant de mourir, §b%s§r a fait apparaitre §b%s§r caches sur la map, une seule renferme le nom d'un Ennemi du Village"
       },
+      "poorly_groomed_bear": {
+        "name": "Ours Mal Léché",
+        "description": "Le nombre de Grr du Montreur d'Ours est modifié de +1 ou -1"
+      },
       "infection": {
         "name": "Infection",
         "description": "Une fois dans la partie infecte un joueur au hasard.\nL'infection se déroule entre 1h et 1h15 après les rôles, \nsi il y a moins de la moitié des joueurs \nqui sont Loups Garous.",
         "message": "[§5Infection§r] Un joueur aléatoire vient d'être infecté"
+      },
+      "amnesic": {
+        "name": "Amnésique",
+        "message": "[§5Amnesic§r] Vous découvrez que vous êtes en fait un Loup Garou. Vous connaitrez un loup toutes les cinq minutes",
+        "description": "Au moment de la liste des Loups,\n une personne non Loup est choisi aléatoirement\n et devient Amnésique.\n Si elle se fait taper par un Loup Garou \nelle passera dans leur camp \net connaitra un membre des Loups \ntoutes les cinq minutes. \nSi elle n'est pas transformée \nelle garde son camp d'origine",
+        "new": "[§aLG UHC§r] §b%s§f est un Loup Garou, prochain pseudo dans cinq minutes"
       },
       "triple": {
         "name": "Trouple",
@@ -1027,6 +1039,10 @@
         "lover_join": "[§aLG UHC§r] §b%s§f rejoint votre couple",
         "join": "[§aLG UHC§r] Vous rejoignez le couple constitué de §b%s",
         "message": "[§5Trouple§r] Une troisième personne vient de rejoindre un couple"
+      },
+      "drunken_werewolf": {
+        "name": "Loup Garou Bourré",
+        "description": "Un Loup choisi au hasard n'a \npas la bonne liste des Loups Garous"
       },
       "bearing_ritual": {
         "name": "Rituel du coussinet",

@@ -106,7 +106,6 @@ public class LootBox extends ListenerManager {
     @EventHandler
     public void onActionBarRequest(ActionBarEvent event) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
         StringBuilder stringBuilder = new StringBuilder(event.getActionBar());
 
         if (chestHasBeenOpen.isEmpty()) return;
@@ -114,6 +113,8 @@ public class LootBox extends ListenerManager {
         if (Bukkit.getPlayer(event.getPlayerUUID()) == null) return;
 
         Player player = Bukkit.getPlayer(event.getPlayerUUID());
+
+        if (player == null) return;
 
         for (Location location : chestLocation) {
             if (!chestHasBeenOpen.get(location)) {

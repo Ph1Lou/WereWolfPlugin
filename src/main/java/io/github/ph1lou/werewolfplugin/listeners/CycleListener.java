@@ -298,26 +298,26 @@ public class CycleListener implements Listener {
 
         List<ILover> loverAPIS = new ArrayList<>();
 
-        List<IPlayerWW> IPlayerWWs = game.getPlayerWW().stream()
+        List<IPlayerWW> playerWWS = game.getPlayerWW().stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .collect(Collectors.toList());
 
-        if (IPlayerWWs.isEmpty()) return;
+        if (playerWWS.isEmpty()) return;
 
-        while (IPlayerWWs.size() > 3) {
+        while (playerWWS.size() > 3) {
             loverAPIS.add(new FakeLover(game,
-                    Arrays.asList(IPlayerWWs.remove(0),
-                            IPlayerWWs.remove(0))));
+                    Arrays.asList(playerWWS.remove(0),
+                            playerWWS.remove(0))));
         }
-        if (IPlayerWWs.size() == 3) {
+        if (playerWWS.size() == 3) {
             loverAPIS.add(new FakeLover(game,
-                    Arrays.asList(IPlayerWWs.remove(0),
-                            IPlayerWWs.remove(0),
-                            IPlayerWWs.remove(0))));
-        } else if (IPlayerWWs.size() == 2) {
+                    Arrays.asList(playerWWS.remove(0),
+                            playerWWS.remove(0),
+                            playerWWS.remove(0))));
+        } else if (playerWWS.size() == 2) {
             loverAPIS.add(new FakeLover(game,
-                    Arrays.asList(IPlayerWWs.remove(0),
-                            IPlayerWWs.remove(0))));
+                    Arrays.asList(playerWWS.remove(0),
+                            playerWWS.remove(0))));
         }
 
         loverAPIS.forEach(ILover -> BukkitUtils

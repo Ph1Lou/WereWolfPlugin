@@ -42,14 +42,14 @@ public class Triple extends ListenerManager {
                     Lover lover = lovers.get((int) Math.floor(
                             game.getRandom().nextFloat() * lovers.size()));
 
-                    List<IPlayerWW> IPlayerWWList = game.getPlayerWW().stream()
+                    List<IPlayerWW> playerWWS = game.getPlayerWW().stream()
                             .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                             .filter(playerWW -> playerWW.getLovers().isEmpty())
                             .collect(Collectors.toList());
 
-                    if (IPlayerWWList.isEmpty()) return;
+                    if (playerWWS.isEmpty()) return;
 
-                    IPlayerWW playerWW = IPlayerWWList.get((int) Math.floor(game.getRandom().nextDouble() * IPlayerWWList.size()));
+                    IPlayerWW playerWW = playerWWS.get((int) Math.floor(game.getRandom().nextDouble() * playerWWS.size()));
 
                     TroupleEvent troupleEvent = new TroupleEvent(playerWW, new HashSet<>(lover.getLovers()));
                     Bukkit.getPluginManager().callEvent(troupleEvent);
