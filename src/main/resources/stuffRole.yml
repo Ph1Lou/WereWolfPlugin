@@ -169,7 +169,7 @@
   '3':
     ==: org.bukkit.inventory.ItemStack
     type: STRING
-    amount: 64
+    amount: 3
 
 "werewolf.role.priestess.display":
   '0':

@@ -488,10 +488,10 @@ public class PlayerListener implements Listener {
 
 		if (playerWW.isState(StatePlayer.ALIVE)) return;
 
+		playerWW.setState(StatePlayer.ALIVE);
 		playerWW.getRole().recoverPotionEffect();
 		playerWW.sendMessageWithKey("werewolf.announcement.resurrection");
 		game.getMapManager().transportation(playerWW, Math.random() * Math.PI * 2);
-		playerWW.setState(StatePlayer.ALIVE);
 
 		BukkitUtils.scheduleSyncDelayedTask(game::checkVictory);
 	}

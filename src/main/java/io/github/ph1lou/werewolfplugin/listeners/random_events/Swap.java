@@ -12,6 +12,7 @@ import io.github.ph1lou.werewolfapi.events.random_events.SwapEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
 import java.util.List;
@@ -63,6 +64,15 @@ public class Swap extends ListenerManager {
                     playerWW2.addPlayerMaxHealth(20 - playerWW2.getMaxHealth());
                     playerWW1.getPotionEffects().forEach(playerWW1::removePotionEffect);
                     playerWW2.getPotionEffects().forEach(playerWW1::removePotionEffect);
+                    Player player1 = Bukkit.getPlayer(playerWW1.getUUID());
+                    Player player2 = Bukkit.getPlayer(playerWW2.getUUID());
+                    if (player1 != null) {
+                        player1.getActivePotionEffects().forEach(potionEffect -> player1.removePotionEffect(potionEffect.getType()));
+                    }
+                    if (player2 != null) {
+                        player2.getActivePotionEffects().forEach(potionEffect -> player2.removePotionEffect(potionEffect.getType()));
+                    }
+
                     playerWW1.sendMessageWithKey("werewolf.random_events.swap.concerned");
                     playerWW2.sendMessageWithKey("werewolf.random_events.swap.concerned");
                     roles1.recoverPower();
