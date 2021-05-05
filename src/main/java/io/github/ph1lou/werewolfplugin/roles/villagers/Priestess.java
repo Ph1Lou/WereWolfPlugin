@@ -8,12 +8,12 @@ import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTag;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
+import io.github.ph1lou.werewolfapi.events.game.game_cycle.UpdateCompositionEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleWithLimitedSelectionDuration;
 import io.github.ph1lou.werewolfapi.utils.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -21,7 +21,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class Priestess extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
@@ -101,64 +100,45 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
 
     }
 
+
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onAnnounceDeath(AnnouncementDeathEvent event) {
+    private void sendDeathMessage(AnnouncementDeathEvent event) {
 
         if (event.isCancelled()) return;
 
+        IPlayerWW playerWW = event.getPlayerWW();
+        IPlayerWW targetWW = event.getTargetPlayer();
+        String key = playerWW.getRole().getKey();
+        String message = game.translate(event.getFormat()).replace("&player&", targetWW.getName());
+
         event.setCancelled(true);
 
-        game.getPlayerWW()
-                .stream()
-                .map(IPlayerWW::getRole)
-                .forEach(roles -> sendDeathMessage(roles.getPlayerWW(),
-                        event.getPlayerWW(),
-                        roles.isNeutral(),
-                        roles.isWereWolf(),
-                        event.getFormat(),
-                        event.getRole()));
-
-        game.getModerationManager().getModerators().stream()
-                .filter(uuid -> game.getPlayerWW(uuid) == null)
-                .map(Bukkit::getPlayer)
-                .filter(Objects::nonNull)
-                .forEach(player -> player.sendMessage(game.translate("werewolf.announcement.death_message_with_role")
-                        .replace("&player&", event.getPlayerName())
-                        .replace("&role&", game.translate(event.getPlayerWW().getRole().getKey()))));
-
-        Bukkit.getConsoleSender()
-                .sendMessage(game.translate("werewolf.announcement.death_message_with_role")
-                        .replace("&player&", event.getPlayerName())
-                        .replace("&role&",
-                                game.translate(event.getPlayerWW().getRole().getKey())));
-        event.setRole(event.getPlayerWW().getRole().getCamp().getKey());
-    }
-
-    private void sendDeathMessage(IPlayerWW playerWW, IPlayerWW targetWW, boolean neutral, boolean werewolf, String format, String role) {
-
-        String message = game.translate(format).replace("&player&", targetWW.getName());
-
-        if (neutral) {
+        if (playerWW.getRole().isNeutral()) {
             if (getPlayerWW().isState(StatePlayer.ALIVE) && game.getRandom().nextFloat() > 0.95) {
                 playerWW.sendMessage(message.replace("&role&", ChatColor.MAGIC + "Coucou"));
             } else {
-                playerWW.sendMessage(message.replace("&role&", game.translate(role)));
+                playerWW.sendMessage(message.replace("&role&", game.translate(key)));
             }
         } else if (game.getRandom().nextFloat() < 0.8) {
 
-            if (getPlayerWW().isState(StatePlayer.ALIVE) && werewolf) {
+            if (getPlayerWW().isState(StatePlayer.ALIVE) && playerWW.getRole().isWereWolf()) {
                 playerWW.sendMessage(message.replace("&role&", ChatColor.MAGIC + "Coucou"));
             } else {
-                playerWW.sendMessage(message.replace("&role&", game.translate(role)));
+                playerWW.sendMessage(message.replace("&role&", game.translate(key)));
             }
         } else {
 
-            if (getPlayerWW().isState(StatePlayer.ALIVE) && werewolf) {
-                playerWW.sendMessage(message.replace("&role&", game.translate(role)));
+            if (getPlayerWW().isState(StatePlayer.ALIVE) && playerWW.getRole().isWereWolf()) {
+                playerWW.sendMessage(message.replace("&role&", game.translate(key)));
             } else {
                 playerWW.sendMessage(message.replace("&role&", ChatColor.MAGIC + "Coucou"));
             }
         }
+    }
+
+    @EventHandler
+    public void onCompositionUpdate(UpdateCompositionEvent event) {
+        event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

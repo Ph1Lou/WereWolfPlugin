@@ -7,7 +7,9 @@ import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.enums.UpdateCompositionReason;
 import io.github.ph1lou.werewolfapi.events.UpdateLanguageEvent;
+import io.github.ph1lou.werewolfapi.events.game.game_cycle.UpdateCompositionEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FirstDeathEvent;
@@ -38,8 +40,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 
@@ -436,21 +438,10 @@ public class PlayerListener implements Listener {
 
 		if (playerWW.isState(StatePlayer.DEATH)) return;
 
-		ListIterator<Player> allPlayers = new ArrayList<Player>(Bukkit.getOnlinePlayers()).listIterator();
-		List<AnnouncementDeathEvent> announcementDeathEvents = new ArrayList<>();
-
-		while (allPlayers.hasNext()) {
-			AnnouncementDeathEvent announcementDeathEvent = new AnnouncementDeathEvent(playerWW, allPlayers.next().getUniqueId(),
+		game.getPlayerWW().forEach(playerWW1 -> {
+			AnnouncementDeathEvent announcementDeathEvent = new AnnouncementDeathEvent(playerWW, playerWW1,
 					"werewolf.announcement.death_message");
 			Bukkit.getPluginManager().callEvent(announcementDeathEvent);
-			announcementDeathEvents.add(announcementDeathEvent);
-
-
-		}
-
-		ListIterator<AnnouncementDeathEvent> announcementDeathEventIterator = announcementDeathEvents.listIterator();
-		while (announcementDeathEventIterator.hasNext()) {
-			AnnouncementDeathEvent announcementDeathEvent = announcementDeathEventIterator.next();
 			if (!announcementDeathEvent.isCancelled()) {
 
 				String deathMessage = game.translate(announcementDeathEvent.getFormat());
@@ -459,13 +450,25 @@ public class PlayerListener implements Listener {
 				deathMessage = deathMessage.replace("&role&",
 						game.translate(announcementDeathEvent.getRole()));
 
-				Bukkit.broadcastMessage(deathMessage);
-				Bukkit.getPlayer(announcementDeathEvent.getTargetPlayer()).sendMessage(deathMessage);
-
-				//TODO: update role removal method
-				game.getConfig().removeOneRole(announcementDeathEvent.getRole());
+				playerWW.sendMessage(deathMessage);
 			}
+		});
+
+		game.getModerationManager().getModerators().stream()
+				.filter(uuid -> game.getPlayerWW(uuid) == null)
+				.map(Bukkit::getPlayer)
+				.filter(Objects::nonNull)
+				.forEach(player1 -> player1.sendMessage(this.sendOriginalDeathMessage(playerWW)));
+
+		Bukkit.getConsoleSender().sendMessage(this.sendOriginalDeathMessage(playerWW));
+
+		UpdateCompositionEvent updateCompositionReason = new UpdateCompositionEvent(playerWW.getRole().getKey(), UpdateCompositionReason.DEATH, -1);
+		Bukkit.getPluginManager().callEvent(updateCompositionReason);
+
+		if (!updateCompositionReason.isCancelled()) {
+			game.getConfig().removeOneRole(playerWW.getRole().getKey());
 		}
+
 
 		playerWW.setState(StatePlayer.DEATH);
 		game.getScore().removePlayerSize();
@@ -492,6 +495,12 @@ public class PlayerListener implements Listener {
 			}
 		}
 		BukkitUtils.scheduleSyncDelayedTask(game::checkVictory);
+	}
+
+	private String sendOriginalDeathMessage(IPlayerWW playerWW) {
+		return game.translate("werewolf.announcement.death_message_with_role")
+				.replace("&player&", playerWW.getName())
+				.replace("&role&", game.translate(playerWW.getRole().getKey()));
 	}
 
 	@EventHandler

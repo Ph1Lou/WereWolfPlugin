@@ -40,7 +40,7 @@ public class Shaman extends RoleVillage implements IAffectedPlayers {
 
         IPlayerWW playerWW = event.getPlayerWW();
 
-        if (getPlayerWW().isState(StatePlayer.DEATH)) {
+        if (this.getPlayerWW().isState(StatePlayer.DEATH)) {
             return;
         }
 
@@ -49,7 +49,7 @@ public class Shaman extends RoleVillage implements IAffectedPlayers {
         textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/ww %s %s",
                 game.translate("werewolf.role.shaman.command"), playerWW.getUUID())));
 
-        getPlayerWW().sendMessage(textComponent);
+        this.getPlayerWW().sendMessage(textComponent);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

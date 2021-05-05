@@ -77,7 +77,7 @@
         <dependency>
             <groupId>io.github.ph1lou</groupId>
             <artifactId>werewolfapi</artifactId>
-            <version>c09be96bccc610918fac87306fa1b59f5c67de7d</version>
+            <version>1.4</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
