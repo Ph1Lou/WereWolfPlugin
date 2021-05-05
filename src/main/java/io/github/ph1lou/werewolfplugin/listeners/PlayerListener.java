@@ -38,8 +38,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -436,22 +436,35 @@ public class PlayerListener implements Listener {
 
 		if (playerWW.isState(StatePlayer.DEATH)) return;
 
-		AnnouncementDeathEvent announcementDeathEvent = new AnnouncementDeathEvent(playerWW,
-				"werewolf.announcement.death_message");
+		ListIterator<Player> allPlayers = new ArrayList<Player>(Bukkit.getOnlinePlayers()).listIterator();
+		List<AnnouncementDeathEvent> announcementDeathEvents = new ArrayList<>();
 
-		Bukkit.getPluginManager().callEvent(announcementDeathEvent);
+		while (allPlayers.hasNext()) {
+			AnnouncementDeathEvent announcementDeathEvent = new AnnouncementDeathEvent(playerWW, allPlayers.next().getUniqueId(),
+					"werewolf.announcement.death_message");
+			Bukkit.getPluginManager().callEvent(announcementDeathEvent);
+			announcementDeathEvents.add(announcementDeathEvent);
 
-		if (!announcementDeathEvent.isCancelled()) {
 
-			String deathMessage = game.translate(announcementDeathEvent.getFormat());
-			deathMessage = deathMessage.replace("&player&",
-					announcementDeathEvent.getPlayerName());
-			deathMessage = deathMessage.replace("&role&",
-					game.translate(announcementDeathEvent.getRole()));
+		}
 
-			Bukkit.broadcastMessage(deathMessage);
+		ListIterator<AnnouncementDeathEvent> announcementDeathEventIterator = announcementDeathEvents.listIterator();
+		while (announcementDeathEventIterator.hasNext()) {
+			AnnouncementDeathEvent announcementDeathEvent = announcementDeathEventIterator.next();
+			if (!announcementDeathEvent.isCancelled()) {
 
-			game.getConfig().removeOneRole(announcementDeathEvent.getRole());
+				String deathMessage = game.translate(announcementDeathEvent.getFormat());
+				deathMessage = deathMessage.replace("&player&",
+						announcementDeathEvent.getPlayerName());
+				deathMessage = deathMessage.replace("&role&",
+						game.translate(announcementDeathEvent.getRole()));
+
+				Bukkit.broadcastMessage(deathMessage);
+				Bukkit.getPlayer(announcementDeathEvent.getTargetPlayer()).sendMessage(deathMessage);
+
+				//TODO: update role removal method
+				game.getConfig().removeOneRole(announcementDeathEvent.getRole());
+			}
 		}
 
 		playerWW.setState(StatePlayer.DEATH);

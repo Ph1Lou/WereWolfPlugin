@@ -466,6 +466,15 @@
         "progress_charm": "[§eLG UHC§r] Progression du Charme §b%s%%",
         "command": "charmer",
         "change": "[§6LG UHC§r] Votre charmée est maintenant §b%s"
+      },
+      "shaman": {
+        "display": "Chaman",
+        "description": " ",
+        "choice_message": "[§eLG UHC§r] Le joueur §b%s§r est mort. Cliquez ici pour obtenir une information sur son tueur en échange d'un coeur permanent",
+        "killer_none": "[§eLG UHC§r] §b%s§r est mort de PVE",
+        "killer_name": "[§eLG UHC§r] Le tueur de §b%s§r est §b%s§r",
+        "killer_role": "[§eLG UHC§r] Le tueur de §b%s§r est un §b%s§r",
+        "command": "command_shaman"
       }
     },
     "vote": {
