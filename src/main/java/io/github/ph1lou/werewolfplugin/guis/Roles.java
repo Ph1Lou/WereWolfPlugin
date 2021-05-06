@@ -30,26 +30,28 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 public class Roles implements InventoryProvider {
 
+    private Category category = Category.WEREWOLF;
 
-    public static final SmartInventory INVENTORY = SmartInventory.builder()
-            .id("roles")
-            .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
-            .provider(new Roles())
-            .size(6, 9)
-            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.roles.name"))
-            .closeable(true)
-            .build();
+    public Roles(Player player) {
+    }
 
-    private final Map<UUID, Category> categories = new HashMap<>();
+    public static SmartInventory getInventory(Player player) {
+        return SmartInventory.builder()
+                .id("roles")
+                .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
+                .provider(new Roles(player))
+                .size(6, 9)
+                .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.roles.name"))
+                .closeable(true)
+                .build();
+    }
 
 
     @Override
@@ -186,10 +188,10 @@ public class Roles implements InventoryProvider {
                     }));
 
 
-        contents.set(5, 1, ClickableItem.of((new ItemBuilder(Category.WEREWOLF == this.categories.getOrDefault(uuid, Category.WEREWOLF) ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate("werewolf.categories.werewolf")).setAmount(Math.max(1, count(main, Category.WEREWOLF))).build()), e -> this.categories.put(uuid, Category.WEREWOLF)));
-        contents.set(5, 3, ClickableItem.of((new ItemBuilder(Category.VILLAGER == this.categories.getOrDefault(uuid, Category.WEREWOLF) ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate("werewolf.categories.villager")).setAmount(Math.max(1, count(main, Category.VILLAGER))).build()), e -> this.categories.put(uuid, Category.VILLAGER)));
-        contents.set(5, 5, ClickableItem.of((new ItemBuilder(Category.NEUTRAL == this.categories.getOrDefault(uuid, Category.WEREWOLF) ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate("werewolf.categories.neutral")).setAmount(Math.max(1, count(main, Category.NEUTRAL))).build()), e -> this.categories.put(uuid, Category.NEUTRAL)));
-        contents.set(5, 7, ClickableItem.of((new ItemBuilder(Category.ADDONS == this.categories.getOrDefault(uuid, Category.WEREWOLF) ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate("werewolf.categories.addons")).setAmount(Math.max(1, count(main, Category.ADDONS))).build()), e -> this.categories.put(uuid, Category.ADDONS)));
+        contents.set(5, 1, ClickableItem.of((new ItemBuilder(Category.WEREWOLF == this.category ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate("werewolf.categories.werewolf")).setAmount(Math.max(1, count(main, Category.WEREWOLF))).build()), e -> this.category = Category.WEREWOLF));
+        contents.set(5, 3, ClickableItem.of((new ItemBuilder(Category.VILLAGER == this.category ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate("werewolf.categories.villager")).setAmount(Math.max(1, count(main, Category.VILLAGER))).build()), e -> this.category = Category.VILLAGER));
+        contents.set(5, 5, ClickableItem.of((new ItemBuilder(Category.NEUTRAL == this.category ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate("werewolf.categories.neutral")).setAmount(Math.max(1, count(main, Category.NEUTRAL))).build()), e -> this.category = Category.NEUTRAL));
+        contents.set(5, 7, ClickableItem.of((new ItemBuilder(Category.ADDONS == this.category ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate("werewolf.categories.addons")).setAmount(Math.max(1, count(main, Category.ADDONS))).build()), e -> this.category = Category.ADDONS));
 
 
         lore.add(game.translate("werewolf.menu.shift"));
@@ -199,7 +201,7 @@ public class Roles implements InventoryProvider {
 
         for (RoleRegister roleRegister : main.getRegisterManager().getRolesRegister()) {
 
-            if (roleRegister.getCategories().contains(categories.getOrDefault(uuid, Category.WEREWOLF))) {
+            if (roleRegister.getCategories().contains(this.category)) {
 
                 String key = roleRegister.getKey();
                 AtomicBoolean unRemovable = new AtomicBoolean(false);
@@ -283,9 +285,9 @@ public class Roles implements InventoryProvider {
             contents.set(4, 7, null);
             contents.set(4, 8, null);
             contents.set(4, 2, ClickableItem.of(new ItemBuilder(Material.ARROW).setDisplayName(game.translate("werewolf.menu.roles.previous", page, pagination.isFirst() ? page : page - 1)).build(),
-                    e -> INVENTORY.open(player, pagination.previous().getPage())));
+                    e -> getInventory(player).open(player, pagination.previous().getPage())));
             contents.set(4, 6, ClickableItem.of(new ItemBuilder(Material.ARROW).setDisplayName(game.translate("werewolf.menu.roles.next", page, pagination.isLast() ? page : page + 1)).build(),
-                    e -> INVENTORY.open(player, pagination.next().getPage())));
+                    e -> getInventory(player).open(player, pagination.next().getPage())));
             contents.set(4, 4, ClickableItem.empty(new ItemBuilder(UniversalMaterial.SIGN.getType()).setDisplayName(game.translate("werewolf.menu.roles.current", page, items.size() / 27 + 1)).build()));
         } else {
             int i = 0;

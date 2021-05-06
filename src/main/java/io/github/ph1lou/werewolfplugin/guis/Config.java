@@ -49,11 +49,11 @@ public class Config implements InventoryProvider {
 
         contents.set(1, 4, ClickableItem.of((new ItemBuilder(Material.BEACON)
                 .setDisplayName(game.translate("werewolf.menu.roles.name"))
-                .build()), e -> Roles.INVENTORY.open(player)));
+                .build()), e -> Roles.getInventory(player).open(player)));
 
         contents.set(2, 4, ClickableItem.of((new ItemBuilder(UniversalMaterial.ANVIL.getType())
                 .setDisplayName(game.translate("werewolf.menu.timers.name"))
-                .build()), e -> TimersGUI.INVENTORY.open(player)));
+                .build()), e -> TimersGUI.getInventory(player).open(player)));
 
         contents.set(3, 2, ClickableItem.of((new ItemBuilder(Material.PUMPKIN)
                 .setDisplayName(game.translate("werewolf.menu.scenarios.name"))
