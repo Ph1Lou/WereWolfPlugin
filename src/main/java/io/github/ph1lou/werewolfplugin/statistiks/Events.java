@@ -63,7 +63,10 @@ import io.github.ph1lou.werewolfapi.events.roles.comedian.UseMaskEvent;
 import io.github.ph1lou.werewolfapi.events.roles.detective.InvestigateEvent;
 import io.github.ph1lou.werewolfapi.events.roles.elder.ElderResurrectionEvent;
 import io.github.ph1lou.werewolfapi.events.roles.falsifier_werewolf.NewDisplayRole;
+import io.github.ph1lou.werewolfapi.events.roles.flute_player.AllPlayerEnchantedEvent;
 import io.github.ph1lou.werewolfapi.events.roles.flute_player.EnchantedEvent;
+import io.github.ph1lou.werewolfapi.events.roles.flute_player.FindFluteEvent;
+import io.github.ph1lou.werewolfapi.events.roles.flute_player.GiveFluteEvent;
 import io.github.ph1lou.werewolfapi.events.roles.fox.BeginSniffEvent;
 import io.github.ph1lou.werewolfapi.events.roles.fox.SniffEvent;
 import io.github.ph1lou.werewolfapi.events.roles.grim_werewolf.GrimEvent;
@@ -83,6 +86,7 @@ import io.github.ph1lou.werewolfapi.events.roles.rival.RivalLoverEvent;
 import io.github.ph1lou.werewolfapi.events.roles.seer.SeeVoteEvent;
 import io.github.ph1lou.werewolfapi.events.roles.seer.SeerEvent;
 import io.github.ph1lou.werewolfapi.events.roles.serial_killer.SerialKillerEvent;
+import io.github.ph1lou.werewolfapi.events.roles.shaman.ShamanEvent;
 import io.github.ph1lou.werewolfapi.events.roles.sister.SisterSeeNameEvent;
 import io.github.ph1lou.werewolfapi.events.roles.sister.SisterSeeRoleEvent;
 import io.github.ph1lou.werewolfapi.events.roles.stud.StudLoverEvent;
@@ -375,9 +379,32 @@ public class Events implements Listener {
         if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
-        Set<IPlayerWW> enchanted = event.getPlayerWWS();
-        IPlayerWW playerWW = event.getPlayerWW();
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("enchanted", playerWW, enchanted, api.getScore().getTimer()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("enchanted", event.getPlayerWW(), event.getTargetWW(), api.getScore().getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onEnchantedAll(AllPlayerEnchantedEvent event) {
+
+        WereWolfAPI api = main.getWereWolfAPI();
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("all_enchanted", event.getPlayerWW(), api.getScore().getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onFindFlute(FindFluteEvent event) {
+
+        if (event.isCancelled()) return;
+
+        WereWolfAPI api = main.getWereWolfAPI();
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("find_flute", event.getPlayerWW(), event.getTargetWW(), api.getScore().getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onGiveFlute(GiveFluteEvent event) {
+
+        if (event.isCancelled()) return;
+
+        WereWolfAPI api = main.getWereWolfAPI();
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("give_flute", event.getPlayerWW(), event.getTargetWW(), api.getScore().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -1073,5 +1100,14 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("amnesic_transform", event.getPlayerWW(), event.getTargetWW(), api.getScore().getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onShaman(ShamanEvent event) {
+
+        if (event.isCancelled()) return;
+
+        WereWolfAPI api = main.getWereWolfAPI();
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("shaman", event.getPlayerWW(), event.getTargetWW(), api.getScore().getTimer()));
     }
 }

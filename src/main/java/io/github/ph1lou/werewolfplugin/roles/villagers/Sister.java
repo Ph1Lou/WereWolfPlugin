@@ -109,7 +109,7 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
                 .filter(Objects::nonNull)
                 .filter(player -> {
                     try {
-                        return location.distance(player.getLocation()) < 20;
+                        return location.distance(player.getLocation()) < game.getConfig().getDistanceSister();
                     } catch (Exception ignored) {
                         return false;
                     }

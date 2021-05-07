@@ -41,6 +41,7 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
                         this,
                         ServicePriority.Normal);
         this.invManager.init();
+
         Bukkit.getPluginManager().registerEvents(new Events(this), this);
         Bukkit.getPluginManager().registerEvents(languageManager, this);
         currentGame = new GameManager(this);

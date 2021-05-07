@@ -26,6 +26,7 @@ public class Configuration implements IConfiguration {
     private int resistanceRate = 20;
     private int appleRate = 2;
     private int flintRate = 10;
+    private int distanceFlutePlayer = 20;
     private int pearlRate = 30;
     private int xpBoost = 500;
     private int playerRequiredBeforeVotingEnds = 10;
@@ -316,6 +317,16 @@ public class Configuration implements IConfiguration {
     @Override
     public void setDistanceAmnesiacLovers(int distanceAmnesiacLovers) {
         this.distanceAmnesiacLovers = distanceAmnesiacLovers;
+    }
+
+    @Override
+    public int getDistanceFlutePlayer() {
+        return this.distanceFlutePlayer;
+    }
+
+    @Override
+    public void setDistanceFlutePlayer(int distanceFlutePlayer) {
+        this.distanceFlutePlayer = distanceFlutePlayer;
     }
 
     @Override
