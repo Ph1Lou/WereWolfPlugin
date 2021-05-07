@@ -17,7 +17,6 @@ import io.github.ph1lou.werewolfplugin.RegisterManager;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.WorldBorder;
-import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 
-public class ScoreBoard implements IScoreBoard, Listener {
+public class ScoreBoard implements IScoreBoard {
 
 	private final GameManager game;
 	private int group_size = 5;

@@ -41,7 +41,6 @@ public class ListenersLoader {
         listeners.add(new CycleListener(this.game));
         listeners.add(new ActionBarListener(this.game));
         listeners.add(new TabManager(this.game));
-        listeners.add((Listener) this.game.getScore());
         listeners.add((Listener) this.game.getVote());
         this.listeners.forEach(BukkitUtils::registerEvents);
 

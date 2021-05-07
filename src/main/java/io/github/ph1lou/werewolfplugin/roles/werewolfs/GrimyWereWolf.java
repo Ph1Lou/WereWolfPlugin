@@ -8,7 +8,9 @@ import io.github.ph1lou.werewolfapi.enums.Camp;
 import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.UpdateCompositionReason;
 import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTag;
+import io.github.ph1lou.werewolfapi.events.game.game_cycle.UpdateCompositionEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.grim_werewolf.GrimEvent;
@@ -27,6 +29,7 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private boolean power = true;
+    private boolean hide = false;
 
     public GrimyWereWolf(WereWolfAPI main, IPlayerWW playerWW, String key) {
         super(main, playerWW, key);
@@ -86,10 +89,20 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
 
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onAnnounceDeath(AnnouncementDeathEvent event) {
+    @EventHandler
+    public void onDeathAnnounce(AnnouncementDeathEvent event) {
 
-        if (event.isCancelled()) return;
+        if (this.affectedPlayer.isEmpty()) {
+            return;
+        }
+
+        if (event.getPlayerWW().equals(this.affectedPlayer.get(0))) {
+            event.setRole(RolesBase.WEREWOLF.getKey());
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onAnnounceDeath(FinalDeathEvent event) {
 
         if (!event.getPlayerWW().getLastKiller().isPresent()) return;
 
@@ -99,7 +112,6 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
 
         this.power = false;
 
-
         GrimEvent grimEvent = new GrimEvent(this.getPlayerWW(), event.getPlayerWW());
         Bukkit.getPluginManager().callEvent(grimEvent);
 
@@ -108,11 +120,31 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
             return;
         }
 
-        getPlayerWW().sendMessageWithKey("werewolf.role.grimy_werewolf.perform", event.getPlayerName(), game.translate(event.getRole()));
+        this.getPlayerWW().sendMessageWithKey("werewolf.role.grimy_werewolf.perform", event.getPlayerWW().getName(), game.translate(event.getPlayerWW().getRole().getKey()));
 
         this.affectedPlayer.add(event.getPlayerWW());
+    }
 
-        event.setRole(RolesBase.WEREWOLF.getKey());
+    @EventHandler
+    public void onCompositionUpdate(UpdateCompositionEvent event) {
+
+        if (this.affectedPlayer.isEmpty()) {
+            return;
+        }
+
+        if (event.getReason() != UpdateCompositionReason.DEATH) {
+            return;
+        }
+
+        if (!event.getKey().equals(this.affectedPlayer.get(0).getRole().getKey())) {
+            return;
+        }
+
+        if (this.hide) {
+            return;
+        }
+        this.hide = true;
+        event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

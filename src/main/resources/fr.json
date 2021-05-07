@@ -466,6 +466,17 @@
         "progress_charm": "[§eLG UHC§r] Progression du Charme §b%s%%",
         "command": "charmer",
         "change": "[§6LG UHC§r] Votre charmée est maintenant §b%s"
+      },
+      "shaman": {
+        "display": "Chaman",
+        "description": "A chaque fois qu'un joueur meurt, vous pouvez obtenir aléatoirement le role ou le nom du tueur en échange d'un coeur permanent. Vous voyez toujours le véritable role d'un mort",
+        "cannot_use": "[§eLG UHC§r] Vous ne pouvez plus exécuter cette action",
+        "choice_message": "[§eLG UHC§r] Le joueur §b%s§r est mort. Cliquez ici pour obtenir une information sur son tueur en échange d'un coeur permanent",
+        "killer_no_info": "[§eLG UHC§r] Un pouvoir inconnu empêche la divulgation d'informations sur la mort de §b%s§r",
+        "killer_pve": "[§eLG UHC§r] §b%s§r est mort PVE",
+        "killer_name": "[§eLG UHC§r] Le tueur de §b%s§r est §b%s§r",
+        "killer_role": "[§eLG UHC§r] Le tueur de §b%s§r est un §b%s§r",
+        "command": "command_shaman"
       }
     },
     "vote": {

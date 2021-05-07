@@ -8,6 +8,7 @@ import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
 import io.github.ph1lou.werewolfapi.IConfiguration;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.registers.TimerRegister;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
@@ -25,15 +26,19 @@ import java.util.stream.Collectors;
 
 public class TimersGUI implements InventoryProvider {
 
+    public TimersGUI(Player player) {
+    }
 
-    public static final SmartInventory INVENTORY = SmartInventory.builder()
-            .id("timers")
-            .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
-            .provider(new TimersGUI())
-            .size(Math.min(54, (JavaPlugin.getPlugin(Main.class).getRegisterManager().getTimersRegister().size() / 9 + 2) * 9) / 9, 9)
-            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.timers.name"))
-            .closeable(true)
-            .build();
+    public static SmartInventory getInventory(Player player) {
+        return SmartInventory.builder()
+                .id("timers")
+                .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
+                .provider(new TimersGUI(player))
+                .size(Math.min(54, (JavaPlugin.getPlugin(Main.class).getRegisterManager().getTimersRegister().size() / 9 + 2) * 9) / 9, 9)
+                .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.timers.name"))
+                .closeable(true)
+                .build();
+    }
 
 
     private String key = "werewolf.menu.timers.invulnerability";
@@ -41,7 +46,7 @@ public class TimersGUI implements InventoryProvider {
     @Override
     public void init(Player player, InventoryContents contents) {
         Main main = JavaPlugin.getPlugin(Main.class);
-        io.github.ph1lou.werewolfapi.WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = main.getWereWolfAPI();
         contents.set(0, 0, ClickableItem.of((
                 new ItemBuilder(UniversalMaterial.COMPASS.getType())
                         .setDisplayName(
@@ -181,13 +186,13 @@ public class TimersGUI implements InventoryProvider {
                                     page, pagination.isFirst() ? page : page - 1))
                             .build(),
 
-                    e -> INVENTORY.open(player, pagination.previous().getPage())));
+                    e -> getInventory(player).open(player, pagination.previous().getPage())));
             contents.set(5, 6, ClickableItem.of(new ItemBuilder(Material.ARROW)
                             .setDisplayName(game.translate("werewolf.menu.roles.next",
                                     page, pagination.isLast() ? page : page + 1))
                             .build(),
 
-                    e -> INVENTORY.open(player, pagination.next().getPage())));
+                    e -> getInventory(player).open(player, pagination.next().getPage())));
             contents.set(5, 4, ClickableItem.empty(
                     new ItemBuilder(UniversalMaterial.SIGN.getType())
                             .setDisplayName(game.translate("werewolf.menu.roles.current",
