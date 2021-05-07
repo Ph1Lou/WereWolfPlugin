@@ -3,10 +3,12 @@ package io.github.ph1lou.werewolfplugin.commands.roles;
 import io.github.ph1lou.werewolfapi.ICommands;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.events.roles.shaman.ShamanEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.IDisplay;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfplugin.Main;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
@@ -30,15 +32,24 @@ public class CommandShaman implements ICommands {
         UUID argUUID = UUID.fromString(args[0]);
         IPlayerWW pVictim = game.getPlayerWW(argUUID);
 
-        if (game.getScore().getTimer() - pVictim.getDeathTime() < 30) {
+        if (game.getScore().getTimer() - pVictim.getDeathTime() > 30 ||
+                ((IAffectedPlayers) playerWW.getRole()).getAffectedPlayers().contains(pVictim)) {
+            playerWW.sendMessageWithKey("werewolf.role.shaman.cannot_use");
             return;
         }
 
         Optional<IPlayerWW> pKiller = pVictim.getLastKiller();
-        ((IAffectedPlayers) playerWW).addAffectedPlayer(pVictim);
+        ((IAffectedPlayers) playerWW.getRole()).addAffectedPlayer(pVictim);
+
+        ShamanEvent shamanEvent = new ShamanEvent(pVictim, pKiller);
+
+        if (shamanEvent.isCancelled()) {
+            playerWW.sendMessageWithKey("werewolf.role.shaman.killer_no_info", pVictim.getName());
+            return;
+        }
 
         if (!pKiller.isPresent()) {
-            playerWW.sendMessageWithKey("werewolf.role.shaman.killer_none");
+            playerWW.sendMessageWithKey("werewolf.role.shaman.killer_pve", pVictim.getName());
             return;
         }
 

@@ -450,7 +450,7 @@ public class PlayerListener implements Listener {
 				deathMessage = deathMessage.replace("&role&",
 						game.translate(announcementDeathEvent.getRole()));
 
-				playerWW.sendMessage(deathMessage);
+				announcementDeathEvent.getTargetPlayer().sendMessage(deathMessage);
 			}
 		});
 

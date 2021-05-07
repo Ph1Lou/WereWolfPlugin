@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
+import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
@@ -26,7 +27,9 @@ public class Shaman extends RoleVillage implements IAffectedPlayers {
 
     @Override
     public @NotNull String getDescription() {
-        return null;
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.shaman.description"))
+                .build();
     }
 
     @Override
@@ -55,16 +58,16 @@ public class Shaman extends RoleVillage implements IAffectedPlayers {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onAnnounceDeath(AnnouncementDeathEvent event) {
 
-        if (!event.getTargetPlayer().equals(getPlayerUUID())) {
+        if (!event.getTargetPlayer().equals(getPlayerWW())) {
             return;
         }
         event.setCancelled(true);
-
-        String deathMessage = game.translate("death_message_with_role");
+        event.setFormat("werewolf.announcement.death_message_with_role");
+        String deathMessage = game.translate(event.getFormat());
         deathMessage = deathMessage.replace("&player&",
                 event.getPlayerWW().getName());
         deathMessage = deathMessage.replace("&role&",
-                game.translate(event.getPlayerWW().getRole().getDeathRole()));
+                game.translate(event.getPlayerWW().getRole().getKey()));
 
         getPlayerWW().sendMessage(deathMessage);
     }
