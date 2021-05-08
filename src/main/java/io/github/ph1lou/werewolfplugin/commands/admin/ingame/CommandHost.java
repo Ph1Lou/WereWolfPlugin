@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 import io.github.ph1lou.werewolfapi.ICommands;
 import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
+import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.permissions.HostEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
@@ -52,5 +53,6 @@ public class CommandHost implements ICommands {
             Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.host.add", host.getName()));
         }
         Bukkit.getPluginManager().callEvent(new HostEvent(uuid, moderationManager.getHosts().contains(uuid)));
+        Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(host));
     }
 }

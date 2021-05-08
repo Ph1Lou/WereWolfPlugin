@@ -48,7 +48,8 @@ public class ShowDeathCategoryRole extends ListenerManager {
     @Override
     public void register(boolean isActive) {
         super.register(isActive);
-        Bukkit.getPluginManager().callEvent(
-                new UpdateNameTagEvent(Bukkit.getOnlinePlayers()));
+        Bukkit.getOnlinePlayers().forEach(player -> Bukkit.getPluginManager().callEvent(
+                new UpdateNameTagEvent(player)));
+
     }
 }

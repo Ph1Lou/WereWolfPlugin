@@ -12,7 +12,6 @@ import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.events.roles.fox.SniffEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.IDisplay;
 import io.github.ph1lou.werewolfapi.rolesattributs.ILimitedUse;
 import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
 import io.github.ph1lou.werewolfapi.rolesattributs.IProgress;
@@ -197,14 +196,7 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
 
         if (temp >= 100) {
 
-            boolean isWereWolf = true;
-
-            if (playerWW.getRole() instanceof IDisplay &&
-                    (!((IDisplay) playerWW.getRole()).isDisplayCamp(Camp.WEREWOLF.getKey()))) {
-                isWereWolf = false;
-            } else if (!playerWW.getRole().isWereWolf()) {
-                isWereWolf = false;
-            }
+            boolean isWereWolf = playerWW.getRole().isDisplayCamp(Camp.WEREWOLF.getKey());
 
             SniffEvent sniffEvent = new SniffEvent(getPlayerWW(),
                     playerWW, isWereWolf);

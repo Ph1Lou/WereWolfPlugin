@@ -13,7 +13,6 @@ import io.github.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import io.github.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
 import io.github.ph1lou.werewolfapi.events.werewolf.WereWolfCanSpeakInChatEvent;
 import io.github.ph1lou.werewolfapi.events.werewolf.WereWolfChatEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.IDisplay;
 import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfapi.rolesattributs.ITransformed;
@@ -23,7 +22,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
-public class WolfDog extends RoleVillage implements IDisplay, ITransformed, IPower {
+public class WolfDog extends RoleVillage implements ITransformed, IPower {
 
     private boolean transformed = false;
     private boolean power = true;
@@ -145,10 +144,6 @@ public class WolfDog extends RoleVillage implements IDisplay, ITransformed, IPow
     }
 
     @Override
-    public void setDisplayCamp(String camp) {
-    }
-
-    @Override
     public String getDisplayRole() {
 
         if (this.transformed) {
@@ -165,16 +160,10 @@ public class WolfDog extends RoleVillage implements IDisplay, ITransformed, IPow
         return this.game.getPlayerWW().stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .map(IPlayerWW::getRole)
-                .filter(role -> role.isWereWolf() || role instanceof IDisplay)
-                .filter(role -> !(role instanceof IDisplay) ||
-                        ((IDisplay) role).isDisplayCamp(Camp.WEREWOLF.getKey()))
+                .filter(role -> role.isDisplayCamp(Camp.WEREWOLF.getKey()))
                 .map(IRole::getKey)
                 .findFirst()
                 .orElse(this.getKey());
-    }
-
-    @Override
-    public void setDisplayRole(String s) {
     }
 
     @Override

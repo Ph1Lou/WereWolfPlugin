@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.permissions.ModeratorEvent;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
@@ -47,6 +48,7 @@ public class CommandModerator implements ICommands {
                 game.finalJoin(moderator);
             }
             Bukkit.getPluginManager().callEvent(new ModeratorEvent(argUUID, false));
+            Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(moderator));
             return;
         }
 
@@ -68,5 +70,6 @@ public class CommandModerator implements ICommands {
         moderationManager.addModerator(argUUID);
         Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.moderator.add", moderator.getName()));
         Bukkit.getPluginManager().callEvent(new ModeratorEvent(argUUID, true));
+        Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(moderator));
     }
 }

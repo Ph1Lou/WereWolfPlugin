@@ -14,6 +14,7 @@ import io.github.ph1lou.werewolfapi.enums.Day;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.UpdateLanguageEvent;
+import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.LoadEvent;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
@@ -126,14 +127,15 @@ public class GameManager implements WereWolfAPI {
 
         if (this.getPlayerWW(uuid) != null) return;
 
-        moderationManager.getQueue().remove(uuid);
-        score.addPlayerSize();
+        this.moderationManager.getQueue().remove(uuid);
+        this.score.addPlayerSize();
         Bukkit.broadcastMessage(translate("werewolf.announcement.join", score.getPlayerSize(), score.getRole(), player.getName()));
         clearPlayer(player);
         player.setGameMode(GameMode.ADVENTURE);
         IPlayerWW plg = new PlayerWW(this, player);
-        playerLG.put(uuid, plg);
+        this.playerLG.put(uuid, plg);
         Bukkit.getPluginManager().callEvent(new FinalJoinEvent(plg));
+        Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(player));
         player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 0, false, false));
         player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
 

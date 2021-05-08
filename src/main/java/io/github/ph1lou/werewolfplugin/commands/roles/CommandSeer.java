@@ -8,7 +8,6 @@ import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.roles.seer.SeerEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.IDisplay;
 import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -59,9 +58,9 @@ public class CommandSeer implements ICommands {
 
             String camp = "werewolf.categories.villager";
 
-            if ((role1 instanceof IDisplay && ((IDisplay) role1).isDisplayCamp(Camp.NEUTRAL.getKey())) || role1.isNeutral()) {
+            if (role1.isDisplayCamp(Camp.NEUTRAL.getKey())) {
                 camp = "werewolf.categories.neutral";
-            } else if ((role1 instanceof IDisplay && ((IDisplay) role1).isDisplayCamp(Camp.WEREWOLF.getKey())) || (!(role1 instanceof IDisplay) && role1.isWereWolf())) {
+            } else if (role1.isDisplayCamp(Camp.WEREWOLF.getKey())) {
                 camp = "werewolf.categories.werewolf";
             }
 

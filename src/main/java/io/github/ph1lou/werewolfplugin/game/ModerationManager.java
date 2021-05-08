@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.game;
 
 import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
+import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfplugin.commands.Admin;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -47,10 +48,11 @@ public class ModerationManager implements IModerationManager {
 
         UUID uuid = player.getUniqueId();
 
-        if (!getQueue().contains(uuid)) {
-            queue.add(uuid);
-            Bukkit.broadcastMessage(game.translate("werewolf.announcement.queue", player.getName(), queue.indexOf(uuid) + 1));
-            player.sendMessage(game.translate("werewolf.announcement.rank"));
+        if (!this.queue.contains(uuid)) {
+            this.queue.add(uuid);
+            Bukkit.broadcastMessage(this.game.translate("werewolf.announcement.queue", player.getName(), this.queue.indexOf(uuid) + 1));
+            player.sendMessage(this.game.translate("werewolf.announcement.rank"));
+            Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(player));
         }
     }
 

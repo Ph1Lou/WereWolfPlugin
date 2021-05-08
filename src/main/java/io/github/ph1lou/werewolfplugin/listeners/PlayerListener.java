@@ -9,6 +9,7 @@ import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.enums.UpdateCompositionReason;
 import io.github.ph1lou.werewolfapi.events.UpdateLanguageEvent;
+import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.UpdateCompositionEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
@@ -493,6 +494,7 @@ public class PlayerListener implements Listener {
 			if (game.getConfig().getSpectatorMode() == 0 && !player.isOp()) {
 				player.kickPlayer(game.translate("werewolf.check.death_spectator"));
 			}
+			Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(player));
 		}
 		BukkitUtils.scheduleSyncDelayedTask(game::checkVictory);
 	}
@@ -515,6 +517,10 @@ public class PlayerListener implements Listener {
 		playerWW.sendMessageWithKey("werewolf.announcement.resurrection");
 		game.getMapManager().transportation(playerWW, Math.random() * Math.PI * 2);
 
+		Player player = Bukkit.getPlayer(playerWW.getUUID());
+		if (player != null) {
+			Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(player));
+		}
 		BukkitUtils.scheduleSyncDelayedTask(game::checkVictory);
 	}
 

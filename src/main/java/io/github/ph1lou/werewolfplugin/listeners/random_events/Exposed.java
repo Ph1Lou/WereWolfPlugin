@@ -10,7 +10,6 @@ import io.github.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import io.github.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
 import io.github.ph1lou.werewolfapi.events.random_events.ExposedEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.IDisplay;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import org.bukkit.Bukkit;
@@ -96,9 +95,7 @@ public class Exposed extends ListenerManager {
 
         List<String> roles = new ArrayList<>(Arrays.asList(role1.getKey(),
                 role2.getKey(),
-                playerWW.getRole() instanceof IDisplay ?
-                        ((IDisplay) playerWW.getRole()).getDisplayRole() :
-                        playerWW.getRole().getKey()));
+                playerWW.getRole().getDisplayRole()));
 
         Collections.shuffle(roles, game.getRandom());
 

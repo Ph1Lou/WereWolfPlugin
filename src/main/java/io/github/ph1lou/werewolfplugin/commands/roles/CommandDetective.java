@@ -7,7 +7,6 @@ import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.roles.detective.InvestigateEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.IDisplay;
 import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -87,15 +86,8 @@ public class CommandDetective implements ICommands {
 
         if (playerWW1 == null || playerWW2 == null) return;
 
-        String isLG1 = playerWW1.getRole().getCamp().getKey();
-        String isLG2 = playerWW2.getRole().getCamp().getKey();
-
-        if (playerWW1.getRole() instanceof IDisplay) {
-            isLG1 = ((IDisplay) playerWW1.getRole()).getDisplayCamp();
-        }
-        if (playerWW2.getRole() instanceof IDisplay) {
-            isLG2 = ((IDisplay) playerWW2.getRole()).getDisplayCamp();
-        }
+        String isLG1 = playerWW1.getRole().getDisplayCamp();
+        String isLG2 = playerWW2.getRole().getDisplayCamp();
 
         ((IPower) detective).setPower(false);
 

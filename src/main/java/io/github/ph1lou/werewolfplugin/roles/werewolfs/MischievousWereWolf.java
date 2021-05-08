@@ -7,6 +7,7 @@ import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Day;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTag;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayWillComeEvent;
@@ -123,8 +124,9 @@ public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
             getPlayerWW().removePotionEffect(PotionEffectType.INVISIBILITY);
             setInvisible(false);
             Bukkit.getPluginManager().callEvent(new InvisibleEvent(
-                    getPlayerWW(),
+                    this.getPlayerWW(),
                     false));
+            Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
             getPlayerWW().sendMessageWithKey(
                     "werewolf.role.little_girl.visible");
         } else getPlayerWW().removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
@@ -249,6 +251,7 @@ public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
                 setInvisible(true);
                 Bukkit.getPluginManager().callEvent(
                         new InvisibleEvent(playerWW, true));
+                Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
             }
         } else if (isInvisible()) {
             player.sendMessage(game.translate("werewolf.role.little_girl.visible"));
@@ -257,6 +260,7 @@ public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
             setInvisible(false);
             Bukkit.getPluginManager().callEvent(
                     new InvisibleEvent(playerWW, false));
+            Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
         }
     }
 

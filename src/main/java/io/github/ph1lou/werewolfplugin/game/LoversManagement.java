@@ -9,7 +9,9 @@ import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.lovers.CupidLoversEvent;
+import io.github.ph1lou.werewolfapi.events.lovers.LoversRepartitionEvent;
 import io.github.ph1lou.werewolfapi.events.lovers.RevealLoversEvent;
 import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import io.github.ph1lou.werewolfplugin.roles.lovers.AmnesiacLover;
@@ -99,16 +101,20 @@ public class LoversManagement implements ILoverManager {
 
 	@Override
 	public void repartition() {
-		autoLovers();
-		rangeLovers();
-		game.getConfig().setLoverCount(LoverType.LOVER.getKey(), lovers.size());
-		autoAmnesiacLovers();
-		autoCursedLovers();
-		lovers
-				.forEach(ILover -> BukkitUtils
-						.registerEvents((Listener) ILover));
+		Bukkit.getPluginManager().callEvent(new LoversRepartitionEvent());
+		this.autoLovers();
+		this.rangeLovers();
+		game.getConfig().setLoverCount(LoverType.LOVER.getKey(), this.lovers.size());
+		this.autoAmnesiacLovers();
+		this.autoCursedLovers();
+		this.lovers
+				.forEach(lovers -> {
+					BukkitUtils
+							.registerEvents((Listener) lovers);
+					lovers.getLovers().forEach(playerWW -> Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(playerWW)));
+				});
 		Bukkit.getPluginManager().callEvent(new RevealLoversEvent(this.lovers));
-		game.checkVictory();
+		this.game.checkVictory();
 	}
 
 	private void autoLovers() {

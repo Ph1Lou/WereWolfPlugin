@@ -7,7 +7,6 @@ import io.github.ph1lou.werewolfapi.enums.Camp;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.roles.priestess.PriestessEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.IDisplay;
 import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -62,7 +61,7 @@ public class CommandPriestess implements ICommands {
 
             String message = "werewolf.role.priestess.is_not_werewolf";
 
-            if ((role1 instanceof IDisplay && ((IDisplay) role1).isDisplayCamp(Camp.WEREWOLF.getKey())) || (!(role1 instanceof IDisplay) && role1.isWereWolf())) {
+            if (role1.isDisplayCamp(Camp.WEREWOLF.getKey())) {
                 message = "werewolf.role.priestess.is_werewolf";
             }
 

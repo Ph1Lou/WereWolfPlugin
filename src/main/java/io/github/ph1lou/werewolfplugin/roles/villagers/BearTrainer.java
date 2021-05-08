@@ -8,7 +8,6 @@ import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.events.roles.bear_trainer.GrowlEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.IDisplay;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
 import org.bukkit.Bukkit;
@@ -55,9 +54,7 @@ public class BearTrainer extends RoleVillage {
                 .filter(Objects::nonNull)
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .map(IPlayerWW::getRole)
-                .filter(roles -> roles.isWereWolf() || roles instanceof IDisplay)
-                .filter(roles -> !(roles instanceof IDisplay) ||
-                        ((IDisplay) roles).isDisplayCamp(Camp.WEREWOLF.getKey()))
+                .filter(roles -> roles.isDisplayCamp(Camp.WEREWOLF.getKey()))
                 .map(IRole::getPlayerWW)
                 .collect(Collectors.toSet());
 

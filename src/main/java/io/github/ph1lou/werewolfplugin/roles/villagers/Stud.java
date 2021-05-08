@@ -7,6 +7,7 @@ import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.stud.StudLoverEvent;
@@ -74,6 +75,8 @@ public class Stud extends RoleVillage implements IPower {
         }
 
         Bukkit.getPluginManager().callEvent(new StudLoverEvent(getPlayerWW(), killerWW.get()));
+        Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
+        Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(killerWW.get()));
 
         setPower(false);
 

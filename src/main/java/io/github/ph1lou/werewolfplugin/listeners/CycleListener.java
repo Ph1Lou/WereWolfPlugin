@@ -20,7 +20,6 @@ import io.github.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
 import io.github.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
 import io.github.ph1lou.werewolfapi.events.game.vote.VoteEndEvent;
 import io.github.ph1lou.werewolfapi.events.game.vote.VoteResultEvent;
-import io.github.ph1lou.werewolfapi.events.lovers.LoversRepartitionEvent;
 import io.github.ph1lou.werewolfapi.events.roles.SelectionEndEvent;
 import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
@@ -330,7 +329,7 @@ public class CycleListener implements Listener {
                         .forEach(playerWW -> playerWW
                                 .sendMessageWithKey("werewolf.announcement.lover_troll"));
                 game.getConfig().setTrollLover(false);
-                Bukkit.getPluginManager().callEvent(new LoversRepartitionEvent());
+                game.getLoversManager().repartition();
             }
             loverAPIS.forEach(ILover -> HandlerList.unregisterAll((Listener) ILover));
 

@@ -28,6 +28,10 @@ public class Swap extends ListenerManager {
     public void onRepartition(RepartitionEvent event) {
         WereWolfAPI game = main.getWereWolfAPI();
 
+        if (game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey()) <= 1) {
+            return;
+        }
+
         BukkitUtils.scheduleSyncDelayedTask(() -> {
             if (game.isState(StateGame.GAME)) {
                 if (isRegister()) {

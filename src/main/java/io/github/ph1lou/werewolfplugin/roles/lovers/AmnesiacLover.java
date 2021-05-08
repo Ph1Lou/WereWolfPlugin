@@ -9,6 +9,7 @@ import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
+import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.permissions.UpdateModeratorNameTag;
 import io.github.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
@@ -45,11 +46,11 @@ public class AmnesiacLover implements ILover, Listener {
     }
 
     public List<? extends IPlayerWW> getLovers() {
-        return new ArrayList<>(Arrays.asList(amnesiacLover1, amnesiacLover2));
+        return new ArrayList<>(Arrays.asList(this.amnesiacLover1, this.amnesiacLover2));
     }
 
     public IPlayerWW getOtherLover(IPlayerWW playerWW) {
-        return playerWW.equals(amnesiacLover1) ? amnesiacLover2 : amnesiacLover1;
+        return playerWW.equals(this.amnesiacLover1) ? this.amnesiacLover2 : this.amnesiacLover1;
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -79,12 +80,12 @@ public class AmnesiacLover implements ILover, Listener {
     @Override
     public void second() {
 
-        if (find) return;
+        if (this.find) return;
 
-        if (death) return;
+        if (this.death) return;
 
-        Player player1 = Bukkit.getPlayer(amnesiacLover1.getUUID());
-        Player player2 = Bukkit.getPlayer(amnesiacLover2.getUUID());
+        Player player1 = Bukkit.getPlayer(this.amnesiacLover1.getUUID());
+        Player player2 = Bukkit.getPlayer(this.amnesiacLover2.getUUID());
 
         if (player1 == null || player2 == null) return;
 
@@ -93,14 +94,16 @@ public class AmnesiacLover implements ILover, Listener {
         }
 
         if (player1.getLocation().distance(player2.getLocation()) <
-                game.getConfig().getDistanceAmnesiacLovers()) {
+                this.game.getConfig().getDistanceAmnesiacLovers()) {
 
             Bukkit.getPluginManager().callEvent(new RevealAmnesiacLoversEvent(
-                    Sets.newHashSet(amnesiacLover1, amnesiacLover2)));
+                    Sets.newHashSet(this.amnesiacLover1, this.amnesiacLover2)));
+            Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.amnesiacLover1));
+            Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.amnesiacLover2));
 
-            find = true;
-            announceAmnesiacLoversOnJoin(amnesiacLover1);
-            announceAmnesiacLoversOnJoin(amnesiacLover2);
+            this.find = true;
+            announceAmnesiacLoversOnJoin(this.amnesiacLover1);
+            announceAmnesiacLoversOnJoin(this.amnesiacLover2);
             game.getConfig().addOneLover(LoverType.AMNESIAC_LOVER.getKey());
             game.checkVictory();
 
@@ -109,14 +112,14 @@ public class AmnesiacLover implements ILover, Listener {
 
     public void announceAmnesiacLoversOnJoin(IPlayerWW playerWW) {
 
-        if (!find) return;
+        if (!this.find) return;
 
-        if (amnesiacLover1.equals(playerWW)) {
+        if (this.amnesiacLover1.equals(playerWW)) {
             playerWW.sendMessageWithKey("werewolf.role.lover.description", Sound.PORTAL_TRAVEL,
-                    amnesiacLover2.getName());
-        } else if (amnesiacLover2.equals(playerWW)) {
+                    this.amnesiacLover2.getName());
+        } else if (this.amnesiacLover2.equals(playerWW)) {
             playerWW.sendMessageWithKey("werewolf.role.lover.description", Sound.PORTAL_TRAVEL,
-                    amnesiacLover1.getName());
+                    this.amnesiacLover1.getName());
         }
     }
 
@@ -126,7 +129,7 @@ public class AmnesiacLover implements ILover, Listener {
 
         StringBuilder sb = new StringBuilder(event.getSuffix());
 
-        IPlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID());
+        IPlayerWW playerWW = this.game.getPlayerWW(event.getPlayerUUID());
 
         if (playerWW == null) return;
 
@@ -158,14 +161,14 @@ public class AmnesiacLover implements ILover, Listener {
     @EventHandler
     public void onActionBarGameLoverEvent(ActionBarEvent event) {
 
-        if(!find) return;
+        if (!this.find) return;
 
-        if(death) return;
+        if (this.death) return;
 
-        if (!game.isState(StateGame.GAME)) return;
+        if (!this.game.isState(StateGame.GAME)) return;
 
         UUID uuid = event.getPlayerUUID();
-        IPlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = this.game.getPlayerWW(uuid);
 
         if (!getLovers().contains(playerWW)) return;
 
@@ -178,13 +181,13 @@ public class AmnesiacLover implements ILover, Listener {
 
         if (!playerWW.isState(StatePlayer.ALIVE)) return;
 
-        if (!find) {
+        if (!this.find) {
             return;
         }
 
         buildActionbarLover(player,
                 sb,
-                new ArrayList<>(Arrays.asList(amnesiacLover1, amnesiacLover2)));
+                new ArrayList<>(Arrays.asList(this.amnesiacLover1, this.amnesiacLover2)));
 
         event.setActionBar(sb.toString());
 
@@ -201,7 +204,7 @@ public class AmnesiacLover implements ILover, Listener {
 
         StringBuilder sb = event.getEndMessage();
 
-        sb.append(game.translate("werewolf.end.lover",
+        sb.append(this.game.translate("werewolf.end.lover",
                 playerWW1.getName() + " "));
     }
 
@@ -231,12 +234,12 @@ public class AmnesiacLover implements ILover, Listener {
 
         if (this.getLovers().contains(playerWW1)) return false;
 
-        if (death) return false;
+        if (this.death) return false;
 
-        if (amnesiacLover1.equals(playerWW)) {
-            amnesiacLover1 = playerWW1;
+        if (this.amnesiacLover1.equals(playerWW)) {
+            this.amnesiacLover1 = playerWW1;
         } else {
-            amnesiacLover2 = playerWW1;
+            this.amnesiacLover2 = playerWW1;
         }
 
 
@@ -249,7 +252,7 @@ public class AmnesiacLover implements ILover, Listener {
     @EventHandler
     public void onAroundLover(AroundLover event) {
 
-        if (death) return;
+        if (this.death) return;
 
         for (IPlayerWW playerWW : event.getPlayerWWS()) {
             if (getLovers().contains(playerWW)) {

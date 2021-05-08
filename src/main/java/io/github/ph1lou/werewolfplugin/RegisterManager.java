@@ -14,6 +14,7 @@ import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.TrollEvent;
 import io.github.ph1lou.werewolfapi.events.TrollLoverEvent;
+import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.timers.BorderStartEvent;
 import io.github.ph1lou.werewolfapi.events.game.timers.DiggingEndEvent;
 import io.github.ph1lou.werewolfapi.events.game.timers.InvulnerabilityEvent;
@@ -21,7 +22,6 @@ import io.github.ph1lou.werewolfapi.events.game.timers.PVPEvent;
 import io.github.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
 import io.github.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import io.github.ph1lou.werewolfapi.events.game.vote.VoteBeginEvent;
-import io.github.ph1lou.werewolfapi.events.lovers.LoversRepartitionEvent;
 import io.github.ph1lou.werewolfapi.events.roles.angel.AutoAngelEvent;
 import io.github.ph1lou.werewolfapi.events.roles.rival.RivalEvent;
 import io.github.ph1lou.werewolfapi.events.roles.wild_child.AutoModelEvent;
@@ -1390,6 +1390,7 @@ public class RegisterManager implements IRegisterManager {
                                     .forEach(playerWW -> {
                                         playerWW.sendMessageWithKey("werewolf.role.werewolf.see_others");
                                         Sound.WOLF_HOWL.play(playerWW);
+                                        Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(playerWW));
                                     });
                             Bukkit.getPluginManager().callEvent(new WereWolfListEvent());
                         })
@@ -1482,9 +1483,7 @@ public class RegisterManager implements IRegisterManager {
                                 Bukkit.getPluginManager().callEvent(new TrollLoverEvent());
                             } else {
                                 wereWolfAPI.getLoversManager().repartition();
-                                Bukkit.getPluginManager().callEvent(new LoversRepartitionEvent());
                             }
-
                         })
                         .setDefaultValue(240));
 

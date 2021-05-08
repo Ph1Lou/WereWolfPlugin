@@ -5,7 +5,6 @@ import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.events.roles.shaman.ShamanEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.IDisplay;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.entity.Player;
@@ -67,8 +66,7 @@ public class CommandShaman implements ICommands {
         } else {
             IRole role = pKiller.get().getRole();
             playerWW.sendMessageWithKey("werewolf.role.shaman.killer_role", playerWW1.getName(),
-                    role instanceof IDisplay ? game.translate(((IDisplay) role).getDisplayRole())
-                            : game.translate(role.getKey()));
+                    game.translate(role.getDisplayRole()));
         }
 
     }

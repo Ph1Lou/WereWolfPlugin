@@ -118,7 +118,7 @@ public class Roles implements InventoryProvider {
                             new ItemBuilder(
                                     UniversalMaterial.RED_TERRACOTTA
                                             .getStack())
-                                    .setDisplayName(game.translate(LoverType.LOVER.getKey()))
+                                    .setDisplayName(game.translate(LoverType.LOVER.getKey()) + game.translate("werewolf.role.lover.random"))
                                     .setLore(lore).build()), e -> {
                         if (e.isLeftClick()) {
                             config.addOneLover(LoverType.LOVER.getKey());

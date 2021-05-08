@@ -8,7 +8,6 @@ import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.roles.SelectionEndEvent;
 import io.github.ph1lou.werewolfapi.events.roles.falsifier_werewolf.NewDisplayRole;
-import io.github.ph1lou.werewolfapi.rolesattributs.IDisplay;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleWereWolf;
 import org.bukkit.Bukkit;
@@ -19,38 +18,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class FalsifierWereWolf extends RoleWereWolf implements IDisplay {
+public class FalsifierWereWolf extends RoleWereWolf {
 
-    private String displayCamp = Camp.VILLAGER.getKey();
-    private String displayRole = RolesBase.VILLAGER.getKey();
 
     public FalsifierWereWolf(WereWolfAPI api, IPlayerWW playerWW, String key) {
         super(api, playerWW, key);
-    }
-
-    @Override
-    public boolean isDisplayCamp(String camp) {
-        return (this.displayCamp.equals(camp));
-    }
-
-    @Override
-    public String getDisplayCamp() {
-        return (this.displayCamp);
-    }
-
-    @Override
-    public void setDisplayCamp(String camp) {
-        this.displayCamp = camp;
-    }
-
-    @Override
-    public String getDisplayRole() {
-        return (this.displayRole);
-    }
-
-    @Override
-    public void setDisplayRole(String role) {
-        this.displayRole = role;
+        this.setDisplayCamp(Camp.VILLAGER.getKey());
+        this.setDisplayRole(RolesBase.VILLAGER.getKey());
     }
 
     @EventHandler
@@ -97,7 +71,7 @@ public class FalsifierWereWolf extends RoleWereWolf implements IDisplay {
                 .setDescription(() -> game.translate("werewolf.role.falsifier_werewolf.description"))
                 .setEffects(() -> game.translate("werewolf.description.werewolf"))
                 .addExtraLines(() -> game.translate("werewolf.role.falsifier_werewolf.role",
-                        game.translate(this.displayRole)))
+                        game.translate(this.getDisplayRole())))
                 .build();
     }
 
