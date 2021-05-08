@@ -283,7 +283,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
 
         PlayerInventory inventory = clickedPlayer.getInventory();
         for (int j = 9; j < 40; j++) {
-            if (inventory.getItem(j) != null) {
+            if (inventory.getItem(j) == null) {
                 inventory.setItem(j, flute);
                 Bukkit.getPluginManager().callEvent(new GiveFluteEvent(clickedPlayerWW, this.getPlayerWW()));
                 this.flutedPlayer.add(clickedPlayerWW);
