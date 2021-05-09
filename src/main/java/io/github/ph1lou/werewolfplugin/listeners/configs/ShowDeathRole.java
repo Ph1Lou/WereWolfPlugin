@@ -19,7 +19,7 @@ public class ShowDeathRole extends ListenerManager {
         super(main);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onAnnounceDeath(AnnouncementDeathEvent event) {
 
         event.setFormat("werewolf.announcement.death_message_with_role");

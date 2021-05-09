@@ -14,7 +14,6 @@ import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleWithLimitedSelectionDuration;
 import io.github.ph1lou.werewolfapi.utils.Utils;
-import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.NotNull;
@@ -101,37 +100,28 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
     }
 
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGH)
     private void sendDeathMessage(AnnouncementDeathEvent event) {
 
-        if (event.isCancelled()) return;
+        if (event.getTargetPlayer().equals(this.getPlayerWW())) {
+            return;
+        }
 
-        IPlayerWW playerWW = event.getPlayerWW();
-        IPlayerWW targetWW = event.getTargetPlayer();
-        String key = playerWW.getRole().getKey();
-        String message = game.translate(event.getFormat()).replace("&player&", targetWW.getName());
 
-        event.setCancelled(true);
+        IPlayerWW playerWW = event.getTargetPlayer();
 
         if (playerWW.getRole().isNeutral()) {
             if (getPlayerWW().isState(StatePlayer.ALIVE) && game.getRandom().nextFloat() > 0.95) {
-                playerWW.sendMessage(message.replace("&role&", ChatColor.MAGIC + "Coucou"));
-            } else {
-                playerWW.sendMessage(message.replace("&role&", game.translate(key)));
+                event.setRole("werewolf.role.priestess.magic");
             }
         } else if (game.getRandom().nextFloat() < 0.8) {
 
             if (getPlayerWW().isState(StatePlayer.ALIVE) && playerWW.getRole().isWereWolf()) {
-                playerWW.sendMessage(message.replace("&role&", ChatColor.MAGIC + "Coucou"));
-            } else {
-                playerWW.sendMessage(message.replace("&role&", game.translate(key)));
+                event.setRole("werewolf.role.priestess.magic");
             }
         } else {
-
-            if (getPlayerWW().isState(StatePlayer.ALIVE) && playerWW.getRole().isWereWolf()) {
-                playerWW.sendMessage(message.replace("&role&", game.translate(key)));
-            } else {
-                playerWW.sendMessage(message.replace("&role&", ChatColor.MAGIC + "Coucou"));
+            if (getPlayerWW().isState(StatePlayer.ALIVE) && !playerWW.getRole().isWereWolf()) {
+                event.setRole("werewolf.role.priestess.magic");
             }
         }
     }

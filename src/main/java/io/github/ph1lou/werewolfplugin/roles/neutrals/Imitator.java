@@ -6,6 +6,7 @@ import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FirstDeathEvent;
@@ -188,7 +189,7 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
                 i--;
             }
         }
-
+        Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
         game.death(playerWW);
     }
 

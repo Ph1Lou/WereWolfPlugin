@@ -439,20 +439,20 @@ public class PlayerListener implements Listener {
 
 		if (playerWW.isState(StatePlayer.DEATH)) return;
 
+		playerWW.setState(StatePlayer.DEATH);
+		game.getScore().removePlayerSize();
+
 		game.getPlayerWW().forEach(playerWW1 -> {
 			AnnouncementDeathEvent announcementDeathEvent = new AnnouncementDeathEvent(playerWW, playerWW1,
 					"werewolf.announcement.death_message");
 			Bukkit.getPluginManager().callEvent(announcementDeathEvent);
-			if (!announcementDeathEvent.isCancelled()) {
+			String deathMessage = game.translate(announcementDeathEvent.getFormat());
+			deathMessage = deathMessage.replace("&player&",
+					announcementDeathEvent.getPlayerName());
+			deathMessage = deathMessage.replace("&role&",
+					game.translate(announcementDeathEvent.getRole()));
 
-				String deathMessage = game.translate(announcementDeathEvent.getFormat());
-				deathMessage = deathMessage.replace("&player&",
-						announcementDeathEvent.getPlayerName());
-				deathMessage = deathMessage.replace("&role&",
-						game.translate(announcementDeathEvent.getRole()));
-
-				announcementDeathEvent.getTargetPlayer().sendMessage(deathMessage);
-			}
+			announcementDeathEvent.getTargetPlayer().sendMessage(deathMessage);
 		});
 
 		game.getModerationManager().getModerators().stream()
@@ -469,10 +469,6 @@ public class PlayerListener implements Listener {
 		if (!updateCompositionReason.isCancelled()) {
 			game.getConfig().removeOneRole(playerWW.getRole().getKey());
 		}
-
-
-		playerWW.setState(StatePlayer.DEATH);
-		game.getScore().removePlayerSize();
 
 		Stream.concat(playerWW.getItemDeath()
 						.stream(),

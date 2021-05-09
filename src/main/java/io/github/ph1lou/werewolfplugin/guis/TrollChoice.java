@@ -9,6 +9,7 @@ import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
 import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Camp;
 import io.github.ph1lou.werewolfapi.enums.Category;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.registers.RoleRegister;
@@ -60,21 +61,21 @@ public class TrollChoice implements InventoryProvider {
                         Category.WEREWOLF == this.categories.getOrDefault(
                                 uuid, Category.WEREWOLF) ?
                                 Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK)
-                        .setDisplayName(game.translate("werewolf.categories.werewolf"))
+                        .setDisplayName(game.translate(Camp.WEREWOLF.getKey()))
                         .build()), e -> this.categories.put(uuid, Category.WEREWOLF)));
         contents.set(5, 3, ClickableItem.of((
                 new ItemBuilder(
                         Category.VILLAGER == this.categories.getOrDefault(
                                 uuid, Category.WEREWOLF) ?
                                 Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK)
-                        .setDisplayName(game.translate("werewolf.categories.villager"))
+                        .setDisplayName(game.translate(Camp.VILLAGER.getKey()))
                         .build()), e -> this.categories.put(uuid, Category.VILLAGER)));
         contents.set(5, 5, ClickableItem.of((
                 new ItemBuilder(
                         Category.NEUTRAL == this.categories.getOrDefault(
                                 uuid, Category.WEREWOLF) ?
                                 Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK)
-                        .setDisplayName(game.translate("werewolf.categories.neutral"))
+                        .setDisplayName(game.translate(Camp.NEUTRAL.getKey()))
                         .build()), e -> this.categories.put(uuid, Category.NEUTRAL)));
         contents.set(5, 7, ClickableItem.of((
                 new ItemBuilder(

@@ -55,21 +55,16 @@ public class Shaman extends RoleVillage implements IAffectedPlayers {
         this.getPlayerWW().sendMessage(textComponent);
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onAnnounceDeath(AnnouncementDeathEvent event) {
 
         if (!event.getTargetPlayer().equals(getPlayerWW())) {
             return;
         }
-        event.setCancelled(true);
-        event.setFormat("werewolf.announcement.death_message_with_role");
-        String deathMessage = game.translate(event.getFormat());
-        deathMessage = deathMessage.replace("&player&",
-                event.getPlayerWW().getName());
-        deathMessage = deathMessage.replace("&role&",
-                game.translate(event.getPlayerWW().getRole().getKey()));
 
-        getPlayerWW().sendMessage(deathMessage);
+        event.setFormat("werewolf.announcement.death_message_with_role");
+        event.setRole(event.getPlayerWW().getRole().getKey());
+        event.setFormat(event.getPlayerWW().getName());
     }
 
     @Override

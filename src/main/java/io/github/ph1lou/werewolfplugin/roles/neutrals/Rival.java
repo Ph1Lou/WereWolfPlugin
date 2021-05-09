@@ -74,8 +74,8 @@ public class Rival extends RoleNeutral implements IPower {
         return new DescriptionBuilder(game, this)
                 .setDescription(() -> game.translate("werewolf.role.rival.description",
                         Utils.conversion(
-                                Math.abs(game.getConfig().getTimerValue(TimersBase.ROLE_DURATION.getKey()))
-                                        + Math.abs(game.getConfig().getTimerValue(TimersBase.RIVAL_DURATION.getKey())))))
+                                Math.max(0, game.getConfig().getTimerValue(TimersBase.ROLE_DURATION.getKey()))
+                                        + game.getConfig().getTimerValue(TimersBase.RIVAL_DURATION.getKey()))))
                 .setItems(() -> game.translate("werewolf.role.rival.item"))
                 .setEquipments(() -> game.translate("werewolf.role.rival.extra", game.getConfig().getLimitPowerBow() + 1))
                 .build();

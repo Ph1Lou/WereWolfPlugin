@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.ListenerManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Sound;
+import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
@@ -113,7 +114,11 @@ public class Amnesic extends ListenerManager {
 
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent((Player) event.getEntity()));
 
-        BukkitUtils.scheduleSyncDelayedTask(this::revealWereWolf, 20 * 60 * 5L);
+        BukkitUtils.scheduleSyncDelayedTask(() -> {
+            if (!game.isState(StateGame.END)) {
+                this.revealWereWolf();
+            }
+        }, 20 * 60 * 5L);
     }
 
 

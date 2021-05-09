@@ -1271,67 +1271,67 @@ public class RegisterManager implements IRegisterManager {
                 .add(new RandomEventRegister("werewolf.name",
                         RandomEvent.EXPOSED.getKey(), new Exposed(main))
                         .setLoreKey("werewolf.random_events.exposed.description")
-                        .setDefaultValue(10));
+                        .setDefaultValue(1));
 
         eventRandomsRegister
                 .add(new RandomEventRegister("werewolf.name",
                         RandomEvent.TRIPLE.getKey(), new Triple(main))
                         .setLoreKey("werewolf.random_events.triple.description")
-                        .setDefaultValue(10));
+                        .setDefaultValue(1));
 
         eventRandomsRegister
                 .add(new RandomEventRegister("werewolf.name",
                         RandomEvent.BEARING_RITUAL.getKey(), new BearingRitual(main))
                         .setLoreKey("werewolf.random_events.bearing_ritual.description")
-                        .setDefaultValue(10));
+                        .setDefaultValue(1));
 
         eventRandomsRegister
                 .add(new RandomEventRegister("werewolf.name",
                         RandomEvent.PUTREFACTION.getKey(), new Putrefaction(main))
                         .setLoreKey("werewolf.random_events.putrefaction.description")
-                        .setDefaultValue(10));
+                        .setDefaultValue(1));
 
         eventRandomsRegister
                 .add(new RandomEventRegister("werewolf.name",
                         RandomEvent.GOD_MIRACLE.getKey(), new GodMiracle(main))
                         .setLoreKey("werewolf.random_events.god_miracle.description")
-                        .setDefaultValue(10));
+                        .setDefaultValue(1));
 
         eventRandomsRegister
                 .add(new RandomEventRegister("werewolf.name",
                         RandomEvent.SWAP.getKey(), new Swap(main))
                         .setLoreKey("werewolf.random_events.swap.description")
-                        .setDefaultValue(10));
+                        .setDefaultValue(1));
 
         eventRandomsRegister
                 .add(new RandomEventRegister("werewolf.name",
                         RandomEvent.LOOT_BOX.getKey(), new LootBox(main))
                         .setLoreKey("werewolf.random_events.loot_box.description")
-                        .setDefaultValue(10));
+                        .setDefaultValue(1));
 
         eventRandomsRegister
                 .add(new RandomEventRegister("werewolf.name",
                         RandomEvent.INFECTION.getKey(), new Infection(main))
                         .setLoreKey("werewolf.random_events.infection.description")
-                        .setDefaultValue(10));
+                        .setDefaultValue(1));
 
         eventRandomsRegister
                 .add(new RandomEventRegister("werewolf.name",
                         RandomEvent.DRUNKEN_WEREWOLF.getKey(), new DrunkenWereWolf(main))
                         .setLoreKey("werewolf.random_events.drunken_werewolf.description")
-                        .setDefaultValue(10));
+                        .setDefaultValue(1));
 
         eventRandomsRegister
                 .add(new RandomEventRegister("werewolf.name",
                         RandomEvent.AMNESIC.getKey(), new Amnesic(main))
                         .setLoreKey("werewolf.random_events.amnesic.description")
-                        .setDefaultValue(10));
+                        .setDefaultValue(1));
 
         eventRandomsRegister
                 .add(new RandomEventRegister("werewolf.name",
                         RandomEvent.POORLY_GROOMED_BEAR.getKey(), new PoorlyGroomedBear(main))
                         .setLoreKey("werewolf.random_events.poorly_groomed_bear.description")
-                        .setDefaultValue(10));
+                        .setDefaultValue(1));
     }
 
     private void registerTimers() {

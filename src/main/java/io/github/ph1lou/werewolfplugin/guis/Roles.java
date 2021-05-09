@@ -11,6 +11,7 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IStuffManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Camp;
 import io.github.ph1lou.werewolfapi.enums.Category;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
@@ -188,9 +189,9 @@ public class Roles implements InventoryProvider {
                     }));
 
 
-        contents.set(5, 1, ClickableItem.of((new ItemBuilder(Category.WEREWOLF == this.category ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate("werewolf.categories.werewolf")).setAmount(Math.max(1, count(main, Category.WEREWOLF))).build()), e -> this.category = Category.WEREWOLF));
-        contents.set(5, 3, ClickableItem.of((new ItemBuilder(Category.VILLAGER == this.category ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate("werewolf.categories.villager")).setAmount(Math.max(1, count(main, Category.VILLAGER))).build()), e -> this.category = Category.VILLAGER));
-        contents.set(5, 5, ClickableItem.of((new ItemBuilder(Category.NEUTRAL == this.category ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate("werewolf.categories.neutral")).setAmount(Math.max(1, count(main, Category.NEUTRAL))).build()), e -> this.category = Category.NEUTRAL));
+        contents.set(5, 1, ClickableItem.of((new ItemBuilder(Category.WEREWOLF == this.category ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate(Camp.WEREWOLF.getKey())).setAmount(Math.max(1, count(main, Category.WEREWOLF))).build()), e -> this.category = Category.WEREWOLF));
+        contents.set(5, 3, ClickableItem.of((new ItemBuilder(Category.VILLAGER == this.category ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate(Camp.VILLAGER.getKey())).setAmount(Math.max(1, count(main, Category.VILLAGER))).build()), e -> this.category = Category.VILLAGER));
+        contents.set(5, 5, ClickableItem.of((new ItemBuilder(Category.NEUTRAL == this.category ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate(Camp.NEUTRAL.getKey())).setAmount(Math.max(1, count(main, Category.NEUTRAL))).build()), e -> this.category = Category.NEUTRAL));
         contents.set(5, 7, ClickableItem.of((new ItemBuilder(Category.ADDONS == this.category ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate("werewolf.categories.addons")).setAmount(Math.max(1, count(main, Category.ADDONS))).build()), e -> this.category = Category.ADDONS));
 
 

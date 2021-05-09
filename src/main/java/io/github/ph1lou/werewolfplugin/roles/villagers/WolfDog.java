@@ -49,8 +49,13 @@ public class WolfDog extends RoleVillage implements ITransformed, IPower {
 
     @Override
     public void recoverPower() {
-        this.getPlayerWW().sendMessageWithKey("werewolf.role.wolf_dog.transform",
-                Utils.conversion(game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey())));
+
+        int timer = game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey());
+
+        if (timer > 0) {
+            this.getPlayerWW().sendMessageWithKey("werewolf.role.wolf_dog.transform",
+                    Utils.conversion(game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey())));
+        }
     }
 
     @Override

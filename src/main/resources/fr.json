@@ -235,7 +235,7 @@
       },
       "thief": {
         "display": "Voleur",
-        "thief": "vous avez §fvolé un(e) §b%s§f",
+        "thief": " §fvous avez §fvolé un(e) §b%s§f",
         "details": "[§eLG UHC§r] Pour voir les détails de votre rôle §b/ww role",
         "description": "Vous récupérez le rôle de la première personne que vous tuez et devrez gagner avec son Camp.",
         "effect": "Résistance jusqu’à son premier meurtre",
@@ -292,8 +292,8 @@
         "description": "Le Jour, Vous pouvez connaître le camp d'un joueur en échange de deux coeurs permanents. Tant que vous êtes en vie les Loups Garous ont 20%% de chance de voir le rôles des joueurs morts contre 80%% pour les Villageois. Quand vous mourrez, ces probabilités s'inversent. Les Neutres ont 95%% de chance de le voir",
         "command": "spec",
         "items": "Quatre Obsidiennes",
-        "is_werewolf": "[§cLG UHC§r] §b%s§r est dans le camp des Loups Garous",
-        "is_not_werewolf": "[§aLG UHC§r] §b%s§r n'est pas dans le camp des Loups Garous",
+        "magic": "§kCoucou",
+        "message": "[§cLG UHC§r] §b%s§r est dans le camp des §b%s",
         "werewolf_death": "[§aLG UHC§r] Un Loup Garou que vous avez espionné est mort, vous regagnez 1 coeur",
         "perform": "[§eLG UHC§r] Découvrez le camp d'un joueur à moins de §b%d§r blocs de vous avec §b/ww spec§r vous avez §b%s",
         "distance": "[§cLG UHC§r] Vous devez être à moins de 10 blocs du joueur"
@@ -415,7 +415,7 @@
         "find": "[§cLG UHC§r] Vous venez de découvrir une flûte sur vous, elle n'a plus d'effets sur vous",
         "find_flute": "[§cLG UHC§r] §b%s§f a découvert votre flûte, elle n'agit plus sur lui",
         "effect": "Si une personne charmée se trouve dans votre champ, vous gagnez Résistance. Si vous charmez tout les joueurs, vous gagnez l'effet Force permanent",
-        "day": "[§eLG UHC§r] Vous pouvez de nouveau refiler une flûte à quelqu'un (stock actuel §b%d§f)",
+        "day": "[§eLG UHC§r] Vous pouvez de nouveau donner une flûte à quelqu'un (stock actuel §b%d§f)",
         "craft": "[§eLG UHC§r] Vous venez de fabriquer une nouvelle flûte (§f%d§f flûte(s) en stock), faites clique droit sur un joueur pour lui donner sans éveiller les soupcons. Il charmera les personnes autour de lui tant qu'il ne remarque pas la flûte dans son inventaire",
         "perform": "[§eLG UHC§r] Vous venez de réaliser votre flûte, vous commencez à charmer les personnes à §b%d§f blocks de vous",
         "item": "Flûte magique"
@@ -495,7 +495,7 @@
       "vote_not_yet_activated": "[§cLG UHC§r] Les Votes ne sont pas encore activés",
       "vote_result": "[§eLG UHC§r] §b%s§r est celui qui a recueillit le plus de vote§r : §b%s§r. Il perd 5 coeurs",
       "no_result": "[§6LG UHC§r] Aucun joueur n'a été voté plus d'une fois",
-      "vote_time": "§b§m§l-+-----------------------------------+-\n§f[§6LG UHC§r] C'est l'heure de voter §b/ww vote§r Vous avez §b%s\n§r§b§m§l-+-----------------------------------+-",
+      "vote_time": "§b§m§l-+-----------------------------------+-\n§f [§6LG UHC§r] C'est l'heure de voter §b/ww vote§r Vous avez §b%s\n§r§b§m§l-+-----------------------------------+-",
       "command": "vote"
     },
     "lone_wolf": {
@@ -507,8 +507,8 @@
       "border": "[§6LG UHC§r] La bordure commence à se déplacer",
       "mining": "[§6LG UHC§r] Minage Désactivé",
       "day": "[§6LG UHC§r] C'est le Jour §b%s§r ✸ ",
-      "death_message_with_role": "§b§m§l-+-----------------------------------+-\n§f[§cLG UHC§r] §b&player&§r est mort, il était §b&role&§r\n§r§b§m§l-+-----------------------------------+-",
-      "death_message_with_camp": "§b§m§l-+-----------------------------------+-\n§f[§cLG UHC§r] §b&player&§r est mort, il était dans le camp des §b&role&§r\n§r§b§m§l-+-----------------------------------+-",
+      "death_message_with_role": "§b§m§l-+-----------------------------------+-\n§f  [§cLG UHC§r] §b&player&§r est mort, il était §b&role&§r\n§r§b§m§l-+-----------------------------------+-",
+      "death_message_with_camp": "§b§m§l-+-----------------------------------+-\n§f  [§cLG UHC§r] §b&player&§r est mort, il était dans le camp des §b&role&§r\n§r§b§m§l-+-----------------------------------+-",
       "death_message": "§b§m§l-+-----------------------------------+-\n§f      [§cLG UHC§r] §b&player&§r est mort\n§r§b§m§l-+-----------------------------------+-",
       "review_role": "[§eLG UHC§r] Pour revoir la description §b/ww role",
       "troll": "[§5LG UHC§r] Bon ok, la blague a assez duré ! Voici ton vrai role : ",
