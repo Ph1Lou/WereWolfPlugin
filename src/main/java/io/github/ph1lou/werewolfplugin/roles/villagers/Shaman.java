@@ -64,7 +64,7 @@ public class Shaman extends RoleVillage implements IAffectedPlayers {
 
         event.setFormat("werewolf.announcement.death_message_with_role");
         event.setRole(event.getPlayerWW().getRole().getKey());
-        event.setFormat(event.getPlayerWW().getName());
+        event.setPlayerName(event.getPlayerWW().getName());
     }
 
     @Override
