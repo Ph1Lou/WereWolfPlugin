@@ -60,16 +60,13 @@ public class CommandTPGroup implements ICommands {
             IPlayerWW playerWW1 = game.getPlayerWW(uuid);
 
             if (size > 0 && playerWW1 != null && playerWW1.isState(StatePlayer.ALIVE)) {
-
-                try {
+                if (p.getWorld().equals(playerArg.getWorld())) {
                     if (p.getLocation().distance(location) <= d) {
                         size--;
                         sb.append(p.getName()).append(" ");
                         playerWW1.sendMessageWithKey("werewolf.commands.admin.tp_group.perform", playerName);
                         game.getMapManager().transportation(playerWW1, r);
                     }
-                } catch (Exception ignored) {
-
                 }
             }
         }

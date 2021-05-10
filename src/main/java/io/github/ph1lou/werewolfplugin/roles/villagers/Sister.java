@@ -107,13 +107,8 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
                 .map(IRole::getPlayerUUID)
                 .map(Bukkit::getPlayer)
                 .filter(Objects::nonNull)
-                .filter(player -> {
-                    try {
-                        return location.distance(player.getLocation()) < game.getConfig().getDistanceSister();
-                    } catch (Exception ignored) {
-                        return false;
-                    }
-                })
+                .filter(player -> player.getWorld().equals(location.getWorld()) &&
+                        location.distance(player.getLocation()) < game.getConfig().getDistanceSister())
                 .findFirst()
                 .orElse(null) != null;
 

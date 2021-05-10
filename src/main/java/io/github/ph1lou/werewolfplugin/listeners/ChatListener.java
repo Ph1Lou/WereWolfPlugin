@@ -109,7 +109,7 @@ public class ChatListener implements Listener {
 
             for (Player p : Bukkit.getOnlinePlayers()) {
 
-                try {
+                if (p.getWorld().equals(player.getWorld())) {
                     double distance = p.getLocation().distance(player.getLocation());
 
                     if (distance < 20) {
@@ -121,8 +121,6 @@ public class ChatListener implements Listener {
                                 player.getName(),
                                 obfuscation(event.getMessage(), ((int) distance - 20) / 70f)));
                     }
-                } catch (Exception ignored) {
-
                 }
             }
 

@@ -174,12 +174,12 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
         Location renardLocation = player.getLocation();
         Location playerLocation = flair.getLocation();
 
-        try {
-            if (renardLocation.distance(playerLocation) >
-                    game.getConfig().getDistanceFox()) {
-                return;
-            }
-        } catch (Exception ignored) {
+        if (!player.getWorld().equals(flair.getWorld())) {
+            return;
+        }
+
+        if (renardLocation.distance(playerLocation) >
+                game.getConfig().getDistanceFox()) {
             return;
         }
 
