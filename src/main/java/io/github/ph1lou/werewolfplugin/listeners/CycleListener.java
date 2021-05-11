@@ -13,6 +13,7 @@ import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.enums.VoteStatus;
 import io.github.ph1lou.werewolfapi.events.TrollEvent;
 import io.github.ph1lou.werewolfapi.events.TrollLoverEvent;
+import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayWillComeEvent;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
@@ -370,6 +371,7 @@ public class CycleListener implements Listener {
                         roleRegister.getKey());
                 BukkitUtils.registerEvents(role);
                 playerWW.setRole(role);
+                Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(playerWW));
             } catch (IllegalAccessException | InstantiationException | InvocationTargetException exception) {
                 exception.printStackTrace();
             }

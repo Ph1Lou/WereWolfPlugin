@@ -10,7 +10,6 @@ import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTag;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import io.github.ph1lou.werewolfapi.events.game.permissions.UpdateModeratorNameTag;
-import io.github.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
 import io.github.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
 import io.github.ph1lou.werewolfapi.events.werewolf.RequestSeeWereWolfListEvent;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
@@ -201,13 +200,4 @@ public class TabManager implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onRepartition(RepartitionEvent event) {
-        for (UUID uuid : game.getModerationManager().getModerators()) {
-            Player player = Bukkit.getPlayer(uuid);
-            if (player != null) {
-                this.updatePlayerScoreBoard(player);
-            }
-        }
-    }
 }

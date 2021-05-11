@@ -62,39 +62,39 @@ public class LittleGirl extends RoleVillage implements IInvisible {
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
-        if (!isInvisible()) return;
+        if (!this.isInvisible()) return;
 
-        getPlayerWW().removePotionEffect(PotionEffectType.INVISIBILITY);
+        this.getPlayerWW().removePotionEffect(PotionEffectType.INVISIBILITY);
 
-        setInvisible(false);
+        this.setInvisible(false);
         Bukkit.getPluginManager().callEvent(
                 new InvisibleEvent(getPlayerWW(),
                         false));
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
-        getPlayerWW().sendMessageWithKey("werewolf.role.little_girl.visible");
+        this.getPlayerWW().sendMessageWithKey("werewolf.role.little_girl.visible");
     }
 
     @EventHandler
     public void onUpdateNameTag(UpdatePlayerNameTag event) {
 
-        if (!event.getPlayerUUID().equals(getPlayerUUID())) return;
+        if (!event.getPlayerUUID().equals(this.getPlayerUUID())) return;
 
         if (event.isVisibility()) {
-            event.setVisibility(!invisible);
+            event.setVisibility(!this.invisible);
         }
     }
 
     @EventHandler
     public void onGoldenAppleEat(GoldenAppleParticleEvent event) {
 
-        if (!event.getPlayerWW().equals(getPlayerWW())) return;
+        if (!event.getPlayerWW().equals(this.getPlayerWW())) return;
 
-        if (!isInvisible()) return;
+        if (!this.isInvisible()) return;
 
-        if (game.isDay(Day.DAY)) return;
+        if (this.game.isDay(Day.DAY)) return;
 
         event.setCancelled(true);
     }
@@ -104,11 +104,11 @@ public class LittleGirl extends RoleVillage implements IInvisible {
     public void onDayWillCome(DayWillComeEvent event) {
 
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        getPlayerWW().sendMessageWithKey(
+        this.getPlayerWW().sendMessageWithKey(
                 "werewolf.role.little_girl.soon_to_be_day");
     }
 
@@ -121,15 +121,15 @@ public class LittleGirl extends RoleVillage implements IInvisible {
             return;
         }
 
-        if (!game.isDay(Day.NIGHT)) {
+        if (!this.game.isDay(Day.NIGHT)) {
             return;
         }
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        if (!isInvisible()) {
+        if (!this.isInvisible()) {
             return;
         }
 
@@ -174,7 +174,7 @@ public class LittleGirl extends RoleVillage implements IInvisible {
 
         if (!event.getThiefWW().equals(getPlayerWW())) return;
 
-        setInvisible(false);
+        this.setInvisible(false);
     }
 
     @Override
@@ -204,13 +204,13 @@ public class LittleGirl extends RoleVillage implements IInvisible {
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 
-        if (!event.getPlayerWW().equals(getPlayerWW())) return;
+        if (!event.getPlayerWW().equals(this.getPlayerWW())) return;
 
-        setInvisible(false);
+        this.setInvisible(false);
 
-        if(game.getConfig().getLimitKnockBack()==2) return;
+        if (this.game.getConfig().getLimitKnockBack() == 2) return;
 
-        for (ItemStack i : getPlayerWW().getItemDeath()) {
+        for (ItemStack i : this.getPlayerWW().getItemDeath()) {
             if (i != null) {
                 i.removeEnchantment(Enchantment.KNOCKBACK);
             }
@@ -235,34 +235,33 @@ public class LittleGirl extends RoleVillage implements IInvisible {
         Player player = (Player) event.getPlayer();
         UUID uuid = player.getUniqueId();
 
-        if (!uuid.equals(getPlayerUUID())) return;
+        if (!uuid.equals(this.getPlayerUUID())) return;
 
         Inventory inventory = player.getInventory();
 
-        if (!game.isState(StateGame.GAME)) return;
-        if (!game.isDay(Day.NIGHT)) return;
+        if (!this.game.isState(StateGame.GAME)) return;
+        if (!this.game.isDay(Day.NIGHT)) return;
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (inventory.getItem(36) == null &&
                 inventory.getItem(37) == null &&
                 inventory.getItem(38) == null &&
                 inventory.getItem(39) == null) {
-            if (!isInvisible()) {
+            if (!this.isInvisible()) {
                 player.sendMessage(game.translate("werewolf.role.little_girl.remove_armor_perform"));
-                getPlayerWW().addPotionEffect(PotionEffectType.INVISIBILITY);
+                this.getPlayerWW().addPotionEffect(PotionEffectType.INVISIBILITY);
                 if (getInfected()) {
                     getPlayerWW().removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
                 }
-                setInvisible(true);
-                Bukkit.getPluginManager().callEvent(
-                        new InvisibleEvent(getPlayerWW(), true));
+                this.setInvisible(true);
+                Bukkit.getPluginManager().callEvent(new InvisibleEvent(this.getPlayerWW(), true));
                 Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
             }
-        } else if (isInvisible()) {
+        } else if (this.isInvisible()) {
             player.sendMessage(game.translate(
                     "werewolf.role.little_girl.visible"));
-            if (getInfected()) {
+            if (this.getInfected()) {
                 player.addPotionEffect(new PotionEffect(
                         PotionEffectType.INCREASE_DAMAGE,
                         Integer.MAX_VALUE,
@@ -274,6 +273,7 @@ public class LittleGirl extends RoleVillage implements IInvisible {
             this.setInvisible(false);
             Bukkit.getPluginManager().callEvent(
                     new InvisibleEvent(getPlayerWW(), false));
+            Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
         }
     }
 
@@ -288,7 +288,7 @@ public class LittleGirl extends RoleVillage implements IInvisible {
             return;
         }
 
-        getPlayerWW().sendMessageWithKey("werewolf.commands.admin.ww_chat.prefix", event.getMessage());
+        this.getPlayerWW().sendMessageWithKey("werewolf.commands.admin.ww_chat.prefix", event.getMessage());
 
     }
 
@@ -298,7 +298,7 @@ public class LittleGirl extends RoleVillage implements IInvisible {
 
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
-        setInvisible(false);
+        this.setInvisible(false);
     }
 
 }

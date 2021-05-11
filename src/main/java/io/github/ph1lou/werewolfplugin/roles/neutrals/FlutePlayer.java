@@ -261,6 +261,10 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
             return;
         }
 
+        if (!event.getPlayer().getUniqueId().equals(this.getPlayerUUID())) {
+            return;
+        }
+
         if (!(event.getRightClicked() instanceof Player)) {
             return;
         }
