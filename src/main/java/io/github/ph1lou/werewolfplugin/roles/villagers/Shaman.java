@@ -6,6 +6,7 @@ import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.game.life_cycle.FirstDeathEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -38,19 +39,19 @@ public class Shaman extends RoleVillage implements IAffectedPlayers {
     }
 
     @EventHandler
-    public void onFinalDeath(FinalDeathEvent event) {
+    public void onFirstDeathEvent(FirstDeathEvent event) {
 
-
-        IPlayerWW playerWW = event.getPlayerWW();
-
-        if (this.getPlayerWW().isState(StatePlayer.DEATH)) {
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
+        IPlayerWW playerWW = event.getPlayerWW();
+        int nTimesAffected = (int) affectedPlayers.stream().filter(player -> player.equals(playerWW)).count();
+
         TextComponent textComponent = new TextComponent(
-                 game.translate("werewolf.role.shaman.choice_message", playerWW.getName()));
-        textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/ww %s %s",
-                game.translate("werewolf.role.shaman.command"), playerWW.getUUID())));
+                game.translate("werewolf.role.shaman.choice_message", playerWW.getName()));
+        textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/ww %s %s %s",
+                game.translate("werewolf.role.shaman.command"), playerWW.getUUID(), Integer.toString(nTimesAffected))));
 
         this.getPlayerWW().sendMessage(textComponent);
     }

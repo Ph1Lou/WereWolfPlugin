@@ -477,11 +477,10 @@
         "display": "Chaman",
         "description": "A chaque fois qu'un joueur meurt, vous pouvez obtenir aléatoirement le role ou le nom du tueur en échange d'un coeur permanent. Vous voyez toujours le véritable role d'un mort",
         "cannot_use": "[§eLG UHC§r] Vous ne pouvez plus exécuter cette action",
-        "choice_message": "[§eLG UHC§r] Le joueur §b%s§r est mort. Cliquez ici pour obtenir une information sur son tueur en échange d'un coeur permanent",
-        "killer_no_info": "[§eLG UHC§r] Un pouvoir inconnu empêche la divulgation d'informations sur la mort de §b%s§r",
-        "killer_pve": "[§eLG UHC§r] §b%s§r est mort PVE",
-        "killer_name": "[§eLG UHC§r] Le tueur de §b%s§r est §b%s§r",
-        "killer_role": "[§eLG UHC§r] Le tueur de §b%s§r est un §b%s§r",
+        "not_enough_life": "[§cLG UHC§r] Vous n'avez pas assez de vie pour cela",
+        "choice_message": "[§eLG UHC§r] Un joueur est mort. §bCliquez ici§r pour obtenir une information sur lui en échange d'un coeur permanent",
+        "victim_name": "[§eLG UHC§r] §b%s§r est mort",
+        "victim_role": "[§eLG UHC§r] Un §b%s§r est mort",
         "command": "command_shaman"
       }
     },

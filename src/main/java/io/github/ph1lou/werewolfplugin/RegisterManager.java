@@ -734,7 +734,7 @@ public class RegisterManager implements IRegisterManager {
                         .addRoleKey(RolesBase.SHAMAN.getKey())
                         .unsetAutoCompletion()
                         .addStateWW(StateGame.GAME)
-                        .addArgNumbers(1));
+                        .addArgNumbers(2));
 
         commandsRegister
                 .add(new CommandRegister("werewolf.name",
