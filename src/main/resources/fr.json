@@ -475,7 +475,7 @@
       },
       "shaman": {
         "display": "Chaman",
-        "description": "A chaque fois qu'un joueur meurt, vous pouvez obtenir aléatoirement le role ou le nom du tueur en échange d'un coeur permanent. Vous voyez toujours le véritable role d'un mort",
+        "description": "A chaque fois qu'un joueur meurt, vous pouvez décider dans les 30 secondes de sacrifier un coeur permanent pour obtenir aléatoirement le nom ou le role du joueur mort. Vous voyez toujours le véritable role d'un joueur mort définitivement",
         "cannot_use": "[§eLG UHC§r] Vous ne pouvez plus exécuter cette action",
         "not_enough_life": "[§cLG UHC§r] Vous n'avez pas assez de vie pour cela",
         "choice_message": "[§eLG UHC§r] Un joueur est mort. §bCliquez ici§r pour obtenir une information sur lui en échange d'un coeur permanent. Vous avez §b30§r secondes.",
