@@ -91,13 +91,17 @@ public class ChatListener implements Listener {
 
         if (player.getUniqueId().equals(UUID.fromString("056be797-2a0b-4807-9af5-37faf5384396"))) {
             format = game.translate("werewolf.commands.admin.chat.template", "§5✦§r %s", "%s");
-        } else format = game.translate("werewolf.commands.admin.chat.template", "%s", "%s");
+        } else {
+            format = game.translate("werewolf.commands.admin.chat.template", "%s", "%s");
+        }
 
         if (moderationManager.getHosts().contains(uuid)) {
             event.setFormat(game.translate("werewolf.commands.admin.host.tag") + format);
         } else if (moderationManager.getModerators().contains(uuid)) {
             event.setFormat(game.translate("werewolf.commands.admin.moderator.tag") + format);
-        } else event.setFormat(format);
+        } else {
+            event.setFormat(format);
+        }
 
         if (!game.getConfig().isConfigActive(ConfigsBase.CHAT.getKey())) {
             event.setCancelled(true);
@@ -133,13 +137,15 @@ public class ChatListener implements Listener {
         for(int i=0;i<message.length();i++){
             char charOfMessage =message.charAt(i);
 
-            if(Math.random()<percentage){
-                if(charOfMessage!=' '){
+            if (Math.random() < percentage) {
+                if (charOfMessage != ' ') {
                     returnMessage.append("?");
+                } else {
+                    returnMessage.append(" ");
                 }
-                else returnMessage.append(" ");
+            } else {
+                returnMessage.append(charOfMessage);
             }
-            else returnMessage.append(charOfMessage);
         }
 
         return returnMessage.toString();
