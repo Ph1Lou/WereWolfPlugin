@@ -91,7 +91,6 @@ public class Roles implements InventoryProvider {
         WereWolfAPI game = main.getWereWolfAPI();
         IConfiguration config = game.getConfig();
         Pagination pagination = contents.pagination();
-        UUID uuid = player.getUniqueId();
 
         List<String> lore = new ArrayList<>(Arrays.asList(game.translate("werewolf.menu.left"), game.translate("werewolf.menu.right")));
 

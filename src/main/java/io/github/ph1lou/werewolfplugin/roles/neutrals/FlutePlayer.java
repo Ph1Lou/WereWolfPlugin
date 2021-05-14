@@ -24,7 +24,9 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.ItemFlag;
@@ -35,6 +37,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -109,21 +112,23 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
     }
 
     @EventHandler
-    public void onFluteCraft(PrepareItemCraftEvent event) {
+    public void onInventoryClick(CraftItemEvent event) {
 
-
-        if (!flute.equals(event.getInventory().getResult())) {
+        if (event.getSlotType() != InventoryType.SlotType.RESULT) {
             return;
         }
 
-        event.getInventory().setResult(new ItemStack(Material.AIR));
-
-        if (!event.getView().getPlayer().getUniqueId().equals(this.getPlayerUUID())) {
+        if (!event.getWhoClicked().getUniqueId().equals(this.getPlayerUUID())) {
             return;
         }
 
-        event.getInventory().clear();
-        event.getView().getPlayer().closeInventory();
+        if (!flute.equals(event.getCurrentItem())) {
+            return;
+        }
+
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
+            return;
+        }
 
         if (!this.hasOwnFlute) {
             this.hasOwnFlute = true;
@@ -131,9 +136,38 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
                     game.getConfig().getDistanceFlutePlayer());
         } else {
             this.fluteInStore++;
-            this.getPlayerWW().sendMessageWithKey("werewolf.role.flute_player.craft", this.fluteInStore);
+            this.getPlayerWW().sendMessageWithKey("werewolf.role.flute_player.craft",
+                    this.fluteInStore);
         }
 
+        event.setCurrentItem(null);
+
+        ItemStack[] inventories = event.getInventory().getMatrix();
+
+        Arrays.stream(inventories)
+                .filter(Objects::nonNull)
+                .filter(itemStack -> itemStack.getAmount() > 1)
+                .forEach(itemStack -> {
+                    itemStack.setAmount(itemStack.getAmount() - 1);
+                    this.getPlayerWW().addItem(itemStack);
+                });
+
+        event.getInventory().clear();
+
+        event.getWhoClicked().closeInventory();
+    }
+
+    @EventHandler
+    public void onFluteCraft(PrepareItemCraftEvent event) {
+
+
+        if (!flute.equals(event.getInventory().getResult())) {
+            return;
+        }
+
+        if (!event.getView().getPlayer().getUniqueId().equals(this.getPlayerUUID())) {
+            event.getInventory().setResult(new ItemStack(Material.AIR));
+        }
     }
 
     @EventHandler
@@ -159,10 +193,10 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
             return;
         }
 
-        timer++;
+        this.timer++;
         this.timer %= 6;
 
-        if (timer != 0) {
+        if (this.timer != 0) {
             return;
         }
 
