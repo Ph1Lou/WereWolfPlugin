@@ -513,10 +513,7 @@ public class PlayerListener implements Listener {
 		playerWW.sendMessageWithKey("werewolf.announcement.resurrection");
 		game.getMapManager().transportation(playerWW, Math.random() * Math.PI * 2);
 
-		Player player = Bukkit.getPlayer(playerWW.getUUID());
-		if (player != null) {
-			Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(player));
-		}
+		Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(playerWW));
 		BukkitUtils.scheduleSyncDelayedTask(game::checkVictory);
 	}
 

@@ -363,6 +363,12 @@
         "description": "Vous avez été séparé de votre frère à la naissance, cependant vous avez gardé un lien très fort avec lui. Vos coeurs au dela du cinquième sont liées.",
         "siamese_twin_list": "Liste de vos Frères Siamois: §b%s"
       },
+      "alpha_werewolf": {
+        "display": "Loup Garou Alpha",
+        "description": "Votre pseudo est visible par les autres Loups dans le chat.",
+        "effect": "2 ♥ d’absorption pendant 5 minutes au début de chaque nuit.",
+        "prefix": "[§c%s§r] %s"
+      },
       "lover": {
         "display": "Couple",
         "random": " Aléatoire",

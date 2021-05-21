@@ -181,6 +181,7 @@ import io.github.ph1lou.werewolfplugin.roles.villagers.Villager;
 import io.github.ph1lou.werewolfplugin.roles.villagers.WildChild;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Witch;
 import io.github.ph1lou.werewolfplugin.roles.villagers.WolfDog;
+import io.github.ph1lou.werewolfplugin.roles.werewolfs.AlphaWereWolf;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.AvengerWereWolf;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.FalsifierWereWolf;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.GrimyWereWolf;
@@ -1060,6 +1061,11 @@ public class RegisterManager implements IRegisterManager {
                             RolesBase.SHAMAN.getKey(), Shaman.class)
                             .addCategory(Category.VILLAGER)
                             .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.ALPHA_WEREWOLF.getKey(), AlphaWereWolf.class)
+                            .addCategory(Category.WEREWOLF));
 
         } catch (NoSuchMethodException e) {
             e.printStackTrace();

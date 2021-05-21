@@ -160,7 +160,6 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
     @EventHandler
     public void onFluteCraft(PrepareItemCraftEvent event) {
 
-
         if (!flute.equals(event.getInventory().getResult())) {
             return;
         }
