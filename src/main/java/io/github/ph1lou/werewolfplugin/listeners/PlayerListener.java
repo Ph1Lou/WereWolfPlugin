@@ -1,13 +1,10 @@
 package io.github.ph1lou.werewolfplugin.listeners;
 
 import fr.mrmicky.fastboard.FastBoard;
+import io.github.ph1lou.werewolfapi.AuraModifier;
 import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
-import io.github.ph1lou.werewolfapi.enums.Sound;
-import io.github.ph1lou.werewolfapi.enums.StateGame;
-import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.enums.TimersBase;
-import io.github.ph1lou.werewolfapi.enums.UpdateCompositionReason;
+import io.github.ph1lou.werewolfapi.enums.*;
 import io.github.ph1lou.werewolfapi.events.UpdateLanguageEvent;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.UpdateCompositionEvent;
@@ -213,6 +210,8 @@ public class PlayerListener implements Listener {
 
 				if (killerWW != null) {
 					killerWW.addOneKill();
+					killerWW.getRole().addAuraModifier(
+							new AuraModifier("killer", Aura.DARK, 40, false));
 				}
 			} else playerWW.addKiller(null);
 
@@ -509,6 +508,7 @@ public class PlayerListener implements Listener {
 		if (playerWW.isState(StatePlayer.ALIVE)) return;
 
 		playerWW.setState(StatePlayer.ALIVE);
+		playerWW.getRole().addAuraModifier(new AuraModifier("resurrection", Aura.NEUTRAL, 10, false));
 		playerWW.getRole().recoverPotionEffect();
 		playerWW.sendMessageWithKey("werewolf.announcement.resurrection");
 		game.getMapManager().transportation(playerWW, Math.random() * Math.PI * 2);

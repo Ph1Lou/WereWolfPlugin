@@ -1,8 +1,10 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
+import io.github.ph1lou.werewolfapi.AuraModifier;
 import io.github.ph1lou.werewolfapi.ICommands;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.roles.guard.GuardEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
@@ -65,6 +67,7 @@ public class CommandGuard implements ICommands {
         }
 
         ((IAffectedPlayers) guard).addAffectedPlayer(playerWW1);
+        playerWW1.getRole().addAuraModifier(new AuraModifier("guarded", Aura.LIGHT, 30, true));
 
         playerWW.sendMessageWithKey("werewolf.role.guard.perform", playerArg.getName());
     }

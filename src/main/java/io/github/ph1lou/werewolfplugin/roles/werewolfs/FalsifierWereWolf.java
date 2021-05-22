@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.Camp;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
@@ -20,11 +21,13 @@ import java.util.UUID;
 
 public class FalsifierWereWolf extends RoleWereWolf {
 
+    private Aura displayAura;
 
     public FalsifierWereWolf(WereWolfAPI api, IPlayerWW playerWW, String key) {
         super(api, playerWW, key);
         this.setDisplayCamp(Camp.VILLAGER.getKey());
         this.setDisplayRole(RolesBase.VILLAGER.getKey());
+        this.displayAura = Aura.LIGHT;
     }
 
     @EventHandler
@@ -55,9 +58,11 @@ public class FalsifierWereWolf extends RoleWereWolf {
             getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
             setDisplayCamp(Camp.WEREWOLF.getKey());
             setDisplayRole(RolesBase.FALSIFIER_WEREWOLF.getKey());
+            displayAura = Aura.DARK;
         } else {
             setDisplayRole(roles.getKey());
             setDisplayCamp(newDisplayRole.getNewDisplayCamp());
+            displayAura = roles.getDefaultAura();
         }
         getPlayerWW().sendMessageWithKey("werewolf.role.falsifier_werewolf.display_role_message",
                 game.translate(getDisplayRole()));
@@ -79,5 +84,15 @@ public class FalsifierWereWolf extends RoleWereWolf {
     @Override
     public void recoverPower() {
 
+    }
+
+    @Override
+    public Aura getDefaultAura() {
+        return displayAura;
+    }
+
+    @Override
+    public Aura getAura() {
+        return displayAura;
     }
 }

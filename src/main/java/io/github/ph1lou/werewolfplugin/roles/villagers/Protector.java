@@ -1,9 +1,11 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
+import io.github.ph1lou.werewolfapi.AuraModifier;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
@@ -70,6 +72,7 @@ public class Protector extends RoleWithLimitedSelectionDuration implements IAffe
 
 
             this.last.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+            this.last.getRole().removeAuraModifier("protection");
             this.last.sendMessageWithKey("werewolf.role.protector.no_longer_protected");
             this.last = null;
         }
@@ -95,6 +98,7 @@ public class Protector extends RoleWithLimitedSelectionDuration implements IAffe
         if (!event.getThiefWW().equals(this.last)) return;
 
         this.last.addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+        this.last.getRole().addAuraModifier(new AuraModifier("protection", Aura.LIGHT, 30, true));
     }
 
     @Override
@@ -109,6 +113,11 @@ public class Protector extends RoleWithLimitedSelectionDuration implements IAffe
     @Override
     public void recoverPower() {
 
+    }
+
+    @Override
+    public Aura getDefaultAura() {
+        return Aura.LIGHT;
     }
 
 

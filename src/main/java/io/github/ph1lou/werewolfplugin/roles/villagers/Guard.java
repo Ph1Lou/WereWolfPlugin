@@ -4,6 +4,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
@@ -93,6 +94,9 @@ public class Guard extends RoleWithLimitedSelectionDuration implements IAffected
     @EventHandler(priority = EventPriority.LOWEST)
     public void onDay(DayEvent event) {
 
+        if (this.last != null) {
+            this.last.getRole().removeAuraModifier("guarded");
+        }
         this.last = null;
 
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
@@ -121,5 +125,10 @@ public class Guard extends RoleWithLimitedSelectionDuration implements IAffected
     @Override
     public void recoverPower() {
 
+    }
+
+    @Override
+    public Aura getDefaultAura() {
+        return Aura.LIGHT;
     }
 }
