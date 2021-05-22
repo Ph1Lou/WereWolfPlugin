@@ -288,7 +288,7 @@ public class LittleGirl extends RoleVillage implements IInvisible {
             return;
         }
 
-        this.getPlayerWW().sendMessageWithKey("werewolf.commands.admin.ww_chat.prefix", event.getMessage());
+        this.getPlayerWW().sendMessageWithKey(event.getPrefix(this.getPlayerWW()), event.getMessage());
 
     }
 

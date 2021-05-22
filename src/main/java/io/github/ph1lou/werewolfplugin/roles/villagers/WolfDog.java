@@ -85,7 +85,7 @@ public class WolfDog extends RoleVillage implements ITransformed, IPower {
 
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
-        getPlayerWW().sendMessageWithKey("werewolf.commands.admin.ww_chat.prefix", event.getMessage());
+        getPlayerWW().sendMessageWithKey(event.getPrefix(event.getPlayerWW()), event.getMessage());
 
     }
 

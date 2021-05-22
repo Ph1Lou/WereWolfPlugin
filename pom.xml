@@ -39,7 +39,10 @@
         </plugins>
     </build>
     <repositories>
-
+        <repository>
+            <id>enginehub-repo</id>
+            <url>https://maven.enginehub.org/repo/</url>
+        </repository>
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
@@ -55,6 +58,14 @@
             <groupId>com.eclipsesource.minimal-json</groupId>
             <artifactId>minimal-json</artifactId>
             <version>0.9.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.enginehub</groupId>
+            <artifactId>squirrelid</artifactId>
+            <version>0.3.0</version>
+            <scope>compile</scope>
+            <type>jar</type>
         </dependency>
 
         <dependency>
@@ -102,13 +113,6 @@
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-artifact</artifactId>
             <version>3.0.3</version>
-        </dependency>
-
-
-        <dependency>
-            <groupId>com.github.KevinPriv</groupId>
-            <artifactId>MojangAPI</artifactId>
-            <version>1.0</version>
         </dependency>
 
 

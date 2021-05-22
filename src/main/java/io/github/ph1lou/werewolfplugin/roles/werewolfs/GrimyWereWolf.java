@@ -119,7 +119,6 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
             getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
             return;
         }
-
         this.getPlayerWW().sendMessageWithKey("werewolf.role.grimy_werewolf.perform", event.getPlayerWW().getName(), game.translate(event.getPlayerWW().getRole().getKey()));
 
         this.affectedPlayer.add(event.getPlayerWW());
