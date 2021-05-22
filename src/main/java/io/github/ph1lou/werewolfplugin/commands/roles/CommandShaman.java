@@ -72,7 +72,7 @@ public class CommandShaman implements ICommands {
         } else {
             IRole role = playerWW1.getRole();
             playerWW.sendMessageWithKey("werewolf.role.shaman.victim_role",
-                    role.getDisplayRole());
+                    game.translate(role.getDisplayRole()));
         }
 
     }
