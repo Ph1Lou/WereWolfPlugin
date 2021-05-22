@@ -7,6 +7,7 @@ import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTag;
+import io.github.ph1lou.werewolfapi.events.game.game_cycle.UpdateCompositionEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -23,6 +24,11 @@ public class ShowDeathRole extends ListenerManager {
     public void onAnnounceDeath(AnnouncementDeathEvent event) {
 
         event.setFormat("werewolf.announcement.death_message_with_role");
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onCompositionUpdate(UpdateCompositionEvent event) {
+        event.setCancelled(false);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -43,6 +49,7 @@ public class ShowDeathRole extends ListenerManager {
                         "")
                 + game.translate(playerWW.getRole().getKey()));
     }
+
 
     @Override
     public void register(boolean isActive) {

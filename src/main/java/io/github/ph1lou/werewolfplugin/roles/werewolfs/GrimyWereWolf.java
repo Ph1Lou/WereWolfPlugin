@@ -124,7 +124,7 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
         this.affectedPlayer.add(event.getPlayerWW());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onCompositionUpdate(UpdateCompositionEvent event) {
 
         if (this.affectedPlayer.isEmpty()) {

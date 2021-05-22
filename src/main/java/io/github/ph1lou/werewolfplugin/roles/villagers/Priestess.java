@@ -129,7 +129,7 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onCompositionUpdate(UpdateCompositionEvent event) {
         event.setCancelled(true);
     }
