@@ -367,7 +367,7 @@
         "display": "Loup Garou Alpha",
         "description": "Votre pseudo est visible par les autres Loups dans le chat.",
         "effect": "2 ♥ d’absorption pendant 5 minutes au début de chaque nuit.",
-        "prefix": "[§c%s§r] %s"
+        "prefix": "[§c&name&§r] %s"
       },
       "lover": {
         "display": "Couple",

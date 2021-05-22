@@ -63,7 +63,7 @@ public class CommandWereWolfChat implements ICommands {
                         sb.append(w).append(" ");
                     }
 
-                    WereWolfChatEvent wereWolfChatEvent = new WereWolfChatEvent(playerWW, sb.toString());
+                    WereWolfChatEvent wereWolfChatEvent = new WereWolfChatEvent(game, playerWW, sb.toString());
                     Bukkit.getPluginManager().callEvent(wereWolfChatEvent);
                 } else {
                     playerWW.sendMessageWithKey("werewolf.commands.admin.ww_chat.timer");

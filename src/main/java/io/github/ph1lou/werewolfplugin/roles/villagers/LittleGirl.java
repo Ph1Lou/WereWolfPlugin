@@ -294,7 +294,7 @@ public class LittleGirl extends RoleVillage implements IInvisible {
             return;
         }
 
-        this.getPlayerWW().sendMessageWithKey(event.getPrefix(this.getPlayerWW()), event.getMessage());
+        this.getPlayerWW().sendMessage(String.format(event.getPrefix(this.getPlayerWW()), event.getMessage()));
 
     }
 
