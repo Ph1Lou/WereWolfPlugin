@@ -98,7 +98,7 @@ public class Protector extends RoleWithLimitedSelectionDuration implements IAffe
         if (!event.getThiefWW().equals(this.last)) return;
 
         this.last.addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-        this.last.getRole().addAuraModifier(new AuraModifier("protection", Aura.LIGHT, 30, true));
+        this.last.getRole().addAuraModifier(new AuraModifier("protection", Aura.LIGHT, 40, true));
     }
 
     @Override

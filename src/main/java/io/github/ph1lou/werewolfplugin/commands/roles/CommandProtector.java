@@ -72,7 +72,7 @@ public class CommandProtector implements ICommands {
         ((IAffectedPlayers) protector).addAffectedPlayer(playerWW1);
 
         playerWW1.addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-        playerWW1.getRole().addAuraModifier(new AuraModifier("protection", Aura.LIGHT, 30, true));
+        playerWW1.getRole().addAuraModifier(new AuraModifier("protection", Aura.LIGHT, 40, true));
         playerWW1.sendMessageWithKey("werewolf.role.protector.get_protection");
         playerWW.sendMessageWithKey("werewolf.role.protector.protection_perform", playerArg.getName());
     }

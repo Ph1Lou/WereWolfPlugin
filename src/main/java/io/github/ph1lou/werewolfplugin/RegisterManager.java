@@ -63,35 +63,7 @@ import io.github.ph1lou.werewolfplugin.commands.admin.ingame.CommandStuffRole;
 import io.github.ph1lou.werewolfplugin.commands.admin.ingame.CommandTP;
 import io.github.ph1lou.werewolfplugin.commands.admin.ingame.CommandTPGroup;
 import io.github.ph1lou.werewolfplugin.commands.admin.ingame.CommandWhitelist;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandAngelRegen;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandCitizenCancelVote;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandCitizenSeeVote;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandComedian;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandCupid;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandDetective;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandFallenAngel;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandFox;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandGuard;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandGuardianAngel;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandInfect;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandLibrarian;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandLovers;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandPriestess;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandProtector;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandRaven;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandSeer;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandSendToLibrarian;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandShaman;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandSisterSeeName;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandSisterSeeRole;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandSuccubus;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandTrapper;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandTroubleMaker;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandWereWolf;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandWereWolfChat;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandWildChild;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandWitch;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandWolfDog;
+import io.github.ph1lou.werewolfplugin.commands.roles.*;
 import io.github.ph1lou.werewolfplugin.commands.utilities.CommandAnonymeChat;
 import io.github.ph1lou.werewolfplugin.commands.utilities.CommandCompo;
 import io.github.ph1lou.werewolfplugin.commands.utilities.CommandDoc;
@@ -155,32 +127,7 @@ import io.github.ph1lou.werewolfplugin.roles.neutrals.SerialKiller;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.Succubus;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.Thief;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.WhiteWereWolf;
-import io.github.ph1lou.werewolfplugin.roles.villagers.BearTrainer;
-import io.github.ph1lou.werewolfplugin.roles.villagers.ChattySeer;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Citizen;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Comedian;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Cupid;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Detective;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Elder;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Fox;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Guard;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Librarian;
-import io.github.ph1lou.werewolfplugin.roles.villagers.LittleGirl;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Priestess;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Protector;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Raven;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Seer;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Shaman;
-import io.github.ph1lou.werewolfplugin.roles.villagers.SiameseTwin;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Sister;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Stud;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Trapper;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Troublemaker;
-import io.github.ph1lou.werewolfplugin.roles.villagers.VillageIdiot;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Villager;
-import io.github.ph1lou.werewolfplugin.roles.villagers.WildChild;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Witch;
-import io.github.ph1lou.werewolfplugin.roles.villagers.WolfDog;
+import io.github.ph1lou.werewolfplugin.roles.villagers.*;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.AlphaWereWolf;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.AvengerWereWolf;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.FalsifierWereWolf;
@@ -739,6 +686,15 @@ public class RegisterManager implements IRegisterManager {
 
         commandsRegister
                 .add(new CommandRegister("werewolf.name",
+                    "werewolf.role.oracle.command", new CommandOracle(main))
+                        .addRoleKey(RolesBase.ORACLE.getKey())
+                        .setRequiredPower()
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(1));
+
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
                         "werewolf.menu.roles.command_1", new CommandRole(main))
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
@@ -1067,6 +1023,11 @@ public class RegisterManager implements IRegisterManager {
                             RolesBase.ALPHA_WEREWOLF.getKey(), AlphaWereWolf.class)
                             .addCategory(Category.WEREWOLF));
 
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name", RolesBase.ORACLE.getKey(), Oracle.class)
+                            .addCategory(Category.VILLAGER)
+                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION));
+
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
@@ -1261,6 +1222,10 @@ public class RegisterManager implements IRegisterManager {
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.DETECTIVE_EVERY_OTHER_DAY.getKey()));
+
+        configsRegister
+                .add(new ConfigRegister("werewolf.name",
+                        ConfigsBase.ORACLE_EVERY_OTHER_DAY.getKey()));
 
         configsRegister
                 .add(new ConfigRegister("werewolf.name",

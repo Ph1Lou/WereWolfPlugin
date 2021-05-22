@@ -211,7 +211,7 @@ public class PlayerListener implements Listener {
 				if (killerWW != null) {
 					killerWW.addOneKill();
 					killerWW.getRole().addAuraModifier(
-							new AuraModifier("killer", Aura.DARK, 40, false));
+							new AuraModifier("killer", Aura.DARK, 50, false));
 				}
 			} else playerWW.addKiller(null);
 
