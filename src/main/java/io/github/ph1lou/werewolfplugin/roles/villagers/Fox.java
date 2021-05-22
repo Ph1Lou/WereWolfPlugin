@@ -208,12 +208,13 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
                     player.sendMessage(game.translate(
                             "werewolf.role.fox.werewolf",
                             playerWW.getName()));
+                    player.sendMessage(game.translate("werewolf.role.fox.warn"));
                 } else {
                     player.sendMessage(game.translate(
                             "werewolf.role.fox.not_werewolf",
                             playerWW.getName()));
                 }
-                player.sendMessage(game.translate("werewolf.role.fox.warn"));
+
 
                 if (playerWW.getRole().isWereWolf()) {
                     BukkitUtils.scheduleSyncDelayedTask(() -> {

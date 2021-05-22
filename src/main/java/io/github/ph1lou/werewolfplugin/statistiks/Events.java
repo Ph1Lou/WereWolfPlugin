@@ -189,7 +189,8 @@ public class Events implements Listener {
 
                 TextComponent msg = new TextComponent(main.getWereWolfAPI().translate("werewolf.statistics.message"));
                 msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
-                        String.format("https://ph1lou.fr/werewolfstat/detail.php?id=%s", response.toString().replaceAll("\"", ""))));
+                        String.format("https://ph1lou.fr/werewolfstat/detail.php?id=%s",
+                                response.toString().replaceAll("\"", ""))));
                 BukkitUtils.scheduleSyncDelayedTask(() -> Bukkit.getOnlinePlayers()
                         .forEach(player -> player.spigot().sendMessage(msg)), 100);
             } catch (Exception ignored) {
@@ -203,7 +204,8 @@ public class Events implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onWin(WinEvent event) {
         WereWolfAPI api = main.getWereWolfAPI();
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("win", event.getPlayers(), api.getScore().getTimer(), event.getRole()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("win",
+                event.getPlayers(), api.getScore().getTimer(), event.getRole()));
         main.getCurrentGameReview().end(event.getRole(), event.getPlayers());
     }
 
@@ -241,14 +243,16 @@ public class Events implements Listener {
 
         if (playerWW.isState(StatePlayer.DEATH)) return;
 
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("kill", playerWW, killerWW, api.getScore().getTimer()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("kill",
+                playerWW, killerWW, api.getScore().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onFinalDeath(FinalDeathEvent event) {
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("final_kill", playerWW, event.getPlayerWW().getLastKiller().isPresent() ?
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("final_kill",
+                playerWW, event.getPlayerWW().getLastKiller().isPresent() ?
                 event.getPlayerWW().getLastKiller().get() : null, api.getScore().getTimer()));
     }
 
@@ -269,7 +273,8 @@ public class Events implements Listener {
 
 
         WereWolfAPI api = main.getWereWolfAPI();
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("infection", event.getPlayerWW(), event.getTargetWW(), api.getScore().getTimer()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("infection",
+                event.getPlayerWW(), event.getTargetWW(), api.getScore().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -279,7 +284,8 @@ public class Events implements Listener {
 
 
         WereWolfAPI api = main.getWereWolfAPI();
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("grim", event.getPlayerWW(), event.getTargetWW(), api.getScore().getTimer()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("grim",
+                event.getPlayerWW(), event.getTargetWW(), api.getScore().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -289,7 +295,9 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("elder_revive", playerWW, api.getScore().getTimer(), event.isKillerAVillager() ? "elder_kill_by_villager" : "elder_not_kill_by_villager"));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("elder_revive",
+                playerWW, api.getScore().getTimer(),
+                event.isKillerAVillager() ? "elder_kill_by_villager" : "elder_not_kill_by_villager"));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -301,7 +309,8 @@ public class Events implements Listener {
         IPlayerWW playerWW = event.getPlayerWW();
         main.getCurrentGameReview()
                 .addRegisteredAction(
-                        new RegisteredAction("revive", playerWW, api.getScore().getTimer()));
+                        new RegisteredAction("revive",
+                                playerWW, api.getScore().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -312,7 +321,8 @@ public class Events implements Listener {
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview()
                 .addRegisteredAction(
-                        new RegisteredAction("witch_revive", event.getPlayerWW(), event.getTargetWW(), api.getScore().getTimer()));
+                        new RegisteredAction("witch_revive",
+                                event.getPlayerWW(), event.getTargetWW(), api.getScore().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -321,7 +331,8 @@ public class Events implements Listener {
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview()
                 .addRegisteredAction(
-                        new RegisteredAction("lover_death", event.getPlayerWW1(), event.getPlayerWW2(), api.getScore().getTimer()));
+                        new RegisteredAction("lover_death",
+                                event.getPlayerWW1(), event.getPlayerWW2(), api.getScore().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -330,7 +341,8 @@ public class Events implements Listener {
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview()
                 .addRegisteredAction(
-                        new RegisteredAction("amnesiac_lover_death", event.getPlayerWW1(), event.getPlayerWW2(), api.getScore().getTimer()));
+                        new RegisteredAction("amnesiac_lover_death",
+                                event.getPlayerWW1(), event.getPlayerWW2(), api.getScore().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -339,7 +351,8 @@ public class Events implements Listener {
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview()
                 .addRegisteredAction(
-                        new RegisteredAction("cursed_lover_death", event.getPlayerWW1(), event.getPlayerWW2(), api.getScore().getTimer()));
+                        new RegisteredAction("cursed_lover_death",
+                                event.getPlayerWW1(), event.getPlayerWW2(), api.getScore().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -350,7 +363,8 @@ public class Events implements Listener {
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
         IPlayerWW targetWW = event.getTargetWW();
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("protection", playerWW, targetWW, api.getScore().getTimer()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("protection",
+                playerWW, targetWW, api.getScore().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -359,7 +373,8 @@ public class Events implements Listener {
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
         IPlayerWW targetWW = event.getTargetWW();
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("model", playerWW, targetWW, api.getScore().getTimer()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("model",
+                playerWW, targetWW, api.getScore().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -370,7 +385,8 @@ public class Events implements Listener {
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW targetWW = event.getTargetWW();
         IPlayerWW playerWW = event.getPlayerWW();
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("charmed", playerWW, targetWW, api.getScore().getTimer()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("charmed",
+                playerWW, targetWW, api.getScore().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -379,14 +395,16 @@ public class Events implements Listener {
         if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("enchanted", event.getPlayerWW(), event.getTargetWW(), api.getScore().getTimer()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("enchanted",
+                event.getPlayerWW(), event.getTargetWW(), api.getScore().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onEnchantedAll(AllPlayerEnchantedEvent event) {
 
         WereWolfAPI api = main.getWereWolfAPI();
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("all_enchanted", event.getPlayerWW(), api.getScore().getTimer()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("all_enchanted",
+                event.getPlayerWW(), api.getScore().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -395,7 +413,8 @@ public class Events implements Listener {
         if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("find_flute", event.getPlayerWW(), event.getTargetWW(), api.getScore().getTimer()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("find_flute",
+                event.getPlayerWW(), event.getTargetWW(), api.getScore().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -931,7 +950,8 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
 
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("villager_kit", event.getPlayerWW(), api.getScore().getTimer(), event.getKit()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("villager_kit",
+                event.getPlayerWW(), api.getScore().getTimer(), event.getKit()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -940,7 +960,8 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
 
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("exposed", event.getPlayerWW(), new HashSet<>(event.getRoles()), api.getScore().getTimer()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("exposed",
+                event.getPlayerWW(), new HashSet<>(event.getRoles()), api.getScore().getTimer()));
 
     }
 
@@ -951,7 +972,8 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
 
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("event_loot_box", event.getPlayerWW(), api.getScore().getTimer(), event.getChestNumbers()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("event_loot_box",
+                event.getPlayerWW(), api.getScore().getTimer(), event.getChestNumbers()));
 
     }
 
@@ -960,7 +982,8 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
 
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("find_all_loot_box", api.getScore().getTimer()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("find_all_loot_box",
+                api.getScore().getTimer()));
 
     }
 
@@ -970,7 +993,8 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
 
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("random_infection", event.getPlayerWW(), api.getScore().getTimer()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("random_infection",
+                event.getPlayerWW(), api.getScore().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -979,7 +1003,8 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
 
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("bearing_ritual_event", api.getScore().getTimer()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("bearing_ritual_event",
+                api.getScore().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -988,7 +1013,8 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
 
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("putrefaction_event", api.getScore().getTimer()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("putrefaction_event",
+                api.getScore().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -997,7 +1023,8 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
 
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("god_miracle_event", event.getPlayerWW(), api.getScore().getTimer()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("god_miracle_event",
+                event.getPlayerWW(), api.getScore().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -1006,7 +1033,8 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
 
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("swap_event", event.getPlayerWW1(), event.getPlayerWW2(), api.getScore().getTimer()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("swap_event",
+                event.getPlayerWW1(), event.getPlayerWW2(), api.getScore().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -1015,7 +1043,8 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
 
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("lone_wolf", event.getPlayerWW(), api.getScore().getTimer()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("lone_wolf",
+                event.getPlayerWW(), api.getScore().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -1024,7 +1053,8 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
 
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("guard_event", event.getPlayerWW(), event.getTargetWW(), api.getScore().getTimer()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("guard_event",
+                event.getPlayerWW(), event.getTargetWW(), api.getScore().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -1033,7 +1063,8 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
 
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("guard_resurrection", event.getPlayerWW(), event.getTargetWW(), api.getScore().getTimer()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("guard_resurrection",
+                event.getPlayerWW(), event.getTargetWW(), api.getScore().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -1042,7 +1073,8 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
 
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("trouple_event", event.getPlayerWW(), event.getPlayerWWs(), api.getScore().getTimer()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("trouple_event",
+                event.getPlayerWW(), event.getPlayerWWs(), api.getScore().getTimer()));
     }
 
 
@@ -1053,7 +1085,8 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("avenger_list_register", playerWW, event.getTargetWW(), api.getScore().getTimer()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("avenger_list_register",
+                playerWW, event.getTargetWW(), api.getScore().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -1063,7 +1096,8 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("avenger_list_death", playerWW, event.getTargetWW(), api.getScore().getTimer()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("avenger_list_death",
+                playerWW, event.getTargetWW(), api.getScore().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -1072,7 +1106,8 @@ public class Events implements Listener {
         if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("poorly_groomed_bear", event.getModification(), api.getScore().getTimer()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("poorly_groomed_bear",
+                event.getModification(), api.getScore().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -1081,7 +1116,8 @@ public class Events implements Listener {
         if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("drunken_werewolf", event.getPlayerWW(), api.getScore().getTimer()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("drunken_werewolf",
+                event.getPlayerWW(), api.getScore().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -1090,7 +1126,8 @@ public class Events implements Listener {
         if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("amnesic_design", event.getPlayerWW(), api.getScore().getTimer()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("amnesic_design",
+                event.getPlayerWW(), api.getScore().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -1099,7 +1136,8 @@ public class Events implements Listener {
         if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("amnesic_transform", event.getPlayerWW(), event.getTargetWW(), api.getScore().getTimer()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("amnesic_transform",
+                event.getPlayerWW(), event.getTargetWW(), api.getScore().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -1108,6 +1146,7 @@ public class Events implements Listener {
         if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("shaman", event.getPlayerWW(), event.getTargetWW(), api.getScore().getTimer()));
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("shaman",
+                event.getPlayerWW(), event.getTargetWW(), api.getScore().getTimer()));
     }
 }

@@ -29,9 +29,9 @@ public class VillageIdiot extends RoleVillage implements IPower {
 
     public @NotNull String getDescription() {
 
-        return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.village_idiot.description"))
-                .setPower(() -> game.translate(power ?
+        return new DescriptionBuilder(this.game, this)
+                .setDescription(() -> this.game.translate("werewolf.role.village_idiot.description"))
+                .setPower(() -> this.game.translate(this.power ?
                         "werewolf.role.village_idiot.power_on" :
                         "werewolf.role.village_idiot.power_off"))
                 .build();
@@ -55,11 +55,11 @@ public class VillageIdiot extends RoleVillage implements IPower {
 
         if (!event.getPlayerUUID().equals(getPlayerUUID())) return;
 
-        if (power) return;
+        if (this.power) return;
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
-        event.setSuffix(event.getSuffix() + " " + game.translate("werewolf.role.village_idiot.suffix"));
+        event.setSuffix(event.getSuffix() + " " + this.game.translate("werewolf.role.village_idiot.suffix"));
     }
 
 
@@ -69,10 +69,10 @@ public class VillageIdiot extends RoleVillage implements IPower {
         if (event.isCancelled()) {
             return;
         }
-        if (!event.getPlayerWW().equals(getPlayerWW())) {
+        if (!event.getPlayerWW().equals(this.getPlayerWW())) {
             return;
         }
-        if (!hasPower()) {
+        if (!this.hasPower()) {
             return;
         }
 
@@ -86,7 +86,7 @@ public class VillageIdiot extends RoleVillage implements IPower {
             return;
         }
 
-        setPower(false);
+        this.setPower(false);
 
         VillageIdiotEvent villageIdiotEvent =
                 new VillageIdiotEvent(getPlayerWW(), killerWW.get());
@@ -96,16 +96,16 @@ public class VillageIdiot extends RoleVillage implements IPower {
             getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
             return;
         }
-        game.resurrection(getPlayerWW());
+        this.game.resurrection(getPlayerWW());
         Player player = Bukkit.getPlayer(getPlayerUUID());
         if (player != null) {
             Bukkit.getPluginManager().callEvent(
                     new UpdateNameTagEvent(player));
         }
-        getPlayerWW().removePlayerMaxHealth(4);
+        this.getPlayerWW().removePlayerMaxHealth(4);
         event.setCancelled(true);
-        Bukkit.broadcastMessage(game.translate("werewolf.role.village_idiot.announce",
-                getPlayerWW().getName()));
+        Bukkit.broadcastMessage(this.game.translate("werewolf.role.village_idiot.announce",
+                this.getPlayerWW().getName()));
     }
 }
 

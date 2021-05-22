@@ -24,12 +24,11 @@ public class Guard extends RoleWithLimitedSelectionDuration implements IAffected
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private IPlayerWW last;
-    private boolean power = true;
+    private boolean power = false;
 
 
     public Guard(WereWolfAPI api, IPlayerWW playerWW, String key) {
         super(api, playerWW, key);
-        setPower(false);
     }
 
     @Override
@@ -55,18 +54,20 @@ public class Guard extends RoleWithLimitedSelectionDuration implements IAffected
 
         if (!this.last.getLastKiller().get().getRole().isWereWolf()) return;
 
-        if (!this.last.equals(getPlayerWW()) && !getPlayerWW().isState(StatePlayer.ALIVE)) return;
+        if (!this.last.equals(this.getPlayerWW()) && !this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
-        game.resurrection(this.last);
+        this.game.resurrection(this.last);
 
-        getPlayerWW().sendMessageWithKey("werewolf.role.guard.resurrection");
+        event.setCancelled(true);
+
+        this.getPlayerWW().sendMessageWithKey("werewolf.role.guard.resurrection");
 
         this.last.sendMessageWithKey("werewolf.role.guard.protect");
 
         GuardResurrectionEvent guardResurrectionEvent = new GuardResurrectionEvent(getPlayerWW(), this.last);
 
         if (guardResurrectionEvent.isCancelled()) {
-            getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
             return;
         }
 
@@ -95,26 +96,26 @@ public class Guard extends RoleWithLimitedSelectionDuration implements IAffected
 
         this.last = null;
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
         if (!this.power) return;
 
-        setPower(true);
+        this.setPower(true);
 
-        getPlayerWW().sendMessageWithKey(
+        this.getPlayerWW().sendMessageWithKey(
                 "werewolf.role.guard.message",
                 Utils.conversion(
-                        game.getConfig().getTimerValue(TimersBase.POWER_DURATION.getKey())));
+                        this.game.getConfig().getTimerValue(TimersBase.POWER_DURATION.getKey())));
     }
 
     @Override
     public @NotNull String getDescription() {
 
-        return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.guard.description"))
-                .setItems(() -> game.translate("werewolf.role.guard.items"))
+        return new DescriptionBuilder(this.game, this)
+                .setDescription(() -> this.game.translate("werewolf.role.guard.description"))
+                .setItems(() -> this.game.translate("werewolf.role.guard.items"))
                 .build();
     }
 

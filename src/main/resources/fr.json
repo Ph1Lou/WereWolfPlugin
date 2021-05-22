@@ -174,7 +174,7 @@
         "smell_message": "[§eLG UHC§r] Vous pouvez flairer un joueur §b/ww flairer§f. Si vous êtes déjà en train de flairer quelqu'un, il sera remplacé par le nouveau joueur et la progression sera remis à 0. Il vous reste §b%d§r flair(s)",
         "smell_beginning": "[§eLG UHC§r] Vous commencez à flairer §b%s",
         "not_werewolf": "[§eLG UHC§r] %s §2n'est pas dans le camp des Loups Garous",
-        "warn": "Il sera prévenu dans 5 minutes que vous l'avez flairé",
+        "warn": "[§eLG UHC§r] Il sera prévenu dans 5 minutes que vous l'avez flairé",
         "werewolf": "[§eLG UHC§r] %s §4est dans le camp des Loups Garous.§f Il sera prévenu qu'il a été flairé dans 5 minutes",
         "not_enough_near": "[§cLG UHC§r] Vous n'êtes pas assez proche de la personne que vous voulez flairer",
         "progress": "[§eLG UHC§r] Progression du Flair §b%s%%",
