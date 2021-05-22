@@ -521,7 +521,7 @@ public class PlayerListener implements Listener {
 
 
 	@EventHandler
-	public void onCHatWW(WereWolfChatEvent event) {
+	public void onChatWW(WereWolfChatEvent event) {
 		if (event.isCancelled()) return;
 
 		game.getModerationManager().getModerators().stream()
