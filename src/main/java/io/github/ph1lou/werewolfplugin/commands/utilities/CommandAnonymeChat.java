@@ -31,6 +31,13 @@ public class CommandAnonymeChat implements ICommands {
         WereWolfAPI game = main.getWereWolfAPI();
         StringBuilder sb = new StringBuilder();
 
+
+        if (args.length == 0) {
+            player.sendMessage(game.translate("werewolf.commands.admin.anonymous_chat.empty"));
+            return;
+        }
+
+
         for (String w : args) {
             sb.append(w).append(" ");
         }

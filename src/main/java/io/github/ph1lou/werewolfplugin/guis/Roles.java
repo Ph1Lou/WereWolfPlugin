@@ -29,16 +29,17 @@ import java.util.stream.Collectors;
 
 public class Roles implements InventoryProvider {
 
-    private Category category = Category.WEREWOLF;
+    private Category category;
 
-    public Roles(Player player) {
+    public Roles(Player player, Category category) {
+        this.category = category;
     }
 
-    public static SmartInventory getInventory(Player player) {
+    public static SmartInventory getInventory(Player player, Category category) {
         return SmartInventory.builder()
                 .id("roles")
                 .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
-                .provider(new Roles(player))
+                .provider(new Roles(player, category))
                 .size(6, 9)
                 .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.roles.name"))
                 .closeable(true)
@@ -276,9 +277,9 @@ public class Roles implements InventoryProvider {
             contents.set(4, 7, null);
             contents.set(4, 8, null);
             contents.set(4, 2, ClickableItem.of(new ItemBuilder(Material.ARROW).setDisplayName(game.translate("werewolf.menu.roles.previous", page, pagination.isFirst() ? page : page - 1)).build(),
-                    e -> getInventory(player).open(player, pagination.previous().getPage())));
+                    e -> getInventory(player, this.category).open(player, pagination.previous().getPage())));
             contents.set(4, 6, ClickableItem.of(new ItemBuilder(Material.ARROW).setDisplayName(game.translate("werewolf.menu.roles.next", page, pagination.isLast() ? page : page + 1)).build(),
-                    e -> getInventory(player).open(player, pagination.next().getPage())));
+                    e -> getInventory(player, this.category).open(player, pagination.next().getPage())));
             contents.set(4, 4, ClickableItem.empty(new ItemBuilder(UniversalMaterial.SIGN.getType()).setDisplayName(game.translate("werewolf.menu.roles.current", page, items.size() / 27 + 1)).build()));
         } else {
             int i = 0;

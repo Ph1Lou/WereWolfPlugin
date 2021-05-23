@@ -1167,7 +1167,7 @@ public class RegisterManager implements IRegisterManager {
                                 return ClickableItem.of(
                                         new ItemBuilder(Material.MELON)
                                                 .setLore(game.translate(config.isDetectiveEveryOtherDay() ? "werewolf.utils.enable" : "werewolf.utils.disable"))
-                                                .setDisplayName(game.translate(" werewolf.role.angel.sweet_angel"))
+                                                .setDisplayName(game.translate("werewolf.role.angel.sweet_angel"))
                                                 .build(), e -> {
                                             config.setDetectiveEveryOtherDay(!config.isDetectiveEveryOtherDay());
 

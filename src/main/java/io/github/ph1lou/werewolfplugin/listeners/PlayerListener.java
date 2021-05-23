@@ -4,7 +4,12 @@ import fr.mrmicky.fastboard.FastBoard;
 import io.github.ph1lou.werewolfapi.AuraModifier;
 import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
-import io.github.ph1lou.werewolfapi.enums.*;
+import io.github.ph1lou.werewolfapi.enums.Aura;
+import io.github.ph1lou.werewolfapi.enums.Sound;
+import io.github.ph1lou.werewolfapi.enums.StateGame;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.enums.UpdateCompositionReason;
 import io.github.ph1lou.werewolfapi.events.UpdateLanguageEvent;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.UpdateCompositionEvent;
@@ -527,7 +532,8 @@ public class PlayerListener implements Listener {
 		game.getModerationManager().getModerators().stream()
 				.map(Bukkit::getPlayer)
 				.filter(Objects::nonNull)
-				.forEach(player -> player.sendMessage(game.translate("werewolf.commands.admin.ww_chat.prefix", event.getMessage())));
+				.forEach(player -> player.sendMessage(game.translate("werewolf.role.alpha_werewolf.prefix",
+						event.getMessage()).replace("&name&", event.getPlayerWW().getName())));
 
 	}
 

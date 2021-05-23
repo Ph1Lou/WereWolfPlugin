@@ -601,7 +601,8 @@
           "send": "[§b%s§r] %s (Cliquez pour répondre)",
           "anonyme": "Anonyme",
           "failure": "[§cLG UHC§r] Votre message n'a pas pu être envoyé. Aucun Staff de connecté",
-          "description": "Pour envoyer un message anonyme"
+          "description": "Pour envoyer un message anonyme",
+          "empty": "[§cLG UHC§r] Vous devez envoyer un message après le ?"
         },
         "info": {
           "command": "info",
@@ -628,7 +629,8 @@
           "not_access": "[§cLG UHC§r] Vous ne pouvez pas parler dans le chat des Loups Garous",
           "disable": "[§cLG UHC§r] Le chat des Loups Garous est désactivé",
           "number": "§b%d§r messages par cycle dans le chat Loup Garou",
-          "speak_number": "[§cLG UHC§r] Vous ne pouvez parler que §b%s§r fois par cycle"
+          "speak_number": "[§cLG UHC§r] Vous ne pouvez parler que §b%s§r fois par cycle",
+          "drunken": "Attention, le loup bourré est présent dans cette partie"
         },
         "stuff_start": {
           "command": "lootStart",

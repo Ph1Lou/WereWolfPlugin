@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.commands.roles;
 import io.github.ph1lou.werewolfapi.ICommands;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.RandomEvent;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
@@ -57,5 +58,11 @@ public class CommandWereWolf implements ICommands {
             }
         }
         playerWW.sendMessageWithKey("werewolf.role.werewolf.werewolf_list", list.toString());
+        if (main.getRegisterManager().getRandomEventsRegister().stream()
+                .filter(randomEventRegister -> randomEventRegister.getKey().equals(RandomEvent.DRUNKEN_WEREWOLF.getKey()))
+                .anyMatch(randomEventRegister -> randomEventRegister.getRandomEvent().isRegister())) {
+            playerWW.sendMessageWithKey("werewolf.commands.admin.ww_chat.drunken");
+        }
+
     }
 }

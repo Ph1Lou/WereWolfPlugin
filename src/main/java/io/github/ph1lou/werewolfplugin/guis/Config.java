@@ -5,6 +5,7 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
+import io.github.ph1lou.werewolfapi.enums.Category;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
@@ -49,7 +50,7 @@ public class Config implements InventoryProvider {
 
         contents.set(1, 4, ClickableItem.of((new ItemBuilder(Material.BEACON)
                 .setDisplayName(game.translate("werewolf.menu.roles.name"))
-                .build()), e -> Roles.getInventory(player).open(player)));
+                .build()), e -> Roles.getInventory(player, Category.WEREWOLF).open(player)));
 
         contents.set(2, 4, ClickableItem.of((new ItemBuilder(UniversalMaterial.ANVIL.getType())
                 .setDisplayName(game.translate("werewolf.menu.timers.name"))

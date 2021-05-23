@@ -8,6 +8,7 @@ import fr.minuskube.inv.content.InventoryProvider;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.IStuffManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Category;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
@@ -56,7 +57,7 @@ public class AdvancedRoleMenu implements InventoryProvider {
 
         contents.set(0, 0, ClickableItem.of(new ItemBuilder(UniversalMaterial.COMPASS.getType())
                         .setDisplayName(game.translate("werewolf.menu.return")).build(),
-                e -> Roles.getInventory(player).open(player)));
+                e -> Roles.getInventory(player, Category.WEREWOLF).open(player)));
 
         contents.set(0, 2, ClickableItem.of(new ItemBuilder(UniversalMaterial.CHEST.getType()).setDisplayName(game.translate("werewolf.menu.advanced_tool_role.config", game.translate(register.getKey()))).build(),
                 event -> manageStuff(player)));
@@ -86,7 +87,6 @@ public class AdvancedRoleMenu implements InventoryProvider {
 
         WereWolfAPI game = api.getWereWolfAPI();
 
-        // WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
 
         if (!game.getModerationManager()
