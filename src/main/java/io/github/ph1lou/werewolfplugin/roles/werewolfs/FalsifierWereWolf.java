@@ -88,11 +88,11 @@ public class FalsifierWereWolf extends RoleWereWolf {
 
     @Override
     public Aura getDefaultAura() {
-        return displayAura;
+        return this.displayAura;
     }
 
     @Override
     public Aura getAura() {
-        return displayAura;
+        return this.displayAura;
     }
 }

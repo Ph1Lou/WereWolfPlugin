@@ -261,7 +261,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
     }
 
     @EventHandler
-    public void onInventoryCLick(InventoryClickEvent event) {
+    public void onInventoryClick(InventoryClickEvent event) {
 
         if (!this.hasOwnFlute) {
             return;

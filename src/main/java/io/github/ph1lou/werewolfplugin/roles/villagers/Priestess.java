@@ -101,11 +101,6 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
     }
 
     @Override
-    public Aura getDefaultAura() {
-        return Aura.LIGHT;
-    }
-
-    @Override
     public Aura getAura() {
         return Aura.LIGHT;
     }

@@ -4,7 +4,6 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
@@ -65,12 +64,6 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
     public void recoverPower() {
 
     }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.LIGHT;
-    }
-
 
     @EventHandler
     public void onWerewolfList(WereWolfListEvent event) {

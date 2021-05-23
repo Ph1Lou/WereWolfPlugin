@@ -4,7 +4,6 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.enums.VillagerKit;
@@ -76,11 +75,6 @@ public class Villager extends RoleVillage {
                 break;
         }
 
-    }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.LIGHT;
     }
 
     @EventHandler

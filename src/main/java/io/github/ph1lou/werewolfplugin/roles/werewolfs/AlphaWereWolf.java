@@ -3,7 +3,6 @@ package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.Day;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import io.github.ph1lou.werewolfapi.events.werewolf.WereWolfChatPrefixEvent;
@@ -38,11 +37,6 @@ public class AlphaWereWolf extends RoleWereWolf {
         if (game.isDay(Day.NIGHT)) {
             this.getPlayerWW().addPotionEffect(PotionEffectType.ABSORPTION, 6000, 0);
         }
-    }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.DARK;
     }
 
     @EventHandler

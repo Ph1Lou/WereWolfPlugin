@@ -4,7 +4,6 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
 import io.github.ph1lou.werewolfapi.events.lovers.AroundLover;
@@ -83,12 +82,6 @@ public class Cupid extends RoleVillage implements IAffectedPlayers, IPower {
     public void recoverPower() {
 
     }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.LIGHT;
-    }
-
 
     @EventHandler
     public void onAroundLover(AroundLover event) {

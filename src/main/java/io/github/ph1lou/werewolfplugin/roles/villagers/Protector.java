@@ -115,12 +115,6 @@ public class Protector extends RoleWithLimitedSelectionDuration implements IAffe
 
     }
 
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.LIGHT;
-    }
-
-
     @EventHandler
     private void onPlayerDamage(EntityDamageEvent event) {
 
