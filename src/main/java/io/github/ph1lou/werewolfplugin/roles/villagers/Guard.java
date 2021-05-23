@@ -56,22 +56,22 @@ public class Guard extends RoleWithLimitedSelectionDuration implements IAffected
 
         if (!this.last.equals(this.getPlayerWW()) && !this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
-        this.game.resurrection(this.last);
-
-        event.setCancelled(true);
-
-        this.getPlayerWW().sendMessageWithKey("werewolf.role.guard.resurrection");
-
-        this.last.sendMessageWithKey("werewolf.role.guard.protect");
-
         GuardResurrectionEvent guardResurrectionEvent = new GuardResurrectionEvent(getPlayerWW(), this.last);
+
+        Bukkit.getPluginManager().callEvent(guardResurrectionEvent);
 
         if (guardResurrectionEvent.isCancelled()) {
             this.getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
             return;
         }
 
-        Bukkit.getPluginManager().callEvent(guardResurrectionEvent);
+        this.game.resurrection(this.last);
+
+        this.getPlayerWW().sendMessageWithKey("werewolf.role.guard.resurrection");
+
+        this.last.sendMessageWithKey("werewolf.role.guard.protect");
+
+        event.setCancelled(true);
 
         this.power = false;
     }

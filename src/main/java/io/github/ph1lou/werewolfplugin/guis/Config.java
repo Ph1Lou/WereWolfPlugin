@@ -55,6 +55,10 @@ public class Config implements InventoryProvider {
                 .setDisplayName(game.translate("werewolf.menu.timers.name"))
                 .build()), e -> TimersGUI.getInventory(player).open(player)));
 
+        contents.set(2, 5, ClickableItem.of((new ItemBuilder(UniversalMaterial.CLOCK.getType())
+                .setDisplayName(game.translate("werewolf.menu.advanced_config_roles.name"))
+                .build()), e -> AdvancedConfigRole.getInventory().open(player)));
+
         contents.set(3, 2, ClickableItem.of((new ItemBuilder(Material.PUMPKIN)
                 .setDisplayName(game.translate("werewolf.menu.scenarios.name"))
                 .build()), e -> ScenariosGUI.INVENTORY.open(player)));
@@ -125,7 +129,7 @@ public class Config implements InventoryProvider {
 
 
         int[] SlotRedGlass = {1, 2, 6, 7, 9, 10, 16, 17, 18, 26, 27, 35, 36, 37, 43, 44, 46, 47, 51, 52};
-        int[] SlotBlackGlass = {3, 5, 11, 12, 14, 15, 19, 20, 21, 23, 24, 25, 28, 34, 38, 39, 41, 42};
+        int[] SlotBlackGlass = {3, 5, 11, 12, 14, 15, 19, 20, 21, 24, 25, 28, 34, 38, 39, 41, 42};
         for (int slotRedGlass : SlotRedGlass) {
             contents.set(slotRedGlass / 9, slotRedGlass % 9, ClickableItem.empty((new ItemBuilder(UniversalMaterial.RED_STAINED_GLASS_PANE.getStack()).build())));
 

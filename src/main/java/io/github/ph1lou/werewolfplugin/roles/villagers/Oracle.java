@@ -3,7 +3,6 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
@@ -62,7 +61,7 @@ public class Oracle extends RoleWithLimitedSelectionDuration implements IAffecte
             return;
         }
 
-        if (game.getConfig().isConfigActive(ConfigsBase.ORACLE_EVERY_OTHER_DAY.getKey()) &&
+        if (game.getConfig().isOracleEveryOtherDay() &&
                 event.getNumber() == dayNumber + 1) {
             return;
         }

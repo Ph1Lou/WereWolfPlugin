@@ -59,6 +59,11 @@ public class Configuration implements IConfiguration {
     private double borderSpeed = 0.3;
     private int werewolfChatMaxMessage = 1;
     private boolean trollLover = false;
+    private boolean autoRez = false;
+    private boolean seerEveryOtherDay = true;
+    private boolean oracleEveryOtherDay = true;
+    private boolean detectiveEveryOtherDay = true;
+    private boolean sweetAngel = false;
 
     public Configuration(IRegisterManager registerManager) {
         this.registerManager = registerManager;
@@ -536,6 +541,56 @@ public class Configuration implements IConfiguration {
     @Override
     public void setTrollLover(boolean trollLover) {
         this.trollLover = trollLover;
+    }
+
+    @Override
+    public boolean isWitchAutoResurrection() {
+        return this.autoRez;
+    }
+
+    @Override
+    public void setWitchAutoResurrection(boolean autoReZ) {
+        this.autoRez = autoReZ;
+    }
+
+    @Override
+    public boolean isSeerEveryOtherDay() {
+        return this.seerEveryOtherDay;
+    }
+
+    @Override
+    public void setSeerEveryOtherDay(boolean seerEveryOtherDay) {
+        this.seerEveryOtherDay = seerEveryOtherDay;
+    }
+
+    @Override
+    public boolean isDetectiveEveryOtherDay() {
+        return this.detectiveEveryOtherDay;
+    }
+
+    @Override
+    public void setDetectiveEveryOtherDay(boolean detectiveEveryOtherDay) {
+        this.detectiveEveryOtherDay = detectiveEveryOtherDay;
+    }
+
+    @Override
+    public boolean isOracleEveryOtherDay() {
+        return this.oracleEveryOtherDay;
+    }
+
+    @Override
+    public void setOracleEveryOtherDay(boolean oracleEveryOtherDay) {
+        this.oracleEveryOtherDay = oracleEveryOtherDay;
+    }
+
+    @Override
+    public boolean isSweetAngel() {
+        return this.sweetAngel;
+    }
+
+    @Override
+    public void setSweetAngel(boolean sweetAngel) {
+        this.sweetAngel = sweetAngel;
     }
 
 

@@ -3,7 +3,6 @@ package io.github.ph1lou.werewolfplugin.commands.roles;
 import io.github.ph1lou.werewolfapi.ICommands;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.roles.witch.WitchResurrectionEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
@@ -48,7 +47,7 @@ public class CommandWitch implements ICommands {
             return;
         }
 
-        if (!game.getConfig().isConfigActive(ConfigsBase.AUTO_REZ_WITCH.getKey()) && argUUID.equals(uuid)) {
+        if (!game.getConfig().isWitchAutoResurrection() && argUUID.equals(uuid)) {
             playerWW.sendMessageWithKey("werewolf.check.not_yourself");
             return;
         }

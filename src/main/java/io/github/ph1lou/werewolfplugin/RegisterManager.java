@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin;
 
 
+import fr.minuskube.inv.ClickableItem;
 import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.enums.Category;
 import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
@@ -12,6 +13,7 @@ import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.events.TrollEvent;
 import io.github.ph1lou.werewolfapi.events.TrollLoverEvent;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
@@ -34,6 +36,7 @@ import io.github.ph1lou.werewolfapi.registers.RandomEventRegister;
 import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfapi.registers.ScenarioRegister;
 import io.github.ph1lou.werewolfapi.registers.TimerRegister;
+import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.commands.admin.CommandChange;
 import io.github.ph1lou.werewolfplugin.commands.admin.CommandGeneration;
 import io.github.ph1lou.werewolfplugin.commands.admin.CommandSize;
@@ -63,7 +66,36 @@ import io.github.ph1lou.werewolfplugin.commands.admin.ingame.CommandStuffRole;
 import io.github.ph1lou.werewolfplugin.commands.admin.ingame.CommandTP;
 import io.github.ph1lou.werewolfplugin.commands.admin.ingame.CommandTPGroup;
 import io.github.ph1lou.werewolfplugin.commands.admin.ingame.CommandWhitelist;
-import io.github.ph1lou.werewolfplugin.commands.roles.*;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandAngelRegen;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandCitizenCancelVote;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandCitizenSeeVote;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandComedian;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandCupid;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandDetective;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandFallenAngel;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandFox;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandGuard;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandGuardianAngel;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandInfect;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandLibrarian;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandLovers;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandOracle;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandPriestess;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandProtector;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandRaven;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandSeer;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandSendToLibrarian;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandShaman;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandSisterSeeName;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandSisterSeeRole;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandSuccubus;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandTrapper;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandTroubleMaker;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandWereWolf;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandWereWolfChat;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandWildChild;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandWitch;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandWolfDog;
 import io.github.ph1lou.werewolfplugin.commands.utilities.CommandAnonymeChat;
 import io.github.ph1lou.werewolfplugin.commands.utilities.CommandCompo;
 import io.github.ph1lou.werewolfplugin.commands.utilities.CommandDoc;
@@ -127,7 +159,33 @@ import io.github.ph1lou.werewolfplugin.roles.neutrals.SerialKiller;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.Succubus;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.Thief;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.WhiteWereWolf;
-import io.github.ph1lou.werewolfplugin.roles.villagers.*;
+import io.github.ph1lou.werewolfplugin.roles.villagers.BearTrainer;
+import io.github.ph1lou.werewolfplugin.roles.villagers.ChattySeer;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Citizen;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Comedian;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Cupid;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Detective;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Elder;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Fox;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Guard;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Librarian;
+import io.github.ph1lou.werewolfplugin.roles.villagers.LittleGirl;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Oracle;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Priestess;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Protector;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Raven;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Seer;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Shaman;
+import io.github.ph1lou.werewolfplugin.roles.villagers.SiameseTwin;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Sister;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Stud;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Trapper;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Troublemaker;
+import io.github.ph1lou.werewolfplugin.roles.villagers.VillageIdiot;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Villager;
+import io.github.ph1lou.werewolfplugin.roles.villagers.WildChild;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Witch;
+import io.github.ph1lou.werewolfplugin.roles.villagers.WolfDog;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.AlphaWereWolf;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.AvengerWereWolf;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.FalsifierWereWolf;
@@ -138,9 +196,11 @@ import io.github.ph1lou.werewolfplugin.roles.werewolfs.MysticalWereWolf;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.NaughtyLittleWolf;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.WereWolf;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.WorldBorder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -815,7 +875,24 @@ public class RegisterManager implements IRegisterManager {
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.WITCH.getKey(), Witch.class)
-                            .addCategory(Category.VILLAGER));
+                            .addCategory(Category.VILLAGER)
+                            .addConfig(game -> {
+
+                                IConfiguration config = game.getConfig();
+
+                                return ClickableItem.of(
+                                        new ItemBuilder(Material.STICK)
+                                                .setLore(game.translate(config.isWitchAutoResurrection() ? "werewolf.utils.enable" : "werewolf.utils.disable"))
+                                                .setDisplayName(game.translate("werewolf.role.witch.auto_rez_witch"))
+                                                .build(), e -> {
+                                            config.setWitchAutoResurrection(!config.isWitchAutoResurrection());
+
+                                            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                                                    .setLore(game.translate(config.isWitchAutoResurrection() ? "werewolf.utils.enable" : "werewolf.utils.disable"))
+                                                    .build());
+
+                                        });
+                            }));
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.ELDER.getKey(), Elder.class)
@@ -825,7 +902,60 @@ public class RegisterManager implements IRegisterManager {
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.FOX.getKey(), Fox.class)
                             .addCategory(Category.VILLAGER)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION));
+                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION)
+                            .addConfig(game -> {
+
+                                List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
+                                        game.translate("werewolf.menu.right"));
+                                IConfiguration config = game.getConfig();
+
+                                return ClickableItem.of(
+                                        new ItemBuilder(UniversalMaterial.CARROT.getType())
+                                                .setLore(lore)
+                                                .setDisplayName(game.translate("werewolf.menu.advanced_tool.fox_smell_number",
+                                                        config.getUseOfFlair()))
+                                                .build(), e -> {
+                                            if (e.isLeftClick()) {
+                                                config.setUseOfFlair(config.getUseOfFlair() + 1);
+                                            } else if (config.getUseOfFlair() > 0) {
+                                                config.setUseOfFlair(config.getUseOfFlair() - 1);
+                                            }
+
+
+                                            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                                                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.fox_smell_number",
+                                                            config.getUseOfFlair()))
+                                                    .build());
+
+                                        });
+                            })
+                            .addConfig(game -> {
+
+                                List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
+                                        game.translate("werewolf.menu.right"));
+                                IConfiguration config = game.getConfig();
+
+                                return ClickableItem.of((
+                                        new ItemBuilder(UniversalMaterial.ORANGE_WOOL.getStack())
+                                                .setDisplayName(game.translate("werewolf.menu.advanced_tool.fox",
+                                                        config.getDistanceFox()))
+                                                .setLore(lore).build()), e -> {
+
+                                    if (e.isLeftClick()) {
+                                        config.setDistanceFox((config.getDistanceFox() + 5));
+                                    } else if (config.getDistanceFox() - 5 > 0) {
+                                        config.setDistanceFox(config.getDistanceFox() - 5);
+                                    }
+
+
+                                    e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                                            .setLore(lore)
+                                            .setDisplayName(game.translate("werewolf.menu.advanced_tool.fox",
+                                                    config.getDistanceFox()))
+                                            .build());
+
+                                });
+                            }));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
@@ -846,7 +976,34 @@ public class RegisterManager implements IRegisterManager {
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.SISTER.getKey(), Sister.class)
                             .addCategory(Category.VILLAGER)
-                            .setRequireDouble());
+                            .setRequireDouble()
+                            .addConfig(game -> {
+
+                                List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
+                                        game.translate("werewolf.menu.right"));
+                                IConfiguration config = game.getConfig();
+
+                                return ClickableItem.of((
+                                        new ItemBuilder(UniversalMaterial.GRAY_WOOL.getStack())
+                                                .setDisplayName(game.translate("werewolf.menu.advanced_tool.sister",
+                                                        config.getDistanceSister()))
+                                                .setLore(lore).build()), e -> {
+
+                                    if (e.isLeftClick()) {
+                                        config.setDistanceSister((config.getDistanceSister() + 2));
+                                    } else if (config.getDistanceSister() - 2 > 0) {
+                                        config.setDistanceSister(config.getDistanceSister() - 2);
+                                    }
+
+
+                                    e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                                            .setLore(lore)
+                                            .setDisplayName(game.translate("werewolf.menu.advanced_tool.sister",
+                                                    config.getDistanceSister()))
+                                            .build());
+
+                                });
+                            }));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
@@ -883,13 +1040,56 @@ public class RegisterManager implements IRegisterManager {
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.BEAR_TRAINER.getKey(), BearTrainer.class)
                             .addCategory(Category.VILLAGER)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION));
+                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION)
+                            .addConfig(game -> {
+
+                                List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
+                                        game.translate("werewolf.menu.right"));
+                                IConfiguration config = game.getConfig();
+
+                                return ClickableItem.of((
+                                        new ItemBuilder(UniversalMaterial.BROWN_WOOL.getStack())
+                                                .setDisplayName(game.translate("werewolf.menu.advanced_tool.bear_trainer",
+                                                        config.getDistanceBearTrainer()))
+                                                .setLore(lore).build()), e -> {
+                                    if (e.isLeftClick()) {
+                                        config.setDistanceBearTrainer((config.getDistanceBearTrainer() + 5));
+                                    } else if (config.getDistanceBearTrainer() - 5 > 0) {
+                                        config.setDistanceBearTrainer(config.getDistanceBearTrainer() - 5);
+                                    }
+
+
+                                    e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                                            .setLore(lore)
+                                            .setDisplayName(game.translate("werewolf.menu.advanced_tool.bear_trainer",
+                                                    config.getDistanceBearTrainer()))
+                                            .build());
+
+                                });
+                            }));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.SEER.getKey(), Seer.class)
                             .addCategory(Category.VILLAGER)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION));
+                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION)
+                            .addConfig(game -> {
+
+                                IConfiguration config = game.getConfig();
+
+                                return ClickableItem.of(
+                                        new ItemBuilder(Material.GOLD_BLOCK)
+                                                .setLore(game.translate(config.isSeerEveryOtherDay() ? "werewolf.utils.enable" : "werewolf.utils.disable"))
+                                                .setDisplayName(game.translate("werewolf.role.seer.seer_every_other_day"))
+                                                .build(), e -> {
+                                            config.setSeerEveryOtherDay(!config.isSeerEveryOtherDay());
+
+                                            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                                                    .setLore(game.translate(config.isSeerEveryOtherDay() ? "werewolf.utils.enable" : "werewolf.utils.disable"))
+                                                    .build());
+
+                                        });
+                            }));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
@@ -901,7 +1101,24 @@ public class RegisterManager implements IRegisterManager {
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.DETECTIVE.getKey(), Detective.class)
                             .addCategory(Category.VILLAGER)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION));
+                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION)
+                            .addConfig(game -> {
+
+                                IConfiguration config = game.getConfig();
+
+                                return ClickableItem.of(
+                                        new ItemBuilder(UniversalMaterial.LEAD.getType())
+                                                .setLore(game.translate(config.isDetectiveEveryOtherDay() ? "werewolf.utils.enable" : "werewolf.utils.disable"))
+                                                .setDisplayName(game.translate("werewolf.role.detective.detective_every_other_day"))
+                                                .build(), e -> {
+                                            config.setDetectiveEveryOtherDay(!config.isDetectiveEveryOtherDay());
+
+                                            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                                                    .setLore(game.translate(config.isDetectiveEveryOtherDay() ? "werewolf.utils.enable" : "werewolf.utils.disable"))
+                                                    .build());
+
+                                        });
+                            }));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
@@ -912,12 +1129,54 @@ public class RegisterManager implements IRegisterManager {
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.SUCCUBUS.getKey(), Succubus.class)
-                            .addCategory(Category.NEUTRAL));
+                            .addCategory(Category.NEUTRAL)
+                            .addConfig(game -> {
+
+                                List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
+                                        game.translate("werewolf.menu.right"));
+                                IConfiguration config = game.getConfig();
+
+                                return ClickableItem.of((new ItemBuilder(
+                                        UniversalMaterial.PURPLE_WOOL.getStack())
+                                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.succubus",
+                                                config.getDistanceSuccubus()))
+                                        .setLore(lore).build()), e -> {
+                                    if (e.isLeftClick()) {
+                                        config.setDistanceSuccubus((config.getDistanceSuccubus() + 5));
+                                    } else if (config.getDistanceSuccubus() - 5 > 0) {
+                                        config.setDistanceSuccubus(config.getDistanceSuccubus() - 5);
+                                    }
+
+
+                                    e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                                            .setLore(lore)
+                                            .setDisplayName(game.translate("werewolf.menu.advanced_tool.succubus",
+                                                    config.getDistanceSuccubus()))
+                                            .build());
+
+                                });
+                            }));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.ANGEL.getKey(), Angel.class)
-                            .addCategory(Category.NEUTRAL));
+                            .addCategory(Category.NEUTRAL)
+                            .addConfig(game -> {
+                                IConfiguration config = game.getConfig();
+
+                                return ClickableItem.of(
+                                        new ItemBuilder(Material.MELON)
+                                                .setLore(game.translate(config.isDetectiveEveryOtherDay() ? "werewolf.utils.enable" : "werewolf.utils.disable"))
+                                                .setDisplayName(game.translate(" werewolf.role.angel.sweet_angel"))
+                                                .build(), e -> {
+                                            config.setDetectiveEveryOtherDay(!config.isDetectiveEveryOtherDay());
+
+                                            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                                                    .setLore(game.translate(config.isDetectiveEveryOtherDay() ? "werewolf.utils.enable" : "werewolf.utils.disable"))
+                                                    .build());
+
+                                        });
+                            }));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
@@ -960,7 +1219,33 @@ public class RegisterManager implements IRegisterManager {
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.FLUTE_PLAYER.getKey(), FlutePlayer.class)
-                            .addCategory(Category.NEUTRAL));
+                            .addCategory(Category.NEUTRAL)
+                            .addConfig(game -> {
+
+                                List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
+                                        game.translate("werewolf.menu.right"));
+                                IConfiguration config = game.getConfig();
+
+                                return ClickableItem.of((new ItemBuilder(
+                                        UniversalMaterial.LIGHT_BLUE_WOOL.getStack())
+                                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.flute_player",
+                                                config.getDistanceFlutePlayer()))
+                                        .setLore(lore).build()), e -> {
+                                    if (e.isLeftClick()) {
+                                        config.setDistanceFlutePlayer((config.getDistanceFlutePlayer() + 2));
+                                    } else if (config.getDistanceFlutePlayer() - 2 > 0) {
+                                        config.setDistanceFlutePlayer(config.getDistanceFlutePlayer() - 2);
+                                    }
+
+
+                                    e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                                            .setLore(lore)
+                                            .setDisplayName(game.translate("werewolf.menu.advanced_tool.flute_player",
+                                                    config.getDistanceFlutePlayer()))
+                                            .build());
+
+                                });
+                            }));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
@@ -1004,13 +1289,66 @@ public class RegisterManager implements IRegisterManager {
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.PRIESTESS.getKey(), Priestess.class)
                             .addCategory(Category.VILLAGER)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION));
+                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION)
+                            .addConfig(game -> {
+
+                                List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
+                                        game.translate("werewolf.menu.right"));
+                                IConfiguration config = game.getConfig();
+
+                                return ClickableItem.of((
+                                        new ItemBuilder(UniversalMaterial.BLUE_WOOL.getStack())
+                                                .setDisplayName(game.translate("werewolf.menu.advanced_tool.priestess",
+                                                        config.getDistancePriestess()))
+                                                .setLore(lore).build()), e -> {
+
+                                    if (e.isLeftClick()) {
+                                        config.setDistancePriestess((config.getDistancePriestess() + 2));
+                                    } else if (config.getDistancePriestess() - 2 > 0) {
+                                        config.setDistancePriestess(config.getDistancePriestess() - 2);
+                                    }
+
+
+                                    e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                                            .setLore(lore)
+                                            .setDisplayName(game.translate("werewolf.menu.advanced_tool.priestess",
+                                                    config.getDistancePriestess()))
+                                            .build());
+
+                                });
+                            }));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.AVENGER_WEREWOLF.getKey(), AvengerWereWolf.class)
                             .addCategory(Category.WEREWOLF)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.WEREWOLF));
+                            .setRandomCompositionAttribute(RandomCompositionAttribute.WEREWOLF)
+                            .addConfig(game -> {
+
+                                List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
+                                        game.translate("werewolf.menu.right"));
+                                IConfiguration config = game.getConfig();
+
+                                return ClickableItem.of((new ItemBuilder(
+                                        UniversalMaterial.RED_WOOL.getStack())
+                                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.avenger_werewolf",
+                                                config.getDistanceAvengerWerewolf()))
+                                        .setLore(lore).build()), e -> {
+                                    if (e.isLeftClick()) {
+                                        config.setDistanceAvengerWerewolf((config.getDistanceAvengerWerewolf() + 2));
+                                    } else if (config.getDistanceAvengerWerewolf() - 2 > 0) {
+                                        config.setDistanceAvengerWerewolf(config.getDistanceAvengerWerewolf() - 2);
+                                    }
+
+
+                                    e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                                            .setLore(lore)
+                                            .setDisplayName(game.translate("werewolf.menu.advanced_tool.avenger_werewolf",
+                                                    config.getDistanceAvengerWerewolf()))
+                                            .build());
+
+                                });
+                            }));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
@@ -1026,7 +1364,24 @@ public class RegisterManager implements IRegisterManager {
             rolesRegister
                     .add(new RoleRegister("werewolf.name", RolesBase.ORACLE.getKey(), Oracle.class)
                             .addCategory(Category.VILLAGER)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION));
+                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION)
+                            .addConfig(game -> {
+
+                                IConfiguration config = game.getConfig();
+
+                                return ClickableItem.of(
+                                        new ItemBuilder(Material.DIAMOND_BLOCK)
+                                                .setLore(game.translate(config.isOracleEveryOtherDay() ? "werewolf.utils.enable" : "werewolf.utils.disable"))
+                                                .setDisplayName(game.translate("werewolf.role.oracle.oracle_every_other_day"))
+                                                .build(), e -> {
+                                            config.setOracleEveryOtherDay(!config.isOracleEveryOtherDay());
+
+                                            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                                                    .setLore(game.translate(config.isOracleEveryOtherDay() ? "werewolf.utils.enable" : "werewolf.utils.disable"))
+                                                    .build());
+
+                                        });
+                            }));
 
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
@@ -1185,9 +1540,6 @@ public class RegisterManager implements IRegisterManager {
 
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
-                        ConfigsBase.AUTO_REZ_WITCH.getKey()));
-        configsRegister
-                .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.VOTE.getKey())
                         .setDefaultValue()
                         .unSetAppearInMenu());
@@ -1202,10 +1554,6 @@ public class RegisterManager implements IRegisterManager {
 
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
-                        ConfigsBase.SWEET_ANGEL.getKey()));
-
-        configsRegister
-                .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.WEREWOLF_CHAT.getKey())
                         .setDefaultValue());
 
@@ -1213,19 +1561,6 @@ public class RegisterManager implements IRegisterManager {
                 .add(new ConfigRegister("werewolf.name",
                         ConfigsBase.DOUBLE_TROLL.getKey())
                         .unSetAppearInMenu());
-
-        configsRegister
-                .add(new ConfigRegister("werewolf.name",
-                        ConfigsBase.SEER_EVERY_OTHER_DAY.getKey())
-                        .setDefaultValue());
-
-        configsRegister
-                .add(new ConfigRegister("werewolf.name",
-                        ConfigsBase.DETECTIVE_EVERY_OTHER_DAY.getKey()));
-
-        configsRegister
-                .add(new ConfigRegister("werewolf.name",
-                        ConfigsBase.ORACLE_EVERY_OTHER_DAY.getKey()));
 
         configsRegister
                 .add(new ConfigRegister("werewolf.name",

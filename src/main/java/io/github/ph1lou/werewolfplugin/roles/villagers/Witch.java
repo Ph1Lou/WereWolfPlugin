@@ -5,7 +5,6 @@ import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
-import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.ThirdDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.witch.WitchResurrectionEvent;
@@ -68,7 +67,7 @@ public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
                 .setPower(() -> game.translate(power ? "werewolf.role.witch.power_available" : "werewolf.role.witch.power_not_available"))
                 .setItems(() -> game.translate("werewolf.role.witch.items"))
                 .addExtraLines(() -> game.translate("werewolf.description.power",
-                        game.translate(game.getConfig().isConfigActive(ConfigsBase.AUTO_REZ_WITCH.getKey())
+                        game.translate(game.getConfig().isWitchAutoResurrection()
                                 ?
                                 "werewolf.role.witch.himself"
                                 :
@@ -119,7 +118,7 @@ public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
 
     private boolean autoResurrection(IPlayerWW player) {
 
-        if (!game.getConfig().isConfigActive(ConfigsBase.AUTO_REZ_WITCH.getKey())) {
+        if (!game.getConfig().isWitchAutoResurrection()) {
             return false;
         }
 

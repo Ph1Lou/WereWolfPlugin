@@ -25,7 +25,7 @@ public class AdvancedConfig implements InventoryProvider {
             .id("advancedConfig")
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
             .provider(new AdvancedConfig())
-            .size(5, 9)
+            .size(3, 9)
             .title(JavaPlugin.getPlugin(Main.class)
                     .getWereWolfAPI().translate("werewolf.menu.advanced_tool.name"))
             .closeable(true)
@@ -117,26 +117,8 @@ public class AdvancedConfig implements InventoryProvider {
                     .build());
 
         }));
-        contents.set(1, 1, ClickableItem.of((
-                new ItemBuilder(UniversalMaterial.CARROT.getType())
-                        .setLore(lore)
-                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.fox_smell_number",
-                                config.getUseOfFlair()))
-                        .build()), e -> {
-            if (e.isLeftClick()) {
-                config.setUseOfFlair(config.getUseOfFlair() + 1);
-            } else if (config.getUseOfFlair() > 0) {
-                config.setUseOfFlair(config.getUseOfFlair() - 1);
-            }
 
-
-            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.fox_smell_number",
-                            config.getUseOfFlair()))
-                    .build());
-
-        }));
-        contents.set(1, 3, ClickableItem.of((
+        contents.set(0, 8, ClickableItem.of((
                 new ItemBuilder(Material.DIAMOND)
                         .setLore(lore)
                         .setDisplayName(game.translate("werewolf.menu.advanced_tool.diamond",
@@ -156,7 +138,7 @@ public class AdvancedConfig implements InventoryProvider {
 
 
         }));
-        contents.set(1, 5, ClickableItem.of((
+        contents.set(1, 1, ClickableItem.of((
                 new ItemBuilder(UniversalMaterial.EXPERIENCE_BOTTLE.getType())
                         .setLore(lore)
                         .setDisplayName(game.translate("werewolf.menu.advanced_tool.xp",
@@ -176,7 +158,7 @@ public class AdvancedConfig implements InventoryProvider {
                     .build());
 
         }));
-        contents.set(1, 7, ClickableItem.of((
+        contents.set(1, 3, ClickableItem.of((
                 new ItemBuilder(UniversalMaterial.PLAYER_HEAD.getStack())
                         .setLore(lore).setDisplayName(
                         game.translate("werewolf.menu.advanced_tool.vote",
@@ -197,149 +179,8 @@ public class AdvancedConfig implements InventoryProvider {
 
         }));
 
-        contents.set(2, 0, ClickableItem.of((
-                new ItemBuilder(UniversalMaterial.BLUE_WOOL.getStack())
-                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.priestess",
-                                config.getDistancePriestess()))
-                        .setLore(lore).build()), e -> {
 
-            if (e.isLeftClick()) {
-                config.setDistancePriestess((config.getDistancePriestess() + 2));
-            } else if (config.getDistancePriestess() - 2 > 0) {
-                config.setDistancePriestess(config.getDistancePriestess() - 2);
-            }
-
-
-            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setLore(lore)
-                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.priestess",
-                            config.getDistancePriestess()))
-                    .build());
-
-        }));
-
-
-        contents.set(2, 2, ClickableItem.of((
-                new ItemBuilder(UniversalMaterial.GRAY_WOOL.getStack())
-                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.sister",
-                                config.getDistanceSister()))
-                        .setLore(lore).build()), e -> {
-
-            if (e.isLeftClick()) {
-                config.setDistanceSister((config.getDistanceSister() + 2));
-            } else if (config.getDistanceSister() - 2 > 0) {
-                config.setDistanceSister(config.getDistanceSister() - 2);
-            }
-
-
-            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setLore(lore)
-                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.sister",
-                            config.getDistanceSister()))
-                    .build());
-
-        }));
-
-        contents.set(2, 4, ClickableItem.of((
-                new ItemBuilder(UniversalMaterial.ORANGE_WOOL.getStack())
-                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.fox",
-                                config.getDistanceFox()))
-                        .setLore(lore).build()), e -> {
-
-            if (e.isLeftClick()) {
-                config.setDistanceFox((config.getDistanceFox() + 5));
-            } else if (config.getDistanceFox() - 5 > 0) {
-                config.setDistanceFox(config.getDistanceFox() - 5);
-            }
-
-
-            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setLore(lore)
-                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.fox",
-                            config.getDistanceFox()))
-                    .build());
-
-        }));
-        contents.set(2, 6, ClickableItem.of((
-                new ItemBuilder(UniversalMaterial.BROWN_WOOL.getStack())
-                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.bear_trainer",
-                                config.getDistanceBearTrainer()))
-                        .setLore(lore).build()), e -> {
-            if (e.isLeftClick()) {
-                config.setDistanceBearTrainer((config.getDistanceBearTrainer() + 5));
-            } else if (config.getDistanceBearTrainer() - 5 > 0) {
-                config.setDistanceBearTrainer(config.getDistanceBearTrainer() - 5);
-            }
-
-
-            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setLore(lore)
-                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.bear_trainer",
-                            config.getDistanceBearTrainer()))
-                    .build());
-
-        }));
-        contents.set(2, 8, ClickableItem.of((new ItemBuilder(
-                UniversalMaterial.PURPLE_WOOL.getStack())
-                .setDisplayName(game.translate("werewolf.menu.advanced_tool.succubus",
-                        config.getDistanceSuccubus()))
-                .setLore(lore).build()), e -> {
-            if (e.isLeftClick()) {
-                config.setDistanceSuccubus((config.getDistanceSuccubus() + 5));
-            } else if (config.getDistanceSuccubus() - 5 > 0) {
-                config.setDistanceSuccubus(config.getDistanceSuccubus() - 5);
-            }
-
-
-            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setLore(lore)
-                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.succubus",
-                            config.getDistanceSuccubus()))
-                    .build());
-
-        }));
-
-        contents.set(3, 1, ClickableItem.of((new ItemBuilder(
-                UniversalMaterial.RED_WOOL.getStack())
-                .setDisplayName(game.translate("werewolf.menu.advanced_tool.avenger_werewolf",
-                        config.getDistanceAvengerWerewolf()))
-                .setLore(lore).build()), e -> {
-            if (e.isLeftClick()) {
-                config.setDistanceAvengerWerewolf((config.getDistanceAvengerWerewolf() + 2));
-            } else if (config.getDistanceAvengerWerewolf() - 2 > 0) {
-                config.setDistanceAvengerWerewolf(config.getDistanceAvengerWerewolf() - 2);
-            }
-
-
-            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setLore(lore)
-                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.avenger_werewolf",
-                            config.getDistanceAvengerWerewolf()))
-                    .build());
-
-        }));
-
-        contents.set(3, 3, ClickableItem.of((new ItemBuilder(
-                UniversalMaterial.LIGHT_BLUE_WOOL.getStack())
-                .setDisplayName(game.translate("werewolf.menu.advanced_tool.flute_player",
-                        config.getDistanceFlutePlayer()))
-                .setLore(lore).build()), e -> {
-            if (e.isLeftClick()) {
-                config.setDistanceFlutePlayer((config.getDistanceFlutePlayer() + 2));
-            } else if (config.getDistanceFlutePlayer() - 2 > 0) {
-                config.setDistanceFlutePlayer(config.getDistanceFlutePlayer() - 2);
-            }
-
-
-            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setLore(lore)
-                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.flute_player",
-                            config.getDistanceFlutePlayer()))
-                    .build());
-
-        }));
-
-        contents.set(3, 5, ClickableItem.of((
+        contents.set(1, 5, ClickableItem.of((
                 new ItemBuilder(Material.POTION)
                         .setDisplayName(game.translate("werewolf.menu.advanced_tool.strength",
                                 config.getStrengthRate()))
@@ -358,7 +199,7 @@ public class AdvancedConfig implements InventoryProvider {
                     .build());
 
         }));
-        contents.set(3, 7, ClickableItem.of((new ItemBuilder(Material.POTION)
+        contents.set(1, 7, ClickableItem.of((new ItemBuilder(Material.POTION)
                 .setDisplayName(game.translate("werewolf.menu.advanced_tool.resistance",
                         config.getResistanceRate()))
                 .setLore(lore).build()), e -> {
@@ -375,7 +216,7 @@ public class AdvancedConfig implements InventoryProvider {
                     .build());
 
         }));
-        contents.set(4, 0, ClickableItem.of((
+        contents.set(2, 0, ClickableItem.of((
                 new ItemBuilder(UniversalMaterial.BOOK.getStack())
                         .setLore(lore).setDisplayName(
                         game.translate("werewolf.commands.admin.ww_chat.number",
@@ -396,7 +237,7 @@ public class AdvancedConfig implements InventoryProvider {
 
         }));
 
-        contents.set(4, 2, ClickableItem.of((
+        contents.set(2, 2, ClickableItem.of((
                 new ItemBuilder(Material.BREAD)
                         .setDisplayName(game.translate(config.isTrollSV() ?
                                 "werewolf.menu.advanced_tool.troll_on" :
@@ -422,7 +263,7 @@ public class AdvancedConfig implements InventoryProvider {
 
         }));
 
-        contents.set(4, 4, ClickableItem.of((
+        contents.set(2, 4, ClickableItem.of((
                 new ItemBuilder(Material.GOLD_NUGGET)
                         .setDisplayName(game.translate("werewolf.menu.advanced_tool.particles"))
                         .setLore(Collections.singletonList(
@@ -451,7 +292,7 @@ public class AdvancedConfig implements InventoryProvider {
 
         }));
 
-        contents.set(4, 6, ClickableItem.of((
+        contents.set(2, 6, ClickableItem.of((
                         new ItemBuilder(Material.ARROW)
                                 .setDisplayName(game.translate(config.isTrollLover() ?
                                         "werewolf.menu.advanced_tool.troll_lover_on" :

@@ -52,7 +52,6 @@ public class AlphaWereWolf extends RoleWereWolf {
         if (!event.getRequester().getRole().isWereWolf()) return;
 
         event.setPrefix((game) -> game.translate("werewolf.role.alpha_werewolf.prefix",
-                this.getPlayerWW().getName(),
                 "%s"));
     }
 }

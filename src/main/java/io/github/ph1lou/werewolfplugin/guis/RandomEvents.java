@@ -118,10 +118,10 @@ public class RandomEvents implements InventoryProvider {
         ItemStack itemStack;
 
         if (config.getProbability(key) > 0) {
-            lore.add(0, game.translate("werewolf.utils.enable", ""));
+            lore.add(0, game.translate("werewolf.utils.enable"));
             itemStack = UniversalMaterial.GREEN_TERRACOTTA.getStack();
         } else {
-            lore.add(0, game.translate("werewolf.utils.disable", ""));
+            lore.add(0, game.translate("werewolf.utils.disable"));
             itemStack = UniversalMaterial.RED_TERRACOTTA.getStack();
         }
         lore.add(game.translate("werewolf.menu.random_events.probability", config.getProbability(key)));

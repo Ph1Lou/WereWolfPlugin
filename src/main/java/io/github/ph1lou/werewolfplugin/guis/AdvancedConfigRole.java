@@ -7,40 +7,44 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
-import io.github.ph1lou.werewolfapi.IConfiguration;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
-import io.github.ph1lou.werewolfapi.registers.ScenarioRegister;
+import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.Main;
-import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.function.Function;
 
-public class ScenariosGUI implements InventoryProvider {
+public class AdvancedConfigRole implements InventoryProvider {
 
 
-    public static final SmartInventory INVENTORY = SmartInventory.builder()
-            .id("scenarios")
-            .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
-            .provider(new ScenariosGUI())
-            .size(Math.min(54, (JavaPlugin.getPlugin(Main.class).getRegisterManager().getScenariosRegister().size() / 9 + 2) * 9) / 9, 9)
-            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.scenarios.name"))
-            .closeable(true)
-            .build();
+    public static SmartInventory getInventory() {
+
+        Main main = JavaPlugin.getPlugin(Main.class);
+
+        int size = main.getRegisterManager().getRolesRegister().stream()
+                .mapToInt(register -> register.getConfig().size()).sum();
+
+        return SmartInventory.builder()
+                .id("advanced_config_role")
+                .manager(main.getInvManager())
+                .provider(new AdvancedConfigRole())
+                .size(Math.min(54, (size / 9 + 2) * 9) / 9, 9)
+                .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.advanced_config_roles.name"))
+                .closeable(true)
+                .build();
+    }
 
 
     @Override
     public void init(Player player, InventoryContents contents) {
         Main main = JavaPlugin.getPlugin(Main.class);
-        io.github.ph1lou.werewolfapi.WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = main.getWereWolfAPI();
 
         contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType()).setDisplayName(game.translate("werewolf.menu.return")).build()), e -> Config.INVENTORY.open(player)));
     }
@@ -49,48 +53,18 @@ public class ScenariosGUI implements InventoryProvider {
     public void update(Player player, InventoryContents contents) {
 
         Main main = JavaPlugin.getPlugin(Main.class);
-        GameManager game = (GameManager) main.getWereWolfAPI();
-        IConfiguration config = game.getConfig();
+        WereWolfAPI game = main.getWereWolfAPI();
         Pagination pagination = contents.pagination();
         List<ClickableItem> items = new ArrayList<>();
 
-        for (ScenarioRegister scenarioRegister : main.getRegisterManager()
-                .getScenariosRegister()) {
+        for (RoleRegister roleRegister : main.getRegisterManager()
+                .getRolesRegister()) {
 
-            List<String> lore = new ArrayList<>();
-            scenarioRegister.getLoreKey().stream().map(game::translate).map(s -> Arrays.stream(s.split("\\n")).collect(Collectors.toList())).forEach(lore::addAll);
-            ItemStack itemStack;
+            for (Function<WereWolfAPI, ClickableItem> item : roleRegister.getConfig()) {
 
-            if (config.isScenarioActive(scenarioRegister.getKey())) {
-                lore.add(0, game.translate("werewolf.utils.enable"));
-                itemStack = UniversalMaterial.GREEN_TERRACOTTA.getStack();
-            } else {
-                lore.add(0, game.translate("werewolf.utils.disable",
-                        ""));
-                itemStack = UniversalMaterial.RED_TERRACOTTA.getStack();
+                items.add(item.apply(game));
             }
-
-            Optional<String> incompatible = scenarioRegister
-                    .getIncompatibleScenarios()
-                    .stream()
-                    .filter(s -> game.getConfig().isScenarioActive(s))
-                    .map(game::translate).findFirst();
-
-            incompatible
-                    .ifPresent(s -> lore.add(game.translate("werewolf.menu.scenarios.incompatible", s)));
-
-
-            items.add(ClickableItem.of((new ItemBuilder(scenarioRegister.getItem().isPresent() ? scenarioRegister.getItem().get() : itemStack)
-                    .setDisplayName(game.translate(scenarioRegister.getKey()))
-                    .setLore(lore).build()), e -> {
-
-                if (!incompatible.isPresent() || config.isScenarioActive(scenarioRegister.getKey())) {
-                    config.switchScenarioValue(scenarioRegister.getKey());
-                    scenarioRegister.getScenario().register(config.isScenarioActive(scenarioRegister.getKey()));
-                }
-            }));
         }
-
 
         if (items.size() > 45) {
             pagination.setItems(items.toArray(new ClickableItem[0]));
@@ -112,7 +86,7 @@ public class ScenariosGUI implements InventoryProvider {
                                             page, pagination.isFirst() ?
                                                     page : page - 1)).build(),
 
-                    e -> INVENTORY.open(player, pagination
+                    e -> getInventory().open(player, pagination
                             .previous().getPage())));
             contents.set(5, 6, ClickableItem.of(
                     new ItemBuilder(Material.ARROW)
@@ -120,7 +94,7 @@ public class ScenariosGUI implements InventoryProvider {
                                     game.translate("werewolf.menu.roles.next",
                                             page, pagination.isLast() ?
                                                     page : page + 1)).build(),
-                    e -> INVENTORY.open(player, pagination
+                    e -> getInventory().open(player, pagination
                             .next().getPage())));
 
             contents.set(5, 4, ClickableItem.empty(

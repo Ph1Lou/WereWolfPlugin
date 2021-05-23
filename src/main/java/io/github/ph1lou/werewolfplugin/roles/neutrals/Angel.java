@@ -4,7 +4,13 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enums.*;
+import io.github.ph1lou.werewolfapi.enums.AngelForm;
+import io.github.ph1lou.werewolfapi.enums.Aura;
+import io.github.ph1lou.werewolfapi.enums.Day;
+import io.github.ph1lou.werewolfapi.enums.RolesBase;
+import io.github.ph1lou.werewolfapi.enums.Sound;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
@@ -117,7 +123,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
 
             return new DescriptionBuilder(game, this)
                     .setEffects(() -> game.translate("werewolf.role.guardian_angel.effect"))
-                    .setDescription(() -> game.getConfig().isConfigActive(ConfigsBase.SWEET_ANGEL.getKey()) ?
+                    .setDescription(() -> game.getConfig().isSweetAngel() ?
                             game.translate("werewolf.role.guardian_angel.description") :
                             game.translate("werewolf.role.guardian_angel.description_patch"))
                     .addExtraLines(() -> affectedPlayer.isEmpty() ?
@@ -171,7 +177,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
                         }
 
                     } else {
-                        if (game.getConfig().isConfigActive(ConfigsBase.SWEET_ANGEL.getKey())) {
+                        if (game.getConfig().isSweetAngel()) {
                             sb.append(game.translate(
                                     "werewolf.role.guardian_angel.protege_death"));
                         } else {
@@ -216,8 +222,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
                         HoverEvent.Action.SHOW_TEXT,
                         new ComponentBuilder(
                                 game.translate(
-                                        game.getConfig().isConfigActive(
-                                                ConfigsBase.SWEET_ANGEL.getKey())
+                                        game.getConfig().isSweetAngel()
                                                 ? "werewolf.role.angel.guardian_choice" :
                                                 "werewolf.role.angel.guardian_choice_patch"))
                                 .create()));
@@ -356,8 +361,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
         } else if (isChoice(AngelForm.GUARDIAN_ANGEL)) {
             getPlayerWW().removePlayerMaxHealth(6);
 
-            if (game.getConfig().isConfigActive(
-                    ConfigsBase.SWEET_ANGEL.getKey())) {
+            if (game.getConfig().isSweetAngel()) {
                 getPlayerWW().sendMessageWithKey(
                         "werewolf.role.guardian_angel.protege_death");
             } else {
@@ -427,7 +431,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
     @Override
     public boolean isNeutral() {
         return super.isNeutral() &&
-                (!game.getConfig().isConfigActive(ConfigsBase.SWEET_ANGEL.getKey())
+                (!game.getConfig().isSweetAngel()
                         || !choice.equals(AngelForm.GUARDIAN_ANGEL)
                         || affectedPlayer.isEmpty()
                         || !affectedPlayer.get(0).isState(StatePlayer.DEATH));

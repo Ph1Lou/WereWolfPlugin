@@ -63,10 +63,10 @@ public class GlobalConfigs implements InventoryProvider {
                     ItemStack itemStack;
 
                     if (game.getConfig().isConfigActive(configRegister.getKey())) {
-                        lore.add(0, game.translate("werewolf.utils.enable", ""));
+                        lore.add(0, game.translate("werewolf.utils.enable"));
                         itemStack = UniversalMaterial.GREEN_TERRACOTTA.getStack();
                     } else {
-                        lore.add(0, game.translate("werewolf.utils.disable", ""));
+                        lore.add(0, game.translate("werewolf.utils.disable"));
                         itemStack = UniversalMaterial.RED_TERRACOTTA.getStack();
                     }
 

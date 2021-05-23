@@ -9,7 +9,6 @@ import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.IConfiguration;
-import io.github.ph1lou.werewolfapi.IStuffManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Camp;
 import io.github.ph1lou.werewolfapi.enums.Category;
@@ -18,21 +17,13 @@ import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.Main;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -229,7 +220,7 @@ public class Roles implements InventoryProvider {
                                     .build()), e -> {
 
                         if (e.isShiftClick()) {
-                            manageStuff(main, player, key);
+                            AdvancedRoleMenu.getInventory(roleRegister).open(player);
                         } else if (e.isLeftClick()) {
                             selectPlus(game, key);
                         } else if (e.isRightClick()) {
@@ -256,7 +247,7 @@ public class Roles implements InventoryProvider {
                             .setDisplayName(game.translate(roleRegister.getKey())).build()), e -> {
 
                         if (e.isShiftClick()) {
-                            manageStuff(main, player, key);
+                            AdvancedRoleMenu.getInventory(roleRegister).open(player);
                         } else if (e.isLeftClick()) {
                             if (roleRegister.getRequireRole().isPresent()) {
                                 if (game.getConfig().getRoleCount(roleRegister.getRequireRole().get()) == 0) {
@@ -302,44 +293,7 @@ public class Roles implements InventoryProvider {
 
     }
 
-    private void manageStuff(Main main, Player player, String key) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
-        UUID uuid = player.getUniqueId();
-
-        if (!game.getModerationManager()
-                .checkAccessAdminCommand("werewolf.commands.admin.loot_role.command",
-                        player)) {
-            return;
-        }
-
-        IStuffManager stuffManager = game.getStuffs();
-        PlayerInventory inventory = player.getInventory();
-        player.setGameMode(GameMode.CREATIVE);
-
-        if (!stuffManager.getTempStuff().containsKey(uuid)) {
-
-            Inventory inventoryTemp = Bukkit.createInventory(player, 45);
-            for (int j = 0; j < 40; j++) {
-                inventoryTemp.setItem(j, inventory.getItem(j));
-            }
-            stuffManager.getTempStuff().put(uuid, inventoryTemp);
-        }
-
-        for (int j = 0; j < 40; j++) {
-            inventory.setItem(j, null);
-        }
-
-        for (ItemStack item : game.getStuffs().getStuffRoles().get(key)) {
-            if (item != null) {
-                player.getInventory().addItem(item);
-            }
-        }
-        TextComponent msg = new TextComponent(game.translate("werewolf.commands.admin.loot_role.valid"));
-        msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/a %s %s", game.translate("werewolf.commands.admin.loot_role.command"), key)));
-        player.spigot().sendMessage(msg);
-        player.closeInventory();
-    }
 
 
     public void selectMinus(WereWolfAPI game, String key) {

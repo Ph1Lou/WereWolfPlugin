@@ -100,7 +100,8 @@
         "himself": "Vous §apouvez§f vous ressusciter vous même",
         "resuscitation_message": "[§eLG UHC§r] §b%s§r est mort, pour le ressusciter, §6Cliquez ici §r(Vous avez §b7sec§r)",
         "resuscitation_perform": "[§eLG UHC§r] Vous venez de ressusciter §b%s",
-        "command": "sauver_witch"
+        "command": "sauver_witch",
+        "auto_rez_witch": "la Sorcière peut se ressusciter elle même"
       },
       "little_girl": {
         "display": "Petite Fille",
@@ -150,7 +151,8 @@
         "angel_choice_perform": "[§eLG UHC§r] Vous venez de choisir §b%s",
         "command_1": "gardien",
         "command_2": "dechu",
-        "choice": "il a choisi %s"
+        "choice": "il a choisi %s",
+        "sweet_angel": "L'ange Gardien gagne Village quand son protégé meurt"
       },
       "mystical_werewolf": {
         "display": "Loup Garou Mystique",
@@ -253,7 +255,8 @@
         "same_camp": "[§eLG UHC§r] %s et %s §2sont dans le même camp",
         "opposing_camp": "[§eLG UHC§r] %s et %s §4ne sont pas dans le même camp",
         "already_inspect": "[§cLG UHC§r] Au moins un de ces joueurs a déjà été inspecté",
-        "command": "inspecter"
+        "command": "inspecter",
+        "detective_every_other_day": "Detective tous les deux jours"
       },
       "naughty_little_wolf": {
         "display": "Vilain Petit Loup",
@@ -285,7 +288,8 @@
         "see_perform": "[§eLG UHC§r] Vous venez d'espionner un membre du camp des §b%s",
         "not_enough_life": "[§cLG UHC§r] Vous n'avez plus assez de vie pour espionner un joueur",
         "see_villager": "[§cLG UHC§r] Vous venez d'espionner un membre du Village vous perdez 3 coeurs et vous ne pourrez pas utiliser votre pouvoir pour la prochaine fois",
-        "command": "voir"
+        "command": "voir",
+        "seer_every_other_day": "Voyante tous les deux jours"
       },
       "priestess": {
         "display": "Prêtresse",
@@ -307,7 +311,8 @@
         "message": "[§cLG UHC§r] L'aura de §b%s§r est %s",
         "light": "Lumineuse",
         "neutral": "Neutre",
-        "dark": "Obscure"
+        "dark": "Obscure",
+        "oracle_every_other_day": "Oracle tous les deux jours"
       },
       "protector": {
         "display": "Salvateur",
@@ -637,7 +642,7 @@
         },
         "loot_role": {
           "command": "stuffRole",
-          "valid": "[§eLG UHC§r] Cliquez ici pour valider le stuff",
+          "valid": "[§eLG UHC§r] Cliquez ici pour valider le stuff de §b%s",
           "perform": "[§aLG UHC§r] Stuff §b%s§r Actualisé"
         },
         "role": {
@@ -791,9 +796,13 @@
       "return": "Revenir au Menu Principal",
       "left": "§fClique-§bGauche§f >> +",
       "right": "§fClique-§bDroit§f >> -",
-      "shift": "§bShift§f-Clique >> Stuff",
+      "shift": "§bShift§f-Clique >> Configuration avancée",
       "addon": {
         "name": "Réglages Addons"
+      },
+      "advanced_tool_role": {
+        "menu": "Menu Avancé §b%s",
+        "config": "Configurer le Stuff du §b%s"
       },
       "advanced_tool": {
         "name": "Configuration §bAvancée",
@@ -901,6 +910,9 @@
         "punch": "Punch §b%d",
         "depth_rider": "Depth Strider §b%d"
       },
+      "advanced_config_roles": {
+        "name": "Configuration Avancée §bRole"
+      },
       "timers": {
         "command": "timers",
         "description": "Pour voir les timers",
@@ -965,16 +977,11 @@
         "werewolf_chat": "Chat des Loups Garous",
         "show_role_to_death": "Affiche le Rôle à la Mort",
         "show_role_category_to_death": "Affiche la Catégorie du Rôle à la Mort",
-        "auto_rez_witch": "la Sorcière peut se ressusciter elle même",
-        "sweet_angel": "L'ange Gardien gagne Village quand son protégé meurt",
         "vote": "Vote",
         "hide_composition": "Composition Cachée",
         "red_name_tag": "Pseudo des Loups Garous en rouge",
         "hide_scenarios": "Cache les Scenarios",
         "hide_events": "Cache les Events",
-        "seer_every_other_day": "Voyante tous les deux jours",
-        "detective_every_other_day": "Detective tous les deux jours",
-        "oracle_every_other_day": "Oracle tous les deux jours",
         "proximity_chat": "Chat de Proximité",
         "double_troll": "Double Troll",
         "lone_wolf": "Loup Solitaire",
@@ -1140,8 +1147,8 @@
     },
     "bug": "§b§m§l-+-----------------------------------+-\n§f        [§cLG UHC§f] Signalez les bugs en cliquant ici\n§r§b§m§l-+-----------------------------------+-",
     "utils": {
-      "disable": "%s §4Désactivé",
-      "enable": "%s §2Activé",
+      "disable": "§4Désactivé ",
+      "enable": "§2Activé ",
       "display": "%s (§b%s§r)",
       "pve": "§bPVE",
       "on": "§bON",

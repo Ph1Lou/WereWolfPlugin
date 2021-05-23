@@ -15,7 +15,7 @@ public class NoNether extends ListenerManager {
     @EventHandler
     private void onPlayerTeleport(PlayerTeleportEvent event) {
 
-        if (event.getCause().equals(PlayerTeleportEvent.TeleportCause.END_PORTAL)) {
+        if (event.getCause().equals(PlayerTeleportEvent.TeleportCause.NETHER_PORTAL)) {
             event.setCancelled(true);
         }
     }

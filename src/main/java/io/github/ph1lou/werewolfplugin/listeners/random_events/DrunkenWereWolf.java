@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.ListenerManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
@@ -14,15 +15,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class DrunkenWereWolf extends ListenerManager {
 
-    List<UUID> fakeList = new ArrayList<>();
+    private final Set<UUID> fakeList = new HashSet<>();
     private IPlayerWW temp;
 
 
@@ -72,6 +74,12 @@ public class DrunkenWereWolf extends ListenerManager {
         Collections.shuffle(fakeListPool, game.getRandom());
 
         this.fakeList.addAll(fakeListPool.subList(0, playerWWS.size()));
+
+        this.fakeList.addAll(game.getPlayerWW().stream()
+                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                .filter(playerWW -> playerWW.getRole().isKey(RolesBase.ALPHA_WEREWOLF.getKey()))
+                .map(IPlayerWW::getUUID)
+                .collect(Collectors.toList()));
 
         this.fakeList.add(this.temp.getUUID());
     }
