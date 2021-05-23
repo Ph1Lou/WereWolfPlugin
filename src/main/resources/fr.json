@@ -298,6 +298,17 @@
         "perform": "[§eLG UHC§r] Découvrez le camp d'un joueur à moins de §b%d§r blocs de vous avec §b/ww spec§r vous avez §b%s",
         "distance": "[§cLG UHC§r] Vous devez être à moins de 10 blocs du joueur"
       },
+      "oracle": {
+        "display": "Oracle",
+        "description": "Une fois par épisode, vous pouvez connaitre l'aura d'un joueur de votre choix.",
+        "effect": "Vision nocturne",
+        "command": "oracle",
+        "perform": "[§eLG UHC§r] Découvrez l'aura d'un joueur avec §b/ww oracle§r vous avez §b%s",
+        "message": "[§cLG UHC§r] L'aura de §b%s§r est %s",
+        "light": "Lumineuse",
+        "neutral": "Neutre",
+        "dark": "Obscure"
+      },
       "protector": {
         "display": "Salvateur",
         "items": "Trois Potions Splash de Soin",
@@ -963,6 +974,7 @@
         "hide_events": "Cache les Events",
         "seer_every_other_day": "Voyante tous les deux jours",
         "detective_every_other_day": "Detective tous les deux jours",
+        "oracle_every_other_day": "Oracle tous les deux jours",
         "proximity_chat": "Chat de Proximité",
         "double_troll": "Double Troll",
         "lone_wolf": "Loup Solitaire",

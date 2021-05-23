@@ -4,6 +4,7 @@ package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleWereWolf;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,6 +24,11 @@ public class WereWolf extends RoleWereWolf {
     @Override
     public void recoverPower() {
 
+    }
+
+    @Override
+    public Aura getDefaultAura() {
+        return Aura.DARK;
     }
 
 

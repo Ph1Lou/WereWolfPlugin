@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
@@ -178,6 +179,8 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
                 playerWW,
                 roleClone.getKey()));
 
+        roleClone.removeTemporaryAuras();
+
         roleClone.recoverPower();
         roleClone.recoverPotionEffect();
 
@@ -204,6 +207,11 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
         super.recoverPotionEffect();
 
         restoreStrength();
+    }
+
+    @Override
+    public Aura getDefaultAura() {
+        return Aura.LIGHT;
     }
 
 }

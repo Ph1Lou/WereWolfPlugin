@@ -1,8 +1,10 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
+import io.github.ph1lou.werewolfapi.AuraModifier;
 import io.github.ph1lou.werewolfapi.ICommands;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.roles.raven.CurseEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
@@ -65,6 +67,7 @@ public class CommandRaven implements ICommands {
         ((IAffectedPlayers) raven).clearAffectedPlayer();
         ((IAffectedPlayers) raven).addAffectedPlayer(playerWW1);
         playerWW1.addPotionEffect(PotionEffectType.JUMP);
+        playerWW1.getRole().addAuraModifier(new AuraModifier("cursed", Aura.DARK, 20, true));
         playerWW1.sendMessageWithKey("werewolf.role.raven.get_curse");
         playerWW.sendMessageWithKey("werewolf.role.raven.curse_perform", playerArg.getName());
     }

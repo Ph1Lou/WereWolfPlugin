@@ -1,6 +1,5 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
-
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -19,36 +18,42 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Seer extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
+public class Oracle extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
     private int dayNumber = -8;
-    private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
+    private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
 
-    private boolean disablePower = false;
-
-    public Seer(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Oracle(WereWolfAPI game, IPlayerWW playerWW, String key) {
+        super(game, playerWW, key);
         setPower(false);
     }
 
     @Override
-    public void addAffectedPlayer(IPlayerWW playerWW) {
-        this.affectedPlayer.add(playerWW);
+    public void addAffectedPlayer(IPlayerWW iPlayerWW) {
+        affectedPlayers.add(iPlayerWW);
     }
 
     @Override
-    public void removeAffectedPlayer(IPlayerWW playerWW) {
-        this.affectedPlayer.remove(playerWW);
+    public void removeAffectedPlayer(IPlayerWW iPlayerWW) {
+        affectedPlayers.remove(iPlayerWW);
     }
 
     @Override
     public void clearAffectedPlayer() {
-        this.affectedPlayer.clear();
+        affectedPlayers.clear();
     }
 
     @Override
-    public List<IPlayerWW> getAffectedPlayers() {
-        return (this.affectedPlayer);
+    public List<? extends IPlayerWW> getAffectedPlayers() {
+        return affectedPlayers;
+    }
+
+    @Override
+    public @NotNull String getDescription() {
+        return new DescriptionBuilder(game, this)
+                .setDescription(() -> game.translate("werewolf.role.oracle.description"))
+                .setEffects(() -> game.translate("werewolf.role.oracle.effect"))
+                .build();
     }
 
     @EventHandler
@@ -58,44 +63,30 @@ public class Seer extends RoleWithLimitedSelectionDuration implements IAffectedP
             return;
         }
 
-        if (game.getConfig().isConfigActive(ConfigsBase.SEER_EVERY_OTHER_DAY.getKey()) &&
+        if (game.getConfig().isConfigActive(ConfigsBase.ORACLE_EVERY_OTHER_DAY.getKey()) &&
                 event.getNumber() == dayNumber + 1) {
             return;
         }
 
         dayNumber = event.getNumber();
 
-        if (disablePower) {
-            disablePower = false;
-            getPlayerWW().sendMessageWithKey("werewolf.role.seer.disable");
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
         setPower(true);
 
         getPlayerWW().sendMessageWithKey(
-                "werewolf.role.seer.see_camp_message",
+                "werewolf.role.oracle.perform",
                 Utils.conversion(
                         game.getConfig()
                                 .getTimerValue(TimersBase.POWER_DURATION.getKey())));
     }
 
-
-    @Override
-    public @NotNull String getDescription() {
-        return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.seer.description"))
-                .setItems(() -> game.translate("werewolf.role.seer.items"))
-                .setEffects(() -> game.translate("werewolf.role.seer.effect"))
-                .build();
-    }
-
-
     @Override
     public void recoverPower() {
 
     }
-
 
     @Override
     public void recoverPotionEffect() {
@@ -109,9 +100,4 @@ public class Seer extends RoleWithLimitedSelectionDuration implements IAffectedP
     public Aura getDefaultAura() {
         return Aura.LIGHT;
     }
-
-    public void setDisablePower() {
-        this.disablePower = true;
-    }
-
 }

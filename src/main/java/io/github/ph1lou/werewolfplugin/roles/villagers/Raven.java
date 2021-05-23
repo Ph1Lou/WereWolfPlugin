@@ -4,6 +4,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimersBase;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
@@ -68,6 +69,7 @@ public class Raven extends RoleWithLimitedSelectionDuration implements IAffected
 
         if (last != null) {
             last.removePotionEffect(PotionEffectType.JUMP);
+            last.getRole().removeAuraModifier("cursed");
             last.sendMessageWithKey("werewolf.role.raven.no_longer_curse");
             last = null;
         }
@@ -97,6 +99,11 @@ public class Raven extends RoleWithLimitedSelectionDuration implements IAffected
 
     @Override
     public void recoverPower() {
+    }
+
+    @Override
+    public Aura getDefaultAura() {
+        return Aura.DARK;
     }
 
 

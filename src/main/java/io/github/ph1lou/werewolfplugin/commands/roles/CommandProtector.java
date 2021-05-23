@@ -1,8 +1,10 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
+import io.github.ph1lou.werewolfapi.AuraModifier;
 import io.github.ph1lou.werewolfapi.ICommands;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.roles.protector.ProtectionEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
@@ -70,6 +72,7 @@ public class CommandProtector implements ICommands {
         ((IAffectedPlayers) protector).addAffectedPlayer(playerWW1);
 
         playerWW1.addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+        playerWW1.getRole().addAuraModifier(new AuraModifier("protection", Aura.LIGHT, 40, true));
         playerWW1.sendMessageWithKey("werewolf.role.protector.get_protection");
         playerWW.sendMessageWithKey("werewolf.role.protector.protection_perform", playerArg.getName());
     }

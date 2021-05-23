@@ -4,13 +4,7 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enums.AngelForm;
-import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
-import io.github.ph1lou.werewolfapi.enums.Day;
-import io.github.ph1lou.werewolfapi.enums.RolesBase;
-import io.github.ph1lou.werewolfapi.enums.Sound;
-import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.enums.*;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
@@ -437,6 +431,16 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
                         || !choice.equals(AngelForm.GUARDIAN_ANGEL)
                         || affectedPlayer.isEmpty()
                         || !affectedPlayer.get(0).isState(StatePlayer.DEATH));
+    }
+
+    @Override
+    public Aura getDefaultAura() {
+        return Aura.LIGHT;
+    }
+
+    @Override
+    public Aura getAura() {
+        return Aura.LIGHT;
     }
 
     @EventHandler

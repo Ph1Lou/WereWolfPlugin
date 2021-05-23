@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleNeutral;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,5 +38,10 @@ public class WhiteWereWolf extends RoleNeutral {
     @Override
     public boolean isNeutral(){
         return true;
+    }
+
+    @Override
+    public Aura getDefaultAura() {
+        return Aura.DARK;
     }
 }
