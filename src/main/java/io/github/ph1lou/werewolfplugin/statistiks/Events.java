@@ -77,6 +77,7 @@ import io.github.ph1lou.werewolfapi.events.roles.librarian.LibrarianDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.librarian.LibrarianGiveBackEvent;
 import io.github.ph1lou.werewolfapi.events.roles.librarian.LibrarianRequestEvent;
 import io.github.ph1lou.werewolfapi.events.roles.mystical_werewolf.MysticalWerewolfRevelationEvent;
+import io.github.ph1lou.werewolfapi.events.roles.oracle.OracleEvent;
 import io.github.ph1lou.werewolfapi.events.roles.priestess.PriestessEvent;
 import io.github.ph1lou.werewolfapi.events.roles.protector.ProtectionEvent;
 import io.github.ph1lou.werewolfapi.events.roles.raven.CurseEvent;
@@ -1149,4 +1150,16 @@ public class Events implements Listener {
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("shaman",
                 event.getPlayerWW(), event.getTargetWW(), api.getScore().getTimer()));
     }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onOracle(OracleEvent event) {
+
+        if (event.isCancelled()) return;
+
+        WereWolfAPI api = main.getWereWolfAPI();
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("oracle_see",
+                event.getPlayerWW(), event.getTargetWW(), api.getScore().getTimer()));
+    }
+
+
 }
