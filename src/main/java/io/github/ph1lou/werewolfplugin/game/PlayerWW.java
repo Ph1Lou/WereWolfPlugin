@@ -1,15 +1,18 @@
 package io.github.ph1lou.werewolfplugin.game;
 
-
+import com.eclipsesource.json.JsonArray;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.MessageAction;
-import io.github.ph1lou.werewolfapi.PotionAction;
+import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.Sound;
+import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
+import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Villager;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -18,7 +21,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.enginehub.squirrelid.Profile;
 import org.enginehub.squirrelid.resolver.HttpRepositoryService;
 import org.enginehub.squirrelid.resolver.ProfileService;
@@ -28,17 +30,20 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class PlayerWW implements IPlayerWW {
 
     private StatePlayer state = StatePlayer.ALIVE;
     private final List<ILover> lovers = new ArrayList<>();
-    private final List<PotionAction> disconnectedPotionActions = new ArrayList<>();
+    private final Map<PotionModifier,Integer> potionModifiers = new HashMap<>();
     private final List<MessageAction> disconnectedMessages = new ArrayList<>();
     private final List<ItemStack> decoItems = new ArrayList<>();
     private int maxHealth = 20;
@@ -54,9 +59,9 @@ public class PlayerWW implements IPlayerWW {
     private transient Location spawn;
     private int deathTime = 0;
     private int disconnectedTime = 0;
-    private int kill = 0;
     private String name;
     private final WereWolfAPI game;
+    private final List<IPlayerWW> playersKilled = new ArrayList<>();
 
 
     public PlayerWW(WereWolfAPI api, Player player) {
@@ -80,27 +85,27 @@ public class PlayerWW implements IPlayerWW {
     @Override
     public void addPlayerHealth(int health) {
 
-        Player player = Bukkit.getPlayer(uuid);
+        Player player = Bukkit.getPlayer(this.uuid);
 
         if (player != null) {
             player.setHealth(Math.min(player.getHealth() + health, VersionUtils.getVersionUtils().getPlayerMaxHealth(player)));
             return;
         }
 
-        disconnectedChangeHealth += health;
+        this.disconnectedChangeHealth += health;
     }
 
     @Override
     public void removePlayerHealth(int health) {
 
-        Player player = Bukkit.getPlayer(uuid);
+        Player player = Bukkit.getPlayer(this.uuid);
 
         if (player != null) {
             player.setHealth(player.getHealth() - health);
             return;
         }
 
-        disconnectedChangeHealth -= health;
+        this.disconnectedChangeHealth -= health;
 
     }
 
@@ -109,14 +114,14 @@ public class PlayerWW implements IPlayerWW {
 
         Player player = Bukkit.getPlayer(uuid);
 
-        maxHealth += health;
+        this.maxHealth += health;
 
         if (player != null) {
             VersionUtils.getVersionUtils().addPlayerMaxHealth(player, health);
             return;
         }
 
-        disconnectedChangeMaxHealth += health;
+        this.disconnectedChangeMaxHealth += health;
     }
 
     @Override
@@ -124,7 +129,7 @@ public class PlayerWW implements IPlayerWW {
 
         Player player = Bukkit.getPlayer(uuid);
 
-        maxHealth -= health;
+        this.maxHealth -= health;
 
         if (player != null) {
             VersionUtils.getVersionUtils().removePlayerMaxHealth(player, health);
@@ -135,11 +140,11 @@ public class PlayerWW implements IPlayerWW {
             return;
         }
 
-        disconnectedChangeMaxHealth -= health;
+        this.disconnectedChangeMaxHealth -= health;
     }
 
-    @Override
-    public void sendMessage(String message) {
+
+    private void sendMessage(String message) {
         this.sendMessage(new TextComponent(message));
     }
 
@@ -151,6 +156,20 @@ public class PlayerWW implements IPlayerWW {
     @Override
     public void sendMessageWithKey(String key, Sound sound, Object... args) {
         this.sendMessage(new TextComponent(game.translate(key, args)), sound);
+    }
+
+    @Override
+    public void sendMessageWithKey(String key, Formatter... formatters) {
+        String message = game.translate(key);
+        for(Formatter formatter :formatters){
+            message = formatter.handle(message);
+        }
+        this.sendMessage(message);
+    }
+
+    @Override
+    public void sendMessageWithKey(String s, Sound sound, Formatter... formatters) {
+
     }
 
     @Override
@@ -175,59 +194,107 @@ public class PlayerWW implements IPlayerWW {
     }
 
     @Override
-    public void addPotionEffect(PotionEffectType potionEffectType, int duration, int amplifier) {
-
-        if (potionEffectType.equals(PotionEffectType.INCREASE_DAMAGE)) {
-            amplifier = -1;
-        }
-
-        PotionEffect potionEffect = new PotionEffect(potionEffectType,
-                duration,
-                amplifier,
-                false,
-                false);
-
-        Player player = Bukkit.getPlayer(uuid);
-
-        if (player != null) {
-            player.addPotionEffect(potionEffect);
-            return;
-        }
-
-        disconnectedPotionActions.add(new PotionAction(potionEffectType, duration, amplifier));
-
-    }
-
-    @Override
-    public void addPotionEffect(PotionEffectType potionEffectType) {
-        removePotionEffect(potionEffectType);
-        addPotionEffect(potionEffectType, Integer.MAX_VALUE, 0);
-    }
-
-    @Override
-    public void removePotionEffect(PotionEffectType potionEffectType) {
-
-        Player player = Bukkit.getPlayer(uuid);
-
-        if (player != null) {
-            player.removePotionEffect(potionEffectType);
-            return;
-        }
-
-        disconnectedPotionActions.add(new PotionAction(potionEffectType, false));
-    }
-
-    @Override
-    public List<? extends PotionEffectType> getPotionEffects() {
-        List<PotionEffectType> potionEffectTypes = disconnectedPotionActions.stream().filter(PotionAction::isAdd)
-                .map(PotionAction::getPotionEffectType)
-                .collect(Collectors.toList());
+    public void addPotionModifier(PotionModifier potionModifier) {
 
         Player player = Bukkit.getPlayer(this.uuid);
-        if (player != null) {
-            potionEffectTypes.addAll(player.getActivePotionEffects().stream().map(PotionEffect::getType).collect(Collectors.toSet()));
+
+        if(!potionModifier.isAdd()){
+            new ArrayList<>(this.potionModifiers.keySet())
+                    .stream()
+                    .filter(potionModifier1 -> potionModifier1.getIdentifier().equals(potionModifier.getIdentifier()))
+                    .filter(potionModifier1 -> potionModifier1.getPotionEffectType().equals(potionModifier.getPotionEffectType()))
+                    .forEach(potionModifier1 -> {
+                        int id = this.potionModifiers.remove(potionModifier1);
+
+                        if(id != -1){
+                            Bukkit.getScheduler().cancelTask(id);
+                        }
+
+                        if(player!=null){
+                            if(this.potionModifiers.keySet().stream()
+                                    .noneMatch(potionModifier2 -> potionModifier2.getPotionEffectType().equals(potionModifier.getPotionEffectType()))){
+                                player.removePotionEffect(potionModifier.getPotionEffectType());
+                            }
+                        }
+                    });
         }
-        return potionEffectTypes;
+        else{
+
+            AtomicBoolean find = new AtomicBoolean(false);
+            new ArrayList<>(this.potionModifiers.keySet())
+                    .stream()
+                    .filter(potionModifier1 -> potionModifier1.getIdentifier().equals(potionModifier.getIdentifier()))
+                    .filter(potionModifier1 -> potionModifier1.getPotionEffectType().equals(potionModifier.getPotionEffectType()))
+                    .forEach(potionModifier1 -> {
+                        if(potionModifier1.getTimer() +
+                                potionModifier1.getDuration() -
+                                game.getTimer()  < potionModifier.getDuration()){
+                            int id = this.potionModifiers.remove(potionModifier1);
+                            if(id != -1){
+                                Bukkit.getScheduler().cancelTask(id);
+                            }
+                        }
+                        else {
+                            find.set(true);
+                        }
+                    });
+
+            if(find.get()){
+                return;
+            }
+
+
+            if(potionModifier.getDuration()<1000000000){
+                potionModifier.setTimer(game.getTimer());
+                this.potionModifiers.put(potionModifier,BukkitUtils.scheduleSyncDelayedTask(() -> {
+
+                    if(this.game.isState(StateGame.GAME)){
+
+                        Player player1 = Bukkit.getPlayer(this.uuid);
+
+                        int id = this.potionModifiers.remove(potionModifier);
+
+                        if(id != -1){
+                            Bukkit.getScheduler().cancelTask(id);
+                        }
+
+                        if(player1!=null){
+                            if(this.potionModifiers.keySet().stream()
+                                    .noneMatch(potionModifier2 -> potionModifier2.getPotionEffectType().equals(potionModifier.getPotionEffectType()))){
+                                player1.removePotionEffect(potionModifier.getPotionEffectType());
+                            }
+                        }
+                    }
+                },potionModifier.getDuration()));
+            }
+            else {
+                this.potionModifiers.put(potionModifier,-1);
+            }
+            if(player!=null){
+                player.addPotionEffect(new PotionEffect(potionModifier.getPotionEffectType(),
+                        potionModifier.getDuration(),
+                        potionModifier.getAmplifier(),
+                        false,
+                        false));
+            }
+        }
+    }
+
+    @Override
+    public void clearPotionEffects() {
+        this.potionModifiers.clear();
+
+        Player player = Bukkit.getPlayer(this.uuid);
+
+        if(player!=null){
+            player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
+        }
+    }
+
+    @Override
+    public Set<? extends PotionModifier> getPotionModifiers() {
+
+        return this.potionModifiers.keySet();
     }
 
     @Override
@@ -271,13 +338,13 @@ public class PlayerWW implements IPlayerWW {
 	}
 
     @Override
-    public void addOneKill() {
-        this.kill += 1;
+    public void addOneKill(IPlayerWW playerWW) {
+        this.playersKilled.add(playerWW);
     }
 
     @Override
-    public int getNbKill() {
-        return (this.kill);
+    public List<? extends IPlayerWW> getPlayersKills() {
+        return this.playersKilled;
     }
 
     @Override
@@ -308,11 +375,6 @@ public class PlayerWW implements IPlayerWW {
     public void setRole(IRole role) {
         this.role = role;
         this.role.setPlayerWW(this);
-    }
-
-    @Override
-    public boolean isKey(String role) {
-        return (role.equals(this.role.getKey()));
     }
 
     @Override
@@ -351,7 +413,7 @@ public class PlayerWW implements IPlayerWW {
     }
 
 	@Override
-	public void setDeathTime(Integer deathTime) {
+	public void setDeathTime(int deathTime) {
 		this.deathTime =deathTime;
 	}
 
@@ -404,28 +466,45 @@ public class PlayerWW implements IPlayerWW {
     @Override
     public void updateAfterReconnect(Player player) {
 
-        for (ItemStack item : decoItems) {
-            addItem(item);
-        }
-        addPlayerMaxHealth(disconnectedChangeMaxHealth);
-        addPlayerHealth(disconnectedChangeHealth);
+        this.decoItems.forEach(this::addItem);
 
-        for (PotionAction potionAction : disconnectedPotionActions) {
-            potionAction.executePotionAction(player);
-        }
-        for (MessageAction message : disconnectedMessages) {
-            player.spigot().sendMessage(message.getMessage());
-            if (message.getSound().isPresent()) {
-                message.getSound().get().play(player);
-            }
-        }
-        player.teleport(disconnectedLocation);
+        addPlayerMaxHealth(this.disconnectedChangeMaxHealth);
+        addPlayerHealth(this.disconnectedChangeHealth);
 
-        disconnectedChangeHealth = 0;
-        disconnectedChangeMaxHealth = 0;
-        disconnectedPotionActions.clear();
-        disconnectedMessages.clear();
-        decoItems.clear();
+        this.updatePotionEffects(player);
+
+        this.disconnectedMessages.forEach(messageAction -> {
+            player.spigot().sendMessage(messageAction.getMessage());
+            messageAction.getSound().ifPresent(sound -> sound.play(player));
+        });
+
+        player.teleport(this.disconnectedLocation);
+
+        this.disconnectedChangeHealth = 0;
+        this.disconnectedChangeMaxHealth = 0;
+        this.disconnectedMessages.clear();
+        this.decoItems.clear();
+    }
+
+    public void updatePotionEffects(Player player) {
+        player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
+
+        this.potionModifiers.keySet()
+                .stream()
+                .filter(PotionModifier::isAdd)
+                .forEach(potionModifier -> {
+                    int duration = potionModifier.getDuration();
+                    if(duration<1000000000){
+                        duration-=(this.game.getTimer()-potionModifier.getTimer())*20;
+                    }
+                    player.addPotionEffect(
+                            new PotionEffect(
+                                    potionModifier.getPotionEffectType(),
+                                    duration,
+                                    potionModifier.getAmplifier(),
+                                    false,
+                                    false));
+                });
     }
 
     @Override

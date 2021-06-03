@@ -1,7 +1,8 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
-import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -11,26 +12,17 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandKill implements ICommands {
-
-
-    private final Main main;
-
-    public CommandKill(Main main) {
-        this.main = main;
-    }
+public class CommandKill implements ICommand {
 
     @Override
-    public void execute(Player player, String[] args) {
-
-        GameManager game = (GameManager) main.getWereWolfAPI();
+    public void execute(WereWolfAPI game, Player player, String[] args) {
 
         boolean find = false;
 
         UUID argUUID = null;
         IPlayerWW playerWW1 = null;
 
-        for (IPlayerWW playerWW : game.getPlayerWW()) {
+        for (IPlayerWW playerWW : game.getPlayersWW()) {
             if (playerWW.getName().equalsIgnoreCase(args[0])) {
                 find = true;
                 argUUID = playerWW.getUUID();
@@ -47,8 +39,8 @@ public class CommandKill implements ICommands {
             return;
         }
         if (game.isState(StateGame.START)) {
-            game.getScore().removePlayerSize();
-            game.remove(argUUID);
+            ((GameManager) game).setPlayerSize(game.getPlayerSize()-1);
+            ((GameManager) game).remove(argUUID);
             player.sendMessage(game.translate("werewolf.commands.kill.remove_role"));
             return;
         }

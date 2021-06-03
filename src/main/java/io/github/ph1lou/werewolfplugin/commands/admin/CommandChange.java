@@ -1,25 +1,17 @@
 package io.github.ph1lou.werewolfplugin.commands.admin;
 
-import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.ICommand;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
 
-public class CommandChange implements ICommands {
-
-
-    private final Main main;
-
-    public CommandChange(Main main) {
-        this.main = main;
-    }
+public class CommandChange implements ICommand {
 
     @Override
-    public void execute(Player player, String[] args) {
-
-        GameManager game = (GameManager) main.getWereWolfAPI();
+    public void execute(WereWolfAPI game, Player player, String[] args) {
 
         player.sendMessage(game.translate("werewolf.commands.admin.change.in_progress"));
 

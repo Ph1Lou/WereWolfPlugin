@@ -28,8 +28,8 @@ public class MysticalWereWolf extends RoleWereWolf {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.mystical_werewolf.description"))
-                .setEffects(() -> game.translate("werewolf.description.werewolf"))
+                .setDescription(game.translate("werewolf.role.mystical_werewolf.description"))
+                .setEffects(game.translate("werewolf.description.werewolf"))
                 .build();
     }
 
@@ -49,7 +49,7 @@ public class MysticalWereWolf extends RoleWereWolf {
 
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
-        getPlayerWW().sendMessageWithKey("werewolf.role.mystical_werewolf.no_message");
+        this.getPlayerWW().sendMessageWithKey("werewolf.role.mystical_werewolf.no_message");
         event.setCancelled(true);
     }
 
@@ -60,11 +60,11 @@ public class MysticalWereWolf extends RoleWereWolf {
     @EventHandler
     public void onWereWolfDeath(FinalDeathEvent event) {
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (!event.getPlayerWW().getRole().isWereWolf()) return;
 
-        List<IPlayerWW> roles = game.getPlayerWW()
+        List<IPlayerWW> roles = game.getPlayersWW()
                 .stream().filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> !playerWW.getRole().isWereWolf())
                 .collect(Collectors.toList());
@@ -73,9 +73,9 @@ public class MysticalWereWolf extends RoleWereWolf {
 
         IPlayerWW roleWW = roles.get((int) Math.floor(game.getRandom().nextFloat() * roles.size()));
 
-        Bukkit.getPluginManager().callEvent(new MysticalWerewolfRevelationEvent(getPlayerWW(), roleWW));
+        Bukkit.getPluginManager().callEvent(new MysticalWerewolfRevelationEvent(this.getPlayerWW(), roleWW));
 
-        getPlayerWW().sendMessageWithKey("werewolf.role.mystical_werewolf.werewolf_death", roleWW.getName(), game.translate(roleWW.getRole().getKey()));
+        this.getPlayerWW().sendMessageWithKey("werewolf.role.mystical_werewolf.werewolf_death", roleWW.getName(), game.translate(roleWW.getRole().getKey()));
     }
 
 

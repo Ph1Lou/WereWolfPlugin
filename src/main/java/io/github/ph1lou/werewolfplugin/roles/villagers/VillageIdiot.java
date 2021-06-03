@@ -30,8 +30,8 @@ public class VillageIdiot extends RoleVillage implements IPower {
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(this.game, this)
-                .setDescription(() -> this.game.translate("werewolf.role.village_idiot.description"))
-                .setPower(() -> this.game.translate(this.power ?
+                .setDescription(this.game.translate("werewolf.role.village_idiot.description"))
+                .setPower(this.game.translate(this.power ?
                         "werewolf.role.village_idiot.power_on" :
                         "werewolf.role.village_idiot.power_off"))
                 .build();
@@ -89,11 +89,11 @@ public class VillageIdiot extends RoleVillage implements IPower {
         this.setPower(false);
 
         VillageIdiotEvent villageIdiotEvent =
-                new VillageIdiotEvent(getPlayerWW(), killerWW.get());
+                new VillageIdiotEvent(this.getPlayerWW(), killerWW.get());
         Bukkit.getPluginManager().callEvent(villageIdiotEvent);
 
         if (villageIdiotEvent.isCancelled()) {
-            getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
             return;
         }
         this.game.resurrection(getPlayerWW());

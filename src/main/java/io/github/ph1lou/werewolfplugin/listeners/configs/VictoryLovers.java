@@ -21,7 +21,7 @@ public class VictoryLovers extends ListenerManager {
 
         if (event.isCancelled()) return;
 
-        WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = this.getGame();
 
         if (game.getLoversManager().getLovers().stream()
                 .filter(ILover::isAlive).anyMatch(ILover -> ILover.isKey(LoverType.LOVER.getKey()))) {

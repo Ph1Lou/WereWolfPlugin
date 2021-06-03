@@ -68,19 +68,19 @@ public class Rival extends RoleNeutral implements IPower {
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.rival.description",
+                .setDescription(game.translate("werewolf.role.rival.description",
                         Utils.conversion(
-                                Math.max(0, game.getConfig().getTimerValue(TimersBase.ROLE_DURATION.getKey()))
-                                        + game.getConfig().getTimerValue(TimersBase.RIVAL_DURATION.getKey()))))
-                .setItems(() -> game.translate("werewolf.role.rival.item"))
-                .setEquipments(() -> game.translate("werewolf.role.rival.extra", game.getConfig().getLimitPowerBow() + 1))
+                                Math.max(0, game.getConfig().getTimerValue(TimerBase.ROLE_DURATION.getKey()))
+                                        + game.getConfig().getTimerValue(TimerBase.RIVAL_DURATION.getKey()))))
+                .setItems(game.translate("werewolf.role.rival.item"))
+                .setEquipments(game.translate("werewolf.role.rival.extra", game.getConfig().getLimitPowerBow() + 1))
                 .build();
     }
 
     @EventHandler
     public void onLoverReveal(RevealLoversEvent event) {
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (event.getLovers().isEmpty()) return;
 
@@ -94,7 +94,7 @@ public class Rival extends RoleNeutral implements IPower {
         this.lover = loverAPIs.get((int) Math.floor(game.getRandom().nextFloat() * loverAPIs.size()));
 
         if (lover instanceof Lover) {
-            this.cupidWW = game.getPlayerWW()
+            this.cupidWW = game.getPlayersWW()
                     .stream().map(IPlayerWW::getRole)
                     .filter(roles -> roles.isKey(RolesBase.CUPID.getKey()))
                     .map(roles -> (IAffectedPlayers) roles)
@@ -106,7 +106,7 @@ public class Rival extends RoleNeutral implements IPower {
 
         List<IPlayerWW> lovers = new ArrayList<>(lover.getLovers());
 
-        getPlayerWW().sendMessageWithKey("werewolf.role.rival.lover", lovers.isEmpty() ? "" : game.translate(lovers.get(0).getRole().getKey()), lovers.size() == 2 ? game.translate(lovers.get(1).getRole().getKey()) : "");
+        this.getPlayerWW().sendMessageWithKey("werewolf.role.rival.lover", lovers.isEmpty() ? "" : game.translate(lovers.get(0).getRole().getKey()), lovers.size() == 2 ? game.translate(lovers.get(1).getRole().getKey()) : "");
     }
 
     @EventHandler
@@ -124,11 +124,11 @@ public class Rival extends RoleNeutral implements IPower {
     @EventHandler
     public void onMultiChoice(RivalEvent event) {
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (lover == null) return;
 
-        List<IPlayerWW> playerWWS = game.getPlayerWW()
+        List<IPlayerWW> playerWWS = game.getPlayersWW()
                 .stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> !playerWW.equals(getPlayerWW()))
@@ -145,16 +145,16 @@ public class Rival extends RoleNeutral implements IPower {
 
         if (playerWW1S.isEmpty()) return;
 
-        RivalAnnouncementEvent rivalAnnouncementEvent = new RivalAnnouncementEvent(getPlayerWW(), playerWW1S);
+        RivalAnnouncementEvent rivalAnnouncementEvent = new RivalAnnouncementEvent(this.getPlayerWW(), playerWW1S);
 
         Bukkit.getPluginManager().callEvent(rivalAnnouncementEvent);
 
         if (rivalAnnouncementEvent.isCancelled()) {
-            getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
             return;
         }
 
-        getPlayerWW().sendMessageWithKey("werewolf.role.rival.find_lovers", playerWW1S.get(0).getName(), playerWW1S.size() >= 2 ? playerWW1S.get(1).getName() : "", playerWW1S.size() >= 3 ? playerWW1S.get(2).getName() : "", playerWW1S.size() >= 4 ? playerWW1S.get(3).getName() : "", playerWW1S.size() >= 5 ? playerWW1S.get(4).getName() : "");
+        this.getPlayerWW().sendMessageWithKey("werewolf.role.rival.find_lovers", playerWW1S.get(0).getName(), playerWW1S.size() >= 2 ? playerWW1S.get(1).getName() : "", playerWW1S.size() >= 3 ? playerWW1S.get(2).getName() : "", playerWW1S.size() >= 4 ? playerWW1S.get(3).getName() : "", playerWW1S.size() >= 5 ? playerWW1S.get(4).getName() : "");
     }
 
     @EventHandler
@@ -164,7 +164,7 @@ public class Rival extends RoleNeutral implements IPower {
 
     private void loverDeath(IPlayerWW playerWW1, IPlayerWW playerWW2) {
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (!power) return;
 
@@ -174,22 +174,22 @@ public class Rival extends RoleNeutral implements IPower {
 
 
         int health = 5;
-        if (getPlayerWW().getMaxHealth() < 10) { //si le joueur a moins de coeurs ont réduit le temps de récupération de coeurs
-            health = getPlayerWW().getMaxHealth() / 2 - 1; //-1 car le joueur aura un coeur minimum quand il prend les votes
+        if (this.getPlayerWW().getMaxHealth() < 10) { //si le joueur a moins de coeurs ont réduit le temps de récupération de coeurs
+            health = this.getPlayerWW().getMaxHealth() / 2 - 1; //-1 car le joueur aura un coeur minimum quand il prend les votes
         }
-        getPlayerWW().removePlayerMaxHealth(10);
+        this.getPlayerWW().removePlayerMaxHealth(10);
 
         int task = BukkitUtils.scheduleSyncRepeatingTask(() -> {
             if (game.isState(StateGame.GAME)) {
-                getPlayerWW().addPlayerMaxHealth(2);
+                this.getPlayerWW().addPlayerMaxHealth(2);
             }
         }, 1200, 1200);
 
         BukkitUtils.scheduleSyncDelayedTask(() -> Bukkit.getScheduler().cancelTask(task), (long) health * 62 * 20);
 
 
-        getPlayerWW().sendMessageWithKey("werewolf.role.rival.lover_death");
-        Bukkit.getPluginManager().callEvent(new RivalLoverDeathEvent(getPlayerWW(), new ArrayList<>(lover.getLovers())));
+        this.getPlayerWW().sendMessageWithKey("werewolf.role.rival.lover_death");
+        Bukkit.getPluginManager().callEvent(new RivalLoverDeathEvent(this.getPlayerWW(), new ArrayList<>(lover.getLovers())));
         lover = null;
     }
 
@@ -219,7 +219,7 @@ public class Rival extends RoleNeutral implements IPower {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onLoverDeath(FinalDeathEvent event) {
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (lover == null) return;
 
@@ -235,17 +235,17 @@ public class Rival extends RoleNeutral implements IPower {
 
         if (!killerWW.get().equals(getPlayerWW())) return;
 
-        RivalLoverEvent rivalLoverEvent = new RivalLoverEvent(getPlayerWW(), playerWW);
+        RivalLoverEvent rivalLoverEvent = new RivalLoverEvent(this.getPlayerWW(), playerWW);
 
         Bukkit.getPluginManager().callEvent(rivalLoverEvent);
 
         if (rivalLoverEvent.isCancelled()) {
-            getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
             return;
         }
 
         if (lover.swap(playerWW, getPlayerWW())) {
-            getPlayerWW().addLover(lover);
+            this.getPlayerWW().addLover(lover);
             playerWW.removeLover(lover);
             power = false;
         }
@@ -263,7 +263,7 @@ public class Rival extends RoleNeutral implements IPower {
 
         if (player == null) return;
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (cupidWW == null) return;
 

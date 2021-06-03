@@ -3,7 +3,7 @@ package io.github.ph1lou.werewolfplugin.listeners;
 import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enums.ConfigBase;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
@@ -134,7 +134,7 @@ public class TabManager implements Listener {
                 AppearInWereWolfListEvent appearInWereWolfListEvent = new AppearInWereWolfListEvent(target.getUniqueId(), uuid1);
                 Bukkit.getPluginManager().callEvent(appearInWereWolfListEvent);
                 if (appearInWereWolfListEvent.isAppear()) {
-                    if (game.getConfig().isConfigActive(ConfigsBase.RED_NAME_TAG.getKey())) {
+                    if (game.getConfig().isConfigActive(ConfigBase.RED_NAME_TAG.getKey())) {
                         sb.append(ChatColor.DARK_RED);
                     }
                 }
@@ -188,7 +188,7 @@ public class TabManager implements Listener {
 
         StringBuilder sb = new StringBuilder(event.getSuffix());
 
-        IPlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID());
+        IPlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID()).orElse(null);
 
         if (playerWW == null) {
             return;

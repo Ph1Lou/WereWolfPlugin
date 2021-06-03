@@ -4,7 +4,7 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.ListenerManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
-import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Location;
@@ -37,7 +37,7 @@ public class DiamondLimit extends ListenerManager {
     private void onBlockBreak(BlockBreakEvent event) {
 
 
-        WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = this.getGame();
         if (game.isState(StateGame.LOBBY)) return;
 
         String playerName = event.getPlayer().getName();
@@ -50,7 +50,7 @@ public class DiamondLimit extends ListenerManager {
                 block.getLocation().getBlockY() + 0.5,
                 block.getLocation().getBlockZ() + 0.5);
 
-        if (game.getConfig().getTimerValue(TimersBase.DIGGING.getKey()) < 0) {
+        if (game.getConfig().getTimerValue(TimerBase.DIGGING.getKey()) < 0) {
             block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop());
             block.setType(Material.AIR);
             return;

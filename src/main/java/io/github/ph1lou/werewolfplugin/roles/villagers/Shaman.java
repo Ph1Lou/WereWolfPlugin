@@ -6,7 +6,6 @@ import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
-import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FirstDeathEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
@@ -30,7 +29,7 @@ public class Shaman extends RoleVillage implements IAffectedPlayers {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.shaman.description"))
+                .setDescription(game.translate("werewolf.role.shaman.description"))
                 .build();
     }
 
@@ -47,7 +46,7 @@ public class Shaman extends RoleVillage implements IAffectedPlayers {
     @EventHandler
     public void onFirstDeathEvent(FirstDeathEvent event) {
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -57,7 +56,7 @@ public class Shaman extends RoleVillage implements IAffectedPlayers {
         TextComponent textComponent = new TextComponent(
                 game.translate("werewolf.role.shaman.choice_message", playerWW.getName()));
         textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/ww %s %s %s",
-                game.translate("werewolf.role.shaman.command"), playerWW.getUUID(), Integer.toString(nTimesAffected))));
+                game.translate("werewolf.role.shaman.command"), playerWW.getUUID(), nTimesAffected)));
 
         this.getPlayerWW().sendMessage(textComponent);
     }

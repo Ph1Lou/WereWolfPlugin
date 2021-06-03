@@ -4,11 +4,11 @@ package io.github.ph1lou.werewolfplugin.game;
 import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.Category;
-import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enums.ConfigBase;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.WinEvent;
 import io.github.ph1lou.werewolfapi.events.game.utils.CountRemainingRolesCategoriesEvent;
 import io.github.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
@@ -42,7 +42,7 @@ public class End {
 
         if (game.isState(StateGame.END)) return;
 
-        if (game.getScore().getPlayerSize() == 0) {
+        if (game.getPlayerSize() == 0) {
             winner = "werewolf.end.death";
             fin();
             return;
@@ -61,7 +61,7 @@ public class End {
                             AroundLover aroundLover = new AroundLover(lovers);
                             Bukkit.getPluginManager().callEvent(aroundLover);
 
-                            if (aroundLover.getPlayerWWS().size() == game.getScore().getPlayerSize()) {
+                            if (aroundLover.getPlayerWWS().size() == game.getPlayerSize()) {
                                 winner = ILover.getKey();
                                 fin();
                             }
@@ -89,12 +89,12 @@ public class End {
 
         Bukkit.getPluginManager().callEvent(event);
 
-        if (event.getWerewolf() == game.getScore().getPlayerSize()) {
+        if (event.getWerewolf() == game.getPlayerSize()) {
             winner = Category.WEREWOLF.getKey();
             fin();
             return;
         }
-        if (event.getVillager() == game.getScore().getPlayerSize()) {
+        if (event.getVillager() == game.getPlayerSize()) {
             winner = Category.VILLAGER.getKey();
             fin();
         }
@@ -103,7 +103,7 @@ public class End {
     public void fin() {
 
         Bukkit.getPluginManager().callEvent(new WinEvent(winner,
-                game.getPlayerWW()
+                game.getPlayersWW()
                         .stream()
                         .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                         .collect(Collectors.toSet())));
@@ -112,11 +112,9 @@ public class End {
 
         game.setState(StateGame.END);
 
-        game.getScore().getKillCounter();
+        game.getConfig().setConfig(ConfigBase.CHAT.getKey(), true);
 
-        game.getConfig().setConfig(ConfigsBase.CHAT.getKey(), true);
-
-        for (IPlayerWW playerWW1 : game.getPlayerWW()) {
+        for (IPlayerWW playerWW1 : game.getPlayersWW()) {
 
             String role = game.translate(playerWW1.getRole().getDeathRole());
             String playerName = playerWW1.getName();
@@ -145,8 +143,8 @@ public class End {
             p.spigot().sendMessage(msg);
         }
 
-        BukkitUtils.scheduleSyncDelayedTask(game::stopGame, 20L * game.getConfig().getTimerValue(TimersBase.AUTO_RESTART_DURATION.getKey()));
-        Bukkit.broadcastMessage(game.translate("werewolf.announcement.restart", Utils.conversion(game.getConfig().getTimerValue(TimersBase.AUTO_RESTART_DURATION.getKey()))));
+        BukkitUtils.scheduleSyncDelayedTask(game::stopGame, 20L * game.getConfig().getTimerValue(TimerBase.AUTO_RESTART_DURATION.getKey()));
+        Bukkit.broadcastMessage(game.translate("werewolf.announcement.restart", Utils.conversion(game.getConfig().getTimerValue(TimerBase.AUTO_RESTART_DURATION.getKey()))));
     }
 
 

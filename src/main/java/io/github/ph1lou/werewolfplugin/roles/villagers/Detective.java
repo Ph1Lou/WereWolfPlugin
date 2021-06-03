@@ -5,7 +5,7 @@ import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleWithLimitedSelectionDuration;
@@ -50,7 +50,7 @@ public class Detective extends RoleWithLimitedSelectionDuration implements IAffe
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -64,15 +64,15 @@ public class Detective extends RoleWithLimitedSelectionDuration implements IAffe
         setPower(true);
 
 
-        getPlayerWW().sendMessageWithKey("werewolf.role.detective.inspection_message",
-                Utils.conversion(game.getConfig().getTimerValue(TimersBase.POWER_DURATION.getKey())));
+        this.getPlayerWW().sendMessageWithKey("werewolf.role.detective.inspection_message",
+                Utils.conversion(game.getConfig().getTimerValue(TimerBase.POWER_DURATION.getKey())));
     }
 
 
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.detective.description"))
+                .setDescription(game.translate("werewolf.role.detective.description"))
                 .build();
     }
 

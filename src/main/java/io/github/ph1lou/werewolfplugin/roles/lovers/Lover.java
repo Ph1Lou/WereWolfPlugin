@@ -72,7 +72,7 @@ public class Lover implements ILover, Listener {
         if (!game.isState(StateGame.GAME)) return;
 
         UUID uuid = event.getPlayerUUID();
-        IPlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
 
         if (!lovers.contains(playerWW)) return;
 
@@ -110,7 +110,7 @@ public class Lover implements ILover, Listener {
 
         StringBuilder sb = new StringBuilder(event.getSuffix());
 
-        IPlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID());
+        IPlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID()).orElse(null);
 
         if (playerWW == null) return;
 
@@ -193,7 +193,7 @@ public class Lover implements ILover, Listener {
 
         lovers.forEach(this::announceLovers);
 
-        game.getPlayerWW()
+        game.getPlayersWW()
                 .stream().map(IPlayerWW::getRole)
                 .filter(roles -> roles.isKey(RolesBase.CUPID.getKey()))
                 .map(roles -> (IAffectedPlayers) roles)

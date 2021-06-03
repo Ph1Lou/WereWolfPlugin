@@ -1,8 +1,9 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
 import io.github.ph1lou.werewolfapi.AuraModifier;
-import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
@@ -17,21 +18,13 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.UUID;
 
-public class CommandRaven implements ICommands {
-
-
-    private final Main main;
-
-    public CommandRaven(Main main) {
-        this.main = main;
-    }
+public class CommandRaven implements ICommand {
 
     @Override
-    public void execute(Player player, String[] args) {
+    public void execute(WereWolfAPI game, Player player, String[] args) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
 
         if (playerWW == null) return;
 
@@ -43,7 +36,7 @@ public class CommandRaven implements ICommands {
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
-        IPlayerWW playerWW1 = game.getPlayerWW(argUUID);
+        IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
             playerWW.sendMessageWithKey("werewolf.check.player_not_found");
@@ -66,7 +59,7 @@ public class CommandRaven implements ICommands {
 
         ((IAffectedPlayers) raven).clearAffectedPlayer();
         ((IAffectedPlayers) raven).addAffectedPlayer(playerWW1);
-        playerWW1.addPotionEffect(PotionEffectType.JUMP);
+        playerWW1.addPotionModifier(PotionModifier.add(PotionEffectType.SPEED,"raven"));
         playerWW1.getRole().addAuraModifier(new AuraModifier("cursed", Aura.DARK, 20, true));
         playerWW1.sendMessageWithKey("werewolf.role.raven.get_curse");
         playerWW.sendMessageWithKey("werewolf.role.raven.curse_perform", playerArg.getName());

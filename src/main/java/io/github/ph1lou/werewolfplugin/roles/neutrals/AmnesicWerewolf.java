@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Day;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
@@ -17,7 +18,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,22 +33,24 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
     @EventHandler
     public void onNight(NightEvent event) {
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        getPlayerWW().addPotionEffect(PotionEffectType.INCREASE_DAMAGE);
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"werewolf"));
+
     }
 
 
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        getPlayerWW().removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"werewolf"));
+
     }
 
     @EventHandler
@@ -63,12 +65,12 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
         if (transformed) return;
 
         AmnesiacTransformationEvent amnesiacTransformationEvent =
-                new AmnesiacTransformationEvent(getPlayerWW(), playerWW);
+                new AmnesiacTransformationEvent(this.getPlayerWW(), playerWW);
 
         Bukkit.getPluginManager().callEvent(amnesiacTransformationEvent);
 
         if (amnesiacTransformationEvent.isCancelled()) {
-            getPlayerWW().sendMessageWithKey("werewolf.check.transformation");
+            this.getPlayerWW().sendMessageWithKey("werewolf.check.transformation");
             return;
         }
 
@@ -86,19 +88,21 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
 
         super.recoverPotionEffect();
 
-        getPlayerWW().addPotionEffect(PotionEffectType.NIGHT_VISION);
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION,"werewolf"));
+
 
         if (game.isDay(Day.DAY)) return;
 
-        getPlayerWW().addPotionEffect(PotionEffectType.INCREASE_DAMAGE);
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"werewolf"));
+
     }
 
     @Override
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.amnesiac_werewolf.description"))
-                .setEffects(() -> game.translate("werewolf.description.werewolf"))
+                .setDescription(game.translate("werewolf.role.amnesiac_werewolf.description"))
+                .setEffects(game.translate("werewolf.description.werewolf"))
                 .build();
     }
 
@@ -107,7 +111,7 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
     }
 
     @Override
-    public boolean getTransformed() {
+    public boolean isTransformed() {
         return this.transformed;
     }
 
@@ -142,17 +146,16 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
 
         if (!killer.getUniqueId().equals(getPlayerUUID())) return;
 
-        killer.removePotionEffect(PotionEffectType.ABSORPTION);
-        killer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(
+                PotionEffectType.SPEED,
                 1200,
                 0,
-                false,
-                false));
-        killer.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,
+                "amnesic_werewolf"));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(
+                PotionEffectType.ABSORPTION,
                 1200,
                 0,
-                false,
-                false));
+                "amnesic_werewolf"));
     }
 
 }

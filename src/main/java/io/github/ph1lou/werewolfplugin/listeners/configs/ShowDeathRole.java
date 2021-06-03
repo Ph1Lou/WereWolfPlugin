@@ -34,9 +34,9 @@ public class ShowDeathRole extends ListenerManager {
     @EventHandler(priority = EventPriority.HIGH)
     public void onUpdate(UpdatePlayerNameTag event) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = this.getGame();
 
-        IPlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID());
+        IPlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID()).orElse(null);
 
         if (playerWW == null) {
             return;

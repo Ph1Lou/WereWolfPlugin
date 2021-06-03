@@ -1,6 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
-import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IStuffManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.events.UpdateStuffEvent;
@@ -13,19 +13,11 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
-public class CommandLootDeath implements ICommands {
-
-
-    private final Main main;
-
-    public CommandLootDeath(Main main) {
-        this.main = main;
-    }
+public class CommandLootDeath implements ICommand {
 
     @Override
-    public void execute(Player player, String[] args) {
+    public void execute(WereWolfAPI game, Player player, String[] args) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
         IStuffManager stuffManager = game.getStuffs();
         UUID uuid = player.getUniqueId();
 

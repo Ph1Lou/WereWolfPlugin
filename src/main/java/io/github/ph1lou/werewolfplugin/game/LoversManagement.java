@@ -43,7 +43,7 @@ public class LoversManagement implements ILoverManager {
 
 	private void autoCursedLovers() {
 
-		List<IPlayerWW> cursedLovers = game.getPlayerWW().stream()
+		List<IPlayerWW> cursedLovers = game.getPlayersWW().stream()
 				.filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
 				.filter(playerWW -> playerWW.getLovers().isEmpty())
 				.collect(Collectors.toList());
@@ -73,7 +73,7 @@ public class LoversManagement implements ILoverManager {
 
 	private void autoAmnesiacLovers() {
 
-		List<IPlayerWW> amnesiacLovers = game.getPlayerWW().stream()
+		List<IPlayerWW> amnesiacLovers = game.getPlayersWW().stream()
 				.filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
 				.filter(playerWW -> playerWW.getLovers().isEmpty())
 				.collect(Collectors.toList());
@@ -119,7 +119,7 @@ public class LoversManagement implements ILoverManager {
 
 	private void autoLovers() {
 
-		List<IPlayerWW> loversAvailable = game.getPlayerWW().stream()
+		List<IPlayerWW> loversAvailable = game.getPlayersWW().stream()
 				.filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
 				.collect(Collectors.toList());
 
@@ -133,11 +133,11 @@ public class LoversManagement implements ILoverManager {
 
 		if ((game.getConfig().getLoverCount(LoverType.LOVER.getKey()) == 0 &&
 				game.getConfig().getRoleCount(RolesBase.CUPID.getKey()) * 2 >=
-						game.getScore().getPlayerSize()) ||
+						game.getPlayerSize()) ||
 				(game.getConfig().getLoverCount(LoverType.LOVER.getKey()) != 0 &&
 						(game.getConfig().getRoleCount(RolesBase.CUPID.getKey()) +
 								game.getConfig().getLoverCount(LoverType.LOVER.getKey())) * 2 >
-								game.getScore().getPlayerSize())) {
+								game.getPlayerSize())) {
 
 			polygamy = true;
 			Bukkit.broadcastMessage(game.translate("werewolf.role.lover.polygamy"));
@@ -147,9 +147,9 @@ public class LoversManagement implements ILoverManager {
 		IPlayerWW playerWW2;
 
 
-		for (IPlayerWW playerWW : game.getPlayerWW()) {
+		for (IPlayerWW playerWW : game.getPlayersWW()) {
 
-			if (playerWW.isKey(RolesBase.CUPID.getKey())) {
+			if (playerWW.getRole().isKey(RolesBase.CUPID.getKey())) {
 
 				UUID uuid = playerWW.getUUID();
 				Cupid cupid = (Cupid) playerWW.getRole();
@@ -215,7 +215,7 @@ public class LoversManagement implements ILoverManager {
 	private void rangeLovers() {
 
 		List<Lover> loverAPIS = new ArrayList<>();
-		List<IPlayerWW> loversAvailable = game.getPlayerWW().stream()
+		List<IPlayerWW> loversAvailable = game.getPlayersWW().stream()
 				.filter(playerWW -> !playerWW.getLovers().isEmpty())
 				.collect(Collectors.toList());
 
@@ -225,7 +225,7 @@ public class LoversManagement implements ILoverManager {
 			linkCouple.add(loversAvailable.remove(0));
 
 			for (int j = 0; j < linkCouple.size(); j++) {
-				for (IPlayerWW playerWW : game.getPlayerWW()) {
+				for (IPlayerWW playerWW : game.getPlayersWW()) {
 					for (ILover lover : playerWW.getLovers()) {
 						if (lover.getLovers().contains(linkCouple.get(j))) {
 							if (!linkCouple.contains(playerWW)) {

@@ -16,7 +16,7 @@ public class WereWolf extends RoleWereWolf {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setEffects(() -> game.translate("werewolf.description.werewolf"))
+                .setEffects(game.translate("werewolf.description.werewolf"))
                 .build();
     }
 

@@ -22,6 +22,7 @@ public class GameTask extends BukkitRunnable {
 	public void run() {
 
 		if (game.isState(StateGame.END)) {
+			game.getScore().updateBoard();
 			cancel();
 			return;
 		}
@@ -29,7 +30,7 @@ public class GameTask extends BukkitRunnable {
 		World world = game.getMapManager().getWorld();
 		game.getScore().updateBoard();
 
-		game.getPlayerWW().stream().map(IPlayerWW::getRole).forEach(role -> {
+		game.getPlayersWW().stream().map(IPlayerWW::getRole).forEach(role -> {
 			try {
 				role.second();
 			} catch (Exception exception) {
@@ -51,7 +52,7 @@ public class GameTask extends BukkitRunnable {
 						game.getConfig().getTimerValue(
 								"werewolf.menu.timers.day_duration") - 1)));
 
-		game.getScore().addTimer();
+		game.setTimer(game.getTimer()+1);
 
 		RegisterManager.get().getTimersRegister()
 				.forEach(timerRegister -> {

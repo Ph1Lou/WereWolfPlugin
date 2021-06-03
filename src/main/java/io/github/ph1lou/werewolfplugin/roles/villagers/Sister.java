@@ -3,10 +3,11 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import io.github.ph1lou.werewolfapi.events.roles.sister.SisterDeathEvent;
@@ -44,18 +45,19 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
     @Override
     public @NotNull String getDescription() {
 
+        String extraLines;
+
+        if (game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST.getKey()) > 0) {
+            extraLines= game.translate("werewolf.role.sister.sisters_list", Utils.conversion(game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST.getKey())));
+        } else {
+            extraLines= game.translate("werewolf.role.sister.sisters_list", this.getSister());
+        }
 
         return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.sister.description"))
-                .setEffects(() -> game.translate("werewolf.role.sister.effect",
+                .setDescription(game.translate("werewolf.role.sister.description"))
+                .setEffects(game.translate("werewolf.role.sister.effect",
                         game.getConfig().getDistanceSister()))
-                .addExtraLines(() -> {
-                    if (game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey()) > 0) {
-                        return game.translate("werewolf.role.sister.sisters_list", Utils.conversion(game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey())));
-                    } else {
-                        return game.translate("werewolf.role.sister.sisters_list", this.getSister());
-                    }
-                })
+                .addExtraLines(extraLines)
                 .build();
     }
 
@@ -67,18 +69,18 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
 
     @EventHandler
     public void onWerewolfList(WereWolfListEvent event) {
-        getPlayerWW().sendMessageWithKey("werewolf.role.sister.sisters_list", this.getSister());
+        this.getPlayerWW().sendMessageWithKey("werewolf.role.sister.sisters_list", this.getSister());
     }
 
     private String getSister() {
 
         StringBuilder list = new StringBuilder();
 
-        game.getPlayerWW()
+        game.getPlayersWW()
                 .stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> !playerWW.getRole().equals(this))
-                .filter(playerWW -> playerWW.isKey(RolesBase.SISTER.getKey()))
+                .filter(playerWW -> playerWW.getRole().isKey(RolesBase.SISTER.getKey()))
                 .forEach(playerWW -> list.append(playerWW.getName()).append(" "));
         return list.toString();
     }
@@ -91,13 +93,13 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
         if (sister == null) {
             return;
         }
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
         Location location = sister.getLocation();
 
-        boolean recoverResistance = game.getPlayerWW()
+        boolean recoverResistance = game.getPlayersWW()
                 .stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .map(IPlayerWW::getRole)
@@ -122,12 +124,12 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
                     .filter(potionEffectType -> potionEffectType.equals(
                             PotionEffectType.DAMAGE_RESISTANCE))
                     .forEach(sister::removePotionEffect);
-            sister.addPotionEffect(new PotionEffect(
+
+            this.getPlayerWW().addPotionModifier(PotionModifier.add(
                     PotionEffectType.DAMAGE_RESISTANCE,
                     100,
                     0,
-                    false,
-                    false));
+                    "sister"));
         }
 
 
@@ -138,7 +140,7 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
 
         if (event.isCancelled()) return;
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         event.getAllSisters().add(getPlayerWW());
 
@@ -180,7 +182,7 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
 
         textComponent.addExtra(role);
 
-        getPlayerWW().sendMessage(textComponent);
+        this.getPlayerWW().sendMessage(textComponent);
 
         sisterWW.getLastKiller().ifPresent(killerWWS::add);
 
@@ -199,7 +201,7 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
         if (!playerWW.equals(getPlayerWW())) return;
 
         Bukkit.getPluginManager().callEvent(new SisterDeathEvent(playerWW,
-                new HashSet<>(), getPlayerWW().getLastKiller().isPresent() ? getPlayerWW().getLastKiller().get() : null));
+                new HashSet<>(), this.getPlayerWW().getLastKiller().isPresent() ? this.getPlayerWW().getLastKiller().get() : null));
 
     }
 

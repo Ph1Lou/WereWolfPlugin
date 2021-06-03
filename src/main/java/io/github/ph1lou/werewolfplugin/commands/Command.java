@@ -79,7 +79,7 @@ public class Command implements TabExecutor {
 
         if (commandRegister.isRequiredPlayerInGame()) {
 
-            IPlayerWW playerWW = game.getPlayerWW(uuid);
+            IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
 
             if (playerWW == null) {
                 return game.translate("werewolf.check.not_in_game");
@@ -108,7 +108,7 @@ public class Command implements TabExecutor {
             return game.translate("werewolf.check.parameters", commandRegister.getMinArgNumbers());
         }
 
-        commandRegister.getCommand().execute(player, args);
+        commandRegister.getCommand().execute(game,player, args);
 
         return "";
     }
@@ -122,7 +122,7 @@ public class Command implements TabExecutor {
         Player player = (Player) sender;
         UUID uuid = player.getUniqueId();
         WereWolfAPI game = main.getWereWolfAPI();
-        IPlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
 
         if (args.length > 1) {
             return null;

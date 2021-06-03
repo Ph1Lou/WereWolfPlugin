@@ -14,6 +14,6 @@ public class GuardianAngel extends Angel {
         super(api, playerWW, key);
         setChoice(AngelForm.GUARDIAN_ANGEL);
         Bukkit.getPluginManager().callEvent(
-                new AngelChoiceEvent(getPlayerWW(), AngelForm.GUARDIAN_ANGEL));
+                new AngelChoiceEvent(this.getPlayerWW(), AngelForm.GUARDIAN_ANGEL));
     }
 }

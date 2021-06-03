@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.Sound;
@@ -43,6 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers {
@@ -104,11 +106,11 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.flute_player.description", game.getConfig().getDistanceFlutePlayer()))
-                .setPower(() -> game.translate("werewolf.role.flute_player.power"))
-                .setItems(() -> game.translate("werewolf.role.flute_player.craft_description"))
-                .setEffects(() -> game.translate("werewolf.role.flute_player.effect"))
-                .addExtraLines(() -> game.translate("werewolf.role.flute_player.affected", (affectedPlayer.isEmpty() ? "" : enchantedList())))
+                .setDescription(game.translate("werewolf.role.flute_player.description", game.getConfig().getDistanceFlutePlayer()))
+                .setPower(game.translate("werewolf.role.flute_player.power"))
+                .setItems(game.translate("werewolf.role.flute_player.craft_description"))
+                .setEffects(game.translate("werewolf.role.flute_player.effect"))
+                .addExtraLines(game.translate("werewolf.role.flute_player.affected", (affectedPlayer.isEmpty() ? "" : enchantedList())))
                 .build();
     }
 
@@ -205,7 +207,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
         if (player == null) {
             return;
         }
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -216,7 +218,8 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
                 .filter(player1 -> this.checkDistance(player, player1) || this.checkDistance(player1))
                 .map(Entity::getUniqueId)
                 .map(game::getPlayerWW)
-                .filter(Objects::nonNull)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .peek(playerWW -> {
                     if (this.affectedPlayer.contains(playerWW)) {
                         recoverResistance.set(true);
@@ -242,7 +245,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
                 });
 
         if (recoverResistance.get()) {
-            this.getPlayerWW().addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 240, 0);
+            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE, 240, 0,"elder"));
         }
     }
 
@@ -304,7 +307,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
         }
         Player clickedPlayer = (Player) event.getRightClicked();
 
-        IPlayerWW clickedPlayerWW = game.getPlayerWW(clickedPlayer.getUniqueId());
+        IPlayerWW clickedPlayerWW = game.getPlayerWW(clickedPlayer.getUniqueId()).orElse(null);
 
         if (clickedPlayerWW == null) {
             return;
@@ -379,15 +382,14 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
     private void checkStrength() {
 
         if (this.all) {
-            this.getPlayerWW().addPotionEffect(PotionEffectType.INCREASE_DAMAGE);
+            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"flute_player"));
             return;
         }
 
         if (this.affectedPlayer.stream().filter(playerWW -> playerWW.isState(StatePlayer.ALIVE)).count() + 1
-                == game.getScore().getPlayerSize()) {
+                == game.getPlayerSize()) {
             this.all = true;
             Bukkit.getPluginManager().callEvent(new AllPlayerEnchantedEvent(this.getPlayerWW()));
-            this.getPlayerWW().addPotionEffect(PotionEffectType.INCREASE_DAMAGE);
         }
     }
 

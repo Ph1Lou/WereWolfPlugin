@@ -63,10 +63,10 @@ public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.witch.description"))
-                .setPower(() -> game.translate(power ? "werewolf.role.witch.power_available" : "werewolf.role.witch.power_not_available"))
-                .setItems(() -> game.translate("werewolf.role.witch.items"))
-                .addExtraLines(() -> game.translate("werewolf.description.power",
+                .setDescription(game.translate("werewolf.role.witch.description"))
+                .setPower(game.translate(power ? "werewolf.role.witch.power_available" : "werewolf.role.witch.power_not_available"))
+                .setItems(game.translate("werewolf.role.witch.items"))
+                .addExtraLines(game.translate("werewolf.description.power",
                         game.translate(game.getConfig().isWitchAutoResurrection()
                                 ?
                                 "werewolf.role.witch.himself"
@@ -101,7 +101,7 @@ public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
             return;
         }
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         TextComponent textComponent =
                 new TextComponent(
@@ -113,7 +113,7 @@ public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
                 String.format("/ww %s %s",
                         game.translate("werewolf.role.witch.command"),
                         playerWW.getUUID())));
-        getPlayerWW().sendMessage(textComponent);
+        this.getPlayerWW().sendMessage(textComponent);
     }
 
     private boolean autoResurrection(IPlayerWW player) {
@@ -123,7 +123,7 @@ public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
         }
 
         WitchResurrectionEvent witchResurrectionEvent =
-                new WitchResurrectionEvent(getPlayerWW(),
+                new WitchResurrectionEvent(this.getPlayerWW(),
                         getPlayerWW());
         Bukkit.getPluginManager().callEvent(witchResurrectionEvent);
         setPower(false);

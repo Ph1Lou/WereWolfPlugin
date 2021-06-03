@@ -27,7 +27,7 @@ public class CutClean extends ListenerManager {
     @EventHandler
     private void onBlockBreak(BlockBreakEvent event) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = this.getGame();
         Block block = event.getBlock();
         Location loc = new Location(block.getWorld(), block.getLocation().getBlockX() + 0.5, block.getLocation().getBlockY() + 0.5, block.getLocation().getBlockZ() + 0.5);
 

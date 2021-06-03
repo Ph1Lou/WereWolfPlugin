@@ -6,7 +6,7 @@ import io.github.ph1lou.werewolfapi.ListenerManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.game.configs.LoneWolfEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
@@ -27,7 +27,7 @@ public class LoneWolf extends ListenerManager {
     @EventHandler
     public void designAloneWolf(WereWolfListEvent event) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = this.getGame();
 
         BukkitUtils.scheduleSyncDelayedTask(() -> {
             if (!game.isState(StateGame.END) && isRegister()) {
@@ -38,9 +38,9 @@ public class LoneWolf extends ListenerManager {
 
     private void designSolitary() {
 
-        WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = this.getGame();
 
-        List<IRole> roleWWs = game.getPlayerWW().stream()
+        List<IRole> roleWWs = game.getPlayersWW().stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .map(IPlayerWW::getRole)
                 .filter(IRole::isWereWolf)
@@ -68,9 +68,9 @@ public class LoneWolf extends ListenerManager {
     @EventHandler
     public void onDeath(FinalDeathEvent event) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = this.getGame();
 
-        if (game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey()) > 0) return;
+        if (game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST.getKey()) > 0) return;
 
         designSolitary();
     }

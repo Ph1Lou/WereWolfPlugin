@@ -40,9 +40,9 @@ public class DrunkenWereWolf extends ListenerManager {
             return;
         }
 
-        WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = this.getGame();
 
-        List<IPlayerWW> playerWWS = game.getPlayerWW().stream()
+        List<IPlayerWW> playerWWS = game.getPlayersWW().stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> playerWW.getRole().isWereWolf())
                 .collect(Collectors.toList());
@@ -60,7 +60,7 @@ public class DrunkenWereWolf extends ListenerManager {
             return;
         }
 
-        List<UUID> fakeListPool = game.getPlayerWW().stream()
+        List<UUID> fakeListPool = game.getPlayersWW().stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .map(IPlayerWW::getUUID)
                 .collect(Collectors.toList());
@@ -75,7 +75,7 @@ public class DrunkenWereWolf extends ListenerManager {
 
         this.fakeList.addAll(fakeListPool.subList(0, playerWWS.size()));
 
-        this.fakeList.addAll(game.getPlayerWW().stream()
+        this.fakeList.addAll(game.getPlayersWW().stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> playerWW.getRole().isKey(RolesBase.ALPHA_WEREWOLF.getKey()))
                 .map(IPlayerWW::getUUID)

@@ -3,8 +3,13 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enums.*;
+import io.github.ph1lou.werewolfapi.enums.Aura;
+import io.github.ph1lou.werewolfapi.enums.Camp;
+import io.github.ph1lou.werewolfapi.enums.ConfigBase;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import io.github.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import io.github.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
@@ -32,7 +37,7 @@ public class WolfDog extends RoleVillage implements ITransformed, IPower {
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(() -> power ?
+                .setDescription(power ?
                         game.translate("werewolf.role.wolf_dog.description")
                                 + '\n' + game.translate("werewolf.role.wolf_dog.description_2")
                         :
@@ -47,11 +52,11 @@ public class WolfDog extends RoleVillage implements ITransformed, IPower {
     @Override
     public void recoverPower() {
 
-        int timer = game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey());
+        int timer = game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST.getKey());
 
         if (timer > 0) {
             this.getPlayerWW().sendMessageWithKey("werewolf.role.wolf_dog.transform",
-                    Utils.conversion(game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey())));
+                    Utils.conversion(game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST.getKey())));
         }
     }
 
@@ -85,9 +90,9 @@ public class WolfDog extends RoleVillage implements ITransformed, IPower {
             return;
         }
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
-        getPlayerWW().sendMessage(String.format(event.getPrefix(event.getPlayerWW()), event.getMessage()));
+        event.sendMessage(this.getPlayerWW());
 
     }
 
@@ -95,18 +100,18 @@ public class WolfDog extends RoleVillage implements ITransformed, IPower {
     @EventHandler
     public void onNightForWereWolf(NightEvent event) {
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
         if (super.isWereWolf()) {
-            getPlayerWW().addPotionEffect(PotionEffectType.INCREASE_DAMAGE);
+            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"werewolf"));
         }
 
         if (transformed || !super.isWereWolf()) return;
 
 
-        if (!game.getConfig().isConfigActive(ConfigsBase.WEREWOLF_CHAT.getKey())) return;
+        if (!game.getConfig().isConfigActive(ConfigBase.WEREWOLF_CHAT.getKey())) return;
 
         openWereWolfChat();
 
@@ -116,7 +121,7 @@ public class WolfDog extends RoleVillage implements ITransformed, IPower {
     @EventHandler
     public void onChatSpeak(WereWolfCanSpeakInChatEvent event) {
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
@@ -131,7 +136,7 @@ public class WolfDog extends RoleVillage implements ITransformed, IPower {
 
         if (!getPlayerUUID().equals(event.getPlayerUUID())) return;
 
-        if (getPlayerWW().isState(StatePlayer.DEATH)) return;
+        if (this.getPlayerWW().isState(StatePlayer.DEATH)) return;
 
         event.setAppear(!this.transformed || super.isWereWolf());
     }
@@ -154,7 +159,7 @@ public class WolfDog extends RoleVillage implements ITransformed, IPower {
     public String getDisplayRole() {
 
         if (this.transformed) {
-            return this.game.getPlayerWW().stream()
+            return this.game.getPlayersWW().stream()
                     .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                     .map(IPlayerWW::getRole)
                     .filter(roles -> roles.isCamp(Camp.VILLAGER))
@@ -164,7 +169,7 @@ public class WolfDog extends RoleVillage implements ITransformed, IPower {
         }
 
 
-        return this.game.getPlayerWW().stream()
+        return this.game.getPlayersWW().stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .map(IPlayerWW::getRole)
                 .filter(role -> role.isDisplayCamp(Camp.WEREWOLF.getKey()))
@@ -174,7 +179,7 @@ public class WolfDog extends RoleVillage implements ITransformed, IPower {
     }
 
     @Override
-    public boolean getTransformed() {
+    public boolean isTransformed() {
         return this.transformed;
     }
 

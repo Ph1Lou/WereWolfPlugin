@@ -1,7 +1,7 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
 import com.google.common.collect.Sets;
-import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
@@ -15,21 +15,14 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandDetective implements ICommands {
+public class CommandDetective implements ICommand {
 
-
-    private final Main main;
-
-    public CommandDetective(Main main) {
-        this.main = main;
-    }
 
     @Override
-    public void execute(Player player, String[] args) {
+    public void execute(WereWolfAPI game, Player player, String[] args) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
 
         if (playerWW == null) return;
 
@@ -55,7 +48,7 @@ public class CommandDetective implements ICommands {
             }
 
             UUID uuid1 = playerArg.getUniqueId();
-            IPlayerWW playerWW1 = game.getPlayerWW(uuid1);
+            IPlayerWW playerWW1 = game.getPlayerWW(uuid1).orElse(null);
 
             if (playerWW1 == null || playerWW1.isState(StatePlayer.DEATH)) {
                 playerWW.sendMessageWithKey("werewolf.check.player_not_found");
@@ -81,8 +74,8 @@ public class CommandDetective implements ICommands {
         UUID uuid1 = player1.getUniqueId();
         UUID uuid2 = player2.getUniqueId();
 
-        IPlayerWW playerWW1 = game.getPlayerWW(uuid1);
-        IPlayerWW playerWW2 = game.getPlayerWW(uuid2);
+        IPlayerWW playerWW1 = game.getPlayerWW(uuid1).orElse(null);
+        IPlayerWW playerWW2 = game.getPlayerWW(uuid2).orElse(null);
 
         if (playerWW1 == null || playerWW2 == null) return;
 

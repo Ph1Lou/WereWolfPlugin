@@ -4,7 +4,7 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.ListenerManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
-import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import io.github.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
@@ -26,7 +26,7 @@ public class Putrefaction extends ListenerManager {
 
     @EventHandler
     public void onRepartition(RepartitionEvent event) {
-        WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = this.getGame();
 
         BukkitUtils.scheduleSyncDelayedTask(() -> {
             if (game.isState(StateGame.GAME)) {
@@ -49,7 +49,7 @@ public class Putrefaction extends ListenerManager {
                                 Bukkit.broadcastMessage(game.translate("werewolf.random_events.putrefaction.end"));
                             }
                         }
-                    }, game.getConfig().getTimerValue(TimersBase.DAY_DURATION.getKey()) * 40L);
+                    }, game.getConfig().getTimerValue(TimerBase.DAY_DURATION.getKey()) * 40L);
                 }
             }
         }, (long) (20 * 60 * 60 + game.getRandom().nextDouble() * 15 * 60 * 20));

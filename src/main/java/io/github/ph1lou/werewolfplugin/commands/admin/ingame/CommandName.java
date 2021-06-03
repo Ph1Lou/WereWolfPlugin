@@ -1,24 +1,15 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
-import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.entity.Player;
 
-public class CommandName implements ICommands {
+public class CommandName implements ICommand {
 
-
-    private final Main main;
-
-    public CommandName(Main main) {
-        this.main = main;
-    }
 
     @Override
-    public void execute(Player player, String[] args) {
-
-
-        WereWolfAPI game = main.getWereWolfAPI();
+    public void execute(WereWolfAPI game, Player player, String[] args) {
 
         if (args.length == 0) {
             player.sendMessage(game.translate("werewolf.check.parameters", 1));

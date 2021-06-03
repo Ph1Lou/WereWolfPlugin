@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.game;
 
 import io.github.ph1lou.werewolfapi.IMapManager;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -191,8 +192,7 @@ public class MapManager implements IMapManager {
         int x = (int) (Math.round(wb.getSize() / 3 * Math.cos(d) + world.getSpawnLocation().getX()));
         int z = (int) (Math.round(wb.getSize() / 3 * Math.sin(d) + world.getSpawnLocation().getZ()));
 
-        playerWW.removePotionEffect(PotionEffectType.WITHER);
-        playerWW.addPotionEffect(PotionEffectType.WITHER, 700, -1);
+        playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.WITHER, 700, 0,"respawn"));
         playerWW.teleport(new Location(world, x, world.getHighestBlockYAt(x, z) + 100, z));
     }
 

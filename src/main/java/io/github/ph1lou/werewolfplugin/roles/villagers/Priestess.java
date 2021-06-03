@@ -6,7 +6,7 @@ import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTag;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.UpdateCompositionEvent;
@@ -60,28 +60,28 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
 
         if (!event.getPlayerWW().getRole().isWereWolf()) return;
 
-        getPlayerWW().sendMessageWithKey("werewolf.role.priestess.werewolf_death");
+        this.getPlayerWW().sendMessageWithKey("werewolf.role.priestess.werewolf_death");
 
         this.affectedPlayer.remove(event.getPlayerWW());
 
-        getPlayerWW().addPlayerMaxHealth(2);
+        this.getPlayerWW().addPlayerMaxHealth(2);
     }
 
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
         setPower(true);
 
-        getPlayerWW().sendMessageWithKey(
+        this.getPlayerWW().sendMessageWithKey(
                 "werewolf.role.priestess.perform",
                 game.getConfig().getDistancePriestess(),
                 Utils.conversion(
                         game.getConfig()
-                                .getTimerValue(TimersBase.POWER_DURATION.getKey())));
+                                .getTimerValue(TimerBase.POWER_DURATION.getKey())));
     }
 
 
@@ -89,8 +89,8 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.priestess.description"))
-                .setItems(() -> game.translate("werewolf.role.priestess.items"))
+                .setDescription(game.translate("werewolf.role.priestess.description"))
+                .setItems(game.translate("werewolf.role.priestess.items"))
                 .build();
     }
 
@@ -120,17 +120,32 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
         IPlayerWW playerWW = event.getTargetPlayer();
 
         if (playerWW.getRole().isNeutral()) {
-            if (getPlayerWW().isState(StatePlayer.ALIVE) && game.getRandom().nextFloat() > 0.95) {
+            if (this.getPlayerWW().isState(StatePlayer.ALIVE) && game.getRandom().nextFloat() > 0.95) {
                 event.setRole("werewolf.role.priestess.magic");
             }
         } else if (game.getRandom().nextFloat() < 0.8) {
 
-            if (getPlayerWW().isState(StatePlayer.ALIVE) && playerWW.getRole().isWereWolf()) {
-                event.setRole("werewolf.role.priestess.magic");
+            if (this.getPlayerWW().isState(StatePlayer.ALIVE)) {
+                if(playerWW.getRole().isWereWolf()){
+                    event.setRole("werewolf.role.priestess.magic");
+                }
+
+            }
+            else{
+                if(!playerWW.getRole().isWereWolf()){
+                    event.setRole("werewolf.role.priestess.magic");
+                }
             }
         } else {
-            if (getPlayerWW().isState(StatePlayer.ALIVE) && !playerWW.getRole().isWereWolf()) {
-                event.setRole("werewolf.role.priestess.magic");
+            if (this.getPlayerWW().isState(StatePlayer.ALIVE)) {
+                if(!playerWW.getRole().isWereWolf()){
+                    event.setRole("werewolf.role.priestess.magic");
+                }
+            }
+            else{
+                if(playerWW.getRole().isWereWolf()){
+                    event.setRole("werewolf.role.priestess.magic");
+                }
             }
         }
     }
@@ -143,7 +158,7 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onUpdate(UpdatePlayerNameTag event) {
 
-        IPlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID());
+        IPlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID()).orElse(null);
 
         if (playerWW == null) {
             return;

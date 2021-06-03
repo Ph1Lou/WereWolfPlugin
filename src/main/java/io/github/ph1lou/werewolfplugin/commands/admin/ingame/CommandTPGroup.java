@@ -1,6 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
-import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
@@ -11,20 +11,11 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandTPGroup implements ICommands {
-
-
-    private final Main main;
-
-    public CommandTPGroup(Main main) {
-        this.main = main;
-    }
+public class CommandTPGroup implements ICommand {
 
     @Override
-    public void execute(Player player, String[] args) {
+    public void execute(WereWolfAPI game, Player player, String[] args) {
 
-
-        WereWolfAPI game = main.getWereWolfAPI();
         Player playerArg = Bukkit.getPlayer(args[0]);
         String playerName = player.getName();
 
@@ -33,7 +24,7 @@ public class CommandTPGroup implements ICommands {
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(argUUID);
+        IPlayerWW playerWW = game.getPlayerWW(argUUID).orElse(null);
 
         if (playerWW == null) {
             player.sendMessage(game.translate("werewolf.check.player_not_found"));
@@ -44,7 +35,7 @@ public class CommandTPGroup implements ICommands {
             return;
         }
         int d = 20;
-        int size = game.getScore().getGroup();
+        int size = game.getGroup();
         double r = Math.random() * 2 * Math.PI;
 
         Location location = playerArg.getLocation();
@@ -57,7 +48,7 @@ public class CommandTPGroup implements ICommands {
         }
         for (Player p : Bukkit.getOnlinePlayers()) {
             UUID uuid = p.getUniqueId();
-            IPlayerWW playerWW1 = game.getPlayerWW(uuid);
+            IPlayerWW playerWW1 = game.getPlayerWW(uuid).orElse(null);
 
             if (size > 0 && playerWW1 != null && playerWW1.isState(StatePlayer.ALIVE)) {
                 if (p.getWorld().equals(playerArg.getWorld())) {

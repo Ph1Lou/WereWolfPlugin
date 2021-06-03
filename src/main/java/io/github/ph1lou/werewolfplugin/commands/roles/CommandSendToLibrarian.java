@@ -1,34 +1,27 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
-import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.roles.librarian.LibrarianGiveBackEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.IStorage;
-import io.github.ph1lou.werewolfplugin.Main;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Librarian;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class CommandSendToLibrarian implements ICommands {
+public class CommandSendToLibrarian implements ICommand {
 
-    private final Main main;
-
-    public CommandSendToLibrarian(Main main) {
-        this.main = main;
-    }
 
     @Override
-    public void execute(Player player, String[] args) {
+    public void execute(WereWolfAPI game, Player player, String[] args) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
 
         if (playerWW == null) return;
 
@@ -45,11 +38,11 @@ public class CommandSendToLibrarian implements ICommands {
         for (String w : args) {
             sb2.append(w).append(" ");
         }
-        game.getPlayerWW()
+        game.getPlayersWW()
                 .stream()
                 .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
-                .filter(playerWW1 -> playerWW1.isKey(RolesBase.LIBRARIAN.getKey()))
                 .map(IPlayerWW::getRole)
+                .filter(role -> role.isKey(RolesBase.LIBRARIAN.getKey()))
                 .filter(roles -> ((IAffectedPlayers) roles).getAffectedPlayers().contains(playerWW))
                 .forEach(roles -> {
 
@@ -66,7 +59,7 @@ public class CommandSendToLibrarian implements ICommands {
                         return;
                     }
 
-                    ((IStorage) roles).addStorage(sb2.toString());
+                    ((Librarian) roles).addStorage(sb2.toString());
 
                     playerWW.sendMessageWithKey("werewolf.role.librarian.contribute");
                     find.set(true);

@@ -62,10 +62,10 @@ public class Cupid extends RoleVillage implements IAffectedPlayers, IPower {
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.cupid.description"))
-                .setItems(() -> game.translate("werewolf.role.cupid.items"))
-                .setEquipments(() -> game.translate("werewolf.role.cupid.extra", game.getConfig().getLimitPowerBow() + 1))
-                .addExtraLines(() -> game.translate("werewolf.role.cupid.lover",
+                .setDescription(game.translate("werewolf.role.cupid.description"))
+                .setItems(game.translate("werewolf.role.cupid.items"))
+                .setEquipments(game.translate("werewolf.role.cupid.extra", game.getConfig().getLimitPowerBow() + 1))
+                .addExtraLines(game.translate("werewolf.role.cupid.lover",
                         this.affectedPlayer.isEmpty() ?
                                 this.hasPower() ?
                                         game.translate("werewolf.role.cupid.lover_designation_message",
@@ -86,7 +86,7 @@ public class Cupid extends RoleVillage implements IAffectedPlayers, IPower {
     @EventHandler
     public void onAroundLover(AroundLover event) {
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (event.getPlayerWWS().contains(getPlayerWW())) {
             for (IPlayerWW playerWW : affectedPlayer) {

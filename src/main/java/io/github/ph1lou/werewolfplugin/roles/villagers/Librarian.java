@@ -7,7 +7,6 @@ import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.librarian.LibrarianDeathEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.ILimitedUse;
-import io.github.ph1lou.werewolfapi.rolesattributs.IStorage;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -16,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Librarian extends RoleVillage implements ILimitedUse, IAffectedPlayers, IStorage {
+public class Librarian extends RoleVillage implements ILimitedUse, IAffectedPlayers {
 
     private int use = 0;
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
@@ -61,8 +60,8 @@ public class Librarian extends RoleVillage implements ILimitedUse, IAffectedPlay
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.librarian.description", 3 - use))
-                .setItems(() -> game.translate("werewolf.role.librarian.items"))
+                .setDescription(game.translate("werewolf.role.librarian.description", 3 - use))
+                .setItems(game.translate("werewolf.role.librarian.items"))
                 .build();
     }
 
@@ -72,17 +71,14 @@ public class Librarian extends RoleVillage implements ILimitedUse, IAffectedPlay
 
     }
 
-    @Override
     public List<String> getStorage() {
         return this.storage;
     }
 
-    @Override
     public void addStorage(String message) {
         this.storage.add(message);
     }
 
-    @Override
     public void clearStorage() {
         this.storage.clear();
     }

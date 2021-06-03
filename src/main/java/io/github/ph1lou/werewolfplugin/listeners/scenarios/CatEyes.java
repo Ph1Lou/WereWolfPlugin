@@ -2,11 +2,14 @@ package io.github.ph1lou.werewolfplugin.listeners.scenarios;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.ListenerManager;
+import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
+import io.github.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.ResurrectionEvent;
 import io.github.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
+import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -17,7 +20,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Objects;
+import javax.xml.stream.events.StartElement;
+import java.util.Optional;
 
 public class CatEyes extends ListenerManager {
 
@@ -27,109 +31,32 @@ public class CatEyes extends ListenerManager {
     }
 
     @EventHandler
-    private void onJoinEvent(PlayerJoinEvent event) {
+    private void onStartEvent(StartEvent event) {
 
-        Player player = event.getPlayer();
-
-        player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-
-        player.addPotionEffect(
-                new PotionEffect(PotionEffectType.NIGHT_VISION,
-                        Integer.MAX_VALUE,
-                        0,
-                        false,
-                        false));
-    }
-
-    @EventHandler
-    public void onNight(NightEvent event) {
-        Bukkit.getOnlinePlayers().forEach(player -> {
-            player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-            player.addPotionEffect(
-                    new PotionEffect(PotionEffectType.NIGHT_VISION,
-                            Integer.MAX_VALUE,
-                            0,
-                            false,
-                            false));
+        this.getGame().getPlayersWW().forEach(playerWW -> {
+            playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION,"cat_eyes"));
         });
-    }
-
-    @EventHandler
-    public void onDay(DayEvent event) {
-        Bukkit.getOnlinePlayers().forEach(player -> {
-            player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-            player.addPotionEffect(
-                    new PotionEffect(PotionEffectType.NIGHT_VISION,
-                            Integer.MAX_VALUE,
-                            0,
-                            false,
-                            false));
-        });
-    }
-
-    @EventHandler
-    public void onRepartition(RepartitionEvent event) {
-        Bukkit.getOnlinePlayers().forEach(player -> {
-            player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-            player.addPotionEffect(
-                    new PotionEffect(PotionEffectType.NIGHT_VISION,
-                            Integer.MAX_VALUE,
-                            0,
-                            false,
-                            false));
-        });
-    }
-
-    @EventHandler
-    private void onResurrection(ResurrectionEvent event) {
-
-        Player player = Bukkit.getPlayer(event.getPlayerWW().getUUID());
-
-        if (player == null) return;
-
-        player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-        player.addPotionEffect(
-                new PotionEffect(PotionEffectType.NIGHT_VISION,
-                        Integer.MAX_VALUE,
-                        0,
-                        false,
-                        false));
     }
 
     @Override
     public void register(boolean isActive) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
 
         if (isActive) {
             if (!isRegister()) {
-
-                Bukkit.getOnlinePlayers()
-                        .forEach(player -> {
-                            player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-                            player.addPotionEffect(
-                                    new PotionEffect(PotionEffectType.NIGHT_VISION,
-                                            Integer.MAX_VALUE,
-                                            0,
-                                            false,
-                                            false));
-                        });
-                Bukkit.getPluginManager().registerEvents(this, (Plugin) main);
+                this.getGame().getPlayersWW().forEach(playerWW -> {
+                    playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION,"cat_eyes"));
+                });
+                BukkitUtils.registerEvents(this);
                 register = true;
             }
         } else if (isRegister()) {
             register = false;
             HandlerList.unregisterAll(this);
 
-            Bukkit.getOnlinePlayers()
-                    .forEach(player -> player.removePotionEffect(PotionEffectType.NIGHT_VISION));
-
-            Bukkit.getOnlinePlayers()
-                    .stream()
-                    .map(Entity::getUniqueId)
-                    .map(game::getPlayerWW)
-                    .filter(Objects::nonNull)
-                    .forEach(playerWW -> playerWW.getRole().recoverPotionEffect());
+            this.getGame().getPlayersWW().forEach(playerWW -> {
+                playerWW.addPotionModifier(PotionModifier.remove(PotionEffectType.NIGHT_VISION,"cat_eyes"));
+            });
         }
     }
 }

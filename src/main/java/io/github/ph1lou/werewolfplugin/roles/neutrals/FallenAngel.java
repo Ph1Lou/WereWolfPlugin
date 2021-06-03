@@ -13,6 +13,6 @@ public class FallenAngel extends Angel {
         super(api, playerWW, key);
         setChoice(AngelForm.FALLEN_ANGEL);
         Bukkit.getPluginManager().callEvent(
-                new AngelChoiceEvent(getPlayerWW(), AngelForm.FALLEN_ANGEL));
+                new AngelChoiceEvent(this.getPlayerWW(), AngelForm.FALLEN_ANGEL));
     }
 }

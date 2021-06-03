@@ -2,7 +2,9 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Day;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
@@ -51,11 +53,11 @@ public class LittleGirl extends RoleVillage implements IInvisible {
     @EventHandler
     public void onNight(NightEvent event) {
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        getPlayerWW().sendMessageWithKey(
+        this.getPlayerWW().sendMessageWithKey(
                 "werewolf.role.little_girl.remove_armor");
     }
 
@@ -67,11 +69,11 @@ public class LittleGirl extends RoleVillage implements IInvisible {
         }
         if (!this.isInvisible()) return;
 
-        this.getPlayerWW().removePotionEffect(PotionEffectType.INVISIBILITY);
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INVISIBILITY,"little_girl"));
 
         this.setInvisible(false);
         Bukkit.getPluginManager().callEvent(
-                new InvisibleEvent(getPlayerWW(),
+                new InvisibleEvent(this.getPlayerWW(),
                         false));
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
         this.getPlayerWW().sendMessageWithKey("werewolf.role.little_girl.visible");
@@ -133,7 +135,7 @@ public class LittleGirl extends RoleVillage implements IInvisible {
             return;
         }
 
-        game.getPlayerWW()
+        game.getPlayersWW()
                 .stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .map(IPlayerWW::getRole)
@@ -162,9 +164,9 @@ public class LittleGirl extends RoleVillage implements IInvisible {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.little_girl.description"))
-                .setItems(() -> game.translate("werewolf.role.little_girl.item"))
-                .setEffects(() -> game.translate("werewolf.role.little_girl.effect"))
+                .setDescription(game.translate("werewolf.role.little_girl.description"))
+                .setItems(game.translate("werewolf.role.little_girl.item"))
+                .setEffects(game.translate("werewolf.role.little_girl.effect"))
                 .build();
     }
 
@@ -198,7 +200,7 @@ public class LittleGirl extends RoleVillage implements IInvisible {
         super.recoverPotionEffect();
 
 
-        getPlayerWW().addPotionEffect(PotionEffectType.NIGHT_VISION);
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION,"little_girl"));
     }
 
     @EventHandler
@@ -250,9 +252,11 @@ public class LittleGirl extends RoleVillage implements IInvisible {
                 inventory.getItem(39) == null) {
             if (!this.isInvisible()) {
                 player.sendMessage(game.translate("werewolf.role.little_girl.remove_armor_perform"));
-                this.getPlayerWW().addPotionEffect(PotionEffectType.INVISIBILITY);
+                this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INVISIBILITY,"little_girl"));
+
                 if (getInfected()) {
-                    getPlayerWW().removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+                    this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"werewolf"));
+
                 }
                 this.setInvisible(true);
                 Bukkit.getPluginManager().callEvent(new InvisibleEvent(this.getPlayerWW(), true));
@@ -262,17 +266,12 @@ public class LittleGirl extends RoleVillage implements IInvisible {
             player.sendMessage(game.translate(
                     "werewolf.role.little_girl.visible"));
             if (this.getInfected()) {
-                player.addPotionEffect(new PotionEffect(
-                        PotionEffectType.INCREASE_DAMAGE,
-                        Integer.MAX_VALUE,
-                        -1,
-                        false,
-                        false));
+                this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"werewolf"));
             }
             player.removePotionEffect(PotionEffectType.INVISIBILITY);
             this.setInvisible(false);
             Bukkit.getPluginManager().callEvent(
-                    new InvisibleEvent(getPlayerWW(), false));
+                    new InvisibleEvent(this.getPlayerWW(), false));
             Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
         }
     }
@@ -282,13 +281,13 @@ public class LittleGirl extends RoleVillage implements IInvisible {
 
         if (event.isCancelled()) return;
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (isWereWolf()) { //pour éviter qu'elle ait le message en double
             return;
         }
 
-        this.getPlayerWW().sendMessage(String.format(event.getPrefix(this.getPlayerWW()), event.getMessage()));
+        event.sendMessage(this.getPlayerWW());
 
     }
 

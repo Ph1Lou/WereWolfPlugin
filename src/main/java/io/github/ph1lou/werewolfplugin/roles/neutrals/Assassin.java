@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.Day;
@@ -11,10 +12,8 @@ import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import io.github.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleNeutral;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
@@ -30,35 +29,23 @@ public class Assassin extends RoleNeutral {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onNight(NightEvent event) {
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
+        this.getPlayerWW()
+                .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"assassin"));
 
-        if (player == null) {
-            return;
-        }
-
-        player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
     }
 
     @EventHandler
     public void onDay(DayEvent event) {
 
+        this.getPlayerWW()
+                .addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"assassin"));
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
-        if (player == null) {
-            return;
-        }
-
-        getPlayerWW().addPotionEffect(PotionEffectType.INCREASE_DAMAGE);
     }
 
     @EventHandler
     public void onEnchantment(EnchantmentEvent event){
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -106,9 +93,9 @@ public class Assassin extends RoleNeutral {
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setEquipments(() -> game.translate("werewolf.role.assassin.limit"))
-                .setItems(() -> game.translate("werewolf.role.assassin.items"))
-                .setEffects(() -> game.translate("werewolf.role.assassin.effect"))
+                .setEquipments(game.translate("werewolf.role.assassin.limit"))
+                .setItems(game.translate("werewolf.role.assassin.items"))
+                .setEffects(game.translate("werewolf.role.assassin.effect"))
                 .build();
     }
 
@@ -126,7 +113,7 @@ public class Assassin extends RoleNeutral {
 
         if (game.isDay(Day.NIGHT)) return;
 
-        getPlayerWW().addPotionEffect(PotionEffectType.INCREASE_DAMAGE);
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"assassin"));
     }
 
     @Override

@@ -1,6 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
-import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.events.roles.sister.SisterSeeNameEvent;
@@ -10,22 +10,15 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandSisterSeeName implements ICommands {
+public class CommandSisterSeeName implements ICommand {
 
-
-    private final Main main;
-
-    public CommandSisterSeeName(Main main) {
-        this.main = main;
-    }
 
     @Override
-    public void execute(Player player, String[] args) {
+    public void execute(WereWolfAPI game, Player player, String[] args) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid);
-        IPlayerWW killerWW = args[0].equals("pve") ? null : game.getPlayerWW(UUID.fromString(args[0]));
+        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
+        IPlayerWW killerWW = args[0].equals("pve") ? null : game.getPlayerWW(UUID.fromString(args[0])).orElse(null);
         if (playerWW == null) return;
 
         IAffectedPlayers affectedPlayers = (IAffectedPlayers) playerWW.getRole();

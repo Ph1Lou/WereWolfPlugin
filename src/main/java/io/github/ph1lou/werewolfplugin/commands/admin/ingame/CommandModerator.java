@@ -1,8 +1,9 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
-import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
@@ -15,20 +16,14 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandModerator implements ICommands {
+public class CommandModerator implements ICommand {
 
-
-    private final Main main;
-
-    public CommandModerator(Main main) {
-        this.main = main;
-    }
 
     @Override
-    public void execute(Player player, String[] args) {
+    public void execute(WereWolfAPI game, Player player, String[] args) {
 
 
-        GameManager game = (GameManager) main.getWereWolfAPI();
+
         IModerationManager moderationManager = game.getModerationManager();
         Player moderator = Bukkit.getPlayer(args[0]);
 
@@ -38,14 +33,14 @@ public class CommandModerator implements ICommands {
         }
 
         UUID argUUID = moderator.getUniqueId();
-        IPlayerWW playerWW1 = game.getPlayerWW(argUUID);
+        IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (moderationManager.getModerators().contains(argUUID)) {
             Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.moderator.remove", moderator.getName()));
             moderationManager.getModerators().remove(argUUID);
 
             if (game.isState(StateGame.LOBBY)) {
-                game.finalJoin(moderator);
+                ((GameManager)game).finalJoin(moderator);
             }
             Bukkit.getPluginManager().callEvent(new ModeratorEvent(argUUID, false));
             Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(moderator));
@@ -59,8 +54,7 @@ public class CommandModerator implements ICommands {
             }
         } else {
             if (playerWW1 != null) {
-                game.getScore().removePlayerSize();
-                game.remove(argUUID);
+                ((GameManager)game).remove(argUUID);
             } else {
                 moderationManager.getQueue().remove(argUUID);
             }

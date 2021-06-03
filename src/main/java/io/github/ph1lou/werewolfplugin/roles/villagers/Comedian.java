@@ -2,11 +2,12 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.ComedianMask;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleWithLimitedSelectionDuration;
 import io.github.ph1lou.werewolfapi.utils.Utils;
@@ -48,9 +49,9 @@ public class Comedian extends RoleWithLimitedSelectionDuration {
     @EventHandler
     public void onDay(DayEvent event) {
 
-        getLastMask().ifPresent(comedianMask -> getPlayerWW().removePotionEffect(comedianMask.getPotionEffectType()));
+        getLastMask().ifPresent(comedianMask -> this.getPlayerWW().addPotionModifier(PotionModifier.remove(comedianMask.getPotionEffectType(),"comedian")));
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -58,10 +59,10 @@ public class Comedian extends RoleWithLimitedSelectionDuration {
 
         setPower(true);
 
-        getPlayerWW().sendMessageWithKey("werewolf.role.comedian.wear_mask_message",
+        this.getPlayerWW().sendMessageWithKey("werewolf.role.comedian.wear_mask_message",
                 Utils.conversion(
                         game.getConfig().getTimerValue(
-                                TimersBase.POWER_DURATION.getKey())));
+                                TimerBase.POWER_DURATION.getKey())));
 
     }
 
@@ -69,8 +70,8 @@ public class Comedian extends RoleWithLimitedSelectionDuration {
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.comedian.description"))
-                .addExtraLines(() -> game.translate("werewolf.role.comedian.masks",
+                .setDescription(game.translate("werewolf.role.comedian.description"))
+                .addExtraLines(game.translate("werewolf.role.comedian.masks",
                         comedianMasks.isEmpty() ?
                                 game.translate("werewolf.role.comedian.none") :
                                 comedianMasks.stream()

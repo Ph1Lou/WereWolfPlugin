@@ -46,7 +46,7 @@ public class FileUtils_ {
 
         if (file.exists()) {
             game.setConfig(Serializer.deserialize(loadContent(file)));
-            game.getScore().setRole(0);
+            game.setRoleInitialSize(0);
             game.getModerationManager().checkQueue();
             ((Configuration) game.getConfig()).addRegister((RegisterManager) main.getRegisterManager());
         }
@@ -56,7 +56,7 @@ public class FileUtils_ {
 
         for (RoleRegister roleRegister : register.getRolesRegister()) {
             String key = roleRegister.getKey();
-            game.getScore().setRole(game.getScore().getRole() + config.getRoleCount(key));
+            game.setRoleInitialSize(game.getRoleInitialSize() + config.getRoleCount(key));
         }
 
         save(file, Serializer.serialize(game.getConfig()));

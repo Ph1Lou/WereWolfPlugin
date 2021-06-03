@@ -17,6 +17,7 @@ import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.Main;
+import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -50,7 +51,7 @@ public class Roles implements InventoryProvider {
     @Override
     public void init(Player player, InventoryContents contents) {
         Main main = JavaPlugin.getPlugin(Main.class);
-        WereWolfAPI game = main.getWereWolfAPI();
+        GameManager game = (GameManager) main.getWereWolfAPI();
         IConfiguration config = game.getConfig();
 
         contents.set(0, 0, ClickableItem.of((
@@ -72,7 +73,7 @@ public class Roles implements InventoryProvider {
             config.setLoverCount(LoverType.LOVER.getKey(), 0);
             config.setLoverCount(LoverType.AMNESIAC_LOVER.getKey(), 0);
             config.setLoverCount(LoverType.CURSED_LOVER.getKey(), 0);
-            game.getScore().setRole(0);
+            game.setRoleInitialSize(0);
         }));
     }
 
@@ -80,7 +81,7 @@ public class Roles implements InventoryProvider {
     public void update(Player player, InventoryContents contents) {
 
         Main main=JavaPlugin.getPlugin(Main.class);
-        WereWolfAPI game = main.getWereWolfAPI();
+        GameManager game = (GameManager) main.getWereWolfAPI();
         IConfiguration config = game.getConfig();
         Pagination pagination = contents.pagination();
 
@@ -297,18 +298,18 @@ public class Roles implements InventoryProvider {
 
 
 
-    public void selectMinus(WereWolfAPI game, String key) {
+    public void selectMinus(GameManager game, String key) {
         IConfiguration config = game.getConfig();
         if (config.getRoleCount(key) > 0) {
-            game.getScore().setRole(game.getScore().getRole() - 1);
+            game.setRoleInitialSize(game.getRoleInitialSize() - 1);
             config.removeOneRole(key);
         }
     }
 
-    public void selectPlus(WereWolfAPI game, String key) {
+    public void selectPlus(GameManager game, String key) {
         IConfiguration config = game.getConfig();
         config.addOneRole(key);
-        game.getScore().setRole(game.getScore().getRole() + 1);
+        game.setRoleInitialSize(game.getRoleInitialSize() + 1);
     }
 
     private int count(GetWereWolfAPI main, Category category) {

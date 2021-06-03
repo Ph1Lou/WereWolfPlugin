@@ -1,6 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
-import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.GameMode;
@@ -8,19 +8,11 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandGamemode implements ICommands {
-
-
-    private final Main main;
-
-    public CommandGamemode(Main main) {
-        this.main = main;
-    }
+public class CommandGamemode implements ICommand {
 
     @Override
-    public void execute(Player player, String[] args) {
+    public void execute(WereWolfAPI game, Player player, String[] args) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
         try {
             int i = Integer.parseInt(args[0]);

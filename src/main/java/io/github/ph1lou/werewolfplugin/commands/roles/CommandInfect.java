@@ -1,6 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
-import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
@@ -16,22 +16,13 @@ import org.bukkit.entity.Player;
 import java.util.Optional;
 import java.util.UUID;
 
-public class CommandInfect implements ICommands {
-
-
-    private final Main main;
-
-    public CommandInfect(Main main) {
-        this.main = main;
-    }
+public class CommandInfect implements ICommand {
 
     @Override
-    public void execute(Player player, String[] args) {
+    public void execute(WereWolfAPI game, Player player, String[] args) {
 
-
-        WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
 
         if (playerWW == null) return;
 
@@ -42,7 +33,7 @@ public class CommandInfect implements ICommands {
             return;
         }
         UUID argUUID = UUID.fromString(args[0]);
-        IPlayerWW playerWW1 = game.getPlayerWW(argUUID);
+        IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (argUUID.equals(uuid)) {
             playerWW.sendMessageWithKey("werewolf.check.not_yourself");
@@ -66,7 +57,7 @@ public class CommandInfect implements ICommands {
                 !killerWW.get()
                         .getRole()
                         .isWereWolf() ||
-                game.getScore().getTimer() - playerWW1.getDeathTime() > 7) {
+                game.getTimer() - playerWW1.getDeathTime() > 7) {
 
             playerWW.sendMessageWithKey("werewolf.role.infect_father_of_the_wolves.player_cannot_be_infected");
             return;

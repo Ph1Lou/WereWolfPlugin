@@ -1,6 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
-import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
@@ -14,21 +14,13 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandWitch implements ICommands {
-
-
-    private final Main main;
-
-    public CommandWitch(Main main) {
-        this.main = main;
-    }
+public class CommandWitch implements ICommand {
 
     @Override
-    public void execute(Player player, String[] args) {
+    public void execute(WereWolfAPI game, Player player, String[] args) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
 
         if (playerWW == null) return;
 
@@ -40,7 +32,7 @@ public class CommandWitch implements ICommands {
             return;
         }
         UUID argUUID = UUID.fromString(args[0]);
-        IPlayerWW playerWW1 = game.getPlayerWW(argUUID);
+        IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (playerWW1 == null) {
             playerWW.sendMessageWithKey("werewolf.check.player_not_found");
@@ -57,7 +49,7 @@ public class CommandWitch implements ICommands {
             return;
         }
 
-        if (game.getScore().getTimer() - playerWW1.getDeathTime() < 7) {
+        if (game.getTimer() - playerWW1.getDeathTime() < 7) {
             return;
         }
 

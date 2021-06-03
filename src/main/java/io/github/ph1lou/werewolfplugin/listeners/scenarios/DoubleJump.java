@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.listeners.scenarios;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.ListenerManager;
+import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -64,7 +65,7 @@ public class DoubleJump extends ListenerManager {
         player.setVelocity(player.getLocation().getDirection().multiply(vel).setY(1));
 
         this.jumpTime.put(uuid, System.currentTimeMillis());
-        Bukkit.getScheduler().runTaskLater((Plugin) main, () -> {
+        BukkitUtils.scheduleSyncDelayedTask(() -> {
             if (player.isFlying()) {
                 player.setAllowFlight(false);
             }

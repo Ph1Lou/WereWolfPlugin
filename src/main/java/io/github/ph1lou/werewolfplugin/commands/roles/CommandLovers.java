@@ -1,6 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
-import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -17,22 +17,14 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class CommandLovers implements ICommands {
-
-
-    private final Main main;
-
-    public CommandLovers(Main main) {
-        this.main = main;
-    }
+public class CommandLovers implements ICommand {
 
     @Override
-    public void execute(Player player, String[] args) {
+    public void execute(WereWolfAPI game, Player player, String[] args) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
-        String playername = player.getName();
+        String playerName = player.getName();
         UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
 
         if (playerWW == null) return;
 
@@ -82,7 +74,7 @@ public class CommandLovers implements ICommands {
                                             if (!donEvent.isCancelled()) {
                                                 playerCouple.setHealth(playerCouple.getHealth() + don);
                                                 temp.updateAndGet(v -> v + don);
-                                                playerCouple.sendMessage(game.translate("werewolf.role.lover.received", heart, playername));
+                                                playerCouple.sendMessage(game.translate("werewolf.role.lover.received", heart, playerName));
                                                 playerWW.sendMessageWithKey("werewolf.role.lover.complete", Sound.PORTAL, heart, playerCouple.getName());
                                             } else {
                                                 playerWW.sendMessageWithKey("werewolf.check.cancel");
@@ -97,7 +89,7 @@ public class CommandLovers implements ICommands {
                     });
         }
         else {
-            if (args[1].equals(playername)) {
+            if (args[1].equals(playerName)) {
                 playerWW.sendMessageWithKey("werewolf.check.not_yourself");
                 return;
             }
@@ -109,7 +101,7 @@ public class CommandLovers implements ICommands {
             }
 
             UUID argUUID = playerCouple.getUniqueId();
-            IPlayerWW playerWW1 = game.getPlayerWW(argUUID);
+            IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
             if (playerWW1 == null) return;
 
@@ -137,7 +129,7 @@ public class CommandLovers implements ICommands {
                         if (!donEvent.isCancelled()) {
                             playerCouple.setHealth(playerCouple.getHealth() + don);
                             player.setHealth(player.getHealth() - don);
-                            playerWW1.sendMessageWithKey("werewolf.role.lover.received", heart, playername);
+                            playerWW1.sendMessageWithKey("werewolf.role.lover.received", heart, playerName);
                             playerWW.sendMessageWithKey("werewolf.role.lover.complete", Sound.PORTAL, heart, playerCouple.getName());
                         } else {
                             playerWW.sendMessageWithKey("werewolf.check.cancel");

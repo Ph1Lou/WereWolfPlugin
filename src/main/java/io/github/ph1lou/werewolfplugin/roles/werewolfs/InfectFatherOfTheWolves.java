@@ -65,10 +65,10 @@ public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPl
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.infect_father_of_the_wolves.description"))
-                .setEffects(() -> game.translate("werewolf.description.werewolf"))
-                .setPower(() -> game.translate(power ? "werewolf.role.infect_father_of_the_wolves.power_available" : "werewolf.role.infect_father_of_the_wolves.power_not_available"))
-                .setItems(() -> game.translate("werewolf.role.infect_father_of_the_wolves.items"))
+                .setDescription(game.translate("werewolf.role.infect_father_of_the_wolves.description"))
+                .setEffects(game.translate("werewolf.description.werewolf"))
+                .setPower(game.translate(power ? "werewolf.role.infect_father_of_the_wolves.power_available" : "werewolf.role.infect_father_of_the_wolves.power_not_available"))
+                .setItems(game.translate("werewolf.role.infect_father_of_the_wolves.items"))
                 .build();
     }
 

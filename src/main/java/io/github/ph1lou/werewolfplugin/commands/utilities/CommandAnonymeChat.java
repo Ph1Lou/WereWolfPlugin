@@ -1,6 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.utilities;
 
-import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -13,22 +13,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class CommandAnonymeChat implements ICommands {
+public class CommandAnonymeChat implements ICommand {
 
-
-    private final Main main;
     private final int cesar = (int) (Math.random() * 26) + 1;
     private final Map<String, UUID> players = new HashMap<>();
     private final char[] alphabet1 = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '_'};
 
-    public CommandAnonymeChat(Main main) {
-        this.main = main;
-    }
-
     @Override
-    public void execute(Player player, String[] args) {
+    public void execute(WereWolfAPI game, Player player, String[] args) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
         StringBuilder sb = new StringBuilder();
 
 

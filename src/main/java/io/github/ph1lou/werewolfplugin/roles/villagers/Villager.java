@@ -26,14 +26,14 @@ public class Villager extends RoleVillage {
         if (!game.isState(StateGame.GAME)) return;
         villagerKit = VillagerKit.values()[(int) Math.floor(game.getRandom().nextFloat() * VillagerKit.values().length)];
         if (game.getConfig().isTrollSV()) return;
-        Bukkit.getPluginManager().callEvent(new VillagerKitEvent(getPlayerWW(), villagerKit.getKey()));
+        Bukkit.getPluginManager().callEvent(new VillagerKitEvent(this.getPlayerWW(), villagerKit.getKey()));
     }
 
 
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setEquipments(() -> game.translate(villagerKit.getDescription()))
+                .setEquipments(game.translate(villagerKit.getDescription()))
                 .build();
     }
 
@@ -47,29 +47,29 @@ public class Villager extends RoleVillage {
             case GOLEM:
                 ItemStack book = new ItemBuilder(UniversalMaterial.ENCHANTED_BOOK.getStack())
                         .addEnchant(Enchantment.DURABILITY, 3).build();
-                getPlayerWW().addItem(UniversalMaterial.IRON_INGOT.getStack(15));
-                getPlayerWW().addItem(book);
-                getPlayerWW().addItem(book);
-                getPlayerWW().addItem(book);
+                this.getPlayerWW().addItem(UniversalMaterial.IRON_INGOT.getStack(15));
+                this.getPlayerWW().addItem(book);
+                this.getPlayerWW().addItem(book);
+                this.getPlayerWW().addItem(book);
                 break;
             case MINER:
-                getPlayerWW().addItem(new ItemBuilder(UniversalMaterial.DIAMOND_PICKAXE.getStack())
+                this.getPlayerWW().addItem(new ItemBuilder(UniversalMaterial.DIAMOND_PICKAXE.getStack())
                         .addEnchant(Enchantment.DIG_SPEED, 2).build());
                 break;
             case ARCHER:
-                getPlayerWW().addItem(UniversalMaterial.ARROW.getStack(64));
-                getPlayerWW().addItem(UniversalMaterial.STRING.getStack(6));
+                this.getPlayerWW().addItem(UniversalMaterial.ARROW.getStack(64));
+                this.getPlayerWW().addItem(UniversalMaterial.STRING.getStack(6));
                 break;
             case PRIEST:
-                getPlayerWW().addItem(UniversalMaterial.GOLDEN_APPLE.getStack(3));
+                this.getPlayerWW().addItem(UniversalMaterial.GOLDEN_APPLE.getStack(3));
                 break;
             case BLACK_SMITH:
-                getPlayerWW().addItem(UniversalMaterial.ANVIL.getStack());
-                getPlayerWW().addItem(UniversalMaterial.EXPERIENCE_BOTTLE.getStack(10));
+                this.getPlayerWW().addItem(UniversalMaterial.ANVIL.getStack());
+                this.getPlayerWW().addItem(UniversalMaterial.EXPERIENCE_BOTTLE.getStack(10));
                 break;
             case BOOK_SELLER:
-                getPlayerWW().addItem(UniversalMaterial.BOOK.getStack(8));
-                getPlayerWW().addItem(UniversalMaterial.EXPERIENCE_BOTTLE.getStack(10));
+                this.getPlayerWW().addItem(UniversalMaterial.BOOK.getStack(8));
+                this.getPlayerWW().addItem(UniversalMaterial.EXPERIENCE_BOTTLE.getStack(10));
                 break;
             default:
                 break;

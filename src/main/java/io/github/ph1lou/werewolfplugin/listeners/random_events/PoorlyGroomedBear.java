@@ -21,7 +21,7 @@ public class PoorlyGroomedBear extends ListenerManager {
     @EventHandler(priority = EventPriority.HIGH)
     public void onGrowl(GrowlEvent event) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = this.getGame();
 
         int modification = game.getRandom().nextFloat() < 0.5 ? 1 : -1;
 
@@ -38,7 +38,7 @@ public class PoorlyGroomedBear extends ListenerManager {
             Optional<IPlayerWW> removedPlayer = event.getPlayerWWS().stream().findFirst();
             removedPlayer.ifPresent(playerWW -> event.getPlayerWWS().remove(playerWW));
         } else {
-            Optional<? extends IPlayerWW> addedPlayer = game.getPlayerWW().stream()
+            Optional<? extends IPlayerWW> addedPlayer = game.getPlayersWW().stream()
                     .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                     .filter(playerWW -> !event.getPlayerWWS().contains(playerWW))
                     .findFirst();

@@ -1,9 +1,9 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
-import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enums.ConfigBase;
 import io.github.ph1lou.werewolfapi.events.werewolf.WereWolfCanSpeakInChatEvent;
 import io.github.ph1lou.werewolfapi.events.werewolf.WereWolfChatEvent;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -14,15 +14,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class CommandWereWolfChat implements ICommands {
+public class CommandWereWolfChat implements ICommand {
 
     private static final Map<UUID, Integer> messageSend = new HashMap<>();
     private static boolean enable = false;
-    private final Main main;
-
-    public CommandWereWolfChat(Main main) {
-        this.main = main;
-    }
 
     public static void disable() {
         enable = false;
@@ -34,15 +29,14 @@ public class CommandWereWolfChat implements ICommands {
     }
 
     @Override
-    public void execute(Player player, String[] args) {
+    public void execute(WereWolfAPI game, Player player, String[] args) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
 
         if (playerWW == null) return;
 
-        if (!game.getConfig().isConfigActive(ConfigsBase.WEREWOLF_CHAT.getKey())) {
+        if (!game.getConfig().isConfigActive(ConfigBase.WEREWOLF_CHAT.getKey())) {
             playerWW.sendMessageWithKey("werewolf.commands.admin.ww_chat.disable");
             return;
         }
@@ -63,7 +57,7 @@ public class CommandWereWolfChat implements ICommands {
                         sb.append(w).append(" ");
                     }
 
-                    WereWolfChatEvent wereWolfChatEvent = new WereWolfChatEvent(game, playerWW, sb.toString());
+                    WereWolfChatEvent wereWolfChatEvent = new WereWolfChatEvent(playerWW, sb.toString());
                     Bukkit.getPluginManager().callEvent(wereWolfChatEvent);
                 } else {
                     playerWW.sendMessageWithKey("werewolf.commands.admin.ww_chat.timer");

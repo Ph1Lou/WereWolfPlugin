@@ -32,7 +32,7 @@ public class Exposed extends ListenerManager {
 
     @EventHandler
     public void onRepartition(RepartitionEvent event) {
-        WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = this.getGame();
 
         BukkitUtils.scheduleSyncDelayedTask(() -> {
             if (game.isState(StateGame.GAME)) {
@@ -60,9 +60,9 @@ public class Exposed extends ListenerManager {
     @Nullable
     private IPlayerWW announce() {
 
-        WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = this.getGame();
 
-        List<IPlayerWW> playerWWS = game.getPlayerWW().stream()
+        List<IPlayerWW> playerWWS = game.getPlayersWW().stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> !playerWW.equals(temp))
                 .collect(Collectors.toList());
@@ -71,7 +71,7 @@ public class Exposed extends ListenerManager {
 
         IPlayerWW playerWW = playerWWS.get((int) Math.floor(game.getRandom().nextDouble() * playerWWS.size()));
 
-        List<IRole> role1List = game.getPlayerWW().stream()
+        List<IRole> role1List = game.getPlayersWW().stream()
                 .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                 .filter(playerWW1 -> !playerWW.equals(playerWW1))
                 .map(IPlayerWW::getRole)
@@ -82,7 +82,7 @@ public class Exposed extends ListenerManager {
 
         IRole role1 = role1List.get((int) Math.floor(game.getRandom().nextDouble() * role1List.size()));
 
-        List<IRole> role2List = game.getPlayerWW().stream()
+        List<IRole> role2List = game.getPlayersWW().stream()
                 .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                 .filter(playerWW1 -> !playerWW.equals(playerWW1))
                 .map(IPlayerWW::getRole)

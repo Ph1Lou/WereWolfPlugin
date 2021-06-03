@@ -6,13 +6,12 @@ import io.github.ph1lou.werewolfapi.ListenerManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
 import io.github.ph1lou.werewolfapi.events.random_events.SwapEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
 import java.util.List;
@@ -26,9 +25,9 @@ public class Swap extends ListenerManager {
 
     @EventHandler
     public void onRepartition(RepartitionEvent event) {
-        WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = this.getGame();
 
-        if (game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey()) <= 1) {
+        if (game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST.getKey()) <= 1) {
             return;
         }
 
@@ -36,7 +35,7 @@ public class Swap extends ListenerManager {
             if (game.isState(StateGame.GAME)) {
                 if (isRegister()) {
 
-                    List<IPlayerWW> playerWWS = game.getPlayerWW().stream()
+                    List<IPlayerWW> playerWWS = game.getPlayersWW().stream()
                             .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                             .collect(Collectors.toList());
 
@@ -44,7 +43,7 @@ public class Swap extends ListenerManager {
 
                     IPlayerWW playerWW1 = playerWWS.get((int) Math.floor(game.getRandom().nextDouble() * playerWWS.size()));
 
-                    playerWWS = game.getPlayerWW().stream()
+                    playerWWS = game.getPlayersWW().stream()
                             .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                             .filter(playerWW -> !playerWW.equals(playerWW1))
                             .collect(Collectors.toList());
@@ -66,17 +65,8 @@ public class Swap extends ListenerManager {
                     register(false);
                     playerWW1.addPlayerMaxHealth(20 - playerWW1.getMaxHealth());
                     playerWW2.addPlayerMaxHealth(20 - playerWW2.getMaxHealth());
-                    playerWW1.getPotionEffects().forEach(playerWW1::removePotionEffect);
-                    playerWW2.getPotionEffects().forEach(playerWW1::removePotionEffect);
-                    Player player1 = Bukkit.getPlayer(playerWW1.getUUID());
-                    Player player2 = Bukkit.getPlayer(playerWW2.getUUID());
-                    if (player1 != null) {
-                        player1.getActivePotionEffects().forEach(potionEffect -> player1.removePotionEffect(potionEffect.getType()));
-                    }
-                    if (player2 != null) {
-                        player2.getActivePotionEffects().forEach(potionEffect -> player2.removePotionEffect(potionEffect.getType()));
-                    }
-
+                    playerWW1.clearPotionEffects();
+                    playerWW2.clearPotionEffects();
                     playerWW1.sendMessageWithKey("werewolf.random_events.swap.concerned");
                     playerWW2.sendMessageWithKey("werewolf.random_events.swap.concerned");
                     roles1.recoverPower();
@@ -85,7 +75,7 @@ public class Swap extends ListenerManager {
                     roles2.recoverPotionEffect();
                 }
             }
-        }, (long) (game.getRandom().nextDouble() * game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey()) * 20));
+        }, (long) (game.getRandom().nextDouble() * game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST.getKey()) * 20));
     }
 
 }

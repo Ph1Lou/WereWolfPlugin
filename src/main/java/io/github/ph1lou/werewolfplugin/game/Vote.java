@@ -4,9 +4,9 @@ package io.github.ph1lou.werewolfplugin.game;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.IVoteManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enums.ConfigBase;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
-import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.enums.VoteStatus;
 import io.github.ph1lou.werewolfapi.events.game.vote.VoteBeginEvent;
 import io.github.ph1lou.werewolfapi.events.game.vote.VoteEndEvent;
@@ -46,9 +46,9 @@ public class Vote implements Listener, IVoteManager {
 
 		if (voter == null) return;
 
-		if (game.getConfig().getTimerValue(TimersBase.VOTE_BEGIN.getKey()) > 0) {
+		if (game.getConfig().getTimerValue(TimerBase.VOTE_BEGIN.getKey()) > 0) {
 			voterWW.sendMessageWithKey("werewolf.vote.vote_not_yet_activated");
-		} else if (!game.getConfig().isConfigActive(ConfigsBase.VOTE.getKey())) {
+		} else if (!game.getConfig().isConfigActive(ConfigBase.VOTE.getKey())) {
 			voterWW.sendMessageWithKey("werewolf.vote.vote_disable");
 		} else if (!currentStatus.equals(VoteStatus.IN_PROGRESS)) {
 			voterWW.sendMessageWithKey("werewolf.vote.not_vote_time");

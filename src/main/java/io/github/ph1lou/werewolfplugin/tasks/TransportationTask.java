@@ -3,7 +3,7 @@ package io.github.ph1lou.werewolfplugin.tasks;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
-import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
@@ -56,7 +56,7 @@ public class TransportationTask implements Listener {
                 return;
             }
 
-            if (i.get() == this.game.getScore().getPlayerSize()) {
+            if (i.get() == this.game.getPlayerSize()) {
                 kill(0);
                 step1();
 
@@ -81,7 +81,7 @@ public class TransportationTask implements Listener {
                 return;
             }
 
-            if (i.get() == this.game.getScore().getPlayerSize()) {
+            if (i.get() == this.game.getPlayerSize()) {
                 kill(1);
                 HandlerList.unregisterAll(this);
                 step2();
@@ -145,10 +145,10 @@ public class TransportationTask implements Listener {
 
         for (Player player : Bukkit.getOnlinePlayers()) {
 
-            if (this.game.getPlayerWW(player.getUniqueId()) != null) {
+            if (this.game.getPlayerWW(player.getUniqueId()).isPresent()) {
                 player.setGameMode(GameMode.SURVIVAL);
                 player.sendMessage(this.game.translate("werewolf.announcement.start.message",
-                        Utils.conversion(this.game.getConfig().getTimerValue(TimersBase.INVULNERABILITY.getKey()))));
+                        Utils.conversion(this.game.getConfig().getTimerValue(TimerBase.INVULNERABILITY.getKey()))));
             } else {
                 player.teleport(this.game.getMapManager().getWorld().getSpawnLocation());
                 player.setGameMode(GameMode.SPECTATOR);
@@ -174,9 +174,9 @@ public class TransportationTask implements Listener {
         Bukkit.getOnlinePlayers()
                 .forEach(Sound.ORB_PICKUP::play);
 
-        actionBar = this.game.translate("werewolf.action_bar.tp", i + 1, this.game.getScore().getPlayerSize());
+        actionBar = this.game.translate("werewolf.action_bar.tp", i + 1, this.game.getPlayerSize());
 
-        IPlayerWW playerWW = (IPlayerWW) this.game.getPlayerWW().toArray()[i];
+        IPlayerWW playerWW = (IPlayerWW) this.game.getPlayersWW().toArray()[i];
         playerWW.setSpawn(spawns.get(i));
         Player player = Bukkit.getPlayer(playerWW.getUUID());
 
@@ -215,9 +215,9 @@ public class TransportationTask implements Listener {
         }
 
         actionBar = this.game.translate("werewolf.action_bar.create_tp_point", i + 1,
-                this.game.getScore().getPlayerSize());
+                this.game.getPlayerSize());
 
-        double a = i * 2 * Math.PI / this.game.getScore().getPlayerSize();
+        double a = i * 2 * Math.PI / this.game.getPlayerSize();
         int x = (int) (Math.round(wb.getSize() / 3 * Math.cos(a) + world.getSpawnLocation().getX()));
         int z = (int) (Math.round(wb.getSize() / 3 * Math.sin(a) + world.getSpawnLocation().getZ()));
         Location spawn = new Location(world, x, world.getHighestBlockYAt(x, z) + 100, z);

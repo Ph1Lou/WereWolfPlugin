@@ -25,22 +25,24 @@ public class SiameseTwin extends RoleVillage {
     @Override
     public @NotNull String getDescription() {
 
+        String extraLines;
+
+        if (game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST.getKey()) > 0) {
+            extraLines= game.translate("werewolf.role.siamese_twin.siamese_twin_list", Utils.conversion(game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST.getKey())));
+        } else {
+            extraLines=  game.translate("werewolf.role.siamese_twin.siamese_twin_list", this.getBrother());
+        }
+
         return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.siamese_twin.description"))
-                .setPower(() -> game.translate("werewolf.role.siamese_twin.power"))
-                .addExtraLines(() -> {
-                    if (game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey()) > 0) {
-                        return game.translate("werewolf.role.siamese_twin.siamese_twin_list", Utils.conversion(game.getConfig().getTimerValue(TimersBase.WEREWOLF_LIST.getKey())));
-                    } else {
-                        return game.translate("werewolf.role.siamese_twin.siamese_twin_list", this.getBrother());
-                    }
-                })
+                .setDescription(game.translate("werewolf.role.siamese_twin.description"))
+                .setPower(game.translate("werewolf.role.siamese_twin.power"))
+                .addExtraLines(extraLines)
                 .build();
     }
 
     @EventHandler
     public void onWerewolfList(WereWolfListEvent event) {
-        getPlayerWW().sendMessageWithKey("werewolf.role.siamese_twin.siamese_twin_list", this.getBrother());
+        this.getPlayerWW().sendMessageWithKey("werewolf.role.siamese_twin.siamese_twin_list", this.getBrother());
     }
 
 
@@ -48,11 +50,11 @@ public class SiameseTwin extends RoleVillage {
 
         StringBuilder list = new StringBuilder();
 
-        game.getPlayerWW()
+        game.getPlayersWW()
                 .stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> !playerWW.getRole().equals(this))
-                .filter(playerWW -> playerWW.isKey(
+                .filter(playerWW -> playerWW.getRole().isKey(
                         RolesBase.SIAMESE_TWIN.getKey()))
                 .forEach(playerWW -> list.append(playerWW.getName()).append(" "));
 
@@ -62,7 +64,7 @@ public class SiameseTwin extends RoleVillage {
 
     @Override
     public void recoverPower() {
-        getPlayerWW().addPlayerMaxHealth(4);
+        this.getPlayerWW().addPlayerMaxHealth(4);
     }
 
     @Override
@@ -74,7 +76,7 @@ public class SiameseTwin extends RoleVillage {
     @Override
     public void second() {
 
-        double health = game.getPlayerWW()
+        double health = game.getPlayersWW()
                 .stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .map(IPlayerWW::getRole)
@@ -87,7 +89,7 @@ public class SiameseTwin extends RoleVillage {
                 .average()
                 .orElse(0);
 
-        game.getPlayerWW()
+        game.getPlayersWW()
                 .stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .map(IPlayerWW::getRole)

@@ -48,13 +48,13 @@ public class LootBox extends ListenerManager {
     @EventHandler
     public void onVillagerDeath(FinalDeathEvent event) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = this.getGame();
 
         if (eventActive) return;
 
         if (!event.getPlayerWW().getRole().isCamp(Camp.VILLAGER)) return;
 
-        if (game.getScore().getPlayerSize() > 16) return;
+        if (game.getPlayerSize() > 16) return;
 
         if (game.getRandom().nextFloat() * 5 > 3) return;
 
@@ -64,7 +64,7 @@ public class LootBox extends ListenerManager {
 
     private void createTarget(Location location, Boolean active, String name) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = this.getGame();
         Location location2 = location.clone();
         location2.setY(location2.getY() + 1);
 
@@ -131,11 +131,11 @@ public class LootBox extends ListenerManager {
 
     public void launchEvent(String deathName) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = this.getGame();
         World world = game.getMapManager().getWorld();
         WorldBorder wb = world.getWorldBorder();
 
-        List<IPlayerWW> playerWWS = game.getPlayerWW().stream()
+        List<IPlayerWW> playerWWS = game.getPlayersWW().stream()
                 .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                 .filter(playerWW1 -> !playerWW1.getRole().isCamp(Camp.VILLAGER))
                 .collect(Collectors.toList());
@@ -145,7 +145,7 @@ public class LootBox extends ListenerManager {
         IPlayerWW playerWW = playerWWS.get((int) Math.floor(
                 game.getRandom().nextFloat() * playerWWS.size()));
 
-        int nbTarget = game.getScore().getPlayerSize() / 3;
+        int nbTarget = game.getPlayerSize() / 3;
         if (nbTarget < 2) {
             nbTarget = 2;
         }
@@ -179,13 +179,13 @@ public class LootBox extends ListenerManager {
     @EventHandler
     private void catchChestOpen(InventoryOpenEvent event) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = this.getGame();
 
         if (!(event.getPlayer() instanceof Player)) {
             return;
         }
         Player player = (Player) event.getPlayer();
-        IPlayerWW playerWW = game.getPlayerWW(player.getUniqueId());
+        IPlayerWW playerWW = game.getPlayerWW(player.getUniqueId()).orElse(null);
 
         if (playerWW == null) return;
 

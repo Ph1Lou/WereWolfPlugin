@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 
 public class Amnesic extends ListenerManager {
 
-    List<UUID> list = new ArrayList<>();
+    final List<UUID> list = new ArrayList<>();
     private IPlayerWW temp;
 
     public Amnesic(GetWereWolfAPI main) {
@@ -44,9 +44,9 @@ public class Amnesic extends ListenerManager {
             return;
         }
 
-        WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = this.getGame();
 
-        List<IPlayerWW> playerWWS = game.getPlayerWW().stream()
+        List<IPlayerWW> playerWWS = game.getPlayersWW().stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> !playerWW.getRole().isWereWolf())
                 .collect(Collectors.toList());
@@ -77,7 +77,7 @@ public class Amnesic extends ListenerManager {
             return;
         }
 
-        WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = this.getGame();
 
         if (!(event.getEntity() instanceof Player)) {
             return;
@@ -91,7 +91,7 @@ public class Amnesic extends ListenerManager {
             return;
         }
 
-        IPlayerWW playerWW = game.getPlayerWW(event.getDamager().getUniqueId());
+        IPlayerWW playerWW = game.getPlayerWW(event.getDamager().getUniqueId()).orElse(null);
 
         if (playerWW == null) {
             return;
@@ -126,9 +126,9 @@ public class Amnesic extends ListenerManager {
 
         if (this.temp == null) return;
 
-        WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = this.getGame();
 
-        List<UUID> playerWWS = game.getPlayerWW().stream()
+        List<UUID> playerWWS = game.getPlayersWW().stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> playerWW.getRole().isWereWolf())
                 .map(IPlayerWW::getUUID)
@@ -140,7 +140,7 @@ public class Amnesic extends ListenerManager {
         Collections.shuffle(playerWWS, game.getRandom());
 
         UUID uuid = playerWWS.get(0);
-        IPlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
 
         if (playerWW == null) return;
 

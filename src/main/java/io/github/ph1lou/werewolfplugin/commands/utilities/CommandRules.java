@@ -1,26 +1,17 @@
 package io.github.ph1lou.werewolfplugin.commands.utilities;
 
-import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.registers.ConfigRegister;
-import io.github.ph1lou.werewolfplugin.Main;
+import io.github.ph1lou.werewolfplugin.RegisterManager;
 import org.bukkit.entity.Player;
 
-public class CommandRules implements ICommands {
-
-
-    private final Main main;
-
-    public CommandRules(Main main) {
-        this.main = main;
-    }
+public class CommandRules implements ICommand {
 
     @Override
-    public void execute(Player player, String[] args) {
+    public void execute(WereWolfAPI game, Player player, String[] args) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
-
-        for (ConfigRegister configRegister : main.getRegisterManager().getConfigsRegister()) {
+        for (ConfigRegister configRegister : RegisterManager.get().getConfigsRegister()) {
 
             if (configRegister.isAppearInMenu()) {
                 if (game.getConfig().isConfigActive(configRegister.getKey())) {

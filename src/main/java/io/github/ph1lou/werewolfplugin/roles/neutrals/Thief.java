@@ -4,12 +4,11 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
-import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
-import io.github.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FirstDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.StealEvent;
@@ -77,8 +76,8 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.thief.description"))
-                .setEffects(() -> game.translate("werewolf.role.thief.effect"))
+                .setDescription(game.translate("werewolf.role.thief.description"))
+                .setEffects(game.translate("werewolf.role.thief.effect"))
                 .build();
 
     }
@@ -92,7 +91,10 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
 
         super.recoverPotionEffect();
 
-        restoreResistance();
+        if(!this.power) return;
+
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,"thief"));
+
     }
 
     @EventHandler
@@ -103,12 +105,11 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
 
         if (!killer.getUniqueId().equals(getPlayerUUID())) return;
 
-        killer.addPotionEffect(new PotionEffect(
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(
                 PotionEffectType.SPEED,
                 1200,
                 0,
-                false,
-                false));
+                "thief"));
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -126,7 +127,7 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
 
         BukkitUtils.scheduleSyncDelayedTask(() -> {
             if (!game.isState(StateGame.END)) {
-                if (getPlayerWW().isState(StatePlayer.ALIVE)
+                if (this.getPlayerWW().isState(StatePlayer.ALIVE)
                         && hasPower()) {
                     thiefRecoverRole(playerWW);
                 } else {
@@ -149,9 +150,9 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
         IRole role = playerWW.getRole();
 
         setPower(false);
-        HandlerList.unregisterAll((Listener) getPlayerWW().getRole());
+        HandlerList.unregisterAll((Listener) this.getPlayerWW().getRole());
         IRole roleClone = role.publicClone();
-        getPlayerWW().setRole(roleClone);
+        this.getPlayerWW().setRole(roleClone);
         assert roleClone != null;
         BukkitUtils.registerEvents((Listener) roleClone);
         if (this.getInfected()) {
@@ -161,12 +162,13 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
         }
         roleClone.setDeathRole(this.getKey());
 
-        getPlayerWW().sendMessageWithKey("werewolf.role.thief.realized_theft",
+        this.getPlayerWW().sendMessageWithKey("werewolf.role.thief.realized_theft",
                 game.translate(role.getKey()));
-        getPlayerWW().sendMessageWithKey("werewolf.role.thief.details");
+        this.getPlayerWW().sendMessageWithKey("werewolf.role.thief.details");
 
-        getPlayerWW().removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-        Bukkit.getPluginManager().callEvent(new StealEvent(getPlayerWW(),
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,"thief"));
+
+        Bukkit.getPluginManager().callEvent(new StealEvent(this.getPlayerWW(),
                 playerWW,
                 roleClone.getKey()));
 
@@ -178,7 +180,7 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
         for (int i = 0; i < playerWW.getLovers().size(); i++) {
             ILover lover = playerWW.getLovers().get(i);
             if (lover.swap(playerWW, getPlayerWW())) {
-                getPlayerWW().addLover(lover);
+                this.getPlayerWW().addLover(lover);
                 playerWW.removeLover(lover);
                 i--;
             }
@@ -186,26 +188,4 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
         game.death(playerWW);
     }
-
-    
-    @EventHandler
-    public void onDay(DayEvent event) {
-        restoreResistance();
-    }
-
-    @EventHandler
-    public void onNight(NightEvent event){
-        restoreResistance();
-    }
-
-
-    private void restoreResistance() {
-
-        if (!hasPower()) return;
-
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
-
-        getPlayerWW().addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-    }
-
 }

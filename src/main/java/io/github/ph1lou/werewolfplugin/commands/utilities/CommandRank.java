@@ -1,6 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.utilities;
 
-import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -9,19 +9,11 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.UUID;
 
-public class CommandRank implements ICommands {
-
-
-    private final Main main;
-
-    public CommandRank(Main main) {
-        this.main = main;
-    }
+public class CommandRank implements ICommand {
 
     @Override
-    public void execute(Player player, String[] args) {
+    public void execute(WereWolfAPI game, Player player, String[] args) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
 
         List<? extends UUID> queue = game.getModerationManager().getQueue();

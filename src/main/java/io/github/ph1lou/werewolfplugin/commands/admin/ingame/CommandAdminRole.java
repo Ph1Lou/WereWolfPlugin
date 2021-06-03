@@ -1,6 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
-import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -19,21 +19,13 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class CommandAdminRole implements ICommands {
-
-
-    private final Main main;
-
-    public CommandAdminRole(Main main) {
-        this.main = main;
-    }
+public class CommandAdminRole implements ICommand {
 
     @Override
-    public void execute(Player player, String[] args) {
+    public void execute(WereWolfAPI game, Player player, String[] args) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
 
         if (playerWW != null &&
                 playerWW.isState(StatePlayer.ALIVE)) {
@@ -42,7 +34,7 @@ public class CommandAdminRole implements ICommands {
         }
 
         if (args.length == 0) {
-            game.getPlayerWW()
+            game.getPlayersWW()
                     .stream()
                     .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                     .forEach(playerWW1 -> player.sendMessage(game.translate("werewolf.commands.admin.role.role",
@@ -53,7 +45,7 @@ public class CommandAdminRole implements ICommands {
 
         AtomicReference<UUID> playerAtomicUUID = new AtomicReference<>();
 
-        game.getPlayerWW()
+        game.getPlayersWW()
                 .stream()
                 .filter(playerWW1 -> playerWW1.getName().equalsIgnoreCase(args[0]))
                 .forEach(playerWW1 -> playerAtomicUUID.set(playerWW1.getUUID()));
@@ -64,7 +56,7 @@ public class CommandAdminRole implements ICommands {
         }
 
         UUID playerUUID = playerAtomicUUID.get();
-        IPlayerWW targetWW = game.getPlayerWW(playerUUID);
+        IPlayerWW targetWW = game.getPlayerWW(playerUUID).orElse(null);
 
         if (targetWW == null) {
             player.sendMessage(game.translate("werewolf.check.not_in_game_player"));
@@ -90,7 +82,7 @@ public class CommandAdminRole implements ICommands {
         }
         if (role instanceof ITransformed) {
             player.sendMessage(game.translate("werewolf.commands.admin.role.transformed",
-                    game.translate(((ITransformed) role).getTransformed() ?
+                    game.translate(((ITransformed) role).isTransformed() ?
                             "werewolf.commands.admin.role.yes" :
                             "werewolf.commands.admin.role.no")));
         }
@@ -130,8 +122,8 @@ public class CommandAdminRole implements ICommands {
         if (role.isKey(RolesBase.SISTER.getKey())) {
             sb = new StringBuilder();
 
-            for (IPlayerWW playerWW1 : game.getPlayerWW()) {
-                if (playerWW1.isKey(RolesBase.SISTER.getKey()) && !playerWW1.equals(targetWW)) {
+            for (IPlayerWW playerWW1 : game.getPlayersWW()) {
+                if (playerWW1.getRole().isKey(RolesBase.SISTER.getKey()) && !playerWW1.equals(targetWW)) {
                     sb.append(playerWW1.getName()).append(" ");
                 }
             }
@@ -144,7 +136,7 @@ public class CommandAdminRole implements ICommands {
         if (role.isKey(RolesBase.SIAMESE_TWIN.getKey())) {
             sb = new StringBuilder();
 
-            for (IPlayerWW playerWW1 : game.getPlayerWW()) {
+            for (IPlayerWW playerWW1 : game.getPlayersWW()) {
                 if (playerWW1.getRole().isKey(RolesBase.SIAMESE_TWIN.getKey()) && !playerWW1.equals(targetWW)) {
                     sb.append(playerWW1.getName()).append(" ");
                 }

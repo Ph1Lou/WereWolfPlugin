@@ -4,12 +4,11 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.ListenerManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
+import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.Plugin;
-
-import java.util.Objects;
 
 public class CompassMiddle extends ListenerManager {
 
@@ -31,11 +30,11 @@ public class CompassMiddle extends ListenerManager {
     @Override
     public void register(boolean isActive) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = this.getGame();
 
         if (isActive) {
             if (!isRegister()) {
-                Bukkit.getPluginManager().registerEvents(this, (Plugin) main);
+                BukkitUtils.registerEvents(this);
                 Bukkit.getOnlinePlayers()
                         .forEach(player -> player.setCompassTarget(player
                                 .getWorld()
@@ -47,11 +46,8 @@ public class CompassMiddle extends ListenerManager {
             register = false;
             HandlerList.unregisterAll(this);
             Bukkit.getOnlinePlayers()
-                    .stream()
-                    .filter(player -> game.getPlayerWW(player.getUniqueId()) != null)
-                    .forEach(player -> player.setCompassTarget(
-                            Objects.requireNonNull(game.getPlayerWW(
-                                    player.getUniqueId())).getSpawn()));
+                    .forEach(player -> game.getPlayerWW(player.getUniqueId())
+                            .ifPresent(playerWW -> player.setCompassTarget(playerWW.getSpawn())));
 
         }
     }

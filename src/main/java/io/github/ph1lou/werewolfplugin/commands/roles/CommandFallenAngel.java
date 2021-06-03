@@ -1,13 +1,14 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
 
-import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.AngelForm;
 import io.github.ph1lou.werewolfapi.enums.Day;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
-import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.roles.angel.AngelChoiceEvent;
 import io.github.ph1lou.werewolfapi.utils.Utils;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -18,21 +19,13 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.UUID;
 
-public class CommandFallenAngel implements ICommands {
-
-
-    private final Main main;
-
-    public CommandFallenAngel(Main main) {
-        this.main = main;
-    }
+public class CommandFallenAngel implements ICommand {
 
     @Override
-    public void execute(Player player, String[] args) {
+    public void execute(WereWolfAPI game, Player player, String[] args) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
 
         if (playerWW == null) return;
 
@@ -47,10 +40,11 @@ public class CommandFallenAngel implements ICommands {
         Bukkit.getPluginManager().callEvent(new AngelChoiceEvent(playerWW, AngelForm.FALLEN_ANGEL));
         player.sendMessage(game.translate("werewolf.role.angel.angle_choice_click",
                 game.translate(RolesBase.FALLEN_ANGEL.getKey()),
-                Utils.conversion(game.getConfig().getTimerValue(TimersBase.ANGEL_DURATION.getKey()))));
+                Utils.conversion(game.getConfig().getTimerValue(TimerBase.ANGEL_DURATION.getKey()))));
 
         if (game.isDay(Day.NIGHT)) {
-            playerWW.addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+            playerWW.addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,"fallen_angel"));
+
         }
     }
 }

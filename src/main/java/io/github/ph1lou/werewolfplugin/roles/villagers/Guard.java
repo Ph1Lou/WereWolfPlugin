@@ -5,7 +5,7 @@ import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.ThirdDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.guard.GuardResurrectionEvent;
@@ -56,7 +56,7 @@ public class Guard extends RoleWithLimitedSelectionDuration implements IAffected
 
         if (!this.last.equals(this.getPlayerWW()) && !this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
-        GuardResurrectionEvent guardResurrectionEvent = new GuardResurrectionEvent(getPlayerWW(), this.last);
+        GuardResurrectionEvent guardResurrectionEvent = new GuardResurrectionEvent(this.getPlayerWW(), this.last);
 
         Bukkit.getPluginManager().callEvent(guardResurrectionEvent);
 
@@ -110,15 +110,15 @@ public class Guard extends RoleWithLimitedSelectionDuration implements IAffected
         this.getPlayerWW().sendMessageWithKey(
                 "werewolf.role.guard.message",
                 Utils.conversion(
-                        this.game.getConfig().getTimerValue(TimersBase.POWER_DURATION.getKey())));
+                        this.game.getConfig().getTimerValue(TimerBase.POWER_DURATION.getKey())));
     }
 
     @Override
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(this.game, this)
-                .setDescription(() -> this.game.translate("werewolf.role.guard.description"))
-                .setItems(() -> this.game.translate("werewolf.role.guard.items"))
+                .setDescription(this.game.translate("werewolf.role.guard.description"))
+                .setItems(this.game.translate("werewolf.role.guard.items"))
                 .build();
     }
 

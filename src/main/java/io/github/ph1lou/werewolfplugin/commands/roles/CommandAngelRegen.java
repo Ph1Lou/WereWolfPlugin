@@ -1,7 +1,8 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
-import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.events.roles.angel.RegenerationEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
@@ -10,26 +11,18 @@ import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.UUID;
 
-public class CommandAngelRegen implements ICommands {
-
-    private final Main main;
-
-    public CommandAngelRegen(Main main) {
-        this.main = main;
-    }
+public class CommandAngelRegen implements ICommand {
 
 
     @Override
-    public void execute(Player player, String[] args) {
+    public void execute(WereWolfAPI game, Player player, String[] args) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
 
         if (playerWW == null) return;
 
@@ -67,13 +60,10 @@ public class CommandAngelRegen implements ICommands {
             return;
         }
 
-        playerProtected.removePotionEffect(PotionEffectType.REGENERATION);
-        playerProtected.addPotionEffect(new PotionEffect(
-                PotionEffectType.REGENERATION,
+        playerWW1.addPotionModifier(PotionModifier.add( PotionEffectType.REGENERATION,
                 400,
                 0,
-                false,
-                false));
+                "angel_regen"));
 
         playerWW1.sendMessageWithKey("werewolf.role.guardian_angel.get_regeneration");
         playerWW.sendMessageWithKey(

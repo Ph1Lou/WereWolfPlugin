@@ -1,6 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.utilities;
 
-import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
@@ -10,22 +10,14 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandVote implements ICommands {
-
-
-    private final Main main;
-
-    public CommandVote(Main main) {
-        this.main = main;
-    }
+public class CommandVote implements ICommand {
 
     @Override
-    public void execute(Player player, String[] args) {
+    public void execute(WereWolfAPI game, Player player, String[] args) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
         Player playerArg = Bukkit.getPlayer(args[0]);
-        IPlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
 
         if (playerWW == null) return;
 
@@ -34,7 +26,7 @@ public class CommandVote implements ICommands {
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
-        IPlayerWW playerWW1 = game.getPlayerWW(argUUID);
+        IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (playerWW1 == null) {
             player.sendMessage(game.translate("werewolf.check.player_not_found"));

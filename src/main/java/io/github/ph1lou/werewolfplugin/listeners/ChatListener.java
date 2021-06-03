@@ -3,7 +3,7 @@ package io.github.ph1lou.werewolfplugin.listeners;
 
 import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enums.ConfigBase;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import org.bukkit.Bukkit;
@@ -103,11 +103,11 @@ public class ChatListener implements Listener {
             event.setFormat(format);
         }
 
-        if (!game.getConfig().isConfigActive(ConfigsBase.CHAT.getKey())) {
+        if (!game.getConfig().isConfigActive(ConfigBase.CHAT.getKey())) {
             event.setCancelled(true);
             event.getPlayer().sendMessage(game.translate("werewolf.commands.admin.chat.off"));
 
-        } else if (game.getConfig().isConfigActive(ConfigsBase.PROXIMITY_CHAT.getKey()) &&
+        } else if (game.getConfig().isConfigActive(ConfigBase.PROXIMITY_CHAT.getKey()) &&
                 !game.isState(StateGame.LOBBY)) {
             event.setCancelled(true);
 

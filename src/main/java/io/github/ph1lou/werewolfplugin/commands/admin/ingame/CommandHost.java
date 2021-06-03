@@ -1,7 +1,8 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
-import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IModerationManager;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.permissions.HostEvent;
@@ -12,19 +13,12 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandHost implements ICommands {
+public class CommandHost implements ICommand {
 
-
-    private final Main main;
-
-    public CommandHost(Main main) {
-        this.main = main;
-    }
 
     @Override
-    public void execute(Player player, String[] args) {
+    public void execute(WereWolfAPI game, Player player, String[] args) {
 
-        GameManager game = (GameManager) main.getWereWolfAPI();
         IModerationManager moderationManager = game.getModerationManager();
         Player host = Bukkit.getPlayer(args[0]);
 
@@ -45,9 +39,9 @@ public class CommandHost implements ICommands {
             moderationManager.getHosts().remove(uuid);
 
         } else {
-            if (game.isState(StateGame.LOBBY) && game.getPlayerWW(uuid) == null &&
+            if (game.isState(StateGame.LOBBY) && !game.getPlayerWW(uuid).isPresent() &&
                     !game.getModerationManager().getModerators().contains(uuid)) {
-                game.finalJoin(host);
+                ((GameManager) game).finalJoin(host);
             }
             moderationManager.addHost(uuid);
             Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.host.add", host.getName()));

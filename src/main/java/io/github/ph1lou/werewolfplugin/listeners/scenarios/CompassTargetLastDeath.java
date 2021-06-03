@@ -16,9 +16,9 @@ public class CompassTargetLastDeath extends ListenerManager {
     @EventHandler
     private void onPlayerDeath(PlayerDeathEvent event) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = this.getGame();
 
-        if (game.getPlayerWW(event.getEntity().getUniqueId()) == null) return;
+        if (!game.getPlayerWW(event.getEntity().getUniqueId()).isPresent()) return;
 
         Bukkit.getOnlinePlayers()
                 .forEach(player -> player.setCompassTarget(event.getEntity().getLocation()));

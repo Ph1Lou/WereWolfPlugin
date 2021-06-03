@@ -3,13 +3,13 @@ package io.github.ph1lou.werewolfplugin.listeners;
 import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.IScoreBoard;
-import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enums.ConfigBase;
 import io.github.ph1lou.werewolfapi.enums.Day;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.enums.VoteStatus;
 import io.github.ph1lou.werewolfapi.events.TrollEvent;
 import io.github.ph1lou.werewolfapi.events.TrollLoverEvent;
@@ -70,23 +70,23 @@ public class CycleListener implements Listener {
 
         game.getMapManager().getWorld().setTime(23500);
 
-        long duration = game.getConfig().getTimerValue(TimersBase.VOTE_DURATION.getKey());
+        long duration = game.getConfig().getTimerValue(TimerBase.VOTE_DURATION.getKey());
         Bukkit.broadcastMessage(game.translate("werewolf.announcement.day", event.getNumber()));
         groupSizeChange();
 
-        if (game.getConfig().isConfigActive(ConfigsBase.VOTE.getKey()) &&
-                game.getScore().getPlayerSize() < game.getConfig().getPlayerRequiredVoteEnd()) {
+        if (game.getConfig().isConfigActive(ConfigBase.VOTE.getKey()) &&
+                game.getPlayerSize() < game.getConfig().getPlayerRequiredVoteEnd()) {
 
-            game.getConfig().switchConfigValue(ConfigsBase.VOTE.getKey());
+            game.getConfig().switchConfigValue(ConfigBase.VOTE.getKey());
             Bukkit.broadcastMessage(game.translate("werewolf.vote.vote_deactivate"));
             game.getVote().setStatus(VoteStatus.ENDED);
         }
 
-        if (2L * game.getConfig().getTimerValue(TimersBase.DAY_DURATION.getKey())
+        if (2L * game.getConfig().getTimerValue(TimerBase.DAY_DURATION.getKey())
                 - duration
-                - game.getConfig().getTimerValue(TimersBase.CITIZEN_DURATION.getKey()) > 0) {
+                - game.getConfig().getTimerValue(TimerBase.CITIZEN_DURATION.getKey()) > 0) {
 
-            if (game.getConfig().isConfigActive(ConfigsBase.VOTE.getKey())
+            if (game.getConfig().isConfigActive(ConfigBase.VOTE.getKey())
                     && !game.getVote().isStatus(VoteStatus.NOT_BEGIN)) {
                 Bukkit.broadcastMessage(game.translate("werewolf.vote.vote_time",
                         Utils.conversion((int) duration)));
@@ -101,9 +101,9 @@ public class CycleListener implements Listener {
                 }, duration * 20);
             }
         }
-        long duration2 = game.getConfig().getTimerValue(TimersBase.POWER_DURATION.getKey());
+        long duration2 = game.getConfig().getTimerValue(TimerBase.POWER_DURATION.getKey());
 
-        if (2L * game.getConfig().getTimerValue(TimersBase.DAY_DURATION.getKey())
+        if (2L * game.getConfig().getTimerValue(TimerBase.DAY_DURATION.getKey())
                 - duration2 > 0) {
 
             BukkitUtils.scheduleSyncDelayedTask(() -> {
@@ -115,13 +115,13 @@ public class CycleListener implements Listener {
 
         }
 
-        long duration3 = game.getConfig().getTimerValue(TimersBase.DAY_DURATION.getKey());
+        long duration3 = game.getConfig().getTimerValue(TimerBase.DAY_DURATION.getKey());
 
         BukkitUtils.scheduleSyncDelayedTask(() -> {
             if (!game.isState(StateGame.END)) {
                 Bukkit.getPluginManager().callEvent(new NightEvent(event.getNumber()));
                 CommandWereWolfChat.enable();
-                BukkitUtils.scheduleSyncDelayedTask(CommandWereWolfChat::disable, game.getConfig().getTimerValue(TimersBase.WEREWOLF_CHAT_DURATION.getKey()) * 20L);
+                BukkitUtils.scheduleSyncDelayedTask(CommandWereWolfChat::disable, game.getConfig().getTimerValue(TimerBase.WEREWOLF_CHAT_DURATION.getKey()) * 20L);
             }
 
         }, duration3 * 20);
@@ -131,7 +131,7 @@ public class CycleListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onNight(NightEvent event) {
 
-        long duration = game.getConfig().getTimerValue(TimersBase.DAY_DURATION.getKey())
+        long duration = game.getConfig().getTimerValue(TimerBase.DAY_DURATION.getKey())
                 - 30;
         game.setDay(Day.NIGHT);
 
@@ -163,7 +163,7 @@ public class CycleListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onVoteEnd(VoteEndEvent event) {
 
-        long duration = game.getConfig().getTimerValue(TimersBase.CITIZEN_DURATION.getKey());
+        long duration = game.getConfig().getTimerValue(TimerBase.CITIZEN_DURATION.getKey());
         BukkitUtils.scheduleSyncDelayedTask(() -> {
             if (!game.isState(StateGame.END)) {
                 Bukkit.getPluginManager().callEvent(new VoteResultEvent());
@@ -176,20 +176,20 @@ public class CycleListener implements Listener {
 
         IScoreBoard score = game.getScore();
 
-        if (score.getPlayerSize() <= score.getGroup() * 3 && score.getGroup() > 3) {
-            score.setGroup(score.getGroup() - 1);
+        if (game.getPlayerSize() <= game.getGroup() * 3 && game.getGroup() > 3) {
+            game.setGroup(game.getGroup() - 1);
 
             Bukkit.getOnlinePlayers()
                     .forEach(player -> {
                         player.sendMessage(
                                 game.translate(
                                         "werewolf.commands.admin.group.group_change",
-                                        score.getGroup()));
+                                        game.getGroup()));
                         VersionUtils.getVersionUtils().sendTitle(
                                 player,
                                 game.translate("werewolf.commands.admin.group.top_title"),
                                 game.translate("werewolf.commands.admin.group.bot_title",
-                                        score.getGroup()),
+                                        game.getGroup()),
                                 20,
                                 60,
                                 20);
@@ -203,7 +203,7 @@ public class CycleListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     private void onBlockBreak(BlockBreakEvent event) {
 
-        if (game.getConfig().getTimerValue(TimersBase.DIGGING.getKey()) >= 0) {
+        if (game.getConfig().getTimerValue(TimerBase.DIGGING.getKey()) >= 0) {
             return;
         }
 
@@ -231,14 +231,14 @@ public class CycleListener implements Listener {
     public void onTroll(TrollEvent event) {
 
         game.setState(StateGame.GAME);
-        game.getConfig().setConfig(ConfigsBase.CHAT.getKey(), false);
+        game.getConfig().setConfig(ConfigBase.CHAT.getKey(), false);
 
         RegisterManager.get().getRolesRegister()
                 .forEach(roleRegister -> {
 
                     if (roleRegister.getKey().equals(game.getConfig().getTrollKey())) {
 
-                        game.getPlayerWW()
+                        game.getPlayersWW()
                                 .forEach(playerWW -> {
                                     try {
                                         IRole role = (IRole) roleRegister.getConstructors()
@@ -259,13 +259,13 @@ public class CycleListener implements Listener {
                 });
 
 
-        game.getPlayerWW()
+        game.getPlayersWW()
                 .forEach(playerWW -> playerWW.getRole().roleAnnouncement());
 
         BukkitUtils.scheduleSyncDelayedTask(() -> {
 
             if (!game.isState(StateGame.END)) {
-                game.getPlayerWW()
+                game.getPlayersWW()
                         .forEach(playerWW -> {
 
                             Player player = Bukkit.getPlayer(playerWW.getUUID());
@@ -280,9 +280,9 @@ public class CycleListener implements Listener {
                             playerWW.addPlayerMaxHealth(20 - playerWW.getMaxHealth());
                             HandlerList.unregisterAll((Listener) playerWW.getRole());
                         });
-                if (game.getConfig().isConfigActive(ConfigsBase.DOUBLE_TROLL.getKey())) {
+                if (game.getConfig().isConfigActive(ConfigBase.DOUBLE_TROLL.getKey())) {
                     Bukkit.getPluginManager().callEvent(new TrollEvent());
-                    game.getConfig().switchConfigValue(ConfigsBase.DOUBLE_TROLL.getKey());
+                    game.getConfig().switchConfigValue(ConfigBase.DOUBLE_TROLL.getKey());
                     game.setDebug(false);
                 } else {
                     game.getConfig().setTrollSV(false);
@@ -298,7 +298,7 @@ public class CycleListener implements Listener {
 
         List<ILover> loverAPIS = new ArrayList<>();
 
-        List<IPlayerWW> playerWWS = game.getPlayerWW().stream()
+        List<IPlayerWW> playerWWS = game.getPlayersWW().stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .collect(Collectors.toList());
 
@@ -326,7 +326,7 @@ public class CycleListener implements Listener {
         BukkitUtils.scheduleSyncDelayedTask(() -> {
 
             if (!game.isState(StateGame.END)) {
-                game.getPlayerWW()
+                game.getPlayersWW()
                         .forEach(playerWW -> playerWW
                                 .sendMessageWithKey("werewolf.announcement.lover_troll"));
                 game.getConfig().setTrollLover(false);
@@ -341,17 +341,17 @@ public class CycleListener implements Listener {
 
         game.setState(StateGame.GAME);
 
-        List<IPlayerWW> playerWWS = new ArrayList<>(game.getPlayerWW());
+        List<IPlayerWW> playerWWS = new ArrayList<>(game.getPlayersWW());
         List<RoleRegister> config = new ArrayList<>();
 
-        game.getConfig().setConfig(ConfigsBase.CHAT.getKey(), false);
+        game.getConfig().setConfig(ConfigBase.CHAT.getKey(), false);
 
         game.getConfig().setRole(RolesBase.VILLAGER.getKey(),
                 Math.max(0,
                         game.getConfig()
                                 .getRoleCount(RolesBase.VILLAGER.getKey()) +
                                 playerWWS.size() -
-                                game.getScore().getRole()));
+                                game.getRoleInitialSize()));
 
         RegisterManager.get().getRolesRegister()
                 .forEach(roleRegister -> {
@@ -376,7 +376,7 @@ public class CycleListener implements Listener {
                 exception.printStackTrace();
             }
         }
-        game.getPlayerWW()
+        game.getPlayersWW()
                 .forEach(playerWW -> playerWW.getRole().roleAnnouncement());
 
         BukkitUtils.scheduleSyncDelayedTask(game::checkVictory);

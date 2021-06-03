@@ -3,12 +3,12 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
-import io.github.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import io.github.ph1lou.werewolfapi.events.game.vote.VoteEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleWithLimitedSelectionDuration;
@@ -56,43 +56,37 @@ public class Raven extends RoleWithLimitedSelectionDuration implements IAffected
         return (this.affectedPlayer);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onNight(NightEvent event) {
-        if (this.last == null) return;
-
-        this.last.addPotionEffect(PotionEffectType.JUMP);
-    }
-
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onDay(DayEvent event) {
 
-        if (last != null) {
-            last.removePotionEffect(PotionEffectType.JUMP);
-            last.getRole().removeAuraModifier("cursed");
-            last.sendMessageWithKey("werewolf.role.raven.no_longer_curse");
-            last = null;
+        if (this.last != null) {
+            this.last.addPotionModifier(PotionModifier.remove(PotionEffectType.SPEED,"raven"));
+
+            this.last.getRole().removeAuraModifier("cursed");
+            this.last.sendMessageWithKey("werewolf.role.raven.no_longer_curse");
+            this.last = null;
         }
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
         setPower(true);
 
-        getPlayerWW().sendMessageWithKey("werewolf.role.raven.curse_message",
+        this.getPlayerWW().sendMessageWithKey("werewolf.role.raven.curse_message",
                 Utils.conversion(
                         game.getConfig()
-                                .getTimerValue(TimersBase.POWER_DURATION.getKey())));
+                                .getTimerValue(TimerBase.POWER_DURATION.getKey())));
     }
 
 
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.raven.description"))
-                .setItems(() -> game.translate("werewolf.role.raven.item"))
-                .setEffects(() -> game.translate("werewolf.role.raven.effect"))
+                .setDescription(game.translate("werewolf.role.raven.description"))
+                .setItems(game.translate("werewolf.role.raven.item"))
+                .setEffects(game.translate("werewolf.role.raven.effect"))
                 .build();
     }
 

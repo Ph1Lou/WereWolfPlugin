@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
@@ -23,7 +24,7 @@ public class NaughtyLittleWolf extends RoleWereWolf {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setEffects(() -> game.translate("werewolf.role.naughty_little_wolf.effect"))
+                .setEffects(game.translate("werewolf.role.naughty_little_wolf.effect"))
                 .build();
     }
 
@@ -40,12 +41,12 @@ public class NaughtyLittleWolf extends RoleWereWolf {
             return;
         }
 
-        getPlayerWW().addPotionEffect(PotionEffectType.SPEED);
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.SPEED, "naughty"));
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onDay(DayEvent event) {
-        getPlayerWW().removePotionEffect(PotionEffectType.SPEED);
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.SPEED, "naughty"));
     }
 
 

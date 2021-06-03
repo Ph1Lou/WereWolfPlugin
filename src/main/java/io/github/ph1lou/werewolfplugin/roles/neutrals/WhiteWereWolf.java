@@ -16,7 +16,7 @@ public class WhiteWereWolf extends RoleNeutral {
 
     @Override
     public void recoverPower() {
-        getPlayerWW().addPlayerMaxHealth(10);
+        this.getPlayerWW().addPlayerMaxHealth(10);
     }
 
 
@@ -24,8 +24,8 @@ public class WhiteWereWolf extends RoleNeutral {
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.white_werewolf.description"))
-                .setPower(() -> game.translate("werewolf.role.white_werewolf.heart"))
+                .setDescription(game.translate("werewolf.role.white_werewolf.description"))
+                .setPower(game.translate("werewolf.role.white_werewolf.heart"))
                 .build();
     }
 

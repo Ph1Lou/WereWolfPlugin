@@ -1,7 +1,8 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
-import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.ComedianMask;
 import io.github.ph1lou.werewolfapi.events.roles.comedian.UseMaskEvent;
@@ -14,21 +15,13 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandComedian implements ICommands {
-
-
-    private final Main main;
-
-    public CommandComedian(Main main) {
-        this.main = main;
-    }
+public class CommandComedian implements ICommand {
 
     @Override
-    public void execute(Player player, String[] args) {
+    public void execute(WereWolfAPI game, Player player, String[] args) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
 
         if (playerWW == null) return;
 
@@ -62,7 +55,7 @@ public class CommandComedian implements ICommands {
             playerWW.sendMessageWithKey(
                     "werewolf.role.comedian.wear_mask_perform",
                     game.translate(ComedianMask.values()[i].getKey()));
-            playerWW.addPotionEffect(ComedianMask.values()[i].getPotionEffectType());
+            playerWW.addPotionModifier(PotionModifier.add(ComedianMask.values()[i].getPotionEffectType(),"comedian"));
 
         } catch (NumberFormatException ignored) {
         }

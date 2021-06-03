@@ -2,9 +2,10 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleWithLimitedSelectionDuration;
@@ -49,15 +50,15 @@ public class Oracle extends RoleWithLimitedSelectionDuration implements IAffecte
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.oracle.description"))
-                .setEffects(() -> game.translate("werewolf.role.oracle.effect"))
+                .setDescription(game.translate("werewolf.role.oracle.description"))
+                .setEffects(game.translate("werewolf.role.oracle.effect"))
                 .build();
     }
 
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -68,17 +69,17 @@ public class Oracle extends RoleWithLimitedSelectionDuration implements IAffecte
 
         dayNumber = event.getNumber();
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
         setPower(true);
 
-        getPlayerWW().sendMessageWithKey(
+        this.getPlayerWW().sendMessageWithKey(
                 "werewolf.role.oracle.perform",
                 Utils.conversion(
                         game.getConfig()
-                                .getTimerValue(TimersBase.POWER_DURATION.getKey())));
+                                .getTimerValue(TimerBase.POWER_DURATION.getKey())));
     }
 
     @Override
@@ -91,6 +92,7 @@ public class Oracle extends RoleWithLimitedSelectionDuration implements IAffecte
 
         super.recoverPotionEffect();
 
-        getPlayerWW().addPotionEffect(PotionEffectType.NIGHT_VISION);
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.NIGHT_VISION,"oracle"));
+
     }
 }

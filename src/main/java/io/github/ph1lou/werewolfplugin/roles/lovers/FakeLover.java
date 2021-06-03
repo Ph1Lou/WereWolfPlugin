@@ -58,7 +58,7 @@ public class FakeLover implements ILover, Listener {
         if (!game.isState(StateGame.GAME)) return;
 
         UUID uuid = event.getPlayerUUID();
-        IPlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
 
         if (!lovers.contains(playerWW)) return;
 

@@ -70,7 +70,7 @@ public class Admin implements TabExecutor {
         }
 
         if (accessCommand(commandRegister, player, args.length, true)) {
-            commandRegister.getCommand().execute(player, args);
+            commandRegister.getCommand().execute(game,player, args);
         }
 
     }
@@ -121,11 +121,7 @@ public class Admin implements TabExecutor {
         IModerationManager moderationManager = game.getModerationManager();
         UUID uuid = player.getUniqueId();
 
-        boolean pass = false;
-
-        if (commandRegister.isHostAccess() && moderationManager.getHosts().contains(uuid)) {
-            pass = true;
-        }
+        boolean pass = commandRegister.isHostAccess() && moderationManager.getHosts().contains(uuid);
 
         if (commandRegister.isModeratorAccess() && moderationManager.getModerators().contains(uuid)) {
             pass = true;
@@ -147,7 +143,7 @@ public class Admin implements TabExecutor {
         Player player = (Player) sender;
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
 
         if (args.length > 1) {
             return null;

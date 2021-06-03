@@ -4,7 +4,7 @@ import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.game.vote.VoteEndEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.ILimitedUse;
@@ -75,17 +75,17 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
     public void onVoteEnd(VoteEndEvent event) {
 
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
 
         if (getUse() < 2) {
-            getPlayerWW().sendMessage(seeVote());
+            this.getPlayerWW().sendMessage(seeVote());
         }
 
         if (hasPower()) {
-            getPlayerWW().sendMessage(cancelVote());
+            this.getPlayerWW().sendMessage(cancelVote());
         }
     }
 
@@ -93,7 +93,7 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.citizen.description"))
+                .setDescription(game.translate("werewolf.role.citizen.description"))
                 .build();
     }
 
@@ -127,7 +127,7 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
         cancel.addExtra(new TextComponent(game.translate("werewolf.role.citizen.time_left",
                 Utils.conversion(
                         game.getConfig().getTimerValue(
-                                TimersBase.CITIZEN_DURATION.getKey())))));
+                                TimerBase.CITIZEN_DURATION.getKey())))));
 
 
         return cancel;
@@ -158,7 +158,7 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
         see.addExtra(new TextComponent(game.translate("werewolf.role.citizen.time_left",
                 Utils.conversion(
                         game.getConfig().getTimerValue(
-                                TimersBase.CITIZEN_DURATION.getKey())))));
+                                TimerBase.CITIZEN_DURATION.getKey())))));
 
 
         return see;

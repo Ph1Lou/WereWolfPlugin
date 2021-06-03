@@ -1,31 +1,25 @@
 package io.github.ph1lou.werewolfplugin.commands.utilities;
 
-import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Category;
-import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enums.ConfigBase;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfplugin.Main;
+import io.github.ph1lou.werewolfplugin.RegisterManager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class CommandCompo implements ICommands {
+public class CommandCompo implements ICommand {
 
-
-    private final Main main;
-
-    public CommandCompo(Main main) {
-        this.main = main;
-    }
 
     @Override
-    public void execute(Player player, String[] args) {
+    public void execute(WereWolfAPI game, Player player, String[] args) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
 
-        if (game.getConfig().isConfigActive(ConfigsBase.HIDE_COMPOSITION.getKey())) {
+        if (game.getConfig().isConfigActive(ConfigBase.HIDE_COMPOSITION.getKey())) {
 
             player.sendMessage(game.translate("werewolf.commands.compo.composition_hide"));
 
@@ -75,7 +69,7 @@ public class CommandCompo implements ICommands {
         AtomicBoolean atomicBoolean = new AtomicBoolean(false);
         sb.append("§f : ");
 
-        main.getRegisterManager().getRolesRegister().stream()
+        RegisterManager.get().getRolesRegister().stream()
                 .filter(roleRegister -> roleRegister.getCategories().contains(category))
                 .forEach(roleRegister -> {
                     String key = roleRegister.getKey();

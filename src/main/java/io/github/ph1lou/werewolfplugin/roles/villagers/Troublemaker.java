@@ -5,9 +5,9 @@ import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
-import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enums.ConfigBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.trouble_maker.TroubleMakerDeathEvent;
@@ -43,11 +43,11 @@ public class Troublemaker extends RoleVillage implements IAffectedPlayers, IPowe
 
         AtomicInteger i = new AtomicInteger();
 
-        game.getPlayerWW().stream()
+        game.getPlayersWW().stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .forEach(playerWW -> {
                     game.getMapManager().transportation(playerWW,
-                            i.get() * 2 * Math.PI / game.getScore().getPlayerSize());
+                            i.get() * 2 * Math.PI / game.getPlayerSize());
                     i.getAndIncrement();
                 });
     }
@@ -85,8 +85,8 @@ public class Troublemaker extends RoleVillage implements IAffectedPlayers, IPowe
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.troublemaker.description"))
-                .setPower(() -> game.translate("werewolf.role.troublemaker.chat"))
+                .setDescription(game.translate("werewolf.role.troublemaker.description"))
+                .setPower(game.translate("werewolf.role.troublemaker.chat"))
                 .build();
     }
 
@@ -102,16 +102,16 @@ public class Troublemaker extends RoleVillage implements IAffectedPlayers, IPowe
     @EventHandler
     public void onNightAnnounceWereWOlfChat(NightEvent event) {
 
-        if (!game.getConfig().isConfigActive(ConfigsBase.WEREWOLF_CHAT.getKey())) return;
+        if (!game.getConfig().isConfigActive(ConfigBase.WEREWOLF_CHAT.getKey())) return;
 
-        getPlayerWW().sendMessageWithKey("werewolf.commands.admin.ww_chat.announce", Utils.conversion(game.getConfig().getTimerValue(TimersBase.WEREWOLF_CHAT_DURATION.getKey())), game.getConfig().getWereWolfChatMaxMessage());
+        this.getPlayerWW().sendMessageWithKey("werewolf.commands.admin.ww_chat.announce", Utils.conversion(game.getConfig().getTimerValue(TimerBase.WEREWOLF_CHAT_DURATION.getKey())), game.getConfig().getWereWolfChatMaxMessage());
 
     }
 
     @EventHandler
     public void onRequestAccessWereWolfChat(WereWolfCanSpeakInChatEvent event) {
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 

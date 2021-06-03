@@ -3,11 +3,9 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
-import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
-import io.github.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
 import io.github.ph1lou.werewolfapi.events.roles.serial_killer.SerialKillerEvent;
@@ -44,18 +42,18 @@ public class SerialKiller extends RoleNeutral implements IPower {
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setPower(() -> game.translate("werewolf.role.serial_killer.power"))
-                .setEquipments(() -> game.translate("werewolf.role.serial_killer.limit"))
-                .setItems(() -> game.translate("werewolf.role.serial_killer.items"))
-                .setEffects(() -> game.translate("werewolf.role.serial_killer.effect"))
-                .addExtraLines(() -> game.translate("werewolf.role.serial_killer.hearts", extraHeart / 2))
+                .setPower(game.translate("werewolf.role.serial_killer.power"))
+                .setEquipments(game.translate("werewolf.role.serial_killer.limit"))
+                .setItems(game.translate("werewolf.role.serial_killer.items"))
+                .setEffects(game.translate("werewolf.role.serial_killer.effect"))
+                .addExtraLines(game.translate("werewolf.role.serial_killer.hearts", extraHeart / 2))
                 .build();
     }
 
 
     @Override
     public void recoverPower() {
-        getPlayerWW().addPlayerMaxHealth(extraHeart);
+        this.getPlayerWW().addPlayerMaxHealth(extraHeart);
     }
 
     @EventHandler
@@ -101,27 +99,6 @@ public class SerialKiller extends RoleNeutral implements IPower {
         }
     }
 
-    @EventHandler
-    public void onDay(DayEvent event) {
-        restoreStrength();
-    }
-
-    @EventHandler
-    public void onNight(NightEvent event){
-        restoreStrength();
-    }
-
-
-    public void restoreStrength() {
-
-        if (!hasPower()) return;
-
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
-
-        getPlayerWW().removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-        getPlayerWW().addPotionEffect(PotionEffectType.INCREASE_DAMAGE);
-    }
-
 
     @Override
     public void recoverPotionEffect() {
@@ -130,7 +107,7 @@ public class SerialKiller extends RoleNeutral implements IPower {
 
         if (!hasPower()) return;
 
-        getPlayerWW().addPotionEffect(PotionEffectType.INCREASE_DAMAGE);
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"serial_killer"));
     }
 
     @Override
@@ -149,13 +126,13 @@ public class SerialKiller extends RoleNeutral implements IPower {
         if (!playerWW.getLastKiller().get().equals(getPlayerWW())) return;
 
         Bukkit.getPluginManager().callEvent(new SerialKillerEvent(
-                getPlayerWW(),
+                this.getPlayerWW(),
                 playerWW));
-        getPlayerWW().addPlayerMaxHealth(2);
+        this.getPlayerWW().addPlayerMaxHealth(2);
         extraHeart += 2;
-        getPlayerWW().addItem(new ItemStack(Material.GOLDEN_APPLE));
+        this.getPlayerWW().addItem(new ItemStack(Material.GOLDEN_APPLE));
         if (hasPower()) {
-            getPlayerWW().removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"serial_killer"));
             setPower(false);
         }
     }

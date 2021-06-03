@@ -20,7 +20,7 @@ public class GodMiracle extends ListenerManager {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onDeath(ThirdDeathEvent event) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = this.getGame();
 
         if (event.isCancelled()) return;
 

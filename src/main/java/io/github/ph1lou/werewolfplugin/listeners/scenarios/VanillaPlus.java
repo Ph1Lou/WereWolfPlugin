@@ -21,7 +21,7 @@ public class VanillaPlus extends ListenerManager {
     @EventHandler
     private void onGravelBreak(BlockBreakEvent event) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = this.getGame();
 
         Block block = event.getBlock();
         Location loc = new Location(block.getWorld(),
@@ -42,7 +42,7 @@ public class VanillaPlus extends ListenerManager {
     @EventHandler
     public void onLeaveDecay(LeavesDecayEvent event) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = this.getGame();
 
         event.getBlock().setType(Material.AIR);
         if (Math.random() * 100 < game.getConfig().getAppleRate()) {

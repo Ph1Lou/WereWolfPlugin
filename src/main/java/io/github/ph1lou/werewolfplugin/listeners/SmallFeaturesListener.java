@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.listeners;
 
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.events.game.utils.GoldenAppleParticleEvent;
 import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
@@ -65,7 +66,7 @@ public class SmallFeaturesListener implements Listener {
     public void onAppleEat(PlayerItemConsumeEvent event) {
 
         Player player = event.getPlayer();
-        IPlayerWW playerWW = game.getPlayerWW(player.getUniqueId());
+        IPlayerWW playerWW = game.getPlayerWW(player.getUniqueId()).orElse(null);
 
         if (playerWW == null) return;
 
@@ -96,21 +97,18 @@ public class SmallFeaturesListener implements Listener {
 
                 if (player.hasPotionEffect(PotionEffectType.ABSORPTION)) {
                     player.removePotionEffect(PotionEffectType.ABSORPTION);
-                    player.addPotionEffect(new PotionEffect(
+                    playerWW.addPotionModifier(PotionModifier.add(
                             PotionEffectType.ABSORPTION,
                             2400,
                             0,
-                            false,
-                            false));
+                            "golden_apple"));
                 }
                 if (player.hasPotionEffect(PotionEffectType.REGENERATION)) {
-                    player.removePotionEffect(PotionEffectType.REGENERATION);
-                    player.addPotionEffect(new PotionEffect(
-                            PotionEffectType.REGENERATION,
+                    playerWW.addPotionModifier(PotionModifier.add(
+                            PotionEffectType.ABSORPTION,
                             90,
                             1,
-                            false,
-                            false));
+                            "golden_apple"));
                 }
 
                 event.setCancelled(true);

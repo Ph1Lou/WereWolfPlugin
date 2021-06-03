@@ -63,13 +63,13 @@ public class Trapper extends RoleVillage implements IAffectedPlayers, IPower {
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
         setPower(true);
 
-        getPlayerWW().sendMessageWithKey(
+        this.getPlayerWW().sendMessageWithKey(
                 "werewolf.role.trapper.tracking_message");
     }
 
@@ -77,7 +77,7 @@ public class Trapper extends RoleVillage implements IAffectedPlayers, IPower {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.trapper.description"))
+                .setDescription(game.translate("werewolf.role.trapper.description"))
                 .build();
     }
 
@@ -98,7 +98,7 @@ public class Trapper extends RoleVillage implements IAffectedPlayers, IPower {
 
         if (player == null) return;
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (hasPower()) return;
 

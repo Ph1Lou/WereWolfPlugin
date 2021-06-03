@@ -16,7 +16,7 @@ public class XpBoost extends ListenerManager {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onXp(BlockExpEvent event) {
-        WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = this.getGame();
         event.setExpToDrop((int) (event.getExpToDrop() * game.getConfig().getXpBoost() / 100f));
     }
 }

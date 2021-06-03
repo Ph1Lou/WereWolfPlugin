@@ -3,12 +3,11 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
-import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
-import io.github.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FirstDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.StealEvent;
@@ -45,8 +44,8 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.imitator.description"))
-                .setEffects(() -> game.translate("werewolf.role.imitator.effect"))
+                .setDescription(game.translate("werewolf.role.imitator.description"))
+                .setEffects(game.translate("werewolf.role.imitator.effect"))
                 .build();
     }
 
@@ -81,25 +80,6 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
         return (this.affectedPlayer);
     }
 
-    @EventHandler
-    public void onDay(DayEvent event) {
-        restoreStrength();
-    }
-
-    @EventHandler
-    public void onNight(NightEvent event) {
-        restoreStrength();
-    }
-
-
-    private void restoreStrength() {
-
-        if (!hasPower()) return;
-
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
-
-        getPlayerWW().addPotionEffect(PotionEffectType.INCREASE_DAMAGE);
-    }
 
     @EventHandler
     private void onPlayerDeath(PlayerDeathEvent event) {
@@ -109,12 +89,11 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
 
         if (!killer.getUniqueId().equals(getPlayerUUID())) return;
 
-        killer.addPotionEffect(new PotionEffect(
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(
                 PotionEffectType.SPEED,
                 1200,
                 0,
-                false,
-                false));
+                "imitator"));
 
     }
 
@@ -133,7 +112,7 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
 
         BukkitUtils.scheduleSyncDelayedTask(() -> {
             if (!game.isState(StateGame.END)) {
-                if (getPlayerWW().isState(StatePlayer.ALIVE)
+                if (this.getPlayerWW().isState(StatePlayer.ALIVE)
                         && hasPower()) {
                     imitatorRecoverRole(playerWW);
                 } else {
@@ -156,9 +135,9 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
 
         setPower(false);
 
-        HandlerList.unregisterAll((Listener) getPlayerWW().getRole());
+        HandlerList.unregisterAll((Listener) this.getPlayerWW().getRole());
         IRole roleClone = role.publicClone();
-        getPlayerWW().setRole(roleClone);
+        this.getPlayerWW().setRole(roleClone);
         assert roleClone != null;
         BukkitUtils.registerEvents((Listener) roleClone);
         if (this.getInfected()) {
@@ -169,12 +148,12 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
         roleClone.setTransformedToNeutral(true);
         roleClone.setDeathRole(this.getKey());
 
-        getPlayerWW().sendMessageWithKey("werewolf.role.thief.realized_theft",
+        this.getPlayerWW().sendMessageWithKey("werewolf.role.thief.realized_theft",
                 game.translate(role.getKey()));
-        getPlayerWW().sendMessageWithKey("werewolf.role.thief.details");
+        this.getPlayerWW().sendMessageWithKey("werewolf.role.thief.details");
 
-        getPlayerWW().removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-        Bukkit.getPluginManager().callEvent(new StealEvent(getPlayerWW(),
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"imitator"));
+        Bukkit.getPluginManager().callEvent(new StealEvent(this.getPlayerWW(),
                 playerWW,
                 roleClone.getKey()));
 
@@ -186,7 +165,7 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
         for (int i = 0; i < playerWW.getLovers().size(); i++) {
             ILover lover = playerWW.getLovers().get(i);
             if (lover.swap(playerWW, getPlayerWW())) {
-                getPlayerWW().addLover(lover);
+                this.getPlayerWW().addLover(lover);
                 playerWW.removeLover(lover);
                 i--;
             }
@@ -205,6 +184,9 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
 
         super.recoverPotionEffect();
 
-        restoreStrength();
+        if(!this.power) return;
+
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"imitator"));
+
     }
 }

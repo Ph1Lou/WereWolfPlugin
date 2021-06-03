@@ -25,16 +25,16 @@ public class Infection extends ListenerManager {
 
     @EventHandler
     public void onRepartition(RepartitionEvent event) {
-        WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = this.getGame();
 
         BukkitUtils.scheduleSyncDelayedTask(() -> {
             if (game.isState(StateGame.GAME)) {
                 if (isRegister()) {
 
-                    if (game.getPlayerWW().stream().filter(playerWW -> playerWW.isState(StatePlayer.ALIVE)).filter(playerWW -> playerWW.getRole().isWereWolf()).count() > game.getPlayerWW().stream().filter(playerWW -> playerWW.isState(StatePlayer.ALIVE)).count() / 2f)
+                    if (game.getPlayersWW().stream().filter(playerWW -> playerWW.isState(StatePlayer.ALIVE)).filter(playerWW -> playerWW.getRole().isWereWolf()).count() > game.getPlayersWW().stream().filter(playerWW -> playerWW.isState(StatePlayer.ALIVE)).count() / 2f)
                         return;
 
-                    List<IRole> roles1 = game.getPlayerWW().stream()
+                    List<IRole> roles1 = game.getPlayersWW().stream()
                             .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                             .map(IPlayerWW::getRole)
                             .filter(roles -> !roles.isWereWolf())

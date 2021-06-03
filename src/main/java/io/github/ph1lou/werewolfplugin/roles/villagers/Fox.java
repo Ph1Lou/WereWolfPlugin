@@ -3,12 +3,13 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Camp;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.events.roles.fox.SniffEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
@@ -101,17 +102,17 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
 
         if (!getPlayerUUID().equals(killer.getUniqueId())) return;
 
-        killer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(
+                PotionEffectType.SPEED,
                 3600,
                 0,
-                false,
-                false));
+                "fox"));
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onDay(DayEvent event) {
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -120,7 +121,7 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
         }
 
         setPower(true);
-        getPlayerWW().sendMessageWithKey("werewolf.role.fox.smell_message",
+        this.getPlayerWW().sendMessageWithKey("werewolf.role.fox.smell_message",
                 game.getConfig().getUseOfFlair() - getUse());
     }
 
@@ -129,12 +130,12 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.fox.description",
+                .setDescription(game.translate("werewolf.role.fox.description",
                         game.getConfig().getDistanceFox(),
                         Utils.conversion(game.getConfig()
-                                .getTimerValue(TimersBase.FOX_SMELL_DURATION.getKey())),
+                                .getTimerValue(TimerBase.FOX_SMELL_DURATION.getKey())),
                         game.getConfig().getUseOfFlair() - use))
-                .setEffects(() -> game.translate("werewolf.role.fox.effect"))
+                .setEffects(game.translate("werewolf.role.fox.effect"))
                 .build();
     }
 
@@ -152,7 +153,7 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
         if (player == null) {
             return;
         }
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
         if (getAffectedPlayers().isEmpty()) {
@@ -183,12 +184,12 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
         }
 
         float temp = getProgress() + 100f /
-                (game.getConfig().getTimerValue(TimersBase.FOX_SMELL_DURATION.getKey()) + 1);
+                (game.getConfig().getTimerValue(TimerBase.FOX_SMELL_DURATION.getKey()) + 1);
 
         setProgress(temp);
 
         if (temp % 10 > 0 && temp % 10 <= 100f /
-                (game.getConfig().getTimerValue(TimersBase.FOX_SMELL_DURATION.getKey()) + 1)) {
+                (game.getConfig().getTimerValue(TimerBase.FOX_SMELL_DURATION.getKey()) + 1)) {
             player.sendMessage(game.translate("werewolf.role.fox.progress",
                     Math.min(100, Math.floor(temp))));
         }
@@ -197,7 +198,7 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
 
             boolean isWereWolf = playerWW.getRole().isDisplayCamp(Camp.WEREWOLF.getKey());
 
-            SniffEvent sniffEvent = new SniffEvent(getPlayerWW(),
+            SniffEvent sniffEvent = new SniffEvent(this.getPlayerWW(),
                     playerWW, isWereWolf);
 
             Bukkit.getPluginManager().callEvent(sniffEvent);

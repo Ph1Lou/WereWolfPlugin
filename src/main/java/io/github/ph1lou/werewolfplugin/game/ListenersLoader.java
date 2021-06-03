@@ -53,7 +53,7 @@ public class ListenersLoader {
             HandlerList.unregisterAll(listener);
         }
 
-        for (IPlayerWW playerWW1 : this.game.getPlayerWW()) {
+        for (IPlayerWW playerWW1 : this.game.getPlayersWW()) {
             HandlerList.unregisterAll((Listener) playerWW1.getRole());
         }
 

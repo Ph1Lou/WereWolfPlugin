@@ -2,10 +2,11 @@ package io.github.ph1lou.werewolfplugin.listeners.scenarios;
 
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.ListenerManager;
+import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.block.Furnace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.FurnaceBurnEvent;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class FastSmelting extends ListenerManager {
@@ -29,7 +30,7 @@ public class FastSmelting extends ListenerManager {
                     this.cancel();
                 }
             }
-        }.runTaskTimer((Plugin) main, 1L, 1L);
+        }.runTaskTimer(JavaPlugin.getPlugin(Main.class), 1L, 1L);
     }
 
 }

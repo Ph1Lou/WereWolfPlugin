@@ -18,7 +18,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -33,7 +33,7 @@ public class BearTrainer extends RoleVillage {
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
         if (player == null) return;
@@ -46,14 +46,15 @@ public class BearTrainer extends RoleVillage {
                         < game.getConfig().getDistanceBearTrainer())
                 .map(Entity::getUniqueId)
                 .map(game::getPlayerWW)
-                .filter(Objects::nonNull)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .map(IPlayerWW::getRole)
                 .filter(roles -> roles.isDisplayCamp(Camp.WEREWOLF.getKey()))
                 .map(IRole::getPlayerWW)
                 .collect(Collectors.toSet());
 
-        GrowlEvent growlEvent = new GrowlEvent(getPlayerWW(), growled);
+        GrowlEvent growlEvent = new GrowlEvent(this.getPlayerWW(), growled);
         Bukkit.getPluginManager().callEvent(growlEvent);
     }
 
@@ -90,7 +91,7 @@ public class BearTrainer extends RoleVillage {
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.bear_trainer.description",
+                .setDescription(game.translate("werewolf.role.bear_trainer.description",
                         game.getConfig().getDistanceBearTrainer()))
                 .build();
     }

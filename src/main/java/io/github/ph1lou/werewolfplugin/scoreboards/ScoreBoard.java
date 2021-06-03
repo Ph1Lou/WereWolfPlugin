@@ -1,15 +1,16 @@
 package io.github.ph1lou.werewolfplugin.scoreboards;
 
 import fr.mrmicky.fastboard.FastBoard;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.IScoreBoard;
-import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enums.ConfigBase;
 import io.github.ph1lou.werewolfapi.enums.Day;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.enums.TimersBase;
+import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfapi.utils.Utils;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
@@ -19,26 +20,22 @@ import org.bukkit.Bukkit;
 import org.bukkit.WorldBorder;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-
+import java.util.stream.Collectors;
 
 public class ScoreBoard implements IScoreBoard {
 
 	private final GameManager game;
-	private int group_size = 5;
-	private int player = 0;
-	private int timer = 0;
-	private int role = 0;
+
 	private int day;
 	private String dayState;
 	private final List<String> scoreboard1 = new ArrayList<>();
 	private final List<String> scoreboard2 = new ArrayList<>();
 	private final List<String> scoreboard3 = new ArrayList<>();
 	private List<String> roles = new ArrayList<>();
-	private final List<UUID> kill_score = new ArrayList<>();
 
 	public ScoreBoard(GameManager game) {
 		this.game = game;
@@ -48,14 +45,13 @@ public class ScoreBoard implements IScoreBoard {
 
 		scoreboard1.clear();
 
-		for (String line : game.translateArray("werewolf.score_board.scoreboard_1")) {
+		scoreboard1.addAll(game.translateArray("werewolf.score_board.scoreboard_1",
+				Formatter.format("&players&", game.getPlayerSize()),
+				Formatter.format("&roles&", game.getRoleInitialSize()),
+				Formatter.format("&max&",game.getConfig().getPlayerMax())).stream()
+				.map(s -> s.substring(0, Math.min(30, s.length())))
+				.collect(Collectors.toList()));
 
-			line = line.replace("&players&", String.valueOf(player));
-			line = line.replace("&roles&", String.valueOf(role));
-			line = line.replace("&max&", String.valueOf(game.getConfig().getPlayerMax()));
-			line = line.substring(0, Math.min(30, line.length()));
-			scoreboard1.add(line);
-		}
 		String line = game.translate("werewolf.score_board.game_name");
 		scoreboard1.add(line.substring(0, Math.min(30, line.length())));
 		line = game.translate("werewolf.score_board.name", game.getGameName());
@@ -66,7 +62,7 @@ public class ScoreBoard implements IScoreBoard {
 
 		UUID playerUUID = board.getPlayer().getUniqueId();
 		List<String> score = new ArrayList<>(scoreboard2);
-		IPlayerWW playerWW = game.getPlayerWW(playerUUID);
+		IPlayerWW playerWW = game.getPlayerWW(playerUUID).orElse(null);
 		IModerationManager moderationManager = game.getModerationManager();
 		String role;
 		if (playerWW != null) {
@@ -74,7 +70,7 @@ public class ScoreBoard implements IScoreBoard {
 			if (!playerWW.isState(StatePlayer.DEATH)) {
 
 				if (!game.isState(StateGame.GAME)) {
-					role = Utils.conversion(game.getConfig().getTimerValue(TimersBase.ROLE_DURATION.getKey()));
+					role = Utils.conversion(game.getConfig().getTimerValue(TimerBase.ROLE_DURATION.getKey()));
 				} else role = game.translate(playerWW.getRole().getKey());
 			} else role = game.translate("werewolf.score_board.death");
 		} else if (moderationManager.getModerators().contains(playerUUID)) {
@@ -93,34 +89,32 @@ public class ScoreBoard implements IScoreBoard {
 	private void updateGlobalScoreBoard2() {
 
 		WorldBorder wb = game.getMapManager().getWorld().getWorldBorder();
-		String border_size = String.valueOf(Math.round(wb.getSize()));
+		String borderSize = String.valueOf(Math.round(wb.getSize()));
 		String border;
 
-		if (game.getConfig().getTimerValue(TimersBase.BORDER_BEGIN.getKey()) > 0) {
-			border = Utils.conversion(game.getConfig().getTimerValue(TimersBase.BORDER_BEGIN.getKey()));
+		if (game.getConfig().getTimerValue(TimerBase.BORDER_BEGIN.getKey()) > 0) {
+			border = Utils.conversion(game.getConfig().getTimerValue(TimerBase.BORDER_BEGIN.getKey()));
 		} else {
 			border = game.translate("werewolf.utils.on");
 			if (wb.getSize() > game.getConfig().getBorderMin()) {
-				border_size = border_size + " > " + game.getConfig().getBorderMin();
+				borderSize = borderSize + " > " + game.getConfig().getBorderMin();
 			}
 		}
 
 		scoreboard2.clear();
 
-		this.day = timer / game.getConfig().getTimerValue(TimersBase.DAY_DURATION.getKey()) / 2 + 1;
+		this.day = game.getTimer() / game.getConfig().getTimerValue(TimerBase.DAY_DURATION.getKey()) / 2 + 1;
 		this.dayState = game.translate(game.isDay(Day.DAY) ? "werewolf.score_board.day" : "werewolf.score_board.night");
 
-		for (String line : game.translateArray("werewolf.score_board.scoreboard_2")) {
 
-			line = line.replace("&timer&", Utils.conversion(timer));
-			line = line.replace("&day&", String.valueOf(this.day));
-			line = line.replace("&players&", String.valueOf(player));
-			line = line.replace("&group&", String.valueOf(group_size));
-			line = line.replace("&border&", border);
-			line = line.replace("&daystate&", this.dayState);
-			line = line.replace("&border_size&", border_size);
-			scoreboard2.add(line);
-		}
+		scoreboard2.addAll(game.translateArray("werewolf.score_board.scoreboard_2",
+				Formatter.format("&timer&",Utils.conversion(game.getTimer())),
+				Formatter.format("&day&", this.day),
+				Formatter.format("&players&", game.getPlayerSize()),
+				Formatter.format("&group&", game.getGroup()),
+				Formatter.format("&border&",border),
+				Formatter.format("&daystate&",this.dayState),
+				Formatter.format("&borderSize&",borderSize)));
 
 		scoreboard2.add(game.translate("werewolf.score_board.game_name"));
 		scoreboard2.add(game.translate("werewolf.score_board.name", game.getGameName()));
@@ -173,37 +167,23 @@ public class ScoreBoard implements IScoreBoard {
 		}
 	}
 
-	@Override
 	public void getKillCounter() {
 
-		for (IPlayerWW playerWW1 : game.getPlayerWW()) {
-			int i = 0;
-			while (i < kill_score.size() && playerWW1.getNbKill() <
-					Objects.requireNonNull(game.getPlayerWW(kill_score.get(i))).getNbKill()) {
-				i++;
-			}
-			kill_score.add(i, playerWW1.getUUID());
-		}
+		List<IPlayerWW> topKillers = game.getPlayersWW().stream()
+				.sorted(Comparator.comparingInt(value -> value.getPlayersKills().size()))
+				.collect(Collectors.toList());
 
 		scoreboard3.add(game.translate("werewolf.score_board.score")
 				.substring(0, Math.min(30, game.translate("werewolf.score_board.score").length())));
 
-		for (int i = 0; i < Math.min(game.getPlayerWW().size(), 10); i++) {
+		for (int i = 0; i < Math.min(game.getPlayersWW().size(), 10); i++) {
 
-			IPlayerWW playerWW1 = game.getPlayerWW(kill_score.get(i));
-
-			if (playerWW1 != null) {
-				scoreboard3.add(playerWW1.getName() + "§3 " +
-						playerWW1.getNbKill());
-			}
-
+			scoreboard3.add(topKillers.get(i).getName() + "§3 " +topKillers.get(i).getPlayersKills().size());
 		}
 		String line = game.translate("werewolf.score_board.game_name");
 		scoreboard3.add(line.substring(0, Math.min(30, line.length())));
 		line = game.translate("werewolf.score_board.name", game.getGameName());
 		scoreboard3.add(line.substring(0, Math.min(30, line.length())));
-
-		this.updateBoard();
 	}
 
 
@@ -214,11 +194,15 @@ public class ScoreBoard implements IScoreBoard {
 	@Override
 	public void updateBoard() {
 
+		if(game.isState(StateGame.END) && this.scoreboard3.isEmpty()){
+			this.getKillCounter();
+		}
+
 		if (Bukkit.getOnlinePlayers().size() == 0) return;
 
 		roles.clear();
 
-		if (!game.getConfig().isConfigActive(ConfigsBase.HIDE_COMPOSITION.getKey())
+		if (!game.getConfig().isConfigActive(ConfigBase.HIDE_COMPOSITION.getKey())
 				&& TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) % 60 >= 30) {
 			updateScoreBoardRole();
 		}
@@ -234,7 +218,7 @@ public class ScoreBoard implements IScoreBoard {
 		String bot = "";
 
 		if (game.isState(StateGame.START) || game.isState(StateGame.GAME)) {
-			bot = game.translate("werewolf.tab.timer", Utils.conversion(timer), day, dayState);
+			bot = game.translate("werewolf.tab.timer", Utils.conversion(game.getTimer()), day, dayState);
 		}
 
 		bot += game.translate("werewolf.tab.bot");
@@ -256,50 +240,5 @@ public class ScoreBoard implements IScoreBoard {
 			}
 		}
 
-	}
-
-	@Override
-	public int getRole() {
-		return role;
-	}
-
-	@Override
-	public void setRole(int role) {
-		this.role = role;
-	}
-
-	@Override
-	public void addTimer() {
-		this.timer++;
-	}
-
-	@Override
-	public int getPlayerSize() {
-		return player;
-	}
-
-	@Override
-	public void removePlayerSize() {
-		this.player = this.player - 1;
-	}
-
-	@Override
-	public void addPlayerSize() {
-		this.player = this.player + 1;
-	}
-
-	@Override
-	public int getTimer() {
-		return timer;
-	}
-
-	@Override
-	public int getGroup() {
-		return this.group_size;
-	}
-
-	@Override
-	public void setGroup(int group) {
-		this.group_size = group;
 	}
 }

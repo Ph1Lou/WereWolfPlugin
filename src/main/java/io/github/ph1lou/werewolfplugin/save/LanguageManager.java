@@ -4,6 +4,7 @@ package io.github.ph1lou.werewolfplugin.save;
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ILanguageManager;
 import io.github.ph1lou.werewolfapi.events.UpdateLanguageEvent;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -119,7 +120,7 @@ public class LanguageManager implements ILanguageManager, Listener {
         return file;
     }
 
-    public List<String> getTranslationList(String key) {
+    public List<String> getTranslationList(String key, Formatter... formatters) {
 
         if (!language.containsKey(key) || !language.get(key).isArray()) {
             return Collections.singletonList("Array Message error");
@@ -128,6 +129,13 @@ public class LanguageManager implements ILanguageManager, Listener {
                 .asArray().values()
                 .stream().filter(JsonValue::isString)
                 .map(JsonValue::asString)
+                .map(s -> {
+                    String message = s;
+                    for(Formatter formatter:formatters){
+                        message = formatter.handle(message);
+                    }
+                    return message;
+                })
                 .collect(Collectors.toList());
     }
 

@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
 public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
 
@@ -31,9 +31,9 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.avenger_werewolf.description", game.getConfig().getDistanceAvengerWerewolf()))
-                .setPower(() -> game.translate("werewolf.role.avenger_werewolf.power"))
-                .setEffects(() -> game.translate("werewolf.description.werewolf"))
+                .setDescription(game.translate("werewolf.role.avenger_werewolf.description", game.getConfig().getDistanceAvengerWerewolf()))
+                .setPower(game.translate("werewolf.role.avenger_werewolf.power"))
+                .setEffects(game.translate("werewolf.description.werewolf"))
                 .build();
     }
 
@@ -41,7 +41,7 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -54,7 +54,7 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
         Bukkit.getPluginManager().callEvent(event1);
 
         if (event1.isCancelled()) {
-            getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
             return;
         }
 
@@ -71,14 +71,15 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
         if (player == null) {
             return;
         }
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
         Bukkit.getOnlinePlayers()
                 .stream()
                 .map(player1 -> game.getPlayerWW(player1.getUniqueId()))
-                .filter(Objects::nonNull)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .filter(playerWW -> !playerWW.getRole().equals(this))
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> playerWW.getRole().isWereWolf())

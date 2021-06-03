@@ -1,27 +1,20 @@
 package io.github.ph1lou.werewolfplugin.commands.utilities;
 
-import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enums.ConfigBase;
 import io.github.ph1lou.werewolfapi.registers.RandomEventRegister;
 import io.github.ph1lou.werewolfplugin.Main;
+import io.github.ph1lou.werewolfplugin.RegisterManager;
 import org.bukkit.entity.Player;
 
-public class CommandRandomEvents implements ICommands {
+public class CommandRandomEvents implements ICommand {
 
-
-    private final Main main;
-
-    public CommandRandomEvents(Main main) {
-        this.main = main;
-    }
 
     @Override
-    public void execute(Player player, String[] args) {
+    public void execute(WereWolfAPI game, Player player, String[] args) {
 
-        WereWolfAPI game = main.getWereWolfAPI();
-
-        if (game.getConfig().isConfigActive(ConfigsBase.HIDE_EVENTS.getKey())) {
+        if (game.getConfig().isConfigActive(ConfigBase.HIDE_EVENTS.getKey())) {
 
             player.sendMessage(game.translate("werewolf.menu.random_events.disable"));
 
@@ -30,7 +23,7 @@ public class CommandRandomEvents implements ICommands {
 
         StringBuilder sb = new StringBuilder(game.translate("werewolf.menu.random_events.list"));
 
-        for (RandomEventRegister randomEventRegister : main.getRegisterManager().getRandomEventsRegister()) {
+        for (RandomEventRegister randomEventRegister : RegisterManager.get().getRandomEventsRegister()) {
 
             if (game.getConfig().getProbability(randomEventRegister.getKey()) > 0) {
                 sb.append(game.translate("werewolf.menu.random_events.command_message",

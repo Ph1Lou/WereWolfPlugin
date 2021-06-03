@@ -1,26 +1,16 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
-import io.github.ph1lou.werewolfapi.ICommands;
+import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
-import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-public class CommandFinalHeal implements ICommands {
-
-
-    private final Main main;
-
-    public CommandFinalHeal(Main main) {
-        this.main = main;
-    }
+public class CommandFinalHeal implements ICommand {
 
     @Override
-    public void execute(Player player, String[] args) {
-
-        WereWolfAPI game = main.getWereWolfAPI();
+    public void execute(WereWolfAPI game, Player player, String[] args) {
 
         Bukkit.getOnlinePlayers().forEach(player1 -> {
             player1.setHealth(VersionUtils.getVersionUtils().getPlayerMaxHealth(player1));

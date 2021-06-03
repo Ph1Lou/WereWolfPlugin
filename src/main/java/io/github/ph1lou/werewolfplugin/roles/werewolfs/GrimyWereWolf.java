@@ -5,7 +5,7 @@ import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Camp;
-import io.github.ph1lou.werewolfapi.enums.ConfigsBase;
+import io.github.ph1lou.werewolfapi.enums.ConfigBase;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.UpdateCompositionReason;
@@ -60,8 +60,8 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(() -> game.translate("werewolf.role.grimy_werewolf.description"))
-                .setEffects(() -> game.translate("werewolf.description.werewolf"))
+                .setDescription(game.translate("werewolf.role.grimy_werewolf.description"))
+                .setEffects(game.translate("werewolf.description.werewolf"))
                 .build();
     }
 
@@ -115,7 +115,7 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
         Bukkit.getPluginManager().callEvent(grimEvent);
 
         if (grimEvent.isCancelled()) {
-            getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
             return;
         }
         this.getPlayerWW().sendMessageWithKey("werewolf.role.grimy_werewolf.perform", event.getPlayerWW().getName(), game.translate(event.getPlayerWW().getRole().getKey()));
@@ -148,7 +148,7 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onUpdate(UpdatePlayerNameTag event) {
 
-        IPlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID());
+        IPlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID()).orElse(null);
 
         if (playerWW == null) {
             return;
@@ -158,12 +158,12 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
 
         if (!this.affectedPlayer.contains(playerWW)) return;
 
-        if (game.getConfig().isConfigActive(ConfigsBase.SHOW_ROLE_TO_DEATH.getKey())) {
+        if (game.getConfig().isConfigActive(ConfigBase.SHOW_ROLE_TO_DEATH.getKey())) {
             event.setSuffix(event.getSuffix()
                     .replace(game.translate(playerWW.getRole().getKey()),
                             "")
                     + game.translate(RolesBase.WEREWOLF.getKey()));
-        } else if (game.getConfig().isConfigActive(ConfigsBase.SHOW_ROLE_CATEGORY_TO_DEATH.getKey())) {
+        } else if (game.getConfig().isConfigActive(ConfigBase.SHOW_ROLE_CATEGORY_TO_DEATH.getKey())) {
             event.setSuffix(event.getSuffix()
                     .replace(game.translate(playerWW.getRole().getCamp().getKey()),
                             "")

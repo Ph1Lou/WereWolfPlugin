@@ -102,7 +102,7 @@ public class CursedLover implements ILover, Listener {
 
         Player player = (Player) event.getEntity();
         UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid);
+        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
 
         if (getLovers().contains(playerWW)) {
             event.setCancelled(true);
@@ -115,7 +115,7 @@ public class CursedLover implements ILover, Listener {
 
         StringBuilder sb = new StringBuilder(event.getSuffix());
 
-        IPlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID());
+        IPlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID()).orElse(null);
 
         if (playerWW == null) return;
 

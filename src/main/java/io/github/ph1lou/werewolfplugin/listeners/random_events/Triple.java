@@ -27,7 +27,7 @@ public class Triple extends ListenerManager {
 
     @EventHandler
     public void onRevealLover(RevealLoversEvent event) {
-        WereWolfAPI game = main.getWereWolfAPI();
+        WereWolfAPI game = this.getGame();
 
         BukkitUtils.scheduleSyncDelayedTask(() -> {
             if (game.isState(StateGame.GAME)) {
@@ -42,7 +42,7 @@ public class Triple extends ListenerManager {
                     Lover lover = lovers.get((int) Math.floor(
                             game.getRandom().nextFloat() * lovers.size()));
 
-                    List<IPlayerWW> playerWWS = game.getPlayerWW().stream()
+                    List<IPlayerWW> playerWWS = game.getPlayersWW().stream()
                             .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                             .filter(playerWW -> playerWW.getLovers().isEmpty())
                             .collect(Collectors.toList());

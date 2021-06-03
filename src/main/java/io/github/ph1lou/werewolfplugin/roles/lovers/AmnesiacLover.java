@@ -129,7 +129,7 @@ public class AmnesiacLover implements ILover, Listener {
 
         StringBuilder sb = new StringBuilder(event.getSuffix());
 
-        IPlayerWW playerWW = this.game.getPlayerWW(event.getPlayerUUID());
+        IPlayerWW playerWW = this.game.getPlayerWW(event.getPlayerUUID()).orElse(null);
 
         if (playerWW == null) return;
 
@@ -168,7 +168,7 @@ public class AmnesiacLover implements ILover, Listener {
         if (!this.game.isState(StateGame.GAME)) return;
 
         UUID uuid = event.getPlayerUUID();
-        IPlayerWW playerWW = this.game.getPlayerWW(uuid);
+        IPlayerWW playerWW = this.game.getPlayerWW(uuid).orElse(null);
 
         if (!getLovers().contains(playerWW)) return;
 
