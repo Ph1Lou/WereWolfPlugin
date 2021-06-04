@@ -8,7 +8,6 @@ import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
-import org.bukkit.plugin.Plugin;
 
 public class CompassMiddle extends ListenerManager {
 

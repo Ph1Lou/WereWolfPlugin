@@ -357,7 +357,6 @@ public class PlayerListener implements Listener {
 			playerWW.setDisconnectedLocation(player.getLocation().clone());
 
 			if (game.isState(StateGame.LOBBY)) {
-				game.setPlayerSize(game.getPlayerSize()-1);
 				game.remove(uuid);
 				game.getModerationManager().checkQueue();
 				event.setQuitMessage(game.translate("werewolf.announcement.leave",

@@ -3,7 +3,7 @@ package io.github.ph1lou.werewolfplugin.listeners.scenarios;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.ListenerManager;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
-import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTag;
+import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 
@@ -14,7 +14,7 @@ public class NoNameTag extends ListenerManager {
 
 
     @EventHandler
-    public void onUpdateNameTag(UpdatePlayerNameTag event) {
+    public void onUpdateNameTag(UpdatePlayerNameTagEvent event) {
         event.setVisibility(false);
     }
 

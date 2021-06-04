@@ -10,9 +10,9 @@ import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
-import io.github.ph1lou.werewolfapi.events.game.permissions.UpdateModeratorNameTag;
+import io.github.ph1lou.werewolfapi.events.game.permissions.UpdateModeratorNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
-import io.github.ph1lou.werewolfapi.events.lovers.AroundLover;
+import io.github.ph1lou.werewolfapi.events.lovers.AroundLoverEvent;
 import io.github.ph1lou.werewolfapi.events.lovers.LoverDeathEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.utils.Utils;
@@ -106,7 +106,7 @@ public class Lover implements ILover, Listener {
     }
 
     @EventHandler
-    public void onModeratorScoreBoard(UpdateModeratorNameTag event) {
+    public void onModeratorScoreBoard(UpdateModeratorNameTagEvent event) {
 
         StringBuilder sb = new StringBuilder(event.getSuffix());
 
@@ -216,7 +216,7 @@ public class Lover implements ILover, Listener {
     }
 
     @EventHandler
-    public void onAroundLover(AroundLover event) {
+    public void onAroundLoverEvent(AroundLoverEvent event) {
 
 
         if (death) return;

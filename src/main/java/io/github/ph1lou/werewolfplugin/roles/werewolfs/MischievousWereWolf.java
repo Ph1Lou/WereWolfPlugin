@@ -9,7 +9,7 @@ import io.github.ph1lou.werewolfapi.enums.Day;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
-import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTag;
+import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayWillComeEvent;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
@@ -47,7 +47,7 @@ public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
     }
 
     @EventHandler
-    public void onUpdateNameTag(UpdatePlayerNameTag event) {
+    public void onUpdateNameTag(UpdatePlayerNameTagEvent event) {
 
         if (!event.getPlayerUUID().equals(getPlayerUUID())) return;
 

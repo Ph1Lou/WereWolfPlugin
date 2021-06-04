@@ -8,7 +8,6 @@ import io.github.ph1lou.werewolfapi.events.roles.librarian.LibrarianRequestEvent
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.ILimitedUse;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
-import io.github.ph1lou.werewolfplugin.Main;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;

@@ -5,7 +5,7 @@ import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
-import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTag;
+import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.village_idiot.VillageIdiotEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
@@ -51,7 +51,7 @@ public class VillageIdiot extends RoleVillage implements IPower {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void onUpdateNameTag(UpdatePlayerNameTag event) {
+    public void onUpdateNameTag(UpdatePlayerNameTagEvent event) {
 
         if (!event.getPlayerUUID().equals(getPlayerUUID())) return;
 

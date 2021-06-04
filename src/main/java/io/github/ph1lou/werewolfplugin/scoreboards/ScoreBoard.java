@@ -71,13 +71,19 @@ public class ScoreBoard implements IScoreBoard {
 
 				if (!game.isState(StateGame.GAME)) {
 					role = Utils.conversion(game.getConfig().getTimerValue(TimerBase.ROLE_DURATION.getKey()));
-				} else role = game.translate(playerWW.getRole().getKey());
-			} else role = game.translate("werewolf.score_board.death");
+				} else {
+					role = game.translate(playerWW.getRole().getKey());
+				}
+			} else {
+			    role = game.translate("werewolf.score_board.death");
+            }
 		} else if (moderationManager.getModerators().contains(playerUUID)) {
 			role = game.translate("werewolf.commands.admin.moderator.name");
 		} else if (moderationManager.getHosts().contains(playerUUID)) {
 			role = game.translate("werewolf.commands.admin.host.name");
-		} else role = game.translate("werewolf.score_board.spectator");
+		} else {
+			role = game.translate("werewolf.score_board.spectator");
+		}
 
 		for(int i=0;i<score.size();i++){
 			score.set(i,score.get(i).replace("&role&",role));
@@ -114,7 +120,7 @@ public class ScoreBoard implements IScoreBoard {
 				Formatter.format("&group&", game.getGroup()),
 				Formatter.format("&border&",border),
 				Formatter.format("&daystate&",this.dayState),
-				Formatter.format("&borderSize&",borderSize)));
+				Formatter.format("&border_size&",borderSize)));
 
 		scoreboard2.add(game.translate("werewolf.score_board.game_name"));
 		scoreboard2.add(game.translate("werewolf.score_board.name", game.getGameName()));

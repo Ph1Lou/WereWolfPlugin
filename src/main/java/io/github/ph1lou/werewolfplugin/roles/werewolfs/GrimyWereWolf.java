@@ -9,7 +9,7 @@ import io.github.ph1lou.werewolfapi.enums.ConfigBase;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.UpdateCompositionReason;
-import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTag;
+import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.UpdateCompositionEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
@@ -146,7 +146,7 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onUpdate(UpdatePlayerNameTag event) {
+    public void onUpdate(UpdatePlayerNameTagEvent event) {
 
         IPlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID()).orElse(null);
 

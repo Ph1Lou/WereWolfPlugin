@@ -8,7 +8,6 @@ import io.github.ph1lou.werewolfapi.events.roles.wolf_dog.WolfDogChooseWereWolfF
 import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfapi.rolesattributs.ITransformed;
-import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

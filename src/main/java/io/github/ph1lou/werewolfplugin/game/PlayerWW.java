@@ -1,6 +1,5 @@
 package io.github.ph1lou.werewolfplugin.game;
 
-import com.eclipsesource.json.JsonArray;
 import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
@@ -226,9 +225,9 @@ public class PlayerWW implements IPlayerWW {
                     .filter(potionModifier1 -> potionModifier1.getIdentifier().equals(potionModifier.getIdentifier()))
                     .filter(potionModifier1 -> potionModifier1.getPotionEffectType().equals(potionModifier.getPotionEffectType()))
                     .forEach(potionModifier1 -> {
-                        if(potionModifier1.getTimer() +
-                                potionModifier1.getDuration() -
-                                game.getTimer()  < potionModifier.getDuration()){
+                        if(20 * (potionModifier1.getTimer() -
+                                game.getTimer()) +
+                                potionModifier1.getDuration()   < potionModifier.getDuration()){
                             int id = this.potionModifiers.remove(potionModifier1);
                             if(id != -1){
                                 Bukkit.getScheduler().cancelTask(id);
@@ -252,11 +251,7 @@ public class PlayerWW implements IPlayerWW {
 
                         Player player1 = Bukkit.getPlayer(this.uuid);
 
-                        int id = this.potionModifiers.remove(potionModifier);
-
-                        if(id != -1){
-                            Bukkit.getScheduler().cancelTask(id);
-                        }
+                        this.potionModifiers.remove(potionModifier);
 
                         if(player1!=null){
                             if(this.potionModifiers.keySet().stream()

@@ -18,7 +18,7 @@ import io.github.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
 import io.github.ph1lou.werewolfapi.events.game.utils.WinConditionsCheckEvent;
-import io.github.ph1lou.werewolfapi.events.lovers.AroundLover;
+import io.github.ph1lou.werewolfapi.events.lovers.AroundLoverEvent;
 import io.github.ph1lou.werewolfapi.events.roles.StealEvent;
 import io.github.ph1lou.werewolfapi.events.roles.angel.AngelChoiceEvent;
 import io.github.ph1lou.werewolfapi.events.roles.angel.AngelTargetDeathEvent;
@@ -448,7 +448,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
     }
 
     @EventHandler
-    public void onLover(AroundLover event) {
+    public void onLover(AroundLoverEvent event) {
 
         if (!choice.equals(AngelForm.GUARDIAN_ANGEL)) return;
 

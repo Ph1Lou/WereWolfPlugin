@@ -13,7 +13,7 @@ import io.github.ph1lou.werewolfapi.events.game.game_cycle.WinEvent;
 import io.github.ph1lou.werewolfapi.events.game.utils.CountRemainingRolesCategoriesEvent;
 import io.github.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
 import io.github.ph1lou.werewolfapi.events.game.utils.WinConditionsCheckEvent;
-import io.github.ph1lou.werewolfapi.events.lovers.AroundLover;
+import io.github.ph1lou.werewolfapi.events.lovers.AroundLoverEvent;
 import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import io.github.ph1lou.werewolfapi.utils.Utils;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
@@ -58,10 +58,10 @@ public class End {
                         Set<IPlayerWW> lovers = new HashSet<>(ILover.getLovers());
 
                         if (ILover.isAlive()) {
-                            AroundLover aroundLover = new AroundLover(lovers);
-                            Bukkit.getPluginManager().callEvent(aroundLover);
+                            AroundLoverEvent AroundLoverEvent = new AroundLoverEvent(lovers);
+                            Bukkit.getPluginManager().callEvent(AroundLoverEvent);
 
-                            if (aroundLover.getPlayerWWS().size() == game.getPlayerSize()) {
+                            if (AroundLoverEvent.getPlayerWWS().size() == game.getPlayerSize()) {
                                 winner = ILover.getKey();
                                 fin();
                             }

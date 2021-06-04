@@ -7,9 +7,9 @@ import io.github.ph1lou.werewolfapi.enums.ConfigBase;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
-import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTag;
+import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
-import io.github.ph1lou.werewolfapi.events.game.permissions.UpdateModeratorNameTag;
+import io.github.ph1lou.werewolfapi.events.game.permissions.UpdateModeratorNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
 import io.github.ph1lou.werewolfapi.events.werewolf.RequestSeeWereWolfListEvent;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
@@ -104,21 +104,21 @@ public class TabManager implements Listener {
             }
         }
 
-        UpdatePlayerNameTag event = new UpdatePlayerNameTag(uuid, sb.toString(), "", true);
+        UpdatePlayerNameTagEvent event = new UpdatePlayerNameTagEvent(uuid, sb.toString(), "", true);
 
-        UpdateModeratorNameTag updateModeratorNameTag =
-                new UpdateModeratorNameTag(uuid, "", "");
+        UpdateModeratorNameTagEvent UpdateModeratorNameTagEvent =
+                new UpdateModeratorNameTagEvent(uuid, "", "");
 
         Bukkit.getPluginManager().callEvent(event);
 
-        Bukkit.getPluginManager().callEvent(updateModeratorNameTag);
+        Bukkit.getPluginManager().callEvent(UpdateModeratorNameTagEvent);
 
         players.forEach(player1 -> set(player, player1,
                 event,
-                updateModeratorNameTag));
+                UpdateModeratorNameTagEvent));
     }
 
-    private void set(Player target, Player recipient, UpdatePlayerNameTag event1, UpdateModeratorNameTag event2) {
+    private void set(Player target, Player recipient, UpdatePlayerNameTagEvent event1, UpdateModeratorNameTagEvent event2) {
 
         Scoreboard scoreboard = recipient.getScoreboard();
         Team team = scoreboard.getTeam(target.getName());
@@ -184,7 +184,7 @@ public class TabManager implements Listener {
 
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onUpdate(UpdatePlayerNameTag event) {
+    public void onUpdate(UpdatePlayerNameTagEvent event) {
 
         StringBuilder sb = new StringBuilder(event.getSuffix());
 

@@ -5,7 +5,6 @@ import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -39,7 +38,6 @@ public class CommandKill implements ICommand {
             return;
         }
         if (game.isState(StateGame.START)) {
-            ((GameManager) game).setPlayerSize(game.getPlayerSize()-1);
             ((GameManager) game).remove(argUUID);
             player.sendMessage(game.translate("werewolf.commands.kill.remove_role"));
             return;

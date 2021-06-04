@@ -7,7 +7,7 @@ import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
-import io.github.ph1lou.werewolfapi.events.game.permissions.UpdateModeratorNameTag;
+import io.github.ph1lou.werewolfapi.events.game.permissions.UpdateModeratorNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
 import io.github.ph1lou.werewolfapi.events.game.utils.WinConditionsCheckEvent;
 import io.github.ph1lou.werewolfapi.events.lovers.CursedLoverDeathEvent;
@@ -111,7 +111,7 @@ public class CursedLover implements ILover, Listener {
 
 
     @EventHandler
-    public void onModeratorScoreBoard(UpdateModeratorNameTag event) {
+    public void onModeratorScoreBoard(UpdateModeratorNameTagEvent event) {
 
         StringBuilder sb = new StringBuilder(event.getSuffix());
 

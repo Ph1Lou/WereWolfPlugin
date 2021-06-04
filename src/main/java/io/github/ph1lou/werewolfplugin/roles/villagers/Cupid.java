@@ -6,7 +6,7 @@ import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
-import io.github.ph1lou.werewolfapi.events.lovers.AroundLover;
+import io.github.ph1lou.werewolfapi.events.lovers.AroundLoverEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
@@ -84,7 +84,7 @@ public class Cupid extends RoleVillage implements IAffectedPlayers, IPower {
     }
 
     @EventHandler
-    public void onAroundLover(AroundLover event) {
+    public void onAroundLoverEvent(AroundLoverEvent event) {
 
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 

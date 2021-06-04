@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 
 public class RegisterManager implements IRegisterManager {
 
-    private final Main main;
     private final List<RoleRegister> rolesRegister;
     private final List<ScenarioRegister> scenariosRegister;
     private final List<ConfigRegister> configsRegister;
@@ -37,7 +36,6 @@ public class RegisterManager implements IRegisterManager {
     private static RegisterManager instance;
 
     public RegisterManager(Main main) {
-        this.main = main;
         instance = this;
         this.rolesRegister = RolesRegister.registerRoles();
         this.scenariosRegister = ScenariosRegister.registerScenarios(main);

@@ -11,10 +11,10 @@ import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
-import io.github.ph1lou.werewolfapi.events.game.permissions.UpdateModeratorNameTag;
+import io.github.ph1lou.werewolfapi.events.game.permissions.UpdateModeratorNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
 import io.github.ph1lou.werewolfapi.events.lovers.AmnesiacLoverDeathEvent;
-import io.github.ph1lou.werewolfapi.events.lovers.AroundLover;
+import io.github.ph1lou.werewolfapi.events.lovers.AroundLoverEvent;
 import io.github.ph1lou.werewolfapi.events.lovers.RevealAmnesiacLoversEvent;
 import io.github.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
@@ -125,7 +125,7 @@ public class AmnesiacLover implements ILover, Listener {
 
 
     @EventHandler
-    public void onModeratorScoreBoard(UpdateModeratorNameTag event) {
+    public void onModeratorScoreBoard(UpdateModeratorNameTagEvent event) {
 
         StringBuilder sb = new StringBuilder(event.getSuffix());
 
@@ -250,7 +250,7 @@ public class AmnesiacLover implements ILover, Listener {
     }
 
     @EventHandler
-    public void onAroundLover(AroundLover event) {
+    public void onAroundLoverEvent(AroundLoverEvent event) {
 
         if (this.death) return;
 

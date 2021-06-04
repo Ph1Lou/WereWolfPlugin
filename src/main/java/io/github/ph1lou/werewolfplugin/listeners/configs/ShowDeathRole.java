@@ -6,7 +6,7 @@ import io.github.ph1lou.werewolfapi.ListenerManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
-import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTag;
+import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.UpdateCompositionEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import org.bukkit.Bukkit;
@@ -32,7 +32,7 @@ public class ShowDeathRole extends ListenerManager {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void onUpdate(UpdatePlayerNameTag event) {
+    public void onUpdate(UpdatePlayerNameTagEvent event) {
 
         WereWolfAPI game = this.getGame();
 

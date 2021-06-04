@@ -8,7 +8,7 @@ import io.github.ph1lou.werewolfapi.enums.*;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.utils.WinConditionsCheckEvent;
-import io.github.ph1lou.werewolfapi.events.lovers.AroundLover;
+import io.github.ph1lou.werewolfapi.events.lovers.AroundLoverEvent;
 import io.github.ph1lou.werewolfapi.events.roles.StealEvent;
 import io.github.ph1lou.werewolfapi.events.roles.succubus.CharmEvent;
 import io.github.ph1lou.werewolfapi.events.roles.succubus.SuccubusResurrectionEvent;
@@ -318,7 +318,7 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
     }
 
     @EventHandler
-    public void onLover(AroundLover event) {
+    public void onLover(AroundLoverEvent event) {
 
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 

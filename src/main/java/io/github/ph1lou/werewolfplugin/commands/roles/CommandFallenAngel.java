@@ -11,7 +11,6 @@ import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.roles.angel.AngelChoiceEvent;
 import io.github.ph1lou.werewolfapi.utils.Utils;
-import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.Angel;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
