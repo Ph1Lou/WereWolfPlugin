@@ -184,7 +184,7 @@ public class ScoreBoard implements IScoreBoard {
 
 		for (int i = 0; i < Math.min(game.getPlayersWW().size(), 10); i++) {
 
-			scoreboard3.add(topKillers.get(i).getName() + "§3 " +topKillers.get(i).getPlayersKills().size());
+			scoreboard3.add(topKillers.get(topKillers.size()-1).getName() + "§3 " +topKillers.remove(topKillers.size()-1).getPlayersKills().size());
 		}
 		String line = game.translate("werewolf.score_board.game_name");
 		scoreboard3.add(line.substring(0, Math.min(30, line.length())));
@@ -216,7 +216,7 @@ public class ScoreBoard implements IScoreBoard {
 		if (roles.isEmpty()) {
 			if (game.isState(StateGame.LOBBY)) {
 				updateScoreBoard1();
-			} else {
+			} else if (!game.isState(StateGame.END)){
 				updateGlobalScoreBoard2();
 			}
 		}

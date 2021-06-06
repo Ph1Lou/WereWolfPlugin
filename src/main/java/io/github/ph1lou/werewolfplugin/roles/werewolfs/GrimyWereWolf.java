@@ -76,7 +76,7 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 
-        if (!event.getPlayerWW().getRole().equals(this)) return;
+        if (!event.getPlayerWW().equals(this.getPlayerWW())) return;
 
         if (this.power) {
             game.getConfig().removeOneRole(RolesBase.WEREWOLF.getKey());
@@ -120,6 +120,7 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
         }
         this.getPlayerWW().sendMessageWithKey("werewolf.role.grimy_werewolf.perform", event.getPlayerWW().getName(), game.translate(event.getPlayerWW().getRole().getKey()));
 
+        game.getConfig().removeOneRole(RolesBase.WEREWOLF.getKey());
         this.affectedPlayer.add(event.getPlayerWW());
     }
 

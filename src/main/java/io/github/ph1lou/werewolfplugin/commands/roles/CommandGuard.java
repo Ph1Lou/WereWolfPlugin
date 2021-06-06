@@ -9,7 +9,7 @@ import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.roles.guard.GuardEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
-import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Guard;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -26,7 +26,7 @@ public class CommandGuard implements ICommand {
 
         if (playerWW == null) return;
 
-        IRole guard = playerWW.getRole();
+        Guard guard = (Guard) playerWW.getRole();
 
         Player playerArg = Bukkit.getPlayer(args[0]);
 
@@ -47,6 +47,11 @@ public class CommandGuard implements ICommand {
             return;
         }
 
+        if(!guard.isPowerFinal()){
+            playerWW.sendMessageWithKey("werewolf.check.power");
+            return;
+        }
+
         ((IPower) guard).setPower(false);
 
         GuardEvent guardEvent = new GuardEvent(playerWW, playerWW1);
@@ -59,7 +64,10 @@ public class CommandGuard implements ICommand {
         }
 
         ((IAffectedPlayers) guard).addAffectedPlayer(playerWW1);
-        playerWW1.getRole().addAuraModifier(new AuraModifier("guarded", Aura.LIGHT, 40, true));
+        playerWW1.getRole().addAuraModifier(new AuraModifier("guarded",
+                Aura.LIGHT,
+                40,
+                true));
 
         playerWW.sendMessageWithKey("werewolf.role.guard.perform", playerArg.getName());
     }

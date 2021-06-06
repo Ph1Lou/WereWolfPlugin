@@ -183,10 +183,6 @@
         "smell": "[§cLG UHC§r] Vous avez été flairé par un §bRenard§f il y a 5 minutes",
         "command": "flairer"
       },
-      "miner": {
-        "display": "Mineur",
-        "description": "§6LOUP-GAROU §7➽§9 Vous êtes §1Mineur§9. Votre objectif est d’éliminer les Loups-Garous.\n§9Vous possédez une pioche en diamant et l'effet Célérité."
-      },
       "raven": {
         "display": "Corbeau",
         "effect": "Chute Amortie",
@@ -427,19 +423,19 @@
       "flute_player": {
         "display": "Joueur de Flûte",
         "full": "[§cLG UHC§r] Le joueur a son inventaire rempli, il ne peut recevoir la flûte",
-        "wait": "[§eLG UHC§r] Vous devez attendre un jour avant de transmettre une nouvelle flûte",
+        "wait": "[§eLG UHC§r] Vous devez attendre §bun jour§f avant de transmettre une nouvelle flûte",
         "affected": "§bPersonne affectée§f : §f%s\n",
-        "craft_description": "Pour fabriquer votre flûte, il suffit de mettre un baton entourer de ingot d'or dans votre établi",
+        "craft_description": "Pour fabriquer votre flûte, un baton entourer de ingot d'or dans votre établi",
         "description": "Lorsque vous aurez fabriquer votre flûte, toutes les personnes à §b%d§f blocks de vous seront charmées progressivement (1%% toutes les 6 secondes).",
-        "power": "Vous pouvez fabriquer des flûtes supplémentaires, et les donner furtivement aux joueurs par un clique droit une fois par cycle. Si le joueur repère la flûte son effet est annulé. Un joueur avec une flûte charmera à son insu les joueurs autour de lui.",
+        "power": "Vous pouvez fabriquer des flûtes §bsupplémentaires§f, et les donner furtivement aux joueurs par un §bclique droit§f une fois par cycle. Si le joueur repère la flûte son effet est annulé. Un joueur avec une flûte charmera §bà son insu§f les joueurs autour de lui.",
         "enchanted": "[§eLG UHC§r] Vous venez d'enchanter §b%s",
         "transmit": "[§aLG UHC§r] Vous venez de transmettre une flûte à §b%s§f il vous en reste §b%d",
         "find": "[§cLG UHC§r] Vous venez de découvrir une flûte sur vous, elle n'a plus d'effets sur vous",
-        "find_flute": "[§cLG UHC§r] §b%s§f a découvert votre flûte, elle n'agit plus sur lui",
-        "effect": "Si une personne charmée se trouve dans votre champ, vous gagnez Résistance. Si vous charmez tout les joueurs, vous gagnez l'effet Force permanent",
+        "find_flute": "[§cLG UHC§r] §b%s§f a découvert votre §bflûte§f, elle n'agit plus sur lui",
+        "effect": "Si une personne §bcharmée§f se trouve dans votre champ, vous gagnez §bRésistance§f. Si vous charmez tout les joueurs, vous gagnez l'effet §bForce§f permanent",
         "day": "[§eLG UHC§r] Vous pouvez de nouveau donner une flûte à quelqu'un (stock actuel §b%d§f)",
         "craft": "[§eLG UHC§r] Vous venez de fabriquer une nouvelle flûte (§f%d§f flûte(s) en stock), faites clique droit sur un joueur pour lui donner sans éveiller les soupcons. Il charmera les personnes autour de lui tant qu'il ne remarque pas la flûte dans son inventaire",
-        "perform": "[§eLG UHC§r] Vous venez de réaliser votre flûte, vous commencez à charmer les personnes à §b%d§f blocks de vous",
+        "perform": "[§eLG UHC§r] Vous venez de réaliser §bvotre flûte§f, vous commencez à charmer les personnes à §b%d§f blocks de vous",
         "item": "Flûte magique"
       },
       "librarian": {

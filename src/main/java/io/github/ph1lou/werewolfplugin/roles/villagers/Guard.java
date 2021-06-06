@@ -24,7 +24,10 @@ public class Guard extends RoleWithLimitedSelectionDuration implements IAffected
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private IPlayerWW last;
-    private boolean power = false;
+
+
+
+    private boolean powerFinal = true;
 
 
     public Guard(WereWolfAPI api, IPlayerWW playerWW, String key) {
@@ -42,7 +45,7 @@ public class Guard extends RoleWithLimitedSelectionDuration implements IAffected
 
         if (event.isCancelled()) return;
 
-        if (!this.power) {
+        if (!this.powerFinal) {
             return;
         }
 
@@ -73,7 +76,7 @@ public class Guard extends RoleWithLimitedSelectionDuration implements IAffected
 
         event.setCancelled(true);
 
-        this.power = false;
+        this.powerFinal = false;
     }
 
     @Override
@@ -96,14 +99,15 @@ public class Guard extends RoleWithLimitedSelectionDuration implements IAffected
 
         if (this.last != null) {
             this.last.getRole().removeAuraModifier("guarded");
+            this.last = null;
         }
-        this.last = null;
+
 
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        if (!this.power) return;
+        if (!this.powerFinal) return;
 
         this.setPower(true);
 
@@ -125,5 +129,9 @@ public class Guard extends RoleWithLimitedSelectionDuration implements IAffected
     @Override
     public void recoverPower() {
 
+    }
+
+    public boolean isPowerFinal() {
+        return powerFinal;
     }
 }

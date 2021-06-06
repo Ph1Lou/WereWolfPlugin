@@ -473,7 +473,7 @@ public class PlayerListener implements Listener {
 		});
 
 		game.getModerationManager().getModerators().stream()
-				.filter(uuid -> game.getPlayerWW(uuid).isPresent())
+				.filter(uuid -> !game.getPlayerWW(uuid).isPresent())
 				.map(Bukkit::getPlayer)
 				.filter(Objects::nonNull)
 				.forEach(player1 -> player1.sendMessage(this.sendOriginalDeathMessage(playerWW)));
