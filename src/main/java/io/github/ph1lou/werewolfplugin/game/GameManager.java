@@ -70,7 +70,7 @@ public class GameManager implements WereWolfAPI {
     private final End end = new End(this);
     private final Stuff stuff;
     private final RandomConfig randomConfig;
-    private final ListenersLoader scenarios;
+    private final ListenersLoader listenersLoader;
     private final Random r = new Random(System.currentTimeMillis());
     private final UUID gameUUID = UUID.randomUUID();
     private String gameName = "@Ph1Lou_";
@@ -87,7 +87,7 @@ public class GameManager implements WereWolfAPI {
         this.configuration = new Configuration(main.getRegisterManager());
         this.mapManager = new MapManager(main);
         this.stuff = new Stuff(main);
-        this.scenarios = new ListenersLoader(this);
+        this.listenersLoader = new ListenersLoader(this);
         File mapFolder = new File(main.getDataFolder() +
                 File.separator + "maps");
         if (!mapFolder.exists()) {
@@ -101,7 +101,7 @@ public class GameManager implements WereWolfAPI {
             Bukkit.getPluginManager().callEvent(new UpdateLanguageEvent());
             FileUtils_.loadConfig(main, "saveCurrent");
             main.getWereWolfAPI().getStuffs().load("saveCurrent");
-            scenarios.init();
+            listenersLoader.init();
         });
         setState(StateGame.LOBBY);
         Bukkit.getPluginManager().callEvent(new LoadEvent(this));
@@ -239,7 +239,7 @@ public class GameManager implements WereWolfAPI {
 
         Bukkit.getPluginManager().callEvent(new StopEvent(this));
 
-        scenarios.delete();
+        listenersLoader.delete();
 
         main.createGame();
 
@@ -456,5 +456,7 @@ public class GameManager implements WereWolfAPI {
         this.timer = timer;
     }
 
-
+    public ListenersLoader getListenersLoader() {
+        return this.listenersLoader;
+    }
 }

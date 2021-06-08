@@ -545,8 +545,9 @@ public class PlayerListener implements Listener {
 		game.getModerationManager().getModerators().stream()
 				.map(Bukkit::getPlayer)
 				.filter(Objects::nonNull)
-				.forEach(player -> player.sendMessage(game.translate("werewolf.role.alpha_werewolf.prefix",
-						event.getMessage()).replace("&name&", event.getPlayerWW().getName())));
+				.forEach(player -> player.sendMessage(game.translate("werewolf.commands.admin.ww_chat.modo",
+						Formatter.format("&name&",event.getPlayerWW().getName()),
+						Formatter.format("&message&",event.getMessage()))));
 
 	}
 

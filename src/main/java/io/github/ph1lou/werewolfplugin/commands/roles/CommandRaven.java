@@ -58,7 +58,7 @@ public class CommandRaven implements ICommand {
 
         ((IAffectedPlayers) raven).clearAffectedPlayer();
         ((IAffectedPlayers) raven).addAffectedPlayer(playerWW1);
-        playerWW1.addPotionModifier(PotionModifier.add(PotionEffectType.SPEED,"raven"));
+        playerWW1.addPotionModifier(PotionModifier.add(PotionEffectType.JUMP,"raven"));
         playerWW1.getRole().addAuraModifier(new AuraModifier("cursed", Aura.DARK, 20, true));
         playerWW1.sendMessageWithKey("werewolf.role.raven.get_curse");
         playerWW.sendMessageWithKey("werewolf.role.raven.curse_perform", playerArg.getName());

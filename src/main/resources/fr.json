@@ -620,6 +620,7 @@
         "ww_chat": {
           "name": "chatlg",
           "prefix": "[§cChat LG§r] &message&",
+          "modo": "[§c&name&§r] &message&",
           "announce": "[§eLG UHC§r] Vous avez §b%s§f secondes pour écrire §b%d§f message(s) dans le chat des Loups Garous §b/ww chatlg§r <message>, attention des rôles peuvent voit le contenu du chat",
           "timer": "[§cLG UHC§r] Le temps pour parler dans le chat des Loups Garous est écoulé",
           "not_access": "[§cLG UHC§r] Vous ne pouvez pas parler dans le chat des Loups Garous",

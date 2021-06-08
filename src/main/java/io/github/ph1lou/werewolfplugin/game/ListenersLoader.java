@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.game;
 
 import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.registers.IRegisterManager;
 import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import io.github.ph1lou.werewolfplugin.RegisterManager;
@@ -27,7 +28,7 @@ public class ListenersLoader {
     private final List<Listener> listeners = new ArrayList<>();
     private final GameManager game;
 
-    public ListenersLoader(io.github.ph1lou.werewolfapi.WereWolfAPI game) {
+    public ListenersLoader(WereWolfAPI game) {
         this.game = (GameManager) game;
     }
 

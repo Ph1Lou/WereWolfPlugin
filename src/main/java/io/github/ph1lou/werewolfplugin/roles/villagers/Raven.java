@@ -61,7 +61,7 @@ public class Raven extends RoleWithLimitedSelectionDuration implements IAffected
     public void onDay(DayEvent event) {
 
         if (this.last != null) {
-            this.last.addPotionModifier(PotionModifier.remove(PotionEffectType.SPEED,"raven"));
+            this.last.addPotionModifier(PotionModifier.remove(PotionEffectType.JUMP,"raven"));
 
             this.last.getRole().removeAuraModifier("cursed");
             this.last.sendMessageWithKey("werewolf.role.raven.no_longer_curse");

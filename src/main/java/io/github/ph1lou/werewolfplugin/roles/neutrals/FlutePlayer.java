@@ -6,6 +6,7 @@ import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
+import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
@@ -17,6 +18,7 @@ import io.github.ph1lou.werewolfapi.events.roles.flute_player.GiveFluteEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleNeutral;
+import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Bukkit;
@@ -24,6 +26,7 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.CraftItemEvent;
@@ -67,6 +70,10 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
     }
 
     public void registerCustomCraft() {
+
+        if(flute != null){
+            return;
+        }
 
         flute = new ItemBuilder(Material.STICK)
                 .addItemFlag(ItemFlag.HIDE_ENCHANTS)
@@ -142,8 +149,8 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
             this.getPlayerWW().sendMessageWithKey("werewolf.role.flute_player.craft",
                     this.fluteInStore);
         }
-
-        event.setCurrentItem(null);
+        event.setResult(Event.Result.ALLOW);
+        event.getInventory().setResult(null);
 
         ItemStack[] inventories = event.getInventory().getMatrix();
 
@@ -151,13 +158,15 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
                 .filter(Objects::nonNull)
                 .filter(itemStack -> itemStack.getAmount() > 1)
                 .forEach(itemStack -> {
-                    itemStack.setAmount(itemStack.getAmount() - 1);
-                    this.getPlayerWW().addItem(itemStack);
+                    ItemStack itemStack1 = itemStack.clone();
+                    itemStack1.setAmount(itemStack.getAmount() - 1);
+                    this.getPlayerWW().addItem(itemStack1);
                 });
 
         event.getInventory().clear();
 
-        event.getWhoClicked().closeInventory();
+        BukkitUtils.scheduleSyncDelayedTask(() -> event.getWhoClicked().closeInventory());
+
     }
 
     @EventHandler
@@ -167,7 +176,14 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
             return;
         }
 
-        if (!event.getView().getPlayer().getUniqueId().equals(this.getPlayerUUID())) {
+        IPlayerWW playerWW = game.getPlayerWW(event.getView()
+                .getPlayer().getUniqueId()).orElse(null);
+
+        if(playerWW==null){
+            return;
+        }
+
+        if(!playerWW.getRole().isKey(RolesBase.FLUTE_PLAYER.getKey())){
             event.getInventory().setResult(new ItemStack(Material.AIR));
         }
     }
@@ -282,6 +298,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
             Sound.ANVIL_BREAK.play(playerWW);
             this.getPlayerWW().sendMessageWithKey("werewolf.role.flute_player.find_flute", playerWW.getName());
             event.setCurrentItem(null);
+            this.flutedPlayer.remove(playerWW);
             event.getWhoClicked().closeInventory();
             Bukkit.getPluginManager().callEvent(new FindFluteEvent(playerWW, this.getPlayerWW()));
         }

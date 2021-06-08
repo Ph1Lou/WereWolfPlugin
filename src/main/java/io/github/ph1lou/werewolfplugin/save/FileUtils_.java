@@ -49,6 +49,7 @@ public class FileUtils_ {
             game.setRoleInitialSize(0);
             game.getModerationManager().checkQueue();
             ((Configuration) game.getConfig()).addRegister((RegisterManager) main.getRegisterManager());
+            game.getListenersLoader().update();
         }
 
         IConfiguration config = game.getConfig();

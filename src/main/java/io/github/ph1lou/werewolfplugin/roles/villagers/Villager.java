@@ -33,7 +33,7 @@ public class Villager extends RoleVillage {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setEquipments(villagerKit.getDescription())
+                .setEquipments(game.translate(villagerKit.getDescription()))
                 .build();
     }
 
