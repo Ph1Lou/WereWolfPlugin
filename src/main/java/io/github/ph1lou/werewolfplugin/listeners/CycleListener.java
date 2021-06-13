@@ -267,18 +267,11 @@ public class CycleListener implements Listener {
             if (!game.isState(StateGame.END)) {
                 game.getPlayersWW()
                         .forEach(playerWW -> {
-
-                            Player player = Bukkit.getPlayer(playerWW.getUUID());
-
-                            if (player != null) {
-                                Sound.PORTAL_TRIGGER.play(player);
-                                for (PotionEffect po : player.getActivePotionEffects()) {
-                                    player.removePotionEffect(po.getType());
-                                }
-                            }
+                            HandlerList.unregisterAll((Listener) playerWW.getRole());
+                            Sound.PORTAL_TRIGGER.play(playerWW);
+                            playerWW.clearPotionEffects();
                             playerWW.sendMessageWithKey("werewolf.announcement.troll");
                             playerWW.addPlayerMaxHealth(20 - playerWW.getMaxHealth());
-                            HandlerList.unregisterAll((Listener) playerWW.getRole());
                         });
                 if (game.getConfig().isConfigActive(ConfigBase.DOUBLE_TROLL.getKey())) {
                     Bukkit.getPluginManager().callEvent(new TrollEvent());

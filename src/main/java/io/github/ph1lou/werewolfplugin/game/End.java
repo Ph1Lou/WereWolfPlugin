@@ -53,16 +53,16 @@ public class End {
                 config.getLoverCount(LoverType.LOVER.getKey()) <= 1) {
 
             game.getLoversManager().getLovers().stream()
-                    .filter(ILover -> !ILover.isKey(LoverType.CURSED_LOVER.getKey()))
-                    .forEach(ILover -> {
-                        Set<IPlayerWW> lovers = new HashSet<>(ILover.getLovers());
+                    .filter(lover -> !lover.isKey(LoverType.CURSED_LOVER.getKey()))
+                    .forEach(lover -> {
+                        Set<IPlayerWW> lovers = new HashSet<>(lover.getLovers());
 
-                        if (ILover.isAlive()) {
-                            AroundLoverEvent AroundLoverEvent = new AroundLoverEvent(lovers);
-                            Bukkit.getPluginManager().callEvent(AroundLoverEvent);
+                        if (lover.isAlive()) {
+                            AroundLoverEvent event = new AroundLoverEvent(lovers);
+                            Bukkit.getPluginManager().callEvent(event);
 
-                            if (AroundLoverEvent.getPlayerWWS().size() == game.getPlayerSize()) {
-                                winner = ILover.getKey();
+                            if (event.getPlayerWWS().size() == game.getPlayerSize()) {
+                                winner = lover.getKey();
                                 fin();
                             }
                         }

@@ -57,7 +57,7 @@ public class Triple extends ListenerManager {
                     if (troupleEvent.isCancelled()) return;
 
                     lover.addLover(playerWW);
-                    playerWW.addLover(lover);
+
                     register(false);
 
                     Bukkit.broadcastMessage(game.translate("werewolf.random_events.triple.message"));

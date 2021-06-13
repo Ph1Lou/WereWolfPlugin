@@ -219,7 +219,7 @@ public class Lover implements ILover, Listener {
     public void onAroundLoverEvent(AroundLoverEvent event) {
 
 
-        if (death) return;
+        if (this.death) return;
 
         for (IPlayerWW playerWW : event.getPlayerWWS()) {
             if (getLovers().contains(playerWW)) {
@@ -242,6 +242,7 @@ public class Lover implements ILover, Listener {
                 .collect(Collectors.joining(" ")));
 
         lovers.add(playerWW);
+        playerWW.addLover(this);
 
     }
 }
