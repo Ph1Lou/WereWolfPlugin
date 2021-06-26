@@ -236,6 +236,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
                 .map(game::getPlayerWW)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
+                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .peek(playerWW -> {
                     if (this.affectedPlayer.contains(playerWW)) {
                         recoverResistance.set(true);

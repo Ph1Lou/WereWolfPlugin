@@ -184,8 +184,7 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
 
         this.getPlayerWW().sendMessage(textComponent);
 
-        sisterWW.getLastKiller().ifPresent(killerWWS::add);
-
+        killerWWS.add(sisterWW.getLastKiller().orElse(null));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
