@@ -103,8 +103,6 @@ public class SerialKiller extends RoleNeutral implements IPower {
     @Override
     public void recoverPotionEffect() {
 
-        super.recoverPotionEffect();
-
         if (!hasPower()) return;
 
         this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"serial_killer"));

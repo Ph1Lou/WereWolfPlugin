@@ -34,7 +34,6 @@ public class AlphaWereWolf extends RoleWereWolf {
 
     @Override
     public void recoverPotionEffect() {
-        super.recoverPotionEffect();
 
         if (game.isDay(Day.NIGHT)) {
             this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.ABSORPTION, 6000, 0,"alpha-werewolf"));

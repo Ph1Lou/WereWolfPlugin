@@ -71,8 +71,8 @@ public class Swap extends ListenerManager {
                     playerWW2.sendMessageWithKey("werewolf.random_events.swap.concerned");
                     roles1.recoverPower();
                     roles2.recoverPower();
-                    roles1.recoverPotionEffect();
-                    roles2.recoverPotionEffect();
+                    roles1.recoverPotionEffects();
+                    roles2.recoverPotionEffects();
                 }
             }
         }, (long) (game.getRandom().nextDouble() * game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST.getKey()) * 20));

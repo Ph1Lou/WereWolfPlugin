@@ -86,8 +86,6 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
     @Override
     public void recoverPotionEffect() {
 
-        super.recoverPotionEffect();
-
         this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION,"werewolf"));
 
 

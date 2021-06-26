@@ -90,8 +90,6 @@ public class Oracle extends RoleWithLimitedSelectionDuration implements IAffecte
     @Override
     public void recoverPotionEffect() {
 
-        super.recoverPotionEffect();
-
         this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.NIGHT_VISION,"oracle"));
 
     }

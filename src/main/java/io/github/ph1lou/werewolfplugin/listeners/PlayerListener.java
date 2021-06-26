@@ -527,7 +527,7 @@ public class PlayerListener implements Listener {
 
 		playerWW.setState(StatePlayer.ALIVE);
 		playerWW.getRole().addAuraModifier(new AuraModifier("resurrection", Aura.NEUTRAL, 10, false));
-		playerWW.getRole().recoverPotionEffect();
+		playerWW.getRole().recoverPotionEffects();
 		playerWW.sendMessageWithKey("werewolf.announcement.resurrection");
 		game.getMapManager().transportation(playerWW, Math.random() * Math.PI * 2);
 

@@ -386,8 +386,6 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
 
     @Override
     public void recoverPotionEffect() {
-        super.recoverPotionEffect();
-
         this.checkStrength();
     }
 

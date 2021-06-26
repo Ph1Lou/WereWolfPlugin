@@ -195,9 +195,6 @@ public class LittleGirl extends RoleVillage implements IInvisible {
     @Override
     public void recoverPotionEffect() {
 
-        super.recoverPotionEffect();
-
-
         this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION,"little_girl"));
     }
 

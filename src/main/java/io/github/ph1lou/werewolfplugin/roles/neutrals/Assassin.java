@@ -109,8 +109,6 @@ public class Assassin extends RoleNeutral {
     @Override
     public void recoverPotionEffect() {
 
-        super.recoverPotionEffect();
-
         if (game.isDay(Day.NIGHT)) return;
 
         this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"assassin"));

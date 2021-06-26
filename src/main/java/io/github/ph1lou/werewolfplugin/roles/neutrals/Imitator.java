@@ -181,8 +181,6 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
     @Override
     public void recoverPotionEffect() {
 
-        super.recoverPotionEffect();
-
         if(!this.power) return;
 
         this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"imitator"));

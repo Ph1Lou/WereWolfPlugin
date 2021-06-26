@@ -88,8 +88,6 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
     @Override
     public void recoverPotionEffect() {
 
-        super.recoverPotionEffect();
-
         if(!this.power) return;
 
         this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,"thief"));
@@ -174,7 +172,7 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
         roleClone.removeTemporaryAuras();
 
         roleClone.recoverPower();
-        roleClone.recoverPotionEffect();
+        roleClone.recoverPotionEffects();
 
         for (int i = 0; i < playerWW.getLovers().size(); i++) {
             ILover lover = playerWW.getLovers().get(i);
