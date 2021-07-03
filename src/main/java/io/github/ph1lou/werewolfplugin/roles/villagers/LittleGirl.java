@@ -263,7 +263,7 @@ public class LittleGirl extends RoleVillage implements IInvisible {
             if (this.getInfected()) {
                 this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"werewolf"));
             }
-            player.removePotionEffect(PotionEffectType.INVISIBILITY);
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INVISIBILITY,"little_girl"));
             this.setInvisible(false);
             Bukkit.getPluginManager().callEvent(
                     new InvisibleEvent(this.getPlayerWW(), false));

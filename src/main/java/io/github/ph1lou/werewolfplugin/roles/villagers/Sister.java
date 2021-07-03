@@ -115,15 +115,6 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
 
 
         if (recoverResistance) {
-            
-            sister.getActivePotionEffects()
-                    .stream()
-                    .filter(potionEffect -> potionEffect.getDuration()
-                            < 100)
-                    .map(PotionEffect::getType)
-                    .filter(potionEffectType -> potionEffectType.equals(
-                            PotionEffectType.DAMAGE_RESISTANCE))
-                    .forEach(sister::removePotionEffect);
 
             this.getPlayerWW().addPotionModifier(PotionModifier.add(
                     PotionEffectType.DAMAGE_RESISTANCE,
