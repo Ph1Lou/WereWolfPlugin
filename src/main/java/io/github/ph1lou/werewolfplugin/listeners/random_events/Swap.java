@@ -75,7 +75,8 @@ public class Swap extends ListenerManager {
                     roles2.recoverPotionEffects();
                 }
             }
-        }, (long) (game.getRandom().nextDouble() * game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST.getKey()) * 20));
+        }, (long) (game.getRandom().nextDouble() * Math.min(game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST.getKey()),
+                game.getConfig().getTimerValue(TimerBase.LOVER_DURATION.getKey())) * 20) - 5);
     }
 
 }

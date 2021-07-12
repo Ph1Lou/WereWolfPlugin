@@ -156,8 +156,7 @@ public class TimersRegister {
                         TimerBase.RIVAL_DURATION.getKey())
                         .setDefaultValue(2400)
                         .onZero(wereWolfAPI -> Bukkit.getPluginManager().callEvent(new RivalEvent()))
-                        .addPredicate(wereWolfAPI -> wereWolfAPI.getConfig().getTimerValue(TimerBase.ROLE_DURATION.getKey()) < 0
-                                && !wereWolfAPI.getConfig().isTrollSV()));
+                        .addPredicate(wereWolfAPI -> wereWolfAPI.getConfig().getTimerValue(TimerBase.LOVER_DURATION.getKey()) < 0));
 
         timersRegister
                 .add(new TimerRegister("werewolf.name",

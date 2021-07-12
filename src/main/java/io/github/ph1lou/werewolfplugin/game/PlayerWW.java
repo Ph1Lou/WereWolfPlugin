@@ -266,6 +266,7 @@ public class PlayerWW implements IPlayerWW {
                 this.potionModifiers.put(potionModifier,-1);
             }
             if(player!=null){
+                player.removePotionEffect(potionModifier.getPotionEffectType());
                 player.addPotionEffect(new PotionEffect(potionModifier.getPotionEffectType(),
                         potionModifier.getDuration(),
                         potionModifier.getAmplifier(),

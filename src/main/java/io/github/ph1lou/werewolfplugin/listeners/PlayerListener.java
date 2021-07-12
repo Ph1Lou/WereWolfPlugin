@@ -40,6 +40,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.Inventory;
@@ -244,7 +245,27 @@ public class PlayerListener implements Listener {
 		}
 	}
 
+	@EventHandler
+	private void onPreJoin(PlayerLoginEvent event) {
 
+		Player player = event.getPlayer();
+		UUID uuid = player.getUniqueId();
+		IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
+
+		if (!game.isState(StateGame.LOBBY)) {
+			if(!game.getModerationManager().isStaff(uuid)){
+
+				if (game.getConfig().getSpectatorMode() == 0 && (playerWW == null || playerWW.isState(StatePlayer.DEATH))){
+					event.setResult(PlayerLoginEvent.Result.KICK_OTHER);
+					event.setKickMessage(game.translate("werewolf.check.spectator_disabled"));
+				}
+				else if(game.getConfig().getSpectatorMode() == 1  && playerWW == null){
+					event.setResult(PlayerLoginEvent.Result.KICK_OTHER);
+					event.setKickMessage(game.translate("werewolf.check.death_spectator"));
+				}
+			}
+		}
+	}
 	
 	@EventHandler
 	private void onJoin(PlayerJoinEvent event) {
@@ -283,9 +304,7 @@ public class PlayerListener implements Listener {
 
 		} else if (playerWW != null) {
 
-			if (!playerWW.getName().equals(playerName)) {
-				playerWW.setName(playerName);
-			}
+			player.setCompassTarget(playerWW.getSpawn());
 
 			playerWW.updateAfterReconnect(player);
 
@@ -295,34 +314,34 @@ public class PlayerListener implements Listener {
 						playerName));
 			} else if (playerWW.isState(StatePlayer.DEATH)) {
 
-				if (game.getConfig().getSpectatorMode() > 0 ||
-						moderationManager.getHosts().contains(player.getUniqueId())) {
+				if (game.getConfig().getSpectatorMode() == 0 &&
+						!moderationManager.isStaff(player.getUniqueId()) && !player.isOp()) {
+					player.kickPlayer(game.translate("werewolf.check.spectator_disabled"));
+				} else{
 					player.setGameMode(GameMode.SPECTATOR);
 					event.setJoinMessage(game.translate("werewolf.announcement.join_in_spec",
 							playerName));
-				} else if (!player.isOp()) {
-					player.kickPlayer(game.translate("werewolf.check.death_spectator"));
 				}
 			}
 		}
 		else {
+
+			player.setCompassTarget(game.getMapManager().getWorld().getSpawnLocation());
+
 			if (moderationManager.getModerators().contains(uuid)) {
 				event.setJoinMessage(game.translate("werewolf.announcement.join_moderator",
 						playerName));
 				player.sendMessage(game.translate("werewolf.commands.admin.moderator.message"));
 				player.setGameMode(GameMode.SPECTATOR);
-				BukkitUtils.scheduleSyncDelayedTask(() ->
-						player.teleport(game.getMapManager().getWorld().getSpawnLocation()), 10);
-			} else if (game.getConfig().getSpectatorMode() < 2) {
-				player.kickPlayer(game.translate("werewolf.check.spectator_disabled"));
+
 			} else {
 				player.setGameMode(GameMode.SPECTATOR);
 				event.setJoinMessage(game.translate("werewolf.announcement.join_spec", playerName));
 				player.sendMessage(game.translate("werewolf.check.already_begin"));
-				BukkitUtils.scheduleSyncDelayedTask(() ->
-						player.teleport(game.getMapManager().getWorld().getSpawnLocation()), 10);
 
 			}
+			BukkitUtils.scheduleSyncDelayedTask(() ->
+					player.teleport(game.getMapManager().getWorld().getSpawnLocation()), 10);
 		}
 	}
 
@@ -463,13 +482,14 @@ public class PlayerListener implements Listener {
 					"werewolf.announcement.death_message");
 			Bukkit.getPluginManager().callEvent(announcementDeathEvent);
 
-			Formatter[] formatters = (Formatter[]) ArrayUtils.addAll(announcementDeathEvent.getFormatters().toArray(new Formatter[0]),
-					new Formatter[]{Formatter.format("&player&", announcementDeathEvent.getPlayerName()),
-							Formatter.format("&role&",game.translate(announcementDeathEvent.getRole()))});
+			if(!announcementDeathEvent.isCancelled()){
+				Formatter[] formatters = (Formatter[]) ArrayUtils.addAll(announcementDeathEvent.getFormatters().toArray(new Formatter[0]),
+						new Formatter[]{Formatter.format("&player&", announcementDeathEvent.getPlayerName()),
+								Formatter.format("&role&",game.translate(announcementDeathEvent.getRole()))});
 
+				announcementDeathEvent.getTargetPlayer().sendMessageWithKey(announcementDeathEvent.getFormat(),formatters);
+			}
 
-			announcementDeathEvent.getTargetPlayer().sendMessageWithKey(announcementDeathEvent.getFormat(),formatters
-			);
 		});
 
 		game.getModerationManager().getModerators().stream()
@@ -480,11 +500,11 @@ public class PlayerListener implements Listener {
 
 		Bukkit.getConsoleSender().sendMessage(this.sendOriginalDeathMessage(playerWW));
 
-		UpdateCompositionEvent updateCompositionReason = new UpdateCompositionEvent(playerWW.getRole().getKey(), UpdateCompositionReason.DEATH, -1);
+		UpdateCompositionEvent updateCompositionReason = new UpdateCompositionEvent(playerWW.getRole().getDeathRole(), UpdateCompositionReason.DEATH, -1);
 		Bukkit.getPluginManager().callEvent(updateCompositionReason);
 
 		if (!updateCompositionReason.isCancelled()) {
-			game.getConfig().removeOneRole(playerWW.getRole().getKey());
+			game.getConfig().removeOneRole(playerWW.getRole().getDeathRole());
 		}
 
 		Stream.concat(playerWW.getItemDeath()
@@ -504,8 +524,10 @@ public class PlayerListener implements Listener {
 			msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
 					"https://discord.gg/GXXCVUA"));
 			player.spigot().sendMessage(msg);
-			if (game.getConfig().getSpectatorMode() == 0 && !player.isOp()) {
-				player.kickPlayer(game.translate("werewolf.check.death_spectator"));
+			if (game.getConfig().getSpectatorMode() == 0 &&
+					!player.isOp() &&
+					!game.getModerationManager().isStaff(player.getUniqueId())) {
+				player.kickPlayer(game.translate("werewolf.check.spectator_disabled"));
 			}
 			Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(player));
 		}

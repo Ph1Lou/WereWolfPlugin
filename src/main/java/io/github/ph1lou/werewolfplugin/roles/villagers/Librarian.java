@@ -79,10 +79,6 @@ public class Librarian extends RoleVillage implements ILimitedUse, IAffectedPlay
         this.storage.add(message);
     }
 
-    public void clearStorage() {
-        this.storage.clear();
-    }
-
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 

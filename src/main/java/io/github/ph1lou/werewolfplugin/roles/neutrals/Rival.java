@@ -89,7 +89,10 @@ public class Rival extends RoleNeutral implements IPower {
                 .filter(loverAPI1 -> !loverAPI1.getLovers().contains(getPlayerWW()))
                 .collect(Collectors.toList());
 
-        if (loverAPIs.isEmpty()) return;
+        if (loverAPIs.isEmpty()) {
+            getPlayerWW().sendMessageWithKey("werewolf.role.rival.error");
+            return;
+        }
 
         this.lover = loverAPIs.get((int) Math.floor(game.getRandom().nextFloat() * loverAPIs.size()));
 

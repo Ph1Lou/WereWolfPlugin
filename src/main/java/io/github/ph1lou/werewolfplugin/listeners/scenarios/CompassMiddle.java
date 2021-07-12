@@ -6,8 +6,11 @@ import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 public class CompassMiddle extends ListenerManager {
 
@@ -24,6 +27,15 @@ public class CompassMiddle extends ListenerManager {
                 .forEach(player -> player.setCompassTarget(player
                         .getWorld()
                         .getSpawnLocation()));
+    }
+
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        player.setCompassTarget(player
+                .getWorld()
+                .getSpawnLocation());
     }
 
     @Override

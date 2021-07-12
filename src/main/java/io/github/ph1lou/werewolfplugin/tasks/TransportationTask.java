@@ -152,12 +152,15 @@ public class TransportationTask implements Listener {
             } else {
                 player.teleport(this.game.getMapManager().getWorld().getSpawnLocation());
                 player.setGameMode(GameMode.SPECTATOR);
+                if(game.getConfig().getSpectatorMode() < 2){
+                    player.kickPlayer(game.translate("werewolf.check.spectator_disabled"));
+                }
             }
 
             VersionUtils.getVersionUtils().sendTitle(player, this.game.translate("werewolf.announcement.start.top_title"), this.game.translate("werewolf.announcement.start.bot_title"), 20, 20, 20);
             Sound.NOTE_BASS.play(player);
         }
-
+        this.game.getModerationManager().getQueue().clear();
         this.game.setState(StateGame.START);
         GameTask start = new GameTask(this.game);
         start.runTaskTimer(JavaPlugin.getPlugin(Main.class), 0, 20);

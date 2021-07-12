@@ -47,7 +47,7 @@ public class ShowDeathRole extends ListenerManager {
         event.setSuffix(event.getSuffix()
                 .replace(game.translate("werewolf.score_board.death"),
                         "")
-                + game.translate(playerWW.getRole().getKey()));
+                + game.translate(playerWW.getRole().getDeathRole()));
     }
 
 
