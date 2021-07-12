@@ -1,12 +1,15 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
+import fr.minuskube.inv.ClickableItem;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimerBase;
+import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.UpdateCompositionEvent;
@@ -14,12 +17,14 @@ import io.github.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEven
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleWithLimitedSelectionDuration;
+import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Priestess extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
@@ -167,5 +172,33 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
         if (!playerWW.isState(StatePlayer.DEATH)) return;
 
         event.setSuffix("");
+    }
+
+    public static ClickableItem config(WereWolfAPI game) {
+
+        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
+                game.translate("werewolf.menu.right"));
+        IConfiguration config = game.getConfig();
+
+        return ClickableItem.of((
+                new ItemBuilder(UniversalMaterial.BLUE_WOOL.getStack())
+                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.priestess",
+                                config.getDistancePriestess()))
+                        .setLore(lore).build()), e -> {
+
+            if (e.isLeftClick()) {
+                config.setDistancePriestess((config.getDistancePriestess() + 2));
+            } else if (config.getDistancePriestess() - 2 > 0) {
+                config.setDistancePriestess(config.getDistancePriestess() - 2);
+            }
+
+
+            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                    .setLore(lore)
+                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.priestess",
+                            config.getDistancePriestess()))
+                    .build());
+
+        });
     }
 }

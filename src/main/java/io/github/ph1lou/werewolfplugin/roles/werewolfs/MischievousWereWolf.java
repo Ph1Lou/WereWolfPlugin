@@ -171,7 +171,7 @@ public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
                 "werewolf.role.little_girl.soon_to_be_day");
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onFinalDeath(FinalDeathEvent event) {
 
         if (!event.getPlayerWW().equals(getPlayerWW())) return;

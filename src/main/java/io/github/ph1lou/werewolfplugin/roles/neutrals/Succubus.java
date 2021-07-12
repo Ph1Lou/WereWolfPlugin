@@ -1,7 +1,9 @@
 package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 
+import fr.minuskube.inv.ClickableItem;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.*;
@@ -16,6 +18,7 @@ import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
 import io.github.ph1lou.werewolfapi.rolesattributs.IProgress;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleNeutral;
+import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -25,6 +28,7 @@ import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -337,4 +341,30 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
         }
     }
 
+    public static ClickableItem config(WereWolfAPI game) {
+
+        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
+                game.translate("werewolf.menu.right"));
+        IConfiguration config = game.getConfig();
+
+        return ClickableItem.of((new ItemBuilder(
+                UniversalMaterial.PURPLE_WOOL.getStack())
+                .setDisplayName(game.translate("werewolf.menu.advanced_tool.succubus",
+                        config.getDistanceSuccubus()))
+                .setLore(lore).build()), e -> {
+            if (e.isLeftClick()) {
+                config.setDistanceSuccubus((config.getDistanceSuccubus() + 5));
+            } else if (config.getDistanceSuccubus() - 5 > 0) {
+                config.setDistanceSuccubus(config.getDistanceSuccubus() - 5);
+            }
+
+
+            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                    .setLore(lore)
+                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.succubus",
+                            config.getDistanceSuccubus()))
+                    .build());
+
+        });
+    }
 }

@@ -198,7 +198,7 @@ public class LittleGirl extends RoleVillage implements IInvisible {
         this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION,"little_girl"));
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onFinalDeath(FinalDeathEvent event) {
 
         if (!event.getPlayerWW().equals(this.getPlayerWW())) return;

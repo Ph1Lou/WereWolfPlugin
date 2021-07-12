@@ -1,20 +1,25 @@
 package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 
+import fr.minuskube.inv.ClickableItem;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.avenger_werewolf.DeathAvengerListEvent;
 import io.github.ph1lou.werewolfapi.events.roles.avenger_werewolf.RegisterAvengerListEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleWereWolf;
+import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -129,5 +134,32 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
     @Override
     public List<IPlayerWW> getAffectedPlayers() {
         return new ArrayList<>(this.affectedPlayers);
+    }
+
+    public static ClickableItem config(WereWolfAPI game) {
+
+        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
+                game.translate("werewolf.menu.right"));
+        IConfiguration config = game.getConfig();
+
+        return ClickableItem.of((new ItemBuilder(
+                UniversalMaterial.RED_WOOL.getStack())
+                .setDisplayName(game.translate("werewolf.menu.advanced_tool.avenger_werewolf",
+                        config.getDistanceAvengerWerewolf()))
+                .setLore(lore).build()), e -> {
+            if (e.isLeftClick()) {
+                config.setDistanceAvengerWerewolf((config.getDistanceAvengerWerewolf() + 2));
+            } else if (config.getDistanceAvengerWerewolf() - 2 > 0) {
+                config.setDistanceAvengerWerewolf(config.getDistanceAvengerWerewolf() - 2);
+            }
+
+
+            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                    .setLore(lore)
+                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.avenger_werewolf",
+                            config.getDistanceAvengerWerewolf()))
+                    .build());
+
+        });
     }
 }

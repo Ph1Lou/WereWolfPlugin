@@ -1,15 +1,19 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.minuskube.inv.ClickableItem;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Camp;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.events.roles.bear_trainer.GrowlEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
+import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -18,6 +22,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -100,5 +106,31 @@ public class BearTrainer extends RoleVillage {
     @Override
     public void recoverPower() {
 
+    }
+
+    public static ClickableItem config(WereWolfAPI game) {
+        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
+                game.translate("werewolf.menu.right"));
+        IConfiguration config = game.getConfig();
+
+        return ClickableItem.of((
+                new ItemBuilder(UniversalMaterial.BROWN_WOOL.getStack())
+                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.bear_trainer",
+                                config.getDistanceBearTrainer()))
+                        .setLore(lore).build()), e -> {
+            if (e.isLeftClick()) {
+                config.setDistanceBearTrainer((config.getDistanceBearTrainer() + 5));
+            } else if (config.getDistanceBearTrainer() - 5 > 0) {
+                config.setDistanceBearTrainer(config.getDistanceBearTrainer() - 5);
+            }
+
+
+            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                    .setLore(lore)
+                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.bear_trainer",
+                            config.getDistanceBearTrainer()))
+                    .build());
+
+        });
     }
 }

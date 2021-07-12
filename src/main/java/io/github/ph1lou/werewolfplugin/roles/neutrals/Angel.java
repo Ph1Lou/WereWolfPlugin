@@ -1,7 +1,9 @@
 package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 
+import fr.minuskube.inv.ClickableItem;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -28,6 +30,7 @@ import io.github.ph1lou.werewolfapi.events.roles.angel.FallenAngelTargetDeathEve
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.ILimitedUse;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleNeutral;
+import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfapi.utils.Utils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -35,6 +38,7 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -533,4 +537,21 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
         this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,"fallen_angel"));
     }
 
+    public static ClickableItem config(WereWolfAPI game) {
+
+        IConfiguration config = game.getConfig();
+
+        return ClickableItem.of(
+                new ItemBuilder(Material.MELON)
+                        .setLore(game.translate(config.isDetectiveEveryOtherDay() ? "werewolf.utils.enable" : "werewolf.utils.disable"))
+                        .setDisplayName(game.translate("werewolf.role.angel.sweet_angel"))
+                        .build(), e -> {
+                    config.setDetectiveEveryOtherDay(!config.isDetectiveEveryOtherDay());
+
+                    e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                            .setLore(game.translate(config.isDetectiveEveryOtherDay() ? "werewolf.utils.enable" : "werewolf.utils.disable"))
+                            .build());
+
+                });
+    }
 }

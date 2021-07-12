@@ -1,7 +1,9 @@
 package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 
+import fr.minuskube.inv.ClickableItem;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -9,6 +11,7 @@ import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.flute_player.AllPlayerEnchantedEvent;
@@ -419,4 +422,30 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
         return this.power;
     }
 
+    public static ClickableItem config(WereWolfAPI game) {
+
+        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
+                game.translate("werewolf.menu.right"));
+        IConfiguration config = game.getConfig();
+
+        return ClickableItem.of((new ItemBuilder(
+                UniversalMaterial.LIGHT_BLUE_WOOL.getStack())
+                .setDisplayName(game.translate("werewolf.menu.advanced_tool.flute_player",
+                        config.getDistanceFlutePlayer()))
+                .setLore(lore).build()), e -> {
+            if (e.isLeftClick()) {
+                config.setDistanceFlutePlayer((config.getDistanceFlutePlayer() + 2));
+            } else if (config.getDistanceFlutePlayer() - 2 > 0) {
+                config.setDistanceFlutePlayer(config.getDistanceFlutePlayer() - 2);
+            }
+
+
+            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                    .setLore(lore)
+                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.flute_player",
+                            config.getDistanceFlutePlayer()))
+                    .build());
+
+        });
+    }
 }

@@ -1,19 +1,23 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
+import fr.minuskube.inv.ClickableItem;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimerBase;
+import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import io.github.ph1lou.werewolfapi.events.roles.sister.SisterDeathEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
+import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfapi.utils.Utils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -28,6 +32,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -212,5 +217,32 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
     @Override
     public List<IPlayerWW> getAffectedPlayers() {
         return killerWWS;
+    }
+
+    public static ClickableItem config(WereWolfAPI game) {
+        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
+                game.translate("werewolf.menu.right"));
+        IConfiguration config = game.getConfig();
+
+        return ClickableItem.of((
+                new ItemBuilder(UniversalMaterial.GRAY_WOOL.getStack())
+                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.sister",
+                                config.getDistanceSister()))
+                        .setLore(lore).build()), e -> {
+
+            if (e.isLeftClick()) {
+                config.setDistanceSister((config.getDistanceSister() + 2));
+            } else if (config.getDistanceSister() - 2 > 0) {
+                config.setDistanceSister(config.getDistanceSister() - 2);
+            }
+
+
+            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                    .setLore(lore)
+                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.sister",
+                            config.getDistanceSister()))
+                    .build());
+
+        });
     }
 }

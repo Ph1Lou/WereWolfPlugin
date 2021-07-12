@@ -1,6 +1,8 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.minuskube.inv.ClickableItem;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -9,7 +11,9 @@ import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleWithLimitedSelectionDuration;
+import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfapi.utils.Utils;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -92,5 +96,23 @@ public class Oracle extends RoleWithLimitedSelectionDuration implements IAffecte
 
         this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.NIGHT_VISION,"oracle"));
 
+    }
+
+    public static ClickableItem config(WereWolfAPI game) {
+
+        IConfiguration config = game.getConfig();
+
+        return ClickableItem.of(
+                new ItemBuilder(Material.DIAMOND_BLOCK)
+                        .setLore(game.translate(config.isOracleEveryOtherDay() ? "werewolf.utils.enable" : "werewolf.utils.disable"))
+                        .setDisplayName(game.translate("werewolf.role.oracle.oracle_every_other_day"))
+                        .build(), e -> {
+                    config.setOracleEveryOtherDay(!config.isOracleEveryOtherDay());
+
+                    e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                            .setLore(game.translate(config.isOracleEveryOtherDay() ? "werewolf.utils.enable" : "werewolf.utils.disable"))
+                            .build());
+
+                });
     }
 }

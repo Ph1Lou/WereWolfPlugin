@@ -1,7 +1,9 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
+import fr.minuskube.inv.ClickableItem;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -10,6 +12,7 @@ import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimerBase;
+import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.events.roles.fox.SniffEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
@@ -18,6 +21,7 @@ import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
 import io.github.ph1lou.werewolfapi.rolesattributs.IProgress;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
 import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
+import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -29,6 +33,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffectedPlayers, IPower {
@@ -230,5 +235,59 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
             clearAffectedPlayer();
             setProgress(0f);
         }
+    }
+
+    public static ClickableItem config1(WereWolfAPI game) {
+        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
+                game.translate("werewolf.menu.right"));
+        IConfiguration config = game.getConfig();
+
+        return ClickableItem.of(
+                new ItemBuilder(UniversalMaterial.CARROT.getType())
+                        .setLore(lore)
+                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.fox_smell_number",
+                                config.getUseOfFlair()))
+                        .build(), e -> {
+                    if (e.isLeftClick()) {
+                        config.setUseOfFlair(config.getUseOfFlair() + 1);
+                    } else if (config.getUseOfFlair() > 0) {
+                        config.setUseOfFlair(config.getUseOfFlair() - 1);
+                    }
+
+
+                    e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                            .setDisplayName(game.translate("werewolf.menu.advanced_tool.fox_smell_number",
+                                    config.getUseOfFlair()))
+                            .build());
+
+                });
+    }
+
+    public static ClickableItem config2(WereWolfAPI game) {
+
+        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
+                game.translate("werewolf.menu.right"));
+        IConfiguration config = game.getConfig();
+
+        return ClickableItem.of((
+                new ItemBuilder(UniversalMaterial.ORANGE_WOOL.getStack())
+                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.fox",
+                                config.getDistanceFox()))
+                        .setLore(lore).build()), e -> {
+
+            if (e.isLeftClick()) {
+                config.setDistanceFox((config.getDistanceFox() + 5));
+            } else if (config.getDistanceFox() - 5 > 0) {
+                config.setDistanceFox(config.getDistanceFox() - 5);
+            }
+
+
+            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                    .setLore(lore)
+                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.fox",
+                            config.getDistanceFox()))
+                    .build());
+
+        });
     }
 }

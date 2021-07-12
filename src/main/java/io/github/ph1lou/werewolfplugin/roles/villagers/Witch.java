@@ -1,7 +1,9 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
+import fr.minuskube.inv.ClickableItem;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
@@ -11,9 +13,11 @@ import io.github.ph1lou.werewolfapi.events.roles.witch.WitchResurrectionEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
+import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,6 +31,24 @@ public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
 
     public Witch(WereWolfAPI api, IPlayerWW playerWW, String key) {
         super(api, playerWW, key);
+    }
+
+    public static ClickableItem config(WereWolfAPI game) {
+
+        IConfiguration config = game.getConfig();
+
+        return ClickableItem.of(
+                new ItemBuilder(Material.STICK)
+                        .setLore(game.translate(config.isWitchAutoResurrection() ? "werewolf.utils.enable" : "werewolf.utils.disable"))
+                        .setDisplayName(game.translate("werewolf.role.witch.auto_rez_witch"))
+                        .build(), e -> {
+                    config.setWitchAutoResurrection(!config.isWitchAutoResurrection());
+
+                    e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                            .setLore(game.translate(config.isWitchAutoResurrection() ? "werewolf.utils.enable" : "werewolf.utils.disable"))
+                            .build());
+
+                });
     }
 
     @Override
