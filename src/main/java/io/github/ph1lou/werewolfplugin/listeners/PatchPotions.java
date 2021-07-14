@@ -1,13 +1,23 @@
 package io.github.ph1lou.werewolfplugin.listeners;
 
 
+import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.PotionSplashEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import java.util.Optional;
 
 public class PatchPotions implements Listener {
 
@@ -39,6 +49,46 @@ public class PatchPotions implements Listener {
                 event.setCancelled(true);
             }
             event.setDamage(event.getDamage() * (100 - game.getConfig().getResistanceRate()) / 80f);
+        }
+    }
+
+
+    @EventHandler
+    public void onEffectGet(PotionSplashEvent event){
+
+        event.setCancelled(true);
+        event.getAffectedEntities().stream()
+                .map(livingEntity -> game.getPlayerWW(livingEntity.getUniqueId()))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .forEach(playerWW -> event.getPotion().getEffects().forEach(potionEffect -> playerWW.addPotionModifier(PotionModifier.add(
+                        potionEffect.getType(),
+                        potionEffect.getDuration(),
+                        potionEffect.getAmplifier(),
+                        "splash_potion"))));
+    }
+
+    @EventHandler
+    public void onDrinkPotionEvent(PlayerItemConsumeEvent event){
+
+        Player player = event.getPlayer();
+
+        if(event.getItem().getType()== Material.POTION)
+        {
+            Potion potion = Potion.fromItemStack(event.getItem());
+            event.setCancelled(true);
+            BukkitUtils.scheduleSyncDelayedTask(() ->
+            {
+                PlayerInventory inventory = player.getInventory();
+                inventory.remove(event.getItem());
+                inventory.addItem(new ItemStack(Material.GLASS_BOTTLE));
+            });
+
+            game.getPlayerWW(player.getUniqueId())
+                    .ifPresent(playerWW -> potion.getEffects().forEach(potionEffect -> playerWW.addPotionModifier(PotionModifier.add(potionEffect.getType(),
+                            potionEffect.getDuration(),
+                            potionEffect.getAmplifier(),
+                            "potion_drink"))));
         }
     }
 }

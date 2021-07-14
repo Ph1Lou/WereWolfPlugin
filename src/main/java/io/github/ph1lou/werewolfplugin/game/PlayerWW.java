@@ -29,6 +29,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -210,70 +211,69 @@ public class PlayerWW implements IPlayerWW {
                         }
 
                         if(player!=null){
-                            if(this.potionModifiers.keySet().stream()
-                                    .noneMatch(potionModifier2 -> potionModifier2.getPotionEffectType().equals(potionModifier.getPotionEffectType()))){
-                                player.removePotionEffect(potionModifier.getPotionEffectType());
-                            }
+                            player.removePotionEffect(potionModifier1.getPotionEffectType());
+                            this.potionModifiers.keySet().stream()
+                                    .filter(potionModifier2 -> potionModifier2.getPotionEffectType().equals(potionModifier1.getPotionEffectType()))
+                                    .max(Comparator.comparing(potionModifier2 -> 20 * (potionModifier2.getTimer() - game.getTimer()) + potionModifier2.getDuration()))
+                                    .ifPresent(potionModifier2 -> player.addPotionEffect(
+                                            new PotionEffect(
+                                                    potionModifier2.getPotionEffectType(),
+                                                    20 * (potionModifier2.getTimer() - game.getTimer()) + potionModifier2.getDuration(),
+                                                    potionModifier2.getAmplifier(),
+                                                    false,
+                                                    false)));
                         }
                     });
-        }
-        else{
 
-            AtomicBoolean find = new AtomicBoolean(false);
-            new ArrayList<>(this.potionModifiers.keySet())
-                    .stream()
-                    .filter(potionModifier1 -> potionModifier1.getIdentifier().equals(potionModifier.getIdentifier()))
-                    .filter(potionModifier1 -> potionModifier1.getPotionEffectType().equals(potionModifier.getPotionEffectType()))
-                    .forEach(potionModifier1 -> {
-                        if(20 * (potionModifier1.getTimer() -
-                                game.getTimer()) +
-                                potionModifier1.getDuration()   < potionModifier.getDuration()){
+            return;
+        }
+        AtomicBoolean find = new AtomicBoolean(false);
+        new ArrayList<>(this.potionModifiers.keySet())
+                .stream()
+                .filter(potionModifier1 -> potionModifier1.getPotionEffectType().equals(potionModifier.getPotionEffectType()))
+                .forEach(potionModifier1 -> {
+                    if(20 * (potionModifier1.getTimer() - game.getTimer()) +
+                            potionModifier1.getDuration()   < potionModifier.getDuration()){
+
+                        if(potionModifier1.getIdentifier().equals(potionModifier.getIdentifier())){
                             int id = this.potionModifiers.remove(potionModifier1);
                             if(id != -1){
                                 Bukkit.getScheduler().cancelTask(id);
                             }
                         }
-                        else {
-                            find.set(true);
-                        }
-                    });
+                        player.removePotionEffect(potionModifier.getPotionEffectType());
 
-            if(find.get()){
-                return;
-            }
-
-
-            if(potionModifier.getDuration()<1000000000){
-                potionModifier.setTimer(game.getTimer());
-                this.potionModifiers.put(potionModifier,BukkitUtils.scheduleSyncDelayedTask(() -> {
-
-                    if(this.game.isState(StateGame.GAME)){
-
-                        Player player1 = Bukkit.getPlayer(this.uuid);
-
-                        this.potionModifiers.remove(potionModifier);
-
-                        if(player1!=null){
-                            if(this.potionModifiers.keySet().stream()
-                                    .noneMatch(potionModifier2 -> potionModifier2.getPotionEffectType().equals(potionModifier.getPotionEffectType()))){
-                                player1.removePotionEffect(potionModifier.getPotionEffectType());
-                            }
-                        }
                     }
-                },potionModifier.getDuration()));
-            }
-            else {
-                this.potionModifiers.put(potionModifier,-1);
-            }
-            if(player!=null){
-                player.removePotionEffect(potionModifier.getPotionEffectType());
-                player.addPotionEffect(new PotionEffect(potionModifier.getPotionEffectType(),
-                        potionModifier.getDuration(),
-                        potionModifier.getAmplifier(),
-                        false,
-                        false));
-            }
+                    else if(potionModifier1.getIdentifier().equals(potionModifier.getIdentifier())){
+                        find.set(true);
+                    }
+                });
+
+        if(find.get()){
+            return;
         }
+
+        if(potionModifier.getDuration()<1000000000){
+            potionModifier.setTimer(game.getTimer());
+            this.potionModifiers.put(potionModifier,BukkitUtils.scheduleSyncDelayedTask(() -> {
+                if(!this.game.isState(StateGame.END)){
+                    this.addPotionModifier(PotionModifier.remove(potionModifier.getPotionEffectType(),
+                            potionModifier.getIdentifier()));
+                }
+            },potionModifier.getDuration()));
+        }
+        else {
+            this.potionModifiers.put(potionModifier,-1);
+        }
+
+        if(player!=null){
+            player.addPotionEffect(new PotionEffect(potionModifier.getPotionEffectType(),
+                    potionModifier.getDuration(),
+                    potionModifier.getAmplifier(),
+                    false,
+                    false));
+        }
+
     }
 
     @Override

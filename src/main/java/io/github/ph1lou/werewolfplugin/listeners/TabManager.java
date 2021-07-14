@@ -151,7 +151,7 @@ public class TabManager implements Listener {
                 String string1 = event1.getSuffix();
                 team.setSuffix(string1.substring(0, Math.min(16, string1.length())));
                 String string2 = sb.toString();
-                team.setPrefix(string2.substring(0, Math.min(16, string2.length())));
+                team.setPrefix(string2.substring(Math.max(string2.length()-16,0)));
                 VersionUtils.getVersionUtils().setTeamNameTagVisibility(team, event1.isVisibility());
 
             }
