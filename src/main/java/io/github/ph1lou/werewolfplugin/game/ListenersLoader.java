@@ -14,10 +14,8 @@ import io.github.ph1lou.werewolfplugin.listeners.PatchPotions;
 import io.github.ph1lou.werewolfplugin.listeners.PlayerListener;
 import io.github.ph1lou.werewolfplugin.listeners.SmallFeaturesListener;
 import io.github.ph1lou.werewolfplugin.listeners.TabManager;
-import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.PluginManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +31,6 @@ public class ListenersLoader {
     }
 
     public void init() {
-        PluginManager pm = Bukkit.getPluginManager();
         listeners.add(new PlayerListener(this.game));
         listeners.add(new SmallFeaturesListener(this.game));
         listeners.add(new EnchantmentListener(this.game));

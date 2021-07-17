@@ -73,7 +73,10 @@ public class TabManager implements Listener {
 
         for (Player player1 : Bukkit.getOnlinePlayers()) {
             Scoreboard scoreBoard = player1.getScoreboard();
-            Objects.requireNonNull(scoreBoard.getTeam(name)).unregister();
+            Team team = scoreBoard.getTeam(name);
+            if(team != null){
+                team.unregister();
+            }
         }
     }
 

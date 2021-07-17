@@ -2,7 +2,6 @@ package io.github.ph1lou.werewolfplugin.listeners;
 
 import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
-import io.github.ph1lou.werewolfapi.IScoreBoard;
 import io.github.ph1lou.werewolfapi.enums.ConfigBase;
 import io.github.ph1lou.werewolfapi.enums.Day;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
@@ -171,8 +170,6 @@ public class CycleListener implements Listener {
     }
 
     public void groupSizeChange() {
-
-        IScoreBoard score = game.getScore();
 
         if (game.getPlayerSize() <= game.getGroup() * 3 && game.getGroup() > 3) {
             game.setGroup(game.getGroup() - 1);

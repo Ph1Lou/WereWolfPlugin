@@ -113,7 +113,9 @@ public class Save implements InventoryProvider {
         WereWolfAPI game = main.getWereWolfAPI();
         File repertoire = new File(main.getDataFolder() + File.separator + "configs");
         File[] files = repertoire.listFiles();
-        if (files.length <= j) return;
+
+        if (files == null || files.length <= j) return;
+
         FileUtils_.loadConfig(main, files[j].getName().replace(".json", ""));
         game.getStuffs().load(files[j].getName().replace(".json", ""));
     }
@@ -135,7 +137,7 @@ public class Save implements InventoryProvider {
         File repertoire = new File(main.getDataFolder() + File.separator + "configs");
         File[] files = repertoire.listFiles();
 
-        if (files.length <= j) return;
+        if (files == null || files.length <= j) return;
 
         File file = new File(main.getDataFolder() + File.separator + "configs", files[j].getName());
         if (!file.delete()) {

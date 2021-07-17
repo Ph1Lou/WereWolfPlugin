@@ -42,6 +42,12 @@
         "werewolf_list": "[§eWW UHC§r] Werewolves' list : §b%s",
         "command": "ww"
       },
+      "grimy_werewolf": {
+        "display": "Grimy Werewolf",
+        "description": "The first player you kill will appear as a Werewolf on his death",
+        "perform": "[§aWW UHC§r] The player §b%s§f was a §b%s§f. Due to your power, his role has been disguised as a Werewolf",
+        "actualize": "[§aLG UHC§r] A Grimy Werewolf died. He did disguise the death of a §b%s"
+      },
       "wild_child": {
         "display": "Wild Child",
         "model_none": "§cNone§f select a master §b/ww master",
@@ -94,7 +100,8 @@
         "himself": "You §acan§f save yourself",
         "resuscitation_message": "[§eWW UHC§r] §b%s§r is dead, to revive them, §6Click here §r(You have §b7sec§r)",
         "resuscitation_perform": "[§eWW UHC§r] You revived §b%s",
-        "command": "save_witch"
+        "command": "save_witch",
+        "auto_rez_witch": "the witch can bring herself back to life"
       },
       "little_girl": {
         "display": "Little Girl",
@@ -144,7 +151,8 @@
         "angel_choice_perform": "[§eWW UHC§r] You just chose §b%s",
         "command_1": "guardian",
         "command_2": "fallen",
-        "choice": "he chose %s"
+        "choice": "he chose %s",
+        "sweet_angel": "The Guardian angel wins with the Village if his ward dies"
       },
       "mystical_werewolf": {
         "display": "Mystic Werewolf",
@@ -156,8 +164,9 @@
         "display": "Rival",
         "extra": "You are allowed a Power §b%d bow",
         "item": "Two potions of damage",
-        "description": "When the lovers are announced, you get to know the roles of the two lovers. In §b%s§r, you obtain a list of 5 players among whom the lovers are.\nIf you kill a lover, you take his place and have to win with his lover.\nHowever, if the lovers die, You have to win alone with two less permanent hearts. You know in which direction the cupid is if there is one in the game.",
+        "description": "When the Lovers are announced, you will obtain the roles of two players in love with each other. In §b%s§r, you will obtain a list of 5 players containing the names of the two lovers. \nIf you kill a lover, you will take his place and will have to win with his lover. \nHowever, if they die, you will have to win alone and you lose 5 hearts (a heart container is returned to you every minute). You do know the direction in which to find the Cupid if he is part of the game.",
         "lover": "[§eWW UHC§r] The lovers are a §b%s§f and a §b%s§f.",
+        "error": "[§cWW UHC§r] No lovers have been found for your role (Rival)",
         "find_lovers": "[§eWW UHC§r] The lovers are among the following players : %s, %s, %s, %s, %s",
         "lover_death": "[§cWW UHC§r] The lovers are dead, you now have to win alone and lose two permanent hearts."
       },
@@ -168,16 +177,12 @@
         "smell_message": "[§eWW UHC§r] You may sniff a player §b/ww sniff§. If you are already sniffing someone, he will be replaced by the new target and progression will be reset to 0. You have §b%d§r sniffs remaining",
         "smell_beginning": "[§eWW UHC§r] You started smelling §b%s",
         "not_werewolf": "[§eWW UHC§r] %s §2isn't in the Werewolf team",
-        "warn": "He will be informed in 5 minutes that he was sniffed",
-        "werewolf": "[§eWW UHC§r] %s §4is in the Werewolf team",
+        "warn": "[§eWW UHC§r] He will be informed in 5 minutes that you sniffed him",
+        "werewolf": "[§eWW UHC§r] %s§4 is a membre of the Werewolves.§f He will be informed that he has ben sniffed in 5 minutes",
         "not_enough_near": "[§cWW UHC§r] You aren't close enough to the player you are smelling",
         "progress": "[§eWW UHC§r] Smell Progression §b%s%%",
         "smell": "[§WW UHC§r] You have been sniffed by a §bFox§f 5 minutes ago",
         "command": "smell"
-      },
-      "miner": {
-        "display": "Miner",
-        "description": "§6Werewolves §7➽§9 You are a §1Miner§9. Your objective is to kill the Werewolves.\n§9You have a diamond pickaxe and a Haste effect."
       },
       "raven": {
         "display": "Raven",
@@ -229,7 +234,7 @@
       },
       "thief": {
         "display": "Thief",
-        "thief": "you have §fstolen a §b%s§f",
+        "thief": " §fyou have §fstolen a §b%s§f",
         "details": "[§eWW UHC§r] To see the details of your role §b/ww role",
         "description": "You obtain the role of the first person you kill and will have to win with its team.",
         "effect": "Resistance until your first kill",
@@ -247,7 +252,8 @@
         "same_camp": "[§eWW UHC§r] %s and %s §2are in the same team",
         "opposing_camp": "[§eWW UHC§r] %s and %s §2are not in the same team",
         "already_inspect": "[§cWW UHC§r] At least one of the players has already been inspected",
-        "command": "inspect"
+        "command": "inspect",
+        "detective_every_other_day": "Detective every two days"
       },
       "naughty_little_wolf": {
         "display": "Naughty Little Wolf",
@@ -279,18 +285,31 @@
         "see_perform": "[§eWW UHC§r] You have spied on a member of the §b%s camp",
         "not_enough_life": "[§cWW UHC§r] You don't have enough life to spy on someone",
         "see_villager": "[§cWW UHC§r] You just spied on a villager and thus lose 3 hearts and cannot use your power the next time",
-        "command": "see"
+        "command": "see",
+        "seer_every_other_day": "Seer every two days"
       },
       "priestess": {
         "display": "Priestess",
-        "description": "During the day, You may chose to learn to which team a player belongs in exchange for two permanent hearts. While you are alive, the werewolves have a probability of 20%% to see the role of a dead person while this is 80%% for the villagers. After you died, those probabilities are reversed",
+        "description": "During the day, You may chose to learn to which team a player belongs in exchange for two permanent hearts. While you are alive, the werewolves have a probability of 20%% to see the role of a dead person while this is 80%% for the villagers. After you died, those probabilities are reversed. Neutral roles have a 95% probability of seeing the role",
         "command": "spec",
         "items": "Four blocks of Obsidian",
-        "is_werewolf": "[§cWW UHC§r] §b%s§r is a member of the Werewolves",
-        "is_not_werewolf": "[§aWW UHC§r] §b%s§r is not a member of the Werwolves",
+        "magic": "§kHello There",
+        "message": "[§cWW UHC§r] §b%s§r is a member of the §b%s",
         "werewolf_death": "[§aWW UHC§r] A Werewolf you discovered died. You get 1 heart back",
         "perform": "[§eWW UHC§r] Discover the role of a player who is at less than §b%d§r blocks of you with §b/ww spec§r you have §b%s",
         "distance": "[§cWW UHC§r] You have to be at less than 10 blocs of the player"
+      },
+      "oracle": {
+        "display": "Oracle",
+        "description": "Once per day, you may know the current aura of a player of your choice.",
+        "effect": "Night Vision",
+        "command": "oracle",
+        "perform": "[§eWW UHC§r] Discover the current aura of a player with §b/ww oracle§r you have §b%s",
+        "message": "[§cWW UHC§r] The aura of §b%s§r is %s",
+        "light": "Bright",
+        "neutral": "Neutral",
+        "dark": "Dark",
+        "oracle_every_other_day": "Oracle every two days"
       },
       "protector": {
         "display": "Protector",
@@ -318,6 +337,13 @@
         "growling_message": "[§eWW UHC§r] %s",
         "growling": "Grrrr "
       },
+      "avenger_werewolf": {
+        "display": "Avenging Werewolf",
+        "power": "7 Hearts at the beginning. Whenever a recorded Werewolf dies, you gain an additional heart container.",
+        "description": "Whenever you meet another Werewolf at less than §b%d§f blocs, he is recorded.",
+        "add": "[§eWW UHC§r] §b%s§f has been recorded",
+        "remove": "[§aWW UHC§r] §b%s§f was among the werewolves you recorded. You gain an additional heart container"
+      },
       "fallen_angel": {
         "display": "Fallen Angel",
         "effect": "Resistance during the Night",
@@ -337,7 +363,7 @@
         "display": "Cupid",
         "lover": "§bLovers§f : %s\n",
         "none": "§cNone§f, to make two people fall in love §b/ww lovers",
-        "items": "A Power II book, Punch I book, 64 arrows, 2 strings",
+        "items": "A Power II, Punch I Book, 64 arrows, 3 strings",
         "description": "You have to win with your lovers. If the were to die, you win as a villager.",
         "extra": "You are allowed a bow Power §b%d",
         "lover_designation_message": "You have to designate two Lovers, §b/ww lovers§r, you have §b%s",
@@ -349,6 +375,12 @@
         "power": "Two additional hearts",
         "description": "You have been separated from your brother at birth, but keep a strong link to him. Your hearts above the fifth are linked.",
         "siamese_twin_list": "List of your Siamese Brothers: §b%s"
+      },
+      "alpha_werewolf": {
+        "display": "Alpha Werewolf",
+        "description": "Your name is visible for all other Werewolves in the wolf chat.",
+        "effect": "2 ♥ of Absorption for 5 minutes at the beginning of each night.",
+        "prefix": "[§c&alpha&§r] &message&"
       },
       "lover": {
         "display": "Lovers",
@@ -391,15 +423,21 @@
       },
       "flute_player": {
         "display": "Pied Piper",
+        "full": "[§cWW UHC§r] This player has a full inventory, he cannot receive a pipe",
+        "wait": "[§eWW UHC§r] You have to wait §bone day§f before giving another pipe",
         "affected": "§bAffected player§f : §f%s\n",
-        "description": "At dawn, you may bewitch two persons who are at less than a 100 blocks from you. If you bewitch all living players, you win. The bewitched people know each other",
-        "list": "[§eWW UHC§r] List of Bewitched Players : §b",
-        "power": "[§eWW UHC§r] Bewitch two players §b/ww bewitch§r you have §b%s",
-        "already_enchant": "[§eWW UHC§r] You have already bewitched §b%s",
-        "distance": "[§cWW UHC§r] You are at more than a 100 blocks from §b%s",
-        "enchanted": "[§eWW UHC§r] You have just been bewitched by the Pied Piper",
-        "perform": "[§eWW UHC§r] You just bewitched §b%s§r",
-        "command": "bewitch"
+        "craft_description": "To craft a pipe, surround a stick with gold ingots in a crafting table",
+        "description": "Once you craft a pipe, every player at less than §b%d§f blocs of you will slowly become charmed (1%% every 6 seconds).",
+        "power": "You may craft §badditional§f pipes and give them to other players once per day by §bright-clicking§f them. If the player finds the pipe in his inventory, it's effect is cancelled. A player carrying a pipe will §bunknowingly§f charm players around him.",
+        "enchanted": "[§eWW UHC§r] You charmed §b%s",
+        "transmit": "[§aWW UHC§r] You gave a pipe to §b%s§f you have §b%d%f pipes remaining",
+        "find": "[§cWW UHC§r] You discovered a pipe you were carrying, it doesn't have any effect anymore",
+        "find_flute": "[§cWW UHC§r] §b%s§f discovered you §bpipe§f, it doesn't affect him anymore",
+        "effect": "If a §bcharmed§f player is near you you have §bResistance§f. If all players are charmed, you get a permanent §bStrength§f effect",
+        "day": "[§eWW UHC§r] You may again give a pipe to someone (you currently have §b%d§f pipes)",
+        "craft": "[§eWW UHC§r] You crafted an additional pipe (you currently have §f%d§f), right-click a player to give him the pipe. He will charm players near him as long as he doesn't discover the pipe in your inventory",
+        "perform": "[§eWW UHC§r] You crafted §byour pipe§f, you now charm people who are at less than §b%d§f blocs of you",
+        "item": "Magical pipe"
       },
       "librarian": {
         "display": "Librarian",
@@ -453,6 +491,16 @@
         "progress_charm": "[§eWW UHC§r] Charm's Progression §b%s%%",
         "command": "charm",
         "change": "[§6WW UHC§r] Your Charmed is now §b%s"
+      },
+      "shaman": {
+        "display": "Shaman",
+        "description": "Whenever a player dies, you have 30 seconds to choose if you wish to sacrifice a heart container in order to randomly obtain the role or the name of the dead player. You always see a dead players real role",
+        "cannot_use": "[§eWW UHC§r] You can no longer do this",
+        "not_enough_life": "[§cWW UHC§r] You do not have enough life to do this",
+        "choice_message": "[§eWW UHC§r] A player died. §bClick here§r to obtain an information about hum in exchange of a heart container. You have §b30§r seconds.",
+        "victim_name": "[§eWW UHC§r] §b%s§r died",
+        "victim_role": "[§eWW UHC§r] A §b%s§r died",
+        "command": "command_shaman"
       }
     },
     "vote": {
@@ -465,7 +513,7 @@
       "vote_not_yet_activated": "[§cWW UHC§r] Votes are not enabled yet",
       "vote_result": "[§eWW UHC§r] §b%s§r is the player who was voted most often§r : §b%s§r. He loses 5 hearts",
       "no_result": "[§6WW UHC§r] No player have been voted more than ounce",
-      "vote_time": "§b§m§l-+-----------------------------------+-\n§f[§6WW UHC§r] It is time to vote §b/ww vote§r You have §b%s\n§r§b§m§l-+-----------------------------------+-",
+      "vote_time": "§b§m§l-+-----------------------------------+-\n§f [§6WW UHC§r] It is time to vote §b/ww vote§r You have §b%s\n§r§b§m§l-+-----------------------------------+-",
       "command": "vote"
     },
     "lone_wolf": {
@@ -477,9 +525,9 @@
       "border": "[§6WW UHC§r] Borders started to shrink",
       "mining": "[§6WW UHC§r] Mining Disabled",
       "day": "[§6WW UHC§r] It is now Day §b%s§r ✸ ",
-      "death_message_with_role": "§b§m§l-+-----------------------------------+-\n§f        [§cWW UHC§r] §b&player&§r died, he was a §b&role&§r\n§r§b§m§l-+-----------------------------------+-",
-      "death_message_with_camp": "§b§m§l-+-----------------------------------+-\n§f        [§cWW UHC§r] §b&player&§r died, he was a member of the §b&role&§r\n§r§b§m§l-+-----------------------------------+-",
-      "death_message": "§b§m§l-+-----------------------------------+-\n§f                 [§cWW UHC§r] §b&player&§r died\n§r§b§m§l-+-----------------------------------+-",
+      "death_message_with_role": "§b§m§l-+-----------------------------------+-\n§f [§cWW UHC§r] §b&player&§r died, he was a §b&role&§r\n§r§b§m§l-+-----------------------------------+-",
+      "death_message_with_camp": "§b§m§l-+-----------------------------------+-\n§f  [§cWW UHC§r] §b&player&§r died, he was a member of the §b&role&§r\n§r§b§m§l-+-----------------------------------+-",
+      "death_message": "§b§m§l-+-----------------------------------+-\n§f      [§cWW UHC§r] §b&player&§r died\n§r§b§m§l-+-----------------------------------+-",
       "review_role": "[§eWW UHC§r] To see your role's description again, §b/ww role",
       "troll": "[§5WW UHC§r] Well, the joke has gone on for long enough ! Here's your real role : ",
       "lover_troll": "[§aWW UHC§r] The Valentine's Day joke is over, your love was an illusion",
@@ -550,7 +598,8 @@
           "send": "[§b%s§r] %s (Click to answer)",
           "anonyme": "Anonymous",
           "failure": "[§cWW UHC§r] Your message couldn't be sent. No staff is connected",
-          "description": "To send an anonymous message"
+          "description": "To send an anonymous message",
+          "empty": "[§cWW UHC§r] You have to send a message after the ?"
         },
         "info": {
           "command": "info",
@@ -571,13 +620,15 @@
         },
         "ww_chat": {
           "name": "chatww",
-          "prefix": "[§cChat WW§r] %s",
-          "announce": "[§eWW UHC§r] You have §b%s§f seconds to write §b%d§f messages(s) in the Werwolf Chat §b/ww chatww§r <message>, but be careful, the Little Girl sees the messages as well",
+          "prefix": "[§cChat WW§r] &message&",
+          "modo": "[§c&name&§r] &message&",
+          "announce": "[§eWW UHC§r] You have §b%s§f seconds to write §b%d§f messages(s) in the Werwolf Chat §b/ww chatww§r <message>, but be careful, some non-Werewolves roles have the ability to read the messages as well",
           "timer": "[§cWW UHC§r] The time to write in the Werewolf chat is over",
           "not_access": "[§cWW UHC§r] You cannot talk in the Werewolf chat",
           "disable": "[§cWW UHC§r] The Werewolf chat is disabled",
-          "number": "§b%d§r messages by cycle\nin the Werewolf chat",
-          "speak_number": "[§cWW UHC§r] You may talk only §b%s§r times per cycle"
+          "number": "§b%d§r messages per cycle in the Werewolf chat",
+          "speak_number": "[§cWW UHC§r] You may talk only §b%s§r times per cycle",
+          "drunken": "Be Warned, there is a drunk werewolf in this game"
         },
         "stuff_start": {
           "command": "lootStart",
@@ -591,7 +642,7 @@
         },
         "loot_role": {
           "command": "stuffRole",
-          "valid": "[§eWW UHC§r] Click here to validate the inventory",
+          "valid": "[§eWW UHC§r] Click here to confirm the starting stuff of a §b%s",
           "perform": "[§aWW UHC§r] Stuff §b%s§r updated"
         },
         "role": {
@@ -745,9 +796,13 @@
       "return": "Return to Main Menu",
       "left": "§fLeft-§bClick§f >> +",
       "right": "§fRight-§bClick§f >> -",
-      "shift": "§bShift§f-Click >> Stuff",
+      "shift": "§bShift§f-Click >> Advanced configuration",
       "addon": {
         "name": "Addon Settings"
+      },
+      "advanced_tool_role": {
+        "menu": "Advanced Menu §b%s",
+        "config": "Customize a §b%s§f's starting stuff"
       },
       "advanced_tool": {
         "name": "§bAdvanced §rSettings",
@@ -773,11 +828,15 @@
         "particles_off": "§4Disable§r for all players",
         "exception": "§6Disable for Little-Girl and the Mischievous Wolf invisible",
         "fox": "Fox's action zone §b%d",
+        "avenger_werewolf": "Avenging Werewolf action radius §b%d",
+        "flute_player": "Pied Piper action radius §b%d",
         "bear_trainer": "Bear Trainer's action zone §b%d"
       },
       "troll": "Configuration §bTroll",
       "roles": {
         "command_1": "role",
+        "need": "§cThis role needs a §f%s§c in the composition",
+        "dependant_load": "§cDepending role loaded (§f%s§c)",
         "command_2": "compo",
         "description1": "See the description of your role",
         "description2": "See the composition",
@@ -851,6 +910,9 @@
         "punch": "Punch §b%d",
         "depth_rider": "Depth Strider §b%d"
       },
+      "advanced_config_roles": {
+        "name": "Advanced $bRole§r Configuration"
+      },
       "timers": {
         "command": "timers",
         "description": "See the timers",
@@ -915,15 +977,11 @@
         "werewolf_chat": "Werewolf chat",
         "show_role_to_death": "Displays Role at Death",
         "show_role_category_to_death": "Show role category on death",
-        "auto_rez_witch": "the witch can bring herself back to life",
-        "sweet_angel": "Guardian angel wins as Villager if his ward dies",
         "vote": "Vote",
         "hide_composition": "Hidden Composition",
         "red_name_tag": "Werewolves' name in red",
         "hide_scenarios": "Hides the scenarios",
         "hide_events": "Hides the Events",
-        "seer_every_other_day": "Seer every two days",
-        "detective_every_other_day": "Detective every two days",
         "proximity_chat": "Proximity chat",
         "double_troll": "Double Troll",
         "lone_wolf": "Lone Wolf",
@@ -1002,10 +1060,20 @@
         "all_chest_find": "[§aWW UHC§r] All caches have been found",
         "villager_death": "[§5Loot-Box§r] Before dying, §b%s§r spawned§b%s§r caches on the map, one of them contains the name of an enemy of the Village"
       },
+      "poorly_groomed_bear": {
+        "name": "Poorly Groomed Bear",
+        "description": "The number of Grr of the Bear Trainer is modified by +1 or -1"
+      },
       "infection": {
         "name": "Infection",
-        "description": "Once during the game a random player is Infected.\nThe infection happens between 1h and 1h15, \nif less than half the players are Werewolves.",
+        "description": "Once during the game, infects a player at random.\nThe infection happens between 1h and 1h15 after the roles, \nif less than half the players are Werewolves.",
         "message": "[§5Infection§r] A random player has been infected"
+      },
+      "amnesic": {
+        "name": "Amnesiac",
+        "message": "[§5Amnesiac§r] You discover that you are actually are a Werewolf. You will know a Werewolf every five minutes",
+        "description": "When the Werewolves' list is announced, \na non-Werewolf player is chosen at random \nand becomes Amnesiac.\nIf he is hit by a Werewolf he will \nbecome part of their pack \nand will know a Werewolf \nevery five minutes. \nIf he is not transformed, he stays in \nhis original team",
+        "new": "[§aWW UHC§r] §b%s§f is a Werewolf, next name in five minutes"
       },
       "triple": {
         "name": "Love Triangle",
@@ -1013,6 +1081,10 @@
         "lover_join": "[§aWW UHC§r] §b%s§f joined your couple",
         "join": "[§aWW UHC§r] You joined the lovers, §b%s",
         "message": "[§5Love Triangle§r] A third player has joined the lovers"
+      },
+      "drunken_werewolf": {
+        "name": "Drunk Werewolf",
+        "description": "A Werewolf chosen at randome \ndoes not have the right Werewolves \nlist"
       },
       "bearing_ritual": {
         "name": "Fall Guys",
@@ -1055,13 +1127,13 @@
       "number_required": "[§cWW UHC§r] The command needs a number as input",
       "already_get_power": "[§cWW UHC§r] The player has already been affected by your ability yesterday",
       "permission_denied": "[§cWW UHC§r] You don't have the permission to use this command",
-      "death_spectator": "[§cWW UHC§r] The spectator mode after death is disable during this game",
+      "death_spectator": "[§cWW UHC§r] Spectator mode is enabled only for dead players",
       "offline_player": "[§cWW UHC§r] The player is disconnected",
       "not_in_game_player": "[§cWW UHC§r] The player isn't in the game",
       "already_begin": "[§cWW UHC§r] The game already started",
       "role_not_set": "[§cWW UHC§r] Roles have not been assigned yet",
       "disabled_command": "[§cWW UHC§r] Command disabled",
-      "spectator_disabled": "[§cWW UHC§r] Outside spectators are disabled during this game",
+      "spectator_disabled": "[§cWW UHC§r] Spectators are disabled for this game",
       "console": "[§cWW UHC§r] This command is not usable via the console",
       "full": "[§cWW UHC§r] The game is full",
       "cancel": "[§cWW UHC§r] Your power has been canceled",
@@ -1075,8 +1147,8 @@
     },
     "bug": "§b§m§l-+-----------------------------------+-\n§f        [§cWW UHC§f] Report bugs by clicking here\n§r§b§m§l-+-----------------------------------+-",
     "utils": {
-      "disable": "%s §4Disabled",
-      "enable": "%s §2Enabled",
+      "disable": "§4Disabled ",
+      "enable": "§2 Enabled ",
       "display": "%s (§b%s§r)",
       "pve": "§bPVE",
       "on": "§bON",
@@ -1094,6 +1166,7 @@
     },
     "description": {
       "_": "§b================================\n",
+      "doc": "https://docs.google.com/spreadsheets/d/1jkos7zslxBl6NCWy4FXuQXtFkvtPLa9e6UOlpmcsDm0/edit?usp=sharing",
       "role": "§fYou are §b%s\n",
       "description": "§bDescription : §f %s\n",
       "camp": "§fTeam of the §b%s\n",
@@ -1105,7 +1178,11 @@
       "transformed": "Transformed: §b%s\n",
       "no": "No",
       "yes": "Yes",
+      "description_message": "&description&",
       "werewolf": "Strength (during the night), Night Vision, 2 hearts of absorption and a minute of speed after every kill"
+    },
+    "statistics": {
+      "message": "[§eWW UHC§r] Discover the summary of the preceding game by §bClicking here"
     }
   }
 }

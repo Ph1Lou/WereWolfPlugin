@@ -210,7 +210,7 @@ public class TimersGUI implements InventoryProvider {
 
     }
 
-    public String getConversion(io.github.ph1lou.werewolfapi.WereWolfAPI game, String key) {
+    public String getConversion(WereWolfAPI game, String key) {
         return Utils.conversion(game
                 .getConfig()
                 .getTimerValue(key));
