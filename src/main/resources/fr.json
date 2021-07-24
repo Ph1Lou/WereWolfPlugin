@@ -1143,7 +1143,8 @@
     },
     "update": {
       "up_to_date": "[§aLG UHC§r] Le plugin LG UHC est à jour",
-      "out_of_date": "[§6LG UHC§r] Une mise à jour du plugin est disponible"
+      "out_of_date": "[§6LG UHC§r] Une mise à jour du plugin est disponible",
+      "snapshot": "[§aLG UHC§r] Vous êtes en version Snapshot du LG UHC"
     },
     "bug": "§b§m§l-+-----------------------------------+-\n§f        [§cLG UHC§f] Signalez les bugs en cliquant ici\n§r§b§m§l-+-----------------------------------+-",
     "utils": {

@@ -148,10 +148,14 @@ public class GameManager implements WereWolfAPI {
         new UpdateChecker(main, 73113).getVersion(version -> {
             DefaultArtifactVersion siteVersion = new DefaultArtifactVersion(version);
             DefaultArtifactVersion loadVersion = new DefaultArtifactVersion(main.getDescription().getVersion());
-            if (siteVersion.compareTo(loadVersion) >= 0) {
-                player.sendMessage(translate("werewolf.update.up_to_date"));
-            } else {
-                player.sendMessage(translate("werewolf.update.out_of_date"));
+
+            if (loadVersion.compareTo(siteVersion) == 0) {
+                player.sendMessage(this.translate("werewolf.update.up_to_date"));
+            } else if (loadVersion.compareTo(siteVersion) < 0) {
+                player.sendMessage(this.translate("werewolf.update.out_of_date"));
+            }
+            else {
+                player.sendMessage(this.translate("werewolf.update.snapshot"));
             }
         });
 

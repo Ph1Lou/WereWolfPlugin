@@ -1143,7 +1143,9 @@
     },
     "update": {
       "up_to_date": "[§aWW UHC§r] The plugin WW UHC is updated",
-      "out_of_date": "[§6WW UHC§r] A plugin's update is available"
+      "out_of_date": "[§6WW UHC§r] A plugin's update is available",
+      "snapshot": "[§aWW UHC§r] You are in Snapshot version of the WW UHC"
+
     },
     "bug": "§b§m§l-+-----------------------------------+-\n§f        [§cWW UHC§f] Report bugs by clicking here\n§r§b§m§l-+-----------------------------------+-",
     "utils": {

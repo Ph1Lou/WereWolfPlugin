@@ -6,7 +6,7 @@
 
     <groupId>io.github.ph1lou</groupId>
     <artifactId>werewolfplugin</artifactId>
-    <version>1.7-SNAPSHOT</version>
+    <version>1.8-SNAPSHOT</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -61,11 +61,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.enginehub</groupId>
-            <artifactId>squirrelid</artifactId>
-            <version>0.3.0</version>
-            <scope>compile</scope>
-            <type>jar</type>
+            <groupId>com.github.KevinPriv</groupId>
+            <artifactId>MojangAPI</artifactId>
+            <version>1.0</version>
         </dependency>
 
         <dependency>

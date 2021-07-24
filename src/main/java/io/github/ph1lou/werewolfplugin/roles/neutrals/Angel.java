@@ -392,7 +392,6 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
 
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
-
         if (isChoice(AngelForm.FALLEN_ANGEL)) {
             this.getPlayerWW().sendMessageWithKey("werewolf.role.fallen_angel.new_target", targetName);
         } else if (isChoice(AngelForm.GUARDIAN_ANGEL)) {

@@ -14,15 +14,14 @@ import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Villager;
+import me.kbrewster.exceptions.APIException;
+import me.kbrewster.mojangapi.MojangAPI;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
-import org.enginehub.squirrelid.Profile;
-import org.enginehub.squirrelid.resolver.HttpRepositoryService;
-import org.enginehub.squirrelid.resolver.ProfileService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -71,13 +70,9 @@ public class PlayerWW implements IPlayerWW {
         this.role = new Villager(api, this,
                 RolesBase.VILLAGER.getKey());
         this.game = api;
-        ProfileService resolver = HttpRepositoryService.forMinecraft();
         try {
-            Profile profile = resolver.findByName(this.name); // May be null
-            if (profile != null) {
-                this.mojangUUID = profile.getUniqueId();
-            }
-        } catch (IOException | InterruptedException e) {
+            this.mojangUUID =  MojangAPI.getUUID(this.name);
+        } catch (IOException | APIException e) {
             e.printStackTrace();
         }
     }
@@ -349,13 +344,9 @@ public class PlayerWW implements IPlayerWW {
         if (this.mojangUUID != null) {
             return this.mojangUUID;
         }
-        ProfileService resolver = HttpRepositoryService.forMinecraft();
         try {
-            Profile profile = resolver.findByName(this.name); // May be null
-            if (profile != null) {
-                return this.mojangUUID = profile.getUniqueId();
-            }
-        } catch (IOException | InterruptedException e) {
+            this.mojangUUID =  MojangAPI.getUUID(this.name);
+        } catch (IOException | APIException e) {
             e.printStackTrace();
         }
 
