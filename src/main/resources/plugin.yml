@@ -1,5 +1,5 @@
 name: WereWolfPlugin
-version: "1.7.1"
+version: "1.7.2"
 author: Ph1Lou
 main: io.github.ph1lou.werewolfplugin.Main
 load: STARTUP

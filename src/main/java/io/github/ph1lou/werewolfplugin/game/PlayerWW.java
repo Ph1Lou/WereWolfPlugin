@@ -15,6 +15,7 @@ import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Villager;
 import me.kbrewster.exceptions.APIException;
+import me.kbrewster.exceptions.InvalidPlayerException;
 import me.kbrewster.mojangapi.MojangAPI;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -72,8 +73,7 @@ public class PlayerWW implements IPlayerWW {
         this.game = api;
         try {
             this.mojangUUID =  MojangAPI.getUUID(this.name);
-        } catch (IOException | APIException e) {
-            e.printStackTrace();
+        } catch (IOException | APIException | InvalidPlayerException ignored) {
         }
     }
 
@@ -138,14 +138,9 @@ public class PlayerWW implements IPlayerWW {
         this.disconnectedChangeMaxHealth -= health;
     }
 
-
-    private void sendMessage(String message) {
-        this.sendMessage(new TextComponent(message));
-    }
-
     @Override
     public void sendMessageWithKey(String key, Object... args) {
-        this.sendMessage(game.translate(key, args));
+        this.sendMessage(new TextComponent(game.translate(key, args)));
     }
 
     @Override
@@ -155,16 +150,16 @@ public class PlayerWW implements IPlayerWW {
 
     @Override
     public void sendMessageWithKey(String key, Formatter... formatters) {
+        this.sendMessageWithKey(key,null,formatters);
+    }
+
+    @Override
+    public void sendMessageWithKey(String key,@Nullable Sound sound, Formatter... formatters) {
         String message = game.translate(key);
         for(Formatter formatter :formatters){
             message = formatter.handle(message);
         }
-        this.sendMessage(message);
-    }
-
-    @Override
-    public void sendMessageWithKey(String s, Sound sound, Formatter... formatters) {
-
+        this.sendMessage(new TextComponent(message), sound);
     }
 
     @Override
@@ -173,7 +168,7 @@ public class PlayerWW implements IPlayerWW {
     }
 
     @Override
-    public void sendMessage(TextComponent textComponent, Sound sound) {
+    public void sendMessage(TextComponent textComponent,@Nullable Sound sound) {
 
         Player player = Bukkit.getPlayer(uuid);
 
@@ -346,7 +341,7 @@ public class PlayerWW implements IPlayerWW {
         }
         try {
             this.mojangUUID =  MojangAPI.getUUID(this.name);
-        } catch (IOException | APIException e) {
+        } catch (IOException | APIException | InvalidPlayerException e) {
             e.printStackTrace();
         }
 
