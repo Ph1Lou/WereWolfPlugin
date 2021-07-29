@@ -231,8 +231,9 @@ public class PlayerWW implements IPlayerWW {
                                 Bukkit.getScheduler().cancelTask(id);
                             }
                         }
-                        player.removePotionEffect(potionModifier.getPotionEffectType());
-
+                        if(player!=null){
+                            player.removePotionEffect(potionModifier.getPotionEffectType());
+                        }
                     }
                     else if(potionModifier1.getIdentifier().equals(potionModifier.getIdentifier())){
                         find.set(true);
@@ -341,8 +342,7 @@ public class PlayerWW implements IPlayerWW {
         }
         try {
             this.mojangUUID =  MojangAPI.getUUID(this.name);
-        } catch (IOException | APIException | InvalidPlayerException e) {
-            e.printStackTrace();
+        } catch (IOException | APIException | InvalidPlayerException ignored) {
         }
 
         return this.uuid;
