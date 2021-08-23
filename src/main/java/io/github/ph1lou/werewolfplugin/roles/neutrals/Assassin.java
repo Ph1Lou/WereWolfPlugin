@@ -37,6 +37,8 @@ public class Assassin extends RoleNeutral {
     @EventHandler
     public void onDay(DayEvent event) {
 
+        if (!isAbilityEnabled()) return;
+
         this.getPlayerWW()
                 .addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"assassin"));
 
@@ -111,11 +113,24 @@ public class Assassin extends RoleNeutral {
 
         if (game.isDay(Day.NIGHT)) return;
 
+        if (!isAbilityEnabled()) return;
+
         this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"assassin"));
     }
 
     @Override
     public Aura getDefaultAura() {
         return Aura.DARK;
+    }
+
+    @Override
+    public void disableAbilities() {
+        super.disableAbilities();
+
+        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+            return;
+        }
+
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"assassin"));
     }
 }

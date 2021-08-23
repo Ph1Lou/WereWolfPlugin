@@ -37,6 +37,8 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
             return;
         }
 
+        if (!isAbilityEnabled()) return;
+
         this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"werewolf"));
 
     }
@@ -91,6 +93,8 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
 
         if (game.isDay(Day.DAY)) return;
 
+        if (!isAbilityEnabled()) return;
+
         this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"werewolf"));
 
     }
@@ -144,6 +148,8 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
 
         if (!killer.getUniqueId().equals(getPlayerUUID())) return;
 
+        if (!isAbilityEnabled()) return;
+
         this.getPlayerWW().addPotionModifier(PotionModifier.add(
                 PotionEffectType.SPEED,
                 1200,
@@ -154,6 +160,17 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
                 1200,
                 0,
                 "amnesic_werewolf"));
+    }
+
+    @Override
+    public void disableAbilities() {
+        super.disableAbilities();
+
+        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+            return;
+        }
+
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"werewolf"));
     }
 
 }

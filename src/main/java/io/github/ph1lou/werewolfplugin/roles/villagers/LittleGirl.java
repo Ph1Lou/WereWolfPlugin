@@ -246,6 +246,11 @@ public class LittleGirl extends RoleVillage implements IInvisible {
                 inventory.getItem(38) == null &&
                 inventory.getItem(39) == null) {
             if (!this.isInvisible()) {
+                if (!isAbilityEnabled()) {
+                    getPlayerWW().sendMessageWithKey("werewolf.check.ability_disabled");
+                    return;
+                }
+
                 player.sendMessage(game.translate("werewolf.role.little_girl.remove_armor_perform"));
                 this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INVISIBILITY,"little_girl"));
 
@@ -293,6 +298,27 @@ public class LittleGirl extends RoleVillage implements IInvisible {
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         this.setInvisible(false);
+    }
+
+    @Override
+    public void disableAbilities() {
+        super.disableAbilities();
+
+        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+            return;
+        }
+
+        if (isInvisible()) {
+            getPlayerWW().sendMessageWithKey("werewolf.role.little_girl.ability_disabled");
+            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"werewolf"));
+
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INVISIBILITY,"mischievous"));
+
+            setInvisible(false);
+            Bukkit.getPluginManager().callEvent(
+                    new InvisibleEvent(this.getPlayerWW(), false));
+            Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
+        }
     }
 
 }

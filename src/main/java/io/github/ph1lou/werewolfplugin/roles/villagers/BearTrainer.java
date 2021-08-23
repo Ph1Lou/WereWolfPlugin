@@ -44,6 +44,8 @@ public class BearTrainer extends RoleVillage {
         }
         if (player == null) return;
 
+        if (!isAbilityEnabled()) return;
+
         Location oursLocation = player.getLocation();
         Set<IPlayerWW> growled = Bukkit.getOnlinePlayers()
                 .stream()

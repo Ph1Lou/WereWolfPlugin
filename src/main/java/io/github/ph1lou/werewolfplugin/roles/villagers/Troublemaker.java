@@ -115,6 +115,8 @@ public class Troublemaker extends RoleVillage implements IAffectedPlayers, IPowe
 
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
+        if (!isAbilityEnabled()) return;
+
         event.setCanSpeak(true);
     }
 }

@@ -111,7 +111,8 @@
         "remove_armor": "[§eLG UHC§r] C'est la nuit, enlevez votre armure pour devenir invisible",
         "visible": "[§eLG UHC§r] Vous redevenez visible",
         "remove_armor_perform": "[§aLG UHC§r] Vous devenez invisible. Remettez votre armure pour redevenir visible",
-        "soon_to_be_day": "[§6LG UHC§r] Il fait jour dans §b30§r secondes"
+        "soon_to_be_day": "[§6LG UHC§r] Il fait jour dans §b30§r secondes",
+        "ability_disabled": "[§cLG UHC§r] Votre pouvoir à été désactivé, vous redevenez visible"
       },
       "troublemaker": {
         "display": "Trublion",
@@ -158,7 +159,8 @@
         "display": "Loup Garou Mystique",
         "no_message": "[§cLG UHC§r] Le Loup Garou Mystique n'a pas le droit d'envoyer des messages dans le chat des Loups Garous",
         "description": "À chaque décès d'un Loup Garou, vous obtiendrez le rôle et le pseudo d'un joueur qui n'est pas de votre camp.",
-        "werewolf_death": "[§cLG UHC§r] Un Loup Garou vient de mourir, vous obtenez comme information que §b%s§f est §b%s"
+        "werewolf_death": "[§cLG UHC§r] Un Loup Garou vient de mourir, vous obtenez comme information que §b%s§f est §b%s",
+        "ability_disabled": "[§cLG UHC§r] Votre pouvoir a été désactivé; vous n'obtenez pas d'information"
       },
       "rival": {
         "display": "Rival",
@@ -1118,6 +1120,7 @@
       "end_selection": "[§cLG UHC§r] Vous ne pouvez plus utiliser votre pouvoir aujourd'hui",
       "not_in_game": "[§cLG UHC§r] Vous n'êtes pas dans la partie",
       "power": "[§cLG UHC§r] Votre pouvoir ne peut pas encore être utilisé ou ne peut plus être utilisé",
+      "ability_disabled": "[§cWW UHC§r] Vos pouvoirs ont été désactivés, vous ne pouvez pas effectuer cette action",
       "two_distinct_player": "[§cLG UHC§r] Vous devez sélectionner deux joueurs différents",
       "not_yourself": "[§cLG UHC§r] Vous ne pouvez pas vous choisir vous même",
       "player_not_found": "[§cLG UHC§r] Le joueur n'existe pas, s'est déconnecté, est dans le couloir de la mort ou est déjà mort",

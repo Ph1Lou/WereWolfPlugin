@@ -250,6 +250,7 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
 
         if (hasPower()) return;
 
+        if (!isAbilityEnabled()) return;
 
         IPlayerWW targetWW = getAffectedPlayers().get(0);
         Player target = Bukkit.getPlayer(targetWW.getUUID());

@@ -109,6 +109,8 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
 
         if (!this.power) return;
 
+        if (!isAbilityEnabled()) return;
+
         this.power = false;
 
         GrimEvent grimEvent = new GrimEvent(this.getPlayerWW(), event.getPlayerWW());

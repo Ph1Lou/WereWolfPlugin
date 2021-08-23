@@ -104,6 +104,8 @@ public class WolfDog extends RoleVillage implements ITransformed, IPower {
             return;
         }
 
+        if (!isAbilityEnabled()) return;
+
         if (super.isWereWolf()) {
             this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"werewolf"));
         }

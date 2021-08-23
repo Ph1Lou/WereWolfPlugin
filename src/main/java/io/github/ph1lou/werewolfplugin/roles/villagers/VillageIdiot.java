@@ -76,6 +76,8 @@ public class VillageIdiot extends RoleVillage implements IPower {
             return;
         }
 
+        if (!isAbilityEnabled()) return;
+
         Optional<IPlayerWW> killerWW = this.getPlayerWW().getLastKiller();
 
         if (!killerWW.isPresent()) {

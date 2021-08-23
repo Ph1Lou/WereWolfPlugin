@@ -50,6 +50,8 @@ public class Shaman extends RoleVillage implements IAffectedPlayers {
             return;
         }
 
+        if (!isAbilityEnabled()) return;
+
         IPlayerWW playerWW = event.getPlayerWW();
         int nTimesAffected = (int) affectedPlayers.stream().filter(player -> player.equals(playerWW)).count();
 
@@ -67,6 +69,8 @@ public class Shaman extends RoleVillage implements IAffectedPlayers {
         if (!event.getTargetPlayer().equals(getPlayerWW())) {
             return;
         }
+
+        if (!isAbilityEnabled()) return;
 
         event.setFormat("werewolf.announcement.death_message_with_role");
         event.setRole(event.getPlayerWW().getRole().getKey());

@@ -116,6 +116,8 @@ public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
 
         if (!hasPower()) return;
 
+        if (!isAbilityEnabled()) return;
+
         IPlayerWW playerWW = event.getPlayerWW();
 
         if (playerWW.equals(getPlayerWW())) {

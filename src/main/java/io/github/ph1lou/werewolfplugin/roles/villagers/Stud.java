@@ -64,6 +64,8 @@ public class Stud extends RoleVillage implements IPower {
 
         if (!hasPower()) return;
 
+        if (!isAbilityEnabled()) return;
+
         Optional<IPlayerWW> killerWW = getPlayerWW().getLastKiller();
 
         if (!killerWW.isPresent()) return;

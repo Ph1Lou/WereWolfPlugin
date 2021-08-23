@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.Camp;
@@ -13,6 +14,7 @@ import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleWereWolf;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -35,6 +37,13 @@ public class FalsifierWereWolf extends RoleWereWolf {
 
 
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
+            return;
+        }
+
+        if (!isAbilityEnabled()) {
+            this.setDisplayCamp(Camp.WEREWOLF.getKey());
+            this.setDisplayRole(this.getKey());
+            this.displayAura = Aura.DARK;
             return;
         }
 

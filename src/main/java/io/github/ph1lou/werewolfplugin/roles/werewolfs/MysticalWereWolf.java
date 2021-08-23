@@ -64,6 +64,11 @@ public class MysticalWereWolf extends RoleWereWolf {
 
         if (!event.getPlayerWW().getRole().isWereWolf()) return;
 
+        if (!isAbilityEnabled()) {
+            getPlayerWW().sendMessageWithKey("werewolf.role.mystical_werewolf.ability_disabled");
+            return;
+        }
+
         List<IPlayerWW> roles = game.getPlayersWW()
                 .stream().filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> !playerWW.getRole().isWereWolf())
