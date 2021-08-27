@@ -1120,7 +1120,7 @@
       "end_selection": "[§cLG UHC§r] Vous ne pouvez plus utiliser votre pouvoir aujourd'hui",
       "not_in_game": "[§cLG UHC§r] Vous n'êtes pas dans la partie",
       "power": "[§cLG UHC§r] Votre pouvoir ne peut pas encore être utilisé ou ne peut plus être utilisé",
-      "ability_disabled": "[§cWW UHC§r] Vos pouvoirs ont été désactivés, vous ne pouvez pas effectuer cette action",
+      "ability_disabled": "[§cLG UHC§r] Vos pouvoirs ont été désactivés, vous ne pouvez pas effectuer cette action",
       "two_distinct_player": "[§cLG UHC§r] Vous devez sélectionner deux joueurs différents",
       "not_yourself": "[§cLG UHC§r] Vous ne pouvez pas vous choisir vous même",
       "player_not_found": "[§cLG UHC§r] Le joueur n'existe pas, s'est déconnecté, est dans le couloir de la mort ou est déjà mort",
