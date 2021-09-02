@@ -544,6 +544,8 @@ public class PlayerListener implements Listener {
 
 		IPlayerWW playerWW = event.getPlayerWW();
 
+		if (event.isCancelled()) return;
+
 		if (playerWW.isState(StatePlayer.ALIVE)) return;
 
 		playerWW.setState(StatePlayer.ALIVE);
