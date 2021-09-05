@@ -542,9 +542,9 @@ public class PlayerListener implements Listener {
 	@EventHandler
 	public void onResurrection(ResurrectionEvent event) {
 
-		IPlayerWW playerWW = event.getPlayerWW();
-
 		if (event.isCancelled()) return;
+
+		IPlayerWW playerWW = event.getPlayerWW();
 
 		if (playerWW.isState(StatePlayer.ALIVE)) return;
 
