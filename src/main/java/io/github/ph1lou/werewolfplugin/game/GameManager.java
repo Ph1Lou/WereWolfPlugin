@@ -24,6 +24,7 @@ import io.github.ph1lou.werewolfapi.events.game.life_cycle.ResurrectionEvent;
 import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandWereWolfChat;
 import io.github.ph1lou.werewolfplugin.save.Configuration;
 import io.github.ph1lou.werewolfplugin.save.FileUtils_;
 import io.github.ph1lou.werewolfplugin.save.LanguageManager;
@@ -462,5 +463,13 @@ public class GameManager implements WereWolfAPI {
 
     public ListenersLoader getListenersLoader() {
         return this.listenersLoader;
+    }
+
+    public void enableWereWolfChat(){
+        CommandWereWolfChat.enable();
+    }
+
+    public void disableWereWolfChat(){
+        CommandWereWolfChat.disable();
     }
 }
