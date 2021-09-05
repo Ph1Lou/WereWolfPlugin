@@ -85,6 +85,8 @@ public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPl
 
         if (!hasPower()) return;
 
+        if (!isAbilityEnabled()) return;
+
         IPlayerWW playerWW = event.getPlayerWW();
 
 

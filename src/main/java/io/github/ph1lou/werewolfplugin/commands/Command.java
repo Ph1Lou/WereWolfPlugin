@@ -98,6 +98,10 @@ public class Command implements TabExecutor {
             if (commandRegister.isRequiredPower() && (!(playerWW.getRole() instanceof IPower) || !((IPower) playerWW.getRole()).hasPower())) {
                 return game.translate("werewolf.check.power");
             }
+
+            if (commandRegister.isRequiredAbilityEnabled() && !playerWW.getRole().isAbilityEnabled()) {
+                return game.translate("werewolf.check.ability_disabled");
+            }
         }
 
         if (!commandRegister.isStateWW(game.getState())) {

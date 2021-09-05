@@ -115,6 +115,8 @@ public class Raven extends RoleWithLimitedSelectionDuration implements IAffected
 
         if (!(event.getEntity() instanceof Player)) return;
 
+        if (!isAbilityEnabled()) return;
+
         Player player = (Player) event.getEntity();
         UUID uuid = player.getUniqueId();
 

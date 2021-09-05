@@ -86,6 +86,8 @@ public class Librarian extends RoleVillage implements ILimitedUse, IAffectedPlay
 
         if (this.storage.isEmpty()) return;
 
+        if (!isAbilityEnabled()) return;
+
         Bukkit.broadcastMessage(game.translate("werewolf.role.librarian.death"));
         int i = 1;
         for (String s : this.storage) {

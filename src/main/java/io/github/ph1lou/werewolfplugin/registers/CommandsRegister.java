@@ -59,6 +59,7 @@ public class CommandsRegister {
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.commands.admin.ww_chat.name", new CommandWereWolfChat())
                         .addStateAccess(StatePlayer.ALIVE)
+                        .setRequiredAbilityEnabled()
                         .addStateWW(StateGame.GAME));
 
         commandsRegister
@@ -69,6 +70,7 @@ public class CommandsRegister {
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
                         .setRequiredPower()
+                        .setRequiredAbilityEnabled()
                         .addArgNumbers(1));
 
         commandsRegister
@@ -87,6 +89,7 @@ public class CommandsRegister {
                         .setRequiredPower()
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
+                        .setRequiredAbilityEnabled()
                         .addArgNumbers(2));
 
         commandsRegister
@@ -113,6 +116,7 @@ public class CommandsRegister {
                         .addRoleKey(RolesBase.INFECT.getKey())
                         .unsetAutoCompletion()
                         .setRequiredPower()
+                        .setRequiredAbilityEnabled()
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
                         .addArgNumbers(1));
@@ -122,6 +126,7 @@ public class CommandsRegister {
                         "werewolf.role.fox.command", new CommandFox())
                         .addRoleKey(RolesBase.FOX.getKey())
                         .setRequiredPower()
+                        .setRequiredAbilityEnabled()
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
                         .addArgNumbers(1));
@@ -139,6 +144,7 @@ public class CommandsRegister {
                         "werewolf.role.protector.command", new CommandProtector())
                         .addRoleKey(RolesBase.PROTECTOR.getKey())
                         .setRequiredPower()
+                        .setRequiredAbilityEnabled()
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
                         .addArgNumbers(1));
@@ -149,6 +155,7 @@ public class CommandsRegister {
                         .addRoleKey(RolesBase.SISTER.getKey())
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
+                        .setRequiredAbilityEnabled()
                         .unsetAutoCompletion()
                         .addArgNumbers(1));
 
@@ -158,6 +165,7 @@ public class CommandsRegister {
                         .addRoleKey(RolesBase.SISTER.getKey())
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
+                        .setRequiredAbilityEnabled()
                         .unsetAutoCompletion()
                         .addArgNumbers(1));
 
@@ -166,6 +174,7 @@ public class CommandsRegister {
                         "werewolf.role.raven.command", new CommandRaven())
                         .addRoleKey(RolesBase.RAVEN.getKey())
                         .setRequiredPower()
+                        .setRequiredAbilityEnabled()
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
                         .addArgNumbers(1));
@@ -177,6 +186,7 @@ public class CommandsRegister {
                         .addStateAccess(StatePlayer.ALIVE)
                         .unsetAutoCompletion()
                         .setRequiredPower()
+                        .setRequiredAbilityEnabled()
                         .addStateWW(StateGame.GAME).addArgNumbers(0));
 
         commandsRegister
@@ -186,6 +196,7 @@ public class CommandsRegister {
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
                         .unsetAutoCompletion()
+                        .setRequiredAbilityEnabled()
                         .addArgNumbers(0));
 
         commandsRegister
@@ -195,6 +206,7 @@ public class CommandsRegister {
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
                         .setRequiredPower()
+                        .setRequiredAbilityEnabled()
                         .addArgNumbers(1));
 
 
@@ -205,6 +217,7 @@ public class CommandsRegister {
                         .setRequiredPower()
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
+                        .setRequiredAbilityEnabled()
                         .addArgNumbers(1));
 
         commandsRegister
@@ -230,6 +243,7 @@ public class CommandsRegister {
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
                         .setRequiredPower()
+                        .setRequiredAbilityEnabled()
                         .addArgNumbers(1));
 
         commandsRegister
@@ -238,6 +252,7 @@ public class CommandsRegister {
                         .addRoleKey(RolesBase.WITCH.getKey())
                         .unsetAutoCompletion()
                         .setRequiredPower()
+                        .setRequiredAbilityEnabled()
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
                         .addArgNumbers(1));
@@ -247,6 +262,7 @@ public class CommandsRegister {
                         "werewolf.role.trapper.command", new CommandTrapper())
                         .addRoleKey(RolesBase.TRAPPER.getKey())
                         .setRequiredPower()
+                        .setRequiredAbilityEnabled()
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
                         .addArgNumbers(1));
@@ -258,6 +274,7 @@ public class CommandsRegister {
                         .addRoleKey(RolesBase.GUARDIAN_ANGEL.getKey())
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
+                        .setRequiredAbilityEnabled()
                         .addArgNumbers(0));
 
         commandsRegister
@@ -274,6 +291,7 @@ public class CommandsRegister {
                         "werewolf.role.succubus.command", new CommandSuccubus())
                         .addRoleKey(RolesBase.SUCCUBUS.getKey())
                         .setRequiredPower()
+                        .setRequiredAbilityEnabled()
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
                         .addArgNumbers(1));
@@ -283,6 +301,7 @@ public class CommandsRegister {
                         "werewolf.role.priestess.command", new CommandPriestess())
                         .addRoleKey(RolesBase.PRIESTESS.getKey())
                         .setRequiredPower()
+                        .setRequiredAbilityEnabled()
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
                         .addArgNumbers(1));
@@ -293,6 +312,7 @@ public class CommandsRegister {
                         .addRoleKey(RolesBase.LIBRARIAN.getKey())
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
+                        .setRequiredAbilityEnabled()
                         .addArgNumbers(1));
 
         commandsRegister
@@ -308,6 +328,7 @@ public class CommandsRegister {
                         .addRoleKey(RolesBase.SHAMAN.getKey())
                         .unsetAutoCompletion()
                         .addStateWW(StateGame.GAME)
+                        .setRequiredAbilityEnabled()
                         .addArgNumbers(2));
 
         commandsRegister
@@ -315,6 +336,7 @@ public class CommandsRegister {
                         "werewolf.role.oracle.command", new CommandOracle())
                         .addRoleKey(RolesBase.ORACLE.getKey())
                         .setRequiredPower()
+                        .setRequiredAbilityEnabled()
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
                         .addArgNumbers(1));

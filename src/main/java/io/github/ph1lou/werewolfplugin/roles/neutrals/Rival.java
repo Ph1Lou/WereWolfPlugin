@@ -270,6 +270,8 @@ public class Rival extends RoleNeutral implements IPower {
 
         if (cupidWW == null) return;
 
+        if (!isAbilityEnabled()) return;
+
         if (cupidWW.isState(StatePlayer.ALIVE)) {
 
             stringBuilder

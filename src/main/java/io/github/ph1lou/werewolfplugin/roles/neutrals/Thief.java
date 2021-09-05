@@ -90,6 +90,8 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
 
         if(!this.power) return;
 
+        if (!isAbilityEnabled()) return;
+
         this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,"thief"));
 
     }
@@ -169,6 +171,9 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
                 playerWW,
                 roleClone.getKey()));
 
+        if (!isAbilityEnabled()) {
+            roleClone.disableAbilities();
+        }
         roleClone.removeTemporaryAuras();
 
         roleClone.recoverPower();
@@ -184,5 +189,16 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
         }
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
         game.death(playerWW);
+    }
+
+    @Override
+    public void disableAbilities() {
+        super.disableAbilities();
+
+        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+            return;
+        }
+
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,"thief"));
     }
 }

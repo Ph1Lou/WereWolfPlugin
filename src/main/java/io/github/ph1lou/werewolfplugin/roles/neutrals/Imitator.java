@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Day;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
@@ -156,6 +157,9 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
                 playerWW,
                 roleClone.getKey()));
 
+        if (!isAbilityEnabled()) {
+            roleClone.disableAbilities();
+        }
         roleClone.removeTemporaryAuras();
 
         roleClone.recoverPower();
@@ -183,7 +187,20 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
 
         if(!this.power) return;
 
+        if(!isAbilityEnabled()) return;
+
         this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"imitator"));
 
+    }
+
+    @Override
+    public void disableAbilities() {
+        super.disableAbilities();
+
+        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+            return;
+        }
+
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"imitator"));
     }
 }

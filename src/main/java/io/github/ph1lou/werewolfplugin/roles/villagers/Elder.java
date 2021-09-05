@@ -7,6 +7,7 @@ import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.Camp;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.elder.ElderResurrectionEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
@@ -58,6 +59,8 @@ public class Elder extends RoleVillage implements IPower {
 
         if (!hasPower()) return;
 
+        if(!isAbilityEnabled()) return;
+
         this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,"elder"));
     }
 
@@ -74,6 +77,8 @@ public class Elder extends RoleVillage implements IPower {
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         if (!hasPower()) return;
+
+        if (!isAbilityEnabled()) return;
 
         Optional<IPlayerWW> killerWW = this.getPlayerWW().getLastKiller();
 
@@ -96,5 +101,16 @@ public class Elder extends RoleVillage implements IPower {
             game.resurrection(getPlayerWW());
         }
 
+    }
+
+    @Override
+    public void disableAbilities() {
+        super.disableAbilities();
+
+        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+            return;
+        }
+
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,"elder"));
     }
 }

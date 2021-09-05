@@ -247,25 +247,28 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
                 })
                 .filter(playerWW -> !this.affectedPlayer.contains(playerWW))
                 .forEach(playerWW -> {
-                    this.progress.merge(playerWW, 1, Integer::sum);
 
-                    if (this.progress.get(playerWW) > 100) {
+                    if (isAbilityEnabled()) {
+                        this.progress.merge(playerWW, 1, Integer::sum);
 
-                        EnchantedEvent event = new EnchantedEvent(this.getPlayerWW(), playerWW);
+                        if (this.progress.get(playerWW) > 100) {
 
-                        Bukkit.getPluginManager().callEvent(event);
+                            EnchantedEvent event = new EnchantedEvent(this.getPlayerWW(), playerWW);
 
-                        if (!event.isCancelled()) {
-                            this.affectedPlayer.add(playerWW);
-                            this.progress.remove(playerWW);
-                            this.getPlayerWW().sendMessageWithKey("werewolf.role.flute_player.enchanted", playerWW.getName());
-                            this.checkStrength();
+                            Bukkit.getPluginManager().callEvent(event);
+
+                            if (!event.isCancelled()) {
+                                this.affectedPlayer.add(playerWW);
+                                this.progress.remove(playerWW);
+                                this.getPlayerWW().sendMessageWithKey("werewolf.role.flute_player.enchanted", playerWW.getName());
+                                this.checkStrength();
+                            }
                         }
                     }
                 });
 
         if (recoverResistance.get()) {
-            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE, 240, 0,"elder"));
+            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE, 240, 0,"pied_piper"));
         }
     }
 

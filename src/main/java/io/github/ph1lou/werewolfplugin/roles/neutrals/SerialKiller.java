@@ -6,6 +6,8 @@ import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
+import io.github.ph1lou.werewolfapi.enums.Day;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
 import io.github.ph1lou.werewolfapi.events.roles.serial_killer.SerialKillerEvent;
@@ -126,13 +128,29 @@ public class SerialKiller extends RoleNeutral implements IPower {
         Bukkit.getPluginManager().callEvent(new SerialKillerEvent(
                 this.getPlayerWW(),
                 playerWW));
-        this.getPlayerWW().addPlayerMaxHealth(2);
-        extraHeart += 2;
-        this.getPlayerWW().addItem(new ItemStack(Material.GOLDEN_APPLE));
         if (hasPower()) {
             this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"serial_killer"));
             setPower(false);
         }
+        if (!isAbilityEnabled()) return;
+
+        this.getPlayerWW().addPlayerMaxHealth(2);
+        extraHeart += 2;
+        this.getPlayerWW().addItem(new ItemStack(Material.GOLDEN_APPLE));
+    }
+
+    @Override
+    public void disableAbilities() {
+        super.enableAbilities();
+
+        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+            return;
+        }
+
+        if (this.hasPower()) {
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"serial_killer"));
+        }
+
     }
 
 }
