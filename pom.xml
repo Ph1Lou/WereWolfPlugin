@@ -61,14 +61,8 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.KevinPriv</groupId>
-            <artifactId>MojangAPI</artifactId>
-            <version>1.0</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
+            <artifactId>spigot</artifactId>
             <version>1.16.5-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
@@ -86,7 +80,7 @@
         <dependency>
             <groupId>io.github.ph1lou</groupId>
             <artifactId>werewolfapi</artifactId>
-            <version>c201c7e</version>
+            <version>1.5</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -111,11 +105,6 @@
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-artifact</artifactId>
             <version>3.0.3</version>
-        </dependency>
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>4.9.1</version>
         </dependency>
 
     </dependencies>
