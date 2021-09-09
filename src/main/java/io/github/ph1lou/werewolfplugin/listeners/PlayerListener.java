@@ -539,8 +539,10 @@ public class PlayerListener implements Listener {
 				.replace("&role&", game.translate(playerWW.getRole().getKey()));
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onResurrection(ResurrectionEvent event) {
+
+		if(event.isCancelled()) return;
 
 		IPlayerWW playerWW = event.getPlayerWW();
 

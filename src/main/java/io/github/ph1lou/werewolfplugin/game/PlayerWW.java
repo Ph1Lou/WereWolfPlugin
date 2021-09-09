@@ -12,11 +12,9 @@ import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
+import io.github.ph1lou.werewolfapi.utils.NMSUtils;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Villager;
-import me.kbrewster.exceptions.APIException;
-import me.kbrewster.exceptions.InvalidPlayerException;
-import me.kbrewster.mojangapi.MojangAPI;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -25,8 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -72,8 +69,12 @@ public class PlayerWW implements IPlayerWW {
                 RolesBase.VILLAGER.getKey());
         this.game = api;
         try {
-            this.mojangUUID =  MojangAPI.getUUID(this.name);
-        } catch (IOException | APIException | InvalidPlayerException ignored) {
+            Object server = NMSUtils.getNMSClass("MinecraftServer")
+                    .getMethod("getServer").invoke(null);
+            Object userCache = server.getClass().getMethod("getUserCache").invoke(server);
+            Object profile = userCache.getClass().getMethod("getProfile",String.class).invoke(userCache,name);
+            this.mojangUUID = (UUID) profile.getClass().getMethod("getId").invoke(profile);
+        } catch (NullPointerException | ClassNotFoundException | NoSuchMethodException | InvocationTargetException | IllegalAccessException ignored) {
         }
     }
 
@@ -340,11 +341,6 @@ public class PlayerWW implements IPlayerWW {
         if (this.mojangUUID != null) {
             return this.mojangUUID;
         }
-        try {
-            this.mojangUUID =  MojangAPI.getUUID(this.name);
-        } catch (IOException | APIException | InvalidPlayerException ignored) {
-        }
-
         return this.uuid;
     }
 
