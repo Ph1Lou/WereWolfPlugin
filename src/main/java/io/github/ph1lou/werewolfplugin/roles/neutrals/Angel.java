@@ -542,13 +542,13 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
 
         return ClickableItem.of(
                 new ItemBuilder(Material.MELON)
-                        .setLore(game.translate(config.isDetectiveEveryOtherDay() ? "werewolf.utils.enable" : "werewolf.utils.disable"))
+                        .setLore(game.translate(config.isSweetAngel() ? "werewolf.utils.enable" : "werewolf.utils.disable"))
                         .setDisplayName(game.translate("werewolf.role.angel.sweet_angel"))
                         .build(), e -> {
-                    config.setDetectiveEveryOtherDay(!config.isDetectiveEveryOtherDay());
+                    config.setSweetAngel(!config.isSweetAngel());
 
                     e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                            .setLore(game.translate(config.isDetectiveEveryOtherDay() ? "werewolf.utils.enable" : "werewolf.utils.disable"))
+                            .setLore(game.translate(config.isSweetAngel() ? "werewolf.utils.enable" : "werewolf.utils.disable"))
                             .build());
 
                 });

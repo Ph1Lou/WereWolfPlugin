@@ -47,10 +47,6 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
-        <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -59,7 +55,6 @@
             <artifactId>minimal-json</artifactId>
             <version>0.9.5</version>
         </dependency>
-
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
@@ -80,33 +75,28 @@
         <dependency>
             <groupId>io.github.ph1lou</groupId>
             <artifactId>werewolfapi</artifactId>
-            <version>1.5</version>
+            <version>1.6</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.7</version>
         </dependency>
-
-
         <dependency>
             <groupId>com.github.Tanju42</groupId>
             <artifactId>smart-invs-fork</artifactId>
             <version>1.2.9</version>
         </dependency>
-
         <dependency>
             <groupId>org.javatuples</groupId>
             <artifactId>javatuples</artifactId>
             <version>1.2</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-artifact</artifactId>
             <version>3.0.3</version>
         </dependency>
-
     </dependencies>
 
 
