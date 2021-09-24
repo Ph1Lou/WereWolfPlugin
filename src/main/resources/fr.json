@@ -1062,10 +1062,6 @@
         "all_chest_find": "[§aLG UHC§r] Toutes les caches ont été trouvées",
         "villager_death": "[§5Loot-Box§r] Avant de mourir, §b%s§r a fait apparaitre §b%s§r caches sur la map, une seule renferme le nom d'un Ennemi du Village"
       },
-      "poorly_groomed_bear": {
-        "name": "Ours Mal Léché",
-        "description": "Le nombre de Grr du Montreur d'Ours est modifié de +1 ou -1"
-      },
       "infection": {
         "name": "Infection",
         "description": "Une fois dans la partie infecte un joueur au hasard.\nL'infection se déroule entre 1h et 1h15 après les rôles, \nsi il y a moins de la moitié des joueurs \nqui sont Loups Garous.",

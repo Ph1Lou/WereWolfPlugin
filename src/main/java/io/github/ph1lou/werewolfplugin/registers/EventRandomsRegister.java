@@ -10,7 +10,6 @@ import io.github.ph1lou.werewolfplugin.listeners.random_events.Exposed;
 import io.github.ph1lou.werewolfplugin.listeners.random_events.GodMiracle;
 import io.github.ph1lou.werewolfplugin.listeners.random_events.Infection;
 import io.github.ph1lou.werewolfplugin.listeners.random_events.LootBox;
-import io.github.ph1lou.werewolfplugin.listeners.random_events.PoorlyGroomedBear;
 import io.github.ph1lou.werewolfplugin.listeners.random_events.Putrefaction;
 import io.github.ph1lou.werewolfplugin.listeners.random_events.Swap;
 import io.github.ph1lou.werewolfplugin.listeners.random_events.Triple;
@@ -82,12 +81,6 @@ public class EventRandomsRegister {
                 .add(new RandomEventRegister("werewolf.name",
                         RandomEvent.AMNESIC.getKey(), new Amnesic(main))
                         .setLoreKey("werewolf.random_events.amnesic.description")
-                        .setDefaultValue(1));
-
-        eventRandomsRegister
-                .add(new RandomEventRegister("werewolf.name",
-                        RandomEvent.POORLY_GROOMED_BEAR.getKey(), new PoorlyGroomedBear(main))
-                        .setLoreKey("werewolf.random_events.poorly_groomed_bear.description")
                         .setDefaultValue(1));
 
         return eventRandomsRegister;

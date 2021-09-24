@@ -90,13 +90,23 @@ public class End {
         Bukkit.getPluginManager().callEvent(event);
 
         if (event.getWerewolf() == game.getPlayerSize()) {
-            winner = Category.WEREWOLF.getKey();
-            fin();
-            return;
+            if(event.getVillager() == 0){ //useless
+                winner = Category.WEREWOLF.getKey();
+                fin();
+                return;
+            }
+            else {
+                Bukkit.broadcastMessage("Signalez ce Code d'erreur à Ph1Lou sur discord : 1398");
+            }
         }
         if (event.getVillager() == game.getPlayerSize()) {
-            winner = Category.VILLAGER.getKey();
-            fin();
+            if(event.getWerewolf() == 0) { //useless
+                winner = Category.VILLAGER.getKey();
+                fin();
+            }
+            else {
+                Bukkit.broadcastMessage("Signalez ce Code d'erreur à Ph1Lou sur discord : 1399");
+            }
         }
     }
 

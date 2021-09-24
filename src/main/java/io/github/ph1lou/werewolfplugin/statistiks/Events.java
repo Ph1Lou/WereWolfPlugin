@@ -44,7 +44,6 @@ import io.github.ph1lou.werewolfapi.events.random_events.FindAllLootBoxEvent;
 import io.github.ph1lou.werewolfapi.events.random_events.GodMiracleEvent;
 import io.github.ph1lou.werewolfapi.events.random_events.InfectionRandomEvent;
 import io.github.ph1lou.werewolfapi.events.random_events.LootBoxEvent;
-import io.github.ph1lou.werewolfapi.events.random_events.PoorlyGroomedBearEvent;
 import io.github.ph1lou.werewolfapi.events.random_events.PutrefactionEvent;
 import io.github.ph1lou.werewolfapi.events.random_events.SwapEvent;
 import io.github.ph1lou.werewolfapi.events.random_events.TroupleEvent;
@@ -1099,16 +1098,6 @@ public class Events implements Listener {
         IPlayerWW playerWW = event.getPlayerWW();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("avenger_list_death",
                 playerWW, event.getTargetWW(), api.getTimer()));
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onPoorlyGroomedBear(PoorlyGroomedBearEvent event) {
-
-        if (event.isCancelled()) return;
-
-        WereWolfAPI api = main.getWereWolfAPI();
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("poorly_groomed_bear",
-                event.getModification(), api.getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

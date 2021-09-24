@@ -152,7 +152,6 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
 
     private Pair<Integer, TextComponent> heartAndMessageTargetManagement() {
 
-
         int extraHearts = 4;
 
         TextComponent textComponent = new TextComponent(" ");
@@ -533,6 +532,8 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
 
         if (!choice.equals(AngelForm.FALLEN_ANGEL)) return;
 
+        if(!this.isAbilityEnabled()) return;
+
         this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,"fallen_angel"));
     }
 
@@ -552,5 +553,12 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
                             .build());
 
                 });
+    }
+
+    @Override
+    public void disableAbilities() {
+        super.disableAbilities();
+
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,"fallen_angel"));
     }
 }

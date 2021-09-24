@@ -21,6 +21,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.InvocationTargetException;
@@ -56,6 +57,7 @@ public class PlayerWW implements IPlayerWW {
     private transient Location spawn;
     private int deathTime = 0;
     private int disconnectedTime = 0;
+    private boolean tpWhenDisconnected = false;
     private String name;
     private final WereWolfAPI game;
     private final List<IPlayerWW> playersKilled = new ArrayList<>();
@@ -294,7 +296,7 @@ public class PlayerWW implements IPlayerWW {
             player.teleport(location);
             return;
         }
-
+        this.tpWhenDisconnected = true;
         disconnectedLocation = location.clone();
 
     }
@@ -455,7 +457,10 @@ public class PlayerWW implements IPlayerWW {
             player.spigot().sendMessage(messageAction.getMessage());
             messageAction.getSound().ifPresent(sound -> sound.play(player));
         });
-
+        if(this.tpWhenDisconnected){
+            this.tpWhenDisconnected=false;
+            this.addPotionModifier(PotionModifier.add(PotionEffectType.WITHER,400,0,"no_fall"));
+        }
         player.teleport(this.disconnectedLocation);
 
         this.disconnectedChangeHealth = 0;
@@ -487,7 +492,7 @@ public class PlayerWW implements IPlayerWW {
 
     @Override
     public void setDisconnectedLocation(Location location) {
-        disconnectedLocation = location;
+        this.disconnectedLocation = location;
     }
 
     @Override

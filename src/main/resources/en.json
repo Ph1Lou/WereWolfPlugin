@@ -1060,10 +1060,6 @@
         "all_chest_find": "[§aWW UHC§r] All caches have been found",
         "villager_death": "[§5Loot-Box§r] Before dying, §b%s§r spawned§b%s§r caches on the map, one of them contains the name of an enemy of the Village"
       },
-      "poorly_groomed_bear": {
-        "name": "Poorly Groomed Bear",
-        "description": "The number of Grr of the Bear Trainer is modified by +1 or -1"
-      },
       "infection": {
         "name": "Infection",
         "description": "Once during the game, infects a player at random.\nThe infection happens between 1h and 1h15 after the roles, \nif less than half the players are Werewolves.",

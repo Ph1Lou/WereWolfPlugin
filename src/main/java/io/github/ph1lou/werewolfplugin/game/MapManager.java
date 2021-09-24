@@ -192,7 +192,7 @@ public class MapManager implements IMapManager {
         int x = (int) (Math.round(wb.getSize() / 3 * Math.cos(d) + world.getSpawnLocation().getX()));
         int z = (int) (Math.round(wb.getSize() / 3 * Math.sin(d) + world.getSpawnLocation().getZ()));
 
-        playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.WITHER, 700, 0,"respawn"));
+        playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.WITHER, 400, 0,"no_fall"));
         playerWW.teleport(new Location(world, x, world.getHighestBlockYAt(x, z) + 100, z));
     }
 
