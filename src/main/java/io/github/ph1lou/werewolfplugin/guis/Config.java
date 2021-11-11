@@ -37,7 +37,6 @@ public class Config implements InventoryProvider {
 
     @Override
     public void init(Player player, InventoryContents contents) {
-
         GameManager game = (GameManager) JavaPlugin.getPlugin(Main.class).getWereWolfAPI();
 
         contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.PLAYER_HEAD.getStack())

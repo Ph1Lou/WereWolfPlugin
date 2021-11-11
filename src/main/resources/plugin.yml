@@ -1,5 +1,6 @@
 name: WereWolfPlugin
 version: "1.8"
+api-version: "1.13"
 author: Ph1Lou
 main: io.github.ph1lou.werewolfplugin.Main
 load: STARTUP
@@ -9,4 +10,5 @@ commands:
     description: player commands
   a:
     description: admin commands
+
 
