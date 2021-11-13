@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -53,7 +54,8 @@ public class CommandOracle implements ICommand {
 
         ((IAffectedPlayers) oracle).addAffectedPlayer(playerWW1);
 
-        playerWW.sendMessageWithKey("werewolf.role.oracle.message", playerWW1.getName(),
-                aura.getChatColor() + game.translate(aura.getKey()));
+        playerWW.sendMessageWithKey("werewolf.role.oracle.message",
+                Formatter.format("&player&",playerWW1.getName()),
+                Formatter.format("&aura&",aura.getChatColor() + game.translate(aura.getKey())));
     }
 }

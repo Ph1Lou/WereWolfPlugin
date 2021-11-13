@@ -142,48 +142,44 @@ public class PlayerWW implements IPlayerWW {
     }
 
     @Override
-    public void sendMessageWithKey(String key, Object... args) {
-        this.sendMessage(new TextComponent(game.translate(key, args)));
+    public void sendMessageWithKey(@NotNull String key, Formatter... formatters) {
+        this.sendMessageWithKey(key, "", formatters);
     }
 
     @Override
-    public void sendMessageWithKey(String key, Sound sound, Object... args) {
-        this.sendMessage(new TextComponent(game.translate(key, args)), sound);
-    }
-
-    @Override
-    public void sendMessageWithKey(String key, Formatter... formatters) {
-        this.sendMessageWithKey(key,null,formatters);
-    }
-
-    @Override
-    public void sendMessageWithKey(String key,@Nullable Sound sound, Formatter... formatters) {
-        String message = game.translate(key);
-        for(Formatter formatter :formatters){
-            message = formatter.handle(message);
-        }
-        this.sendMessage(new TextComponent(message), sound);
-    }
-
-    @Override
-    public void sendMessage(TextComponent textComponent) {
-        this.sendMessage(textComponent, null);
-    }
-
-    @Override
-    public void sendMessage(TextComponent textComponent,@Nullable Sound sound) {
+    public void sendMessageWithKey(@NotNull String prefixKey,@NotNull String key, Formatter... formatters) {
+        String message = game.translate(prefixKey,key,formatters);
 
         Player player = Bukkit.getPlayer(uuid);
 
         if (player != null) {
-            player.spigot().sendMessage(textComponent);
-            if (sound != null) {
-                sound.play(player);
-            }
+            player.sendMessage(message);
             return;
         }
 
-        disconnectedMessages.add(new MessageAction(textComponent, sound));
+        this.disconnectedMessages.add(new MessageAction(message));
+    }
+
+
+
+    @Override
+    public void sendMessage(@NotNull TextComponent textComponent) {
+        Player player = Bukkit.getPlayer(uuid);
+
+        if (player != null) {
+            player.spigot().sendMessage(textComponent);
+            return;
+        }
+
+        this.disconnectedMessages.add(new MessageAction(textComponent));
+    }
+
+    @Override
+    public void sendSound(@NotNull Sound sound) {
+        Player player = Bukkit.getPlayer(uuid);
+        if(player != null){
+            sound.play(player);
+        }
     }
 
     @Override
@@ -454,8 +450,13 @@ public class PlayerWW implements IPlayerWW {
         this.updatePotionEffects(player);
 
         this.disconnectedMessages.forEach(messageAction -> {
-            player.spigot().sendMessage(messageAction.getMessage());
-            messageAction.getSound().ifPresent(sound -> sound.play(player));
+            if(messageAction.isMessageComponent()){
+                player.spigot().sendMessage(messageAction.getMessageComponent());
+            }
+            else{
+                player.sendMessage(messageAction.getMessageString());
+            }
+
         });
         if(this.tpWhenDisconnected){
             this.tpWhenDisconnected=false;

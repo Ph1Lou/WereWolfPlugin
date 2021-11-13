@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.minuskube.inv.ClickableItem;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
@@ -78,9 +79,9 @@ public class Seer extends RoleWithLimitedSelectionDuration implements IAffectedP
 
         this.getPlayerWW().sendMessageWithKey(
                 "werewolf.role.seer.see_camp_message",
-                Utils.conversion(
+                Formatter.format("&timer&",Utils.conversion(
                         game.getConfig()
-                                .getTimerValue(TimerBase.POWER_DURATION.getKey())));
+                                .getTimerValue(TimerBase.POWER_DURATION.getKey()))));
     }
 
 

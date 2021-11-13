@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
@@ -84,7 +85,8 @@ public class Villager extends RoleVillage {
 
         StringBuilder sb = event.getEndMessage();
 
-        sb.append(game.translate("werewolf.role.villager.kit", game.translate(villagerKit.getKey())));
+        sb.append(game.translate("werewolf.role.villager.kit",
+                Formatter.format("&kit&",game.translate(villagerKit.getKey()))));
 
     }
 

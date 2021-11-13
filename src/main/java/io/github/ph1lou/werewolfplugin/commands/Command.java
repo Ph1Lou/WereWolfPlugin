@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.commands;
 
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.registers.CommandRegister;
@@ -109,7 +110,8 @@ public class Command implements TabExecutor {
         }
 
         if (!commandRegister.isArgNumbers(args.length)) {
-            return game.translate("werewolf.check.parameters", commandRegister.getMinArgNumbers());
+            return game.translate("werewolf.check.parameters",
+                    Formatter.format("&number&",commandRegister.getMinArgNumbers()));
         }
 
         commandRegister.getCommand().execute(game,player, args);

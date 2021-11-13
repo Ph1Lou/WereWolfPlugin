@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
@@ -104,7 +105,10 @@ public class Troublemaker extends RoleVillage implements IAffectedPlayers, IPowe
 
         if (!game.getConfig().isConfigActive(ConfigBase.WEREWOLF_CHAT.getKey())) return;
 
-        this.getPlayerWW().sendMessageWithKey("werewolf.commands.admin.ww_chat.announce", Utils.conversion(game.getConfig().getTimerValue(TimerBase.WEREWOLF_CHAT_DURATION.getKey())), game.getConfig().getWereWolfChatMaxMessage());
+        this.getPlayerWW().sendMessageWithKey("werewolf.commands.admin.ww_chat.announce",
+                Formatter.format("&timer&",Utils.conversion(game.getConfig()
+                        .getTimerValue(TimerBase.WEREWOLF_CHAT_DURATION.getKey()))),
+                Formatter.format("&number&",game.getConfig().getWereWolfChatMaxMessage()));
 
     }
 

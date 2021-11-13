@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -62,6 +63,7 @@ public class CommandTrapper implements ICommand {
         ((IAffectedPlayers) trapper).addAffectedPlayer(playerWW1);
 
         playerArg.sendMessage(game.translate("werewolf.role.trapper.get_track"));
-        player.sendMessage(game.translate("werewolf.role.trapper.tracking_perform", playerArg.getName()));
+        player.sendMessage(game.translate("werewolf.role.trapper.tracking_perform",
+                Formatter.format("&player&",playerArg.getName())));
     }
 }

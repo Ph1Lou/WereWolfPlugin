@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
@@ -80,7 +81,9 @@ public class MysticalWereWolf extends RoleWereWolf {
 
         Bukkit.getPluginManager().callEvent(new MysticalWerewolfRevelationEvent(this.getPlayerWW(), roleWW));
 
-        this.getPlayerWW().sendMessageWithKey("werewolf.role.mystical_werewolf.werewolf_death", roleWW.getName(), game.translate(roleWW.getRole().getKey()));
+        this.getPlayerWW().sendMessageWithKey("werewolf.role.mystical_werewolf.werewolf_death",
+                Formatter.format("&player&",roleWW.getName()),
+                Formatter.format("&role&",game.translate(roleWW.getRole().getKey())));
     }
 
 

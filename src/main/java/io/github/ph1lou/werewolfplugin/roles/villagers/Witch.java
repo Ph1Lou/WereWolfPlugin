@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.minuskube.inv.ClickableItem;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -89,11 +90,11 @@ public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
                 .setPower(game.translate(power ? "werewolf.role.witch.power_available" : "werewolf.role.witch.power_not_available"))
                 .setItems(game.translate("werewolf.role.witch.items"))
                 .addExtraLines(game.translate("werewolf.description.power",
-                        game.translate(game.getConfig().isWitchAutoResurrection()
+                                Formatter.format("&on&",game.translate(game.getConfig().isWitchAutoResurrection()
                                 ?
                                 "werewolf.role.witch.himself"
                                 :
-                                "werewolf.role.witch.not_himself")))
+                                "werewolf.role.witch.not_himself"))))
                 .build();
     }
 
@@ -131,7 +132,7 @@ public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
                 new TextComponent(
                         game.translate(
                                 "werewolf.role.witch.resuscitation_message",
-                                playerWW.getName()));
+                                Formatter.format("&player&",playerWW.getName())));
         textComponent.setClickEvent(new ClickEvent(
                 ClickEvent.Action.RUN_COMMAND,
                 String.format("/ww %s %s",

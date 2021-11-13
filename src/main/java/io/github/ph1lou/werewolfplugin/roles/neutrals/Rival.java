@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -69,11 +70,12 @@ public class Rival extends RoleNeutral implements IPower {
 
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.rival.description",
-                        Utils.conversion(
+                                Formatter.format("&timer&",Utils.conversion(
                                 Math.max(0, game.getConfig().getTimerValue(TimerBase.ROLE_DURATION.getKey()))
-                                        + game.getConfig().getTimerValue(TimerBase.RIVAL_DURATION.getKey()))))
+                                        + game.getConfig().getTimerValue(TimerBase.RIVAL_DURATION.getKey())))))
                 .setItems(game.translate("werewolf.role.rival.item"))
-                .setEquipments(game.translate("werewolf.role.rival.extra", game.getConfig().getLimitPowerBow() + 1))
+                .setEquipments(game.translate("werewolf.role.rival.extra",
+                                Formatter.format("&power&",game.getConfig().getLimitPowerBow() + 1)))
                 .build();
     }
 
@@ -109,7 +111,9 @@ public class Rival extends RoleNeutral implements IPower {
 
         List<IPlayerWW> lovers = new ArrayList<>(lover.getLovers());
 
-        this.getPlayerWW().sendMessageWithKey("werewolf.role.rival.lover", lovers.isEmpty() ? "" : game.translate(lovers.get(0).getRole().getKey()), lovers.size() == 2 ? game.translate(lovers.get(1).getRole().getKey()) : "");
+        this.getPlayerWW().sendMessageWithKey("werewolf.role.rival.lover",
+                Formatter.format("&role1&",lovers.isEmpty() ? "" : game.translate(lovers.get(0).getRole().getKey())),
+                Formatter.format("&role2&",lovers.size() == 2 ? game.translate(lovers.get(1).getRole().getKey()) : ""));
     }
 
     @EventHandler
@@ -157,7 +161,12 @@ public class Rival extends RoleNeutral implements IPower {
             return;
         }
 
-        this.getPlayerWW().sendMessageWithKey("werewolf.role.rival.find_lovers", playerWW1S.get(0).getName(), playerWW1S.size() >= 2 ? playerWW1S.get(1).getName() : "", playerWW1S.size() >= 3 ? playerWW1S.get(2).getName() : "", playerWW1S.size() >= 4 ? playerWW1S.get(3).getName() : "", playerWW1S.size() >= 5 ? playerWW1S.get(4).getName() : "");
+        this.getPlayerWW().sendMessageWithKey("werewolf.role.rival.find_lovers",
+                Formatter.format("&player1&",playerWW1S.get(0).getName()),
+                Formatter.format("&player2&",playerWW1S.size() >= 2 ? playerWW1S.get(1).getName() : ""),
+                Formatter.format("&player3&",playerWW1S.size() >= 3 ? playerWW1S.get(2).getName() : ""),
+                Formatter.format("&player4&",playerWW1S.size() >= 4 ? playerWW1S.get(3).getName() : ""),
+                Formatter.format("&player5&",playerWW1S.size() >= 5 ? playerWW1S.get(4).getName() : ""));
     }
 
     @EventHandler

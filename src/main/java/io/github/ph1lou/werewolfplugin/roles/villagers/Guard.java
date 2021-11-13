@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
@@ -113,8 +114,8 @@ public class Guard extends RoleWithLimitedSelectionDuration implements IAffected
 
         this.getPlayerWW().sendMessageWithKey(
                 "werewolf.role.guard.message",
-                Utils.conversion(
-                        this.game.getConfig().getTimerValue(TimerBase.POWER_DURATION.getKey())));
+                Formatter.format("&timer&",Utils.conversion(
+                        this.game.getConfig().getTimerValue(TimerBase.POWER_DURATION.getKey()))));
     }
 
     @Override

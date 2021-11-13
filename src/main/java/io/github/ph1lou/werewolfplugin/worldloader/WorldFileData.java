@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.worldloader;
 
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 
 import java.io.*;
@@ -175,7 +176,7 @@ public class WorldFileData {
 	// send a message to the server console/log and possibly to an in-game player
 	private void sendMessage(String text)
 	{
-		System.out.println("[WorldData] " + text);
+		Bukkit.getLogger().info("[WorldData] " + text);
 	}
 
     // file filter used for region files

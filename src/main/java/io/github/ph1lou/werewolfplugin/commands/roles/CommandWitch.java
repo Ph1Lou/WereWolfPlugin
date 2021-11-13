@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -64,6 +65,6 @@ public class CommandWitch implements ICommand {
         ((IAffectedPlayers) witch).addAffectedPlayer(playerWW1);
         game.resurrection(playerWW1);
         playerWW.sendMessageWithKey("werewolf.role.witch.resuscitation_perform",
-                playerWW1.getName());
+                Formatter.format("&player&",playerWW1.getName()));
     }
 }

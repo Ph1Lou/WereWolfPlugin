@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.listeners.random_events;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.ListenerManager;
@@ -155,7 +156,8 @@ public class Amnesic extends ListenerManager {
         playerWW.sendMessageWithKey("werewolf.role.werewolf.new_werewolf");
         Sound.WOLF_HOWL.play(playerWW);
 
-        this.temp.sendMessageWithKey("werewolf.random_events.amnesic.new", playerWW.getName());
+        this.temp.sendMessageWithKey("werewolf.random_events.amnesic.new",
+                Formatter.format("&player&",playerWW.getName()));
 
         BukkitUtils.scheduleSyncDelayedTask(this::revealWereWolf, 20 * 60 * 5L);
 

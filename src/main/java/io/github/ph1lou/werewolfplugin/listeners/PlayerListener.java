@@ -287,7 +287,7 @@ public class PlayerListener implements Listener {
 				player.sendMessage(game.translate("werewolf.commands.admin.moderator.message"));
 				player.setGameMode(GameMode.SPECTATOR);
 				event.setJoinMessage(game.translate("werewolf.announcement.join_moderator",
-						playerName));
+						Formatter.format("&player&",playerName)));
 
 			} else if (moderationManager.getQueue().contains(uuid)) {
 
@@ -295,7 +295,8 @@ public class PlayerListener implements Listener {
 				player.setGameMode(GameMode.ADVENTURE);
 				if (moderationManager.getQueue().contains(uuid)) {
 					event.setJoinMessage(game.translate("werewolf.announcement.queue_rejoin",
-							playerName, game.getModerationManager().getQueue().indexOf(uuid) + 1));
+							Formatter.format("&player&",playerName),
+							Formatter.format("&position&",game.getModerationManager().getQueue().indexOf(uuid) + 1)));
 				}
 
 			} else {
@@ -311,7 +312,7 @@ public class PlayerListener implements Listener {
 			if (playerWW.isState(StatePlayer.ALIVE)) {
 
 				event.setJoinMessage(game.translate("werewolf.announcement.join_in_game",
-						playerName));
+						Formatter.format("&player&",playerName)));
 			} else if (playerWW.isState(StatePlayer.DEATH)) {
 
 				if (game.getConfig().getSpectatorMode() == 0 &&
@@ -320,7 +321,7 @@ public class PlayerListener implements Listener {
 				} else{
 					player.setGameMode(GameMode.SPECTATOR);
 					event.setJoinMessage(game.translate("werewolf.announcement.join_in_spec",
-							playerName));
+							Formatter.format("&player&",playerName)));
 				}
 			}
 		}
@@ -330,13 +331,14 @@ public class PlayerListener implements Listener {
 
 			if (moderationManager.getModerators().contains(uuid)) {
 				event.setJoinMessage(game.translate("werewolf.announcement.join_moderator",
-						playerName));
+						Formatter.format("&player&",playerName)));
 				player.sendMessage(game.translate("werewolf.commands.admin.moderator.message"));
 				player.setGameMode(GameMode.SPECTATOR);
 
 			} else {
 				player.setGameMode(GameMode.SPECTATOR);
-				event.setJoinMessage(game.translate("werewolf.announcement.join_spec", playerName));
+				event.setJoinMessage(game.translate("werewolf.announcement.join_spec",
+						Formatter.format("&player&",playerName)));
 				player.sendMessage(game.translate("werewolf.check.already_begin"));
 
 			}
@@ -379,26 +381,28 @@ public class PlayerListener implements Listener {
 				game.remove(uuid);
 				game.getModerationManager().checkQueue();
 				event.setQuitMessage(game.translate("werewolf.announcement.leave",
-						game.getPlayerSize(), game.getRoleInitialSize(), player.getName()));
+						Formatter.format("&number&",game.getPlayerSize()),
+						Formatter.format("&sum&",game.getRoleInitialSize()),
+						Formatter.format("&player&",player.getName())));
 				game.clearPlayer(player);
 			} else if (game.isState(StateGame.END) || !playerWW.isState(StatePlayer.ALIVE)) {
 				player.setGameMode(GameMode.SPECTATOR);
 				game.clearPlayer(player);
 				player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
 				event.setQuitMessage(game.translate("werewolf.announcement.leave_in_spec",
-						playerName));
+						Formatter.format("&player&",playerName)));
 			} else {
 
 				event.setQuitMessage(game.translate("werewolf.announcement.leave_in_game",
-						playerName));
+						Formatter.format("&player&",playerName)));
 				playerWW.setDisconnectedTime(game.getTimer());
 			}
         } else {
 			if (game.getModerationManager().getQueue().contains(uuid)) {
 				event.setQuitMessage(game.translate("werewolf.announcement.spectator_leave",
-						playerName));
+						Formatter.format("&player&",playerName)));
 			} else event.setQuitMessage(game.translate("werewolf.announcement.leave_spec",
-					playerName));
+					Formatter.format("&player&",playerName)));
         }
 	}
 

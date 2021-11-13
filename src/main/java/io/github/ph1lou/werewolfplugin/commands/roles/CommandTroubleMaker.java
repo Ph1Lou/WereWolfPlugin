@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -51,6 +52,7 @@ public class CommandTroubleMaker implements ICommand {
 
         playerWW1.sendMessageWithKey("werewolf.role.troublemaker.get_switch");
         game.getMapManager().transportation(playerWW1, Math.random() * 2 * Math.PI);
-        player.sendMessage(game.translate("werewolf.role.troublemaker.troublemaker_perform", playerArg.getName()));
+        player.sendMessage(game.translate("werewolf.role.troublemaker.troublemaker_perform",
+                Formatter.format("&player&",playerArg.getName())));
     }
 }

@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.roles.lovers;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -79,15 +80,17 @@ public class CursedLover implements ILover, Listener {
                 playerWW.addPlayerMaxHealth(2);
             }
             power1 = true;
-            playerWW.sendMessageWithKey("werewolf.role.cursed_lover.description", Sound.SHEEP_SHEAR,
-                    cursedLover2.getName());
+            playerWW.sendMessageWithKey("werewolf.role.cursed_lover.description",
+                    Formatter.format("&player&",cursedLover2.getName()));
+            playerWW.sendSound(Sound.SHEEP_SHEAR);
         } else if (cursedLover2.equals(playerWW)) {
             if (!power2) {
                 playerWW.addPlayerMaxHealth(2);
             }
             power2 = true;
-            playerWW.sendMessageWithKey("werewolf.role.cursed_lover.description", Sound.SHEEP_SHEAR,
-                    cursedLover1.getName());
+            playerWW.sendMessageWithKey("werewolf.role.cursed_lover.description",
+                    Formatter.format("&player&",cursedLover1.getName()));
+            playerWW.sendSound(Sound.SHEEP_SHEAR);
         }
     }
 
@@ -142,7 +145,7 @@ public class CursedLover implements ILover, Listener {
         StringBuilder sb = event.getEndMessage();
 
         sb.append(game.translate("werewolf.end.cursed_lover",
-                playerWW1.getName() + " "));
+                Formatter.format("&player&",playerWW1.getName() + " ")));
     }
 
     @EventHandler(priority = EventPriority.LOW)

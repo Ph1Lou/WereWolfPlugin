@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -46,6 +47,7 @@ public class CommandWildChild implements ICommand {
         ((IAffectedPlayers) wildChild).addAffectedPlayer(playerWW1);
         ((IPower) wildChild).setPower(false);
         Bukkit.getPluginManager().callEvent(new ModelEvent(playerWW, playerWW1));
-        playerWW.sendMessageWithKey("werewolf.role.wild_child.reveal_model", playerArg.getName());
+        playerWW.sendMessageWithKey("werewolf.role.wild_child.reveal_model",
+                Formatter.format("&model&",playerArg.getName()));
     }
 }

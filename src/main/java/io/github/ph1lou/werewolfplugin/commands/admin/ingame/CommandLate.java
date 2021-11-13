@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
@@ -31,7 +32,8 @@ public class CommandLate implements ICommand {
             return;
         }
 
-        Bukkit.broadcastMessage(game.translate("werewolf.commands.late.launch", player1.getName()));
+        Bukkit.broadcastMessage(game.translate("werewolf.commands.late.launch",
+                Formatter.format("&player&",player1.getName())));
 
         ((GameManager) game).addLatePlayer(player1);
     }

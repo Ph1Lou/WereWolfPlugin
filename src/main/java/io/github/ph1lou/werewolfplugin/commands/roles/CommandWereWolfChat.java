@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -62,7 +63,8 @@ public class CommandWereWolfChat implements ICommand {
                     playerWW.sendMessageWithKey("werewolf.commands.admin.ww_chat.timer");
                 }
             } else {
-                playerWW.sendMessageWithKey("werewolf.commands.admin.ww_chat.speak_number", game.getConfig().getWereWolfChatMaxMessage());
+                playerWW.sendMessageWithKey("werewolf.commands.admin.ww_chat.speak_number",
+                        Formatter.format("&number&",game.getConfig().getWereWolfChatMaxMessage()));
             }
 
 

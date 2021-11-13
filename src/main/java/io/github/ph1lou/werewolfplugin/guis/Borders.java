@@ -5,6 +5,7 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
@@ -44,20 +45,32 @@ public class Borders implements InventoryProvider {
         WereWolfAPI game = main.getWereWolfAPI();
         IConfiguration config = game.getConfig();
 
-        contents.set(0, 3, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "-", config.getBorderMax())).build()), e -> {
+        contents.set(0, 3, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON)
+                .setDisplayName(game.translate("werewolf.utils.display",
+                                Formatter.format("&field&","-"),
+                                Formatter.format("&value&",config.getBorderMax())))
+                .build()), e -> {
             if (game.getConfig().getBorderMax() >= 100) {
                 game.getConfig().setBorderMax(game.getConfig().getBorderMax() - 100);
                 game.getMapManager().changeBorder(game.getConfig().getBorderMax() / 2);
                 Borders.INVENTORY.open(player);
             }
         }));
-        contents.set(0, 4, ClickableItem.empty((new ItemBuilder(Material.GLASS).setDisplayName(game.translate("werewolf.menu.border.radius_border_max", config.getBorderMax())).build())));
-        contents.set(0, 5, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "+", config.getBorderMax())).build()), e -> {
+        contents.set(0, 4, ClickableItem.empty((new ItemBuilder(Material.GLASS)
+                .setDisplayName(game.translate("werewolf.menu.border.radius_border_max",
+                        Formatter.format("&size&",config.getBorderMax()))).build())));
+        contents.set(0, 5, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display",
+                Formatter.format("&field&","+"),
+                Formatter.format("&value&",config.getBorderMax())))
+                .build()), e -> {
             game.getConfig().setBorderMax(game.getConfig().getBorderMax() + 100);
             game.getMapManager().changeBorder(game.getConfig().getBorderMax() / 2);
             Borders.INVENTORY.open(player);
         }));
-        contents.set(1, 3, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "-", config.getBorderMin())).build()), e -> {
+        contents.set(1, 3, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display",
+                Formatter.format("&field&","-"),
+                Formatter.format("&value&",config.getBorderMin())))
+                .build()), e -> {
             if (game.getConfig().getBorderMin() >= 100) {
                 game.getConfig().setBorderMin(game.getConfig().getBorderMin() - 100);
                 Borders.INVENTORY.open(player);
@@ -65,8 +78,12 @@ public class Borders implements InventoryProvider {
         }));
 
 
-        contents.set(1, 4, ClickableItem.empty((new ItemBuilder(Material.GLASS).setDisplayName(game.translate("werewolf.menu.border.radius_border_min", config.getBorderMin())).build())));
-        contents.set(1, 5, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "+", config.getBorderMin())).build()), e -> {
+        contents.set(1, 4, ClickableItem.empty((new ItemBuilder(Material.GLASS).setDisplayName(game.translate("werewolf.menu.border.radius_border_min",
+                Formatter.format("&size&",config.getBorderMin()))).build())));
+        contents.set(1, 5, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display",
+                Formatter.format("&field&","+"),
+                Formatter.format("&value&",config.getBorderMin())))
+                .build()), e -> {
             game.getConfig().setBorderMin(game.getConfig().getBorderMin() + 100);
             Borders.INVENTORY.open(player);
         }));
@@ -74,14 +91,21 @@ public class Borders implements InventoryProvider {
         String borderSpeed = new DecimalFormat("0.0")
                 .format(config.getBorderSpeed());
 
-        contents.set(2, 3, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "-", borderSpeed)).build()), e -> {
+        contents.set(2, 3, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display",
+                Formatter.format("&field&","-"),
+                Formatter.format("&value&",borderSpeed)))
+                .build()), e -> {
             if (game.getConfig().getBorderSpeed() >= 0.1) {
                 game.getConfig().setBorderSpeed(game.getConfig().getBorderSpeed() - 0.1);
                 Borders.INVENTORY.open(player);
             }
         }));
-        contents.set(2, 4, ClickableItem.empty((new ItemBuilder(Material.GLASS).setDisplayName(game.translate("werewolf.menu.border.speed", borderSpeed)).build())));
-        contents.set(2, 5, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display", "+", borderSpeed)).build()), e -> {
+        contents.set(2, 4, ClickableItem.empty((new ItemBuilder(Material.GLASS).setDisplayName(game.translate("werewolf.menu.border.speed",
+                Formatter.format("&speed&",borderSpeed))).build())));
+        contents.set(2, 5, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON).setDisplayName(game.translate("werewolf.utils.display",
+                Formatter.format("&field&","+"),
+                Formatter.format("&value&",borderSpeed)))
+                .build()), e -> {
             game.getConfig().setBorderSpeed(game.getConfig().getBorderSpeed() + 0.1);
             Borders.INVENTORY.open(player);
         }));

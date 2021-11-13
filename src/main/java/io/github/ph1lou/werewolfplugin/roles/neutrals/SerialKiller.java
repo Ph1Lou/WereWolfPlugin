@@ -2,11 +2,11 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
-import io.github.ph1lou.werewolfapi.enums.Day;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
@@ -48,7 +48,7 @@ public class SerialKiller extends RoleNeutral implements IPower {
                 .setEquipments(game.translate("werewolf.role.serial_killer.limit"))
                 .setItems(game.translate("werewolf.role.serial_killer.items"))
                 .setEffects(game.translate("werewolf.role.serial_killer.effect"))
-                .addExtraLines(game.translate("werewolf.role.serial_killer.hearts", extraHeart / 2))
+                .addExtraLines(game.translate("werewolf.role.serial_killer.hearts", Formatter.format("&heart&",extraHeart / 2)))
                 .build();
     }
 

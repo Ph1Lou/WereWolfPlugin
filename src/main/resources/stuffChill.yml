@@ -1,6 +1,6 @@
 
 start_loot:
-  '0':
+  0:
     ==: org.bukkit.inventory.ItemStack
     type: IRON_PICKAXE
     meta:
@@ -12,7 +12,7 @@ start_loot:
       Unbreakable: true
       ItemFlags: !!set
         HIDE_ENCHANTS: null
-  '1':
+  1:
     ==: org.bukkit.inventory.ItemStack
     type: DIAMOND_AXE
     meta:
@@ -25,7 +25,7 @@ start_loot:
       Unbreakable: true
       ItemFlags: !!set
         HIDE_ENCHANTS: null
-  '2':
+  2:
     ==: org.bukkit.inventory.ItemStack
     type: DIAMOND_SPADE
     meta:
@@ -36,7 +36,7 @@ start_loot:
       Unbreakable: true
       ItemFlags: !!set
         HIDE_ENCHANTS: null
-  '3':
+  3:
     ==: org.bukkit.inventory.ItemStack
     type: LEATHER_BOOTS
     meta:
@@ -50,38 +50,38 @@ start_loot:
       Unbreakable: true
       ItemFlags: !!set
         HIDE_ENCHANTS: null
-  '4':
+  4:
     ==: org.bukkit.inventory.ItemStack
     type: APPLE
     amount: 8
-  '5':
+  5:
     ==: org.bukkit.inventory.ItemStack
     type: COOKED_BEEF
     amount: 64
-  '6':
+  6:
     ==: org.bukkit.inventory.ItemStack
     type: FEATHER
     amount: 6
-  '7':
+  7:
     ==: org.bukkit.inventory.ItemStack
     type: BOOK
     amount: 9
-  '8':
+  8:
     ==: org.bukkit.inventory.ItemStack
     type: WATER_BUCKET
-  '9':
+  9:
     ==: org.bukkit.inventory.ItemStack
     type: WATER_BUCKET
-  '10':
+  10:
     ==: org.bukkit.inventory.ItemStack
     type: LOG
     amount: 64
-  '11':
+  11:
     ==: org.bukkit.inventory.ItemStack
     type: WORKBENCH
     amount: 16
 death_loot:
-  '0':
+  0:
     ==: org.bukkit.inventory.ItemStack
     type: GOLDEN_APPLE
     amount: 2

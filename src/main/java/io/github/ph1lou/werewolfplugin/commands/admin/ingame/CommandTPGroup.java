@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -54,12 +55,15 @@ public class CommandTPGroup implements ICommand {
                     if (p.getLocation().distance(location) <= d) {
                         size--;
                         sb.append(p.getName()).append(" ");
-                        playerWW1.sendMessageWithKey("werewolf.commands.admin.tp_group.perform", playerName);
+                        playerWW1.sendMessageWithKey("werewolf.commands.admin.tp_group.perform",
+                                Formatter.format("&player&",playerName));
                         game.getMapManager().transportation(playerWW1, r);
                     }
                 }
             }
         }
-        Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.commands.admin.tp_group.broadcast", sb.toString(), playerName));
+        Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.commands.admin.tp_group.broadcast",
+                Formatter.format("&players&",sb.toString()),
+                Formatter.format("&player&",playerName)));
     }
 }

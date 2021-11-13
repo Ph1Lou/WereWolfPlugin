@@ -5,6 +5,7 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
@@ -53,7 +54,10 @@ public class WhiteList implements InventoryProvider {
                 config.setSpectatorMode((config.getSpectatorMode() + 1) % 3);
             } else config.setSpectatorMode((config.getSpectatorMode() + 2) % 3);
         }));
-        contents.set(1, 3, ClickableItem.of((new ItemBuilder(UniversalMaterial.PLAYER_HEAD.getStack()).setDisplayName(game.translate("werewolf.menu.whitelist.max", config.getPlayerMax())).build()), e -> {
+        contents.set(1, 3, ClickableItem.of((new ItemBuilder(UniversalMaterial.PLAYER_HEAD.getStack())
+                .setDisplayName(game.translate("werewolf.menu.whitelist.max",
+                        Formatter.format("&number&",config.getPlayerMax())))
+                .build()), e -> {
             if (e.isLeftClick()) {
                 config.setPlayerMax(config.getPlayerMax() + 1);
                 game.getModerationManager().checkQueue();

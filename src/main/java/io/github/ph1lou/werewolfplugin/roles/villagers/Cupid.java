@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
@@ -64,17 +65,18 @@ public class Cupid extends RoleVillage implements IAffectedPlayers, IPower {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.cupid.description"))
                 .setItems(game.translate("werewolf.role.cupid.items"))
-                .setEquipments(game.translate("werewolf.role.cupid.extra", game.getConfig().getLimitPowerBow() + 1))
+                .setEquipments(game.translate("werewolf.role.cupid.extra",
+                                Formatter.format("&power&",game.getConfig().getLimitPowerBow() + 1)))
                 .addExtraLines(game.translate("werewolf.role.cupid.lover",
-                        this.affectedPlayer.isEmpty() ?
+                                Formatter.format("&lovers&",this.affectedPlayer.isEmpty() ?
                                 this.hasPower() ?
                                         game.translate("werewolf.role.cupid.lover_designation_message",
-                                                Utils.conversion(
+                                                Formatter.format("&timer&",Utils.conversion(
                                                         game.getConfig()
-                                                                .getTimerValue("werewolf.menu.timers.lover_duration"))) :
+                                                                .getTimerValue("werewolf.menu.timers.lover_duration")))) :
                                         game.translate("werewolf.role.cupid.none") :
                                 affectedPlayer.stream().map(IPlayerWW::getName)
-                                        .collect(Collectors.joining(" "))))
+                                        .collect(Collectors.joining(" ")))))
                 .build();
     }
 

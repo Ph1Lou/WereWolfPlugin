@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
@@ -162,7 +163,7 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
         roleClone.setDeathRole(this.getKey());
 
         this.getPlayerWW().sendMessageWithKey("werewolf.role.thief.realized_theft",
-                game.translate(role.getKey()));
+                Formatter.format("&role&",game.translate(role.getKey())));
         this.getPlayerWW().sendMessageWithKey("werewolf.role.thief.details");
 
         this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,"thief"));

@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -76,7 +77,7 @@ public class CommandInfect implements ICommand {
         ((IAffectedPlayers) infect).addAffectedPlayer(playerWW1);
 
         playerWW.sendMessageWithKey("werewolf.role.infect_father_of_the_wolves.infection_perform",
-                playerWW1.getName());
+                Formatter.format("&player&",playerWW1.getName()));
         game.resurrection(playerWW1);
 
         if (!playerWW1.getRole().isWereWolf()) { //si déjà loup

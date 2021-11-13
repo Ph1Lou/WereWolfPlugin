@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
@@ -35,7 +36,8 @@ public class CommandModerator implements ICommand {
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (moderationManager.getModerators().contains(argUUID)) {
-            Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.moderator.remove", moderator.getName()));
+            Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.moderator.remove",
+                    Formatter.format("&player&",moderator.getName())));
             moderationManager.getModerators().remove(argUUID);
 
             if (game.isState(StateGame.LOBBY)) {
@@ -61,7 +63,8 @@ public class CommandModerator implements ICommand {
         }
         moderator.setGameMode(GameMode.SPECTATOR);
         moderationManager.addModerator(argUUID);
-        Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.moderator.add", moderator.getName()));
+        Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.moderator.add",
+                Formatter.format("&player&",moderator.getName())));
         Bukkit.getPluginManager().callEvent(new ModeratorEvent(argUUID, true));
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(moderator));
     }

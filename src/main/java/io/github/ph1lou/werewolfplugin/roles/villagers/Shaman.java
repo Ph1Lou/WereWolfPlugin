@@ -56,7 +56,7 @@ public class Shaman extends RoleVillage implements IAffectedPlayers {
         int nTimesAffected = (int) affectedPlayers.stream().filter(player -> player.equals(playerWW)).count();
 
         TextComponent textComponent = new TextComponent(
-                game.translate("werewolf.role.shaman.choice_message", playerWW.getName()));
+                game.translate("werewolf.role.shaman.choice_message"));
         textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/ww %s %s %s",
                 game.translate("werewolf.role.shaman.command"), playerWW.getUUID(), nTimesAffected)));
 

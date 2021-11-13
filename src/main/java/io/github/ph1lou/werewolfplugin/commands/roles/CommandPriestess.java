@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -40,7 +41,8 @@ public class CommandPriestess implements ICommand {
         }
 
         if (!player.getWorld().equals(playerArg.getWorld()) || player.getLocation().distance(playerArg.getLocation()) > game.getConfig().getDistancePriestess()) {
-            playerWW.sendMessageWithKey("werewolf.role.priestess.distance");
+            playerWW.sendMessageWithKey("werewolf.role.priestess.distance",
+                    Formatter.format("&blocks&",game.getConfig().getDistancePriestess()));
             return;
         }
 
@@ -62,7 +64,9 @@ public class CommandPriestess implements ICommand {
 
             playerWW.removePlayerMaxHealth(4);
 
-            playerWW.sendMessageWithKey("werewolf.role.priestess.message", playerArg.getName(), game.translate(priestessEvent.getCamp()));
+            playerWW.sendMessageWithKey("werewolf.role.priestess.message",
+                    Formatter.format("&player&",playerArg.getName()),
+                    Formatter.format("&camp&",game.translate(priestessEvent.getCamp())));
 
         }
     }

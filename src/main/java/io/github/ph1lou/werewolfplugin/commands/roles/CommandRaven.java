@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
 import io.github.ph1lou.werewolfapi.AuraModifier;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
@@ -61,6 +62,7 @@ public class CommandRaven implements ICommand {
         playerWW1.addPotionModifier(PotionModifier.add(PotionEffectType.JUMP,"raven"));
         playerWW1.getRole().addAuraModifier(new AuraModifier("cursed", Aura.DARK, 20, true));
         playerWW1.sendMessageWithKey("werewolf.role.raven.get_curse");
-        playerWW.sendMessageWithKey("werewolf.role.raven.curse_perform", playerArg.getName());
+        playerWW.sendMessageWithKey("werewolf.role.raven.curse_perform",
+                Formatter.format("&player&",playerArg.getName()));
     }
 }

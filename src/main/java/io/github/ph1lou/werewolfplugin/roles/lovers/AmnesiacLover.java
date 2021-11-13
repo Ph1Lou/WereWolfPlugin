@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.roles.lovers;
 
 import com.google.common.collect.Sets;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -69,7 +70,7 @@ public class AmnesiacLover implements ILover, Listener {
         IPlayerWW playerWW1 = getOtherLover(event.getPlayerWW());
 
         Bukkit.broadcastMessage(game.translate("werewolf.role.lover.lover_death",
-                playerWW1.getName()));
+                Formatter.format("&player&",playerWW1.getName())));
         Bukkit.getPluginManager().callEvent(
                 new AmnesiacLoverDeathEvent(event.getPlayerWW(), playerWW1));
         game.death(playerWW1);
@@ -115,11 +116,13 @@ public class AmnesiacLover implements ILover, Listener {
         if (!this.find) return;
 
         if (this.amnesiacLover1.equals(playerWW)) {
-            playerWW.sendMessageWithKey("werewolf.role.lover.description", Sound.PORTAL_TRAVEL,
-                    this.amnesiacLover2.getName());
+            playerWW.sendMessageWithKey("werewolf.role.lover.description",
+                    Formatter.format("&player&",this.amnesiacLover2.getName()));
+            playerWW.sendSound(Sound.PORTAL_TRAVEL);
         } else if (this.amnesiacLover2.equals(playerWW)) {
-            playerWW.sendMessageWithKey("werewolf.role.lover.description", Sound.PORTAL_TRAVEL,
-                    this.amnesiacLover1.getName());
+            playerWW.sendMessageWithKey("werewolf.role.lover.description",
+                    Formatter.format("&player&",this.amnesiacLover1.getName()));
+            playerWW.sendSound(Sound.PORTAL_TRAVEL);
         }
     }
 
@@ -205,7 +208,7 @@ public class AmnesiacLover implements ILover, Listener {
         StringBuilder sb = event.getEndMessage();
 
         sb.append(this.game.translate("werewolf.end.lover",
-                playerWW1.getName() + " "));
+                Formatter.format("&player&",playerWW1.getName() + " ")));
     }
 
     @Override

@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
@@ -120,14 +121,14 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
 
         TextComponent cancel =
                 new TextComponent(game.translate("werewolf.role.citizen.cancel_vote_message",
-                        hasPower() ? 1 : 0));
+                        Formatter.format("&number&",hasPower() ? 1 : 0)));
 
         cancel.addExtra(cancelVote);
 
         cancel.addExtra(new TextComponent(game.translate("werewolf.role.citizen.time_left",
-                Utils.conversion(
+                Formatter.format("&timer&",Utils.conversion(
                         game.getConfig().getTimerValue(
-                                TimerBase.CITIZEN_DURATION.getKey())))));
+                                TimerBase.CITIZEN_DURATION.getKey()))))));
 
 
         return cancel;
@@ -151,14 +152,14 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
 
         TextComponent see = new TextComponent(
                 game.translate("werewolf.role.citizen.see_vote_message",
-                        2 - getUse()));
+                        Formatter.format("&number&",2 - getUse())));
         see.addExtra(seeVote);
 
 
         see.addExtra(new TextComponent(game.translate("werewolf.role.citizen.time_left",
-                Utils.conversion(
+                Formatter.format("&timer&",Utils.conversion(
                         game.getConfig().getTimerValue(
-                                TimerBase.CITIZEN_DURATION.getKey())))));
+                                TimerBase.CITIZEN_DURATION.getKey()))))));
 
 
         return see;

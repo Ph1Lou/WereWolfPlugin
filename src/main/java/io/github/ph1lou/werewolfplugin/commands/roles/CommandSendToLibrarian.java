@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -27,7 +28,8 @@ public class CommandSendToLibrarian implements ICommand {
 
 
         if (args.length == 0) {
-            playerWW.sendMessageWithKey("werewolf.check.parameters", 1);
+            playerWW.sendMessageWithKey("werewolf.check.parameters",
+                    Formatter.format("&number&",1));
             return;
         }
 
@@ -65,8 +67,8 @@ public class CommandSendToLibrarian implements ICommand {
                     find.set(true);
                     librarianGiveBackEvent.getTargetWW().sendMessageWithKey(
                             "werewolf.role.librarian.contribution",
-                            player.getName(),
-                            librarianGiveBackEvent.getInfo());
+                            Formatter.format("&player&",player.getName()),
+                            Formatter.format("message",librarianGiveBackEvent.getInfo()));
                 });
 
 

@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Camp;
@@ -83,7 +84,8 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
             this.power = false;
         } else if (!this.affectedPlayer.isEmpty()) {
             game.getConfig().removeOneRole(this.affectedPlayer.get(0).getRole().getKey());
-            Bukkit.broadcastMessage(game.translate("werewolf.role.grimy_werewolf.actualize", game.translate(this.affectedPlayer.get(0).getRole().getKey())));
+            Bukkit.broadcastMessage(game.translate("werewolf.role.grimy_werewolf.actualize",
+                    Formatter.format("&role&",game.translate(this.affectedPlayer.get(0).getRole().getKey()))));
         }
 
     }
@@ -120,7 +122,9 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
             this.getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
             return;
         }
-        this.getPlayerWW().sendMessageWithKey("werewolf.role.grimy_werewolf.perform", event.getPlayerWW().getName(), game.translate(event.getPlayerWW().getRole().getKey()));
+        this.getPlayerWW().sendMessageWithKey("werewolf.role.grimy_werewolf.perform",
+                Formatter.format("&player&",event.getPlayerWW().getName()),
+                Formatter.format("&role&",game.translate(event.getPlayerWW().getRole().getKey())));
 
         game.getConfig().removeOneRole(RolesBase.WEREWOLF.getKey());
         this.affectedPlayer.add(event.getPlayerWW());

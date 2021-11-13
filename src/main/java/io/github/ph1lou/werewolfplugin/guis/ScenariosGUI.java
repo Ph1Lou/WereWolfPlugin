@@ -7,6 +7,7 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.registers.ScenarioRegister;
@@ -65,8 +66,7 @@ public class ScenariosGUI implements InventoryProvider {
                 lore.add(0, game.translate("werewolf.utils.enable"));
                 itemStack = UniversalMaterial.GREEN_TERRACOTTA.getStack();
             } else {
-                lore.add(0, game.translate("werewolf.utils.disable",
-                        ""));
+                lore.add(0, game.translate("werewolf.utils.disable"));
                 itemStack = UniversalMaterial.RED_TERRACOTTA.getStack();
             }
 
@@ -77,7 +77,8 @@ public class ScenariosGUI implements InventoryProvider {
                     .map(game::translate).findFirst();
 
             incompatible
-                    .ifPresent(s -> lore.add(game.translate("werewolf.menu.scenarios.incompatible", s)));
+                    .ifPresent(scenario -> lore.add(game.translate("werewolf.menu.scenarios.incompatible",
+                            Formatter.format("&scenario&",scenario))));
 
 
             items.add(ClickableItem.of((new ItemBuilder(scenarioRegister.getItem().isPresent() ? scenarioRegister.getItem().get() : itemStack)
@@ -109,8 +110,9 @@ public class ScenariosGUI implements InventoryProvider {
                             .setDisplayName(
                                     game.translate(
                                             "werewolf.menu.roles.previous",
-                                            page, pagination.isFirst() ?
-                                                    page : page - 1)).build(),
+                                            Formatter.format("&current&",page),
+                                            Formatter.format("&previous&",pagination.isFirst() ?
+                                                    page : page - 1))).build(),
 
                     e -> INVENTORY.open(player, pagination
                             .previous().getPage())));
@@ -118,8 +120,9 @@ public class ScenariosGUI implements InventoryProvider {
                     new ItemBuilder(Material.ARROW)
                             .setDisplayName(
                                     game.translate("werewolf.menu.roles.next",
-                                            page, pagination.isLast() ?
-                                                    page : page + 1)).build(),
+                                            Formatter.format("&current&",page),
+                                            Formatter.format("&next&",pagination.isLast() ?
+                                                    page : page + 1))).build(),
                     e -> INVENTORY.open(player, pagination
                             .next().getPage())));
 
@@ -127,7 +130,8 @@ public class ScenariosGUI implements InventoryProvider {
                     new ItemBuilder(UniversalMaterial.SIGN.getType())
                             .setDisplayName(
                                     game.translate("werewolf.menu.roles.current",
-                                            page, items.size() / 36 + 1))
+                                                    Formatter.format("&current&",page),
+                                                                    Formatter.format("&sum&",items.size() / 36 + 1)))
                             .build()));
         } else {
             int i = 0;

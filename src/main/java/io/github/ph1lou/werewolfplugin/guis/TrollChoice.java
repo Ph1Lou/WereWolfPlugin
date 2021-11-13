@@ -7,6 +7,7 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Camp;
@@ -108,11 +109,23 @@ public class TrollChoice implements InventoryProvider {
             pagination.setItemsPerPage(27);
             pagination.addToIterator(contents.newIterator(SlotIterator.Type.HORIZONTAL, 1, 0));
             int page = pagination.getPage() + 1;
-            contents.set(4, 2, ClickableItem.of(new ItemBuilder(Material.ARROW).setDisplayName(game.translate("werewolf.menu.roles.previous", page, pagination.isFirst() ? page : page - 1)).build(),
+            contents.set(4, 2, ClickableItem.of(new ItemBuilder(Material.ARROW)
+                            .setDisplayName(game.translate("werewolf.menu.roles.previous",
+                                    Formatter.format("&current&",page),
+                                                    Formatter.format("&previous&",pagination.isFirst() ? page : page - 1)))
+                            .build(),
                     e -> INVENTORY.open(player, pagination.previous().getPage())));
-            contents.set(4, 6, ClickableItem.of(new ItemBuilder(Material.ARROW).setDisplayName(game.translate("werewolf.menu.roles.next", page, pagination.isLast() ? page : page + 1)).build(),
+            contents.set(4, 6, ClickableItem.of(new ItemBuilder(Material.ARROW)
+                            .setDisplayName(game.translate("werewolf.menu.roles.next",
+                                                    Formatter.format("&current&",page),
+                                                                    Formatter.format("&next&",pagination.isLast() ? page : page + 1)))
+                            .build(),
                     e -> INVENTORY.open(player, pagination.next().getPage())));
-            contents.set(4, 4, ClickableItem.empty(new ItemBuilder(UniversalMaterial.SIGN.getType()).setDisplayName(game.translate("werewolf.menu.roles.current", page, items.size() / 27 + 1)).build()));
+            contents.set(4, 4, ClickableItem.empty(new ItemBuilder(UniversalMaterial.SIGN.getType())
+                    .setDisplayName(game.translate("werewolf.menu.roles.current",
+                                    Formatter.format("&current&",page),
+                                                    Formatter.format("&sum&",items.size() / 27 + 1)))
+                    .build()));
         } else {
             int i = 0;
             for (ClickableItem clickableItem : items) {

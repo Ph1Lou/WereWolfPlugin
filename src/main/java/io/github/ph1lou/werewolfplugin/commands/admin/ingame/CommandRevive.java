@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -47,7 +48,9 @@ public class CommandRevive implements ICommand {
         game.resurrection(playerWW1);
 
         for (Player p : Bukkit.getOnlinePlayers()) {
-            p.sendMessage(game.translate("werewolf.commands.admin.revive.perform", player1.getName(), player.getName()));
+            p.sendMessage(game.translate("werewolf.commands.admin.revive.perform",
+                    Formatter.format("&player&",player1.getName()),
+                    Formatter.format("&admin&",player.getName())));
             Sound.AMBIENCE_THUNDER.play(p);
         }
 

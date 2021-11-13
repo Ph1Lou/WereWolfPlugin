@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
@@ -38,8 +39,8 @@ public class CommandFallenAngel implements ICommand {
         role.setChoice(AngelForm.FALLEN_ANGEL);
         Bukkit.getPluginManager().callEvent(new AngelChoiceEvent(playerWW, AngelForm.FALLEN_ANGEL));
         player.sendMessage(game.translate("werewolf.role.angel.angle_choice_click",
-                game.translate(RolesBase.FALLEN_ANGEL.getKey()),
-                Utils.conversion(game.getConfig().getTimerValue(TimerBase.ANGEL_DURATION.getKey()))));
+                Formatter.format("&form&",game.translate(RolesBase.FALLEN_ANGEL.getKey())),
+                Formatter.format("&timer&",Utils.conversion(game.getConfig().getTimerValue(TimerBase.ANGEL_DURATION.getKey())))));
 
         if (game.isDay(Day.NIGHT)) {
             playerWW.addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,"fallen_angel"));

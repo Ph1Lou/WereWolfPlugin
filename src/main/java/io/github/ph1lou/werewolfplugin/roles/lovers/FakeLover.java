@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.roles.lovers;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -48,7 +49,9 @@ public class FakeLover implements ILover, Listener {
                 couple.append(playerWW1.getName()).append(" ");
             }
         }
-        playerWW.sendMessageWithKey("werewolf.role.lover.description", Sound.SHEEP_SHEAR, couple.toString());
+        playerWW.sendMessageWithKey("werewolf.role.lover.description",
+                Formatter.format("&player&",couple.toString()));
+        playerWW.sendSound(Sound.SHEEP_SHEAR);
     }
 
 

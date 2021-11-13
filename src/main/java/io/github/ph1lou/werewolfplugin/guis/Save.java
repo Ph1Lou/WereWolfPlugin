@@ -5,6 +5,7 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
@@ -64,10 +65,16 @@ public class Save implements InventoryProvider {
 
                 contents.set(0, i + 1, null);
             } else if (i == j) {
-                contents.set(0, i + 1, ClickableItem.empty((new ItemBuilder(UniversalMaterial.FEATHER.getType()).setDisplayName(game.translate("werewolf.menu.save.configuration", files[i].getName())).build())));
+                contents.set(0, i + 1,
+                        ClickableItem.empty((new ItemBuilder(UniversalMaterial.FEATHER.getType())
+                                .setDisplayName(game.translate("werewolf.menu.save.configuration",
+                                        Formatter.format("&save&",files[i].getName()))).build())));
             } else {
                 int finalI = i;
-                contents.set(0, i + 1, ClickableItem.of((new ItemBuilder(UniversalMaterial.PAPER.getType()).setDisplayName(game.translate("werewolf.menu.save.configuration", files[i].getName())).build()), e -> j = finalI));
+                contents.set(0, i + 1, ClickableItem.of((new ItemBuilder(UniversalMaterial.PAPER.getType())
+                        .setDisplayName(game.translate("werewolf.menu.save.configuration",
+                                Formatter.format("&save&",files[i].getName())))
+                        .build()), e -> j = finalI));
             }
         }
 
@@ -79,7 +86,7 @@ public class Save implements InventoryProvider {
                 .preventClose()
                 .text(" ")
                 .title(game.translate("werewolf.menu.save.save_menu"))
-                .item(new ItemStack(Material.EMERALD_BLOCK))
+                .itemLeft(new ItemStack(Material.EMERALD_BLOCK))
                 .plugin(main)
                 .onClose((player2) -> BukkitUtils.scheduleSyncDelayedTask(() -> Save.INVENTORY.open(player)))
                 .open(player)));
@@ -89,16 +96,19 @@ public class Save implements InventoryProvider {
                     ClickableItem.of((new ItemBuilder(
                             UniversalMaterial.BED.getType())
                             .setDisplayName(game.translate("werewolf.menu.save.load",
-                                    files[j].getName())).build()), e -> {
+                                    Formatter.format("&save&",files[j].getName())))
+                            .build()), e -> {
                         load(main);
-                        player.sendMessage(game.translate("werewolf.menu.save.load_message", files[j].getName()));
+                        player.sendMessage(game.translate("werewolf.menu.save.load_message",
+                                Formatter.format("&save&",files[j].getName())));
                     }));
             contents.set(1, 5, ClickableItem.of((
                     new ItemBuilder(UniversalMaterial.BARRIER.getType())
                             .setDisplayName(game.translate("werewolf.menu.save.delete",
-                                    files[j].getName())).build()), e -> {
+                                    Formatter.format("&save&",files[j].getName())))
+                            .build()), e -> {
                 player.sendMessage(game.translate("werewolf.menu.save.delete_message",
-                        files[j].getName()));
+                        Formatter.format("&save&",files[j].getName())));
                 erase(main);
             }));
         } else {
@@ -141,11 +151,13 @@ public class Save implements InventoryProvider {
 
         File file = new File(main.getDataFolder() + File.separator + "configs", files[j].getName());
         if (!file.delete()) {
-            Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.menu.save.delete_failed", files[j].getName()));
+            Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.menu.save.delete_failed",
+                    Formatter.format("&save&",files[j].getName())));
         }
         file = new File(main.getDataFolder() + File.separator + "stuffs", files[j].getName().replaceFirst(".json", ".yml"));
         if (!file.delete()) {
-            Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.menu.save.delete_failed", files[j].getName().replaceFirst(".json", ".yml")));
+            Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.menu.save.delete_failed",
+                    Formatter.format("&save&",files[j].getName().replaceFirst(".json", ".yml"))));
         }
 
     }

@@ -46,7 +46,6 @@ import org.bukkit.potion.PotionEffectType;
 import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.IllegalFormatException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -136,7 +135,10 @@ public class GameManager implements WereWolfAPI {
 
         this.moderationManager.getQueue().remove(uuid);
         this.playerSize++;
-        Bukkit.broadcastMessage(translate("werewolf.announcement.join", this.getPlayerSize(),this.getRoleInitialSize(), player.getName()));
+        Bukkit.broadcastMessage(translate("werewolf.announcement.join",
+                Formatter.format("&number&",this.getPlayerSize()),
+                Formatter.format("&sum&",this.getRoleInitialSize()),
+                Formatter.format("&player&",player.getName())));
         clearPlayer(player);
         player.setGameMode(GameMode.ADVENTURE);
         IPlayerWW playerWW = new PlayerWW(this, player);
@@ -302,24 +304,19 @@ public class GameManager implements WereWolfAPI {
 
 
     @Override
-    public String translate(String key, Object... args) {
-        LanguageManager languageManager = (LanguageManager) main.getLangManager();
-        String translation = languageManager.getTranslation(key);
-        try {
-            return String.format(translation, args);
-        } catch (IllegalFormatException e) {
-            Bukkit.getConsoleSender().sendMessage(String.format("Error while formatting translation (%s)", key.toLowerCase()));
-            return translation + " (Format error)";
-        }
+    public String translate(String key, Formatter... formatters) {
+        return translate("",key,formatters);
     }
 
     @Override
-    public String translate(String key, Formatter... formatters) {
-        String message = this.translate(key,new Object[]{});
+    public String translate(String prefixKey, String key, Formatter... formatters) {
+        LanguageManager languageManager = (LanguageManager) main.getLangManager();
+        String message = languageManager.getTranslation(key);
+        String prefix = prefixKey.isEmpty() ? "": languageManager.getTranslation(prefixKey);
         for(Formatter formatter:formatters){
             message = formatter.handle(message);
         }
-        return message;
+        return prefix+message;
     }
 
     @Override

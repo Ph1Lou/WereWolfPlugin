@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
@@ -67,6 +68,6 @@ public class CommandAngelRegen implements ICommand {
         playerWW1.sendMessageWithKey("werewolf.role.guardian_angel.get_regeneration");
         playerWW.sendMessageWithKey(
                 "werewolf.role.guardian_angel.perform",
-                3 - ((ILimitedUse) guardianAngel).getUse());
+                Formatter.format("&number&",3 - ((ILimitedUse) guardianAngel).getUse()));
     }
 }

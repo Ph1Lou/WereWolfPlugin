@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
@@ -37,8 +38,8 @@ public class CommandAdminRole implements ICommand {
                     .stream()
                     .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                     .forEach(playerWW1 -> player.sendMessage(game.translate("werewolf.commands.admin.role.role",
-                            playerWW1.getName(),
-                            game.translate(playerWW1.getRole().getKey()))));
+                            Formatter.format("&player&",playerWW1.getName()),
+                            Formatter.format("&role&",game.translate(playerWW1.getRole().getKey())))));
             return;
         }
 
@@ -64,26 +65,26 @@ public class CommandAdminRole implements ICommand {
 
         IRole role = targetWW.getRole();
         player.sendMessage(game.translate("werewolf.commands.admin.role.role",
-                args[0],
-                game.translate(role.getKey())));
+                Formatter.format("&player&",args[0]),
+                Formatter.format("&role&",game.translate(role.getKey()))));
 
         if (role instanceof Angel && role.isKey(RolesBase.ANGEL.getKey()) &&
                 !((Angel) role).isChoice(AngelForm.ANGEL)) {
 
             player.sendMessage(game.translate("werewolf.commands.admin.role.angel",
-                    game.translate(((Angel) role).isChoice(AngelForm.FALLEN_ANGEL) ?
+                    Formatter.format("&form&",game.translate(((Angel) role).isChoice(AngelForm.FALLEN_ANGEL) ?
                             RolesBase.FALLEN_ANGEL.getKey() :
-                            RolesBase.GUARDIAN_ANGEL.getKey())));
+                            RolesBase.GUARDIAN_ANGEL.getKey()))));
         }
         if (role instanceof IPower) {
             player.sendMessage(game.translate("werewolf.commands.admin.role.power",
-                    ((IPower) role).hasPower()));
+                    Formatter.format("&on&",((IPower) role).hasPower())));
         }
         if (role instanceof ITransformed) {
             player.sendMessage(game.translate("werewolf.commands.admin.role.transformed",
-                    game.translate(((ITransformed) role).isTransformed() ?
+                    Formatter.format("&on&",game.translate(((ITransformed) role).isTransformed() ?
                             "werewolf.commands.admin.role.yes" :
-                            "werewolf.commands.admin.role.no")));
+                            "werewolf.commands.admin.role.no"))));
         }
 
 
@@ -96,11 +97,13 @@ public class CommandAdminRole implements ICommand {
 
             if (!lover.isKey(LoverType.CURSED_LOVER.getKey())) {
                 if (sb.length() != 0) {
-                    player.sendMessage(game.translate("werewolf.commands.admin.role.lover", sb.toString()));
+                    player.sendMessage(game.translate("werewolf.commands.admin.role.lover",
+                            Formatter.format("&player&",sb.toString())));
                 }
             } else {
                 if (sb.length() != 0) {
-                    player.sendMessage(game.translate("werewolf.commands.admin.role.cursed_lover", sb.toString()));
+                    player.sendMessage(game.translate("werewolf.commands.admin.role.cursed_lover",
+                            Formatter.format("&player&",sb.toString())));
                 }
             }
         }
@@ -114,7 +117,8 @@ public class CommandAdminRole implements ICommand {
                 sb.append(playerWW1.getName()).append(" ");
             }
             if (sb.length() != 0) {
-                player.sendMessage(game.translate("werewolf.commands.admin.role.affected", sb.toString()));
+                player.sendMessage(game.translate("werewolf.commands.admin.role.affected",
+                        Formatter.format("&player&",sb.toString())));
             }
         }
 
@@ -127,7 +131,8 @@ public class CommandAdminRole implements ICommand {
                 }
             }
             if (sb.length() != 0) {
-                player.sendMessage(game.translate("werewolf.commands.admin.role.sister", sb.toString()));
+                player.sendMessage(game.translate("werewolf.commands.admin.role.sister",
+                        Formatter.format("&list&",sb.toString())));
 
             }
         }
@@ -141,7 +146,8 @@ public class CommandAdminRole implements ICommand {
                 }
             }
             if (sb.length() != 0) {
-                player.sendMessage(game.translate("werewolf.commands.admin.role.siamese_twin", sb.toString()));
+                player.sendMessage(game.translate("werewolf.commands.admin.role.siamese_twin",
+                        Formatter.format("&list&",sb.toString())));
 
             }
         }
@@ -155,7 +161,8 @@ public class CommandAdminRole implements ICommand {
         }
 
         if (sb.length() != 0) {
-            player.sendMessage(game.translate("werewolf.commands.admin.role.kill_by", sb.toString()));
+            player.sendMessage(game.translate("werewolf.commands.admin.role.kill_by",
+                    Formatter.format("&player&",sb.toString())));
         }
     }
 }

@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
@@ -60,7 +61,8 @@ public class Librarian extends RoleVillage implements ILimitedUse, IAffectedPlay
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.librarian.description", 3 - use))
+                .setDescription(game.translate("werewolf.role.librarian.description",
+                                Formatter.format("&number&",3 - use)))
                 .setItems(game.translate("werewolf.role.librarian.items"))
                 .build();
     }
@@ -89,11 +91,13 @@ public class Librarian extends RoleVillage implements ILimitedUse, IAffectedPlay
         if (!isAbilityEnabled()) return;
 
         Bukkit.broadcastMessage(game.translate("werewolf.role.librarian.death"));
-        int i = 1;
-        for (String s : this.storage) {
+        int page = 1;
+        for (String message : this.storage) {
             Bukkit.broadcastMessage(game.translate(
-                    "werewolf.role.librarian.book", i, s));
-            i++;
+                    "werewolf.role.librarian.book",
+                    Formatter.format("&page&",page),
+                    Formatter.format("&message&",message)));
+            page++;
         }
 
         this.getStorage().clear();

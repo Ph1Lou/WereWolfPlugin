@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import org.bukkit.GameMode;
@@ -14,18 +15,20 @@ public class CommandGamemode implements ICommand {
 
         UUID uuid = player.getUniqueId();
         try {
-            int i = Integer.parseInt(args[0]);
+            int gamemode = Integer.parseInt(args[0]);
             int j = 2;
-            if (i == 0) {
+            if (gamemode == 0) {
                 j = 1;
-            } else if (i == 1) {
+            } else if (gamemode == 1) {
                 j = 0;
-            } else if (i == 3) {
+            } else if (gamemode == 3) {
                 j = 3;
             }
 
             player.setGameMode(GameMode.values()[j]);
-            String message = game.translate("werewolf.commands.admin.gamemode.send", player.getName(), i);
+            String message = game.translate("werewolf.commands.admin.gamemode.send",
+                    Formatter.format("&player&",player.getName()),
+                    Formatter.format("&number&",gamemode));
 
             game.getModerationManager().alertHostsAndModerators(message);
             if (!game.getModerationManager().isStaff(uuid)) {

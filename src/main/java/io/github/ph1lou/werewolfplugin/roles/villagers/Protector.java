@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.AuraModifier;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -79,8 +80,8 @@ public class Protector extends RoleWithLimitedSelectionDuration implements IAffe
 
         this.getPlayerWW().sendMessageWithKey(
                 "werewolf.role.protector.protection_message",
-                Utils.conversion(
-                        game.getConfig().getTimerValue(TimerBase.POWER_DURATION.getKey())));
+                Formatter.format("&timer&",Utils.conversion(
+                        game.getConfig().getTimerValue(TimerBase.POWER_DURATION.getKey()))));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

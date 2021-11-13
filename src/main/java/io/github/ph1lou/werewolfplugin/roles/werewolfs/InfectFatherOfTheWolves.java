@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
@@ -110,7 +111,7 @@ public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPl
         TextComponent infect_msg = new TextComponent(
                 game.translate(
                         "werewolf.role.infect_father_of_the_wolves.infection_message",
-                        playerWW.getName()));
+                        Formatter.format("&player&",playerWW.getName())));
         infect_msg.setClickEvent(
                 new ClickEvent(ClickEvent.Action.RUN_COMMAND,
                         String.format("/ww %s %s",

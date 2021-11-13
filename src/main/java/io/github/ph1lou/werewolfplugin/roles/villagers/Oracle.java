@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.minuskube.inv.ClickableItem;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
@@ -81,9 +82,9 @@ public class Oracle extends RoleWithLimitedSelectionDuration implements IAffecte
 
         this.getPlayerWW().sendMessageWithKey(
                 "werewolf.role.oracle.perform",
-                Utils.conversion(
+                Formatter.format("&timer&",Utils.conversion(
                         game.getConfig()
-                                .getTimerValue(TimerBase.POWER_DURATION.getKey())));
+                                .getTimerValue(TimerBase.POWER_DURATION.getKey()))));
     }
 
     @Override

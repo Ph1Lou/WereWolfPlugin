@@ -5,6 +5,7 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
@@ -47,7 +48,8 @@ public class Enchantments implements InventoryProvider {
         contents.set(0, 2, ClickableItem.of((
                         new ItemBuilder(Material.IRON_CHESTPLATE)
                                 .setDisplayName(game.translate("werewolf.menu.enchantments.iron_protection",
-                                        game.getConfig().getLimitProtectionIron()))).setLore(lore).build(),
+                                        Formatter.format("&number&",game.getConfig().getLimitProtectionIron()))))
+                                .setLore(lore).build(),
                 e -> {
                     if (e.isLeftClick()) {
                         game.getConfig().setLimitProtectionIron(game.getConfig().getLimitProtectionIron() + 1);
@@ -57,12 +59,13 @@ public class Enchantments implements InventoryProvider {
 
                     e.setCurrentItem(new ItemBuilder(Material.IRON_CHESTPLATE)
                             .setDisplayName(game.translate("werewolf.menu.enchantments.iron_protection",
-                                    game.getConfig().getLimitProtectionIron())).setLore(lore).build());
+                                    Formatter.format("&number&",game.getConfig().getLimitProtectionIron())
+                            )).setLore(lore).build());
                 }));
         contents.set(0, 4, ClickableItem.of((
                         new ItemBuilder(Material.DIAMOND_CHESTPLATE).setDisplayName(
                                 game.translate("werewolf.menu.enchantments.diamond_protection",
-                                        game.getConfig().getLimitProtectionDiamond())))
+                                        Formatter.format("&number&",game.getConfig().getLimitProtectionDiamond()))))
                         .setLore(lore)
                         .build(),
                 e -> {
@@ -74,7 +77,7 @@ public class Enchantments implements InventoryProvider {
 
                     e.setCurrentItem(new ItemBuilder(Material.DIAMOND_CHESTPLATE).setDisplayName(
                             game.translate("werewolf.menu.enchantments.diamond_protection",
-                                    game.getConfig().getLimitProtectionDiamond()))
+                                            Formatter.format("&number&",game.getConfig().getLimitProtectionDiamond())))
                             .setLore(lore)
                             .build());
                 }));
@@ -82,7 +85,7 @@ public class Enchantments implements InventoryProvider {
                         new ItemBuilder(Material.BOW)
                                 .setDisplayName(
                                         game.translate("werewolf.menu.enchantments.power",
-                                                game.getConfig().getLimitPowerBow())))
+                                                Formatter.format("&number&",game.getConfig().getLimitPowerBow()))))
                         .setLore(lore).build(),
                 e -> {
                     if (e.isLeftClick()) {
@@ -94,13 +97,13 @@ public class Enchantments implements InventoryProvider {
                     e.setCurrentItem(new ItemBuilder(Material.BOW)
                             .setDisplayName(
                                     game.translate("werewolf.menu.enchantments.power",
-                                            game.getConfig().getLimitPowerBow()))
+                                                    Formatter.format("&number&",game.getConfig().getLimitPowerBow())))
                             .setLore(lore).build());
                 }));
         contents.set(0, 8, ClickableItem.of((
                         new ItemBuilder(Material.STICK)
                                 .setDisplayName(game.translate("werewolf.menu.enchantments.knock_back",
-                                        game.getConfig().getLimitKnockBack()))
+                                                Formatter.format("&number&",game.getConfig().getLimitKnockBack())))
                                 .setLore(Arrays.asList(
                                         Arrays.asList(
                                                 game.translate("werewolf.menu.enchantments.knock_back_invisible"),
@@ -120,7 +123,8 @@ public class Enchantments implements InventoryProvider {
                     }
                     e.setCurrentItem(new ItemBuilder(Material.STICK)
                             .setDisplayName(game.translate("werewolf.menu.enchantments.knock_back",
-                                    game.getConfig().getLimitKnockBack())).setLore(
+                                    Formatter.format("&number&",game.getConfig().getLimitKnockBack())))
+                            .setLore(
                                     Arrays.asList(
                                             Arrays.asList(
                                                     game.translate("werewolf.menu.enchantments.knock_back_invisible"),
@@ -132,7 +136,8 @@ public class Enchantments implements InventoryProvider {
                 }));
         contents.set(1, 2, ClickableItem.of((new ItemBuilder(Material.IRON_SWORD)
                         .setDisplayName(game.translate("werewolf.menu.enchantments.sharpness_iron",
-                                game.getConfig().getLimitSharpnessIron()))).setLore(lore).build(),
+                                Formatter.format("&number&",game.getConfig().getLimitSharpnessIron()))))
+                        .setLore(lore).build(),
                 e -> {
                     if (e.isLeftClick()) {
                         game.getConfig().setLimitSharpnessIron(game.getConfig().getLimitSharpnessIron() + 1);
@@ -141,12 +146,14 @@ public class Enchantments implements InventoryProvider {
                     }
                     e.setCurrentItem(new ItemBuilder(Material.IRON_SWORD)
                             .setDisplayName(game.translate("werewolf.menu.enchantments.sharpness_iron",
-                                    game.getConfig().getLimitSharpnessIron())).setLore(lore).build());
+                                    Formatter.format("&number&",game.getConfig().getLimitSharpnessIron())))
+                            .setLore(lore).build());
                 }));
         contents.set(1, 4, ClickableItem.of((
                         new ItemBuilder(Material.DIAMOND_SWORD)
                                 .setDisplayName(game.translate("werewolf.menu.enchantments.sharpness_diamond",
-                                        game.getConfig().getLimitSharpnessDiamond()))).setLore(lore).build(),
+                                        Formatter.format("&number&",game.getConfig().getLimitSharpnessDiamond()))))
+                        .setLore(lore).build(),
                 e -> {
                     if (e.isLeftClick()) {
                         game.getConfig().setLimitSharpnessDiamond(game.getConfig().getLimitSharpnessDiamond() + 1);
@@ -155,13 +162,14 @@ public class Enchantments implements InventoryProvider {
                     }
                     e.setCurrentItem(new ItemBuilder(Material.DIAMOND_SWORD)
                             .setDisplayName(game.translate("werewolf.menu.enchantments.sharpness_diamond",
-                                    game.getConfig().getLimitSharpnessDiamond())).setLore(lore).build());
+                                    Formatter.format("&number&",game.getConfig().getLimitSharpnessDiamond())))
+                            .setLore(lore).build());
                 }));
         contents.set(1, 6, ClickableItem.of((
                         new ItemBuilder(Material.ARROW)
                                 .setDisplayName(
                                         game.translate("werewolf.menu.enchantments.punch",
-                                                game.getConfig().getLimitPunch()))
+                                                        Formatter.format("&number&",game.getConfig().getLimitPunch())))
                                 .setLore(lore).build()),
                 e -> {
                     if (e.isLeftClick()) {
@@ -172,13 +180,14 @@ public class Enchantments implements InventoryProvider {
                     e.setCurrentItem(new ItemBuilder(Material.ARROW)
                             .setDisplayName(
                                     game.translate("werewolf.menu.enchantments.punch",
-                                            game.getConfig().getLimitPunch()))
+                                                    Formatter.format("&number&",game.getConfig().getLimitPunch())))
                             .setLore(lore).build());
                 }));
         contents.set(1, 8, ClickableItem.of((
                         new ItemBuilder(UniversalMaterial.OAK_BOAT.getType())
                                 .setDisplayName(game.translate("werewolf.menu.enchantments.depth_rider",
-                                        game.getConfig().getLimitDepthStrider()))).setLore(lore).build(),
+                                        Formatter.format("&number&",game.getConfig().getLimitDepthStrider()))))
+                        .setLore(lore).build(),
                 e -> {
                     if (e.isLeftClick()) {
                         game.getConfig().setLimitDepthStrider(game.getConfig().getLimitDepthStrider() + 1);
@@ -189,7 +198,8 @@ public class Enchantments implements InventoryProvider {
 
                     e.setCurrentItem(new ItemBuilder(UniversalMaterial.OAK_BOAT.getType())
                             .setDisplayName(game.translate("werewolf.menu.enchantments.depth_rider",
-                                    game.getConfig().getLimitDepthStrider())).setLore(lore).build());
+                                    Formatter.format("&number&",game.getConfig().getLimitDepthStrider())))
+                            .setLore(lore).build());
                 }));
 
     }

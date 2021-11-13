@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IStuffManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -30,7 +31,8 @@ public class CommandStuffRole implements ICommand {
         for (ItemStack i : player.getInventory().getContents()) {
             stuffManager.getStuffRoles().get(args[0]).add(i);
         }
-        player.sendMessage(game.translate("werewolf.commands.admin.loot_role.perform", game.translate(args[0])));
+        player.sendMessage(game.translate("werewolf.commands.admin.loot_role.perform",
+                Formatter.format("&role&",game.translate(args[0]))));
 
         Inventory inventory;
         if (stuffManager.getTempStuff().containsKey(uuid)) {

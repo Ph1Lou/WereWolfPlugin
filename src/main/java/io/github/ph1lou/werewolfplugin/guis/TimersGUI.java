@@ -7,6 +7,7 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
@@ -69,42 +70,48 @@ public class TimersGUI implements InventoryProvider {
                 new ItemBuilder(Material.STONE_BUTTON)
 
                         .setDisplayName(game.translate("werewolf.utils.display",
-                                "-10m", c))
+                                Formatter.format("&field&","-10m"),
+                                        Formatter.format("&value&",c)))
                         .build()), e -> {
 
             config.moveTimer(key, -600);
 
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setDisplayName(game.translate("werewolf.utils.display",
-                            "-10m", getConversion(game, key)))
+                                    Formatter.format("&field&","-10m"),
+                                    Formatter.format("&value&",getConversion(game, key))))
                     .build());
 
         }));
         contents.set(0, 2, ClickableItem.of((
                 new ItemBuilder(Material.STONE_BUTTON)
                         .setDisplayName(game.translate("werewolf.utils.display",
-                                "-1m", c))
+                                        Formatter.format("&field&","-1m"),
+                                        Formatter.format("&value&",c)))
                         .build()), e -> {
 
             config.moveTimer(key, -60);
 
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setDisplayName(game.translate("werewolf.utils.display",
-                            "-1m", getConversion(game, key)))
+                                    Formatter.format("&field&","-1m"),
+                                    Formatter.format("&value&",getConversion(game, key))))
                     .build());
 
         }));
         contents.set(0, 3, ClickableItem.of((
                 new ItemBuilder(Material.STONE_BUTTON)
                         .setDisplayName(game.translate("werewolf.utils.display",
-                                "-10s", c))
+                                        Formatter.format("&field&","-10s"),
+                                        Formatter.format("&value&",c)))
                         .build()), e -> {
 
             config.moveTimer(key, -10);
 
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setDisplayName(game.translate("werewolf.utils.display",
-                            "-10s", getConversion(game, key)))
+                                    Formatter.format("&field&","-10s"),
+                                    Formatter.format("&value&",getConversion(game, key))))
                     .build());
 
         }));
@@ -112,7 +119,8 @@ public class TimersGUI implements InventoryProvider {
                 new ItemBuilder(Material.STONE_BUTTON)
                         .setDisplayName(
                                 game.translate("werewolf.utils.display",
-                                        "+10s", c))
+                                                Formatter.format("&field&","+10s"),
+                                                Formatter.format("&value&",c)))
                         .build()), e -> {
 
             config.moveTimer(key, 10);
@@ -120,35 +128,40 @@ public class TimersGUI implements InventoryProvider {
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setDisplayName(
                             game.translate("werewolf.utils.display",
-                                    "+10s", getConversion(game, key)))
+                                            Formatter.format("&field&","+10s"),
+                                            Formatter.format("&value&",getConversion(game, key))))
                     .build());
 
         }));
         contents.set(0, 6, ClickableItem.of((
                 new ItemBuilder(Material.STONE_BUTTON)
                         .setDisplayName(game.translate("werewolf.utils.display",
-                                "+1m", c))
+                                        Formatter.format("&field&","+1m"),
+                                        Formatter.format("&value&",c)))
                         .build()), e -> {
 
             config.moveTimer(key, 60);
 
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setDisplayName(game.translate("werewolf.utils.display",
-                            "+1m", getConversion(game, key)))
+                                    Formatter.format("&field&","+1m"),
+                                    Formatter.format("&value&",getConversion(game, key))))
                     .build());
 
         }));
         contents.set(0, 7, ClickableItem.of((
                 new ItemBuilder(Material.STONE_BUTTON)
                         .setDisplayName(game.translate("werewolf.utils.display",
-                                "+10m", c))
+                                        Formatter.format("&field&","+10m"),
+                                        Formatter.format("&value&",c)))
 
                         .build()), e -> {
             config.moveTimer(key, 600);
 
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setDisplayName(game.translate("werewolf.utils.display",
-                            "+10m", getConversion(game, key)))
+                                    Formatter.format("&field&","+10m"),
+                                    Formatter.format("&value&",getConversion(game, key))))
                     .build());
         }));
 
@@ -164,7 +177,8 @@ public class TimersGUI implements InventoryProvider {
                                 Material.ANVIL)
                                 .setLore(lore)
                                 .setDisplayName(game.translate(timer.getKey(),
-                                        Utils.conversion(config.getTimerValue(timer.getKey())))).build()),
+                                        Formatter.format("&timer&",Utils.conversion(config.getTimerValue(timer.getKey())))))
+                                .build()),
                         e -> this.key = timer.getKey()));
             }
 
@@ -183,20 +197,23 @@ public class TimersGUI implements InventoryProvider {
             contents.set(5, 8, null);
             contents.set(5, 2, ClickableItem.of(new ItemBuilder(Material.ARROW)
                             .setDisplayName(game.translate("werewolf.menu.roles.previous",
-                                    page, pagination.isFirst() ? page : page - 1))
+                                                    Formatter.format("&current&",page),
+                                                                    Formatter.format("&previous&",pagination.isFirst() ? page : page - 1)))
                             .build(),
 
                     e -> getInventory(player).open(player, pagination.previous().getPage())));
             contents.set(5, 6, ClickableItem.of(new ItemBuilder(Material.ARROW)
                             .setDisplayName(game.translate("werewolf.menu.roles.next",
-                                    page, pagination.isLast() ? page : page + 1))
+                                                    Formatter.format("&current&",page),
+                                                                    Formatter.format("&next&",pagination.isLast() ? page : page + 1)))
                             .build(),
 
                     e -> getInventory(player).open(player, pagination.next().getPage())));
             contents.set(5, 4, ClickableItem.empty(
                     new ItemBuilder(UniversalMaterial.SIGN.getType())
                             .setDisplayName(game.translate("werewolf.menu.roles.current",
-                                    page, items.size() / 36 + 1)).build()));
+                                    Formatter.format("&current&",page),
+                                            Formatter.format("&sum&",items.size() / 36 + 1))).build()));
         } else {
             int i = 0;
             for (ClickableItem clickableItem : items) {

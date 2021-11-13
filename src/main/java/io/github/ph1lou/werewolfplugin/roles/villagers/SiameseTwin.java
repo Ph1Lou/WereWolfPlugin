@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.*;
@@ -28,9 +29,11 @@ public class SiameseTwin extends RoleVillage {
         String extraLines;
 
         if (game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST.getKey()) > 0) {
-            extraLines= game.translate("werewolf.role.siamese_twin.siamese_twin_list", Utils.conversion(game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST.getKey())));
+            extraLines= game.translate("werewolf.role.siamese_twin.siamese_twin_list",
+                    Formatter.format("&list&",Utils.conversion(game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST.getKey()))));
         } else {
-            extraLines=  game.translate("werewolf.role.siamese_twin.siamese_twin_list", this.getBrother());
+            extraLines=  game.translate("werewolf.role.siamese_twin.siamese_twin_list",
+                    Formatter.format("&list&",this.getBrother()));
         }
 
         return new DescriptionBuilder(game, this)
@@ -42,7 +45,8 @@ public class SiameseTwin extends RoleVillage {
 
     @EventHandler
     public void onWerewolfList(WereWolfListEvent event) {
-        this.getPlayerWW().sendMessageWithKey("werewolf.role.siamese_twin.siamese_twin_list", this.getBrother());
+        this.getPlayerWW().sendMessageWithKey("werewolf.role.siamese_twin.siamese_twin_list",
+                Formatter.format("&list&",this.getBrother()));
     }
 
 

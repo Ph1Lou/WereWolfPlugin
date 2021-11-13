@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.listeners.random_events;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.ListenerManager;
@@ -109,7 +110,10 @@ public class Exposed extends ListenerManager {
         if (!exposedEvent.isCancelled()) {
             roles = roles.stream().map(game::translate).collect(Collectors.toList());
             Bukkit.broadcastMessage(game.translate("werewolf.random_events.exposed.message",
-                    playerWW.getName(), roles.get(0), roles.get(1), roles.get(2)));
+                    Formatter.format("&player&",playerWW.getName()),
+                    Formatter.format("&role1&",roles.get(0)),
+                    Formatter.format("&role2&",roles.get(1)),
+                    Formatter.format("&role3&",roles.get(2))));
         }
 
         return playerWW;

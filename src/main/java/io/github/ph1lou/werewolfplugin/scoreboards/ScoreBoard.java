@@ -54,7 +54,8 @@ public class ScoreBoard implements IScoreBoard {
 
 		String line = game.translate("werewolf.score_board.game_name");
 		scoreboard1.add(line.substring(0, Math.min(30, line.length())));
-		line = game.translate("werewolf.score_board.name", game.getGameName());
+		line = game.translate("werewolf.score_board.name",
+				Formatter.format("&name&",game.getGameName()));
 		scoreboard1.add(line.substring(0, Math.min(30, line.length())));
 	}
 	
@@ -123,7 +124,8 @@ public class ScoreBoard implements IScoreBoard {
 				Formatter.format("&border_size&",borderSize)));
 
 		scoreboard2.add(game.translate("werewolf.score_board.game_name"));
-		scoreboard2.add(game.translate("werewolf.score_board.name", game.getGameName()));
+		scoreboard2.add(game.translate("werewolf.score_board.name",
+				Formatter.format("&name&",game.getGameName())));
 	}
 
 	private void updateScoreBoardRole(){
@@ -165,7 +167,9 @@ public class ScoreBoard implements IScoreBoard {
 				roles.add(0,up.substring(0,Math.min(30,up.length())));
 
 
-				String down = game.translate("werewolf.score_board.page", inf / 6 + 1, total);
+				String down = game.translate("werewolf.score_board.page",
+						Formatter.format("&current&",inf / 6 + 1),
+						Formatter.format("&sum&",total));
 
 				roles.add(roles.size(), down.substring(0, Math.min(30, down.length())));
 
@@ -188,7 +192,8 @@ public class ScoreBoard implements IScoreBoard {
 		}
 		String line = game.translate("werewolf.score_board.game_name");
 		scoreboard3.add(line.substring(0, Math.min(30, line.length())));
-		line = game.translate("werewolf.score_board.name", game.getGameName());
+		line = game.translate("werewolf.score_board.name",
+				Formatter.format("&name&",game.getGameName()));
 		scoreboard3.add(line.substring(0, Math.min(30, line.length())));
 	}
 
@@ -224,7 +229,10 @@ public class ScoreBoard implements IScoreBoard {
 		String bot = "";
 
 		if (game.isState(StateGame.START) || game.isState(StateGame.GAME)) {
-			bot = game.translate("werewolf.tab.timer", Utils.conversion(game.getTimer()), day, dayState);
+			bot = game.translate("werewolf.tab.timer",
+					Formatter.format("&timer&",Utils.conversion(game.getTimer())),
+					Formatter.format("&day&",day),
+					Formatter.format("&day_state",dayState));
 		}
 
 		bot += game.translate("werewolf.tab.bot");

@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.listeners;
 
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.ConfigBase;
@@ -71,10 +72,11 @@ public class ChatListener implements Listener {
             }
             sb.delete(0, args[0].length() + args[1].length() + 2);
             recipient.sendMessage(game.translate("werewolf.commands.message.received",
-                    player.getName(), sb.toString()));
+                    Formatter.format("&player&",player.getName()),
+                    Formatter.format("&message&",sb.toString())));
             player.sendMessage(game.translate("werewolf.commands.message.send",
-                    args[1],
-                    sb.toString()));
+                    Formatter.format("&player&",args[1]),
+                    Formatter.format("&message&",sb.toString())));
             Sound.ANVIL_USE.play(recipient);
         }
 
@@ -90,9 +92,13 @@ public class ChatListener implements Listener {
         String format;
 
         if (player.getUniqueId().equals(UUID.fromString("056be797-2a0b-4807-9af5-37faf5384396"))) {
-            format = game.translate("werewolf.commands.admin.chat.template", "§5✦§r %s", "%s");
+            format = game.translate("werewolf.commands.admin.chat.template",
+                    Formatter.format("&player&","§5✦§r %s"),
+                    Formatter.format("&message&","%s"));
         } else {
-            format = game.translate("werewolf.commands.admin.chat.template", "%s", "%s");
+            format = game.translate("werewolf.commands.admin.chat.template",
+                    Formatter.format("&player&","%s"),
+                    Formatter.format("&message&","%s"));
         }
 
         if (moderationManager.getHosts().contains(uuid)) {

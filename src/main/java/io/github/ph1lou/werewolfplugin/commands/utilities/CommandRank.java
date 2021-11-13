@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.utilities;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
@@ -23,7 +24,8 @@ public class CommandRank implements ICommand {
         }
 
         if (queue.contains(uuid)) {
-            player.sendMessage(game.translate("werewolf.menu.rank.perform", queue.indexOf(uuid) + 1));
+            player.sendMessage(game.translate("werewolf.menu.rank.perform",
+                    Formatter.format("&position&",queue.indexOf(uuid) + 1)));
         } else {
             player.sendMessage(game.translate("werewolf.menu.rank.not_in_queue"));
         }

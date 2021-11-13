@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
 import io.github.ph1lou.werewolfapi.AuraModifier;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -69,6 +70,7 @@ public class CommandGuard implements ICommand {
                 40,
                 true));
 
-        playerWW.sendMessageWithKey("werewolf.role.guard.perform", playerArg.getName());
+        playerWW.sendMessageWithKey("werewolf.role.guard.perform",
+                Formatter.format("&player&",playerArg.getName()));
     }
 }

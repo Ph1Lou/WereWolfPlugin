@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
@@ -53,7 +54,7 @@ public class CommandComedian implements ICommand {
 
             playerWW.sendMessageWithKey(
                     "werewolf.role.comedian.wear_mask_perform",
-                    game.translate(ComedianMask.values()[i].getKey()));
+                    Formatter.format("&mask&",game.translate(ComedianMask.values()[i].getKey())));
             playerWW.addPotionModifier(PotionModifier.add(ComedianMask.values()[i].getPotionEffectType(),"comedian"));
 
         } catch (NumberFormatException ignored) {

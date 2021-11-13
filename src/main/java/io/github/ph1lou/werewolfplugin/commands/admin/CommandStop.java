@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.admin;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
@@ -13,7 +14,7 @@ public class CommandStop implements ICommand {
     public void execute(WereWolfAPI game, Player player, String[] args) {
 
         Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.stop.send",
-                player.getName()));
+                Formatter.format("&player&",player.getName())));
         ((GameManager) game).setState(StateGame.END);
         game.stopGame();
 

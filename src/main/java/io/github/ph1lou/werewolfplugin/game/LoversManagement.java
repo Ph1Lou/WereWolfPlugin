@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.game;
 
 
 import com.google.common.collect.Sets;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.ILoverManager;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
@@ -19,13 +20,11 @@ import io.github.ph1lou.werewolfplugin.roles.lovers.CursedLover;
 import io.github.ph1lou.werewolfplugin.roles.lovers.Lover;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Cupid;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -151,7 +150,6 @@ public class LoversManagement implements ILoverManager {
 
 			if (playerWW.getRole().isKey(RolesBase.CUPID.getKey())) {
 
-				UUID uuid = playerWW.getUUID();
 				Cupid cupid = (Cupid) playerWW.getRole();
 
 				if (cupid.hasPower() ||
@@ -178,10 +176,9 @@ public class LoversManagement implements ILoverManager {
 					cupid.addAffectedPlayer(playerWW1);
 					cupid.setPower(false);
 					Bukkit.getPluginManager().callEvent(new CupidLoversEvent(playerWW, Sets.newHashSet(cupid.getAffectedPlayers())));
-					Player player1 = Bukkit.getPlayer(uuid);
-					if (player1 != null) {
-						player1.sendMessage(game.translate("werewolf.role.cupid.designation_perform", playerWW2.getName(), playerWW1.getName()));
-					}
+					playerWW.sendMessageWithKey("werewolf.role.cupid.designation_perform",
+							Formatter.format("&player1&",playerWW2.getName()),
+							Formatter.format("&player2&",playerWW1.getName()));
 
 				} else {
 					playerWW2 = cupid.getAffectedPlayers().get(0);

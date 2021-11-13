@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -71,6 +72,7 @@ public class CommandSuccubus implements ICommand {
         }
 
         ((IAffectedPlayers) succubus).addAffectedPlayer(playerWW1);
-        playerWW.sendMessageWithKey("werewolf.role.succubus.charming_beginning", playerArg.getName());
+        playerWW.sendMessageWithKey("werewolf.role.succubus.charming_beginning",
+                Formatter.format("&player&",playerArg.getName()));
     }
 }

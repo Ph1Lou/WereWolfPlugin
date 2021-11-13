@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
@@ -107,7 +108,7 @@ public class VillageIdiot extends RoleVillage implements IPower {
         this.getPlayerWW().removePlayerMaxHealth(4);
         event.setCancelled(true);
         Bukkit.broadcastMessage(this.game.translate("werewolf.role.village_idiot.announce",
-                this.getPlayerWW().getName()));
+                Formatter.format("&player&",this.getPlayerWW().getName())));
     }
 }
 

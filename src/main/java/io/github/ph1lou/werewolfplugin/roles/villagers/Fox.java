@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.minuskube.inv.ClickableItem;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
@@ -126,7 +127,7 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
 
         setPower(true);
         this.getPlayerWW().sendMessageWithKey("werewolf.role.fox.smell_message",
-                game.getConfig().getUseOfFlair() - getUse());
+                Formatter.format("&number&",game.getConfig().getUseOfFlair() - getUse()));
     }
 
 
@@ -135,10 +136,10 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
 
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.fox.description",
-                        game.getConfig().getDistanceFox(),
-                        Utils.conversion(game.getConfig()
-                                .getTimerValue(TimerBase.FOX_SMELL_DURATION.getKey())),
-                        game.getConfig().getUseOfFlair() - use))
+                        Formatter.format("&blocks&",game.getConfig().getDistanceFox()),
+                                Formatter.format("&timer&",Utils.conversion(game.getConfig()
+                                .getTimerValue(TimerBase.FOX_SMELL_DURATION.getKey()))),
+                                Formatter.format("&number&",game.getConfig().getUseOfFlair() - use)))
                 .setEffects(game.translate("werewolf.role.fox.effect"))
                 .build();
     }
@@ -195,7 +196,7 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
         if (temp % 10 > 0 && temp % 10 <= 100f /
                 (game.getConfig().getTimerValue(TimerBase.FOX_SMELL_DURATION.getKey()) + 1)) {
             player.sendMessage(game.translate("werewolf.role.fox.progress",
-                    Math.min(100, Math.floor(temp))));
+                    Formatter.format("&progress&",Math.min(100, Math.floor(temp)))));
         }
 
         if (temp >= 100) {
@@ -211,19 +212,20 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
                 if (sniffEvent.isWereWolf()) {
                     player.sendMessage(game.translate(
                             "werewolf.role.fox.werewolf",
-                            playerWW.getName()));
+                            Formatter.format("&player&",playerWW.getName())));
                     player.sendMessage(game.translate("werewolf.role.fox.warn"));
                 } else {
                     player.sendMessage(game.translate(
                             "werewolf.role.fox.not_werewolf",
-                            playerWW.getName()));
+                            Formatter.format("&player&",playerWW.getName())));
                 }
 
 
                 if (playerWW.getRole().isWereWolf()) {
                     BukkitUtils.scheduleSyncDelayedTask(() -> {
                         if (game.isState(StateGame.GAME)) {
-                            playerWW.sendMessageWithKey("werewolf.role.fox.smell", Sound.DONKEY_ANGRY);
+                            playerWW.sendMessageWithKey("werewolf.role.fox.smell");
+                            playerWW.sendSound(Sound.DONKEY_ANGRY);
                         }
                     }, 20 * 60 * 5);
                 }
@@ -246,7 +248,7 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
                 new ItemBuilder(UniversalMaterial.CARROT.getType())
                         .setLore(lore)
                         .setDisplayName(game.translate("werewolf.menu.advanced_tool.fox_smell_number",
-                                config.getUseOfFlair()))
+                                        Formatter.format("&number&",config.getUseOfFlair())))
                         .build(), e -> {
                     if (e.isLeftClick()) {
                         config.setUseOfFlair(config.getUseOfFlair() + 1);
@@ -257,7 +259,7 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
 
                     e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                             .setDisplayName(game.translate("werewolf.menu.advanced_tool.fox_smell_number",
-                                    config.getUseOfFlair()))
+                                            Formatter.format("&number&",config.getUseOfFlair())))
                             .build());
 
                 });
@@ -272,7 +274,7 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
         return ClickableItem.of((
                 new ItemBuilder(UniversalMaterial.ORANGE_WOOL.getStack())
                         .setDisplayName(game.translate("werewolf.menu.advanced_tool.fox",
-                                config.getDistanceFox()))
+                                        Formatter.format("&number&",config.getDistanceFox())))
                         .setLore(lore).build()), e -> {
 
             if (e.isLeftClick()) {
@@ -285,7 +287,7 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setLore(lore)
                     .setDisplayName(game.translate("werewolf.menu.advanced_tool.fox",
-                            config.getDistanceFox()))
+                                    Formatter.format("&number&",config.getDistanceFox())))
                     .build());
 
         });

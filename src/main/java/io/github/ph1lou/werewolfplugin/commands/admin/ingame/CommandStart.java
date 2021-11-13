@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
@@ -38,8 +39,8 @@ public class CommandStart implements ICommand {
         if (game.getMapManager().getPercentageGenerated() < 100) {
             player.sendMessage(
                     game.translate("werewolf.commands.admin.generation.not_finished",
-                            new DecimalFormat("0.0")
-                                    .format(game.getMapManager().getPercentageGenerated())));
+                            Formatter.format("&progress&",new DecimalFormat("0.0")
+                                    .format(game.getMapManager().getPercentageGenerated()))));
             return;
         }
 

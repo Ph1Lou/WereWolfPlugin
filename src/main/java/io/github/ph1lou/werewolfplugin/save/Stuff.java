@@ -3,8 +3,10 @@ package io.github.ph1lou.werewolfplugin.save;
 import io.github.ph1lou.werewolfapi.IStuffManager;
 import io.github.ph1lou.werewolfapi.registers.AddonRegister;
 import io.github.ph1lou.werewolfapi.registers.RoleRegister;
+import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -12,6 +14,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -80,17 +83,17 @@ public class Stuff implements IStuffManager {
         int pos = 0;
         FileConfiguration config = getOrCreateCustomConfig(main, configName);
         if (config == null) {
-            System.out.println("[pluginLG] backup error");
+            Bukkit.getLogger().warning("[pluginLG] backup error");
             return;
         }
 
         for (ItemStack i : startLoot) {
-            config.set("start_loot." + pos, i);
+            this.setItem(config,"start_loot." + pos,i);
             pos++;
         }
         pos = 0;
         for (ItemStack i : deathLoot) {
-            config.set("death_loot." + pos, i);
+            this.setItem(config,"death_loot." + pos, i);
             pos++;
         }
 
@@ -108,7 +111,7 @@ public class Stuff implements IStuffManager {
         int pos = 0;
         FileConfiguration config = getOrCreateCustomConfig(plugin, configName);
         if (config == null) {
-            System.out.println("[pluginLG] backup error");
+            Bukkit.getLogger().warning("[pluginLG] backup error");
             return;
         }
 
@@ -116,7 +119,7 @@ public class Stuff implements IStuffManager {
             if(roleRegister.getAddonKey().equals(keyAddon)){
                 String key = roleRegister.getKey();
                 for (ItemStack i : stuffRoles.get(key)) {
-                    config.set(key + "." + pos, i);
+                    this.setItem(config,key + "." + pos,i);
                     pos++;
                 }
                 pos = 0;
@@ -158,7 +161,7 @@ public class Stuff implements IStuffManager {
                 if (configurationSection != null) {
                     Set<String> sl = configurationSection.getKeys(false);
                     for (String s2 : sl) {
-                        temp.get(key).add(config.getItemStack(key + "." + s2));
+                        temp.get(key).add(this.getItem(config,key + "." + s2));
                     }
                 }
             }
@@ -178,10 +181,7 @@ public class Stuff implements IStuffManager {
             Set<String> sl = configurationSection.getKeys(false);
 
             for (String s : sl) {
-                ItemStack item = config.getItemStack("start_loot." + s);
-                if (item != null) {
-                    startLoot.addItem(item);
-                }
+                startLoot.addItem(this.getItem(config,"start_loot." + s));
             }
         }
 
@@ -190,8 +190,47 @@ public class Stuff implements IStuffManager {
         if(configurationSection!=null){
             Set<String> sl = configurationSection.getKeys(false);
             for (String s : sl) {
-                deathLoot.add(config.getItemStack("death_loot." + s));
+                deathLoot.add(this.getItem(config,"death_loot." + s));
             }
+        }
+    }
+
+    private ItemStack getItem(FileConfiguration file, String path){
+
+        ItemStack item;
+        if(file.contains(path+".potion_data")){
+            item=file.getItemStack(path+".item");
+        }
+        else{
+            item=file.getItemStack(path);
+        }
+        if(item ==null){
+            item=new ItemStack(Material.AIR);
+        }
+
+        if (file.contains(path+".potion_data")) {
+            int amount = item.getAmount();
+            item = VersionUtils.getVersionUtils()
+                    .getPotionItem((short) file.getInt(path+".potion_data"));
+            item.setAmount(amount);
+        }
+        return item;
+    }
+
+    private void setItem(FileConfiguration file, String path,@Nullable ItemStack item){
+
+        if(item == null){
+            return;
+        }
+
+        short id = VersionUtils.getVersionUtils().generatePotionId(item);
+
+        if(id != 0){
+            file.set(path+".potion_data",id);
+            file.set(path+".item",item);
+        }
+        else{
+            file.set(path,item);
         }
     }
 

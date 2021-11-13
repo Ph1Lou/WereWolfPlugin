@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -75,9 +76,9 @@ public class Raven extends RoleWithLimitedSelectionDuration implements IAffected
         setPower(true);
 
         this.getPlayerWW().sendMessageWithKey("werewolf.role.raven.curse_message",
-                Utils.conversion(
+                Formatter.format("&timer&",Utils.conversion(
                         game.getConfig()
-                                .getTimerValue(TimerBase.POWER_DURATION.getKey())));
+                                .getTimerValue(TimerBase.POWER_DURATION.getKey()))));
     }
 
 

@@ -8,6 +8,7 @@ import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.RegisterManager;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
+import org.bukkit.Bukkit;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -30,10 +31,10 @@ public class FileUtils_ {
 
         if (!file.exists()) {
             if (file.getParentFile().mkdirs()) {
-                System.out.println("[WereWolfPlugin] Create Parent Directory for " + file.getName());
+                Bukkit.getLogger().info("[WereWolfPlugin] Create Parent Directory for " + file.getName());
             }
             if (file.createNewFile()) {
-                System.out.println("[WereWolfPlugin] Create " + file.getName());
+                Bukkit.getLogger().info("[WereWolfPlugin] Create " + file.getName());
             }
         }
     }
@@ -103,7 +104,7 @@ public class FileUtils_ {
 
         if (source == null) return;
 
-        System.out.println("[WereWolfPlugin] Copying ->" + source + "\n\tto ->" + destination);
+        Bukkit.getLogger().info("[WereWolfPlugin] Copying ->" + source + "\n\tto ->" + destination);
         File file = new File(destination);
 
         try {

@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -19,8 +20,8 @@ public class CommandDisconnected implements ICommand {
             Player player1 = Bukkit.getPlayer(playerWW.getUUID());
             if (playerWW.isState(StatePlayer.ALIVE) && player1 == null) {
                 player.sendMessage(game.translate("werewolf.commands.admin.disconnected.send",
-                        playerWW.getName(),
-                        Utils.conversion(game.getTimer() - playerWW.getDisconnectedTime())));
+                        Formatter.format("&player&",playerWW.getName()),
+                        Formatter.format("&timer&",Utils.conversion(game.getTimer() - playerWW.getDisconnectedTime()))));
             }
         }
     }

@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.listeners;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.ConfigBase;
@@ -68,7 +69,8 @@ public class CycleListener implements Listener {
         game.getMapManager().getWorld().setTime(23500);
 
         long duration = game.getConfig().getTimerValue(TimerBase.VOTE_DURATION.getKey());
-        Bukkit.broadcastMessage(game.translate("werewolf.announcement.day", event.getNumber()));
+        Bukkit.broadcastMessage(game.translate("werewolf.announcement.day",
+                Formatter.format("&number&",event.getNumber())));
         groupSizeChange();
 
         if (game.getConfig().isConfigActive(ConfigBase.VOTE.getKey()) &&
@@ -86,7 +88,7 @@ public class CycleListener implements Listener {
             if (game.getConfig().isConfigActive(ConfigBase.VOTE.getKey())
                     && !game.getVote().isStatus(VoteStatus.NOT_BEGIN)) {
                 Bukkit.broadcastMessage(game.translate("werewolf.vote.vote_time",
-                        Utils.conversion((int) duration)));
+                        Formatter.format("&timer&",Utils.conversion((int) duration))));
 
                 game.getVote().setStatus(VoteStatus.IN_PROGRESS);
 
@@ -137,7 +139,7 @@ public class CycleListener implements Listener {
         game.getMapManager().getWorld().setTime(12000);
 
         Bukkit.broadcastMessage(game.translate("werewolf.announcement.night",
-                event.getNumber()));
+                Formatter.format("&number&",event.getNumber())));
         groupSizeChange();
 
         if (duration > 0) {
@@ -179,12 +181,12 @@ public class CycleListener implements Listener {
                         player.sendMessage(
                                 game.translate(
                                         "werewolf.commands.admin.group.group_change",
-                                        game.getGroup()));
+                                        Formatter.format("&number&",game.getGroup())));
                         VersionUtils.getVersionUtils().sendTitle(
                                 player,
                                 game.translate("werewolf.commands.admin.group.top_title"),
                                 game.translate("werewolf.commands.admin.group.bot_title",
-                                        game.getGroup()),
+                                        Formatter.format("&number&",game.getGroup())),
                                 20,
                                 60,
                                 20);

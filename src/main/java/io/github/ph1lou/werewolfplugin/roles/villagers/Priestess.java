@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.minuskube.inv.ClickableItem;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -83,10 +84,10 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
 
         this.getPlayerWW().sendMessageWithKey(
                 "werewolf.role.priestess.perform",
-                game.getConfig().getDistancePriestess(),
-                Utils.conversion(
+                Formatter.format("&blocks",game.getConfig().getDistancePriestess()),
+                Formatter.format("&timer&",Utils.conversion(
                         game.getConfig()
-                                .getTimerValue(TimerBase.POWER_DURATION.getKey())));
+                                .getTimerValue(TimerBase.POWER_DURATION.getKey()))));
     }
 
 
@@ -183,7 +184,7 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
         return ClickableItem.of((
                 new ItemBuilder(UniversalMaterial.BLUE_WOOL.getStack())
                         .setDisplayName(game.translate("werewolf.menu.advanced_tool.priestess",
-                                config.getDistancePriestess()))
+                                        Formatter.format("&number&",config.getDistancePriestess())))
                         .setLore(lore).build()), e -> {
 
             if (e.isLeftClick()) {
@@ -196,7 +197,7 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setLore(lore)
                     .setDisplayName(game.translate("werewolf.menu.advanced_tool.priestess",
-                            config.getDistancePriestess()))
+                                    Formatter.format("&number&",config.getDistancePriestess())))
                     .build());
 
         });

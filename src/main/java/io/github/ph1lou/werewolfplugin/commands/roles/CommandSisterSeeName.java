@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -38,8 +39,9 @@ public class CommandSisterSeeName implements ICommand {
 
 
         playerWW.sendMessageWithKey("werewolf.role.sister.reveal_killer_name",
+                Formatter.format("&player&",
                 killerWW != null ?
                         killerWW.getName() :
-                        game.translate("werewolf.utils.pve"));
+                        game.translate("werewolf.utils.pve")));
     }
 }

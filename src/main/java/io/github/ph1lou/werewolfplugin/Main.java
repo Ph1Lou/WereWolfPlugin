@@ -48,8 +48,8 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
         Objects.requireNonNull(getCommand("a")).setExecutor(new Admin(this));
         Objects.requireNonNull(getCommand("ww")).setExecutor(new Command(this));
         MapManager mapManager = (MapManager) currentGame.getMapManager();
-        Bukkit.getScheduler().scheduleSyncDelayedTask(this, mapManager::init);
 
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this, mapManager::init);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> Bukkit.getOnlinePlayers()
                 .forEach(player -> {
                     ActionBarEvent actionBarEvent = new ActionBarEvent(player.getUniqueId());

@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.listeners.random_events;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.ListenerManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -173,7 +174,9 @@ public class LootBox extends ListenerManager {
             chestHasBeenOpen.put(location, false);
         }
 
-        Bukkit.broadcastMessage(game.translate("werewolf.random_events.loot_box.villager_death", deathName, nbTarget));
+        Bukkit.broadcastMessage(game.translate("werewolf.random_events.loot_box.villager_death",
+                Formatter.format("&player&",deathName),
+                Formatter.format("&number&",nbTarget)));
     }
 
     @EventHandler

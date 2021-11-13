@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.minuskube.inv.ClickableItem;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
@@ -52,15 +53,19 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
         String extraLines;
 
         if (game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST.getKey()) > 0) {
-            extraLines= game.translate("werewolf.role.sister.sisters_list", Utils.conversion(game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST.getKey())));
+            extraLines= game.translate("werewolf.role.sister.sisters_list",
+                    Formatter.format("&list&",
+                            Utils.conversion(game.getConfig()
+                                    .getTimerValue(TimerBase.WEREWOLF_LIST.getKey()))));
         } else {
-            extraLines= game.translate("werewolf.role.sister.sisters_list", this.getSister());
+            extraLines= game.translate("werewolf.role.sister.sisters_list",
+                    Formatter.format("&list&",this.getSister()));
         }
 
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.sister.description"))
                 .setEffects(game.translate("werewolf.role.sister.effect",
-                        game.getConfig().getDistanceSister()))
+                        Formatter.format("&blocks&", game.getConfig().getDistanceSister())))
                 .addExtraLines(extraLines)
                 .build();
     }
@@ -73,7 +78,8 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
 
     @EventHandler
     public void onWerewolfList(WereWolfListEvent event) {
-        this.getPlayerWW().sendMessageWithKey("werewolf.role.sister.sisters_list", this.getSister());
+        this.getPlayerWW().sendMessageWithKey("werewolf.role.sister.sisters_list",
+                Formatter.format("&list&",this.getSister()));
     }
 
     private String getSister() {
@@ -177,6 +183,9 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
 
         textComponent.addExtra(role);
 
+        textComponent.addExtra(new TextComponent(game.translate("werewolf.role.sister.end_message",
+                Formatter.format("&player&",sisterWW.getName()))));
+
         this.getPlayerWW().sendMessage(textComponent);
 
         killerWWS.add(sisterWW.getLastKiller().orElse(null));
@@ -227,7 +236,7 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
         return ClickableItem.of((
                 new ItemBuilder(UniversalMaterial.GRAY_WOOL.getStack())
                         .setDisplayName(game.translate("werewolf.menu.advanced_tool.sister",
-                                config.getDistanceSister()))
+                                        Formatter.format("&number&",config.getDistanceSister())))
                         .setLore(lore).build()), e -> {
 
             if (e.isLeftClick()) {
@@ -240,7 +249,7 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setLore(lore)
                     .setDisplayName(game.translate("werewolf.menu.advanced_tool.sister",
-                            config.getDistanceSister()))
+                                    Formatter.format("&number&",config.getDistanceSister())))
                     .build());
 
         });

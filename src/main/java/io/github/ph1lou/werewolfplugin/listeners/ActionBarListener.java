@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.listeners;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
@@ -34,8 +35,9 @@ public class ActionBarListener implements Listener {
 
         int d = Utils.midDistance(player);
         event.setActionBar(event.getActionBar() + game.translate("werewolf.action_bar.in_game",
-                d, d + 300,
-                (int) Math.floor(player.getLocation().getY())));
+                Formatter.format("&min&",d),
+                Formatter.format("&max&",d + 300),
+                Formatter.format("&height&",(int) Math.floor(player.getLocation().getY()))));
     }
 
     @EventHandler
@@ -65,9 +67,9 @@ public class ActionBarListener implements Listener {
         if (game.getMapManager().getPercentageGenerated() < 100) {
             event.setActionBar(event.getActionBar() +
                     game.translate("werewolf.action_bar.progress",
-                            new DecimalFormat("0.0")
+                            Formatter.format("&progress&",new DecimalFormat("0.0")
                                     .format(game.getMapManager()
-                                            .getPercentageGenerated())));
+                                            .getPercentageGenerated()))));
 
             return;
         }

@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
 import com.google.common.collect.Sets;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -64,6 +65,8 @@ public class CommandCupid implements ICommand {
         }
         ((IPower) cupid).setPower(false);
         Bukkit.getPluginManager().callEvent(new CupidLoversEvent(playerWW, Sets.newHashSet(((IAffectedPlayers) cupid).getAffectedPlayers())));
-        playerWW.sendMessageWithKey("werewolf.role.cupid.designation_perform", args[0], args[1]);
+        playerWW.sendMessageWithKey("werewolf.role.cupid.designation_perform",
+                Formatter.format("&player1&",args[0]),
+                        Formatter.format("&player2&",args[1]));
     }
 }

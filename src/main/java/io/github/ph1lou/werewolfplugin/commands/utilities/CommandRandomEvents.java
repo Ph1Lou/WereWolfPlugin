@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.utilities;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.ConfigBase;
@@ -26,8 +27,8 @@ public class CommandRandomEvents implements ICommand {
 
             if (game.getConfig().getProbability(randomEventRegister.getKey()) > 0) {
                 sb.append(game.translate("werewolf.menu.random_events.command_message",
-                        game.translate(randomEventRegister.getKey()),
-                        game.getConfig().getProbability(randomEventRegister.getKey()))).append(", ");
+                        Formatter.format("&event&",game.translate(randomEventRegister.getKey())),
+                                Formatter.format("&number&",game.getConfig().getProbability(randomEventRegister.getKey())))).append(", ");
             }
         }
 

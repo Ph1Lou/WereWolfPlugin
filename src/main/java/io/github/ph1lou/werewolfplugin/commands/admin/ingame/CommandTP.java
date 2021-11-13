@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -35,7 +36,9 @@ public class CommandTP implements ICommand {
             }
 
             player.teleport(playerArg1);
-            String message = game.translate("werewolf.commands.admin.teleportation.send", player.getName(), playerArg1.getName());
+            String message = game.translate("werewolf.commands.admin.teleportation.send",
+                    Formatter.format("&player1&",player.getName()),
+                    Formatter.format("&player2&",playerArg1.getName()));
             moderationManager.alertHostsAndModerators(message);
             if (!moderationManager.isStaff(uuid)) {
                 player.sendMessage(message);
@@ -65,7 +68,9 @@ public class CommandTP implements ICommand {
         }
 
         playerArg1.teleport(playerArg1);
-        String message = game.translate("werewolf.commands.admin.teleportation.send", playerArg1.getName(), playerArg2.getName());
+        String message = game.translate("werewolf.commands.admin.teleportation.send",
+                Formatter.format("&player1&",playerArg1.getName()),
+                Formatter.format("&player2&",playerArg2.getName()));
         moderationManager.alertHostsAndModerators(message);
         if (!moderationManager.isStaff(uuid)) {
             player.sendMessage(message);

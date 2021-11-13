@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.game;
 
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.IVoteManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -67,7 +68,8 @@ public class Vote implements Listener, IVoteManager {
 			this.voters.put(voteEvent.getPlayerWW(), voteEvent.getTargetWW());
 			this.votes.merge(vote, 1, Integer::sum);
 
-			voterWW.sendMessageWithKey("werewolf.vote.perform_vote", vote.getName());
+			voterWW.sendMessageWithKey("werewolf.vote.perform_vote",
+					Formatter.format("&player&",vote.getName()));
 		}
 
 	}
@@ -123,7 +125,9 @@ public class Vote implements Listener, IVoteManager {
 
 			String voterName = playerWW1.getName();
 			String voteName = voteWW.getName();
-			player.sendMessage(game.translate("werewolf.role.citizen.see_vote", voterName, voteName));
+			player.sendMessage(game.translate("werewolf.role.citizen.see_vote",
+					Formatter.format("&voter&",voterName),
+					Formatter.format("&player&",voteName)));
 		}
 	}
 
@@ -168,7 +172,9 @@ public class Vote implements Listener, IVoteManager {
 			}
 			playerWW.removePlayerMaxHealth(10);
 
-			Bukkit.broadcastMessage(game.translate("werewolf.vote.vote_result", playerWW.getName(), this.votes.get(playerWW)));
+			Bukkit.broadcastMessage(game.translate("werewolf.vote.vote_result",
+					Formatter.format("&player&",playerWW.getName()),
+					Formatter.format("&number&",this.votes.get(playerWW))));
 
 			int task = BukkitUtils.scheduleSyncRepeatingTask(() -> {
 				if (game.isState(StateGame.GAME)) {

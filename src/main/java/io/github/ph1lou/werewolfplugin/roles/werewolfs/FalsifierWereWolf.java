@@ -1,8 +1,8 @@
 package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
-import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.Camp;
@@ -14,7 +14,6 @@ import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleWereWolf;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
-import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -74,7 +73,7 @@ public class FalsifierWereWolf extends RoleWereWolf {
             displayAura = roles.getDefaultAura();
         }
         this.getPlayerWW().sendMessageWithKey("werewolf.role.falsifier_werewolf.display_role_message",
-                game.translate(getDisplayRole()));
+                Formatter.format("&role&",game.translate(getDisplayRole())));
     }
 
 
@@ -85,7 +84,7 @@ public class FalsifierWereWolf extends RoleWereWolf {
                 .setDescription(game.translate("werewolf.role.falsifier_werewolf.description"))
                 .setEffects(game.translate("werewolf.description.werewolf"))
                 .addExtraLines(game.translate("werewolf.role.falsifier_werewolf.role",
-                        game.translate(this.getDisplayRole())))
+                                Formatter.format("&role&",game.translate(this.getDisplayRole()))))
                 .build();
     }
 

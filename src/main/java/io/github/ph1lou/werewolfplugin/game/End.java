@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.game;
 
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.Category;
@@ -131,12 +132,17 @@ public class End {
             StringBuilder sb = new StringBuilder();
 
             if (playerWW1.isState(StatePlayer.DEATH)) {
-                sb.append(game.translate("werewolf.end.reveal_death", playerName, role));
+                sb.append(game.translate("werewolf.end.reveal_death",
+                        Formatter.format("&player&",playerName),
+                        Formatter.format("&role&",role)));
             } else {
-                sb.append(game.translate("werewolf.end.reveal", playerName, role));
+                sb.append(game.translate("werewolf.end.reveal",
+                        Formatter.format("&player&",playerName),
+                        Formatter.format("&role&",role)));
             }
             if (!playerWW1.getRole().getKey().equals(playerWW1.getRole().getDeathRole())) {
-                sb.append(game.translate("werewolf.end.thief", game.translate(playerWW1.getRole().getKey())));
+                sb.append(game.translate("werewolf.end.thief",
+                        Formatter.format("&role&",game.translate(playerWW1.getRole().getKey()))));
             }
 
             EndPlayerMessageEvent endPlayerMessageEvent = new EndPlayerMessageEvent(playerWW1, sb);
@@ -146,7 +152,8 @@ public class End {
         }
 
         for (Player p : Bukkit.getOnlinePlayers()) {
-            p.sendMessage(game.translate("werewolf.end.message", subtitles_victory));
+            p.sendMessage(game.translate("werewolf.end.message",
+                    Formatter.format("&winner&",subtitles_victory)));
             VersionUtils.getVersionUtils().sendTitle(p, game.translate("werewolf.end.victory"), subtitles_victory, 20, 60, 20);
             TextComponent msg = new TextComponent(game.translate("werewolf.bug"));
             msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/GXXCVUA"));
@@ -154,7 +161,8 @@ public class End {
         }
 
         BukkitUtils.scheduleSyncDelayedTask(game::stopGame, 20L * game.getConfig().getTimerValue(TimerBase.AUTO_RESTART_DURATION.getKey()));
-        Bukkit.broadcastMessage(game.translate("werewolf.announcement.restart", Utils.conversion(game.getConfig().getTimerValue(TimerBase.AUTO_RESTART_DURATION.getKey()))));
+        Bukkit.broadcastMessage(game.translate("werewolf.announcement.restart",
+                Formatter.format("&timer&",Utils.conversion(game.getConfig().getTimerValue(TimerBase.AUTO_RESTART_DURATION.getKey())))));
     }
 
 

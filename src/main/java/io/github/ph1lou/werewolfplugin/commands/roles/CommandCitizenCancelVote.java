@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -47,7 +48,7 @@ public class CommandCitizenCancelVote implements ICommand {
 
         playerWW.sendMessageWithKey(
                 "werewolf.role.citizen.cancelling_vote_perform",
-                voteWW.getName());
+                Formatter.format("&player&",voteWW.getName()));
         citizen.addAffectedPlayer(voteWW);
 
 

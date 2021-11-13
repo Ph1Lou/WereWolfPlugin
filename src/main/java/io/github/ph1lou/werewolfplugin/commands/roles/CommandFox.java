@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -80,6 +81,7 @@ public class CommandFox implements ICommand {
         ((IAffectedPlayers) fox).addAffectedPlayer(playerWW1);
         ((IProgress) fox).setProgress(0f);
 
-        playerWW.sendMessageWithKey("werewolf.role.fox.smell_beginning", playerArg.getName());
+        playerWW.sendMessageWithKey("werewolf.role.fox.smell_beginning",
+                Formatter.format("&player&",playerArg.getName()));
     }
 }

@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -85,6 +86,6 @@ public class CommandLibrarian implements ICommand {
 
         playerWW.sendMessageWithKey(
                 "werewolf.role.librarian.perform",
-                selectionPlayer.getName());
+                Formatter.format("&player&",selectionPlayer.getName()));
     }
 }

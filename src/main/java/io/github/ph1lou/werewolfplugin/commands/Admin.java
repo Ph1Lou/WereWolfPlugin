@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -89,7 +90,8 @@ public class Admin implements TabExecutor {
 
         if (!commandRegister.isArgNumbers(args)) {
             if (seePermissionMessages) {
-                player.sendMessage(game.translate("werewolf.check.parameters", commandRegister.getMinArgNumbers()));
+                player.sendMessage(game.translate("werewolf.check.parameters",
+                        Formatter.format("&number&",commandRegister.getMinArgNumbers())));
             }
             return false;
         }

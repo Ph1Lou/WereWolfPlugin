@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
 import io.github.ph1lou.werewolfapi.AuraModifier;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
@@ -66,6 +67,7 @@ public class CommandProtector implements ICommand {
         playerWW1.addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,"protector"));
         playerWW1.getRole().addAuraModifier(new AuraModifier("protection", Aura.LIGHT, 40, true));
         playerWW1.sendMessageWithKey("werewolf.role.protector.get_protection");
-        playerWW.sendMessageWithKey("werewolf.role.protector.protection_perform", playerArg.getName());
+        playerWW.sendMessageWithKey("werewolf.role.protector.protection_perform",
+                Formatter.format("&player&",playerArg.getName()));
     }
 }

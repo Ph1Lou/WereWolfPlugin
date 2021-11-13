@@ -5,6 +5,7 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
@@ -52,7 +53,7 @@ public class Maps implements InventoryProvider {
             contents.set(0, i, ClickableItem.of((
                             new ItemBuilder(UniversalMaterial.MAP.getType())
                                     .setDisplayName(game.translate("werewolf.menu.maps.map",
-                                            file.getName())).build()),
+                                            Formatter.format("&world&",file.getName()))).build()),
                     e -> {
                         if (!game.isState(StateGame.LOBBY)) {
                             player.sendMessage(game.translate("werewolf.check.game_in_progress"));

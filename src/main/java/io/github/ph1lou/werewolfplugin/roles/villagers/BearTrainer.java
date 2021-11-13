@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.minuskube.inv.ClickableItem;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -92,7 +93,8 @@ public class BearTrainer extends RoleVillage {
         Bukkit.getOnlinePlayers()
                 .forEach(Sound.WOLF_GROWL::play);
 
-        Bukkit.broadcastMessage(game.translate("werewolf.role.bear_trainer.growling_message", builder));
+        Bukkit.broadcastMessage(game.translate("werewolf.role.bear_trainer.growling_message",
+                Formatter.format("&growling&",builder)));
     }
 
     @Override
@@ -100,7 +102,7 @@ public class BearTrainer extends RoleVillage {
 
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.bear_trainer.description",
-                        game.getConfig().getDistanceBearTrainer()))
+                                Formatter.format("&blocks&",game.getConfig().getDistanceBearTrainer())))
                 .build();
     }
 
@@ -118,7 +120,7 @@ public class BearTrainer extends RoleVillage {
         return ClickableItem.of((
                 new ItemBuilder(UniversalMaterial.BROWN_WOOL.getStack())
                         .setDisplayName(game.translate("werewolf.menu.advanced_tool.bear_trainer",
-                                config.getDistanceBearTrainer()))
+                                        Formatter.format("&number&",config.getDistanceBearTrainer())))
                         .setLore(lore).build()), e -> {
             if (e.isLeftClick()) {
                 config.setDistanceBearTrainer((config.getDistanceBearTrainer() + 5));
@@ -130,7 +132,7 @@ public class BearTrainer extends RoleVillage {
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setLore(lore)
                     .setDisplayName(game.translate("werewolf.menu.advanced_tool.bear_trainer",
-                            config.getDistanceBearTrainer()))
+                                    Formatter.format("&number&",config.getDistanceBearTrainer())))
                     .build());
 
         });

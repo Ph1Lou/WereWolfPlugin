@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -60,9 +61,9 @@ public class Comedian extends RoleWithLimitedSelectionDuration {
         setPower(true);
 
         this.getPlayerWW().sendMessageWithKey("werewolf.role.comedian.wear_mask_message",
-                Utils.conversion(
+                Formatter.format("&timer&",Utils.conversion(
                         game.getConfig().getTimerValue(
-                                TimerBase.POWER_DURATION.getKey())));
+                                TimerBase.POWER_DURATION.getKey()))));
 
     }
 
@@ -72,11 +73,11 @@ public class Comedian extends RoleWithLimitedSelectionDuration {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.comedian.description"))
                 .addExtraLines(game.translate("werewolf.role.comedian.masks",
-                        comedianMasks.isEmpty() ?
+                                Formatter.format("&number&",comedianMasks.isEmpty() ?
                                 game.translate("werewolf.role.comedian.none") :
                                 comedianMasks.stream()
                                         .map(comedianMasks1 -> game.translate(comedianMasks1.getKey()))
-                                        .collect(Collectors.joining(" "))))
+                                        .collect(Collectors.joining(" ")))))
                 .build();
 
     }

@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -65,11 +66,12 @@ public class CommandShaman implements ICommand {
         playerWW.removePlayerMaxHealth(2);
 
         if (game.getRandom().nextBoolean()) {
-            playerWW.sendMessageWithKey("werewolf.role.shaman.victim_name", playerWW1.getName());
+            playerWW.sendMessageWithKey("werewolf.role.shaman.victim_name",
+                    Formatter.format("&player&",playerWW1.getName()));
         } else {
             IRole role = playerWW1.getRole();
             playerWW.sendMessageWithKey("werewolf.role.shaman.victim_role",
-                    game.translate(role.getDisplayRole()));
+                    Formatter.format("&role&",game.translate(role.getDisplayRole())));
         }
 
     }

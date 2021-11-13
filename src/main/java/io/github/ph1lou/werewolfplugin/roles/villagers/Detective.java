@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.minuskube.inv.ClickableItem;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -69,7 +70,9 @@ public class Detective extends RoleWithLimitedSelectionDuration implements IAffe
 
 
         this.getPlayerWW().sendMessageWithKey("werewolf.role.detective.inspection_message",
-                Utils.conversion(game.getConfig().getTimerValue(TimerBase.POWER_DURATION.getKey())));
+                Formatter.format("&timer&",
+                        Utils.conversion(game.getConfig()
+                                .getTimerValue(TimerBase.POWER_DURATION.getKey()))));
     }
 
 

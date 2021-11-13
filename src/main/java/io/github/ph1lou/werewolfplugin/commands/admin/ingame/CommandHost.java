@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -34,7 +35,8 @@ public class CommandHost implements ICommand {
                 player.sendMessage(game.translate("werewolf.commands.admin.host.one"));
                 return;
             }
-            Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.host.remove", host.getName()));
+            Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.host.remove",
+                    Formatter.format("&player&",host.getName())));
             moderationManager.getHosts().remove(uuid);
 
         } else {
@@ -43,7 +45,8 @@ public class CommandHost implements ICommand {
                 ((GameManager) game).finalJoin(host);
             }
             moderationManager.addHost(uuid);
-            Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.host.add", host.getName()));
+            Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.host.add",
+                    Formatter.format("&player&",host.getName())));
         }
         Bukkit.getPluginManager().callEvent(new HostEvent(uuid, moderationManager.getHosts().contains(uuid)));
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(host));

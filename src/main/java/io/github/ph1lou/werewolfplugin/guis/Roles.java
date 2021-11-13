@@ -7,6 +7,7 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.enums.Camp;
@@ -199,14 +200,16 @@ public class Roles implements InventoryProvider {
                 AtomicBoolean unRemovable = new AtomicBoolean(false);
                 List<String> lore2 = new ArrayList<>(lore);
                 roleRegister.getLoreKey().stream().map(game::translate).map(s -> Arrays.stream(s.split("\\n")).collect(Collectors.toList())).forEach(lore2::addAll);
-                roleRegister.getRequireRole().ifPresent(roleKey -> lore2.add(game.translate("werewolf.menu.roles.need", game.translate(roleKey))));
+                roleRegister.getRequireRole().ifPresent(roleKey -> lore2.add(game.translate("werewolf.menu.roles.need",
+                        Formatter.format("&role&",game.translate(roleKey)))));
                 main.getRegisterManager().getRolesRegister().stream()
                         .filter(roleRegister1 -> roleRegister1.getRequireRole().isPresent())
                         .filter(roleRegister1 -> game.getConfig().getRoleCount(roleRegister1.getKey()) > 0)
                         .filter(roleRegister1 -> roleRegister1.getRequireRole().get().equals(key))
                         .map(RoleRegister::getKey)
-                        .findFirst().ifPresent(s -> {
-                    lore2.add(game.translate("werewolf.menu.roles.dependant_load", game.translate(s)));
+                        .findFirst().ifPresent(role -> {
+                    lore2.add(game.translate("werewolf.menu.roles.dependant_load",
+                            Formatter.format("&role&",game.translate(role))));
                     unRemovable.set(true);
                 });
 
@@ -276,11 +279,23 @@ public class Roles implements InventoryProvider {
             contents.set(4, 5, null);
             contents.set(4, 7, null);
             contents.set(4, 8, null);
-            contents.set(4, 2, ClickableItem.of(new ItemBuilder(Material.ARROW).setDisplayName(game.translate("werewolf.menu.roles.previous", page, pagination.isFirst() ? page : page - 1)).build(),
+            contents.set(4, 2, ClickableItem.of(new ItemBuilder(Material.ARROW)
+                            .setDisplayName(game.translate("werewolf.menu.roles.previous",
+                                    Formatter.format("&current&",page),
+                                                    Formatter.format("&previous&",pagination.isFirst() ? page : page - 1)))
+                            .build(),
                     e -> getInventory(player, this.category).open(player, pagination.previous().getPage())));
-            contents.set(4, 6, ClickableItem.of(new ItemBuilder(Material.ARROW).setDisplayName(game.translate("werewolf.menu.roles.next", page, pagination.isLast() ? page : page + 1)).build(),
+            contents.set(4, 6, ClickableItem.of(new ItemBuilder(Material.ARROW)
+                            .setDisplayName(game.translate("werewolf.menu.roles.next",
+                                                    Formatter.format("&current&",page),
+                                                                    Formatter.format("&next&",pagination.isLast() ? page : page + 1)))
+                            .build(),
                     e -> getInventory(player, this.category).open(player, pagination.next().getPage())));
-            contents.set(4, 4, ClickableItem.empty(new ItemBuilder(UniversalMaterial.SIGN.getType()).setDisplayName(game.translate("werewolf.menu.roles.current", page, items.size() / 27 + 1)).build()));
+            contents.set(4, 4, ClickableItem.empty(new ItemBuilder(UniversalMaterial.SIGN.getType())
+                    .setDisplayName(game.translate("werewolf.menu.roles.current",
+                                    Formatter.format("&current&",page),
+                                                    Formatter.format("&sum&",items.size() / 27 + 1)))
+                    .build()));
         } else {
             int i = 0;
             for (ClickableItem clickableItem : items) {

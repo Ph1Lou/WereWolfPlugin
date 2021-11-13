@@ -302,14 +302,14 @@ public class WorldFillTask implements Runnable {
 		// Due to chunk generation eating up memory and Java being too slow about GC, we need to track memory availability
 		int availMem = AvailableMemory();
 
-		System.out.println("[Fill] " + text + " (free mem: " + availMem + " MB)");
+		Bukkit.getLogger().info("[Fill] " + text + " (free mem: " + availMem + " MB)");
 
 
 		if (availMem < 200) {    // running low on memory, auto-pause
 
 			pausedForMemory = true;
 			text = "Available memory is very low, task is pausing. A cleanup will be attempted now, and the task will automatically continue if/when sufficient memory is freed up.\n Alternatively, if you restart the server, this task will automatically continue once the server is back up.";
-			System.out.println("[Fill] " + text);
+			Bukkit.getLogger().info("[Fill] " + text);
 
 			// prod Java with a request to go ahead and do GC to clean unloaded chunks from memory; this seems to work wonders almost immediately
 			// yes, explicit calls to System.gc() are normally bad, but in this case it otherwise can take a long long long time for Java to recover memory

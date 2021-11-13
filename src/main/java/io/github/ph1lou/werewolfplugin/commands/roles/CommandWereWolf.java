@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -50,7 +51,7 @@ public class CommandWereWolf implements ICommand {
                 list.append(playerWW1.getName()).append(" ");
             }
         }
-        playerWW.sendMessageWithKey("werewolf.role.werewolf.werewolf_list", list.toString());
+        playerWW.sendMessageWithKey("werewolf.role.werewolf.werewolf_list", Formatter.format("&list&",list.toString()));
         if (RegisterManager.get().getRandomEventsRegister().stream()
                 .filter(randomEventRegister -> randomEventRegister.getKey().equals(RandomEvent.DRUNKEN_WEREWOLF.getKey()))
                 .anyMatch(randomEventRegister -> randomEventRegister.getRandomEvent().isRegister())) {

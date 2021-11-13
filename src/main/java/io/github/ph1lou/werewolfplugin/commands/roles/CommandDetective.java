@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
 import com.google.common.collect.Sets;
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -28,7 +29,8 @@ public class CommandDetective implements ICommand {
         IRole detective = playerWW.getRole();
 
         if (args.length != 2) {
-            playerWW.sendMessageWithKey("werewolf.check.parameters", 2);
+            playerWW.sendMessageWithKey("werewolf.check.parameters",
+                    Formatter.format("&number&",2));
             return;
         }
 
@@ -95,8 +97,12 @@ public class CommandDetective implements ICommand {
         ((IAffectedPlayers) detective).addAffectedPlayer(playerWW2);
 
         if (event.isSameCamp()) {
-            playerWW.sendMessageWithKey("werewolf.role.detective.same_camp", player1.getName(), player2.getName());
+            playerWW.sendMessageWithKey("werewolf.role.detective.same_camp",
+                    Formatter.format("&player1&",player1.getName()),
+                    Formatter.format("&player2&",player2.getName()));
         } else
-            playerWW.sendMessageWithKey("werewolf.role.detective.opposing_camp", player1.getName(), player2.getName());
+            playerWW.sendMessageWithKey("werewolf.role.detective.opposing_camp",
+                    Formatter.format("&player1&",player1.getName()),
+                    Formatter.format("&player2&",player2.getName()));
     }
 }

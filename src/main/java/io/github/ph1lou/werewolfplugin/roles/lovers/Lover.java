@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.roles.lovers;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -62,8 +63,8 @@ public class Lover implements ILover, Listener {
                 .forEach(playerWW1 -> couple.append(playerWW1.getName()).append(" "));
 
         playerWW.sendMessageWithKey("werewolf.role.lover.description",
-                Sound.SHEEP_SHEAR,
-                couple.toString());
+                Formatter.format("&player&",couple.toString()));
+        playerWW.sendSound(Sound.SHEEP_SHEAR);
     }
 
     @EventHandler
@@ -140,7 +141,7 @@ public class Lover implements ILover, Listener {
                 .forEach(playerWW1 -> {
                     Bukkit.broadcastMessage(
                             game.translate("werewolf.role.lover.lover_death",
-                                    playerWW1.getName()));
+                                    Formatter.format("&player&",playerWW1.getName())));
                     Bukkit.getPluginManager().callEvent(
                             new LoverDeathEvent(event.getPlayerWW(), playerWW1));
                     game.death(playerWW1);
@@ -165,7 +166,8 @@ public class Lover implements ILover, Listener {
                 .filter(playerWW1 -> !playerWW.equals(playerWW1))
                 .forEach(playerWW1 -> sb2.append(playerWW1.getName()).append(" "));
 
-        sb.append(game.translate("werewolf.end.lover", sb2.toString()));
+        sb.append(game.translate("werewolf.end.lover",
+                Formatter.format("&player&",sb2.toString())));
     }
 
 
@@ -235,11 +237,12 @@ public class Lover implements ILover, Listener {
 
         if (lovers.contains(playerWW)) return;
 
-        lovers.forEach(playerWW1 -> playerWW1.sendMessageWithKey("werewolf.random_events.triple.lover_join", playerWW.getName()));
+        lovers.forEach(playerWW1 -> playerWW1.sendMessageWithKey("werewolf.random_events.triple.lover_join",
+                Formatter.format("&player&",playerWW.getName())));
 
-        playerWW.sendMessageWithKey("werewolf.random_events.triple.join", getLovers().stream()
+        playerWW.sendMessageWithKey("werewolf.random_events.triple.join", Formatter.format("&lovers&",getLovers().stream()
                 .map(IPlayerWW::getName)
-                .collect(Collectors.joining(" ")));
+                .collect(Collectors.joining(" "))));
 
         lovers.add(playerWW);
         playerWW.addLover(this);

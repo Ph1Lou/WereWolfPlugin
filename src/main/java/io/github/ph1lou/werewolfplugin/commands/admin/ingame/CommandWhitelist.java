@@ -1,5 +1,6 @@
 package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 
+import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
@@ -26,10 +27,12 @@ public class CommandWhitelist implements ICommand {
         UUID uuid = playerArg.getUniqueId();
 
         if (moderationManager.getWhiteListedPlayers().contains(uuid)) {
-            player.sendMessage(game.translate("werewolf.commands.admin.whitelist.remove"));
+            player.sendMessage(game.translate("werewolf.commands.admin.whitelist.remove",
+                    Formatter.format("&player&",playerArg.getName())));
             moderationManager.removePlayerOnWhiteList(uuid);
         } else {
-            player.sendMessage(game.translate("werewolf.commands.admin.whitelist.add"));
+            player.sendMessage(game.translate("werewolf.commands.admin.whitelist.add",
+                    Formatter.format("&player&",playerArg.getName())));
             moderationManager.addPlayerOnWhiteList(uuid);
             ((GameManager) game).finalJoin(playerArg);
         }
