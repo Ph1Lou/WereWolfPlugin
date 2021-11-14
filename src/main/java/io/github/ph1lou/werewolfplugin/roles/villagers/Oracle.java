@@ -7,6 +7,7 @@ import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
@@ -81,7 +82,7 @@ public class Oracle extends RoleWithLimitedSelectionDuration implements IAffecte
         setPower(true);
 
         this.getPlayerWW().sendMessageWithKey(
-                "werewolf.role.oracle.perform",
+                Prefix.YELLOW.getKey() , "werewolf.role.oracle.perform",
                 Formatter.format("&timer&",Utils.conversion(
                         game.getConfig()
                                 .getTimerValue(TimerBase.POWER_DURATION.getKey()))));

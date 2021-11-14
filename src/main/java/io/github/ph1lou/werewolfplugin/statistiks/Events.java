@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.CustomEvent;
@@ -187,7 +188,7 @@ public class Events implements Listener {
                     response.append(responseLine.trim());
                 }
 
-                TextComponent msg = new TextComponent(main.getWereWolfAPI().translate("werewolf.statistics.message"));
+                TextComponent msg = new TextComponent(main.getWereWolfAPI().translate(Prefix.YELLOW.getKey() , "werewolf.statistics.message"));
                 msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
                         String.format("https://ph1lou.fr/werewolfstat/detail.php?id=%s",
                                 response.toString().replaceAll("\"", ""))));

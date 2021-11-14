@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Category;
 import io.github.ph1lou.werewolfapi.enums.ConfigBase;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfplugin.RegisterManager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -20,7 +21,7 @@ public class CommandCompo implements ICommand {
 
         if (game.getConfig().isConfigActive(ConfigBase.HIDE_COMPOSITION.getKey())) {
 
-            player.sendMessage(game.translate("werewolf.commands.compo.composition_hide"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.commands.compo.composition_hide"));
 
             return;
         }
@@ -75,9 +76,12 @@ public class CommandCompo implements ICommand {
                     int number = game.getConfig().getRoleCount(key);
                     if (number > 0) {
                         if (number == 1) {
-                            sb.append(game.translate(roleRegister.getKey())).append(", ");
+                            sb.append(game.translate(roleRegister.getKey()))
+                                    .append(", ");
                         } else {
-                            sb.append(game.translate(roleRegister.getKey())).append(" (§b").append(game.getConfig().getRoleCount(key)).append("§f), ");
+                            sb.append(game.translate(roleRegister.getKey()))
+                                    .append(" (§b").append(game.getConfig().getRoleCount(key))
+                                    .append("§f), ");
                         }
                         atomicBoolean.set(true);
                     }

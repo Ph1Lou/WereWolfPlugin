@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.game.vote.VoteEndEvent;
@@ -120,7 +121,7 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
 
 
         TextComponent cancel =
-                new TextComponent(game.translate("werewolf.role.citizen.cancel_vote_message",
+                new TextComponent(game.translate(Prefix.YELLOW.getKey() , "werewolf.role.citizen.cancel_vote_message",
                         Formatter.format("&number&",hasPower() ? 1 : 0)));
 
         cancel.addExtra(cancelVote);
@@ -151,7 +152,7 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
 
 
         TextComponent see = new TextComponent(
-                game.translate("werewolf.role.citizen.see_vote_message",
+                game.translate(Prefix.YELLOW.getKey() , "werewolf.role.citizen.see_vote_message",
                         Formatter.format("&number&",2 - getUse())));
         see.addExtra(seeVote);
 

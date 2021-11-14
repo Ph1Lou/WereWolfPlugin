@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.roles.detective.InvestigateEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
@@ -29,13 +30,13 @@ public class CommandDetective implements ICommand {
         IRole detective = playerWW.getRole();
 
         if (args.length != 2) {
-            playerWW.sendMessageWithKey("werewolf.check.parameters",
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.parameters",
                     Formatter.format("&number&",2));
             return;
         }
 
         if (args[0].equalsIgnoreCase(args[1])) {
-            playerWW.sendMessageWithKey("werewolf.check.two_distinct_player");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.two_distinct_player");
             return;
         }
 
@@ -44,7 +45,7 @@ public class CommandDetective implements ICommand {
             Player playerArg = Bukkit.getPlayer(p);
 
             if (playerArg == null) {
-                playerWW.sendMessageWithKey("werewolf.check.offline_player");
+                playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.offline_player");
                 return;
             }
 
@@ -52,17 +53,17 @@ public class CommandDetective implements ICommand {
             IPlayerWW playerWW1 = game.getPlayerWW(uuid1).orElse(null);
 
             if (playerWW1 == null || playerWW1.isState(StatePlayer.DEATH)) {
-                playerWW.sendMessageWithKey("werewolf.check.player_not_found");
+                playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.player_not_found");
                 return;
             }
 
             if (uuid.equals(uuid1)) {
-                playerWW.sendMessageWithKey("werewolf.check.not_yourself");
+                playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.not_yourself");
                 return;
             }
 
             if (((IAffectedPlayers) detective).getAffectedPlayers().contains(playerWW1)) {
-                playerWW.sendMessageWithKey("werewolf.role.detective.already_inspect");
+                playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.detective.already_inspect");
                 return;
             }
         }
@@ -89,7 +90,7 @@ public class CommandDetective implements ICommand {
         Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
-            playerWW.sendMessageWithKey("werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
             return;
         }
 
@@ -97,11 +98,11 @@ public class CommandDetective implements ICommand {
         ((IAffectedPlayers) detective).addAffectedPlayer(playerWW2);
 
         if (event.isSameCamp()) {
-            playerWW.sendMessageWithKey("werewolf.role.detective.same_camp",
+            playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.detective.same_camp",
                     Formatter.format("&player1&",player1.getName()),
                     Formatter.format("&player2&",player2.getName()));
         } else
-            playerWW.sendMessageWithKey("werewolf.role.detective.opposing_camp",
+            playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.detective.opposing_camp",
                     Formatter.format("&player1&",player1.getName()),
                     Formatter.format("&player2&",player2.getName()));
     }

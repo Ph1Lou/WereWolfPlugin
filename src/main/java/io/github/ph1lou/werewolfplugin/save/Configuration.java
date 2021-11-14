@@ -371,7 +371,13 @@ public class Configuration implements IConfiguration {
 
     @Override
     public boolean isScenarioActive(String key) {
-        return scenarioValues.getOrDefault(key, registerManager.getScenariosRegister().stream().filter(scenarioRegister -> scenarioRegister.getKey().equals(key)).findFirst().map(ScenarioRegister::getDefaultValue).orElse(false));
+        return scenarioValues
+                .getOrDefault(key, registerManager.getScenariosRegister()
+                        .stream()
+                        .filter(scenarioRegister -> scenarioRegister.getKey().equals(key))
+                        .findFirst()
+                        .map(ScenarioRegister::getDefaultValue)
+                        .orElse(false));
     }
 
     @Override

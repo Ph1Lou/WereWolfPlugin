@@ -18,6 +18,7 @@ import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class Main extends JavaPlugin implements GetWereWolfAPI {
 
@@ -71,7 +72,12 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
 
     @Override
     public IRegisterManager getRegisterManager() {
-        return registerManager;
+        return this.registerManager;
+    }
+
+    @Override
+    public Optional<IRegisterManager> getAddonRegisterManager(String addonKey) {
+        return this.registerManager.getRegister(addonKey);
     }
 
     @Override

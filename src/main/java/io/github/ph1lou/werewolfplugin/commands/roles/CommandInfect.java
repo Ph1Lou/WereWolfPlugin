@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.roles.infect_father_of_the_wolves.InfectionEvent;
 import io.github.ph1lou.werewolfapi.events.werewolf.NewWereWolfEvent;
@@ -29,24 +30,24 @@ public class CommandInfect implements ICommand {
         IRole infect = playerWW.getRole();
 
         if(Bukkit.getPlayer(UUID.fromString(args[0]))==null){
-            playerWW.sendMessageWithKey("werewolf.check.offline_player");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.offline_player");
             return;
         }
         UUID argUUID = UUID.fromString(args[0]);
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (argUUID.equals(uuid)) {
-            playerWW.sendMessageWithKey("werewolf.check.not_yourself");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.not_yourself");
             return;
         }
 
         if (playerWW1 == null) {
-            playerWW.sendMessageWithKey("werewolf.check.player_not_found");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.player_not_found");
             return;
         }
 
         if (!playerWW1.isState(StatePlayer.JUDGEMENT)) {
-            playerWW.sendMessageWithKey("werewolf.check.not_in_judgement");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.not_in_judgement");
             return;
         }
 
@@ -59,7 +60,7 @@ public class CommandInfect implements ICommand {
                         .isWereWolf() ||
                 game.getTimer() - playerWW1.getDeathTime() > 7) {
 
-            playerWW.sendMessageWithKey("werewolf.role.infect_father_of_the_wolves.player_cannot_be_infected");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.infect_father_of_the_wolves.player_cannot_be_infected");
             return;
         }
 
@@ -70,13 +71,13 @@ public class CommandInfect implements ICommand {
         Bukkit.getPluginManager().callEvent(infectionEvent);
 
         if (infectionEvent.isCancelled()) {
-            playerWW.sendMessageWithKey("werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
             return;
         }
 
         ((IAffectedPlayers) infect).addAffectedPlayer(playerWW1);
 
-        playerWW.sendMessageWithKey("werewolf.role.infect_father_of_the_wolves.infection_perform",
+        playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.infect_father_of_the_wolves.infection_perform",
                 Formatter.format("&player&",playerWW1.getName()));
         game.resurrection(playerWW1);
 

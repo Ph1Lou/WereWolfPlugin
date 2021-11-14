@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.roles.trapper.TrackEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
@@ -28,7 +29,7 @@ public class CommandTrapper implements ICommand {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            player.sendMessage(game.translate("werewolf.check.offline_player"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.offline_player"));
             return;
         }
 
@@ -36,17 +37,17 @@ public class CommandTrapper implements ICommand {
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (uuid.equals(argUUID)) {
-            player.sendMessage(game.translate("werewolf.check.not_yourself"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.not_yourself"));
             return;
         }
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            player.sendMessage(game.translate("werewolf.check.player_not_found"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.player_not_found"));
             return;
         }
 
         if (((IAffectedPlayers) trapper).getAffectedPlayers().contains(playerWW1)) {
-            player.sendMessage(game.translate("werewolf.check.already_get_power"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.already_get_power"));
             return;
         }
 
@@ -55,15 +56,15 @@ public class CommandTrapper implements ICommand {
         Bukkit.getPluginManager().callEvent(trackEvent);
 
         if (trackEvent.isCancelled()) {
-            player.sendMessage(game.translate("werewolf.check.cancel"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.cancel"));
             return;
         }
 
         ((IAffectedPlayers) trapper).clearAffectedPlayer();
         ((IAffectedPlayers) trapper).addAffectedPlayer(playerWW1);
 
-        playerArg.sendMessage(game.translate("werewolf.role.trapper.get_track"));
-        player.sendMessage(game.translate("werewolf.role.trapper.tracking_perform",
+        playerArg.sendMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.role.trapper.get_track"));
+        player.sendMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.role.trapper.tracking_perform",
                 Formatter.format("&player&",playerArg.getName())));
     }
 }

@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.ListenerManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimerBase;
@@ -67,8 +68,8 @@ public class Swap extends ListenerManager {
                     playerWW2.addPlayerMaxHealth(20 - playerWW2.getMaxHealth());
                     playerWW1.clearPotionEffects();
                     playerWW2.clearPotionEffects();
-                    playerWW1.sendMessageWithKey("werewolf.random_events.swap.concerned");
-                    playerWW2.sendMessageWithKey("werewolf.random_events.swap.concerned");
+                    playerWW1.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.random_events.swap.concerned");
+                    playerWW2.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.random_events.swap.concerned");
                     roles1.recoverPower();
                     roles2.recoverPower();
                     roles1.recoverPotionEffects();

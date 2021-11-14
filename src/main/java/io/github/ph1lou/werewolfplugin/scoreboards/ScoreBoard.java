@@ -150,7 +150,10 @@ public class ScoreBoard implements IScoreBoard {
 			String key = roleRegister.getKey();
 			if (game.getConfig().getRoleCount(key) > 0) {
 				StringBuilder sb = new StringBuilder();
-				sb.append("§3").append(game.getConfig().getRoleCount(key)).append("§f ").append(game.translate(roleRegister.getKey()));
+				sb
+						.append("§3")
+						.append(game.getConfig().getRoleCount(key))
+						.append("§f ").append(roleRegister.getKey());
 				roles.add(sb.substring(0, Math.min(30, sb.length())));
 			}
 		}

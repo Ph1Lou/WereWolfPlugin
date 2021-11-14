@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IStuffManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.events.UpdateStuffEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -25,7 +26,7 @@ public class CommandLootDeath implements ICommand {
         for (ItemStack i : player.getInventory().getContents()) {
             stuffManager.addDeathLoot(i);
         }
-        player.sendMessage(game.translate("werewolf.commands.admin.loot_death.perform"));
+        player.sendMessage(game.translate(Prefix.GREEN.getKey() , "werewolf.commands.admin.loot_death.perform"));
         player.getInventory().clear();
         player.setGameMode(GameMode.ADVENTURE);
 

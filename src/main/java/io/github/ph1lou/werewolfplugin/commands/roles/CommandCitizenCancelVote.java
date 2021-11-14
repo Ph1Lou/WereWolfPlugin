@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.VoteStatus;
 import io.github.ph1lou.werewolfapi.events.game.vote.CancelVoteEvent;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Citizen;
@@ -25,7 +26,7 @@ public class CommandCitizenCancelVote implements ICommand {
         Citizen citizen = (Citizen) playerWW.getRole();
 
         if (!game.getVote().isStatus(VoteStatus.WAITING_CITIZEN)) {
-            playerWW.sendMessageWithKey("werewolf.check.power");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.power");
             return;
         }
 
@@ -36,18 +37,18 @@ public class CommandCitizenCancelVote implements ICommand {
         Bukkit.getPluginManager().callEvent(cancelVoteEvent);
 
         if (cancelVoteEvent.isCancelled()) {
-            playerWW.sendMessageWithKey("werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
             return;
         }
 
         game.getVote().resetVote();
         Bukkit.broadcastMessage(game.translate(
-                "werewolf.role.citizen.cancelling_broadcast"));
+                Prefix.GREEN.getKey() , "werewolf.role.citizen.cancelling_broadcast"));
 
         if (voteWW == null) return;
 
         playerWW.sendMessageWithKey(
-                "werewolf.role.citizen.cancelling_vote_perform",
+                Prefix.YELLOW.getKey() , "werewolf.role.citizen.cancelling_vote_perform",
                 Formatter.format("&player&",voteWW.getName()));
         citizen.addAffectedPlayer(voteWW);
 

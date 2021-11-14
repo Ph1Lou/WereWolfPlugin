@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
@@ -96,7 +97,7 @@ public class VillageIdiot extends RoleVillage implements IPower {
         Bukkit.getPluginManager().callEvent(villageIdiotEvent);
 
         if (villageIdiotEvent.isCancelled()) {
-            this.getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
             return;
         }
         this.game.resurrection(getPlayerWW());
@@ -107,7 +108,7 @@ public class VillageIdiot extends RoleVillage implements IPower {
         }
         this.getPlayerWW().removePlayerMaxHealth(4);
         event.setCancelled(true);
-        Bukkit.broadcastMessage(this.game.translate("werewolf.role.village_idiot.announce",
+        Bukkit.broadcastMessage(this.game.translate(Prefix.YELLOW.getKey() , "werewolf.role.village_idiot.announce",
                 Formatter.format("&player&",this.getPlayerWW().getName())));
     }
 }

@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.ConfigBase;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.events.werewolf.WereWolfCanSpeakInChatEvent;
 import io.github.ph1lou.werewolfapi.events.werewolf.WereWolfChatEvent;
 import org.bukkit.Bukkit;
@@ -37,7 +38,7 @@ public class CommandWereWolfChat implements ICommand {
         if (playerWW == null) return;
 
         if (!game.getConfig().isConfigActive(ConfigBase.WEREWOLF_CHAT.getKey())) {
-            playerWW.sendMessageWithKey("werewolf.commands.admin.ww_chat.disable");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.commands.admin.ww_chat.disable");
             return;
         }
 
@@ -60,14 +61,14 @@ public class CommandWereWolfChat implements ICommand {
                     WereWolfChatEvent wereWolfChatEvent = new WereWolfChatEvent(playerWW, sb.toString());
                     Bukkit.getPluginManager().callEvent(wereWolfChatEvent);
                 } else {
-                    playerWW.sendMessageWithKey("werewolf.commands.admin.ww_chat.timer");
+                    playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.commands.admin.ww_chat.timer");
                 }
             } else {
-                playerWW.sendMessageWithKey("werewolf.commands.admin.ww_chat.speak_number",
+                playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.commands.admin.ww_chat.speak_number",
                         Formatter.format("&number&",game.getConfig().getWereWolfChatMaxMessage()));
             }
 
 
-        } else playerWW.sendMessageWithKey("werewolf.commands.admin.ww_chat.not_access");
+        } else playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.commands.admin.ww_chat.not_access");
     }
 }

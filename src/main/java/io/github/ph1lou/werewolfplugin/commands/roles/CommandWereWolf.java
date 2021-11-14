@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.RandomEvent;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimerBase;
@@ -27,7 +28,7 @@ public class CommandWereWolf implements ICommand {
         if (playerWW == null) return;
 
         if (game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST.getKey()) > 0) {
-            playerWW.sendMessageWithKey("werewolf.role.werewolf.list_not_revealed");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.werewolf.list_not_revealed");
             return;
         }
 
@@ -35,7 +36,7 @@ public class CommandWereWolf implements ICommand {
         Bukkit.getPluginManager().callEvent(requestSeeWereWolfListEvent);
 
         if (!requestSeeWereWolfListEvent.isAccept()) {
-            playerWW.sendMessageWithKey("werewolf.role.werewolf.not_werewolf");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.werewolf.not_werewolf");
             return;
         }
 
@@ -51,7 +52,7 @@ public class CommandWereWolf implements ICommand {
                 list.append(playerWW1.getName()).append(" ");
             }
         }
-        playerWW.sendMessageWithKey("werewolf.role.werewolf.werewolf_list", Formatter.format("&list&",list.toString()));
+        playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.werewolf.werewolf_list", Formatter.format("&list&",list.toString()));
         if (RegisterManager.get().getRandomEventsRegister().stream()
                 .filter(randomEventRegister -> randomEventRegister.getKey().equals(RandomEvent.DRUNKEN_WEREWOLF.getKey()))
                 .anyMatch(randomEventRegister -> randomEventRegister.getRandomEvent().isRegister())) {

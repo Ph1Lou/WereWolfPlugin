@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.tasks;
 
 import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.TimerBase;
@@ -34,7 +35,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class TransportationTask implements Listener {
 
-    private String actionBar;
+    private String actionBar="";
     private final GameManager game;
     private final List<Location> spawns = new ArrayList<>();
     private final Map<Integer, Integer> taskStep = new HashMap<>();
@@ -148,13 +149,13 @@ public class TransportationTask implements Listener {
 
             if (this.game.getPlayerWW(player.getUniqueId()).isPresent()) {
                 player.setGameMode(GameMode.SURVIVAL);
-                player.sendMessage(this.game.translate("werewolf.announcement.start.message",
+                player.sendMessage(this.game.translate(Prefix.YELLOW.getKey() , "werewolf.announcement.start.message",
                         Formatter.format("&timer&",Utils.conversion(this.game.getConfig().getTimerValue(TimerBase.INVULNERABILITY.getKey())))));
             } else {
                 player.teleport(this.game.getMapManager().getWorld().getSpawnLocation());
                 player.setGameMode(GameMode.SPECTATOR);
                 if(game.getConfig().getSpectatorMode() < 2){
-                    player.kickPlayer(game.translate("werewolf.check.spectator_disabled"));
+                    player.kickPlayer(game.translate(Prefix.RED.getKey() , "werewolf.check.spectator_disabled"));
                 }
             }
 
@@ -256,7 +257,7 @@ public class TransportationTask implements Listener {
 
     @EventHandler
     public void onActionBar(ActionBarEvent event) {
-        event.setActionBar(event.getActionBar() + actionBar);
+        event.setActionBar(event.getActionBar() + this.actionBar);
     }
 
 

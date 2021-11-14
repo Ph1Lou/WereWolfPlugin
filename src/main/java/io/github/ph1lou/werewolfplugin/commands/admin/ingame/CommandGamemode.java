@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
@@ -26,7 +27,7 @@ public class CommandGamemode implements ICommand {
             }
 
             player.setGameMode(GameMode.values()[j]);
-            String message = game.translate("werewolf.commands.admin.gamemode.send",
+            String message = game.translate(Prefix.YELLOW.getKey() , "werewolf.commands.admin.gamemode.send",
                     Formatter.format("&player&",player.getName()),
                     Formatter.format("&number&",gamemode));
 

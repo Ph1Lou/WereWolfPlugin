@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.lovers.CupidLoversEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
@@ -28,7 +29,7 @@ public class CommandCupid implements ICommand {
         IRole cupid = playerWW.getRole();
 
         if (args[0].equalsIgnoreCase(args[1])) {
-            playerWW.sendMessageWithKey("werewolf.check.two_distinct_player");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.two_distinct_player");
             return;
         }
 
@@ -37,7 +38,7 @@ public class CommandCupid implements ICommand {
             Player playerArg = Bukkit.getPlayer(p);
 
             if (playerArg == null) {
-                playerWW.sendMessageWithKey("werewolf.check.offline_player");
+                playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.offline_player");
                 return;
             }
 
@@ -45,12 +46,12 @@ public class CommandCupid implements ICommand {
             IPlayerWW playerWW1 = game.getPlayerWW(uuid1).orElse(null);
 
             if (playerWW1 == null || playerWW1.isState(StatePlayer.DEATH)) {
-                playerWW.sendMessageWithKey("werewolf.check.player_not_found");
+                playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.player_not_found");
                 return;
             }
 
             if (uuid.equals(uuid1)) {
-                playerWW.sendMessageWithKey("werewolf.check.not_yourself");
+                playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.not_yourself");
                 return;
             }
         }
@@ -65,7 +66,7 @@ public class CommandCupid implements ICommand {
         }
         ((IPower) cupid).setPower(false);
         Bukkit.getPluginManager().callEvent(new CupidLoversEvent(playerWW, Sets.newHashSet(((IAffectedPlayers) cupid).getAffectedPlayers())));
-        playerWW.sendMessageWithKey("werewolf.role.cupid.designation_perform",
+        playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.cupid.designation_perform",
                 Formatter.format("&player1&",args[0]),
                         Formatter.format("&player2&",args[1]));
     }

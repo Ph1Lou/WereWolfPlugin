@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -13,7 +14,7 @@ public class CommandInfo implements ICommand {
     public void execute(WereWolfAPI game, Player player, String[] args) {
 
         if (args.length == 0) {
-            player.sendMessage(game.translate("werewolf.check.parameters", Formatter.format("&number&",1)));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.parameters", Formatter.format("&number&",1)));
             return;
         }
 

@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.registers.CommandRegister;
 import io.github.ph1lou.werewolfplugin.Main;
 import org.bukkit.command.Command;
@@ -38,7 +39,7 @@ public class Admin implements TabExecutor {
         WereWolfAPI game = main.getWereWolfAPI();
 
         if (!(sender instanceof Player)) {
-            sender.sendMessage(game.translate("werewolf.check.console"));
+            sender.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.console"));
             return true;
         }
 
@@ -83,14 +84,14 @@ public class Admin implements TabExecutor {
 
         if (!commandRegister.isStateWW(game.getState())) {
             if (seePermissionMessages) {
-                player.sendMessage(game.translate("werewolf.check.state"));
+                player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.state"));
             }
             return false;
         }
 
         if (!commandRegister.isArgNumbers(args)) {
             if (seePermissionMessages) {
-                player.sendMessage(game.translate("werewolf.check.parameters",
+                player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.parameters",
                         Formatter.format("&number&",commandRegister.getMinArgNumbers())));
             }
             return false;
@@ -98,7 +99,7 @@ public class Admin implements TabExecutor {
 
         if (!checkPermission(commandRegister, player)) {
             if (seePermissionMessages) {
-                player.sendMessage(game.translate("werewolf.check.permission_denied"));
+                player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.permission_denied"));
             }
             return false;
         }

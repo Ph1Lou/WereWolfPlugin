@@ -7,6 +7,7 @@ import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
@@ -65,7 +66,7 @@ public class Raven extends RoleWithLimitedSelectionDuration implements IAffected
             this.last.addPotionModifier(PotionModifier.remove(PotionEffectType.JUMP,"raven"));
 
             this.last.getRole().removeAuraModifier("cursed");
-            this.last.sendMessageWithKey("werewolf.role.raven.no_longer_curse");
+            this.last.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.raven.no_longer_curse");
             this.last = null;
         }
 
@@ -75,7 +76,7 @@ public class Raven extends RoleWithLimitedSelectionDuration implements IAffected
 
         setPower(true);
 
-        this.getPlayerWW().sendMessageWithKey("werewolf.role.raven.curse_message",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.raven.curse_message",
                 Formatter.format("&timer&",Utils.conversion(
                         game.getConfig()
                                 .getTimerValue(TimerBase.POWER_DURATION.getKey()))));

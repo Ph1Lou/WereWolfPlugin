@@ -7,6 +7,7 @@ import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.roles.raven.CurseEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
@@ -32,19 +33,19 @@ public class CommandRaven implements ICommand {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            playerWW.sendMessageWithKey("werewolf.check.offline_player");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.offline_player");
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey("werewolf.check.player_not_found");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.player_not_found");
             return;
         }
 
         if (((IAffectedPlayers) raven).getAffectedPlayers().contains(playerWW1)) {
-            playerWW.sendMessageWithKey("werewolf.check.already_get_power");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.already_get_power");
             return;
         }
 
@@ -53,7 +54,7 @@ public class CommandRaven implements ICommand {
         Bukkit.getPluginManager().callEvent(curseEvent);
 
         if (curseEvent.isCancelled()) {
-            playerWW.sendMessageWithKey("werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
             return;
         }
 
@@ -61,8 +62,8 @@ public class CommandRaven implements ICommand {
         ((IAffectedPlayers) raven).addAffectedPlayer(playerWW1);
         playerWW1.addPotionModifier(PotionModifier.add(PotionEffectType.JUMP,"raven"));
         playerWW1.getRole().addAuraModifier(new AuraModifier("cursed", Aura.DARK, 20, true));
-        playerWW1.sendMessageWithKey("werewolf.role.raven.get_curse");
-        playerWW.sendMessageWithKey("werewolf.role.raven.curse_perform",
+        playerWW1.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.raven.get_curse");
+        playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.raven.curse_perform",
                 Formatter.format("&player&",playerArg.getName()));
     }
 }

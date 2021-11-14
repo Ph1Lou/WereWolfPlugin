@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
@@ -28,7 +29,7 @@ public class CommandModerator implements ICommand {
         Player moderator = Bukkit.getPlayer(args[0]);
 
         if (moderator == null) {
-            player.sendMessage(game.translate("werewolf.check.offline_player"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.offline_player"));
             return;
         }
 
@@ -36,7 +37,7 @@ public class CommandModerator implements ICommand {
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (moderationManager.getModerators().contains(argUUID)) {
-            Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.moderator.remove",
+            Bukkit.broadcastMessage(game.translate(Prefix.RED.getKey() , "werewolf.commands.admin.moderator.remove",
                     Formatter.format("&player&",moderator.getName())));
             moderationManager.getModerators().remove(argUUID);
 
@@ -50,7 +51,7 @@ public class CommandModerator implements ICommand {
 
         if (!game.isState(StateGame.LOBBY)) {
             if (playerWW1 != null && !playerWW1.isState(StatePlayer.DEATH)) {
-                player.sendMessage(game.translate("werewolf.commands.admin.moderator.player_living"));
+                player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.commands.admin.moderator.player_living"));
                 return;
             }
         } else {
@@ -63,7 +64,7 @@ public class CommandModerator implements ICommand {
         }
         moderator.setGameMode(GameMode.SPECTATOR);
         moderationManager.addModerator(argUUID);
-        Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.moderator.add",
+        Bukkit.broadcastMessage(game.translate(Prefix.GREEN.getKey() , "werewolf.commands.admin.moderator.add",
                 Formatter.format("&player&",moderator.getName())));
         Bukkit.getPluginManager().callEvent(new ModeratorEvent(argUUID, true));
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(moderator));

@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.ConfigBase;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import org.bukkit.Bukkit;
@@ -36,11 +37,11 @@ public class ChatListener implements Listener {
                 args[0].equalsIgnoreCase("/bukkit:rl") ||
                 args[0].equalsIgnoreCase("/bukkit:reload")) {
             event.setCancelled(true);
-            player.sendMessage(game.translate("werewolf.check.disabled_command"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.disabled_command"));
         } else if (args[0].equalsIgnoreCase("/me") ||
                 args[0].equalsIgnoreCase("/minecraft:me")) {
             event.setCancelled(true);
-            player.sendMessage(game.translate("werewolf.check.disabled_command"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.disabled_command"));
         } else if (args[0].equalsIgnoreCase("/tellRaw") ||
                 args[0].equalsIgnoreCase("/msg") ||
                 args[0].equalsIgnoreCase("/tell") ||
@@ -53,7 +54,7 @@ public class ChatListener implements Listener {
 
             if (recipient == null) {
                 player.sendMessage(game.
-                        translate("werewolf.check.offline_player"));
+                        translate(Prefix.RED.getKey() , "werewolf.check.offline_player"));
                 return;
             }
 
@@ -61,7 +62,7 @@ public class ChatListener implements Listener {
 
                 if (!moderationManager.isStaff(recipient.getUniqueId()) &&
                         !moderationManager.isStaff(player.getUniqueId())) {
-                    player.sendMessage(game.translate("werewolf.check.permission_denied"));
+                    player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.permission_denied"));
                     return;
                 }
             }
@@ -111,7 +112,7 @@ public class ChatListener implements Listener {
 
         if (!game.getConfig().isConfigActive(ConfigBase.CHAT.getKey())) {
             event.setCancelled(true);
-            event.getPlayer().sendMessage(game.translate("werewolf.commands.admin.chat.off"));
+            event.getPlayer().sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.commands.admin.chat.off"));
 
         } else if (game.getConfig().isConfigActive(ConfigBase.PROXIMITY_CHAT.getKey()) &&
                 !game.isState(StateGame.LOBBY)) {

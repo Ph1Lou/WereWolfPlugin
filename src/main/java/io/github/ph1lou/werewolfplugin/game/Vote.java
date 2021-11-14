@@ -6,6 +6,7 @@ import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.IVoteManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.ConfigBase;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.enums.VoteStatus;
@@ -48,27 +49,27 @@ public class Vote implements Listener, IVoteManager {
 		if (voter == null) return;
 
 		if (game.getConfig().getTimerValue(TimerBase.VOTE_BEGIN.getKey()) > 0) {
-			voterWW.sendMessageWithKey("werewolf.vote.vote_not_yet_activated");
+			voterWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.vote.vote_not_yet_activated");
 		} else if (!game.getConfig().isConfigActive(ConfigBase.VOTE.getKey())) {
-			voterWW.sendMessageWithKey("werewolf.vote.vote_disable");
+			voterWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.vote.vote_disable");
 		} else if (!currentStatus.equals(VoteStatus.IN_PROGRESS)) {
-			voterWW.sendMessageWithKey("werewolf.vote.not_vote_time");
+			voterWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.vote.not_vote_time");
 		} else if (voters.containsKey(voterWW)) {
-			voterWW.sendMessageWithKey("werewolf.vote.already_voted");
+			voterWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.vote.already_voted");
 		} else if (tempPlayer.contains(vote)) {
-			voterWW.sendMessageWithKey("werewolf.vote.player_already_voted");
+			voterWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.vote.player_already_voted");
 		} else {
 			VoteEvent voteEvent = new VoteEvent(voterWW, vote);
 			Bukkit.getPluginManager().callEvent(voteEvent);
 
 			if (voteEvent.isCancelled()) {
-				voterWW.sendMessageWithKey("werewolf.check.cancel");
+				voterWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
 				return;
 			}
 			this.voters.put(voteEvent.getPlayerWW(), voteEvent.getTargetWW());
 			this.votes.merge(vote, 1, Integer::sum);
 
-			voterWW.sendMessageWithKey("werewolf.vote.perform_vote",
+			voterWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.vote.perform_vote",
 					Formatter.format("&player&",vote.getName()));
 		}
 
@@ -90,7 +91,7 @@ public class Vote implements Listener, IVoteManager {
 			event.setPlayerWW(getResult());
 			if (event.getPlayerWW() == null) {
 				if (currentStatus == VoteStatus.WAITING_CITIZEN) {
-					Bukkit.broadcastMessage(game.translate("werewolf.vote.no_result"));
+					Bukkit.broadcastMessage(game.translate(Prefix.ORANGE.getKey() , "werewolf.vote.no_result"));
 				}
 				event.setCancelled(true);
 			} else showResultVote(event.getPlayerWW());
@@ -115,10 +116,10 @@ public class Vote implements Listener, IVoteManager {
 		if (player == null) return;
 
 		if (seeVoteEvent.isCancelled()) {
-			player.sendMessage(game.translate("werewolf.check.cancel"));
+			player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.cancel"));
 			return;
 		}
-		player.sendMessage(game.translate("werewolf.role.citizen.count_votes"));
+		player.sendMessage(game.translate(Prefix.GREEN.getKey() , "werewolf.role.citizen.count_votes"));
 		for (IPlayerWW playerWW1 : voters.keySet()) {
 
 			IPlayerWW voteWW = this.voters.get(playerWW1);
@@ -172,7 +173,7 @@ public class Vote implements Listener, IVoteManager {
 			}
 			playerWW.removePlayerMaxHealth(10);
 
-			Bukkit.broadcastMessage(game.translate("werewolf.vote.vote_result",
+			Bukkit.broadcastMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.vote.vote_result",
 					Formatter.format("&player&",playerWW.getName()),
 					Formatter.format("&number&",this.votes.get(playerWW))));
 

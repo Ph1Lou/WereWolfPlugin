@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Camp;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.roles.seer.SeerEvent;
@@ -32,19 +33,19 @@ public class CommandSeer implements ICommand {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            playerWW.sendMessageWithKey("werewolf.check.offline_player");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.offline_player");
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey("werewolf.check.player_not_found");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.player_not_found");
             return;
         }
 
         if (player.getHealth() < 7) {
-            playerWW.sendMessageWithKey("werewolf.role.seer.not_enough_life");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.seer.not_enough_life");
         } else {
             IRole role1 = playerWW1.getRole();
 
@@ -61,7 +62,7 @@ public class CommandSeer implements ICommand {
             Bukkit.getPluginManager().callEvent(seerEvent);
 
             if (seerEvent.isCancelled()) {
-                playerWW.sendMessageWithKey("werewolf.check.cancel");
+                playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
                 return;
             }
 
@@ -69,24 +70,24 @@ public class CommandSeer implements ICommand {
 
             if (seerEvent.getCamp().equals(Camp.VILLAGER.getKey())) {
                 ((Seer) seer).setDisablePower();
-                playerWW.sendMessageWithKey("werewolf.role.seer.see_villager");
+                playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.seer.see_villager");
                 if (seer.isKey(RolesBase.CHATTY_SEER.getKey())) {
-                    Bukkit.broadcastMessage(game.translate("werewolf.role.chatty_seer.see_perform",
+                    Bukkit.broadcastMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.role.chatty_seer.see_perform",
                             Formatter.format("&camp&",game.translate(Camp.VILLAGER.getKey()))));
                 }
                 playerWW.removePlayerHealth(6);
             } else if (seerEvent.getCamp().equals(Camp.WEREWOLF.getKey())) {
-                playerWW.sendMessageWithKey("werewolf.role.seer.see_perform",
+                playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.seer.see_perform",
                         Formatter.format("&camp&",game.translate(Camp.WEREWOLF.getKey())));
                 if (seer.isKey(RolesBase.CHATTY_SEER.getKey())) {
-                    Bukkit.broadcastMessage(game.translate("werewolf.role.chatty_seer.see_perform",
+                    Bukkit.broadcastMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.role.chatty_seer.see_perform",
                             Formatter.format("&camp&",game.translate(Camp.WEREWOLF.getKey()))));
                 }
             } else {
-                playerWW.sendMessageWithKey("werewolf.role.seer.see_perform",
+                playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.seer.see_perform",
                         Formatter.format("&camp&",game.translate(Camp.NEUTRAL.getKey())));
                 if (seer.isKey(RolesBase.CHATTY_SEER.getKey())) {
-                    Bukkit.broadcastMessage(game.translate("werewolf.role.chatty_seer.see_perform",
+                    Bukkit.broadcastMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.role.chatty_seer.see_perform",
                             Formatter.format("&camp&",game.translate(Camp.NEUTRAL.getKey()))));
                 }
             }

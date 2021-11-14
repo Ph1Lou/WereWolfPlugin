@@ -8,6 +8,7 @@ import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
@@ -66,7 +67,7 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
 
         if (!event.getPlayerWW().getRole().isWereWolf()) return;
 
-        this.getPlayerWW().sendMessageWithKey("werewolf.role.priestess.werewolf_death");
+        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.role.priestess.werewolf_death");
 
         this.affectedPlayer.remove(event.getPlayerWW());
 
@@ -83,7 +84,7 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
         setPower(true);
 
         this.getPlayerWW().sendMessageWithKey(
-                "werewolf.role.priestess.perform",
+                Prefix.YELLOW.getKey() , "werewolf.role.priestess.perform",
                 Formatter.format("&blocks",game.getConfig().getDistancePriestess()),
                 Formatter.format("&timer&",Utils.conversion(
                         game.getConfig()

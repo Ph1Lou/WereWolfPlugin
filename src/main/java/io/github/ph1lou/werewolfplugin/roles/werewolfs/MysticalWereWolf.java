@@ -6,6 +6,7 @@ import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.mystical_werewolf.MysticalWerewolfRevelationEvent;
@@ -50,7 +51,7 @@ public class MysticalWereWolf extends RoleWereWolf {
 
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
-        this.getPlayerWW().sendMessageWithKey("werewolf.role.mystical_werewolf.no_message");
+        this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.mystical_werewolf.no_message");
         event.setCancelled(true);
     }
 
@@ -66,7 +67,7 @@ public class MysticalWereWolf extends RoleWereWolf {
         if (!event.getPlayerWW().getRole().isWereWolf()) return;
 
         if (!isAbilityEnabled()) {
-            getPlayerWW().sendMessageWithKey("werewolf.role.mystical_werewolf.ability_disabled");
+            getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.mystical_werewolf.ability_disabled");
             return;
         }
 
@@ -81,7 +82,7 @@ public class MysticalWereWolf extends RoleWereWolf {
 
         Bukkit.getPluginManager().callEvent(new MysticalWerewolfRevelationEvent(this.getPlayerWW(), roleWW));
 
-        this.getPlayerWW().sendMessageWithKey("werewolf.role.mystical_werewolf.werewolf_death",
+        this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.mystical_werewolf.werewolf_death",
                 Formatter.format("&player&",roleWW.getName()),
                 Formatter.format("&role&",game.translate(roleWW.getRole().getKey())));
     }

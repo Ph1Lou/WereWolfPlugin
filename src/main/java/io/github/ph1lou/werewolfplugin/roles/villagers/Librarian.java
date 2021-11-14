@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.librarian.LibrarianDeathEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
@@ -90,11 +91,11 @@ public class Librarian extends RoleVillage implements ILimitedUse, IAffectedPlay
 
         if (!isAbilityEnabled()) return;
 
-        Bukkit.broadcastMessage(game.translate("werewolf.role.librarian.death"));
+        Bukkit.broadcastMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.role.librarian.death"));
         int page = 1;
         for (String message : this.storage) {
             Bukkit.broadcastMessage(game.translate(
-                    "werewolf.role.librarian.book",
+                    Prefix.YELLOW.getKey() , "werewolf.role.librarian.book",
                     Formatter.format("&page&",page),
                     Formatter.format("&message&",message)));
             page++;

@@ -9,6 +9,7 @@ import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.Camp;
 import io.github.ph1lou.werewolfapi.enums.ConfigBase;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
@@ -56,7 +57,7 @@ public class WolfDog extends RoleVillage implements ITransformed, IPower {
         int timer = game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST.getKey());
 
         if (timer > 0) {
-            this.getPlayerWW().sendMessageWithKey("werewolf.role.wolf_dog.transform",
+            this.getPlayerWW().sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.role.wolf_dog.transform",
                     Formatter.format("&timer&",Utils.conversion(game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST.getKey()))));
         }
     }
@@ -75,7 +76,7 @@ public class WolfDog extends RoleVillage implements ITransformed, IPower {
     public void onWereWolfList(WereWolfListEvent event) {
 
         if (this.power) {
-            this.getPlayerWW().sendMessageWithKey("werewolf.role.wolf_dog.time_over");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.wolf_dog.time_over");
         }
         this.power = false;
     }

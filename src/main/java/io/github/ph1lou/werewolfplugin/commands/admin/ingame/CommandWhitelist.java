@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -20,18 +21,18 @@ public class CommandWhitelist implements ICommand {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            player.sendMessage(game.translate("werewolf.check.offline_player"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.offline_player"));
             return;
         }
 
         UUID uuid = playerArg.getUniqueId();
 
         if (moderationManager.getWhiteListedPlayers().contains(uuid)) {
-            player.sendMessage(game.translate("werewolf.commands.admin.whitelist.remove",
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.commands.admin.whitelist.remove",
                     Formatter.format("&player&",playerArg.getName())));
             moderationManager.removePlayerOnWhiteList(uuid);
         } else {
-            player.sendMessage(game.translate("werewolf.commands.admin.whitelist.add",
+            player.sendMessage(game.translate(Prefix.GREEN.getKey() , "werewolf.commands.admin.whitelist.add",
                     Formatter.format("&player&",playerArg.getName())));
             moderationManager.addPlayerOnWhiteList(uuid);
             ((GameManager) game).finalJoin(playerArg);

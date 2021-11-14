@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.ListenerManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
@@ -153,10 +154,10 @@ public class Amnesic extends ListenerManager {
 
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(player));
 
-        playerWW.sendMessageWithKey("werewolf.role.werewolf.new_werewolf");
+        playerWW.sendMessageWithKey(Prefix.ORANGE.getKey() , "werewolf.role.werewolf.new_werewolf");
         Sound.WOLF_HOWL.play(playerWW);
 
-        this.temp.sendMessageWithKey("werewolf.random_events.amnesic.new",
+        this.temp.sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.random_events.amnesic.new",
                 Formatter.format("&player&",playerWW.getName()));
 
         BukkitUtils.scheduleSyncDelayedTask(this::revealWereWolf, 20 * 60 * 5L);

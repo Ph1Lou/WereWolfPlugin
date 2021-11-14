@@ -7,6 +7,7 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
@@ -56,7 +57,7 @@ public class Maps implements InventoryProvider {
                                             Formatter.format("&world&",file.getName()))).build()),
                     e -> {
                         if (!game.isState(StateGame.LOBBY)) {
-                            player.sendMessage(game.translate("werewolf.check.game_in_progress"));
+                            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.game_in_progress"));
                             return;
                         }
                         try {
@@ -74,7 +75,7 @@ public class Maps implements InventoryProvider {
                                 .setDisplayName(game.translate("werewolf.menu.maps.new")).build()),
                 e -> BukkitUtils.scheduleSyncDelayedTask(() -> {
                     if (!game.isState(StateGame.LOBBY)) {
-                        player.sendMessage(game.translate("werewolf.check.game_in_progress"));
+                        player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.game_in_progress"));
                         return;
                     }
                     try {

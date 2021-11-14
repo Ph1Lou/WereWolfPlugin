@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.commands.utilities;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -21,19 +22,19 @@ public class CommandVote implements ICommand {
         if (playerWW == null) return;
 
         if (playerArg == null) {
-            player.sendMessage(game.translate("werewolf.check.offline_player"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.offline_player"));
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (playerWW1 == null) {
-            player.sendMessage(game.translate("werewolf.check.player_not_found"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.player_not_found"));
             return;
         }
 
         if (playerWW1.isState(StatePlayer.DEATH)) {
-            player.sendMessage(game.translate("werewolf.check.player_not_found"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.player_not_found"));
             return;
         }
 

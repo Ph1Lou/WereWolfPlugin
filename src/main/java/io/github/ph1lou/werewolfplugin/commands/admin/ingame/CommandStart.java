@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -26,19 +27,19 @@ public class CommandStart implements ICommand {
 
         if (game.getRoleInitialSize() - game.getPlayerSize() > 0) {
             player.sendMessage(
-                    game.translate("werewolf.commands.admin.start.too_much_role"));
+                    game.translate(Prefix.RED.getKey() , "werewolf.commands.admin.start.too_much_role"));
             return;
         }
 
         if (game.getMapManager().getPercentageGenerated() == 0) {
             player.sendMessage(
-                    game.translate("werewolf.commands.admin.generation.not_generated"));
+                    game.translate(Prefix.RED.getKey() , "werewolf.commands.admin.generation.not_generated"));
             return;
         }
 
         if (game.getMapManager().getPercentageGenerated() < 100) {
             player.sendMessage(
-                    game.translate("werewolf.commands.admin.generation.not_finished",
+                    game.translate(Prefix.RED.getKey() , "werewolf.commands.admin.generation.not_finished",
                             Formatter.format("&progress&",new DecimalFormat("0.0")
                                     .format(game.getMapManager().getPercentageGenerated()))));
             return;

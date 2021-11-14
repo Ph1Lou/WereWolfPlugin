@@ -7,6 +7,7 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import io.github.ph1lou.werewolfapi.IStuffManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.Main;
@@ -87,7 +88,7 @@ public class Stuffs implements InventoryProvider {
                 inventory.setItem(j, game.getStuffs().getStartLoot().getItem(j));
             }
 
-            TextComponent msg = new TextComponent(game.translate("werewolf.commands.admin.stuff_start.valid"));
+            TextComponent msg = new TextComponent(game.translate(Prefix.YELLOW.getKey() , "werewolf.commands.admin.stuff_start.valid"));
             msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/a %s", game.translate("werewolf.commands.admin.stuff_start.command"))));
             player.spigot().sendMessage(msg);
             player.closeInventory();
@@ -124,7 +125,7 @@ public class Stuffs implements InventoryProvider {
                 }
             }
 
-            TextComponent msg = new TextComponent(game.translate("werewolf.commands.admin.loot_death.valid"));
+            TextComponent msg = new TextComponent(game.translate(Prefix.YELLOW.getKey() , "werewolf.commands.admin.loot_death.valid"));
             msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/a %s", game.translate("werewolf.commands.admin.loot_death.command"))));
             player.spigot().sendMessage(msg);
             player.closeInventory();

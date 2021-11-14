@@ -7,6 +7,7 @@ import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.ConfigBase;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
@@ -40,7 +41,7 @@ public class Troublemaker extends RoleVillage implements IAffectedPlayers, IPowe
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         Bukkit.getPluginManager().callEvent(new TroubleMakerDeathEvent(getPlayerWW()));
-        Bukkit.broadcastMessage(game.translate("werewolf.role.troublemaker.troublemaker_death"));
+        Bukkit.broadcastMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.role.troublemaker.troublemaker_death"));
 
         AtomicInteger i = new AtomicInteger();
 
@@ -105,7 +106,7 @@ public class Troublemaker extends RoleVillage implements IAffectedPlayers, IPowe
 
         if (!game.getConfig().isConfigActive(ConfigBase.WEREWOLF_CHAT.getKey())) return;
 
-        this.getPlayerWW().sendMessageWithKey("werewolf.commands.admin.ww_chat.announce",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.commands.admin.ww_chat.announce",
                 Formatter.format("&timer&",Utils.conversion(game.getConfig()
                         .getTimerValue(TimerBase.WEREWOLF_CHAT_DURATION.getKey()))),
                 Formatter.format("&number&",game.getConfig().getWereWolfChatMaxMessage()));

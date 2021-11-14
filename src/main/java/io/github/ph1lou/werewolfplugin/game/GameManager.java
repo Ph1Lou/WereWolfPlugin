@@ -12,6 +12,7 @@ import io.github.ph1lou.werewolfapi.IStuffManager;
 import io.github.ph1lou.werewolfapi.IVoteManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Day;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.UpdateLanguageEvent;
@@ -42,7 +43,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
 import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
@@ -117,10 +117,10 @@ public class GameManager implements WereWolfAPI {
         if (moderationManager.getWhiteListedPlayers().contains(uuid)) {
             finalJoin(player);
         } else if (this.getPlayerSize() >= configuration.getPlayerMax()) {
-            player.sendMessage(translate("werewolf.check.full"));
+            player.sendMessage(translate(Prefix.RED.getKey() , "werewolf.check.full"));
             moderationManager.addQueue(player);
         } else if (configuration.isWhiteList()) {
-            player.sendMessage(translate("werewolf.commands.admin.whitelist.player_not_whitelisted"));
+            player.sendMessage(translate(Prefix.RED.getKey() , "werewolf.commands.admin.whitelist.player_not_whitelisted"));
             moderationManager.addQueue(player);
         } else {
             finalJoin(player);
@@ -153,12 +153,12 @@ public class GameManager implements WereWolfAPI {
             DefaultArtifactVersion loadVersion = new DefaultArtifactVersion(main.getDescription().getVersion());
 
             if (loadVersion.compareTo(siteVersion) == 0) {
-                player.sendMessage(this.translate("werewolf.update.up_to_date"));
+                player.sendMessage(this.translate(Prefix.GREEN.getKey() , "werewolf.update.up_to_date"));
             } else if (loadVersion.compareTo(siteVersion) < 0) {
-                player.sendMessage(this.translate("werewolf.update.out_of_date"));
+                player.sendMessage(this.translate(Prefix.ORANGE.getKey() , "werewolf.update.out_of_date"));
             }
             else {
-                player.sendMessage(this.translate("werewolf.update.snapshot"));
+                player.sendMessage(this.translate(Prefix.GREEN.getKey() , "werewolf.update.snapshot"));
             }
         });
 
@@ -308,6 +308,7 @@ public class GameManager implements WereWolfAPI {
         return translate("",key,formatters);
     }
 
+
     @Override
     public String translate(String prefixKey, String key, Formatter... formatters) {
         LanguageManager languageManager = (LanguageManager) main.getLangManager();
@@ -325,10 +326,9 @@ public class GameManager implements WereWolfAPI {
         return languageManager.getTranslationList(key, formatters);
     }
 
-
     @Override
     public UUID getGameUUID() {
-        return gameUUID;
+        return this.gameUUID;
     }
 
     @Override

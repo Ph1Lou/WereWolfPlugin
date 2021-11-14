@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.events.roles.angel.RegenerationEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.ILimitedUse;
@@ -30,13 +31,13 @@ public class CommandAngelRegen implements ICommand {
 
 
         if (((ILimitedUse) guardianAngel).getUse() >= 3) {
-            playerWW.sendMessageWithKey("werewolf.check.power");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.power");
             return;
         }
 
         if (((IAffectedPlayers) guardianAngel)
                 .getAffectedPlayers().isEmpty()) {
-            playerWW.sendMessageWithKey("werewolf.role.guardian_angel.no_protege");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.guardian_angel.no_protege");
             return;
         }
 
@@ -45,7 +46,7 @@ public class CommandAngelRegen implements ICommand {
         Player playerProtected = Bukkit.getPlayer(playerWW1.getUUID());
 
         if (playerProtected == null) {
-            playerWW.sendMessageWithKey("werewolf.role.guardian_angel.disconnected_protege");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.guardian_angel.disconnected_protege");
             return;
         }
 
@@ -56,7 +57,7 @@ public class CommandAngelRegen implements ICommand {
                 .getAffectedPlayers().get(0));
 
         if (event.isCancelled()) {
-            playerWW.sendMessageWithKey("werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
             return;
         }
 
@@ -65,9 +66,9 @@ public class CommandAngelRegen implements ICommand {
                 0,
                 "angel_regen"));
 
-        playerWW1.sendMessageWithKey("werewolf.role.guardian_angel.get_regeneration");
+        playerWW1.sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.role.guardian_angel.get_regeneration");
         playerWW.sendMessageWithKey(
-                "werewolf.role.guardian_angel.perform",
+                Prefix.GREEN.getKey() , "werewolf.role.guardian_angel.perform",
                 Formatter.format("&number&",3 - ((ILimitedUse) guardianAngel).getUse()));
     }
 }

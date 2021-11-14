@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IStuffManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.events.UpdateStuffEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -31,7 +32,7 @@ public class CommandLootStart implements ICommand {
             inventory.setItem(j, stuffManager.getTempStuff().get(uuid).getItem(j));
         }
         stuffManager.getTempStuff().remove(uuid);
-        player.sendMessage(game.translate("werewolf.commands.admin.stuff_start.perform"));
+        player.sendMessage(game.translate(Prefix.GREEN.getKey() , "werewolf.commands.admin.stuff_start.perform"));
         player.setGameMode(GameMode.ADVENTURE);
 
         Bukkit.getPluginManager().callEvent(new UpdateStuffEvent());

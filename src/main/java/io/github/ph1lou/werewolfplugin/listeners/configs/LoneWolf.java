@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.ListenerManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimerBase;
@@ -56,7 +57,7 @@ public class LoneWolf extends ListenerManager {
 
         if (event.isCancelled()) return;
 
-        role.getPlayerWW().sendMessageWithKey("werewolf.lone_wolf.message");
+        role.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.lone_wolf.message");
 
         if (role.getPlayerWW().getMaxHealth() < 30) {
             role.getPlayerWW().addPlayerMaxHealth(Math.min(8, 30 - role.getPlayerWW().getMaxHealth()));

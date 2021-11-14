@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -20,14 +21,14 @@ public class CommandTPGroup implements ICommand {
         String playerName = player.getName();
 
         if (playerArg == null) {
-            player.sendMessage(game.translate("werewolf.check.offline_player"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.offline_player"));
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         IPlayerWW playerWW = game.getPlayerWW(argUUID).orElse(null);
 
         if (playerWW == null) {
-            player.sendMessage(game.translate("werewolf.check.player_not_found"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.player_not_found"));
             return;
         }
 
@@ -55,14 +56,14 @@ public class CommandTPGroup implements ICommand {
                     if (p.getLocation().distance(location) <= d) {
                         size--;
                         sb.append(p.getName()).append(" ");
-                        playerWW1.sendMessageWithKey("werewolf.commands.admin.tp_group.perform",
+                        playerWW1.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.commands.admin.tp_group.perform",
                                 Formatter.format("&player&",playerName));
                         game.getMapManager().transportation(playerWW1, r);
                     }
                 }
             }
         }
-        Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.commands.admin.tp_group.broadcast",
+        Bukkit.getConsoleSender().sendMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.commands.admin.tp_group.broadcast",
                 Formatter.format("&players&",sb.toString()),
                 Formatter.format("&player&",playerName)));
     }

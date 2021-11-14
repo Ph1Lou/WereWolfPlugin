@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.roles.trouble_maker.TroubleMakerEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
@@ -28,14 +29,14 @@ public class CommandTroubleMaker implements ICommand {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            player.sendMessage(game.translate("werewolf.check.offline_player"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.offline_player"));
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            player.sendMessage(game.translate("werewolf.check.player_not_found"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.player_not_found"));
             return;
         }
 
@@ -44,15 +45,15 @@ public class CommandTroubleMaker implements ICommand {
         Bukkit.getPluginManager().callEvent(troubleMakerEvent);
 
         if (troubleMakerEvent.isCancelled()) {
-            player.sendMessage(game.translate("werewolf.check.cancel"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.cancel"));
             return;
         }
 
         ((IAffectedPlayers) troublemaker).addAffectedPlayer(playerWW1);
 
-        playerWW1.sendMessageWithKey("werewolf.role.troublemaker.get_switch");
+        playerWW1.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.troublemaker.get_switch");
         game.getMapManager().transportation(playerWW1, Math.random() * 2 * Math.PI);
-        player.sendMessage(game.translate("werewolf.role.troublemaker.troublemaker_perform",
+        player.sendMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.role.troublemaker.troublemaker_perform",
                 Formatter.format("&player&",playerArg.getName())));
     }
 }

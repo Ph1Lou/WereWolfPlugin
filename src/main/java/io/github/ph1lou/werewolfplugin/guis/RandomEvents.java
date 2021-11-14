@@ -11,6 +11,7 @@ import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
+import io.github.ph1lou.werewolfapi.registers.RandomEventRegister;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.Main;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
@@ -57,7 +58,7 @@ public class RandomEvents implements InventoryProvider {
         main.getRegisterManager().getRandomEventsRegister()
                 .forEach(randomEventRegister -> {
                     String key = randomEventRegister.getKey();
-                    ItemStack itemStack = getItemStack(game, key, randomEventRegister.getLoreKey());
+                    ItemStack itemStack = getItemStack(game, randomEventRegister);
 
                     items.add(ClickableItem.of((itemStack), e -> {
 
@@ -69,7 +70,7 @@ public class RandomEvents implements InventoryProvider {
                                     randomEventRegister.getRandomEvent().register(game.getRandom().nextDouble() * 100 < game.getConfig().getProbability(key));
                                 }
                             }
-                            e.setCurrentItem(getItemStack(game, key, randomEventRegister.getLoreKey()));
+                            e.setCurrentItem(getItemStack(game, randomEventRegister));
                         }
                         if (e.isRightClick()) {
                             int probability = config.getProbability(key);
@@ -77,7 +78,7 @@ public class RandomEvents implements InventoryProvider {
                             if (probability == 1) {
                                 randomEventRegister.getRandomEvent().register(false);
                             }
-                            e.setCurrentItem(getItemStack(game, key, randomEventRegister.getLoreKey()));
+                            e.setCurrentItem(getItemStack(game, randomEventRegister));
                         }
                     }));
 
@@ -121,12 +122,16 @@ public class RandomEvents implements InventoryProvider {
                 });
     }
 
-    private ItemStack getItemStack(GameManager game, String key, List<String> loreKey) {
+    private ItemStack getItemStack(GameManager game, RandomEventRegister randomEventRegister) {
 
+        String key = randomEventRegister.getKey();
         IConfiguration config = game.getConfig();
-        List<String> lore2 = new ArrayList<>(Arrays.asList(game.translate("werewolf.menu.left"), game.translate("werewolf.menu.right")));
+        List<String> lore2 = new ArrayList<>(Arrays.asList(game.translate("werewolf.menu.left"),
+                game.translate("werewolf.menu.right")));
         List<String> lore = new ArrayList<>();
-        loreKey.stream().map(game::translate).map(s -> Arrays.stream(s.split("\\n")).collect(Collectors.toList())).forEach(lore::addAll);
+        randomEventRegister.getLoreKey().stream().map(game::translate)
+                .map(s -> Arrays.stream(s.split("\\n"))
+                .collect(Collectors.toList())).forEach(lore::addAll);
         ItemStack itemStack;
 
         if (config.getProbability(key) > 0) {

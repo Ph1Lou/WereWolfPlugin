@@ -6,6 +6,7 @@ import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
@@ -38,7 +39,7 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
 
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.avenger_werewolf.description",
-                                Formatter.format("&blocks&",game.getConfig().getDistanceAvengerWerewolf())))
+                                Formatter.format("&number&",game.getConfig().getDistanceAvengerWerewolf())))
                 .setPower(game.translate("werewolf.role.avenger_werewolf.power"))
                 .setEffects(game.translate("werewolf.description.werewolf"))
                 .build();
@@ -61,12 +62,12 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
         Bukkit.getPluginManager().callEvent(event1);
 
         if (event1.isCancelled()) {
-            this.getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
             return;
         }
 
 
-        this.getPlayerWW().sendMessageWithKey("werewolf.role.avenger_werewolf.remove",
+        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.role.avenger_werewolf.remove",
                 Formatter.format("&player&",event.getPlayerWW().getName()));
         this.getPlayerWW().addPlayerMaxHealth(2);
     }
@@ -108,7 +109,7 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
                         }
 
                         this.affectedPlayers.add(playerWW);
-                        this.getPlayerWW().sendMessageWithKey("werewolf.role.avenger_werewolf.add",
+                        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.avenger_werewolf.add",
                                 Formatter.format("&player&",playerWW.getName()));
                     }
                 });

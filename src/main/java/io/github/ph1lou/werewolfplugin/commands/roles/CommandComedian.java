@@ -6,6 +6,7 @@ import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.ComedianMask;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.events.roles.comedian.UseMaskEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
@@ -31,14 +32,14 @@ public class CommandComedian implements ICommand {
         try {
             int i = Integer.parseInt(args[0]) - 1;
             if (i < 0 || i > 2) {
-                playerWW.sendMessageWithKey("werewolf.role.comedian.mask_unknown");
+                playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.comedian.mask_unknown");
                 return;
             }
 
             if (((Comedian) comedian).getMasks()
                     .contains(ComedianMask.values()[i])) {
 
-                playerWW.sendMessageWithKey("werewolf.role.comedian.used_mask");
+                playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.comedian.used_mask");
                 return;
             }
             ((IPower) comedian).setPower(false);
@@ -48,12 +49,12 @@ public class CommandComedian implements ICommand {
             Bukkit.getPluginManager().callEvent(useMaskEvent);
 
             if (useMaskEvent.isCancelled()) {
-                playerWW.sendMessageWithKey("werewolf.check.cancel");
+                playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
                 return;
             }
 
             playerWW.sendMessageWithKey(
-                    "werewolf.role.comedian.wear_mask_perform",
+                    Prefix.YELLOW.getKey() , "werewolf.role.comedian.wear_mask_perform",
                     Formatter.format("&mask&",game.translate(ComedianMask.values()[i].getKey())));
             playerWW.addPotionModifier(PotionModifier.add(ComedianMask.values()[i].getPotionEffectType(),"comedian"));
 

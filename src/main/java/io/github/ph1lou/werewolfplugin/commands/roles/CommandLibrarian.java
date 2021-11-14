@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.roles.librarian.LibrarianRequestEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
@@ -31,14 +32,14 @@ public class CommandLibrarian implements ICommand {
         IRole librarian = playerWW.getRole();
 
         if (args[0].equalsIgnoreCase(playername)) {
-            playerWW.sendMessageWithKey("werewolf.check.not_yourself");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.not_yourself");
             return;
         }
 
         Player selectionPlayer = Bukkit.getPlayer(args[0]);
 
         if (selectionPlayer == null) {
-            playerWW.sendMessageWithKey("werewolf.check.offline_player");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.offline_player");
             return;
         }
 
@@ -48,18 +49,18 @@ public class CommandLibrarian implements ICommand {
         if (playerWW1 == null ||
                 !playerWW1.isState(StatePlayer.ALIVE)) {
 
-            playerWW.sendMessageWithKey("werewolf.check.player_not_found");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.player_not_found");
             return;
         }
 
         if (((IAffectedPlayers) librarian).getAffectedPlayers().contains(playerWW1)) {
-            playerWW.sendMessageWithKey("werewolf.role.librarian.waiting");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.librarian.waiting");
             return;
         }
 
 
         if (((ILimitedUse) librarian).getUse() >= 3) {
-            playerWW.sendMessageWithKey("werewolf.check.power");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.power");
             return;
         }
 
@@ -68,14 +69,14 @@ public class CommandLibrarian implements ICommand {
         Bukkit.getPluginManager().callEvent(librarianRequestEvent);
 
         if (librarianRequestEvent.isCancelled()) {
-            playerWW.sendMessageWithKey("werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
             return;
         }
 
         ((IAffectedPlayers) librarian).addAffectedPlayer(playerWW1);
 
         TextComponent contributionMessage = new TextComponent(game.translate(
-                "werewolf.role.librarian.message"));
+                Prefix.YELLOW.getKey() , "werewolf.role.librarian.message"));
         contributionMessage
                 .setClickEvent(new ClickEvent(
                         ClickEvent.Action.SUGGEST_COMMAND,
@@ -85,7 +86,7 @@ public class CommandLibrarian implements ICommand {
         selectionPlayer.spigot().sendMessage(contributionMessage);
 
         playerWW.sendMessageWithKey(
-                "werewolf.role.librarian.perform",
+                Prefix.YELLOW.getKey() , "werewolf.role.librarian.perform",
                 Formatter.format("&player&",selectionPlayer.getName()));
     }
 }

@@ -8,6 +8,7 @@ import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.ThirdDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.witch.WitchResurrectionEvent;
@@ -131,7 +132,7 @@ public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
         TextComponent textComponent =
                 new TextComponent(
                         game.translate(
-                                "werewolf.role.witch.resuscitation_message",
+                                Prefix.YELLOW.getKey() , "werewolf.role.witch.resuscitation_message",
                                 Formatter.format("&player&",playerWW.getName())));
         textComponent.setClickEvent(new ClickEvent(
                 ClickEvent.Action.RUN_COMMAND,
@@ -158,7 +159,7 @@ public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
             return true;
         }
 
-        player.sendMessageWithKey("werewolf.check.cancel");
+        player.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
 
         return false;
     }

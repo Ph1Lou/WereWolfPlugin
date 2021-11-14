@@ -8,6 +8,7 @@ import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.AngelForm;
 import io.github.ph1lou.werewolfapi.enums.Day;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.roles.angel.AngelChoiceEvent;
@@ -32,13 +33,13 @@ public class CommandFallenAngel implements ICommand {
         Angel role = (Angel) playerWW.getRole();
 
         if (!role.isChoice(AngelForm.ANGEL)) {
-            player.sendMessage(game.translate("werewolf.check.power"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.power"));
             return;
         }
 
         role.setChoice(AngelForm.FALLEN_ANGEL);
         Bukkit.getPluginManager().callEvent(new AngelChoiceEvent(playerWW, AngelForm.FALLEN_ANGEL));
-        player.sendMessage(game.translate("werewolf.role.angel.angle_choice_click",
+        player.sendMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.role.angel.angle_choice_click",
                 Formatter.format("&form&",game.translate(RolesBase.FALLEN_ANGEL.getKey())),
                 Formatter.format("&timer&",Utils.conversion(game.getConfig().getTimerValue(TimerBase.ANGEL_DURATION.getKey())))));
 

@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -26,7 +27,7 @@ public class CommandAnonymeChat implements ICommand {
 
 
         if (args.length == 0) {
-            player.sendMessage(game.translate("werewolf.commands.admin.anonymous_chat.empty"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.commands.admin.anonymous_chat.empty"));
             return;
         }
 
@@ -91,7 +92,7 @@ public class CommandAnonymeChat implements ICommand {
         }
 
         if (i == 0) {
-            player.sendMessage(game.translate("werewolf.commands.admin.anonymous_chat.failure"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.commands.admin.anonymous_chat.failure"));
         } else
             player.sendMessage(game.translate("werewolf.commands.message.send",
                     Formatter.format("&player&",game.translate("werewolf.commands.admin.moderator.name")),

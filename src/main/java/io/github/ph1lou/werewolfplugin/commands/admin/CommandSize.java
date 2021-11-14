@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.commands.admin;
 import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -24,12 +25,12 @@ public class CommandSize implements ICommand {
         }
 
         Location location = world.getSpawnLocation();
-        player.sendMessage(game.translate("werewolf.commands.admin.size.begin"));
+        player.sendMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.commands.admin.size.begin"));
         int size = VersionUtils.getVersionUtils().biomeSize(location, world);
-        player.sendMessage(game.translate("werewolf.commands.admin.size.result",
+        player.sendMessage(game.translate(Prefix.GREEN.getKey() , "werewolf.commands.admin.size.result",
                 Formatter.format("&number&",size)));
 
-        TextComponent msg = new TextComponent(game.translate("werewolf.commands.admin.size.change"));
+        TextComponent msg = new TextComponent(game.translate(Prefix.YELLOW.getKey() , "werewolf.commands.admin.size.change"));
         msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/a %s", game.translate("werewolf.commands.admin.change.command"))));
         player.spigot().sendMessage(msg);
     }

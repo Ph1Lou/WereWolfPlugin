@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.commands.roles;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.roles.wolf_dog.WolfDogChooseWereWolfForm;
 import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
@@ -29,13 +30,13 @@ public class CommandWolfDog implements ICommand {
         Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
-            playerWW.sendMessageWithKey("werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
             return;
         }
 
         ((ITransformed) wolfDog).setTransformed(true);
 
-        playerWW.sendMessageWithKey("werewolf.role.wolf_dog.perform");
+        playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.wolf_dog.perform");
 
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(player));
 

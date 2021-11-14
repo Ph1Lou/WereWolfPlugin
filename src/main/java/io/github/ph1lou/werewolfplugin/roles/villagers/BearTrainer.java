@@ -7,6 +7,7 @@ import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Camp;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
@@ -82,7 +83,7 @@ public class BearTrainer extends RoleVillage {
         if (player == null) return;
 
         if (event.isCancelled()) {
-            player.sendMessage(game.translate("werewolf.check.cancel"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.cancel"));
             return;
         }
 
@@ -93,7 +94,7 @@ public class BearTrainer extends RoleVillage {
         Bukkit.getOnlinePlayers()
                 .forEach(Sound.WOLF_GROWL::play);
 
-        Bukkit.broadcastMessage(game.translate("werewolf.role.bear_trainer.growling_message",
+        Bukkit.broadcastMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.role.bear_trainer.growling_message",
                 Formatter.format("&growling&",builder)));
     }
 
@@ -102,7 +103,7 @@ public class BearTrainer extends RoleVillage {
 
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.bear_trainer.description",
-                                Formatter.format("&blocks&",game.getConfig().getDistanceBearTrainer())))
+                                Formatter.format("&number&",game.getConfig().getDistanceBearTrainer())))
                 .build();
     }
 

@@ -8,6 +8,7 @@ import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimerBase;
@@ -65,7 +66,7 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.sister.description"))
                 .setEffects(game.translate("werewolf.role.sister.effect",
-                        Formatter.format("&blocks&", game.getConfig().getDistanceSister())))
+                        Formatter.format("&number&", game.getConfig().getDistanceSister())))
                 .addExtraLines(extraLines)
                 .build();
     }
@@ -147,7 +148,7 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
 
         IPlayerWW sisterWW = event.getSister();
         IPlayerWW killerWW = event.getKiller();
-        TextComponent textComponent = new TextComponent(game.translate("werewolf.role.sister.choice"));
+        TextComponent textComponent = new TextComponent(game.translate(Prefix.YELLOW.getKey() , "werewolf.role.sister.choice"));
 
         TextComponent name = new TextComponent(
                 game.translate("werewolf.role.sister.name"));

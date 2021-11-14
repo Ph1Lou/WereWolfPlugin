@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.save;
 
 
 import com.eclipsesource.json.Json;
+import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 import io.github.ph1lou.werewolfapi.Formatter;
@@ -24,7 +25,6 @@ public class LanguageManager implements ILanguageManager, Listener {
 
     private final Main main;
     private final Map<String, JsonValue> extraTexts = new HashMap<>();
-
     private final Map<String, JsonValue> language = new HashMap<>();
 
 
@@ -69,13 +69,13 @@ public class LanguageManager implements ILanguageManager, Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     private void updateLanguage(UpdateLanguageEvent event) {
-        language.clear();
-        language.putAll(loadTranslations(FileUtils_.loadContent(buildLanguageFile(main, "fr"))));
-        extraTexts.clear();
+        this.language.clear();
+        this.language.putAll(loadTranslations(FileUtils_.loadContent(buildLanguageFile(main, "fr"))));
+        this.extraTexts.clear();
 
-        main.getRegisterManager().getAddonsRegister().forEach(addon -> {
+        this.main.getRegisterManager().getAddonsRegister().forEach(addon -> {
             String defaultLanguages = addon.getDefaultLanguage();
-            extraTexts.putAll(loadTranslations(FileUtils_.loadContent(buildLanguageFile(addon.getPlugin(), defaultLanguages))));
+            this.extraTexts.putAll(loadTranslations(FileUtils_.loadContent(buildLanguageFile(addon.getPlugin(), defaultLanguages))));
         });
     }
 
@@ -122,11 +122,19 @@ public class LanguageManager implements ILanguageManager, Listener {
 
     public List<String> getTranslationList(String key, Formatter... formatters) {
 
+        JsonArray array;
         if (!language.containsKey(key) || !language.get(key).isArray()) {
-            return Collections.singletonList("Array Message error");
+            if (this.extraTexts.containsKey(key) && this.extraTexts.get(key).isArray()) {
+                array = this.extraTexts.get(key).asArray();
+            }
+            else{
+                return Collections.singletonList("Array Message error");
+            }
         }
-        return language.get(key)
-                .asArray().values()
+        else{
+            array = this.language.get(key).asArray();
+        }
+        return array.values()
                 .stream().filter(JsonValue::isString)
                 .map(JsonValue::asString)
                 .map(s -> {
@@ -142,14 +150,14 @@ public class LanguageManager implements ILanguageManager, Listener {
 
     public String getTranslation(String key) {
 
-        if (!language.containsKey(key) || !language.get(key).isString()) {
+        if (!this.language.containsKey(key) || !this.language.get(key).isString()) {
 
             if (this.extraTexts.containsKey(key) && this.extraTexts.get(key).isString()) {
                 return this.extraTexts.get(key).asString();
             }
             return String.format("Message error (%s) ", key.toLowerCase());
         }
-        return language.get(key).asString();
+        return this.language.get(key).asString();
     }
 
 

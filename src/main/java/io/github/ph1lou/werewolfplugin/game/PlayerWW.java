@@ -24,6 +24,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -143,14 +144,14 @@ public class PlayerWW implements IPlayerWW {
 
     @Override
     public void sendMessageWithKey(@NotNull String key, Formatter... formatters) {
-        this.sendMessageWithKey(key, "", formatters);
+        this.sendMessageWithKey("", key, formatters);
     }
 
     @Override
     public void sendMessageWithKey(@NotNull String prefixKey,@NotNull String key, Formatter... formatters) {
-        String message = game.translate(prefixKey,key,formatters);
+        String message = this.game.translate(prefixKey,key,formatters);
 
-        Player player = Bukkit.getPlayer(uuid);
+        Player player = Bukkit.getPlayer(this.uuid);
 
         if (player != null) {
             player.sendMessage(message);
@@ -159,8 +160,6 @@ public class PlayerWW implements IPlayerWW {
 
         this.disconnectedMessages.add(new MessageAction(message));
     }
-
-
 
     @Override
     public void sendMessage(@NotNull TextComponent textComponent) {
@@ -279,7 +278,6 @@ public class PlayerWW implements IPlayerWW {
 
     @Override
     public Set<? extends PotionModifier> getPotionModifiers() {
-
         return this.potionModifiers.keySet();
     }
 

@@ -13,7 +13,7 @@ import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.potion.Potion;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -73,10 +73,11 @@ public class PatchPotions implements Listener {
 
         Player player = event.getPlayer();
 
-        if(event.getItem().getType()== Material.POTION)
+        if(event.getItem().getItemMeta() instanceof PotionMeta)
         {
-            Potion potion = Potion.fromItemStack(event.getItem());
             event.setCancelled(true);
+            PotionMeta potionMeta = (PotionMeta) event.getItem().getItemMeta();
+
             BukkitUtils.scheduleSyncDelayedTask(() ->
             {
                 PlayerInventory inventory = player.getInventory();
@@ -85,7 +86,7 @@ public class PatchPotions implements Listener {
             });
 
             game.getPlayerWW(player.getUniqueId())
-                    .ifPresent(playerWW -> potion.getEffects().forEach(potionEffect -> playerWW.addPotionModifier(PotionModifier.add(potionEffect.getType(),
+                    .ifPresent(playerWW -> potionMeta.getCustomEffects().forEach(potionEffect -> playerWW.addPotionModifier(PotionModifier.add(potionEffect.getType(),
                             potionEffect.getDuration(),
                             potionEffect.getAmplifier(),
                             "potion_drink"))));

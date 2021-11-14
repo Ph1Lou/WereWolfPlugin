@@ -9,6 +9,7 @@ import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Camp;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
@@ -126,7 +127,7 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
         }
 
         setPower(true);
-        this.getPlayerWW().sendMessageWithKey("werewolf.role.fox.smell_message",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.fox.smell_message",
                 Formatter.format("&number&",game.getConfig().getUseOfFlair() - getUse()));
     }
 
@@ -136,7 +137,7 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
 
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.fox.description",
-                        Formatter.format("&blocks&",game.getConfig().getDistanceFox()),
+                        Formatter.format("&number&",game.getConfig().getDistanceFox()),
                                 Formatter.format("&timer&",Utils.conversion(game.getConfig()
                                 .getTimerValue(TimerBase.FOX_SMELL_DURATION.getKey()))),
                                 Formatter.format("&number&",game.getConfig().getUseOfFlair() - use)))
@@ -195,7 +196,7 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
 
         if (temp % 10 > 0 && temp % 10 <= 100f /
                 (game.getConfig().getTimerValue(TimerBase.FOX_SMELL_DURATION.getKey()) + 1)) {
-            player.sendMessage(game.translate("werewolf.role.fox.progress",
+            player.sendMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.role.fox.progress",
                     Formatter.format("&progress&",Math.min(100, Math.floor(temp)))));
         }
 
@@ -211,12 +212,12 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
             if (!sniffEvent.isCancelled()) {
                 if (sniffEvent.isWereWolf()) {
                     player.sendMessage(game.translate(
-                            "werewolf.role.fox.werewolf",
+                            Prefix.YELLOW.getKey() , "werewolf.role.fox.werewolf",
                             Formatter.format("&player&",playerWW.getName())));
-                    player.sendMessage(game.translate("werewolf.role.fox.warn"));
+                    player.sendMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.role.fox.warn"));
                 } else {
                     player.sendMessage(game.translate(
-                            "werewolf.role.fox.not_werewolf",
+                            Prefix.YELLOW.getKey() , "werewolf.role.fox.not_werewolf",
                             Formatter.format("&player&",playerWW.getName())));
                 }
 
@@ -224,14 +225,14 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
                 if (playerWW.getRole().isWereWolf()) {
                     BukkitUtils.scheduleSyncDelayedTask(() -> {
                         if (game.isState(StateGame.GAME)) {
-                            playerWW.sendMessageWithKey("werewolf.role.fox.smell");
+                            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.fox.smell");
                             playerWW.sendSound(Sound.DONKEY_ANGRY);
                         }
                     }, 20 * 60 * 5);
                 }
 
             } else {
-                player.sendMessage(game.translate("werewolf.check.cancel"));
+                player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.cancel"));
             }
 
             clearAffectedPlayer();

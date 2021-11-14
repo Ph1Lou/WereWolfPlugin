@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.events.roles.sister.SisterSeeRoleEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import org.bukkit.entity.Player;
@@ -23,7 +24,7 @@ public class CommandSisterSeeRole implements ICommand {
         IAffectedPlayers affectedPlayers = (IAffectedPlayers) playerWW.getRole();
 
         if (!affectedPlayers.getAffectedPlayers().contains(killerWW)) {
-            playerWW.sendMessageWithKey("werewolf.role.sister.already");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.sister.already");
             return;
         }
 
@@ -32,12 +33,12 @@ public class CommandSisterSeeRole implements ICommand {
         SisterSeeRoleEvent sisterSeeRoleEvent = new SisterSeeRoleEvent(playerWW, killerWW);
 
         if (sisterSeeRoleEvent.isCancelled()) {
-            playerWW.sendMessageWithKey("werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
             return;
         }
 
 
-        playerWW.sendMessageWithKey("werewolf.role.sister.reveal_killer_role",
+        playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.sister.reveal_killer_role",
                 Formatter.format("&role&",
                 killerWW != null ?
                         game.translate(killerWW.getRole().getKey()) :

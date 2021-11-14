@@ -60,7 +60,12 @@ public class GlobalConfigs implements InventoryProvider {
                 .forEach(configRegister -> {
                     String key = configRegister.getKey();
                     List<String> lore = new ArrayList<>();
-                    configRegister.getLoreKey().stream().map(game::translate).map(s -> Arrays.stream(s.split("\\n")).collect(Collectors.toList())).forEach(lore::addAll);
+                    configRegister.getLoreKey()
+                            .stream()
+                            .map(game::translate)
+                            .map(s -> Arrays.stream(s.split("\\n"))
+                                    .collect(Collectors.toList()))
+                            .forEach(lore::addAll);
                     ItemStack itemStack;
 
                     if (game.getConfig().isConfigActive(configRegister.getKey())) {
@@ -81,7 +86,9 @@ public class GlobalConfigs implements InventoryProvider {
                             .ifPresent(configuration -> lore.add(game.translate("werewolf.menu.global.incompatible",
                                     Formatter.format("&configuration&",configuration))));
 
-                    items.add(ClickableItem.of((new ItemBuilder(itemStack).setDisplayName(game.translate(configRegister.getKey())).setLore(lore).build()), e -> {
+                    items.add(ClickableItem.of((new ItemBuilder(itemStack)
+                            .setDisplayName(game.translate(configRegister.getKey()))
+                            .setLore(lore).build()), e -> {
 
                         if (!incompatible.isPresent() || config.isConfigActive(key)) {
                             config.switchConfigValue(key);

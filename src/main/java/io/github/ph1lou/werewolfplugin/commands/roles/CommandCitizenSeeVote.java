@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.commands.roles;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.VoteStatus;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Citizen;
 import org.bukkit.entity.Player;
@@ -23,12 +24,12 @@ public class CommandCitizenSeeVote implements ICommand {
         Citizen citizen = (Citizen) playerWW.getRole();
 
         if (citizen.getUse() >= 2) {
-            playerWW.sendMessageWithKey("werewolf.check.power");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.power");
             return;
         }
 
         if (!game.getVote().isStatus(VoteStatus.WAITING_CITIZEN)) {
-            playerWW.sendMessageWithKey("werewolf.check.power");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.power");
             return;
         }
 

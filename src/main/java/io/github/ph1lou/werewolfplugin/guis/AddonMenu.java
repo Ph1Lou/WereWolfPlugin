@@ -44,7 +44,8 @@ public class AddonMenu implements InventoryProvider {
             lore.add(game.translate("werewolf.utils.author"));
             lore.addAll(addon.getAuthors());
 
-            contents.set(i / 9, i % 9, ClickableItem.of((new ItemBuilder(addon.getItem()).setDisplayName(game.translate(addon.getAddonKey())).setLore(lore).build()), e ->
+            contents.set(i / 9, i % 9, ClickableItem.of((new ItemBuilder(addon.getItem())
+                    .setDisplayName(game.translate(addon.getKey())).setLore(lore).build()), e ->
                     addon.getAction().make(player, INVENTORY)));
             i++;
         }

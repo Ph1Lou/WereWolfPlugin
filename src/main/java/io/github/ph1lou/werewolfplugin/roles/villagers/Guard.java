@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
@@ -65,15 +66,15 @@ public class Guard extends RoleWithLimitedSelectionDuration implements IAffected
         Bukkit.getPluginManager().callEvent(guardResurrectionEvent);
 
         if (guardResurrectionEvent.isCancelled()) {
-            this.getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
             return;
         }
 
         this.game.resurrection(this.last);
 
-        this.getPlayerWW().sendMessageWithKey("werewolf.role.guard.resurrection");
+        this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.guard.resurrection");
 
-        this.last.sendMessageWithKey("werewolf.role.guard.protect");
+        this.last.sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.role.guard.protect");
 
         event.setCancelled(true);
 
@@ -113,7 +114,7 @@ public class Guard extends RoleWithLimitedSelectionDuration implements IAffected
         this.setPower(true);
 
         this.getPlayerWW().sendMessageWithKey(
-                "werewolf.role.guard.message",
+                Prefix.YELLOW.getKey() , "werewolf.role.guard.message",
                 Formatter.format("&timer&",Utils.conversion(
                         this.game.getConfig().getTimerValue(TimerBase.POWER_DURATION.getKey()))));
     }

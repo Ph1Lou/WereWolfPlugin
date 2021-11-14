@@ -7,6 +7,7 @@ import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.Camp;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.elder.ElderResurrectionEvent;
@@ -92,7 +93,7 @@ public class Elder extends RoleVillage implements IPower {
         setPower(false);
 
         if (elderResurrectionEvent.isCancelled()) {
-            this.getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
         } else {
             if (elderResurrectionEvent.isKillerAVillager()) {
                 this.getPlayerWW().removePlayerMaxHealth(6);

@@ -73,7 +73,7 @@ public class Stuff implements IStuffManager {
             saveStuffRole(plugin,configName,addon.getAddonKey());
         }
 
-        saveStuffRole(main,configName,"werewolf.name");
+        saveStuffRole(main,configName, "werewolf.name");
         saveStuffStartAndDeath(configName);
 
     }
@@ -106,7 +106,7 @@ public class Stuff implements IStuffManager {
 
     }
 
-    private void saveStuffRole(Plugin plugin,String configName, String keyAddon) {
+    private void saveStuffRole(Plugin plugin,String configName, String addonKey) {
 
         int pos = 0;
         FileConfiguration config = getOrCreateCustomConfig(plugin, configName);
@@ -116,7 +116,7 @@ public class Stuff implements IStuffManager {
         }
 
         for (RoleRegister roleRegister:main.getRegisterManager().getRolesRegister()) {
-            if(roleRegister.getAddonKey().equals(keyAddon)){
+            if(roleRegister.getAddonKey().equals(addonKey)){
                 String key = roleRegister.getKey();
                 for (ItemStack i : stuffRoles.get(key)) {
                     this.setItem(config,key + "." + pos,i);
@@ -264,8 +264,13 @@ public class Stuff implements IStuffManager {
 
         stuffRoles.clear();
 
-        main.getRegisterManager().getAddonsRegister().forEach(addonRegister -> stuffRoles.putAll(loadStuff(addonRegister.getPlugin(), addonRegister.getAddonKey(), configName)));
-        stuffRoles.putAll(loadStuff(main, "werewolf.name", configName));
+        main.getRegisterManager()
+                .getAddonsRegister()
+                .forEach(addonRegister -> stuffRoles.putAll(loadStuff(addonRegister.getPlugin(),
+                        addonRegister.getAddonKey(), configName)));
+        stuffRoles.putAll(loadStuff(main,
+                "werewolf.name",
+                configName));
     }
 
 

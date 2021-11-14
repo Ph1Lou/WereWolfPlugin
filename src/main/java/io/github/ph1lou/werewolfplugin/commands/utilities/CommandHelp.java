@@ -2,6 +2,7 @@ package io.github.ph1lou.werewolfplugin.commands.utilities;
 
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.registers.CommandRegister;
 import io.github.ph1lou.werewolfapi.registers.IRegisterManager;
 import io.github.ph1lou.werewolfplugin.RegisterManager;
@@ -19,7 +20,7 @@ public class CommandHelp implements ICommand {
 
         IRegisterManager registerManager = RegisterManager.get();
 
-        TextComponent textComponent1 = new TextComponent(game.translate("werewolf.commands.admin.help.help"));
+        TextComponent textComponent1 = new TextComponent(game.translate(Prefix.GREEN.getKey() , "werewolf.commands.admin.help.help"));
 
         for (CommandRegister command : registerManager.getCommandsRegister()) {
             if (!command.getDescription().isEmpty()) {

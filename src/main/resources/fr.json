@@ -12,21 +12,21 @@
       },
       "guardian_angel": {
         "display": "Ange Gardien",
-        "protege": "Protégé : §b&ward&\n",
+        "protege": "Protégé : §b&player&\n",
         "wait": "Vous obtiendrez votre protégé dans §b&timer&§f",
         "effect": "15 coeurs puis 12 si votre protégé meurt",
         "show_command": "Vous pouvez, trois fois au cours de la partie, donner Regeneration à votre protégé pendant 20 secondes §b/ww regen",
         "description": "Vous devez protéger une personne choisie aléatoirement et gagner avec elle. Si celle-ci meurt, vous §ldevez gagner avec le Village.",
         "description_patch": "Vous devez protéger une personne choisie aléatoirement et gagner avec elle. Si celle-ci meurt, vous §ldevez gagner Seule.",
-        "protege_death": "[§eLG UHC§r] Votre protégé a été tué, vous perdez 3 coeurs et devez maintenant gagner avec le Village",
-        "protege_death_patch": "[§eLG UHC§r] Votre protégé a été tué, vous perdez 3 coeurs et devez maintenant gagner Seule",
-        "reveal_protege": "[§eLG UHC§r] Votre protégé est §b&ward&",
-        "get_regeneration": "[§aLG UHC§r] Vous obtenez Regeneration de la part de votre Ange Gardien pendant 20 secondes",
-        "no_protege": "[§cLG UHC§r] Vous n'avez pas encore de protégé",
-        "disconnected_protege": "[§cLG UHC§r] Votre protégé n'est pas connecté actuellement",
+        "protege_death": "Votre protégé a été tué, vous perdez 3 coeurs et devez maintenant gagner avec le Village",
+        "protege_death_patch": "Votre protégé a été tué, vous perdez 3 coeurs et devez maintenant gagner Seule",
+        "reveal_protege": "Votre protégé est §b&player&",
+        "get_regeneration": "Vous obtenez Regeneration de la part de votre Ange Gardien pendant 20 secondes",
+        "no_protege": "Vous n'avez pas encore de protégé",
+        "disconnected_protege": "Votre protégé n'est pas connecté actuellement",
         "command": "regen",
-        "perform": "[§aLG UHC§r] Votre protégé reçoit Régénération, il vous reste §b&number&§r Régénération(s)",
-        "new_protege": "[§6LG UHC§r] Votre protégé est maintenant §b&ward&"
+        "perform": "Votre protégé reçoit Régénération, il vous reste §b&number&§r Régénération(s)",
+        "new_protege": "Votre protégé est maintenant §b&player&"
       },
       "amnesiac_werewolf": {
         "display": "Loup Garou Amnésique",
@@ -34,56 +34,56 @@
       },
       "werewolf": {
         "display": "Loup Garou",
-        "go_to_the_werewolf_camp": "[§eLG UHC§r] Vous passez dans le camp des §4Loups Garous §b/ww lg",
-        "new_werewolf": "[§6LG UHC§r] Un nouveau joueur a rejoint la meute §b/ww lg",
-        "see_others": "[§eLG UHC§r] Vous distinguez maintenant les Loups Garous §b/ww lg",
-        "not_werewolf": "[§cLG UHC§r] Vous n'êtes pas un Loup Garou",
-        "list_not_revealed": "[§cLG UHC§r] La liste des Loups Garous n'est pas encore dévoilée",
-        "werewolf_list": "[§eLG UHC§r] Liste des Loups Garous : §b&list&",
+        "go_to_the_werewolf_camp": "Vous passez dans le camp des §4Loups Garous §b/ww lg",
+        "new_werewolf": "Un nouveau joueur a rejoint la meute §b/ww lg",
+        "see_others": "Vous distinguez maintenant les Loups Garous §b/ww lg",
+        "not_werewolf": "Vous n'êtes pas un Loup Garou",
+        "list_not_revealed": "La liste des Loups Garous n'est pas encore dévoilée",
+        "werewolf_list": "Liste des Loups Garous : §b&list&",
         "command": "lg"
       },
       "grimy_werewolf": {
         "display": "Loup Garou Grimeur",
         "description": "La première personne que vous tuerez apparaitra comme étant Loup Garou à l'annonce de sa mort",
-        "perform": "[§aLG UHC§r] Le joueur §b&player&§f était §b&role&§f. Grâce à votre pouvoir, son rôle à l'annonce de sa mort a été maquillé en Loup Garou",
-        "actualize": "[§aLG UHC§r] Un Loup Garou Grimeur vient de mourir. Il avait maquillé la mort d'un §b&role&"
+        "perform": "Le joueur §b&player&§f était §b&role&§f. Grâce à votre pouvoir, son rôle à l'annonce de sa mort a été maquillé en Loup Garou",
+        "actualize": "Un Loup Garou Grimeur vient de mourir. Il avait maquillé la mort d'un §b&role&"
       },
       "wild_child": {
         "display": "Enfant Sauvage",
         "model_none": "§cAucun§f désigner un modèle §b/ww modele",
         "description": "En début de partie, vous choisissez un modèle. Si celui ci meurt, vous passez dans le camp des Loups Garous.",
         "design_model": "Vous devez désigner un modèle §b/ww modele§r. Vous avez §b&timer&",
-        "reveal_model": "[§eLG UHC§r] Votre modèle est §b&model&",
+        "reveal_model": "Votre modèle est §b&player&",
         "model_death": "§cMort§f",
-        "model": "§bModele§f : &model&\n",
+        "model": "§bModele§f : &player&\n",
         "command": "modele",
-        "change": "[§6LG UHC§r] Votre modèle est maintenant §b&model&"
+        "change": "Votre modèle est maintenant §b&player&"
       },
       "sister": {
         "display": "Soeur",
-        "effect": "Résistance à moins de §b&blocks&§f blocs d'une §bSoeur§f.",
+        "effect": "Résistance à moins de §b&number&§f blocs d'une §bSoeur§f.",
         "description": "Si une Soeur meurt, vous pouvez choisir de connaitre le nom ou le rôle de son assassin.",
-        "choice": "[§eLG UHC§r] Cliquez pour connaitre ",
+        "choice": "Cliquez pour connaitre ",
         "name": "§ble nom§f",
         "role": "§ble rôle§f",
         "or": " ou ",
         "see_role": "Voir le rôle",
         "see_name": "Voir le nom",
-        "already": "[§cLG UHC§r] Vous avez déjà eu les informations",
+        "already": "Vous avez déjà eu les informations",
         "command_name": "commandseenamesister",
         "command_role": "commandseerolesister",
         "end_message": "de l'assassin de §b&player&§f",
-        "reveal_killer_name": "[§eLG UHC§r] Votre soeur a été tué par §b&player&",
-        "reveal_killer_role": "[§eLG UHC§r] Votre soeur a été tué par un §b&role&",
+        "reveal_killer_name": "Votre soeur a été tué par §b&player&",
+        "reveal_killer_role": "Votre soeur a été tué par un §b&role&",
         "sisters_list": "Liste de vos Soeurs : §b&list&\n"
       },
       "wolf_dog": {
         "display": "Chien Loup",
         "command": "changer",
         "description": "Forme §aVillageois§f : Les Loups Garous vous voient dans leur liste, cependant, vous ne connaissez pas les Loups Garous. Attention, les rôles à informations vous voient dans le camp des Loups Garous. Vous pouvez lire et envoyer des messages dans le chat des Loups Garous",
-        "transform": "[§aLG UHC§r] Vous pouvez passer dans votre forme Loup Garou avec la commande §b/ww changer§f (irreversible), vous avez §b&timer&",
-        "time_over": "[§cLG UHC§r] Vous ne pouvez plus choisir votre forme, vous gardez donc votre forme Village",
-        "perform": "[§cLG UHC§r] Vous venez de choisir la forme Loup Garou",
+        "transform": "Vous pouvez passer dans votre forme Loup Garou avec la commande §b/ww changer§f (irreversible), vous avez §b&timer&",
+        "time_over": "Vous ne pouvez plus choisir votre forme, vous gardez donc votre forme Village",
+        "perform": "Vous venez de choisir la forme Loup Garou",
         "description_2": "Forme §cLoup Garou§f : Les Loups Garous ne vous voient pas dans leur liste. Cependant, vous connaissez les Loups Garous. Les rôles à informations vous voient dans le camp des Villageois. Vous n'avez pas Force la nuit."
       },
       "stud": {
@@ -98,8 +98,8 @@
         "description": "Une fois dans la partie, vous pouvez ressusciter un joueur.",
         "not_himself": "Vous ne §cpouvez pas§f vous ressusciter vous même",
         "himself": "Vous §apouvez§f vous ressusciter vous même",
-        "resuscitation_message": "[§eLG UHC§r] §b&player&§r est mort, pour le ressusciter, §6Cliquez ici §r(Vous avez §b7sec§r)",
-        "resuscitation_perform": "[§eLG UHC§r] Vous venez de ressusciter §b&player&",
+        "resuscitation_message": "§b&player&§r est mort, pour le ressusciter, §6Cliquez ici §r(Vous avez §b7sec§r)",
+        "resuscitation_perform": "Vous venez de ressusciter §b&player&",
         "command": "sauver_witch",
         "auto_rez_witch": "la Sorcière peut se ressusciter elle même"
       },
@@ -108,48 +108,48 @@
         "item": "5 Tnt",
         "effect": "Invisible en enlevant votre armure la nuit.",
         "description": "Lorsque vous êtes invisible, vous laissez des particules bleues derrière vous visible par les Loups Garous Perfides. Inversement vous pouvez les repérer par leurs particules rouges. Vous pouvez également voir le chat des Loups Garous",
-        "remove_armor": "[§eLG UHC§r] C'est la nuit, enlevez votre armure pour devenir invisible",
-        "visible": "[§eLG UHC§r] Vous redevenez visible",
-        "remove_armor_perform": "[§aLG UHC§r] Vous devenez invisible. Remettez votre armure pour redevenir visible",
-        "soon_to_be_day": "[§6LG UHC§r] Il fait jour dans §b30§r secondes",
-        "ability_disabled": "[§cLG UHC§r] Votre pouvoir à été désactivé, vous redevenez visible"
+        "remove_armor": "C'est la nuit, enlevez votre armure pour devenir invisible",
+        "visible": "Vous redevenez visible",
+        "remove_armor_perform": "Vous devenez invisible. Remettez votre armure pour redevenir visible",
+        "soon_to_be_day": "Il fait jour dans §b30§r secondes",
+        "ability_disabled": "Votre pouvoir à été désactivé, vous redevenez visible"
       },
       "troublemaker": {
         "display": "Trublion",
         "description": "Une fois dans la partie, vous pouvez téléporter un joueur aléatoirement sur la carte avec §b/ww switch§f. Lorsque vous mourrez tous les joueurs sont téléportées aux quatre coins de la carte.",
         "chat": "Vous pouvez envoyer des messages dans le chat des Loups Garous néanmoins, vous ne pouvez pas voir son contenu",
-        "troublemaker_perform": "[§eLG UHC§r] Vous venez de trublionner §b&player&",
-        "troublemaker_death": "[§eLG UHC§r] Un Trublion vient de mourir, tous les joueurs sont téléportés aléatoirement",
-        "get_switch": "[§eLG UHC§r] Vous venez d'être téléporté par un trublion",
+        "troublemaker_perform": "Vous venez de trublionner §b&player&",
+        "troublemaker_death": "Un Trublion vient de mourir, tous les joueurs sont téléportés aléatoirement",
+        "get_switch": "Vous venez d'être téléporté par un trublion",
         "command": "switch"
       },
       "citizen": {
         "display": "Citoyen",
         "description": "Vous pouvez, deux fois dans le partie, décider de voir les Votes, et une fois seulement, les annuler.",
-        "cancel_vote_message": "[§eLG UHC§r] Vous pouvez encore annuler le vote §b&number&§r fois. ",
-        "see_vote_message": "[§eLG UHC§r] Vous pouvez encore dépouiller les votes §b&number&§r fois. ",
+        "cancel_vote_message": "Vous pouvez encore annuler le vote §b&number&§r fois. ",
+        "see_vote_message": "Vous pouvez encore dépouiller les votes §b&number&§r fois. ",
         "click": "§bCliquez ici ",
         "cancel": "Annuler le §bVote",
         "see": "Voir les §bVotes",
         "time_left": ", vous avez §b&timer&",
-        "cancelling_vote_perform": "[§eLG UHC§r] Vote annulé, vous venez de sauver §b&player&",
-        "cancelling_broadcast": "[§aLG UHC§r] Un Citoyen a annulé le vote",
-        "count_votes": "[§aLG UHC§r] Dépouillement ",
+        "cancelling_vote_perform": "Vote annulé, vous venez de sauver §b&player&",
+        "cancelling_broadcast": "Un Citoyen a annulé le vote",
+        "count_votes": "Dépouillement ",
         "see_vote": "§b&voter&§r a voté pour §b&player&§r",
         "command_1": "depouiller_citizen",
         "command_2": "annuler_citizen"
       },
       "angel": {
         "display": "Ange",
-        "angel_choice": "[§eLG UHC§r] Vous pouvez décider d'être soit ",
-        "angle_choice_click": "[§eLG UHC§r] Vous venez de choisir §b&form&§b§f. Vous obtiendrez votre cible dans §b&timer&",
+        "angel_choice": "Vous pouvez décider d'être soit ",
+        "angle_choice_click": "Vous venez de choisir §b&form&§b§f. Vous obtiendrez votre cible dans §b&timer&",
         "or": " soit ",
         "target": "Cible : §b&target&\n",
         "time": ", vous avez §b&timer& §f(Cliquez pour choisir)",
         "fallen_choice": "Si vous choisissez §bAnge Déchu§f,\n vous obtiendrez 12 coeurs, une cible vous sera assignée aléatoirement si vous la tuez,\n vous passerez à 15 coeurs jusqu'à la fin de la partie.",
         "guardian_choice": "Si vous choisissez §bAnge Gardien§f,\n vous obtiendrez 15 coeurs et devrez protéger une personne choisie aléatoirement et gagner avec elle.\n Si celle-ci meurt, vous repasserez à 12 coeurs \net devrez gagner avec le Village.",
         "guardian_choice_patch": "Si vous choisissez §bAnge Gardien§f,\n vous obtiendrez 15 coeurs et devrez protéger une personne choisie aléatoirement et gagner avec elle.\n Si celle-ci meurt, vous repasserez à 12 coeurs \net devrez gagner Seule.",
-        "angel_choice_perform": "[§eLG UHC§r] Vous venez de choisir §b&form&",
+        "angel_choice_perform": "Vous venez de choisir §b&form&",
         "command_1": "gardien",
         "command_2": "dechu",
         "choice": "il a choisi &form&",
@@ -157,33 +157,33 @@
       },
       "mystical_werewolf": {
         "display": "Loup Garou Mystique",
-        "no_message": "[§cLG UHC§r] Le Loup Garou Mystique n'a pas le droit d'envoyer des messages dans le chat des Loups Garous",
+        "no_message": "Le Loup Garou Mystique n'a pas le droit d'envoyer des messages dans le chat des Loups Garous",
         "description": "À chaque décès d'un Loup Garou, vous obtiendrez le rôle et le pseudo d'un joueur qui n'est pas de votre camp.",
-        "werewolf_death": "[§cLG UHC§r] Un Loup Garou vient de mourir, vous obtenez comme information que §b&player&§f est §b&role&",
-        "ability_disabled": "[§cLG UHC§r] Votre pouvoir a été désactivé; vous n'obtenez pas d'information"
+        "werewolf_death": "Un Loup Garou vient de mourir, vous obtenez comme information que §b&player&§f est §b&role&",
+        "ability_disabled": "Votre pouvoir a été désactivé; vous n'obtenez pas d'information"
       },
       "rival": {
         "display": "Rival",
-        "extra": "Vous avez le droit à un arc Puissance §b&power&",
+        "extra": "Vous avez le droit à un arc Puissance §b&number&",
         "item": "Deux potions de dégats",
         "description": "Lors de l'annonce du couple vous obtiendrez le rôle de deux personnes formant un couple. Dans §b&timer&§r, vous obtiendrez une liste de 5 joueurs contenant les noms des deux amoureux. \nSi vous tuez un membre du couple, vous prendrez sa place et devrez gagner avec son couple. \nEn revanche, si le couple meurt, vous devrez gagner seul et vous perdrez 5 coeurs (vous récupèrerez un coeurs par minute). Vous connaissez la direction du cupidon si il est présent dans la partie.",
-        "lover": "[§eLG UHC§r] Votre couple associé de la partie se compose d'un §b&role1&§f et d'un §b&role2&§f.",
-        "error": "[§cLG UHC§r] Aucun couple n'a été trouvé pour votre rôle (Rival)",
-        "find_lovers": "[§eLG UHC§r] Le couple se trouve parmi les joueurs suivants : &player1&, &player2&, &player3&, &player4&, &player5&",
-        "lover_death": "[§cLG UHC§r] Le couple est mort, vous êtes maintenant forcé de gagner seul, votre barre de vie est réduite de 2 coeurs."
+        "lover": "Votre couple associé de la partie se compose d'un §b&role1&§f et d'un §b&role2&§f.",
+        "error": "Aucun couple n'a été trouvé pour votre rôle (Rival)",
+        "find_lovers": "Le couple se trouve parmi les joueurs suivants : &player1&, &player2&, &player3&, &player4&, &player5&",
+        "lover_death": "Le couple est mort, vous êtes maintenant forcé de gagner seul, votre barre de vie est réduite de 2 coeurs."
       },
       "fox": {
         "display": "Renard",
         "effect": "Trois minutes de Vitesse après chaque kill",
-        "description": "Vous pouvez flairer les joueurs pour savoir si ils sont Loup-Garou. Les joueurs devront se situer à moins de §b&blocks&§f blocs pendant §b&timer&§f. Vous disposez de §b&number&§f flair(s).",
-        "smell_message": "[§eLG UHC§r] Vous pouvez flairer un joueur §b/ww flairer§f. Si vous êtes déjà en train de flairer quelqu'un, il sera remplacé par le nouveau joueur et la progression sera remis à 0. Il vous reste §b&number&§r flair(s)",
-        "smell_beginning": "[§eLG UHC§r] Vous commencez à flairer §b&player&",
-        "not_werewolf": "[§eLG UHC§r] &player& §2n'est pas dans le camp des Loups Garous",
-        "warn": "[§eLG UHC§r] Il sera prévenu dans 5 minutes que vous l'avez flairé",
-        "werewolf": "[§eLG UHC§r] &player& §4est dans le camp des Loups Garous.§f Il sera prévenu qu'il a été flairé dans 5 minutes",
-        "not_enough_near": "[§cLG UHC§r] Vous n'êtes pas assez proche de la personne que vous voulez flairer",
-        "progress": "[§eLG UHC§r] Progression du Flair §b&progress&%",
-        "smell": "[§cLG UHC§r] Vous avez été flairé par un §bRenard§f il y a 5 minutes",
+        "description": "Vous pouvez flairer les joueurs pour savoir si ils sont Loup-Garou. Les joueurs devront se situer à moins de §b&number&§f blocs pendant §b&timer&§f. Vous disposez de §b&number&§f flair(s).",
+        "smell_message": "Vous pouvez flairer un joueur §b/ww flairer§f. Si vous êtes déjà en train de flairer quelqu'un, il sera remplacé par le nouveau joueur et la progression sera remis à 0. Il vous reste §b&number&§r flair(s)",
+        "smell_beginning": "Vous commencez à flairer §b&player&",
+        "not_werewolf": "&player& §2n'est pas dans le camp des Loups Garous",
+        "warn": "Il sera prévenu dans 5 minutes que vous l'avez flairé",
+        "werewolf": "&player& §4est dans le camp des Loups Garous.§f Il sera prévenu qu'il a été flairé dans 5 minutes",
+        "not_enough_near": "Vous n'êtes pas assez proche de la personne que vous voulez flairer",
+        "progress": "Progression du Flair §b&progress&%",
+        "smell": "Vous avez été flairé par un §bRenard§f il y a 5 minutes",
         "command": "flairer"
       },
       "raven": {
@@ -191,10 +191,10 @@
         "effect": "Chute Amortie",
         "item": "Livre Chute Amortie III",
         "description": "Votre vote compte double. Vous pouvez maudire un joueur chaque matin qui obtiendra l'effet Saut amélioré II pendant une journée.",
-        "curse_message": "[§eLG UHC§r] Maudissez un joueur pour la journée §b/ww maudire§r, vous avez §b&timer&",
-        "curse_perform": "[§eLG UHC§r] Vous venez de maudire §b&player&",
-        "get_curse": "[§eLG UHC§r] Vous venez d'être maudit par le corbeau. Vous obtenez Jump Boost jusqu'au matin",
-        "no_longer_curse": "[§eLG UHC§r] Vous n'êtes plus maudit",
+        "curse_message": "Maudissez un joueur pour la journée §b/ww maudire§r, vous avez §b&timer&",
+        "curse_perform": "Vous venez de maudire §b&player&",
+        "get_curse": "Vous venez d'être maudit par le corbeau. Vous obtenez Jump Boost jusqu'au matin",
+        "no_longer_curse": "Vous n'êtes plus maudit",
         "command": "maudire"
       },
       "village_idiot": {
@@ -202,7 +202,7 @@
         "suffix": "§6Idiot",
         "power_on": "Vous pouvez §aencore§f ressusciter",
         "power_off": "Vois ne pouvez §cplus§f ressusciter",
-        "announce": "[§eLG UHC§r] L'Idiot du Village §b&player&§r ressuscite.",
+        "announce": "L'Idiot du Village §b&player&§r ressuscite.",
         "description": "Lorsque vous vous faites tuer par un joueur qui n’appartient pas au camp des Loups Garous, vous êtes ressuscité mais perdez 2 coeurs permanents et tous les joueurs sont informés de votre rôle."
       },
       "villager": {
@@ -232,15 +232,15 @@
         "display": "Loup Garou Feutré",
         "description": "§fVous avez un rôle d’affichage différent chaque jour parmi ceux encore en vie pour tromper le Village.",
         "role": "§fRole d'Affichage Actuel : §b&role&\n",
-        "display_role_message": "[§eLG UHC§r] Votre Rôle d'affichage aujourd'hui est §b&role&"
+        "display_role_message": "Votre Rôle d'affichage aujourd'hui est §b&role&"
       },
       "thief": {
         "display": "Voleur",
         "thief": " §fvous avez §fvolé un(e) §b&role&§f",
-        "details": "[§eLG UHC§r] Pour voir les détails de votre rôle §b/ww role",
+        "details": "Pour voir les détails de votre rôle §b/ww role",
         "description": "Vous récupérez le rôle de la première personne que vous tuez et devrez gagner avec son Camp.",
         "effect": "Résistance jusqu’à son premier meurtre",
-        "realized_theft": "[§eLG UHC§r] Vous devenez §b&role&"
+        "realized_theft": "Vous devenez §b&role&"
       },
       "imitator": {
         "display": "Imitateur",
@@ -250,10 +250,10 @@
       "detective": {
         "display": "Détective",
         "description": "Chaque matin, vous pouvez tester deux joueurs pour savoir s'ils appartiennent, ou non, au même camp.",
-        "inspection_message": "[§eLG UHC§r] Inspectez deux joueurs §b/ww inspecter§r vous avez §b&timer&",
-        "same_camp": "[§eLG UHC§r] &player1& et &player2& §2sont dans le même camp",
-        "opposing_camp": "[§eLG UHC§r] &player1& et &player2& §4ne sont pas dans le même camp",
-        "already_inspect": "[§cLG UHC§r] Au moins un de ces joueurs a déjà été inspecté",
+        "inspection_message": "Inspectez deux joueurs §b/ww inspecter§r vous avez §b&timer&",
+        "same_camp": "&player1& et &player2& §2sont dans le même camp",
+        "opposing_camp": "&player1& et &player2& §4ne sont pas dans le même camp",
+        "already_inspect": "Au moins un de ces joueurs a déjà été inspecté",
         "command": "inspecter",
         "detective_every_other_day": "Detective tous les deux jours"
       },
@@ -264,7 +264,7 @@
       "chatty_seer": {
         "display": "Voyante Bavarde",
         "description": "Le Matin, Vous pouvez connaître le camp d'un joueur. Cependant si c'est un Villageois, vous perdrez 3 coeurs et ne pourrez pas utiliser votre pouvoir le tour suivant. Le message sera affiché dans le chat global.",
-        "see_perform": "[§eLG UHC§r] Une Voyante Bavarde vient d'espionner un membre du camp des §b&camp&"
+        "see_perform": "Une Voyante Bavarde vient d'espionner un membre du camp des §b&camp&"
       },
       "infect_father_of_the_wolves": {
         "display": "Infect Père des Loups",
@@ -272,21 +272,21 @@
         "power_available": "Vous pouvez §aencore§f utiliser votre pouvoir",
         "power_not_available": "Vous avez §cdéjà§f utilisé votre pouvoir",
         "description": "Vous pouvez ressusciter un joueur de votre choix, tué par les Loups-Garous. Ce joueur rejoindra votre Camp, tout en gardant ses pouvoirs d’origines.",
-        "infection_message": "[§eLG UHC§r] §b&player&§r est mort, pour l'infecter §6Cliquez ici §r(Vous avez §b7sec§r)",
-        "infection_perform": "[§eLG UHC§r] Vous venez d'infecter §b&player&",
-        "player_cannot_be_infected": "[§cLG UHC§r] Le joueur ne peut pas (plus) être infecté",
+        "infection_message": "§b&player&§r est mort, pour l'infecter §6Cliquez ici §r(Vous avez §b7sec§r)",
+        "infection_perform": "Vous venez d'infecter §b&player&",
+        "player_cannot_be_infected": "Le joueur ne peut pas (plus) être infecté",
         "command": "infecter_infect"
       },
       "seer": {
         "display": "Voyante",
         "items": "4 Obsidiennes et 4 Bibliothèques",
         "effect": "Vision Nocturne",
-        "disable": "[§cLG UHC§r] Vous avez espionné un Villageois la dernière fois. Votre pouvoir sera réactivé pour le prochain cycle",
+        "disable": "Vous avez espionné un Villageois la dernière fois. Votre pouvoir sera réactivé pour le prochain cycle",
         "description": "Le Matin, Vous pouvez connaître le camp d'un joueur. Cependant si c'est un Villageois, vous perdrez 3 coeurs et ne pourrez pas utiliser votre pouvoir le tour suivant.",
-        "see_camp_message": "[§eLG UHC§r] Découvrez le camp d'un joueur §b/ww voir§r vous avez §b&timer&",
-        "see_perform": "[§eLG UHC§r] Vous venez d'espionner un membre du camp des §b&camp&",
-        "not_enough_life": "[§cLG UHC§r] Vous n'avez plus assez de vie pour espionner un joueur",
-        "see_villager": "[§cLG UHC§r] Vous venez d'espionner un membre du Village vous perdez 3 coeurs et vous ne pourrez pas utiliser votre pouvoir pour la prochaine fois",
+        "see_camp_message": "Découvrez le camp d'un joueur §b/ww voir§r vous avez §b&timer&",
+        "see_perform": "Vous venez d'espionner un membre du camp des §b&camp&",
+        "not_enough_life": "Vous n'avez plus assez de vie pour espionner un joueur",
+        "see_villager": "Vous venez d'espionner un membre du Village vous perdez 3 coeurs et vous ne pourrez pas utiliser votre pouvoir pour la prochaine fois",
         "command": "voir",
         "seer_every_other_day": "Voyante tous les deux jours"
       },
@@ -296,18 +296,18 @@
         "command": "spec",
         "items": "Quatre Obsidiennes",
         "magic": "§kCoucou",
-        "message": "[§cLG UHC§r] §b&player&§r est dans le camp des §b&camp&",
-        "werewolf_death": "[§aLG UHC§r] Un Loup Garou que vous avez espionné est mort, vous regagnez 1 coeur",
-        "perform": "[§eLG UHC§r] Découvrez le camp d'un joueur à moins de §b&blocks&§r blocs de vous avec §b/ww spec§r vous avez §b&timer&",
-        "distance": "[§cLG UHC§r] Vous devez être à moins de &blocks& blocs du joueur"
+        "message": "§b&player&§r est dans le camp des §b&camp&",
+        "werewolf_death": "Un Loup Garou que vous avez espionné est mort, vous regagnez 1 coeur",
+        "perform": "Découvrez le camp d'un joueur à moins de §b&number&§r blocs de vous avec §b/ww spec§r vous avez §b&timer&",
+        "distance": "Vous devez être à moins de &number& blocs du joueur"
       },
       "oracle": {
         "display": "Oracle",
         "description": "Une fois par épisode, vous pouvez connaitre l'aura d'un joueur de votre choix.",
         "effect": "Vision nocturne",
         "command": "oracle",
-        "perform": "[§eLG UHC§r] Découvrez l'aura d'un joueur avec §b/ww oracle§r vous avez §b&timer&",
-        "message": "[§cLG UHC§r] L'aura de §b&player&§r est §b&aura&",
+        "perform": "Découvrez l'aura d'un joueur avec §b/ww oracle§r vous avez §b&timer&",
+        "message": "L'aura de §b&player&§r est §b&aura&",
         "light": "Lumineuse",
         "neutral": "Neutre",
         "dark": "Obscure",
@@ -317,10 +317,10 @@
         "display": "Salvateur",
         "items": "Trois Potions Splash de Soin",
         "description": "Chaque matin, vous pouvez décider de protéger un joueur, il recevra les effets Résistance et Chute Amortie jusqu'au matin",
-        "protection_message": "[§eLG UHC§r] Protégez un joueur pour la journée §b/ww proteger§r vous avez §b&timer&",
-        "protection_perform": "[§eLG UHC§r] Vous venez de protéger §b&player&",
-        "get_protection": "[§eLG UHC§r] Le Salvateur vous protège pour la journée, vous avez Résistance et Nofall",
-        "no_longer_protected": "[§eLG UHC§r] Vous n'avez plus la salvation",
+        "protection_message": "Protégez un joueur pour la journée §b/ww proteger§r vous avez §b&timer&",
+        "protection_perform": "Vous venez de protéger §b&player&",
+        "get_protection": "Le Salvateur vous protège pour la journée, vous avez Résistance et Nofall",
+        "no_longer_protected": "Vous n'avez plus la salvation",
         "command": "proteger"
       },
       "guard": {
@@ -328,33 +328,33 @@
         "description": "Chaque matin, vous pouvez décider de protéger un joueur. S'il se fait tuer par un Loup Garou, il ressuscitera et vous ne pourrez plus utiliser votre pouvoir. Vous ne pouvez protéger qu'une fois chaque joueur",
         "items": "Une Potion Splash de Force",
         "command": "proteger",
-        "perform": "[§aLG UHC§r] Vous venez de protéger §b&player&",
-        "protect": "[§aLG UHC§r] Le garde vous avait protégé, de ce fait vous ressuscitez",
-        "resurrection": "[§cLG UHC§r] La personne que vous avez protégé vient de ressusciter. Vous n'avez plus de pouvoirs",
-        "message": "[§eLG UHC§r] Protégez un joueur pour la journée §b/ww proteger§r vous avez §b&timer&"
+        "perform": "Vous venez de protéger §b&player&",
+        "protect": "Le garde vous avait protégé, de ce fait vous ressuscitez",
+        "resurrection": "La personne que vous avez protégé vient de ressusciter. Vous n'avez plus de pouvoirs",
+        "message": "Protégez un joueur pour la journée §b/ww proteger§r vous avez §b&timer&"
       },
       "bear_trainer": {
         "display": "Montreur d'Ours",
-        "description": "Vous avez la particularité de grogner au début du jour si un Loup-Garou se trouve dans votre voisinage de §b&blocks&§f blocs. Un message sera envoyé dans le chat global.",
-        "growling_message": "[§eLG UHC§r] &growling&",
+        "description": "Vous avez la particularité de grogner au début du jour si un Loup-Garou se trouve dans votre voisinage de §b&number&§f blocs. Un message sera envoyé dans le chat global.",
+        "growling_message": "&growling&",
         "growling": "Grrrr "
       },
       "avenger_werewolf": {
         "display": "Loup Garou Vengeur",
         "power": "7 cœurs au départ. Lorsque un Loup Garou enregistré meurt, vous gagnez 1 cœur permanent supplémentaire.",
-        "description": "Lorsque vous croisez d'autres Loup Garou à moins de §b&blocks&§f blocs, ceux-ci sont enregistrés.",
-        "add": "[§eLG UHC§r] §b&player&§f a été enregistré",
-        "remove": "[§aLG UHC§r] §b&player&§f était dans votre liste d'enregistrement, vous récupérez un coeur permanent supplémentaire"
+        "description": "Lorsque vous croisez d'autres Loup Garou à moins de §b&number&§f blocs, ceux-ci sont enregistrés.",
+        "add": "§b&player&§f a été enregistré",
+        "remove": "§b&player&§f était dans votre liste d'enregistrement, vous récupérez un coeur permanent supplémentaire"
       },
       "fallen_angel": {
         "display": "Ange Déchu",
         "effect": "Résistance la nuit",
         "wait": "Vous obtiendrez votre cible dans §b&timer&§f",
         "power": "12 coeurs puis 15 si vous tuez votre cible.",
-        "deadly_target": "[§eLG UHC§r] Vous avez tué votre cible, vous gagnez 3 coeurs",
-        "deadly_target_by_other": "[§cLG UHC§r] Votre cible a été tué par un autre joueur, vous ne pouvez plus gagner de coeurs supplémentaires",
-        "reveal_target": "[§eLG UHC§r] Votre cible est §b&target&",
-        "new_target": "[§6LG UHC§r] Votre cible est maintenant §b&target&"
+        "deadly_target": "Vous avez tué votre cible, vous gagnez 3 coeurs",
+        "deadly_target_by_other": "Votre cible a été tué par un autre joueur, vous ne pouvez plus gagner de coeurs supplémentaires",
+        "reveal_target": "Votre cible est §b&target&",
+        "new_target": "Votre cible est maintenant §b&target&"
       },
       "white_werewolf": {
         "display": "Loup Garou Blanc",
@@ -367,9 +367,9 @@
         "none": "§cAucun§f, pour désigner §b/ww couple",
         "items": "Un Livre Power II, Punch I, 64 flèches, 3 fils",
         "description": "Vous devez gagner avec votre couple puis avec le Village.",
-        "extra": "Vous avez le droit à un arc Puissance §b&power&",
+        "extra": "Vous avez le droit à un arc Puissance §b&number&",
         "lover_designation_message": "Vous devez désigner un Couple, §b/ww couple§r, vous avez §b&timer&",
-        "designation_perform": "[§eLG UHC§r] Votre couple associé est §b&player1&§r et §b&player2&",
+        "designation_perform": "Votre couple associé est §b&player1&§r et §b&player2&",
         "command": "couple"
       },
       "siamese_twin": {
@@ -388,27 +388,27 @@
         "display": "Couple",
         "random": " Aléatoire",
         "description": "§6LOUP-GAROU §7➽§d Vous tombez éperdument amoureux de §b&player&§d.\n§dSi l'un meurt, l'autre le rejoindra par amour.\n§dVous pouvez envoyer de la vie à votre âme soeur avec §b/ww don §d[% de vie à envoyer] [facultatif:joueur à qui l'envoyer]",
-        "not_in_pairs": "[§cLG UHC§r] Vous n'êtes pas en couple",
+        "not_in_pairs": "Vous n'êtes pas en couple",
         "lover_death": "§d&player& par amour, le rejoint dans sa tombe",
-        "not_enough_players": "[§cLG UHC§r] il n'y a pas assez de personnes pour former un couple",
-        "not_lover": "[§cLG UHC§r] Vous ne pouvez partager des coeurs qu'avec un amant",
-        "polygamy": "[§6LG UHC§r] En raison du trop faible nombre de joueur par rapport au nombre de couples la polygamie est activée",
-        "received": "[§eLG UHC§r] Vous recevez §b&number&§r % de la vie de §b&player&",
-        "disconnected": "[§cLG UHC§r] Votre amant n'est pas connecté",
-        "complete": "[§aLG UHC§r] Vous venez d'envoyer §b&number&§r % de votre vie à §b&player&",
-        "100": "[§aLG UHC§r] Vous ne pouvez pas envoyer 100% ou plus de votre vie",
+        "not_enough_players": "il n'y a pas assez de personnes pour former un couple",
+        "not_lover": "Vous ne pouvez partager des coeurs qu'avec un amant",
+        "polygamy": "En raison du trop faible nombre de joueur par rapport au nombre de couples la polygamie est activée",
+        "received": "Vous recevez §b&number&§r % de la vie de §b&player&",
+        "disconnected": "Votre amant n'est pas connecté",
+        "complete": "Vous venez d'envoyer §b&number&§r % de votre vie à §b&player&",
+        "100": "Vous ne pouvez pas envoyer 100% ou plus de votre vie",
         "command": "don",
-        "too_many_heart": "[§cLG UHC§r] §b&player&§r a trop de vie"
+        "too_many_heart": "§b&player&§r a trop de vie"
       },
       "cursed_lover": {
         "display": "Couple Maudit",
         "description": "§6LOUP-GAROU §7➽§c Une liaison destructive entre §6&player&§c et vous vient de naitre, même si vous êtes dans le même camp, vous ne pouvez gagner ensemble.\n§c Vous possédez un coeur supplémentaire permanent et chute Amortie tant que vous êtes les deux en vie.",
-        "death_cursed_lover": "[§cLG UHC§r] Votre Couple Maudit est Mort, vous perdez vos Bonus associés",
-        "not_enough_players": "[§cLG UHC§r] Il n'y a pas assez de personnes pour former un couple maudit"
+        "death_cursed_lover": "Votre Couple Maudit est Mort, vous perdez vos Bonus associés",
+        "not_enough_players": "Il n'y a pas assez de personnes pour former un couple maudit"
       },
       "amnesiac_lover": {
         "display": "Couple Amnésique",
-        "not_enough_players": "[§cLG UHC§r] Il n'y a pas assez de personnes pour former un couple amnésique"
+        "not_enough_players": "Il n'y a pas assez de personnes pour former un couple amnésique"
       },
       "mischievous_werewolf": {
         "display": "Loup Garou Perfide",
@@ -425,35 +425,35 @@
       },
       "flute_player": {
         "display": "Joueur de Flûte",
-        "full": "[§cLG UHC§r] Le joueur a son inventaire rempli, il ne peut recevoir la flûte",
-        "wait": "[§eLG UHC§r] Vous devez attendre §bun jour§f avant de transmettre une nouvelle flûte",
+        "full": "Le joueur a son inventaire rempli, il ne peut recevoir la flûte",
+        "wait": "Vous devez attendre §bun jour§f avant de transmettre une nouvelle flûte",
         "affected": "§bPersonne affectée§f : §f&list&\n",
         "craft_description": "Pour fabriquer votre flûte, un baton entourer de ingot d'or dans votre établi",
-        "description": "Lorsque vous aurez fabriquer votre flûte, toutes les personnes à §b&blocks&§f blocks de vous seront charmées progressivement (1% toutes les 6 secondes).",
+        "description": "Lorsque vous aurez fabriquer votre flûte, toutes les personnes à §b&number&§f blocks de vous seront charmées progressivement (1% toutes les 6 secondes).",
         "power": "Vous pouvez fabriquer des flûtes §bsupplémentaires§f, et les donner furtivement aux joueurs par un §bclique droit§f une fois par cycle. Si le joueur repère la flûte son effet est annulé. Un joueur avec une flûte charmera §bà son insu§f les joueurs autour de lui.",
-        "enchanted": "[§eLG UHC§r] Vous venez d'enchanter §b&player&",
-        "transmit": "[§aLG UHC§r] Vous venez de transmettre une flûte à §b&player&§f il vous en reste §b&number&",
-        "find": "[§cLG UHC§r] Vous venez de découvrir une flûte sur vous, elle n'a plus d'effets sur vous",
-        "find_flute": "[§cLG UHC§r] §b&player&§f a découvert votre §bflûte§f, elle n'agit plus sur lui",
+        "enchanted": "Vous venez d'enchanter §b&player&",
+        "transmit": "Vous venez de transmettre une flûte à §b&player&§f il vous en reste §b&number&",
+        "find": "Vous venez de découvrir une flûte sur vous, elle n'a plus d'effets sur vous",
+        "find_flute": "§b&player&§f a découvert votre §bflûte§f, elle n'agit plus sur lui",
         "effect": "Si une personne §bcharmée§f se trouve dans votre champ, vous gagnez §bRésistance§f. Si vous charmez tout les joueurs, vous gagnez l'effet §bForce§f permanent",
-        "day": "[§eLG UHC§r] Vous pouvez de nouveau donner une flûte à quelqu'un (stock actuel §b&number&§f)",
-        "craft": "[§eLG UHC§r] Vous venez de fabriquer une nouvelle flûte (§f&number&§f flûte(s) en stock), faites clique droit sur un joueur pour lui donner sans éveiller les soupcons. Il charmera les personnes autour de lui tant qu'il ne remarque pas la flûte dans son inventaire",
-        "perform": "[§eLG UHC§r] Vous venez de réaliser §bvotre flûte§f, vous commencez à charmer les personnes à §b&blocks&§f blocks de vous",
+        "day": "Vous pouvez de nouveau donner une flûte à quelqu'un (stock actuel §b&number&§f)",
+        "craft": "Vous venez de fabriquer une nouvelle flûte (§f&number&§f flûte(s) en stock), faites clique droit sur un joueur pour lui donner sans éveiller les soupcons. Il charmera les personnes autour de lui tant qu'il ne remarque pas la flûte dans son inventaire",
+        "perform": "Vous venez de réaliser §bvotre flûte§f, vous commencez à charmer les personnes à §b&number&§f blocks de vous",
         "item": "Flûte magique"
       },
       "librarian": {
         "display": "Bibliothécaire",
         "items": "4 Bibliothèques",
         "description": "Vous pouvez §b&number&§f fois au cours de la partie, demander à une personne d'écrire dans votre livre §b/ww livre§f. Quand vous mourrez, votre livre est publié",
-        "perform": "[§eLG UHC§r] Vous venez d'envoyer un livre à §b&player&",
-        "message": "[§eLG UHC§r] Le §bBibliothécaire§r souhaite que vous contribuez à son livre. Cliquez ici",
-        "contribute": "[§aLG UHC§r] Vous venez de contribuer",
-        "contribution": "[§aLG UHC§r] §b&player&§r vient de vous envoyer §b&message&",
-        "prohibit": "[§cLG UHC§r] Vous n'êtes pas autorisé à contribuer",
-        "waiting": "[§cLG UHC§r] Vous êtes déjà en attente du livre de cette personne",
+        "perform": "Vous venez d'envoyer un livre à §b&player&",
+        "message": "Le §bBibliothécaire§r souhaite que vous contribuez à son livre. Cliquez ici",
+        "contribute": "Vous venez de contribuer",
+        "contribution": "§b&player&§r vient de vous envoyer §b&message&",
+        "prohibit": "Vous n'êtes pas autorisé à contribuer",
+        "waiting": "Vous êtes déjà en attente du livre de cette personne",
         "request_command": "contribuer",
-        "death": "[§eLG UHC§r] Un §bBibliothécaire§r vient de mourir, il révèle son livre :",
-        "book": "[§eLG UHC§r] Page §b&page&§r : &message&",
+        "death": "Un §bBibliothécaire§r vient de mourir, il révèle son livre :",
+        "book": "Page §b&page&§r : &message&",
         "command": "livre"
       },
       "comedian": {
@@ -461,10 +461,10 @@
         "masks": "Masque(s) utilisé(s) : §b&number&",
         "none": "Aucun",
         "description": "Vous possédez trois masques, un de Force, un de Résistance et un de Vitesse. Chaque matin, vous pouvez choisir (ou non) d'en mettre un pour la journée. Attention, ces masques sont à usage unique.",
-        "wear_mask_message": "[§eLG UHC§r] Vous pouvez mettre choisir de mettre un masque pour la journée. Faites §b/ww masque§f 1, 2 ou 3 (respectivememt : Résistance, Vitesse et Force). Vous avez §b&timer&",
-        "wear_mask_perform": "[§eLG UHC§r] Vous venez de mettre le masque de §b&mask&",
-        "used_mask": "[§cLG UHC§r] Vous avez déjà utilisé ce masque",
-        "mask_unknown": "[§cLG UHC§r] Masque inconnu",
+        "wear_mask_message": "Vous pouvez mettre choisir de mettre un masque pour la journée. Faites §b/ww masque§f 1, 2 ou 3 (respectivememt : Résistance, Vitesse et Force). Vous avez §b&timer&",
+        "wear_mask_perform": "Vous venez de mettre le masque de §b&mask&",
+        "used_mask": "Vous avez déjà utilisé ce masque",
+        "mask_unknown": "Masque inconnu",
         "1": "Résistance",
         "2": "Vitesse",
         "3": "Force",
@@ -473,9 +473,9 @@
       "trapper": {
         "display": "Trappeur",
         "description": "Chaque matin, vous pourrez pister la position d'un joueur différent.",
-        "tracking_message": "[§eLG UHC§r] Vous pouvez pister une nouvelle personne §b/ww pister",
-        "tracking_perform": "[§eLG UHC§r] Vous commencez à pister §b&player&",
-        "get_track": "[§eLG UHC§r] Un Trappeur vous piste aujourd'hui",
+        "tracking_message": "Vous pouvez pister une nouvelle personne §b/ww pister",
+        "tracking_perform": "Vous commencez à pister §b&player&",
+        "get_track": "Un Trappeur vous piste aujourd'hui",
         "command": "pister"
       },
       "succubus": {
@@ -484,79 +484,78 @@
         "charm_command": "pour charmer §b/ww charmer§b",
         "none": "§cAucun§f",
         "description": "Vous pouvez charmer un joueur qui gagnera avec vous. Si vous mourrez, la personne charmée mourra à votre place. Le temps de charme est de §b&timer&",
-        "charming_message": "[§eLG UHC§r] Vous pouvez désigner une personne à charmer §b/ww charmer",
-        "charming_beginning": "[§eLG UHC§r] Vous commencez à charmer §b&player&",
-        "charming_perform": "[§aLG UHC§r] §b&player&§r est totalement charmé, si vous mourrez il mourra à votre place",
-        "get_charmed": "[§eLG UHC§r] Le Succube §b&player&§r vous a charmé, vous devez maintenant gagner avec lui. Si le Succube vient à mourir, vous mourrez à sa place.",
-        "free_of_succubus": "[§eLG UHC§r] Vous êtes libéré de votre Succube, mais à quel prix...",
-        "not_enough_near": "[§cLG UHC§r] Vous n'êtes pas assez proche de la personne que vous voulez charmer",
-        "progress_charm": "[§eLG UHC§r] Progression du Charme §b&progress&%",
+        "charming_message": "Vous pouvez désigner une personne à charmer §b/ww charmer",
+        "charming_beginning": "Vous commencez à charmer §b&player&",
+        "charming_perform": "§b&player&§r est totalement charmé, si vous mourrez il mourra à votre place",
+        "get_charmed": "Le Succube §b&player&§r vous a charmé, vous devez maintenant gagner avec lui. Si le Succube vient à mourir, vous mourrez à sa place.",
+        "free_of_succubus": "Vous êtes libéré de votre Succube, mais à quel prix...",
+        "not_enough_near": "Vous n'êtes pas assez proche de la personne que vous voulez charmer",
+        "progress_charm": "Progression du Charme §b&progress&%",
         "command": "charmer",
-        "change": "[§6LG UHC§r] Votre charmée est maintenant §b&player&"
+        "change": "Votre charmée est maintenant §b&player&"
       },
       "shaman": {
         "display": "Chaman",
         "description": "A chaque fois qu'un joueur meurt, vous pouvez décider dans les 30 secondes de sacrifier un coeur permanent pour obtenir aléatoirement le nom ou le role du joueur mort. Vous voyez toujours le véritable role d'un joueur mort définitivement",
-        "cannot_use": "[§eLG UHC§r] Vous ne pouvez plus exécuter cette action",
-        "not_enough_life": "[§cLG UHC§r] Vous n'avez pas assez de vie pour cela",
-        "choice_message": "[§eLG UHC§r] Un joueur est mort. §bCliquez ici§r pour obtenir une information sur lui en échange d'un coeur permanent. Vous avez §b30§r secondes.",
-        "victim_name": "[§eLG UHC§r] §b&player&§r est mort",
-        "victim_role": "[§eLG UHC§r] Un §b&role&§r est mort",
+        "cannot_use": "Vous ne pouvez plus exécuter cette action",
+        "not_enough_life": "Vous n'avez pas assez de vie pour cela",
+        "choice_message": "Un joueur est mort. §bCliquez ici§r pour obtenir une information sur lui en échange d'un coeur permanent. Vous avez §b30§r secondes.",
+        "victim_name": "§b&player&§r est mort",
+        "victim_role": "Un §b&role&§r est mort",
         "command": "command_shaman"
       }
     },
     "vote": {
-      "already_voted": "[§cLG UHC§r] Vous avez déjà voté aujourd'hui",
-      "not_vote_time": "[§cLG UHC§r] Ce n'est plus l'heure du vote",
-      "player_already_voted": "[§cLG UHC§r] Ce joueur a déjà été voté",
-      "perform_vote": "[§eLG UHC§r] Vous avez voté pour §b&player&",
-      "vote_disable": "[§cLG UHC§r] Les Votes sont désactivés",
-      "vote_deactivate": "[§6LG UHC§r] En raison du nombre de joueurs, les Votes sont désactivés",
-      "vote_not_yet_activated": "[§cLG UHC§r] Les Votes ne sont pas encore activés",
-      "vote_result": "[§eLG UHC§r] §b&player&§r est celui qui a recueillit le plus de vote§r : §b&number&§r. Il perd 5 coeurs",
-      "no_result": "[§6LG UHC§r] Aucun joueur n'a été voté plus d'une fois",
-      "vote_time": "§b§m§l-+-----------------------------------+-\n§f [§6LG UHC§r] C'est l'heure de voter §b/ww vote§r Vous avez §b&timer&\n§r§b§m§l-+-----------------------------------+-",
+      "already_voted": "Vous avez déjà voté aujourd'hui",
+      "not_vote_time": "Ce n'est plus l'heure du vote",
+      "player_already_voted": "Ce joueur a déjà été voté",
+      "perform_vote": "Vous avez voté pour §b&player&",
+      "vote_disable": "Les Votes sont désactivés",
+      "vote_deactivate": "En raison du nombre de joueurs, les Votes sont désactivés",
+      "vote_not_yet_activated": "Les Votes ne sont pas encore activés",
+      "vote_result": "§b&player&§r est celui qui a recueillit le plus de vote§r : §b&number&§r. Il perd 5 coeurs",
+      "no_result": "Aucun joueur n'a été voté plus d'une fois",
+      "vote_time": "C'est l'heure de voter §b/ww vote§r Vous avez §b&timer&",
       "command": "vote"
     },
     "lone_wolf": {
-      "message": "[§cLG UHC§r] Vous devenez Solitaire. A partir de maintenant,vous devez gagner Seul. Pour cela, vous bénéficiez de quatres coeurs permanents supplémentaires (dans la limite de 15 coeurs max)"
+      "message": "Vous devenez Solitaire. A partir de maintenant,vous devez gagner Seul. Pour cela, vous bénéficiez de quatres coeurs permanents supplémentaires (dans la limite de 15 coeurs max)"
     },
     "announcement": {
-      "restart": "[§6LG UHC§r] Redémarrage de la partie dans §b&timer&",
-      "pvp": "[§6LG UHC§r] PVP activé",
-      "border": "[§6LG UHC§r] La bordure commence à se déplacer",
-      "mining": "[§6LG UHC§r] Minage Désactivé",
-      "day": "[§6LG UHC§r] C'est le Jour §b&number&§r ✸ ",
-      "death_message_with_role": "§b§m§l-+-----------------------------------+-\n§f  [§cLG UHC§r] §b&player&§r est mort, il était §b&role&§r\n§r§b§m§l-+-----------------------------------+-",
-      "death_message_with_camp": "§b§m§l-+-----------------------------------+-\n§f  [§cLG UHC§r] §b&player&§r est mort, il était dans le camp des §b&role&§r\n§r§b§m§l-+-----------------------------------+-",
-      "death_message": "§b§m§l-+-----------------------------------+-\n§f      [§cLG UHC§r] §b&player&§r est mort\n§r§b§m§l-+-----------------------------------+-",
-      "review_role": "[§eLG UHC§r] Pour revoir la description §b/ww role",
-      "troll": "[§5LG UHC§r] Bon ok, la blague a assez duré ! Voici ton vrai role : ",
-      "lover_troll": "[§aLG UHC§r] Le troll Saint Valentin est fini, votre couple était faux",
-      "night": "[§eLG UHC§r] C'est la Nuit §b&number&§r ☼",
+      "restart": "Redémarrage de la partie dans §b&timer&",
+      "pvp": "PVP activé",
+      "border": "La bordure commence à se déplacer",
+      "mining": "Minage Désactivé",
+      "day": "C'est le Jour §b&number&§r ✸ ",
+      "death_message_with_role": "  §b&player&§r est mort, il était §b&role&§r",
+      "death_message_with_camp": "  §b&player&§r est mort, il était dans le camp des §b&role&",
+      "death_message": "      §b&player&§r est mort",
+      "review_role": "Pour revoir la description §b/ww role",
+      "troll": "Bon ok, la blague a assez duré ! Voici ton vrai role : ",
+      "lover_troll": "Le troll Saint Valentin est fini, votre couple était faux",
+      "night": "C'est la Nuit §b&number&§r ☼",
       "start": {
-        "message": "[§eLG UHC§r] Vous avez §b&timer&§r d'invulnérabilité\n§f Plus d'infos sur la partie §b/ww h",
+        "message": "Vous avez §b&timer&§r d'invulnérabilité\n§f Plus d'infos sur la partie §b/ww h",
         "top_title": "Début de Partie",
         "bot_title": "§bBonne Game",
         "launch": "Lancer la §bPartie"
       },
-      "potential_revive": "[§6LG UHC§r] En attente d'une potentielle resurrection",
-      "invulnerability": "[§eLG UHC§r] Fin de l'invulnérabilité",
-      "join_in_game": "[§eLG UHC§r] §b&player&§r a redémarré sa Box",
+      "potential_revive": "En attente d'une potentielle resurrection",
+      "invulnerability": "Fin de l'invulnérabilité",
+      "join_in_game": "§b&player&§r a redémarré sa Box",
       "join": "[§a&number&/&sum&§r] §b&player&§r rejoint le Village",
       "leave": "[§c&number&/&sum&§r] §b&player&§r quitte le Village",
-      "leave_in_game": "[§eLG UHC§r] §b&player&§r n'a plus d'électricité dans son quartier",
+      "leave_in_game": "§b&player&§r n'a plus d'électricité dans son quartier",
       "leave_in_spec": "L'âme de §b&player&§r quitte le Village",
       "join_in_spec": "L'âme de §b&player&§r rejoint le Village",
-      "queue_rejoin": "[§eLG UHC§r] §b&player&§r retrouve sa place dans la file d'attente (position : §b&position&§r)",
-      "queue_leave": "[§eLG UHC§r] §b&player&§r quitte la partie",
-      "spectator_leave": "[§cLG UHC§r] §b&player&§r quitte la queue",
-      "leave_spec": "[§eLG UHC§r] Le spectateur §b&player&§r quitte la Partie",
-      "join_spec": "[§eLG UHC§r] Le spectateur §b&player&§r rejoint la Partie",
-      "join_moderator": "[§eLG UHC§r] Le modérateur §b&player&§r rejoint la Partie",
-      "queue": "[§eLG UHC§r] §b&player&§r a rejoint la file d'attente (position : §b&position&§r)",
+      "queue_rejoin": "§b&player&§r retrouve sa place dans la file d'attente (position : §b&number&§r)",
+      "spectator_leave": "§b&player&§r quitte la queue",
+      "leave_spec": "Le spectateur §b&player&§r quitte la Partie",
+      "join_spec": "Le spectateur §b&player&§r rejoint la Partie",
+      "join_moderator": "Le modérateur §b&player&§r rejoint la Partie",
+      "queue": "§b&player&§r a rejoint la file d'attente (position : §b&number&§r)",
       "rank": "§b/ww rang§r pour voir votre position dans la queue",
-      "resurrection": "[§eLG UHC§r] Vous venez de ressusciter"
+      "resurrection": "Vous venez de ressusciter"
     },
     "end": {
       "thief": "§e il a volé un(e) &role&",
@@ -570,26 +569,26 @@
       "lover": " en couple avec &player&",
       "cursed_lover": " en couple maudit avec &player&",
       "victory": "Victoire",
-      "message": "[§6LG UHC§r] Victoire &winner&"
+      "message": "Victoire &winner&"
     },
     "commands": {
       "admin": {
         "stop": {
           "command": "stop",
           "message": "Stopper la Partie",
-          "send": "[§cLG UHC§r] §b&player&§r a stoppé la partie",
+          "send": "§b&player&§r a stoppé la partie",
           "description": "Pour stopper la partie"
         },
         "start": {
           "command": "start",
-          "too_much_role": "[§cLG UHC§r] Vous devez enlever des rôles pour lancer la partie.",
+          "too_much_role": "Vous devez enlever des rôles pour lancer la partie.",
           "description": "Pour lancer la partie"
         },
         "group": {
           "command": "group",
           "command_2": "setgroup",
-          "group_change": "[§6LG UHC§r] Les groupes passent à §b&number&",
-          "respect_limit": "[§eLG UHC§r] Respectez les limites, groupes de §b&number&",
+          "group_change": "Les groupes passent à §b&number&",
+          "respect_limit": "Respectez les limites, groupes de §b&number&",
           "top_title": "Respectez la limite",
           "bot_title": "groupe de §b&number&",
           "description1": "Pour envoyer un message pour faire respecter les groupes",
@@ -599,9 +598,9 @@
           "command": "?",
           "send": "[§b&player&§r] &message& (Cliquez pour répondre)",
           "anonyme": "Anonyme",
-          "failure": "[§cLG UHC§r] Votre message n'a pas pu être envoyé. Aucun Staff de connecté",
+          "failure": "Votre message n'a pas pu être envoyé. Aucun Staff de connecté",
           "description": "Pour envoyer un message anonyme",
-          "empty": "[§cLG UHC§r] Vous devez envoyer un message après le ?"
+          "empty": "Vous devez envoyer un message après le ?"
         },
         "info": {
           "command": "info",
@@ -609,14 +608,14 @@
           "description": "Pour envoyer une information dans le chat global"
         },
         "set_game_name": {
-          "send": "[§aLG UHC§r] Nom de la partie configuré",
+          "send": "Nom de la partie configuré",
           "command": "name",
           "description": "Pour changer le nom de la partie"
         },
         "chat": {
           "command": "chat",
-          "on": "[§aLG UHC§r] Le Chat est §bactivé",
-          "off": "[§cLG UHC§r] Le Chat est §bdésactivé",
+          "on": "Le Chat est §bactivé",
+          "off": "Le Chat est §bdésactivé",
           "template": "&player& : &message&",
           "description": "Pour activer/désactiver le chat"
         },
@@ -624,32 +623,32 @@
           "name": "chatlg",
           "prefix": "[§cChat LG§r] &message&",
           "modo": "[§c&name&§r] &message&",
-          "announce": "[§eLG UHC§r] Vous avez §b&timer&§f secondes pour écrire §b&number&§f message(s) dans le chat des Loups Garous §b/ww chatlg§r <message>, attention des rôles peuvent voit le contenu du chat",
-          "timer": "[§cLG UHC§r] Le temps pour parler dans le chat des Loups Garous est écoulé",
-          "not_access": "[§cLG UHC§r] Vous ne pouvez pas parler dans le chat des Loups Garous",
-          "disable": "[§cLG UHC§r] Le chat des Loups Garous est désactivé",
+          "announce": "Vous avez §b&timer&§f secondes pour écrire §b&number&§f message(s) dans le chat des Loups Garous §b/ww chatlg§r <message>, attention des rôles peuvent voit le contenu du chat",
+          "timer": "Le temps pour parler dans le chat des Loups Garous est écoulé",
+          "not_access": "Vous ne pouvez pas parler dans le chat des Loups Garous",
+          "disable": "Le chat des Loups Garous est désactivé",
           "number": "§b&number&§r messages par cycle dans le chat Loup Garou",
-          "speak_number": "[§cLG UHC§r] Vous ne pouvez parler que §b&number&§r fois par cycle",
+          "speak_number": "Vous ne pouvez parler que §b&number&§r fois par cycle",
           "drunken": "Attention, le loup bourré est présent dans cette partie"
         },
         "stuff_start": {
           "command": "lootStart",
-          "valid": "[§eLG UHC§r] Cliquez ici pour valider l'inventaire de départ",
-          "perform": "[§aLG UHC§r] Stuff de départ actualisé"
+          "valid": "Cliquez ici pour valider l'inventaire de départ",
+          "perform": "Stuff de départ actualisé"
         },
         "loot_death": {
           "command": "lootDeath",
-          "valid": "[§eLG UHC§r] Cliquez ici pour valider les objets à la mort",
-          "perform": "[§aLG UHC§r] Stuff de mort actualisé"
+          "valid": "Cliquez ici pour valider les objets à la mort",
+          "perform": "Stuff de mort actualisé"
         },
         "loot_role": {
           "command": "stuffRole",
-          "valid": "[§eLG UHC§r] Cliquez ici pour valider le stuff de §b&role&",
-          "perform": "[§aLG UHC§r] Stuff §b&role&§r Actualisé"
+          "valid": "Cliquez ici pour valider le stuff de §b&role&",
+          "perform": "Stuff §b&role&§r Actualisé"
         },
         "role": {
           "command": "role",
-          "in_game": "[§cLG UHC§r] Vous ne pouvez pas voir le rôle du joueur si vous êtes encore dans la partie",
+          "in_game": "Vous ne pouvez pas voir le rôle du joueur si vous êtes encore dans la partie",
           "affected": "Affecte : §b&player&",
           "cursed_lover": "En Liaison maudite avec : §b&player&",
           "lover": "En Couple avec : §b&player&",
@@ -666,34 +665,34 @@
         },
         "final_heal": {
           "command": "fh",
-          "send": "[§6LG UHC§r] Final Heal !",
+          "send": "Final Heal !",
           "description": "Pour soigner tout les joueurs"
         },
         "generation": {
           "command": "generation",
-          "already_start": "[§cLG UHC§r] La Génération est déjà lancée",
-          "perform": "[§eLG UHC§r] La Génération du monde a commencé",
-          "not_generated": "[§cLG UHC§r] Carte non générée. Faites §b/a generation",
-          "not_finished": "[§cLG UHC§r] Attendez la fin de génération de la carte (§b&progress&%§r)",
+          "already_start": "La Génération est déjà lancée",
+          "perform": "La Génération du monde a commencé",
+          "not_generated": "Carte non générée. Faites §b/a generation",
+          "not_finished": "Attendez la fin de génération de la carte (§b&progress&%§r)",
           "description": "Pour générer la Carte"
         },
         "change": {
           "command": "change",
-          "in_progress": "[§eLG UHC§r] Changement de la Carte en cours",
-          "finished": "[§aLG UHC§r] Nouvelle Carte créée",
+          "in_progress": "Changement de la Carte en cours",
+          "finished": "Nouvelle Carte créée",
           "description": "Pour changer la Carte"
         },
         "preview": {
           "command": "preview",
-          "map": "[§eLG UHC§r] Vous venez d'être téléporté au centre de la map de la partie\n §b/a preview§r pour revenir",
-          "lobby": "[§eLG UHC§r] Vous êtes revenu au lobby",
-          "create": "[§cLG UHC§r] Création de la Carte en cours, veuillez patienter...",
+          "map": "Vous venez d'être téléporté au centre de la map de la partie\n §b/a preview§r pour revenir",
+          "lobby": "Vous êtes revenu au lobby",
+          "create": "Création de la Carte en cours, veuillez patienter...",
           "description": "Pour se téléporter sur la carte de jeu"
         },
         "tp_group": {
           "command": "tpgroup",
-          "broadcast": "[§eLG UHC§r] §b&players&§r ont été téléporté par §b&player&",
-          "perform": "[§eLG UHC§r] Vous venez d'être téléporté par §b&player&",
+          "broadcast": "§b&players&§r ont été téléporté par §b&player&",
+          "perform": "Vous venez d'être téléporté par §b&player&",
           "description": "Pour téléporter une partie d'un trop gros groupe"
         },
         "disconnected": {
@@ -703,56 +702,56 @@
         },
         "revive": {
           "command": "revive",
-          "perform": "[§eLG UHC§r] §b&player&§r a été ressuscité par §b&admin&",
-          "not_death": "[§cLG UHC§r] Le joueur n'est pas Mort",
+          "perform": "§b&player&§r a été ressuscité par §b&admin&",
+          "not_death": "Le joueur n'est pas Mort",
           "description": "Pour ressusciter un joueur"
         },
         "size": {
           "command": "size",
-          "begin": "[§eLG UHC§r] Début du Calcul de la surface du Biome central",
-          "result": "[§aLG UHC§r] Le Biome central occupe §b&number&§r blocs.",
-          "change": "[§eLG UHC§r] Cliquez ici pour changer de Map",
+          "begin": "Début du Calcul de la surface du Biome central",
+          "result": "Le Biome central occupe §b&number&§r blocs.",
+          "change": "Cliquez ici pour changer de Map",
           "description": "Pour voir la taille du biome central"
         },
         "host": {
           "command": "host",
           "name": "Host",
-          "add": "[§aLG UHC§r] §b&player&§r est à présent Host",
-          "remove": "[§cLG UHC§r] §b&player&§r n'est plus Host",
-          "one": "§cLG UHC§r] Il faut au minimum un host",
+          "add": "§b&player&§r est à présent Host",
+          "remove": "§b&player&§r n'est plus Host",
+          "one": "Il faut au minimum un host",
           "tag": "§cHost§r » ",
           "description": "Pour ajouter un host"
         },
         "whitelist": {
           "command": "whitelist",
-          "add": "[§aLG UHC§r] Le joueur &player& a été ajouté à la whitelist",
-          "remove": "[§cLG UHC§r] Le joueur &player& a été enlevé de la whitelist",
-          "player_not_whitelisted": "[§cLG UHC§r] Vous n'êtes pas sur la whiteList",
+          "add": "Le joueur &player& a été ajouté à la whitelist",
+          "remove": "Le joueur &player& a été enlevé de la whitelist",
+          "player_not_whitelisted": "Vous n'êtes pas sur la whiteList",
           "description": "Pour ajouter une personne à la whitelist"
         },
         "moderator": {
           "command": "moderator",
           "name": "Modérateur",
-          "add": "[§aLG UHC§r] §b&player&§r est à présent modérateur",
-          "remove": "[§cLG UHC§r] §b&player&§r n'est plus modérateur",
-          "player_living": "[§cLG UHC§r] Vous ne pouvez pas mettre modérateur un joueur encore vivant",
+          "add": "§b&player&§r est à présent modérateur",
+          "remove": "§b&player&§r n'est plus modérateur",
+          "player_living": "Vous ne pouvez pas mettre modérateur un joueur encore vivant",
           "tag": "§bModo§r » ",
-          "message": "[§aLG UHC§r] Vous êtes en Mode Modération",
+          "message": "Vous êtes en Mode Modération",
           "description": "Pour ajouter un modérateur"
         },
         "gamemode": {
           "command": "gamemode",
-          "send": "[§eLG UHC§r] §b&player&§r s'est mis en gamemode §b&number&",
+          "send": "§b&player&§r s'est mis en gamemode §b&number&",
           "description": "Pour changer son mode de jeu"
         },
         "teleportation": {
           "command": "tp",
-          "send": "[§eLG UHC§r] Téléportation de §b&player1&§r vers §b&player2&",
+          "send": "Téléportation de §b&player1&§r vers §b&player2&",
           "description": "Pour se téléporter"
         },
         "help": {
           "command": "h",
-          "help": "[§aLG UHC§r] Commandes disponibles :\n"
+          "help": "Commandes disponibles :\n"
         }
       },
       "inventory": {
@@ -764,27 +763,26 @@
         "received": "[Message de §b&player&§r] » §b&message&"
       },
       "compo": {
-        "composition_hide": "[§cLG UHC§r] La Composition est cachée",
+        "composition_hide": "La Composition est cachée",
         "description": "Pour voir la composition",
-        "message": "[§aLG UHC§r] Composition :\n",
         "_": "§6================================\n"
       },
       "doc": {
         "command": "doc",
         "description": "Pour avoir le doc des rôles",
-        "link": "[§6LG UHC§r] Cliquez ici pour avoir accès au document des rôles"
+        "link": "Cliquez ici pour avoir accès au document des rôles"
       },
       "kill": {
         "command": "kill",
-        "on_line": "[§cLG UHC§r] Le joueur est en ligne",
-        "remove_role": "[§6LG UHC§r] Enlevez un rôle dans la config pour compenser le joueur",
-        "not_living": "[§cLG UHC§r] Le joueur n'est pas vivant",
+        "on_line": "Le joueur est en ligne",
+        "remove_role": "Enlevez un rôle dans la config pour compenser le joueur",
+        "not_living": "Le joueur n'est pas vivant",
         "description": "Pour enlever un joueur de la partie"
       },
       "late": {
         "command": "late",
-        "in_game": "[§cLG UHC§r] Le joueur est déjà dans la partie",
-        "launch": "[§aLG UHC§r] §b&player&§r vient d'être rajouté à la partie",
+        "in_game": "Le joueur est déjà dans la partie",
+        "launch": "§b&player&§r vient d'être rajouté à la partie",
         "description": "Pour rajouter un joueur au cours de la partie"
       },
       "help": {
@@ -859,8 +857,8 @@
         "enable": "§2Activé§f pour tous"
       },
       "scenarios": {
-        "disable": "[§cLG UHC§r] L'affichage des scénarios est désactivés",
-        "list": "[§aLG UHC§r] Liste des Scénarios §bactivés§f :\n",
+        "disable": "L'affichage des scénarios est désactivés",
+        "list": "Liste des Scénarios §bactivés§f :\n",
         "command": "scenarios",
         "no_nether": "NoNether",
         "no_end": "NoEnd",
@@ -892,8 +890,8 @@
       "rank": {
         "command": "rang",
         "description": "Pour voir son rang dans la queue",
-        "perform": "[§aLG UHC§r] Vous êtes en position §b&position&§r dans la queue",
-        "not_in_queue": "[§cLG UHC§r] Vous n'êtes pas dans la file d'attente",
+        "perform": "Vous êtes en position §b&number&§r dans la queue",
+        "not_in_queue": "Vous n'êtes pas dans la file d'attente",
         "tag": "§6Queue§r » "
       },
       "enchantments": {
@@ -940,10 +938,10 @@
         "succubus_duration": "Durée du Charme du Succube (§b&timer&§r)"
       },
       "random_events": {
-        "list": "[§aLG UHC§r] Liste des évènements aléatoires §bactivés§f :\n",
+        "list": "Liste des évènements aléatoires §bactivés§f :\n",
         "name": "Configuration §bEvents",
         "command": "events",
-        "disable": "[§cLG UHC§r] L'affichage des events aléatoires est désactivés",
+        "disable": "L'affichage des events aléatoires est désactivés",
         "description": "Pour voir les Events Aléatoires",
         "command_message": "§b&event& §f(probabilité §b&number&%§f)",
         "probability": "§fProbabilité : §b&number&§f%"
@@ -954,11 +952,11 @@
         "load": "Charger §b&save&",
         "delete": "Supprimer §b&save&",
         "configuration": "Configuration §b&save&",
-        "load_message": "[§aLG UHC§r] Configuration §b&save&§r chargée",
-        "delete_message": "[§cLG UHC§r] Configuration §b&save&§r supprimée",
-        "success": "[§aLG UHC§r] Configuration §bsauvegardée",
-        "failure": "[§cLG UHC§r] Slot de configuration plein",
-        "delete_failed": "[§cLG UHC§r] Erreur lors de la suppression de §b&save&",
+        "load_message": "Configuration §b&save&§r chargée",
+        "delete_message": "Configuration §b&save&§r supprimée",
+        "success": "Configuration §bsauvegardée",
+        "failure": "Slot de configuration plein",
+        "delete_failed": "Erreur lors de la suppression de §b&save&",
         "save_menu": "§bMenu de §bSauvegarde"
       },
       "stuff": {
@@ -1059,7 +1057,7 @@
         "name": "Loot Box",
         "description": "Une fois dans la partie, à la mort \nd'un Villageois, des caches apparaissent.\n Une seule contient le nom d'un Ennemi du Village",
         "on_sign": "Bon toutou",
-        "all_chest_find": "[§aLG UHC§r] Toutes les caches ont été trouvées",
+        "all_chest_find": "Toutes les caches ont été trouvées",
         "villager_death": "[§5Loot-Box§r] Avant de mourir, §b&player&§r a fait apparaitre §b&number&§r caches sur la map, une seule renferme le nom d'un Ennemi du Village"
       },
       "infection": {
@@ -1071,13 +1069,13 @@
         "name": "Amnésique",
         "message": "[§5Amnesic§r] Vous découvrez que vous êtes en fait un Loup Garou. Vous connaitrez un loup toutes les cinq minutes",
         "description": "Au moment de la liste des Loups,\n une personne non Loup est choisi aléatoirement\n et devient Amnésique.\n Si elle se fait taper par un Loup Garou \nelle passera dans leur camp \net connaitra un membre des Loups \ntoutes les cinq minutes. \nSi elle n'est pas transformée \nelle garde son camp d'origine",
-        "new": "[§aLG UHC§r] §b&player&§f est un Loup Garou, prochain pseudo dans cinq minutes"
+        "new": "§b&player&§f est un Loup Garou, prochain pseudo dans cinq minutes"
       },
       "triple": {
         "name": "Trouple",
         "description": "Une troisième personne s'ajoute sur un couple",
-        "lover_join": "[§aLG UHC§r] §b&player&§f rejoint votre couple",
-        "join": "[§aLG UHC§r] Vous rejoignez le couple constitué de §b&lovers&",
+        "lover_join": "§b&player&§f rejoint votre couple",
+        "join": "Vous rejoignez le couple constitué de §b&lovers&",
         "message": "[§5Trouple§r] Une troisième personne vient de rejoindre un couple"
       },
       "drunken_werewolf": {
@@ -1104,47 +1102,43 @@
       "swap": {
         "name": "Swap",
         "message": "[§5Swap§r] Deux personnes ont leur rôle inversées",
-        "concerned": "[§cLG UHC§r] Votre rôle a été échangé §b/ww role§f pour découvrir le nouveau",
+        "concerned": "Votre rôle a été échangé §b/ww role§f pour découvrir le nouveau",
         "description": "Une fois dans la partie,\n avant l'annonce de la liste des loups\n 2 roles sont échangés"
       }
     },
     "check": {
-      "death": "[§cLG UHC§r] Vous n'êtes pas Vivant",
-      "state_player": "[§cLG UHC§r] Vous ne pouvez pas accéder à cette commande dans cet état",
-      "game_not_in_progress": "[§cLG UHC§r] La partie est déjà finie ou les rôles n'ont pas encore été annoncés",
-      "game_in_progress": "[§cLG UHC§r] La partie est en cours",
-      "end_selection": "[§cLG UHC§r] Vous ne pouvez plus utiliser votre pouvoir aujourd'hui",
-      "not_in_game": "[§cLG UHC§r] Vous n'êtes pas dans la partie",
-      "power": "[§cLG UHC§r] Votre pouvoir ne peut pas encore être utilisé ou ne peut plus être utilisé",
-      "ability_disabled": "[§cLG UHC§r] Vos pouvoirs ont été désactivés, vous ne pouvez pas effectuer cette action",
-      "two_distinct_player": "[§cLG UHC§r] Vous devez sélectionner deux joueurs différents",
-      "not_yourself": "[§cLG UHC§r] Vous ne pouvez pas vous choisir vous même",
-      "player_not_found": "[§cLG UHC§r] Le joueur n'existe pas, s'est déconnecté, est dans le couloir de la mort ou est déjà mort",
-      "parameters": "[§cLG UHC§r] Nombre de paramètres requis en entrée §b&number&",
-      "not_in_judgement": "[§cLG UHC§r] Le joueur n'est pas dans le couloir de la mort",
-      "number_required": "[§cLG UHC§r] La commande a besoin d'un nombre en entrée",
-      "already_get_power": "[§cLG UHC§r] Le joueur a déja été affecté par votre pouvoir au dernier tour",
-      "permission_denied": "[§cLG UHC§r] Vous n'avez pas la permission d'utiliser cette commande",
-      "death_spectator": "[§cLG UHC§r] Le mode spectateur est activé que pour les morts",
-      "offline_player": "[§cLG UHC§r] Le joueur est hors ligne",
-      "not_in_game_player": "[§cLG UHC§r] Le joueur n'est pas dans la partie",
-      "already_begin": "[§cLG UHC§r] La partie a déjà commencé",
-      "role_not_set": "[§cLG UHC§r] Les rôles n'ont pas encore été attribué",
-      "disabled_command": "[§cLG UHC§r] Commande désactivée",
-      "spectator_disabled": "[§cLG UHC§r] Les spectateurs sont désactivés durant cette partie",
-      "console": "[§cLG UHC§r] Cette commande n'est pas accessible via la console",
-      "full": "[§cLG UHC§r] La partie est pleine",
-      "cancel": "[§cLG UHC§r] Votre pouvoir a été annulé",
-      "transformation": "[§cLG UHC§r] Votre transformation a été annulé",
-      "invalid_key": "[§cLG UHC§r] Clef invalide",
-      "state": "[§cLG UHC§r] Vous ne pouvez pas faire cette commande à ce moment de la partie"
+      "state_player": "Vous ne pouvez pas accéder à cette commande dans cet état",
+      "game_in_progress": "La partie est en cours",
+      "not_in_game": "Vous n'êtes pas dans la partie",
+      "power": "Votre pouvoir ne peut pas encore être utilisé ou ne peut plus être utilisé",
+      "ability_disabled": "Vos pouvoirs ont été désactivés, vous ne pouvez pas effectuer cette action",
+      "two_distinct_player": "Vous devez sélectionner deux joueurs différents",
+      "not_yourself": "Vous ne pouvez pas vous choisir vous même",
+      "player_not_found": "Le joueur n'existe pas, s'est déconnecté, est dans le couloir de la mort ou est déjà mort",
+      "parameters": "Nombre de paramètres requis en entrée §b&number&",
+      "not_in_judgement": "Le joueur n'est pas dans le couloir de la mort",
+      "number_required": "La commande a besoin d'un nombre en entrée",
+      "already_get_power": "Le joueur a déja été affecté par votre pouvoir au dernier tour",
+      "permission_denied": "Vous n'avez pas la permission d'utiliser cette commande",
+      "death_spectator": "Le mode spectateur est activé que pour les morts",
+      "offline_player": "Le joueur est hors ligne",
+      "not_in_game_player": "Le joueur n'est pas dans la partie",
+      "already_begin": "La partie a déjà commencé",
+      "disabled_command": "Commande désactivée",
+      "spectator_disabled": "Les spectateurs sont désactivés durant cette partie",
+      "console": "Cette commande n'est pas accessible via la console",
+      "full": "La partie est pleine",
+      "cancel": "Votre pouvoir a été annulé",
+      "transformation": "Votre transformation a été annulé",
+      "invalid_key": "Clef invalide",
+      "state": "Vous ne pouvez pas faire cette commande à ce moment de la partie"
     },
     "update": {
-      "up_to_date": "[§aLG UHC§r] Le plugin LG UHC est à jour",
-      "out_of_date": "[§6LG UHC§r] Une mise à jour du plugin est disponible",
-      "snapshot": "[§aLG UHC§r] Vous êtes en version Snapshot du LG UHC"
+      "up_to_date": "Le plugin LG UHC est à jour",
+      "out_of_date": "Une mise à jour du plugin est disponible",
+      "snapshot": "Vous êtes en version Snapshot du LG UHC"
     },
-    "bug": "§b§m§l-+-----------------------------------+-\n§f        [§cLG UHC§f] Signalez les bugs en cliquant ici\n§r§b§m§l-+-----------------------------------+-",
+    "bug": "Signalez les bugs en cliquant ici",
     "utils": {
       "disable": "§4Désactivé ",
       "enable": "§2Activé ",
@@ -1154,8 +1148,7 @@
       "debug": "§fMode §4debug",
       "none": "§4Aucun",
       "author": "§fAuteur(s) :",
-      "stat": "[§cLG UHC§r] L'addon de statistique n'est pas installé, cliquez ici pour le télécharger",
-      "stat_out_of_date": "[§cLG UHC§r] L'addon de statistique n'est pas à jours, cliquez ici pour le télécharger"
+      "bar": "\n§r§b§m§l-+-----------------------------------+-§r§r§r§f\n"
     },
     "categories": {
       "villager": "Villageois",
@@ -1181,9 +1174,15 @@
       "werewolf": "Force (la nuit), Vision Nocturne. 1 minute de Vitesse et 2 coeur d'absorption après chaque kill"
     },
     "statistics": {
-      "message": "[§eLG UHC§r] Découvrez le récapitulatif de la partie précédente en §bCliquant ici"
+      "message": "Découvrez le récapitulatif de la partie précédente en §bCliquant ici"
+    },
+    "prefix": {
+      "yellow": "[§eLG UHC§r] ",
+      "red": "[§cLG UHC§r] ",
+      "green": "[§aLG UHC§r] ",
+      "orange": "[§6LG UHC§r] ",
+      "blue": "[§9LG UHC§r] ",
+      "light_blue": "[§3LG UHC§r] "
     }
   }
-
-
 }

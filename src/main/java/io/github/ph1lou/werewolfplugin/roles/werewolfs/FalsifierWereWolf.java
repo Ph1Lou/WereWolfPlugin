@@ -6,6 +6,7 @@ import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.Camp;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.roles.SelectionEndEvent;
@@ -63,7 +64,7 @@ public class FalsifierWereWolf extends RoleWereWolf {
         Bukkit.getPluginManager().callEvent(newDisplayRole);
 
         if (newDisplayRole.isCancelled()) {
-            this.getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
             setDisplayCamp(Camp.WEREWOLF.getKey());
             setDisplayRole(RolesBase.FALSIFIER_WEREWOLF.getKey());
             displayAura = Aura.DARK;
@@ -72,7 +73,7 @@ public class FalsifierWereWolf extends RoleWereWolf {
             setDisplayCamp(newDisplayRole.getNewDisplayCamp());
             displayAura = roles.getDefaultAura();
         }
-        this.getPlayerWW().sendMessageWithKey("werewolf.role.falsifier_werewolf.display_role_message",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.falsifier_werewolf.display_role_message",
                 Formatter.format("&role&",game.translate(getDisplayRole())));
     }
 

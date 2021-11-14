@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.events.roles.shaman.ShamanEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
@@ -32,7 +33,7 @@ public class CommandShaman implements ICommand {
         }
 
         if (player.getHealth() < 3) {
-            playerWW.sendMessageWithKey("werewolf.role.shaman.not_enough_life");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.shaman.not_enough_life");
             return;
         }
 
@@ -48,7 +49,7 @@ public class CommandShaman implements ICommand {
         if (game.getTimer() - playerWW1.getDeathTime() > 30 ||
                 ((IAffectedPlayers) playerWW.getRole()).getAffectedPlayers().stream()
                         .filter(p -> p.equals(playerWW1)).count() > nTimesAffected) {
-            playerWW.sendMessageWithKey("werewolf.role.shaman.cannot_use");
+            playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.shaman.cannot_use");
             return;
         }
 
@@ -59,18 +60,18 @@ public class CommandShaman implements ICommand {
         Bukkit.getPluginManager().callEvent(shamanEvent);
 
         if(shamanEvent.isCancelled()){
-            playerWW.sendMessageWithKey("werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
             return;
         }
 
         playerWW.removePlayerMaxHealth(2);
 
         if (game.getRandom().nextBoolean()) {
-            playerWW.sendMessageWithKey("werewolf.role.shaman.victim_name",
+            playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.shaman.victim_name",
                     Formatter.format("&player&",playerWW1.getName()));
         } else {
             IRole role = playerWW1.getRole();
-            playerWW.sendMessageWithKey("werewolf.role.shaman.victim_role",
+            playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.shaman.victim_role",
                     Formatter.format("&role&",game.translate(role.getDisplayRole())));
         }
 

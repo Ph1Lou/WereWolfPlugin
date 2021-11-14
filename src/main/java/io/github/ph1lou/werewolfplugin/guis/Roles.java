@@ -66,7 +66,8 @@ public class Roles implements InventoryProvider {
                     game.getScore().setRole(game.getConfig().getLoverCount(LoverType.CURSED_LOVER.getKey()));
                 }));*/
 
-        contents.set(0, 8, ClickableItem.of((new ItemBuilder(UniversalMaterial.BARRIER.getType()).setDisplayName(game.translate("werewolf.menu.roles.zero")).build()), e -> {
+        contents.set(0, 8, ClickableItem.of((new ItemBuilder(UniversalMaterial.BARRIER.getType())
+                .setDisplayName(game.translate("werewolf.menu.roles.zero")).build()), e -> {
             for (RoleRegister roleRegister : main.getRegisterManager().getRolesRegister()) {
                 config.setRole(roleRegister.getKey(), 0);
             }
@@ -85,7 +86,8 @@ public class Roles implements InventoryProvider {
         IConfiguration config = game.getConfig();
         Pagination pagination = contents.pagination();
 
-        List<String> lore = new ArrayList<>(Arrays.asList(game.translate("werewolf.menu.left"), game.translate("werewolf.menu.right")));
+        List<String> lore = new ArrayList<>(Arrays.asList(game.translate("werewolf.menu.left"),
+                game.translate("werewolf.menu.right")));
 
         if (config.getLoverCount(LoverType.LOVER.getKey()) > 0) {
             contents.set(0, 2,
@@ -93,7 +95,8 @@ public class Roles implements InventoryProvider {
                             new ItemBuilder(
                                     UniversalMaterial.GREEN_TERRACOTTA
                                             .getStack(config.getLoverCount(LoverType.LOVER.getKey())))
-                                    .setDisplayName(game.translate(LoverType.LOVER.getKey()) + game.translate("werewolf.role.lover.random"))
+                                    .setDisplayName(game.translate(LoverType.LOVER.getKey()) +
+                                            game.translate("werewolf.role.lover.random"))
                                     .setLore(lore).build()), e -> {
 
                         if (e.isLeftClick()) {
@@ -111,7 +114,8 @@ public class Roles implements InventoryProvider {
                             new ItemBuilder(
                                     UniversalMaterial.RED_TERRACOTTA
                                             .getStack())
-                                    .setDisplayName(game.translate(LoverType.LOVER.getKey()) + game.translate("werewolf.role.lover.random"))
+                                    .setDisplayName(game.translate(LoverType.LOVER.getKey()) +
+                                            game.translate("werewolf.role.lover.random"))
                                     .setLore(lore).build()), e -> {
                         if (e.isLeftClick()) {
                             config.addOneLover(LoverType.LOVER.getKey());
@@ -181,10 +185,14 @@ public class Roles implements InventoryProvider {
                     }));
 
 
-        contents.set(5, 1, ClickableItem.of((new ItemBuilder(Category.WEREWOLF == this.category ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate(Camp.WEREWOLF.getKey())).setAmount(Math.max(1, count(main, Category.WEREWOLF))).build()), e -> this.category = Category.WEREWOLF));
-        contents.set(5, 3, ClickableItem.of((new ItemBuilder(Category.VILLAGER == this.category ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate(Camp.VILLAGER.getKey())).setAmount(Math.max(1, count(main, Category.VILLAGER))).build()), e -> this.category = Category.VILLAGER));
-        contents.set(5, 5, ClickableItem.of((new ItemBuilder(Category.NEUTRAL == this.category ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate(Camp.NEUTRAL.getKey())).setAmount(Math.max(1, count(main, Category.NEUTRAL))).build()), e -> this.category = Category.NEUTRAL));
-        contents.set(5, 7, ClickableItem.of((new ItemBuilder(Category.ADDONS == this.category ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK).setDisplayName(game.translate("werewolf.categories.addons")).setAmount(Math.max(1, count(main, Category.ADDONS))).build()), e -> this.category = Category.ADDONS));
+        contents.set(5, 1, ClickableItem.of((new ItemBuilder(Category.WEREWOLF == this.category ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK)
+                .setDisplayName(game.translate(Camp.WEREWOLF.getKey())).setAmount(Math.max(1, count(main, Category.WEREWOLF))).build()), e -> this.category = Category.WEREWOLF));
+        contents.set(5, 3, ClickableItem.of((new ItemBuilder(Category.VILLAGER == this.category ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK)
+                .setDisplayName(game.translate(Camp.VILLAGER.getKey())).setAmount(Math.max(1, count(main, Category.VILLAGER))).build()), e -> this.category = Category.VILLAGER));
+        contents.set(5, 5, ClickableItem.of((new ItemBuilder(Category.NEUTRAL == this.category ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK)
+                .setDisplayName(game.translate(Camp.NEUTRAL.getKey())).setAmount(Math.max(1, count(main, Category.NEUTRAL))).build()), e -> this.category = Category.NEUTRAL));
+        contents.set(5, 7, ClickableItem.of((new ItemBuilder(Category.ADDONS == this.category ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK)
+                .setDisplayName(game.translate("werewolf.categories.addons")).setAmount(Math.max(1, count(main, Category.ADDONS))).build()), e -> this.category = Category.ADDONS));
 
 
         lore.add(game.translate("werewolf.menu.shift"));
@@ -199,7 +207,11 @@ public class Roles implements InventoryProvider {
                 String key = roleRegister.getKey();
                 AtomicBoolean unRemovable = new AtomicBoolean(false);
                 List<String> lore2 = new ArrayList<>(lore);
-                roleRegister.getLoreKey().stream().map(game::translate).map(s -> Arrays.stream(s.split("\\n")).collect(Collectors.toList())).forEach(lore2::addAll);
+                roleRegister.getLoreKey()
+                        .stream()
+                        .map(game::translate)
+                        .map(s -> Arrays.stream(s.split("\\n"))
+                                .collect(Collectors.toList())).forEach(lore2::addAll);
                 roleRegister.getRequireRole().ifPresent(roleKey -> lore2.add(game.translate("werewolf.menu.roles.need",
                         Formatter.format("&role&",game.translate(roleKey)))));
                 main.getRegisterManager().getRolesRegister().stream()

@@ -8,6 +8,7 @@ import io.github.ph1lou.werewolfapi.ILoverManager;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
@@ -49,7 +50,7 @@ public class LoversManagement implements ILoverManager {
 
 
 		if (cursedLovers.size() < 2 && game.getConfig().getLoverCount(LoverType.CURSED_LOVER.getKey()) > 0) {
-			Bukkit.broadcastMessage(game.translate("werewolf.role.cursed_lover.not_enough_players"));
+			Bukkit.broadcastMessage(game.translate(Prefix.RED.getKey() , "werewolf.role.cursed_lover.not_enough_players"));
 			game.getConfig().setLoverCount(LoverType.CURSED_LOVER.getKey(), 0);
 			return;
 		}
@@ -78,7 +79,7 @@ public class LoversManagement implements ILoverManager {
 				.collect(Collectors.toList());
 
 		if (amnesiacLovers.size() < 2 && game.getConfig().getLoverCount(LoverType.AMNESIAC_LOVER.getKey()) > 0) {
-			Bukkit.broadcastMessage(game.translate("werewolf.role.amnesiac_lover.not_enough_players"));
+			Bukkit.broadcastMessage(game.translate(Prefix.RED.getKey() , "werewolf.role.amnesiac_lover.not_enough_players"));
 			game.getConfig().setLoverCount(LoverType.AMNESIAC_LOVER.getKey(), 0);
 			return;
 		}
@@ -124,7 +125,7 @@ public class LoversManagement implements ILoverManager {
 
 		if (loversAvailable.size() < 2 && game.getConfig().getRoleCount(RolesBase.CUPID.getKey()) +
 				game.getConfig().getLoverCount(LoverType.LOVER.getKey()) > 0) {
-			Bukkit.broadcastMessage(game.translate("werewolf.role.lover.not_enough_players"));
+			Bukkit.broadcastMessage(game.translate(Prefix.RED.getKey() , "werewolf.role.lover.not_enough_players"));
 			return;
 		}
 
@@ -139,7 +140,7 @@ public class LoversManagement implements ILoverManager {
 								game.getPlayerSize())) {
 
 			polygamy = true;
-			Bukkit.broadcastMessage(game.translate("werewolf.role.lover.polygamy"));
+			Bukkit.broadcastMessage(game.translate(Prefix.ORANGE.getKey() , "werewolf.role.lover.polygamy"));
 		}
 
 		IPlayerWW playerWW1;
@@ -176,7 +177,7 @@ public class LoversManagement implements ILoverManager {
 					cupid.addAffectedPlayer(playerWW1);
 					cupid.setPower(false);
 					Bukkit.getPluginManager().callEvent(new CupidLoversEvent(playerWW, Sets.newHashSet(cupid.getAffectedPlayers())));
-					playerWW.sendMessageWithKey("werewolf.role.cupid.designation_perform",
+					playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.cupid.designation_perform",
 							Formatter.format("&player1&",playerWW2.getName()),
 							Formatter.format("&player2&",playerWW1.getName()));
 

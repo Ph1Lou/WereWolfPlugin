@@ -15,9 +15,11 @@ public class CommandRules implements ICommand {
 
             if (configRegister.isAppearInMenu()) {
                 if (game.getConfig().isConfigActive(configRegister.getKey())) {
-                    player.sendMessage(game.translate("werewolf.utils.enable") + game.translate(configRegister.getKey()));
+                    player.sendMessage(game.translate("werewolf.utils.enable") +
+                            game.translate(configRegister.getKey()));
                 } else {
-                    player.sendMessage(game.translate("werewolf.utils.disable") + game.translate(configRegister.getKey()));
+                    player.sendMessage(game.translate("werewolf.utils.disable") +
+                            game.translate(configRegister.getKey()));
                 }
             }
 

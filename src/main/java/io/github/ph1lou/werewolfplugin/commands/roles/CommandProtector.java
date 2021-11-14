@@ -7,6 +7,7 @@ import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.roles.protector.ProtectionEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
@@ -33,19 +34,19 @@ public class CommandProtector implements ICommand {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            playerWW.sendMessageWithKey("werewolf.check.offline_player");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.offline_player");
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey("werewolf.check.player_not_found");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.player_not_found");
             return;
         }
 
         if (((IAffectedPlayers) protector).getAffectedPlayers().contains(playerWW1)) {
-            playerWW.sendMessageWithKey("werewolf.check.already_get_power");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.already_get_power");
             return;
         }
 
@@ -57,7 +58,7 @@ public class CommandProtector implements ICommand {
         Bukkit.getPluginManager().callEvent(protectionEvent);
 
         if (protectionEvent.isCancelled()) {
-            playerWW.sendMessageWithKey("werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
             return;
         }
 
@@ -66,8 +67,8 @@ public class CommandProtector implements ICommand {
 
         playerWW1.addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,"protector"));
         playerWW1.getRole().addAuraModifier(new AuraModifier("protection", Aura.LIGHT, 40, true));
-        playerWW1.sendMessageWithKey("werewolf.role.protector.get_protection");
-        playerWW.sendMessageWithKey("werewolf.role.protector.protection_perform",
+        playerWW1.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.protector.get_protection");
+        playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.protector.protection_perform",
                 Formatter.format("&player&",playerArg.getName()));
     }
 }

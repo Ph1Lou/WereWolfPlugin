@@ -168,7 +168,11 @@ public class TimersGUI implements InventoryProvider {
 
         for (TimerRegister timer : main.getRegisterManager().getTimersRegister()) {
             List<String> lore = new ArrayList<>();
-            timer.getLoreKey().stream().map(game::translate).map(s -> Arrays.stream(s.split("\\n")).collect(Collectors.toList())).forEach(lore::addAll);
+            timer.getLoreKey().stream()
+                    .map(game::translate)
+                    .map(s -> Arrays.stream(s.split("\\n"))
+                            .collect(Collectors.toList()))
+                    .forEach(lore::addAll);
 
             if (game.getConfig().getTimerValue(timer.getKey()) >= 0 || game.isDebug()) {
 

@@ -32,7 +32,9 @@ public class ScenariosGUI implements InventoryProvider {
             .id("scenarios")
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
             .provider(new ScenariosGUI())
-            .size(Math.min(54, (JavaPlugin.getPlugin(Main.class).getRegisterManager().getScenariosRegister().size() / 9 + 2) * 9) / 9, 9)
+            .size(Math.min(54, (JavaPlugin.getPlugin(Main.class)
+                    .getRegisterManager()
+                    .getScenariosRegister().size() / 9 + 2) * 9) / 9, 9)
             .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.scenarios.name"))
             .closeable(true)
             .build();
@@ -43,7 +45,8 @@ public class ScenariosGUI implements InventoryProvider {
         Main main = JavaPlugin.getPlugin(Main.class);
         io.github.ph1lou.werewolfapi.WereWolfAPI game = main.getWereWolfAPI();
 
-        contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType()).setDisplayName(game.translate("werewolf.menu.return")).build()), e -> Config.INVENTORY.open(player)));
+        contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType())
+                .setDisplayName(game.translate("werewolf.menu.return")).build()), e -> Config.INVENTORY.open(player)));
     }
 
     @Override
@@ -59,7 +62,10 @@ public class ScenariosGUI implements InventoryProvider {
                 .getScenariosRegister()) {
 
             List<String> lore = new ArrayList<>();
-            scenarioRegister.getLoreKey().stream().map(game::translate).map(s -> Arrays.stream(s.split("\\n")).collect(Collectors.toList())).forEach(lore::addAll);
+            scenarioRegister.getLoreKey().stream()
+                    .map(game::translate)
+                    .map(s -> Arrays.stream(s.split("\\n")).collect(Collectors.toList()))
+                    .forEach(lore::addAll);
             ItemStack itemStack;
 
             if (config.isScenarioActive(scenarioRegister.getKey())) {
@@ -74,7 +80,8 @@ public class ScenariosGUI implements InventoryProvider {
                     .getIncompatibleScenarios()
                     .stream()
                     .filter(s -> game.getConfig().isScenarioActive(s))
-                    .map(game::translate).findFirst();
+                    .map(game::translate)
+                    .findFirst();
 
             incompatible
                     .ifPresent(scenario -> lore.add(game.translate("werewolf.menu.scenarios.incompatible",

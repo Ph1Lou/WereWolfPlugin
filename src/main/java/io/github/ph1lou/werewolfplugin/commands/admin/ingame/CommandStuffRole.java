@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IStuffManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.events.UpdateStuffEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -23,7 +24,7 @@ public class CommandStuffRole implements ICommand {
         UUID uuid = player.getUniqueId();
 
         if (!stuffManager.getStuffRoles().containsKey(args[0])) {
-            player.sendMessage(game.translate("werewolf.check.invalid_key"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.invalid_key"));
             return;
         }
 
@@ -31,7 +32,7 @@ public class CommandStuffRole implements ICommand {
         for (ItemStack i : player.getInventory().getContents()) {
             stuffManager.getStuffRoles().get(args[0]).add(i);
         }
-        player.sendMessage(game.translate("werewolf.commands.admin.loot_role.perform",
+        player.sendMessage(game.translate(Prefix.GREEN.getKey() , "werewolf.commands.admin.loot_role.perform",
                 Formatter.format("&role&",game.translate(args[0]))));
 
         Inventory inventory;

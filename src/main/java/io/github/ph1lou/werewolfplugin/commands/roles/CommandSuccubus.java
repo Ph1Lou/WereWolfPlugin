@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.roles.succubus.BeginCharmEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
@@ -27,26 +28,26 @@ public class CommandSuccubus implements ICommand {
         IRole succubus = playerWW.getRole();
 
         if (!((IAffectedPlayers) succubus).getAffectedPlayers().isEmpty()) {
-            playerWW.sendMessageWithKey("werewolf.check.power");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.power");
             return;
         }
 
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            playerWW.sendMessageWithKey("werewolf.check.offline_player");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.offline_player");
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (argUUID.equals(uuid)) {
-            playerWW.sendMessageWithKey("werewolf.check.not_yourself");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.not_yourself");
             return;
         }
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey("werewolf.check.player_not_found");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.player_not_found");
             return;
         }
 
@@ -55,7 +56,7 @@ public class CommandSuccubus implements ICommand {
 
         if (player.getWorld().equals(playerArg.getWorld())) {
             if (location.distance(locationTarget) > game.getConfig().getDistanceSuccubus()) {
-                playerWW.sendMessageWithKey("werewolf.role.succubus.not_enough_near");
+                playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.succubus.not_enough_near");
                 return;
             }
         } else {
@@ -67,12 +68,12 @@ public class CommandSuccubus implements ICommand {
         Bukkit.getPluginManager().callEvent(beginCharmEvent);
 
         if (beginCharmEvent.isCancelled()) {
-            playerWW.sendMessageWithKey("werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
             return;
         }
 
         ((IAffectedPlayers) succubus).addAffectedPlayer(playerWW1);
-        playerWW.sendMessageWithKey("werewolf.role.succubus.charming_beginning",
+        playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.succubus.charming_beginning",
                 Formatter.format("&player&",playerArg.getName()));
     }
 }

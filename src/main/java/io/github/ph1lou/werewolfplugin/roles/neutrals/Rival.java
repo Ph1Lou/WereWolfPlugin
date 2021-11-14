@@ -75,7 +75,7 @@ public class Rival extends RoleNeutral implements IPower {
                                         + game.getConfig().getTimerValue(TimerBase.RIVAL_DURATION.getKey())))))
                 .setItems(game.translate("werewolf.role.rival.item"))
                 .setEquipments(game.translate("werewolf.role.rival.extra",
-                                Formatter.format("&power&",game.getConfig().getLimitPowerBow() + 1)))
+                                Formatter.format("&number&",game.getConfig().getLimitPowerBow() + 1)))
                 .build();
     }
 
@@ -92,7 +92,7 @@ public class Rival extends RoleNeutral implements IPower {
                 .collect(Collectors.toList());
 
         if (loverAPIs.isEmpty()) {
-            getPlayerWW().sendMessageWithKey("werewolf.role.rival.error");
+            getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.rival.error");
             return;
         }
 
@@ -111,7 +111,7 @@ public class Rival extends RoleNeutral implements IPower {
 
         List<IPlayerWW> lovers = new ArrayList<>(lover.getLovers());
 
-        this.getPlayerWW().sendMessageWithKey("werewolf.role.rival.lover",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.rival.lover",
                 Formatter.format("&role1&",lovers.isEmpty() ? "" : game.translate(lovers.get(0).getRole().getKey())),
                 Formatter.format("&role2&",lovers.size() == 2 ? game.translate(lovers.get(1).getRole().getKey()) : ""));
     }
@@ -157,11 +157,11 @@ public class Rival extends RoleNeutral implements IPower {
         Bukkit.getPluginManager().callEvent(rivalAnnouncementEvent);
 
         if (rivalAnnouncementEvent.isCancelled()) {
-            this.getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
             return;
         }
 
-        this.getPlayerWW().sendMessageWithKey("werewolf.role.rival.find_lovers",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.rival.find_lovers",
                 Formatter.format("&player1&",playerWW1S.get(0).getName()),
                 Formatter.format("&player2&",playerWW1S.size() >= 2 ? playerWW1S.get(1).getName() : ""),
                 Formatter.format("&player3&",playerWW1S.size() >= 3 ? playerWW1S.get(2).getName() : ""),
@@ -200,7 +200,7 @@ public class Rival extends RoleNeutral implements IPower {
         BukkitUtils.scheduleSyncDelayedTask(() -> Bukkit.getScheduler().cancelTask(task), (long) health * 62 * 20);
 
 
-        this.getPlayerWW().sendMessageWithKey("werewolf.role.rival.lover_death");
+        this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.rival.lover_death");
         Bukkit.getPluginManager().callEvent(new RivalLoverDeathEvent(this.getPlayerWW(), new ArrayList<>(lover.getLovers())));
         lover = null;
     }
@@ -252,7 +252,7 @@ public class Rival extends RoleNeutral implements IPower {
         Bukkit.getPluginManager().callEvent(rivalLoverEvent);
 
         if (rivalLoverEvent.isCancelled()) {
-            this.getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
             return;
         }
 

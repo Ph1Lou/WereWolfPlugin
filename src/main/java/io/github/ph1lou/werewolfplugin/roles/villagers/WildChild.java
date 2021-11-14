@@ -6,6 +6,7 @@ import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimerBase;
@@ -97,8 +98,8 @@ public class WildChild extends RoleVillage implements IAffectedPlayers, ITransfo
             return;
         }
 
-        this.getPlayerWW().sendMessageWithKey("werewolf.role.wild_child.reveal_model",
-                Formatter.format("&model&",model.getName()));
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.wild_child.reveal_model",
+                Formatter.format("&player&",model.getName()));
         this.getPlayerWW().sendSound(Sound.BAT_IDLE);
     }
 
@@ -108,7 +109,7 @@ public class WildChild extends RoleVillage implements IAffectedPlayers, ITransfo
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.wild_child.description"))
                 .addExtraLines(game.translate("werewolf.role.wild_child.model",
-                        Formatter.format("&model&",
+                        Formatter.format("&player&",
                         affectedPlayer.isEmpty() ?
                                 !transformed ?
                                         game.translate("werewolf.role.wild_child.design_model",
@@ -150,7 +151,7 @@ public class WildChild extends RoleVillage implements IAffectedPlayers, ITransfo
             Bukkit.getPluginManager().callEvent(wildChildTransformationEvent);
 
             if (wildChildTransformationEvent.isCancelled()) {
-                this.getPlayerWW().sendMessageWithKey("werewolf.check.transformation");
+                this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.transformation");
                 return;
             }
 
@@ -162,7 +163,7 @@ public class WildChild extends RoleVillage implements IAffectedPlayers, ITransfo
             }
 
         } else
-            this.getPlayerWW().sendMessageWithKey("werewolf.role.wild_child.reveal_model",
+            this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.wild_child.reveal_model",
                     Formatter.format("&format&",model.getName()));
 
 
@@ -201,7 +202,7 @@ public class WildChild extends RoleVillage implements IAffectedPlayers, ITransfo
 
         if (wildChildTransformationEvent.isCancelled()) {
             this.getPlayerWW().sendMessageWithKey(
-                    "werewolf.check.transformation");
+                    Prefix.RED.getKey() , "werewolf.check.transformation");
             return;
         }
 
@@ -227,8 +228,8 @@ public class WildChild extends RoleVillage implements IAffectedPlayers, ITransfo
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         this.getPlayerWW().sendMessageWithKey(
-                "werewolf.role.wild_child.change",
-                Formatter.format("&model&",thiefWW.getName()));
+                Prefix.ORANGE.getKey() , "werewolf.role.wild_child.change",
+                Formatter.format("&player&",thiefWW.getName()));
     }
 
     @EventHandler

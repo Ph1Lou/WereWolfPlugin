@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.roles.librarian.LibrarianGiveBackEvent;
@@ -28,7 +29,7 @@ public class CommandSendToLibrarian implements ICommand {
 
 
         if (args.length == 0) {
-            playerWW.sendMessageWithKey("werewolf.check.parameters",
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.parameters",
                     Formatter.format("&number&",1));
             return;
         }
@@ -57,23 +58,23 @@ public class CommandSendToLibrarian implements ICommand {
                     Bukkit.getPluginManager().callEvent(librarianGiveBackEvent);
 
                     if (librarianGiveBackEvent.isCancelled()) {
-                        playerWW.sendMessageWithKey("werewolf.check.cancel");
+                        playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
                         return;
                     }
 
                     ((Librarian) roles).addStorage(sb2.toString());
 
-                    playerWW.sendMessageWithKey("werewolf.role.librarian.contribute");
+                    playerWW.sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.role.librarian.contribute");
                     find.set(true);
                     librarianGiveBackEvent.getTargetWW().sendMessageWithKey(
-                            "werewolf.role.librarian.contribution",
+                            Prefix.GREEN.getKey() , "werewolf.role.librarian.contribution",
                             Formatter.format("&player&",player.getName()),
                             Formatter.format("message",librarianGiveBackEvent.getInfo()));
                 });
 
 
         if (!find.get()) {
-            playerWW.sendMessageWithKey("werewolf.role.librarian.prohibit");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.librarian.prohibit");
         }
 
 

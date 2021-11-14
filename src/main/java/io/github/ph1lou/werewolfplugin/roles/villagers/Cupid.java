@@ -66,7 +66,7 @@ public class Cupid extends RoleVillage implements IAffectedPlayers, IPower {
                 .setDescription(game.translate("werewolf.role.cupid.description"))
                 .setItems(game.translate("werewolf.role.cupid.items"))
                 .setEquipments(game.translate("werewolf.role.cupid.extra",
-                                Formatter.format("&power&",game.getConfig().getLimitPowerBow() + 1)))
+                                Formatter.format("&number&",game.getConfig().getLimitPowerBow() + 1)))
                 .addExtraLines(game.translate("werewolf.role.cupid.lover",
                                 Formatter.format("&lovers&",this.affectedPlayer.isEmpty() ?
                                 this.hasPower() ?

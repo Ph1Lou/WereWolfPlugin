@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -31,12 +32,12 @@ public class CommandTP implements ICommand {
             }
 
             if (playerArg1 == null) {
-                player.sendMessage(game.translate("werewolf.check.offline_player"));
+                player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.offline_player"));
                 return;
             }
 
             player.teleport(playerArg1);
-            String message = game.translate("werewolf.commands.admin.teleportation.send",
+            String message = game.translate(Prefix.YELLOW.getKey() , "werewolf.commands.admin.teleportation.send",
                     Formatter.format("&player1&",player.getName()),
                     Formatter.format("&player2&",playerArg1.getName()));
             moderationManager.alertHostsAndModerators(message);
@@ -63,12 +64,12 @@ public class CommandTP implements ICommand {
         Player playerArg2 = Bukkit.getPlayer(args[1]);
 
         if (playerArg2 == null || playerArg1 == null) {
-            player.sendMessage(game.translate("werewolf.check.offline_player"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.offline_player"));
             return;
         }
 
         playerArg1.teleport(playerArg1);
-        String message = game.translate("werewolf.commands.admin.teleportation.send",
+        String message = game.translate(Prefix.YELLOW.getKey() , "werewolf.commands.admin.teleportation.send",
                 Formatter.format("&player1&",playerArg1.getName()),
                 Formatter.format("&player2&",playerArg2.getName()));
         moderationManager.alertHostsAndModerators(message);

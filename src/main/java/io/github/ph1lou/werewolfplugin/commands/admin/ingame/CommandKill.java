@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.commands.admin.ingame;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
@@ -29,21 +30,21 @@ public class CommandKill implements ICommand {
             }
         }
         if (!find) {
-            player.sendMessage(game.translate("werewolf.check.not_in_game_player"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.not_in_game_player"));
             return;
         }
 
         if (!playerWW1.isState(StatePlayer.ALIVE)) {
-            player.sendMessage(game.translate("werewolf.commands.kill.not_living"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.commands.kill.not_living"));
             return;
         }
         if (game.isState(StateGame.START)) {
             ((GameManager) game).remove(argUUID);
-            player.sendMessage(game.translate("werewolf.commands.kill.remove_role"));
+            player.sendMessage(game.translate(Prefix.ORANGE.getKey() , "werewolf.commands.kill.remove_role"));
             return;
         }
         if (Bukkit.getPlayer(args[0]) != null) {
-            player.sendMessage(game.translate("werewolf.commands.kill.on_line"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.commands.kill.on_line"));
             return;
         }
 

@@ -6,6 +6,7 @@ import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
@@ -148,9 +149,9 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
         roleClone.setTransformedToNeutral(true);
         roleClone.setDeathRole(this.getKey());
 
-        this.getPlayerWW().sendMessageWithKey("werewolf.role.thief.realized_theft",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.thief.realized_theft",
                 Formatter.format("&role&",game.translate(role.getKey())));
-        this.getPlayerWW().sendMessageWithKey("werewolf.role.thief.details");
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.thief.details");
 
         this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"imitator"));
         Bukkit.getPluginManager().callEvent(new StealEvent(this.getPlayerWW(),

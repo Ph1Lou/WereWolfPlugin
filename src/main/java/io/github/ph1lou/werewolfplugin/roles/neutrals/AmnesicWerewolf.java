@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Day;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
@@ -72,7 +73,7 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
         Bukkit.getPluginManager().callEvent(amnesiacTransformationEvent);
 
         if (amnesiacTransformationEvent.isCancelled()) {
-            this.getPlayerWW().sendMessageWithKey("werewolf.check.transformation");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.transformation");
             return;
         }
 

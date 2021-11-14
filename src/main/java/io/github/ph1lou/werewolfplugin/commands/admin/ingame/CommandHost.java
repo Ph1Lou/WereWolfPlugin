@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IModerationManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.permissions.HostEvent;
@@ -23,7 +24,7 @@ public class CommandHost implements ICommand {
         Player host = Bukkit.getPlayer(args[0]);
 
         if (host == null) {
-            player.sendMessage(game.translate("werewolf.check.offline_player"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.offline_player"));
             return;
         }
 
@@ -32,10 +33,10 @@ public class CommandHost implements ICommand {
         if (moderationManager.getHosts().contains(uuid)) {
 
             if (moderationManager.getHosts().size() == 1) {
-                player.sendMessage(game.translate("werewolf.commands.admin.host.one"));
+                player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.commands.admin.host.one"));
                 return;
             }
-            Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.host.remove",
+            Bukkit.broadcastMessage(game.translate(Prefix.RED.getKey() , "werewolf.commands.admin.host.remove",
                     Formatter.format("&player&",host.getName())));
             moderationManager.getHosts().remove(uuid);
 
@@ -45,7 +46,7 @@ public class CommandHost implements ICommand {
                 ((GameManager) game).finalJoin(host);
             }
             moderationManager.addHost(uuid);
-            Bukkit.broadcastMessage(game.translate("werewolf.commands.admin.host.add",
+            Bukkit.broadcastMessage(game.translate(Prefix.GREEN.getKey() , "werewolf.commands.admin.host.add",
                     Formatter.format("&player&",host.getName())));
         }
         Bukkit.getPluginManager().callEvent(new HostEvent(uuid, moderationManager.getHosts().contains(uuid)));

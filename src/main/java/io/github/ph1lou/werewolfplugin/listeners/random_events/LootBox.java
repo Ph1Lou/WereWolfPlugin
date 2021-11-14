@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.ListenerManager;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Camp;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
@@ -217,7 +218,7 @@ public class LootBox extends ListenerManager {
         chestLocation.clear();
         chestHasBeenOpen.clear();
         register(false);
-        Bukkit.broadcastMessage(game.translate("werewolf.random_events.loot_box.all_chest_find"));
+        Bukkit.broadcastMessage(game.translate(Prefix.GREEN.getKey() , "werewolf.random_events.loot_box.all_chest_find"));
 
         Bukkit.getPluginManager().callEvent(new FindAllLootBoxEvent());
     }

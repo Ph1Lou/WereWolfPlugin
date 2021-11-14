@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FirstDeathEvent;
@@ -56,7 +57,7 @@ public class Shaman extends RoleVillage implements IAffectedPlayers {
         int nTimesAffected = (int) affectedPlayers.stream().filter(player -> player.equals(playerWW)).count();
 
         TextComponent textComponent = new TextComponent(
-                game.translate("werewolf.role.shaman.choice_message"));
+                game.translate(Prefix.YELLOW.getKey() , "werewolf.role.shaman.choice_message"));
         textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/ww %s %s %s",
                 game.translate("werewolf.role.shaman.command"), playerWW.getUUID(), nTimesAffected)));
 

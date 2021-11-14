@@ -30,7 +30,6 @@ public class Villager extends RoleVillage {
         Bukkit.getPluginManager().callEvent(new VillagerKitEvent(this.getPlayerWW(), villagerKit.getKey()));
     }
 
-
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)

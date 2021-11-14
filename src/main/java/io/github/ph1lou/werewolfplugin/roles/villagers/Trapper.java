@@ -4,6 +4,7 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
@@ -70,7 +71,7 @@ public class Trapper extends RoleVillage implements IAffectedPlayers, IPower {
         setPower(true);
 
         this.getPlayerWW().sendMessageWithKey(
-                "werewolf.role.trapper.tracking_message");
+                Prefix.YELLOW.getKey() , "werewolf.role.trapper.tracking_message");
     }
 
 

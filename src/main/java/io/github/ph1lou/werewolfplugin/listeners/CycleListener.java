@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.enums.ConfigBase;
 import io.github.ph1lou.werewolfapi.enums.Day;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
@@ -69,7 +70,7 @@ public class CycleListener implements Listener {
         game.getMapManager().getWorld().setTime(23500);
 
         long duration = game.getConfig().getTimerValue(TimerBase.VOTE_DURATION.getKey());
-        Bukkit.broadcastMessage(game.translate("werewolf.announcement.day",
+        Bukkit.broadcastMessage(game.translate(Prefix.ORANGE.getKey() , "werewolf.announcement.day",
                 Formatter.format("&number&",event.getNumber())));
         groupSizeChange();
 
@@ -77,7 +78,7 @@ public class CycleListener implements Listener {
                 game.getPlayerSize() < game.getConfig().getPlayerRequiredVoteEnd()) {
 
             game.getConfig().switchConfigValue(ConfigBase.VOTE.getKey());
-            Bukkit.broadcastMessage(game.translate("werewolf.vote.vote_deactivate"));
+            Bukkit.broadcastMessage(game.translate(Prefix.ORANGE.getKey() , "werewolf.vote.vote_deactivate"));
             game.getVote().setStatus(VoteStatus.ENDED);
         }
 
@@ -87,8 +88,11 @@ public class CycleListener implements Listener {
 
             if (game.getConfig().isConfigActive(ConfigBase.VOTE.getKey())
                     && !game.getVote().isStatus(VoteStatus.NOT_BEGIN)) {
-                Bukkit.broadcastMessage(game.translate("werewolf.vote.vote_time",
+
+                Bukkit.broadcastMessage(game.translate("werewolf.utils.bar"));
+                Bukkit.broadcastMessage(game.translate(Prefix.ORANGE.getKey() , "werewolf.vote.vote_time",
                         Formatter.format("&timer&",Utils.conversion((int) duration))));
+                Bukkit.broadcastMessage(game.translate("werewolf.utils.bar"));
 
                 game.getVote().setStatus(VoteStatus.IN_PROGRESS);
 
@@ -138,7 +142,7 @@ public class CycleListener implements Listener {
 
         game.getMapManager().getWorld().setTime(12000);
 
-        Bukkit.broadcastMessage(game.translate("werewolf.announcement.night",
+        Bukkit.broadcastMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.announcement.night",
                 Formatter.format("&number&",event.getNumber())));
         groupSizeChange();
 
@@ -180,7 +184,7 @@ public class CycleListener implements Listener {
                     .forEach(player -> {
                         player.sendMessage(
                                 game.translate(
-                                        "werewolf.commands.admin.group.group_change",
+                                        Prefix.ORANGE.getKey() , "werewolf.commands.admin.group.group_change",
                                         Formatter.format("&number&",game.getGroup())));
                         VersionUtils.getVersionUtils().sendTitle(
                                 player,
@@ -267,7 +271,7 @@ public class CycleListener implements Listener {
                             HandlerList.unregisterAll((Listener) playerWW.getRole());
                             Sound.PORTAL_TRIGGER.play(playerWW);
                             playerWW.clearPotionEffects();
-                            playerWW.sendMessageWithKey("werewolf.announcement.troll");
+                            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.announcement.troll");
                             playerWW.addPlayerMaxHealth(20 - playerWW.getMaxHealth());
                         });
                 if (game.getConfig().isConfigActive(ConfigBase.DOUBLE_TROLL.getKey())) {
@@ -318,7 +322,7 @@ public class CycleListener implements Listener {
             if (!game.isState(StateGame.END)) {
                 game.getPlayersWW()
                         .forEach(playerWW -> playerWW
-                                .sendMessageWithKey("werewolf.announcement.lover_troll"));
+                                .sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.announcement.lover_troll"));
                 game.getConfig().setTrollLover(false);
                 game.getLoversManager().repartition();
             }

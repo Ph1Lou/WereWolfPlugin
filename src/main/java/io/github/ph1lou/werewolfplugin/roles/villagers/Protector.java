@@ -8,6 +8,7 @@ import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
@@ -67,7 +68,7 @@ public class Protector extends RoleWithLimitedSelectionDuration implements IAffe
 
             this.last.addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,"protector"));
             this.last.getRole().removeAuraModifier("protection");
-            this.last.sendMessageWithKey("werewolf.role.protector.no_longer_protected");
+            this.last.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.protector.no_longer_protected");
             this.last = null;
         }
 
@@ -79,7 +80,7 @@ public class Protector extends RoleWithLimitedSelectionDuration implements IAffe
         setPower(true);
 
         this.getPlayerWW().sendMessageWithKey(
-                "werewolf.role.protector.protection_message",
+                Prefix.YELLOW.getKey() , "werewolf.role.protector.protection_message",
                 Formatter.format("&timer&",Utils.conversion(
                         game.getConfig().getTimerValue(TimerBase.POWER_DURATION.getKey()))));
     }

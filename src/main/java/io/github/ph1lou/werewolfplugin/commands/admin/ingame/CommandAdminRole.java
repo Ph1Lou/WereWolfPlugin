@@ -7,6 +7,7 @@ import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.AngelForm;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
@@ -29,7 +30,7 @@ public class CommandAdminRole implements ICommand {
 
         if (playerWW != null &&
                 playerWW.isState(StatePlayer.ALIVE)) {
-            player.sendMessage(game.translate("werewolf.commands.admin.role.in_game"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.commands.admin.role.in_game"));
             return;
         }
 
@@ -51,7 +52,7 @@ public class CommandAdminRole implements ICommand {
                 .forEach(playerWW1 -> playerAtomicUUID.set(playerWW1.getUUID()));
 
         if (playerAtomicUUID.get() == null) {
-            player.sendMessage(game.translate("werewolf.check.not_in_game_player"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.not_in_game_player"));
             return;
         }
 
@@ -59,7 +60,7 @@ public class CommandAdminRole implements ICommand {
         IPlayerWW targetWW = game.getPlayerWW(playerUUID).orElse(null);
 
         if (targetWW == null) {
-            player.sendMessage(game.translate("werewolf.check.not_in_game_player"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.not_in_game_player"));
             return;
         }
 

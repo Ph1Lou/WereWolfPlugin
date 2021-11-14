@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin.commands.utilities;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.ConfigBase;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.registers.ScenarioRegister;
 import io.github.ph1lou.werewolfplugin.RegisterManager;
 import org.bukkit.entity.Player;
@@ -14,16 +15,18 @@ public class CommandScenarios implements ICommand {
 
         if (game.getConfig().isConfigActive(ConfigBase.HIDE_SCENARIOS.getKey())) {
 
-            player.sendMessage(game.translate("werewolf.menu.scenarios.disable"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.menu.scenarios.disable"));
 
             return;
         }
 
-        StringBuilder sb = new StringBuilder(game.translate("werewolf.menu.scenarios.list"));
+        StringBuilder sb = new StringBuilder(game.translate(Prefix.GREEN.getKey() , "werewolf.menu.scenarios.list"));
         int i = 0;
         for (ScenarioRegister scenarioRegister : RegisterManager.get().getScenariosRegister()) {
             if (game.getConfig().isScenarioActive(scenarioRegister.getKey())) {
-                sb.append(i % 2 == 0 ? "§b" : "").append(game.translate(scenarioRegister.getKey())).append("§f, ");
+                sb.append(i % 2 == 0 ? "§b" : "")
+                        .append(game.translate(scenarioRegister.getKey()))
+                        .append("§f, ");
                 i++;
             }
         }

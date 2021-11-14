@@ -6,6 +6,7 @@ import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.roles.guard.GuardEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
@@ -32,24 +33,24 @@ public class CommandGuard implements ICommand {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            playerWW.sendMessageWithKey("werewolf.check.offline_player");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.offline_player");
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey("werewolf.check.player_not_found");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.player_not_found");
             return;
         }
 
         if (((IAffectedPlayers) guard).getAffectedPlayers().contains(playerWW1)) {
-            playerWW.sendMessageWithKey("werewolf.check.already_get_power");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.already_get_power");
             return;
         }
 
         if(!guard.isPowerFinal()){
-            playerWW.sendMessageWithKey("werewolf.check.power");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.power");
             return;
         }
 
@@ -60,7 +61,7 @@ public class CommandGuard implements ICommand {
         Bukkit.getPluginManager().callEvent(guardEvent);
 
         if (guardEvent.isCancelled()) {
-            playerWW.sendMessageWithKey("werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
             return;
         }
 
@@ -70,7 +71,7 @@ public class CommandGuard implements ICommand {
                 40,
                 true));
 
-        playerWW.sendMessageWithKey("werewolf.role.guard.perform",
+        playerWW.sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.role.guard.perform",
                 Formatter.format("&player&",playerArg.getName()));
     }
 }

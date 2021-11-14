@@ -1,6 +1,7 @@
 package io.github.ph1lou.werewolfplugin.registers;
 
 import io.github.ph1lou.werewolfapi.IConfiguration;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimerBase;
@@ -37,7 +38,7 @@ public class TimersRegister {
                         .onZero(wereWolfAPI -> {
                             Bukkit.getOnlinePlayers()
                                     .forEach(player -> {
-                                        player.sendMessage(wereWolfAPI.translate("werewolf.announcement.invulnerability"));
+                                        player.sendMessage(wereWolfAPI.translate(Prefix.ORANGE.getKey(),"werewolf.announcement.invulnerability"));
                                         Sound.GLASS.play(player);
                                     });
                             Bukkit.getPluginManager().callEvent(new InvulnerabilityEvent());
@@ -66,7 +67,7 @@ public class TimersRegister {
                             wereWolfAPI.getMapManager().getWorld().setPVP(true);
                             Bukkit.getOnlinePlayers()
                                     .forEach(player -> {
-                                        player.sendMessage(wereWolfAPI.translate("werewolf.announcement.pvp"));
+                                        player.sendMessage(wereWolfAPI.translate(Prefix.ORANGE.getKey() , "werewolf.announcement.pvp"));
                                         Sound.DONKEY_ANGRY.play(player);
                                     });
                         })
@@ -82,7 +83,7 @@ public class TimersRegister {
                                     .filter(playerWW -> !playerWW.isState(StatePlayer.DEATH))
                                     .filter(playerWW -> playerWW.getRole().isWereWolf())
                                     .forEach(playerWW -> {
-                                        playerWW.sendMessageWithKey("werewolf.role.werewolf.see_others");
+                                        playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.werewolf.see_others");
                                         Sound.WOLF_HOWL.play(playerWW);
                                         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(playerWW));
                                     });
@@ -104,7 +105,7 @@ public class TimersRegister {
                         .onZero(wereWolfAPI -> {
                             Bukkit.getOnlinePlayers()
                                     .forEach(player -> {
-                                        player.sendMessage(wereWolfAPI.translate("werewolf.announcement.border"));
+                                        player.sendMessage(wereWolfAPI.translate(Prefix.ORANGE.getKey() , "werewolf.announcement.border"));
                                         Sound.FIREWORK_LAUNCH.play(player);
                                     });
                             Bukkit.getPluginManager().callEvent(new BorderStartEvent());
@@ -134,7 +135,7 @@ public class TimersRegister {
                         .onZero(wereWolfAPI -> {
                             Bukkit.getOnlinePlayers()
                                     .forEach(player -> {
-                                        player.sendMessage(wereWolfAPI.translate("werewolf.announcement.mining"));
+                                        player.sendMessage(wereWolfAPI.translate(Prefix.ORANGE.getKey() , "werewolf.announcement.mining"));
                                         Sound.ANVIL_BREAK.play(player);
                                     });
                             Bukkit.getPluginManager().callEvent(new DiggingEndEvent());

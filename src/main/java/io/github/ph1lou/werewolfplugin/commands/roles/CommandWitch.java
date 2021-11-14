@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.roles.witch.WitchResurrectionEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
@@ -28,24 +29,24 @@ public class CommandWitch implements ICommand {
 
 
         if (Bukkit.getPlayer(UUID.fromString(args[0])) == null) {
-            playerWW.sendMessageWithKey("werewolf.check.offline_player");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.offline_player");
             return;
         }
         UUID argUUID = UUID.fromString(args[0]);
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (playerWW1 == null) {
-            playerWW.sendMessageWithKey("werewolf.check.player_not_found");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.player_not_found");
             return;
         }
 
         if (!game.getConfig().isWitchAutoResurrection() && argUUID.equals(uuid)) {
-            playerWW.sendMessageWithKey("werewolf.check.not_yourself");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.not_yourself");
             return;
         }
 
         if (!playerWW1.isState(StatePlayer.JUDGEMENT)) {
-            playerWW.sendMessageWithKey("werewolf.check.not_in_judgement");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.not_in_judgement");
             return;
         }
 
@@ -58,13 +59,13 @@ public class CommandWitch implements ICommand {
         Bukkit.getPluginManager().callEvent(witchResurrectionEvent);
 
         if (witchResurrectionEvent.isCancelled()) {
-            playerWW.sendMessageWithKey("werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
             return;
         }
 
         ((IAffectedPlayers) witch).addAffectedPlayer(playerWW1);
         game.resurrection(playerWW1);
-        playerWW.sendMessageWithKey("werewolf.role.witch.resuscitation_perform",
+        playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.witch.resuscitation_perform",
                 Formatter.format("&player&",playerWW1.getName()));
     }
 }

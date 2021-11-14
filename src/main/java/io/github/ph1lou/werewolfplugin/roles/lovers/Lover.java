@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
@@ -237,10 +238,10 @@ public class Lover implements ILover, Listener {
 
         if (lovers.contains(playerWW)) return;
 
-        lovers.forEach(playerWW1 -> playerWW1.sendMessageWithKey("werewolf.random_events.triple.lover_join",
+        lovers.forEach(playerWW1 -> playerWW1.sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.random_events.triple.lover_join",
                 Formatter.format("&player&",playerWW.getName())));
 
-        playerWW.sendMessageWithKey("werewolf.random_events.triple.join", Formatter.format("&lovers&",getLovers().stream()
+        playerWW.sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.random_events.triple.join", Formatter.format("&lovers&",getLovers().stream()
                 .map(IPlayerWW::getName)
                 .collect(Collectors.joining(" "))));
 

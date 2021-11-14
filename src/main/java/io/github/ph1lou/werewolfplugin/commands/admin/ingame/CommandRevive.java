@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
@@ -21,7 +22,7 @@ public class CommandRevive implements ICommand {
         Player player1 = Bukkit.getPlayer(args[0]);
 
         if (player1 == null) {
-            player.sendMessage(game.translate("werewolf.check.offline_player"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.offline_player"));
             return;
         }
 
@@ -29,12 +30,12 @@ public class CommandRevive implements ICommand {
         IPlayerWW playerWW1 = game.getPlayerWW(uuid).orElse(null);
 
         if (playerWW1 == null) {
-            player.sendMessage(game.translate("werewolf.check.not_in_game_player"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.not_in_game_player"));
             return;
         }
 
         if (!playerWW1.isState(StatePlayer.DEATH)) {
-            player.sendMessage(game.translate("werewolf.commands.admin.revive.not_death"));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.commands.admin.revive.not_death"));
             return;
         }
 
@@ -48,7 +49,7 @@ public class CommandRevive implements ICommand {
         game.resurrection(playerWW1);
 
         for (Player p : Bukkit.getOnlinePlayers()) {
-            p.sendMessage(game.translate("werewolf.commands.admin.revive.perform",
+            p.sendMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.commands.admin.revive.perform",
                     Formatter.format("&player&",player1.getName()),
                     Formatter.format("&admin&",player.getName())));
             Sound.AMBIENCE_THUNDER.play(p);
