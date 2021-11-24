@@ -4,6 +4,7 @@ package io.github.ph1lou.werewolfplugin.listeners;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
+import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,10 +14,10 @@ import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Collection;
 import java.util.Optional;
 
 public class PatchPotions implements Listener {
@@ -72,12 +73,12 @@ public class PatchPotions implements Listener {
     public void onDrinkPotionEvent(PlayerItemConsumeEvent event){
 
         Player player = event.getPlayer();
+        Collection<PotionEffect> potionEffectList = VersionUtils.getVersionUtils()
+                .getPotionEffect(event.getItem());
 
-        if(event.getItem().getItemMeta() instanceof PotionMeta)
+        if(!potionEffectList.isEmpty())
         {
             event.setCancelled(true);
-            PotionMeta potionMeta = (PotionMeta) event.getItem().getItemMeta();
-
             BukkitUtils.scheduleSyncDelayedTask(() ->
             {
                 PlayerInventory inventory = player.getInventory();
@@ -86,10 +87,13 @@ public class PatchPotions implements Listener {
             });
 
             game.getPlayerWW(player.getUniqueId())
-                    .ifPresent(playerWW -> potionMeta.getCustomEffects().forEach(potionEffect -> playerWW.addPotionModifier(PotionModifier.add(potionEffect.getType(),
-                            potionEffect.getDuration(),
-                            potionEffect.getAmplifier(),
-                            "potion_drink"))));
+                    .ifPresent(playerWW -> potionEffectList
+                            .forEach(potionEffect -> playerWW.addPotionModifier(
+                                    PotionModifier.add(
+                                            potionEffect.getType(),
+                                            potionEffect.getDuration(),
+                                            potionEffect.getAmplifier(),
+                                            "potion_drink"))));
         }
     }
 }

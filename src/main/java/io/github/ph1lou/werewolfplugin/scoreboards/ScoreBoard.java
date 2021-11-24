@@ -100,7 +100,8 @@ public class ScoreBoard implements IScoreBoard {
 		String border;
 
 		if (game.getConfig().getTimerValue(TimerBase.BORDER_BEGIN.getKey()) > 0) {
-			border = Utils.conversion(game.getConfig().getTimerValue(TimerBase.BORDER_BEGIN.getKey()));
+			border = Utils.conversion(game.getConfig()
+					.getTimerValue(TimerBase.BORDER_BEGIN.getKey()));
 		} else {
 			border = game.translate("werewolf.utils.on");
 			if (wb.getSize() > game.getConfig().getBorderMin()) {
@@ -110,8 +111,10 @@ public class ScoreBoard implements IScoreBoard {
 
 		scoreboard2.clear();
 
-		this.day = game.getTimer() / game.getConfig().getTimerValue(TimerBase.DAY_DURATION.getKey()) / 2 + 1;
-		this.dayState = game.translate(game.isDay(Day.DAY) ? "werewolf.score_board.day" : "werewolf.score_board.night");
+		this.day = game.getTimer() / game.getConfig()
+				.getTimerValue(TimerBase.DAY_DURATION.getKey()) / 2 + 1;
+		this.dayState = game.translate(game.isDay(Day.DAY) ?
+				"werewolf.score_board.day" : "werewolf.score_board.night");
 
 
 		scoreboard2.addAll(game.translateArray("werewolf.score_board.scoreboard_2",
@@ -133,17 +136,24 @@ public class ScoreBoard implements IScoreBoard {
 
 		if (game.getConfig().getLoverCount(LoverType.LOVER.getKey()) > 0) {
 			StringBuilder sb = new StringBuilder();
-			sb.append("§3").append(game.getConfig().getLoverCount(LoverType.LOVER.getKey())).append("§f ").append(game.translate(LoverType.LOVER.getKey()));
+			sb.append("§3")
+					.append(game.getConfig().getLoverCount(LoverType.LOVER.getKey()))
+					.append("§f ")
+					.append(game.translate(LoverType.LOVER.getKey()));
 			roles.add(sb.substring(0, Math.min(30, sb.length())));
 		}
 		if (game.getConfig().getLoverCount(LoverType.AMNESIAC_LOVER.getKey()) > 0) {
 			StringBuilder sb = new StringBuilder();
-			sb.append("§3").append(game.getConfig().getLoverCount(LoverType.AMNESIAC_LOVER.getKey())).append("§f ").append(game.translate(LoverType.AMNESIAC_LOVER.getKey()));
+			sb.append("§3").append(game.getConfig().getLoverCount(LoverType.AMNESIAC_LOVER.getKey()))
+					.append("§f ")
+					.append(game.translate(LoverType.AMNESIAC_LOVER.getKey()));
 			roles.add(sb.substring(0, Math.min(30, sb.length())));
 		}
 		if (game.getConfig().getLoverCount(LoverType.CURSED_LOVER.getKey()) > 0) {
 			StringBuilder sb = new StringBuilder();
-			sb.append("§3").append(game.getConfig().getLoverCount(LoverType.CURSED_LOVER.getKey())).append("§f ").append(game.translate(LoverType.CURSED_LOVER.getKey()));
+			sb.append("§3").append(game.getConfig().getLoverCount(LoverType.CURSED_LOVER.getKey()))
+					.append("§f ")
+					.append(game.translate(LoverType.CURSED_LOVER.getKey()));
 			roles.add(sb.substring(0, Math.min(30, sb.length())));
 		}
 		for (RoleRegister roleRegister : RegisterManager.get().getRolesRegister()) {
@@ -153,7 +163,8 @@ public class ScoreBoard implements IScoreBoard {
 				sb
 						.append("§3")
 						.append(game.getConfig().getRoleCount(key))
-						.append("§f ").append(roleRegister.getKey());
+						.append("§f ")
+						.append(game.translate(roleRegister.getKey()));
 				roles.add(sb.substring(0, Math.min(30, sb.length())));
 			}
 		}

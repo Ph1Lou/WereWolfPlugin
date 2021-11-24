@@ -3,6 +3,7 @@ package io.github.ph1lou.werewolfplugin;
 import fr.minuskube.inv.InventoryManager;
 import io.github.ph1lou.werewolfapi.GetWereWolfAPI;
 import io.github.ph1lou.werewolfapi.ILanguageManager;
+import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
 import io.github.ph1lou.werewolfapi.registers.IRegisterManager;
 import io.github.ph1lou.werewolfapi.statistics.GameReview;
@@ -62,11 +63,13 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
 
     @Override
     public void onLoad() {
-        VersionUtils.getVersionUtils().patchBiomes();
+        new Replacer();
     }
 
+
+
     @Override
-    public io.github.ph1lou.werewolfapi.WereWolfAPI getWereWolfAPI() {
+    public WereWolfAPI getWereWolfAPI() {
         return currentGame;
     }
 
