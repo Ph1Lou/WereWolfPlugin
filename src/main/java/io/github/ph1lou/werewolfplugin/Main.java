@@ -60,13 +60,10 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
                 }), 0, 4);
     }
 
-
     @Override
     public void onLoad() {
         new Replacer();
     }
-
-
 
     @Override
     public WereWolfAPI getWereWolfAPI() {
@@ -87,7 +84,6 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
     public ILanguageManager getLangManager() {
         return languageManager;
     }
-
 
     public void createGame() {
         this.currentGame = new GameManager(this);

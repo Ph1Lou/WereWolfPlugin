@@ -42,6 +42,4 @@ public class SlowBow extends ListenerManager {
                 false,
                 false));
     }
-
-
 }

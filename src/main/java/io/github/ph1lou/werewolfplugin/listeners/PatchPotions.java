@@ -53,7 +53,6 @@ public class PatchPotions implements Listener {
         }
     }
 
-
     @EventHandler
     public void onEffectGet(PotionSplashEvent event){
 
@@ -69,20 +68,27 @@ public class PatchPotions implements Listener {
                         "splash_potion"))));
     }
 
+
     @EventHandler
     public void onDrinkPotionEvent(PlayerItemConsumeEvent event){
 
         Player player = event.getPlayer();
+        ItemStack itemStack = event.getItem();
         Collection<PotionEffect> potionEffectList = VersionUtils.getVersionUtils()
-                .getPotionEffect(event.getItem());
+                .getPotionEffect(itemStack);
 
-        if(!potionEffectList.isEmpty())
-        {
+        if(!potionEffectList.isEmpty()) {
+
             event.setCancelled(true);
             BukkitUtils.scheduleSyncDelayedTask(() ->
             {
                 PlayerInventory inventory = player.getInventory();
-                inventory.remove(event.getItem());
+                if(itemStack.getAmount()==1){
+                    player.getInventory().removeItem(itemStack);
+                }
+                else {
+                    itemStack.setAmount(itemStack.getAmount()-1);
+                }
                 inventory.addItem(new ItemStack(Material.GLASS_BOTTLE));
             });
 
