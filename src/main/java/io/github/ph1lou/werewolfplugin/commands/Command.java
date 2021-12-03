@@ -112,7 +112,7 @@ public class Command implements TabExecutor {
 
         if (!commandRegister.isArgNumbers(args.length)) {
             return game.translate(Prefix.RED.getKey() , "werewolf.check.parameters",
-                    Formatter.format("&number&",commandRegister.getMinArgNumbers()));
+                    Formatter.number(commandRegister.getMinArgNumbers()));
         }
 
         commandRegister.getCommand().execute(game,player, args);

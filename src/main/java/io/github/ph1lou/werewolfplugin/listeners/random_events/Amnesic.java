@@ -158,7 +158,7 @@ public class Amnesic extends ListenerManager {
         Sound.WOLF_HOWL.play(playerWW);
 
         this.temp.sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.random_events.amnesic.new",
-                Formatter.format("&player&",playerWW.getName()));
+                Formatter.player(playerWW.getName()));
 
         BukkitUtils.scheduleSyncDelayedTask(this::revealWereWolf, 20 * 60 * 5L);
 

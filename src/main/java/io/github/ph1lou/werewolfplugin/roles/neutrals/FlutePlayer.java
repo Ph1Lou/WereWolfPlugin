@@ -27,6 +27,7 @@ import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -119,7 +120,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
 
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.flute_player.description",
-                                Formatter.format("&number&",game.getConfig().getDistanceFlutePlayer())))
+                                Formatter.number(game.getConfig().getDistanceFlutePlayer())))
                 .setPower(game.translate("werewolf.role.flute_player.power"))
                 .setItems(game.translate("werewolf.role.flute_player.craft_description"))
                 .setEffects(game.translate("werewolf.role.flute_player.effect"))
@@ -150,11 +151,11 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
         if (!this.hasOwnFlute) {
             this.hasOwnFlute = true;
             this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.flute_player.perform",
-                    Formatter.format("&number&",game.getConfig().getDistanceFlutePlayer()));
+                    Formatter.number(game.getConfig().getDistanceFlutePlayer()));
         } else {
             this.fluteInStore++;
             this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.flute_player.craft",
-                    Formatter.format("&number&",this.fluteInStore));
+                    Formatter.number(this.fluteInStore));
         }
         event.setResult(Event.Result.ALLOW);
         event.getInventory().setResult(null);
@@ -209,7 +210,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
         this.power = true;
 
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.flute_player.day",
-                Formatter.format("&number&",this.fluteInStore));
+                Formatter.number(this.fluteInStore));
     }
 
     @Override
@@ -226,11 +227,6 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
             return;
         }
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) {
-            return;
-        }
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
@@ -238,8 +234,8 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
         AtomicBoolean recoverResistance = new AtomicBoolean(false);
 
         Bukkit.getOnlinePlayers().stream()
-                .filter(player1 -> !player.equals(player1))
-                .filter(player1 -> this.checkDistance(player, player1) || this.checkDistance(player1))
+                .filter(player1 -> !this.getPlayerUUID().equals(player1.getUniqueId()))
+                .filter(player1 -> this.checkDistance(this.getPlayerWW().getLocation(), player1) || this.checkDistance(player1))
                 .map(Entity::getUniqueId)
                 .map(game::getPlayerWW)
                 .filter(Optional::isPresent)
@@ -266,7 +262,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
                                 this.affectedPlayer.add(playerWW);
                                 this.progress.remove(playerWW);
                                 this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.flute_player.enchanted",
-                                        Formatter.format("&player&",playerWW.getName()));
+                                        Formatter.player(playerWW.getName()));
                                 this.checkStrength();
                             }
                         }
@@ -280,15 +276,12 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
 
     private boolean checkDistance(Player player1) {
         return this.flutedPlayer.stream()
-                .map(IPlayerWW::getUUID)
-                .map(Bukkit::getPlayer)
-                .filter(Objects::nonNull)
-                .anyMatch(player -> checkDistance(player, player1));
+                .anyMatch(player -> checkDistance(player.getLocation(), player1));
     }
 
-    private boolean checkDistance(Player player, Player player1) {
-        return player.getWorld().equals(player1.getWorld()) &&
-                player.getLocation().distance(player1.getLocation())
+    private boolean checkDistance(Location player, Player player1) {
+        return player.getWorld() == player1.getWorld() &&
+                player.distance(player1.getLocation())
                         < game.getConfig().getDistanceFlutePlayer();
     }
 
@@ -310,7 +303,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
             playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.flute_player.find");
             Sound.ANVIL_BREAK.play(playerWW);
             this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.flute_player.find_flute",
-                    Formatter.format("&player&",playerWW.getName()));
+                    Formatter.player(playerWW.getName()));
             event.setCurrentItem(null);
             this.flutedPlayer.remove(playerWW);
             event.getWhoClicked().closeInventory();
@@ -362,8 +355,8 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
                 this.power = false;
                 this.fluteInStore--;
                 this.getPlayerWW().sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.role.flute_player.transmit",
-                        Formatter.format("&player&",clickedPlayerWW.getName()),
-                        Formatter.format("&number&",this.fluteInStore));
+                        Formatter.player(clickedPlayerWW.getName()),
+                        Formatter.number(this.fluteInStore));
                 return;
             }
         }
@@ -441,7 +434,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
         return ClickableItem.of((new ItemBuilder(
                 UniversalMaterial.LIGHT_BLUE_WOOL.getStack())
                 .setDisplayName(game.translate("werewolf.menu.advanced_tool.flute_player",
-                                Formatter.format("&number&",config.getDistanceFlutePlayer())))
+                                Formatter.number(config.getDistanceFlutePlayer())))
                 .setLore(lore).build()), e -> {
             if (e.isLeftClick()) {
                 config.setDistanceFlutePlayer((config.getDistanceFlutePlayer() + 2));
@@ -453,7 +446,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setLore(lore)
                     .setDisplayName(game.translate("werewolf.menu.advanced_tool.flute_player",
-                                    Formatter.format("&number&",config.getDistanceFlutePlayer())))
+                                    Formatter.number(config.getDistanceFlutePlayer())))
                     .build());
 
         });

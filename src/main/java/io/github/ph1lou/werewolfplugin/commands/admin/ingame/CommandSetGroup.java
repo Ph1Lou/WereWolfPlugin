@@ -17,9 +17,9 @@ public class CommandSetGroup implements ICommand {
             game.setGroup(Integer.parseInt(args[0]));
             for (Player p : Bukkit.getOnlinePlayers()) {
                 VersionUtils.getVersionUtils().sendTitle(p, game.translate("werewolf.commands.admin.group.top_title"), game.translate("werewolf.commands.admin.group.bot_title",
-                        Formatter.format("&number&",game.getGroup())), 20, 60, 20);
+                        Formatter.number(game.getGroup())), 20, 60, 20);
                 p.sendMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.commands.admin.group.respect_limit",
-                        Formatter.format("&number&",game.getGroup())));
+                        Formatter.number(game.getGroup())));
             }
 
         } catch (NumberFormatException ignored) {

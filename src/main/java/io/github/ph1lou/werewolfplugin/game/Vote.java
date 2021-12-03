@@ -70,7 +70,7 @@ public class Vote implements Listener, IVoteManager {
 			this.votes.merge(vote, 1, Integer::sum);
 
 			voterWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.vote.perform_vote",
-					Formatter.format("&player&",vote.getName()));
+					Formatter.player(vote.getName()));
 		}
 
 	}
@@ -85,16 +85,18 @@ public class Vote implements Listener, IVoteManager {
 		this.currentStatus = VoteStatus.WAITING_CITIZEN;
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onVoteResult(VoteResultEvent event) {
 		if (!event.isCancelled()) {
 			event.setPlayerWW(getResult());
 			if (event.getPlayerWW() == null) {
-				if (currentStatus == VoteStatus.WAITING_CITIZEN) {
+				if (this.currentStatus == VoteStatus.WAITING_CITIZEN) {
 					Bukkit.broadcastMessage(game.translate(Prefix.ORANGE.getKey() , "werewolf.vote.no_result"));
 				}
 				event.setCancelled(true);
-			} else showResultVote(event.getPlayerWW());
+			} else {
+				showResultVote(event.getPlayerWW());
+			}
 		}
         resetVote();
     }
@@ -128,7 +130,7 @@ public class Vote implements Listener, IVoteManager {
 			String voteName = voteWW.getName();
 			player.sendMessage(game.translate("werewolf.role.citizen.see_vote",
 					Formatter.format("&voter&",voterName),
-					Formatter.format("&player&",voteName)));
+					Formatter.player(voteName)));
 		}
 	}
 
@@ -174,8 +176,8 @@ public class Vote implements Listener, IVoteManager {
 			playerWW.removePlayerMaxHealth(10);
 
 			Bukkit.broadcastMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.vote.vote_result",
-					Formatter.format("&player&",playerWW.getName()),
-					Formatter.format("&number&",this.votes.get(playerWW))));
+					Formatter.player(playerWW.getName()),
+					Formatter.number(this.votes.get(playerWW))));
 
 			int task = BukkitUtils.scheduleSyncRepeatingTask(() -> {
 				if (game.isState(StateGame.GAME)) {

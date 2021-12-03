@@ -52,11 +52,11 @@ public class ListenersLoader {
         }
 
         for (IPlayerWW playerWW1 : this.game.getPlayersWW()) {
-            HandlerList.unregisterAll((Listener) playerWW1.getRole());
+            HandlerList.unregisterAll(playerWW1.getRole());
         }
 
         for (ILover lover : this.game.getLoversManager().getLovers()) {
-            HandlerList.unregisterAll((Listener) lover);
+            HandlerList.unregisterAll(lover);
         }
     }
 

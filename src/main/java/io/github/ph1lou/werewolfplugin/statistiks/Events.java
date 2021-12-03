@@ -59,6 +59,9 @@ import io.github.ph1lou.werewolfapi.events.roles.angel.RegenerationEvent;
 import io.github.ph1lou.werewolfapi.events.roles.avenger_werewolf.DeathAvengerListEvent;
 import io.github.ph1lou.werewolfapi.events.roles.avenger_werewolf.RegisterAvengerListEvent;
 import io.github.ph1lou.werewolfapi.events.roles.bear_trainer.GrowlEvent;
+import io.github.ph1lou.werewolfapi.events.roles.charmer.CharmedDeathEvent;
+import io.github.ph1lou.werewolfapi.events.roles.charmer.CharmerEvent;
+import io.github.ph1lou.werewolfapi.events.roles.charmer.CharmerGetEffectDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.comedian.UseMaskEvent;
 import io.github.ph1lou.werewolfapi.events.roles.detective.InvestigateEvent;
 import io.github.ph1lou.werewolfapi.events.roles.elder.ElderResurrectionEvent;
@@ -101,6 +104,8 @@ import io.github.ph1lou.werewolfapi.events.roles.village_idiot.VillageIdiotEvent
 import io.github.ph1lou.werewolfapi.events.roles.villager.VillagerKitEvent;
 import io.github.ph1lou.werewolfapi.events.roles.wild_child.ModelEvent;
 import io.github.ph1lou.werewolfapi.events.roles.wild_child.WildChildTransformationEvent;
+import io.github.ph1lou.werewolfapi.events.roles.will_o_the_wisp.WillOTheWispRecoverRoleEvent;
+import io.github.ph1lou.werewolfapi.events.roles.will_o_the_wisp.WillOTheWispTeleportEvent;
 import io.github.ph1lou.werewolfapi.events.roles.witch.WitchResurrectionEvent;
 import io.github.ph1lou.werewolfapi.events.roles.wolf_dog.WolfDogChooseWereWolfForm;
 import io.github.ph1lou.werewolfapi.events.werewolf.NewWereWolfEvent;
@@ -130,6 +135,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -329,11 +335,11 @@ public class Events implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onLoverDeath(LoverDeathEvent event) {
 
+        List<? extends IPlayerWW> lovers = event.getLover().getLovers();
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview()
                 .addRegisteredAction(
-                        new RegisteredAction("lover_death",
-                                event.getPlayerWW1(), event.getPlayerWW2(), api.getTimer()));
+                        new RegisteredAction("lover_death", new HashSet<>(lovers), api.getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -1149,6 +1155,56 @@ public class Events implements Listener {
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("oracle_see",
                 event.getPlayerWW(), event.getTargetWW(), api.getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onCharmedDeath(CharmedDeathEvent event) {
+
+        if (event.isCancelled()) return;
+
+        WereWolfAPI api = main.getWereWolfAPI();
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("charmed_death_event",
+                event.getPlayerWW(), event.getTargetWW(),event.isBeforeCountDown()?1:0, api.getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onCharmerGetEffect(CharmerGetEffectDeathEvent event) {
+
+        if (event.isCancelled()) return;
+
+        WereWolfAPI api = main.getWereWolfAPI();
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("charmer_get_effect",
+                event.getPlayerWW(),new HashSet<>(event.getLover().getLovers()), api.getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onCharmerCharmed(CharmerEvent event) {
+
+        if (event.isCancelled()) return;
+
+        WereWolfAPI api = main.getWereWolfAPI();
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("charmer_charmed",
+                event.getPlayerWW(),event.getTargetWW(), api.getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onWispTeleport(WillOTheWispTeleportEvent event) {
+
+        if (event.isCancelled()) return;
+
+        WereWolfAPI api = main.getWereWolfAPI();
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("will_o_the_wisp_teleport",
+                event.getPlayerWW(),event.getNumberUse(), api.getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onWispTeleport(WillOTheWispRecoverRoleEvent event) {
+
+        if (event.isCancelled()) return;
+
+        WereWolfAPI api = main.getWereWolfAPI();
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("will_o_the_wisp_recover_role",
+                event.getPlayerWW(),event.getTargetWW(),0,event.getRoleKey(), api.getTimer()));
     }
 
 

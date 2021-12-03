@@ -31,7 +31,7 @@ public class CommandDetective implements ICommand {
 
         if (args.length != 2) {
             playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.parameters",
-                    Formatter.format("&number&",2));
+                    Formatter.number(2));
             return;
         }
 

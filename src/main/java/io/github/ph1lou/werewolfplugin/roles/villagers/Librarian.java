@@ -63,7 +63,7 @@ public class Librarian extends RoleVillage implements ILimitedUse, IAffectedPlay
 
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.librarian.description",
-                                Formatter.format("&number&",3 - use)))
+                                Formatter.number(3 - use)))
                 .setItems(game.translate("werewolf.role.librarian.items"))
                 .build();
     }

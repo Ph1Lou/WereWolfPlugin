@@ -72,6 +72,6 @@ public class CommandGuard implements ICommand {
                 true));
 
         playerWW.sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.role.guard.perform",
-                Formatter.format("&player&",playerArg.getName()));
+                Formatter.player(playerArg.getName()));
     }
 }

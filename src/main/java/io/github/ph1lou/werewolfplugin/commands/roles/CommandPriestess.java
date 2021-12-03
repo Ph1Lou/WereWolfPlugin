@@ -43,7 +43,7 @@ public class CommandPriestess implements ICommand {
 
         if (!player.getWorld().equals(playerArg.getWorld()) || player.getLocation().distance(playerArg.getLocation()) > game.getConfig().getDistancePriestess()) {
             playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.priestess.distance",
-                    Formatter.format("&number&",game.getConfig().getDistancePriestess()));
+                    Formatter.number(game.getConfig().getDistancePriestess()));
             return;
         }
 
@@ -66,7 +66,7 @@ public class CommandPriestess implements ICommand {
             playerWW.removePlayerMaxHealth(4);
 
             playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.priestess.message",
-                    Formatter.format("&player&",playerArg.getName()),
+                    Formatter.player(playerArg.getName()),
                     Formatter.format("&camp&",game.translate(priestessEvent.getCamp())));
 
         }

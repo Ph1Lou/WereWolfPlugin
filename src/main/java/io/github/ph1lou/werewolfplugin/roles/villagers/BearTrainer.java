@@ -103,7 +103,7 @@ public class BearTrainer extends RoleVillage {
 
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.bear_trainer.description",
-                                Formatter.format("&number&",game.getConfig().getDistanceBearTrainer())))
+                                Formatter.number(game.getConfig().getDistanceBearTrainer())))
                 .build();
     }
 
@@ -121,7 +121,7 @@ public class BearTrainer extends RoleVillage {
         return ClickableItem.of((
                 new ItemBuilder(UniversalMaterial.BROWN_WOOL.getStack())
                         .setDisplayName(game.translate("werewolf.menu.advanced_tool.bear_trainer",
-                                        Formatter.format("&number&",config.getDistanceBearTrainer())))
+                                        Formatter.number(config.getDistanceBearTrainer())))
                         .setLore(lore).build()), e -> {
             if (e.isLeftClick()) {
                 config.setDistanceBearTrainer((config.getDistanceBearTrainer() + 5));
@@ -133,7 +133,7 @@ public class BearTrainer extends RoleVillage {
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setLore(lore)
                     .setDisplayName(game.translate("werewolf.menu.advanced_tool.bear_trainer",
-                                    Formatter.format("&number&",config.getDistanceBearTrainer())))
+                                    Formatter.number(config.getDistanceBearTrainer())))
                     .build());
 
         });

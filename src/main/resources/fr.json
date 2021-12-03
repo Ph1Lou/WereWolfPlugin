@@ -175,7 +175,7 @@
       "fox": {
         "display": "Renard",
         "effect": "Trois minutes de Vitesse après chaque kill",
-        "description": "Vous pouvez flairer les joueurs pour savoir si ils sont Loup-Garou. Les joueurs devront se situer à moins de §b&number&§f blocs pendant §b&timer&§f. Vous disposez de §b&number&§f flair(s).",
+        "description": "Vous pouvez flairer les joueurs pour savoir si ils sont Loup-Garou. Les joueurs devront se situer à moins de §b&number&§f blocs pendant §b&timer&§f. Vous disposez de §b&number1&§f flair(s).",
         "smell_message": "Vous pouvez flairer un joueur §b/ww flairer§f. Si vous êtes déjà en train de flairer quelqu'un, il sera remplacé par le nouveau joueur et la progression sera remis à 0. Il vous reste §b&number&§r flair(s)",
         "smell_beginning": "Vous commencez à flairer §b&player&",
         "not_werewolf": "&player& §2n'est pas dans le camp des Loups Garous",
@@ -410,6 +410,9 @@
         "display": "Couple Amnésique",
         "not_enough_players": "Il n'y a pas assez de personnes pour former un couple amnésique"
       },
+      "fake_lover": {
+        "display": "Couple"
+      },
       "mischievous_werewolf": {
         "display": "Loup Garou Perfide",
         "items": "5 Tnt",
@@ -418,10 +421,11 @@
       },
       "elder": {
         "display": "Ancien",
-        "effect": "Résistance pour sa première vie",
+        "effect": "Résistance",
         "available": "Vous avez §aencore§f votre seconde Vie.",
         "not_available": "Vous n'avez §cplus§f votre seconde Vie.",
-        "description": "Vous possédez une seconde vie. Vous perdrez votre Résistance à votre première mort, mais attention, si c’est un Villageois qui vous tue, vous perdrez également trois coeurs permanents."
+        "description": "Si un Loup Garou vous tue, vous ressuscitez. Si c’est un Villageois qui vous tue, il perdra son pouvoir et cinq coeurs.",
+        "info_villager": "Vous venez de tuer l'Ancien, vous perdez 5 coeurs et votre pouvoir"
       },
       "flute_player": {
         "display": "Joueur de Flûte",
@@ -458,7 +462,7 @@
       },
       "comedian": {
         "display": "Comédien",
-        "masks": "Masque(s) utilisé(s) : §b&number&",
+        "masks": "Masque(s) utilisé(s) : §b&mask&",
         "none": "Aucun",
         "description": "Vous possédez trois masques, un de Force, un de Résistance et un de Vitesse. Chaque matin, vous pouvez choisir (ou non) d'en mettre un pour la journée. Attention, ces masques sont à usage unique.",
         "wear_mask_message": "Vous pouvez mettre choisir de mettre un masque pour la journée. Faites §b/ww masque§f 1, 2 ou 3 (respectivememt : Résistance, Vitesse et Force). Vous avez §b&timer&",
@@ -481,7 +485,7 @@
       "succubus": {
         "display": "Succube",
         "charm": "Charmé : §b&list&\n",
-        "charm_command": "pour charmer §b/ww charmer§b",
+        "charm_command": "pour charmer §b/ww charmer§f",
         "none": "§cAucun§f",
         "description": "Vous pouvez charmer un joueur qui gagnera avec vous. Si vous mourrez, la personne charmée mourra à votre place. Le temps de charme est de §b&timer&",
         "charming_message": "Vous pouvez désigner une personne à charmer §b/ww charmer",
@@ -503,6 +507,45 @@
         "victim_name": "§b&player&§r est mort",
         "victim_role": "Un §b&role&§r est mort",
         "command": "command_shaman"
+      },
+      "charmer": {
+        "display": "Charmeuse",
+        "description": "Vous avez le pouvoir de faire croire à un joueur qu'il est en couple avec vous, mais vous devez gagner sans lui. Si votre charmé meurt avant la fin du compte à rebours, vous perdez 3 coeurs permanents",
+        "choose": "Faites §b/ww charmer§f pour charmer un joueur, vous avez §b&timer&",
+        "effects": "Vitesse et 10 coeurs d'absorption si le couple meurt",
+        "command": "charmer",
+        "timer": "Vous pourrez tuer votre charmé &player& sans malus dans &timer&",
+        "affected": "Votre charmé est &player&, vous pouvez le tuer sans malus",
+        "reveal": "Votre couple avec &player& était en faite faux",
+        "before_count_down": "Votre charmé est mort avant la fin du compte à rebours, vous perdez 3 coeurs permanents",
+        "lover_death": "Vous gagnez l'effet §bVitesse§f et 10 coeurs d'absorption suite à la mort du couple",
+        "perform": "Vous venez de charmer &player&",
+        "annoucement": "Votre charmé &player& vient d'être informé de son couple"
+      },
+      "fearful_werewolf": {
+        "display": "Loup Garou craintif",
+        "description": "Vous disposez d'effets dépendant du nombre de loups garous présent à &number& blocs autour de vous. Vous ne pouvez pas voter, et votre mort ne sera pas annoncée dans le chat global",
+        "effects": "4 LG ou plus : Faiblesse, 2 LG ou moins : Resistance le Jour, Force la nuit, Seul : Vitesse"
+      },
+      "hermit": {
+        "display": "Ermite",
+        "description": "Vous disposez d'effets dépendant du nombre de personnes présent à &number& blocs autour de vous. Vous ne pouvez pas voter, et votre mort ne sera pas annoncée dans le chat global",
+        "effects": "5 personnes ou plus : Faiblesse sinon Resistance le Jour, Force la nuit, Seul : Vitesse"
+      },
+      "big_bad_werewolf": {
+        "display": "Grand Méchant Loup",
+        "effects": "Force le Jour tant qu'un membre des Loups-Garous n'est pas mort",
+        "werewolf_death": "Un Loup Garou vient de mourir, vous perdez votre force le jour"
+      },
+      "will_o_the_wisp": {
+        "display": "Feu Follet",
+        "description": "Invisible : vous pouvez voir les particules bleues de la petite fille et rouge du loup perfide. Au début de la nuit, vous recevez le rôle d'un joueur situez à moins de §b&number&§f blocs de vous",
+        "effects": "Vitesse le jour, Invisibilité et quatres coeurs d'absorption pendant 5 minutes en retirant son armure",
+        "command": "tp",
+        "command_info": "Invisible : vous pouvez, encore §b&number&§f fois pendant la partie, vous tp &number2& blocs en avant avec /ww tp",
+        "should_be_invisible": "Vous devez être invisible pour utiliser cette commande",
+        "role_reveal": "Un joueur situé à moins de §b&number&§f blocs est §b&role&",
+        "use_tp": "Vous pouvez encore utiliser §b&number&§f fois votre commande §b/a tp§f "
       }
     },
     "vote": {
@@ -567,6 +610,7 @@
       "model": " modèle &player&",
       "death": "§cDe la Mort",
       "lover": " en couple avec &player&",
+      "fake_lover": " en faux couple avec &player&",
       "cursed_lover": " en couple maudit avec &player&",
       "victory": "Victoire",
       "message": "Victoire &winner&"
@@ -652,6 +696,7 @@
           "affected": "Affecte : §b&player&",
           "cursed_lover": "En Liaison maudite avec : §b&player&",
           "lover": "En Couple avec : §b&player&",
+          "fake_lover": "En Faux Couple avec : §b&player&",
           "kill_by": "Tué par : §b&player&",
           "power": "Pouvoir : §b&on&",
           "role": "§b&player&§r est §b&role&",
@@ -830,7 +875,10 @@
         "fox": "Champ d'action du Renard §b&number&",
         "avenger_werewolf": "Champ d'action du Loup Garou Vengeur §b&number&",
         "flute_player": "Champ d'action du Joueur de Flûte §b&number&",
-        "bear_trainer": "Champ d'action du Montreur d'Ours §b&number&"
+        "bear_trainer": "Champ d'action du Montreur d'Ours §b&number&",
+        "fearful_werewolf": "Champ d'action du Loup-Garou Craintif §b&number&",
+        "hermit": "Champ d'action de l'Ermite §b&number&",
+        "will_o_the_wisp": "Champ d'action du Feu Follet §b&number&"
       },
       "troll": "Configuration §bTroll",
       "roles": {
@@ -935,7 +983,8 @@
         "vote_begin": "Début des Votes (§b&timer&§r)",
         "auto_restart_duration": "Durée de redémarrage du serveur (§b&timer&§r)",
         "invulnerability": "Invulnérabilité (§b&timer&§r)",
-        "succubus_duration": "Durée du Charme du Succube (§b&timer&§r)"
+        "succubus_duration": "Durée du Charme du Succube (§b&timer&§r)",
+        "charmer_countdown": "Durée du compte à rebours de la Charmeuse (§b&timer&§r)"
       },
       "random_events": {
         "list": "Liste des évènements aléatoires §bactivés§f :\n",
@@ -1111,6 +1160,7 @@
       "game_in_progress": "La partie est en cours",
       "not_in_game": "Vous n'êtes pas dans la partie",
       "power": "Votre pouvoir ne peut pas encore être utilisé ou ne peut plus être utilisé",
+      "end_selection": "[§cLG UHC§r] Vous ne pouvez plus utiliser votre pouvoir aujourd'hui",
       "ability_disabled": "Vos pouvoirs ont été désactivés, vous ne pouvez pas effectuer cette action",
       "two_distinct_player": "Vous devez sélectionner deux joueurs différents",
       "not_yourself": "Vous ne pouvez pas vous choisir vous même",

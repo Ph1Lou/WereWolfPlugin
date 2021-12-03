@@ -70,7 +70,7 @@ public class AmnesiacLover implements ILover, Listener {
         IPlayerWW playerWW1 = getOtherLover(event.getPlayerWW());
 
         Bukkit.broadcastMessage(game.translate("werewolf.role.lover.lover_death",
-                Formatter.format("&player&",playerWW1.getName())));
+                Formatter.player(playerWW1.getName())));
         Bukkit.getPluginManager().callEvent(
                 new AmnesiacLoverDeathEvent(event.getPlayerWW(), playerWW1));
         game.death(playerWW1);
@@ -117,11 +117,11 @@ public class AmnesiacLover implements ILover, Listener {
 
         if (this.amnesiacLover1.equals(playerWW)) {
             playerWW.sendMessageWithKey("werewolf.role.lover.description",
-                    Formatter.format("&player&",this.amnesiacLover2.getName()));
+                    Formatter.player(this.amnesiacLover2.getName()));
             playerWW.sendSound(Sound.PORTAL_TRAVEL);
         } else if (this.amnesiacLover2.equals(playerWW)) {
             playerWW.sendMessageWithKey("werewolf.role.lover.description",
-                    Formatter.format("&player&",this.amnesiacLover1.getName()));
+                    Formatter.player(this.amnesiacLover1.getName()));
             playerWW.sendSound(Sound.PORTAL_TRAVEL);
         }
     }
@@ -208,7 +208,7 @@ public class AmnesiacLover implements ILover, Listener {
         StringBuilder sb = event.getEndMessage();
 
         sb.append(this.game.translate("werewolf.end.lover",
-                Formatter.format("&player&",playerWW1.getName() + " ")));
+                Formatter.player(playerWW1.getName() + " ")));
     }
 
     @Override

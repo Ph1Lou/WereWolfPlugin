@@ -53,16 +53,16 @@ public class Comedian extends RoleWithLimitedSelectionDuration {
 
         getLastMask().ifPresent(comedianMask -> this.getPlayerWW().addPotionModifier(PotionModifier.remove(comedianMask.getPotionEffectType(),"comedian")));
 
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
-
         if (getMasks().size() >= 3) return;
 
         setPower(true);
 
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
+            return;
+        }
+
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.comedian.wear_mask_message",
-                Formatter.format("&timer&",Utils.conversion(
+                Formatter.timer(Utils.conversion(
                         game.getConfig().getTimerValue(
                                 TimerBase.POWER_DURATION.getKey()))));
 
@@ -74,7 +74,7 @@ public class Comedian extends RoleWithLimitedSelectionDuration {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.comedian.description"))
                 .addExtraLines(game.translate("werewolf.role.comedian.masks",
-                                Formatter.format("&number&",comedianMasks.isEmpty() ?
+                                Formatter.format("&mask&",comedianMasks.isEmpty() ?
                                 game.translate("werewolf.role.comedian.none") :
                                 comedianMasks.stream()
                                         .map(comedianMasks1 -> game.translate(comedianMasks1.getKey()))

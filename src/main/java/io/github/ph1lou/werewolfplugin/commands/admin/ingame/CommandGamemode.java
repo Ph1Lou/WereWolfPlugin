@@ -28,8 +28,8 @@ public class CommandGamemode implements ICommand {
 
             player.setGameMode(GameMode.values()[j]);
             String message = game.translate(Prefix.YELLOW.getKey() , "werewolf.commands.admin.gamemode.send",
-                    Formatter.format("&player&",player.getName()),
-                    Formatter.format("&number&",gamemode));
+                    Formatter.player(player.getName()),
+                    Formatter.number(gamemode));
 
             game.getModerationManager().alertHostsAndModerators(message);
             if (!game.getModerationManager().isStaff(uuid)) {

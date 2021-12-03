@@ -26,7 +26,7 @@ public class CommandRank implements ICommand {
 
         if (queue.contains(uuid)) {
             player.sendMessage(game.translate(Prefix.GREEN.getKey() , "werewolf.menu.rank.perform",
-                    Formatter.format("&number&",queue.indexOf(uuid) + 1)));
+                    Formatter.number(queue.indexOf(uuid) + 1)));
         } else {
             player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.menu.rank.not_in_queue"));
         }

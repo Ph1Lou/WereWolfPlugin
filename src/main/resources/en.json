@@ -458,7 +458,7 @@
       },
       "comedian": {
         "display": "Comedian",
-        "masks": "Used Mask(s) : §b&number&",
+        "masks": "Used Mask(s) : §b&mask&",
         "none": "None",
         "description": "You have three masks, one of Strength, one of Resistance, and one of Speed. Every morning, you may chose to put on (or not) a mask for the day. Each mask can be used only once.",
         "wear_mask_message": "You may now chose to put on a mask for the day. Use §b/ww mask§f 1, 2 or 3 (respectively : Resistance, Speed and Strength). You have §b&timer&",

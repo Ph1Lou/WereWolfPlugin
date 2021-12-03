@@ -91,18 +91,18 @@ public class CommandLovers implements ICommand {
                                 playerCouple.setHealth(playerCouple.getHealth() + don);
                                 temp.updateAndGet(v -> v + don);
                                 playerWW1.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.lover.received",
-                                        Formatter.format("&number&",heart),
-                                        Formatter.format("&player&",playerName));
+                                        Formatter.number(heart),
+                                        Formatter.player(playerName));
                                 playerWW.sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.role.lover.complete",
-                                        Formatter.format("&number&",heart),
-                                        Formatter.format("&player&",playerCouple.getName()));
+                                        Formatter.number(heart),
+                                        Formatter.player(playerCouple.getName()));
                                 playerWW.sendSound(Sound.PORTAL);
                             } else {
                                 playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
                             }
                         } else {
                             playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.lover.too_many_heart",
-                                    Formatter.format("&player&",playerCouple.getName()));
+                                    Formatter.player(playerCouple.getName()));
                         }
                     }
                 });
@@ -152,18 +152,18 @@ public class CommandLovers implements ICommand {
                             playerCouple.setHealth(playerCouple.getHealth() + don);
                             player.setHealth(player.getHealth() - don);
                             playerWW1.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.lover.received",
-                                    Formatter.format("&number&",heart),
-                                    Formatter.format("&player&",playerName));
+                                    Formatter.number(heart),
+                                    Formatter.player(playerName));
                             playerWW.sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.role.lover.complete",
-                                    Formatter.format("&number&",heart),
-                                    Formatter.format("&player&",playerCouple.getName()));
+                                    Formatter.number(heart),
+                                    Formatter.player(playerCouple.getName()));
                             playerWW.sendSound( Sound.PORTAL);
                         } else {
                             playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
                         }
                     } else {
                         playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.lover.too_many_heart",
-                                Formatter.format("&player&",playerCouple.getName()));
+                                Formatter.player(playerCouple.getName()));
                     }
                 });
             } else {

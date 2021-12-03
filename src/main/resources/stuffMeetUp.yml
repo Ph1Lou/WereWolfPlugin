@@ -112,6 +112,7 @@ death_loot:
 werewolf.role.guard.display:
   0:
     potion_data: 16393
+    item:
       ==: org.bukkit.inventory.ItemStack
       type: POTION
 werewolf.role.cupid.display:

@@ -87,6 +87,6 @@ public class CommandLibrarian implements ICommand {
 
         playerWW.sendMessageWithKey(
                 Prefix.YELLOW.getKey() , "werewolf.role.librarian.perform",
-                Formatter.format("&player&",selectionPlayer.getName()));
+                Formatter.player(selectionPlayer.getName()));
     }
 }

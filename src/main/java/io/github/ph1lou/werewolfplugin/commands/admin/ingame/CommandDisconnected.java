@@ -20,8 +20,8 @@ public class CommandDisconnected implements ICommand {
             Player player1 = Bukkit.getPlayer(playerWW.getUUID());
             if (playerWW.isState(StatePlayer.ALIVE) && player1 == null) {
                 player.sendMessage(game.translate("werewolf.commands.admin.disconnected.send",
-                        Formatter.format("&player&",playerWW.getName()),
-                        Formatter.format("&timer&",Utils.conversion(game.getTimer() - playerWW.getDisconnectedTime()))));
+                        Formatter.player(playerWW.getName()),
+                        Formatter.timer(Utils.conversion(game.getTimer() - playerWW.getDisconnectedTime()))));
             }
         }
     }

@@ -15,7 +15,7 @@ public class CommandStop implements ICommand {
     public void execute(WereWolfAPI game, Player player, String[] args) {
 
         Bukkit.broadcastMessage(game.translate(Prefix.RED.getKey() , "werewolf.commands.admin.stop.send",
-                Formatter.format("&player&",player.getName())));
+                Formatter.player(player.getName())));
         ((GameManager) game).setState(StateGame.END);
         game.stopGame();
 

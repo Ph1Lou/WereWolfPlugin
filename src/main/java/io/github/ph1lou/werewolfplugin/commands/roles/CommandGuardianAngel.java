@@ -37,6 +37,6 @@ public class CommandGuardianAngel implements ICommand {
         angel.setChoice(AngelForm.GUARDIAN_ANGEL);
         playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.angel.angle_choice_click",
                 Formatter.format("&form&",game.translate(RolesBase.GUARDIAN_ANGEL.getKey())),
-                Formatter.format("&timer&",Utils.conversion(game.getConfig().getTimerValue(TimerBase.ANGEL_DURATION.getKey()))));
+                Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.ANGEL_DURATION.getKey()))));
     }
 }

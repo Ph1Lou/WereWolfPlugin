@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.registers.CommandRegister;
 import io.github.ph1lou.werewolfplugin.commands.roles.CommandAngelRegen;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandCharmer;
 import io.github.ph1lou.werewolfplugin.commands.roles.CommandCitizenCancelVote;
 import io.github.ph1lou.werewolfplugin.commands.roles.CommandCitizenSeeVote;
 import io.github.ph1lou.werewolfplugin.commands.roles.CommandComedian;
@@ -32,6 +33,7 @@ import io.github.ph1lou.werewolfplugin.commands.roles.CommandTroubleMaker;
 import io.github.ph1lou.werewolfplugin.commands.roles.CommandWereWolf;
 import io.github.ph1lou.werewolfplugin.commands.roles.CommandWereWolfChat;
 import io.github.ph1lou.werewolfplugin.commands.roles.CommandWildChild;
+import io.github.ph1lou.werewolfplugin.commands.roles.CommandWillOTheWisp;
 import io.github.ph1lou.werewolfplugin.commands.roles.CommandWitch;
 import io.github.ph1lou.werewolfplugin.commands.roles.CommandWolfDog;
 import io.github.ph1lou.werewolfplugin.commands.utilities.CommandAnonymeChat;
@@ -54,6 +56,14 @@ public class CommandsRegister {
 
     public static List<CommandRegister> registerCommands(){
         List<CommandRegister> commandsRegister = new ArrayList<>();
+
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.will_o_the_wisp.command", new CommandWillOTheWisp())
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .setRequiredAbilityEnabled()
+                        .addRoleKey(RolesBase.WILL_O_THE_WISP.getKey())
+                        .addStateWW(StateGame.GAME));
 
         commandsRegister
                 .add(new CommandRegister("werewolf.name",
@@ -335,6 +345,16 @@ public class CommandsRegister {
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.role.oracle.command", new CommandOracle())
                         .addRoleKey(RolesBase.ORACLE.getKey())
+                        .setRequiredPower()
+                        .setRequiredAbilityEnabled()
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(1));
+
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.charmer.command", new CommandCharmer())
+                        .addRoleKey(RolesBase.CHARMER.getKey())
                         .setRequiredPower()
                         .setRequiredAbilityEnabled()
                         .addStateAccess(StatePlayer.ALIVE)

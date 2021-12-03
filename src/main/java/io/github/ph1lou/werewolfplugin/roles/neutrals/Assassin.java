@@ -127,10 +127,6 @@ public class Assassin extends RoleNeutral {
     public void disableAbilities() {
         super.disableAbilities();
 
-        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
-            return;
-        }
-
         this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"assassin"));
     }
 }

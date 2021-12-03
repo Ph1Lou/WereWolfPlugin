@@ -65,6 +65,6 @@ public class CommandTrapper implements ICommand {
 
         playerArg.sendMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.role.trapper.get_track"));
         player.sendMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.role.trapper.tracking_perform",
-                Formatter.format("&player&",playerArg.getName())));
+                Formatter.player(playerArg.getName())));
     }
 }

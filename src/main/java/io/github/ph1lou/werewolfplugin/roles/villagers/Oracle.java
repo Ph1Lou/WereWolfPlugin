@@ -64,10 +64,6 @@ public class Oracle extends RoleWithLimitedSelectionDuration implements IAffecte
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
-
         if (game.getConfig().isOracleEveryOtherDay() &&
                 event.getNumber() == dayNumber + 1) {
             return;
@@ -75,15 +71,15 @@ public class Oracle extends RoleWithLimitedSelectionDuration implements IAffecte
 
         dayNumber = event.getNumber();
 
+        setPower(true);
+
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        setPower(true);
-
         this.getPlayerWW().sendMessageWithKey(
                 Prefix.YELLOW.getKey() , "werewolf.role.oracle.perform",
-                Formatter.format("&timer&",Utils.conversion(
+                Formatter.timer(Utils.conversion(
                         game.getConfig()
                                 .getTimerValue(TimerBase.POWER_DURATION.getKey()))));
     }

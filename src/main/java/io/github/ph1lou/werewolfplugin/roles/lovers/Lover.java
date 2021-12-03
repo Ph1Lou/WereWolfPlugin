@@ -1,157 +1,54 @@
 package io.github.ph1lou.werewolfplugin.roles.lovers;
 
 import io.github.ph1lou.werewolfapi.Formatter;
-import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
-import io.github.ph1lou.werewolfapi.enums.Sound;
-import io.github.ph1lou.werewolfapi.enums.StateGame;
-import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.events.ActionBarEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
-import io.github.ph1lou.werewolfapi.events.game.permissions.UpdateModeratorNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
 import io.github.ph1lou.werewolfapi.events.lovers.AroundLoverEvent;
 import io.github.ph1lou.werewolfapi.events.lovers.LoverDeathEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
-import io.github.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class Lover implements ILover, Listener {
+public class Lover extends AbstractLover {
 
-    private final List<IPlayerWW> lovers;
-    private final WereWolfAPI game;
-    private boolean death = false;
 
     public Lover(WereWolfAPI game, List<IPlayerWW> lovers) {
-        this.game = game;
-        this.lovers = lovers;
-        lovers.forEach(playerWW -> playerWW.addLover(this));
+        super(game, lovers);
     }
 
-    public List<? extends IPlayerWW> getLovers() {
-        return lovers;
+    @Override
+    public LoverType getLoverType() {
+        return LoverType.LOVER;
     }
-
-
-    public void announceLovers() {
-        lovers.forEach(this::announceLovers);
-    }
-
-    public void announceLovers(IPlayerWW playerWW) {
-
-        if (death) return;
-
-        if (!lovers.contains(playerWW)) return;
-
-        StringBuilder couple = new StringBuilder();
-
-        lovers.stream()
-                .filter(playerWW1 -> !playerWW.equals(playerWW1))
-                .forEach(playerWW1 -> couple.append(playerWW1.getName()).append(" "));
-
-        playerWW.sendMessageWithKey("werewolf.role.lover.description",
-                Formatter.format("&player&",couple.toString()));
-        playerWW.sendSound(Sound.SHEEP_SHEAR);
-    }
-
-    @EventHandler
-    public void onActionBarGameLoverEvent(ActionBarEvent event) {
-
-        if (!game.isState(StateGame.GAME)) return;
-
-        UUID uuid = event.getPlayerUUID();
-        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
-
-        if (!lovers.contains(playerWW)) return;
-
-        StringBuilder sb = new StringBuilder(event.getActionBar());
-        Player player = Bukkit.getPlayer(uuid);
-
-        if (player == null) return;
-
-        if (playerWW == null) return;
-
-        if (!playerWW.isState(StatePlayer.ALIVE)) return;
-
-        buildActionbarLover(player, sb, lovers);
-
-        event.setActionBar(sb.toString());
-
-    }
-
-    private void buildActionbarLover(Player player, StringBuilder sb, List<IPlayerWW> list) {
-
-        list
-                .stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
-                .filter(playerWW -> !playerWW.getUUID().equals(player.getUniqueId()))
-                .peek(playerWW -> sb.append(" §d♥ ")
-                        .append(playerWW.getName())
-                        .append(" "))
-                .forEach(playerWW -> sb
-                        .append(Utils.updateArrow(player,
-                                playerWW.getLocation())));
-    }
-
-    @EventHandler
-    public void onModeratorScoreBoard(UpdateModeratorNameTagEvent event) {
-
-        StringBuilder sb = new StringBuilder(event.getSuffix());
-
-        IPlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID()).orElse(null);
-
-        if (playerWW == null) return;
-
-        if (!lovers.contains(playerWW)) return;
-
-        if (playerWW.isState(StatePlayer.DEATH)) {
-            return;
-        }
-
-        sb.append(ChatColor.LIGHT_PURPLE).append(" ♥");
-
-        event.setSuffix(sb.toString());
-    }
-
-
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onFinalDeath(FinalDeathEvent event) {
 
-        if (death) return;
+        if (this.death) return;
 
-        if (!lovers.contains(event.getPlayerWW())) return;
+        if (!this.lovers.contains(event.getPlayerWW())) return;
 
-        death = true;
-        lovers.stream()
+        this.death = true;
+        this.lovers.stream()
                 .filter(playerWW1 -> !playerWW1.equals(event.getPlayerWW()))
                 .forEach(playerWW1 -> {
                     Bukkit.broadcastMessage(
-                            game.translate("werewolf.role.lover.lover_death",
-                                    Formatter.format("&player&",playerWW1.getName())));
-                    Bukkit.getPluginManager().callEvent(
-                            new LoverDeathEvent(event.getPlayerWW(), playerWW1));
-                    game.death(playerWW1);
+                            this.game.translate("werewolf.role.lover.lover_death",
+                                    Formatter.player(playerWW1.getName())));
+                    this.game.death(playerWW1);
                 });
+        Bukkit.getPluginManager().callEvent(new LoverDeathEvent(this));
 
-        game.getConfig().removeOneLover(LoverType.LOVER.getKey());
-
-        HandlerList.unregisterAll(this);
-
+        this.game.getConfig().removeOneLover(LoverType.LOVER.getKey());
     }
 
     @EventHandler
@@ -159,27 +56,16 @@ public class Lover implements ILover, Listener {
 
         IPlayerWW playerWW = event.getPlayerWW();
 
-        if (!lovers.contains(playerWW)) return;
+        if (!this.lovers.contains(playerWW)) return;
 
         StringBuilder sb = event.getEndMessage();
         StringBuilder sb2 = new StringBuilder();
-        lovers.stream()
+        this.lovers.stream()
                 .filter(playerWW1 -> !playerWW.equals(playerWW1))
                 .forEach(playerWW1 -> sb2.append(playerWW1.getName()).append(" "));
 
-        sb.append(game.translate("werewolf.end.lover",
-                Formatter.format("&player&",sb2.toString())));
-    }
-
-
-    @Override
-    public String getKey() {
-        return LoverType.LOVER.getKey();
-    }
-
-    @Override
-    public boolean isAlive() {
-        return !death;
+        sb.append(this.game.translate("werewolf.end.lover",
+                Formatter.player(sb2.toString())));
     }
 
     @Override
@@ -189,14 +75,14 @@ public class Lover implements ILover, Listener {
 
         if (this.getLovers().contains(playerWW1)) return false;
 
-        if (death) return false;
+        if (this.death) return false;
 
-        lovers.remove(playerWW);
-        lovers.add(playerWW1);
+        this.lovers.remove(playerWW);
+        this.lovers.add(playerWW1);
 
-        lovers.forEach(this::announceLovers);
+        this.lovers.forEach(this::announceLovers);
 
-        game.getPlayersWW()
+        this.game.getPlayersWW()
                 .stream().map(IPlayerWW::getRole)
                 .filter(roles -> roles.isKey(RolesBase.CUPID.getKey()))
                 .map(roles -> (IAffectedPlayers) roles)
@@ -209,14 +95,6 @@ public class Lover implements ILover, Listener {
         return true;
     }
 
-    @Override
-    public void second() {
-    }
-
-    @Override
-    public boolean isKey(String key) {
-        return getKey().equals(key);
-    }
 
     @EventHandler
     public void onAroundLoverEvent(AroundLoverEvent event) {
@@ -239,7 +117,7 @@ public class Lover implements ILover, Listener {
         if (lovers.contains(playerWW)) return;
 
         lovers.forEach(playerWW1 -> playerWW1.sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.random_events.triple.lover_join",
-                Formatter.format("&player&",playerWW.getName())));
+                Formatter.player(playerWW.getName())));
 
         playerWW.sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.random_events.triple.join", Formatter.format("&lovers&",getLovers().stream()
                 .map(IPlayerWW::getName)

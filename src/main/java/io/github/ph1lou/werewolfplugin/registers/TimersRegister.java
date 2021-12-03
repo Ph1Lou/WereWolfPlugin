@@ -19,6 +19,7 @@ import io.github.ph1lou.werewolfapi.events.roles.angel.AutoAngelEvent;
 import io.github.ph1lou.werewolfapi.events.roles.rival.RivalEvent;
 import io.github.ph1lou.werewolfapi.events.roles.wild_child.AutoModelEvent;
 import io.github.ph1lou.werewolfapi.registers.TimerRegister;
+import io.github.ph1lou.werewolfplugin.game.LoversManagement;
 import org.bukkit.Bukkit;
 import org.bukkit.WorldBorder;
 
@@ -100,6 +101,13 @@ public class TimersRegister {
 
         timersRegister
                 .add(new TimerRegister("werewolf.name",
+                        TimerBase.CHARMER_COUNTDOWN.getKey())
+                        .addPredicate(wereWolfAPI -> wereWolfAPI.getConfig().getTimerValue(TimerBase.ROLE_DURATION.getKey()) < 0
+                                && !wereWolfAPI.getConfig().isTrollSV())
+                        .setDefaultValue(6000));
+
+        timersRegister
+                .add(new TimerRegister("werewolf.name",
                         TimerBase.BORDER_BEGIN.getKey())
                         .setDefaultValue(3600)
                         .onZero(wereWolfAPI -> {
@@ -176,7 +184,7 @@ public class TimersRegister {
                             if (wereWolfAPI.getConfig().isTrollLover()) {
                                 Bukkit.getPluginManager().callEvent(new TrollLoverEvent());
                             } else {
-                                wereWolfAPI.getLoversManager().repartition();
+                                ((LoversManagement)wereWolfAPI.getLoversManager()).repartition();
                             }
                         })
                         .setDefaultValue(240));

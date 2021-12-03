@@ -56,7 +56,7 @@ public class WhiteList implements InventoryProvider {
         }));
         contents.set(1, 3, ClickableItem.of((new ItemBuilder(UniversalMaterial.PLAYER_HEAD.getStack())
                 .setDisplayName(game.translate("werewolf.menu.whitelist.max",
-                        Formatter.format("&number&",config.getPlayerMax())))
+                        Formatter.number(config.getPlayerMax())))
                 .build()), e -> {
             if (e.isLeftClick()) {
                 config.setPlayerMax(config.getPlayerMax() + 1);

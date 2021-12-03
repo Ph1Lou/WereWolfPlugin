@@ -37,7 +37,7 @@ public class CommandHost implements ICommand {
                 return;
             }
             Bukkit.broadcastMessage(game.translate(Prefix.RED.getKey() , "werewolf.commands.admin.host.remove",
-                    Formatter.format("&player&",host.getName())));
+                    Formatter.player(host.getName())));
             moderationManager.getHosts().remove(uuid);
 
         } else {
@@ -47,7 +47,7 @@ public class CommandHost implements ICommand {
             }
             moderationManager.addHost(uuid);
             Bukkit.broadcastMessage(game.translate(Prefix.GREEN.getKey() , "werewolf.commands.admin.host.add",
-                    Formatter.format("&player&",host.getName())));
+                    Formatter.player(host.getName())));
         }
         Bukkit.getPluginManager().callEvent(new HostEvent(uuid, moderationManager.getHosts().contains(uuid)));
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(host));

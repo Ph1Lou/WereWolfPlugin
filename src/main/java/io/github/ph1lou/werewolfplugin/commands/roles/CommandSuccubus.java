@@ -74,6 +74,6 @@ public class CommandSuccubus implements ICommand {
 
         ((IAffectedPlayers) succubus).addAffectedPlayer(playerWW1);
         playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.succubus.charming_beginning",
-                Formatter.format("&player&",playerArg.getName()));
+                Formatter.player(playerArg.getName()));
     }
 }

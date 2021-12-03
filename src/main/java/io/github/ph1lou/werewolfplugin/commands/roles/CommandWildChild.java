@@ -49,6 +49,6 @@ public class CommandWildChild implements ICommand {
         ((IPower) wildChild).setPower(false);
         Bukkit.getPluginManager().callEvent(new ModelEvent(playerWW, playerWW1));
         playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.wild_child.reveal_model",
-                Formatter.format("&player&",playerArg.getName()));
+                Formatter.player(playerArg.getName()));
     }
 }

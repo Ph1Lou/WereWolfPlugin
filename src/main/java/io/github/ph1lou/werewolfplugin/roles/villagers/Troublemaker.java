@@ -38,6 +38,10 @@ public class Troublemaker extends RoleVillage implements IAffectedPlayers, IPowe
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 
+        if(!this.isAbilityEnabled()){
+            return;
+        }
+
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         Bukkit.getPluginManager().callEvent(new TroubleMakerDeathEvent(getPlayerWW()));
@@ -107,9 +111,9 @@ public class Troublemaker extends RoleVillage implements IAffectedPlayers, IPowe
         if (!game.getConfig().isConfigActive(ConfigBase.WEREWOLF_CHAT.getKey())) return;
 
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.commands.admin.ww_chat.announce",
-                Formatter.format("&timer&",Utils.conversion(game.getConfig()
+                Formatter.timer(Utils.conversion(game.getConfig()
                         .getTimerValue(TimerBase.WEREWOLF_CHAT_DURATION.getKey()))),
-                Formatter.format("&number&",game.getConfig().getWereWolfChatMaxMessage()));
+                Formatter.number(game.getConfig().getWereWolfChatMaxMessage()));
 
     }
 

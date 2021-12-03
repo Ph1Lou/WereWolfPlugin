@@ -18,7 +18,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 
@@ -70,8 +69,6 @@ public class CursedLover implements ILover, Listener {
         playerWW1.removePlayerMaxHealth(2);
 
         game.getConfig().removeOneLover(LoverType.CURSED_LOVER.getKey());
-
-        HandlerList.unregisterAll(this);
     }
 
     public void announceCursedLoversOnJoin(IPlayerWW playerWW) {
@@ -82,7 +79,7 @@ public class CursedLover implements ILover, Listener {
             }
             power1 = true;
             playerWW.sendMessageWithKey("werewolf.role.cursed_lover.description",
-                    Formatter.format("&player&",cursedLover2.getName()));
+                    Formatter.player(cursedLover2.getName()));
             playerWW.sendSound(Sound.SHEEP_SHEAR);
         } else if (cursedLover2.equals(playerWW)) {
             if (!power2) {
@@ -90,7 +87,7 @@ public class CursedLover implements ILover, Listener {
             }
             power2 = true;
             playerWW.sendMessageWithKey("werewolf.role.cursed_lover.description",
-                    Formatter.format("&player&",cursedLover1.getName()));
+                    Formatter.player(cursedLover1.getName()));
             playerWW.sendSound(Sound.SHEEP_SHEAR);
         }
     }
@@ -146,7 +143,7 @@ public class CursedLover implements ILover, Listener {
         StringBuilder sb = event.getEndMessage();
 
         sb.append(game.translate("werewolf.end.cursed_lover",
-                Formatter.format("&player&",playerWW1.getName() + " ")));
+                Formatter.player(playerWW1.getName() + " ")));
     }
 
     @EventHandler(priority = EventPriority.LOW)

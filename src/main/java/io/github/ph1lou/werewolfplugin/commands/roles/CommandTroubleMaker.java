@@ -54,6 +54,6 @@ public class CommandTroubleMaker implements ICommand {
         playerWW1.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.troublemaker.get_switch");
         game.getMapManager().transportation(playerWW1, Math.random() * 2 * Math.PI);
         player.sendMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.role.troublemaker.troublemaker_perform",
-                Formatter.format("&player&",playerArg.getName())));
+                Formatter.player(playerArg.getName())));
     }
 }

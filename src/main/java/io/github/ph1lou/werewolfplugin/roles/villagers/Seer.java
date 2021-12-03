@@ -80,7 +80,7 @@ public class Seer extends RoleWithLimitedSelectionDuration implements IAffectedP
 
         this.getPlayerWW().sendMessageWithKey(
                 Prefix.YELLOW.getKey() , "werewolf.role.seer.see_camp_message",
-                Formatter.format("&timer&",Utils.conversion(
+                Formatter.timer(Utils.conversion(
                         game.getConfig()
                                 .getTimerValue(TimerBase.POWER_DURATION.getKey()))));
     }

@@ -55,7 +55,7 @@ public class End {
                 config.getLoverCount(LoverType.LOVER.getKey()) <= 1) {
 
             game.getLoversManager().getLovers().stream()
-                    .filter(lover -> !lover.isKey(LoverType.CURSED_LOVER.getKey()))
+                    .filter(lover -> lover.isKey(LoverType.AMNESIAC_LOVER.getKey()) || lover.isKey(LoverType.LOVER.getKey()))
                     .forEach(lover -> {
                         Set<IPlayerWW> lovers = new HashSet<>(lover.getLovers());
 
@@ -134,16 +134,16 @@ public class End {
 
             if (playerWW1.isState(StatePlayer.DEATH)) {
                 sb.append(game.translate("werewolf.end.reveal_death",
-                        Formatter.format("&player&",playerName),
-                        Formatter.format("&role&",role)));
+                        Formatter.player(playerName),
+                        Formatter.role(role)));
             } else {
                 sb.append(game.translate("werewolf.end.reveal",
-                        Formatter.format("&player&",playerName),
-                        Formatter.format("&role&",role)));
+                        Formatter.player(playerName),
+                        Formatter.role(role)));
             }
             if (!playerWW1.getRole().getKey().equals(playerWW1.getRole().getDeathRole())) {
                 sb.append(game.translate("werewolf.end.thief",
-                        Formatter.format("&role&",game.translate(playerWW1.getRole().getKey()))));
+                        Formatter.role(game.translate(playerWW1.getRole().getKey()))));
             }
 
             EndPlayerMessageEvent endPlayerMessageEvent = new EndPlayerMessageEvent(playerWW1, sb);
@@ -165,7 +165,7 @@ public class End {
 
         BukkitUtils.scheduleSyncDelayedTask(game::stopGame, 20L * game.getConfig().getTimerValue(TimerBase.AUTO_RESTART_DURATION.getKey()));
         Bukkit.broadcastMessage(game.translate(Prefix.ORANGE.getKey() , "werewolf.announcement.restart",
-                Formatter.format("&timer&",Utils.conversion(game.getConfig().getTimerValue(TimerBase.AUTO_RESTART_DURATION.getKey())))));
+                Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.AUTO_RESTART_DURATION.getKey())))));
     }
 
 

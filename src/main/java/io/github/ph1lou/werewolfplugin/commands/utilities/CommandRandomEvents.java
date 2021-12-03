@@ -29,7 +29,7 @@ public class CommandRandomEvents implements ICommand {
             if (game.getConfig().getProbability(randomEventRegister.getKey()) > 0) {
                 sb.append(game.translate("werewolf.menu.random_events.command_message",
                         Formatter.format("&event&",game.translate(randomEventRegister.getKey())),
-                                Formatter.format("&number&",game.getConfig().getProbability(randomEventRegister.getKey()))))
+                                Formatter.number(game.getConfig().getProbability(randomEventRegister.getKey()))))
                         .append(", ");
             }
         }

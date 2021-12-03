@@ -64,6 +64,6 @@ public class CommandRaven implements ICommand {
         playerWW1.getRole().addAuraModifier(new AuraModifier("cursed", Aura.DARK, 20, true));
         playerWW1.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.raven.get_curse");
         playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.raven.curse_perform",
-                Formatter.format("&player&",playerArg.getName()));
+                Formatter.player(playerArg.getName()));
     }
 }

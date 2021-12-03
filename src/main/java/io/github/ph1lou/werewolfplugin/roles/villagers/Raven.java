@@ -77,7 +77,7 @@ public class Raven extends RoleWithLimitedSelectionDuration implements IAffected
         setPower(true);
 
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.raven.curse_message",
-                Formatter.format("&timer&",Utils.conversion(
+                Formatter.timer(Utils.conversion(
                         game.getConfig()
                                 .getTimerValue(TimerBase.POWER_DURATION.getKey()))));
     }

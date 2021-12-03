@@ -86,7 +86,7 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
         } else if (!this.affectedPlayer.isEmpty()) {
             game.getConfig().removeOneRole(this.affectedPlayer.get(0).getRole().getKey());
             Bukkit.broadcastMessage(game.translate(Prefix.GREEN.getKey() , "werewolf.role.grimy_werewolf.actualize",
-                    Formatter.format("&role&",game.translate(this.affectedPlayer.get(0).getRole().getKey()))));
+                    Formatter.role(game.translate(this.affectedPlayer.get(0).getRole().getKey()))));
         }
 
     }
@@ -124,8 +124,8 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
             return;
         }
         this.getPlayerWW().sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.role.grimy_werewolf.perform",
-                Formatter.format("&player&",event.getPlayerWW().getName()),
-                Formatter.format("&role&",game.translate(event.getPlayerWW().getRole().getKey())));
+                Formatter.player(event.getPlayerWW().getName()),
+                Formatter.role(game.translate(event.getPlayerWW().getRole().getKey())));
 
         game.getConfig().removeOneRole(RolesBase.WEREWOLF.getKey());
         this.affectedPlayer.add(event.getPlayerWW());

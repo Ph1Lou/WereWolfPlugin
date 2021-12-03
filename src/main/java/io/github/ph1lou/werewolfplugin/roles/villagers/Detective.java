@@ -56,10 +56,6 @@ public class Detective extends RoleWithLimitedSelectionDuration implements IAffe
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
-
         if (game.getConfig().isDetectiveEveryOtherDay() &&
                 event.getNumber() == dayNumber + 1) {
             return;
@@ -69,9 +65,12 @@ public class Detective extends RoleWithLimitedSelectionDuration implements IAffe
 
         setPower(true);
 
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
+            return;
+        }
 
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.detective.inspection_message",
-                Formatter.format("&timer&",
+                Formatter.timer(
                         Utils.conversion(game.getConfig()
                                 .getTimerValue(TimerBase.POWER_DURATION.getKey()))));
     }

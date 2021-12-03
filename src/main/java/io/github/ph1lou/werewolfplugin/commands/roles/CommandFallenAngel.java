@@ -41,7 +41,7 @@ public class CommandFallenAngel implements ICommand {
         Bukkit.getPluginManager().callEvent(new AngelChoiceEvent(playerWW, AngelForm.FALLEN_ANGEL));
         player.sendMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.role.angel.angle_choice_click",
                 Formatter.format("&form&",game.translate(RolesBase.FALLEN_ANGEL.getKey())),
-                Formatter.format("&timer&",Utils.conversion(game.getConfig().getTimerValue(TimerBase.ANGEL_DURATION.getKey())))));
+                Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.ANGEL_DURATION.getKey())))));
 
         if (game.isDay(Day.NIGHT)) {
             playerWW.addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,"fallen_angel"));

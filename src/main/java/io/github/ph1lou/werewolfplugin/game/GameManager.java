@@ -136,9 +136,9 @@ public class GameManager implements WereWolfAPI {
         this.moderationManager.getQueue().remove(uuid);
         this.playerSize++;
         Bukkit.broadcastMessage(translate("werewolf.announcement.join",
-                Formatter.format("&number&",this.getPlayerSize()),
+                Formatter.number(this.getPlayerSize()),
                 Formatter.format("&sum&",this.getRoleInitialSize()),
-                Formatter.format("&player&",player.getName())));
+                Formatter.player(player.getName())));
         clearPlayer(player);
         player.setGameMode(GameMode.ADVENTURE);
         IPlayerWW playerWW = new PlayerWW(this, player);
@@ -173,17 +173,17 @@ public class GameManager implements WereWolfAPI {
 
         player.setGameMode(GameMode.SURVIVAL);
         IPlayerWW playerWW = new PlayerWW(this, player);
-        playerLG.put(player.getUniqueId(), playerWW);
-        Location spawn = mapManager.getWorld().getSpawnLocation();
+        this.playerLG.put(player.getUniqueId(), playerWW);
+        Location spawn = this.mapManager.getWorld().getSpawnLocation();
         spawn.setY(spawn.getBlockY() - 4);
         playerWW.setSpawn(spawn);
         this.playerSize++;
 
         for (int j = 0; j < 40; j++) {
-            inventory.setItem(j, stuff.getStartLoot().getItem(j));
+            inventory.setItem(j, this.stuff.getStartLoot().getItem(j));
         }
 
-        mapManager.transportation(playerWW, 0);
+        this.mapManager.transportation(playerWW, 0);
     }
 
     public void clearPlayer(Player player) {
@@ -242,15 +242,15 @@ public class GameManager implements WereWolfAPI {
     @Override
     public void stopGame() {
 
-        if (!main.getWereWolfAPI().equals(this)) return;
+        if (!this.main.getWereWolfAPI().equals(this)) return;
 
         Bukkit.getPluginManager().callEvent(new StopEvent(this));
 
-        listenersLoader.delete();
+        this.listenersLoader.delete();
 
-        main.createGame();
+        this.main.createGame();
 
-        GameManager newGame = (GameManager) main.getWereWolfAPI();
+        GameManager newGame = (GameManager) this.main.getWereWolfAPI();
 
         BukkitUtils.scheduleSyncDelayedTask(() -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
@@ -268,11 +268,11 @@ public class GameManager implements WereWolfAPI {
 
         Bukkit.getOnlinePlayers()
                 .stream()
-                .filter(player -> player.getWorld().equals(mapManager.getWorld()))
+                .filter(player -> player.getWorld().equals(this.mapManager.getWorld()))
                 .forEach(player -> player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation()));
 
         if (this.getTimer() > 60) { //Si la game a commencé depuis moins d'une minute on ne delete pas la map
-            mapManager.deleteMap();
+            this.mapManager.deleteMap();
         }
     }
 
@@ -370,12 +370,12 @@ public class GameManager implements WereWolfAPI {
 
     @Override
     public IStuffManager getStuffs() {
-        return stuff;
+        return this.stuff;
     }
 
     @Override
     public ILoverManager getLoversManager() {
-        return loversManage;
+        return this.loversManage;
     }
 
     @Override
@@ -409,17 +409,17 @@ public class GameManager implements WereWolfAPI {
     }
 
     public Map<UUID, FastBoard> getBoards() {
-        return boards;
+        return this.boards;
     }
 
     @Override
     public IMapManager getMapManager() {
-        return mapManager;
+        return this.mapManager;
     }
 
     @Override
     public IModerationManager getModerationManager() {
-        return moderationManager;
+        return this.moderationManager;
     }
 
     @Override
@@ -429,7 +429,7 @@ public class GameManager implements WereWolfAPI {
 
 
     public boolean isDebug() {
-        return debug;
+        return this.debug;
     }
 
     public void setDebug(boolean debug) {
@@ -438,12 +438,13 @@ public class GameManager implements WereWolfAPI {
 
 
     public void remove(UUID uuid) {
-        playerLG.remove(uuid);
-        this.playerSize--;
+        if(this.playerLG.remove(uuid) != null){
+            this.playerSize--;
+        }
     }
 
     public RandomConfig getRandomConfig() {
-        return randomConfig;
+        return this.randomConfig;
     }
 
     public void setRoleInitialSize(int roleInitialSize) {

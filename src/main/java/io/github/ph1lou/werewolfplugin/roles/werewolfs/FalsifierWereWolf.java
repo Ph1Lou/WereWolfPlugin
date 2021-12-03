@@ -74,7 +74,7 @@ public class FalsifierWereWolf extends RoleWereWolf {
             displayAura = roles.getDefaultAura();
         }
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.falsifier_werewolf.display_role_message",
-                Formatter.format("&role&",game.translate(getDisplayRole())));
+                Formatter.role(game.translate(getDisplayRole())));
     }
 
 
@@ -85,7 +85,7 @@ public class FalsifierWereWolf extends RoleWereWolf {
                 .setDescription(game.translate("werewolf.role.falsifier_werewolf.description"))
                 .setEffects(game.translate("werewolf.description.werewolf"))
                 .addExtraLines(game.translate("werewolf.role.falsifier_werewolf.role",
-                                Formatter.format("&role&",game.translate(this.getDisplayRole()))))
+                                Formatter.role(game.translate(this.getDisplayRole()))))
                 .build();
     }
 

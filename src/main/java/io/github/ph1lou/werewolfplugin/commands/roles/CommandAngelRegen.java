@@ -69,6 +69,6 @@ public class CommandAngelRegen implements ICommand {
         playerWW1.sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.role.guardian_angel.get_regeneration");
         playerWW.sendMessageWithKey(
                 Prefix.GREEN.getKey() , "werewolf.role.guardian_angel.perform",
-                Formatter.format("&number&",3 - ((ILimitedUse) guardianAngel).getUse()));
+                Formatter.number(3 - ((ILimitedUse) guardianAngel).getUse()));
     }
 }

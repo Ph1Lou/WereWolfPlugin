@@ -53,8 +53,8 @@ public class ModerationManager implements IModerationManager {
         if (!this.queue.contains(uuid)) {
             this.queue.add(uuid);
             Bukkit.broadcastMessage(this.game.translate(Prefix.YELLOW.getKey() , "werewolf.announcement.queue",
-                    Formatter.format("&player&",player.getName()),
-                    Formatter.format("&number&",this.queue.indexOf(uuid) + 1)));
+                    Formatter.player(player.getName()),
+                    Formatter.number(this.queue.indexOf(uuid) + 1)));
             player.sendMessage(this.game.translate("werewolf.announcement.rank"));
             Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(player));
         }

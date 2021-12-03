@@ -92,7 +92,7 @@ public class Admin implements TabExecutor {
         if (!commandRegister.isArgNumbers(args)) {
             if (seePermissionMessages) {
                 player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.parameters",
-                        Formatter.format("&number&",commandRegister.getMinArgNumbers())));
+                        Formatter.number(commandRegister.getMinArgNumbers())));
             }
             return false;
         }

@@ -34,7 +34,7 @@ public class CommandLate implements ICommand {
         }
 
         Bukkit.broadcastMessage(game.translate(Prefix.GREEN.getKey() , "werewolf.commands.late.launch",
-                Formatter.format("&player&",player1.getName())));
+                Formatter.player(player1.getName())));
 
         ((GameManager) game).addLatePlayer(player1);
     }

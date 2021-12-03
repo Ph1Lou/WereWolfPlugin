@@ -72,16 +72,15 @@ public class Protector extends RoleWithLimitedSelectionDuration implements IAffe
             this.last = null;
         }
 
+        setPower(true);
 
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        setPower(true);
-
         this.getPlayerWW().sendMessageWithKey(
                 Prefix.YELLOW.getKey() , "werewolf.role.protector.protection_message",
-                Formatter.format("&timer&",Utils.conversion(
+                Formatter.timer(Utils.conversion(
                         game.getConfig().getTimerValue(TimerBase.POWER_DURATION.getKey()))));
     }
 

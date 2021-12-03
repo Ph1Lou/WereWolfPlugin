@@ -7,6 +7,7 @@ import io.github.ph1lou.werewolfapi.registers.RoleRegister;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.AmnesicWerewolf;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.Angel;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.Assassin;
+import io.github.ph1lou.werewolfplugin.roles.neutrals.Charmer;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.FallenAngel;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.FlutePlayer;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.GuardianAngel;
@@ -16,6 +17,7 @@ import io.github.ph1lou.werewolfplugin.roles.neutrals.SerialKiller;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.Succubus;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.Thief;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.WhiteWereWolf;
+import io.github.ph1lou.werewolfplugin.roles.neutrals.WillOTheWisp;
 import io.github.ph1lou.werewolfplugin.roles.villagers.BearTrainer;
 import io.github.ph1lou.werewolfplugin.roles.villagers.ChattySeer;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Citizen;
@@ -25,6 +27,7 @@ import io.github.ph1lou.werewolfplugin.roles.villagers.Detective;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Elder;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Fox;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Guard;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Hermit;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Librarian;
 import io.github.ph1lou.werewolfplugin.roles.villagers.LittleGirl;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Oracle;
@@ -45,7 +48,9 @@ import io.github.ph1lou.werewolfplugin.roles.villagers.Witch;
 import io.github.ph1lou.werewolfplugin.roles.villagers.WolfDog;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.AlphaWereWolf;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.AvengerWereWolf;
+import io.github.ph1lou.werewolfplugin.roles.werewolfs.BigBadWerewolf;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.FalsifierWereWolf;
+import io.github.ph1lou.werewolfplugin.roles.werewolfs.FearFulWerewolf;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.GrimyWereWolf;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.InfectFatherOfTheWolves;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.MischievousWereWolf;
@@ -222,6 +227,11 @@ public class RolesRegister {
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
+                            RolesBase.CHARMER.getKey(), Charmer.class)
+                            .addCategory(Category.NEUTRAL));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
                             RolesBase.FALLEN_ANGEL.getKey(), FallenAngel.class)
                             .addCategory(Category.NEUTRAL));
 
@@ -229,6 +239,29 @@ public class RolesRegister {
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.GUARDIAN_ANGEL.getKey(), GuardianAngel.class)
                             .addCategory(Category.NEUTRAL));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.WILL_O_THE_WISP.getKey(), WillOTheWisp.class)
+                            .addCategory(Category.NEUTRAL)
+                            .addConfig(WillOTheWisp::config));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.BIG_BAD_WEREWOLF.getKey(), BigBadWerewolf.class)
+                            .addCategory(Category.WEREWOLF));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.FEARFUL_WEREWOLF.getKey(), FearFulWerewolf.class)
+                            .addCategory(Category.WEREWOLF)
+                            .addConfig(FearFulWerewolf::config));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.HERMIT.getKey(), Hermit.class)
+                            .addCategory(Category.VILLAGER)
+                            .addConfig(Hermit::config));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",

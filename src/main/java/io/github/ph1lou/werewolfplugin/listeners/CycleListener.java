@@ -32,6 +32,7 @@ import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.RegisterManager;
 import io.github.ph1lou.werewolfplugin.commands.roles.CommandWereWolfChat;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
+import io.github.ph1lou.werewolfplugin.game.LoversManagement;
 import io.github.ph1lou.werewolfplugin.roles.lovers.FakeLover;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -71,7 +72,7 @@ public class CycleListener implements Listener {
 
         long duration = game.getConfig().getTimerValue(TimerBase.VOTE_DURATION.getKey());
         Bukkit.broadcastMessage(game.translate(Prefix.ORANGE.getKey() , "werewolf.announcement.day",
-                Formatter.format("&number&",event.getNumber())));
+                Formatter.number(event.getNumber())));
         groupSizeChange();
 
         if (game.getConfig().isConfigActive(ConfigBase.VOTE.getKey()) &&
@@ -91,7 +92,7 @@ public class CycleListener implements Listener {
 
                 Bukkit.broadcastMessage(game.translate("werewolf.utils.bar"));
                 Bukkit.broadcastMessage(game.translate(Prefix.ORANGE.getKey() , "werewolf.vote.vote_time",
-                        Formatter.format("&timer&",Utils.conversion((int) duration))));
+                        Formatter.timer(Utils.conversion((int) duration))));
                 Bukkit.broadcastMessage(game.translate("werewolf.utils.bar"));
 
                 game.getVote().setStatus(VoteStatus.IN_PROGRESS);
@@ -143,7 +144,7 @@ public class CycleListener implements Listener {
         game.getMapManager().getWorld().setTime(12000);
 
         Bukkit.broadcastMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.announcement.night",
-                Formatter.format("&number&",event.getNumber())));
+                Formatter.number(event.getNumber())));
         groupSizeChange();
 
         if (duration > 0) {
@@ -185,12 +186,12 @@ public class CycleListener implements Listener {
                         player.sendMessage(
                                 game.translate(
                                         Prefix.ORANGE.getKey() , "werewolf.commands.admin.group.group_change",
-                                        Formatter.format("&number&",game.getGroup())));
+                                        Formatter.number(game.getGroup())));
                         VersionUtils.getVersionUtils().sendTitle(
                                 player,
                                 game.translate("werewolf.commands.admin.group.top_title"),
                                 game.translate("werewolf.commands.admin.group.bot_title",
-                                        Formatter.format("&number&",game.getGroup())),
+                                        Formatter.number(game.getGroup())),
                                 20,
                                 60,
                                 20);
@@ -247,7 +248,7 @@ public class CycleListener implements Listener {
                                                         playerWW,
                                                         roleRegister.getKey());
 
-                                        BukkitUtils.registerEvents((Listener) role);
+                                        BukkitUtils.registerEvents(role);
 
                                         playerWW.setRole(role);
                                     } catch (InstantiationException |
@@ -268,7 +269,7 @@ public class CycleListener implements Listener {
             if (!game.isState(StateGame.END)) {
                 game.getPlayersWW()
                         .forEach(playerWW -> {
-                            HandlerList.unregisterAll((Listener) playerWW.getRole());
+                            HandlerList.unregisterAll(playerWW.getRole());
                             Sound.PORTAL_TRIGGER.play(playerWW);
                             playerWW.clearPotionEffects();
                             playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.announcement.troll");
@@ -314,8 +315,7 @@ public class CycleListener implements Listener {
                             playerWWS.remove(0))));
         }
 
-        loverAPIS.forEach(ILover -> BukkitUtils
-                .registerEvents((Listener) ILover));
+        loverAPIS.forEach(BukkitUtils::registerEvents);
 
         BukkitUtils.scheduleSyncDelayedTask(() -> {
 
@@ -324,9 +324,9 @@ public class CycleListener implements Listener {
                         .forEach(playerWW -> playerWW
                                 .sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.announcement.lover_troll"));
                 game.getConfig().setTrollLover(false);
-                game.getLoversManager().repartition();
+                ((LoversManagement)game.getLoversManager()).repartition();
             }
-            loverAPIS.forEach(ILover -> HandlerList.unregisterAll((Listener) ILover));
+            loverAPIS.forEach(HandlerList::unregisterAll);
 
         }, 1800L);
     }

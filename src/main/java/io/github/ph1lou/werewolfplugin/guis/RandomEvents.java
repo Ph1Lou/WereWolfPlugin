@@ -142,7 +142,7 @@ public class RandomEvents implements InventoryProvider {
             itemStack = UniversalMaterial.RED_TERRACOTTA.getStack();
         }
         lore.add(game.translate("werewolf.menu.random_events.probability",
-                Formatter.format("&number&",config.getProbability(key))));
+                Formatter.number(config.getProbability(key))));
         lore.addAll(lore2);
 
         return new ItemBuilder(itemStack).setDisplayName(game.translate(key)).setLore(lore).build();

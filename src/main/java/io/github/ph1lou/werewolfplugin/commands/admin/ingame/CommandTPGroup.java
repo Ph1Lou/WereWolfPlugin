@@ -57,7 +57,7 @@ public class CommandTPGroup implements ICommand {
                         size--;
                         sb.append(p.getName()).append(" ");
                         playerWW1.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.commands.admin.tp_group.perform",
-                                Formatter.format("&player&",playerName));
+                                Formatter.player(playerName));
                         game.getMapManager().transportation(playerWW1, r);
                     }
                 }
@@ -65,6 +65,6 @@ public class CommandTPGroup implements ICommand {
         }
         Bukkit.getConsoleSender().sendMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.commands.admin.tp_group.broadcast",
                 Formatter.format("&players&",sb.toString()),
-                Formatter.format("&player&",playerName)));
+                Formatter.player(playerName)));
     }
 }

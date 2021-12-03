@@ -66,6 +66,6 @@ public class CommandWitch implements ICommand {
         ((IAffectedPlayers) witch).addAffectedPlayer(playerWW1);
         game.resurrection(playerWW1);
         playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.witch.resuscitation_perform",
-                Formatter.format("&player&",playerWW1.getName()));
+                Formatter.player(playerWW1.getName()));
     }
 }

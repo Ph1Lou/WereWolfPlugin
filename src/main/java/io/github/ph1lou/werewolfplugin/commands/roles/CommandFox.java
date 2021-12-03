@@ -83,6 +83,6 @@ public class CommandFox implements ICommand {
         ((IProgress) fox).setProgress(0f);
 
         playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.fox.smell_beginning",
-                Formatter.format("&player&",playerArg.getName()));
+                Formatter.player(playerArg.getName()));
     }
 }

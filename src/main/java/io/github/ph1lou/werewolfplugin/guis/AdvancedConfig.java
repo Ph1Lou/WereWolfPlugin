@@ -57,7 +57,7 @@ public class AdvancedConfig implements InventoryProvider {
         contents.set(0, 2, ClickableItem.of((new ItemBuilder(Material.APPLE)
                 .setLore(lore)
                 .setDisplayName(game.translate("werewolf.menu.advanced_tool.apple",
-                                Formatter.format("&number&",config.getAppleRate())))
+                                Formatter.number(config.getAppleRate())))
                 .build()), e -> {
 
             if (e.isLeftClick()) {
@@ -71,7 +71,7 @@ public class AdvancedConfig implements InventoryProvider {
 
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setDisplayName(game.translate("werewolf.menu.advanced_tool.apple",
-                                    Formatter.format("&number&",config.getAppleRate())))
+                                    Formatter.number(config.getAppleRate())))
                     .build());
 
         }));
@@ -79,7 +79,7 @@ public class AdvancedConfig implements InventoryProvider {
                 new ItemBuilder(Material.FLINT)
                         .setLore(lore)
                         .setDisplayName(game.translate("werewolf.menu.advanced_tool.flint",
-                                        Formatter.format("&number&",config.getFlintRate())))
+                                        Formatter.number(config.getFlintRate())))
                         .build()), e -> {
 
             if (e.isLeftClick()) {
@@ -92,7 +92,7 @@ public class AdvancedConfig implements InventoryProvider {
 
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setDisplayName(game.translate("werewolf.menu.advanced_tool.flint",
-                                    Formatter.format("&number&",config.getFlintRate())))
+                                    Formatter.number(config.getFlintRate())))
                     .build());
 
 
@@ -101,7 +101,7 @@ public class AdvancedConfig implements InventoryProvider {
                 new ItemBuilder(Material.ENDER_PEARL)
                         .setLore(lore)
                         .setDisplayName(game.translate("werewolf.menu.advanced_tool.ender_pearl",
-                                Formatter.format("&number&",config.getPearlRate())))
+                                Formatter.number(config.getPearlRate())))
                         .build()), e -> {
 
             if (e.isLeftClick()) {
@@ -115,7 +115,7 @@ public class AdvancedConfig implements InventoryProvider {
 
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setDisplayName(game.translate("werewolf.menu.advanced_tool.ender_pearl",
-                                    Formatter.format("&number&",config.getPearlRate())))
+                                    Formatter.number(config.getPearlRate())))
                     .build());
 
         }));
@@ -124,7 +124,7 @@ public class AdvancedConfig implements InventoryProvider {
                 new ItemBuilder(Material.DIAMOND)
                         .setLore(lore)
                         .setDisplayName(game.translate("werewolf.menu.advanced_tool.diamond",
-                                        Formatter.format("&number&",config.getDiamondLimit())))
+                                        Formatter.number(config.getDiamondLimit())))
                         .build()), e -> {
             if (e.isLeftClick()) {
                 config.setDiamondLimit(config.getDiamondLimit() + 1);
@@ -135,7 +135,7 @@ public class AdvancedConfig implements InventoryProvider {
 
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setDisplayName(game.translate("werewolf.menu.advanced_tool.diamond",
-                                    Formatter.format("&number&",config.getDiamondLimit())))
+                                    Formatter.number(config.getDiamondLimit())))
                     .build());
 
 
@@ -144,7 +144,7 @@ public class AdvancedConfig implements InventoryProvider {
                 new ItemBuilder(UniversalMaterial.EXPERIENCE_BOTTLE.getType())
                         .setLore(lore)
                         .setDisplayName(game.translate("werewolf.menu.advanced_tool.xp",
-                                        Formatter.format("&number&",config.getXpBoost())))
+                                        Formatter.number(config.getXpBoost())))
                         .build()), e -> {
 
             if (e.isLeftClick()) {
@@ -156,7 +156,7 @@ public class AdvancedConfig implements InventoryProvider {
 
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setDisplayName(game.translate("werewolf.menu.advanced_tool.xp",
-                                    Formatter.format("&number&",config.getXpBoost())))
+                                    Formatter.number(config.getXpBoost())))
                     .build());
 
         }));
@@ -164,7 +164,7 @@ public class AdvancedConfig implements InventoryProvider {
                 new ItemBuilder(UniversalMaterial.PLAYER_HEAD.getStack())
                         .setLore(lore).setDisplayName(
                         game.translate("werewolf.menu.advanced_tool.vote",
-                                        Formatter.format("&number&",config.getPlayerRequiredVoteEnd())))
+                                        Formatter.number(config.getPlayerRequiredVoteEnd())))
                         .build()), e -> {
             if (e.isLeftClick()) {
                 config.setPlayerRequiredVoteEnd(config.getPlayerRequiredVoteEnd() + 1);
@@ -176,7 +176,7 @@ public class AdvancedConfig implements InventoryProvider {
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setLore(lore).setDisplayName(
                             game.translate("werewolf.menu.advanced_tool.vote",
-                                            Formatter.format("&number&",config.getPlayerRequiredVoteEnd())))
+                                            Formatter.number(config.getPlayerRequiredVoteEnd())))
                     .build());
 
         }));
@@ -185,7 +185,7 @@ public class AdvancedConfig implements InventoryProvider {
         contents.set(1, 5, ClickableItem.of((
                 new ItemBuilder(Material.POTION)
                         .setDisplayName(game.translate("werewolf.menu.advanced_tool.strength",
-                                        Formatter.format("&number&",config.getStrengthRate())))
+                                        Formatter.number(config.getStrengthRate())))
                         .setLore(lore).build()), e -> {
             if (e.isLeftClick()) {
                 config.setStrengthRate(config.getStrengthRate() + 10);
@@ -197,13 +197,13 @@ public class AdvancedConfig implements InventoryProvider {
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setLore(lore)
                     .setDisplayName(game.translate("werewolf.menu.advanced_tool.strength",
-                                    Formatter.format("&number&",config.getStrengthRate())))
+                                    Formatter.number(config.getStrengthRate())))
                     .build());
 
         }));
         contents.set(1, 7, ClickableItem.of((new ItemBuilder(Material.POTION)
                 .setDisplayName(game.translate("werewolf.menu.advanced_tool.resistance",
-                                Formatter.format("&number&",config.getResistanceRate())))
+                                Formatter.number(config.getResistanceRate())))
                 .setLore(lore).build()), e -> {
             if (e.isLeftClick()) {
                 config.setResistanceRate(config.getResistanceRate() + 2);
@@ -214,7 +214,7 @@ public class AdvancedConfig implements InventoryProvider {
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setLore(lore)
                     .setDisplayName(game.translate("werewolf.menu.advanced_tool.resistance",
-                                    Formatter.format("&number&",config.getResistanceRate())))
+                                    Formatter.number(config.getResistanceRate())))
                     .build());
 
         }));
@@ -222,7 +222,7 @@ public class AdvancedConfig implements InventoryProvider {
                 new ItemBuilder(UniversalMaterial.BOOK.getStack())
                         .setLore(lore).setDisplayName(
                         game.translate("werewolf.commands.admin.ww_chat.number",
-                                        Formatter.format("&number&",config.getWereWolfChatMaxMessage())))
+                                        Formatter.number(config.getWereWolfChatMaxMessage())))
                         .build()), e -> {
             if (e.isLeftClick()) {
                 config.setWereWolfChatMaxMessage(config.getWereWolfChatMaxMessage() + 1);
@@ -234,7 +234,7 @@ public class AdvancedConfig implements InventoryProvider {
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setLore(lore).setDisplayName(
                             game.translate("werewolf.commands.admin.ww_chat.number",
-                                            Formatter.format("&number&",config.getWereWolfChatMaxMessage())))
+                                            Formatter.number(config.getWereWolfChatMaxMessage())))
                     .build());
 
         }));

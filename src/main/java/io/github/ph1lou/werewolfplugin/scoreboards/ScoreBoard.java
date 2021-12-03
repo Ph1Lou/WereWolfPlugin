@@ -118,7 +118,7 @@ public class ScoreBoard implements IScoreBoard {
 
 
 		scoreboard2.addAll(game.translateArray("werewolf.score_board.scoreboard_2",
-				Formatter.format("&timer&",Utils.conversion(game.getTimer())),
+				Formatter.timer(Utils.conversion(game.getTimer())),
 				Formatter.format("&day&", this.day),
 				Formatter.format("&players&", game.getPlayerSize()),
 				Formatter.format("&group&", game.getGroup()),
@@ -244,7 +244,7 @@ public class ScoreBoard implements IScoreBoard {
 
 		if (game.isState(StateGame.START) || game.isState(StateGame.GAME)) {
 			bot = game.translate("werewolf.tab.timer",
-					Formatter.format("&timer&",Utils.conversion(game.getTimer())),
+					Formatter.timer(Utils.conversion(game.getTimer())),
 					Formatter.format("&day&",day),
 					Formatter.format("&day_state",dayState));
 		}

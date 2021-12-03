@@ -176,8 +176,8 @@ public class LootBox extends ListenerManager {
         }
 
         Bukkit.broadcastMessage(game.translate("werewolf.random_events.loot_box.villager_death",
-                Formatter.format("&player&",deathName),
-                Formatter.format("&number&",nbTarget)));
+                Formatter.player(deathName),
+                Formatter.number(nbTarget)));
     }
 
     @EventHandler

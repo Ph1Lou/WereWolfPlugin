@@ -99,7 +99,7 @@ public class WildChild extends RoleVillage implements IAffectedPlayers, ITransfo
         }
 
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.wild_child.reveal_model",
-                Formatter.format("&player&",model.getName()));
+                Formatter.player(model.getName()));
         this.getPlayerWW().sendSound(Sound.BAT_IDLE);
     }
 
@@ -109,11 +109,11 @@ public class WildChild extends RoleVillage implements IAffectedPlayers, ITransfo
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.wild_child.description"))
                 .addExtraLines(game.translate("werewolf.role.wild_child.model",
-                        Formatter.format("&player&",
+                        Formatter.player(
                         affectedPlayer.isEmpty() ?
                                 !transformed ?
                                         game.translate("werewolf.role.wild_child.design_model",
-                                                Formatter.format("&timer&",Utils.conversion(game.getConfig()
+                                                Formatter.timer(Utils.conversion(game.getConfig()
                                                         .getTimerValue(TimerBase.MODEL_DURATION.getKey()))))
                                         :
                                         game.translate("werewolf.role.wild_child.model_none")
@@ -229,7 +229,7 @@ public class WildChild extends RoleVillage implements IAffectedPlayers, ITransfo
 
         this.getPlayerWW().sendMessageWithKey(
                 Prefix.ORANGE.getKey() , "werewolf.role.wild_child.change",
-                Formatter.format("&player&",thiefWW.getName()));
+                Formatter.player(thiefWW.getName()));
     }
 
     @EventHandler
@@ -245,7 +245,7 @@ public class WildChild extends RoleVillage implements IAffectedPlayers, ITransfo
 
             if (modelWW != null) {
                 sb.append(game.translate("werewolf.end.model",
-                        Formatter.format("&player&",modelWW.getName())));
+                        Formatter.player(modelWW.getName())));
             }
 
         }

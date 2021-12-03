@@ -30,7 +30,7 @@ public class CommandSendToLibrarian implements ICommand {
 
         if (args.length == 0) {
             playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.parameters",
-                    Formatter.format("&number&",1));
+                    Formatter.number(1));
             return;
         }
 
@@ -68,7 +68,7 @@ public class CommandSendToLibrarian implements ICommand {
                     find.set(true);
                     librarianGiveBackEvent.getTargetWW().sendMessageWithKey(
                             Prefix.GREEN.getKey() , "werewolf.role.librarian.contribution",
-                            Formatter.format("&player&",player.getName()),
+                            Formatter.player(player.getName()),
                             Formatter.format("message",librarianGiveBackEvent.getInfo()));
                 });
 

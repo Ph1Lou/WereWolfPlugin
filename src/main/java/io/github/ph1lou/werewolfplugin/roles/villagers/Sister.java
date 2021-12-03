@@ -27,7 +27,6 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.potion.PotionEffectType;
@@ -66,7 +65,7 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.sister.description"))
                 .setEffects(game.translate("werewolf.role.sister.effect",
-                        Formatter.format("&number&", game.getConfig().getDistanceSister())))
+                        Formatter.number( game.getConfig().getDistanceSister())))
                 .addExtraLines(extraLines)
                 .build();
     }
@@ -99,16 +98,12 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
     @Override
     public void second() {
 
-        Player sister = Bukkit.getPlayer(getPlayerUUID());
 
-        if (sister == null) {
-            return;
-        }
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        Location location = sister.getLocation();
+        Location location = this.getPlayerWW().getLocation();
 
         boolean recoverResistance = game.getPlayersWW()
                 .stream()
@@ -185,7 +180,7 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
         textComponent.addExtra(role);
 
         textComponent.addExtra(new TextComponent(game.translate("werewolf.role.sister.end_message",
-                Formatter.format("&player&",sisterWW.getName()))));
+                Formatter.player(sisterWW.getName()))));
 
         this.getPlayerWW().sendMessage(textComponent);
 
@@ -237,7 +232,7 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
         return ClickableItem.of((
                 new ItemBuilder(UniversalMaterial.GRAY_WOOL.getStack())
                         .setDisplayName(game.translate("werewolf.menu.advanced_tool.sister",
-                                        Formatter.format("&number&",config.getDistanceSister())))
+                                        Formatter.number(config.getDistanceSister())))
                         .setLore(lore).build()), e -> {
 
             if (e.isLeftClick()) {
@@ -250,7 +245,7 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setLore(lore)
                     .setDisplayName(game.translate("werewolf.menu.advanced_tool.sister",
-                                    Formatter.format("&number&",config.getDistanceSister())))
+                                    Formatter.number(config.getDistanceSister())))
                     .build());
 
         });

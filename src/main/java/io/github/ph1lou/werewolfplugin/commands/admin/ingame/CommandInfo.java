@@ -14,7 +14,7 @@ public class CommandInfo implements ICommand {
     public void execute(WereWolfAPI game, Player player, String[] args) {
 
         if (args.length == 0) {
-            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.parameters", Formatter.format("&number&",1)));
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.parameters", Formatter.number(1)));
             return;
         }
 

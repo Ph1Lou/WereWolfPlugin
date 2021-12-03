@@ -109,7 +109,7 @@ public class VillageIdiot extends RoleVillage implements IPower {
         this.getPlayerWW().removePlayerMaxHealth(4);
         event.setCancelled(true);
         Bukkit.broadcastMessage(this.game.translate(Prefix.YELLOW.getKey() , "werewolf.role.village_idiot.announce",
-                Formatter.format("&player&",this.getPlayerWW().getName())));
+                Formatter.player(this.getPlayerWW().getName())));
     }
 }
 

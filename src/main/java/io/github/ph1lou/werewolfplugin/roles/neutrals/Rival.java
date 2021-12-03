@@ -70,12 +70,12 @@ public class Rival extends RoleNeutral implements IPower {
 
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.rival.description",
-                                Formatter.format("&timer&",Utils.conversion(
+                                Formatter.timer(Utils.conversion(
                                 Math.max(0, game.getConfig().getTimerValue(TimerBase.ROLE_DURATION.getKey()))
                                         + game.getConfig().getTimerValue(TimerBase.RIVAL_DURATION.getKey())))))
                 .setItems(game.translate("werewolf.role.rival.item"))
                 .setEquipments(game.translate("werewolf.role.rival.extra",
-                                Formatter.format("&number&",game.getConfig().getLimitPowerBow() + 1)))
+                                Formatter.number(game.getConfig().getLimitPowerBow() + 1)))
                 .build();
     }
 
@@ -171,7 +171,15 @@ public class Rival extends RoleNeutral implements IPower {
 
     @EventHandler
     public void onLoverDeath(LoverDeathEvent event) {
-        loverDeath(event.getPlayerWW1(), event.getPlayerWW2());
+
+        String loverKey = event.getLover().getKey();
+        if(loverKey.equals(LoverType.LOVER.getKey()) ||
+        loverKey.equals(LoverType.AMNESIAC_LOVER.getKey())){
+            List<? extends IPlayerWW> lovers = event.getLover().getLovers();
+            if(lovers.size() >= 2){
+                loverDeath(lovers.get(0), lovers.get(1));
+            }
+        }
     }
 
     private void loverDeath(IPlayerWW playerWW1, IPlayerWW playerWW2) {
@@ -198,7 +206,6 @@ public class Rival extends RoleNeutral implements IPower {
         }, 1200, 1200);
 
         BukkitUtils.scheduleSyncDelayedTask(() -> Bukkit.getScheduler().cancelTask(task), (long) health * 62 * 20);
-
 
         this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.rival.lover_death");
         Bukkit.getPluginManager().callEvent(new RivalLoverDeathEvent(this.getPlayerWW(), new ArrayList<>(lover.getLovers())));

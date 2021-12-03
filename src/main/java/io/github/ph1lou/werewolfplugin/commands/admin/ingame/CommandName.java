@@ -14,7 +14,7 @@ public class CommandName implements ICommand {
 
         if (args.length == 0) {
             player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.parameters",
-                    Formatter.format("&number&",1)));
+                    Formatter.number(1)));
             return;
         }
 

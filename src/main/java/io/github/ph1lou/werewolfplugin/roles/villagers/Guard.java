@@ -115,7 +115,7 @@ public class Guard extends RoleWithLimitedSelectionDuration implements IAffected
 
         this.getPlayerWW().sendMessageWithKey(
                 Prefix.YELLOW.getKey() , "werewolf.role.guard.message",
-                Formatter.format("&timer&",Utils.conversion(
+                Formatter.timer(Utils.conversion(
                         this.game.getConfig().getTimerValue(TimerBase.POWER_DURATION.getKey()))));
     }
 

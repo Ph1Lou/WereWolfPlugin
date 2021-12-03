@@ -150,7 +150,7 @@ public class TransportationTask implements Listener {
             if (this.game.getPlayerWW(player.getUniqueId()).isPresent()) {
                 player.setGameMode(GameMode.SURVIVAL);
                 player.sendMessage(this.game.translate(Prefix.YELLOW.getKey() , "werewolf.announcement.start.message",
-                        Formatter.format("&timer&",Utils.conversion(this.game.getConfig().getTimerValue(TimerBase.INVULNERABILITY.getKey())))));
+                        Formatter.timer(Utils.conversion(this.game.getConfig().getTimerValue(TimerBase.INVULNERABILITY.getKey())))));
             } else {
                 player.teleport(this.game.getMapManager().getWorld().getSpawnLocation());
                 player.setGameMode(GameMode.SPECTATOR);
@@ -180,7 +180,7 @@ public class TransportationTask implements Listener {
                 .forEach(Sound.ORB_PICKUP::play);
 
         actionBar = this.game.translate("werewolf.action_bar.tp",
-                Formatter.format("&number&",i + 1),
+                Formatter.number(i + 1),
                 Formatter.format("&sum&",this.game.getPlayerSize()));
 
         IPlayerWW playerWW = (IPlayerWW) this.game.getPlayersWW().toArray()[i];
@@ -223,7 +223,7 @@ public class TransportationTask implements Listener {
         }
 
         actionBar = this.game.translate("werewolf.action_bar.create_tp_point",
-                Formatter.format("&number&",i + 1),
+                Formatter.number(i + 1),
                 Formatter.format("&sum&",this.game.getPlayerSize()));
 
         double a = i * 2 * Math.PI / this.game.getPlayerSize();

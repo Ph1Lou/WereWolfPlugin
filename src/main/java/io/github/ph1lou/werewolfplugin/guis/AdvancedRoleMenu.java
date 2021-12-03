@@ -47,7 +47,7 @@ public class AdvancedRoleMenu implements InventoryProvider {
                 .provider(new AdvancedRoleMenu(register))
                 .size(Math.min(54, (Math.max(0, (register.getConfig().size() * 2 - 6)) / 9 + 1) * 9) / 9, 9)
                 .title(game.translate("werewolf.menu.advanced_tool_role.menu",
-                                Formatter.format("&role&",game.translate(register.getKey()))))
+                                Formatter.role(game.translate(register.getKey()))))
                 .closeable(true)
                 .build();
     }
@@ -63,7 +63,7 @@ public class AdvancedRoleMenu implements InventoryProvider {
                 e -> Roles.getInventory(player, Category.WEREWOLF).open(player)));
 
         contents.set(0, 2, ClickableItem.of(new ItemBuilder(UniversalMaterial.CHEST.getType()).setDisplayName(game.translate("werewolf.menu.advanced_tool_role.config",
-                        Formatter.format("&role&",game.translate(register.getKey())))).build(),
+                        Formatter.role(game.translate(register.getKey())))).build(),
                 event -> manageStuff(player)));
     }
 
@@ -122,7 +122,7 @@ public class AdvancedRoleMenu implements InventoryProvider {
             }
         }
         TextComponent msg = new TextComponent(game.translate(Prefix.YELLOW.getKey() , "werewolf.commands.admin.loot_role.valid",
-                Formatter.format("&role&",game.translate(register.getKey()))));
+                Formatter.role(game.translate(register.getKey()))));
         msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/a %s %s", game.translate("werewolf.commands.admin.loot_role.command"), this.register.getKey())));
         player.spigot().sendMessage(msg);
         player.closeInventory();

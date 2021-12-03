@@ -110,7 +110,7 @@ public class Exposed extends ListenerManager {
         if (!exposedEvent.isCancelled()) {
             roles = roles.stream().map(game::translate).collect(Collectors.toList());
             Bukkit.broadcastMessage(game.translate("werewolf.random_events.exposed.message",
-                    Formatter.format("&player&",playerWW.getName()),
+                    Formatter.player(playerWW.getName()),
                     Formatter.format("&role1&",roles.get(0)),
                     Formatter.format("&role2&",roles.get(1)),
                     Formatter.format("&role3&",roles.get(2))));

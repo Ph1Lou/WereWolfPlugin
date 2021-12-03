@@ -181,7 +181,7 @@ public class TimersGUI implements InventoryProvider {
                                 Material.ANVIL)
                                 .setLore(lore)
                                 .setDisplayName(game.translate(timer.getKey(),
-                                        Formatter.format("&timer&",Utils.conversion(config.getTimerValue(timer.getKey())))))
+                                        Formatter.timer(Utils.conversion(config.getTimerValue(timer.getKey())))))
                                 .build()),
                         e -> this.key = timer.getKey()));
             }

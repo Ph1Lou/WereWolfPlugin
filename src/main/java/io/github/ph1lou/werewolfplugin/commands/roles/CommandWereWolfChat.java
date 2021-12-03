@@ -65,7 +65,7 @@ public class CommandWereWolfChat implements ICommand {
                 }
             } else {
                 playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.commands.admin.ww_chat.speak_number",
-                        Formatter.format("&number&",game.getConfig().getWereWolfChatMaxMessage()));
+                        Formatter.number(game.getConfig().getWereWolfChatMaxMessage()));
             }
 
 

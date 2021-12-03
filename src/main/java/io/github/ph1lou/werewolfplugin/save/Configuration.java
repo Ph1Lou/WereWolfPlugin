@@ -45,7 +45,10 @@ public class Configuration implements IConfiguration {
     private int distanceAmnesiacLovers = 15;
     private int distancePriestess = 10;
     private int distanceSister = 20;
+    private int distanceWillOTheWisp = 50;
+    private int distanceHermit = 20;
     private int distanceFox = 20;
+    private int distanceFearfulWerewolf = 20;
     private int distanceAvengerWerewolf = 10;
     private boolean trollSV = false;
     private int borderMax = 2000;
@@ -606,5 +609,35 @@ public class Configuration implements IConfiguration {
 
     public void setComposition(Map<String, Integer> composition) {
         this.roleCount = composition;
+    }
+
+    @Override
+    public int getDistanceFearfulWerewolf() {
+        return distanceFearfulWerewolf;
+    }
+
+    @Override
+    public void setDistanceFearfulWerewolf(int distanceFearfulWerewolf) {
+        this.distanceFearfulWerewolf = distanceFearfulWerewolf;
+    }
+
+    @Override
+    public int getDistanceHermit() {
+        return this.distanceHermit;
+    }
+
+    @Override
+    public void setDistanceHermit(int distanceHermit) {
+        this.distanceHermit = distanceHermit;
+    }
+
+    @Override
+    public int getDistanceWillOTheWisp() {
+        return this.distanceWillOTheWisp;
+    }
+
+    @Override
+    public void setDistanceWillOTheWisp(int distanceWillOTheWisp) {
+        this.distanceWillOTheWisp = distanceWillOTheWisp;
     }
 }

@@ -58,7 +58,7 @@ public class WolfDog extends RoleVillage implements ITransformed, IPower {
 
         if (timer > 0) {
             this.getPlayerWW().sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.role.wolf_dog.transform",
-                    Formatter.format("&timer&",Utils.conversion(game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST.getKey()))));
+                    Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST.getKey()))));
         }
     }
 
@@ -101,10 +101,6 @@ public class WolfDog extends RoleVillage implements ITransformed, IPower {
     @Override
     @EventHandler
     public void onNightForWereWolf(NightEvent event) {
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
 
         if (!isAbilityEnabled()) return;
 

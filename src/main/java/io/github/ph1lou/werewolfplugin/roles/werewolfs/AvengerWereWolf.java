@@ -16,7 +16,7 @@ import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleWereWolf;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,7 +39,7 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
 
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.avenger_werewolf.description",
-                                Formatter.format("&number&",game.getConfig().getDistanceAvengerWerewolf())))
+                                Formatter.number(game.getConfig().getDistanceAvengerWerewolf())))
                 .setPower(game.translate("werewolf.role.avenger_werewolf.power"))
                 .setEffects(game.translate("werewolf.description.werewolf"))
                 .build();
@@ -68,18 +68,13 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
 
 
         this.getPlayerWW().sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.role.avenger_werewolf.remove",
-                Formatter.format("&player&",event.getPlayerWW().getName()));
+                Formatter.player(event.getPlayerWW().getName()));
         this.getPlayerWW().addPlayerMaxHealth(2);
     }
 
     @Override
     public void second() {
 
-        Player player = Bukkit.getPlayer(getPlayerUUID());
-
-        if (player == null) {
-            return;
-        }
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
@@ -93,8 +88,9 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> playerWW.getRole().isWereWolf())
                 .filter(playerWW -> {
-                    if (player.getWorld().equals(playerWW.getLocation().getWorld())) {
-                        return player.getLocation().distance(playerWW.getLocation()) < game.getConfig().getDistanceAvengerWerewolf();
+                    Location playerLocation = this.getPlayerWW().getLocation();
+                    if (playerLocation.getWorld() == playerWW.getLocation().getWorld()) {
+                        return playerLocation.distance(playerWW.getLocation()) < game.getConfig().getDistanceAvengerWerewolf();
                     }
                     return false;
                 })
@@ -110,7 +106,7 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
 
                         this.affectedPlayers.add(playerWW);
                         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.avenger_werewolf.add",
-                                Formatter.format("&player&",playerWW.getName()));
+                                Formatter.player(playerWW.getName()));
                     }
                 });
     }
@@ -150,7 +146,7 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
         return ClickableItem.of((new ItemBuilder(
                 UniversalMaterial.RED_WOOL.getStack())
                 .setDisplayName(game.translate("werewolf.menu.advanced_tool.avenger_werewolf",
-                                Formatter.format("&number&",config.getDistanceAvengerWerewolf())))
+                                Formatter.number(config.getDistanceAvengerWerewolf())))
                 .setLore(lore).build()), e -> {
             if (e.isLeftClick()) {
                 config.setDistanceAvengerWerewolf((config.getDistanceAvengerWerewolf() + 2));
@@ -162,7 +158,7 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setLore(lore)
                     .setDisplayName(game.translate("werewolf.menu.advanced_tool.avenger_werewolf",
-                                    Formatter.format("&number&",config.getDistanceAvengerWerewolf())))
+                                    Formatter.number(config.getDistanceAvengerWerewolf())))
                     .build());
 
         });

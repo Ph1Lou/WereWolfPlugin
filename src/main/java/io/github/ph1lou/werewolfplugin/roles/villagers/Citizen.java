@@ -122,12 +122,12 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
 
         TextComponent cancel =
                 new TextComponent(game.translate(Prefix.YELLOW.getKey() , "werewolf.role.citizen.cancel_vote_message",
-                        Formatter.format("&number&",hasPower() ? 1 : 0)));
+                        Formatter.number(hasPower() ? 1 : 0)));
 
         cancel.addExtra(cancelVote);
 
         cancel.addExtra(new TextComponent(game.translate("werewolf.role.citizen.time_left",
-                Formatter.format("&timer&",Utils.conversion(
+                Formatter.timer(Utils.conversion(
                         game.getConfig().getTimerValue(
                                 TimerBase.CITIZEN_DURATION.getKey()))))));
 
@@ -153,12 +153,12 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
 
         TextComponent see = new TextComponent(
                 game.translate(Prefix.YELLOW.getKey() , "werewolf.role.citizen.see_vote_message",
-                        Formatter.format("&number&",2 - getUse())));
+                        Formatter.number(2 - getUse())));
         see.addExtra(seeVote);
 
 
         see.addExtra(new TextComponent(game.translate("werewolf.role.citizen.time_left",
-                Formatter.format("&timer&",Utils.conversion(
+                Formatter.timer(Utils.conversion(
                         game.getConfig().getTimerValue(
                                 TimerBase.CITIZEN_DURATION.getKey()))))));
 

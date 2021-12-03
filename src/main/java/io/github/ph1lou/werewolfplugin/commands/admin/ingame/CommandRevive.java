@@ -50,7 +50,7 @@ public class CommandRevive implements ICommand {
 
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.sendMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.commands.admin.revive.perform",
-                    Formatter.format("&player&",player1.getName()),
+                    Formatter.player(player1.getName()),
                     Formatter.format("&admin&",player.getName())));
             Sound.AMBIENCE_THUNDER.play(p);
         }

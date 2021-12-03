@@ -49,7 +49,7 @@ public class CommandCitizenCancelVote implements ICommand {
 
         playerWW.sendMessageWithKey(
                 Prefix.YELLOW.getKey() , "werewolf.role.citizen.cancelling_vote_perform",
-                Formatter.format("&player&",voteWW.getName()));
+                Formatter.player(voteWW.getName()));
         citizen.addAffectedPlayer(voteWW);
 
 

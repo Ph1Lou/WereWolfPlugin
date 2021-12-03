@@ -18,7 +18,7 @@ public class CommandTimer implements ICommand {
             String time = Utils.conversion(game.getConfig().getTimerValue(timer.getKey()));
             if (time.charAt(0) != '-') {
                 player.sendMessage(game.translate(timer.getKey(),
-                        Formatter.format("&timer&",time)));
+                        Formatter.timer(time)));
             }
         }
     }

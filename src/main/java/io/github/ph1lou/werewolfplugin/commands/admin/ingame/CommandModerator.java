@@ -38,7 +38,7 @@ public class CommandModerator implements ICommand {
 
         if (moderationManager.getModerators().contains(argUUID)) {
             Bukkit.broadcastMessage(game.translate(Prefix.RED.getKey() , "werewolf.commands.admin.moderator.remove",
-                    Formatter.format("&player&",moderator.getName())));
+                    Formatter.player(moderator.getName())));
             moderationManager.getModerators().remove(argUUID);
 
             if (game.isState(StateGame.LOBBY)) {
@@ -65,7 +65,7 @@ public class CommandModerator implements ICommand {
         moderator.setGameMode(GameMode.SPECTATOR);
         moderationManager.addModerator(argUUID);
         Bukkit.broadcastMessage(game.translate(Prefix.GREEN.getKey() , "werewolf.commands.admin.moderator.add",
-                Formatter.format("&player&",moderator.getName())));
+                Formatter.player(moderator.getName())));
         Bukkit.getPluginManager().callEvent(new ModeratorEvent(argUUID, true));
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(moderator));
     }

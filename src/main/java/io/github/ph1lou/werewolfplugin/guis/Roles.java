@@ -213,7 +213,7 @@ public class Roles implements InventoryProvider {
                         .map(s -> Arrays.stream(s.split("\\n"))
                                 .collect(Collectors.toList())).forEach(lore2::addAll);
                 roleRegister.getRequireRole().ifPresent(roleKey -> lore2.add(game.translate("werewolf.menu.roles.need",
-                        Formatter.format("&role&",game.translate(roleKey)))));
+                        Formatter.role(game.translate(roleKey)))));
                 main.getRegisterManager().getRolesRegister().stream()
                         .filter(roleRegister1 -> roleRegister1.getRequireRole().isPresent())
                         .filter(roleRegister1 -> game.getConfig().getRoleCount(roleRegister1.getKey()) > 0)
@@ -221,7 +221,7 @@ public class Roles implements InventoryProvider {
                         .map(RoleRegister::getKey)
                         .findFirst().ifPresent(role -> {
                     lore2.add(game.translate("werewolf.menu.roles.dependant_load",
-                            Formatter.format("&role&",game.translate(role))));
+                            Formatter.role(game.translate(role))));
                     unRemovable.set(true);
                 });
 

@@ -29,11 +29,11 @@ public class CommandWhitelist implements ICommand {
 
         if (moderationManager.getWhiteListedPlayers().contains(uuid)) {
             player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.commands.admin.whitelist.remove",
-                    Formatter.format("&player&",playerArg.getName())));
+                    Formatter.player(playerArg.getName())));
             moderationManager.removePlayerOnWhiteList(uuid);
         } else {
             player.sendMessage(game.translate(Prefix.GREEN.getKey() , "werewolf.commands.admin.whitelist.add",
-                    Formatter.format("&player&",playerArg.getName())));
+                    Formatter.player(playerArg.getName())));
             moderationManager.addPlayerOnWhiteList(uuid);
             ((GameManager) game).finalJoin(playerArg);
         }

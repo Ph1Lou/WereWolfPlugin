@@ -68,11 +68,11 @@ public class CommandShaman implements ICommand {
 
         if (game.getRandom().nextBoolean()) {
             playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.shaman.victim_name",
-                    Formatter.format("&player&",playerWW1.getName()));
+                    Formatter.player(playerWW1.getName()));
         } else {
             IRole role = playerWW1.getRole();
             playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.shaman.victim_role",
-                    Formatter.format("&role&",game.translate(role.getDisplayRole())));
+                    Formatter.role(game.translate(role.getDisplayRole())));
         }
 
     }

@@ -28,7 +28,7 @@ public class CommandSize implements ICommand {
         player.sendMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.commands.admin.size.begin"));
         int size = VersionUtils.getVersionUtils().biomeSize(location, world);
         player.sendMessage(game.translate(Prefix.GREEN.getKey() , "werewolf.commands.admin.size.result",
-                Formatter.format("&number&",size)));
+                Formatter.number(size)));
 
         TextComponent msg = new TextComponent(game.translate(Prefix.YELLOW.getKey() , "werewolf.commands.admin.size.change"));
         msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/a %s", game.translate("werewolf.commands.admin.change.command"))));

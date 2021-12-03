@@ -69,6 +69,6 @@ public class CommandProtector implements ICommand {
         playerWW1.getRole().addAuraModifier(new AuraModifier("protection", Aura.LIGHT, 40, true));
         playerWW1.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.protector.get_protection");
         playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.protector.protection_perform",
-                Formatter.format("&player&",playerArg.getName()));
+                Formatter.player(playerArg.getName()));
     }
 }

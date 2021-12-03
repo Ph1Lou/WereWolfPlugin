@@ -133,7 +133,7 @@ public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
                 new TextComponent(
                         game.translate(
                                 Prefix.YELLOW.getKey() , "werewolf.role.witch.resuscitation_message",
-                                Formatter.format("&player&",playerWW.getName())));
+                                Formatter.player(playerWW.getName())));
         textComponent.setClickEvent(new ClickEvent(
                 ClickEvent.Action.RUN_COMMAND,
                 String.format("/ww %s %s",

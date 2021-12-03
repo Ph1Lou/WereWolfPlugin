@@ -11,17 +11,18 @@ import io.github.ph1lou.werewolfapi.enums.LoverType;
 import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.lovers.CupidLoversEvent;
 import io.github.ph1lou.werewolfapi.events.lovers.LoversRepartitionEvent;
 import io.github.ph1lou.werewolfapi.events.lovers.RevealLoversEvent;
 import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
+import io.github.ph1lou.werewolfplugin.roles.lovers.AbstractLover;
 import io.github.ph1lou.werewolfplugin.roles.lovers.AmnesiacLover;
 import io.github.ph1lou.werewolfplugin.roles.lovers.CursedLover;
 import io.github.ph1lou.werewolfplugin.roles.lovers.Lover;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Cupid;
 import org.bukkit.Bukkit;
-import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,6 +77,8 @@ public class LoversManagement implements ILoverManager {
 		List<IPlayerWW> amnesiacLovers = game.getPlayersWW().stream()
 				.filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
 				.filter(playerWW -> playerWW.getLovers().isEmpty())
+				.filter(playerWW -> !playerWW.getRole().isKey(RolesBase.CHARMER.getKey()))
+				.filter(playerWW -> !playerWW.getRole().isKey(RolesBase.RIVAL.getKey()))
 				.collect(Collectors.toList());
 
 		if (amnesiacLovers.size() < 2 && game.getConfig().getLoverCount(LoverType.AMNESIAC_LOVER.getKey()) > 0) {
@@ -99,18 +102,26 @@ public class LoversManagement implements ILoverManager {
 	}
 
 
-	@Override
 	public void repartition() {
+
+		List<ILover> temp = new ArrayList<>(this.lovers); // sauvegarder les couples mis manuellement avant la repartition
+		this.lovers.clear();
 		Bukkit.getPluginManager().callEvent(new LoversRepartitionEvent());
 		this.autoLovers();
 		this.rangeLovers();
 		game.getConfig().setLoverCount(LoverType.LOVER.getKey(), this.lovers.size());
 		this.autoAmnesiacLovers();
 		this.autoCursedLovers();
+		temp.forEach(iLover -> {
+			if(iLover instanceof AbstractLover){
+				((AbstractLover)iLover).announceLovers();
+			}
+		});
+		this.lovers.addAll(temp);
 		this.lovers
 				.forEach(lovers -> {
 					BukkitUtils
-							.registerEvents((Listener) lovers);
+							.registerEvents(lovers);
 					lovers.getLovers().forEach(playerWW -> Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(playerWW)));
 				});
 		Bukkit.getPluginManager().callEvent(new RevealLoversEvent(this.lovers));
@@ -121,6 +132,9 @@ public class LoversManagement implements ILoverManager {
 
 		List<IPlayerWW> loversAvailable = game.getPlayersWW().stream()
 				.filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+				.filter(playerWW -> !playerWW.getRole().isKey(RolesBase.CHARMER.getKey()))
+				.filter(playerWW -> !playerWW.getRole().isKey(RolesBase.RIVAL.getKey()))
+				.filter(playerWW -> playerWW.getLovers().isEmpty())
 				.collect(Collectors.toList());
 
 		if (loversAvailable.size() < 2 && game.getConfig().getRoleCount(RolesBase.CUPID.getKey()) +
@@ -215,6 +229,9 @@ public class LoversManagement implements ILoverManager {
 		List<Lover> loverAPIS = new ArrayList<>();
 		List<IPlayerWW> loversAvailable = game.getPlayersWW().stream()
 				.filter(playerWW -> !playerWW.getLovers().isEmpty())
+				.filter(playerWW -> playerWW
+						.getLovers()
+						.stream().anyMatch(lover -> lover.getKey().equals(LoverType.LOVER.getKey())))
 				.collect(Collectors.toList());
 
 		while (!loversAvailable.isEmpty()) {
@@ -223,16 +240,21 @@ public class LoversManagement implements ILoverManager {
 			linkCouple.add(loversAvailable.remove(0));
 
 			for (int j = 0; j < linkCouple.size(); j++) {
-				for (IPlayerWW playerWW : game.getPlayersWW()) {
-					for (ILover lover : playerWW.getLovers()) {
-						if (lover.getLovers().contains(linkCouple.get(j))) {
-							if (!linkCouple.contains(playerWW)) {
-								linkCouple.add(playerWW);
-								loversAvailable.remove(playerWW);
+
+				IPlayerWW playerWWLover = linkCouple.get(j);
+
+				game.getPlayersWW().forEach(playerWW -> playerWW
+						.getLovers()
+						.stream()
+						.filter(iLover -> iLover.getKey().equals(LoverType.LOVER.getKey()))
+						.forEach(lover -> {
+							if (lover.getLovers().contains(playerWWLover)) {
+								if (!linkCouple.contains(playerWW)) {
+									linkCouple.add(playerWW);
+									loversAvailable.remove(playerWW);
+								}
 							}
-						}
-					}
-				}
+						}));
 			}
 			loverAPIS.add(new Lover(game, linkCouple));
 		}
@@ -254,11 +276,14 @@ public class LoversManagement implements ILoverManager {
 
 	@Override
 	public void removeLover(ILover lover) {
-		lovers.remove(lover);
+		this.lovers.remove(lover);
 	}
 
 	@Override
 	public void addLover(ILover lover) {
-		lovers.add(lover);
+		if(game.getConfig().getTimerValue(TimerBase.LOVER_DURATION.getKey()) < 0){
+			BukkitUtils.registerEvents(lover);
+		}
+		this.lovers.add(lover);
 	}
 }

@@ -112,7 +112,7 @@ public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPl
         TextComponent infect_msg = new TextComponent(
                 game.translate(
                         Prefix.YELLOW.getKey() , "werewolf.role.infect_father_of_the_wolves.infection_message",
-                        Formatter.format("&player&",playerWW.getName())));
+                        Formatter.player(playerWW.getName())));
         infect_msg.setClickEvent(
                 new ClickEvent(ClickEvent.Action.RUN_COMMAND,
                         String.format("/ww %s %s",

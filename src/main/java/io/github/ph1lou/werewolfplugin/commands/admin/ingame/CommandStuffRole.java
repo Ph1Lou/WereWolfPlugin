@@ -33,7 +33,7 @@ public class CommandStuffRole implements ICommand {
             stuffManager.getStuffRoles().get(args[0]).add(i);
         }
         player.sendMessage(game.translate(Prefix.GREEN.getKey() , "werewolf.commands.admin.loot_role.perform",
-                Formatter.format("&role&",game.translate(args[0]))));
+                Formatter.role(game.translate(args[0]))));
 
         Inventory inventory;
         if (stuffManager.getTempStuff().containsKey(uuid)) {

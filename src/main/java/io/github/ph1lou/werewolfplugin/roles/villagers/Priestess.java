@@ -86,7 +86,7 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
         this.getPlayerWW().sendMessageWithKey(
                 Prefix.YELLOW.getKey() , "werewolf.role.priestess.perform",
                 Formatter.format("&blocks",game.getConfig().getDistancePriestess()),
-                Formatter.format("&timer&",Utils.conversion(
+                Formatter.timer(Utils.conversion(
                         game.getConfig()
                                 .getTimerValue(TimerBase.POWER_DURATION.getKey()))));
     }
@@ -185,7 +185,7 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
         return ClickableItem.of((
                 new ItemBuilder(UniversalMaterial.BLUE_WOOL.getStack())
                         .setDisplayName(game.translate("werewolf.menu.advanced_tool.priestess",
-                                        Formatter.format("&number&",config.getDistancePriestess())))
+                                        Formatter.number(config.getDistancePriestess())))
                         .setLore(lore).build()), e -> {
 
             if (e.isLeftClick()) {
@@ -198,7 +198,7 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setLore(lore)
                     .setDisplayName(game.translate("werewolf.menu.advanced_tool.priestess",
-                                    Formatter.format("&number&",config.getDistancePriestess())))
+                                    Formatter.number(config.getDistancePriestess())))
                     .build());
 
         });

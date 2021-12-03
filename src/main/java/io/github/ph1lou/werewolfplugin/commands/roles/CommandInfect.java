@@ -78,7 +78,7 @@ public class CommandInfect implements ICommand {
         ((IAffectedPlayers) infect).addAffectedPlayer(playerWW1);
 
         playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.infect_father_of_the_wolves.infection_perform",
-                Formatter.format("&player&",playerWW1.getName()));
+                Formatter.player(playerWW1.getName()));
         game.resurrection(playerWW1);
 
         if (!playerWW1.getRole().isWereWolf()) { //si déjà loup

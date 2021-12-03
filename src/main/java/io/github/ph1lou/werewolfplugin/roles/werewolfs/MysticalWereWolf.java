@@ -83,8 +83,8 @@ public class MysticalWereWolf extends RoleWereWolf {
         Bukkit.getPluginManager().callEvent(new MysticalWerewolfRevelationEvent(this.getPlayerWW(), roleWW));
 
         this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.mystical_werewolf.werewolf_death",
-                Formatter.format("&player&",roleWW.getName()),
-                Formatter.format("&role&",game.translate(roleWW.getRole().getKey())));
+                Formatter.player(roleWW.getName()),
+                Formatter.role(game.translate(roleWW.getRole().getKey())));
     }
 
 

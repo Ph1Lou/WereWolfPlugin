@@ -39,7 +39,7 @@ public class CommandSisterSeeRole implements ICommand {
 
 
         playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.sister.reveal_killer_role",
-                Formatter.format("&role&",
+                Formatter.role(
                 killerWW != null ?
                         game.translate(killerWW.getRole().getKey()) :
                         game.translate("werewolf.utils.pve")));

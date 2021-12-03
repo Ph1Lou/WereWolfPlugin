@@ -136,12 +136,12 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
 
         setPower(false);
 
-        HandlerList.unregisterAll((Listener) this.getPlayerWW().getRole());
+        HandlerList.unregisterAll(this.getPlayerWW().getRole());
         IRole roleClone = role.publicClone();
         this.getPlayerWW().setRole(roleClone);
         assert roleClone != null;
-        BukkitUtils.registerEvents((Listener) roleClone);
-        if (this.getInfected()) {
+        BukkitUtils.registerEvents(roleClone);
+        if (this.isInfected()) {
             roleClone.setInfected();
         } else if (roleClone.isWereWolf()) {
             Bukkit.getPluginManager().callEvent(new NewWereWolfEvent(getPlayerWW()));
@@ -150,7 +150,7 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
         roleClone.setDeathRole(this.getKey());
 
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.thief.realized_theft",
-                Formatter.format("&role&",game.translate(role.getKey())));
+                Formatter.role(game.translate(role.getKey())));
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.thief.details");
 
         this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"imitator"));
@@ -197,10 +197,6 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
     @Override
     public void disableAbilities() {
         super.disableAbilities();
-
-        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
-            return;
-        }
 
         this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"imitator"));
     }
