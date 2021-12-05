@@ -30,7 +30,7 @@ public class Assassin extends RoleNeutral {
     public void onNight(NightEvent event) {
 
         this.getPlayerWW()
-                .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"assassin"));
+                .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"assassin",0));
 
     }
 
@@ -127,6 +127,6 @@ public class Assassin extends RoleNeutral {
     public void disableAbilities() {
         super.disableAbilities();
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"assassin"));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"assassin",0));
     }
 }

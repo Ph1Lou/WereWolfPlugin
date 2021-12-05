@@ -189,8 +189,11 @@ public class PlayerWW implements IPlayerWW {
         if(!potionModifier.isAdd()){
             new ArrayList<>(this.potionModifiers.keySet())
                     .stream()
-                    .filter(potionModifier1 -> potionModifier1.getIdentifier().equals(potionModifier.getIdentifier()))
-                    .filter(potionModifier1 -> potionModifier1.getPotionEffectType().equals(potionModifier.getPotionEffectType()))
+                    .filter(potionModifier1 -> potionModifier1.getIdentifier()
+                            .equals(potionModifier.getIdentifier()))
+                    .filter(potionModifier1 -> potionModifier1.getPotionEffectType()
+                            .equals(potionModifier.getPotionEffectType()))
+                    .filter(potionModifier1 -> potionModifier1.getAmplifier() == potionModifier.getAmplifier())
                     .forEach(potionModifier1 -> {
                         int id = this.potionModifiers.remove(potionModifier1);
 
@@ -200,8 +203,16 @@ public class PlayerWW implements IPlayerWW {
 
                         if(player!=null){
                             player.removePotionEffect(potionModifier1.getPotionEffectType());
+
+                            int maxAmplifier = this.potionModifiers.keySet().stream()
+                                    .filter(potionModifier2 -> potionModifier2.getPotionEffectType().equals(potionModifier1.getPotionEffectType()))
+                                    .max(Comparator.comparing(PotionModifier::getAmplifier))
+                                    .map(PotionModifier::getAmplifier)
+                                    .orElse(-1);
+
                             this.potionModifiers.keySet().stream()
                                     .filter(potionModifier2 -> potionModifier2.getPotionEffectType().equals(potionModifier1.getPotionEffectType()))
+                                    .filter(potionModifier2 -> potionModifier2.getAmplifier() == maxAmplifier)
                                     .max(Comparator.comparing(potionModifier2 -> 20 * (potionModifier2.getTimer() - game.getTimer()) + potionModifier2.getDuration()))
                                     .ifPresent(potionModifier2 -> player.addPotionEffect(
                                             new PotionEffect(
@@ -218,12 +229,16 @@ public class PlayerWW implements IPlayerWW {
         AtomicBoolean find = new AtomicBoolean(false);
         new ArrayList<>(this.potionModifiers.keySet())
                 .stream()
-                .filter(potionModifier1 -> potionModifier1.getPotionEffectType().equals(potionModifier.getPotionEffectType()))
+                .filter(potionModifier1 -> potionModifier1.getPotionEffectType()
+                        .equals(potionModifier.getPotionEffectType()))
                 .forEach(potionModifier1 -> {
                     if(20 * (potionModifier1.getTimer() - game.getTimer()) +
-                            potionModifier1.getDuration()   < potionModifier.getDuration()){
+                            potionModifier1.getDuration()  < potionModifier.getDuration() &&
+                    potionModifier1.getAmplifier() == potionModifier.getAmplifier() ||
+                            potionModifier1.getAmplifier() < potionModifier.getAmplifier()){
 
-                        if(potionModifier1.getIdentifier().equals(potionModifier.getIdentifier())){
+                        if(potionModifier1.getIdentifier().equals(potionModifier.getIdentifier()) &&
+                                potionModifier1.getAmplifier() == potionModifier.getAmplifier()){
                             int id = this.potionModifiers.remove(potionModifier1);
                             if(id != -1){
                                 Bukkit.getScheduler().cancelTask(id);
@@ -247,7 +262,8 @@ public class PlayerWW implements IPlayerWW {
             this.potionModifiers.put(potionModifier,BukkitUtils.scheduleSyncDelayedTask(() -> {
                 if(!this.game.isState(StateGame.END)){
                     this.addPotionModifier(PotionModifier.remove(potionModifier.getPotionEffectType(),
-                            potionModifier.getIdentifier()));
+                            potionModifier.getIdentifier(),
+                            potionModifier.getAmplifier()));
                 }
             },potionModifier.getDuration()));
         }

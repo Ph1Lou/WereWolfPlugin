@@ -53,7 +53,7 @@ public class NaughtyLittleWolf extends RoleWereWolf {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onDay(DayEvent event) {
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.SPEED, "naughty"));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.SPEED, "naughty",0));
     }
 
     @Override
@@ -64,7 +64,7 @@ public class NaughtyLittleWolf extends RoleWereWolf {
             return;
         }
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.SPEED,"naughty"));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.SPEED,"naughty",0));
     }
 
 

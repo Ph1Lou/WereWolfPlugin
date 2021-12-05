@@ -66,7 +66,7 @@ public class Protector extends RoleWithLimitedSelectionDuration implements IAffe
         if (this.last != null) {
 
 
-            this.last.addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,"protector"));
+            this.last.addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,"protector",0));
             this.last.getRole().removeAuraModifier("protection");
             this.last.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.protector.no_longer_protected");
             this.last = null;

@@ -103,20 +103,14 @@ public class LoversManagement implements ILoverManager {
 
 
 	public void repartition() {
-
-		List<ILover> temp = new ArrayList<>(this.lovers); // sauvegarder les couples mis manuellement avant la repartition
-		this.lovers.clear();
 		Bukkit.getPluginManager().callEvent(new LoversRepartitionEvent());
+		List<ILover> temp = new ArrayList<>(this.lovers); // sauvegarder les couples mis manuellement avant la repartition pour pas les trier
+		this.lovers.clear();
 		this.autoLovers();
 		this.rangeLovers();
 		game.getConfig().setLoverCount(LoverType.LOVER.getKey(), this.lovers.size());
 		this.autoAmnesiacLovers();
 		this.autoCursedLovers();
-		temp.forEach(iLover -> {
-			if(iLover instanceof AbstractLover){
-				((AbstractLover)iLover).announceLovers();
-			}
-		});
 		this.lovers.addAll(temp);
 		this.lovers
 				.forEach(lovers -> {

@@ -44,7 +44,7 @@ public class CommandFallenAngel implements ICommand {
                 Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.ANGEL_DURATION.getKey())))));
 
         if (game.isDay(Day.NIGHT)) {
-            playerWW.addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,"fallen_angel"));
+            playerWW.addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,"fallen_angel",0));
 
         }
     }

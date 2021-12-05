@@ -59,8 +59,6 @@ public class Triple extends ListenerManager {
                     lover.addLover(playerWW);
 
                     register(false);
-
-                    Bukkit.broadcastMessage(game.translate("werewolf.random_events.triple.message"));
                 }
             }
         }, (long) (game.getRandom().nextDouble() * 10 * 60 * 20));

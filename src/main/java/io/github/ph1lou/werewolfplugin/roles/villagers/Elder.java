@@ -120,6 +120,6 @@ public class Elder extends RoleVillage implements IPower {
         super.disableAbilities();
 
         this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
-                "elder"));
+                "elder",0));
     }
 }

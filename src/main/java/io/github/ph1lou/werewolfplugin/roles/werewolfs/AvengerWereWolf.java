@@ -6,6 +6,7 @@ import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
@@ -162,5 +163,10 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
                     .build());
 
         });
+    }
+
+    @Override
+    public Aura getDefaultAura() {
+        return this.getPlayerWW().getMaxHealth() >= 10 ? Aura.DARK : Aura.NEUTRAL;
     }
 }

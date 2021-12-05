@@ -1,11 +1,13 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.minuskube.inv.ClickableItem;
+import io.github.ph1lou.werewolfapi.AuraModifier;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.Camp;
 import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.Sound;
@@ -96,6 +98,21 @@ public class BearTrainer extends RoleVillage {
 
         Bukkit.broadcastMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.role.bear_trainer.growling_message",
                 Formatter.format("&growling&",builder)));
+
+        int growl = event.getPlayerWWS().size();
+
+        this.removeAuraModifier("bear_trainer");
+
+        if(growl == 0){
+            this.addAuraModifier(new AuraModifier("bear_trainer", Aura.LIGHT,1,true));
+        }
+        else if(growl == 1){
+            this.addAuraModifier(new AuraModifier("bear_trainer", Aura.NEUTRAL,1,true));
+        }
+        else{
+            this.addAuraModifier(new AuraModifier("bear_trainer", Aura.DARK,1,true));
+        }
+
     }
 
     @Override

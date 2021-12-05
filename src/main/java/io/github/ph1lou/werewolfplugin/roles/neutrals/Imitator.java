@@ -24,7 +24,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -153,7 +152,8 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
                 Formatter.role(game.translate(role.getKey())));
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.thief.details");
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"imitator"));
+        this.getPlayerWW()
+                .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"imitator",0));
         Bukkit.getPluginManager().callEvent(new StealEvent(this.getPlayerWW(),
                 playerWW,
                 roleClone.getKey()));
@@ -198,6 +198,6 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
     public void disableAbilities() {
         super.disableAbilities();
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"imitator"));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"imitator",0));
     }
 }

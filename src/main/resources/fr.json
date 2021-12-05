@@ -812,6 +812,38 @@
         "description": "Pour voir la composition",
         "_": "§6================================\n"
       },
+      "aura": {
+        "command": "aura",
+        "messages": [
+          "Rôles à aura Lumineuse :",
+          "§cChien-Loup (Loup), Loup-Garou Mystique, Loup-Garou Grimeur",
+          "§bVoyante, Renard, Montreur d'Ours, Prêtresse, Conteuse, Jumeaux, Analyste, Astronome (la nuit), Soeurs, Salvateur, Citoyen, Idiot du Village, Simple Villageois",
+          "§aAnge, Charmeuse, Feu Follet, Joueur de Flûte, §6Cupidon",
+          "Rôles à aura Neutre :",
+          "§cLoup-Garou Perfide, Loup-Garou Amnésique, Loup-Garou Craintif, Loup-Garou Vengeur",
+          "§bChaman, Chasseur, Ancien, Oracle, Ermite, Garde, Détective, Petite Fille",
+          "§aImitateur, Barbare, §6Enfant Sauvage, Voleur, Trublion",
+          "Rôles à aura Obscure :",
+          "§cTous les autres Loups-Garous",
+          "§bAstronome (le jour), Sorcière, Corbeau, Bouc Émissaire, Chien-Loup (Chien)",
+          "§aAssassin, Rival, §6Loup-Garou Blanc§f",
+          "Cas particuliers :",
+          "Tuer un joueur (qui ne se fait pas ressusciter) donne une aura §bObscure",
+          "Se faire protéger par le §bSalvateur§f ou le §bGarde§f donne une aura §bLumineuse",
+          "Se faire maudire par le §bCorbeau§f donne une aura Obscure",
+          "Se faire ressusciter donne une aura §bNeutre",
+          "Le §cLoup-Garou Feutré§f obtient l'aura par défaut de son rôle de façade",
+          "Le §6Voleur§f et l'§6Imitateur§f obtiennent l'aura du joueur qu'ils volent",
+          "Le §bMontreur d’Ours§f change d’aura en fonction du nombre de “Grrrrr” (§b0§f / §71§f / §c2+§f)",
+          "Quand le §bRenard§f renifle un Loup-Garou, son aura devient Obscure",
+          "Quand le §bChaman§f et le §bChasseur§f utilisent leur pouvoir, leur aura devient Obscure",
+          "Quand l’§bAnalyste§f utilise son pouvoir d’analyse, son aura devient Obscure",
+          "Quand le §cLoup-Garou Vengeur§f atteint 10 ♥, son aura devient Obscure",
+          "La §bPrêtresse§f et l'§aAnge§f gardent TOUJOURS une aura Lumineuse",
+          "Le §cGrand Méchant Loup§f garde TOUJOURS une aura Obscure"],
+        "description": "Explication sur les auras",
+        "prefix": "Descriptif des Auras :"
+      },
       "doc": {
         "command": "doc",
         "description": "Pour avoir le doc des rôles",
@@ -1124,8 +1156,7 @@
         "name": "Trouple",
         "description": "Une troisième personne s'ajoute sur un couple",
         "lover_join": "§b&player&§f rejoint votre couple",
-        "join": "Vous rejoignez le couple constitué de §b&lovers&",
-        "message": "[§5Trouple§r] Une troisième personne vient de rejoindre un couple"
+        "join": "Vous rejoignez le couple constitué de §b&lovers&"
       },
       "drunken_werewolf": {
         "name": "Loup Garou Bourré",

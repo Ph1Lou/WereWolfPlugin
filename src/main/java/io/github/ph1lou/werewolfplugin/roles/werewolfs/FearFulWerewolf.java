@@ -10,14 +10,17 @@ import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Day;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
+import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.vote.VoteEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleWereWolf;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
@@ -62,6 +65,20 @@ public class FearFulWerewolf extends RoleWereWolf {
         event.setCancelled(true);
     }
 
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onUpdate(UpdatePlayerNameTagEvent event) {
+
+        if(!event.getPlayerUUID().equals(this.getPlayerUUID())){
+            return;
+        }
+
+        if(!this.getPlayerWW().isState(StatePlayer.DEATH)){
+            return;
+        }
+
+        event.setTabVisibility(false);
+    }
+
     @Override
     public void second() {
 
@@ -97,7 +114,7 @@ public class FearFulWerewolf extends RoleWereWolf {
         else{
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.remove(PotionEffectType.SPEED,
-                            "fearful"));
+                            "fearful",0));
         }
 
         if(number >= 4){
@@ -108,7 +125,7 @@ public class FearFulWerewolf extends RoleWereWolf {
         else{
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS,
-                            "fearful"));
+                            "fearful",0));
         }
 
         if(number <= 2){
@@ -126,7 +143,7 @@ public class FearFulWerewolf extends RoleWereWolf {
                                 "werewolf"));
                 this.getPlayerWW()
                         .addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
-                                "fearful"));
+                                "fearful",0));
             }
         }
         else{
@@ -135,7 +152,7 @@ public class FearFulWerewolf extends RoleWereWolf {
                             "werewolf"));
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
-                            "fearful"));
+                            "fearful",0));
         }
     }
 

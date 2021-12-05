@@ -153,7 +153,7 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
         event.setCancelled(true);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGH)
     public void onUpdate(UpdatePlayerNameTagEvent event) {
 
         IPlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID()).orElse(null);

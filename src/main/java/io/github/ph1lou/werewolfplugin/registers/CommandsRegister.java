@@ -37,6 +37,7 @@ import io.github.ph1lou.werewolfplugin.commands.roles.CommandWillOTheWisp;
 import io.github.ph1lou.werewolfplugin.commands.roles.CommandWitch;
 import io.github.ph1lou.werewolfplugin.commands.roles.CommandWolfDog;
 import io.github.ph1lou.werewolfplugin.commands.utilities.CommandAnonymeChat;
+import io.github.ph1lou.werewolfplugin.commands.utilities.CommandAura;
 import io.github.ph1lou.werewolfplugin.commands.utilities.CommandCompo;
 import io.github.ph1lou.werewolfplugin.commands.utilities.CommandDoc;
 import io.github.ph1lou.werewolfplugin.commands.utilities.CommandEnchantment;
@@ -71,6 +72,7 @@ public class CommandsRegister {
                         .addStateAccess(StatePlayer.ALIVE)
                         .setRequiredAbilityEnabled()
                         .addStateWW(StateGame.GAME));
+
 
         commandsRegister
                 .add(new CommandRegister("werewolf.name",
@@ -395,6 +397,14 @@ public class CommandsRegister {
                         .addArgNumbers(0));
 
         commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.commands.aura.command", new CommandAura())
+                        .setDescription("werewolf.menu.aura.description")
+                        .addArgNumbers(0));
+
+
+
+                commandsRegister
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.menu.enchantments.command", new CommandEnchantment())
                         .setDescription("werewolf.menu.enchantments.description")

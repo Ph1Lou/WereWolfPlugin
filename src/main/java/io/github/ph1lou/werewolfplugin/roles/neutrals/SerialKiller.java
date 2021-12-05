@@ -7,7 +7,6 @@ import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Aura;
-import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
 import io.github.ph1lou.werewolfapi.events.roles.serial_killer.SerialKillerEvent;
@@ -129,7 +128,7 @@ public class SerialKiller extends RoleNeutral implements IPower {
                 this.getPlayerWW(),
                 playerWW));
         if (hasPower()) {
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"serial_killer"));
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"serial_killer",0));
             setPower(false);
         }
         if (!isAbilityEnabled()) return;
@@ -144,7 +143,7 @@ public class SerialKiller extends RoleNeutral implements IPower {
         super.enableAbilities();
 
         if (this.hasPower()) {
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"serial_killer"));
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"serial_killer",0));
         }
 
     }

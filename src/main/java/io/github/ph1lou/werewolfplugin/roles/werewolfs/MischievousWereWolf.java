@@ -10,7 +10,6 @@ import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.UpdateNameTagEvent;
-import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayWillComeEvent;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
@@ -45,16 +44,6 @@ public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
 
     public MischievousWereWolf(WereWolfAPI api, IPlayerWW playerWW, String key) {
         super(api, playerWW, key);
-    }
-
-    @EventHandler
-    public void onUpdateNameTag(UpdatePlayerNameTagEvent event) {
-
-        if (!event.getPlayerUUID().equals(getPlayerUUID())) return;
-
-        if (event.isVisibility()) {
-            event.setVisibility(!invisible);
-        }
     }
 
     @EventHandler
@@ -123,7 +112,7 @@ public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
 
 
         if (isInvisible()) {
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INVISIBILITY,"mischievous"));
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INVISIBILITY,"mischievous",0));
             setInvisible(false);
             Bukkit.getPluginManager().callEvent(new InvisibleEvent(
                     this.getPlayerWW(),
@@ -250,7 +239,7 @@ public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
                 player.sendMessage(game.translate(
                         Prefix.GREEN.getKey() , "werewolf.role.little_girl.remove_armor_perform"));
                 this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INVISIBILITY,"mischievous"));
-                this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"werewolf"));
+                this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"werewolf",0));
 
                 setInvisible(true);
                 Bukkit.getPluginManager().callEvent(
@@ -261,7 +250,7 @@ public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
             player.sendMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.role.little_girl.visible"));
             this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"werewolf"));
 
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INVISIBILITY,"mischievous"));
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INVISIBILITY,"mischievous",0));
 
             setInvisible(false);
             Bukkit.getPluginManager().callEvent(
@@ -289,9 +278,9 @@ public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
 
         if (isInvisible()) {
             getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.little_girl.ability_disabled");
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"werewolf"));
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"werewolf",0));
 
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INVISIBILITY,"mischievous"));
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INVISIBILITY,"mischievous",0));
 
             setInvisible(false);
             Bukkit.getPluginManager().callEvent(

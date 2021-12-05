@@ -530,7 +530,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
 
         if (!choice.equals(AngelForm.FALLEN_ANGEL)) return;
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,"fallen_angel"));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,"fallen_angel",0));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -565,6 +565,6 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
     public void disableAbilities() {
         super.disableAbilities();
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,"fallen_angel"));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,"fallen_angel",0));
     }
 }

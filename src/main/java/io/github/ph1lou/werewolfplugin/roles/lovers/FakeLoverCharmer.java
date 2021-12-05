@@ -23,7 +23,7 @@ public class FakeLoverCharmer extends FakeLover{
                     .sendMessageWithKey(Prefix.YELLOW.getKey(),
                             "werewolf.role.charmer.annoucement",
                             Formatter.player(this.getLovers().stream()
-                                    .filter(playerWW1 -> playerWW1.equals(playerWW))
+                                    .filter(playerWW1 -> !playerWW1.equals(playerWW))
                                     .map(IPlayerWW::getName)
                                     .findFirst()
                                     .orElse(null)));
@@ -31,5 +31,9 @@ public class FakeLoverCharmer extends FakeLover{
         else{
             super.announceLovers(playerWW);
         }
+    }
+
+    public IPlayerWW getCharmer() {
+        return charmer;
     }
 }

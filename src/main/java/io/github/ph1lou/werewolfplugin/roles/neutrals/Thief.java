@@ -25,7 +25,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -167,7 +166,7 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
                 Formatter.role(game.translate(role.getKey())));
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.thief.details");
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,"thief"));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,"thief",0));
 
         Bukkit.getPluginManager().callEvent(new StealEvent(this.getPlayerWW(),
                 playerWW,
@@ -201,6 +200,6 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
             return;
         }
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,"thief"));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,"thief",0));
     }
 }

@@ -12,6 +12,8 @@ import io.github.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import io.github.ph1lou.werewolfapi.events.game.permissions.UpdateModeratorNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
 import io.github.ph1lou.werewolfapi.events.werewolf.RequestSeeWereWolfListEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IInvisible;
+import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -107,34 +109,39 @@ public class TabManager implements Listener {
             }
         }
 
-        UpdatePlayerNameTagEvent event = new UpdatePlayerNameTagEvent(uuid, sb.toString(), "", true);
-
-        UpdateModeratorNameTagEvent UpdateModeratorNameTagEvent =
-                new UpdateModeratorNameTagEvent(uuid, "", "");
-
-        Bukkit.getPluginManager().callEvent(event);
+        UpdateModeratorNameTagEvent UpdateModeratorNameTagEvent = new UpdateModeratorNameTagEvent(uuid);
 
         Bukkit.getPluginManager().callEvent(UpdateModeratorNameTagEvent);
 
         players.forEach(player1 -> set(player, player1,
-                event,
-                UpdateModeratorNameTagEvent));
+                UpdateModeratorNameTagEvent,
+                sb.toString()));
     }
 
-    private void set(Player target, Player recipient, UpdatePlayerNameTagEvent event1, UpdateModeratorNameTagEvent event2) {
+    private void set(Player player, Player target, UpdateModeratorNameTagEvent event2, String prefix) {
 
-        Scoreboard scoreboard = recipient.getScoreboard();
-        Team team = scoreboard.getTeam(target.getName());
+        UpdatePlayerNameTagEvent event1 = new UpdatePlayerNameTagEvent(player.getUniqueId(), target.getUniqueId(), prefix);
+
+        Bukkit.getPluginManager().callEvent(event1);
+
+        Scoreboard scoreboard = target.getScoreboard();
+        Team team = scoreboard.getTeam(player.getName());
         StringBuilder sb = new StringBuilder(event1.getPrefix());
 
-        if (team != null) {
-            UUID uuid1 = recipient.getUniqueId();
+        if(event1.isTabVisibility()){
+            VersionUtils.getVersionUtils().showPlayer(target,player);
+        }
+        else{
+            VersionUtils.getVersionUtils().hidePlayer(target,player);
+        }
 
+        if (team != null) {
+            UUID uuid1 = target.getUniqueId();
             RequestSeeWereWolfListEvent requestSeeWereWolfListEvent = new RequestSeeWereWolfListEvent(uuid1);
             Bukkit.getPluginManager().callEvent(requestSeeWereWolfListEvent);
 
             if (requestSeeWereWolfListEvent.isAccept()) {
-                AppearInWereWolfListEvent appearInWereWolfListEvent = new AppearInWereWolfListEvent(target.getUniqueId(), uuid1);
+                AppearInWereWolfListEvent appearInWereWolfListEvent = new AppearInWereWolfListEvent(player.getUniqueId(), uuid1);
                 Bukkit.getPluginManager().callEvent(appearInWereWolfListEvent);
                 if (appearInWereWolfListEvent.isAppear()) {
                     if (game.getConfig().isConfigActive(ConfigBase.RED_NAME_TAG.getKey())) {
@@ -170,6 +177,20 @@ public class TabManager implements Listener {
         }
     }
 
+    @EventHandler(priority = EventPriority.LOW)
+    public void onUpdateNameTag(UpdatePlayerNameTagEvent event) {
+
+        game.getPlayerWW(event.getPlayerUUID())
+                .ifPresent(playerWW -> {
+                    IRole role = playerWW.getRole();
+                    if(role instanceof IInvisible){
+                        if (event.isVisibility()) {
+                            event.setVisibility(!((IInvisible)role).isInvisible());
+                        }
+                    }
+                });
+    }
+
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         this.unregisterPlayer(event.getPlayer());
@@ -184,7 +205,6 @@ public class TabManager implements Listener {
     public void onStop(StopEvent event) {
         Bukkit.getOnlinePlayers().forEach(this::registerPlayer);
     }
-
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onUpdate(UpdatePlayerNameTagEvent event) {

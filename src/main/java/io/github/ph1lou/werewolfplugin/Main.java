@@ -18,6 +18,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -32,6 +33,11 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
     @Override
     public InventoryManager getInvManager() {
         return invManager;
+    }
+
+    @Override
+    public List<GameReview> loadPreviousGame() {
+        return null; //todo
     }
 
     @Override

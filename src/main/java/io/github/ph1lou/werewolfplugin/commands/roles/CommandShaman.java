@@ -1,9 +1,11 @@
 package io.github.ph1lou.werewolfplugin.commands.roles;
 
+import io.github.ph1lou.werewolfapi.AuraModifier;
 import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.events.roles.shaman.ShamanEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
@@ -65,6 +67,7 @@ public class CommandShaman implements ICommand {
         }
 
         playerWW.removePlayerMaxHealth(2);
+        playerWW.getRole().addAuraModifier(new AuraModifier("shaman", Aura.DARK,1,false));
 
         if (game.getRandom().nextBoolean()) {
             playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.shaman.victim_name",

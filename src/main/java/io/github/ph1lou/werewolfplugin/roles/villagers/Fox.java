@@ -2,12 +2,14 @@ package io.github.ph1lou.werewolfplugin.roles.villagers;
 
 
 import fr.minuskube.inv.ClickableItem;
+import io.github.ph1lou.werewolfapi.AuraModifier;
 import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.Camp;
 import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.Sound;
@@ -205,6 +207,9 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
                     this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.fox.werewolf",
                             Formatter.player(playerWW.getName()));
                     this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.fox.warn");
+
+                    this.addAuraModifier(new AuraModifier("fox", Aura.DARK,1,false));
+
                 } else {
                     this.getPlayerWW().sendMessageWithKey(
                             Prefix.YELLOW.getKey() , "werewolf.role.fox.not_werewolf",

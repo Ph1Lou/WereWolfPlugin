@@ -12,13 +12,14 @@ import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.lovers.LoverDeathEvent;
-import io.github.ph1lou.werewolfapi.events.lovers.LoversRepartitionEvent;
+import io.github.ph1lou.werewolfapi.events.lovers.RevealLoversEvent;
 import io.github.ph1lou.werewolfapi.events.roles.charmer.CharmedDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.charmer.CharmerGetEffectDeathEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleNeutral;
 import io.github.ph1lou.werewolfapi.utils.Utils;
+import io.github.ph1lou.werewolfplugin.roles.lovers.AbstractLover;
 import io.github.ph1lou.werewolfplugin.roles.lovers.FakeLoverCharmer;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -164,7 +165,7 @@ public class Charmer extends RoleNeutral implements IPower, IAffectedPlayers {
     }
 
     @EventHandler
-    public void onLoverDurationEnd(LoversRepartitionEvent event){
+    public void onLoverDurationEnd(RevealLoversEvent event){
 
         if(this.playerWW==null){
             this.setPower(false);
@@ -185,12 +186,18 @@ public class Charmer extends RoleNeutral implements IPower, IAffectedPlayers {
 
             FakeLoverCharmer fakeLover = new FakeLoverCharmer(game,new ArrayList<>(Arrays.asList(this.getPlayerWW(), playerWW)), this.getPlayerWW());
             game.getLoversManager().addLover(fakeLover);
-            fakeLover.announceLovers(playerWW);
+            fakeLover.announceLovers();
         }
         else{
             this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey(),
                     "werewolf.role.charmer.annoucement",
                     Formatter.player(this.playerWW.getName()));
+
+            this.getPlayerWW().getLovers().stream()
+                    .filter(iLover -> iLover instanceof FakeLoverCharmer)
+                    .map(iLover -> (FakeLoverCharmer)iLover)
+                    .filter(fakeLoverCharmer -> fakeLoverCharmer.getCharmer().equals(this.getPlayerWW()))
+                    .forEach(AbstractLover::announceLovers);
         }
     }
 

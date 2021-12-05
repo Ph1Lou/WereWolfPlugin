@@ -10,14 +10,17 @@ import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Day;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
+import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.vote.VoteEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
@@ -51,6 +54,20 @@ public class Hermit extends RoleVillage {
         }
 
         event.setCancelled(true);
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onUpdate(UpdatePlayerNameTagEvent event) {
+
+        if(!event.getPlayerUUID().equals(this.getPlayerUUID())){
+            return;
+        }
+
+        if(!this.getPlayerWW().isState(StatePlayer.DEATH)){
+            return;
+        }
+
+        event.setTabVisibility(false);
     }
 
     @EventHandler
@@ -95,7 +112,7 @@ public class Hermit extends RoleVillage {
         else{
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.remove(PotionEffectType.SPEED,
-                            "hermit"));
+                            "hermit",0));
         }
 
         if(number >= 5){
@@ -105,15 +122,15 @@ public class Hermit extends RoleVillage {
 
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
-                            "hermit"));
+                            "hermit",0));
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
-                            "hermit"));
+                            "hermit",0));
         }
         else{
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS,
-                            "hermit"));
+                            "hermit",0));
             
             if(game.isDay(Day.DAY)){
                 this.getPlayerWW()
@@ -121,7 +138,7 @@ public class Hermit extends RoleVillage {
                                 "hermit"));
                 this.getPlayerWW()
                         .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
-                                "hermit"));
+                                "hermit",0));
             }
             else{
                 this.getPlayerWW()
@@ -129,7 +146,7 @@ public class Hermit extends RoleVillage {
                                 "hermit"));
                 this.getPlayerWW()
                         .addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
-                                "hermit"));
+                                "hermit",0));
             }
         }
     }

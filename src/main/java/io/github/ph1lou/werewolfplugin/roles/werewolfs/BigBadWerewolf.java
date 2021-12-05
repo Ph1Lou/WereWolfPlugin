@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
@@ -36,7 +37,7 @@ public class BigBadWerewolf extends RoleWereWolf {
         super.disableAbilities();
         this.getPlayerWW()
                 .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
-                        "big_bad_werewolf"));
+                        "big_bad_werewolf",0));
 
     }
 
@@ -44,7 +45,7 @@ public class BigBadWerewolf extends RoleWereWolf {
     public void onDeath(FinalDeathEvent event){
         if(event.getPlayerWW().getRole().isWereWolf()){
             this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
-                    "big_bad_werewolf"));
+                    "big_bad_werewolf",0));
             if(!this.getPlayerWW().isState(StatePlayer.DEATH)){
                 this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE.getKey(),
                         "werewolf.role.big_bad_werewolf.werewolf_death");
@@ -57,5 +58,10 @@ public class BigBadWerewolf extends RoleWereWolf {
         if(this.isAbilityEnabled()){
             this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"big_bad_werewolf"));
         }
+    }
+
+    @Override
+    public Aura getAura() {
+        return Aura.DARK; //toujours dark
     }
 }

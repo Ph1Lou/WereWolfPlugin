@@ -51,7 +51,10 @@ public class Comedian extends RoleWithLimitedSelectionDuration {
     @EventHandler
     public void onDay(DayEvent event) {
 
-        getLastMask().ifPresent(comedianMask -> this.getPlayerWW().addPotionModifier(PotionModifier.remove(comedianMask.getPotionEffectType(),"comedian")));
+        getLastMask().ifPresent(comedianMask -> this.getPlayerWW()
+                .addPotionModifier(PotionModifier.remove(comedianMask.getPotionEffectType(),
+                        "comedian",
+                        0)));
 
         if (getMasks().size() >= 3) return;
 

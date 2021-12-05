@@ -492,15 +492,24 @@ public class PlayerListener implements Listener {
 				announcementDeathEvent.getTargetPlayer().sendMessageWithKey("werewolf.utils.bar");
 				announcementDeathEvent.getTargetPlayer().sendMessageWithKey(Prefix.RED.getKey(),announcementDeathEvent.getFormat(),formatters);
 				announcementDeathEvent.getTargetPlayer().sendMessageWithKey("werewolf.utils.bar");
+				announcementDeathEvent.getTargetPlayer().sendSound(Sound.AMBIENCE_THUNDER);
 			}
-
 		});
+
+		event
+				.getPlayerWW()
+				.getLastKiller()
+				.ifPresent(playerWW1 -> playerWW1.getRole()
+						.addAuraModifier(new AuraModifier("killer", Aura.DARK, 1, false)));
 
 		game.getModerationManager().getModerators().stream()
 				.filter(uuid -> !game.getPlayerWW(uuid).isPresent())
 				.map(Bukkit::getPlayer)
 				.filter(Objects::nonNull)
-				.forEach(player1 -> player1.sendMessage(this.sendOriginalDeathMessage(playerWW)));
+				.forEach(player1 -> {
+					player1.sendMessage(this.sendOriginalDeathMessage(playerWW));
+					Sound.AMBIENCE_THUNDER.play(player1);
+				});
 
 		Bukkit.getConsoleSender().sendMessage(this.sendOriginalDeathMessage(playerWW));
 
@@ -518,8 +527,7 @@ public class PlayerListener implements Listener {
 				.filter(Objects::nonNull)
 				.forEach(itemStack -> world.dropItem(playerWW.getSpawn(), itemStack));
 
-		Bukkit.getOnlinePlayers()
-				.forEach(Sound.AMBIENCE_THUNDER::play);
+
 
 		if (player != null) {
 

@@ -36,7 +36,12 @@ public class CatEyes extends ListenerManager {
             register = false;
             HandlerList.unregisterAll(this);
 
-            this.getGame().getPlayersWW().forEach(playerWW -> playerWW.addPotionModifier(PotionModifier.remove(PotionEffectType.NIGHT_VISION,"cat_eyes")));
+            this.getGame().getPlayersWW()
+                    .forEach(playerWW -> playerWW
+                            .addPotionModifier(
+                                    PotionModifier.remove(PotionEffectType.NIGHT_VISION,
+                                            "cat_eyes",
+                                            0)));
         }
     }
 }
