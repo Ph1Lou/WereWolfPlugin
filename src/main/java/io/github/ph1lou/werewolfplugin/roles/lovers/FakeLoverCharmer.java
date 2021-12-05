@@ -9,7 +9,7 @@ import java.util.List;
 
 public class FakeLoverCharmer extends FakeLover{
 
-    private final IPlayerWW charmer;
+    private IPlayerWW charmer;
 
     public FakeLoverCharmer(WereWolfAPI game, List<IPlayerWW> lovers, IPlayerWW charmer) {
         super(game, lovers);
@@ -21,7 +21,7 @@ public class FakeLoverCharmer extends FakeLover{
         if(playerWW.equals(this.charmer)){
             this.charmer
                     .sendMessageWithKey(Prefix.YELLOW.getKey(),
-                            "werewolf.role.charmer.annoucement",
+                            "werewolf.role.charmer.announcement",
                             Formatter.player(this.getLovers().stream()
                                     .filter(playerWW1 -> !playerWW1.equals(playerWW))
                                     .map(IPlayerWW::getName)
@@ -31,6 +31,14 @@ public class FakeLoverCharmer extends FakeLover{
         else{
             super.announceLovers(playerWW);
         }
+    }
+
+    @Override
+    public boolean swap(IPlayerWW playerWW, IPlayerWW playerWW1) {
+        if(playerWW.equals(this.charmer)){
+            this.charmer = playerWW1;
+        }
+        return super.swap(playerWW, playerWW1);
     }
 
     public IPlayerWW getCharmer() {

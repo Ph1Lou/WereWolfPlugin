@@ -13,6 +13,7 @@ import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.vote.VoteEvent;
+import io.github.ph1lou.werewolfapi.events.lovers.AnnouncementLoverDeathEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleWereWolf;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import org.bukkit.Bukkit;
@@ -77,6 +78,13 @@ public class FearFulWerewolf extends RoleWereWolf {
         }
 
         event.setTabVisibility(false);
+    }
+
+    @EventHandler
+    public void onLoverDeathMessage(AnnouncementLoverDeathEvent event){
+        if(event.getPlayerWW().equals(this.getPlayerWW())){
+            event.setCancelled(true);
+        }
     }
 
     @Override

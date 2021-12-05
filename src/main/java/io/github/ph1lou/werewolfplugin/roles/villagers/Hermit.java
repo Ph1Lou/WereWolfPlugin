@@ -13,6 +13,7 @@ import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.vote.VoteEvent;
+import io.github.ph1lou.werewolfapi.events.lovers.AnnouncementLoverDeathEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import org.bukkit.Bukkit;
@@ -54,6 +55,13 @@ public class Hermit extends RoleVillage {
         }
 
         event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onLoverDeathMessage(AnnouncementLoverDeathEvent event){
+        if(event.getPlayerWW().equals(this.getPlayerWW())){
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGH)

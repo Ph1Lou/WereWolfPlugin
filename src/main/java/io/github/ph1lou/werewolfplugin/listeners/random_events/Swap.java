@@ -74,6 +74,19 @@ public class Swap extends ListenerManager {
                     roles2.recoverPower();
                     roles1.recoverPotionEffects();
                     roles2.recoverPotionEffects();
+                    playerWW1.getLovers().forEach(iLover -> {
+                        if(iLover.swap(playerWW1,playerWW2)){
+                            playerWW2.addLover(iLover);
+                            playerWW1.removeLover(iLover);
+                        }
+                    });
+                    playerWW2.getLovers().forEach(iLover -> {
+                        if(iLover.swap(playerWW2,playerWW1)){
+                            playerWW1.addLover(iLover);
+                            playerWW2.removeLover(iLover);
+                        }
+                    });
+
                 }
             }
         }, (long) (game.getRandom().nextDouble() * Math.min(game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST.getKey()),

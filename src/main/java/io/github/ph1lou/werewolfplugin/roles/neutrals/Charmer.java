@@ -13,6 +13,7 @@ import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.lovers.LoverDeathEvent;
 import io.github.ph1lou.werewolfapi.events.lovers.RevealLoversEvent;
+import io.github.ph1lou.werewolfapi.events.random_events.SwapEvent;
 import io.github.ph1lou.werewolfapi.events.roles.charmer.CharmedDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.charmer.CharmerGetEffectDeathEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
@@ -190,7 +191,7 @@ public class Charmer extends RoleNeutral implements IPower, IAffectedPlayers {
         }
         else{
             this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey(),
-                    "werewolf.role.charmer.annoucement",
+                    "werewolf.role.charmer.announcement",
                     Formatter.player(this.playerWW.getName()));
 
             this.getPlayerWW().getLovers().stream()

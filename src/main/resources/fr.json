@@ -520,10 +520,10 @@
         "before_count_down": "Votre charmé est mort avant la fin du compte à rebours, vous perdez 3 coeurs permanents",
         "lover_death": "Vous gagnez l'effet §bVitesse§f et 10 coeurs d'absorption suite à la mort du couple",
         "perform": "Vous venez de charmer &player&",
-        "annoucement": "Votre charmé &player& vient d'être informé de son couple"
+        "announcement": "Votre charmé &player& vient d'être informé de son couple"
       },
       "fearful_werewolf": {
-        "display": "Loup Garou craintif",
+        "display": "Loup Garou Craintif",
         "description": "Vous disposez d'effets dépendant du nombre de loups garous présent à &number& blocs autour de vous. Vous ne pouvez pas voter, et votre mort ne sera pas annoncée dans le chat global",
         "effects": "4 LG ou plus : Faiblesse, 2 LG ou moins : Resistance le Jour, Force la nuit, Seul : Vitesse"
       },
@@ -817,16 +817,16 @@
         "messages": [
           "Rôles à aura Lumineuse :",
           "§cChien-Loup (Loup), Loup-Garou Mystique, Loup-Garou Grimeur",
-          "§bVoyante, Renard, Montreur d'Ours, Prêtresse, Conteuse, Jumeaux, Analyste, Astronome (la nuit), Soeurs, Salvateur, Citoyen, Idiot du Village, Simple Villageois",
+          "§bVoyante, Renard, Montreur d'Ours, Tombeur, Bibliothécaire, Trappeur, Prêtresse, Conteuse, Jumeaux, Analyste, Astronome (la nuit), Soeurs, Salvateur, Citoyen, Idiot du Village, Simple Villageois",
           "§aAnge, Charmeuse, Feu Follet, Joueur de Flûte, §6Cupidon",
           "Rôles à aura Neutre :",
           "§cLoup-Garou Perfide, Loup-Garou Amnésique, Loup-Garou Craintif, Loup-Garou Vengeur",
-          "§bChaman, Chasseur, Ancien, Oracle, Ermite, Garde, Détective, Petite Fille",
+          "§bChaman, Comédien, Frère Siamois, Chasseur, Ancien, Oracle, Ermite, Garde, Détective, Petite Fille",
           "§aImitateur, Barbare, §6Enfant Sauvage, Voleur, Trublion",
           "Rôles à aura Obscure :",
           "§cTous les autres Loups-Garous",
           "§bAstronome (le jour), Sorcière, Corbeau, Bouc Émissaire, Chien-Loup (Chien)",
-          "§aAssassin, Rival, §6Loup-Garou Blanc§f",
+          "§aAssassin, Rival, Succube, Tueur en Série, §6Loup-Garou Blanc§f",
           "Cas particuliers :",
           "Tuer un joueur (qui ne se fait pas ressusciter) donne une aura §bObscure",
           "Se faire protéger par le §bSalvateur§f ou le §bGarde§f donne une aura §bLumineuse",

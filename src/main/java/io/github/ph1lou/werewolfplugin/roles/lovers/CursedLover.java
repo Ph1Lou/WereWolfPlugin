@@ -35,7 +35,6 @@ public class CursedLover implements ILover, Listener {
     private boolean power2 = false;
     private boolean death = false;
 
-
     public CursedLover(WereWolfAPI game, IPlayerWW cursedLover1, IPlayerWW cursedLover2) {
         this.game = game;
         this.cursedLover1 = cursedLover1;
@@ -44,7 +43,7 @@ public class CursedLover implements ILover, Listener {
     }
 
     public IPlayerWW getOtherLover(IPlayerWW playerWW) {
-        return playerWW.equals(cursedLover1) ? cursedLover2 : cursedLover1;
+        return playerWW.equals(this.cursedLover1) ? this.cursedLover2 : this.cursedLover1;
     }
 
     public List<? extends IPlayerWW> getLovers() {
@@ -54,11 +53,11 @@ public class CursedLover implements ILover, Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onFinalDeath(FinalDeathEvent event) {
 
-        if (death) return;
+        if (this.death) return;
 
         if (!getLovers().contains(event.getPlayerWW())) return;
 
-        death = true;
+        this.death = true;
         IPlayerWW playerWW1 = getOtherLover(event.getPlayerWW());
 
         Bukkit.getPluginManager().callEvent(
@@ -68,24 +67,24 @@ public class CursedLover implements ILover, Listener {
 
         playerWW1.removePlayerMaxHealth(2);
 
-        game.getConfig().removeOneLover(LoverType.CURSED_LOVER.getKey());
+        this.game.getConfig().removeOneLover(LoverType.CURSED_LOVER.getKey());
     }
 
     public void announceCursedLoversOnJoin(IPlayerWW playerWW) {
 
-        if (cursedLover1.equals(playerWW)) {
-            if (!power1) {
+        if (this.cursedLover1.equals(playerWW)) {
+            if (!this.power1) {
                 playerWW.addPlayerMaxHealth(2);
             }
-            power1 = true;
+            this.power1 = true;
             playerWW.sendMessageWithKey("werewolf.role.cursed_lover.description",
                     Formatter.player(cursedLover2.getName()));
             playerWW.sendSound(Sound.SHEEP_SHEAR);
-        } else if (cursedLover2.equals(playerWW)) {
-            if (!power2) {
+        } else if (this.cursedLover2.equals(playerWW)) {
+            if (!this.power2) {
                 playerWW.addPlayerMaxHealth(2);
             }
-            power2 = true;
+            this.power2 = true;
             playerWW.sendMessageWithKey("werewolf.role.cursed_lover.description",
                     Formatter.player(cursedLover1.getName()));
             playerWW.sendSound(Sound.SHEEP_SHEAR);
@@ -95,7 +94,7 @@ public class CursedLover implements ILover, Listener {
     @EventHandler
     private void onPlayerDamage(EntityDamageEvent event) {
 
-        if (death) return;
+        if (this.death) return;
 
         if (!event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) return;
 
@@ -151,7 +150,7 @@ public class CursedLover implements ILover, Listener {
 
         if (event.isCancelled()) return;
 
-        if (death) return;
+        if (this.death) return;
 
         event.setCancelled(true);
     }
@@ -163,7 +162,7 @@ public class CursedLover implements ILover, Listener {
 
     @Override
     public boolean isAlive() {
-        return !death;
+        return !this.death;
     }
 
     @Override
@@ -178,14 +177,14 @@ public class CursedLover implements ILover, Listener {
 
         if (this.getLovers().contains(playerWW1)) return false;
 
-        if (death) return false;
+        if (this.death) return false;
 
-        if (cursedLover1.equals(playerWW)) {
-            cursedLover1 = playerWW1;
-            power1 = false;
+        if (this.cursedLover1.equals(playerWW)) {
+            this.cursedLover1 = playerWW1;
+            this.power1 = false;
         } else {
-            cursedLover2 = playerWW1;
-            power2 = false;
+            this.cursedLover2 = playerWW1;
+            this.power2 = false;
         }
 
         for (IPlayerWW playerWW2 : getLovers()) {

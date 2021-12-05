@@ -15,6 +15,7 @@ import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.permissions.UpdateModeratorNameTagEvent;
 import io.github.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
 import io.github.ph1lou.werewolfapi.events.lovers.AmnesiacLoverDeathEvent;
+import io.github.ph1lou.werewolfapi.events.lovers.AnnouncementLoverDeathEvent;
 import io.github.ph1lou.werewolfapi.events.lovers.AroundLoverEvent;
 import io.github.ph1lou.werewolfapi.events.lovers.RevealAmnesiacLoversEvent;
 import io.github.ph1lou.werewolfapi.utils.Utils;
@@ -29,6 +30,7 @@ import org.bukkit.event.Listener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class AmnesiacLover implements ILover, Listener {
@@ -57,20 +59,36 @@ public class AmnesiacLover implements ILover, Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onFinalDeath(FinalDeathEvent event) {
 
-        if (death) return;
+        if (this.death) return;
 
         if (!getLovers().contains(event.getPlayerWW())) return;
 
-        death = true;
+        this.death = true;
 
         HandlerList.unregisterAll(this);
 
-        if (!find) return;
+        if (!this.find) return;
 
         IPlayerWW playerWW1 = getOtherLover(event.getPlayerWW());
 
-        Bukkit.broadcastMessage(game.translate("werewolf.role.lover.lover_death",
-                Formatter.player(playerWW1.getName())));
+        game.getPlayersWW().forEach(playerWW -> {
+            AnnouncementLoverDeathEvent event1 = new AnnouncementLoverDeathEvent(event.getPlayerWW(),playerWW,"werewolf.role.lover.lover_death");
+            Bukkit.getPluginManager().callEvent(event1);
+
+            if(!event1.isCancelled()){
+                playerWW.sendMessageWithKey("werewolf.role.lover.lover_death",Formatter.player(playerWW1.getName()));
+            }
+
+        });
+
+        game.getModerationManager().getModerators().stream()
+                .filter(uuid -> !game.getPlayerWW(uuid).isPresent())
+                .map(Bukkit::getPlayer)
+                .filter(Objects::nonNull)
+                .forEach(player1 -> player1.sendMessage(game.translate("werewolf.role.lover.lover_death",Formatter.player(playerWW1.getName()))));
+
+        Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.role.lover.lover_death",Formatter.player(playerWW1.getName())));
+
         Bukkit.getPluginManager().callEvent(
                 new AmnesiacLoverDeathEvent(event.getPlayerWW(), playerWW1));
         game.death(playerWW1);
