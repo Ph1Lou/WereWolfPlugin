@@ -36,7 +36,8 @@ public class Analyst extends RoleWithLimitedSelectionDuration implements ILimite
                         Formatter.timer(
                                 Utils.conversion(
                                         Math.max(0,
-                                                Math.max(0,game.getConfig().getTimerValue(TimerBase.ROLE_DURATION.getKey()))+
+                                                Math.max(0,
+                                                        game.getConfig().getTimerValue(TimerBase.ROLE_DURATION.getKey()))+
                                                         game.getConfig().getTimerValue(TimerBase.ANALYSE_DURATION.getKey()))))))
                 .build();
     }

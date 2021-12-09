@@ -120,9 +120,9 @@ public class Twin extends RoleVillage {
 
         this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey(),"werewolf.role.twin.death", Formatter.player(event.getPlayerWW().getName()));
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,600,0,"twin"));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,6000,0,"twin"));
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.SPEED,600,0,"twin"));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.SPEED,6000,0,"twin"));
 
     }
 

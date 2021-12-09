@@ -573,7 +573,8 @@
         "call_back": "Un §bAnalyste§f vient d'observer vos effets",
         "call_back_no_villager": "L'§bAnalyste§f &player& vient d'observer vos effets",
         "command_see": "observer",
-        "command_analyse": "analyser"
+        "command_analyse": "analyser",
+        "not_affected": "Vous ne pouvez effectuer cette commande que sur un joueur observé precedemment via §b/ww oberver§f"
       }
     },
     "vote": {

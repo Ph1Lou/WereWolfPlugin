@@ -14,8 +14,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -29,7 +27,7 @@ public class CommandAnalystAnalyse implements ICommand {
 
         if (playerWW == null) return;
 
-        if(playerWW.getRole() instanceof Analyst){
+        if(!(playerWW.getRole() instanceof Analyst)){
             return;
         }
 
@@ -49,20 +47,24 @@ public class CommandAnalystAnalyse implements ICommand {
             return;
         }
 
-        List<PotionEffectType> effects = Arrays.asList(PotionEffectType.INCREASE_DAMAGE,
-                PotionEffectType.DAMAGE_RESISTANCE, PotionEffectType.WEAKNESS, PotionEffectType.SPEED, PotionEffectType.INVISIBILITY, PotionEffectType.ABSORPTION);
+        if(!analyst.getAffectedPlayers().contains(playerWW1)){
+            playerWW.sendMessageWithKey(Prefix.ORANGE.getKey(),"werewolf.role.analyst.not_affected");
+            return;
+        }
 
         if(!analyst.isPower2()){
             playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.power");
             return;
         }
 
+        analyst.setPower2(false);
+
 
         AnalystExtraDetailsEvent analystEvent = new AnalystExtraDetailsEvent(playerWW,playerWW1, playerWW1.getPotionModifiers()
                 .stream()
                 .filter(PotionModifier::isAdd)
                 .map(PotionModifier::getPotionEffectType)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toSet()));
 
         Bukkit.getPluginManager().callEvent(analystEvent);
 
