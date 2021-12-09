@@ -27,6 +27,7 @@ public class Analyst extends RoleWithLimitedSelectionDuration implements ILimite
 
     public Analyst(WereWolfAPI game, IPlayerWW playerWW, String key) {
         super(game, playerWW, key);
+        this.setPower(false);
     }
 
     @Override

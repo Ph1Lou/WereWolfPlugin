@@ -559,7 +559,7 @@
         "timer": "Dans &timer&, vous obtenez 3 pseudos dont celui de vos Jumeaux.",
         "twin_list": "Votre jumeau est dans la liste suivante : &list&",
         "too_near": "Vous êtes trop proche de votre Jumeau pour voir des informations",
-        "list_near": "Voici la liste des joueurs à moins de &numbers& blocs de votre Jumeau, &list&",
+        "list_near": "Voici la liste des joueurs à moins de &number& blocs de votre Jumeau, &list&",
         "role_near": "Un joueur situé à moins de &number& blocs de votre Jumeau est §b&role&§f",
         "death": "Votre Jumeau &player& est mort, de rage vous disposez de cinq minutes de Force et de Vitesse"
       },

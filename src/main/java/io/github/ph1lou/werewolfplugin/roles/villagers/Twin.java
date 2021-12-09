@@ -160,8 +160,8 @@ public class Twin extends RoleVillage {
                             .filter(playerWW1 -> {
                                 Location location = playerWW1.getLocation();
 
-                                return playerLocation.getWorld() == location.getWorld() &&
-                                        playerLocation.distance(location) < game.getConfig().getDistanceTwin();
+                                return twinLocation.getWorld() == location.getWorld() &&
+                                        twinLocation.distance(location) < game.getConfig().getDistanceTwin();
 
                             })
                             .collect(Collectors.toList());
