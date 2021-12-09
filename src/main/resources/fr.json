@@ -530,7 +530,7 @@
       "hermit": {
         "display": "Ermite",
         "description": "Vous disposez d'effets dépendant du nombre de personnes présent à &number& blocs autour de vous. Vous ne pouvez pas voter, et votre mort ne sera pas annoncée dans le chat global",
-        "effects": "5 personnes ou plus : Faiblesse sinon Resistance le Jour, Force la nuit, Seul : Vitesse"
+        "effects": "5 personnes ou plus : Faiblesse sinon Resistance la Nuit, Force le Jour, Seul : Vitesse"
       },
       "big_bad_werewolf": {
         "display": "Grand Méchant Loup",
@@ -546,6 +546,34 @@
         "should_be_invisible": "Vous devez être invisible pour utiliser cette commande",
         "role_reveal": "Un joueur situé à moins de §b&number&§f blocs est §b&role&",
         "use_tp": "Vous pouvez encore utiliser §b&number&§f fois votre commande §b/a tp§f "
+      },
+      "howling_werewolf": {
+        "display": "Loup Garou Hurleur",
+        "description": "À chaque début de nuit, vous hurlez si il y a plus de 5 joueurs à &number& blocs de vous. En fonction du nombre de non Loup qui ont entendu votre cri, vous gagnez des slots de coeurs supplémentaires pendant cinq minutes. [2 ou 3 = 1♥ / 4 ou 5 = 2♥ / 6+ = 3♥]",
+        "message": "Il y avait §b&number&§f personne(s) non Loup Garou autour de vous. Vous gagnez ainsi §b&heart&§f coeurs en plus pendant 5 minutes"
+      },
+      "twin": {
+        "display": "Jumeau",
+        "description": "Au début de Nuit, si vous êtes à plus de §b&number2&§f blocs de votre Jumeau, vous recevez la liste des joueurs à moins de §b&number&§f blocs de votre Jumeau OU le rôle d’un des joueurs de cette liste.",
+        "effects": "Lorsque votre Jumeau meurt, vous obtenez cinq minutes de Force et de Vitesse",
+        "timer": "Dans &timer&, vous obtenez 3 pseudos dont celui de vos Jumeaux.",
+        "twin_list": "Votre jumeau est dans la liste suivante : &list&",
+        "too_near": "Vous êtes trop proche de votre Jumeau pour voir des informations",
+        "list_near": "Voici la liste des joueurs à moins de &numbers& blocs de votre Jumeau, &list&",
+        "role_near": "Un joueur situé à moins de &number& blocs de votre Jumeau est §b&role&§f",
+        "death": "Votre Jumeau &player& est mort, de rage vous disposez de cinq minutes de Force et de Vitesse"
+      },
+      "analyst": {
+        "display": "Analyste",
+        "description": "Dans &timer&, vous pourrez observer (cinq fois maximum) un joueur le matin pour savoir s’il possède ou non un des effets suivants : Force, Resistance, Faiblesse, Vitesse, Invisibilité, Absorption. Il peut ensuite analyser le joueur (1x par partie) pour connaître précisément le(s) effet(s) qu’il possède. Le joueur analysé en sera informé et s’il n’est pas membre du Village, il obtiendra le pseudo de l’Analyste.",
+        "message_see": "Vous pouvez observer encore &number& joueur(s) §b/ww observer§r vous avez §b&timer&",
+        "has_effects": "Le joueur §b&player&§f §aa un des effets suivants§f : Force, Resistance, Faiblesse, Vitesse, Invisibilité, Absorption",
+        "no_effects": "Le joueur §b&player&§f n'a §cpas un des effets suivants§f : Force, Resistance, Faiblesse, Vitesse, Invisibilité, Absorption",
+        "effects": "Le joueur §b&player&§f a les effets suivants : &list&",
+        "call_back": "Un §bAnalyste§f vient d'observer vos effets",
+        "call_back_no_villager": "L'§bAnalyste§f &player& vient d'observer vos effets",
+        "command_see": "observer",
+        "command_analyse": "analyser"
       }
     },
     "vote": {
@@ -817,7 +845,7 @@
         "messages": [
           "Rôles à aura Lumineuse :",
           "§cChien-Loup (Loup), Loup-Garou Mystique, Loup-Garou Grimeur",
-          "§bVoyante, Renard, Montreur d'Ours, Tombeur, Bibliothécaire, Trappeur, Prêtresse, Conteuse, Jumeaux, Analyste, Astronome (la nuit), Soeurs, Salvateur, Citoyen, Idiot du Village, Simple Villageois",
+          "§bVoyante, Renard, Montreur d'Ours, Tombeur, Bibliothécaire, Trappeur, Prêtresse, Jumeaux, Analyste, Soeurs, Salvateur, Citoyen, Idiot du Village, Simple Villageois",
           "§aAnge, Charmeuse, Feu Follet, Joueur de Flûte, §6Cupidon",
           "Rôles à aura Neutre :",
           "§cLoup-Garou Perfide, Loup-Garou Amnésique, Loup-Garou Craintif, Loup-Garou Vengeur",
@@ -825,7 +853,7 @@
           "§aImitateur, Barbare, §6Enfant Sauvage, Voleur, Trublion",
           "Rôles à aura Obscure :",
           "§cTous les autres Loups-Garous",
-          "§bAstronome (le jour), Sorcière, Corbeau, Bouc Émissaire, Chien-Loup (Chien)",
+          "§bSorcière, Corbeau, Chien-Loup (Chien)",
           "§aAssassin, Rival, Succube, Tueur en Série, §6Loup-Garou Blanc§f",
           "Cas particuliers :",
           "Tuer un joueur (qui ne se fait pas ressusciter) donne une aura §bObscure",
@@ -910,7 +938,9 @@
         "bear_trainer": "Champ d'action du Montreur d'Ours §b&number&",
         "fearful_werewolf": "Champ d'action du Loup-Garou Craintif §b&number&",
         "hermit": "Champ d'action de l'Ermite §b&number&",
-        "will_o_the_wisp": "Champ d'action du Feu Follet §b&number&"
+        "will_o_the_wisp": "Champ d'action du Feu Follet §b&number&",
+        "howling_werewolf": "Champ d'action du Loup Garou Hurleur §b&number&",
+        "twin": "Champ d'action des Jumeaux §b&number&"
       },
       "troll": "Configuration §bTroll",
       "roles": {
@@ -1011,12 +1041,14 @@
         "role_duration": "Révélation des Rôles (§b&timer&§r)",
         "digging_end": "Fin du Minage (§b&timer&§r)",
         "angel_duration": "Durée pour le choix de l'Ange (§b&timer&§r)",
+        "twin_duration": "Durée pour la révélation des Jumeaux (§b&timer&§r)",
         "power_duration": "Durée d'utilisation des pouvoirs le Matin (§b&timer&§r)",
         "vote_begin": "Début des Votes (§b&timer&§r)",
         "auto_restart_duration": "Durée de redémarrage du serveur (§b&timer&§r)",
         "invulnerability": "Invulnérabilité (§b&timer&§r)",
         "succubus_duration": "Durée du Charme du Succube (§b&timer&§r)",
-        "charmer_countdown": "Durée du compte à rebours de la Charmeuse (§b&timer&§r)"
+        "charmer_countdown": "Durée du compte à rebours de la Charmeuse (§b&timer&§r)",
+        "analyse_duration": "Début du pouvoir Analyste (§b&timer&§r)"
       },
       "random_events": {
         "list": "Liste des évènements aléatoires §bactivés§f :\n",

@@ -17,7 +17,6 @@ import io.github.ph1lou.werewolfapi.events.lovers.AnnouncementLoverDeathEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
@@ -142,19 +141,19 @@ public class Hermit extends RoleVillage {
             
             if(game.isDay(Day.DAY)){
                 this.getPlayerWW()
-                        .addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,
-                                "hermit"));
-                this.getPlayerWW()
-                        .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
+                        .addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
                                 "hermit",0));
-            }
-            else{
                 this.getPlayerWW()
                         .addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,
                                 "hermit"));
+            }
+            else{
                 this.getPlayerWW()
-                        .addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
+                        .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
                                 "hermit",0));
+                this.getPlayerWW()
+                        .addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,
+                                "hermit"));
             }
         }
     }

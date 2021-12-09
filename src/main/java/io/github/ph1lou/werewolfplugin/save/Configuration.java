@@ -45,6 +45,8 @@ public class Configuration implements IConfiguration {
     private int distanceAmnesiacLovers = 15;
     private int distancePriestess = 10;
     private int distanceSister = 20;
+    private int distanceTwin = 50;
+    private int distanceHowlingWerewolf = 80;
     private int distanceWillOTheWisp = 50;
     private int distanceHermit = 20;
     private int distanceFox = 20;
@@ -265,6 +267,26 @@ public class Configuration implements IConfiguration {
     @Override
     public void setDistanceFox(int distanceFox) {
         this.distanceFox = distanceFox;
+    }
+
+    @Override
+    public int getDistanceHowlingWerewolf() {
+        return this.distanceHowlingWerewolf;
+    }
+
+    @Override
+    public void setDistanceHowlingWerewolf(int distanceHowlingWerewolf) {
+        this.distanceHowlingWerewolf=distanceHowlingWerewolf;
+    }
+
+    @Override
+    public int getDistanceTwin() {
+        return this.distanceTwin;
+    }
+
+    @Override
+    public void setDistanceTwin(int distanceTwin) {
+        this.distanceTwin = distanceTwin;
     }
 
     @Override

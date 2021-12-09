@@ -51,6 +51,8 @@ import io.github.ph1lou.werewolfapi.events.random_events.TroupleEvent;
 import io.github.ph1lou.werewolfapi.events.roles.InvisibleEvent;
 import io.github.ph1lou.werewolfapi.events.roles.StealEvent;
 import io.github.ph1lou.werewolfapi.events.roles.amnesiac.AmnesiacTransformationEvent;
+import io.github.ph1lou.werewolfapi.events.roles.analyst.AnalystEvent;
+import io.github.ph1lou.werewolfapi.events.roles.analyst.AnalystExtraDetailsEvent;
 import io.github.ph1lou.werewolfapi.events.roles.angel.AngelChoiceEvent;
 import io.github.ph1lou.werewolfapi.events.roles.angel.AngelTargetDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.angel.AngelTargetEvent;
@@ -75,6 +77,7 @@ import io.github.ph1lou.werewolfapi.events.roles.fox.SniffEvent;
 import io.github.ph1lou.werewolfapi.events.roles.grim_werewolf.GrimEvent;
 import io.github.ph1lou.werewolfapi.events.roles.guard.GuardEvent;
 import io.github.ph1lou.werewolfapi.events.roles.guard.GuardResurrectionEvent;
+import io.github.ph1lou.werewolfapi.events.roles.howling_werewolf.HowlEvent;
 import io.github.ph1lou.werewolfapi.events.roles.infect_father_of_the_wolves.InfectionEvent;
 import io.github.ph1lou.werewolfapi.events.roles.librarian.LibrarianDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.librarian.LibrarianGiveBackEvent;
@@ -100,6 +103,9 @@ import io.github.ph1lou.werewolfapi.events.roles.succubus.SuccubusResurrectionEv
 import io.github.ph1lou.werewolfapi.events.roles.trapper.TrackEvent;
 import io.github.ph1lou.werewolfapi.events.roles.trouble_maker.TroubleMakerDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.trouble_maker.TroubleMakerEvent;
+import io.github.ph1lou.werewolfapi.events.roles.twin.TwinListEvent;
+import io.github.ph1lou.werewolfapi.events.roles.twin.TwinRevealEvent;
+import io.github.ph1lou.werewolfapi.events.roles.twin.TwinRoleEvent;
 import io.github.ph1lou.werewolfapi.events.roles.village_idiot.VillageIdiotEvent;
 import io.github.ph1lou.werewolfapi.events.roles.villager.VillagerKitEvent;
 import io.github.ph1lou.werewolfapi.events.roles.wild_child.ModelEvent;
@@ -125,6 +131,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.potion.PotionEffectType;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -138,6 +145,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class Events implements Listener {
 
@@ -218,14 +226,17 @@ public class Events implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onGameStart(StartEvent event) {
-        main.setCurrentGameReview(new GameReview(main.getWereWolfAPI()));
-        String serverUUID = main.getConfig().getString("server_uuid");
-        if (serverUUID != null) {
-            try {
-                main.getCurrentGameReview().setServerUUID(UUID.fromString(serverUUID));
-            } catch (Exception ignored) {
-            }
+        UUID serverUUID;
+        try{
+            serverUUID = UUID.fromString(main.getConfig().getString("server_uuid"));
         }
+        catch (Exception e){
+            serverUUID = UUID.randomUUID();
+            main.getConfig().set("server_uuid", serverUUID);
+        }
+
+        main.setCurrentGameReview(new GameReview(main.getWereWolfAPI(), serverUUID));
+
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -1164,7 +1175,7 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("charmed_death_event",
-                event.getPlayerWW(), event.getTargetWW(),event.isBeforeCountDown()?1:0, api.getTimer()));
+                event.getPlayerWW(), event.getTargetWW(),0,event.isBeforeCountDown()?"before_count_down":"after_count_down", api.getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -1205,6 +1216,66 @@ public class Events implements Listener {
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("will_o_the_wisp_recover_role",
                 event.getPlayerWW(),event.getTargetWW(),0,event.getRoleKey(), api.getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onTwin(TwinRevealEvent event) {
+
+        if (event.isCancelled()) return;
+
+        WereWolfAPI api = main.getWereWolfAPI();
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("twin_reveal",
+                event.getPlayerWW(),event.getPlayerWWS(), api.getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onTwinList(TwinListEvent event) {
+
+        if (event.isCancelled()) return;
+
+        WereWolfAPI api = main.getWereWolfAPI();
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("twin_list",
+                event.getPlayerWW(),event.getPlayerWWS(), api.getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onTwinRole(TwinRoleEvent event) {
+
+        if (event.isCancelled()) return;
+
+        WereWolfAPI api = main.getWereWolfAPI();
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("twin_role",
+                event.getPlayerWW(),event.getTargetWW(),0,event.getTargetWW().getRole().getKey(), api.getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onWerewolfHowler(HowlEvent event) {
+
+        if (event.isCancelled()) return;
+
+        WereWolfAPI api = main.getWereWolfAPI();
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf_howler",
+                event.getPlayerWW(),event.getPlayerWWS(),event.getNotWerewolfSize(), api.getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onAnalystAnalyst(AnalystExtraDetailsEvent event) {
+
+        if (event.isCancelled()) return;
+
+        WereWolfAPI api = main.getWereWolfAPI();
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("analyst_analyst",
+                event.getPlayerWW(),event.getTargetWW(),0,event.getPotions().stream().map(PotionEffectType::getName).collect(Collectors.joining(", ")), api.getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onAnalystSee(AnalystEvent event) {
+
+        if (event.isCancelled()) return;
+
+        WereWolfAPI api = main.getWereWolfAPI();
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("analyst_see",
+                event.getPlayerWW(),event.getTargetWW(),0,event.hasEffect()?"werewolf.role.analyst.has_effects":"werewolf.role.analyst.no_effects", api.getTimer()));
     }
 
 

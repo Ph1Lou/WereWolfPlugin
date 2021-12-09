@@ -232,9 +232,9 @@ public class PlayerWW implements IPlayerWW {
                 .filter(potionModifier1 -> potionModifier1.getPotionEffectType()
                         .equals(potionModifier.getPotionEffectType()))
                 .forEach(potionModifier1 -> {
-                    if(20 * (potionModifier1.getTimer() - game.getTimer()) +
+                    if((20 * (potionModifier1.getTimer() - game.getTimer()) +
                             potionModifier1.getDuration()  < potionModifier.getDuration() &&
-                    potionModifier1.getAmplifier() == potionModifier.getAmplifier() ||
+                    potionModifier1.getAmplifier() == potionModifier.getAmplifier()) ||
                             potionModifier1.getAmplifier() < potionModifier.getAmplifier()){
 
                         if(potionModifier1.getIdentifier().equals(potionModifier.getIdentifier()) &&
@@ -384,12 +384,17 @@ public class PlayerWW implements IPlayerWW {
 
     @Override
     public void addLover(ILover lover) {
-        lovers.add(lover);
+        this.lovers.add(lover);
     }
 
     @Override
     public void removeLover(ILover lover) {
-        lovers.remove(lover);
+        this.lovers.remove(lover);
+    }
+
+    @Override
+    public void clearLover() {
+        this.lovers.clear();
     }
 
     @Override

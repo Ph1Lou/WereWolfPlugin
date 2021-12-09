@@ -30,7 +30,7 @@ import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import io.github.ph1lou.werewolfapi.utils.Utils;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.RegisterManager;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandWereWolfChat;
+import io.github.ph1lou.werewolfplugin.commands.roles.werewolf.CommandWereWolfChat;
 import io.github.ph1lou.werewolfplugin.game.GameManager;
 import io.github.ph1lou.werewolfplugin.game.LoversManagement;
 import io.github.ph1lou.werewolfplugin.roles.lovers.FakeLover;
@@ -49,6 +49,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -275,6 +276,13 @@ public class CycleListener implements Listener {
                             playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.announcement.troll");
                             playerWW.addPlayerMaxHealth(20 - playerWW.getMaxHealth());
                         });
+                game.getPlayersWW().forEach(IPlayerWW::clearLover);
+                Iterator<? extends ILover> iterator = game.getLoversManager().getLovers().iterator();
+                while (iterator.hasNext()){
+                    HandlerList.unregisterAll(iterator.next());
+                    iterator.remove();
+                }
+
                 if (game.getConfig().isConfigActive(ConfigBase.DOUBLE_TROLL.getKey())) {
                     Bukkit.getPluginManager().callEvent(new TrollEvent());
                     game.getConfig().switchConfigValue(ConfigBase.DOUBLE_TROLL.getKey());

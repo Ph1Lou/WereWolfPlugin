@@ -17,7 +17,6 @@ import io.github.ph1lou.werewolfapi.events.lovers.AnnouncementLoverDeathEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleWereWolf;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
@@ -143,7 +142,7 @@ public class FearFulWerewolf extends RoleWereWolf {
                                 "fearful"));
                 this.getPlayerWW()
                         .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
-                                "werewolf"));
+                                "werewolf",0));
             }
             else{
                 this.getPlayerWW()
@@ -157,7 +156,7 @@ public class FearFulWerewolf extends RoleWereWolf {
         else{
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
-                            "werewolf"));
+                            "werewolf",0));
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
                             "fearful",0));

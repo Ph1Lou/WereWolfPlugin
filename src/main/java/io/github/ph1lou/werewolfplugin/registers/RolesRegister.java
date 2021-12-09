@@ -18,6 +18,7 @@ import io.github.ph1lou.werewolfplugin.roles.neutrals.Succubus;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.Thief;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.WhiteWereWolf;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.WillOTheWisp;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Analyst;
 import io.github.ph1lou.werewolfplugin.roles.villagers.BearTrainer;
 import io.github.ph1lou.werewolfplugin.roles.villagers.ChattySeer;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Citizen;
@@ -41,6 +42,7 @@ import io.github.ph1lou.werewolfplugin.roles.villagers.Sister;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Stud;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Trapper;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Troublemaker;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Twin;
 import io.github.ph1lou.werewolfplugin.roles.villagers.VillageIdiot;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Villager;
 import io.github.ph1lou.werewolfplugin.roles.villagers.WildChild;
@@ -52,6 +54,7 @@ import io.github.ph1lou.werewolfplugin.roles.werewolfs.BigBadWerewolf;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.FalsifierWereWolf;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.FearFulWerewolf;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.GrimyWereWolf;
+import io.github.ph1lou.werewolfplugin.roles.werewolfs.HowlingWerewolfWerewolf;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.InfectFatherOfTheWolves;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.MischievousWereWolf;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.MysticalWereWolf;
@@ -114,6 +117,13 @@ public class RolesRegister {
                             RolesBase.WITCH.getKey(), Witch.class)
                             .addCategory(Category.VILLAGER)
                             .addConfig(Witch::config));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.HOWLING_WEREWOLF.getKey(), HowlingWerewolfWerewolf.class)
+                            .addCategory(Category.WEREWOLF)
+                            .addConfig(HowlingWerewolfWerewolf::config));
+
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.ELDER.getKey(), Elder.class)
@@ -148,6 +158,13 @@ public class RolesRegister {
                             .addCategory(Category.VILLAGER)
                             .setRequireDouble()
                             .addConfig(Sister::config));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.TWIN.getKey(), Twin.class)
+                            .addCategory(Category.VILLAGER)
+                            .setRequireDouble()
+                            .addConfig(Twin::config));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
@@ -209,6 +226,12 @@ public class RolesRegister {
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
+                            RolesBase.ANALYST.getKey(), Analyst.class)
+                            .addCategory(Category.VILLAGER)
+                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
                             RolesBase.WILD_CHILD.getKey(), WildChild.class)
                             .addCategory(Category.VILLAGER)
                             .setRandomCompositionAttribute(RandomCompositionAttribute.HYBRID));
@@ -221,14 +244,15 @@ public class RolesRegister {
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
+                            RolesBase.CHARMER.getKey(), Charmer.class)
+                            .addCategory(Category.NEUTRAL));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
                             RolesBase.ANGEL.getKey(), Angel.class)
                             .addCategory(Category.NEUTRAL)
                             .addConfig(Angel::config));
 
-            rolesRegister
-                    .add(new RoleRegister("werewolf.name",
-                            RolesBase.CHARMER.getKey(), Charmer.class)
-                            .addCategory(Category.NEUTRAL));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",

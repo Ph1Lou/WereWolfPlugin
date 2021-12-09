@@ -17,6 +17,8 @@ import io.github.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import io.github.ph1lou.werewolfapi.events.game.vote.VoteBeginEvent;
 import io.github.ph1lou.werewolfapi.events.roles.angel.AutoAngelEvent;
 import io.github.ph1lou.werewolfapi.events.roles.rival.RivalEvent;
+import io.github.ph1lou.werewolfapi.events.roles.twin.AutoTwinEvent;
+import io.github.ph1lou.werewolfapi.events.roles.twin.TwinRevealEvent;
 import io.github.ph1lou.werewolfapi.events.roles.wild_child.AutoModelEvent;
 import io.github.ph1lou.werewolfapi.registers.TimerRegister;
 import io.github.ph1lou.werewolfplugin.game.LoversManagement;
@@ -177,6 +179,14 @@ public class TimersRegister {
 
         timersRegister
                 .add(new TimerRegister("werewolf.name",
+                        TimerBase.TWIN_DURATION.getKey())
+                        .addPredicate(wereWolfAPI -> wereWolfAPI.getConfig().getTimerValue(TimerBase.ROLE_DURATION.getKey()) < 0
+                                && !wereWolfAPI.getConfig().isTrollSV())
+                        .onZero(wereWolfAPI -> Bukkit.getPluginManager().callEvent(new AutoTwinEvent()))
+                        .setDefaultValue(1800));
+
+        timersRegister
+                .add(new TimerRegister("werewolf.name",
                         TimerBase.LOVER_DURATION.getKey())
                         .addPredicate(wereWolfAPI -> wereWolfAPI.getConfig().getTimerValue(TimerBase.ROLE_DURATION.getKey()) < 0
                                 && !wereWolfAPI.getConfig().isTrollSV())
@@ -196,6 +206,13 @@ public class TimersRegister {
                                 && !wereWolfAPI.getConfig().isTrollSV())
                         .onZero(wereWolfAPI -> Bukkit.getPluginManager().callEvent(new AutoAngelEvent()))
                         .setDefaultValue(240));
+
+        timersRegister
+                .add(new TimerRegister("werewolf.name",
+                        TimerBase.ANALYSE_DURATION.getKey())
+                        .addPredicate(wereWolfAPI -> wereWolfAPI.getConfig().getTimerValue(TimerBase.ROLE_DURATION.getKey()) < 0
+                                && !wereWolfAPI.getConfig().isTrollSV())
+                        .setDefaultValue(1800));
 
         timersRegister
                 .add(new TimerRegister("werewolf.name",

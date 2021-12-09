@@ -4,38 +4,40 @@ import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.registers.CommandRegister;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandAngelRegen;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandCharmer;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandCitizenCancelVote;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandCitizenSeeVote;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandComedian;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandCupid;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandDetective;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandFallenAngel;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandFox;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandGuard;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandGuardianAngel;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandInfect;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandLibrarian;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandLovers;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandOracle;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandPriestess;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandProtector;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandRaven;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandSeer;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandSendToLibrarian;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandShaman;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandSisterSeeName;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandSisterSeeRole;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandSuccubus;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandTrapper;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandTroubleMaker;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandWereWolf;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandWereWolfChat;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandWildChild;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandWillOTheWisp;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandWitch;
-import io.github.ph1lou.werewolfplugin.commands.roles.CommandWolfDog;
+import io.github.ph1lou.werewolfplugin.commands.roles.hybrid.wildchild.CommandWildChild;
+import io.github.ph1lou.werewolfplugin.commands.roles.hybrid.wolfdog.CommandWolfDog;
+import io.github.ph1lou.werewolfplugin.commands.roles.lovers.CommandLovers;
+import io.github.ph1lou.werewolfplugin.commands.roles.neutral.angel.CommandAngelRegen;
+import io.github.ph1lou.werewolfplugin.commands.roles.neutral.angel.CommandFallenAngel;
+import io.github.ph1lou.werewolfplugin.commands.roles.neutral.angel.CommandGuardianAngel;
+import io.github.ph1lou.werewolfplugin.commands.roles.neutral.charmer.CommandCharmer;
+import io.github.ph1lou.werewolfplugin.commands.roles.neutral.succubus.CommandSuccubus;
+import io.github.ph1lou.werewolfplugin.commands.roles.neutral.willothewisp.CommandWillOTheWisp;
+import io.github.ph1lou.werewolfplugin.commands.roles.villager.citizen.CommandCitizenCancelVote;
+import io.github.ph1lou.werewolfplugin.commands.roles.villager.citizen.CommandCitizenSeeVote;
+import io.github.ph1lou.werewolfplugin.commands.roles.villager.comedian.CommandComedian;
+import io.github.ph1lou.werewolfplugin.commands.roles.villager.cupid.CommandCupid;
+import io.github.ph1lou.werewolfplugin.commands.roles.villager.guard.CommandGuard;
+import io.github.ph1lou.werewolfplugin.commands.roles.villager.info.analyst.CommandAnalystAnalyse;
+import io.github.ph1lou.werewolfplugin.commands.roles.villager.info.analyst.CommandAnalystSee;
+import io.github.ph1lou.werewolfplugin.commands.roles.villager.info.detective.CommandDetective;
+import io.github.ph1lou.werewolfplugin.commands.roles.villager.info.fox.CommandFox;
+import io.github.ph1lou.werewolfplugin.commands.roles.villager.info.librarian.CommandLibrarian;
+import io.github.ph1lou.werewolfplugin.commands.roles.villager.info.librarian.CommandSendToLibrarian;
+import io.github.ph1lou.werewolfplugin.commands.roles.villager.info.oracle.CommandOracle;
+import io.github.ph1lou.werewolfplugin.commands.roles.villager.info.seer.CommandSeer;
+import io.github.ph1lou.werewolfplugin.commands.roles.villager.priestess.CommandPriestess;
+import io.github.ph1lou.werewolfplugin.commands.roles.villager.protector.CommandProtector;
+import io.github.ph1lou.werewolfplugin.commands.roles.villager.raven.CommandRaven;
+import io.github.ph1lou.werewolfplugin.commands.roles.villager.shaman.CommandShaman;
+import io.github.ph1lou.werewolfplugin.commands.roles.villager.sister.CommandSisterSeeName;
+import io.github.ph1lou.werewolfplugin.commands.roles.villager.sister.CommandSisterSeeRole;
+import io.github.ph1lou.werewolfplugin.commands.roles.villager.trapper.CommandTrapper;
+import io.github.ph1lou.werewolfplugin.commands.roles.villager.troublemaker.CommandTroubleMaker;
+import io.github.ph1lou.werewolfplugin.commands.roles.villager.witch.CommandWitch;
+import io.github.ph1lou.werewolfplugin.commands.roles.werewolf.CommandWereWolf;
+import io.github.ph1lou.werewolfplugin.commands.roles.werewolf.CommandWereWolfChat;
+import io.github.ph1lou.werewolfplugin.commands.roles.werewolf.infect.CommandInfect;
 import io.github.ph1lou.werewolfplugin.commands.utilities.CommandAnonymeChat;
 import io.github.ph1lou.werewolfplugin.commands.utilities.CommandAura;
 import io.github.ph1lou.werewolfplugin.commands.utilities.CommandCompo;
@@ -156,6 +158,25 @@ public class CommandsRegister {
                         "werewolf.role.protector.command", new CommandProtector())
                         .addRoleKey(RolesBase.PROTECTOR.getKey())
                         .setRequiredPower()
+                        .setRequiredAbilityEnabled()
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(1));
+
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.analyst.command_see", new CommandAnalystSee())
+                        .addRoleKey(RolesBase.ANALYST.getKey())
+                        .setRequiredPower()
+                        .setRequiredAbilityEnabled()
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(1));
+
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.analyst.command_analyse", new CommandAnalystAnalyse())
+                        .addRoleKey(RolesBase.ANALYST.getKey())
                         .setRequiredAbilityEnabled()
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
