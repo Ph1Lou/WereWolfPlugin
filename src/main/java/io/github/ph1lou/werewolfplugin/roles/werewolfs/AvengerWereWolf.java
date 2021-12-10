@@ -167,6 +167,6 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
 
     @Override
     public Aura getDefaultAura() {
-        return this.getPlayerWW().getMaxHealth() >= 10 ? Aura.DARK : Aura.NEUTRAL;
+        return this.getPlayerWW().getMaxHealth() >= 20 ? Aura.DARK : Aura.NEUTRAL;
     }
 }

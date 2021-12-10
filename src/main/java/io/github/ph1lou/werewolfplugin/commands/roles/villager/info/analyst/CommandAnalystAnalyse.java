@@ -1,10 +1,12 @@
 package io.github.ph1lou.werewolfplugin.commands.roles.villager.info.analyst;
 
+import io.github.ph1lou.werewolfapi.AuraModifier;
 import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.Camp;
 import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
@@ -87,5 +89,7 @@ public class CommandAnalystAnalyse implements ICommand {
             playerWW1.sendMessageWithKey(Prefix.RED.getKey(),"werewolf.role.analyst.call_back_no_villager",
                     Formatter.player(playerWW.getName()));
         }
+
+        analyst.addAuraModifier(new AuraModifier("analyst", Aura.DARK,1,false));
     }
 }

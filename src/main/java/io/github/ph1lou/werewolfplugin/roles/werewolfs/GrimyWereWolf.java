@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.Camp;
 import io.github.ph1lou.werewolfapi.enums.ConfigBase;
 import io.github.ph1lou.werewolfapi.enums.Prefix;
@@ -188,5 +189,10 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
     @Override
     public boolean hasPower() {
         return this.power;
+    }
+
+    @Override
+    public Aura getDefaultAura() {
+        return Aura.LIGHT;
     }
 }

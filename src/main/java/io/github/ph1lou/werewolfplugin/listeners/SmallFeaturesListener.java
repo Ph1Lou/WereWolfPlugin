@@ -21,6 +21,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
@@ -77,47 +78,61 @@ public class SmallFeaturesListener implements Listener {
 
         } else if (event.getItem().getType().equals(Material.GOLDEN_APPLE)) {
 
+            event.setCancelled(true);
+
             BukkitUtils.scheduleSyncDelayedTask(() -> {
 
-                if (game.getConfig().getGoldenAppleParticles() == 2) {
-                    return;
+                ItemStack itemStack = event.getItem();
+                if(itemStack.getAmount() == 1){
+                    player.getInventory().removeItem(itemStack);
+                }
+                else {
+                    itemStack.setAmount(itemStack.getAmount()-1);
                 }
 
-                if (game.getConfig().getGoldenAppleParticles() == 1) {
+                if (game.getConfig().getGoldenAppleParticles() == 2) {
+                    this.addGoldenPotionEffectsWithParticles(player);
+                }
+
+                else if (game.getConfig().getGoldenAppleParticles() == 1) {
 
                     GoldenAppleParticleEvent goldenAppleParticleEvent =
                             new GoldenAppleParticleEvent(playerWW);
 
                     Bukkit.getPluginManager().callEvent(goldenAppleParticleEvent);
 
-                    if (!goldenAppleParticleEvent.isCancelled()) return;
-
+                    if (!goldenAppleParticleEvent.isCancelled()) {
+                        this.addGoldenPotionEffectsWithParticles(player);
+                    }
                 }
 
-                if (player.hasPotionEffect(PotionEffectType.ABSORPTION)) {
-                    player.removePotionEffect(PotionEffectType.ABSORPTION);
-                    playerWW.addPotionModifier(PotionModifier.add(
-                            PotionEffectType.ABSORPTION,
-                            2400,
-                            0,
-                            "golden_apple"));
-                }
-                if (player.hasPotionEffect(PotionEffectType.REGENERATION)) {
-                    playerWW.addPotionModifier(PotionModifier.add(
-                            PotionEffectType.ABSORPTION,
-                            90,
-                            1,
-                            "golden_apple"));
-                }
-
-                event.setCancelled(true);
-            }, 1L);
+                this.setGoldenAppleEffects(playerWW);
+            });
         }
+    }
+
+    private void addGoldenPotionEffectsWithParticles(Player player) {
+        player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,2400,0));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,90,1));
+
+    }
+
+    private void setGoldenAppleEffects(IPlayerWW playerWW) {
+        playerWW.addPotionModifier(PotionModifier.add(
+                PotionEffectType.ABSORPTION,
+                2400,
+                0,
+                "golden_apple"));
+
+        playerWW.addPotionModifier(PotionModifier.add(
+                PotionEffectType.REGENERATION,
+                90,
+                1,
+                "golden_apple"));
     }
 
     @EventHandler
     public void WeatherChangeEvent(WeatherChangeEvent event) {
-
         event.setCancelled(true);
         event.getWorld().setWeatherDuration(0);
         event.getWorld().setThundering(false);

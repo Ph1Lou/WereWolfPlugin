@@ -43,7 +43,7 @@ public class MysticalWereWolf extends RoleWereWolf {
 
     @Override
     public Aura getDefaultAura() {
-        return Aura.NEUTRAL;
+        return Aura.LIGHT;
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -86,6 +86,4 @@ public class MysticalWereWolf extends RoleWereWolf {
                 Formatter.player(roleWW.getName()),
                 Formatter.role(game.translate(roleWW.getRole().getKey())));
     }
-
-
 }
