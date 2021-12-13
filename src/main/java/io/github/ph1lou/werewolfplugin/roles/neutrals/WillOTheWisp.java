@@ -223,13 +223,24 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
                 this.timer = BukkitUtils.scheduleSyncDelayedTask(() -> {
                     if(this.isInvisible()){
                         this.setInvisible(false);
+                        this.getPlayerWW().addPotionModifier(PotionModifier
+                                .remove(PotionEffectType.INVISIBILITY,
+                                        "will_o_the_wisp",
+                                        0));
+                        this.getPlayerWW().addPotionModifier(PotionModifier
+                                .remove(PotionEffectType.ABSORPTION,
+                                        "will_o_the_wisp",
+                                        1));
                         Bukkit.getPluginManager().callEvent(new InvisibleEvent(this.getPlayerWW(), false));
                         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
                         this.timer=-1;
                     }
                 },6000);
                 if (isInfected()) {
-                    this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"werewolf",0));
+                    this.getPlayerWW().addPotionModifier(PotionModifier
+                            .remove(PotionEffectType.INCREASE_DAMAGE,
+                                    "werewolf",
+                                    0));
 
                 }
                 this.setInvisible(true);
@@ -240,10 +251,18 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
             player.sendMessage(game.translate(
                     Prefix.YELLOW.getKey() , "werewolf.role.little_girl.visible"));
             if (this.isInfected()) {
-                this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"werewolf"));
+                this.getPlayerWW().addPotionModifier(PotionModifier
+                        .add(PotionEffectType.INCREASE_DAMAGE,
+                                "werewolf"));
             }
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INVISIBILITY,"will_o_the_wisp",0));
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.ABSORPTION,"will_o_the_wisp",1));
+            this.getPlayerWW().addPotionModifier(PotionModifier
+                    .remove(PotionEffectType.INVISIBILITY,
+                            "will_o_the_wisp",
+                            0));
+            this.getPlayerWW().addPotionModifier(PotionModifier
+                    .remove(PotionEffectType.ABSORPTION,
+                            "will_o_the_wisp",
+                            1));
             if(this.timer != -1){
                 Bukkit.getScheduler().cancelTask(this.timer);
                 this.timer=-1;
@@ -273,9 +292,15 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
 
         if (isInvisible()) {
             getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.little_girl.ability_disabled");
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"werewolf",0));
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.ABSORPTION,"will_o_the_wisp",1));
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INVISIBILITY,"will_o_the_wisp",0));
+            this.getPlayerWW().addPotionModifier(PotionModifier
+                    .remove(PotionEffectType.INCREASE_DAMAGE,
+                            "werewolf",0));
+            this.getPlayerWW().addPotionModifier(PotionModifier
+                    .remove(PotionEffectType.ABSORPTION,
+                            "will_o_the_wisp",1));
+            this.getPlayerWW().addPotionModifier(PotionModifier
+                    .remove(PotionEffectType.INVISIBILITY,
+                            "will_o_the_wisp",0));
 
             setInvisible(false);
             Bukkit.getPluginManager().callEvent(
