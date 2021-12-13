@@ -160,6 +160,9 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
         } else if (roleClone.isWereWolf()) {
             Bukkit.getPluginManager().callEvent(new NewWereWolfEvent(getPlayerWW()));
         }
+        if(this.isSolitary()){
+            roleClone.setSolitary(true);
+        }
         roleClone.setDeathRole(this.getKey());
 
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.thief.realized_theft",

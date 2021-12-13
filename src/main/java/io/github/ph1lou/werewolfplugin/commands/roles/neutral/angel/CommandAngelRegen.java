@@ -5,11 +5,12 @@ import io.github.ph1lou.werewolfapi.ICommand;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.AngelForm;
 import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.events.roles.angel.RegenerationEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.ILimitedUse;
-import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
+import io.github.ph1lou.werewolfplugin.roles.neutrals.Angel;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
@@ -27,7 +28,12 @@ public class CommandAngelRegen implements ICommand {
 
         if (playerWW == null) return;
 
-        IRole guardianAngel = playerWW.getRole();
+        Angel guardianAngel = (Angel) playerWW.getRole();
+
+        if (!guardianAngel.isChoice(AngelForm.GUARDIAN_ANGEL)) {
+            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.state_player"));
+            return;
+        }
 
 
         if (((ILimitedUse) guardianAngel).getUse() >= 3) {

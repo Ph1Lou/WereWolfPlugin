@@ -8,9 +8,12 @@ import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.Day;
+import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
+import io.github.ph1lou.werewolfapi.enums.UpdateCompositionReason;
 import io.github.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
+import io.github.ph1lou.werewolfapi.events.game.game_cycle.UpdateCompositionEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.vote.VoteEvent;
 import io.github.ph1lou.werewolfapi.events.lovers.AnnouncementLoverDeathEvent;
@@ -86,6 +89,20 @@ public class Hermit extends RoleVillage {
         event.setCancelled(true);
     }
 
+    @EventHandler
+    public void onUpdateCompo(UpdateCompositionEvent event){
+
+        if(event.getReason() != UpdateCompositionReason.DEATH){
+            return;
+        }
+
+        if(!event.getKey().equals(RolesBase.HERMIT.getKey())){
+            return;
+        }
+
+        event.setCancelled(true);
+    }
+
     @Override
     public void second() {
         if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
@@ -102,7 +119,6 @@ public class Hermit extends RoleVillage {
                 .map(game::getPlayerWW)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .filter(playerWW -> playerWW.getRole().isWereWolf())
                 .filter(iPlayerWW -> {
                     Location hermit = this.getPlayerWW().getLocation();
                     Location player = iPlayerWW.getLocation();

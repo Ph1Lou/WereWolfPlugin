@@ -145,6 +145,9 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
         } else if (roleClone.isWereWolf()) {
             Bukkit.getPluginManager().callEvent(new NewWereWolfEvent(getPlayerWW()));
         }
+        if(this.isSolitary()){
+            roleClone.setSolitary(true);
+        }
         roleClone.setTransformedToNeutral(true);
         roleClone.setDeathRole(this.getKey());
 

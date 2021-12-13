@@ -38,8 +38,8 @@ public class SmallFeaturesListener implements Listener {
     @EventHandler
     public void onDrinkMilk(PlayerInteractEvent event) {
 
-        Action a = event.getAction();
-        if (a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK) {
+        Action action = event.getAction();
+        if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
 
             if (VersionUtils.getVersionUtils()
                     .getItemInHand(event.getPlayer()).getType() == Material.MILK_BUCKET) {
@@ -51,8 +51,8 @@ public class SmallFeaturesListener implements Listener {
     @EventHandler
     public void onCraft(PrepareItemCraftEvent event) {
 
-        final CraftingInventory inv = event.getInventory();
-        final ItemStack AIR = new ItemStack(Material.AIR);
+        CraftingInventory inv = event.getInventory();
+        ItemStack AIR = new ItemStack(Material.AIR);
 
         if (inv.getResult() == null) return;
 
@@ -82,12 +82,14 @@ public class SmallFeaturesListener implements Listener {
 
             BukkitUtils.scheduleSyncDelayedTask(() -> {
 
-                ItemStack itemStack = event.getItem();
-                if(itemStack.getAmount() == 1){
-                    player.getInventory().removeItem(itemStack);
-                }
-                else {
+                ItemStack itemStack = VersionUtils.getVersionUtils().getItemInHand(player);
+
+                if(itemStack.getAmount() > 1){
                     itemStack.setAmount(itemStack.getAmount()-1);
+                    VersionUtils.getVersionUtils().setItemInHand(player,itemStack);
+                }
+                else{
+                    VersionUtils.getVersionUtils().setItemInHand(player,null);
                 }
 
                 if (game.getConfig().getGoldenAppleParticles() == 2) {
@@ -113,7 +115,7 @@ public class SmallFeaturesListener implements Listener {
 
     private void addGoldenPotionEffectsWithParticles(Player player) {
         player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,2400,0));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,90,1));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,100,1));
 
     }
 
@@ -126,7 +128,7 @@ public class SmallFeaturesListener implements Listener {
 
         playerWW.addPotionModifier(PotionModifier.add(
                 PotionEffectType.REGENERATION,
-                90,
+                100,
                 1,
                 "golden_apple"));
     }

@@ -13,7 +13,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -80,16 +79,19 @@ public class PatchPotions implements Listener {
         if(!potionEffectList.isEmpty()) {
 
             event.setCancelled(true);
+
             BukkitUtils.scheduleSyncDelayedTask(() ->
             {
-                PlayerInventory inventory = player.getInventory();
-                if(itemStack.getAmount()==1){
-                    player.getInventory().removeItem(itemStack);
+                ItemStack itemStack1 = VersionUtils.getVersionUtils().getItemInHand(player);
+
+                if(itemStack1.getAmount() > 1){
+                    itemStack1.setAmount(itemStack1.getAmount()-1);
+                    VersionUtils.getVersionUtils().setItemInHand(player,itemStack1);
                 }
-                else {
-                    itemStack.setAmount(itemStack.getAmount()-1);
+                else{
+                    VersionUtils.getVersionUtils().setItemInHand(player,null);
                 }
-                inventory.addItem(new ItemStack(Material.GLASS_BOTTLE));
+                player.getInventory().addItem(new ItemStack(Material.GLASS_BOTTLE));
             });
 
             game.getPlayerWW(player.getUniqueId())

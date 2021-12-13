@@ -16,9 +16,7 @@ import io.github.ph1lou.werewolfapi.events.werewolf.NewWereWolfEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.ITransformed;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleNeutral;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,6 +43,7 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
     }
 
 
+
     @EventHandler
     public void onDay(DayEvent event) {
 
@@ -67,7 +66,7 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
 
         if (!playerWW.getLastKiller().get().equals(getPlayerWW())) return;
 
-        if (transformed) return;
+        if (this.isTransformed()) return;
 
         AmnesiacTransformationEvent amnesiacTransformationEvent =
                 new AmnesiacTransformationEvent(this.getPlayerWW(), playerWW);
@@ -79,7 +78,7 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
             return;
         }
 
-        setTransformed(true);
+        this.setTransformed(true);
 
         if (!super.isWereWolf()) {
             Bukkit.getPluginManager().callEvent(
@@ -126,7 +125,7 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         StringBuilder sb = event.getEndMessage();
-        if(transformed){
+        if(this.isTransformed()){
             sb.append(game.translate("werewolf.end.transform"));
         }
     }
@@ -138,31 +137,7 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
 
     @Override
     public boolean isWereWolf() {
-        return this.transformed || super.isWereWolf();
-    }
-
-    @EventHandler
-    private void onPlayerDeath(PlayerDeathEvent event) {
-
-        if (!transformed) return;
-
-        if (event.getEntity().getKiller() == null) return;
-        Player killer = event.getEntity().getKiller();
-
-        if (!killer.getUniqueId().equals(getPlayerUUID())) return;
-
-        if (!isAbilityEnabled()) return;
-
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(
-                PotionEffectType.SPEED,
-                1200,
-                0,
-                "amnesic_werewolf"));
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(
-                PotionEffectType.ABSORPTION,
-                1200,
-                0,
-                "amnesic_werewolf"));
+        return this.isTransformed() || super.isWereWolf();
     }
 
     @Override
