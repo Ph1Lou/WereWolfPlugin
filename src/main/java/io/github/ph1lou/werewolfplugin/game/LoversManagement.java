@@ -17,7 +17,6 @@ import io.github.ph1lou.werewolfapi.events.lovers.CupidLoversEvent;
 import io.github.ph1lou.werewolfapi.events.lovers.LoversRepartitionEvent;
 import io.github.ph1lou.werewolfapi.events.lovers.RevealLoversEvent;
 import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
-import io.github.ph1lou.werewolfplugin.roles.lovers.AbstractLover;
 import io.github.ph1lou.werewolfplugin.roles.lovers.AmnesiacLover;
 import io.github.ph1lou.werewolfplugin.roles.lovers.CursedLover;
 import io.github.ph1lou.werewolfplugin.roles.lovers.Lover;

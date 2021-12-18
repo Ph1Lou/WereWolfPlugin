@@ -5,7 +5,6 @@ import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.MessageAction;
 import io.github.ph1lou.werewolfapi.PotionModifier;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.Sound;
 import io.github.ph1lou.werewolfapi.enums.StateGame;
@@ -60,11 +59,11 @@ public class PlayerWW implements IPlayerWW {
     private int disconnectedTime = 0;
     private boolean tpWhenDisconnected = false;
     private String name;
-    private final WereWolfAPI game;
+    private final GameManager game;
     private final List<IPlayerWW> playersKilled = new ArrayList<>();
 
 
-    public PlayerWW(WereWolfAPI api, Player player) {
+    public PlayerWW(GameManager api, Player player) {
         this.spawn = player.getWorld().getSpawnLocation();
         this.uuid = player.getUniqueId();
         this.name = player.getName();
@@ -78,6 +77,7 @@ public class PlayerWW implements IPlayerWW {
             Object profile = userCache.getClass().getMethod("getProfile",String.class).invoke(userCache,name);
             this.mojangUUID = (UUID) profile.getClass().getMethod("getId").invoke(profile);
         } catch (NullPointerException | ClassNotFoundException | NoSuchMethodException | InvocationTargetException | IllegalAccessException ignored) {
+            this.game.setCrack();
         }
     }
 
@@ -348,12 +348,13 @@ public class PlayerWW implements IPlayerWW {
     }
 
     @Override
-    public UUID getMojangUUID() {
+    public Optional<UUID> getMojangUUID() {
+        return Optional.ofNullable(this.mojangUUID);
+    }
 
-        if (this.mojangUUID != null) {
-            return this.mojangUUID;
-        }
-        return this.uuid;
+    @Override
+    public UUID getReviewUUID(){
+        return this.getMojangUUID().isPresent() ? this.getMojangUUID().get() : this.getUUID();
     }
 
     @Override

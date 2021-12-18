@@ -77,6 +77,7 @@ public class GameManager implements WereWolfAPI {
     private int groupSize = 5;
     private int playerSize = 0;
     private int timer = 0;
+    private boolean crack = false;
 
     private int roleInitialSize = 0;
 
@@ -469,5 +470,13 @@ public class GameManager implements WereWolfAPI {
 
     public void disableWereWolfChat(){
         CommandWereWolfChat.disable();
+    }
+
+    public boolean isCrack() {
+        return crack;
+    }
+
+    public void setCrack() {
+        this.crack = true;
     }
 }

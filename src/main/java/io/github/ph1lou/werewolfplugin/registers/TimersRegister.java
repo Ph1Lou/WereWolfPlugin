@@ -18,7 +18,6 @@ import io.github.ph1lou.werewolfapi.events.game.vote.VoteBeginEvent;
 import io.github.ph1lou.werewolfapi.events.roles.angel.AutoAngelEvent;
 import io.github.ph1lou.werewolfapi.events.roles.rival.RivalEvent;
 import io.github.ph1lou.werewolfapi.events.roles.twin.AutoTwinEvent;
-import io.github.ph1lou.werewolfapi.events.roles.twin.TwinRevealEvent;
 import io.github.ph1lou.werewolfapi.events.roles.wild_child.AutoModelEvent;
 import io.github.ph1lou.werewolfapi.registers.TimerRegister;
 import io.github.ph1lou.werewolfplugin.game.LoversManagement;

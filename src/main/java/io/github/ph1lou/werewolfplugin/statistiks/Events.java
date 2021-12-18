@@ -166,7 +166,7 @@ public class Events implements Listener {
 
         FileUtils_.save(file, jsonInputString);
 
-        if (!((GameManager) main.getWereWolfAPI()).isDebug()) {
+        if (!((GameManager) event.getWereWolfAPI()).isDebug()) {
             if (main.getCurrentGameReview().getPlayerSize() < 17) {
                 Bukkit.getLogger().warning("[WereWolfPlugin] Statistiks no send because player size < 17");
                 return;
@@ -176,6 +176,11 @@ public class Events implements Listener {
                 Bukkit.getLogger().warning("[WereWolfPlugin] Statistiks no send because game duration < 1h");
                 return;
             }
+        }
+
+        if(((GameManager) event.getWereWolfAPI()).isCrack()){
+            Bukkit.getLogger().warning("[WereWolfPlugin] Statistiks no send because Server Crack");
+            return;
         }
 
         try {
@@ -210,6 +215,25 @@ public class Events implements Listener {
                         .forEach(player -> player.spigot().sendMessage(msg)), 100);
             } catch (Exception ignored) {
 
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+
+            URL url = new URL("http://ph1lou.fr:3000/create");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "application/json; utf-8");
+            con.setRequestProperty("Accept", "application/json");
+            con.setDoOutput(true);
+
+
+            try (OutputStream os = con.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            } catch (Exception ignored) {
             }
         } catch (IOException e) {
             e.printStackTrace();
