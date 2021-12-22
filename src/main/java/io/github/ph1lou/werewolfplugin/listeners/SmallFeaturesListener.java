@@ -79,7 +79,8 @@ public class SmallFeaturesListener implements Listener {
         } else if (event.getItem().getType().equals(Material.GOLDEN_APPLE)) {
 
             event.setCancelled(true);
-
+            player.setFoodLevel(player.getFoodLevel()+4);
+            player.setSaturation(player.getSaturation()+9.6f);
             BukkitUtils.scheduleSyncDelayedTask(() -> {
 
                 ItemStack itemStack = VersionUtils.getVersionUtils().getItemInHand(player);

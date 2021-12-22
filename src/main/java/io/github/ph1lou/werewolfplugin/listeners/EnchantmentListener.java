@@ -126,7 +126,9 @@ public class EnchantmentListener implements Listener {
                     result.setItemMeta(meta);
                 }
             }
-           else  result=new ItemStack(Material.BOOK);
+            else {
+               result=new ItemStack(Material.BOOK);
+            }
         }
         return result;
     }

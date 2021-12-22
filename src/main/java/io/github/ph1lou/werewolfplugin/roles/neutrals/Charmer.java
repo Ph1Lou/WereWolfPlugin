@@ -18,6 +18,7 @@ import io.github.ph1lou.werewolfapi.events.roles.charmer.CharmerGetEffectDeathEv
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleNeutral;
+import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import io.github.ph1lou.werewolfapi.utils.Utils;
 import io.github.ph1lou.werewolfplugin.roles.lovers.AbstractLover;
 import io.github.ph1lou.werewolfplugin.roles.lovers.FakeLoverCharmer;
@@ -173,6 +174,7 @@ public class Charmer extends RoleNeutral implements IPower, IAffectedPlayers {
             List<IPlayerWW> playerWWS = game.getPlayersWW()
                     .stream()
                     .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
+                    .filter(playerWW1 -> !playerWW1.equals(this.getPlayerWW()))
                     .collect(Collectors.toList());
             Collections.shuffle(playerWWS, game.getRandom());
             if(playerWWS.isEmpty()){
@@ -186,6 +188,7 @@ public class Charmer extends RoleNeutral implements IPower, IAffectedPlayers {
 
             FakeLoverCharmer fakeLover = new FakeLoverCharmer(game,new ArrayList<>(Arrays.asList(this.getPlayerWW(), playerWW)), this.getPlayerWW());
             game.getLoversManager().addLover(fakeLover);
+            BukkitUtils.registerEvents(fakeLover);
             fakeLover.announceLovers();
         }
         else{

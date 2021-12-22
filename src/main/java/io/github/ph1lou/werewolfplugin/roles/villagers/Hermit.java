@@ -119,6 +119,7 @@ public class Hermit extends RoleVillage {
                 .map(game::getPlayerWW)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
+                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(iPlayerWW -> {
                     Location hermit = this.getPlayerWW().getLocation();
                     Location player = iPlayerWW.getLocation();

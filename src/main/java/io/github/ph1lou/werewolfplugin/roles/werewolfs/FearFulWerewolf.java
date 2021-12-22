@@ -121,6 +121,7 @@ public class FearFulWerewolf extends RoleWereWolf {
                 .map(game::getPlayerWW)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
+                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> playerWW.getRole().isWereWolf())
                 .filter(iPlayerWW -> {
                     Location fearful = this.getPlayerWW().getLocation();

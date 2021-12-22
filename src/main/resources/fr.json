@@ -545,7 +545,7 @@
         "command_info": "Invisible : vous pouvez, encore §b&number&§f fois pendant la partie, vous tp &number2& blocs en avant avec /ww tp",
         "should_be_invisible": "Vous devez être invisible pour utiliser cette commande",
         "role_reveal": "Un joueur situé à moins de §b&number&§f blocs est §b&role&",
-        "use_tp": "Vous pouvez encore utiliser §b&number&§f fois votre commande §b/a tp§f "
+        "use_tp": "Vous pouvez encore utiliser §b&number&§f fois votre commande §b/ww tp§f "
       },
       "howling_werewolf": {
         "display": "Loup Garou Hurleur",
@@ -1224,7 +1224,7 @@
       "game_in_progress": "La partie est en cours",
       "not_in_game": "Vous n'êtes pas dans la partie",
       "power": "Votre pouvoir ne peut pas encore être utilisé ou ne peut plus être utilisé",
-      "end_selection": "[§cLG UHC§r] Vous ne pouvez plus utiliser votre pouvoir aujourd'hui",
+      "end_selection": "Vous ne pouvez plus utiliser votre pouvoir aujourd'hui",
       "ability_disabled": "Vos pouvoirs ont été désactivés, vous ne pouvez pas effectuer cette action",
       "two_distinct_player": "Vous devez sélectionner deux joueurs différents",
       "not_yourself": "Vous ne pouvez pas vous choisir vous même",

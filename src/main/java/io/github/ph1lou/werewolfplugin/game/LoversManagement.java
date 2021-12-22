@@ -274,9 +274,6 @@ public class LoversManagement implements ILoverManager {
 
 	@Override
 	public void addLover(ILover lover) {
-		if(game.getConfig().getTimerValue(TimerBase.LOVER_DURATION.getKey()) < 0){
-			BukkitUtils.registerEvents(lover);
-		}
 		this.lovers.add(lover);
 	}
 }

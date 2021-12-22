@@ -270,7 +270,21 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
                 });
 
         if (recoverResistance.get()) {
-            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE, 240, 0,"pied_piper"));
+            this.getPlayerWW()
+                    .addPotionModifier(
+                            PotionModifier
+                                    .add(PotionEffectType.DAMAGE_RESISTANCE,
+                                            240,
+                                            0,
+                                            "flute_player"));
+        }
+        else{
+            this.getPlayerWW()
+                    .addPotionModifier(
+                            PotionModifier
+                                    .remove(PotionEffectType.DAMAGE_RESISTANCE,
+                                            "flute_player",
+                                            0));
         }
     }
 

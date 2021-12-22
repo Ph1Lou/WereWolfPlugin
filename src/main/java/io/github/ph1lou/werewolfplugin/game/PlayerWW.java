@@ -11,7 +11,6 @@ import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
-import io.github.ph1lou.werewolfapi.utils.NMSUtils;
 import io.github.ph1lou.werewolfapi.versions.VersionUtils;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Villager;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -23,8 +22,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.shanerx.mojang.Mojang;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -47,6 +46,7 @@ public class PlayerWW implements IPlayerWW {
     private int maxHealth = 20;
     private Location disconnectedLocation = null;
     private int disconnectedChangeHealth = 0;
+    private static final Mojang api = new Mojang().connect();
     @Nullable
     private UUID mojangUUID = null;
     private final List<IPlayerWW> killer = new ArrayList<>();
@@ -71,12 +71,8 @@ public class PlayerWW implements IPlayerWW {
                 RolesBase.VILLAGER.getKey());
         this.game = api;
         try {
-            Object server = NMSUtils.getNMSClass("MinecraftServer")
-                    .getMethod("getServer").invoke(null);
-            Object userCache = server.getClass().getMethod("getUserCache").invoke(server);
-            Object profile = userCache.getClass().getMethod("getProfile",String.class).invoke(userCache,name);
-            this.mojangUUID = (UUID) profile.getClass().getMethod("getId").invoke(profile);
-        } catch (NullPointerException | ClassNotFoundException | NoSuchMethodException | InvocationTargetException | IllegalAccessException ignored) {
+            this.mojangUUID = UUID.fromString(PlayerWW.api.getUUIDOfUsername(name));
+        } catch (RuntimeException ignored) {
             this.game.setCrack();
         }
     }

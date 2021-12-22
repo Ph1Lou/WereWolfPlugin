@@ -166,16 +166,14 @@ public class Events implements Listener {
 
         FileUtils_.save(file, jsonInputString);
 
-        if (!((GameManager) event.getWereWolfAPI()).isDebug()) {
-            if (main.getCurrentGameReview().getPlayerSize() < 17) {
-                Bukkit.getLogger().warning("[WereWolfPlugin] Statistiks no send because player size < 17");
-                return;
-            }
+        if (main.getCurrentGameReview().getPlayerSize() < 17) {
+            Bukkit.getLogger().warning("[WereWolfPlugin] Statistiks no send because player size < 17");
+            return;
+        }
 
-            if (event.getWereWolfAPI().getTimer() < 3600) {
-                Bukkit.getLogger().warning("[WereWolfPlugin] Statistiks no send because game duration < 1h");
-                return;
-            }
+        if (event.getWereWolfAPI().getTimer() < 3600) {
+            Bukkit.getLogger().warning("[WereWolfPlugin] Statistiks no send because game duration < 1h");
+            return;
         }
 
         if(((GameManager) event.getWereWolfAPI()).isCrack()){

@@ -13,6 +13,7 @@ import io.github.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.stud.StudLoverEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
+import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import io.github.ph1lou.werewolfplugin.roles.lovers.Lover;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -84,7 +85,7 @@ public class Stud extends RoleVillage implements IPower {
         Lover lover = new Lover(game, new ArrayList<>(Arrays.asList(getPlayerWW(), killerWW.get())));
 
         game.getLoversManager().addLover(lover);
-
+        BukkitUtils.registerEvents(lover);
         lover.announceLovers();
 
         event.setCancelled(true);

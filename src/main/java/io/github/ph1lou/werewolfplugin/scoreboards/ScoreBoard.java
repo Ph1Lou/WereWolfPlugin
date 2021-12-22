@@ -246,7 +246,7 @@ public class ScoreBoard implements IScoreBoard {
 			bot = game.translate("werewolf.tab.timer",
 					Formatter.timer(Utils.conversion(game.getTimer())),
 					Formatter.format("&day&",day),
-					Formatter.format("&day_state",dayState));
+					Formatter.format("&day_state&",dayState));
 		}
 
 		bot += game.translate("werewolf.tab.bot");
