@@ -181,6 +181,20 @@ public class FearFulWerewolf extends RoleWereWolf {
         }
     }
 
+    @Override
+    public void disableAbilities() {
+        super.disableAbilities();
+        this.getPlayerWW()
+                .addPotionModifier(PotionModifier.remove(PotionEffectType.SPEED,
+                        "fearful",0));
+        this.getPlayerWW()
+                .addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
+                        "fearful",0));
+        this.getPlayerWW()
+                .addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS,
+                        "fearful",0));
+    }
+
     public static ClickableItem config(WereWolfAPI game) {
 
         List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),

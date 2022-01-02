@@ -1,5 +1,7 @@
 package io.github.ph1lou.werewolfplugin.game;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.ILover;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
@@ -22,8 +24,10 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.shanerx.mojang.Mojang;
-
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -46,7 +50,6 @@ public class PlayerWW implements IPlayerWW {
     private int maxHealth = 20;
     private Location disconnectedLocation = null;
     private int disconnectedChangeHealth = 0;
-    private static final Mojang api = new Mojang().connect();
     @Nullable
     private UUID mojangUUID = null;
     private final List<IPlayerWW> killer = new ArrayList<>();
@@ -71,10 +74,20 @@ public class PlayerWW implements IPlayerWW {
                 RolesBase.VILLAGER.getKey());
         this.game = api;
         try {
-            this.mojangUUID = UUID.fromString(PlayerWW.api.getUUIDOfUsername(name));
-        } catch (RuntimeException ignored) {
+            this.mojangUUID = getUUID(name);
+        } catch (IOException ignored) {
             this.game.setCrack();
+            ignored.printStackTrace();
         }
+    }
+
+    private static UUID getUUID(String name) throws IOException {
+        String uuid = "";
+        BufferedReader in = new BufferedReader(new InputStreamReader(new URL("https://api.mojang.com/users/profiles/minecraft/" + name).openStream()));
+        uuid = (((JsonObject)new JsonParser().parse(in)).get("id")).toString().replaceAll("\"", "");
+        uuid = uuid.replaceAll("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5");
+        in.close();
+        return UUID.fromString(uuid);
     }
 
     @Override

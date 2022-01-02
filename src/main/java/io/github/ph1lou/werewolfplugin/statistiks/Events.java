@@ -166,6 +166,7 @@ public class Events implements Listener {
 
         FileUtils_.save(file, jsonInputString);
 
+
         if (main.getCurrentGameReview().getPlayerSize() < 17) {
             Bukkit.getLogger().warning("[WereWolfPlugin] Statistiks no send because player size < 17");
             return;
@@ -176,18 +177,13 @@ public class Events implements Listener {
             return;
         }
 
-        if(((GameManager) event.getWereWolfAPI()).isCrack()){
-            Bukkit.getLogger().warning("[WereWolfPlugin] Statistiks no send because Server Crack");
-            return;
-        }
-
         try {
 
             URL url = new URL("http://ph1lou.fr:15000/infos2");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("POST");
-            con.setRequestProperty("Content-Type", "application/json; utf-8");
-            con.setRequestProperty("Accept", "application/json");
+            con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            con.setRequestProperty("accept", "application/json");
             con.setDoOutput(true);
 
 
@@ -218,19 +214,35 @@ public class Events implements Listener {
             e.printStackTrace();
         }
 
+        if(((GameManager) event.getWereWolfAPI()).isCrack()){
+            Bukkit.getLogger().warning("[WereWolfPlugin] Statistiks no send because Server Crack");
+            return;
+        }
+
         try {
 
             URL url = new URL("http://ph1lou.fr:3000/create");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("POST");
-            con.setRequestProperty("Content-Type", "application/json; utf-8");
+            con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
             con.setRequestProperty("Accept", "application/json");
             con.setDoOutput(true);
 
-
             try (OutputStream os = con.getOutputStream()) {
                 byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
-                os.write(input, 0, input.length);
+                os.write(input);
+            } catch (Exception ignored) {
+            }
+
+            try (BufferedReader br = new BufferedReader(
+                    new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
+                StringBuilder response = new StringBuilder();
+                String responseLine;
+                while ((responseLine = br.readLine()) != null) {
+                    response.append(responseLine.trim());
+                }
+
+                Bukkit.getLogger().warning(response.toString());
             } catch (Exception ignored) {
             }
         } catch (IOException e) {

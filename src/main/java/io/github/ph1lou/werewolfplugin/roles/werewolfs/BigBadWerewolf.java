@@ -8,12 +8,15 @@ import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.enums.Prefix;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleWereWolf;
 import org.bukkit.event.EventHandler;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
-public class BigBadWerewolf extends RoleWereWolf {
+public class BigBadWerewolf extends RoleWereWolf implements IPower {
+
+    private boolean power = true;
 
     public BigBadWerewolf(WereWolfAPI game, IPlayerWW playerWW, String key) {
         super(game, playerWW, key);
@@ -43,6 +46,11 @@ public class BigBadWerewolf extends RoleWereWolf {
 
     @EventHandler
     public void onDeath(FinalDeathEvent event){
+
+        if(!this.hasPower()){
+            return;
+        }
+
         if(event.getPlayerWW().getRole().isWereWolf()){
             this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
                     "big_bad_werewolf",0));
@@ -50,18 +58,31 @@ public class BigBadWerewolf extends RoleWereWolf {
                 this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE.getKey(),
                         "werewolf.role.big_bad_werewolf.werewolf_death");
             }
+            this.setPower(false);
         }
     }
 
     @Override
     public void recoverPotionEffect() {
-        if(this.isAbilityEnabled()){
+        if(this.isAbilityEnabled() && this.hasPower()){
             this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"big_bad_werewolf"));
         }
     }
 
+
+
     @Override
     public Aura getAura() {
         return Aura.DARK; //toujours dark
+    }
+
+    @Override
+    public void setPower(boolean power) {
+        this.power=power;
+    }
+
+    @Override
+    public boolean hasPower() {
+        return this.power;
     }
 }

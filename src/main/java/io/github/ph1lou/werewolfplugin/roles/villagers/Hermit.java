@@ -50,6 +50,23 @@ public class Hermit extends RoleVillage {
 
     }
 
+    @Override
+    public void disableAbilities() {
+        super.disableAbilities();
+        this.getPlayerWW()
+                .addPotionModifier(PotionModifier.remove(PotionEffectType.SPEED,
+                        "hermit",0));
+        this.getPlayerWW()
+                .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
+                        "hermit",0));
+        this.getPlayerWW()
+                .addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
+                        "hermit",0));
+        this.getPlayerWW()
+                .addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS,
+                        "hermit",0));
+    }
+
     @EventHandler
     public void onVote(VoteEvent event){
         if(!event.getPlayerWW().equals(this.getPlayerWW())){
