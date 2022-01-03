@@ -25,6 +25,7 @@ import io.github.ph1lou.werewolfplugin.roles.villagers.Citizen;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Comedian;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Cupid;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Detective;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Druid;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Elder;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Fox;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Guard;
@@ -389,6 +390,11 @@ public class RolesRegister {
                             .addCategory(Category.VILLAGER)
                             .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION)
                             .addConfig(Oracle::config));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name", RolesBase.DRUID.getKey(), Druid.class)
+                            .addCategory(Category.VILLAGER)
+                            .addConfig(Druid::config));
 
         } catch (NoSuchMethodException e) {
             e.printStackTrace();

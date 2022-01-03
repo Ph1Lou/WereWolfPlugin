@@ -575,6 +575,12 @@
         "command_see": "observer",
         "command_analyse": "analyser",
         "not_affected": "Vous ne pouvez effectuer cette commande que sur un joueur observé precedemment via §b/ww oberver§f"
+      },
+      "druid": {
+        "display": "Druide",
+        "perform": "Vous venez d'utiliser votre pouvoir, il y a &number& aura(s) sombre(s) à &blocks& blocs de vous",
+        "description": "Vous pouvez connaître le nombre d’auras obscures dans un rayon de &number& blocs en mangeant une pomme d’or accroupi pendant la nuit",
+        "day": "Vous pouvez de nouveau utiliser votre pouvoir"
       }
     },
     "vote": {
@@ -941,7 +947,8 @@
         "hermit": "Champ d'action de l'Ermite §b&number&",
         "will_o_the_wisp": "Champ d'action du Feu Follet §b&number&",
         "howling_werewolf": "Champ d'action du Loup Garou Hurleur §b&number&",
-        "twin": "Champ d'action des Jumeaux §b&number&"
+        "twin": "Champ d'action des Jumeaux §b&number&",
+        "druid": "Champ d'action du Druide §b&number&"
       },
       "troll": "Configuration §bTroll",
       "roles": {

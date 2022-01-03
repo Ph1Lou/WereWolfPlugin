@@ -52,6 +52,7 @@ public class Configuration implements IConfiguration {
     private int distanceFox = 20;
     private int distanceFearfulWerewolf = 20;
     private int distanceAvengerWerewolf = 10;
+    private int distanceDruid=50;
     private boolean trollSV = false;
     private int borderMax = 2000;
     private int borderMin = 300;
@@ -257,6 +258,16 @@ public class Configuration implements IConfiguration {
     @Override
     public void setDistanceBearTrainer(int distanceBearTrainer) {
         this.distanceBearTrainer = distanceBearTrainer;
+    }
+
+    @Override
+    public int getDistanceDruid() {
+        return this.distanceDruid;
+    }
+
+    @Override
+    public void setDistanceDruid(int distanceDruid) {
+        this.distanceDruid=distanceDruid;
     }
 
     @Override

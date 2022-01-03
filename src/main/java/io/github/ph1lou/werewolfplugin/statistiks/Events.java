@@ -66,6 +66,7 @@ import io.github.ph1lou.werewolfapi.events.roles.charmer.CharmerEvent;
 import io.github.ph1lou.werewolfapi.events.roles.charmer.CharmerGetEffectDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.comedian.UseMaskEvent;
 import io.github.ph1lou.werewolfapi.events.roles.detective.InvestigateEvent;
+import io.github.ph1lou.werewolfapi.events.roles.druid.DruidUsePowerEvent;
 import io.github.ph1lou.werewolfapi.events.roles.elder.ElderResurrectionEvent;
 import io.github.ph1lou.werewolfapi.events.roles.falsifier_werewolf.NewDisplayRole;
 import io.github.ph1lou.werewolfapi.events.roles.flute_player.AllPlayerEnchantedEvent;
@@ -1209,7 +1210,7 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("charmed_death_event",
-                event.getPlayerWW(), event.getTargetWW(),0,event.isBeforeCountDown()?"before_count_down":"after_count_down", api.getTimer()));
+                event.getPlayerWW(), event.getTargetWW(),api.getTimer(), event.isBeforeCountDown()?"before_count_down":"after_count_down"));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -1239,7 +1240,7 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("will_o_the_wisp_teleport",
-                event.getPlayerWW(),event.getNumberUse(), api.getTimer()));
+                event.getPlayerWW(),api.getTimer(), event.getNumberUse()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -1249,7 +1250,7 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("will_o_the_wisp_recover_role",
-                event.getPlayerWW(),event.getTargetWW(),0,event.getRoleKey(), api.getTimer()));
+                event.getPlayerWW(),event.getTargetWW(),api.getTimer(),event.getRoleKey()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -1279,7 +1280,7 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("twin_role",
-                event.getPlayerWW(),event.getTargetWW(),0,event.getTargetWW().getRole().getKey(), api.getTimer()));
+                event.getPlayerWW(),event.getTargetWW(),api.getTimer(),event.getTargetWW().getRole().getKey()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -1299,7 +1300,7 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("analyst_analyst",
-                event.getPlayerWW(),event.getTargetWW(),0,event.getPotions().stream().map(PotionEffectType::getName).collect(Collectors.joining(", ")), api.getTimer()));
+                event.getPlayerWW(),event.getTargetWW(),api.getTimer(),event.getPotions().stream().map(PotionEffectType::getName).collect(Collectors.joining(", "))));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -1309,7 +1310,17 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("analyst_see",
-                event.getPlayerWW(),event.getTargetWW(),0,event.hasEffect()?"werewolf.role.analyst.has_effects":"werewolf.role.analyst.no_effects", api.getTimer()));
+                event.getPlayerWW(),event.getTargetWW(),api.getTimer(),event.hasEffect()?"werewolf.role.analyst.has_effects":"werewolf.role.analyst.no_effects"));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onDruidInfo(DruidUsePowerEvent event) {
+
+        if (event.isCancelled()) return;
+
+        WereWolfAPI api = main.getWereWolfAPI();
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("druid_power",
+                event.getPlayerWW(),api.getTimer(),event.getDarkAura()));
     }
 
 
