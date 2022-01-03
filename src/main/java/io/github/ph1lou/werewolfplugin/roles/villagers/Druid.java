@@ -138,13 +138,13 @@ public class Druid extends RoleVillage implements IPower {
         IConfiguration config = game.getConfig();
 
         return ClickableItem.of((
-                new ItemBuilder(UniversalMaterial.GRAY_WOOL.getStack())
+                new ItemBuilder(UniversalMaterial.CYAN_WOOL.getStack())
                         .setDisplayName(game.translate("werewolf.menu.advanced_tool.druid",
                                 Formatter.number(config.getDistanceDruid())))
                         .setLore(lore).build()), e -> {
 
             if (e.isLeftClick()) {
-                config.setDistanceSister((config.getDistanceDruid() + 2));
+                config.setDistanceDruid((config.getDistanceDruid() + 2));
             } else if (config.getDistanceDruid() - 2 > 0) {
                 config.setDistanceDruid(config.getDistanceDruid() - 2);
             }
