@@ -19,6 +19,7 @@ import io.github.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
 import io.github.ph1lou.werewolfapi.events.game.utils.GoldenAppleParticleEvent;
 import io.github.ph1lou.werewolfapi.events.roles.InvisibleEvent;
 import io.github.ph1lou.werewolfapi.events.roles.StealEvent;
+import io.github.ph1lou.werewolfapi.events.roles.tenebrous_werewolf.TenebrousEvent;
 import io.github.ph1lou.werewolfapi.events.werewolf.WereWolfChatEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IInvisible;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
@@ -290,6 +291,15 @@ public class LittleGirl extends RoleVillage implements IInvisible {
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         this.setInvisible(false);
+    }
+
+    @EventHandler
+    public void onTenebrousEvent(TenebrousEvent event) {
+        if (!this.isInvisible()) return;
+
+        if (event.getAffectedPlayers().contains(getPlayerWW())) {
+            event.removeAffectedPlayer(getPlayerWW());
+        }
     }
 
     @Override

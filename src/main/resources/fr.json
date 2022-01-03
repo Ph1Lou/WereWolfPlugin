@@ -575,6 +575,15 @@
         "command_see": "observer",
         "command_analyse": "analyser",
         "not_affected": "Vous ne pouvez effectuer cette commande que sur un joueur observé precedemment via §b/ww oberver§f"
+      },
+      "tenebrous_werewolf": {
+        "display": "Loup Ténébreux",
+        "description": "Une fois par partie, durant la nuit, vous pouvez donner un effet de Blindness à tous les non-loups proches pendant 30 secondes ou jusqu'à ce qu'ils soient attaqués par un loup",
+        "description_command": "/ww tenebres",
+        "command": "tenebres",
+        "darkness": "Le loup Ténébreux vous a plongé dans les ténèbres!",
+        "darkness_wolves": "Le Loup Ténébreux a plongé une partie du village dans les ténèbres",
+        "not_night": "Vous ne pouvez pas effectuer cette action le jour"
       }
     },
     "vote": {

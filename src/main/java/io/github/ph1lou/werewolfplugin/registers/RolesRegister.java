@@ -48,18 +48,7 @@ import io.github.ph1lou.werewolfplugin.roles.villagers.Villager;
 import io.github.ph1lou.werewolfplugin.roles.villagers.WildChild;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Witch;
 import io.github.ph1lou.werewolfplugin.roles.villagers.WolfDog;
-import io.github.ph1lou.werewolfplugin.roles.werewolfs.AlphaWereWolf;
-import io.github.ph1lou.werewolfplugin.roles.werewolfs.AvengerWereWolf;
-import io.github.ph1lou.werewolfplugin.roles.werewolfs.BigBadWerewolf;
-import io.github.ph1lou.werewolfplugin.roles.werewolfs.FalsifierWereWolf;
-import io.github.ph1lou.werewolfplugin.roles.werewolfs.FearFulWerewolf;
-import io.github.ph1lou.werewolfplugin.roles.werewolfs.GrimyWereWolf;
-import io.github.ph1lou.werewolfplugin.roles.werewolfs.HowlingWerewolfWerewolf;
-import io.github.ph1lou.werewolfplugin.roles.werewolfs.InfectFatherOfTheWolves;
-import io.github.ph1lou.werewolfplugin.roles.werewolfs.MischievousWereWolf;
-import io.github.ph1lou.werewolfplugin.roles.werewolfs.MysticalWereWolf;
-import io.github.ph1lou.werewolfplugin.roles.werewolfs.NaughtyLittleWolf;
-import io.github.ph1lou.werewolfplugin.roles.werewolfs.WereWolf;
+import io.github.ph1lou.werewolfplugin.roles.werewolfs.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -389,6 +378,10 @@ public class RolesRegister {
                             .addCategory(Category.VILLAGER)
                             .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION)
                             .addConfig(Oracle::config));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name", RolesBase.TENEBROUS_WEREWOLF.getKey(), TenebrousWerewolf.class)
+                            .addCategory(Category.WEREWOLF));
 
         } catch (NoSuchMethodException e) {
             e.printStackTrace();

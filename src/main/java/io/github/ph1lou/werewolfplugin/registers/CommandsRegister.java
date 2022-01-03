@@ -38,6 +38,7 @@ import io.github.ph1lou.werewolfplugin.commands.roles.villager.witch.CommandWitc
 import io.github.ph1lou.werewolfplugin.commands.roles.werewolf.CommandWereWolf;
 import io.github.ph1lou.werewolfplugin.commands.roles.werewolf.CommandWereWolfChat;
 import io.github.ph1lou.werewolfplugin.commands.roles.werewolf.infect.CommandInfect;
+import io.github.ph1lou.werewolfplugin.commands.roles.werewolf.tenebrous.CommandTenebrous;
 import io.github.ph1lou.werewolfplugin.commands.utilities.CommandAnonymeChat;
 import io.github.ph1lou.werewolfplugin.commands.utilities.CommandAura;
 import io.github.ph1lou.werewolfplugin.commands.utilities.CommandCompo;
@@ -383,6 +384,13 @@ public class CommandsRegister {
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
                         .addArgNumbers(1));
+
+        commandsRegister.add(new CommandRegister("werewolf.name",
+                "werewolf.role.tenebrous_werewolf.command", new CommandTenebrous())
+                .addRoleKey(RolesBase.TENEBROUS_WEREWOLF.getKey())
+                .setRequiredAbilityEnabled()
+                .setRequiredPower().addStateAccess(StatePlayer.ALIVE)
+                .addStateWW(StateGame.GAME));
 
         commandsRegister
                 .add(new CommandRegister("werewolf.name",

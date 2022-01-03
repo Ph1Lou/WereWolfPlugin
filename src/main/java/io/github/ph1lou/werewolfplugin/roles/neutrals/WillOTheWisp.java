@@ -19,6 +19,7 @@ import io.github.ph1lou.werewolfapi.events.game.life_cycle.ResurrectionEvent;
 import io.github.ph1lou.werewolfapi.events.game.utils.GoldenAppleParticleEvent;
 import io.github.ph1lou.werewolfapi.events.roles.InvisibleEvent;
 import io.github.ph1lou.werewolfapi.events.roles.StealEvent;
+import io.github.ph1lou.werewolfapi.events.roles.tenebrous_werewolf.TenebrousEvent;
 import io.github.ph1lou.werewolfapi.events.roles.will_o_the_wisp.WillOTheWispRecoverRoleEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IInvisible;
 import io.github.ph1lou.werewolfapi.rolesattributs.ILimitedUse;
@@ -373,5 +374,14 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
                     .build());
 
         });
+    }
+
+    @EventHandler
+    public void onTenebrousEvent(TenebrousEvent event) {
+        if (!this.isInvisible()) return;
+
+        if (event.getAffectedPlayers().contains(getPlayerWW())) {
+            event.removeAffectedPlayer(getPlayerWW());
+        }
     }
 }
