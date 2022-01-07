@@ -9,6 +9,8 @@ import io.github.ph1lou.werewolfapi.enums.StateGame;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.events.roles.fruitmerchant.FruitMerchantCommandEvent;
+import io.github.ph1lou.werewolfapi.events.roles.fruitmerchant.FruitMerchantRecoverInformationEvent;
+import io.github.ph1lou.werewolfapi.events.roles.fruitmerchant.GoldenCount;
 import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
 import io.github.ph1lou.werewolfapi.utils.Utils;
 import io.github.ph1lou.werewolfplugin.roles.villagers.FruitMerchant;
@@ -17,6 +19,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -38,6 +42,7 @@ public class CommandFruitMerchant implements ICommand {
         Set<IPlayerWW> players = Bukkit.getOnlinePlayers()
                 .stream()
                 .map(Entity::getUniqueId)
+                .filter(uuid1 -> !uuid1.equals(player.getUniqueId()))
                 .map(game::getPlayerWW)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
@@ -76,11 +81,27 @@ public class CommandFruitMerchant implements ICommand {
         BukkitUtils.scheduleSyncDelayedTask(() -> {
             if(game.isState(StateGame.GAME)){
                 if(playerWW.isState(StatePlayer.ALIVE)){
+                    Map<IPlayerWW, GoldenCount> goldenCountMap = new HashMap<>();
+                    fruitMerchant.getAffectedPlayers()
+                            .forEach(playerWW1 -> goldenCountMap.put(playerWW1,new GoldenCount(fruitMerchant.getGoldenAppleNumber(playerWW1),
+                                    Utils.countGoldenApple(playerWW1))));
+
+                    fruitMerchant.clearAffectedPlayer();
+                    FruitMerchantRecoverInformationEvent fruitMerchantRecoverInformationEvent = new FruitMerchantRecoverInformationEvent(playerWW,goldenCountMap);
+
+                    Bukkit.getPluginManager().callEvent(fruitMerchantRecoverInformationEvent);
+
+                    if(fruitMerchantRecoverInformationEvent.isCancelled()){
+                        playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+                        return;
+                    }
+
                     playerWW.sendMessageWithKey(Prefix.LIGHT_BLUE.getKey(),"werewolf.role.fruit_merchant.announce_info");
-                    fruitMerchant.getAffectedPlayers().forEach(playerWW1 -> playerWW.sendMessageWithKey(Prefix.YELLOW.getKey(),"werewolf.role.fruit_merchant.info",
+                    fruitMerchantRecoverInformationEvent.getPlayerWWS().forEach(playerWW1 -> playerWW.sendMessageWithKey(Prefix.YELLOW.getKey(),"werewolf.role.fruit_merchant.info",
                             Formatter.player(playerWW1.getName()),
-                            Formatter.number(fruitMerchant.getGoldenAppleNumber(playerWW1)),
-                            Formatter.format("&number2&", Utils.countGoldenApple(playerWW1))));
+                            Formatter.number(fruitMerchantRecoverInformationEvent.getGoldenAppleCount(playerWW1).getOldCount()),
+                            Formatter.format("&number2&", fruitMerchantRecoverInformationEvent.getGoldenAppleCount(playerWW1).getNewCount())));
+
                     BukkitUtils.scheduleSyncDelayedTask(() -> {
                         fruitMerchant.setPower(true);
                         playerWW.sendMessageWithKey(Prefix.GREEN.getKey(),"werewolf.role.fruit_merchant.recover");

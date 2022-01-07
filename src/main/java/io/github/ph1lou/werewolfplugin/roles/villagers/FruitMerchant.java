@@ -11,11 +11,14 @@ import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.enums.TimerBase;
 import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import io.github.ph1lou.werewolfapi.events.roles.fruitmerchant.FruitMerchantDeathEvent;
+import io.github.ph1lou.werewolfapi.events.roles.fruitmerchant.GoldenCount;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
 import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfapi.utils.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -42,7 +45,7 @@ public class FruitMerchant extends RoleVillage implements IAffectedPlayers, IPow
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game,this)
-                .setDescription(game.translate("werewolf.role.analyst.description",
+                .setDescription(game.translate("werewolf.role.fruit_merchant.description",
                         Formatter.number(game.getConfig().getDistanceFruitMerchant()),
                         Formatter.timer(Utils
                                 .conversion(game.getConfig()
@@ -98,14 +101,25 @@ public class FruitMerchant extends RoleVillage implements IAffectedPlayers, IPow
             return;
         }
 
-        if(!this.getAffectedPlayers().contains(event.getPlayerWW())){
+        if(!this.goldenAppleNumber.containsKey(event.getPlayerWW())){
+            return;
+        }
+
+        FruitMerchantDeathEvent fruitMerchantDeathEvent = new FruitMerchantDeathEvent(this.getPlayerWW(),
+                event.getPlayerWW(),new GoldenCount(this.goldenAppleNumber.get(event.getPlayerWW()),
+                Utils.countGoldenApple(event.getPlayerWW())));
+
+        Bukkit.getPluginManager().callEvent(fruitMerchantDeathEvent);
+
+        if(fruitMerchantDeathEvent.isCancelled()){
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
             return;
         }
 
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey(),"werewolf.role.fruit_merchant.info",
                 Formatter.player(event.getPlayerWW().getName()),
-                Formatter.number(this.getGoldenAppleNumber(event.getPlayerWW())),
-                Formatter.format("&number2&", Utils.countGoldenApple(event.getPlayerWW())));
+                Formatter.number(fruitMerchantDeathEvent.getGoldenAppleCount().getOldCount()),
+                Formatter.format("&number2&", fruitMerchantDeathEvent.getGoldenAppleCount().getNewCount()));
 
         this.removeAffectedPlayer(event.getPlayerWW());
     }

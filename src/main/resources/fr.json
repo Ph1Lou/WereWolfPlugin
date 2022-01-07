@@ -578,7 +578,7 @@
       },
       "fruit_merchant": {
         "display": "Marchande de Fruit",
-        "perform": "Vous venez d'utiliser votre pouvoir, les joueurs dans votre champ d'action sont &players&. \nVous recevrez dans §b&timer&§f minutes les informations",
+        "perform": "Vous venez d'utiliser votre pouvoir, les joueurs dans votre champ d'action sont &players&. \nVous recevrez dans §b&timer&§f les informations",
         "announce_info": "Vous recevez les informations suite à votre commande",
         "info": "Le joueur &player& avait &number& pomme(s) d'or lors de l'execution de votre commande, il en a maintenant &number2&",
         "command": "compter",
