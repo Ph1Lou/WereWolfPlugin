@@ -61,10 +61,13 @@ public class WiseElder extends RoleVillage {
                     switch (aura) {
                         case NEUTRAL:
                             neutralCounter++;
+                            break;
                         case DARK:
                             darkCounter++;
+                            break;
                         case LIGHT:
                             lightCounter++;
+                            break;
                     }
                 });
     }
