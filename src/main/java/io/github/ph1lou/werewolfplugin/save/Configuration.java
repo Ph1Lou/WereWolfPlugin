@@ -69,6 +69,7 @@ public class Configuration implements IConfiguration {
     private boolean oracleEveryOtherDay = true;
     private boolean detectiveEveryOtherDay = true;
     private boolean sweetAngel = false;
+    private int distanceFruitMerchant=50;
 
     public Configuration(IRegisterManager registerManager) {
         this.registerManager = registerManager;
@@ -357,6 +358,16 @@ public class Configuration implements IConfiguration {
     @Override
     public void setDistanceFlutePlayer(int distanceFlutePlayer) {
         this.distanceFlutePlayer = distanceFlutePlayer;
+    }
+
+    @Override
+    public int getDistanceFruitMerchant() {
+        return this.distanceFruitMerchant;
+    }
+
+    @Override
+    public void setDistanceFruitMerchant(int distanceFruitMerchant) {
+        this.distanceFruitMerchant=distanceFruitMerchant;
     }
 
     @Override

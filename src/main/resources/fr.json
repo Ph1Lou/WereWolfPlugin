@@ -575,6 +575,16 @@
         "command_see": "observer",
         "command_analyse": "analyser",
         "not_affected": "Vous ne pouvez effectuer cette commande que sur un joueur observé precedemment via §b/ww oberver§f"
+      },
+      "fruit_merchant": {
+        "display": "Marchande de Fruit",
+        "perform": "Vous venez d'utiliser votre pouvoir, les joueurs dans votre champ d'action sont &players&. \nVous recevrez dans §b&timer&§f minutes les informations",
+        "announce_info": "Vous recevez les informations suite à votre commande",
+        "info": "Le joueur &player& avait &number& pomme(s) d'or lors de l'execution de votre commande, il en a maintenant &number2&",
+        "command": "compter",
+        "recover": "Vous venez de récupérer votre pouvoir. Faites §b/ww compter§f pour le réutiliser",
+        "description": "Avec §b/ww compter§f, vous pouvez compter les pommes d'or des joueurs à §b&number&§f blocs de vous.",
+        "power": "1 chance sur 4 de régénérer 3 ♥ avec les pommes d’or, la nourriture vous donne 1 gigot de plus."
       }
     },
     "vote": {
@@ -941,7 +951,8 @@
         "hermit": "Champ d'action de l'Ermite §b&number&",
         "will_o_the_wisp": "Champ d'action du Feu Follet §b&number&",
         "howling_werewolf": "Champ d'action du Loup Garou Hurleur §b&number&",
-        "twin": "Champ d'action des Jumeaux §b&number&"
+        "twin": "Champ d'action des Jumeaux §b&number&",
+        "fruit_merchant": "Champ d'action de la Marchande de fruit §b&number&"
       },
       "troll": "Configuration §bTroll",
       "roles": {
@@ -1049,7 +1060,8 @@
         "invulnerability": "Invulnérabilité (§b&timer&§r)",
         "succubus_duration": "Durée du Charme du Succube (§b&timer&§r)",
         "charmer_countdown": "Durée du compte à rebours de la Charmeuse (§b&timer&§r)",
-        "analyse_duration": "Début du pouvoir Analyste (§b&timer&§r)"
+        "analyse_duration": "Début du pouvoir Analyste (§b&timer&§r)",
+        "fruit_merchant_cooldown": "Cooldown du pouvoir de la Marchande de Fruit (§b&timer&§r)"
       },
       "random_events": {
         "list": "Liste des évènements aléatoires §bactivés§f :\n",
