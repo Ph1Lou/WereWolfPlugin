@@ -363,7 +363,8 @@ public class RolesRegister {
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name", RolesBase.WISE_ELDER.getKey(), WiseElder.class)
-                            .addCategory(Category.VILLAGER));
+                            .addCategory(Category.VILLAGER)
+                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION));
 
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
