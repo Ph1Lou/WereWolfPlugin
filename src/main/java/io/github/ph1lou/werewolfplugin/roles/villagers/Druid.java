@@ -158,4 +158,9 @@ public class Druid extends RoleVillage implements IPower {
 
         });
     }
+
+    @Override
+    public Aura getDefaultAura() {
+        return Aura.DARK;
+    }
 }

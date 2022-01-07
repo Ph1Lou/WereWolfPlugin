@@ -222,7 +222,7 @@ public class Events implements Listener {
 
         try {
 
-            URL url = new URL("http://ph1lou.fr:3000/create");
+            URL url = new URL("https://api.ph1lou.fr/create");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("POST");
             con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
