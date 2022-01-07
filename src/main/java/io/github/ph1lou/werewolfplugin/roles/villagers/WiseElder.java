@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.events.roles.wise_elder.RevealAuraAmountEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
@@ -46,7 +47,8 @@ public class WiseElder extends RoleVillage {
                     Formatter.format("&neutral&",neutralCounter),
                     Formatter.format("&dark&",darkCounter),
                     Formatter.format("&light&",lightCounter));
-            Bukkit.getPluginManager().callEvent(new RevealAuraAmountEvent(getPlayerWW(),neutralCounter,darkCounter,lightCounter));
+            Bukkit.getPluginManager()
+                    .callEvent(new RevealAuraAmountEvent(getPlayerWW(),neutralCounter,darkCounter,lightCounter));
             resetCounters();
         }
     }
@@ -57,7 +59,9 @@ public class WiseElder extends RoleVillage {
 
         Location location = getPlayerWW().getLocation();
         game.getPlayersWW().stream()
-                .filter(iPlayerWW -> iPlayerWW.getLocation().distance(location) < 15 && !iPlayerWW.equals(getPlayerWW()))
+                .filter(iPlayerWW -> iPlayerWW.getLocation().distance(location) < 15
+                        && !iPlayerWW.equals(getPlayerWW())
+                        && iPlayerWW.isState(StatePlayer.ALIVE))
                 .map(IPlayerWW::getRole)
                 .map(IRole::getAura)
                 .forEach(aura -> {
