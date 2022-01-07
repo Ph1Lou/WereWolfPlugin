@@ -579,7 +579,7 @@
       "wise_elder": {
         "display" : "Vieux sage",
         "description": "Vous disposez de 3 compteurs (1 pour chaque type d'Aura)\nPour chaque seconde passée à moins de 15 blocs d'un joueur, le compteur correspondant à l'Aura de ce joueur augmente d'un point.\nA la fin de chaque cycle (à partir du cycle 3), vous recevez un message avec le nombre de points de chaque compteur et les compteurs sont remis à zéro.",
-        "end_of_cycle": "Cycle terminé! §fCompteur aura neutre: &neutral&§r; §lCompteur aura obscure: &dark&§r; §eCompteur aura lumineuse: &light&§r"
+        "end_of_cycle": "Cycle terminé! §f§lCompteur aura neutre: &neutral&§r; §0§lCompteur aura obscure: &dark&§r; §l§eCompteur aura lumineuse: &light&"
       }
     },
     "vote": {

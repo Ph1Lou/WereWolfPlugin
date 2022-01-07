@@ -5,8 +5,10 @@ import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
+import io.github.ph1lou.werewolfapi.events.roles.wise_elder.RevealAuraAmountEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
@@ -44,6 +46,7 @@ public class WiseElder extends RoleVillage {
                     Formatter.format("&neutral&",neutralCounter),
                     Formatter.format("&dark&",darkCounter),
                     Formatter.format("&light&",lightCounter));
+            Bukkit.getPluginManager().callEvent(new RevealAuraAmountEvent(getPlayerWW(),neutralCounter,darkCounter,lightCounter));
             resetCounters();
         }
     }
