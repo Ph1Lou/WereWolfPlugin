@@ -575,6 +575,10 @@
         "command_see": "observer",
         "command_analyse": "analyser",
         "not_affected": "Vous ne pouvez effectuer cette commande que sur un joueur observé precedemment via §b/ww oberver§f"
+      },
+      "scammer": {
+        "display": "Escroc",
+        "description": "Vous volez progressivement le rôle des joueurs autour de vous (20 blocs) au rythme de 1% toutes les 9 secondes. Vous récupérez le rôle (et rejoignez le camp) du premier joueur qui arrive à 100%. Le joueur escroqué devient Loup-Garou Blanc s’il était dans le camp des Loups ou devient Simple Villageois dans tous les autres cas."
       }
     },
     "vote": {
