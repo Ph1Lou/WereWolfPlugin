@@ -16,11 +16,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
+
 /**
  * @author Héphaïsto
  */
 public class Servitor extends RoleVillage implements IPower {
-    private boolean power;
+    private boolean power = true;
     private IPlayerWW master;
 
     public Servitor(WereWolfAPI game, IPlayerWW playerWW, String key) {
@@ -56,9 +58,15 @@ public class Servitor extends RoleVillage implements IPower {
 
         if (!isAbilityEnabled()) return;
 
+        if (master == null) return;
+
         IPlayerWW playerWW = event.getPlayerWW();
 
-        if (playerWW.equals(getPlayerWW())) {
+        Optional<IPlayerWW> lastKiller = event.getPlayerWW().getLastKiller();
+
+        if (!lastKiller.isPresent()) return;
+
+        if (playerWW.equals(getPlayerWW()) && lastKiller.get().equals(master)) {
             event.setCancelled(true);
             autoResurrection();
         }
