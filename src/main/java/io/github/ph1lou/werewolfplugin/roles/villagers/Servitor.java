@@ -7,6 +7,7 @@ import io.github.ph1lou.werewolfapi.WereWolfAPI;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.ThirdDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.servitor.DefinitiveMasterEvent;
+import io.github.ph1lou.werewolfapi.events.roles.servitor.MasterChosenEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
 import org.bukkit.Bukkit;
@@ -42,6 +43,7 @@ public class Servitor extends RoleVillage implements IPower {
     public void onDay(DayEvent event) {
         if (power) {
             master = game.autoSelect(getPlayerWW());
+            Bukkit.getPluginManager().callEvent(new MasterChosenEvent(getPlayerWW(),master));
         }
     }
 
