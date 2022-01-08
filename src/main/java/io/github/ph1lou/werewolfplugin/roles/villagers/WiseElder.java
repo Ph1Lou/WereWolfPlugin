@@ -11,8 +11,12 @@ import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 
 public class WiseElder extends RoleVillage {
 
@@ -58,10 +62,13 @@ public class WiseElder extends RoleVillage {
         if (!active) return;
 
         Location location = getPlayerWW().getLocation();
-        game.getPlayersWW().stream()
-                .filter(iPlayerWW -> iPlayerWW.getLocation().distance(location) < 15
-                        && !iPlayerWW.equals(getPlayerWW())
-                        && iPlayerWW.isState(StatePlayer.ALIVE))
+        Bukkit.getOnlinePlayers().stream()
+                .map(Entity::getUniqueId)
+                .filter(uniqueId -> !getPlayerUUID().equals(uniqueId))
+                .map(game::getPlayerWW)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .filter(iPlayerWW -> iPlayerWW.isState(StatePlayer.ALIVE) && checkDistance(iPlayerWW,location))
                 .map(IPlayerWW::getRole)
                 .map(IRole::getAura)
                 .forEach(aura -> {
@@ -86,5 +93,16 @@ public class WiseElder extends RoleVillage {
         neutralCounter = 0;
         darkCounter = 0;
         lightCounter = 0;
+    }
+
+    /**
+     * Check that the given PlayerWW is within 15 blocks of the Location
+     * @param player the PlayerWW
+     * @param location the location to compare
+     * @return true if the player is within 15 blocks of the location, false otherwise
+     */
+    private boolean checkDistance(IPlayerWW player, Location location) {
+        return player.getLocation().getWorld() == location.getWorld() &&
+                player.getLocation().distance(location) < 15;
     }
 }
