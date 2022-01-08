@@ -17,6 +17,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
+/**
+ * @author Hephaisto
+ */
 public class WiseElder extends RoleVillage {
 
     private int neutralCounter;
