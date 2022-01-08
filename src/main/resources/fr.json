@@ -575,6 +575,10 @@
         "command_see": "observer",
         "command_analyse": "analyser",
         "not_affected": "Vous ne pouvez effectuer cette commande que sur un joueur observé precedemment via §b/ww oberver§f"
+      },
+      "servitor": {
+        "display" : "Serviteur",
+        "description" : "Vous avez un Maître choisi aléatoirement à chaque début d'épisode qui vous confère Strength 0.5 lorsqu’il se situe à moins de 25 blocs de vous.\nSi votre Maître vous tue pour la première fois, vous ressuscitez mais le Maître devient alors définitif et vous confère Weakness I lorsqu’il se situe à moins de 25 blocs de vous.\nLes Maîtres ne savent pas qu’ils le sont et ne connaissent pas votre identité Serviteur."
       }
     },
     "vote": {
