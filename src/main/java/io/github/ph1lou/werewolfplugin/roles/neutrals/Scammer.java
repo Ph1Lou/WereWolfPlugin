@@ -1,11 +1,11 @@
 package io.github.ph1lou.werewolfplugin.roles.neutrals;
 
-import io.github.ph1lou.werewolfapi.DescriptionBuilder;
-import io.github.ph1lou.werewolfapi.IPlayerWW;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
-import io.github.ph1lou.werewolfapi.enums.Camp;
+import fr.minuskube.inv.ClickableItem;
+import io.github.ph1lou.werewolfapi.Formatter;
+import io.github.ph1lou.werewolfapi.*;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
 import io.github.ph1lou.werewolfapi.events.roles.scammer.ScamEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
@@ -13,11 +13,15 @@ import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleNeutral;
 import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
+import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Villager;
+import io.github.ph1lou.werewolfplugin.roles.werewolfs.WereWolf;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,6 +38,27 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
         super(game, playerWW, key);
     }
 
+    public static ClickableItem config(WereWolfAPI game) {
+
+        IConfiguration config = game.getConfig();
+
+        return ClickableItem.of(
+                new ItemBuilder(Material.STICK)
+                        .setLore(game.translate("werewolf.role.scammer.config.lore", Formatter.format("&timer&", config.getScamDelay())))
+                        .setDisplayName(game.translate("werewolf.role.scammer.config.name"))
+                        .build(), e -> {
+                    if (e.isLeftClick()) {
+                        config.setScamDelay(config.getScamDelay() + 1);
+                    } else if (e.isRightClick()) {
+                        config.setScamDelay(config.getScamDelay() - 1);
+                    }
+
+                    e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                            .setLore(game.translate("werewolf.role.scammer.config.lore", Formatter.format("&timer&", config.getScamDelay())))
+                            .build());
+                });
+    }
+
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
@@ -47,7 +72,9 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
     }
 
     @EventHandler
-    public void onStart(StartEvent event) {
+    public void onStart(DayEvent event) {
+        if (event.getNumber() != 1) return;
+
         BukkitUtils.scheduleSyncRepeatingTask(new BukkitRunnable() {
             @Override
             public void run() {
@@ -71,10 +98,10 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
                                     return;
                                 }
                             }
-                            affectedPlayer.put(iPlayerWW, value);
+                            affectedPlayer.put(iPlayerWW, value + 1);
                         });
             }
-        }, 9 * 20, 9 * 20);
+        }, game.getConfig().getScamDelay() * 20L, game.getConfig().getScamDelay() * 20L);
     }
 
     @EventHandler
@@ -82,12 +109,18 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
         setPower(false);
         IPlayerWW target = event.getTargetWW();
         IRole targetRole = target.getRole();
+        HandlerList.unregisterAll(targetRole);
         getPlayerWW().setRole(targetRole);
-        if (targetRole.isCamp(Camp.WEREWOLF)) {
-            target.setRole(new WhiteWereWolf(game, target, RolesBase.ALPHA_WEREWOLF.getKey()));
+        BukkitUtils.registerEvents(targetRole);
+        IRole newRole;
+        if (targetRole.isWereWolf()) {
+            newRole = new WereWolf(game, target, RolesBase.WEREWOLF.getKey());
         } else {
-            target.setRole(new Villager(game, target, RolesBase.VILLAGER.getKey()));
+            newRole = new Villager(game, target, RolesBase.VILLAGER.getKey());
         }
+        newRole.disableAbilities();
+        target.setRole(newRole);
+        BukkitUtils.registerEvents(target.getRole());
     }
 
     @Override

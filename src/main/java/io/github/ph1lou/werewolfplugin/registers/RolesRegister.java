@@ -380,7 +380,8 @@ public class RolesRegister {
             rolesRegister
                     .add(new RoleRegister("werewolf.name", RolesBase.SCAMMER.getKey(), Scammer.class)
                             .addCategory(Category.NEUTRAL)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.HYBRID));
+                            .setRandomCompositionAttribute(RandomCompositionAttribute.HYBRID)
+                            .addConfig(Scammer::config));
 
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
