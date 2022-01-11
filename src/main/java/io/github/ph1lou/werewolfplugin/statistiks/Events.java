@@ -75,6 +75,9 @@ import io.github.ph1lou.werewolfapi.events.roles.flute_player.FindFluteEvent;
 import io.github.ph1lou.werewolfapi.events.roles.flute_player.GiveFluteEvent;
 import io.github.ph1lou.werewolfapi.events.roles.fox.BeginSniffEvent;
 import io.github.ph1lou.werewolfapi.events.roles.fox.SniffEvent;
+import io.github.ph1lou.werewolfapi.events.roles.fruitmerchant.FruitMerchantCommandEvent;
+import io.github.ph1lou.werewolfapi.events.roles.fruitmerchant.FruitMerchantDeathEvent;
+import io.github.ph1lou.werewolfapi.events.roles.fruitmerchant.FruitMerchantRecoverInformationEvent;
 import io.github.ph1lou.werewolfapi.events.roles.grim_werewolf.GrimEvent;
 import io.github.ph1lou.werewolfapi.events.roles.guard.GuardEvent;
 import io.github.ph1lou.werewolfapi.events.roles.guard.GuardResurrectionEvent;
@@ -1311,6 +1314,36 @@ public class Events implements Listener {
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("analyst_see",
                 event.getPlayerWW(),event.getTargetWW(),api.getTimer(),event.hasEffect()?"werewolf.role.analyst.has_effects":"werewolf.role.analyst.no_effects"));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onFruitMerchant(FruitMerchantDeathEvent event) {
+
+        if (event.isCancelled()) return;
+
+        WereWolfAPI api = main.getWereWolfAPI();
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("fruit_merchant_death",
+                event.getPlayerWW(),event.getTargetWW(),api.getTimer(),String.valueOf(event.getGoldenAppleCount().getOldCount()),event.getGoldenAppleCount().getNewCount()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onFruitMerchantCommand(FruitMerchantCommandEvent event) {
+
+        if (event.isCancelled()) return;
+
+        WereWolfAPI api = main.getWereWolfAPI();
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("fruit_merchant_command",
+                event.getPlayerWW(),event.getPlayerWWS(), api.getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onFruitMerchantRecoverInformation(FruitMerchantRecoverInformationEvent event) {
+
+        if (event.isCancelled()) return;
+
+        WereWolfAPI api = main.getWereWolfAPI();
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("fruit_merchant_recover",
+                event.getPlayerWW(), event.getPlayerWWS(), api.getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
