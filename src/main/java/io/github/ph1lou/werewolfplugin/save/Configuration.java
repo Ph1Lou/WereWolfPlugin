@@ -37,6 +37,7 @@ public class Configuration implements IConfiguration {
     private int useOfFlair = 3;
     private int goldenAppleParticles = 1;
     private int distanceBearTrainer = 50;
+    private int distanceScammer = 20;
     private int distanceSuccubus = 20;
     private int distanceAmnesiacLovers = 15;
     private int distancePriestess = 10;
@@ -669,5 +670,15 @@ public class Configuration implements IConfiguration {
     public void setScamDelay(int scamDelay) {
         if (scamDelay < 0) return;
         this.scamDelay = scamDelay;
+    }
+
+    @Override
+    public int getDistanceScammer() {
+        return distanceScammer;
+    }
+
+    @Override
+    public void setDistanceScammer(int distanceScammer) {
+        this.distanceScammer = distanceScammer;
     }
 }

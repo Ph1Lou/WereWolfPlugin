@@ -5,6 +5,7 @@ import io.github.ph1lou.werewolfapi.Formatter;
 import io.github.ph1lou.werewolfapi.*;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
 import io.github.ph1lou.werewolfapi.events.roles.scammer.ScamEvent;
@@ -38,31 +39,10 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
         super(game, playerWW, key);
     }
 
-    public static ClickableItem config(WereWolfAPI game) {
-
-        IConfiguration config = game.getConfig();
-
-        return ClickableItem.of(
-                new ItemBuilder(Material.STICK)
-                        .setLore(game.translate("werewolf.role.scammer.config.lore", Formatter.format("&timer&", config.getScamDelay())))
-                        .setDisplayName(game.translate("werewolf.role.scammer.config.name"))
-                        .build(), e -> {
-                    if (e.isLeftClick()) {
-                        config.setScamDelay(config.getScamDelay() + 1);
-                    } else if (e.isRightClick()) {
-                        config.setScamDelay(config.getScamDelay() - 1);
-                    }
-
-                    e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                            .setLore(game.translate("werewolf.role.scammer.config.lore", Formatter.format("&timer&", config.getScamDelay())))
-                            .build());
-                });
-    }
-
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.scammer.description"))
+                .setDescription(game.translate("werewolf.role.scammer.description",Formatter.timer(String.valueOf(game.getConfig().getScamDelay()))))
                 .build();
     }
 
@@ -106,7 +86,15 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
 
     @EventHandler
     public void onScam(ScamEvent event) {
+
+        if (event.isCancelled()){
+            getPlayerWW().sendMessageWithKey("werewolf.check.cancel");
+            affectedPlayer.put(event.getTargetWW(),0);
+            return;
+        }
+
         setPower(false);
+        affectedPlayer.clear();
         IPlayerWW target = event.getTargetWW();
         IRole targetRole = target.getRole();
         HandlerList.unregisterAll(targetRole);
@@ -152,7 +140,65 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
      */
     private boolean checkDistance(IPlayerWW player, Location location) {
         return player.getLocation().getWorld() == location.getWorld() &&
-                player.getLocation().distance(location) < 20;
+                player.getLocation().distance(location) < game.getConfig().getDistanceScammer();
+    }
+
+    public static ClickableItem config(WereWolfAPI game) {
+        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
+                game.translate("werewolf.menu.right"));
+        IConfiguration config = game.getConfig();
+
+        return ClickableItem.of((
+                new ItemBuilder(UniversalMaterial.BROWN_WOOL.getStack())
+                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.scammer",
+                                Formatter.number(config.getDistanceScammer())))
+                        .setLore(lore).build()), e -> {
+            if (e.isLeftClick()) {
+                config.setDistanceScammer((config.getDistanceScammer() + 5));
+            } else if (config.getDistanceScammer() - 5 > 0) {
+                config.setDistanceScammer(config.getDistanceScammer() - 5);
+            }
+
+            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                    .setLore(lore)
+                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.scammer",
+                            Formatter.number(config.getDistanceScammer())))
+                    .build());
+
+        });
+    }
+
+    public static ClickableItem configDelay(WereWolfAPI game) {
+
+        IConfiguration config = game.getConfig();
+
+        return ClickableItem.of(
+                new ItemBuilder(Material.STICK)
+                        .setLore(game.translate("werewolf.role.scammer.config.lore", Formatter.timer(String.valueOf(config.getScamDelay()))))
+                        .setDisplayName(game.translate("werewolf.role.scammer.config.name"))
+                        .build(), e -> {
+                    if (e.isLeftClick()) {
+                        config.setScamDelay(config.getScamDelay() + 1);
+                    } else if (e.isRightClick()) {
+                        config.setScamDelay(config.getScamDelay() - 1);
+                    }
+
+                    e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                            .setLore(game.translate("werewolf.role.scammer.config.lore", Formatter.timer(String.valueOf(config.getScamDelay()))))
+                            .build());
+                });
+    }
+
+    @Override
+    public void disableAbilities() {
+        super.disableAbilities();
+        setPower(false);
+    }
+
+    @Override
+    public void enableAbilities() {
+        super.enableAbilities();
+        setPower(true);
     }
 
     @Override

@@ -578,7 +578,7 @@
       },
       "scammer": {
         "display": "Escroc",
-        "description": "Vous volez progressivement le rôle des joueurs autour de vous (20 blocs) au rythme de 1% toutes les 9 secondes. Vous récupérez le rôle (et rejoignez le camp) du premier joueur qui arrive à 100%. Le joueur escroqué devient Loup-Garou Omega s’il était dans le camp des Loups (ou Loup-Garou Blanc, ou Loup Solitaire) ou devient Simple Villageois dans tous les autres cas.",
+        "description": "Vous volez progressivement le rôle des joueurs autour de vous (20 blocs) au rythme de 1% toutes les &timer& secondes. Vous récupérez le rôle (et rejoignez le camp) du premier joueur qui arrive à 100%. Le joueur escroqué devient Loup-Garou Omega s’il était dans le camp des Loups (ou Loup-Garou Blanc, ou Loup Solitaire) ou devient Simple Villageois dans tous les autres cas.",
         "config": {
           "name": "Modifier le délai entre chaque mise à jour du %",
           "lore": "§b&timer&§rs"
@@ -945,6 +945,7 @@
         "avenger_werewolf": "Champ d'action du Loup Garou Vengeur §b&number&",
         "flute_player": "Champ d'action du Joueur de Flûte §b&number&",
         "bear_trainer": "Champ d'action du Montreur d'Ours §b&number&",
+        "scammer": "Champ d'action de l'Escroc §b&number&",
         "fearful_werewolf": "Champ d'action du Loup-Garou Craintif §b&number&",
         "hermit": "Champ d'action de l'Ermite §b&number&",
         "will_o_the_wisp": "Champ d'action du Feu Follet §b&number&",
