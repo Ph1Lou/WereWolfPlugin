@@ -957,7 +957,7 @@
         "hermit": "Champ d'action de l'Ermite §b&number&",
         "will_o_the_wisp": "Champ d'action du Feu Follet §b&number&",
         "howling_werewolf": "Champ d'action du Loup Garou Hurleur §b&number&",
-        "druid": "Champ d'action du Druide §b&number&"
+        "druid": "Champ d'action du Druide §b&number&",
         "twin": "Champ d'action des Jumeaux §b&number&",
         "fruit_merchant": "Champ d'action de la Marchande de fruit §b&number&"
       },
@@ -1235,6 +1235,12 @@
         "message": "[§5Swap§r] Deux personnes ont leur rôle inversées",
         "concerned": "Votre rôle a été échangé §b/ww role§f pour découvrir le nouveau",
         "description": "Une fois dans la partie,\n avant l'annonce de la liste des loups\n 2 roles sont échangés"
+      },
+      "discord": {
+        "name": "Zizanie",
+        "message": "[§5Zizanie§r] Un membre du Village passe avec les Loups-Garous, un des Loups devient solitaire, enfin un rôle Solo passe avec le Village",
+        "description": "Entre 55 et 85 minutes après les rôles, \nun membre du Village passe avec les Loups-Garous, \nun des Loups devient solitaire \nenfin un rôle Solo passe avec le Village.",
+        "to_villager": "Vous passez dans le camp des villageois"
       }
     },
     "check": {
