@@ -583,7 +583,9 @@
         "command": "tenebres",
         "darkness": "Le loup Ténébreux vous a plongé dans les ténèbres!",
         "darkness_wolves": "Le Loup Ténébreux a plongé une partie du village dans les ténèbres",
-        "not_night": "Vous ne pouvez pas effectuer cette action le jour"
+        "not_night": "Vous ne pouvez pas effectuer cette action le jour",
+        "power_available": "Vous pouvez §aencore§f utiliser votre pouvoir",
+        "power_not_available": "Vous avez §cdéjà§f utilisé votre pouvoir"
       }
     },
     "vote": {
