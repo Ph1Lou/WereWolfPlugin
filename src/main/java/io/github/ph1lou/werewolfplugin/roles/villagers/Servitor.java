@@ -1,21 +1,24 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
-import io.github.ph1lou.werewolfapi.DescriptionBuilder;
-import io.github.ph1lou.werewolfapi.IPlayerWW;
-import io.github.ph1lou.werewolfapi.PotionModifier;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import fr.minuskube.inv.ClickableItem;
+import io.github.ph1lou.werewolfapi.*;
+import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.ThirdDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.servitor.DefinitiveMasterEvent;
 import io.github.ph1lou.werewolfapi.events.roles.servitor.MasterChosenEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
+import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -44,8 +47,12 @@ public class Servitor extends RoleVillage implements IPower {
     @EventHandler
     public void onDay(DayEvent event) {
         if (power) {
-            master = game.autoSelect(getPlayerWW());
-            Bukkit.getPluginManager().callEvent(new MasterChosenEvent(getPlayerWW(),master));
+            MasterChosenEvent event1 = new MasterChosenEvent(getPlayerWW(),game.autoSelect(getPlayerWW()));
+            Bukkit.getPluginManager().callEvent(event1);
+
+            if (!event1.isCancelled()){
+                master = event1.getTargetWW();
+            }
         }
     }
 
@@ -80,6 +87,12 @@ public class Servitor extends RoleVillage implements IPower {
 
     @Override
     public void second() {
+        if (master == null) return;
+
+        if (!master.isState(StatePlayer.ALIVE)) return;
+
+        if(!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+
         Location location = getPlayerWW().getLocation();
 
         if (checkDistance(master, location)) {
@@ -103,7 +116,33 @@ public class Servitor extends RoleVillage implements IPower {
      */
     private boolean checkDistance(IPlayerWW player, Location location) {
         return player.getLocation().getWorld() == location.getWorld() &&
-                player.getLocation().distance(location) < 25;
+                player.getLocation().distance(location) < game.getConfig().getDistanceServitor();
+    }
+
+    public static ClickableItem config(WereWolfAPI game) {
+        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
+                game.translate("werewolf.menu.right"));
+        IConfiguration config = game.getConfig();
+
+        return ClickableItem.of((
+                new ItemBuilder(UniversalMaterial.BROWN_WOOL.getStack())
+                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.servitor",
+                                Formatter.number(config.getDistanceServitor())))
+                        .setLore(lore).build()), e -> {
+            if (e.isLeftClick()) {
+                config.setDistanceServitor((config.getDistanceServitor() + 5));
+            } else if (config.getDistanceServitor() - 5 > 0) {
+                config.setDistanceServitor(config.getDistanceServitor() - 5);
+            }
+
+
+            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                    .setLore(lore)
+                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.servitor",
+                            Formatter.number(config.getDistanceServitor())))
+                    .build());
+
+        });
     }
 
     @Override

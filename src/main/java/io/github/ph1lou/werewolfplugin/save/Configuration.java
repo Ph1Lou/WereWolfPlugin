@@ -41,6 +41,7 @@ public class Configuration implements IConfiguration {
     private int useOfFlair = 3;
     private int goldenAppleParticles = 1;
     private int distanceBearTrainer = 50;
+    private int distanceServitor = 25;
     private int distanceSuccubus = 20;
     private int distanceAmnesiacLovers = 15;
     private int distancePriestess = 10;
@@ -617,6 +618,16 @@ public class Configuration implements IConfiguration {
     @Override
     public boolean isSweetAngel() {
         return this.sweetAngel;
+    }
+
+    @Override
+    public int getDistanceServitor() {
+        return distanceServitor;
+    }
+
+    @Override
+    public void setDistanceServitor(int i) {
+        distanceServitor = i;
     }
 
     @Override
