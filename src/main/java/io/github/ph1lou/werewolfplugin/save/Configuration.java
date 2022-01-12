@@ -69,6 +69,8 @@ public class Configuration implements IConfiguration {
     private boolean oracleEveryOtherDay = true;
     private boolean detectiveEveryOtherDay = true;
     private boolean sweetAngel = false;
+    private int distanceTenebrousWerewolf = 50;
+    private int tenebrousDuration = 600;
 
     public Configuration(IRegisterManager registerManager) {
         this.registerManager = registerManager;
@@ -617,6 +619,26 @@ public class Configuration implements IConfiguration {
     @Override
     public boolean isSweetAngel() {
         return this.sweetAngel;
+    }
+
+    @Override
+    public int getTenebrousDistance() {
+        return this.distanceTenebrousWerewolf;
+    }
+
+    @Override
+    public void setTenebrousDistance(int distance) {
+        this.distanceTenebrousWerewolf = distance;
+    }
+
+    @Override
+    public int getTenebrousDuration() {
+        return this.tenebrousDuration;
+    }
+
+    @Override
+    public void setTenebrousDuration(int t) {
+        this.tenebrousDuration = t;
     }
 
     @Override

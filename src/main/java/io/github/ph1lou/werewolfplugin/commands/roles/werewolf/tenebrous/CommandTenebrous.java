@@ -35,10 +35,12 @@ public class CommandTenebrous implements ICommand {
 
         Location location = playerWW.getLocation();
 
+        int range = game.getConfig().getTenebrousDistance();
+
         List<IPlayerWW> affectedPlayers = game.getPlayersWW().stream()
                 .filter(player1 -> player1.isState(StatePlayer.ALIVE))
                 .filter(player1 -> !player1.getRole().isWereWolf())
-                .filter(player1 -> player1.getLocation().distance(location) < 50)
+                .filter(player1 -> player1.getLocation().distance(location) < range)
                 .collect(Collectors.toList());
 
         TenebrousEvent event = new TenebrousEvent(affectedPlayers);
@@ -56,7 +58,7 @@ public class CommandTenebrous implements ICommand {
 
         for (IPlayerWW p : affectedPlayers) {
             role.addAffectedPlayer(p);
-            p.addPotionModifier(PotionModifier.add(PotionEffectType.BLINDNESS, 600, 1, "tenebrous"));
+            p.addPotionModifier(PotionModifier.add(PotionEffectType.BLINDNESS, game.getConfig().getTenebrousDuration(), 1, "tenebrous"));
             p.sendMessageWithKey(Prefix.RED.getKey() ,"werewolf.role.tenebrous_werewolf.darkness");
         }
 

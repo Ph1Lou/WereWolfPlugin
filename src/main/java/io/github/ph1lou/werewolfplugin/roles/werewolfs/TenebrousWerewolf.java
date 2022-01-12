@@ -1,13 +1,13 @@
 package io.github.ph1lou.werewolfplugin.roles.werewolfs;
 
-import io.github.ph1lou.werewolfapi.DescriptionBuilder;
-import io.github.ph1lou.werewolfapi.IPlayerWW;
-import io.github.ph1lou.werewolfapi.PotionModifier;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import fr.minuskube.inv.ClickableItem;
+import io.github.ph1lou.werewolfapi.*;
 import io.github.ph1lou.werewolfapi.enums.Aura;
+import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleWereWolf;
+import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -15,6 +15,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TenebrousWerewolf extends RoleWereWolf implements IPower, IAffectedPlayers {
@@ -97,5 +98,57 @@ public class TenebrousWerewolf extends RoleWereWolf implements IPower, IAffected
             targetWW.addPotionModifier(PotionModifier.remove(PotionEffectType.BLINDNESS, "tenebrous", 1));
             affectedPlayers.remove(targetWW);
         }
+    }
+
+    public static ClickableItem configDistance(WereWolfAPI game) {
+        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
+                game.translate("werewolf.menu.right"));
+        IConfiguration config = game.getConfig();
+
+        return ClickableItem.of(
+                new ItemBuilder(UniversalMaterial.BLACK_WOOL.getType())
+                        .setLore(lore)
+                        .setDisplayName(game.translate("werewolf.role.tenebrous_werewolf.darkness_distance",
+                                Formatter.format("&range&",config.getTenebrousDistance())))
+                        .build(), e -> {
+                    if (e.isLeftClick()) {
+                        config.setTenebrousDistance(config.getTenebrousDistance() + 5);
+                    } else if (config.getTenebrousDistance() > 5) {
+                        config.setTenebrousDistance(config.getTenebrousDistance() - 5);
+                    }
+
+
+                    e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                            .setDisplayName(game.translate("werewolf.role.tenebrous_werewolf.darkness_distance",
+                                    Formatter.format("&range&",config.getTenebrousDistance())))
+                            .build());
+
+                });
+    }
+
+    public static ClickableItem configDuration(WereWolfAPI game) {
+        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
+                game.translate("werewolf.menu.right"));
+        IConfiguration config = game.getConfig();
+
+        return ClickableItem.of(
+                new ItemBuilder(UniversalMaterial.CLOCK.getType())
+                        .setLore(lore)
+                        .setDisplayName(game.translate("werewolf.role.tenebrous_werewolf.darkness_duration",
+                                Formatter.format("&time&",config.getTenebrousDuration()/20)))
+                        .build(), e -> {
+                    if (e.isLeftClick()) {
+                        config.setTenebrousDuration(config.getTenebrousDuration() + 100);
+                    } else if (config.getTenebrousDuration() > 100) {
+                        config.setTenebrousDuration(config.getTenebrousDuration() - 100);
+                    }
+
+
+                    e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                            .setDisplayName(game.translate("werewolf.role.tenebrous_werewolf.darkness_duration",
+                                    Formatter.format("&time&",config.getTenebrousDuration()/20)))
+                            .build());
+
+                });
     }
 }

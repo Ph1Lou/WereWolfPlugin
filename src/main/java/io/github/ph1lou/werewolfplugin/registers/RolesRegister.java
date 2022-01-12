@@ -381,7 +381,9 @@ public class RolesRegister {
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name", RolesBase.TENEBROUS_WEREWOLF.getKey(), TenebrousWerewolf.class)
-                            .addCategory(Category.WEREWOLF));
+                            .addCategory(Category.WEREWOLF)
+                            .addConfig(TenebrousWerewolf::configDistance)
+                            .addConfig(TenebrousWerewolf::configDuration));
 
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
