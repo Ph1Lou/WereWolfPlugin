@@ -182,7 +182,7 @@
         "warn": "Il sera prévenu dans 5 minutes que vous l'avez flairé",
         "werewolf": "&player& §4est dans le camp des Loups Garous.§f Il sera prévenu qu'il a été flairé dans 5 minutes",
         "not_enough_near": "Vous n'êtes pas assez proche de la personne que vous voulez flairer",
-        "progress": "Progression du Flair §b&progress&&",
+        "progress": "Progression du Flair §b&progress&%",
         "smell": "Vous avez été flairé par un §bRenard§f il y a 5 minutes",
         "command": "flairer"
       },
@@ -292,7 +292,7 @@
       },
       "priestess": {
         "display": "Prêtresse",
-        "description": "Le Jour, Vous pouvez connaître le camp d'un joueur en échange de deux coeurs permanents. Tant que vous êtes en vie les Loups Garous ont 20& de chance de voir le rôles des joueurs morts contre 80& pour les Villageois. Quand vous mourrez, ces probabilités s'inversent. Les Neutres ont 95& de chance de le voir",
+        "description": "Le Jour, Vous pouvez connaître le camp d'un joueur en échange de deux coeurs permanents. Tant que vous êtes en vie les Loups Garous ont 20% de chance de voir le rôles des joueurs morts contre 80% pour les Villageois. Quand vous mourrez, ces probabilités s'inversent. Les Neutres ont 95% de chance de le voir",
         "command": "spec",
         "items": "Quatre Obsidiennes",
         "magic": "§kCoucou",
@@ -387,16 +387,16 @@
       "lover": {
         "display": "Couple",
         "random": " Aléatoire",
-        "description": "§6LOUP-GAROU §7➽§d Vous tombez éperdument amoureux de §b&player&§d.\n§dSi l'un meurt, l'autre le rejoindra par amour.\n§dVous pouvez envoyer de la vie à votre âme soeur avec §b/ww don §d[& de vie à envoyer] [facultatif:joueur à qui l'envoyer]",
+        "description": "§6LOUP-GAROU §7➽§d Vous tombez éperdument amoureux de §b&player&§d.\n§dSi l'un meurt, l'autre le rejoindra par amour.\n§dVous pouvez envoyer de la vie à votre âme soeur avec §b/ww don §d[% de vie à envoyer] [facultatif:joueur à qui l'envoyer]",
         "not_in_pairs": "Vous n'êtes pas en couple",
         "lover_death": "§d&player& par amour, le rejoint dans sa tombe",
         "not_enough_players": "il n'y a pas assez de personnes pour former un couple",
         "not_lover": "Vous ne pouvez partager des coeurs qu'avec un amant",
         "polygamy": "En raison du trop faible nombre de joueur par rapport au nombre de couples la polygamie est activée",
-        "received": "Vous recevez §b&number&§r & de la vie de §b&player&",
+        "received": "Vous recevez §b&number&§r % de la vie de §b&player&",
         "disconnected": "Votre amant n'est pas connecté",
-        "complete": "Vous venez d'envoyer §b&number&§r & de votre vie à §b&player&",
-        "100": "Vous ne pouvez pas envoyer 100& ou plus de votre vie",
+        "complete": "Vous venez d'envoyer §b&number&§r % de votre vie à §b&player&",
+        "100": "Vous ne pouvez pas envoyer 100% ou plus de votre vie",
         "command": "don",
         "too_many_heart": "§b&player&§r a trop de vie"
       },
@@ -433,7 +433,7 @@
         "wait": "Vous devez attendre §bun jour§f avant de transmettre une nouvelle flûte",
         "affected": "§bPersonne affectée§f : §f&list&\n",
         "craft_description": "Pour fabriquer votre flûte, un baton entourer de ingot d'or dans votre établi",
-        "description": "Lorsque vous aurez fabriquer votre flûte, toutes les personnes à §b&number&§f blocks de vous seront charmées progressivement (1& toutes les 6 secondes).",
+        "description": "Lorsque vous aurez fabriquer votre flûte, toutes les personnes à §b&number&§f blocks de vous seront charmées progressivement (1% toutes les 6 secondes).",
         "power": "Vous pouvez fabriquer des flûtes §bsupplémentaires§f, et les donner furtivement aux joueurs par un §bclique droit§f une fois par cycle. Si le joueur repère la flûte son effet est annulé. Un joueur avec une flûte charmera §bà son insu§f les joueurs autour de lui.",
         "enchanted": "Vous venez d'enchanter §b&player&",
         "transmit": "Vous venez de transmettre une flûte à §b&player&§f il vous en reste §b&number&",
@@ -494,7 +494,7 @@
         "get_charmed": "Le Succube §b&player&§r vous a charmé, vous devez maintenant gagner avec lui. Si le Succube vient à mourir, vous mourrez à sa place.",
         "free_of_succubus": "Vous êtes libéré de votre Succube, mais à quel prix...",
         "not_enough_near": "Vous n'êtes pas assez proche de la personne que vous voulez charmer",
-        "progress_charm": "Progression du Charme §b&progress&&",
+        "progress_charm": "Progression du Charme §b&progress&%",
         "command": "charmer",
         "change": "Votre charmée est maintenant §b&player&"
       },
@@ -576,8 +576,24 @@
         "command_analyse": "analyser",
         "not_affected": "Vous ne pouvez effectuer cette commande que sur un joueur observé precedemment via §b/ww oberver§f"
       },
+      "fruit_merchant": {
+        "display": "Marchande de Fruit",
+        "perform": "Vous venez d'utiliser votre pouvoir, les joueurs dans votre champ d'action sont &players&. \nVous recevrez dans §b&timer&§f les informations",
+        "announce_info": "Vous recevez les informations suite à votre commande",
+        "info": "Le joueur &player& avait &number& pomme(s) d'or lors de l'execution de votre commande, il en a maintenant &number2&",
+        "command": "compter",
+        "recover": "Vous venez de récupérer votre pouvoir. Faites §b/ww compter§f pour le réutiliser",
+        "description": "Avec §b/ww compter§f, vous pouvez compter les pommes d'or des joueurs à §b&number&§f blocs de vous.",
+        "power": "1 chance sur 4 de régénérer 3 ♥ avec les pommes d’or, la nourriture vous donne 1 gigot de plus."
+      },
+      "druid": {
+        "display": "Druide",
+        "perform": "Vous venez d'utiliser votre pouvoir, il y a &number& aura(s) sombre(s) à &blocks& blocs de vous",
+        "description": "Vous pouvez connaître le nombre d’auras obscures dans un rayon de &number& blocs en mangeant une pomme d’or accroupi pendant la nuit",
+        "day": "Vous pouvez de nouveau utiliser votre pouvoir"
+      },
       "wise_elder": {
-        "display" : "Vieux sage",
+        "display": "Vieux sage",
         "description": "Vous disposez de 3 compteurs (1 pour chaque type d'Aura)\nPour chaque seconde passée à moins de 15 blocs d'un joueur, le compteur correspondant à l'Aura de ce joueur augmente d'un point.\nA la fin de chaque cycle (à partir du cycle 3), vous recevez un message avec le nombre de points de chaque compteur et les compteurs sont remis à zéro.",
         "end_of_cycle": "Cycle terminé! §f§lCompteur aura neutre: &neutral&§r; §0§lCompteur aura obscure: &dark&§r; §l§eCompteur aura lumineuse: &light&"
       }
@@ -752,7 +768,7 @@
           "already_start": "La Génération est déjà lancée",
           "perform": "La Génération du monde a commencé",
           "not_generated": "Carte non générée. Faites §b/a generation",
-          "not_finished": "Attendez la fin de génération de la carte (§b&progress&&§r)",
+          "not_finished": "Attendez la fin de génération de la carte (§b&progress&%§r)",
           "description": "Pour générer la Carte"
         },
         "change": {
@@ -874,7 +890,8 @@
           "Quand l’§bAnalyste§f utilise son pouvoir d’analyse, son aura devient Obscure",
           "Quand le §cLoup-Garou Vengeur§f atteint 10 ♥, son aura devient Obscure",
           "La §bPrêtresse§f et l'§aAnge§f gardent TOUJOURS une aura Lumineuse",
-          "Le §cGrand Méchant Loup§f garde TOUJOURS une aura Obscure"],
+          "Le §cGrand Méchant Loup§f garde TOUJOURS une aura Obscure"
+        ],
         "description": "Explication sur les auras",
         "prefix": "Descriptif des Auras :"
       },
@@ -922,18 +939,18 @@
         "troll_lover_on": "Troll Saint Valentin §2Activé",
         "troll_lover_off": "Troll Saint Valentin §4Désactivé",
         "troll_set": "§bShift§f-Clique pour configurer",
-        "resistance": "Resistance §b&number&&",
+        "resistance": "Resistance §b&number&%",
         "succubus": "Champ d'action du Succube §b&number&",
         "sister": "Champ d'action des Soeurs §b&number&",
         "priestess": "Champ d'action de la Prêtresse §b&number&",
         "fox_smell_number": "Nombre de Flair du Renard §b&number&",
-        "ender_pearl": "Taux de Drop EnderPearl §b&number&&",
-        "flint": "Taux de Drop des Silex §b&number&&",
-        "apple": "Taux de Drop des Pommes §b&number&&",
+        "ender_pearl": "Taux de Drop EnderPearl §b&number&%",
+        "flint": "Taux de Drop des Silex §b&number&%",
+        "apple": "Taux de Drop des Pommes §b&number&%",
         "vote": "Fin des votes à §b&number&§r personnes",
         "diamond": "Diamond Limit §b&number&",
-        "xp": "XpBoost §b&number&&",
-        "strength": "Force + §b&number&&",
+        "xp": "XpBoost §b&number&%",
+        "strength": "Force + §b&number&%",
         "particles": "Particules des Pommes d'Or",
         "particles_on": "§bActivé§r pour tous les joueurs",
         "particles_off": "§4Désactivé§r pour tous les joueurs",
@@ -942,11 +959,14 @@
         "avenger_werewolf": "Champ d'action du Loup Garou Vengeur §b&number&",
         "flute_player": "Champ d'action du Joueur de Flûte §b&number&",
         "bear_trainer": "Champ d'action du Montreur d'Ours §b&number&",
+        "wise_elder": "Champ d'action du Vieux Sage §b&number&",
         "fearful_werewolf": "Champ d'action du Loup-Garou Craintif §b&number&",
         "hermit": "Champ d'action de l'Ermite §b&number&",
         "will_o_the_wisp": "Champ d'action du Feu Follet §b&number&",
         "howling_werewolf": "Champ d'action du Loup Garou Hurleur §b&number&",
-        "twin": "Champ d'action des Jumeaux §b&number&"
+        "druid": "Champ d'action du Druide §b&number&",
+        "twin": "Champ d'action des Jumeaux §b&number&",
+        "fruit_merchant": "Champ d'action de la Marchande de fruit §b&number&"
       },
       "troll": "Configuration §bTroll",
       "roles": {
@@ -1062,8 +1082,8 @@
         "command": "events",
         "disable": "L'affichage des events aléatoires est désactivés",
         "description": "Pour voir les Events Aléatoires",
-        "command_message": "§b&event& §f(probabilité §b&number&&§f)",
-        "probability": "§fProbabilité : §b&number&§f&"
+        "command_message": "§b&event& §f(probabilité §b&number&%§f)",
+        "probability": "§fProbabilité : §b&number&§f%"
       },
       "save": {
         "name": "Configuration §bSauvegarde",
@@ -1084,8 +1104,8 @@
         "meet_up": "§bCharger§r Stuff MeetUp",
         "chill": "§bCharger§r Stuff Depart Chill",
         "delete": "§4Supprimer§r le Stuff de Départ et de Mort",
-        "death":"Configuration §bStuff à la mort",
-        "start":"Configuration §bStuff de Départ"
+        "death": "Configuration §bStuff à la mort",
+        "start": "Configuration §bStuff de Départ"
       },
       "global": {
         "command": "regles",
@@ -1128,7 +1148,7 @@
     },
     "action_bar": {
       "generation": "Carte §4non générée§r /a generation",
-      "progress": "Generation §b&progress&&",
+      "progress": "Generation §b&progress&%",
       "in_game": "§7Centre §b&min& §7à§b &max& §7blocs | Y §b&height&",
       "create_tp_point": "Création des points de TP : §b&number&§r/§b&sum&§r",
       "tp": "Téléportation : §b&number&§r/§b&sum&§r",

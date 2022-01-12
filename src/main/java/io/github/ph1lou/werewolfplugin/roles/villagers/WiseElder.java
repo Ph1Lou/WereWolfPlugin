@@ -1,20 +1,22 @@
 package io.github.ph1lou.werewolfplugin.roles.villagers;
 
-import io.github.ph1lou.werewolfapi.DescriptionBuilder;
-import io.github.ph1lou.werewolfapi.Formatter;
-import io.github.ph1lou.werewolfapi.IPlayerWW;
-import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import fr.minuskube.inv.ClickableItem;
+import io.github.ph1lou.werewolfapi.*;
 import io.github.ph1lou.werewolfapi.enums.StatePlayer;
+import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
 import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import io.github.ph1lou.werewolfapi.events.roles.wise_elder.RevealAuraAmountEvent;
 import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
+import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -59,9 +61,37 @@ public class WiseElder extends RoleVillage {
         }
     }
 
+    public static ClickableItem config(WereWolfAPI game) {
+        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
+                game.translate("werewolf.menu.right"));
+        IConfiguration config = game.getConfig();
+
+        return ClickableItem.of((
+                new ItemBuilder(UniversalMaterial.BROWN_WOOL.getStack())
+                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.wise_elder",
+                                Formatter.number(config.getDistanceWiseElder())))
+                        .setLore(lore).build()), e -> {
+            if (e.isLeftClick()) {
+                config.setDistanceWiseElder((config.getDistanceWiseElder() + 5));
+            } else if (config.getDistanceBearTrainer() - 5 > 0) {
+                config.setDistanceWiseElder(config.getDistanceWiseElder() - 5);
+            }
+
+
+            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                    .setLore(lore)
+                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.wise_elder",
+                            Formatter.number(config.getDistanceWiseElder())))
+                    .build());
+
+        });
+    }
+
     @Override
     public void second() {
         if (!active) return;
+
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         Location location = getPlayerWW().getLocation();
         Bukkit.getOnlinePlayers().stream()
@@ -105,6 +135,6 @@ public class WiseElder extends RoleVillage {
      */
     private boolean checkDistance(IPlayerWW player, Location location) {
         return player.getLocation().getWorld() == location.getWorld() &&
-                player.getLocation().distance(location) < 15;
+                player.getLocation().distance(location) < game.getConfig().getDistanceWiseElder();
     }
 }
