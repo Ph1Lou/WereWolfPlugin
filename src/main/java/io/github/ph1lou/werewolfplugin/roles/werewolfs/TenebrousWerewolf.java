@@ -4,6 +4,7 @@ import io.github.ph1lou.werewolfapi.DescriptionBuilder;
 import io.github.ph1lou.werewolfapi.IPlayerWW;
 import io.github.ph1lou.werewolfapi.PotionModifier;
 import io.github.ph1lou.werewolfapi.WereWolfAPI;
+import io.github.ph1lou.werewolfapi.enums.Aura;
 import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
 import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
 import io.github.ph1lou.werewolfapi.rolesattributs.RoleWereWolf;
@@ -43,6 +44,11 @@ public class TenebrousWerewolf extends RoleWereWolf implements IPower, IAffected
                 .setCommand(game.translate("werewolf.role.tenebrous_werewolf.description_command"))
                 .setPower(game.translate(power ? "werewolf.role.tenebrous_werewolf.power_available" : "werewolf.role.tenebrous_werewolf.power_not_available"))
                 .build();
+    }
+
+    @Override
+    public Aura getDefaultAura() {
+        return Aura.LIGHT;
     }
 
     @Override
