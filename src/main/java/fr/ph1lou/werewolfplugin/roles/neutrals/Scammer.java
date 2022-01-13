@@ -116,13 +116,12 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
             return;
         }
 
-        setPower(false);
-        affectedPlayer.clear();
+        this.setPower(false);
+        this.affectedPlayer.clear();
         IPlayerWW target = event.getTargetWW();
         IRole targetRole = target.getRole();
         HandlerList.unregisterAll(this);
         getPlayerWW().setRole(targetRole);
-        BukkitUtils.registerEvents(targetRole);
         Bukkit.getPluginManager().callEvent(new SwapEvent(this.getPlayerWW(),target));
         IRole newRole;
         if (targetRole.isWereWolf()) {

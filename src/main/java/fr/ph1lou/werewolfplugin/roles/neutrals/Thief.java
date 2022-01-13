@@ -149,8 +149,8 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
 
         IRole role = playerWW.getRole();
 
-        setPower(false);
-        HandlerList.unregisterAll(this.getPlayerWW().getRole());
+        this.setPower(false);
+        HandlerList.unregisterAll(this);
         IRole roleClone = role.publicClone();
         this.getPlayerWW().setRole(roleClone);
         assert roleClone != null;
