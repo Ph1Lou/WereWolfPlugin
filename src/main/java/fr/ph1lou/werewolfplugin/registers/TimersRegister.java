@@ -163,7 +163,7 @@ public class TimersRegister {
 
         timersRegister
                 .add(new TimerRegister("werewolf.name",
-                        TimerBase.CITIZEN_DURATION.getKey())
+                        TimerBase.VOTE_WAITING.getKey())
                         .setDefaultValue(60));
 
         timersRegister

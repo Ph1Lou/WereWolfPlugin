@@ -3,7 +3,6 @@ package fr.ph1lou.werewolfplugin.game;
 
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.IVoteManager;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.ConfigBase;
 import fr.ph1lou.werewolfapi.enums.Prefix;
@@ -14,8 +13,8 @@ import fr.ph1lou.werewolfapi.events.game.vote.VoteBeginEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteEndEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteResultEvent;
-import fr.ph1lou.werewolfapi.events.roles.seer.SeeVoteEvent;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
+import fr.ph1lou.werewolfapi.vote.IVoteManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 public class Vote implements Listener, IVoteManager {
@@ -42,7 +42,7 @@ public class Vote implements Listener, IVoteManager {
 	}
 
 	@Override
-	public void setUnVote(IPlayerWW voterWW, IPlayerWW vote) {
+	public void setOneVote(IPlayerWW voterWW, IPlayerWW vote) {
 
 		Player voter = Bukkit.getPlayer(voterWW.getUUID());
 
@@ -54,9 +54,9 @@ public class Vote implements Listener, IVoteManager {
 			voterWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.vote.vote_disable");
 		} else if (!currentStatus.equals(VoteStatus.IN_PROGRESS)) {
 			voterWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.vote.not_vote_time");
-		} else if (voters.containsKey(voterWW)) {
+		} else if (this.voters.containsKey(voterWW)) {
 			voterWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.vote.already_voted");
-		} else if (tempPlayer.contains(vote)) {
+		} else if (this.tempPlayer.contains(vote)) {
 			voterWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.vote.player_already_voted");
 		} else {
 			VoteEvent voteEvent = new VoteEvent(voterWW, vote);
@@ -80,22 +80,19 @@ public class Vote implements Listener, IVoteManager {
 		this.currentStatus = VoteStatus.NOT_IN_PROGRESS;
 	}
 
-	@EventHandler
-	public void onVoteEnd(VoteEndEvent event) {
-		this.currentStatus = VoteStatus.WAITING_CITIZEN;
-	}
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onVoteResult(VoteResultEvent event) {
 		if (!event.isCancelled()) {
-			event.setPlayerWW(getResult());
+			getResult().ifPresent(event::setPlayerWW);
+
 			if (event.getPlayerWW() == null) {
-				if (this.currentStatus == VoteStatus.WAITING_CITIZEN) {
+				if (this.currentStatus == VoteStatus.WAITING) {
 					Bukkit.broadcastMessage(game.translate(Prefix.ORANGE.getKey() , "werewolf.vote.no_result"));
 				}
 				event.setCancelled(true);
 			} else {
-				showResultVote(event.getPlayerWW());
+				showResultVote();
 			}
 		}
         resetVote();
@@ -109,32 +106,6 @@ public class Vote implements Listener, IVoteManager {
     }
 
 	@Override
-	public void seeVote(IPlayerWW playerWW) {
-
-		Player player = Bukkit.getPlayer(playerWW.getUUID());
-		SeeVoteEvent seeVoteEvent = new SeeVoteEvent(playerWW, votes);
-		Bukkit.getPluginManager().callEvent(seeVoteEvent);
-
-		if (player == null) return;
-
-		if (seeVoteEvent.isCancelled()) {
-			player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.cancel"));
-			return;
-		}
-		player.sendMessage(game.translate(Prefix.GREEN.getKey() , "werewolf.role.citizen.count_votes"));
-		for (IPlayerWW playerWW1 : voters.keySet()) {
-
-			IPlayerWW voteWW = this.voters.get(playerWW1);
-
-			String voterName = playerWW1.getName();
-			String voteName = voteWW.getName();
-			player.sendMessage(game.translate("werewolf.role.citizen.see_vote",
-					Formatter.format("&voter&",voterName),
-					Formatter.player(voteName)));
-		}
-	}
-
-	@Override
 	public Map<IPlayerWW, Integer> getVotes() {
 		return this.votes;
 	}
@@ -145,7 +116,7 @@ public class Vote implements Listener, IVoteManager {
 	}
 
 	@Override
-	public IPlayerWW getResult() {
+	public Optional<IPlayerWW> getResult() {
 		int maxVote = 0;
 		IPlayerWW playerVote = null;
 
@@ -157,37 +128,49 @@ public class Vote implements Listener, IVoteManager {
 			}
 		}
 		if (maxVote <= 1) {
-			return null;
+			return Optional.empty();
 		}
-		return playerVote;
+		return Optional.of(playerVote);
 	}
 
 	@Override
-	public void showResultVote(IPlayerWW playerWW) {
+	public void showResultVote() {
 
-		if (playerWW != null) {
+		this.getResult()
+				.ifPresent(playerWW -> {
+					tempPlayer.add(playerWW);
 
-			tempPlayer.add(playerWW);
+					int health = 5;
+					if (playerWW.getMaxHealth() < 10) { //si le joueur a moins de coeurs ont réduit le temps de récupération de coeurs
+						health = playerWW.getMaxHealth() / 2 - 1; //-1 car le joueur aura un coeur minimum quand il prend les votes
+					}
+					playerWW.removePlayerMaxHealth(10);
 
-			int health = 5;
-			if (playerWW.getMaxHealth() < 10) { //si le joueur a moins de coeurs ont réduit le temps de récupération de coeurs
-				health = playerWW.getMaxHealth() / 2 - 1; //-1 car le joueur aura un coeur minimum quand il prend les votes
+					Bukkit.broadcastMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.vote.vote_result",
+							Formatter.player(playerWW.getName()),
+							Formatter.number(this.votes.get(playerWW))));
+
+					int task = BukkitUtils.scheduleSyncRepeatingTask(() -> {
+						if (game.isState(StateGame.GAME)) {
+							playerWW.addPlayerMaxHealth(2);
+						}
+					}, 1200, 1200);
+
+					BukkitUtils.scheduleSyncDelayedTask(() -> Bukkit.getScheduler().cancelTask(task), (long) health * 62 * 20);
+				});
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onVoteEnd(VoteEndEvent event) {
+
+		this.currentStatus = VoteStatus.WAITING;
+		long duration = game.getConfig().getTimerValue(TimerBase.VOTE_WAITING.getKey());
+		BukkitUtils.scheduleSyncDelayedTask(() -> {
+			if (!game.isState(StateGame.END)) {
+				Bukkit.getPluginManager().callEvent(new VoteResultEvent(this.getResult().orElse(null)));
 			}
-			playerWW.removePlayerMaxHealth(10);
 
-			Bukkit.broadcastMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.vote.vote_result",
-					Formatter.player(playerWW.getName()),
-					Formatter.number(this.votes.get(playerWW))));
-
-			int task = BukkitUtils.scheduleSyncRepeatingTask(() -> {
-				if (game.isState(StateGame.GAME)) {
-					playerWW.addPlayerMaxHealth(2);
-				}
-			}, 1200, 1200);
-
-			BukkitUtils.scheduleSyncDelayedTask(() -> Bukkit.getScheduler().cancelTask(task), (long) health * 62 * 20);
-
-		}
+		}, duration * 20);
 	}
 
 	@Override

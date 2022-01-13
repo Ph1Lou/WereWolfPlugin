@@ -108,7 +108,7 @@ public class Raven extends RoleWithLimitedSelectionDuration implements IAffected
 
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
-        game.getVote().getVotes().merge(event.getTargetWW(), 1, Integer::sum);
+        game.getVoteManager().getVotes().merge(event.getTargetWW(), 1, Integer::sum);
 
     }
 

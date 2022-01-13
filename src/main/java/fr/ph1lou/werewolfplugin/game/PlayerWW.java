@@ -64,6 +64,7 @@ public class PlayerWW implements IPlayerWW {
     private String name;
     private final GameManager game;
     private final List<IPlayerWW> playersKilled = new ArrayList<>();
+    private final List<IPlayerWW> lastMinutesDamagedPlayer = new ArrayList<>();
 
 
     public PlayerWW(GameManager api, Player player) {
@@ -83,7 +84,7 @@ public class PlayerWW implements IPlayerWW {
     private static UUID getUUID(String name) throws IOException {
         String uuid;
         BufferedReader in = new BufferedReader(new InputStreamReader(new URL("https://api.mojang.com/users/profiles/minecraft/" + name).openStream()));
-        uuid = (((JsonObject)JsonParser.parseReader(in)).get("id")).toString().replaceAll("\"", "");
+        uuid = (((JsonObject)new JsonParser().parse(in)).get("id")).toString().replaceAll("\"", "");
         uuid = uuid.replaceAll("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5");
         in.close();
         return UUID.fromString(uuid);
@@ -416,7 +417,6 @@ public class PlayerWW implements IPlayerWW {
         return (this.killer);
     }
 
-	@Override
 	public void setDeathTime(int deathTime) {
 		this.deathTime =deathTime;
 	}
@@ -437,11 +437,23 @@ public class PlayerWW implements IPlayerWW {
     }
 
     @Override
+    public List<IPlayerWW> getLastMinutesDamagedPlayer() {
+        return this.lastMinutesDamagedPlayer;
+    }
+
+    public void addLastMinutesDamagedPlayer(IPlayerWW playerWW){
+        this.lastMinutesDamagedPlayer.add(playerWW);
+    }
+
+    public void removeLastMinutesDamagedPlayer(IPlayerWW playerWW){
+        this.lastMinutesDamagedPlayer.remove(playerWW);
+    }
+
+    @Override
     public String getName() {
         return name;
     }
 
-    @Override
     public void setName(String name) {
         this.name = name;
     }
@@ -456,7 +468,6 @@ public class PlayerWW implements IPlayerWW {
         return disconnectedTime;
     }
 
-    @Override
     public void setDisconnectedTime(int disconnectedTime) {
         this.disconnectedTime = disconnectedTime;
     }
@@ -466,8 +477,6 @@ public class PlayerWW implements IPlayerWW {
         return uuid;
     }
 
-
-    @Override
     public void updateAfterReconnect(Player player) {
 
         this.decoItems.forEach(this::addItem);
@@ -519,7 +528,6 @@ public class PlayerWW implements IPlayerWW {
                 });
     }
 
-    @Override
     public void setDisconnectedLocation(Location location) {
         this.disconnectedLocation = location;
     }

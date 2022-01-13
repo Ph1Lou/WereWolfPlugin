@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.listeners;
 
 
+import fr.ph1lou.werewolfapi.events.werewolf.WereWolfChatEvent;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.game.IModerationManager;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -15,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class ChatListener implements Listener {
@@ -156,6 +158,19 @@ public class ChatListener implements Listener {
         }
 
         return returnMessage.toString();
+    }
+
+    @EventHandler
+    public void onChatWW(WereWolfChatEvent event) {
+        if (event.isCancelled()) return;
+
+        game.getModerationManager().getModerators().stream()
+                .map(Bukkit::getPlayer)
+                .filter(Objects::nonNull)
+                .forEach(player -> player.sendMessage(game.translate("werewolf.commands.admin.ww_chat.modo",
+                        Formatter.format("&name&",event.getPlayerWW().getName()),
+                        Formatter.format("&message&",event.getMessage()))));
+
     }
 }
 

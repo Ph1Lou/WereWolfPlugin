@@ -81,22 +81,22 @@ public class CycleListener implements Listener {
 
             game.getConfig().switchConfigValue(ConfigBase.VOTE.getKey());
             Bukkit.broadcastMessage(game.translate(Prefix.ORANGE.getKey() , "werewolf.vote.vote_deactivate"));
-            game.getVote().setStatus(VoteStatus.ENDED);
+            game.getVoteManager().setStatus(VoteStatus.ENDED);
         }
 
         if (2L * game.getConfig().getTimerValue(TimerBase.DAY_DURATION.getKey())
                 - duration
-                - game.getConfig().getTimerValue(TimerBase.CITIZEN_DURATION.getKey()) > 0) {
+                - game.getConfig().getTimerValue(TimerBase.VOTE_WAITING.getKey()) > 0) {
 
             if (game.getConfig().isConfigActive(ConfigBase.VOTE.getKey())
-                    && !game.getVote().isStatus(VoteStatus.NOT_BEGIN)) {
+                    && !game.getVoteManager().isStatus(VoteStatus.NOT_BEGIN)) {
 
                 Bukkit.broadcastMessage(game.translate("werewolf.utils.bar"));
                 Bukkit.broadcastMessage(game.translate(Prefix.ORANGE.getKey() , "werewolf.vote.vote_time",
                         Formatter.timer(Utils.conversion((int) duration))));
                 Bukkit.broadcastMessage(game.translate("werewolf.utils.bar"));
 
-                game.getVote().setStatus(VoteStatus.IN_PROGRESS);
+                game.getVoteManager().setStatus(VoteStatus.IN_PROGRESS);
 
                 BukkitUtils.scheduleSyncDelayedTask(() -> {
                     if (!game.isState(StateGame.END)) {
@@ -163,18 +163,6 @@ public class CycleListener implements Listener {
             }
 
         }, (duration + 30) * 20);
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onVoteEnd(VoteEndEvent event) {
-
-        long duration = game.getConfig().getTimerValue(TimerBase.CITIZEN_DURATION.getKey());
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
-            if (!game.isState(StateGame.END)) {
-                Bukkit.getPluginManager().callEvent(new VoteResultEvent());
-            }
-
-        }, duration * 20);
     }
 
     public void groupSizeChange() {

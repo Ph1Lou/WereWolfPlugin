@@ -25,13 +25,13 @@ public class CommandCitizenCancelVote implements ICommand {
 
         Citizen citizen = (Citizen) playerWW.getRole();
 
-        if (!game.getVote().isStatus(VoteStatus.WAITING_CITIZEN)) {
+        if (!game.getVoteManager().isStatus(VoteStatus.WAITING)) {
             playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.power");
             return;
         }
 
         citizen.setPower(false);
-        IPlayerWW voteWW = game.getVote().getResult();
+        IPlayerWW voteWW = game.getVoteManager().getResult().orElse(null);
 
         CancelVoteEvent cancelVoteEvent = new CancelVoteEvent(playerWW, voteWW);
         Bukkit.getPluginManager().callEvent(cancelVoteEvent);
@@ -41,7 +41,7 @@ public class CommandCitizenCancelVote implements ICommand {
             return;
         }
 
-        game.getVote().resetVote();
+        game.getVoteManager().resetVote();
         Bukkit.broadcastMessage(game.translate(
                 Prefix.GREEN.getKey() , "werewolf.role.citizen.cancelling_broadcast"));
 

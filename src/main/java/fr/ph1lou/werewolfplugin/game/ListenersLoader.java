@@ -4,6 +4,8 @@ import fr.ph1lou.werewolfplugin.RegisterManager;
 import fr.ph1lou.werewolfplugin.listeners.ActionBarListener;
 import fr.ph1lou.werewolfplugin.listeners.ChatListener;
 import fr.ph1lou.werewolfplugin.listeners.CycleListener;
+import fr.ph1lou.werewolfplugin.listeners.DamagesListener;
+import fr.ph1lou.werewolfplugin.listeners.DeathListener;
 import fr.ph1lou.werewolfplugin.listeners.EnchantmentListener;
 import fr.ph1lou.werewolfplugin.listeners.PlayerListener;
 import fr.ph1lou.werewolfplugin.listeners.SmallFeaturesListener;
@@ -31,15 +33,17 @@ public class ListenersLoader {
     }
 
     public void init() {
-        listeners.add(new PlayerListener(this.game));
-        listeners.add(new SmallFeaturesListener(this.game));
-        listeners.add(new EnchantmentListener(this.game));
-        listeners.add(new ChatListener(this.game));
-        listeners.add(new PatchPotions(this.game));
-        listeners.add(new CycleListener(this.game));
-        listeners.add(new ActionBarListener(this.game));
-        listeners.add(new TabManager(this.game));
-        listeners.add((Listener) this.game.getVote());
+        this.listeners.add(new PlayerListener(this.game));
+        this.listeners.add(new SmallFeaturesListener(this.game));
+        this.listeners.add(new EnchantmentListener(this.game));
+        this.listeners.add(new ChatListener(this.game));
+        this.listeners.add(new PatchPotions(this.game));
+        this.listeners.add(new CycleListener(this.game));
+        this.listeners.add(new ActionBarListener(this.game));
+        this.listeners.add(new TabManager(this.game));
+        this.listeners.add(new DeathListener(this.game));
+        this.listeners.add(new DamagesListener(this.game));
+        this.listeners.add((Listener) this.game.getVoteManager());
         this.listeners.forEach(BukkitUtils::registerEvents);
 
         update();

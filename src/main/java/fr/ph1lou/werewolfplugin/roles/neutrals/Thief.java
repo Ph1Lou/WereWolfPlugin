@@ -134,7 +134,7 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
                     BukkitUtils.scheduleSyncDelayedTask(() -> {
                         if (!game.isState(StateGame.END)) {
                             Bukkit.getPluginManager().callEvent(
-                                    new SecondDeathEvent(playerWW));
+                                    new SecondDeathEvent(playerWW, event.getLastStrikers()));
                         }
 
                     }, 20L);

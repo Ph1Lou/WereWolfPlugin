@@ -38,6 +38,6 @@ public class CommandVote implements ICommand {
             return;
         }
 
-        game.getVote().setUnVote(playerWW, playerWW1);
+        game.getVoteManager().setOneVote(playerWW, playerWW1);
     }
 }

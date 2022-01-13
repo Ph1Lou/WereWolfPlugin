@@ -1050,7 +1050,7 @@
         "vote_duration": "Durée du Vote (§b&timer&§r)",
         "werewolf_chat_duration": "Durée du Chat des Loups Garous (§b&timer&§r)",
         "rival_duration": "Attente des informations du rival (§b&timer&§r)",
-        "citizen_duration": "Durée pour le choix du Citoyen (§b&timer&§r)",
+        "vote_waiting": "Durée de transition du vote (§b&timer&§r)",
         "border_begin": "Début de la Bordure (§b&timer&§r)",
         "model_duration": "Durée pour le choix d'un Modèle (§b&timer&§r)",
         "fox_smell_duration": "Durée du Flair du Renard (§b&timer&§r)",

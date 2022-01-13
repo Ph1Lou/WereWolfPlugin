@@ -129,7 +129,7 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
         cancel.addExtra(new TextComponent(game.translate("werewolf.role.citizen.time_left",
                 Formatter.timer(Utils.conversion(
                         game.getConfig().getTimerValue(
-                                TimerBase.CITIZEN_DURATION.getKey()))))));
+                                TimerBase.VOTE_WAITING.getKey()))))));
 
 
         return cancel;
@@ -160,7 +160,7 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
         see.addExtra(new TextComponent(game.translate("werewolf.role.citizen.time_left",
                 Formatter.timer(Utils.conversion(
                         game.getConfig().getTimerValue(
-                                TimerBase.CITIZEN_DURATION.getKey()))))));
+                                TimerBase.VOTE_WAITING.getKey()))))));
 
 
         return see;

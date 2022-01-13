@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.game;
 
 import fr.mrmicky.fastboard.FastBoard;
+import fr.ph1lou.werewolfapi.vote.IVoteManager;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.commands.roles.werewolf.CommandWereWolfChat;
 import fr.ph1lou.werewolfplugin.save.Configuration;
@@ -13,7 +14,6 @@ import fr.ph1lou.werewolfapi.game.IMapManager;
 import fr.ph1lou.werewolfapi.game.IModerationManager;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.IStuffManager;
-import fr.ph1lou.werewolfapi.game.IVoteManager;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.enums.Prefix;
@@ -45,6 +45,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -61,7 +62,7 @@ public class GameManager implements WereWolfAPI {
     private Day day;
     private boolean debug = false;
     private final ScoreBoard score = new ScoreBoard(this);
-    private final Vote vote = new Vote(this);
+    private IVoteManager voteManager = new Vote(this);
     private final LoversManagement loversManage = new LoversManagement(this);
     private final ModerationManager moderationManager = new ModerationManager(this);
     private final MapManager mapManager;
@@ -353,8 +354,8 @@ public class GameManager implements WereWolfAPI {
     }
 
     @Override
-    public IVoteManager getVote() {
-        return this.vote;
+    public IVoteManager getVoteManager() {
+        return this.voteManager;
     }
 
     @Override
@@ -364,7 +365,8 @@ public class GameManager implements WereWolfAPI {
 
     @Override
     public void death(IPlayerWW playerWW) {
-        Bukkit.getPluginManager().callEvent(new FinalDeathEvent(playerWW));
+        Bukkit.getPluginManager().callEvent(new FinalDeathEvent(playerWW,
+                new HashSet<>(playerWW.getLastMinutesDamagedPlayer())));
     }
 
 
@@ -464,6 +466,11 @@ public class GameManager implements WereWolfAPI {
 
     public void disableWereWolfChat(){
         CommandWereWolfChat.disable();
+    }
+
+    @Override
+    public void setVoteManager(IVoteManager iVoteManager) {
+        this.voteManager = iVoteManager;
     }
 
     public boolean isCrack() {
