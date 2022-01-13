@@ -1,6 +1,10 @@
 package fr.ph1lou.werewolfplugin.statistiks;
 
 import com.google.common.collect.Sets;
+import fr.ph1lou.werewolfapi.events.roles.scammer.ScamEvent;
+import fr.ph1lou.werewolfapi.events.roles.servitor.ServitorDefinitiveMasterEvent;
+import fr.ph1lou.werewolfapi.events.roles.servitor.ServitorMasterChosenEvent;
+import fr.ph1lou.werewolfapi.events.roles.wise_elder.WiseElderRevealAuraAmountEvent;
 import fr.ph1lou.werewolfplugin.save.FileUtils_;
 import fr.ph1lou.werewolfplugin.save.Serializer;
 import fr.ph1lou.werewolfapi.lovers.ILover;
@@ -1354,6 +1358,54 @@ public class Events implements Listener {
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("druid_power",
                 event.getPlayerWW(),api.getTimer(),event.getDarkAura()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onRevealAuraAmount(WiseElderRevealAuraAmountEvent event) {
+
+        if (event.isCancelled()) return;
+
+
+        WereWolfAPI api = main.getWereWolfAPI();
+
+        String string = String.format("Neutral: %s; Dark: %s; Light: %s",
+                event.getNeutral(), event.getDark(), event.getLight());
+
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("reveal_aura_amount",
+                event.getPlayerWW(), api.getTimer(), string));
+    }
+
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onRevealAuraAmount(ServitorMasterChosenEvent event) {
+
+        if (event.isCancelled()) return;
+
+        WereWolfAPI api = main.getWereWolfAPI();
+
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("servitor_master_chosen",
+                event.getPlayerWW(), event.getTargetWW(), api.getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onDefinitiveMaster(ServitorDefinitiveMasterEvent event) {
+
+        if (event.isCancelled()) return;
+
+        WereWolfAPI api = main.getWereWolfAPI();
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("servitor_definitive_master",
+                event.getPlayerWW(), event.getTargetWW(), api.getTimer()));
+
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onScammer(ScamEvent event) {
+
+        if (event.isCancelled()) return;
+
+        WereWolfAPI api = main.getWereWolfAPI();
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("scam_event",
+                event.getPlayerWW(), event.getTargetWW(), api.getTimer()));
     }
 
 }

@@ -578,19 +578,24 @@
       },
 
       "servitor": {
-        "display" : "Serviteur",
-        "description" : "Vous avez un Maître choisi aléatoirement à chaque début d'épisode qui vous confère Strength 0.5 lorsqu’il se situe à moins de 25 blocs de vous.\nSi votre Maître vous tue pour la première fois, vous ressuscitez mais le Maître devient alors définitif et vous confère Weakness I lorsqu’il se situe à moins de 25 blocs de vous.\nLes Maîtres ne savent pas qu’ils le sont et ne connaissent pas votre identité Serviteur."
-
-
+        "display": "Serviteur",
+        "message": "Votre maître aujourd'hui est &player&",
+        "description": "Vous avez un Maître choisi aléatoirement chaque matin.\nLes Maîtres n'ont aucune information",
+        "effects": "Force I, si votre maître est à moins de &number& blocs de vous",
+        "effects_death": "Faiblesse I, si votre maître est à moins de &number& blocs de vous",
+        "resurrection": "Votre maître &player& vous a tué, il devient définitif et vous donne Faiblesse I à &number& blocs de vous"
+      },
       "scammer": {
         "display": "Escroc",
-        "description": "Vous volez progressivement le rôle des joueurs autour de vous (20 blocs) au rythme de 1% toutes les &timer& secondes. Vous récupérez le rôle (et rejoignez le camp) du premier joueur qui arrive à 100%. Le joueur escroqué devient Loup-Garou Omega s’il était dans le camp des Loups (ou Loup-Garou Blanc, ou Loup Solitaire) ou devient Simple Villageois dans tous les autres cas.",
+        "message_villager": "L'§bEscroc§f vous a escroqué, vous devenez §bSimple Villageois§f",
+        "message_werewolf": "L'§bEscroc§f vous a escroqué, vous devenez §bLoup Garou§f sans pouvoir",
+        "description": "Vous volez progressivement le rôle des joueurs a §b&number&§f blocs de vous au rythme de 1% toutes les &timer&. Le premier joueur escroqué devient Loup-Garou sans pouvoir s’il était dans le camp des Loups sinon Simple Villageois",
         "config": {
           "name": "Modifier le délai entre chaque mise à jour du %",
           "lore": "§b&timer&§rs"
-        }
-
-
+        },
+        "message": "Vous venez d'escroquer le rôle de &player&"
+      },
       "fruit_merchant": {
         "display": "Marchande de Fruit",
         "perform": "Vous venez d'utiliser votre pouvoir, les joueurs dans votre champ d'action sont &players&. \nVous recevrez dans §b&timer&§f les informations",
@@ -610,9 +615,8 @@
       },
       "wise_elder": {
         "display": "Vieux sage",
-        "description": "Vous disposez de 3 compteurs (1 pour chaque type d'Aura)\nPour chaque seconde passée à moins de 15 blocs d'un joueur, le compteur correspondant à l'Aura de ce joueur augmente d'un point.\nA la fin de chaque cycle (à partir du cycle 3), vous recevez un message avec le nombre de points de chaque compteur et les compteurs sont remis à zéro.",
-        "end_of_cycle": "Cycle terminé! §f§lCompteur aura neutre: &neutral&§r; §0§lCompteur aura obscure: &dark&§r; §l§eCompteur aura lumineuse: &light&"
-
+        "description": "A partir du jour 3, vous disposez d'un compteur pour chaque type d'Aura\nPour chaque seconde passée à moins de &number& blocs d'un joueur, le compteur correspondant à son aura s'incrémente.",
+        "end_of_cycle": "Vous recevez le contenu des compteurs => \nCompteur Aura §fNeutre§f: &neutral&§r.\n Compteur Aura §0Obscure§f: &dark&§r.\n Compteur Aura §eLumineuse§f: &light&"
       }
     },
     "vote": {

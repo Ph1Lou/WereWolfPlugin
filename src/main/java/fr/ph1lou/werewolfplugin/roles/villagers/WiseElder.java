@@ -1,9 +1,11 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.minuskube.inv.ClickableItem;
+import fr.ph1lou.werewolfapi.enums.Prefix;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
+import fr.ph1lou.werewolfapi.events.roles.wise_elder.WiseElderRevealAuraAmountEvent;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -11,7 +13,6 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.roles.wise_elder.RevealAuraAmountEvent;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -40,7 +41,8 @@ public class WiseElder extends RoleVillage {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.wise_elder.description"))
+                .setDescription(game.translate("werewolf.role.wise_elder.description",
+                        Formatter.number(game.getConfig().getDistanceWiseElder())))
                 .build();
     }
 
@@ -51,16 +53,32 @@ public class WiseElder extends RoleVillage {
 
     @EventHandler
     public void onDay(DayEvent event) {
-        if (event.getNumber() == 3)
-            active = true;
 
-        if (active) {
-            getPlayerWW().sendMessageWithKey("werewolf.role.wise_elder.end_of_cycle",
+        if(!this.isAbilityEnabled()){
+            return;
+        }
+
+        if (event.getNumber() == 3) {
+            this.active = true;
+        }
+
+        if (this.active) {
+
+            WiseElderRevealAuraAmountEvent wiseElderRevealAuraAmountEvent = new WiseElderRevealAuraAmountEvent(getPlayerWW(),neutralCounter,darkCounter,lightCounter);
+
+            Bukkit.getPluginManager().callEvent(wiseElderRevealAuraAmountEvent);
+
+            if(wiseElderRevealAuraAmountEvent.isCancelled()){
+                this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+                resetCounters();
+                return;
+            }
+
+            getPlayerWW().sendMessageWithKey(Prefix.GREEN.getKey(),"werewolf.role.wise_elder.end_of_cycle",
                     Formatter.format("&neutral&",neutralCounter),
                     Formatter.format("&dark&",darkCounter),
                     Formatter.format("&light&",lightCounter));
-            Bukkit.getPluginManager()
-                    .callEvent(new RevealAuraAmountEvent(getPlayerWW(),neutralCounter,darkCounter,lightCounter));
+
             resetCounters();
         }
     }
@@ -93,6 +111,11 @@ public class WiseElder extends RoleVillage {
 
     @Override
     public void second() {
+
+        if(!this.isAbilityEnabled()){
+            return;
+        }
+
         if (!active) return;
 
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;

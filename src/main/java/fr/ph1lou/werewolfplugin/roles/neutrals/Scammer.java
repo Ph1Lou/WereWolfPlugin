@@ -1,10 +1,13 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 import fr.minuskube.inv.ClickableItem;
+import fr.ph1lou.werewolfapi.enums.Prefix;
 import fr.ph1lou.werewolfapi.enums.RolesBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
-import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
+import fr.ph1lou.werewolfapi.events.random_events.SwapEvent;
+import fr.ph1lou.werewolfapi.events.roles.scammer.ScamEvent;
+import fr.ph1lou.werewolfapi.events.werewolf.NewWereWolfEvent;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -16,6 +19,7 @@ import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
+import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfplugin.roles.villagers.Villager;
 import fr.ph1lou.werewolfplugin.roles.werewolfs.WereWolf;
 import org.bukkit.Bukkit;
@@ -24,7 +28,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -40,6 +43,7 @@ import java.util.Optional;
 public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
     private final Map<IPlayerWW, Integer> affectedPlayer = new HashMap<>();
     private boolean power = true;
+    private int count = 0;
 
     public Scammer(WereWolfAPI game, IPlayerWW playerWW, String key) {
         super(game, playerWW, key);
@@ -48,7 +52,9 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.scammer.description", Formatter.timer(String.valueOf(game.getConfig().getScamDelay()))))
+                .setDescription(game.translate("werewolf.role.scammer.description",
+                        Formatter.timer(Utils.conversion(game.getConfig().getScamDelay())),
+                        Formatter.number(game.getConfig().getDistanceScammer())))
                 .build();
     }
 
@@ -57,38 +63,45 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
 
     }
 
-    @EventHandler
-    public void onStart(DayEvent event) {
-        if (event.getNumber() != 1) return;
+    @Override
+    public void second() {
 
-        BukkitUtils.scheduleSyncRepeatingTask(new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (!hasPower()) return;
+        if(!this.isAbilityEnabled()){
+            return;
+        }
 
-                Location location = getPlayerWW().getLocation();
+        this.count = this.count++ % game.getConfig().getScamDelay();
 
-                Bukkit.getOnlinePlayers().stream()
-                        .map(Entity::getUniqueId)
-                        .filter(uniqueId -> !getPlayerUUID().equals(uniqueId))
-                        .map(game::getPlayerWW)
-                        .filter(Optional::isPresent)
-                        .map(Optional::get)
-                        .filter(iPlayerWW -> iPlayerWW.isState(StatePlayer.ALIVE) && checkDistance(iPlayerWW, location))
-                        .forEach(iPlayerWW -> {
-                            int value = 0;
-                            if (affectedPlayer.containsKey(iPlayerWW)) {
-                                value = affectedPlayer.get(iPlayerWW);
-                                if (value == 99) {
-                                    Bukkit.getPluginManager().callEvent(new ScamEvent(getPlayerWW(), iPlayerWW));
-                                    return;
-                                }
-                            }
-                            affectedPlayer.put(iPlayerWW, value + 1);
-                        });
-            }
-        }, game.getConfig().getScamDelay() * 20L, game.getConfig().getScamDelay() * 20L);
+        if(count != 0){
+            return;
+        }
+
+        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
+
+        if (!hasPower()) return;
+
+        Location location = getPlayerWW().getLocation();
+
+        Bukkit.getOnlinePlayers().stream()
+                .map(Entity::getUniqueId)
+                .filter(uniqueId -> !getPlayerUUID().equals(uniqueId))
+                .map(game::getPlayerWW)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .filter(iPlayerWW -> iPlayerWW.isState(StatePlayer.ALIVE) && checkDistance(iPlayerWW, location))
+                .forEach(iPlayerWW -> {
+                    int value = 0;
+                    if (this.affectedPlayer.containsKey(iPlayerWW)) {
+                        value = this.affectedPlayer.get(iPlayerWW);
+                        if (value == 99) {
+                            Bukkit.getPluginManager().callEvent(new ScamEvent(getPlayerWW(), iPlayerWW));
+                            return;
+                        }
+                    }
+                    this.affectedPlayer.put(iPlayerWW, value + 1);
+                });
     }
+
 
     @EventHandler
     public void onScam(ScamEvent event) {
@@ -99,22 +112,49 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
             return;
         }
 
+        if(!event.getPlayerWW().equals(this.getPlayerWW())){
+            return;
+        }
+
         setPower(false);
         affectedPlayer.clear();
         IPlayerWW target = event.getTargetWW();
         IRole targetRole = target.getRole();
-        HandlerList.unregisterAll(targetRole);
+        HandlerList.unregisterAll(this);
         getPlayerWW().setRole(targetRole);
         BukkitUtils.registerEvents(targetRole);
+        Bukkit.getPluginManager().callEvent(new SwapEvent(this.getPlayerWW(),target));
         IRole newRole;
         if (targetRole.isWereWolf()) {
             newRole = new WereWolf(game, target, RolesBase.WEREWOLF.getKey());
+            if(targetRole.isNeutral()){
+                if(targetRole.isSolitary()){
+                    newRole.setSolitary(true);
+                }
+                else{
+                    newRole.setTransformedToNeutral(true);
+                }
+            }
+            target.sendMessageWithKey(Prefix.ORANGE.getKey(),"werewolf.role.scammer.message_villager");
         } else {
             newRole = new Villager(game, target, RolesBase.VILLAGER.getKey());
+            target.sendMessageWithKey(Prefix.ORANGE.getKey(),"werewolf.role.scammer.message_werewolf");
         }
+        if (this.isInfected()) {
+            targetRole.setInfected();
+        } else if (targetRole.isWereWolf()) {
+            Bukkit.getPluginManager().callEvent(new NewWereWolfEvent(getPlayerWW()));
+        }
+        if(this.isSolitary()){
+            targetRole.setSolitary(true);
+        }
+        targetRole.setDeathRole(this.getKey());
+
         newRole.disableAbilities();
         target.setRole(newRole);
         BukkitUtils.registerEvents(target.getRole());
+        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN.getKey(),"werewolf.role.scammer.message",
+                Formatter.player(target.getName()));
     }
 
     @Override

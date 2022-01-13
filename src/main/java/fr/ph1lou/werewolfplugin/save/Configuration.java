@@ -41,9 +41,9 @@ public class Configuration implements IConfiguration {
     private int goldenAppleParticles;
     private int distanceBearTrainer;
     private int distanceSuccubus;
-    private int distanceWiseElder = 15;
-    private int distanceServitor = 25;
-    private int distanceScammer = 20;
+    private int distanceWiseElder;
+    private int distanceServitor;
+    private int distanceScammer;
     private int distanceAmnesiacLovers;
     private int distancePriestess;
     private int distanceSister;
@@ -132,6 +132,9 @@ public class Configuration implements IConfiguration {
         this.sweetAngel = false;
         this.distanceFruitMerchant=50;
         this.scamDelay = 9;
+        this.distanceWiseElder = 15;
+        this.distanceServitor = 25;
+        this.distanceScammer = 20;
     }
 
     public Configuration(IRegisterManager registerManager) {
