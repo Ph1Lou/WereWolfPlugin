@@ -577,6 +577,11 @@
         "not_affected": "Vous ne pouvez effectuer cette commande que sur un joueur observé precedemment via §b/ww oberver§f"
       },
 
+      "servitor": {
+        "display" : "Serviteur",
+        "description" : "Vous avez un Maître choisi aléatoirement à chaque début d'épisode qui vous confère Strength 0.5 lorsqu’il se situe à moins de 25 blocs de vous.\nSi votre Maître vous tue pour la première fois, vous ressuscitez mais le Maître devient alors définitif et vous confère Weakness I lorsqu’il se situe à moins de 25 blocs de vous.\nLes Maîtres ne savent pas qu’ils le sont et ne connaissent pas votre identité Serviteur."
+
+
       "scammer": {
         "display": "Escroc",
         "description": "Vous volez progressivement le rôle des joueurs autour de vous (20 blocs) au rythme de 1% toutes les &timer& secondes. Vous récupérez le rôle (et rejoignez le camp) du premier joueur qui arrive à 100%. Le joueur escroqué devient Loup-Garou Omega s’il était dans le camp des Loups (ou Loup-Garou Blanc, ou Loup Solitaire) ou devient Simple Villageois dans tous les autres cas.",
@@ -963,6 +968,7 @@
         "avenger_werewolf": "Champ d'action du Loup Garou Vengeur §b&number&",
         "flute_player": "Champ d'action du Joueur de Flûte §b&number&",
         "bear_trainer": "Champ d'action du Montreur d'Ours §b&number&",
+        "servitor": "Champ d'action du Serviteur §b&number&",
         "scammer": "Champ d'action de l'Escroc §b&number&",
         "fearful_werewolf": "Champ d'action du Loup-Garou Craintif §b&number&",
         "hermit": "Champ d'action de l'Ermite §b&number&",

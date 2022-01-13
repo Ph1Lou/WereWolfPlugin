@@ -4,7 +4,6 @@ import io.github.ph1lou.werewolfapi.enums.Category;
 import io.github.ph1lou.werewolfapi.enums.RandomCompositionAttribute;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.registers.RoleRegister;
-import io.github.ph1lou.werewolfplugin.roles.neutrals.*;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Analyst;
 import io.github.ph1lou.werewolfplugin.roles.villagers.BearTrainer;
 import io.github.ph1lou.werewolfplugin.roles.villagers.ChattySeer;
@@ -49,6 +48,7 @@ import io.github.ph1lou.werewolfplugin.roles.werewolfs.MischievousWereWolf;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.MysticalWereWolf;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.NaughtyLittleWolf;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.WereWolf;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -378,6 +378,10 @@ public class RolesRegister {
                             .addCategory(Category.VILLAGER)
                             .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION)
                             .addConfig(Oracle::config));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name", RolesBase.SERVITOR.getKey(), Servitor.class)
+                            .addCategory(Category.VILLAGER));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name", RolesBase.SCAMMER.getKey(), Scammer.class)
