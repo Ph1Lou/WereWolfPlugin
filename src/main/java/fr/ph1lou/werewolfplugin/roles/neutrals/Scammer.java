@@ -1,22 +1,23 @@
-package io.github.ph1lou.werewolfplugin.roles.neutrals;
+package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 import fr.minuskube.inv.ClickableItem;
-import io.github.ph1lou.werewolfapi.Formatter;
-import io.github.ph1lou.werewolfapi.*;
-import io.github.ph1lou.werewolfapi.enums.RolesBase;
-import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
-import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
-import io.github.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
-import io.github.ph1lou.werewolfapi.events.roles.scammer.ScamEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.IAffectedPlayers;
-import io.github.ph1lou.werewolfapi.rolesattributs.IPower;
-import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
-import io.github.ph1lou.werewolfapi.rolesattributs.RoleNeutral;
-import io.github.ph1lou.werewolfapi.utils.BukkitUtils;
-import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Villager;
-import io.github.ph1lou.werewolfplugin.roles.werewolfs.WereWolf;
+import fr.ph1lou.werewolfapi.enums.RolesBase;
+import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
+import fr.ph1lou.werewolfapi.game.IConfiguration;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
+import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
+import fr.ph1lou.werewolfapi.role.interfaces.IPower;
+import fr.ph1lou.werewolfapi.role.interfaces.IRole;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
+import fr.ph1lou.werewolfapi.utils.BukkitUtils;
+import fr.ph1lou.werewolfapi.utils.ItemBuilder;
+import fr.ph1lou.werewolfplugin.roles.villagers.Villager;
+import fr.ph1lou.werewolfplugin.roles.werewolfs.WereWolf;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -26,7 +27,12 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author Héphaïsto
@@ -42,7 +48,7 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.scammer.description",Formatter.timer(String.valueOf(game.getConfig().getScamDelay()))))
+                .setDescription(game.translate("werewolf.role.scammer.description", Formatter.timer(String.valueOf(game.getConfig().getScamDelay()))))
                 .build();
     }
 

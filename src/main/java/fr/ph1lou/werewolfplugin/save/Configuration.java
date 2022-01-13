@@ -1,14 +1,13 @@
-package io.github.ph1lou.werewolfplugin.save;
+package fr.ph1lou.werewolfplugin.save;
 
-
-import io.github.ph1lou.werewolfapi.IConfiguration;
-import io.github.ph1lou.werewolfapi.enums.RolesBase;
-import io.github.ph1lou.werewolfapi.registers.ConfigRegister;
-import io.github.ph1lou.werewolfapi.registers.IRegisterManager;
-import io.github.ph1lou.werewolfapi.registers.RandomEventRegister;
-import io.github.ph1lou.werewolfapi.registers.ScenarioRegister;
-import io.github.ph1lou.werewolfapi.registers.TimerRegister;
-import io.github.ph1lou.werewolfplugin.RegisterManager;
+import fr.ph1lou.werewolfapi.enums.RolesBase;
+import fr.ph1lou.werewolfapi.game.IConfiguration;
+import fr.ph1lou.werewolfapi.registers.impl.ConfigRegister;
+import fr.ph1lou.werewolfapi.registers.impl.RandomEventRegister;
+import fr.ph1lou.werewolfapi.registers.impl.ScenarioRegister;
+import fr.ph1lou.werewolfapi.registers.impl.TimerRegister;
+import fr.ph1lou.werewolfapi.registers.interfaces.IRegisterManager;
+import fr.ph1lou.werewolfplugin.RegisterManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -713,7 +712,9 @@ public class Configuration implements IConfiguration {
     @Override
     public void setDistanceWiseElder(int i) {
         distanceWiseElder = i;
+    }
 
+    @Override
     public int getDistanceServitor() {
         return distanceServitor;
     }
@@ -727,7 +728,6 @@ public class Configuration implements IConfiguration {
     public void setSweetAngel(boolean sweetAngel) {
         this.sweetAngel = sweetAngel;
     }
-
 
     public void addRegister(RegisterManager registerManager) {
         this.registerManager = registerManager;

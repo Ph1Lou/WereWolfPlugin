@@ -1329,6 +1329,7 @@
       "power": "§bPouvoir : §f&on&\n",
       "item": "§bItems : §f&items&\n",
       "effect": "§bEffet : §f&effect&\n",
+      "disable": "Vos pouvoirs ont été désactivés\n",
       "equipment": "§bÉquipement : §f&equipment&\n",
       "command": "§bCommande : §f&command&\n",
       "transformed": "Transformé : §b&on&\n",

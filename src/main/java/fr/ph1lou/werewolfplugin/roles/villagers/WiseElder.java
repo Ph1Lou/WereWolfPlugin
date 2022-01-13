@@ -1,14 +1,18 @@
-package io.github.ph1lou.werewolfplugin.roles.villagers;
+package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.minuskube.inv.ClickableItem;
-import io.github.ph1lou.werewolfapi.*;
-import io.github.ph1lou.werewolfapi.enums.StatePlayer;
-import io.github.ph1lou.werewolfapi.enums.UniversalMaterial;
-import io.github.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
-import io.github.ph1lou.werewolfapi.events.roles.wise_elder.RevealAuraAmountEvent;
-import io.github.ph1lou.werewolfapi.rolesattributs.IRole;
-import io.github.ph1lou.werewolfapi.rolesattributs.RoleVillage;
-import io.github.ph1lou.werewolfapi.utils.ItemBuilder;
+import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
+import fr.ph1lou.werewolfapi.game.IConfiguration;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.interfaces.IRole;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
+import fr.ph1lou.werewolfapi.roles.wise_elder.RevealAuraAmountEvent;
+import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;

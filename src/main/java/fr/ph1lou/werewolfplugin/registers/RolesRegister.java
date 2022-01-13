@@ -13,6 +13,7 @@ import fr.ph1lou.werewolfplugin.roles.neutrals.FlutePlayer;
 import fr.ph1lou.werewolfplugin.roles.neutrals.GuardianAngel;
 import fr.ph1lou.werewolfplugin.roles.neutrals.Imitator;
 import fr.ph1lou.werewolfplugin.roles.neutrals.Rival;
+import fr.ph1lou.werewolfplugin.roles.neutrals.Scammer;
 import fr.ph1lou.werewolfplugin.roles.neutrals.SerialKiller;
 import fr.ph1lou.werewolfplugin.roles.neutrals.Succubus;
 import fr.ph1lou.werewolfplugin.roles.neutrals.Thief;
