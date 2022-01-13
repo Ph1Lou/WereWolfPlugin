@@ -19,45 +19,18 @@ import io.github.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import io.github.ph1lou.werewolfapi.events.game.game_cycle.WinEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import io.github.ph1lou.werewolfapi.events.game.life_cycle.ResurrectionEvent;
-import io.github.ph1lou.werewolfapi.events.game.timers.BorderStartEvent;
-import io.github.ph1lou.werewolfapi.events.game.timers.BorderStopEvent;
-import io.github.ph1lou.werewolfapi.events.game.timers.DiggingEndEvent;
-import io.github.ph1lou.werewolfapi.events.game.timers.InvulnerabilityEvent;
-import io.github.ph1lou.werewolfapi.events.game.timers.PVPEvent;
-import io.github.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
-import io.github.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
+import io.github.ph1lou.werewolfapi.events.game.timers.*;
 import io.github.ph1lou.werewolfapi.events.game.vote.CancelVoteEvent;
 import io.github.ph1lou.werewolfapi.events.game.vote.VoteEvent;
 import io.github.ph1lou.werewolfapi.events.game.vote.VoteResultEvent;
-import io.github.ph1lou.werewolfapi.events.lovers.AmnesiacLoverDeathEvent;
-import io.github.ph1lou.werewolfapi.events.lovers.CupidLoversEvent;
-import io.github.ph1lou.werewolfapi.events.lovers.CursedLoverDeathEvent;
-import io.github.ph1lou.werewolfapi.events.lovers.DonEvent;
-import io.github.ph1lou.werewolfapi.events.lovers.LoverDeathEvent;
-import io.github.ph1lou.werewolfapi.events.lovers.RevealAmnesiacLoversEvent;
-import io.github.ph1lou.werewolfapi.events.lovers.RevealLoversEvent;
-import io.github.ph1lou.werewolfapi.events.random_events.AmnesicEvent;
-import io.github.ph1lou.werewolfapi.events.random_events.AmnesicTransformEvent;
-import io.github.ph1lou.werewolfapi.events.random_events.BearingRitualEvent;
-import io.github.ph1lou.werewolfapi.events.random_events.DrunkenWereWolfEvent;
-import io.github.ph1lou.werewolfapi.events.random_events.ExposedEvent;
-import io.github.ph1lou.werewolfapi.events.random_events.FindAllLootBoxEvent;
-import io.github.ph1lou.werewolfapi.events.random_events.GodMiracleEvent;
-import io.github.ph1lou.werewolfapi.events.random_events.InfectionRandomEvent;
-import io.github.ph1lou.werewolfapi.events.random_events.LootBoxEvent;
-import io.github.ph1lou.werewolfapi.events.random_events.PutrefactionEvent;
-import io.github.ph1lou.werewolfapi.events.random_events.SwapEvent;
-import io.github.ph1lou.werewolfapi.events.random_events.TroupleEvent;
+import io.github.ph1lou.werewolfapi.events.lovers.*;
+import io.github.ph1lou.werewolfapi.events.random_events.*;
 import io.github.ph1lou.werewolfapi.events.roles.InvisibleEvent;
 import io.github.ph1lou.werewolfapi.events.roles.StealEvent;
 import io.github.ph1lou.werewolfapi.events.roles.amnesiac.AmnesiacTransformationEvent;
 import io.github.ph1lou.werewolfapi.events.roles.analyst.AnalystEvent;
 import io.github.ph1lou.werewolfapi.events.roles.analyst.AnalystExtraDetailsEvent;
-import io.github.ph1lou.werewolfapi.events.roles.angel.AngelChoiceEvent;
-import io.github.ph1lou.werewolfapi.events.roles.angel.AngelTargetDeathEvent;
-import io.github.ph1lou.werewolfapi.events.roles.angel.AngelTargetEvent;
-import io.github.ph1lou.werewolfapi.events.roles.angel.FallenAngelTargetDeathEvent;
-import io.github.ph1lou.werewolfapi.events.roles.angel.RegenerationEvent;
+import io.github.ph1lou.werewolfapi.events.roles.angel.*;
 import io.github.ph1lou.werewolfapi.events.roles.avenger_werewolf.DeathAvengerListEvent;
 import io.github.ph1lou.werewolfapi.events.roles.avenger_werewolf.RegisterAvengerListEvent;
 import io.github.ph1lou.werewolfapi.events.roles.bear_trainer.GrowlEvent;
@@ -94,6 +67,7 @@ import io.github.ph1lou.werewolfapi.events.roles.raven.CurseEvent;
 import io.github.ph1lou.werewolfapi.events.roles.rival.RivalAnnouncementEvent;
 import io.github.ph1lou.werewolfapi.events.roles.rival.RivalLoverDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.rival.RivalLoverEvent;
+import io.github.ph1lou.werewolfapi.events.roles.scammer.ScamEvent;
 import io.github.ph1lou.werewolfapi.events.roles.seer.SeeVoteEvent;
 import io.github.ph1lou.werewolfapi.events.roles.seer.SeerEvent;
 import io.github.ph1lou.werewolfapi.events.roles.serial_killer.SerialKillerEvent;
@@ -137,11 +111,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffectType;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -1313,6 +1283,14 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("analyst_see",
+        event.getPlayerWW(), event.getTargetWW(), 0, event.hasEffect() ? "werewolf.role.analyst.has_effects" : "werewolf.role.analyst.no_effects", api.getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onScam(ScamEvent event) {
+
+        if (event.isCancelled()) return;
+
                 event.getPlayerWW(),event.getTargetWW(),api.getTimer(),event.hasEffect()?"werewolf.role.analyst.has_effects":"werewolf.role.analyst.no_effects"));
     }
 
@@ -1356,4 +1334,9 @@ public class Events implements Listener {
                 event.getPlayerWW(),api.getTimer(),event.getDarkAura()));
     }
 
+        WereWolfAPI api = main.getWereWolfAPI();
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("scammer_scam",
+                event.getPlayerWW(), event.getTargetWW(), api.getTimer()));
+
+    }
 }

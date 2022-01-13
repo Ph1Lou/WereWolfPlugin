@@ -4,20 +4,7 @@ import io.github.ph1lou.werewolfapi.enums.Category;
 import io.github.ph1lou.werewolfapi.enums.RandomCompositionAttribute;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.registers.RoleRegister;
-import io.github.ph1lou.werewolfplugin.roles.neutrals.AmnesicWerewolf;
-import io.github.ph1lou.werewolfplugin.roles.neutrals.Angel;
-import io.github.ph1lou.werewolfplugin.roles.neutrals.Assassin;
-import io.github.ph1lou.werewolfplugin.roles.neutrals.Charmer;
-import io.github.ph1lou.werewolfplugin.roles.neutrals.FallenAngel;
-import io.github.ph1lou.werewolfplugin.roles.neutrals.FlutePlayer;
-import io.github.ph1lou.werewolfplugin.roles.neutrals.GuardianAngel;
-import io.github.ph1lou.werewolfplugin.roles.neutrals.Imitator;
-import io.github.ph1lou.werewolfplugin.roles.neutrals.Rival;
-import io.github.ph1lou.werewolfplugin.roles.neutrals.SerialKiller;
-import io.github.ph1lou.werewolfplugin.roles.neutrals.Succubus;
-import io.github.ph1lou.werewolfplugin.roles.neutrals.Thief;
-import io.github.ph1lou.werewolfplugin.roles.neutrals.WhiteWereWolf;
-import io.github.ph1lou.werewolfplugin.roles.neutrals.WillOTheWisp;
+import io.github.ph1lou.werewolfplugin.roles.neutrals.*;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Analyst;
 import io.github.ph1lou.werewolfplugin.roles.villagers.BearTrainer;
 import io.github.ph1lou.werewolfplugin.roles.villagers.ChattySeer;
@@ -393,6 +380,14 @@ public class RolesRegister {
                             .addConfig(Oracle::config));
 
             rolesRegister
+                    .add(new RoleRegister("werewolf.name", RolesBase.SCAMMER.getKey(), Scammer.class)
+                            .addCategory(Category.NEUTRAL)
+                            .setRandomCompositionAttribute(RandomCompositionAttribute.HYBRID)
+                            .addConfig(Scammer::configDelay)
+                            .addConfig(Scammer::config));
+
+
+            rolesRegister
                     .add(new RoleRegister("werewolf.name", RolesBase.FRUIT_MERCHANT.getKey(), FruitMerchant.class)
                             .addCategory(Category.VILLAGER)
                             .setRandomCompositionAttribute(RandomCompositionAttribute.MINOR_INFORMATION)
@@ -402,6 +397,7 @@ public class RolesRegister {
                     .add(new RoleRegister("werewolf.name", RolesBase.DRUID.getKey(), Druid.class)
                             .addCategory(Category.VILLAGER)
                             .addConfig(Druid::config));
+
 
         } catch (NoSuchMethodException e) {
             e.printStackTrace();

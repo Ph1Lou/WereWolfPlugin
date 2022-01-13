@@ -3,11 +3,7 @@ package io.github.ph1lou.werewolfplugin.save;
 
 import io.github.ph1lou.werewolfapi.IConfiguration;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
-import io.github.ph1lou.werewolfapi.registers.ConfigRegister;
-import io.github.ph1lou.werewolfapi.registers.IRegisterManager;
-import io.github.ph1lou.werewolfapi.registers.RandomEventRegister;
-import io.github.ph1lou.werewolfapi.registers.ScenarioRegister;
-import io.github.ph1lou.werewolfapi.registers.TimerRegister;
+import io.github.ph1lou.werewolfapi.registers.*;
 import io.github.ph1lou.werewolfplugin.RegisterManager;
 
 import java.util.HashMap;
@@ -18,9 +14,9 @@ public class Configuration implements IConfiguration {
     private final Map<String, Integer> timerValues = new HashMap<>();
     private final Map<String, Boolean> configValues = new HashMap<>();
     private final Map<String, Integer> loverCount = new HashMap<>();
-    private Map<String, Integer> roleCount = new HashMap<>();
     private final Map<String, Boolean> scenarioValues = new HashMap<>();
     private final Map<String, Integer> randomEventsValues = new HashMap<>();
+    private Map<String, Integer> roleCount = new HashMap<>();
     private transient IRegisterManager registerManager;
     private int strengthRate = 30;
     private int resistanceRate = 20;
@@ -41,6 +37,7 @@ public class Configuration implements IConfiguration {
     private int useOfFlair = 3;
     private int goldenAppleParticles = 1;
     private int distanceBearTrainer = 50;
+    private int distanceScammer = 20;
     private int distanceSuccubus = 20;
     private int distanceAmnesiacLovers = 15;
     private int distancePriestess = 10;
@@ -71,6 +68,8 @@ public class Configuration implements IConfiguration {
     private boolean detectiveEveryOtherDay = true;
     private boolean sweetAngel = false;
     private int distanceFruitMerchant=50;
+    private int scamDelay = 9;
+
 
     public Configuration(IRegisterManager registerManager) {
         this.registerManager = registerManager;
@@ -82,13 +81,13 @@ public class Configuration implements IConfiguration {
     }
 
     @Override
-    public void setTimerValue(String key, int value) {
-        timerValues.put(key, value);
+    public void setLimitDepthStrider(int i) {
+        this.limitDepthStrider = i;
     }
 
     @Override
-    public void setLimitDepthStrider(int i) {
-        this.limitDepthStrider = i;
+    public void setTimerValue(String key, int value) {
+        timerValues.put(key, value);
     }
 
     @Override
@@ -102,7 +101,7 @@ public class Configuration implements IConfiguration {
     }
 
     @Override
-	public int getStrengthRate() {
+    public int getStrengthRate() {
         return this.strengthRate;
     }
 
@@ -172,72 +171,72 @@ public class Configuration implements IConfiguration {
     }
 
     @Override
-	public int getLimitProtectionDiamond() {
-		return limitProtectionDiamond;
-	}
+    public int getLimitProtectionDiamond() {
+        return limitProtectionDiamond;
+    }
 
     @Override
-	public void setLimitProtectionDiamond(int limitProtectionDiamond) {
-		this.limitProtectionDiamond = limitProtectionDiamond;
-	}
+    public void setLimitProtectionDiamond(int limitProtectionDiamond) {
+        this.limitProtectionDiamond = limitProtectionDiamond;
+    }
 
     @Override
-	public int getLimitSharpnessDiamond() {
-		return limitSharpnessDiamond;
-	}
+    public int getLimitSharpnessDiamond() {
+        return limitSharpnessDiamond;
+    }
 
     @Override
-	public void setLimitSharpnessDiamond(int limitSharpnessDiamond) {
-		this.limitSharpnessDiamond = limitSharpnessDiamond;
-	}
+    public void setLimitSharpnessDiamond(int limitSharpnessDiamond) {
+        this.limitSharpnessDiamond = limitSharpnessDiamond;
+    }
 
     @Override
-	public int getLimitSharpnessIron() {
-		return limitSharpnessIron;
-	}
+    public int getLimitSharpnessIron() {
+        return limitSharpnessIron;
+    }
 
     @Override
-	public void setLimitSharpnessIron(int limitSharpnessIron) {
-		this.limitSharpnessIron = limitSharpnessIron;
-	}
+    public void setLimitSharpnessIron(int limitSharpnessIron) {
+        this.limitSharpnessIron = limitSharpnessIron;
+    }
 
     @Override
-	public int getLimitPowerBow() {
-		return limitPowerBow;
-	}
+    public int getLimitPowerBow() {
+        return limitPowerBow;
+    }
 
     @Override
-	public void setLimitPowerBow(int limitPowerBow) {
-		this.limitPowerBow = limitPowerBow;
-	}
+    public void setLimitPowerBow(int limitPowerBow) {
+        this.limitPowerBow = limitPowerBow;
+    }
 
     @Override
-	public int getLimitKnockBack() {
-		return limitKnockBack;
-	}
+    public int getLimitKnockBack() {
+        return limitKnockBack;
+    }
 
     @Override
-	public void setLimitKnockBack(int limitKnockBack) {
-		this.limitKnockBack = limitKnockBack;
-	}
+    public void setLimitKnockBack(int limitKnockBack) {
+        this.limitKnockBack = limitKnockBack;
+    }
 
     @Override
-	public int getLimitPunch() {
-		return limitPunch;
-	}
+    public int getLimitPunch() {
+        return limitPunch;
+    }
 
     @Override
-	public void setLimitPunch(int limitPunch) {
-		this.limitPunch = limitPunch;
-	}
+    public void setLimitPunch(int limitPunch) {
+        this.limitPunch = limitPunch;
+    }
 
     @Override
-	public int getUseOfFlair() {
-		return useOfFlair;
-	}
+    public int getUseOfFlair() {
+        return useOfFlair;
+    }
 
     @Override
-	public void setUseOfFlair(int useOfFlair) {
+    public void setUseOfFlair(int useOfFlair) {
         this.useOfFlair = useOfFlair;
     }
 
@@ -288,7 +287,7 @@ public class Configuration implements IConfiguration {
 
     @Override
     public void setDistanceHowlingWerewolf(int distanceHowlingWerewolf) {
-        this.distanceHowlingWerewolf=distanceHowlingWerewolf;
+        this.distanceHowlingWerewolf = distanceHowlingWerewolf;
     }
 
     @Override
@@ -532,6 +531,11 @@ public class Configuration implements IConfiguration {
     }
 
     @Override
+    public void setKnockBackMode(int knockBackMode) {
+        this.knockBackMode = knockBackMode;
+    }
+
+    @Override
     public int getProbability(String key) {
         return randomEventsValues.getOrDefault(key, registerManager.getRandomEventsRegister().stream().filter(randomEventRegister -> randomEventRegister.getKey().equals(key)).findFirst().map(RandomEventRegister::getDefaultValue).orElse(0));
     }
@@ -539,11 +543,6 @@ public class Configuration implements IConfiguration {
     @Override
     public void setProbability(String key, int probability) {
         randomEventsValues.put(key, probability);
-    }
-
-    @Override
-    public void setKnockBackMode(int knockBackMode) {
-        this.knockBackMode = knockBackMode;
     }
 
     @Override
@@ -683,5 +682,26 @@ public class Configuration implements IConfiguration {
     @Override
     public void setDistanceWillOTheWisp(int distanceWillOTheWisp) {
         this.distanceWillOTheWisp = distanceWillOTheWisp;
+    }
+
+    @Override
+    public int getScamDelay() {
+        return scamDelay;
+    }
+
+    @Override
+    public void setScamDelay(int scamDelay) {
+        if (scamDelay < 0) return;
+        this.scamDelay = scamDelay;
+    }
+
+    @Override
+    public int getDistanceScammer() {
+        return distanceScammer;
+    }
+
+    @Override
+    public void setDistanceScammer(int distanceScammer) {
+        this.distanceScammer = distanceScammer;
     }
 }
