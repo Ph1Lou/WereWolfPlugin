@@ -63,6 +63,7 @@ import fr.ph1lou.werewolfplugin.roles.werewolfs.MysticalWereWolf;
 import fr.ph1lou.werewolfplugin.roles.werewolfs.NaughtyLittleWolf;
 import fr.ph1lou.werewolfplugin.roles.werewolfs.WereWolf;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -393,6 +394,23 @@ public class RolesRegister {
                             .addConfig(Oracle::config));
 
             rolesRegister
+                    .add(new RoleRegister("werewolf.name", RolesBase.WISE_ELDER.getKey(), WiseElder.class)
+                            .addCategory(Category.VILLAGER)
+                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION));
+          
+          rolesRegister
+                    .add(new RoleRegister("werewolf.name", RolesBase.SERVITOR.getKey(), Servitor.class)
+                            .addCategory(Category.VILLAGER));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name", RolesBase.SCAMMER.getKey(), Scammer.class)
+                            .addCategory(Category.NEUTRAL)
+                            .setRandomCompositionAttribute(RandomCompositionAttribute.HYBRID)
+                            .addConfig(Scammer::configDelay)
+                            .addConfig(Scammer::config));
+
+
+            rolesRegister
                     .add(new RoleRegister("werewolf.name", RolesBase.FRUIT_MERCHANT.getKey(), FruitMerchant.class)
                             .addCategory(Category.VILLAGER)
                             .setRandomCompositionAttribute(RandomCompositionAttribute.MINOR_INFORMATION)
@@ -402,6 +420,7 @@ public class RolesRegister {
                     .add(new RoleRegister("werewolf.name", RolesBase.DRUID.getKey(), Druid.class)
                             .addCategory(Category.VILLAGER)
                             .addConfig(Druid::config));
+
 
         } catch (NoSuchMethodException e) {
             e.printStackTrace();

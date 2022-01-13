@@ -1,14 +1,14 @@
-package fr.ph1lou.werewolfplugin.save;
+package io.github.ph1lou.werewolfplugin.save;
 
 
-import fr.ph1lou.werewolfapi.game.IConfiguration;
-import fr.ph1lou.werewolfapi.enums.RolesBase;
-import fr.ph1lou.werewolfapi.registers.impl.ConfigRegister;
-import fr.ph1lou.werewolfapi.registers.interfaces.IRegisterManager;
-import fr.ph1lou.werewolfapi.registers.impl.RandomEventRegister;
-import fr.ph1lou.werewolfapi.registers.impl.ScenarioRegister;
-import fr.ph1lou.werewolfapi.registers.impl.TimerRegister;
-import fr.ph1lou.werewolfplugin.RegisterManager;
+import io.github.ph1lou.werewolfapi.IConfiguration;
+import io.github.ph1lou.werewolfapi.enums.RolesBase;
+import io.github.ph1lou.werewolfapi.registers.ConfigRegister;
+import io.github.ph1lou.werewolfapi.registers.IRegisterManager;
+import io.github.ph1lou.werewolfapi.registers.RandomEventRegister;
+import io.github.ph1lou.werewolfapi.registers.ScenarioRegister;
+import io.github.ph1lou.werewolfapi.registers.TimerRegister;
+import io.github.ph1lou.werewolfplugin.RegisterManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,6 +42,9 @@ public class Configuration implements IConfiguration {
     private int goldenAppleParticles;
     private int distanceBearTrainer;
     private int distanceSuccubus;
+    private int distanceWiseElder = 15;
+    private int distanceServitor = 25;
+    private int distanceScammer = 20;
     private int distanceAmnesiacLovers;
     private int distancePriestess;
     private int distanceSister;
@@ -71,6 +74,7 @@ public class Configuration implements IConfiguration {
     private boolean detectiveEveryOtherDay;
     private boolean sweetAngel;
     private int distanceFruitMerchant;
+    private int scamDelay;
 
     public Configuration(){
         this.timerValues = new HashMap<>();
@@ -128,6 +132,7 @@ public class Configuration implements IConfiguration {
         this.detectiveEveryOtherDay = true;
         this.sweetAngel = false;
         this.distanceFruitMerchant=50;
+        this.scamDelay = 9;
     }
 
     public Configuration(IRegisterManager registerManager) {
@@ -161,7 +166,7 @@ public class Configuration implements IConfiguration {
     }
 
     @Override
-	public int getStrengthRate() {
+    public int getStrengthRate() {
         return this.strengthRate;
     }
 
@@ -231,72 +236,72 @@ public class Configuration implements IConfiguration {
     }
 
     @Override
-	public int getLimitProtectionDiamond() {
-		return limitProtectionDiamond;
-	}
+    public int getLimitProtectionDiamond() {
+        return limitProtectionDiamond;
+    }
 
     @Override
-	public void setLimitProtectionDiamond(int limitProtectionDiamond) {
-		this.limitProtectionDiamond = limitProtectionDiamond;
-	}
+    public void setLimitProtectionDiamond(int limitProtectionDiamond) {
+        this.limitProtectionDiamond = limitProtectionDiamond;
+    }
 
     @Override
-	public int getLimitSharpnessDiamond() {
-		return limitSharpnessDiamond;
-	}
+    public int getLimitSharpnessDiamond() {
+        return limitSharpnessDiamond;
+    }
 
     @Override
-	public void setLimitSharpnessDiamond(int limitSharpnessDiamond) {
-		this.limitSharpnessDiamond = limitSharpnessDiamond;
-	}
+    public void setLimitSharpnessDiamond(int limitSharpnessDiamond) {
+        this.limitSharpnessDiamond = limitSharpnessDiamond;
+    }
 
     @Override
-	public int getLimitSharpnessIron() {
-		return limitSharpnessIron;
-	}
+    public int getLimitSharpnessIron() {
+        return limitSharpnessIron;
+    }
 
     @Override
-	public void setLimitSharpnessIron(int limitSharpnessIron) {
-		this.limitSharpnessIron = limitSharpnessIron;
-	}
+    public void setLimitSharpnessIron(int limitSharpnessIron) {
+        this.limitSharpnessIron = limitSharpnessIron;
+    }
 
     @Override
-	public int getLimitPowerBow() {
-		return limitPowerBow;
-	}
+    public int getLimitPowerBow() {
+        return limitPowerBow;
+    }
 
     @Override
-	public void setLimitPowerBow(int limitPowerBow) {
-		this.limitPowerBow = limitPowerBow;
-	}
+    public void setLimitPowerBow(int limitPowerBow) {
+        this.limitPowerBow = limitPowerBow;
+    }
 
     @Override
-	public int getLimitKnockBack() {
-		return limitKnockBack;
-	}
+    public int getLimitKnockBack() {
+        return limitKnockBack;
+    }
 
     @Override
-	public void setLimitKnockBack(int limitKnockBack) {
-		this.limitKnockBack = limitKnockBack;
-	}
+    public void setLimitKnockBack(int limitKnockBack) {
+        this.limitKnockBack = limitKnockBack;
+    }
 
     @Override
-	public int getLimitPunch() {
-		return limitPunch;
-	}
+    public int getLimitPunch() {
+        return limitPunch;
+    }
 
     @Override
-	public void setLimitPunch(int limitPunch) {
-		this.limitPunch = limitPunch;
-	}
+    public void setLimitPunch(int limitPunch) {
+        this.limitPunch = limitPunch;
+    }
 
     @Override
-	public int getUseOfFlair() {
-		return useOfFlair;
-	}
+    public int getUseOfFlair() {
+        return useOfFlair;
+    }
 
     @Override
-	public void setUseOfFlair(int useOfFlair) {
+    public void setUseOfFlair(int useOfFlair) {
         this.useOfFlair = useOfFlair;
     }
 
@@ -347,7 +352,7 @@ public class Configuration implements IConfiguration {
 
     @Override
     public void setDistanceHowlingWerewolf(int distanceHowlingWerewolf) {
-        this.distanceHowlingWerewolf=distanceHowlingWerewolf;
+        this.distanceHowlingWerewolf = distanceHowlingWerewolf;
     }
 
     @Override
@@ -701,6 +706,24 @@ public class Configuration implements IConfiguration {
     }
 
     @Override
+    public int getDistanceWiseElder() {
+        return distanceWiseElder;
+    }
+
+    @Override
+    public void setDistanceWiseElder(int i) {
+        distanceWiseElder = i;
+
+    public int getDistanceServitor() {
+        return distanceServitor;
+    }
+
+    @Override
+    public void setDistanceServitor(int i) {
+        distanceServitor = i;
+    }
+
+    @Override
     public void setSweetAngel(boolean sweetAngel) {
         this.sweetAngel = sweetAngel;
     }
@@ -738,5 +761,26 @@ public class Configuration implements IConfiguration {
     @Override
     public void setDistanceWillOTheWisp(int distanceWillOTheWisp) {
         this.distanceWillOTheWisp = distanceWillOTheWisp;
+    }
+
+    @Override
+    public int getScamDelay() {
+        return scamDelay;
+    }
+
+    @Override
+    public void setScamDelay(int scamDelay) {
+        if (scamDelay < 0) return;
+        this.scamDelay = scamDelay;
+    }
+
+    @Override
+    public int getDistanceScammer() {
+        return distanceScammer;
+    }
+
+    @Override
+    public void setDistanceScammer(int distanceScammer) {
+        this.distanceScammer = distanceScammer;
     }
 }

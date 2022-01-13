@@ -1313,6 +1313,28 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("analyst_see",
+                event.getPlayerWW(), event.getTargetWW(), 0, event.hasEffect() ? "werewolf.role.analyst.has_effects" : "werewolf.role.analyst.no_effects", api.getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onRevealAuraAmount(RevealAuraAmountEvent event) {
+
+        WereWolfAPI api = main.getWereWolfAPI();
+
+        String string = String.format("Neutral: %s; Dark: %s; Light: %s",
+                event.getNeutral(),event.getDark(),event.getLight());
+
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("reveal_aura_amount",
+                event.getPlayerWW(),0,string));
+    public void onMasterChoose(MasterChosenEvent event) {
+        event.getPlayerWW(), event.getTargetWW(), 0, event.hasEffect() ? "werewolf.role.analyst.has_effects" : "werewolf.role.analyst.no_effects", api.getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onScam(ScamEvent event) {
+
+        if (event.isCancelled()) return;
+
                 event.getPlayerWW(),event.getTargetWW(),api.getTimer(),event.hasEffect()?"werewolf.role.analyst.has_effects":"werewolf.role.analyst.no_effects"));
     }
 
@@ -1329,9 +1351,24 @@ public class Events implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onFruitMerchantCommand(FruitMerchantCommandEvent event) {
 
+
         if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
+
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("servitor_master_chosen",
+                event.getPlayerWW(), event.getTargetWW(), api.getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onDefinitiveMaster(DefinitiveMasterEvent event) {
+
+        if (event.isCancelled()) return;
+
+        WereWolfAPI api = main.getWereWolfAPI();
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("servitor_definitive_master",
+                event.getPlayerWW(), event.getTargetWW(), api.getTimer()));
+
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("fruit_merchant_command",
                 event.getPlayerWW(),event.getPlayerWWS(), api.getTimer()));
     }
@@ -1356,4 +1393,10 @@ public class Events implements Listener {
                 event.getPlayerWW(),api.getTimer(),event.getDarkAura()));
     }
 
+        WereWolfAPI api = main.getWereWolfAPI();
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("scammer_scam",
+                event.getPlayerWW(), event.getTargetWW(), api.getTimer()));
+
+
+    }
 }
