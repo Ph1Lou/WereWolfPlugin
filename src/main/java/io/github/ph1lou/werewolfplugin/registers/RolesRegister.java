@@ -12,8 +12,10 @@ import io.github.ph1lou.werewolfplugin.roles.villagers.Citizen;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Comedian;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Cupid;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Detective;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Druid;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Elder;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Fox;
+import io.github.ph1lou.werewolfplugin.roles.villagers.FruitMerchant;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Guard;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Hermit;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Librarian;
@@ -383,6 +385,18 @@ public class RolesRegister {
                             .setRandomCompositionAttribute(RandomCompositionAttribute.HYBRID)
                             .addConfig(Scammer::configDelay)
                             .addConfig(Scammer::config));
+
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name", RolesBase.FRUIT_MERCHANT.getKey(), FruitMerchant.class)
+                            .addCategory(Category.VILLAGER)
+                            .setRandomCompositionAttribute(RandomCompositionAttribute.MINOR_INFORMATION)
+                            .addConfig(FruitMerchant::config));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name", RolesBase.DRUID.getKey(), Druid.class)
+                            .addCategory(Category.VILLAGER)
+                            .addConfig(Druid::config));
 
 
         } catch (NoSuchMethodException e) {

@@ -576,6 +576,7 @@
         "command_analyse": "analyser",
         "not_affected": "Vous ne pouvez effectuer cette commande que sur un joueur observé precedemment via §b/ww oberver§f"
       },
+
       "scammer": {
         "display": "Escroc",
         "description": "Vous volez progressivement le rôle des joueurs autour de vous (20 blocs) au rythme de 1% toutes les &timer& secondes. Vous récupérez le rôle (et rejoignez le camp) du premier joueur qui arrive à 100%. Le joueur escroqué devient Loup-Garou Omega s’il était dans le camp des Loups (ou Loup-Garou Blanc, ou Loup Solitaire) ou devient Simple Villageois dans tous les autres cas.",
@@ -583,6 +584,23 @@
           "name": "Modifier le délai entre chaque mise à jour du %",
           "lore": "§b&timer&§rs"
         }
+
+      "fruit_merchant": {
+        "display": "Marchande de Fruit",
+        "perform": "Vous venez d'utiliser votre pouvoir, les joueurs dans votre champ d'action sont &players&. \nVous recevrez dans §b&timer&§f les informations",
+        "announce_info": "Vous recevez les informations suite à votre commande",
+        "info": "Le joueur &player& avait &number& pomme(s) d'or lors de l'execution de votre commande, il en a maintenant &number2&",
+        "command": "compter",
+        "recover": "Vous venez de récupérer votre pouvoir. Faites §b/ww compter§f pour le réutiliser",
+        "description": "Avec §b/ww compter§f, vous pouvez compter les pommes d'or des joueurs à §b&number&§f blocs de vous.",
+        "power": "1 chance sur 4 de régénérer 3 ♥ avec les pommes d’or, la nourriture vous donne 1 gigot de plus."
+      },
+      "druid": {
+        "display": "Druide",
+        "perform": "Vous venez d'utiliser votre pouvoir, il y a &number& aura(s) sombre(s) à &blocks& blocs de vous",
+        "description": "Vous pouvez connaître le nombre d’auras obscures dans un rayon de &number& blocs en mangeant une pomme d’or accroupi pendant la nuit",
+        "day": "Vous pouvez de nouveau utiliser votre pouvoir"
+
       }
     },
     "vote": {
@@ -950,7 +968,9 @@
         "hermit": "Champ d'action de l'Ermite §b&number&",
         "will_o_the_wisp": "Champ d'action du Feu Follet §b&number&",
         "howling_werewolf": "Champ d'action du Loup Garou Hurleur §b&number&",
-        "twin": "Champ d'action des Jumeaux §b&number&"
+        "druid": "Champ d'action du Druide §b&number&"
+        "twin": "Champ d'action des Jumeaux §b&number&",
+        "fruit_merchant": "Champ d'action de la Marchande de fruit §b&number&"
       },
       "troll": "Configuration §bTroll",
       "roles": {

@@ -17,6 +17,7 @@ import io.github.ph1lou.werewolfplugin.commands.roles.villager.citizen.CommandCi
 import io.github.ph1lou.werewolfplugin.commands.roles.villager.citizen.CommandCitizenSeeVote;
 import io.github.ph1lou.werewolfplugin.commands.roles.villager.comedian.CommandComedian;
 import io.github.ph1lou.werewolfplugin.commands.roles.villager.cupid.CommandCupid;
+import io.github.ph1lou.werewolfplugin.commands.roles.villager.fruitmerchant.CommandFruitMerchant;
 import io.github.ph1lou.werewolfplugin.commands.roles.villager.guard.CommandGuard;
 import io.github.ph1lou.werewolfplugin.commands.roles.villager.info.analyst.CommandAnalystAnalyse;
 import io.github.ph1lou.werewolfplugin.commands.roles.villager.info.analyst.CommandAnalystSee;
@@ -466,7 +467,15 @@ public class CommandsRegister {
                         .addStateWW(StateGame.START)
                         .setDescription("werewolf.commands.admin.anonymous_chat.description")
                         .addStateAccess(StatePlayer.ALIVE));
-        
+
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.fruit_merchant.command", new CommandFruitMerchant())
+                        .addStateWW(StateGame.GAME)
+                        .addRoleKey(RolesBase.FRUIT_MERCHANT.getKey())
+                        .setRequiredPower()
+                        .addStateAccess(StatePlayer.ALIVE));
+
         return commandsRegister;
     }
 }

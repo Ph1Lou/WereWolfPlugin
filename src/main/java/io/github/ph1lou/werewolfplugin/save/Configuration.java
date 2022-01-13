@@ -49,6 +49,7 @@ public class Configuration implements IConfiguration {
     private int distanceFox = 20;
     private int distanceFearfulWerewolf = 20;
     private int distanceAvengerWerewolf = 10;
+    private int distanceDruid=50;
     private boolean trollSV = false;
     private int borderMax = 2000;
     private int borderMin = 300;
@@ -66,7 +67,9 @@ public class Configuration implements IConfiguration {
     private boolean oracleEveryOtherDay = true;
     private boolean detectiveEveryOtherDay = true;
     private boolean sweetAngel = false;
+    private int distanceFruitMerchant=50;
     private int scamDelay = 9;
+
 
     public Configuration(IRegisterManager registerManager) {
         this.registerManager = registerManager;
@@ -258,6 +261,16 @@ public class Configuration implements IConfiguration {
     }
 
     @Override
+    public int getDistanceDruid() {
+        return this.distanceDruid;
+    }
+
+    @Override
+    public void setDistanceDruid(int distanceDruid) {
+        this.distanceDruid=distanceDruid;
+    }
+
+    @Override
     public int getDistanceFox() {
         return distanceFox;
     }
@@ -355,6 +368,16 @@ public class Configuration implements IConfiguration {
     @Override
     public void setDistanceFlutePlayer(int distanceFlutePlayer) {
         this.distanceFlutePlayer = distanceFlutePlayer;
+    }
+
+    @Override
+    public int getDistanceFruitMerchant() {
+        return this.distanceFruitMerchant;
+    }
+
+    @Override
+    public void setDistanceFruitMerchant(int distanceFruitMerchant) {
+        this.distanceFruitMerchant=distanceFruitMerchant;
     }
 
     @Override

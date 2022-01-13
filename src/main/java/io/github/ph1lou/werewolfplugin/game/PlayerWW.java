@@ -75,14 +75,13 @@ public class PlayerWW implements IPlayerWW {
         this.game = api;
         try {
             this.mojangUUID = getUUID(name);
-        } catch (IOException ignored) {
+        } catch (Exception ignored) {
             this.game.setCrack();
-            ignored.printStackTrace();
         }
     }
 
     private static UUID getUUID(String name) throws IOException {
-        String uuid = "";
+        String uuid;
         BufferedReader in = new BufferedReader(new InputStreamReader(new URL("https://api.mojang.com/users/profiles/minecraft/" + name).openStream()));
         uuid = (((JsonObject)new JsonParser().parse(in)).get("id")).toString().replaceAll("\"", "");
         uuid = uuid.replaceAll("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5");
