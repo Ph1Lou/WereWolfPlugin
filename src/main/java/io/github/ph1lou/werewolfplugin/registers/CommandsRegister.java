@@ -26,6 +26,7 @@ import io.github.ph1lou.werewolfplugin.commands.roles.villager.info.librarian.Co
 import io.github.ph1lou.werewolfplugin.commands.roles.villager.info.librarian.CommandSendToLibrarian;
 import io.github.ph1lou.werewolfplugin.commands.roles.villager.info.oracle.CommandOracle;
 import io.github.ph1lou.werewolfplugin.commands.roles.villager.info.seer.CommandSeer;
+import io.github.ph1lou.werewolfplugin.commands.roles.villager.occultist.CommandOccultistWish;
 import io.github.ph1lou.werewolfplugin.commands.roles.villager.priestess.CommandPriestess;
 import io.github.ph1lou.werewolfplugin.commands.roles.villager.protector.CommandProtector;
 import io.github.ph1lou.werewolfplugin.commands.roles.villager.raven.CommandRaven;
@@ -465,6 +466,13 @@ public class CommandsRegister {
                         .addStateWW(StateGame.GAME)
                         .addStateWW(StateGame.START)
                         .setDescription("werewolf.commands.admin.anonymous_chat.description")
+                        .addStateAccess(StatePlayer.ALIVE));
+
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.occultist.command", new CommandOccultistWish())
+                        .addStateWW(StateGame.GAME)
+                        .setDescription("werewolf.role.occultist.command_description")
                         .addStateAccess(StatePlayer.ALIVE));
         
         return commandsRegister;

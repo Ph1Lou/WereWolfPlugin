@@ -575,6 +575,11 @@
         "command_see": "observer",
         "command_analyse": "analyser",
         "not_affected": "Vous ne pouvez effectuer cette commande que sur un joueur observé precedemment via §b/ww oberver§f"
+      },
+      "occultist": {
+        "display": "Occultiste",
+        "command": "wish",
+        "command_description": "Définit votre dernier souhait visible par l'Occultiste"
       }
     },
     "vote": {
