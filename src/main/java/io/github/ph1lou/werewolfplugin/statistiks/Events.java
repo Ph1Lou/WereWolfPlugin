@@ -92,6 +92,7 @@ import io.github.ph1lou.werewolfapi.events.roles.wild_child.ModelEvent;
 import io.github.ph1lou.werewolfapi.events.roles.wild_child.WildChildTransformationEvent;
 import io.github.ph1lou.werewolfapi.events.roles.will_o_the_wisp.WillOTheWispRecoverRoleEvent;
 import io.github.ph1lou.werewolfapi.events.roles.will_o_the_wisp.WillOTheWispTeleportEvent;
+import io.github.ph1lou.werewolfapi.events.roles.wise_elder.RevealAuraAmountEvent;
 import io.github.ph1lou.werewolfapi.events.roles.witch.WitchResurrectionEvent;
 import io.github.ph1lou.werewolfapi.events.roles.wolf_dog.WolfDogChooseWereWolfForm;
 import io.github.ph1lou.werewolfapi.events.werewolf.NewWereWolfEvent;
@@ -1289,6 +1290,15 @@ public class Events implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
+    public void onRevealAuraAmount(RevealAuraAmountEvent event) {
+
+        WereWolfAPI api = main.getWereWolfAPI();
+
+        String string = String.format("Neutral: %s; Dark: %s; Light: %s",
+                event.getNeutral(),event.getDark(),event.getLight());
+
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("reveal_aura_amount",
+                event.getPlayerWW(),0,string));
     public void onMasterChoose(MasterChosenEvent event) {
         event.getPlayerWW(), event.getTargetWW(), 0, event.hasEffect() ? "werewolf.role.analyst.has_effects" : "werewolf.role.analyst.no_effects", api.getTimer()));
     }

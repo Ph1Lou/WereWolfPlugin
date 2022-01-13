@@ -4,6 +4,20 @@ import io.github.ph1lou.werewolfapi.enums.Category;
 import io.github.ph1lou.werewolfapi.enums.RandomCompositionAttribute;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.registers.RoleRegister;
+import io.github.ph1lou.werewolfplugin.roles.neutrals.AmnesicWerewolf;
+import io.github.ph1lou.werewolfplugin.roles.neutrals.Angel;
+import io.github.ph1lou.werewolfplugin.roles.neutrals.Assassin;
+import io.github.ph1lou.werewolfplugin.roles.neutrals.Charmer;
+import io.github.ph1lou.werewolfplugin.roles.neutrals.FallenAngel;
+import io.github.ph1lou.werewolfplugin.roles.neutrals.FlutePlayer;
+import io.github.ph1lou.werewolfplugin.roles.neutrals.GuardianAngel;
+import io.github.ph1lou.werewolfplugin.roles.neutrals.Imitator;
+import io.github.ph1lou.werewolfplugin.roles.neutrals.Rival;
+import io.github.ph1lou.werewolfplugin.roles.neutrals.SerialKiller;
+import io.github.ph1lou.werewolfplugin.roles.neutrals.Succubus;
+import io.github.ph1lou.werewolfplugin.roles.neutrals.Thief;
+import io.github.ph1lou.werewolfplugin.roles.neutrals.WhiteWereWolf;
+import io.github.ph1lou.werewolfplugin.roles.neutrals.WillOTheWisp;
 import io.github.ph1lou.werewolfplugin.roles.villagers.Analyst;
 import io.github.ph1lou.werewolfplugin.roles.villagers.BearTrainer;
 import io.github.ph1lou.werewolfplugin.roles.villagers.ChattySeer;
@@ -380,6 +394,11 @@ public class RolesRegister {
                             .addConfig(Oracle::config));
 
             rolesRegister
+                    .add(new RoleRegister("werewolf.name", RolesBase.WISE_ELDER.getKey(), WiseElder.class)
+                            .addCategory(Category.VILLAGER)
+                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION));
+          
+          rolesRegister
                     .add(new RoleRegister("werewolf.name", RolesBase.SERVITOR.getKey(), Servitor.class)
                             .addCategory(Category.VILLAGER));
 
