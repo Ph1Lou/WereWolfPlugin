@@ -1050,7 +1050,7 @@
         "vote_duration": "Durée du Vote (§b&timer&§r)",
         "werewolf_chat_duration": "Durée du Chat des Loups Garous (§b&timer&§r)",
         "rival_duration": "Attente des informations du rival (§b&timer&§r)",
-        "citizen_duration": "Durée pour le choix du Citoyen (§b&timer&§r)",
+        "vote_waiting": "Durée de transition du vote (§b&timer&§r)",
         "border_begin": "Début de la Bordure (§b&timer&§r)",
         "model_duration": "Durée pour le choix d'un Modèle (§b&timer&§r)",
         "fox_smell_duration": "Durée du Flair du Renard (§b&timer&§r)",
@@ -1235,6 +1235,12 @@
         "message": "[§5Swap§r] Deux personnes ont leur rôle inversées",
         "concerned": "Votre rôle a été échangé §b/ww role§f pour découvrir le nouveau",
         "description": "Une fois dans la partie,\n avant l'annonce de la liste des loups\n 2 roles sont échangés"
+      },
+      "discord": {
+        "name": "Zizanie",
+        "message": "[§5Zizanie§r] Un membre du Village passe avec les Loups-Garous, un des Loups devient solitaire, enfin un rôle Solo passe avec le Village",
+        "description": "Entre 55 et 85 minutes après les rôles, \nun membre du Village passe avec les Loups-Garous, \nun des Loups devient solitaire \nenfin un rôle Solo passe avec le Village.",
+        "to_villager": "Vous passez dans le camp des villageois"
       }
     },
     "check": {
