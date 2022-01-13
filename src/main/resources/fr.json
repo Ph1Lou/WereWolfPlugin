@@ -576,6 +576,21 @@
         "command_analyse": "analyser",
         "not_affected": "Vous ne pouvez effectuer cette commande que sur un joueur observé precedemment via §b/ww oberver§f"
       },
+
+      "servitor": {
+        "display" : "Serviteur",
+        "description" : "Vous avez un Maître choisi aléatoirement à chaque début d'épisode qui vous confère Strength 0.5 lorsqu’il se situe à moins de 25 blocs de vous.\nSi votre Maître vous tue pour la première fois, vous ressuscitez mais le Maître devient alors définitif et vous confère Weakness I lorsqu’il se situe à moins de 25 blocs de vous.\nLes Maîtres ne savent pas qu’ils le sont et ne connaissent pas votre identité Serviteur."
+
+
+      "scammer": {
+        "display": "Escroc",
+        "description": "Vous volez progressivement le rôle des joueurs autour de vous (20 blocs) au rythme de 1% toutes les &timer& secondes. Vous récupérez le rôle (et rejoignez le camp) du premier joueur qui arrive à 100%. Le joueur escroqué devient Loup-Garou Omega s’il était dans le camp des Loups (ou Loup-Garou Blanc, ou Loup Solitaire) ou devient Simple Villageois dans tous les autres cas.",
+        "config": {
+          "name": "Modifier le délai entre chaque mise à jour du %",
+          "lore": "§b&timer&§rs"
+        }
+
+
       "fruit_merchant": {
         "display": "Marchande de Fruit",
         "perform": "Vous venez d'utiliser votre pouvoir, les joueurs dans votre champ d'action sont &players&. \nVous recevrez dans §b&timer&§f les informations",
@@ -591,11 +606,13 @@
         "perform": "Vous venez d'utiliser votre pouvoir, il y a &number& aura(s) sombre(s) à &blocks& blocs de vous",
         "description": "Vous pouvez connaître le nombre d’auras obscures dans un rayon de &number& blocs en mangeant une pomme d’or accroupi pendant la nuit",
         "day": "Vous pouvez de nouveau utiliser votre pouvoir"
+
       },
       "wise_elder": {
         "display": "Vieux sage",
         "description": "Vous disposez de 3 compteurs (1 pour chaque type d'Aura)\nPour chaque seconde passée à moins de 15 blocs d'un joueur, le compteur correspondant à l'Aura de ce joueur augmente d'un point.\nA la fin de chaque cycle (à partir du cycle 3), vous recevez un message avec le nombre de points de chaque compteur et les compteurs sont remis à zéro.",
         "end_of_cycle": "Cycle terminé! §f§lCompteur aura neutre: &neutral&§r; §0§lCompteur aura obscure: &dark&§r; §l§eCompteur aura lumineuse: &light&"
+
       }
     },
     "vote": {
@@ -960,6 +977,8 @@
         "flute_player": "Champ d'action du Joueur de Flûte §b&number&",
         "bear_trainer": "Champ d'action du Montreur d'Ours §b&number&",
         "wise_elder": "Champ d'action du Vieux Sage §b&number&",
+        "servitor": "Champ d'action du Serviteur §b&number&",
+        "scammer": "Champ d'action de l'Escroc §b&number&",
         "fearful_werewolf": "Champ d'action du Loup-Garou Craintif §b&number&",
         "hermit": "Champ d'action de l'Ermite §b&number&",
         "will_o_the_wisp": "Champ d'action du Feu Follet §b&number&",

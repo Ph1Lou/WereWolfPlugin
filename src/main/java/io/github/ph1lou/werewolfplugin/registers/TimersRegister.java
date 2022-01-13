@@ -102,6 +102,11 @@ public class TimersRegister {
 
         timersRegister
                 .add(new TimerRegister("werewolf.name",
+                        TimerBase.FRUIT_MERCHANT_COOL_DOWN.getKey())
+                        .setDefaultValue(1200));
+
+        timersRegister
+                .add(new TimerRegister("werewolf.name",
                         TimerBase.CHARMER_COUNTDOWN.getKey())
                         .addPredicate(wereWolfAPI -> wereWolfAPI.getConfig().getTimerValue(TimerBase.ROLE_DURATION.getKey()) < 0
                                 && !wereWolfAPI.getConfig().isTrollSV())
