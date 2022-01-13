@@ -4,9 +4,51 @@ import io.github.ph1lou.werewolfapi.enums.Category;
 import io.github.ph1lou.werewolfapi.enums.RandomCompositionAttribute;
 import io.github.ph1lou.werewolfapi.enums.RolesBase;
 import io.github.ph1lou.werewolfapi.registers.RoleRegister;
-import io.github.ph1lou.werewolfplugin.roles.neutrals.*;
-import io.github.ph1lou.werewolfplugin.roles.villagers.*;
-import io.github.ph1lou.werewolfplugin.roles.werewolfs.*;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Analyst;
+import io.github.ph1lou.werewolfplugin.roles.villagers.BearTrainer;
+import io.github.ph1lou.werewolfplugin.roles.villagers.ChattySeer;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Citizen;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Comedian;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Cupid;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Detective;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Druid;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Elder;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Fox;
+import io.github.ph1lou.werewolfplugin.roles.villagers.FruitMerchant;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Guard;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Hermit;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Librarian;
+import io.github.ph1lou.werewolfplugin.roles.villagers.LittleGirl;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Oracle;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Priestess;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Protector;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Raven;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Seer;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Shaman;
+import io.github.ph1lou.werewolfplugin.roles.villagers.SiameseTwin;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Sister;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Stud;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Trapper;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Troublemaker;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Twin;
+import io.github.ph1lou.werewolfplugin.roles.villagers.VillageIdiot;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Villager;
+import io.github.ph1lou.werewolfplugin.roles.villagers.WildChild;
+import io.github.ph1lou.werewolfplugin.roles.villagers.Witch;
+import io.github.ph1lou.werewolfplugin.roles.villagers.WolfDog;
+import io.github.ph1lou.werewolfplugin.roles.werewolfs.AlphaWereWolf;
+import io.github.ph1lou.werewolfplugin.roles.werewolfs.AvengerWereWolf;
+import io.github.ph1lou.werewolfplugin.roles.werewolfs.BigBadWerewolf;
+import io.github.ph1lou.werewolfplugin.roles.werewolfs.FalsifierWereWolf;
+import io.github.ph1lou.werewolfplugin.roles.werewolfs.FearFulWerewolf;
+import io.github.ph1lou.werewolfplugin.roles.werewolfs.GrimyWereWolf;
+import io.github.ph1lou.werewolfplugin.roles.werewolfs.HowlingWerewolfWerewolf;
+import io.github.ph1lou.werewolfplugin.roles.werewolfs.InfectFatherOfTheWolves;
+import io.github.ph1lou.werewolfplugin.roles.werewolfs.MischievousWereWolf;
+import io.github.ph1lou.werewolfplugin.roles.werewolfs.MysticalWereWolf;
+import io.github.ph1lou.werewolfplugin.roles.werewolfs.NaughtyLittleWolf;
+import io.github.ph1lou.werewolfplugin.roles.werewolfs.WereWolf;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -340,6 +382,26 @@ public class RolesRegister {
             rolesRegister
                     .add(new RoleRegister("werewolf.name", RolesBase.SERVITOR.getKey(), Servitor.class)
                             .addCategory(Category.VILLAGER));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name", RolesBase.SCAMMER.getKey(), Scammer.class)
+                            .addCategory(Category.NEUTRAL)
+                            .setRandomCompositionAttribute(RandomCompositionAttribute.HYBRID)
+                            .addConfig(Scammer::configDelay)
+                            .addConfig(Scammer::config));
+
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name", RolesBase.FRUIT_MERCHANT.getKey(), FruitMerchant.class)
+                            .addCategory(Category.VILLAGER)
+                            .setRandomCompositionAttribute(RandomCompositionAttribute.MINOR_INFORMATION)
+                            .addConfig(FruitMerchant::config));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name", RolesBase.DRUID.getKey(), Druid.class)
+                            .addCategory(Category.VILLAGER)
+                            .addConfig(Druid::config));
+
 
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
