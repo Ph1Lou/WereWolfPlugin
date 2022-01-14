@@ -30,6 +30,11 @@ public class ConfigsRegister {
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
                         ConfigBase.HIDE_EVENTS.getKey()));
+
+        configsRegister
+                .add(new ConfigRegister("werewolf.name",
+                        ConfigBase.NEW_VOTE.getKey()));
+
         configsRegister
                 .add(new ConfigRegister("werewolf.name",
                         ConfigBase.CHAT.getKey())

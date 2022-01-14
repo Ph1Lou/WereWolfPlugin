@@ -10,24 +10,6 @@
         "power": "Lorsque vous tuez un joueur, vous gagnez un coeur permanent supplémentaire et une pomme d'or.",
         "limit": "Limite d'armure, d'arc et d'épée (§b+1§f)"
       },
-      "guardian_angel": {
-        "display": "Ange Gardien",
-        "protege": "Protégé : §b&player&\n",
-        "wait": "Vous obtiendrez votre protégé dans §b&timer&§f",
-        "effect": "15 coeurs puis 12 si votre protégé meurt",
-        "show_command": "Vous pouvez, trois fois au cours de la partie, donner Regeneration à votre protégé pendant 20 secondes §b/ww regen",
-        "description": "Vous devez protéger une personne choisie aléatoirement et gagner avec elle. Si celle-ci meurt, vous §ldevez gagner avec le Village.",
-        "description_patch": "Vous devez protéger une personne choisie aléatoirement et gagner avec elle. Si celle-ci meurt, vous §ldevez gagner Seule.",
-        "protege_death": "Votre protégé a été tué, vous perdez 3 coeurs et devez maintenant gagner avec le Village",
-        "protege_death_patch": "Votre protégé a été tué, vous perdez 3 coeurs et devez maintenant gagner Seule",
-        "reveal_protege": "Votre protégé est §b&player&",
-        "get_regeneration": "Vous obtenez Regeneration de la part de votre Ange Gardien pendant 20 secondes",
-        "no_protege": "Vous n'avez pas encore de protégé",
-        "disconnected_protege": "Votre protégé n'est pas connecté actuellement",
-        "command": "regen",
-        "perform": "Votre protégé reçoit Régénération, il vous reste §b&number&§r Régénération(s)",
-        "new_protege": "Votre protégé est maintenant §b&player&"
-      },
       "amnesiac_werewolf": {
         "display": "Loup Garou Amnésique",
         "description": "Vous n'avez pas accès à la liste des Loups et les autres Loups ne pourront pas vous voir dans leur liste tant que vous n’avez pas tué un Villageois. Attention vous n'êtes pas dans le camp des Loups-Garous tant que vous n'avez pas tué un Villageois"
@@ -127,6 +109,7 @@
         "display": "Citoyen",
         "description": "Vous pouvez, deux fois dans le partie, décider de voir les Votes, et une fois seulement, les annuler.",
         "cancel_vote_message": "Vous pouvez encore annuler le vote §b&number&§r fois. ",
+        "description_extra": "Lorsque la composition est cachée, vous recevez chaque matin une liste de 3 rôles existants avec le nombre de ces rôles présent dans la partie",
         "see_vote_message": "Vous pouvez encore dépouiller les votes §b&number&§r fois. ",
         "click": "§bCliquez ici ",
         "cancel": "Annuler le §bVote",
@@ -137,7 +120,8 @@
         "count_votes": "Dépouillement ",
         "see_vote": "§b&voter&§r a voté pour §b&player&§r",
         "command_1": "depouiller_citizen",
-        "command_2": "annuler_citizen"
+        "command_2": "annuler_citizen",
+        "hide_composition": "Il y a &number& rôle dans la composition parmi : &role1&, &role2&, &role3&"
       },
       "angel": {
         "display": "Ange",
@@ -146,7 +130,7 @@
         "or": " soit ",
         "target": "Cible : §b&target&\n",
         "time": ", vous avez §b&timer& §f(Cliquez pour choisir)",
-        "fallen_choice": "Si vous choisissez §bAnge Déchu§f,\n vous obtiendrez 12 coeurs, une cible vous sera assignée aléatoirement si vous la tuez,\n vous passerez à 15 coeurs jusqu'à la fin de la partie.",
+        "fallen_choice": "Si vous choisissez §bAnge Déchu§f,\n vous obtiendrez 12 coeurs, une cible vous sera assignée aléatoirement.\n Si vous la tuez (ou assist), vous passerez à 15 coeurs jusqu'à la fin de la partie.",
         "guardian_choice": "Si vous choisissez §bAnge Gardien§f,\n vous obtiendrez 15 coeurs et devrez protéger une personne choisie aléatoirement et gagner avec elle.\n Si celle-ci meurt, vous repasserez à 12 coeurs \net devrez gagner avec le Village.",
         "guardian_choice_patch": "Si vous choisissez §bAnge Gardien§f,\n vous obtiendrez 15 coeurs et devrez protéger une personne choisie aléatoirement et gagner avec elle.\n Si celle-ci meurt, vous repasserez à 12 coeurs \net devrez gagner Seule.",
         "angel_choice_perform": "Vous venez de choisir §b&form&",
@@ -154,6 +138,34 @@
         "command_2": "dechu",
         "choice": "il a choisi &form&",
         "sweet_angel": "L'ange Gardien gagne Village quand son protégé meurt"
+      },
+      "fallen_angel": {
+        "display": "Ange Déchu",
+        "effect": "Résistance la nuit",
+        "wait": "Vous obtiendrez votre cible dans §b&timer&§f",
+        "power": "12 coeurs puis 15 si vous tuez votre cible.",
+        "deadly_target": "Vous avez tué votre cible, vous gagnez 3 coeurs",
+        "deadly_target_by_other": "Votre cible a été tué par un autre joueur, vous ne pouvez plus gagner de coeurs supplémentaires",
+        "reveal_target": "Votre cible est §b&target&, il est &role&",
+        "new_target": "Votre cible est maintenant §b&target&, il est &role&"
+      },
+      "guardian_angel": {
+        "display": "Ange Gardien",
+        "protege": "Protégé : §b&player& : &role&\n",
+        "wait": "Vous obtiendrez votre protégé dans §b&timer&§f",
+        "effect": "15 coeurs puis 12 si votre protégé meurt",
+        "show_command": "Vous pouvez, trois fois au cours de la partie, donner Regeneration à votre protégé pendant 20 secondes §b/ww regen",
+        "description": "Vous devez protéger une personne choisie aléatoirement et gagner avec elle. Si celle-ci meurt, vous §ldevez gagner avec le Village.",
+        "description_patch": "Vous devez protéger une personne choisie aléatoirement et gagner avec elle. Si celle-ci meurt, vous §ldevez gagner Seule.",
+        "protege_death": "Votre protégé a été tué, vous perdez 3 coeurs et devez maintenant gagner avec le Village",
+        "protege_death_patch": "Votre protégé a été tué, vous perdez 3 coeurs et devez maintenant gagner Seule",
+        "reveal_protege": "Votre protégé est §b&player&, il est &role&",
+        "get_regeneration": "Vous obtenez Regeneration de la part de votre Ange Gardien pendant 20 secondes",
+        "no_protege": "Vous n'avez pas encore de protégé",
+        "disconnected_protege": "Votre protégé n'est pas connecté actuellement",
+        "command": "regen",
+        "perform": "Votre protégé reçoit Régénération, il vous reste §b&number&§r Régénération(s)",
+        "new_protege": "Votre protégé est maintenant §b&player&, il est &role&"
       },
       "mystical_werewolf": {
         "display": "Loup Garou Mystique",
@@ -345,16 +357,6 @@
         "description": "Lorsque vous croisez d'autres Loup Garou à moins de §b&number&§f blocs, ceux-ci sont enregistrés.",
         "add": "§b&player&§f a été enregistré",
         "remove": "§b&player&§f était dans votre liste d'enregistrement, vous récupérez un coeur permanent supplémentaire"
-      },
-      "fallen_angel": {
-        "display": "Ange Déchu",
-        "effect": "Résistance la nuit",
-        "wait": "Vous obtiendrez votre cible dans §b&timer&§f",
-        "power": "12 coeurs puis 15 si vous tuez votre cible.",
-        "deadly_target": "Vous avez tué votre cible, vous gagnez 3 coeurs",
-        "deadly_target_by_other": "Votre cible a été tué par un autre joueur, vous ne pouvez plus gagner de coeurs supplémentaires",
-        "reveal_target": "Votre cible est §b&target&",
-        "new_target": "Votre cible est maintenant §b&target&"
       },
       "white_werewolf": {
         "display": "Loup Garou Blanc",
@@ -627,10 +629,13 @@
       "vote_disable": "Les Votes sont désactivés",
       "vote_deactivate": "En raison du nombre de joueurs, les Votes sont désactivés",
       "vote_not_yet_activated": "Les Votes ne sont pas encore activés",
-      "vote_result": "§b&player&§r est celui qui a recueillit le plus de vote§r : §b&number&§r. Il perd 5 coeurs",
+      "vote_result": "§b&player&§f est celui qui a recueilli le plus de votes : §b&number&§r. Il perd 5 coeurs",
       "no_result": "Aucun joueur n'a été voté plus d'une fois",
       "vote_time": "C'est l'heure de voter §b/ww vote§r Vous avez §b&timer&",
-      "command": "vote"
+      "command": "vote",
+      "neutral": "Les rôles neutres ne peuvent pas voter",
+      "new_vote_villager": "§b&player&§f est celui qui a recueilli le plus de votes auprès des Villageois : §b&number&§r.",
+      "new_vote_werewolf": "§b&player&§f est celui qui a recueilli le plus de votes auprès des Loups Garous : §b&number&§r."
     },
     "lone_wolf": {
       "message": "Vous devenez Solitaire. A partir de maintenant,vous devez gagner Seul. Pour cela, vous bénéficiez de quatres coeurs permanents supplémentaires (dans la limite de 15 coeurs max)"
@@ -1147,6 +1152,7 @@
         "proximity_chat": "Chat de Proximité",
         "double_troll": "Double Troll",
         "lone_wolf": "Loup Solitaire",
+        "new_vote": "Nouveau Vote",
         "incompatible": "§cConfiguration incompatible chargée : §b&configuration&"
       },
       "border": {
@@ -1331,6 +1337,7 @@
       "description": "§bDescription :§f &text&\n",
       "camp": "§fCamp des §b&camp&\n",
       "power": "§bPouvoir : §f&on&\n",
+      "aura": "§bAura : §f&aura&\n",
       "item": "§bItems : §f&items&\n",
       "effect": "§bEffet : §f&effect&\n",
       "disable": "Vos pouvoirs ont été désactivés\n",

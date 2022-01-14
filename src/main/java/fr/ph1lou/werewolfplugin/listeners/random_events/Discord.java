@@ -100,6 +100,6 @@ public class Discord extends ListenerManager {
                     Bukkit.broadcastMessage(game.translate("werewolf.random_events.discord.message"));
                 }
             }
-        }, (long) (100/*20 * 55 * 60 + game.getRandom().nextDouble() * 20 * 30 * 60*/));
+        }, (long) (20 * 55 * 60 + game.getRandom().nextDouble() * 20 * 30 * 60));
     }
 }

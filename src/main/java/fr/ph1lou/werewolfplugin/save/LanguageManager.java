@@ -9,6 +9,7 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.ILanguageManager;
 import fr.ph1lou.werewolfapi.events.UpdateLanguageEvent;
 import fr.ph1lou.werewolfplugin.Main;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -32,11 +33,11 @@ public class LanguageManager implements ILanguageManager, Listener {
         this.main = main;
     }
 
-    private Map<String, JsonValue> loadTranslations(String file) {
+    private Map<String, JsonValue> loadTranslations(Plugin plugin, String file) {
 
         try {
             JsonObject jsonObject = Json.parse(file).asObject();
-            return this.loadTranslationsRec("", jsonObject, new HashMap<>());
+            return this.loadTranslationsRec(plugin, "", jsonObject, new HashMap<>());
         } catch (Exception exception) {
             exception.printStackTrace();
         }
@@ -46,16 +47,20 @@ public class LanguageManager implements ILanguageManager, Listener {
 
     }
 
-    private Map<String, JsonValue> loadTranslationsRec(String currentPath, JsonValue jsonValue, Map<String, JsonValue> keys) {
+    private Map<String, JsonValue> loadTranslationsRec(Plugin plugin, String currentPath, JsonValue jsonValue, Map<String, JsonValue> keys) {
         // This value is an object - it means she contains sub-section that should be analyzed
         if (jsonValue.isObject()) {
 
             // For each child
             for (JsonObject.Member member : jsonValue.asObject()) {
 
+                if(currentPath.equals("") && !plugin.equals(main) && member.getName().equals("werewolf")){ //Nom de domaine réservé au plugin lg
+                    Bukkit.getLogger().warning(String.format("Plugin %s try to load text file with werewolf.* key",plugin.getName()));
+                    continue;
+                }
                 String newPath = String.format("%s%s%s", currentPath, currentPath.equals("") ? "" : ".", member.getName());
 
-                this.loadTranslationsRec(newPath, member.getValue(), keys);
+                this.loadTranslationsRec(plugin,newPath, member.getValue(), keys);
             }
         }
 
@@ -70,12 +75,12 @@ public class LanguageManager implements ILanguageManager, Listener {
     @EventHandler(priority = EventPriority.LOW)
     private void updateLanguage(UpdateLanguageEvent event) {
         this.language.clear();
-        this.language.putAll(loadTranslations(FileUtils_.loadContent(buildLanguageFile(main, "fr"))));
+        this.language.putAll(loadTranslations(main, FileUtils_.loadContent(buildLanguageFile(main, "fr"))));
         this.extraTexts.clear();
 
         this.main.getRegisterManager().getAddonsRegister().forEach(addon -> {
             String defaultLanguages = addon.getDefaultLanguage();
-            this.extraTexts.putAll(loadTranslations(FileUtils_.loadContent(buildLanguageFile(addon.getPlugin(), defaultLanguages))));
+            this.extraTexts.putAll(loadTranslations(addon.getPlugin(), FileUtils_.loadContent(buildLanguageFile(addon.getPlugin(), defaultLanguages))));
         });
     }
 
@@ -93,8 +98,8 @@ public class LanguageManager implements ILanguageManager, Listener {
             return new File(plugin.getDataFolder() + File.separator + "languages" + File.separator, defaultLang + ".json");
         } else {
             String defaultText = FileUtils_.convert(plugin.getResource(defaultLang + ".json"));
-            Map<String, JsonValue> fr = loadTranslations(defaultText);
-            Map<String, JsonValue> custom = loadTranslations(FileUtils_.loadContent(file));
+            Map<String, JsonValue> fr = loadTranslations(plugin, defaultText);
+            Map<String, JsonValue> custom = loadTranslations(plugin, FileUtils_.loadContent(file));
             JsonObject jsonObject = Json.parse(FileUtils_.loadContent(file)).asObject();
 
             for (String string : fr.keySet()) {

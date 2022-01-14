@@ -1,5 +1,7 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
+import fr.ph1lou.werewolfapi.registers.impl.RoleRegister;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -13,6 +15,7 @@ import fr.ph1lou.werewolfapi.role.interfaces.ILimitedUse;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
 import fr.ph1lou.werewolfapi.utils.Utils;
+import fr.ph1lou.werewolfplugin.RegisterManager;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -21,7 +24,10 @@ import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayers, IPower {
 
@@ -96,7 +102,41 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
 
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.citizen.description"))
+                .addExtraLines(game.translate("werewolf.role.citizen.description_extra"))
                 .build();
+    }
+
+    @EventHandler
+    public void onDay(DayEvent event){
+
+        if(this.getPlayerWW().isState(StatePlayer.DEATH)){
+            return;
+        }
+
+        List<String> roles = RegisterManager
+                .get()
+                .getRolesRegister()
+                .stream()
+                .map(RoleRegister::getKey)
+                .collect(Collectors.toList());
+
+        if(roles.size() < 3){
+            return;
+        }
+
+        Collections.shuffle(roles, game.getRandom());
+
+        int count = roles
+                .subList(0,3)
+                .stream()
+                .mapToInt(s -> game.getConfig().getRoleCount(s))
+                .sum();
+
+        this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE.getKey(),"werewolf.role.citizen.hide_composition",
+                Formatter.format("&role1&", game.translate(roles.get(0))),
+                Formatter.format("&role2&", game.translate(roles.get(1))),
+                Formatter.format("&role3&", game.translate(roles.get(2))),
+                Formatter.number(count));
     }
 
 

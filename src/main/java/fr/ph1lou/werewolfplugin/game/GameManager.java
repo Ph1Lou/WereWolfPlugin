@@ -62,7 +62,7 @@ public class GameManager implements WereWolfAPI {
     private Day day;
     private boolean debug = false;
     private final ScoreBoard score = new ScoreBoard(this);
-    private IVoteManager voteManager = new Vote(this);
+    private IVoteManager voteManager = new VoteManager(this);
     private final LoversManagement loversManage = new LoversManagement(this);
     private final ModerationManager moderationManager = new ModerationManager(this);
     private final MapManager mapManager;
