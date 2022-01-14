@@ -7,6 +7,7 @@ import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
+import fr.ph1lou.werewolfapi.events.random_events.MysanthropeSisterEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.NewWereWolfEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfCanSpeakInChatEvent;
@@ -21,12 +22,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SisterMisanthrope extends ListenerManager {
+public class MisanthropeSister extends ListenerManager {
 
     @Nullable()
     private IPlayerWW sisterWW;
 
-    public SisterMisanthrope(GetWereWolfAPI main) {
+    public MisanthropeSister(GetWereWolfAPI main) {
         super(main);
     }
 
@@ -47,6 +48,14 @@ public class SisterMisanthrope extends ListenerManager {
         this.sisterWW = sisters.get(0);
 
         if (this.sisterWW.getRole().isWereWolf()) {
+            return;
+        }
+
+        MysanthropeSisterEvent mysanthropeSisterEvent = new MysanthropeSisterEvent(this.sisterWW);
+
+        Bukkit.getPluginManager().callEvent(mysanthropeSisterEvent);
+
+        if(mysanthropeSisterEvent.isCancelled()){
             return;
         }
 

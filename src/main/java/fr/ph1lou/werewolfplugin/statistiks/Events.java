@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.statistiks;
 
 import com.google.common.collect.Sets;
 import fr.ph1lou.werewolfapi.events.game.vote.NewVoteResultEvent;
+import fr.ph1lou.werewolfapi.events.random_events.MysanthropeSisterEvent;
 import fr.ph1lou.werewolfapi.events.roles.scammer.ScamEvent;
 import fr.ph1lou.werewolfapi.events.roles.servitor.ServitorDefinitiveMasterEvent;
 import fr.ph1lou.werewolfapi.events.roles.servitor.ServitorMasterChosenEvent;
@@ -1493,6 +1494,16 @@ public class Events implements Listener {
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.new_vote",
                 event.getPlayerVotedByVillagerWW(), event.getPlayerVotedByWerewolfWW(), api.getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onMysanthropeSister(MysanthropeSisterEvent event) {
+
+        if (event.isCancelled()) return;
+
+        WereWolfAPI api = main.getWereWolfAPI();
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.mysanthrope_sister",
+                event.getPlayerWW(), api.getTimer()));
     }
 
 
