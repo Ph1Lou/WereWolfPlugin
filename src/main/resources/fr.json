@@ -1277,6 +1277,11 @@
         "message": "[§5Zizanie§r] Un membre du Village passe avec les Loups-Garous, un des Loups devient solitaire, enfin un rôle Solo passe avec le Village",
         "description": "Entre 55 et 85 minutes après les rôles, \nun membre du Village passe avec les Loups-Garous, \nun des Loups devient solitaire \nenfin un rôle Solo passe avec le Village.",
         "to_villager": "Vous passez dans le camp des villageois"
+      },
+      "sister_misanthrope": {
+        "name": "Soeur Misanthrope",
+        "message": "[§5Soeur Misanthrope§r] Vous passez dans le camp des Loups Garous, mais vous n'apparaissez pas dans la liste des Loups et ne pouvez pas interagir avec le chat des Loups.",
+        "description" : "À la révélation de la liste des Loups, une des Soeurs apprend qu'elle est dans le camp des Loups (elle a accès à la liste, obtient Force I la nuit mais n'apparaît pas dans la liste et ne peut pas interagir avec le chat des Loups."
       }
     },
     "check": {

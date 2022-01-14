@@ -8,6 +8,7 @@ import fr.ph1lou.werewolfplugin.listeners.random_events.GodMiracle;
 import fr.ph1lou.werewolfplugin.listeners.random_events.Infection;
 import fr.ph1lou.werewolfplugin.listeners.random_events.LootBox;
 import fr.ph1lou.werewolfplugin.listeners.random_events.Putrefaction;
+import fr.ph1lou.werewolfplugin.listeners.random_events.SisterMisanthrope;
 import fr.ph1lou.werewolfplugin.listeners.random_events.Swap;
 import fr.ph1lou.werewolfplugin.listeners.random_events.Triple;
 import fr.ph1lou.werewolfapi.enums.RandomEvent;
@@ -89,6 +90,13 @@ public class EventRandomsRegister {
                         RandomEvent.DISCORD.getKey(), new Discord(main))
                         .setLoreKey("werewolf.random_events.discord.description")
                         .setDefaultValue(1));
+
+        eventRandomsRegister
+                .add(new RandomEventRegister("werewolf.name",
+                        RandomEvent.SISTER_MISANTHROPE.getKey(), new SisterMisanthrope(main))
+                        .setLoreKey("werewolf.random_events.sister_misanthrope.description")
+                        .setDefaultValue(1));
+
 
         return eventRandomsRegister;
     }

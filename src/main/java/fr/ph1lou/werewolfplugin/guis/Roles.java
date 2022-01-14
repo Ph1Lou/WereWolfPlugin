@@ -59,13 +59,6 @@ public class Roles implements InventoryProvider {
                         .setDisplayName(game.translate("werewolf.menu.return"))
                         .build()), e -> Config.INVENTORY.open(player)));
 
-        /*contents.set(0, 5, ClickableItem.of((new ItemBuilder(UniversalMaterial.ARROW.getType())
-                .setDisplayName(game.translate("werewolf.menu.return")).build()),
-                e -> {
-                    ((Configuration)game.getConfig()).setComposition(((GameManager)game).getRandomConfig().createRandomConfig(game.getConfig().getLoverCount(LoverType.CURSED_LOVER.getKey()),new HashSet<>(),false));
-                    game.getScore().setRole(game.getConfig().getLoverCount(LoverType.CURSED_LOVER.getKey()));
-                }));*/
-
         contents.set(0, 8, ClickableItem.of((new ItemBuilder(UniversalMaterial.BARRIER.getType())
                 .setDisplayName(game.translate("werewolf.menu.roles.zero")).build()), e -> {
             for (RoleRegister roleRegister : main.getRegisterManager().getRolesRegister()) {

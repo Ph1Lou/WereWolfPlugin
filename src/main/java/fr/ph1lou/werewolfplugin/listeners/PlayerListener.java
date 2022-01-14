@@ -174,6 +174,9 @@ public class PlayerListener implements Listener {
 
 		} else if (playerWW != null) {
 
+			if(!playerWW.getName().equals(player.getName())){
+				playerWW.setName(player.getName());
+			}
 			player.setCompassTarget(playerWW.getSpawn());
 
 			playerWW.updateAfterReconnect(player);

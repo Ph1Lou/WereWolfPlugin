@@ -399,11 +399,13 @@ public class RolesRegister {
             rolesRegister
                     .add(new RoleRegister("werewolf.name", RolesBase.WISE_ELDER.getKey(), WiseElder.class)
                             .addCategory(Category.VILLAGER)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION));
+                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION)
+                            .addConfig(WiseElder::config));
           
           rolesRegister
                     .add(new RoleRegister("werewolf.name", RolesBase.SERVITOR.getKey(), Servitor.class)
-                            .addCategory(Category.VILLAGER));
+                            .addCategory(Category.VILLAGER)
+                            .addConfig(Servitor::config));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name", RolesBase.SCAMMER.getKey(), Scammer.class)
