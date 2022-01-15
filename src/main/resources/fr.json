@@ -1102,7 +1102,8 @@
         "invulnerability": "Invulnérabilité (§b&timer&§r)",
         "succubus_duration": "Durée du Charme du Succube (§b&timer&§r)",
         "charmer_countdown": "Durée du compte à rebours de la Charmeuse (§b&timer&§r)",
-        "analyse_duration": "Début du pouvoir Analyste (§b&timer&§r)"
+        "analyse_duration": "Début du pouvoir Analyste (§b&timer&§r)",
+        "fruit_merchant_cooldown": "Cooldown de la Marchande de Fruit (§b&timer&§r)"
       },
       "random_events": {
         "list": "Liste des évènements aléatoires §bactivés§f :\n",

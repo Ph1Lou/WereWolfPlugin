@@ -1,5 +1,6 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.enums.ConfigBase;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.registers.impl.RoleRegister;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
@@ -109,6 +110,10 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
     public void onDay(DayEvent event){
 
         if(this.getPlayerWW().isState(StatePlayer.DEATH)){
+            return;
+        }
+
+        if(!game.getConfig().isConfigActive(ConfigBase.HIDE_COMPOSITION.getKey())){
             return;
         }
 

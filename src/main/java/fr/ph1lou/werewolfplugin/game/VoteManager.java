@@ -3,6 +3,7 @@ package fr.ph1lou.werewolfplugin.game;
 
 import fr.ph1lou.werewolfapi.enums.ConfigBase;
 import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.TimerBase;
 import fr.ph1lou.werewolfapi.enums.VoteStatus;
@@ -21,6 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -97,7 +99,6 @@ public class VoteManager implements Listener, IVoteManager {
 		if (!event.isCancelled()) {
 			if (event.getPlayerWW() == null) {
 				if (this.currentStatus == VoteStatus.WAITING) {
-					Bukkit.broadcastMessage(game.translate(Prefix.ORANGE.getKey() , "werewolf.vote.no_result"));
 				}
 				event.setCancelled(true);
 			} else {
@@ -149,7 +150,7 @@ public class VoteManager implements Listener, IVoteManager {
 	}
 
 	@Override
-	public void showResultVote(IPlayerWW playerWW) {
+	public void showResultVote(@Nullable IPlayerWW playerWW) {
 
 		if(game.getConfig().isConfigActive(ConfigBase.NEW_VOTE.getKey())){
 			IPlayerWW villagerWW = this.getResult(this.votesVillager).orElse(null);
@@ -160,18 +161,28 @@ public class VoteManager implements Listener, IVoteManager {
 						Formatter.player(villagerWW.getName()),
 						Formatter.number(this.votesVillager.get(villagerWW))));
 			}
+			else{
+				Bukkit.broadcastMessage(game.translate(Prefix.ORANGE.getKey() , "werewolf.vote.no_result"));
+			}
 			if(werewolfWW != null){
 				game.getPlayersWW()
 						.stream()
 						.filter(playerWW2 -> playerWW2.getRole().isWereWolf())
-						.forEach(playerWW2 -> playerWW2.sendMessageWithKey(Prefix.ORANGE.getKey(),"werewolf.vote.new_vote_werewolf",
-								Formatter.player(werewolfWW.getName()),
-								Formatter.number(this.votesWerewolf.get(werewolfWW))));
+						.forEach(playerWW2 -> {
+							playerWW2.sendMessageWithKey(Prefix.ORANGE.getKey(),"werewolf.vote.new_vote_werewolf",
+									Formatter.player(werewolfWW.getName()),
+									Formatter.number(this.votesWerewolf.get(werewolfWW)));
+							Sound.CAT_MEOW.play(playerWW2, werewolfWW.getLocation());
+						});
 			}
 
 			Bukkit.getPluginManager().callEvent(new NewVoteResultEvent(villagerWW, werewolfWW));
 
 			return;
+		}
+
+		if(playerWW == null){
+			Bukkit.broadcastMessage(game.translate(Prefix.ORANGE.getKey() , "werewolf.vote.no_result"));
 		}
 
 		tempPlayer.add(playerWW);
