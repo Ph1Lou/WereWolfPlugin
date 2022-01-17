@@ -1,10 +1,5 @@
 package fr.ph1lou.werewolfplugin.listeners;
 
-import fr.ph1lou.werewolfplugin.commands.roles.werewolf.CommandWereWolfChat;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.lovers.ILover;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.enums.ConfigBase;
 import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.enums.Prefix;
@@ -13,7 +8,6 @@ import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.TimerBase;
-import fr.ph1lou.werewolfapi.enums.VoteStatus;
 import fr.ph1lou.werewolfapi.events.TrollEvent;
 import fr.ph1lou.werewolfapi.events.TrollLoverEvent;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
@@ -22,14 +16,17 @@ import fr.ph1lou.werewolfapi.events.game.day_cycle.DayWillComeEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
-import fr.ph1lou.werewolfapi.events.game.vote.VoteEndEvent;
 import fr.ph1lou.werewolfapi.events.roles.SelectionEndEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.lovers.ILover;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.registers.impl.RoleRegister;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
-import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import fr.ph1lou.werewolfplugin.RegisterManager;
+import fr.ph1lou.werewolfplugin.commands.roles.werewolf.CommandWereWolfChat;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfplugin.game.LoversManagement;
 import fr.ph1lou.werewolfplugin.roles.lovers.FakeLover;
@@ -70,56 +67,26 @@ public class CycleListener implements Listener {
 
         game.getMapManager().getWorld().setTime(23500);
 
-        long duration = game.getConfig().getTimerValue(TimerBase.VOTE_DURATION.getKey());
         Bukkit.broadcastMessage(game.translate(Prefix.ORANGE.getKey() , "werewolf.announcement.day",
                 Formatter.number(event.getNumber())));
         groupSizeChange();
 
-        if (game.getConfig().isConfigActive(ConfigBase.VOTE.getKey()) &&
-                game.getPlayersCount() < game.getConfig().getPlayerRequiredVoteEnd()) {
 
-            game.getConfig().switchConfigValue(ConfigBase.VOTE.getKey());
-            Bukkit.broadcastMessage(game.translate(Prefix.ORANGE.getKey() , "werewolf.vote.vote_deactivate"));
-            game.getVoteManager().setStatus(VoteStatus.ENDED);
-        }
+        long duration = game.getConfig().getTimerValue(TimerBase.POWER_DURATION.getKey());
 
         if (2L * game.getConfig().getTimerValue(TimerBase.DAY_DURATION.getKey())
-                - duration
-                - game.getConfig().getTimerValue(TimerBase.VOTE_WAITING.getKey()) > 0) {
-
-            if (game.getConfig().isConfigActive(ConfigBase.VOTE.getKey())
-                    && !game.getVoteManager().isStatus(VoteStatus.NOT_BEGIN)) {
-
-                Bukkit.broadcastMessage(game.translate("werewolf.utils.bar"));
-                Bukkit.broadcastMessage(game.translate(Prefix.ORANGE.getKey() , "werewolf.vote.vote_time",
-                        Formatter.timer(Utils.conversion((int) duration))));
-                Bukkit.broadcastMessage(game.translate("werewolf.utils.bar"));
-
-                game.getVoteManager().setStatus(VoteStatus.IN_PROGRESS);
-
-                BukkitUtils.scheduleSyncDelayedTask(() -> {
-                    if (!game.isState(StateGame.END)) {
-                        Bukkit.getPluginManager().callEvent(new VoteEndEvent());
-                    }
-
-                }, duration * 20);
-            }
-        }
-        long duration2 = game.getConfig().getTimerValue(TimerBase.POWER_DURATION.getKey());
-
-        if (2L * game.getConfig().getTimerValue(TimerBase.DAY_DURATION.getKey())
-                - duration2 > 0) {
+                - duration > 0) {
 
             BukkitUtils.scheduleSyncDelayedTask(() -> {
 
                 if (!game.isState(StateGame.END)) {
                     Bukkit.getPluginManager().callEvent(new SelectionEndEvent());
                 }
-            }, duration2 * 20);
+            }, duration * 20);
 
         }
 
-        long duration3 = game.getConfig().getTimerValue(TimerBase.DAY_DURATION.getKey());
+        long duration2 = game.getConfig().getTimerValue(TimerBase.DAY_DURATION.getKey());
 
         BukkitUtils.scheduleSyncDelayedTask(() -> {
             if (!game.isState(StateGame.END)) {
@@ -128,7 +95,7 @@ public class CycleListener implements Listener {
                 BukkitUtils.scheduleSyncDelayedTask(CommandWereWolfChat::disable, game.getConfig().getTimerValue(TimerBase.WEREWOLF_CHAT_DURATION.getKey()) * 20L);
             }
 
-        }, duration3 * 20);
+        }, duration2 * 20);
     }
 
 
