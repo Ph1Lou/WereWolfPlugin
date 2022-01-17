@@ -230,8 +230,7 @@ public class CommandsRegister {
                         .addStateAccess(StatePlayer.ALIVE)
                         .addStateWW(StateGame.GAME)
                         .unsetAutoCompletion()
-                        .setRequiredAbilityEnabled()
-                        .addArgNumbers(0));
+                        .setRequiredAbilityEnabled());
 
         commandsRegister
                 .add(new CommandRegister("werewolf.name",

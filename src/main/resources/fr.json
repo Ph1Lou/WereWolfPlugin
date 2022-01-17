@@ -108,6 +108,7 @@
       "citizen": {
         "display": "Citoyen",
         "description": "Vous pouvez, deux fois dans le partie, décider de voir les Votes, et une fois seulement, les annuler.",
+        "description_new_vote": "Vous pouvez une fois dans la partie, connaitre le résultat du vote Loup Garou",
         "cancel_vote_message": "Vous pouvez encore annuler le vote §b&number&§r fois. ",
         "description_extra": "Lorsque la composition est cachée, vous recevez chaque matin une liste de 3 rôles existants avec le nombre de ces rôles présent dans la partie",
         "see_vote_message": "Vous pouvez encore dépouiller les votes §b&number&§r fois. ",
@@ -121,7 +122,10 @@
         "see_vote": "§b&voter&§r a voté pour §b&player&§r",
         "command_1": "depouiller_citizen",
         "command_2": "annuler_citizen",
-        "hide_composition": "Il y a &number& rôle dans la composition parmi : &role1&, &role2&, &role3&"
+        "new_vote_count": "Le joueur %player% a reçu %number% votes.",
+        "hide_composition": "Il y a &number& rôle dans la composition parmi : &role1&, &role2&, &role3&",
+        "werewolf_new_vote": "Aucun joueur n'a été voté par les Loups Garous",
+        "click_to_see_werewolf_vote": "Cliquez ici pour voir le résultat du vote Loup Garou"
       },
       "angel": {
         "display": "Ange",
@@ -143,7 +147,7 @@
         "display": "Ange Déchu",
         "effect": "Résistance la nuit",
         "wait": "Vous obtiendrez votre cible dans §b&timer&§f",
-        "power": "12 coeurs puis 15 si vous tuez votre cible.",
+        "power": "12 coeurs puis 15 si vous tuez votre cible (ou assist).",
         "deadly_target": "Vous avez tué votre cible, vous gagnez 3 coeurs",
         "deadly_target_by_other": "Votre cible a été tué par un autre joueur, vous ne pouvez plus gagner de coeurs supplémentaires",
         "reveal_target": "Votre cible est §b&target&, il est &role&",
@@ -582,7 +586,7 @@
       "servitor": {
         "display": "Serviteur",
         "message": "Votre maître aujourd'hui est &player&",
-        "description": "Vous avez un Maître choisi aléatoirement chaque matin.\nLes Maîtres n'ont aucune information",
+        "description": "Vous avez un Maître choisi aléatoirement chaque matin. Si il vous tue, vous ressuscitez.\nLes Maîtres n'ont aucune information",
         "effects": "Force I, si votre maître est à moins de &number& blocs de vous",
         "effects_death": "Faiblesse I, si votre maître est à moins de &number& blocs de vous",
         "resurrection": "Votre maître &player& vous a tué, il devient définitif et vous donne Faiblesse I à &number& blocs de vous"
@@ -634,8 +638,8 @@
       "vote_time": "C'est l'heure de voter §b/ww vote§r Vous avez §b&timer&",
       "command": "vote",
       "neutral": "Les rôles neutres ne peuvent pas voter",
-      "new_vote_villager": "§b&player&§f est celui qui a recueilli le plus de votes auprès des Villageois : §b&number&§r.",
-      "new_vote_werewolf": "§b&player&§f est celui qui a recueilli le plus de votes auprès des Loups Garous : §b&number&§r."
+      "new_vote_villager": "§b&player&§f est celui qui a recueilli le plus de votes auprès des Villageois.",
+      "new_vote_werewolf": "§b&player&§f est celui qui a recueilli le plus de votes auprès des Loups Garous."
     },
     "lone_wolf": {
       "message": "Vous devenez Solitaire. A partir de maintenant,vous devez gagner Seul. Pour cela, vous bénéficiez de quatres coeurs permanents supplémentaires (dans la limite de 15 coeurs max)"
@@ -1282,7 +1286,7 @@
       "sister_misanthrope": {
         "name": "Soeur Misanthrope",
         "message": "[§5Soeur Misanthrope§r] Vous passez dans le camp des Loups Garous, mais vous n'apparaissez pas dans la liste des Loups et ne pouvez pas interagir avec le chat des Loups.",
-        "description" : "À la révélation de la liste des Loups, une des Soeurs apprend qu'elle est dans le camp des Loups (elle a accès à la liste, obtient Force I la nuit mais n'apparaît pas dans la liste et ne peut pas interagir avec le chat des Loups."
+        "description" : "À la révélation de la liste des Loups, \nune des Soeurs apprend qu'elle est dans le camp des Loups \n(elle a accès à la liste, obtient Force I la nuit mais n'apparaît pas dans la liste \net ne peut pas interagir avec le chat des Loups."
       }
     },
     "check": {
