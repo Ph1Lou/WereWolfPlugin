@@ -1,11 +1,13 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.citizen;
 
 import fr.ph1lou.werewolfapi.commands.ICommand;
-import fr.ph1lou.werewolfapi.events.roles.seer.SeeVoteEvent;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.enums.ConfigBase;
 import fr.ph1lou.werewolfapi.enums.Prefix;
 import fr.ph1lou.werewolfapi.enums.VoteStatus;
+import fr.ph1lou.werewolfapi.events.roles.citizen.CitizenSeeVoteEvent;
+import fr.ph1lou.werewolfapi.events.roles.citizen.CitizenSeeWerewolfVoteEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfplugin.roles.villagers.Citizen;
 import org.bukkit.Bukkit;
@@ -26,6 +28,51 @@ public class CommandCitizenSeeVote implements ICommand {
 
         Citizen citizen = (Citizen) playerWW.getRole();
 
+        if(game.getConfig().isConfigActive(ConfigBase.NEW_VOTE.getKey())){
+            if(args.length == 0){
+                return;
+            }
+            this.newVote(game, playerWW, citizen, args[0]);
+            return;
+        }
+        this.oldVote(game, playerWW, citizen);
+
+    }
+
+    private void newVote(WereWolfAPI game, IPlayerWW playerWW, Citizen citizen, String result){
+
+        UUID uuid;
+        try{
+            uuid = UUID.fromString(result);
+        }
+        catch(IllegalArgumentException ignored){
+            return;
+        }
+        IPlayerWW playerWW1 = game.getPlayerWW(uuid).orElse(null);
+
+        if(playerWW1 == null){
+            return;
+        }
+
+        if(!citizen.hasPower()){
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.power");
+        }
+
+        citizen.setPower(false);
+
+        CitizenSeeWerewolfVoteEvent event1 = new CitizenSeeWerewolfVoteEvent(playerWW, playerWW1);
+        Bukkit.getPluginManager().callEvent(event1);
+
+        if(event1.isCancelled()){
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+            return;
+        }
+        playerWW.sendMessageWithKey(Prefix.RED.getKey(),"werewolf.vote.new_vote_werewolf",
+                Formatter.player(event1.getTargetWW().getName()));
+    }
+
+
+    private void oldVote(WereWolfAPI game, IPlayerWW playerWW, Citizen citizen){
         if (citizen.getUse() >= 2) {
             playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.power");
             return;
@@ -37,21 +84,21 @@ public class CommandCitizenSeeVote implements ICommand {
         }
 
         citizen.setUse(citizen.getUse() + 1);
-        SeeVoteEvent seeVoteEvent = new SeeVoteEvent(playerWW, game.getVoteManager().getVotes());
+        CitizenSeeVoteEvent seeVoteEvent = new  CitizenSeeVoteEvent(playerWW, game.getVoteManager().getVotes());
         Bukkit.getPluginManager().callEvent(seeVoteEvent);
 
         if (seeVoteEvent.isCancelled()) {
-            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.cancel"));
+            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
             return;
         }
-        player.sendMessage(game.translate(Prefix.GREEN.getKey() , "werewolf.role.citizen.count_votes"));
+        playerWW.sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.role.citizen.count_votes");
 
         game.getVoteManager().getPlayerVotes().forEach((voterWW, voteWW) -> {
             String voterName = voterWW.getName();
             String voteName = voteWW.getName();
-            player.sendMessage(game.translate("werewolf.role.citizen.see_vote",
+            playerWW.sendMessageWithKey("werewolf.role.citizen.see_vote",
                     Formatter.format("&voter&",voterName),
-                    Formatter.player(voteName)));
+                    Formatter.player(voteName));
         });
     }
 }

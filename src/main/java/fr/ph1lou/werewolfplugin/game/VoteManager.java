@@ -7,6 +7,7 @@ import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.TimerBase;
 import fr.ph1lou.werewolfapi.enums.VoteStatus;
+import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.NewVoteResultEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteBeginEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteEndEvent;
@@ -16,8 +17,11 @@ import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
+import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfapi.vote.IVoteManager;
 import org.bukkit.Bukkit;
+import org.bukkit.Effect;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -75,7 +79,7 @@ public class VoteManager implements Listener, IVoteManager {
 			this.voters.put(voterWW, vote);
 			this.votes.merge(vote, 1, Integer::sum);
 
-			if(vote.getRole().isWereWolf()){
+			if(voterWW.getRole().isWereWolf()){
 				this.votesWerewolf.merge(vote, 1, Integer::sum);
 			}
 			else{
@@ -105,12 +109,12 @@ public class VoteManager implements Listener, IVoteManager {
 				showResultVote(event.getPlayerWW());
 			}
 		}
-        resetVote();
+		this.currentStatus = VoteStatus.NOT_IN_PROGRESS;
     }
 
 	@Override
 	public void resetVote() {
-        this.currentStatus = VoteStatus.NOT_IN_PROGRESS;
+
         this.voters.clear();
 		this.votesVillager.clear();
 		this.votesWerewolf.clear();
@@ -119,6 +123,9 @@ public class VoteManager implements Listener, IVoteManager {
 
 	@Override
 	public Map<IPlayerWW, Integer> getVotes() {
+		if(game.getConfig().isConfigActive(ConfigBase.NEW_VOTE.getKey())){
+			return this.votesVillager;
+		}
 		return this.votes;
 	}
 
@@ -129,6 +136,9 @@ public class VoteManager implements Listener, IVoteManager {
 
 	@Override
 	public Optional<IPlayerWW> getResult() {
+		if(game.getConfig().isConfigActive(ConfigBase.NEW_VOTE.getKey())){
+			return this.getResult(this.votesVillager);
+		}
 		return this.getResult(this.votes);
 	}
 
@@ -149,17 +159,16 @@ public class VoteManager implements Listener, IVoteManager {
 		return Optional.of(playerVote);
 	}
 
-	@Override
+
 	public void showResultVote(@Nullable IPlayerWW playerWW) {
 
 		if(game.getConfig().isConfigActive(ConfigBase.NEW_VOTE.getKey())){
-			IPlayerWW villagerWW = this.getResult(this.votesVillager).orElse(null);
+
 			IPlayerWW werewolfWW = this.getResult(this.votesWerewolf).orElse(null);
 
-			if(villagerWW != null){
+			if(playerWW != null){
 				Bukkit.broadcastMessage(game.translate(Prefix.ORANGE.getKey(),"werewolf.vote.new_vote_villager",
-						Formatter.player(villagerWW.getName()),
-						Formatter.number(this.votesVillager.get(villagerWW))));
+						Formatter.player(playerWW.getName())));
 			}
 			else{
 				Bukkit.broadcastMessage(game.translate(Prefix.ORANGE.getKey() , "werewolf.vote.no_result"));
@@ -167,22 +176,29 @@ public class VoteManager implements Listener, IVoteManager {
 			if(werewolfWW != null){
 				game.getPlayersWW()
 						.stream()
-						.filter(playerWW2 -> playerWW2.getRole().isWereWolf())
+						.filter(playerWW2 -> playerWW2.getRole().isWereWolf() || playerWW2.getRole().isNeutral())
 						.forEach(playerWW2 -> {
 							playerWW2.sendMessageWithKey(Prefix.ORANGE.getKey(),"werewolf.vote.new_vote_werewolf",
-									Formatter.player(werewolfWW.getName()),
-									Formatter.number(this.votesWerewolf.get(werewolfWW)));
-							Sound.CAT_MEOW.play(playerWW2, werewolfWW.getLocation());
+									Formatter.player(werewolfWW.getName()));
+							if(!playerWW2.getRole().isNeutral()){
+								Player player = Bukkit.getPlayer(playerWW2.getUUID());
+								if(player != null){
+									Sound.CAT_MEOW.play(playerWW2, werewolfWW.getLocation());
+									player.playEffect(werewolfWW.getLocation(),
+											Effect.STEP_SOUND, Material.REDSTONE_BLOCK);
+								}
+							}
 						});
 			}
 
-			Bukkit.getPluginManager().callEvent(new NewVoteResultEvent(villagerWW, werewolfWW));
+			Bukkit.getPluginManager().callEvent(new NewVoteResultEvent(playerWW, werewolfWW));
 
 			return;
 		}
 
 		if(playerWW == null){
 			Bukkit.broadcastMessage(game.translate(Prefix.ORANGE.getKey() , "werewolf.vote.no_result"));
+			return;
 		}
 
 		tempPlayer.add(playerWW);
@@ -217,6 +233,47 @@ public class VoteManager implements Listener, IVoteManager {
 			}
 
 		}, duration * 20);
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onDay(DayEvent event){
+
+		if(this.isStatus(VoteStatus.IN_PROGRESS) || this.isStatus(VoteStatus.WAITING)){
+			return;
+		}
+
+		if (game.getConfig().isConfigActive(ConfigBase.VOTE.getKey()) &&
+				game.getPlayersCount() < game.getConfig().getPlayerRequiredVoteEnd()) {
+
+			game.getConfig().switchConfigValue(ConfigBase.VOTE.getKey());
+			Bukkit.broadcastMessage(game.translate(Prefix.ORANGE.getKey() , "werewolf.vote.vote_deactivate"));
+			this.setStatus(VoteStatus.ENDED);
+		}
+
+		long duration = game.getConfig().getTimerValue(TimerBase.VOTE_DURATION.getKey());
+
+		if (2L * game.getConfig().getTimerValue(TimerBase.DAY_DURATION.getKey())
+				- duration
+				- game.getConfig().getTimerValue(TimerBase.VOTE_WAITING.getKey()) > 0) {
+
+			if (game.getConfig().isConfigActive(ConfigBase.VOTE.getKey())
+					&& !this.isStatus(VoteStatus.NOT_BEGIN)) {
+
+				Bukkit.broadcastMessage(game.translate("werewolf.utils.bar"));
+				Bukkit.broadcastMessage(game.translate(Prefix.ORANGE.getKey() , "werewolf.vote.vote_time",
+						Formatter.timer(Utils.conversion((int) duration))));
+				Bukkit.broadcastMessage(game.translate("werewolf.utils.bar"));
+
+				this.setStatus(VoteStatus.IN_PROGRESS);
+
+				BukkitUtils.scheduleSyncDelayedTask(() -> {
+					if (!game.isState(StateGame.END)) {
+						Bukkit.getPluginManager().callEvent(new VoteEndEvent());
+					}
+
+				}, duration * 20);
+			}
+		}
 	}
 
 	@Override

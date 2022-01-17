@@ -3,6 +3,9 @@ package fr.ph1lou.werewolfplugin.statistiks;
 import com.google.common.collect.Sets;
 import fr.ph1lou.werewolfapi.events.game.vote.NewVoteResultEvent;
 import fr.ph1lou.werewolfapi.events.random_events.MysanthropeSisterEvent;
+import fr.ph1lou.werewolfapi.events.roles.citizen.CitizenCancelVoteEvent;
+import fr.ph1lou.werewolfapi.events.roles.citizen.CitizenSeeVoteEvent;
+import fr.ph1lou.werewolfapi.events.roles.citizen.CitizenSeeWerewolfVoteEvent;
 import fr.ph1lou.werewolfapi.events.roles.scammer.ScamEvent;
 import fr.ph1lou.werewolfapi.events.roles.servitor.ServitorDefinitiveMasterEvent;
 import fr.ph1lou.werewolfapi.events.roles.servitor.ServitorMasterChosenEvent;
@@ -34,7 +37,6 @@ import fr.ph1lou.werewolfapi.events.game.timers.InvulnerabilityEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.PVPEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
-import fr.ph1lou.werewolfapi.events.game.vote.CancelVoteEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteResultEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AmnesiacLoverDeathEvent;
@@ -102,7 +104,6 @@ import fr.ph1lou.werewolfapi.events.roles.raven.CurseEvent;
 import fr.ph1lou.werewolfapi.events.roles.rival.RivalAnnouncementEvent;
 import fr.ph1lou.werewolfapi.events.roles.rival.RivalLoverDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.rival.RivalLoverEvent;
-import fr.ph1lou.werewolfapi.events.roles.seer.SeeVoteEvent;
 import fr.ph1lou.werewolfapi.events.roles.seer.SeerEvent;
 import fr.ph1lou.werewolfapi.events.roles.serial_killer.SerialKillerEvent;
 import fr.ph1lou.werewolfapi.events.roles.shaman.ShamanEvent;
@@ -668,7 +669,7 @@ public class Events implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onVoteSee(SeeVoteEvent event) {
+    public void onVoteSee(CitizenSeeVoteEvent event) {
 
         if (event.isCancelled()) return;
 
@@ -679,7 +680,7 @@ public class Events implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onVoteCancel(CancelVoteEvent event) {
+    public void onVoteCancel(CitizenCancelVoteEvent event) {
 
         if (event.isCancelled()) return;
 
@@ -687,6 +688,17 @@ public class Events implements Listener {
         IPlayerWW playerWW = event.getPlayerWW();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.cancel_vote",
                 playerWW, event.getVoteWW(), api.getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onVoteSeeWerewolf(CitizenSeeWerewolfVoteEvent event) {
+
+        if (event.isCancelled()) return;
+
+        WereWolfAPI api = main.getWereWolfAPI();
+        IPlayerWW playerWW = event.getPlayerWW();
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.see_werewolf_vote",
+                playerWW, event.getTargetWW(), api.getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

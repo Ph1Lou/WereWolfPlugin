@@ -2,6 +2,8 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.enums.ConfigBase;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
+import fr.ph1lou.werewolfapi.events.game.vote.NewVoteResultEvent;
+import fr.ph1lou.werewolfapi.events.roles.citizen.CitizenSeeWerewolfVoteEvent;
 import fr.ph1lou.werewolfapi.registers.impl.RoleRegister;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -21,12 +23,14 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayers, IPower {
@@ -87,6 +91,9 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
             return;
         }
 
+        if(game.getConfig().isConfigActive(ConfigBase.NEW_VOTE.getKey())){
+            return;
+        }
 
         if (getUse() < 2) {
             this.getPlayerWW().sendMessage(seeVote());
@@ -101,7 +108,9 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.citizen.description"))
+                .setDescription(game.translate(game.getConfig().isConfigActive(ConfigBase.NEW_VOTE.getKey())?
+                        "werewolf.role.citizen.description_new_vote":
+                        "werewolf.role.citizen.description"))
                 .addExtraLines(game.translate("werewolf.role.citizen.description_extra"))
                 .build();
     }
@@ -149,7 +158,28 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
 
     }
 
-    public TextComponent cancelVote() {
+    @EventHandler
+    public void onNewVote(NewVoteResultEvent event){
+
+        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+            return;
+        }
+
+       if(event.getPlayerVotedByWerewolfWW() != null){
+           this.getPlayerWW().sendMessage(this.seeWerewolfVote(event.getPlayerVotedByWerewolfWW().getUUID()));
+       }
+
+        if(event.getPlayerVotedByVillagerWW() == null){
+            return;
+        }
+
+        this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE.getKey(),"werewolf.role.citizen.new_vote_count",
+                Formatter.player(event.getPlayerVotedByVillagerWW().getName()),
+                Formatter.number(game.getVoteManager().getVotes().getOrDefault(event.getPlayerVotedByVillagerWW(),0)));
+
+    }
+
+    private TextComponent cancelVote() {
 
         TextComponent cancelVote = new TextComponent(
                 game.translate("werewolf.role.citizen.click"));
@@ -181,7 +211,7 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
     }
 
 
-    public TextComponent seeVote() {
+    private TextComponent seeVote() {
 
         TextComponent seeVote = new TextComponent(
                 game.translate("werewolf.role.citizen.click"));
@@ -211,5 +241,17 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
 
     }
 
+    private TextComponent seeWerewolfVote(UUID werewolf) {
 
+        TextComponent seeVote = new TextComponent(
+                game.translate(Prefix.GREEN.getKey(),"werewolf.role.citizen.click_to_see_werewolf_vote"));
+        seeVote.setClickEvent(new ClickEvent(
+                ClickEvent.Action.RUN_COMMAND,
+                String.format("/ww %s %s",
+                        game.translate("werewolf.role.citizen.command_1"),
+                        werewolf.toString())));
+
+        return seeVote;
+
+    }
 }
