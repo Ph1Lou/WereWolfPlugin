@@ -578,7 +578,7 @@
       },
       "tenebrous_werewolf": {
         "display": "Loup Ténébreux",
-        "description": "Une fois par partie, durant la nuit, vous pouvez donner un effet de Blindness à tous les non-loups proches pendant 30 secondes ou jusqu'à ce qu'ils soient attaqués par un loup",
+        "description": "Une fois par partie, durant la nuit, vous pouvez donner un effet de Blindness à tous les non-loups dans un rayon de &range& pendant &time& secondes ou jusqu'à ce qu'ils soient attaqués par un loup",
         "description_command": "/ww tenebres",
         "command": "tenebres",
         "darkness": "Le loup Ténébreux vous a plongé dans les ténèbres!",
