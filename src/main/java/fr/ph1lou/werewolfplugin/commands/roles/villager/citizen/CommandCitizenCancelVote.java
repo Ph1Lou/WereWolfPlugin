@@ -1,5 +1,6 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.citizen;
 
+import fr.ph1lou.werewolfapi.enums.ConfigBase;
 import fr.ph1lou.werewolfapi.events.roles.citizen.CitizenCancelVoteEvent;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.commands.ICommand;
@@ -20,6 +21,10 @@ public class CommandCitizenCancelVote implements ICommand {
 
         UUID uuid = player.getUniqueId();
         IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
+
+        if(game.getConfig().isConfigActive(ConfigBase.NEW_VOTE.getKey())){
+            return;
+        }
 
         if (playerWW == null) return;
 

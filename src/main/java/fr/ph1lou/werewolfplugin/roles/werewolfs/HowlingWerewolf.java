@@ -28,8 +28,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class HowlingWerewolfWerewolf extends RoleWereWolf {
-    public HowlingWerewolfWerewolf(WereWolfAPI game, IPlayerWW playerWW, String key) {
+public class HowlingWerewolf extends RoleWereWolf {
+    public HowlingWerewolf(WereWolfAPI game, IPlayerWW playerWW, String key) {
         super(game, playerWW, key);
     }
 

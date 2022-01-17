@@ -59,7 +59,7 @@ import fr.ph1lou.werewolfplugin.roles.werewolfs.BigBadWerewolf;
 import fr.ph1lou.werewolfplugin.roles.werewolfs.FalsifierWereWolf;
 import fr.ph1lou.werewolfplugin.roles.werewolfs.FearFulWerewolf;
 import fr.ph1lou.werewolfplugin.roles.werewolfs.GrimyWereWolf;
-import fr.ph1lou.werewolfplugin.roles.werewolfs.HowlingWerewolfWerewolf;
+import fr.ph1lou.werewolfplugin.roles.werewolfs.HowlingWerewolf;
 import fr.ph1lou.werewolfplugin.roles.werewolfs.InfectFatherOfTheWolves;
 import fr.ph1lou.werewolfplugin.roles.werewolfs.MischievousWereWolf;
 import fr.ph1lou.werewolfplugin.roles.werewolfs.MysticalWereWolf;
@@ -126,9 +126,9 @@ public class RolesRegister {
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
-                            RolesBase.HOWLING_WEREWOLF.getKey(), HowlingWerewolfWerewolf.class)
+                            RolesBase.HOWLING_WEREWOLF.getKey(), HowlingWerewolf.class)
                             .addCategory(Category.WEREWOLF)
-                            .addConfig(HowlingWerewolfWerewolf::config));
+                            .addConfig(HowlingWerewolf::config));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
