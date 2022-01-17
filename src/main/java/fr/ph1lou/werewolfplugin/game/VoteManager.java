@@ -153,6 +153,7 @@ public class VoteManager implements Listener, IVoteManager
 	}
 
 	public void showResultVote(@Nullable IPlayerWW playerWW) {
+
 		if (this.game.getConfig().isConfigActive(ConfigBase.NEW_VOTE.getKey())) {
 			IPlayerWW werewolfWW = this.getResult(this.votesWerewolf).orElse(null);
 			if (playerWW != null) {
@@ -217,15 +218,20 @@ public class VoteManager implements Listener, IVoteManager
 		if (this.isStatus(VoteStatus.IN_PROGRESS) || this.isStatus(VoteStatus.WAITING)) {
 			return;
 		}
-		if (this.game.getConfig().isConfigActive(ConfigBase.VOTE.getKey()) && this.game.getPlayersCount() < this.game.getConfig().getPlayerRequiredVoteEnd()) {
+		if (this.game.getConfig().isConfigActive(ConfigBase.VOTE.getKey()) &&
+				this.game.getPlayersCount() < this.game.getConfig().getPlayerRequiredVoteEnd()) {
 			this.game.getConfig().switchConfigValue(ConfigBase.VOTE.getKey());
 			Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE.getKey(), "werewolf.vote.vote_deactivate"));
 			this.setStatus(VoteStatus.ENDED);
 		}
-		long duration = this.game.getConfig().getTimerValue(TimerBase.VOTE_DURATION.getKey());
-		if (2L * this.game.getConfig().getTimerValue(TimerBase.DAY_DURATION.getKey()) - duration - this.game.getConfig().getTimerValue(TimerBase.VOTE_WAITING.getKey()) > 0L && this.game.getConfig().isConfigActive(ConfigBase.VOTE.getKey()) && !this.isStatus(VoteStatus.NOT_BEGIN)) {
+		int duration = this.game.getConfig().getTimerValue(TimerBase.VOTE_DURATION.getKey());
+
+		if (this.game.getConfig().isConfigActive(ConfigBase.VOTE.getKey()) &&
+				!this.isStatus(VoteStatus.NOT_BEGIN)) {
+
 			Bukkit.broadcastMessage(this.game.translate("werewolf.utils.bar"));
-			Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE.getKey(), "werewolf.vote.vote_time", Formatter.timer(Utils.conversion((int)duration))));
+			Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE.getKey(), "werewolf.vote.vote_time",
+					Formatter.timer(Utils.conversion(duration))));
 			Bukkit.broadcastMessage(this.game.translate("werewolf.utils.bar"));
 			this.setStatus(VoteStatus.IN_PROGRESS);
 			BukkitUtils.scheduleSyncDelayedTask(() -> {

@@ -29,6 +29,7 @@ import fr.ph1lou.werewolfplugin.commands.roles.villager.sister.CommandSisterSeeR
 import fr.ph1lou.werewolfplugin.commands.roles.villager.trapper.CommandTrapper;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.troublemaker.CommandTroubleMaker;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.witch.CommandWitch;
+import fr.ph1lou.werewolfplugin.commands.roles.werewolf.CommandTenebrous;
 import fr.ph1lou.werewolfplugin.commands.roles.werewolf.CommandWereWolf;
 import fr.ph1lou.werewolfplugin.commands.roles.werewolf.CommandWereWolfChat;
 import fr.ph1lou.werewolfplugin.commands.roles.werewolf.infect.CommandInfect;
@@ -231,6 +232,13 @@ public class CommandsRegister {
                         .addStateWW(StateGame.GAME)
                         .unsetAutoCompletion()
                         .setRequiredAbilityEnabled());
+
+        commandsRegister.add(new CommandRegister("werewolf.name",
+                "werewolf.role.tenebrous_werewolf.command", new CommandTenebrous())
+                .addRoleKey(RolesBase.TENEBROUS_WEREWOLF.getKey())
+                .setRequiredAbilityEnabled()
+                .setRequiredPower().addStateAccess(StatePlayer.ALIVE)
+                .addStateWW(StateGame.GAME));
 
         commandsRegister
                 .add(new CommandRegister("werewolf.name",

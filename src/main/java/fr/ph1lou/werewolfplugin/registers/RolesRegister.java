@@ -64,6 +64,7 @@ import fr.ph1lou.werewolfplugin.roles.werewolfs.InfectFatherOfTheWolves;
 import fr.ph1lou.werewolfplugin.roles.werewolfs.MischievousWereWolf;
 import fr.ph1lou.werewolfplugin.roles.werewolfs.MysticalWereWolf;
 import fr.ph1lou.werewolfplugin.roles.werewolfs.NaughtyLittleWolf;
+import fr.ph1lou.werewolfplugin.roles.werewolfs.TenebrousWerewolf;
 import fr.ph1lou.werewolfplugin.roles.werewolfs.WereWolf;
 
 
@@ -401,7 +402,13 @@ public class RolesRegister {
                             .addCategory(Category.VILLAGER)
                             .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION)
                             .addConfig(WiseElder::config));
-          
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name", RolesBase.TENEBROUS_WEREWOLF.getKey(), TenebrousWerewolf.class)
+                            .addCategory(Category.WEREWOLF)
+                            .addConfig(TenebrousWerewolf::configDistance)
+                            .addConfig(TenebrousWerewolf::configDuration));
+
           rolesRegister
                     .add(new RoleRegister("werewolf.name", RolesBase.SERVITOR.getKey(), Servitor.class)
                             .addCategory(Category.VILLAGER)

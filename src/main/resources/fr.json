@@ -623,6 +623,19 @@
         "display": "Vieux sage",
         "description": "A partir du jour 3, vous disposez d'un compteur pour chaque type d'Aura\nPour chaque seconde passée à moins de &number& blocs d'un joueur, le compteur correspondant à son aura s'incrémente.",
         "end_of_cycle": "Vous recevez le contenu des compteurs => \nCompteur Aura §fNeutre§f: &neutral&§r.\n Compteur Aura §0Obscure§f: &dark&§r.\n Compteur Aura §eLumineuse§f: &light&"
+      },
+      "tenebrous_werewolf": {
+        "display": "Loup Ténébreux",
+        "description": "Une fois par partie, durant la nuit, vous pouvez donner un effet de Blindness à tous les non-loups dans un rayon de &range& pendant &time& secondes ou jusqu'à ce qu'ils soient attaqués par un loup",
+        "description_command": "/ww tenebres",
+        "command": "tenebres",
+        "darkness": "Le loup Ténébreux vous a plongé dans les ténèbres!",
+        "darkness_wolves": "Le Loup Ténébreux a plongé une partie du village dans les ténèbres",
+        "not_night": "Vous ne pouvez pas effectuer cette action le jour",
+        "power_available": "Vous pouvez §aencore§f utiliser votre pouvoir",
+        "power_not_available": "Vous avez §cdéjà§f utilisé votre pouvoir",
+        "darkness_distance": "Rayon d'action des ténèbres: §b&range&§r blocs",
+        "darkness_duration": "Durée des ténèbres: §b&time&§r seconds"
       }
     },
     "vote": {

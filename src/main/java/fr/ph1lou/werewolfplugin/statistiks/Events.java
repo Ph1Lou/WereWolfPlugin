@@ -9,6 +9,7 @@ import fr.ph1lou.werewolfapi.events.roles.citizen.CitizenSeeWerewolfVoteEvent;
 import fr.ph1lou.werewolfapi.events.roles.scammer.ScamEvent;
 import fr.ph1lou.werewolfapi.events.roles.servitor.ServitorDefinitiveMasterEvent;
 import fr.ph1lou.werewolfapi.events.roles.servitor.ServitorMasterChosenEvent;
+import fr.ph1lou.werewolfapi.events.roles.tenebrous_werewolf.TenebrousEvent;
 import fr.ph1lou.werewolfapi.events.roles.wise_elder.WiseElderRevealAuraAmountEvent;
 import fr.ph1lou.werewolfplugin.save.FileUtils_;
 import fr.ph1lou.werewolfplugin.save.Serializer;
@@ -1518,7 +1519,13 @@ public class Events implements Listener {
                 event.getPlayerWW(), api.getTimer()));
     }
 
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onTenebrous(TenebrousEvent event) {
 
+        if (event.isCancelled()) return;
 
-
+        WereWolfAPI api = main.getWereWolfAPI();
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.tenebrous",
+                new HashSet<>(event.getAffectedPlayers()), api.getTimer()));
+    }
 }
