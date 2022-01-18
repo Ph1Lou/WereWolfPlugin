@@ -219,6 +219,7 @@
         "power_on": "Vous pouvez §aencore§f ressusciter",
         "power_off": "Vois ne pouvez §cplus§f ressusciter",
         "announce": "L'Idiot du Village §b&player&§r ressuscite.",
+        "vote": "Vous avez perdu votre droit de vote suite à votre resurrection",
         "description": "Lorsque vous vous faites tuer par un joueur qui n’appartient pas au camp des Loups Garous, vous êtes ressuscité mais perdez 2 coeurs permanents et tous les joueurs sont informés de votre rôle."
       },
       "villager": {
@@ -650,6 +651,7 @@
       "no_result": "Aucun joueur n'a été voté plus d'une fois",
       "vote_time": "C'est l'heure de voter §b/ww vote§r Vous avez §b&timer&",
       "command": "vote",
+      "new_voted": "Vous avez été le plus voté lors du dernier vote, vous ne pouvez donc pas voter cette fois ci",
       "neutral": "Les rôles neutres ne peuvent pas voter",
       "new_vote_villager": "§b&player&§f est celui qui a recueilli le plus de votes auprès des Villageois.",
       "new_vote_werewolf": "§b&player&§f est celui qui a recueilli le plus de votes auprès des Loups Garous."
@@ -910,15 +912,15 @@
         "messages": [
           "Rôles à aura Lumineuse :",
           "§cChien-Loup (Loup), Loup-Garou Mystique, Loup-Garou Grimeur",
-          "§bVoyante, Renard, Montreur d'Ours, Tombeur, Bibliothécaire, Trappeur, Prêtresse, Jumeaux, Analyste, Soeurs, Salvateur, Citoyen, Idiot du Village, Simple Villageois",
+          "§bVoyante, Renard, Montreur d'Ours, Tombeur, Bibliothécaire, Trappeur, Prêtresse, Jumeaux, Analyste, Soeurs, Salvateur, Citoyen, Idiot du Village, Simple Villageois, Vieux Sage, Serviteur, Marchande de Fruit",
           "§aAnge, Charmeuse, Feu Follet, Joueur de Flûte, §6Cupidon",
           "Rôles à aura Neutre :",
           "§cLoup-Garou Perfide, Loup-Garou Amnésique, Loup-Garou Craintif, Loup-Garou Vengeur",
           "§bChaman, Comédien, Frère Siamois, Chasseur, Ancien, Oracle, Ermite, Garde, Détective, Petite Fille",
-          "§aImitateur, Barbare, §6Enfant Sauvage, Voleur, Trublion",
+          "§aImitateur, Barbare, §6Enfant Sauvage, Voleur, Trublion, Escroc",
           "Rôles à aura Obscure :",
           "§cTous les autres Loups-Garous",
-          "§bSorcière, Corbeau, Chien-Loup (Chien)",
+          "§bSorcière, Corbeau, Chien-Loup (Chien), Druide",
           "§aAssassin, Rival, Succube, Tueur en Série, §6Loup-Garou Blanc§f",
           "Cas particuliers :",
           "Tuer un joueur (qui ne se fait pas ressusciter) donne une aura §bObscure",

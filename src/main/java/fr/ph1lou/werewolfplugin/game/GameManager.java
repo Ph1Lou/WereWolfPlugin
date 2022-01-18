@@ -1,20 +1,6 @@
 package fr.ph1lou.werewolfplugin.game;
 
 import fr.mrmicky.fastboard.FastBoard;
-import fr.ph1lou.werewolfapi.vote.IVoteManager;
-import fr.ph1lou.werewolfplugin.Main;
-import fr.ph1lou.werewolfplugin.commands.roles.werewolf.CommandWereWolfChat;
-import fr.ph1lou.werewolfplugin.save.Configuration;
-import fr.ph1lou.werewolfplugin.save.FileUtils_;
-import fr.ph1lou.werewolfplugin.save.LanguageManager;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.game.IConfiguration;
-import fr.ph1lou.werewolfapi.lovers.ILoverManager;
-import fr.ph1lou.werewolfapi.game.IMapManager;
-import fr.ph1lou.werewolfapi.game.IModerationManager;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.IStuffManager;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.enums.Prefix;
 import fr.ph1lou.werewolfapi.enums.StateGame;
@@ -26,8 +12,22 @@ import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalJoinEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.ResurrectionEvent;
+import fr.ph1lou.werewolfapi.game.IConfiguration;
+import fr.ph1lou.werewolfapi.game.IMapManager;
+import fr.ph1lou.werewolfapi.game.IModerationManager;
+import fr.ph1lou.werewolfapi.game.IStuffManager;
+import fr.ph1lou.werewolfapi.game.IWerewolfChatHandler;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.lovers.ILoverManager;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
+import fr.ph1lou.werewolfapi.vote.IVoteManager;
+import fr.ph1lou.werewolfplugin.Main;
+import fr.ph1lou.werewolfplugin.save.Configuration;
+import fr.ph1lou.werewolfplugin.save.FileUtils_;
+import fr.ph1lou.werewolfplugin.save.LanguageManager;
 import fr.ph1lou.werewolfplugin.save.Stuff;
 import fr.ph1lou.werewolfplugin.scoreboards.ScoreBoard;
 import fr.ph1lou.werewolfplugin.tasks.LobbyTask;
@@ -42,6 +42,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
 import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
@@ -65,6 +66,7 @@ public class GameManager implements WereWolfAPI {
     private IVoteManager voteManager = new VoteManager(this);
     private final LoversManagement loversManage = new LoversManagement(this);
     private final ModerationManager moderationManager = new ModerationManager(this);
+    private final WerewolfChatHandler werewolfChatHandler = new WerewolfChatHandler();
     private final MapManager mapManager;
     private Configuration configuration;
     private final End end = new End(this);
@@ -312,7 +314,7 @@ public class GameManager implements WereWolfAPI {
 
     @Override
     public String translate(String prefixKey, String key, Formatter... formatters) {
-        LanguageManager languageManager = (LanguageManager) main.getLangManager();
+        LanguageManager languageManager = main.getLanguageManager();
         String message = languageManager.getTranslation(key);
         String prefix = prefixKey.isEmpty() ? "": languageManager.getTranslation(prefixKey);
         for(Formatter formatter:formatters){
@@ -323,7 +325,7 @@ public class GameManager implements WereWolfAPI {
 
     @Override
     public List<String> translateArray(String key, Formatter... formatters) {
-        LanguageManager languageManager = (LanguageManager) main.getLangManager();
+        LanguageManager languageManager = main.getLanguageManager();
         return languageManager.getTranslationList(key, formatters);
     }
 
@@ -405,6 +407,11 @@ public class GameManager implements WereWolfAPI {
         return this.roleInitialSize;
     }
 
+    @Override
+    public IWerewolfChatHandler getWerewolfChatHandler() {
+        return this.werewolfChatHandler;
+    }
+
     public Map<UUID, FastBoard> getBoards() {
         return this.boards;
     }
@@ -458,14 +465,6 @@ public class GameManager implements WereWolfAPI {
 
     public ListenersLoader getListenersLoader() {
         return this.listenersLoader;
-    }
-
-    public void enableWereWolfChat(){
-        CommandWereWolfChat.enable();
-    }
-
-    public void disableWereWolfChat(){
-        CommandWereWolfChat.disable();
     }
 
     @Override

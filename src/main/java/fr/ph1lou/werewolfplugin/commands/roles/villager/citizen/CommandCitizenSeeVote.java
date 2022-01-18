@@ -49,6 +49,7 @@ public class CommandCitizenSeeVote implements ICommand
         }
         if (!citizen.hasPower()) {
             playerWW.sendMessageWithKey(Prefix.RED.getKey(), "werewolf.check.power");
+            return;
         }
         citizen.setPower(false);
         CitizenSeeWerewolfVoteEvent event1 = new CitizenSeeWerewolfVoteEvent(playerWW, playerWW2);
@@ -57,7 +58,8 @@ public class CommandCitizenSeeVote implements ICommand
             playerWW.sendMessageWithKey(Prefix.RED.getKey(), "werewolf.check.cancel");
             return;
         }
-        playerWW.sendMessageWithKey(Prefix.RED.getKey(), "werewolf.vote.new_vote_werewolf", Formatter.player(event1.getTargetWW().getName()));
+        playerWW.sendMessageWithKey(Prefix.RED.getKey(), "werewolf.vote.new_vote_werewolf",
+                Formatter.player(event1.getTargetWW().getName()));
     }
 
     private void oldVote(WereWolfAPI game, IPlayerWW playerWW, Citizen citizen) {
@@ -78,7 +80,8 @@ public class CommandCitizenSeeVote implements ICommand
         }
         playerWW.sendMessageWithKey(Prefix.GREEN.getKey(), "werewolf.role.citizen.count_votes");
 
-        game.getVoteManager().getPlayerVotes().forEach((voterWW, voteWW) -> playerWW.sendMessageWithKey("werewolf.role.citizen.see_vote",
+        game.getVoteManager().getPlayerVotes()
+                .forEach((voterWW, voteWW) -> playerWW.sendMessageWithKey("werewolf.role.citizen.see_vote",
                 Formatter.format("&voter&", voterWW.getName()),
                 Formatter.player(voteWW.getName())));
     }

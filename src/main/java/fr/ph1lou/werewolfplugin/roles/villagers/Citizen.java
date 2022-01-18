@@ -136,13 +136,15 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
-        if (event.getPlayerVotedByWerewolfWW() != null) {
+        if (event.getPlayerVotedByWerewolfWW() != null && this.hasPower()) {
             this.getPlayerWW().sendMessage(this.seeWerewolfVote(event.getPlayerVotedByWerewolfWW().getUUID()));
         }
         if (event.getPlayerVotedByVillagerWW() == null) {
             return;
         }
-        this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE.getKey(), "werewolf.role.citizen.new_vote_count", Formatter.player(event.getPlayerVotedByVillagerWW().getName()), Formatter.number(this.game.getVoteManager().getVotes().getOrDefault(event.getPlayerVotedByVillagerWW(), 0)));
+        this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE.getKey(), "werewolf.role.citizen.new_vote_count",
+                Formatter.player(event.getPlayerVotedByVillagerWW().getName()),
+                Formatter.number(this.game.getVoteManager().getVotes().getOrDefault(event.getPlayerVotedByVillagerWW(), 0)));
     }
 
     private TextComponent cancelVote() {
@@ -167,7 +169,8 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
 
     private TextComponent seeWerewolfVote(UUID werewolf) {
         TextComponent seeVote = new TextComponent(this.game.translate(Prefix.GREEN.getKey(), "werewolf.role.citizen.click_to_see_werewolf_vote"));
-        seeVote.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/ww %s %s", this.game.translate("werewolf.role.citizen.command_1"), werewolf.toString())));
+        seeVote.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/ww %s %s", this.game.translate("werewolf.role.citizen.command_1"),
+                werewolf.toString())));
         return seeVote;
     }
 }

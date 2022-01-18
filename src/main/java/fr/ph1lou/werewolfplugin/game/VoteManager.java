@@ -40,7 +40,9 @@ import java.util.Optional;
 public class VoteManager implements Listener, IVoteManager
 {
 	private final WereWolfAPI game;
-	private final List<IPlayerWW> tempPlayer;
+	private final List<IPlayerWW> tempPlayers;
+	@Nullable
+	private IPlayerWW lastVote;
 	private final Map<IPlayerWW, Integer> votes;
 	private final Map<IPlayerWW, Integer> votesWerewolf;
 	private final Map<IPlayerWW, Integer> votesVillager;
@@ -48,7 +50,7 @@ public class VoteManager implements Listener, IVoteManager
 	private VoteStatus currentStatus;
 
 	public VoteManager(WereWolfAPI game) {
-		this.tempPlayer = new ArrayList<>();
+		this.tempPlayers = new ArrayList<>();
 		this.votes = new HashMap<>();
 		this.votesWerewolf = new HashMap<>();
 		this.votesVillager = new HashMap<>();
@@ -60,6 +62,10 @@ public class VoteManager implements Listener, IVoteManager
 	public void setOneVote(IPlayerWW voterWW, IPlayerWW vote) {
 		Player voter = Bukkit.getPlayer(voterWW.getUUID());
 		if (voter == null) {
+			return;
+		}
+		if(voterWW.equals(this.lastVote)){
+			voterWW.sendMessageWithKey(Prefix.RED.getKey(),"werewolf.vote.new_voted");
 			return;
 		}
 		if (this.game.getConfig().getTimerValue(TimerBase.VOTE_BEGIN.getKey()) > 0) {
@@ -74,7 +80,7 @@ public class VoteManager implements Listener, IVoteManager
 		else if (this.voters.containsKey(voterWW)) {
 			voterWW.sendMessageWithKey(Prefix.RED.getKey(), "werewolf.vote.already_voted");
 		}
-		else if (this.tempPlayer.contains(vote)) {
+		else if (this.tempPlayers.contains(vote)) {
 			voterWW.sendMessageWithKey(Prefix.RED.getKey(), "werewolf.vote.player_already_voted");
 		}
 		else if (this.game.getConfig().isConfigActive(ConfigBase.NEW_VOTE.getKey()) && voterWW.getRole().isNeutral()) {
@@ -108,6 +114,13 @@ public class VoteManager implements Listener, IVoteManager
 	public void onVoteResult(VoteResultEvent event) {
 		if (!event.isCancelled()) {
 			this.showResultVote(event.getPlayerWW());
+			this.lastVote = event.getPlayerWW();
+			if(this.lastVote!= null){
+				this.tempPlayers.add(this.lastVote);
+			}
+		}
+		else{
+			this.lastVote = null;
 		}
 		this.currentStatus = VoteStatus.NOT_IN_PROGRESS;
 	}
@@ -187,7 +200,6 @@ public class VoteManager implements Listener, IVoteManager
 			Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE.getKey(), "werewolf.vote.no_result"));
 			return;
 		}
-		this.tempPlayer.add(playerWW);
 		int health = 5;
 		if (playerWW.getMaxHealth() < 10) {
 			health = playerWW.getMaxHealth() / 2 - 1;
@@ -223,12 +235,14 @@ public class VoteManager implements Listener, IVoteManager
 			this.game.getConfig().switchConfigValue(ConfigBase.VOTE.getKey());
 			Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE.getKey(), "werewolf.vote.vote_deactivate"));
 			this.setStatus(VoteStatus.ENDED);
+			return;
 		}
 		int duration = this.game.getConfig().getTimerValue(TimerBase.VOTE_DURATION.getKey());
 
 		if (this.game.getConfig().isConfigActive(ConfigBase.VOTE.getKey()) &&
 				!this.isStatus(VoteStatus.NOT_BEGIN)) {
 
+			this.resetVote();
 			Bukkit.broadcastMessage(this.game.translate("werewolf.utils.bar"));
 			Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE.getKey(), "werewolf.vote.vote_time",
 					Formatter.timer(Utils.conversion(duration))));

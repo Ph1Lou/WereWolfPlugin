@@ -5,7 +5,6 @@ import fr.ph1lou.werewolfplugin.commands.Admin;
 import fr.ph1lou.werewolfplugin.save.LanguageManager;
 import fr.ph1lou.werewolfplugin.statistiks.Events;
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
-import fr.ph1lou.werewolfapi.ILanguageManager;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.events.ActionBarEvent;
 import fr.ph1lou.werewolfapi.registers.interfaces.IRegisterManager;
@@ -14,6 +13,7 @@ import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import fr.ph1lou.werewolfplugin.commands.Command;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfplugin.game.MapManager;
+import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -37,7 +37,7 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
 
     @Override
     public List<GameReview> loadPreviousGames() {
-        return null; //todo
+        throw new NotImplementedException();
     }
 
     @Override
@@ -86,11 +86,6 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
         return this.registerManager.getRegister(addonKey);
     }
 
-    @Override
-    public ILanguageManager getLangManager() {
-        return languageManager;
-    }
-
     public void createGame() {
         this.currentGame = new GameManager(this);
     }
@@ -103,5 +98,8 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
         this.currentGameReview = currentGameReview;
     }
 
+    public LanguageManager getLanguageManager() {
+        return languageManager;
+    }
 }
 

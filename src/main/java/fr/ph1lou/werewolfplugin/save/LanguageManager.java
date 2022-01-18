@@ -6,7 +6,6 @@ import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.ILanguageManager;
 import fr.ph1lou.werewolfapi.events.UpdateLanguageEvent;
 import fr.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
@@ -22,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class LanguageManager implements ILanguageManager, Listener {
+public class LanguageManager implements Listener {
 
     private final Main main;
     private final Map<String, JsonValue> extraTexts = new HashMap<>();

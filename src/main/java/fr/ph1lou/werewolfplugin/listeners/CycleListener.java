@@ -26,7 +26,6 @@ import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import fr.ph1lou.werewolfplugin.RegisterManager;
-import fr.ph1lou.werewolfplugin.commands.roles.werewolf.CommandWereWolfChat;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfplugin.game.LoversManagement;
 import fr.ph1lou.werewolfplugin.roles.lovers.FakeLover;
@@ -91,8 +90,8 @@ public class CycleListener implements Listener {
         BukkitUtils.scheduleSyncDelayedTask(() -> {
             if (!game.isState(StateGame.END)) {
                 Bukkit.getPluginManager().callEvent(new NightEvent(event.getNumber()));
-                CommandWereWolfChat.enable();
-                BukkitUtils.scheduleSyncDelayedTask(CommandWereWolfChat::disable, game.getConfig().getTimerValue(TimerBase.WEREWOLF_CHAT_DURATION.getKey()) * 20L);
+                game.getWerewolfChatHandler().enableWereWolfChat();
+                BukkitUtils.scheduleSyncDelayedTask(() -> game.getWerewolfChatHandler().disableWereWolfChat(), game.getConfig().getTimerValue(TimerBase.WEREWOLF_CHAT_DURATION.getKey()) * 20L);
             }
 
         }, duration2 * 20);

@@ -1,5 +1,6 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.events.game.vote.VoteEvent;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -50,6 +51,25 @@ public class VillageIdiot extends RoleVillage implements IPower {
     @Override
     public boolean hasPower() {
         return this.power;
+    }
+
+    @EventHandler
+    public void onVote(VoteEvent event){
+        if(this.hasPower()){
+            return;
+        }
+
+        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+            return;
+        }
+
+        if(!event.getPlayerWW().equals(this.getPlayerWW())){
+            return;
+        }
+
+        event.setCancelled(true);
+
+        this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey(),"werewolf.role.village_idiot.vote");
     }
 
     @EventHandler(priority = EventPriority.HIGH)
