@@ -122,7 +122,7 @@
         "see_vote": "§b&voter&§r a voté pour §b&player&§r",
         "command_1": "depouiller_citizen",
         "command_2": "annuler_citizen",
-        "new_vote_count": "Le joueur %player% a reçu %number% votes.",
+        "new_vote_count": "Le joueur &player& a reçu &number& votes.",
         "hide_composition": "Il y a &number& rôle dans la composition parmi : &role1&, &role2&, &role3&",
         "werewolf_new_vote": "Aucun joueur n'a été voté par les Loups Garous",
         "click_to_see_werewolf_vote": "Cliquez ici pour voir le résultat du vote Loup Garou"
@@ -648,7 +648,8 @@
       "vote_deactivate": "En raison du nombre de joueurs, les Votes sont désactivés",
       "vote_not_yet_activated": "Les Votes ne sont pas encore activés",
       "vote_result": "§b&player&§f est celui qui a recueilli le plus de votes : §b&number&§r. Il perd 5 coeurs",
-      "no_result": "Aucun joueur n'a été voté plus d'une fois",
+      "no_result": "Aucun joueur n'a été voté",
+      "no_result_more_one": "Aucun joueur n'a été voté plus d'une fois",
       "vote_time": "C'est l'heure de voter §b/ww vote§r Vous avez §b&timer&",
       "command": "vote",
       "new_voted": "Vous avez été le plus voté lors du dernier vote, vous ne pouvez donc pas voter cette fois ci",

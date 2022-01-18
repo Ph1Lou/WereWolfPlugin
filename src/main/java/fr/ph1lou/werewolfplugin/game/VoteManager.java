@@ -159,7 +159,7 @@ public class VoteManager implements Listener, IVoteManager
 				playerVote = playerWW;
 			}
 		}
-		if (maxVote <= 1) {
+		if (maxVote <= 0) {
 			return Optional.empty();
 		}
 		return Optional.of(playerVote);
@@ -200,12 +200,18 @@ public class VoteManager implements Listener, IVoteManager
 			Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE.getKey(), "werewolf.vote.no_result"));
 			return;
 		}
+		if (this.votes.getOrDefault(playerWW, 0) <= 1) {
+			Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE.getKey(), "werewolf.vote.no_result_more_one"));
+			return;
+		}
 		int health = 5;
 		if (playerWW.getMaxHealth() < 10) {
 			health = playerWW.getMaxHealth() / 2 - 1;
 		}
 		playerWW.removePlayerMaxHealth(10);
-		Bukkit.broadcastMessage(this.game.translate(Prefix.YELLOW.getKey(), "werewolf.vote.vote_result", Formatter.player(playerWW.getName()), Formatter.number(this.votes.get(playerWW))));
+		Bukkit.broadcastMessage(this.game.translate(Prefix.YELLOW.getKey(), "werewolf.vote.vote_result",
+				Formatter.player(playerWW.getName()),
+				Formatter.number(this.votes.getOrDefault(playerWW, 0))));
 		int task = BukkitUtils.scheduleSyncRepeatingTask(() -> {
 			if (this.game.isState(StateGame.GAME)) {
 				playerWW.addPlayerMaxHealth(2);

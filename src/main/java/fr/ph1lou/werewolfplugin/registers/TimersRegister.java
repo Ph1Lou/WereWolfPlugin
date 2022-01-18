@@ -1,5 +1,6 @@
 package fr.ph1lou.werewolfplugin.registers;
 
+import fr.ph1lou.werewolfapi.enums.RolesBase;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.enums.Prefix;
 import fr.ph1lou.werewolfapi.enums.Sound;
@@ -103,14 +104,16 @@ public class TimersRegister {
         timersRegister
                 .add(new TimerRegister("werewolf.name",
                         TimerBase.FRUIT_MERCHANT_COOL_DOWN.getKey())
-                        .setDefaultValue(1200));
+                        .setDefaultValue(1200)
+                        .setRoleTimer(RolesBase.FRUIT_MERCHANT.getKey()));
 
         timersRegister
                 .add(new TimerRegister("werewolf.name",
                         TimerBase.CHARMER_COUNTDOWN.getKey())
                         .addPredicate(wereWolfAPI -> wereWolfAPI.getConfig().getTimerValue(TimerBase.ROLE_DURATION.getKey()) < 0
                                 && !wereWolfAPI.getConfig().isTrollSV())
-                        .setDefaultValue(6000));
+                        .setDefaultValue(6000)
+                        .setRoleTimer(RolesBase.CHARMER.getKey()));
 
         timersRegister
                 .add(new TimerRegister("werewolf.name",
@@ -171,7 +174,8 @@ public class TimersRegister {
                         TimerBase.RIVAL_DURATION.getKey())
                         .setDefaultValue(2400)
                         .onZero(wereWolfAPI -> Bukkit.getPluginManager().callEvent(new RivalEvent()))
-                        .addPredicate(wereWolfAPI -> wereWolfAPI.getConfig().getTimerValue(TimerBase.LOVER_DURATION.getKey()) < 0));
+                        .addPredicate(wereWolfAPI -> wereWolfAPI.getConfig().getTimerValue(TimerBase.LOVER_DURATION.getKey()) < 0)
+                        .setRoleTimer(RolesBase.RIVAL.getKey()));
 
         timersRegister
                 .add(new TimerRegister("werewolf.name",
@@ -179,7 +183,8 @@ public class TimersRegister {
                         .addPredicate(wereWolfAPI -> wereWolfAPI.getConfig().getTimerValue(TimerBase.ROLE_DURATION.getKey()) < 0
                                 && !wereWolfAPI.getConfig().isTrollSV())
                         .onZero(wereWolfAPI -> Bukkit.getPluginManager().callEvent(new AutoModelEvent()))
-                        .setDefaultValue(240));
+                        .setDefaultValue(240)
+                        .setRoleTimer(RolesBase.WILD_CHILD.getKey()));
 
         timersRegister
                 .add(new TimerRegister("werewolf.name",
@@ -187,7 +192,8 @@ public class TimersRegister {
                         .addPredicate(wereWolfAPI -> wereWolfAPI.getConfig().getTimerValue(TimerBase.ROLE_DURATION.getKey()) < 0
                                 && !wereWolfAPI.getConfig().isTrollSV())
                         .onZero(wereWolfAPI -> Bukkit.getPluginManager().callEvent(new AutoTwinEvent()))
-                        .setDefaultValue(1800));
+                        .setDefaultValue(1800)
+                        .setRoleTimer(RolesBase.TWIN.getKey()));
 
         timersRegister
                 .add(new TimerRegister("werewolf.name",
@@ -209,14 +215,16 @@ public class TimersRegister {
                         .addPredicate(wereWolfAPI -> wereWolfAPI.getConfig().getTimerValue(TimerBase.ROLE_DURATION.getKey()) < 0
                                 && !wereWolfAPI.getConfig().isTrollSV())
                         .onZero(wereWolfAPI -> Bukkit.getPluginManager().callEvent(new AutoAngelEvent()))
-                        .setDefaultValue(240));
+                        .setDefaultValue(240)
+                        .setRoleTimer(RolesBase.ANGEL.getKey()));
 
         timersRegister
                 .add(new TimerRegister("werewolf.name",
                         TimerBase.ANALYSE_DURATION.getKey())
                         .addPredicate(wereWolfAPI -> wereWolfAPI.getConfig().getTimerValue(TimerBase.ROLE_DURATION.getKey()) < 0
                                 && !wereWolfAPI.getConfig().isTrollSV())
-                        .setDefaultValue(1800));
+                        .setDefaultValue(1800)
+                        .setRoleTimer(RolesBase.ANALYST.getKey()));
 
         timersRegister
                 .add(new TimerRegister("werewolf.name",
@@ -226,12 +234,14 @@ public class TimersRegister {
         timersRegister
                 .add(new TimerRegister("werewolf.name",
                         TimerBase.FOX_SMELL_DURATION.getKey())
-                        .setDefaultValue(90));
+                        .setDefaultValue(90)
+                        .setRoleTimer(RolesBase.FOX.getKey()));
 
         timersRegister
                 .add(new TimerRegister("werewolf.name",
                         TimerBase.SUCCUBUS_DURATION.getKey())
-                        .setDefaultValue(180));
+                        .setDefaultValue(180)
+                        .setRoleTimer(RolesBase.SUCCUBUS.getKey()));
 
         timersRegister
                 .add(new TimerRegister("werewolf.name",
