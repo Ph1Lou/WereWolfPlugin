@@ -43,7 +43,7 @@ public class CommandTenebrous implements ICommand {
                 .filter(player1 -> player1.getLocation().distance(location) < range)
                 .collect(Collectors.toList());
 
-        TenebrousEvent event = new TenebrousEvent(affectedPlayers);
+        TenebrousEvent event = new TenebrousEvent(playerWW, affectedPlayers);
         Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {

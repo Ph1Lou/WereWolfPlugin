@@ -88,15 +88,13 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
                 .map(game::getPlayerWW)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
+                .filter(this.affectedPlayer::containsKey)
                 .filter(iPlayerWW -> iPlayerWW.isState(StatePlayer.ALIVE) && checkDistance(iPlayerWW, location))
                 .forEach(iPlayerWW -> {
-                    int value = 0;
-                    if (this.affectedPlayer.containsKey(iPlayerWW)) {
-                        value = this.affectedPlayer.get(iPlayerWW);
-                        if (value == 99) {
-                            Bukkit.getPluginManager().callEvent(new ScamEvent(getPlayerWW(), iPlayerWW));
-                            return;
-                        }
+                    int value = this.affectedPlayer.get(iPlayerWW);
+                    if (value == 100) {
+                        Bukkit.getPluginManager().callEvent(new ScamEvent(getPlayerWW(), iPlayerWW));
+                        return;
                     }
                     this.affectedPlayer.put(iPlayerWW, value + 1);
                 });
@@ -134,10 +132,11 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
                     newRole.setTransformedToNeutral(true);
                 }
             }
-            target.sendMessageWithKey(Prefix.ORANGE.getKey(),"werewolf.role.scammer.message_villager");
+            target.sendMessageWithKey(Prefix.ORANGE.getKey(),"werewolf.role.scammer.message_werewolf");
+
         } else {
             newRole = new Villager(game, target, RolesBase.VILLAGER.getKey());
-            target.sendMessageWithKey(Prefix.ORANGE.getKey(),"werewolf.role.scammer.message_werewolf");
+            target.sendMessageWithKey(Prefix.ORANGE.getKey(),"werewolf.role.scammer.message_villager");
         }
         if (this.isInfected()) {
             targetRole.setInfected();
@@ -148,6 +147,7 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
             targetRole.setSolitary(true);
         }
         targetRole.setDeathRole(this.getKey());
+        newRole.setDeathRole(targetRole.getKey());
 
         newRole.disableAbilities();
         target.setRole(newRole);
@@ -219,7 +219,7 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
 
         return ClickableItem.of(
                 new ItemBuilder(Material.STICK)
-                        .setLore(game.translate("werewolf.role.scammer.config.lore", Formatter.timer(String.valueOf(config.getScamDelay()))))
+                        .setLore(game.translate("werewolf.role.scammer.config.lore", Formatter.timer(Utils.conversion(config.getScamDelay()))))
                         .setDisplayName(game.translate("werewolf.role.scammer.config.name"))
                         .build(), e -> {
                     if (e.isLeftClick()) {
@@ -229,7 +229,7 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
                     }
 
                     e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                            .setLore(game.translate("werewolf.role.scammer.config.lore", Formatter.timer(String.valueOf(config.getScamDelay()))))
+                            .setLore(game.translate("werewolf.role.scammer.config.lore", Formatter.timer(Utils.conversion(config.getScamDelay()))))
                             .build());
                 });
     }

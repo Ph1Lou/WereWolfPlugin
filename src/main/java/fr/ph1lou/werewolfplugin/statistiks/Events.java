@@ -233,7 +233,7 @@ public class Events implements Listener {
 
         try {
 
-            URL url = new URL("https://api.ph1lou.fr/create");
+            URL url = new URL("https://api.ph1lou.fr/games/create");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("POST");
             con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
@@ -1385,7 +1385,7 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.werewolf_howler",
-                event.getPlayerWW(),event.getPlayerWWS(),event.getNotWerewolfSize(), api.getTimer()));
+                event.getPlayerWW(),event.getPlayerWWS(),api.getTimer(), event.getNotWerewolfSize()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -1526,6 +1526,7 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.tenebrous",
+                event.getPlayerWW(),
                 new HashSet<>(event.getAffectedPlayers()), api.getTimer()));
     }
 }

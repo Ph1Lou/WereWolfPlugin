@@ -423,7 +423,7 @@ public class PlayerWW implements IPlayerWW {
 
 	@Override
 	public int getDeathTime() {
-		return(this.deathTime);
+		return this.deathTime;
 	}
 
     @Nullable

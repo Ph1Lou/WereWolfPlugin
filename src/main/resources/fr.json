@@ -599,7 +599,7 @@
         "description": "Vous volez progressivement le rôle des joueurs a §b&number&§f blocs de vous au rythme de 1% toutes les &timer&. Le premier joueur escroqué devient Loup-Garou sans pouvoir s’il était dans le camp des Loups sinon Simple Villageois",
         "config": {
           "name": "Modifier le délai entre chaque mise à jour du %",
-          "lore": "§b&timer&§rs"
+          "lore": "§b&timer&§r"
         },
         "message": "Vous venez d'escroquer le rôle de &player&"
       },

@@ -75,6 +75,7 @@ public class DeathListener implements Listener {
             playerWW.setSpawn(player.getLocation());
             playerWW.clearItemDeath();
             playerWW.setState(StatePlayer.JUDGEMENT);
+            ((PlayerWW)playerWW).setDeathTime(game.getTimer());
 
             Inventory inv = Bukkit.createInventory(null, 45);
 
