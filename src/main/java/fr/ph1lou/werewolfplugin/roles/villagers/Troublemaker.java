@@ -108,6 +108,10 @@ public class Troublemaker extends RoleVillage implements IAffectedPlayers, IPowe
     @EventHandler
     public void onNightAnnounceWereWOlfChat(NightEvent event) {
 
+        if(this.isWereWolf()){
+            return;
+        }
+
         if (!game.getConfig().isConfigActive(ConfigBase.WEREWOLF_CHAT.getKey())) return;
 
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.commands.admin.ww_chat.announce",
