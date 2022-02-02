@@ -1,22 +1,24 @@
 package fr.ph1lou.werewolfplugin;
 
 import fr.minuskube.inv.InventoryManager;
-import fr.ph1lou.werewolfplugin.commands.Admin;
-import fr.ph1lou.werewolfplugin.save.LanguageManager;
-import fr.ph1lou.werewolfplugin.statistiks.Events;
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.events.ActionBarEvent;
+import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.registers.interfaces.IRegisterManager;
 import fr.ph1lou.werewolfapi.statistics.impl.GameReview;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
+import fr.ph1lou.werewolfplugin.commands.Admin;
 import fr.ph1lou.werewolfplugin.commands.Command;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfplugin.game.MapManager;
+import fr.ph1lou.werewolfplugin.save.LanguageManager;
+import fr.ph1lou.werewolfplugin.statistiks.Events;
 import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
@@ -28,6 +30,7 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
     private GameManager currentGame;
     private final RegisterManager registerManager = new RegisterManager(this);
     private final InventoryManager invManager = new InventoryManager(this);
+    @Nullable
     private GameReview currentGameReview;
 
     @Override
@@ -64,6 +67,11 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
                     Bukkit.getPluginManager().callEvent(actionBarEvent);
                     VersionUtils.getVersionUtils().sendActionBar(player, actionBarEvent.getActionBar());
                 }), 0, 4);
+    }
+
+    @Override
+    public void onDisable() {
+        Bukkit.getPluginManager().callEvent(new StopEvent(this.currentGame));
     }
 
     @Override

@@ -1,23 +1,7 @@
 package fr.ph1lou.werewolfplugin.statistiks;
 
 import com.google.common.collect.Sets;
-import fr.ph1lou.werewolfapi.events.game.vote.NewVoteResultEvent;
-import fr.ph1lou.werewolfapi.events.random_events.MysanthropeSisterEvent;
-import fr.ph1lou.werewolfapi.events.roles.citizen.CitizenCancelVoteEvent;
-import fr.ph1lou.werewolfapi.events.roles.citizen.CitizenSeeVoteEvent;
-import fr.ph1lou.werewolfapi.events.roles.citizen.CitizenSeeWerewolfVoteEvent;
-import fr.ph1lou.werewolfapi.events.roles.scammer.ScamEvent;
-import fr.ph1lou.werewolfapi.events.roles.servitor.ServitorDefinitiveMasterEvent;
-import fr.ph1lou.werewolfapi.events.roles.servitor.ServitorMasterChosenEvent;
-import fr.ph1lou.werewolfapi.events.roles.tenebrous_werewolf.TenebrousEvent;
-import fr.ph1lou.werewolfapi.events.roles.wise_elder.WiseElderRevealAuraAmountEvent;
-import fr.ph1lou.werewolfplugin.save.FileUtils_;
-import fr.ph1lou.werewolfplugin.save.Serializer;
-import fr.ph1lou.werewolfapi.lovers.ILover;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.LoverType;
-import fr.ph1lou.werewolfapi.enums.Prefix;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.CustomEvent;
@@ -38,6 +22,7 @@ import fr.ph1lou.werewolfapi.events.game.timers.InvulnerabilityEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.PVPEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
+import fr.ph1lou.werewolfapi.events.game.vote.NewVoteResultEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteResultEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AmnesiacLoverDeathEvent;
@@ -56,6 +41,7 @@ import fr.ph1lou.werewolfapi.events.random_events.FindAllLootBoxEvent;
 import fr.ph1lou.werewolfapi.events.random_events.GodMiracleEvent;
 import fr.ph1lou.werewolfapi.events.random_events.InfectionRandomEvent;
 import fr.ph1lou.werewolfapi.events.random_events.LootBoxEvent;
+import fr.ph1lou.werewolfapi.events.random_events.MysanthropeSisterEvent;
 import fr.ph1lou.werewolfapi.events.random_events.PutrefactionEvent;
 import fr.ph1lou.werewolfapi.events.random_events.SwapEvent;
 import fr.ph1lou.werewolfapi.events.random_events.TroupleEvent;
@@ -75,6 +61,9 @@ import fr.ph1lou.werewolfapi.events.roles.bear_trainer.GrowlEvent;
 import fr.ph1lou.werewolfapi.events.roles.charmer.CharmedDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.charmer.CharmerEvent;
 import fr.ph1lou.werewolfapi.events.roles.charmer.CharmerGetEffectDeathEvent;
+import fr.ph1lou.werewolfapi.events.roles.citizen.CitizenCancelVoteEvent;
+import fr.ph1lou.werewolfapi.events.roles.citizen.CitizenSeeVoteEvent;
+import fr.ph1lou.werewolfapi.events.roles.citizen.CitizenSeeWerewolfVoteEvent;
 import fr.ph1lou.werewolfapi.events.roles.comedian.UseMaskEvent;
 import fr.ph1lou.werewolfapi.events.roles.detective.InvestigateEvent;
 import fr.ph1lou.werewolfapi.events.roles.druid.DruidUsePowerEvent;
@@ -105,8 +94,11 @@ import fr.ph1lou.werewolfapi.events.roles.raven.CurseEvent;
 import fr.ph1lou.werewolfapi.events.roles.rival.RivalAnnouncementEvent;
 import fr.ph1lou.werewolfapi.events.roles.rival.RivalLoverDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.rival.RivalLoverEvent;
+import fr.ph1lou.werewolfapi.events.roles.scammer.ScamEvent;
 import fr.ph1lou.werewolfapi.events.roles.seer.SeerEvent;
 import fr.ph1lou.werewolfapi.events.roles.serial_killer.SerialKillerEvent;
+import fr.ph1lou.werewolfapi.events.roles.servitor.ServitorDefinitiveMasterEvent;
+import fr.ph1lou.werewolfapi.events.roles.servitor.ServitorMasterChosenEvent;
 import fr.ph1lou.werewolfapi.events.roles.shaman.ShamanEvent;
 import fr.ph1lou.werewolfapi.events.roles.sister.SisterSeeNameEvent;
 import fr.ph1lou.werewolfapi.events.roles.sister.SisterSeeRoleEvent;
@@ -114,6 +106,7 @@ import fr.ph1lou.werewolfapi.events.roles.stud.StudLoverEvent;
 import fr.ph1lou.werewolfapi.events.roles.succubus.BeginCharmEvent;
 import fr.ph1lou.werewolfapi.events.roles.succubus.CharmEvent;
 import fr.ph1lou.werewolfapi.events.roles.succubus.SuccubusResurrectionEvent;
+import fr.ph1lou.werewolfapi.events.roles.tenebrous_werewolf.TenebrousEvent;
 import fr.ph1lou.werewolfapi.events.roles.trapper.TrackEvent;
 import fr.ph1lou.werewolfapi.events.roles.trouble_maker.TroubleMakerDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.trouble_maker.TroubleMakerEvent;
@@ -126,18 +119,17 @@ import fr.ph1lou.werewolfapi.events.roles.wild_child.ModelEvent;
 import fr.ph1lou.werewolfapi.events.roles.wild_child.WildChildTransformationEvent;
 import fr.ph1lou.werewolfapi.events.roles.will_o_the_wisp.WillOTheWispRecoverRoleEvent;
 import fr.ph1lou.werewolfapi.events.roles.will_o_the_wisp.WillOTheWispTeleportEvent;
+import fr.ph1lou.werewolfapi.events.roles.wise_elder.WiseElderRevealAuraAmountEvent;
 import fr.ph1lou.werewolfapi.events.roles.witch.WitchResurrectionEvent;
 import fr.ph1lou.werewolfapi.events.roles.wolf_dog.WolfDogChooseWereWolfForm;
 import fr.ph1lou.werewolfapi.events.werewolf.NewWereWolfEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfChatEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.lovers.ILover;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.statistics.impl.GameReview;
 import fr.ph1lou.werewolfapi.statistics.impl.RegisteredAction;
-import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfplugin.Main;
-import fr.ph1lou.werewolfplugin.game.GameManager;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -145,14 +137,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffectType;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -170,96 +154,7 @@ public class Events implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onGameEnd(StopEvent event) {
-
-        if (main.getCurrentGameReview().getWinnerCampKey() == null) return;
-
-        String jsonInputString = Serializer.serialize(main.getCurrentGameReview());
-        File file = new File(main.getDataFolder() + File.separator + "statistiks", main.getCurrentGameReview().getGameUUID() + ".json");
-
-        FileUtils_.save(file, jsonInputString);
-
-
-        if (main.getCurrentGameReview().getPlayersCount() < 17) {
-            Bukkit.getLogger().warning("[WereWolfPlugin] Statistiks no send because player size < 17");
-            return;
-        }
-
-        if (event.getWereWolfAPI().getTimer() < 3600) {
-            Bukkit.getLogger().warning("[WereWolfPlugin] Statistiks no send because game duration < 1h");
-            return;
-        }
-
-        try {
-
-            URL url = new URL("http://ph1lou.fr:15000/infos2");
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("POST");
-            con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-            con.setRequestProperty("accept", "application/json");
-            con.setDoOutput(true);
-
-
-            try (OutputStream os = con.getOutputStream()) {
-                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
-                os.write(input, 0, input.length);
-            } catch (Exception ignored) {
-            }
-
-            try (BufferedReader br = new BufferedReader(
-                    new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
-                StringBuilder response = new StringBuilder();
-                String responseLine;
-                while ((responseLine = br.readLine()) != null) {
-                    response.append(responseLine.trim());
-                }
-
-                TextComponent msg = new TextComponent(main.getWereWolfAPI().translate(Prefix.YELLOW.getKey() , "werewolf.statistics.message"));
-                msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
-                        String.format("https://ph1lou.fr/werewolfstat/detail.php?id=%s",
-                                response.toString().replaceAll("\"", ""))));
-                BukkitUtils.scheduleSyncDelayedTask(() -> Bukkit.getOnlinePlayers()
-                        .forEach(player -> player.spigot().sendMessage(msg)), 100);
-            } catch (Exception ignored) {
-
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if(((GameManager) event.getWereWolfAPI()).isCrack()){
-            Bukkit.getLogger().warning("[WereWolfPlugin] Statistiks no send because Server Crack");
-            return;
-        }
-
-        try {
-
-            URL url = new URL("https://api.ph1lou.fr/games/create");
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("POST");
-            con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-            con.setRequestProperty("Accept", "application/json");
-            con.setDoOutput(true);
-
-            try (OutputStream os = con.getOutputStream()) {
-                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
-                os.write(input);
-            } catch (Exception ignored) {
-            }
-
-            try (BufferedReader br = new BufferedReader(
-                    new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
-                StringBuilder response = new StringBuilder();
-                String responseLine;
-                while ((responseLine = br.readLine()) != null) {
-                    response.append(responseLine.trim());
-                }
-
-                Bukkit.getLogger().warning(response.toString());
-            } catch (Exception ignored) {
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+      StatistiksUtils.postGame(main, main.getCurrentGameReview());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
