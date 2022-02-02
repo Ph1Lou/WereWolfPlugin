@@ -83,6 +83,8 @@ import io.github.ph1lou.werewolfapi.events.roles.librarian.LibrarianDeathEvent;
 import io.github.ph1lou.werewolfapi.events.roles.librarian.LibrarianGiveBackEvent;
 import io.github.ph1lou.werewolfapi.events.roles.librarian.LibrarianRequestEvent;
 import io.github.ph1lou.werewolfapi.events.roles.mystical_werewolf.MysticalWerewolfRevelationEvent;
+import io.github.ph1lou.werewolfapi.events.roles.occultist.OccultistRevealWishes;
+import io.github.ph1lou.werewolfapi.events.roles.occultist.WishChangeEvent;
 import io.github.ph1lou.werewolfapi.events.roles.oracle.OracleEvent;
 import io.github.ph1lou.werewolfapi.events.roles.priestess.PriestessEvent;
 import io.github.ph1lou.werewolfapi.events.roles.protector.ProtectionEvent;
@@ -1312,5 +1314,17 @@ public class Events implements Listener {
                 event.getPlayerWW(),event.getTargetWW(),0,event.hasEffect()?"werewolf.role.analyst.has_effects":"werewolf.role.analyst.no_effects", api.getTimer()));
     }
 
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onWishEvent(WishChangeEvent event) {
+        if (event.isCancelled()) return;
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("wish_change",
+                event.getPlayerWW(), main.getWereWolfAPI().getTimer(), event.getWish()));
+    }
 
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onRevealWishes(OccultistRevealWishes event) {
+        if (event.isCancelled()) return;
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("reveal_wishes_occultist",
+                event.getPlayerWW(), main.getWereWolfAPI().getTimer()));
+    }
 }

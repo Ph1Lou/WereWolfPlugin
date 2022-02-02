@@ -578,8 +578,10 @@
       },
       "occultist": {
         "display": "Occultiste",
-        "command": "wish",
-        "command_description": "Définit votre dernier souhait visible par l'Occultiste"
+        "description": "Tous les 4 décès l'occultiste voit les dernières volontés des précédents défuns. S'ajoute à ces 4 la volonté du Trublion s'il l'a modifié entre temps.",
+        "lastwishes": "Voici les volontés des 4 derniers morts:",
+        "selfdeath": "L'occultiste est mort sa dernière volonté était: ",
+        "changewish": "Votre dernière volonté est désormais: &wish&"
       }
     },
     "vote": {
@@ -594,6 +596,10 @@
       "no_result": "Aucun joueur n'a été voté plus d'une fois",
       "vote_time": "C'est l'heure de voter §b/ww vote§r Vous avez §b&timer&",
       "command": "vote"
+    },
+    "wish": {
+      "command": "wish",
+      "command_description": "Définis votre dernière volonté"
     },
     "lone_wolf": {
       "message": "Vous devenez Solitaire. A partir de maintenant,vous devez gagner Seul. Pour cela, vous bénéficiez de quatres coeurs permanents supplémentaires (dans la limite de 15 coeurs max)"

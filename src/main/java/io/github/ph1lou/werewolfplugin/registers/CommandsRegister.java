@@ -470,9 +470,9 @@ public class CommandsRegister {
 
         commandsRegister
                 .add(new CommandRegister("werewolf.name",
-                        "werewolf.role.occultist.command", new CommandOccultistWish())
+                        "werewolf.wish.command", new CommandOccultistWish())
                         .addStateWW(StateGame.GAME)
-                        .setDescription("werewolf.role.occultist.command_description")
+                        .setDescription("werewolf.wish.command_description")
                         .addStateAccess(StatePlayer.ALIVE));
         
         return commandsRegister;
