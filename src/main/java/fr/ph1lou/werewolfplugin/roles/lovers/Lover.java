@@ -1,5 +1,7 @@
 package fr.ph1lou.werewolfplugin.roles.lovers;
 
+import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.events.game.permissions.UpdateModeratorNameTagEvent;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -109,6 +111,26 @@ public class Lover extends AbstractLover {
                 });
 
         return true;
+    }
+
+    @EventHandler
+    public void onModeratorScoreBoard(UpdateModeratorNameTagEvent event) {
+
+        StringBuilder sb = new StringBuilder(event.getSuffix());
+
+        IPlayerWW playerWW = this.game.getPlayerWW(event.getPlayerUUID()).orElse(null);
+
+        if (playerWW == null) return;
+
+        if (!this.lovers.contains(playerWW)) return;
+
+        if (playerWW.isState(StatePlayer.DEATH)) {
+            return;
+        }
+
+        sb.append(this.getLoverType().getChatColor()).append(" ♥");
+
+        event.setSuffix(sb.toString());
     }
 
 

@@ -96,26 +96,6 @@ public abstract class AbstractLover implements ILover {
                                 playerWW.getLocation())));
     }
 
-    @EventHandler
-    public void onModeratorScoreBoard(UpdateModeratorNameTagEvent event) {
-
-        StringBuilder sb = new StringBuilder(event.getSuffix());
-
-        IPlayerWW playerWW = this.game.getPlayerWW(event.getPlayerUUID()).orElse(null);
-
-        if (playerWW == null) return;
-
-        if (!this.lovers.contains(playerWW)) return;
-
-        if (playerWW.isState(StatePlayer.DEATH)) {
-            return;
-        }
-
-        sb.append(this.getLoverType().getChatColor()).append(" ♥");
-
-        event.setSuffix(sb.toString());
-    }
-
     @Override
     public boolean isKey(String key) {
         return getKey().equals(key);

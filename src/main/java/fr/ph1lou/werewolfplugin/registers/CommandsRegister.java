@@ -20,6 +20,7 @@ import fr.ph1lou.werewolfplugin.commands.roles.villager.info.librarian.CommandLi
 import fr.ph1lou.werewolfplugin.commands.roles.villager.info.librarian.CommandSendToLibrarian;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.info.oracle.CommandOracle;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.info.seer.CommandSeer;
+import fr.ph1lou.werewolfplugin.commands.utilities.CommandWish;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.priestess.CommandPriestess;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.protector.CommandProtector;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.raven.CommandRaven;
@@ -481,6 +482,13 @@ public class CommandsRegister {
                         .addStateWW(StateGame.GAME)
                         .addRoleKey(RolesBase.FRUIT_MERCHANT.getKey())
                         .setRequiredPower()
+                        .addStateAccess(StatePlayer.ALIVE));
+
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.wish.command", new CommandWish())
+                        .addStateWW(StateGame.GAME)
+                        .setDescription("werewolf.wish.command_description")
                         .addStateAccess(StatePlayer.ALIVE));
 
         return commandsRegister;

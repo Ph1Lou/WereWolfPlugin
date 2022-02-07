@@ -236,7 +236,7 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
                         this.timer=-1;
                     }
                 },6000);
-                if (isInfected()) {
+                if (isInfected() && game.isDay(Day.NIGHT)) {
                     this.getPlayerWW().addPotionModifier(PotionModifier
                             .remove(PotionEffectType.INCREASE_DAMAGE,
                                     "werewolf",
@@ -250,7 +250,7 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
         } else if (this.isInvisible()) {
             player.sendMessage(game.translate(
                     Prefix.YELLOW.getKey() , "werewolf.role.little_girl.visible"));
-            if (this.isInfected()) {
+            if (this.isInfected() && game.isDay(Day.NIGHT)) {
                 this.getPlayerWW().addPotionModifier(PotionModifier
                         .add(PotionEffectType.INCREASE_DAMAGE,
                                 "werewolf"));

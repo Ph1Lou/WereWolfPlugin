@@ -34,6 +34,7 @@ import fr.ph1lou.werewolfplugin.roles.villagers.Guard;
 import fr.ph1lou.werewolfplugin.roles.villagers.Hermit;
 import fr.ph1lou.werewolfplugin.roles.villagers.Librarian;
 import fr.ph1lou.werewolfplugin.roles.villagers.LittleGirl;
+import fr.ph1lou.werewolfplugin.roles.villagers.Occultist;
 import fr.ph1lou.werewolfplugin.roles.villagers.Oracle;
 import fr.ph1lou.werewolfplugin.roles.villagers.Priestess;
 import fr.ph1lou.werewolfplugin.roles.villagers.Protector;
@@ -432,6 +433,10 @@ public class RolesRegister {
                     .add(new RoleRegister("werewolf.name", RolesBase.DRUID.getKey(), Druid.class)
                             .addCategory(Category.VILLAGER)
                             .addConfig(Druid::config));
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.OCCULTIST.getKey(), Occultist.class)
+                            .addCategory(Category.VILLAGER));
 
 
         } catch (NoSuchMethodException e) {

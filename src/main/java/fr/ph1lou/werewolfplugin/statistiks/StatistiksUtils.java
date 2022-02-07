@@ -42,36 +42,6 @@ public class StatistiksUtils {
             return;
         }
 
-        try {
-
-            URL url = new URL("http://ph1lou.fr:15000/infos2");
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("POST");
-            con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-            con.setRequestProperty("accept", "application/json");
-            con.setDoOutput(true);
-
-
-            try (OutputStream os = con.getOutputStream()) {
-                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
-                os.write(input, 0, input.length);
-            } catch (Exception ignored) {
-            }
-
-            try (BufferedReader br = new BufferedReader(
-                    new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
-                StringBuilder response = new StringBuilder();
-                String responseLine;
-                while ((responseLine = br.readLine()) != null) {
-                    response.append(responseLine.trim());
-                }
-            } catch (Exception ignored) {
-
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         if(((GameManager) main.getWereWolfAPI()).isCrack()){
             Bukkit.getLogger().warning("[WereWolfPlugin] Statistiks no send because Server Crack");
             return;
@@ -107,8 +77,7 @@ public class StatistiksUtils {
                         .forEach(player -> player.spigot().sendMessage(msg)), 100);
             } catch (Exception ignored) {
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ignored) {
         }
     }
 }
