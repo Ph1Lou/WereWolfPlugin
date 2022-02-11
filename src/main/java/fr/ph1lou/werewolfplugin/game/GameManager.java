@@ -472,6 +472,11 @@ public class GameManager implements WereWolfAPI {
         this.voteManager = iVoteManager;
     }
 
+    @Override
+    public String getPluginVersion() {
+        return main.getDescription().getVersion();
+    }
+
     public boolean isCrack() {
         return crack;
     }

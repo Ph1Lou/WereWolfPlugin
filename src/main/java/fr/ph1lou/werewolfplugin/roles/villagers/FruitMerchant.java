@@ -132,6 +132,10 @@ public class FruitMerchant extends RoleVillage implements IAffectedPlayers, IPow
 
         if (playerWW == null) return;
 
+        if(!playerWW.equals(this.getPlayerWW())){
+            return;
+        }
+
         if (event.getItem().getType().equals(Material.GOLDEN_APPLE)) {
             if (game.getRandom().nextInt(4) == 0) {
                 playerWW.addPlayerHealth(2);

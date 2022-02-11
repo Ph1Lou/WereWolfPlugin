@@ -58,7 +58,11 @@ public class WiseElder extends RoleVillage {
             return;
         }
 
-        if (event.getNumber() == 3) {
+        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+            return;
+        }
+
+        if (event.getNumber() == 6) {
             this.active = true;
         }
 

@@ -65,7 +65,7 @@ public class PlayerWW implements IPlayerWW {
     private final GameManager game;
     private final List<IPlayerWW> playersKilled = new ArrayList<>();
     private final List<IPlayerWW> lastMinutesDamagedPlayer = new ArrayList<>();
-
+    @Nullable private String lastWish;
 
     public PlayerWW(GameManager api, Player player) {
         this.spawn = player.getWorld().getSpawnLocation();
@@ -423,7 +423,7 @@ public class PlayerWW implements IPlayerWW {
 
 	@Override
 	public int getDeathTime() {
-		return(this.deathTime);
+		return this.deathTime;
 	}
 
     @Nullable
@@ -565,6 +565,16 @@ public class PlayerWW implements IPlayerWW {
         if (player == null) return disconnectedLocation;
 
         return player.getLocation().clone();
+    }
+
+    @Override
+    public Optional<String> getWish() {
+        return Optional.ofNullable(lastWish);
+    }
+
+    @Override
+    public void setWish(String wish) {
+        this.lastWish = wish;
     }
 
 

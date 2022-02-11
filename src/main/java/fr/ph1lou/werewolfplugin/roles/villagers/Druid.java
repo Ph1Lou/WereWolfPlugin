@@ -30,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Druid extends RoleVillage implements IPower {
 
@@ -94,7 +95,7 @@ public class Druid extends RoleVillage implements IPower {
 
         World world = this.getPlayerWW().getLocation().getWorld();
 
-        int darkAura = (int) Bukkit.getOnlinePlayers()
+        List<IPlayerWW> playerWWS = Bukkit.getOnlinePlayers()
                 .stream().map(Entity::getUniqueId)
                 .map(game::getPlayerWW)
                 .filter(Optional::isPresent)
@@ -105,9 +106,9 @@ public class Druid extends RoleVillage implements IPower {
                             location.distance(this.getPlayerWW().getLocation()) < game.getConfig().getDistanceDruid();
                 })
                 .filter(playerWW1 -> playerWW1.getRole().getAura() == Aura.DARK)
-                .count();
+                .collect(Collectors.toList());
 
-        DruidUsePowerEvent druidUsePowerEvent = new DruidUsePowerEvent(this.getPlayerWW(),darkAura);
+        DruidUsePowerEvent druidUsePowerEvent = new DruidUsePowerEvent(this.getPlayerWW(),playerWWS.size(), playerWWS);
 
         Bukkit.getPluginManager().callEvent(druidUsePowerEvent);
 

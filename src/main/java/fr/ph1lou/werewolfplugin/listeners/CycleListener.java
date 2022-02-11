@@ -281,13 +281,16 @@ public class CycleListener implements Listener {
         BukkitUtils.scheduleSyncDelayedTask(() -> {
 
             if (!game.isState(StateGame.END)) {
+                loverAPIS.forEach(HandlerList::unregisterAll);
                 game.getPlayersWW()
-                        .forEach(playerWW -> playerWW
-                                .sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.announcement.lover_troll"));
+                        .forEach(playerWW -> {
+                            playerWW
+                                    .sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.announcement.lover_troll");
+                            loverAPIS.forEach(((IPlayerWW)playerWW)::removeLover);
+                        });
                 game.getConfig().setTrollLover(false);
                 ((LoversManagement)game.getLoversManager()).repartition();
             }
-            loverAPIS.forEach(HandlerList::unregisterAll);
 
         }, 1800L);
     }

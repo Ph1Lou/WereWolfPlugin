@@ -599,7 +599,7 @@
         "description": "Vous volez progressivement le rôle des joueurs a §b&number&§f blocs de vous au rythme de 1% toutes les &timer&. Le premier joueur escroqué devient Loup-Garou sans pouvoir s’il était dans le camp des Loups sinon Simple Villageois",
         "config": {
           "name": "Modifier le délai entre chaque mise à jour du %",
-          "lore": "§b&timer&§rs"
+          "lore": "§b&timer&§r"
         },
         "message": "Vous venez d'escroquer le rôle de &player&"
       },
@@ -622,7 +622,7 @@
       },
       "wise_elder": {
         "display": "Vieux sage",
-        "description": "A partir du jour 3, vous disposez d'un compteur pour chaque type d'Aura\nPour chaque seconde passée à moins de &number& blocs d'un joueur, le compteur correspondant à son aura s'incrémente.",
+        "description": "A partir du jour 6, vous disposez d'un compteur pour chaque type d'Aura\nPour chaque seconde passée à moins de &number& blocs d'un joueur, le compteur correspondant à son aura s'incrémente.",
         "end_of_cycle": "Vous recevez le contenu des compteurs => \nCompteur Aura §fNeutre§f: &neutral&§r.\n Compteur Aura §0Obscure§f: &dark&§r.\n Compteur Aura §eLumineuse§f: &light&"
       },
       "tenebrous_werewolf": {
@@ -644,6 +644,13 @@
         "clue_player": "[§eLG UHC§r] §b&player&§r est mort ici, §b&number&§r autres joueurs se trouvaient à proximité lors de sa mort",
         "clue_role": "[§eLG UHC§r] §b&victim&§r était §b&role&§r. §b&players&§r étaient proches de lui lors de sa mort",
         "clue_nearby": "[§eLG UHC§r] §b&players&§r étaient proches de §b&victim&§r lors de sa mort"
+      },
+      "occultist": {
+        "display": "Occultiste",
+        "description": "Tout les 4 décès, vous voyez les dernières volontés des précédents défunts et celle du Trublion si il l'a modifié entre temps. À votre mort votre dernière volonté est révélée",
+        "last_wishes": "Voici les volontés des 4 derniers morts",
+        "self_death": "L'Occultiste est mort sa dernière volonté était : &wish&",
+        "command": "L'Occultiste est présent dans la partie, vous pouvez faire §b/ww wish§f pour écrire votre dernière volontée."
       }
     },
     "vote": {
@@ -663,6 +670,11 @@
       "neutral": "Les rôles neutres ne peuvent pas voter",
       "new_vote_villager": "§b&player&§f est celui qui a recueilli le plus de votes auprès des Villageois.",
       "new_vote_werewolf": "§b&player&§f est celui qui a recueilli le plus de votes auprès des Loups Garous."
+    },
+    "wish": {
+      "command": "wish",
+      "command_description": "Définis votre dernière volonté",
+      "change_wish": "Votre dernière volonté est désormais: &wish&"
     },
     "lone_wolf": {
       "message": "Vous devenez Solitaire. A partir de maintenant,vous devez gagner Seul. Pour cela, vous bénéficiez de quatres coeurs permanents supplémentaires (dans la limite de 15 coeurs max)"

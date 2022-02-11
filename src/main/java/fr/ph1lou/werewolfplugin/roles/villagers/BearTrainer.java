@@ -62,7 +62,7 @@ public class BearTrainer extends RoleVillage {
                 .map(Optional::get)
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .map(IPlayerWW::getRole)
-                .filter(roles -> roles.isDisplayCamp(Camp.WEREWOLF.getKey()))
+                .filter(roles -> roles.isDisplayCamp(Camp.WEREWOLF.getKey()) || (roles.getDisplayCamp().equals(roles.getCamp().getKey()) && roles.isWereWolf()))
                 .map(IRole::getPlayerWW)
                 .collect(Collectors.toSet());
 

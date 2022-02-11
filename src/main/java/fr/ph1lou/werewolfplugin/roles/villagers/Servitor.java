@@ -135,9 +135,15 @@ public class Servitor extends RoleVillage implements IPower {
 
         if (master == null) return;
 
-        if (!master.isState(StatePlayer.ALIVE)) return;
+        if (!master.isState(StatePlayer.ALIVE)) {
+            getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS, "servitor",0));
+            getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE, "servitor",0));
+            return;
+        }
 
-        if(!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+        if(!getPlayerWW().isState(StatePlayer.ALIVE)) {
+            return;
+        }
 
         Location location = getPlayerWW().getLocation();
 
