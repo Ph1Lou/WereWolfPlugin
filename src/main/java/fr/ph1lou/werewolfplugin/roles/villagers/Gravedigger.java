@@ -4,6 +4,8 @@ import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import fr.ph1lou.werewolfapi.events.roles.gravedigger.CreateGravediggerClueEvent;
+import fr.ph1lou.werewolfapi.events.roles.gravedigger.TriggerGravediggerClueEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -98,8 +100,12 @@ public class Gravedigger extends RoleVillage implements IAffectedPlayers {
                 .filter(player -> player.isState(StatePlayer.ALIVE))
                 .filter(player -> !player.equals(playerWW))
                 .collect(Collectors.toSet());
+        String key = playerWW.getRole().getKey();
 
-        clues.add(new GravediggerClue(playerWW, deathLocation, nearbyPlayers));
+        CreateGravediggerClueEvent clueEvent = new CreateGravediggerClueEvent(playerWW, deathLocation, nearbyPlayers, key);
+        Bukkit.getPluginManager().callEvent(clueEvent);
+
+        clues.add(new GravediggerClue(clueEvent.getPlayerWW(), clueEvent.getDeathLocation(), clueEvent.getNearbyPlayers(), clueEvent.getRoleKey()));
 
         if (!isAbilityEnabled()) {
             return;
@@ -151,20 +157,28 @@ public class Gravedigger extends RoleVillage implements IAffectedPlayers {
             switch (clue.getCount()) {
                 case 6:
                     affectedPlayers.add(clue.getPlayerWW());
+                    TriggerGravediggerClueEvent event1 = new TriggerGravediggerClueEvent(clue.getPlayerWW(), 1, clue.getDeathLocation(), clue.getNearbyPlayers().size(), clue.getNamesList(), clue.getRoleKey());
+                    Bukkit.getPluginManager().callEvent(event1);
                     getPlayerWW().sendMessageWithKey("werewolf.role.gravedigger.clue_player", fr.ph1lou.werewolfapi.player.utils.Formatter.format("&player&", clue.getPlayerWW().getName()),
-                            fr.ph1lou.werewolfapi.player.utils.Formatter.format("&number&", Integer.toString(clue.getNearbyPlayers().size())));
+                            fr.ph1lou.werewolfapi.player.utils.Formatter.format("&number&", Integer.toString(event1.getNumNearbyPlayers())));
                     return;
                 case 12:
+                    TriggerGravediggerClueEvent event2 = new TriggerGravediggerClueEvent(clue.getPlayerWW(), 2, clue.getDeathLocation(), clue.getNearbyPlayers().size(), clue.getNamesList(), clue.getRoleKey());
+                    Bukkit.getPluginManager().callEvent(event2);
                     getPlayerWW().sendMessageWithKey("werewolf.role.gravedigger.clue_role", fr.ph1lou.werewolfapi.player.utils.Formatter.format("&victim&", clue.getPlayerWW().getName()),
-                            fr.ph1lou.werewolfapi.player.utils.Formatter.format("&role&", game.translate(clue.getPlayerWW().getRole().getKey())),
-                            fr.ph1lou.werewolfapi.player.utils.Formatter.format("&players&", buildNamesString(clue.getNamesList(), 1)));
+                            fr.ph1lou.werewolfapi.player.utils.Formatter.format("&role&", game.translate(clue.getRoleKey())),
+                            fr.ph1lou.werewolfapi.player.utils.Formatter.format("&players&", buildNamesString(event2.getPlayerNames(), 1)));
                     return;
                 case 18:
-                    getPlayerWW().sendMessageWithKey("werewolf.role.gravedigger.clue_nearby", fr.ph1lou.werewolfapi.player.utils.Formatter.format("&players&",  buildNamesString(clue.getNamesList(), 2)),
+                    TriggerGravediggerClueEvent event3 = new TriggerGravediggerClueEvent(clue.getPlayerWW(), 3, clue.getDeathLocation(), clue.getNearbyPlayers().size(), clue.getNamesList(), clue.getRoleKey());
+                    Bukkit.getPluginManager().callEvent(event3);
+                    getPlayerWW().sendMessageWithKey("werewolf.role.gravedigger.clue_nearby", fr.ph1lou.werewolfapi.player.utils.Formatter.format("&players&",  buildNamesString(event3.getPlayerNames(), 2)),
                             fr.ph1lou.werewolfapi.player.utils.Formatter.format("&victim&", clue.getPlayerWW().getName()));
                     return;
                 case 24:
-                    getPlayerWW().sendMessageWithKey("werewolf.role.gravedigger.clue_nearby", fr.ph1lou.werewolfapi.player.utils.Formatter.format("&players&", buildNamesString(clue.getNamesList(), 3)),
+                    TriggerGravediggerClueEvent event4 = new TriggerGravediggerClueEvent(clue.getPlayerWW(), 4, clue.getDeathLocation(), clue.getNearbyPlayers().size(), clue.getNamesList(), clue.getRoleKey());
+                    Bukkit.getPluginManager().callEvent(event4);
+                    getPlayerWW().sendMessageWithKey("werewolf.role.gravedigger.clue_nearby", fr.ph1lou.werewolfapi.player.utils.Formatter.format("&players&", buildNamesString(event4.getPlayerNames(), 3)),
                             Formatter.format("&victim&", clue.getPlayerWW().getName()));
                     clues.remove(clue);
                     return;
@@ -195,9 +209,10 @@ public class Gravedigger extends RoleVillage implements IAffectedPlayers {
         private final double distanceToOrigin;
         private final Set<IPlayerWW> nearbyPlayers;
         private List<String> playerNames;
+        private final String roleKey;
         private int count;
 
-        private GravediggerClue(IPlayerWW playerWW, Location deathLocation, Set<IPlayerWW> nearbyPlayers) {
+        private GravediggerClue(IPlayerWW playerWW, Location deathLocation, Set<IPlayerWW> nearbyPlayers, String roleKey) {
             this.playerWW = playerWW;
             this.deathLocation = deathLocation;
             this.distanceToOrigin = deathLocation.length();
@@ -205,6 +220,7 @@ public class Gravedigger extends RoleVillage implements IAffectedPlayers {
             this.playerNames = nearbyPlayers.stream().map(IPlayerWW::getName).collect(Collectors.toList());
             Collections.shuffle(playerNames);
             this.count = 0;
+            this.roleKey = roleKey;
         }
 
         public int getCount() {
@@ -235,5 +251,6 @@ public class Gravedigger extends RoleVillage implements IAffectedPlayers {
             return playerNames;
         }
 
+        public String getRoleKey() {return roleKey;}
     }
 }
