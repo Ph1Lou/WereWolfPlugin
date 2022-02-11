@@ -637,6 +637,13 @@
         "power_not_available": "Vous avez §cdéjà§f utilisé votre pouvoir",
         "darkness_distance": "Rayon d'action des ténèbres: §b&range&§r blocs",
         "darkness_duration": "Durée des ténèbres: §b&time&§r seconds"
+      },
+      "gravedigger": {
+        "display": "Fossoyeur",
+        "description": "Lorsque un joueur meurt, des flammes vous indiquenet la direction du cadavre. Si le mort n'est pas du village, la direction est aléatoire. Vous pouvez enqueter sur le cadavre d'un joueur en restant à moins de 20 blocs du cadavre et obtiendrez à chaque minute des informations sur les joueurs à moins de 70 blocs au moment de la mort",
+        "clue_player": "[§eLG UHC§r] §b&player&§r est mort ici, §b&number&§r autres joueurs se trouvaient à proximité lors de sa mort",
+        "clue_role": "[§eLG UHC§r] §b&victim&§r était §b&role&§r. §b&players&§r étaient proches de lui lors de sa mort",
+        "clue_nearby": "[§eLG UHC§r] §b&players&§r étaient proches de §b&victim&§r lors de sa mort"
       }
     },
     "vote": {

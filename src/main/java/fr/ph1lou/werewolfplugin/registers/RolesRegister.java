@@ -53,6 +53,7 @@ import fr.ph1lou.werewolfplugin.roles.villagers.WildChild;
 import fr.ph1lou.werewolfplugin.roles.villagers.WiseElder;
 import fr.ph1lou.werewolfplugin.roles.villagers.Witch;
 import fr.ph1lou.werewolfplugin.roles.villagers.WolfDog;
+import fr.ph1lou.werewolfplugin.roles.villagers.Gravedigger;
 import fr.ph1lou.werewolfplugin.roles.werewolfs.AlphaWereWolf;
 import fr.ph1lou.werewolfplugin.roles.werewolfs.AvengerWereWolf;
 import fr.ph1lou.werewolfplugin.roles.werewolfs.BigBadWerewolf;
@@ -432,6 +433,10 @@ public class RolesRegister {
                     .add(new RoleRegister("werewolf.name", RolesBase.DRUID.getKey(), Druid.class)
                             .addCategory(Category.VILLAGER)
                             .addConfig(Druid::config));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name", RolesBase.GRAVEDIGGER.getKey(), Gravedigger.class)
+                            .addCategory(Category.VILLAGER).setRandomCompositionAttribute(RandomCompositionAttribute.MINOR_INFORMATION));
 
 
         } catch (NoSuchMethodException e) {
