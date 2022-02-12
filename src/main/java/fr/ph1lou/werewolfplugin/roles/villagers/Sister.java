@@ -78,7 +78,7 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
 
     @EventHandler
     public void onWerewolfList(WereWolfListEvent event) {
-        this.getPlayerWW().sendMessageWithKey("werewolf.role.sister.sisters_list",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey(),"werewolf.role.sister.sisters_list",
                 Formatter.format("&list&",this.getSister()));
     }
 

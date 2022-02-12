@@ -10,6 +10,7 @@ public class FakeLover extends AbstractLover {
 
     public FakeLover(WereWolfAPI game, List<IPlayerWW> lovers) {
        super(game, lovers);
+       this.announceLovers();
     }
 
     @Override
