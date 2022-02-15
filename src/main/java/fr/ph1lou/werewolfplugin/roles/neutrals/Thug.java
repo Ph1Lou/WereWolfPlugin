@@ -9,6 +9,7 @@ import fr.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.DeathItemsEvent;
+import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.thug.ThugRecoverGoldenAppleEvent;
 import fr.ph1lou.werewolfapi.events.roles.thug.ThugRevealEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -41,6 +42,8 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
     private boolean power2 = false;
     @Nullable
     private IPlayerWW playerWW;
+    @Nullable
+    private IPlayerWW deathPlayerWithRoleRevealed;
 
 
     public Thug(WereWolfAPI game, IPlayerWW playerWW, String key) {
@@ -52,7 +55,7 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
         return new DescriptionBuilder(game, this).setDescription(game.translate("werewolf.role.thug.description",
                         Formatter.number(game.getConfig().getThugDistance())))
                 .setEffects(game.translate("werewolf.role.thug.effect"))
-                .setPower(game.translate("werewolf.role.thug.power"))
+                .setPower(game.translate("werewolf.role.thug.power", Formatter.number(this.probability)))
                 .build();
     }
 
@@ -64,6 +67,8 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
     @EventHandler
     public void onDay(DayEvent event){
 
+        this.setPower(true);
+
         if(this.playerWW != null){
             Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.playerWW));
         }
@@ -72,10 +77,9 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
             return;
         }
 
-        if(this.getPlayerWW().isState(StatePlayer.ALIVE)){
+        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
             return;
         }
-        this.setPower(true);
         this.getPlayerWW().sendMessageWithKey(Prefix.BLUE.getKey(),"werewolf.role.thug.command_message");
 
     }
@@ -102,8 +106,8 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
         return Aura.NEUTRAL;
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
-    public void onPlayerDeath(AnnouncementDeathEvent event){
+    @EventHandler
+    public void onPlayerDeath(FinalDeathEvent event){
 
         if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
             return;
@@ -129,7 +133,7 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
                     if(!event.getPlayerWW().getPlayersKills().isEmpty()){
                         this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE.getKey(),
                                 "werewolf.role.thug.new_heart",
-                                Formatter.player(event.getPlayerName()));
+                                Formatter.player(event.getPlayerWW().getName()));
                         this.getPlayerWW().addPlayerMaxHealth(2);
                     }
 
@@ -139,10 +143,18 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
                         Bukkit.getPluginManager().callEvent(thugRevealEvent);
 
                         if(!thugRevealEvent.isCancelled()){
-                            event.setFormat("werewolf.role.thug.death_message");
+                            this.deathPlayerWithRoleRevealed = event.getPlayerWW();
                         }
                     }
                 });
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onAnnouncement(AnnouncementDeathEvent event){
+
+        if(event.getPlayerWW().equals(this.deathPlayerWithRoleRevealed)){
+            event.setFormat("werewolf.role.thug.death_message");
+        }
     }
 
     @EventHandler

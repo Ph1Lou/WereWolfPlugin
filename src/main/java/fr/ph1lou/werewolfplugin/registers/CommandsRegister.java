@@ -491,6 +491,7 @@ public class CommandsRegister {
                         .addStateWW(StateGame.GAME)
                         .addRoleKey(RolesBase.THUG.getKey())
                         .setRequiredPower()
+                        .setRequiredAbilityEnabled()
                         .addStateAccess(StatePlayer.ALIVE));
 
         commandsRegister
