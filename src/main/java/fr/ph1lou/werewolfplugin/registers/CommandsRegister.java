@@ -8,6 +8,7 @@ import fr.ph1lou.werewolfplugin.commands.roles.neutral.angel.CommandFallenAngel;
 import fr.ph1lou.werewolfplugin.commands.roles.neutral.angel.CommandGuardianAngel;
 import fr.ph1lou.werewolfplugin.commands.roles.neutral.charmer.CommandCharmer;
 import fr.ph1lou.werewolfplugin.commands.roles.neutral.succubus.CommandSuccubus;
+import fr.ph1lou.werewolfplugin.commands.roles.neutral.thug.CommandThug;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.citizen.CommandCitizenCancelVote;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.citizen.CommandCitizenSeeVote;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.comedian.CommandComedian;
@@ -481,6 +482,14 @@ public class CommandsRegister {
                         "werewolf.role.fruit_merchant.command", new CommandFruitMerchant())
                         .addStateWW(StateGame.GAME)
                         .addRoleKey(RolesBase.FRUIT_MERCHANT.getKey())
+                        .setRequiredPower()
+                        .addStateAccess(StatePlayer.ALIVE));
+
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.thug.command", new CommandThug())
+                        .addStateWW(StateGame.GAME)
+                        .addRoleKey(RolesBase.THUG.getKey())
                         .setRequiredPower()
                         .addStateAccess(StatePlayer.ALIVE));
 

@@ -644,6 +644,20 @@
         "last_wishes": "Voici les volontés des 4 derniers morts",
         "self_death": "L'Occultiste est mort sa dernière volonté était : &wish&",
         "command": "L'Occultiste est présent dans la partie, vous pouvez faire §b/ww wish§f pour écrire votre dernière volontée."
+      },
+      "thug": {
+        "display": "Voyou",
+        "description": "Chaque jour, vous pouvez masquer le nametag d'un joueur, vous obtenez la moitié des pommes d'or si vous êtes à moins de &number& blocs du cadavre",
+        "power": "§b&number&% de chance que votre rôle s'affiche si vous tuez un joueur",
+        "command_message": "Vous pouvez masquer le nametag d'un joueur, faites §b/ww masquer",
+        "effect": "Résistance après votre premier meurtre, un coeur permanent supplémentaire par joueur tué ayant fait un meurtre",
+        "death_message": "Le voyou a tué &player&",
+        "new_heart": "Vous gagnez un coeur permanent supplémentaire suite au meurtre de &player& qui avait déjà tué quelqu'un",
+        "resistance": "Vous recevez résistance suite à votre premier meurtre",
+        "get_apple": "Vous recevez &number& pommes d'or du stuff du cadavre de &player&, la probabilité que votre prochaine meurtre affiche votre rôle augmente de §b10%§f à &number1&%",
+        "perform": "Vous venez de masquer le nametag de &player&",
+        "alert": "Le voyou vient de masquer votre nametag jusqu'au prochain matin",
+        "command": "masquer"
       }
     },
     "vote": {
@@ -930,7 +944,7 @@
           "Rôles à aura Neutre :",
           "§cLoup-Garou Perfide, Loup-Garou Amnésique, Loup-Garou Craintif, Loup-Garou Vengeur",
           "§bChaman, Comédien, Frère Siamois, Chasseur, Ancien, Oracle, Ermite, Garde, Détective, Petite Fille",
-          "§aImitateur, Barbare, §6Enfant Sauvage, Voleur, Trublion, Escroc",
+          "§aImitateur, Barbare, §6Enfant Sauvage, Voleur, Trublion, Escroc, Voyou",
           "Rôles à aura Obscure :",
           "§cTous les autres Loups-Garous",
           "§bSorcière, Corbeau, Chien-Loup (Chien), Druide",

@@ -109,6 +109,9 @@ import fr.ph1lou.werewolfapi.events.roles.succubus.BeginCharmEvent;
 import fr.ph1lou.werewolfapi.events.roles.succubus.CharmEvent;
 import fr.ph1lou.werewolfapi.events.roles.succubus.SuccubusResurrectionEvent;
 import fr.ph1lou.werewolfapi.events.roles.tenebrous_werewolf.TenebrousEvent;
+import fr.ph1lou.werewolfapi.events.roles.thug.ThugEvent;
+import fr.ph1lou.werewolfapi.events.roles.thug.ThugRecoverGoldenAppleEvent;
+import fr.ph1lou.werewolfapi.events.roles.thug.ThugRevealEvent;
 import fr.ph1lou.werewolfapi.events.roles.trapper.TrackEvent;
 import fr.ph1lou.werewolfapi.events.roles.trouble_maker.TroubleMakerDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.trouble_maker.TroubleMakerEvent;
@@ -1439,5 +1442,27 @@ public class Events implements Listener {
         if (event.isCancelled()) return;
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.reveal_wishes_occultist",
                 event.getPlayerWW(), main.getWereWolfAPI().getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onThugCommand(ThugEvent event) {
+        if (event.isCancelled()) return;
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.thug_command",
+                event.getPlayerWW(), event.getTargetWW(), main.getWereWolfAPI().getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onThugGoldenApple(ThugRecoverGoldenAppleEvent event) {
+        if (event.isCancelled()) return;
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.thug_recover_golden_apple",
+                event.getPlayerWW(), event.getTargetWW(),  main.getWereWolfAPI().getTimer(), event.getGoldenApple()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onThugRevealEvent(ThugRevealEvent event) {
+        if (event.isCancelled()) return;
+
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.thug_reveal_event",
+                event.getPlayerWW(),   main.getWereWolfAPI().getTimer()));
     }
 }

@@ -147,6 +147,7 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
                 .map(game::getPlayerWW)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
+                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> {
                     Location wildLocation = this.getPlayerWW().getLocation();
                     Location playerLocation = playerWW.getLocation();
@@ -287,8 +288,7 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
     }
 
     @Override
-    public void disableAbilities() {
-        super.disableAbilities();
+    public void disableAbilitiesRole() {
 
         if (isInvisible()) {
             getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.little_girl.ability_disabled");

@@ -17,6 +17,7 @@ import fr.ph1lou.werewolfplugin.roles.neutrals.Scammer;
 import fr.ph1lou.werewolfplugin.roles.neutrals.SerialKiller;
 import fr.ph1lou.werewolfplugin.roles.neutrals.Succubus;
 import fr.ph1lou.werewolfplugin.roles.neutrals.Thief;
+import fr.ph1lou.werewolfplugin.roles.neutrals.Thug;
 import fr.ph1lou.werewolfplugin.roles.neutrals.WhiteWereWolf;
 import fr.ph1lou.werewolfplugin.roles.neutrals.WillOTheWisp;
 import fr.ph1lou.werewolfplugin.roles.villagers.Analyst;
@@ -437,6 +438,11 @@ public class RolesRegister {
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.OCCULTIST.getKey(), Occultist.class)
                             .addCategory(Category.VILLAGER));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.THUG.getKey(), Thug.class)
+                            .addCategory(Category.NEUTRAL));
 
 
         } catch (NoSuchMethodException e) {

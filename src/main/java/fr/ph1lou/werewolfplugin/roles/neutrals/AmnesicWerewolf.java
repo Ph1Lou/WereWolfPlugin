@@ -141,8 +141,7 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
     }
 
     @Override
-    public void disableAbilities() {
-        super.disableAbilities();
+    public void disableAbilitiesRole() {
 
         if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
             return;

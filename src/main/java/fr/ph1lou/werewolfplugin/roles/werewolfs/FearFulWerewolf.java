@@ -182,8 +182,8 @@ public class FearFulWerewolf extends RoleWereWolf {
     }
 
     @Override
-    public void disableAbilities() {
-        super.disableAbilities();
+    public void disableAbilitiesRole() {
+
         this.getPlayerWW()
                 .addPotionModifier(PotionModifier.remove(PotionEffectType.SPEED,
                         "fearful",0));

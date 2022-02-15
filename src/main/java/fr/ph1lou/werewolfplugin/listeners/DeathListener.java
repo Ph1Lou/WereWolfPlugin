@@ -9,6 +9,7 @@ import fr.ph1lou.werewolfapi.enums.UpdateCompositionReason;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.UpdateCompositionEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
+import fr.ph1lou.werewolfapi.events.game.life_cycle.DeathItemsEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FirstDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.ResurrectionEvent;
@@ -41,6 +42,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DeathListener implements Listener {
@@ -72,7 +74,7 @@ public class DeathListener implements Listener {
 
             if (!playerWW.isState(StatePlayer.ALIVE)) return;
 
-            playerWW.setSpawn(player.getLocation());
+            playerWW.setDeathLocation(player.getLocation());
             playerWW.clearItemDeath();
             playerWW.setState(StatePlayer.JUDGEMENT);
             ((PlayerWW)playerWW).setDeathTime(game.getTimer());
@@ -169,7 +171,7 @@ public class DeathListener implements Listener {
             playerWW.clearItemDeath();
 
             if (player != null) {
-                playerWW.setSpawn(player.getLocation());
+                playerWW.setDeathLocation(player.getLocation());
 
                 Inventory inv = Bukkit.createInventory(null, 45);
 
@@ -225,14 +227,21 @@ public class DeathListener implements Listener {
             game.getConfig().removeOneRole(playerWW.getRole().getDeathRole());
         }
 
-        Stream.concat(playerWW.getItemDeath()
-                                .stream(),
-                        game.getStuffs().getDeathLoot()
-                                .stream())
-                .filter(Objects::nonNull)
-                .forEach(itemStack -> world.dropItem(playerWW.getSpawn(), itemStack));
+        DeathItemsEvent deathItemsEvent = new DeathItemsEvent(playerWW,
+                Stream.concat(playerWW.getItemDeath()
+                        .stream(),
+                game.getStuffs().getDeathLoot()
+                        .stream()).collect(Collectors.toList()),
+                playerWW.getDeathLocation()
+        );
 
+        Bukkit.getPluginManager().callEvent(deathItemsEvent);
 
+        if(!deathItemsEvent.isCancelled()){
+            deathItemsEvent.getItems().forEach(itemStack -> {
+                world.dropItem(deathItemsEvent.getLocation(), itemStack);
+            });
+        }
 
         if (player != null) {
 

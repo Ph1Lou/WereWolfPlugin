@@ -76,6 +76,7 @@ public class Configuration implements IConfiguration {
     private int scamDelay;
     private int tenebrousDuration;
     private int distanceTenebrousWerewolf;
+    private int thugDistance;
 
     public Configuration(){
         this.timerValues = new HashMap<>();
@@ -139,6 +140,7 @@ public class Configuration implements IConfiguration {
         this.distanceScammer = 20;
         this.tenebrousDuration = 600;
         this.distanceTenebrousWerewolf = 50;
+        this.thugDistance=25;
     }
 
     public Configuration(IRegisterManager registerManager) {
@@ -809,5 +811,15 @@ public class Configuration implements IConfiguration {
     @Override
     public void setTenebrousDuration(int t) {
         this.tenebrousDuration = t;
+    }
+
+    @Override
+    public int getThugDistance() {
+        return this.thugDistance;
+    }
+
+    @Override
+    public void setThugDistance(int distance) {
+        this.thugDistance=thugDistance;
     }
 }

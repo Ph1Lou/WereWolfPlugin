@@ -235,14 +235,12 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
     }
 
     @Override
-    public void disableAbilities() {
-        super.disableAbilities();
+    public void disableAbilitiesRole() {
         setPower(false);
     }
 
     @Override
-    public void enableAbilities() {
-        super.enableAbilities();
+    public void enableAbilitiesRole() {
         setPower(true);
     }
 
