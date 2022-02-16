@@ -1,5 +1,6 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
+import fr.minuskube.inv.ClickableItem;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Prefix;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -12,6 +13,7 @@ import fr.ph1lou.werewolfapi.events.game.life_cycle.DeathItemsEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.thug.ThugRecoverGoldenAppleEvent;
 import fr.ph1lou.werewolfapi.events.roles.thug.ThugRevealEvent;
+import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -20,6 +22,7 @@ import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
+import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -30,6 +33,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -53,7 +57,7 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this).setDescription(game.translate("werewolf.role.thug.description",
-                        Formatter.number(game.getConfig().getThugDistance())))
+                        Formatter.number(game.getConfig().getDistanceThug())))
                 .setEffects(game.translate("werewolf.role.thug.effect"))
                 .setPower(game.translate("werewolf.role.thug.power", Formatter.number(this.probability)))
                 .build();
@@ -287,5 +291,34 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
         }
 
         event.setVisibility(false);
+    }
+
+
+
+    public static ClickableItem config(WereWolfAPI game) {
+        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
+                game.translate("werewolf.menu.right"));
+        IConfiguration config = game.getConfig();
+
+        return ClickableItem.of((
+                new ItemBuilder(UniversalMaterial.GRAY_WOOL.getStack())
+                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.thug",
+                                Formatter.number(config.getDistanceThug())))
+                        .setLore(lore).build()), e -> {
+
+            if (e.isLeftClick()) {
+                config.setDistanceThug((config.getDistanceThug() + 2));
+            } else if (config.getDistanceThug() - 2 > 0) {
+                config.setDistanceThug(config.getDistanceThug() - 2);
+            }
+
+
+            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                    .setLore(lore)
+                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.thug",
+                            Formatter.number(config.getDistanceThug())))
+                    .build());
+
+        });
     }
 }

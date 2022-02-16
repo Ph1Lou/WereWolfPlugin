@@ -57,6 +57,7 @@ import fr.ph1lou.werewolfapi.events.roles.angel.FallenAngelTargetDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.angel.RegenerationEvent;
 import fr.ph1lou.werewolfapi.events.roles.avenger_werewolf.DeathAvengerListEvent;
 import fr.ph1lou.werewolfapi.events.roles.avenger_werewolf.RegisterAvengerListEvent;
+import fr.ph1lou.werewolfapi.events.roles.barbarian.BarbarianEvent;
 import fr.ph1lou.werewolfapi.events.roles.bear_trainer.GrowlEvent;
 import fr.ph1lou.werewolfapi.events.roles.charmer.CharmedDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.charmer.CharmerEvent;
@@ -1464,5 +1465,13 @@ public class Events implements Listener {
 
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.thug_reveal_event",
                 event.getPlayerWW(),   main.getWereWolfAPI().getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onBarbarianEvent(BarbarianEvent event) {
+        if (event.isCancelled()) return;
+
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.barbarian_event",
+                event.getPlayerWW(), event.getTargetWW(),  main.getWereWolfAPI().getTimer()));
     }
 }

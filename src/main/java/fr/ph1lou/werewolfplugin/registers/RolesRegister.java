@@ -7,6 +7,7 @@ import fr.ph1lou.werewolfapi.registers.impl.RoleRegister;
 import fr.ph1lou.werewolfplugin.roles.neutrals.AmnesicWerewolf;
 import fr.ph1lou.werewolfplugin.roles.neutrals.Angel;
 import fr.ph1lou.werewolfplugin.roles.neutrals.Assassin;
+import fr.ph1lou.werewolfplugin.roles.neutrals.Barbarian;
 import fr.ph1lou.werewolfplugin.roles.neutrals.Charmer;
 import fr.ph1lou.werewolfplugin.roles.neutrals.FallenAngel;
 import fr.ph1lou.werewolfplugin.roles.neutrals.FlutePlayer;
@@ -442,7 +443,14 @@ public class RolesRegister {
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.THUG.getKey(), Thug.class)
-                            .addCategory(Category.NEUTRAL));
+                            .addCategory(Category.NEUTRAL)
+                            .addConfig(Thug::config));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.BARBARIAN.getKey(), Barbarian.class)
+                            .addCategory(Category.NEUTRAL)
+                            .addConfig(Barbarian::config));
 
 
         } catch (NoSuchMethodException e) {

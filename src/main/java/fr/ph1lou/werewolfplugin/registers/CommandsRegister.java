@@ -6,6 +6,7 @@ import fr.ph1lou.werewolfplugin.commands.roles.lovers.CommandLovers;
 import fr.ph1lou.werewolfplugin.commands.roles.neutral.angel.CommandAngelRegen;
 import fr.ph1lou.werewolfplugin.commands.roles.neutral.angel.CommandFallenAngel;
 import fr.ph1lou.werewolfplugin.commands.roles.neutral.angel.CommandGuardianAngel;
+import fr.ph1lou.werewolfplugin.commands.roles.neutral.barbarian.CommandBarbarian;
 import fr.ph1lou.werewolfplugin.commands.roles.neutral.charmer.CommandCharmer;
 import fr.ph1lou.werewolfplugin.commands.roles.neutral.succubus.CommandSuccubus;
 import fr.ph1lou.werewolfplugin.commands.roles.neutral.thug.CommandThug;
@@ -492,6 +493,16 @@ public class CommandsRegister {
                         .addRoleKey(RolesBase.THUG.getKey())
                         .setRequiredPower()
                         .setRequiredAbilityEnabled()
+                        .addStateAccess(StatePlayer.ALIVE));
+
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.barbarian.command", new CommandBarbarian())
+                        .addStateWW(StateGame.GAME)
+                        .addRoleKey(RolesBase.BARBARIAN.getKey())
+                        .setRequiredPower()
+                        .setRequiredAbilityEnabled()
+                        .unsetAutoCompletion()
                         .addStateAccess(StatePlayer.ALIVE));
 
         commandsRegister

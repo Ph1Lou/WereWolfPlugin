@@ -109,15 +109,15 @@ public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPl
 
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
-        TextComponent infect_msg = new TextComponent(
+        TextComponent infectMessage = new TextComponent(
                 game.translate(
                         Prefix.YELLOW.getKey() , "werewolf.role.infect_father_of_the_wolves.infection_message",
                         Formatter.player(playerWW.getName())));
-        infect_msg.setClickEvent(
+        infectMessage.setClickEvent(
                 new ClickEvent(ClickEvent.Action.RUN_COMMAND,
                         String.format("/ww %s %s",
                                 game.translate("werewolf.role.infect_father_of_the_wolves.command"),
                                 playerWW.getUUID())));
-        getPlayerWW().sendMessage(infect_msg);
+        getPlayerWW().sendMessage(infectMessage);
     }
 }

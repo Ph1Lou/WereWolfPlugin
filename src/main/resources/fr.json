@@ -658,6 +658,15 @@
         "perform": "Vous venez de masquer le nametag de §b&player&",
         "alert": "Le §bVoyou§f vient de masquer votre nametag jusqu'au prochain matin",
         "command": "masquer"
+      },
+      "barbarian": {
+        "display": "Barbare",
+        "description": "Vous pouvez cacher le rôle d'un mort une fois dans la partie à moins de &number& blocs",
+        "power": "Les dégâts infligés sont doublés lorsque vous frappez un joueur pour la première fois",
+        "click_message": "Vous pouvez dissimuler le rôle à la mort de &player&, (vous avez §b7§f secondes)",
+        "command": "barbarian_hide",
+        "item": "Livre Tranchant III",
+        "perform": "Vous venez de dissimuler le rôle de &player&"
       }
     },
     "vote": {
@@ -1040,7 +1049,9 @@
         "howling_werewolf": "Champ d'action du Loup Garou Hurleur §b&number&",
         "druid": "Champ d'action du Druide §b&number&",
         "twin": "Champ d'action des Jumeaux §b&number&",
-        "fruit_merchant": "Champ d'action de la Marchande de fruit §b&number&"
+        "fruit_merchant": "Champ d'action de la Marchande de fruit §b&number&",
+        "thug": "Champ d'action du Voyou §b&number&",
+        "barbarian": "Champ d'action du Barbare §b&number&"
       },
       "troll": "Configuration §bTroll",
       "roles": {

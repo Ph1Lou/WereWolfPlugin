@@ -239,7 +239,9 @@ public class DeathListener implements Listener {
 
         if(!deathItemsEvent.isCancelled()){
             deathItemsEvent.getItems().forEach(itemStack -> {
-                world.dropItem(deathItemsEvent.getLocation(), itemStack);
+                if(itemStack != null){
+                    world.dropItem(deathItemsEvent.getLocation(), itemStack);
+                }
             });
         }
 
