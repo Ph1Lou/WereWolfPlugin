@@ -43,7 +43,7 @@ public class CommandBarbarian implements ICommand {
 
         IPlayerWW playerWW1 = game.getPlayerWW(uuid1).orElse(null);
 
-        if (playerWW1 == null || playerWW1.isState(StatePlayer.ALIVE)) {
+        if (playerWW1 == null || !playerWW1.isState(StatePlayer.JUDGEMENT)) {
             playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.player_not_found");
             return;
         }
