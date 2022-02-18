@@ -45,7 +45,7 @@ public class SiameseTwin extends RoleVillage {
 
     @EventHandler
     public void onWerewolfList(WereWolfListEvent event) {
-        this.getPlayerWW().sendMessageWithKey("werewolf.role.siamese_twin.siamese_twin_list",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey(),"werewolf.role.siamese_twin.siamese_twin_list",
                 Formatter.format("&list&",this.getBrother()));
     }
 

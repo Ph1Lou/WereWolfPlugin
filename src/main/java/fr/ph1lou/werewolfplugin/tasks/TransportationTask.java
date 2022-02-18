@@ -188,7 +188,6 @@ public class TransportationTask implements Listener {
         Player player = Bukkit.getPlayer(playerWW.getUUID());
 
         if (player != null) {
-            playerWW.setSpawn(spawns.get(i));
             player.setCompassTarget(playerWW.getSpawn());
             player.setGameMode(GameMode.ADVENTURE);
             this.game.clearPlayer(player);

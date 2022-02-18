@@ -36,8 +36,7 @@ public class BigBadWerewolf extends RoleWereWolf implements IPower {
     }
 
     @Override
-    public void disableAbilities() {
-        super.disableAbilities();
+    public void disableAbilitiesRole() {
         this.getPlayerWW()
                 .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
                         "big_bad_werewolf",0));

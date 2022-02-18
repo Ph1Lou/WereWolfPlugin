@@ -652,6 +652,29 @@
         "last_wishes": "Voici les volontés des 4 derniers morts",
         "self_death": "L'Occultiste est mort sa dernière volonté était : &wish&",
         "command": "L'Occultiste est présent dans la partie, vous pouvez faire §b/ww wish§f pour écrire votre dernière volontée."
+      },
+      "thug": {
+        "display": "Voyou",
+        "description": "Chaque jour, vous pouvez masquer le §bnametag§f d'un joueur, vous obtenez la moitié des pommes d'or si vous êtes à moins de §b&number&§f blocs du cadavre",
+        "power": "§b&number&% de chance que votre rôle s'affiche si vous tuez un §bjoueur",
+        "command_message": "Vous pouvez masquer le §bnametag§f d'un joueur, faites §b/ww masquer",
+        "effect": "§bRésistance§f après votre premier meurtre, un coeur permanent supplémentaire par joueur tué ayant fait un meurtre",
+        "death_message": "Le §bVoyou§f a tué &player&",
+        "new_heart": "Vous gagnez un coeur permanent supplémentaire suite au meurtre de &player& qui avait déjà tué quelqu'un",
+        "resistance": "Vous recevez résistance suite à votre premier meurtre",
+        "get_apple": "Vous recevez §b&number&§f pommes d'or du stuff du cadavre de §b&player&§f, la probabilité que votre prochaine meurtre affiche votre rôle augmente de §b10%§f à &number1&%",
+        "perform": "Vous venez de masquer le nametag de §b&player&",
+        "alert": "Le §bVoyou§f vient de masquer votre nametag jusqu'au prochain matin",
+        "command": "masquer"
+      },
+      "barbarian": {
+        "display": "Barbare",
+        "description": "Vous pouvez cacher le rôle d'un mort une fois dans la partie à moins de &number& blocs",
+        "power": "Les dégâts infligés sont doublés lorsque vous frappez un joueur pour la première fois",
+        "click_message": "Vous pouvez dissimuler le rôle à la mort de &player&, (vous avez §b14§f secondes)",
+        "command": "barbarian_hide",
+        "item": "Livre Tranchant III",
+        "perform": "Vous venez de dissimuler le rôle de &player&"
       }
     },
     "vote": {
@@ -938,7 +961,7 @@
           "Rôles à aura Neutre :",
           "§cLoup-Garou Perfide, Loup-Garou Amnésique, Loup-Garou Craintif, Loup-Garou Vengeur",
           "§bChaman, Comédien, Frère Siamois, Chasseur, Ancien, Oracle, Ermite, Garde, Détective, Petite Fille",
-          "§aImitateur, Barbare, §6Enfant Sauvage, Voleur, Trublion, Escroc",
+          "§aImitateur, Barbare, §6Enfant Sauvage, Voleur, Trublion, Escroc, Voyou",
           "Rôles à aura Obscure :",
           "§cTous les autres Loups-Garous",
           "§bSorcière, Corbeau, Chien-Loup (Chien), Druide",
@@ -1034,7 +1057,9 @@
         "howling_werewolf": "Champ d'action du Loup Garou Hurleur §b&number&",
         "druid": "Champ d'action du Druide §b&number&",
         "twin": "Champ d'action des Jumeaux §b&number&",
-        "fruit_merchant": "Champ d'action de la Marchande de fruit §b&number&"
+        "fruit_merchant": "Champ d'action de la Marchande de fruit §b&number&",
+        "thug": "Champ d'action du Voyou §b&number&",
+        "barbarian": "Champ d'action du Barbare §b&number&"
       },
       "troll": "Configuration §bTroll",
       "roles": {

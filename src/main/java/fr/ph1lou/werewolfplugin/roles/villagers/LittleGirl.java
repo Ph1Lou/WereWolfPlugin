@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
+import fr.ph1lou.werewolfapi.events.game.life_cycle.DeathItemsEvent;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
@@ -190,8 +191,8 @@ public class LittleGirl extends RoleVillage implements IInvisible {
         this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION,"little_girl"));
     }
 
-    @EventHandler(priority = EventPriority.LOW)
-    public void onFinalDeath(FinalDeathEvent event) {
+    @EventHandler
+    public void onFinalDeath(DeathItemsEvent event) {
 
         if (!event.getPlayerWW().equals(this.getPlayerWW())) return;
 
@@ -199,7 +200,7 @@ public class LittleGirl extends RoleVillage implements IInvisible {
 
         if (this.game.getConfig().getLimitKnockBack() == 2) return;
 
-        for (ItemStack i : this.getPlayerWW().getItemDeath()) {
+        for (ItemStack i : event.getItems()) {
             if (i != null) {
                 i.removeEnchantment(Enchantment.KNOCKBACK);
             }
@@ -293,8 +294,7 @@ public class LittleGirl extends RoleVillage implements IInvisible {
     }
 
     @Override
-    public void disableAbilities() {
-        super.disableAbilities();
+    public void disableAbilitiesRole() {
 
         if (isInvisible()) {
             getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.little_girl.ability_disabled");

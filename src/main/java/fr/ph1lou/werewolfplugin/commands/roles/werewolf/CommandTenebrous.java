@@ -35,7 +35,7 @@ public class CommandTenebrous implements ICommand {
 
         Location location = playerWW.getLocation();
 
-        int range = game.getConfig().getTenebrousDistance();
+        int range = game.getConfig().getDistanceTenebrous();
 
         List<IPlayerWW> affectedPlayers = game.getPlayersWW().stream()
                 .filter(player1 -> player1.isState(StatePlayer.ALIVE))

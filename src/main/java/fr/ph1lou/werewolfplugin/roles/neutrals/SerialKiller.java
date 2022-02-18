@@ -139,8 +139,7 @@ public class SerialKiller extends RoleNeutral implements IPower {
     }
 
     @Override
-    public void disableAbilities() {
-        super.enableAbilities();
+    public void disableAbilitiesRole() {
 
         if (this.hasPower()) {
             this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"serial_killer",0));

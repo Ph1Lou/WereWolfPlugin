@@ -66,6 +66,8 @@ public class PlayerWW implements IPlayerWW {
     private final List<IPlayerWW> playersKilled = new ArrayList<>();
     private final List<IPlayerWW> lastMinutesDamagedPlayer = new ArrayList<>();
     @Nullable private String lastWish;
+    @Nullable
+    private Location deathLocation;
 
     public PlayerWW(GameManager api, Player player) {
         this.spawn = player.getWorld().getSpawnLocation();
@@ -575,6 +577,19 @@ public class PlayerWW implements IPlayerWW {
     @Override
     public void setWish(String wish) {
         this.lastWish = wish;
+    }
+
+    @Override
+    public Location getDeathLocation() {
+        if(this.deathLocation!=null){
+            return this.deathLocation;
+        }
+        return this.getLocation();
+    }
+
+    @Override
+    public void setDeathLocation(Location location) {
+        this.deathLocation=location;
     }
 
 

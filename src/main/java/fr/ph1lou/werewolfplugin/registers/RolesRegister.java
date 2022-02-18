@@ -7,6 +7,7 @@ import fr.ph1lou.werewolfapi.registers.impl.RoleRegister;
 import fr.ph1lou.werewolfplugin.roles.neutrals.AmnesicWerewolf;
 import fr.ph1lou.werewolfplugin.roles.neutrals.Angel;
 import fr.ph1lou.werewolfplugin.roles.neutrals.Assassin;
+import fr.ph1lou.werewolfplugin.roles.neutrals.Barbarian;
 import fr.ph1lou.werewolfplugin.roles.neutrals.Charmer;
 import fr.ph1lou.werewolfplugin.roles.neutrals.FallenAngel;
 import fr.ph1lou.werewolfplugin.roles.neutrals.FlutePlayer;
@@ -17,6 +18,7 @@ import fr.ph1lou.werewolfplugin.roles.neutrals.Scammer;
 import fr.ph1lou.werewolfplugin.roles.neutrals.SerialKiller;
 import fr.ph1lou.werewolfplugin.roles.neutrals.Succubus;
 import fr.ph1lou.werewolfplugin.roles.neutrals.Thief;
+import fr.ph1lou.werewolfplugin.roles.neutrals.Thug;
 import fr.ph1lou.werewolfplugin.roles.neutrals.WhiteWereWolf;
 import fr.ph1lou.werewolfplugin.roles.neutrals.WillOTheWisp;
 import fr.ph1lou.werewolfplugin.roles.villagers.Analyst;
@@ -440,9 +442,20 @@ public class RolesRegister {
                             .addCategory(Category.VILLAGER));
 
             rolesRegister
+
                     .add(new RoleRegister("werewolf.name", RolesBase.GRAVEDIGGER.getKey(), Gravedigger.class)
                             .addCategory(Category.VILLAGER).setRandomCompositionAttribute(RandomCompositionAttribute.MINOR_INFORMATION));
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.THUG.getKey(), Thug.class)
+                            .addCategory(Category.NEUTRAL)
+                            .addConfig(Thug::config));
 
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.BARBARIAN.getKey(), Barbarian.class)
+                            .addCategory(Category.NEUTRAL)
+                            .addConfig(Barbarian::config));
 
         } catch (NoSuchMethodException e) {
             e.printStackTrace();

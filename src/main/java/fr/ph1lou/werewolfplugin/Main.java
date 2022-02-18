@@ -30,7 +30,6 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
     private GameManager currentGame;
     private final RegisterManager registerManager = new RegisterManager(this);
     private final InventoryManager invManager = new InventoryManager(this);
-    @Nullable
     private GameReview currentGameReview;
 
     @Override
