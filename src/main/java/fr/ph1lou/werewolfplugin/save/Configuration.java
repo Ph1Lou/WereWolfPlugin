@@ -76,6 +76,7 @@ public class Configuration implements IConfiguration {
     private int scamDelay;
     private int tenebrousDuration;
     private int distanceTenebrousWerewolf;
+    private int distanceGravedigger;
     private int thugDistance;
     private int barbarianDistance;
 
@@ -141,6 +142,7 @@ public class Configuration implements IConfiguration {
         this.distanceScammer = 20;
         this.tenebrousDuration = 600;
         this.distanceTenebrousWerewolf = 50;
+        this.distanceGravedigger = 70;
         this.thugDistance=25;
         this.barbarianDistance=25;
     }
@@ -816,6 +818,15 @@ public class Configuration implements IConfiguration {
     }
 
     @Override
+    public void setGravediggerDistance(int i) {
+        this.distanceGravedigger = i;
+    }
+
+    @Override
+    public int getGravediggerDistance() {
+        return this.distanceGravedigger;
+    }
+      
     public int getDistanceBarbarian() {
         return this.barbarianDistance;
     }
