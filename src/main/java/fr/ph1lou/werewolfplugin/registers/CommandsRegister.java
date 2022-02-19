@@ -14,6 +14,7 @@ import fr.ph1lou.werewolfplugin.commands.roles.villager.comedian.CommandComedian
 import fr.ph1lou.werewolfplugin.commands.roles.villager.cupid.CommandCupid;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.fruitmerchant.CommandFruitMerchant;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.guard.CommandGuard;
+import fr.ph1lou.werewolfplugin.commands.roles.villager.hunter.CommandHunter;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.info.detective.CommandDetective;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.info.fox.CommandFox;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.info.librarian.CommandLibrarian;
@@ -490,6 +491,14 @@ public class CommandsRegister {
                         .addStateWW(StateGame.GAME)
                         .setDescription("werewolf.wish.command_description")
                         .addStateAccess(StatePlayer.ALIVE));
+
+        commandsRegister.add(new CommandRegister("werewolf.name",
+                "werewolf.role.hunter.command", new CommandHunter())
+                .addStateWW(StateGame.GAME)
+                .addRoleKey(RolesBase.HUNTER.getKey())
+                .setRequiredAbilityEnabled()
+                .setRequiredPower()
+                .addStateAccess(StatePlayer.DEATH));
 
         return commandsRegister;
     }

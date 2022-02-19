@@ -19,41 +19,7 @@ import fr.ph1lou.werewolfplugin.roles.neutrals.Succubus;
 import fr.ph1lou.werewolfplugin.roles.neutrals.Thief;
 import fr.ph1lou.werewolfplugin.roles.neutrals.WhiteWereWolf;
 import fr.ph1lou.werewolfplugin.roles.neutrals.WillOTheWisp;
-import fr.ph1lou.werewolfplugin.roles.villagers.Analyst;
-import fr.ph1lou.werewolfplugin.roles.villagers.BearTrainer;
-import fr.ph1lou.werewolfplugin.roles.villagers.ChattySeer;
-import fr.ph1lou.werewolfplugin.roles.villagers.Citizen;
-import fr.ph1lou.werewolfplugin.roles.villagers.Comedian;
-import fr.ph1lou.werewolfplugin.roles.villagers.Cupid;
-import fr.ph1lou.werewolfplugin.roles.villagers.Detective;
-import fr.ph1lou.werewolfplugin.roles.villagers.Druid;
-import fr.ph1lou.werewolfplugin.roles.villagers.Elder;
-import fr.ph1lou.werewolfplugin.roles.villagers.Fox;
-import fr.ph1lou.werewolfplugin.roles.villagers.FruitMerchant;
-import fr.ph1lou.werewolfplugin.roles.villagers.Guard;
-import fr.ph1lou.werewolfplugin.roles.villagers.Hermit;
-import fr.ph1lou.werewolfplugin.roles.villagers.Librarian;
-import fr.ph1lou.werewolfplugin.roles.villagers.LittleGirl;
-import fr.ph1lou.werewolfplugin.roles.villagers.Occultist;
-import fr.ph1lou.werewolfplugin.roles.villagers.Oracle;
-import fr.ph1lou.werewolfplugin.roles.villagers.Priestess;
-import fr.ph1lou.werewolfplugin.roles.villagers.Protector;
-import fr.ph1lou.werewolfplugin.roles.villagers.Raven;
-import fr.ph1lou.werewolfplugin.roles.villagers.Seer;
-import fr.ph1lou.werewolfplugin.roles.villagers.Servitor;
-import fr.ph1lou.werewolfplugin.roles.villagers.Shaman;
-import fr.ph1lou.werewolfplugin.roles.villagers.SiameseTwin;
-import fr.ph1lou.werewolfplugin.roles.villagers.Sister;
-import fr.ph1lou.werewolfplugin.roles.villagers.Stud;
-import fr.ph1lou.werewolfplugin.roles.villagers.Trapper;
-import fr.ph1lou.werewolfplugin.roles.villagers.Troublemaker;
-import fr.ph1lou.werewolfplugin.roles.villagers.Twin;
-import fr.ph1lou.werewolfplugin.roles.villagers.VillageIdiot;
-import fr.ph1lou.werewolfplugin.roles.villagers.Villager;
-import fr.ph1lou.werewolfplugin.roles.villagers.WildChild;
-import fr.ph1lou.werewolfplugin.roles.villagers.WiseElder;
-import fr.ph1lou.werewolfplugin.roles.villagers.Witch;
-import fr.ph1lou.werewolfplugin.roles.villagers.WolfDog;
+import fr.ph1lou.werewolfplugin.roles.villagers.*;
 import fr.ph1lou.werewolfplugin.roles.werewolfs.AlphaWereWolf;
 import fr.ph1lou.werewolfplugin.roles.werewolfs.AvengerWereWolf;
 import fr.ph1lou.werewolfplugin.roles.werewolfs.BigBadWerewolf;
@@ -436,6 +402,11 @@ public class RolesRegister {
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.OCCULTIST.getKey(), Occultist.class)
+                            .addCategory(Category.VILLAGER));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.HUNTER.getKey(), Hunter.class)
                             .addCategory(Category.VILLAGER));
 
 

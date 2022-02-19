@@ -184,3 +184,21 @@ werewolf.role.priestess.display:
     ==: org.bukkit.inventory.ItemStack
     type: OBSIDIAN
     amount: 4
+
+werewolf.role.priestess.display:
+  0:
+    ==: org.bukkit.inventory.ItemStack
+    type: STRING
+    amount: 3
+  1:
+    ==: org.bukkit.inventory.ItemStack
+    type: ARROW
+    amount: 64
+  2:
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        ARROW_DAMAGE: 3
