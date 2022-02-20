@@ -19,6 +19,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -94,11 +95,13 @@ public class Hunter extends RoleVillage implements IPower {
         //also handles case damagerWW == null
         if (!damagerWW.equals(getPlayerWW())) return;
 
+        if (damager.hasPotionEffect(PotionEffectType.INCREASE_DAMAGE)) return;
+
         Player target = (Player) event.getEntity();
         IPlayerWW targetWW = game.getPlayerWW(target.getUniqueId()).orElse(null);
         if (targetWW == null || !targetWW.getRole().isWereWolf()) return;
 
-        event.setDamage(event.getDamage() * (1 + game.getConfig().getStrengthRate() * (0.5 + damageBonus)));
+        event.setDamage(event.getDamage() * (1 + (game.getConfig().getStrengthRate()/100f) * (0.5 + damageBonus)));
     }
 
     @EventHandler

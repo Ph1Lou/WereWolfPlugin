@@ -407,7 +407,8 @@ public class RolesRegister {
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.HUNTER.getKey(), Hunter.class)
-                            .addCategory(Category.VILLAGER));
+                            .addCategory(Category.VILLAGER)
+                            .addConfig(Hunter::configCanShoot));
 
 
         } catch (NoSuchMethodException e) {
