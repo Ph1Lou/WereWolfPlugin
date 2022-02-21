@@ -51,8 +51,8 @@ public class Hermit extends RoleVillage {
     }
 
     @Override
-    public void disableAbilities() {
-        super.disableAbilities();
+    public void disableAbilitiesRole() {
+
         this.getPlayerWW()
                 .addPotionModifier(PotionModifier.remove(PotionEffectType.SPEED,
                         "hermit",0));

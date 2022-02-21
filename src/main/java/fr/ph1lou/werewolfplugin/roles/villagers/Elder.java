@@ -117,8 +117,7 @@ public class Elder extends RoleVillage implements IPower {
     }
 
     @Override
-    public void disableAbilities() {
-        super.disableAbilities();
+    public void disableAbilitiesRole() {
 
         this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
                 "elder",0));

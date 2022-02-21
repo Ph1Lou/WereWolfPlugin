@@ -70,9 +70,9 @@ public class StatistiksUtils {
                     response.append(responseLine.trim());
                 }
 
-                TextComponent msg = new TextComponent(main.getWereWolfAPI().translate(response.toString()));
+                TextComponent msg = new TextComponent(response.toString());
                 msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
-                        String.format("https://werewolf.ph1lou.fr/%s", gameReview.getGameUUID().toString())));
+                        String.format("https://werewolf.ph1lou.fr/game-view/%s", gameReview.getGameUUID().toString())));
                 BukkitUtils.scheduleSyncDelayedTask(() -> Bukkit.getOnlinePlayers()
                         .forEach(player -> player.spigot().sendMessage(msg)), 100);
             } catch (Exception ignored) {

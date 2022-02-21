@@ -96,6 +96,15 @@ werewolf.role.raven.display:
       meta-type: ENCHANTED
       stored-enchants:
         PROTECTION_FALL: 3
+werewolf.role.barbarian.display:
+  0:
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        DAMAGE_ALL: 3
 werewolf.role.assassin.display:
   0:
     ==: org.bukkit.inventory.ItemStack

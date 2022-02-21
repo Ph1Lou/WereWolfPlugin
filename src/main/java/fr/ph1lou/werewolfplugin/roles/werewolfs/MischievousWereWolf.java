@@ -1,10 +1,6 @@
 package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
 
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.enums.Prefix;
@@ -14,15 +10,19 @@ import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayWillComeEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
-import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import fr.ph1lou.werewolfapi.events.game.life_cycle.DeathItemsEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.ResurrectionEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.GoldenAppleParticleEvent;
 import fr.ph1lou.werewolfapi.events.roles.InvisibleEvent;
 import fr.ph1lou.werewolfapi.events.roles.StealEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.role.impl.RoleWereWolf;
 import fr.ph1lou.werewolfapi.role.interfaces.IInvisible;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
-import fr.ph1lou.werewolfapi.role.impl.RoleWereWolf;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Material;
@@ -162,16 +162,16 @@ public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
                 Prefix.ORANGE.getKey() , "werewolf.role.little_girl.soon_to_be_day");
     }
 
-    @EventHandler(priority = EventPriority.LOW)
-    public void onFinalDeath(FinalDeathEvent event) {
+    @EventHandler
+    public void onFinalDeath(DeathItemsEvent event) {
 
-        if (!event.getPlayerWW().equals(getPlayerWW())) return;
+        if (!event.getPlayerWW().equals(this.getPlayerWW())) return;
 
-        setInvisible(false);
+        this.setInvisible(false);
 
-        if(game.getConfig().getLimitKnockBack()==2) return;
+        if (this.game.getConfig().getLimitKnockBack() == 2) return;
 
-        for (ItemStack i : this.getPlayerWW().getItemDeath()) {
+        for (ItemStack i : event.getItems()) {
             if (i != null) {
                 i.removeEnchantment(Enchantment.KNOCKBACK);
             }
@@ -270,8 +270,7 @@ public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
     }
 
     @Override
-    public void disableAbilities() {
-        super.disableAbilities();
+    public void disableAbilitiesRole() {
 
         if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
             return;

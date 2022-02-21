@@ -572,9 +572,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
     }
 
     @Override
-    public void disableAbilities() {
-        super.disableAbilities();
-
+    public void disableAbilitiesRole() {
         this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,"fallen_angel",0));
     }
 }

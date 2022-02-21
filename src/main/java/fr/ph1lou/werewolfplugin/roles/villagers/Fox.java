@@ -145,6 +145,8 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
                                 .getTimerValue(TimerBase.FOX_SMELL_DURATION.getKey()))),
                                 Formatter.format("&number1&",game.getConfig().getUseOfFlair() - use)))
                 .setEffects(game.translate("werewolf.role.fox.effect"))
+                .setPower(game.translate( "werewolf.role.fox.progress",
+                        Formatter.format("&progress&",Math.min(100, Math.floor(this.getProgress())))))
                 .build();
     }
 

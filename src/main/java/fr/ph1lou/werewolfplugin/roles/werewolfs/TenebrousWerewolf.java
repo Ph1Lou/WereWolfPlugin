@@ -46,7 +46,7 @@ public class TenebrousWerewolf extends RoleWereWolf implements IPower, IAffected
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.tenebrous_werewolf.description",
-                        Formatter.format("&range&", game.getConfig().getTenebrousDistance()),
+                        Formatter.format("&range&", game.getConfig().getDistanceTenebrous()),
                         Formatter.format("&time&", game.getConfig().getTenebrousDuration()/20)))
                 .setEffects(game.translate("werewolf.description.werewolf"))
                 .setCommand(game.translate("werewolf.role.tenebrous_werewolf.description_command"))
@@ -116,18 +116,18 @@ public class TenebrousWerewolf extends RoleWereWolf implements IPower, IAffected
                 new ItemBuilder(UniversalMaterial.BLACK_WOOL.getType())
                         .setLore(lore)
                         .setDisplayName(game.translate("werewolf.role.tenebrous_werewolf.darkness_distance",
-                                Formatter.format("&range&",config.getTenebrousDistance())))
+                                Formatter.format("&range&",config.getDistanceTenebrous())))
                         .build(), e -> {
                     if (e.isLeftClick()) {
-                        config.setTenebrousDistance(config.getTenebrousDistance() + 5);
-                    } else if (config.getTenebrousDistance() > 5) {
-                        config.setTenebrousDistance(config.getTenebrousDistance() - 5);
+                        config.setDistanceTenebrous(config.getDistanceTenebrous() + 5);
+                    } else if (config.getDistanceTenebrous() > 5) {
+                        config.setDistanceTenebrous(config.getDistanceTenebrous() - 5);
                     }
 
 
                     e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                             .setDisplayName(game.translate("werewolf.role.tenebrous_werewolf.darkness_distance",
-                                    Formatter.format("&range&",config.getTenebrousDistance())))
+                                    Formatter.format("&range&",config.getDistanceTenebrous())))
                             .build());
 
                 });
