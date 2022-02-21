@@ -1,7 +1,11 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.minuskube.inv.ClickableItem;
-import fr.ph1lou.werewolfapi.enums.*;
+import fr.ph1lou.werewolfapi.enums.Aura;
+import fr.ph1lou.werewolfapi.enums.Camp;
+import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.gravedigger.CreateGravediggerClueEvent;
 import fr.ph1lou.werewolfapi.events.roles.gravedigger.GravediggerDirectionEvent;
@@ -11,20 +15,26 @@ import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
-
-import java.awt.*;
-import java.util.*;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
-import org.bukkit.*;
-import org.bukkit.Color;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Effect;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author havwila
@@ -41,8 +51,11 @@ public class Gravedigger extends RoleVillage implements IAffectedPlayers {
     private int secondsCount = 0;
 
     @Override
-    public String getDescription() {
-        return new DescriptionBuilder(game, this).setDescription(game.translate("werewolf.role.gravedigger.description")).build();
+    public @NotNull String getDescription() {
+        return new DescriptionBuilder(game, this)
+                .setDescription(game.translate("werewolf.role.gravedigger.description",
+                        Formatter.number(game.getConfig().getDistanceGravedigger())))
+                .build();
     }
 
     @Override
@@ -93,7 +106,7 @@ public class Gravedigger extends RoleVillage implements IAffectedPlayers {
                 .stream()
                 .filter(player -> {
                     try {
-                        return deathLocation.distance(player.getLocation()) < game.getConfig().getGravediggerDistance();
+                        return deathLocation.distance(player.getLocation()) < game.getConfig().getDistanceGravedigger();
                     } catch (Exception ignored) {
                         return false;
                     }
@@ -108,7 +121,7 @@ public class Gravedigger extends RoleVillage implements IAffectedPlayers {
                 .collect(Collectors.toSet());
         String key = playerWW.getRole().getKey();
 
-        CreateGravediggerClueEvent clueEvent = new CreateGravediggerClueEvent(playerWW, deathLocation, nearbyPlayers, key);
+        CreateGravediggerClueEvent clueEvent = new CreateGravediggerClueEvent(this.getPlayerWW(), playerWW, deathLocation, nearbyPlayers, key);
         Bukkit.getPluginManager().callEvent(clueEvent);
 
         if (!event.isCancelled()) {
@@ -138,11 +151,17 @@ public class Gravedigger extends RoleVillage implements IAffectedPlayers {
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
+        if(player == null){
+            return;
+        }
+
         double baseX = Math.cos(angle);
         double baseZ = Math.sin(angle);
 
         for (int i = 0; i < 20; i++) {
-            Location effectLoc = new Location(playerLocation.getWorld(), playerLocation.getX() + i * baseX, playerLocation.getY(), playerLocation.getZ() + i * baseZ);
+            Location effectLoc = new Location(playerLocation.getWorld(),
+                    playerLocation.getX() + i * baseX, playerLocation.getY()
+                    , playerLocation.getZ() + i * baseZ);
             player.playEffect(effectLoc, Effect.MOBSPAWNER_FLAMES, null);
         }
 
@@ -173,45 +192,65 @@ public class Gravedigger extends RoleVillage implements IAffectedPlayers {
             switch (clue.getCount()) {
                 case 6:
                     affectedPlayers.add(clue.getPlayerWW());
-                    TriggerGravediggerClueEvent event1 = new TriggerGravediggerClueEvent(clue.getPlayerWW(), 1, clue.getDeathLocation(), clue.getNearbyPlayers().size(), clue.getNamesList(), clue.getRoleKey());
+                    TriggerGravediggerClueEvent event1 = new TriggerGravediggerClueEvent(this.getPlayerWW(),
+                            clue.getPlayerWW(),
+                            1,
+                            clue.getDeathLocation(),
+                            clue.getNearbyPlayers().size(),
+                            clue.getNamesList(),
+                            clue.getRoleKey());
                     Bukkit.getPluginManager().callEvent(event1);
                     if(event1.isCancelled()) {
                         return;
                     }
-                    getPlayerWW().sendMessageWithKey(game.translate(Prefix.YELLOW.getKey()),"werewolf.role.gravedigger.clue_player", fr.ph1lou.werewolfapi.player.utils.Formatter.format("&player&", clue.getPlayerWW().getName()),
-                            fr.ph1lou.werewolfapi.player.utils.Formatter.format("&number&", Integer.toString(event1.getNumNearbyPlayers())));
+                    getPlayerWW().sendMessageWithKey(game.translate(Prefix.YELLOW.getKey()),"werewolf.role.gravedigger.clue_player", Formatter.format("&player&", clue.getPlayerWW().getName()),
+                            Formatter.format("&number&", Integer.toString(event1.getNumNearbyPlayers())));
                     return;
                 case 12:
-                    TriggerGravediggerClueEvent event2 = new TriggerGravediggerClueEvent(clue.getPlayerWW(), 2, clue.getDeathLocation(), clue.getNearbyPlayers().size(), clue.getNamesList(), clue.getRoleKey());
+                    TriggerGravediggerClueEvent event2 = new TriggerGravediggerClueEvent(this.getPlayerWW(),
+                            clue.getPlayerWW(),
+                            2,
+                            clue.getDeathLocation(),
+                            clue.getNearbyPlayers().size(),
+                            clue.getNamesList(),
+                            clue.getRoleKey());
                     Bukkit.getPluginManager().callEvent(event2);
                     if(event2.isCancelled()) {
                         return;
                     }
-                    getPlayerWW().sendMessageWithKey(game.translate(Prefix.YELLOW.getKey()),"werewolf.role.gravedigger.clue_role", fr.ph1lou.werewolfapi.player.utils.Formatter.format("&victim&", clue.getPlayerWW().getName()),
-                            fr.ph1lou.werewolfapi.player.utils.Formatter.format("&role&", game.translate(clue.getRoleKey())),
-                            fr.ph1lou.werewolfapi.player.utils.Formatter.format("&players&", buildNamesString(event2.getPlayerNames(), 1)));
+                    getPlayerWW().sendMessageWithKey(game.translate(Prefix.YELLOW.getKey()),"werewolf.role.gravedigger.clue_role", Formatter.format("&victim&", clue.getPlayerWW().getName()),
+                            Formatter.format("&role&", game.translate(clue.getRoleKey())),
+                            Formatter.format("&players&", buildNamesString(event2.getPlayerNames(), 1)));
                     return;
                 case 18:
-                    TriggerGravediggerClueEvent event3 = new TriggerGravediggerClueEvent(clue.getPlayerWW(), 3, clue.getDeathLocation(), clue.getNearbyPlayers().size(), clue.getNamesList(), clue.getRoleKey());
+                    TriggerGravediggerClueEvent event3 = new TriggerGravediggerClueEvent(this.getPlayerWW(),
+                            clue.getPlayerWW(),
+                            3,
+                            clue.getDeathLocation(),
+                            clue.getNearbyPlayers().size(),
+                            clue.getNamesList(),
+                            clue.getRoleKey());
                     Bukkit.getPluginManager().callEvent(event3);
                     if(event3.isCancelled()) {
                         return;
                     }
-                    getPlayerWW().sendMessageWithKey(game.translate(Prefix.YELLOW.getKey()),"werewolf.role.gravedigger.clue_nearby", fr.ph1lou.werewolfapi.player.utils.Formatter.format("&players&",  buildNamesString(event3.getPlayerNames(), 2)),
-                            fr.ph1lou.werewolfapi.player.utils.Formatter.format("&victim&", clue.getPlayerWW().getName()));
-                    return;
+                    getPlayerWW().sendMessageWithKey(game.translate(Prefix.YELLOW.getKey()),"werewolf.role.gravedigger.clue_nearby", Formatter.format("&players&",  buildNamesString(event3.getPlayerNames(), 2)),
+                            Formatter.format("&victim&", clue.getPlayerWW().getName()));
                 case 24:
-                    TriggerGravediggerClueEvent event4 = new TriggerGravediggerClueEvent(clue.getPlayerWW(), 4, clue.getDeathLocation(), clue.getNearbyPlayers().size(), clue.getNamesList(), clue.getRoleKey());
+                    TriggerGravediggerClueEvent event4 = new TriggerGravediggerClueEvent(this.getPlayerWW(),
+                            clue.getPlayerWW(),
+                            4,
+                            clue.getDeathLocation(),
+                            clue.getNearbyPlayers().size(),
+                            clue.getNamesList(),
+                            clue.getRoleKey());
                     Bukkit.getPluginManager().callEvent(event4);
                     if(event4.isCancelled()) {
                         return;
                     }
-                    getPlayerWW().sendMessageWithKey(game.translate(Prefix.YELLOW.getKey()), "werewolf.role.gravedigger.clue_nearby", fr.ph1lou.werewolfapi.player.utils.Formatter.format("&players&", buildNamesString(event4.getPlayerNames(), 3)),
+                    getPlayerWW().sendMessageWithKey(game.translate(Prefix.YELLOW.getKey()), "werewolf.role.gravedigger.clue_nearby", Formatter.format("&players&", buildNamesString(event4.getPlayerNames(), 3)),
                             Formatter.format("&victim&", clue.getPlayerWW().getName()));
                     clues.remove(clue);
-                    return;
-                default:
-                    return;
             }
 
         });
@@ -239,29 +278,29 @@ public class Gravedigger extends RoleVillage implements IAffectedPlayers {
                 new ItemBuilder(UniversalMaterial.BIRCH_LEAVES.getType())
                         .setLore(lore)
                         .setDisplayName(game.translate("werewolf.role.gravedigger.config",
-                                Formatter.number(config.getGravediggerDistance())))
+                                Formatter.number(config.getDistanceGravedigger())))
                         .build(), e -> {
                     if (e.isLeftClick()) {
-                        config.setGravediggerDistance(config.getGravediggerDistance() + 5);
+                        config.setDistanceGravedigger(config.getDistanceGravedigger() + 5);
                     } else if (config.getUseOfFlair() > 4) {
-                        config.setGravediggerDistance(config.getGravediggerDistance() - 5);
+                        config.setDistanceGravedigger(config.getDistanceGravedigger() - 5);
                     }
 
                     e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                             .setDisplayName(game.translate("werewolf.role.gravedigger.config",
-                                    Formatter.number(config.getGravediggerDistance())))
+                                    Formatter.number(config.getDistanceGravedigger())))
                             .build());
                 }
         );
     }
 
-    private class GravediggerClue {
+    private static class GravediggerClue {
 
         private final IPlayerWW playerWW;
         private final Location deathLocation;
         private final double distanceToOrigin;
         private final Set<IPlayerWW> nearbyPlayers;
-        private List<String> playerNames;
+        private final List<String> playerNames;
         private final String roleKey;
         private int count;
 

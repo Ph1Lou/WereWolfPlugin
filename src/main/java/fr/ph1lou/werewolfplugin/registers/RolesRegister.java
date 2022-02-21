@@ -13,6 +13,7 @@ import fr.ph1lou.werewolfplugin.roles.neutrals.FallenAngel;
 import fr.ph1lou.werewolfplugin.roles.neutrals.FlutePlayer;
 import fr.ph1lou.werewolfplugin.roles.neutrals.GuardianAngel;
 import fr.ph1lou.werewolfplugin.roles.neutrals.Imitator;
+import fr.ph1lou.werewolfplugin.roles.neutrals.Necromancer;
 import fr.ph1lou.werewolfplugin.roles.neutrals.Rival;
 import fr.ph1lou.werewolfplugin.roles.neutrals.Scammer;
 import fr.ph1lou.werewolfplugin.roles.neutrals.SerialKiller;
@@ -443,7 +444,8 @@ public class RolesRegister {
 
             rolesRegister
 
-                    .add(new RoleRegister("werewolf.name", RolesBase.GRAVEDIGGER.getKey(), Gravedigger.class)
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.GRAVEDIGGER.getKey(), Gravedigger.class)
                             .addCategory(Category.VILLAGER).setRandomCompositionAttribute(RandomCompositionAttribute.MINOR_INFORMATION));
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
@@ -456,6 +458,12 @@ public class RolesRegister {
                             RolesBase.BARBARIAN.getKey(), Barbarian.class)
                             .addCategory(Category.NEUTRAL)
                             .addConfig(Barbarian::config));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.NECROMANCER.getKey(), Necromancer.class)
+                            .addCategory(Category.NEUTRAL)
+                            .addConfig(Necromancer::config));
 
         } catch (NoSuchMethodException e) {
             e.printStackTrace();

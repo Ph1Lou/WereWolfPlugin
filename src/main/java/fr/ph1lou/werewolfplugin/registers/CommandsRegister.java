@@ -8,6 +8,7 @@ import fr.ph1lou.werewolfplugin.commands.roles.neutral.angel.CommandFallenAngel;
 import fr.ph1lou.werewolfplugin.commands.roles.neutral.angel.CommandGuardianAngel;
 import fr.ph1lou.werewolfplugin.commands.roles.neutral.barbarian.CommandBarbarian;
 import fr.ph1lou.werewolfplugin.commands.roles.neutral.charmer.CommandCharmer;
+import fr.ph1lou.werewolfplugin.commands.roles.neutral.necromancer.CommandNecromancer;
 import fr.ph1lou.werewolfplugin.commands.roles.neutral.succubus.CommandSuccubus;
 import fr.ph1lou.werewolfplugin.commands.roles.neutral.thug.CommandThug;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.citizen.CommandCitizenCancelVote;
@@ -491,6 +492,15 @@ public class CommandsRegister {
                         "werewolf.role.thug.command", new CommandThug())
                         .addStateWW(StateGame.GAME)
                         .addRoleKey(RolesBase.THUG.getKey())
+                        .setRequiredPower()
+                        .setRequiredAbilityEnabled()
+                        .addStateAccess(StatePlayer.ALIVE));
+
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.necromancer.command", new CommandNecromancer())
+                        .addStateWW(StateGame.GAME)
+                        .addRoleKey(RolesBase.NECROMANCER.getKey())
                         .setRequiredPower()
                         .setRequiredAbilityEnabled()
                         .addStateAccess(StatePlayer.ALIVE));

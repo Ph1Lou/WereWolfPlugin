@@ -640,11 +640,11 @@
       },
       "gravedigger": {
         "display": "Fossoyeur",
-        "description": "Lorsque un joueur meurt, des flammes vous indiquent la direction du cadavre. Si le mort n'est pas du village, la direction est aléatoire. Vous pouvez enqueter sur le cadavre d'un joueur en restant à moins de 20 blocs du cadavre et obtiendrez à chaque minute des informations sur les joueurs à moins de 70 blocs au moment de la mort",
+        "description": "Lorsque un joueur meurt, des flammes vous indiquent la direction du cadavre. Si le mort n'est pas du village, la direction est aléatoire. Vous pouvez enqueter sur le cadavre d'un joueur en restant à moins de 20 blocs du cadavre et obtiendrez à chaque minute des informations sur les joueurs à moins de &number& blocs au moment de la mort",
         "clue_player": "§b&player&§r est mort ici, §b&number&§r autres joueurs se trouvaient à proximité lors de sa mort",
         "clue_role": "§b&victim&§r était §b&role&§r. §b&players&§r étaient proches de lui lors de sa mort",
         "clue_nearby": "§b&players&§r étaient proches de §b&victim&§r lors de sa mort",
-        "config": "L'enquete révèle les joueurs à §b&number&§r blocs du mort"
+        "config": "L'enquête révèle les joueurs à §b&number&§r blocs du mort"
       },
       "occultist": {
         "display": "Occultiste",
@@ -675,6 +675,21 @@
         "command": "barbarian_hide",
         "item": "Livre Tranchant III",
         "perform": "Vous venez de dissimuler le rôle de &player&"
+      },
+      "necromancer": {
+        "description": "Après activation de votre pouvoir, vous ressuscitez le 1er joueur qui meurt à - de §b&number&§f blocs et lui volez de la vie progressivement",
+        "power_disable": "Pour activer votre pouvoir §b/ww active§f",
+        "power_enable": "§aPouvoir activé, Progression prochain coeur : &number& %",
+        "display": "Nécromancien",
+        "command": "active",
+        "perform": "Vous venez de ressusciter §b&player&§f grâce à votre pouvoir",
+        "new_victim": "Votre victime est maintenant &player&",
+        "necromancer_steal": "Le Nécromancien vous vole un coeur permanent",
+        "steal": "Vous récuperez un coeur permanent supplémentaire sur §b&player&",
+        "use": "Vous venez d'activer votre pouvoir",
+        "config": "Champ d'action du Nécromancien §b&number&§f blocs",
+        "resurrection": "Vous venez d'être ressuscité par un §bNécromancien§f",
+        "necromancer_death": "Le §bNécromancien§f vient de mourir, vous récuperez un coeur permanent toutes les trois minutes"
       }
     },
     "vote": {

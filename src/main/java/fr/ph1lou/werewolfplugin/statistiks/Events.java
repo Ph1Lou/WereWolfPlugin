@@ -79,6 +79,7 @@ import fr.ph1lou.werewolfapi.events.roles.fox.SniffEvent;
 import fr.ph1lou.werewolfapi.events.roles.fruitmerchant.FruitMerchantCommandEvent;
 import fr.ph1lou.werewolfapi.events.roles.fruitmerchant.FruitMerchantDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.fruitmerchant.FruitMerchantRecoverInformationEvent;
+import fr.ph1lou.werewolfapi.events.roles.gravedigger.TriggerGravediggerClueEvent;
 import fr.ph1lou.werewolfapi.events.roles.grim_werewolf.GrimEvent;
 import fr.ph1lou.werewolfapi.events.roles.guard.GuardEvent;
 import fr.ph1lou.werewolfapi.events.roles.guard.GuardResurrectionEvent;
@@ -88,6 +89,7 @@ import fr.ph1lou.werewolfapi.events.roles.librarian.LibrarianDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.librarian.LibrarianGiveBackEvent;
 import fr.ph1lou.werewolfapi.events.roles.librarian.LibrarianRequestEvent;
 import fr.ph1lou.werewolfapi.events.roles.mystical_werewolf.MysticalWerewolfRevelationEvent;
+import fr.ph1lou.werewolfapi.events.roles.necromancer.NecromancerResurrectionEvent;
 import fr.ph1lou.werewolfapi.events.roles.occultist.OccultistRevealWishes;
 import fr.ph1lou.werewolfapi.events.roles.occultist.WishChangeEvent;
 import fr.ph1lou.werewolfapi.events.roles.oracle.OracleEvent;
@@ -1464,7 +1466,7 @@ public class Events implements Listener {
         if (event.isCancelled()) return;
 
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.thug_reveal_event",
-                event.getPlayerWW(),   main.getWereWolfAPI().getTimer()));
+                event.getPlayerWW(), main.getWereWolfAPI().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -1473,5 +1475,21 @@ public class Events implements Listener {
 
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.barbarian_event",
                 event.getPlayerWW(), event.getTargetWW(),  main.getWereWolfAPI().getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onNecromancerEvent(NecromancerResurrectionEvent event) {
+        if (event.isCancelled()) return;
+
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.necromancer_event",
+                event.getPlayerWW(), event.getTargetWW(),  main.getWereWolfAPI().getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onGraveDiggerEvent(TriggerGravediggerClueEvent event) {
+        if (event.isCancelled()) return;
+
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.gravedigger_event",
+                event.getGravedigger(), event.getPlayerWW(),  main.getWereWolfAPI().getTimer(), event.getClueCount()));
     }
 }

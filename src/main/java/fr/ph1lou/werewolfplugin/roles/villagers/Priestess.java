@@ -85,7 +85,7 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
 
         this.getPlayerWW().sendMessageWithKey(
                 Prefix.YELLOW.getKey() , "werewolf.role.priestess.perform",
-                Formatter.format("&blocks",game.getConfig().getDistancePriestess()),
+                Formatter.number(game.getConfig().getDistancePriestess()),
                 Formatter.timer(Utils.conversion(
                         game.getConfig()
                                 .getTimerValue(TimerBase.POWER_DURATION.getKey()))));

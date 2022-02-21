@@ -22,6 +22,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.projectiles.ProjectileSource;
 import org.jetbrains.annotations.NotNull;
@@ -97,7 +98,7 @@ public class Barbarian extends RoleNeutral implements IPower, IAffectedPlayers {
         return Aura.NEUTRAL;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onMaskedDeathAnnouncement(AnnouncementDeathEvent event){
 
         if(!this.isAbilityEnabled()){

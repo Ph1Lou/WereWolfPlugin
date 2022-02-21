@@ -79,6 +79,7 @@ public class Configuration implements IConfiguration {
     private int distanceGravedigger;
     private int thugDistance;
     private int barbarianDistance;
+    private int necromancerDistance;
 
     public Configuration(){
         this.timerValues = new HashMap<>();
@@ -145,6 +146,7 @@ public class Configuration implements IConfiguration {
         this.distanceGravedigger = 70;
         this.thugDistance=25;
         this.barbarianDistance=25;
+        this.necromancerDistance=70;
     }
 
     public Configuration(IRegisterManager registerManager) {
@@ -818,12 +820,12 @@ public class Configuration implements IConfiguration {
     }
 
     @Override
-    public void setGravediggerDistance(int i) {
+    public void setDistanceGravedigger(int i) {
         this.distanceGravedigger = i;
     }
 
     @Override
-    public int getGravediggerDistance() {
+    public int getDistanceGravedigger() {
         return this.distanceGravedigger;
     }
       
@@ -834,6 +836,16 @@ public class Configuration implements IConfiguration {
     @Override
     public void setDistanceBarbarian(int distance) {
         this.barbarianDistance = distance;
+    }
+
+    @Override
+    public int getDistanceNecromancer() {
+        return this.necromancerDistance;
+    }
+
+    @Override
+    public void setDistanceNecromancer(int distance) {
+        this.necromancerDistance = distance;
     }
 
     @Override
