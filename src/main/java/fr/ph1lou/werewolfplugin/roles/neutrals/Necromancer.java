@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 import fr.minuskube.inv.ClickableItem;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Prefix;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -19,12 +20,15 @@ import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 public class Necromancer extends RoleNeutral implements IPower, IProgress {
 
@@ -114,10 +118,32 @@ public class Necromancer extends RoleNeutral implements IPower, IProgress {
 
         this.playerWW = event.getPlayerWW().getLastKiller().orElse(null);
 
+        if(this.getPlayerWW().equals(this.playerWW)){
+            this.playerWW = Bukkit.getOnlinePlayers().stream()
+                    .map(Entity::getUniqueId)
+                    .filter(uuid -> !this.getPlayerUUID().equals(uuid))
+                    .map(game::getPlayerWW)
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
+                    .min(Comparator.comparingDouble(value -> {
+                        if (event.getPlayerWW().getDeathLocation().getWorld() != value.getLocation().getWorld()) {
+                            return Integer.MAX_VALUE;
+                        }
+                        return event.getPlayerWW().getDeathLocation().distance(value.getLocation());
+                    }))
+                    .orElse(null);
+        }
+
         if(this.playerWW != null){
             this.getPlayerWW().sendMessageWithKey(Prefix.GREEN.getKey(),"werewolf.role.necromancer.new_victim",
                     Formatter.player(this.playerWW.getName()));
         }
+    }
+
+    @Override
+    public Aura getDefaultAura() {
+        return Aura.DARK;
     }
 
     @EventHandler
@@ -160,7 +186,7 @@ public class Necromancer extends RoleNeutral implements IPower, IProgress {
             return;
         }
 
-        if(this.playerWW.getMaxHealth() <= 7){
+        if(this.health >= 7){
             return;
         }
 

@@ -679,7 +679,7 @@
       "necromancer": {
         "description": "Après activation de votre pouvoir, vous ressuscitez le 1er joueur qui meurt à - de §b&number&§f blocs et lui volez de la vie progressivement",
         "power_disable": "Pour activer votre pouvoir §b/ww active§f",
-        "power_enable": "§aPouvoir activé, Progression prochain coeur : &number& %",
+        "power_enable": "§aPouvoir activé§f, Progression prochain coeur : §b&number&§f %",
         "display": "Nécromancien",
         "command": "active",
         "perform": "Vous venez de ressusciter §b&player&§f grâce à votre pouvoir",

@@ -49,7 +49,6 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
         this.power = power;
     }
 
-
     @Override
     public boolean hasPower() {
         return (this.power);
@@ -75,7 +74,6 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
         return (this.affectedPlayer);
     }
 
-
     @Override
     public float getProgress() {
         return (this.progress);
@@ -93,6 +91,8 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
                                 Formatter.timer(
                                         Utils.conversion(game.getConfig()
                                                 .getTimerValue(TimerBase.SUCCUBUS_DURATION.getKey())))))
+                .setPower(game.translate( "werewolf.role.succubus.progress_charm",
+                        Formatter.format("&progress&",Math.min(100, Math.floor(this.getProgress())))))
                 .addExtraLines(game.translate("werewolf.role.succubus.charm",
                                 Formatter.format("&list&",affectedPlayer.isEmpty() ? this.power ?
                                 game.translate("werewolf.role.succubus.charm_command")
