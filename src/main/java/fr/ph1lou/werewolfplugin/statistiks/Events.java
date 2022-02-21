@@ -84,6 +84,7 @@ import fr.ph1lou.werewolfapi.events.roles.grim_werewolf.GrimEvent;
 import fr.ph1lou.werewolfapi.events.roles.guard.GuardEvent;
 import fr.ph1lou.werewolfapi.events.roles.guard.GuardResurrectionEvent;
 import fr.ph1lou.werewolfapi.events.roles.howling_werewolf.HowlEvent;
+import fr.ph1lou.werewolfapi.events.roles.hunter.HunterShotEvent;
 import fr.ph1lou.werewolfapi.events.roles.infect_father_of_the_wolves.InfectionEvent;
 import fr.ph1lou.werewolfapi.events.roles.librarian.LibrarianDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.librarian.LibrarianGiveBackEvent;
@@ -1491,5 +1492,13 @@ public class Events implements Listener {
 
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.gravedigger_event",
                 event.getGravedigger(), event.getPlayerWW(),  main.getWereWolfAPI().getTimer(), event.getClueCount()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onHunterShoot(HunterShotEvent event) {
+        if (event.isCancelled()) return;
+
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.hunter_shoot_event",
+                event.getSource(), event.getTarget(),  main.getWereWolfAPI().getTimer()));
     }
 }
