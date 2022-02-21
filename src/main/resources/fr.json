@@ -653,6 +653,20 @@
         "self_death": "L'Occultiste est mort sa dernière volonté était : &wish&",
         "command": "L'Occultiste est présent dans la partie, vous pouvez faire §b/ww wish§f pour écrire votre dernière volontée."
       },
+
+      "hunter": {
+        "display": "Chasseur",
+        "description": "A chaque fois que vous tuez un loup, les dégâts que vous infligez aux loups sont définitivement augmentés",
+        "effect": "&number& force contre les loups",
+        "description_shoot": "A votre mort, vous pouvez tirer sur un joueur de votre choix autre que votre tueur",
+        "items": "3 fils, 64 flèches, un livre power III",
+        "command": "tirer",
+        "perform": "Vous pouvez tirer sur un joueur autre que votre tueur pour lui faire perdre 5 coeurs avec §b/ww tirer§r. Vous avez 30 seconds",
+        "invalid_target": "[§eLG UHC§r] Vous ne pouvez pas tirer sur cette cible",
+        "success": "Le chasseur a tiré sur &target&. Il perd 5 coeurs.",
+        "can_shoot": "Chasseur peut tirer après sa mort",
+        "werewolf_slain": "Vous avez tué un loup; vous infligez désormais plus de dégâts aux loups."
+      },
       "thug": {
         "display": "Voyou",
         "description": "Chaque jour, vous pouvez masquer le §bnametag§f d'un joueur, vous obtenez la moitié des pommes d'or si vous êtes à moins de §b&number&§f blocs du cadavre",

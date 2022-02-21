@@ -87,6 +87,10 @@ public class ConfigsRegister {
                 .add(new ConfigRegister("werewolf.name",
                         ConfigBase.PROXIMITY_CHAT.getKey()));
 
+        configsRegister.add(new ConfigRegister("werewolf.name",
+                ConfigBase.HUNTER_CAN_SHOOT.getKey())
+                .unSetAppearInMenu());
+
 
         return configsRegister;
     }
