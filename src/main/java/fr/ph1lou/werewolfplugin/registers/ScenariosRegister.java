@@ -1,23 +1,28 @@
 package fr.ph1lou.werewolfplugin.registers;
 
+import fr.ph1lou.werewolfplugin.listeners.scenarios.BetaZombies;
 import fr.ph1lou.werewolfplugin.listeners.scenarios.CatEyes;
 import fr.ph1lou.werewolfplugin.listeners.scenarios.CompassMiddle;
 import fr.ph1lou.werewolfplugin.listeners.scenarios.CompassTargetLastDeath;
 import fr.ph1lou.werewolfplugin.listeners.scenarios.DiamondLimit;
 import fr.ph1lou.werewolfplugin.listeners.scenarios.DoubleJump;
 import fr.ph1lou.werewolfplugin.listeners.scenarios.FastSmelting;
+import fr.ph1lou.werewolfplugin.listeners.scenarios.FinalHeal;
 import fr.ph1lou.werewolfplugin.listeners.scenarios.FireLess;
+import fr.ph1lou.werewolfplugin.listeners.scenarios.HasteyBabies;
 import fr.ph1lou.werewolfplugin.listeners.scenarios.HasteyBoys;
 import fr.ph1lou.werewolfplugin.listeners.scenarios.HorseLess;
 import fr.ph1lou.werewolfplugin.listeners.scenarios.NoCleanUp;
 import fr.ph1lou.werewolfplugin.listeners.scenarios.NoEggSnowBall;
 import fr.ph1lou.werewolfplugin.listeners.scenarios.NoEnd;
+import fr.ph1lou.werewolfplugin.listeners.scenarios.NoExtraStones;
 import fr.ph1lou.werewolfplugin.listeners.scenarios.NoFall;
 import fr.ph1lou.werewolfplugin.listeners.scenarios.NoFireWeapon;
 import fr.ph1lou.werewolfplugin.listeners.scenarios.NoNameTag;
 import fr.ph1lou.werewolfplugin.listeners.scenarios.NoNether;
 import fr.ph1lou.werewolfplugin.listeners.scenarios.NoPoison;
 import fr.ph1lou.werewolfplugin.listeners.scenarios.RodLess;
+import fr.ph1lou.werewolfplugin.listeners.scenarios.SafeMiner;
 import fr.ph1lou.werewolfplugin.listeners.scenarios.SlowBow;
 import fr.ph1lou.werewolfplugin.listeners.scenarios.Timber;
 import fr.ph1lou.werewolfplugin.listeners.scenarios.VanillaPlus;
@@ -72,7 +77,8 @@ public class ScenariosRegister {
                 .add(new ScenarioRegister("werewolf.name",
                         ScenariosBase.HASTEY_BOYS.getKey(),
                         new HasteyBoys(main))
-                        .setDefaultValue());
+                        .setDefaultValue()
+                        .addIncompatibleScenario(ScenariosBase.HASTEY_BABIES.getKey()));
         scenariosRegister
                 .add(new ScenarioRegister("werewolf.name",
                         ScenariosBase.HORSE_LESS.getKey(),
@@ -148,6 +154,33 @@ public class ScenariosRegister {
                         new NoEnd(main))
                         .setDefaultValue()
                 );
+
+        scenariosRegister
+                .add(new ScenarioRegister("werewolf.name",
+                        ScenariosBase.NO_EXTRA_STONES.getKey(),
+                        new NoExtraStones(main))
+                        .setDefaultValue());
+        scenariosRegister
+                .add(new ScenarioRegister("werewolf.name",
+                        ScenariosBase.FINAL_HEAL.getKey(),
+                        new FinalHeal(main))
+                        .setDefaultValue());
+
+        scenariosRegister
+                .add(new ScenarioRegister("werewolf.name",
+                        ScenariosBase.SAFE_MINER.getKey(),
+                        new SafeMiner(main)));
+
+        scenariosRegister
+                .add(new ScenarioRegister("werewolf.name",
+                        ScenariosBase.BETA_ZOMBIES.getKey(),
+                        new BetaZombies(main)));
+
+        scenariosRegister
+                .add(new ScenarioRegister("werewolf.name",
+                        ScenariosBase.HASTEY_BABIES.getKey(),
+                        new HasteyBabies(main))
+                        .addIncompatibleScenario(ScenariosBase.HASTEY_BOYS.getKey()));
 
         return scenariosRegister;
 

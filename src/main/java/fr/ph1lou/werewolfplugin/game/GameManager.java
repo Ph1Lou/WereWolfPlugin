@@ -75,7 +75,7 @@ public class GameManager implements WereWolfAPI {
     private final ListenersLoader listenersLoader;
     private final Random r = new Random(System.currentTimeMillis());
     private final UUID gameUUID = UUID.randomUUID();
-    private String gameName = "@Ph1Lou_";
+    private String gameName="";
     private int groupSize = 5;
     private int playerSize = 0;
     private int timer = 0;
@@ -105,6 +105,7 @@ public class GameManager implements WereWolfAPI {
             FileUtils_.loadConfig(main, "saveCurrent");
             main.getWereWolfAPI().getStuffs().load("saveCurrent");
             listenersLoader.init();
+            this.gameName = this.translate("werewolf.score_board.default_game_name");
         });
         setState(StateGame.LOBBY);
         Bukkit.getPluginManager().callEvent(new LoadEvent(this));

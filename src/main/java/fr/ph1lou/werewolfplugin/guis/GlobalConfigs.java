@@ -59,9 +59,7 @@ public class GlobalConfigs implements InventoryProvider {
                 .stream()
                 .filter(config1 -> (config1.isAppearInMenu() && !config1.getRoleKey().isPresent())
                         || game.isDebug())
-                .forEach(configRegister -> {
-                    items.add(getClickableItem(game, configRegister));
-                });
+                .forEach(configRegister -> items.add(getClickableItem(game, configRegister)));
 
         if (items.size() > 45) {
             pagination.setItems(items.toArray(new ClickableItem[0]));

@@ -2,7 +2,6 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.minuskube.inv.ClickableItem;
 import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.enums.Prefix;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfKillEvent;
@@ -92,8 +91,9 @@ public class Hunter extends RoleVillage implements IPower {
 
         Player damager = (Player) event.getDamager();
         IPlayerWW damagerWW = game.getPlayerWW(damager.getUniqueId()).orElse(null);
+
         //also handles case damagerWW == null
-        if (!damagerWW.equals(getPlayerWW())) return;
+        if (!getPlayerWW().equals(damagerWW)) return;
 
         if (damager.hasPotionEffect(PotionEffectType.INCREASE_DAMAGE)) return;
 

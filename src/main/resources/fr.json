@@ -1170,7 +1170,12 @@
         "no_fire_weapons": "NoFireWeapons",
         "timber": "Timber",
         "double_jump": "Double Jump",
-        "incompatible": "§cScénario incompatible chargé : §b&scenario&"
+        "incompatible": "§cScénario incompatible chargé : §b&scenario&",
+        "hastey_babies": "Hastey Babies",
+        "no_extra_stones": "No Extra Stones",
+        "safe_miner": "Safe Miner",
+        "final_heal": "Final Heal",
+        "beta_zombies": "Beta Zombies"
       },
       "rank": {
         "command": "rang",
@@ -1326,7 +1331,8 @@
         "§3§m---↠§8bordure§3§m↞----",
         "Bordure §b&border&",
         "Taille §b&border_size&"
-      ]
+      ],
+      "default_game_name": "@Ph1Lou_"
     },
     "random_events": {
       "exposed": {

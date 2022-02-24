@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.listeners.scenarios;
 
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.enums.TimerBase;
 import fr.ph1lou.werewolfapi.listeners.ListenerManager;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfplugin.Main;
@@ -25,6 +26,10 @@ public class Timber extends ListenerManager {
 
     @EventHandler
     public void onBreak(BlockBreakEvent event) {
+
+        if(this.getGame().getConfig().getTimerValue(TimerBase.PVP.getKey()) <= 0){
+            return;
+        }
 
         Player player = event.getPlayer();
         Material mat = event.getBlock().getType();
