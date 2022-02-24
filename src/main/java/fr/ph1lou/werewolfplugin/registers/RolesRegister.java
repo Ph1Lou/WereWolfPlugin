@@ -29,6 +29,7 @@ import fr.ph1lou.werewolfplugin.roles.villagers.Citizen;
 import fr.ph1lou.werewolfplugin.roles.villagers.Comedian;
 import fr.ph1lou.werewolfplugin.roles.villagers.Cupid;
 import fr.ph1lou.werewolfplugin.roles.villagers.Detective;
+import fr.ph1lou.werewolfplugin.roles.villagers.DevotedServant;
 import fr.ph1lou.werewolfplugin.roles.villagers.Druid;
 import fr.ph1lou.werewolfplugin.roles.villagers.Elder;
 import fr.ph1lou.werewolfplugin.roles.villagers.Fox;
@@ -128,14 +129,12 @@ public class RolesRegister {
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.WITCH.getKey(), Witch.class)
-                            .addCategory(Category.VILLAGER)
-                            .addConfig(Witch::config));
+                            .addCategory(Category.VILLAGER));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.HOWLING_WEREWOLF.getKey(), HowlingWerewolf.class)
-                            .addCategory(Category.WEREWOLF)
-                            .addConfig(HowlingWerewolf::config));
+                            .addCategory(Category.WEREWOLF));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
@@ -221,8 +220,7 @@ public class RolesRegister {
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.SEER.getKey(), Seer.class)
                             .addCategory(Category.VILLAGER)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION)
-                            .addConfig(Seer::config));
+                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
@@ -234,8 +232,7 @@ public class RolesRegister {
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.DETECTIVE.getKey(), Detective.class)
                             .addCategory(Category.VILLAGER)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION)
-                            .addConfig(Detective::config));
+                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
@@ -263,8 +260,7 @@ public class RolesRegister {
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.ANGEL.getKey(), Angel.class)
-                            .addCategory(Category.NEUTRAL)
-                            .addConfig(Angel::config));
+                            .addCategory(Category.NEUTRAL));
 
 
             rolesRegister
@@ -400,8 +396,7 @@ public class RolesRegister {
             rolesRegister
                     .add(new RoleRegister("werewolf.name", RolesBase.ORACLE.getKey(), Oracle.class)
                             .addCategory(Category.VILLAGER)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION)
-                            .addConfig(Oracle::config));
+                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name", RolesBase.WISE_ELDER.getKey(), WiseElder.class)
@@ -412,8 +407,7 @@ public class RolesRegister {
             rolesRegister
                     .add(new RoleRegister("werewolf.name", RolesBase.TENEBROUS_WEREWOLF.getKey(), TenebrousWerewolf.class)
                             .addCategory(Category.WEREWOLF)
-                            .addConfig(TenebrousWerewolf::configDistance)
-                            .addConfig(TenebrousWerewolf::configDuration));
+                            .addConfig(TenebrousWerewolf::configDistance));
 
           rolesRegister
                     .add(new RoleRegister("werewolf.name", RolesBase.SERVITOR.getKey(), Servitor.class)
@@ -424,7 +418,6 @@ public class RolesRegister {
                     .add(new RoleRegister("werewolf.name", RolesBase.SCAMMER.getKey(), Scammer.class)
                             .addCategory(Category.NEUTRAL)
                             .setRandomCompositionAttribute(RandomCompositionAttribute.HYBRID)
-                            .addConfig(Scammer::configDelay)
                             .addConfig(Scammer::config));
 
 
@@ -471,6 +464,11 @@ public class RolesRegister {
                             RolesBase.NECROMANCER.getKey(), Necromancer.class)
                             .addCategory(Category.NEUTRAL)
                             .addConfig(Necromancer::config));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.DEVOTED_SERVANT.getKey(), DevotedServant.class)
+                            .addCategory(Category.VILLAGER));
 
         } catch (NoSuchMethodException e) {
             e.printStackTrace();

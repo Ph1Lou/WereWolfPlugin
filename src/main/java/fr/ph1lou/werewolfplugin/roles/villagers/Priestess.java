@@ -114,7 +114,7 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
 
 
     @EventHandler(priority = EventPriority.HIGH)
-    private void sendDeathMessage(AnnouncementDeathEvent event) {
+    public void sendDeathMessage(AnnouncementDeathEvent event) {
 
         if (event.getTargetPlayer().equals(this.getPlayerWW())) {
             return; //la prêtresse voit les vrais rôles

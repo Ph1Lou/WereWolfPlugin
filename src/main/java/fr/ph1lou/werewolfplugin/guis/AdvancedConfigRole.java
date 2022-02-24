@@ -7,6 +7,9 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
+import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.game.IConfiguration;
+import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -18,8 +21,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class AdvancedConfigRole implements InventoryProvider {
 
@@ -58,13 +63,15 @@ public class AdvancedConfigRole implements InventoryProvider {
         Pagination pagination = contents.pagination();
         List<ClickableItem> items = new ArrayList<>();
 
-        for (RoleRegister roleRegister : main.getRegisterManager()
-                .getRolesRegister()) {
+        for (RoleRegister roleRegister : main.getRegisterManager().getRolesRegister()) {
 
             for (Function<WereWolfAPI, ClickableItem> item : roleRegister.getConfig()) {
 
                 items.add(item.apply(game));
             }
+
+            items.addAll(getTimersRole(main, roleRegister));
+            items.addAll(getConfigsRole(main, roleRegister));
         }
 
         if (items.size() > 45) {
@@ -117,6 +124,53 @@ public class AdvancedConfigRole implements InventoryProvider {
                 contents.set(k / 9 + 1, k % 9, null);
             }
         }
+    }
+
+    public static List<ClickableItem> getConfigsRole(GetWereWolfAPI main, RoleRegister roleRegister){
+        WereWolfAPI game = main.getWereWolfAPI();
+        return main.getRegisterManager().getConfigsRegister().stream()
+                .filter(configRegister -> configRegister.getRoleKey().isPresent())
+                .filter(configRegister -> configRegister.getRoleKey().get().equals(roleRegister.getKey()))
+                .map(configRegister -> GlobalConfigs.getClickableItem(game, configRegister))
+                .collect(Collectors.toList());
+    }
+
+    public static List<ClickableItem> getTimersRole(GetWereWolfAPI main, RoleRegister roleRegister){
+
+        WereWolfAPI game = main.getWereWolfAPI();
+        return main.getRegisterManager().getTimersRegister().stream()
+                .filter(timerRegister -> timerRegister.getRoleKey().isPresent())
+                .filter(timerRegister -> timerRegister.getRoleKey().get().equals(roleRegister.getKey()))
+                .map(timerRegister -> {
+
+                    IConfiguration config = game.getConfig();
+                    List<String> lore = new ArrayList<>(Arrays.asList(game.translate("werewolf.menu.left"),
+                            game.translate("werewolf.menu.right")));
+                    timerRegister.getLoreKey().stream()
+                            .map(game::translate)
+                            .map(s -> Arrays.stream(s.split("\\n"))
+                                    .collect(Collectors.toList()))
+                            .forEach(lore::addAll);
+                    return ClickableItem.of(new ItemBuilder(UniversalMaterial.ANVIL.getStack())
+                            .setLore(lore)
+                            .setDisplayName(game.translate(timerRegister.getKey(),
+                                    Formatter.timer(Utils.conversion(config.getTimerValue(timerRegister.getKey())))))
+                            .build(),e -> {
+
+
+                        if (e.isLeftClick()) {
+                            config.moveTimer(timerRegister.getKey(), 10);
+                        } else if (config.getDistanceFox() - 5 > 0) {
+                            config.moveTimer(timerRegister.getKey(), -10);
+                        }
+
+                        e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                                .setLore(lore)
+                                .setDisplayName(game.translate(timerRegister.getKey(),
+                                        Formatter.timer(Utils.conversion(config.getTimerValue(timerRegister.getKey())))))
+                                .build());
+                    });
+                }).collect(Collectors.toList());
     }
 }
 

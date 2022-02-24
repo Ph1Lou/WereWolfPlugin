@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 
 import fr.minuskube.inv.ClickableItem;
+import fr.ph1lou.werewolfapi.enums.ConfigBase;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
@@ -129,7 +130,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
 
             return new DescriptionBuilder(game, this)
                     .setEffects(game.translate("werewolf.role.guardian_angel.effect"))
-                    .setDescription(game.getConfig().isSweetAngel() ?
+                    .setDescription(game.getConfig().isConfigActive(ConfigBase.SWEET_ANGEL.getKey()) ?
                             game.translate("werewolf.role.guardian_angel.description") :
                             game.translate("werewolf.role.guardian_angel.description_patch"))
                     .addExtraLines(affectedPlayer.isEmpty() ?
@@ -184,7 +185,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
                         }
 
                     } else {
-                        if (game.getConfig().isSweetAngel()) {
+                        if (game.getConfig().isConfigActive(ConfigBase.SWEET_ANGEL.getKey())) {
                             sb.append(game.translate(
                                     Prefix.YELLOW.getKey() , "werewolf.role.guardian_angel.protege_death"));
                         } else {
@@ -231,7 +232,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
                         HoverEvent.Action.SHOW_TEXT,
                         new ComponentBuilder(
                                 game.translate(
-                                        game.getConfig().isSweetAngel()
+                                        game.getConfig().isConfigActive(ConfigBase.SWEET_ANGEL.getKey())
                                                 ? "werewolf.role.angel.guardian_choice" :
                                                 "werewolf.role.angel.guardian_choice_patch"))
                                 .create()));
@@ -376,7 +377,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
         } else if (isChoice(AngelForm.GUARDIAN_ANGEL)) {
             this.getPlayerWW().removePlayerMaxHealth(6);
 
-            if (game.getConfig().isSweetAngel()) {
+            if (game.getConfig().isConfigActive(ConfigBase.SWEET_ANGEL.getKey())) {
                 this.getPlayerWW().sendMessageWithKey(
                         Prefix.YELLOW.getKey() , "werewolf.role.guardian_angel.protege_death");
             } else {
@@ -449,7 +450,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
     @Override
     public boolean isNeutral() {
         return super.isNeutral() &&
-                (!game.getConfig().isSweetAngel()
+                (!game.getConfig().isConfigActive(ConfigBase.SWEET_ANGEL.getKey())
                         || !choice.equals(AngelForm.GUARDIAN_ANGEL)
                         || affectedPlayer.isEmpty()
                         || !affectedPlayer.get(0).isState(StatePlayer.DEATH));
@@ -553,23 +554,6 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
         this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,"fallen_angel"));
     }
 
-    public static ClickableItem config(WereWolfAPI game) {
-
-        IConfiguration config = game.getConfig();
-
-        return ClickableItem.of(
-                new ItemBuilder(Material.MELON)
-                        .setLore(game.translate(config.isSweetAngel() ? "werewolf.utils.enable" : "werewolf.utils.disable"))
-                        .setDisplayName(game.translate("werewolf.role.angel.sweet_angel"))
-                        .build(), e -> {
-                    config.setSweetAngel(!config.isSweetAngel());
-
-                    e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                            .setLore(game.translate(config.isSweetAngel() ? "werewolf.utils.enable" : "werewolf.utils.disable"))
-                            .build());
-
-                });
-    }
 
     @Override
     public void disableAbilitiesRole() {

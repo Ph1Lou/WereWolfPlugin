@@ -166,27 +166,31 @@ public class TimersGUI implements InventoryProvider {
         }));
 
 
-        for (TimerRegister timer : main.getRegisterManager().getTimersRegister()) {
+        main.getRegisterManager().getTimersRegister()
+                .stream()
+                .filter(timerRegister -> !timerRegister.getRoleKey().isPresent() || game.isDebug())
+                .forEach(timerRegister -> {
+
             List<String> lore = new ArrayList<>();
-            timer.getLoreKey().stream()
+            timerRegister.getLoreKey().stream()
                     .map(game::translate)
                     .map(s -> Arrays.stream(s.split("\\n"))
                             .collect(Collectors.toList()))
                     .forEach(lore::addAll);
 
-            if (game.getConfig().getTimerValue(timer.getKey()) >= 0 || game.isDebug()) {
+            if (game.getConfig().getTimerValue(timerRegister.getKey()) >= 0 || game.isDebug()) {
 
-                items.add(ClickableItem.of((new ItemBuilder(timer.getKey().equals(key) ?
+                items.add(ClickableItem.of((new ItemBuilder(timerRegister.getKey().equals(key) ?
                                 Material.FEATHER :
                                 Material.ANVIL)
                                 .setLore(lore)
-                                .setDisplayName(game.translate(timer.getKey(),
-                                        Formatter.timer(Utils.conversion(config.getTimerValue(timer.getKey())))))
+                                .setDisplayName(game.translate(timerRegister.getKey(),
+                                        Formatter.timer(Utils.conversion(config.getTimerValue(timerRegister.getKey())))))
                                 .build()),
-                        e -> this.key = timer.getKey()));
+                        e -> this.key = timerRegister.getKey()));
             }
 
-        }
+        });
 
         if (items.size() > 45) {
             pagination.setItems(items.toArray(new ClickableItem[0]));

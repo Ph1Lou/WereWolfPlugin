@@ -30,7 +30,6 @@ import java.util.stream.Collectors;
 
 public class End {
 
-
     private String winner = null;
     private final GameManager game;
 
@@ -38,7 +37,7 @@ public class End {
         this.game = game;
     }
 
-    public void check_victory() {
+    public void checkVictory() {
 
         if (game.getConfig().isTrollSV()) return;
 
@@ -46,7 +45,7 @@ public class End {
 
         if (game.getPlayersCount() == 0) {
             winner = "werewolf.end.death";
-            fin();
+            end();
             return;
         }
         IConfiguration config = game.getConfig();
@@ -65,7 +64,7 @@ public class End {
 
                             if (event.getPlayerWWS().size() == game.getPlayersCount()) {
                                 winner = lover.getKey();
-                                fin();
+                                end();
                             }
                         }
                     });
@@ -82,7 +81,7 @@ public class End {
             if (winnerTeam.isEmpty()) return;
 
             winner = winnerTeam;
-            fin();
+            end();
             return;
         }
 
@@ -94,7 +93,7 @@ public class End {
         if (event.getWerewolf() == game.getPlayersCount()) {
             if(event.getVillager() == 0){ //useless
                 winner = Category.WEREWOLF.getKey();
-                fin();
+                end();
                 return;
             }
             else {
@@ -104,7 +103,7 @@ public class End {
         if (event.getVillager() == game.getPlayersCount()) {
             if(event.getWerewolf() == 0) { //useless
                 winner = Category.VILLAGER.getKey();
-                fin();
+                end();
             }
             else {
                 Bukkit.broadcastMessage("Signalez ce Code d'erreur à Ph1Lou sur discord : 1399");
@@ -112,7 +111,7 @@ public class End {
         }
     }
 
-    public void fin() {
+    private void end() {
 
         Bukkit.getPluginManager().callEvent(new WinEvent(winner,
                 game.getPlayersWW()
@@ -128,7 +127,7 @@ public class End {
 
         for (IPlayerWW playerWW1 : game.getPlayersWW()) {
 
-            String role = game.translate(playerWW1.getRole().getDeathRole());
+            String role = game.translate(playerWW1.getDeathRole());
             String playerName = playerWW1.getName();
             StringBuilder sb = new StringBuilder();
 
@@ -141,10 +140,11 @@ public class End {
                         Formatter.player(playerName),
                         Formatter.role(role)));
             }
-            if (!playerWW1.getRole().getKey().equals(playerWW1.getRole().getDeathRole())) {
-                sb.append(game.translate("werewolf.end.thief",
-                        Formatter.role(game.translate(playerWW1.getRole().getKey()))));
-            }
+            playerWW1.getDeathRoles().forEach(deathRole -> {
+                if (!playerWW1.getDeathRole().equals(deathRole)) {
+                    sb.append(" => ").append(game.translate(deathRole));
+                }
+            });
 
             EndPlayerMessageEvent endPlayerMessageEvent = new EndPlayerMessageEvent(playerWW1, sb);
             Bukkit.getPluginManager().callEvent(endPlayerMessageEvent);

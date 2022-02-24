@@ -4,6 +4,7 @@ import fr.minuskube.inv.ClickableItem;
 import fr.ph1lou.werewolfapi.enums.Prefix;
 import fr.ph1lou.werewolfapi.enums.RolesBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.TimerBase;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.random_events.SwapEvent;
 import fr.ph1lou.werewolfapi.events.roles.scammer.ScamEvent;
@@ -24,7 +25,6 @@ import fr.ph1lou.werewolfplugin.roles.villagers.Villager;
 import fr.ph1lou.werewolfplugin.roles.werewolfs.WereWolf;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -53,7 +53,7 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.scammer.description",
-                        Formatter.timer(Utils.conversion(game.getConfig().getScamDelay())),
+                        Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.SCAM_DELAY.getKey()))),
                         Formatter.number(game.getConfig().getDistanceScammer())))
                 .build();
     }
@@ -70,7 +70,7 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
             return;
         }
 
-        this.count = this.count++ % game.getConfig().getScamDelay();
+        this.count = this.count++ % game.getConfig().getTimerValue(TimerBase.SCAM_DELAY.getKey());
 
         if(count != 0){
             return;
@@ -88,10 +88,9 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
                 .map(game::getPlayerWW)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .filter(this.affectedPlayer::containsKey)
                 .filter(iPlayerWW -> iPlayerWW.isState(StatePlayer.ALIVE) && checkDistance(iPlayerWW, location))
                 .forEach(iPlayerWW -> {
-                    int value = this.affectedPlayer.get(iPlayerWW);
+                    int value = this.affectedPlayer.getOrDefault(iPlayerWW, 0);
                     if (value == 100) {
                         Bukkit.getPluginManager().callEvent(new ScamEvent(getPlayerWW(), iPlayerWW));
                         return;
@@ -118,6 +117,7 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
         this.affectedPlayer.clear();
         IPlayerWW target = event.getTargetWW();
         IRole targetRole = target.getRole();
+        targetRole.setPlayerWW(this.getPlayerWW());
         HandlerList.unregisterAll(this);
         getPlayerWW().setRole(targetRole);
         Bukkit.getPluginManager().callEvent(new SwapEvent(this.getPlayerWW(),target));
@@ -146,9 +146,13 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
         if(this.isSolitary()){
             targetRole.setSolitary(true);
         }
-        targetRole.setDeathRole(this.getKey());
-        newRole.setDeathRole(targetRole.getKey());
-
+        target.addDeathRole(targetRole.getKey());
+        this.getPlayerWW().addDeathRole(this.getKey());
+        targetRole.removeTemporaryAuras();
+        targetRole.recoverPower();
+        targetRole.recoverPotionEffects();
+        target.addPlayerMaxHealth(20-target.getMaxHealth());
+        target.clearPotionEffects();
         newRole.disableAbilities();
         target.setRole(newRole);
         BukkitUtils.registerEvents(target.getRole());
@@ -211,27 +215,6 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
                     .build());
 
         });
-    }
-
-    public static ClickableItem configDelay(WereWolfAPI game) {
-
-        IConfiguration config = game.getConfig();
-
-        return ClickableItem.of(
-                new ItemBuilder(Material.STICK)
-                        .setLore(game.translate("werewolf.role.scammer.config.lore", Formatter.timer(Utils.conversion(config.getScamDelay()))))
-                        .setDisplayName(game.translate("werewolf.role.scammer.config.name"))
-                        .build(), e -> {
-                    if (e.isLeftClick()) {
-                        config.setScamDelay(config.getScamDelay() + 1);
-                    } else if (e.isRightClick()) {
-                        config.setScamDelay(config.getScamDelay() - 1);
-                    }
-
-                    e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                            .setLore(game.translate("werewolf.role.scammer.config.lore", Formatter.timer(Utils.conversion(config.getScamDelay()))))
-                            .build());
-                });
     }
 
     @Override

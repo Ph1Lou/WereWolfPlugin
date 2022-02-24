@@ -170,7 +170,9 @@ public class Barbarian extends RoleNeutral implements IPower, IAffectedPlayers {
 
     @Override
     public void removeAffectedPlayer(IPlayerWW playerWW) {
-        this.playerWW = null;
+        if(playerWW.equals(this.playerWW)){
+            this.playerWW = null;
+        }
     }
 
     @Override

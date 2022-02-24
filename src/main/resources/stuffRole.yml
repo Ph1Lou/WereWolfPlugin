@@ -194,7 +194,7 @@ werewolf.role.priestess.display:
     type: OBSIDIAN
     amount: 4
 
-werewolf.role.priestess.display:
+werewolf.role.hunter.display:
   0:
     ==: org.bukkit.inventory.ItemStack
     type: STRING

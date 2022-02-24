@@ -1,6 +1,8 @@
 package fr.ph1lou.werewolfplugin.registers;
 
+import fr.ph1lou.werewolfapi.enums.RolesBase;
 import fr.ph1lou.werewolfplugin.Main;
+import fr.ph1lou.werewolfplugin.listeners.configs.HiddenRoles;
 import fr.ph1lou.werewolfplugin.listeners.configs.LoneWolf;
 import fr.ph1lou.werewolfplugin.listeners.configs.RedNameTag;
 import fr.ph1lou.werewolfplugin.listeners.configs.ShowDeathCategoryRole;
@@ -89,8 +91,37 @@ public class ConfigsRegister {
 
         configsRegister.add(new ConfigRegister("werewolf.name",
                 ConfigBase.HUNTER_CAN_SHOOT.getKey())
-                .unSetAppearInMenu());
+                .setRoleConfig(RolesBase.HUNTER.getKey()));
 
+        configsRegister.add(new ConfigRegister("werewolf.name",
+                ConfigBase.HIDDEN_ROLES.getKey())
+                .addConfig(new HiddenRoles(main))
+                .setLoreKey("werewolf.hidden_roles.description"));
+
+        configsRegister.add(new ConfigRegister("werewolf.name",
+                ConfigBase.RANDOM_CUPID.getKey())
+                .setRoleConfig(RolesBase.CUPID.getKey()));
+
+        configsRegister.add(new ConfigRegister("werewolf.name",
+                ConfigBase.WITCH_AUTO_RESURRECTION.getKey())
+                .setRoleConfig(RolesBase.WITCH.getKey())
+                .setDefaultValue());
+
+        configsRegister.add(new ConfigRegister("werewolf.name",
+                ConfigBase.SEER_EVERY_OTHER_DAY.getKey())
+                .setRoleConfig(RolesBase.SEER.getKey()));
+
+        configsRegister.add(new ConfigRegister("werewolf.name",
+                ConfigBase.ORACLE_EVERY_OTHER_DAY.getKey())
+                .setRoleConfig(RolesBase.ORACLE.getKey()));
+
+        configsRegister.add(new ConfigRegister("werewolf.name",
+                ConfigBase.DETECTIVE_EVERY_OTHER_DAY.getKey())
+                .setRoleConfig(RolesBase.DETECTIVE.getKey()));
+
+        configsRegister.add(new ConfigRegister("werewolf.name",
+                ConfigBase.SWEET_ANGEL.getKey())
+                .setRoleConfig(RolesBase.ANGEL.getKey()));
 
         return configsRegister;
     }

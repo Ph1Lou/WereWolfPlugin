@@ -15,6 +15,7 @@ import fr.ph1lou.werewolfplugin.commands.roles.villager.citizen.CommandCitizenCa
 import fr.ph1lou.werewolfplugin.commands.roles.villager.citizen.CommandCitizenSeeVote;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.comedian.CommandComedian;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.cupid.CommandCupid;
+import fr.ph1lou.werewolfplugin.commands.roles.villager.devoted_servant.CommandDevotedServant;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.fruitmerchant.CommandFruitMerchant;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.guard.CommandGuard;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.hunter.CommandHunter;
@@ -470,7 +471,8 @@ public class CommandsRegister {
         commandsRegister
                 .add(new CommandRegister("werewolf.name",
                         "werewolf.commands.doc.command", new CommandDoc())
-                        .setDescription("werewolf.commands.doc.description"));
+                        .setDescription("werewolf.commands.doc.description")
+                        .addArgNumbers(0));
 
         commandsRegister
                 .add(new CommandRegister("werewolf.name",
@@ -486,7 +488,8 @@ public class CommandsRegister {
                         .addStateWW(StateGame.GAME)
                         .addRoleKey(RolesBase.FRUIT_MERCHANT.getKey())
                         .setRequiredPower()
-                        .addStateAccess(StatePlayer.ALIVE));
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addArgNumbers(0));
 
         commandsRegister
                 .add(new CommandRegister("werewolf.name",
@@ -495,7 +498,8 @@ public class CommandsRegister {
                         .addRoleKey(RolesBase.THUG.getKey())
                         .setRequiredPower()
                         .setRequiredAbilityEnabled()
-                        .addStateAccess(StatePlayer.ALIVE));
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addArgNumbers(1));
 
         commandsRegister
                 .add(new CommandRegister("werewolf.name",
@@ -504,7 +508,8 @@ public class CommandsRegister {
                         .addRoleKey(RolesBase.NECROMANCER.getKey())
                         .setRequiredPower()
                         .setRequiredAbilityEnabled()
-                        .addStateAccess(StatePlayer.ALIVE));
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addArgNumbers(0));
 
         commandsRegister
                 .add(new CommandRegister("werewolf.name",
@@ -514,7 +519,8 @@ public class CommandsRegister {
                         .setRequiredPower()
                         .setRequiredAbilityEnabled()
                         .unsetAutoCompletion()
-                        .addStateAccess(StatePlayer.ALIVE));
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addArgNumbers(1));
 
         commandsRegister
                 .add(new CommandRegister("werewolf.name",
@@ -529,7 +535,19 @@ public class CommandsRegister {
                 .addRoleKey(RolesBase.HUNTER.getKey())
                 .setRequiredAbilityEnabled()
                 .setRequiredPower()
-                .addStateAccess(StatePlayer.DEATH));
+                .addStateAccess(StatePlayer.DEATH)
+                .addArgNumbers(1));
+
+
+        commandsRegister.add(new CommandRegister("werewolf.name",
+                "werewolf.role.devoted_servant.command", new CommandDevotedServant())
+                .addStateWW(StateGame.GAME)
+                .addRoleKey(RolesBase.DEVOTED_SERVANT.getKey())
+                .setRequiredAbilityEnabled()
+                .setRequiredPower()
+                .unsetAutoCompletion()
+                .addStateAccess(StatePlayer.ALIVE)
+                .addArgNumbers(1));
 
         return commandsRegister;
     }

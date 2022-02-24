@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
 import fr.minuskube.inv.ClickableItem;
 import fr.ph1lou.werewolfapi.enums.Aura;
+import fr.ph1lou.werewolfapi.enums.TimerBase;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -47,7 +48,7 @@ public class TenebrousWerewolf extends RoleWereWolf implements IPower, IAffected
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.tenebrous_werewolf.description",
                         Formatter.format("&range&", game.getConfig().getDistanceTenebrous()),
-                        Formatter.format("&time&", game.getConfig().getTenebrousDuration()/20)))
+                        Formatter.format("&time&", game.getConfig().getTimerValue(TimerBase.WEREWOLF_TENEBROUS_DURATION.getKey()))))
                 .setEffects(game.translate("werewolf.description.werewolf"))
                 .setCommand(game.translate("werewolf.role.tenebrous_werewolf.description_command"))
                 .setPower(game.translate(power ? "werewolf.role.tenebrous_werewolf.power_available" : "werewolf.role.tenebrous_werewolf.power_not_available"))
@@ -128,32 +129,6 @@ public class TenebrousWerewolf extends RoleWereWolf implements IPower, IAffected
                     e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                             .setDisplayName(game.translate("werewolf.role.tenebrous_werewolf.darkness_distance",
                                     Formatter.format("&range&",config.getDistanceTenebrous())))
-                            .build());
-
-                });
-    }
-
-    public static ClickableItem configDuration(WereWolfAPI game) {
-        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
-                game.translate("werewolf.menu.right"));
-        IConfiguration config = game.getConfig();
-
-        return ClickableItem.of(
-                new ItemBuilder(UniversalMaterial.CLOCK.getType())
-                        .setLore(lore)
-                        .setDisplayName(game.translate("werewolf.role.tenebrous_werewolf.darkness_duration",
-                                Formatter.format("&time&",config.getTenebrousDuration()/20)))
-                        .build(), e -> {
-                    if (e.isLeftClick()) {
-                        config.setTenebrousDuration(config.getTenebrousDuration() + 100);
-                    } else if (config.getTenebrousDuration() > 100) {
-                        config.setTenebrousDuration(config.getTenebrousDuration() - 100);
-                    }
-
-
-                    e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                            .setDisplayName(game.translate("werewolf.role.tenebrous_werewolf.darkness_duration",
-                                    Formatter.format("&time&",config.getTenebrousDuration()/20)))
                             .build());
 
                 });

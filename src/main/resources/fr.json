@@ -39,7 +39,9 @@
         "model_death": "§cMort§f",
         "model": "§bModele§f : &player&\n",
         "command": "modele",
-        "change": "Votre modèle est maintenant §b&player&"
+        "change": "Votre modèle est maintenant §b&player&",
+        "model_duration": "Durée pour le choix d'un Modèle (§b&timer&§r)",
+        "model_end": " modèle &player&"
       },
       "sister": {
         "display": "Soeur",
@@ -57,7 +59,8 @@
         "end_message": "de l'assassin de §b&player&§f",
         "reveal_killer_name": "Votre soeur a été tué par §b&player&",
         "reveal_killer_role": "Votre soeur a été tué par un §b&role&",
-        "sisters_list": "Liste de vos Soeurs : §b&list&\n"
+        "sisters_list": "Liste de vos Soeurs : §b&list&\n",
+        "sisters": "Soeurs : §b&list&"
       },
       "wolf_dog": {
         "display": "Chien Loup",
@@ -141,7 +144,9 @@
         "command_1": "gardien",
         "command_2": "dechu",
         "choice": "il a choisi &form&",
-        "sweet_angel": "L'ange Gardien gagne Village quand son protégé meurt"
+        "sweet_angel": "L'ange Gardien gagne Village quand son protégé meurt",
+        "angel_duration": "Durée pour le choix de l'Ange (§b&timer&§r)",
+        "choice_form": "Ange choisi : §b&form&"
       },
       "fallen_angel": {
         "display": "Ange Déchu",
@@ -185,6 +190,7 @@
         "description": "Lors de l'annonce du couple vous obtiendrez le rôle de deux personnes formant un couple. Dans §b&timer&§r, vous obtiendrez une liste de 5 joueurs contenant les noms des deux amoureux. \nSi vous tuez un membre du couple, vous prendrez sa place et devrez gagner avec son couple. \nEn revanche, si le couple meurt, vous devrez gagner seul et vous perdrez 5 coeurs (vous récupèrerez un coeurs par minute). Vous connaissez la direction du cupidon si il est présent dans la partie.",
         "lover": "Votre couple associé de la partie se compose d'un §b&role1&§f et d'un §b&role2&§f.",
         "error": "Aucun couple n'a été trouvé pour votre rôle (Rival)",
+        "rival_duration": "Attente des informations du rival (§b&timer&§r)",
         "find_lovers": "Le couple se trouve parmi les joueurs suivants : &player1&, &player2&, &player3&, &player4&, &player5&",
         "lover_death": "Le couple est mort, vous êtes maintenant forcé de gagner seul, votre barre de vie est réduite de 2 coeurs."
       },
@@ -200,7 +206,8 @@
         "not_enough_near": "Vous n'êtes pas assez proche de la personne que vous voulez flairer",
         "progress": "Progression du Flair §b&progress&%",
         "smell": "Vous avez été flairé par un §bRenard§f il y a 5 minutes",
-        "command": "flairer"
+        "command": "flairer",
+        "fox_smell_duration": "Durée du Flair du Renard (§b&timer&§r)"
       },
       "raven": {
         "display": "Corbeau",
@@ -371,19 +378,22 @@
       "cupid": {
         "display": "Cupidon",
         "lover": "§bCouple§f : &lovers&\n",
-        "none": "§cAucun§f, pour désigner §b/ww couple",
+        "none": "§cAucun§f",
         "items": "Un Livre Power II, Punch I, 64 flèches, 3 fils",
         "description": "Vous devez gagner avec votre couple puis avec le Village.",
         "extra": "Vous avez le droit à un arc Puissance §b&number&",
         "lover_designation_message": "Vous devez désigner un Couple, §b/ww couple§r, vous avez §b&timer&",
         "designation_perform": "Votre couple associé est §b&player1&§r et §b&player2&",
-        "command": "couple"
+        "command": "couple",
+        "random": "Le paramètre Cupidon aléatoire est activé",
+        "wait": "Annonce du Couple dans §b&timer&"
       },
       "siamese_twin": {
         "display": "Frère Siamois",
         "power": "Deux coeur en plus",
         "description": "Vous avez été séparé de votre frère à la naissance, cependant vous avez gardé un lien très fort avec lui. Vos coeurs au dela du cinquième sont liées.",
-        "siamese_twin_list": "Liste de vos Frères Siamois: §b&list&"
+        "siamese_twin_list": "Liste de vos Frères Siamois: §b&list&",
+        "siamese_twin": "Frères Siamois : §b&list&"
       },
       "alpha_werewolf": {
         "display": "Loup Garou Alpha",
@@ -503,7 +513,8 @@
         "not_enough_near": "Vous n'êtes pas assez proche de la personne que vous voulez charmer",
         "progress_charm": "Progression du Charme §b&progress&%",
         "command": "charmer",
-        "change": "Votre charmée est maintenant §b&player&"
+        "change": "Votre charmée est maintenant §b&player&",
+        "succubus_duration": "Durée du Charme du Succube (§b&timer&§r)"
       },
       "shaman": {
         "display": "Chaman",
@@ -527,7 +538,8 @@
         "before_count_down": "Votre charmé est mort avant la fin du compte à rebours, vous perdez 3 coeurs permanents",
         "lover_death": "Vous gagnez l'effet §bVitesse§f et 10 coeurs d'absorption suite à la mort du couple",
         "perform": "Vous venez de charmer &player&",
-        "announcement": "Votre charmé &player& vient d'être informé de son couple"
+        "announcement": "Votre charmé &player& vient d'être informé de son couple",
+        "charmer_countdown": "Durée du compte à rebours de la Charmeuse (§b&timer&§r)"
       },
       "fearful_werewolf": {
         "display": "Loup Garou Craintif",
@@ -568,7 +580,8 @@
         "too_near": "Vous êtes trop proche de votre Jumeau pour voir des informations",
         "list_near": "Voici la liste des joueurs à moins de &number& blocs de votre Jumeau, &list&",
         "role_near": "Un joueur situé à moins de &number& blocs de votre Jumeau est §b&role&§f",
-        "death": "Votre Jumeau &player& est mort, de rage vous disposez de cinq minutes de Force et de Vitesse"
+        "death": "Votre Jumeau &player& est mort, de rage vous disposez de cinq minutes de Force et de Vitesse",
+        "twin_duration": "Durée pour la révélation des Jumeaux (§b&timer&§r)"
       },
       "analyst": {
         "display": "Analyste",
@@ -581,6 +594,7 @@
         "call_back_no_villager": "L'§bAnalyste§f &player& vient d'observer vos effets",
         "command_see": "observer",
         "command_analyse": "analyser",
+        "analyse_duration": "Début du pouvoir Analyste (§b&timer&§r)",
         "not_affected": "Vous ne pouvez effectuer cette commande que sur un joueur observé precedemment via §b/ww oberver§f"
       },
 
@@ -598,8 +612,8 @@
         "message_werewolf": "L'§bEscroc§f vous a escroqué, vous devenez §bLoup Garou§f sans pouvoir",
         "description": "Vous volez progressivement le rôle des joueurs a §b&number&§f blocs de vous au rythme de 1% toutes les &timer&. Le premier joueur escroqué devient Loup-Garou sans pouvoir s’il était dans le camp des Loups sinon Simple Villageois",
         "config": {
-          "name": "Modifier le délai entre chaque mise à jour du %",
-          "lore": "§b&timer&§r"
+          "lore": "Modifier le délai entre chaque mise à jour du %",
+          "name": "Délai Escroc &timer&"
         },
         "message": "Vous venez d'escroquer le rôle de &player&"
       },
@@ -609,6 +623,7 @@
         "announce_info": "Vous recevez les informations suite à votre commande",
         "info": "Le joueur &player& avait &number& pomme(s) d'or lors de l'execution de votre commande, il en a maintenant &number2&",
         "command": "compter",
+        "fruit_merchant_cooldown": "Cooldown de la Marchande de Fruit (§b&timer&§r)",
         "recover": "Vous venez de récupérer votre pouvoir. Faites §b/ww compter§f pour le réutiliser",
         "description": "Avec §b/ww compter§f, vous pouvez compter les pommes d'or des joueurs à §b&number&§f blocs de vous.",
         "power": "1 chance sur 4 de régénérer 3 ♥ avec les pommes d’or, la nourriture vous donne 1 gigot de plus."
@@ -630,13 +645,13 @@
         "description": "Une fois par partie, durant la nuit, vous pouvez donner un effet de Blindness à tous les non-loups dans un rayon de &range& pendant &time& secondes ou jusqu'à ce qu'ils soient attaqués par un loup",
         "description_command": "/ww tenebres",
         "command": "tenebres",
-        "darkness": "Le loup Ténébreux vous a plongé dans les ténèbres!",
+        "darkness": "Le Loup Ténébreux vous a plongé dans les ténèbres!",
         "darkness_wolves": "Le Loup Ténébreux a plongé une partie du village dans les ténèbres",
         "not_night": "Vous ne pouvez pas effectuer cette action le jour",
         "power_available": "Vous pouvez §aencore§f utiliser votre pouvoir",
         "power_not_available": "Vous avez §cdéjà§f utilisé votre pouvoir",
         "darkness_distance": "Rayon d'action des ténèbres: §b&range&§r blocs",
-        "darkness_duration": "Durée des ténèbres: §b&time&§r seconds"
+        "darkness_duration": "Durée des ténèbres: §b&timer&§r secondes"
       },
       "gravedigger": {
         "display": "Fossoyeur",
@@ -704,6 +719,15 @@
         "config": "Champ d'action du Nécromancien §b&number&§f blocs",
         "resurrection": "Vous venez d'être ressuscité par un §bNécromancien§f",
         "necromancer_death": "Le §bNécromancien§f vient de mourir, vous récuperez un coeur permanent toutes les trois minutes"
+      },
+      "devoted_servant": {
+        "display": "Servante dévouée",
+        "click": "Cliquez pour voler le rôle du Villageois &player&",
+        "command": "steal_devoted_servant",
+        "steal": "Vous venez de voler le rôle de &player&",
+        "perform": "Vous venez de demander à voler le rôle de &player&",
+        "resurrection": "Vous n'avez pas pu voler le rôle de &player& qui a été ressuscité",
+        "description": "Vous pouvez voler les pouvoirs d'un joueur du Village (1 fois par partie) au moment de sa mort par un autre joueur. Celui-ci est alors affiché en tant que Servante Dévouée."
       }
     },
     "vote": {
@@ -731,6 +755,14 @@
     },
     "lone_wolf": {
       "message": "Vous devenez Solitaire. A partir de maintenant,vous devez gagner Seul. Pour cela, vous bénéficiez de quatres coeurs permanents supplémentaires (dans la limite de 15 coeurs max)"
+    },
+    "hidden_roles": {
+      "display": "Rôles Masqués",
+      "description": "permet d’activer le système de Rôles masqués sans avoir de Prêtresse dans la composition. \nUn joueur du Village est alors choisi aléatoirement au début de la partie sans qu'il le sache",
+      "magic": "§kCoucou"
+    },
+    "random_cupid": {
+      "display": "Cupidon Aléatoire"
     },
     "announcement": {
       "restart": "Redémarrage de la partie dans §b&timer&",
@@ -769,13 +801,11 @@
       "resurrection": "Vous venez de ressusciter"
     },
     "end": {
-      "thief": "§e il a volé un(e) &role&",
       "infect": " Infecté(e)",
       "solitary": " Solitaire",
       "reveal_death": "§e§m&player& était &role&",
       "transform": " transformé",
       "reveal": "§e&player& était &role&",
-      "model": " modèle &player&",
       "death": "§cDe la Mort",
       "lover": " en couple avec &player&",
       "fake_lover": " en faux couple avec &player&",
@@ -868,9 +898,6 @@
           "kill_by": "Tué par : §b&player&",
           "power": "Pouvoir : §b&on&",
           "role": "§b&player&§r est §b&role&",
-          "sister": "Soeurs : §b&list&",
-          "siamese_twin": "Frères Siamois : §b&list&",
-          "angel": "Ange choisi : §b&form&",
           "transformed": "Transformé : §b&on&",
           "yes": "oui",
           "no": "non",
@@ -989,7 +1016,7 @@
           "§aAnge, Charmeuse, Feu Follet, Joueur de Flûte, §6Cupidon",
           "Rôles à aura Neutre :",
           "§cLoup-Garou Perfide, Loup-Garou Amnésique, Loup-Garou Craintif, Loup-Garou Vengeur",
-          "§bChaman, Comédien, Frère Siamois, Chasseur, Ancien, Oracle, Ermite, Garde, Détective, Petite Fille",
+          "§bChaman, Comédien, Frère Siamois, Chasseur, Ancien, Oracle, Ermite, Garde, Détective, Petite Fille, Servante Dévouée",
           "§aImitateur, Barbare, §6Enfant Sauvage, Voleur, Trublion, Escroc, Voyou",
           "Rôles à aura Obscure :",
           "§cTous les autres Loups-Garous",
@@ -1004,7 +1031,7 @@
           "Le §6Voleur§f et l'§6Imitateur§f obtiennent l'aura du joueur qu'ils volent",
           "Le §bMontreur d’Ours§f change d’aura en fonction du nombre de “Grrrrr” (§b0§f / §71§f / §c2+§f)",
           "Quand le §bRenard§f renifle un Loup-Garou, son aura devient Obscure",
-          "Quand le §bChaman§f et le §bChasseur§f utilisent leur pouvoir, leur aura devient Obscure",
+          "Quand le §bChaman§f et le §cLoup-Garou Ténébreux§f utilisent leur pouvoir, leur aura devient Obscure",
           "Quand l’§bAnalyste§f utilise son pouvoir d’analyse, son aura devient Obscure",
           "Quand le §cLoup-Garou Vengeur§f atteint 10 ♥, son aura devient Obscure",
           "La §bPrêtresse§f et l'§aAnge§f gardent TOUJOURS une aura Lumineuse",
@@ -1178,26 +1205,17 @@
         "pvp": "PVP (§b&timer&§r)",
         "vote_duration": "Durée du Vote (§b&timer&§r)",
         "werewolf_chat_duration": "Durée du Chat des Loups Garous (§b&timer&§r)",
-        "rival_duration": "Attente des informations du rival (§b&timer&§r)",
         "vote_waiting": "Durée de transition du vote (§b&timer&§r)",
         "border_begin": "Début de la Bordure (§b&timer&§r)",
-        "model_duration": "Durée pour le choix d'un Modèle (§b&timer&§r)",
-        "fox_smell_duration": "Durée du Flair du Renard (§b&timer&§r)",
         "werewolf_list": "Temps d'attente de la liste des Loups (§b&timer&§r)",
         "lover_duration": "Durée pour le choix du Couple et révélation des couples (§b&timer&§r)",
         "day_duration": "Durée du Jour/Nuit (§b&timer&§r)",
         "role_duration": "Révélation des Rôles (§b&timer&§r)",
         "digging_end": "Fin du Minage (§b&timer&§r)",
-        "angel_duration": "Durée pour le choix de l'Ange (§b&timer&§r)",
-        "twin_duration": "Durée pour la révélation des Jumeaux (§b&timer&§r)",
         "power_duration": "Durée d'utilisation des pouvoirs le Matin (§b&timer&§r)",
         "vote_begin": "Début des Votes (§b&timer&§r)",
         "auto_restart_duration": "Durée de redémarrage du serveur (§b&timer&§r)",
-        "invulnerability": "Invulnérabilité (§b&timer&§r)",
-        "succubus_duration": "Durée du Charme du Succube (§b&timer&§r)",
-        "charmer_countdown": "Durée du compte à rebours de la Charmeuse (§b&timer&§r)",
-        "analyse_duration": "Début du pouvoir Analyste (§b&timer&§r)",
-        "fruit_merchant_cooldown": "Cooldown de la Marchande de Fruit (§b&timer&§r)"
+        "invulnerability": "Invulnérabilité (§b&timer&§r)"
       },
       "random_events": {
         "list": "Liste des évènements aléatoires §bactivés§f :\n",

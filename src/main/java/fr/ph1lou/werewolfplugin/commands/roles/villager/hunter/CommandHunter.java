@@ -28,6 +28,7 @@ public class CommandHunter implements ICommand {
 
         if (playerArg == null) {
             playerWW.sendMessageWithKey("werewolf.check.offline_player");
+            return;
         }
 
         UUID argUUID = playerArg.getUniqueId();

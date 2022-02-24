@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.cupid;
 
 import com.google.common.collect.Sets;
+import fr.ph1lou.werewolfapi.enums.ConfigBase;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -30,6 +31,11 @@ public class CommandCupid implements ICommand {
 
         if (args[0].equalsIgnoreCase(args[1])) {
             playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.two_distinct_player");
+            return;
+        }
+
+        if(game.getConfig().isConfigActive(ConfigBase.RANDOM_CUPID.getKey())){
+            playerWW.sendMessageWithKey(Prefix.GREEN.getKey(),"werewolf.role.cupid.random");
             return;
         }
 

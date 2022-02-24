@@ -79,6 +79,17 @@ public class AdvancedRoleMenu implements InventoryProvider {
             contents.set(i.get() / 9, i.get() % 9, clickableItem.apply(game));
             i.set(i.get() + 2);
         });
+
+        AdvancedConfigRole.getTimersRole(main, this.register).forEach(clickableItem -> {
+            contents.set(i.get() / 9, i.get() % 9, clickableItem);
+            i.set(i.get() + 2);
+        });
+
+        AdvancedConfigRole.getConfigsRole(main, this.register).forEach(clickableItem -> {
+            contents.set(i.get() / 9, i.get() % 9, clickableItem);
+            i.set(i.get() + 2);
+        });
+
     }
 
 

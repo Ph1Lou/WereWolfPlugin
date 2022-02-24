@@ -1,20 +1,17 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
-import fr.minuskube.inv.ClickableItem;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.game.IConfiguration;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.enums.ConfigBase;
 import fr.ph1lou.werewolfapi.enums.Prefix;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.TimerBase;
-import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
-import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleWithLimitedSelectionDuration;
-import fr.ph1lou.werewolfapi.utils.ItemBuilder;
+import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
@@ -56,7 +53,7 @@ public class Detective extends RoleWithLimitedSelectionDuration implements IAffe
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if (game.getConfig().isDetectiveEveryOtherDay() &&
+        if (game.getConfig().isConfigActive(ConfigBase.DETECTIVE_EVERY_OTHER_DAY.getKey()) &&
                 event.getNumber() == dayNumber + 1) {
             return;
         }
@@ -87,23 +84,5 @@ public class Detective extends RoleWithLimitedSelectionDuration implements IAffe
     @Override
     public void recoverPower() {
 
-    }
-
-    public static ClickableItem config(WereWolfAPI game) {
-
-        IConfiguration config = game.getConfig();
-
-        return ClickableItem.of(
-                new ItemBuilder(UniversalMaterial.LEAD.getType())
-                        .setLore(game.translate(config.isDetectiveEveryOtherDay() ? "werewolf.utils.enable" : "werewolf.utils.disable"))
-                        .setDisplayName(game.translate("werewolf.role.detective.detective_every_other_day"))
-                        .build(), e -> {
-                    config.setDetectiveEveryOtherDay(!config.isDetectiveEveryOtherDay());
-
-                    e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                            .setLore(game.translate(config.isDetectiveEveryOtherDay() ? "werewolf.utils.enable" : "werewolf.utils.disable"))
-                            .build());
-
-                });
     }
 }

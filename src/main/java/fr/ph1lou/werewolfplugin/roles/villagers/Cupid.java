@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
+import fr.ph1lou.werewolfapi.enums.ConfigBase;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -70,6 +71,10 @@ public class Cupid extends RoleVillage implements IAffectedPlayers, IPower {
                 .addExtraLines(game.translate("werewolf.role.cupid.lover",
                                 Formatter.format("&lovers&",this.affectedPlayer.isEmpty() ?
                                 this.hasPower() ?
+                                        game.getConfig().isConfigActive(ConfigBase.RANDOM_CUPID.getKey()) ?
+                                        game.translate("werewolf.role.cupid.wait",Formatter.timer(Utils.conversion(
+                                                game.getConfig()
+                                                        .getTimerValue("werewolf.menu.timers.lover_duration")))):
                                         game.translate("werewolf.role.cupid.lover_designation_message",
                                                 Formatter.timer(Utils.conversion(
                                                         game.getConfig()

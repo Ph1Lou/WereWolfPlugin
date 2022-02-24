@@ -1,5 +1,6 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.witch;
 
+import fr.ph1lou.werewolfapi.enums.ConfigBase;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -40,7 +41,7 @@ public class CommandWitch implements ICommand {
             return;
         }
 
-        if (!game.getConfig().isWitchAutoResurrection() && argUUID.equals(uuid)) {
+        if (!game.getConfig().isConfigActive(ConfigBase.WITCH_AUTO_RESURRECTION.getKey()) && argUUID.equals(uuid)) {
             playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.not_yourself");
             return;
         }

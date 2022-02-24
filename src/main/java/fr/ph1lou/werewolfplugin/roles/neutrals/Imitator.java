@@ -149,7 +149,7 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
             roleClone.setSolitary(true);
         }
         roleClone.setTransformedToNeutral(true);
-        roleClone.setDeathRole(this.getKey());
+        this.getPlayerWW().addDeathRole(this.getKey());
 
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.thief.realized_theft",
                 Formatter.role(game.translate(role.getKey())));

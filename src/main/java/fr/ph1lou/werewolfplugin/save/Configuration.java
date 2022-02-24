@@ -67,14 +67,7 @@ public class Configuration implements IConfiguration {
     private double borderSpeed ;
     private int werewolfChatMaxMessage;
     private boolean trollLover;
-    private boolean autoRez;
-    private boolean seerEveryOtherDay;
-    private boolean oracleEveryOtherDay;
-    private boolean detectiveEveryOtherDay;
-    private boolean sweetAngel;
     private int distanceFruitMerchant;
-    private int scamDelay;
-    private int tenebrousDuration;
     private int distanceTenebrousWerewolf;
     private int distanceGravedigger;
     private int thugDistance;
@@ -131,17 +124,10 @@ public class Configuration implements IConfiguration {
         this.borderSpeed = 0.3;
         this.werewolfChatMaxMessage = 1;
         this.trollLover = false;
-        this.autoRez = false;
-        this.seerEveryOtherDay = true;
-        this.oracleEveryOtherDay = true;
-        this.detectiveEveryOtherDay = true;
-        this.sweetAngel = false;
         this.distanceFruitMerchant=50;
-        this.scamDelay = 9;
         this.distanceWiseElder = 15;
         this.distanceServitor = 25;
         this.distanceScammer = 20;
-        this.tenebrousDuration = 600;
         this.distanceTenebrousWerewolf = 50;
         this.distanceGravedigger = 70;
         this.thugDistance=25;
@@ -675,51 +661,6 @@ public class Configuration implements IConfiguration {
     }
 
     @Override
-    public boolean isWitchAutoResurrection() {
-        return this.autoRez;
-    }
-
-    @Override
-    public void setWitchAutoResurrection(boolean autoReZ) {
-        this.autoRez = autoReZ;
-    }
-
-    @Override
-    public boolean isSeerEveryOtherDay() {
-        return this.seerEveryOtherDay;
-    }
-
-    @Override
-    public void setSeerEveryOtherDay(boolean seerEveryOtherDay) {
-        this.seerEveryOtherDay = seerEveryOtherDay;
-    }
-
-    @Override
-    public boolean isDetectiveEveryOtherDay() {
-        return this.detectiveEveryOtherDay;
-    }
-
-    @Override
-    public void setDetectiveEveryOtherDay(boolean detectiveEveryOtherDay) {
-        this.detectiveEveryOtherDay = detectiveEveryOtherDay;
-    }
-
-    @Override
-    public boolean isOracleEveryOtherDay() {
-        return this.oracleEveryOtherDay;
-    }
-
-    @Override
-    public void setOracleEveryOtherDay(boolean oracleEveryOtherDay) {
-        this.oracleEveryOtherDay = oracleEveryOtherDay;
-    }
-
-    @Override
-    public boolean isSweetAngel() {
-        return this.sweetAngel;
-    }
-
-    @Override
     public int getDistanceWiseElder() {
         return distanceWiseElder;
     }
@@ -737,11 +678,6 @@ public class Configuration implements IConfiguration {
     @Override
     public void setDistanceServitor(int i) {
         distanceServitor = i;
-    }
-
-    @Override
-    public void setSweetAngel(boolean sweetAngel) {
-        this.sweetAngel = sweetAngel;
     }
 
     public void addRegister(RegisterManager registerManager) {
@@ -779,17 +715,6 @@ public class Configuration implements IConfiguration {
     }
 
     @Override
-    public int getScamDelay() {
-        return scamDelay;
-    }
-
-    @Override
-    public void setScamDelay(int scamDelay) {
-        if (scamDelay < 0) return;
-        this.scamDelay = scamDelay;
-    }
-
-    @Override
     public int getDistanceScammer() {
         return distanceScammer;
     }
@@ -807,16 +732,6 @@ public class Configuration implements IConfiguration {
     @Override
     public void setDistanceTenebrous(int distance) {
         this.distanceTenebrousWerewolf = distance;
-    }
-
-    @Override
-    public int getTenebrousDuration() {
-        return this.tenebrousDuration;
-    }
-
-    @Override
-    public void setTenebrousDuration(int t) {
-        this.tenebrousDuration = t;
     }
 
     @Override

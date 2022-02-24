@@ -244,14 +244,12 @@ public class WildChild extends RoleVillage implements IAffectedPlayers, ITransfo
             IPlayerWW modelWW = getAffectedPlayers().get(0);
 
             if (modelWW != null) {
-                sb.append(game.translate("werewolf.end.model",
+                sb.append(game.translate("werewolf.role.wild_child.model_end",
                         Formatter.player(modelWW.getName())));
             }
-
         }
         if(transformed){
             sb.append(game.translate("werewolf.end.transform"));
         }
-
     }
 }

@@ -67,6 +67,7 @@ import fr.ph1lou.werewolfapi.events.roles.citizen.CitizenSeeVoteEvent;
 import fr.ph1lou.werewolfapi.events.roles.citizen.CitizenSeeWerewolfVoteEvent;
 import fr.ph1lou.werewolfapi.events.roles.comedian.UseMaskEvent;
 import fr.ph1lou.werewolfapi.events.roles.detective.InvestigateEvent;
+import fr.ph1lou.werewolfapi.events.roles.devoted_servant.DevotedServantEvent;
 import fr.ph1lou.werewolfapi.events.roles.druid.DruidUsePowerEvent;
 import fr.ph1lou.werewolfapi.events.roles.elder.ElderResurrectionEvent;
 import fr.ph1lou.werewolfapi.events.roles.falsifier_werewolf.NewDisplayRole;
@@ -1500,5 +1501,13 @@ public class Events implements Listener {
 
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.hunter_shoot_event",
                 event.getSource(), event.getTarget(),  main.getWereWolfAPI().getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onDevotedServant(DevotedServantEvent event) {
+        if (event.isCancelled()) return;
+
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.devoted_servant_event",
+                event.getPlayerWW(), event.getTargetWW(),  main.getWereWolfAPI().getTimer()));
     }
 }

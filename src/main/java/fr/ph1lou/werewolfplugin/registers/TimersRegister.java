@@ -258,6 +258,18 @@ public class TimersRegister {
                         TimerBase.AUTO_RESTART_DURATION.getKey())
                         .setDefaultValue(60));
 
+        timersRegister
+                .add(new TimerRegister("werewolf.name",
+                        TimerBase.SCAM_DELAY.getKey())
+                        .setDefaultValue(9)
+                        .setRoleTimer(RolesBase.SCAMMER.getKey()));
+
+        timersRegister
+                .add(new TimerRegister("werewolf.name",
+                        TimerBase.WEREWOLF_TENEBROUS_DURATION.getKey())
+                        .setDefaultValue(30)
+                        .setRoleTimer(RolesBase.TENEBROUS_WEREWOLF.getKey()));
+
         return timersRegister;
 
 

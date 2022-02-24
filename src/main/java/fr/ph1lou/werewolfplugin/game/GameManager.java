@@ -238,7 +238,7 @@ public class GameManager implements WereWolfAPI {
 
     @Override
     public void checkVictory() {
-        end.check_victory();
+        end.checkVictory();
     }
 
 

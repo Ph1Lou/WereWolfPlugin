@@ -1,25 +1,22 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
-import fr.minuskube.inv.ClickableItem;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.game.IConfiguration;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.Aura;
+import fr.ph1lou.werewolfapi.enums.ConfigBase;
 import fr.ph1lou.werewolfapi.enums.Prefix;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.ThirdDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.witch.WitchResurrectionEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
-import fr.ph1lou.werewolfapi.utils.ItemBuilder;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,23 +32,6 @@ public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
         super(api, playerWW, key);
     }
 
-    public static ClickableItem config(WereWolfAPI game) {
-
-        IConfiguration config = game.getConfig();
-
-        return ClickableItem.of(
-                new ItemBuilder(Material.STICK)
-                        .setLore(game.translate(config.isWitchAutoResurrection() ? "werewolf.utils.enable" : "werewolf.utils.disable"))
-                        .setDisplayName(game.translate("werewolf.role.witch.auto_rez_witch"))
-                        .build(), e -> {
-                    config.setWitchAutoResurrection(!config.isWitchAutoResurrection());
-
-                    e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                            .setLore(game.translate(config.isWitchAutoResurrection() ? "werewolf.utils.enable" : "werewolf.utils.disable"))
-                            .build());
-
-                });
-    }
 
     @Override
     public void setPower(boolean power) {
@@ -91,7 +71,7 @@ public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
                 .setPower(game.translate(power ? "werewolf.role.witch.power_available" : "werewolf.role.witch.power_not_available"))
                 .setItems(game.translate("werewolf.role.witch.items"))
                 .addExtraLines(game.translate("werewolf.description.power",
-                                Formatter.format("&on&",game.translate(game.getConfig().isWitchAutoResurrection()
+                                Formatter.format("&on&",game.translate(game.getConfig().isConfigActive(ConfigBase.WITCH_AUTO_RESURRECTION.getKey())
                                 ?
                                 "werewolf.role.witch.himself"
                                 :
@@ -144,7 +124,7 @@ public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
 
     private boolean autoResurrection(IPlayerWW player) {
 
-        if (!game.getConfig().isWitchAutoResurrection()) {
+        if (!game.getConfig().isConfigActive(ConfigBase.WITCH_AUTO_RESURRECTION.getKey())) {
             return false;
         }
 
