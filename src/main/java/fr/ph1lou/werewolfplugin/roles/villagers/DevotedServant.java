@@ -77,8 +77,7 @@ public class DevotedServant extends RoleVillage implements IPower, IAffectedPlay
 
         TextComponent resurrectionMessage = new TextComponent(
                 game.translate(
-                        Prefix.YELLOW.getKey() , "werewolf.role.devoted_servant.click",
-                        Formatter.player(event.getPlayerWW().getName())));
+                        Prefix.YELLOW.getKey() , "werewolf.role.devoted_servant.click"));
         resurrectionMessage.setClickEvent(
                 new ClickEvent(ClickEvent.Action.RUN_COMMAND,
                         String.format("/ww %s %s",

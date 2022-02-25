@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.listeners.configs;
 
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.Camp;
+import fr.ph1lou.werewolfapi.enums.RolesBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
@@ -28,6 +29,12 @@ public class HiddenRoles extends ListenerManager {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onRole(RepartitionEvent event) {
+
+        if(this.getGame().getPlayersWW()
+                .stream()
+                .anyMatch(playerWW1 -> playerWW1.getRole().isKey(RolesBase.PRIESTESS.getKey()))){
+            return;
+        }
 
         List<IPlayerWW> playerWWs = this.getGame().getPlayersWW()
                 .stream()

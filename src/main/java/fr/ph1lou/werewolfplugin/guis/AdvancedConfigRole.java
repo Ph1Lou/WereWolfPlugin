@@ -33,14 +33,11 @@ public class AdvancedConfigRole implements InventoryProvider {
 
         Main main = JavaPlugin.getPlugin(Main.class);
 
-        int size = main.getRegisterManager().getRolesRegister().stream()
-                .mapToInt(register -> register.getConfig().size()).sum();
-
         return SmartInventory.builder()
                 .id("advanced_config_role")
                 .manager(main.getInvManager())
                 .provider(new AdvancedConfigRole())
-                .size(Math.min(54, (size / 9 + 2) * 9) / 9, 9)
+                .size(54, 9)
                 .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.advanced_config_roles.name"))
                 .closeable(true)
                 .build();

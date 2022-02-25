@@ -722,7 +722,7 @@
       },
       "devoted_servant": {
         "display": "Servante dévouée",
-        "click": "Cliquez pour voler le rôle du Villageois &player&",
+        "click": "Cliquez pour voler le rôle du Villageois qui vient de mourir",
         "command": "steal_devoted_servant",
         "steal": "Vous venez de voler le rôle de &player&",
         "perform": "Vous venez de demander à voler le rôle de &player&",
