@@ -14,6 +14,7 @@ import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfplugin.game.MapManager;
 import fr.ph1lou.werewolfplugin.save.LanguageManager;
 import fr.ph1lou.werewolfplugin.statistiks.Events;
+import fr.ph1lou.werewolfplugin.statistiks.StatistiksUtils;
 import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
@@ -65,6 +66,7 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
                     Bukkit.getPluginManager().callEvent(actionBarEvent);
                     VersionUtils.getVersionUtils().sendActionBar(player, actionBarEvent.getActionBar());
                 }), 0, 4);
+        StatistiksUtils.loadContributors(this);
     }
 
     @Override

@@ -4,8 +4,10 @@ import fr.ph1lou.werewolfapi.GetWereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.enums.RolesBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
+import fr.ph1lou.werewolfapi.events.game.game_cycle.UpdateCompositionEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
 import fr.ph1lou.werewolfapi.listeners.ListenerManager;
@@ -97,6 +99,25 @@ public class HiddenRoles extends ListenerManager {
                 }
             }
         }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onCompositionUpdate(UpdateCompositionEvent event) {
+        event.setCancelled(true);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onUpdate(UpdatePlayerNameTagEvent event) {
+
+        IPlayerWW playerWW = this.getGame().getPlayerWW(event.getPlayerUUID()).orElse(null);
+
+        if (playerWW == null) {
+            return;
+        }
+
+        if (!playerWW.isState(StatePlayer.DEATH)) return;
+
+        event.setSuffix("");
     }
 
     @EventHandler

@@ -37,7 +37,7 @@ public class AdvancedConfigRole implements InventoryProvider {
                 .id("advanced_config_role")
                 .manager(main.getInvManager())
                 .provider(new AdvancedConfigRole())
-                .size(54, 9)
+                .size(6, 9)
                 .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.advanced_config_roles.name"))
                 .closeable(true)
                 .build();

@@ -8,6 +8,7 @@ import com.eclipsesource.json.JsonValue;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.events.UpdateLanguageEvent;
 import fr.ph1lou.werewolfplugin.Main;
+import fr.ph1lou.werewolfplugin.statistiks.StatistiksUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -73,6 +74,7 @@ public class LanguageManager implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     private void updateLanguage(UpdateLanguageEvent event) {
+        StatistiksUtils.loadMessages(main);
         this.language.clear();
         this.language.putAll(loadTranslations(main, FileUtils_.loadContent(buildLanguageFile(main, "fr"))));
         this.extraTexts.clear();

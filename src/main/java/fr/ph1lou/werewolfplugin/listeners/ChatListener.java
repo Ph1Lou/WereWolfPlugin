@@ -1,14 +1,16 @@
 package fr.ph1lou.werewolfplugin.listeners;
 
 
-import fr.ph1lou.werewolfapi.events.werewolf.WereWolfChatEvent;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.game.IModerationManager;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.ConfigBase;
 import fr.ph1lou.werewolfapi.enums.Prefix;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StateGame;
+import fr.ph1lou.werewolfapi.events.werewolf.WereWolfChatEvent;
+import fr.ph1lou.werewolfapi.game.IModerationManager;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfplugin.statistiks.StatistiksUtils;
+import fr.ph1lou.werewolfplugin.utils.Contributor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,15 +18,18 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
 public class ChatListener implements Listener {
 
     private final WereWolfAPI game;
+    private final List<Contributor> contributors;
 
     public ChatListener(WereWolfAPI game) {
         this.game = game;
+        this.contributors = StatistiksUtils.getContributors();
     }
 
     @EventHandler
@@ -94,11 +99,12 @@ public class ChatListener implements Listener {
         IModerationManager moderationManager = game.getModerationManager();
         String format;
 
-        if (player.getUniqueId().equals(UUID.fromString("056be797-2a0b-4807-9af5-37faf5384396"))) {
+        if(this.contributors.stream().anyMatch(contributor -> contributor.getUuid().equals(player.getUniqueId()))){
             format = game.translate("werewolf.commands.admin.chat.template",
                     Formatter.player("§5✦§r %s"),
                     Formatter.format("&message&","%s"));
-        } else {
+        }
+        else {
             format = game.translate("werewolf.commands.admin.chat.template",
                     Formatter.player("%s"),
                     Formatter.format("&message&","%s"));

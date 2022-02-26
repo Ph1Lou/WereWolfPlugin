@@ -440,8 +440,7 @@ public class RolesRegister {
 
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.HUNTER.getKey(), Hunter.class)
-                            .addCategory(Category.VILLAGER)
-                            .addConfig(Hunter::configCanShoot));
+                            .addCategory(Category.VILLAGER));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",

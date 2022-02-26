@@ -80,7 +80,6 @@ public class GameManager implements WereWolfAPI {
     private int playerSize = 0;
     private int timer = 0;
     private boolean crack = false;
-
     private int roleInitialSize = 0;
 
 
@@ -476,6 +475,11 @@ public class GameManager implements WereWolfAPI {
     @Override
     public String getPluginVersion() {
         return main.getDescription().getVersion();
+    }
+
+    @Override
+    public String getLanguage() {
+        return main.getConfig().getString("lang");
     }
 
     public boolean isCrack() {

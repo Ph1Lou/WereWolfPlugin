@@ -1,11 +1,9 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
-import fr.minuskube.inv.ClickableItem;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Prefix;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfKillEvent;
-import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -13,8 +11,6 @@ import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
-import fr.ph1lou.werewolfapi.utils.ItemBuilder;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -109,22 +105,6 @@ public class Hunter extends RoleVillage implements IPower {
         if (event.getVictimWW().equals(getPlayerWW())) {
             event.setCancelled(true);
         }
-    }
-
-    public static ClickableItem configCanShoot(WereWolfAPI game) {
-        IConfiguration config = game.getConfig();
-
-        return ClickableItem.of(new ItemBuilder(Material.BOW)
-                .setLore(game.translate(
-                        config.isConfigActive("werewolf.role.hunter.can_shoot") ? "werewolf.utils.enable" : "werewolf.utils.disable"))
-                .setDisplayName(game.translate("werewolf.role.hunter.can_shoot"))
-                .build(), e -> {
-            config.setConfig("werewolf.role.hunter.can_shoot", !config.isConfigActive("werewolf.role.hunter.can_shoot"));
-
-            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setLore(game.translate(config.isConfigActive("werewolf.role.hunter.can_shoot") ? "werewolf.utils.enable" : "werewolf.utils.disable"))
-                    .build());
-        });
     }
 
     @Override

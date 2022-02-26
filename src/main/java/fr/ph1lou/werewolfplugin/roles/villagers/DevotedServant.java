@@ -4,6 +4,9 @@ import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.enums.Prefix;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UpdateCompositionReason;
+import fr.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
+import fr.ph1lou.werewolfapi.events.game.game_cycle.UpdateCompositionEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FirstDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.devoted_servant.DevotedServantEvent;
@@ -21,6 +24,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,6 +37,8 @@ public class DevotedServant extends RoleVillage implements IPower, IAffectedPlay
     @Nullable
     private IPlayerWW playerWW;
     private boolean power = true;
+    private boolean hide = false;
+
     public DevotedServant(WereWolfAPI game, IPlayerWW playerWW, String key) {
         super(game, playerWW, key);
     }
@@ -51,6 +57,47 @@ public class DevotedServant extends RoleVillage implements IPower, IAffectedPlay
         if(this.playerWW.equals(event.getPlayerWW())){
             event.setRole(this.getKey());
         }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onCompositionUpdate(UpdateCompositionEvent event) {
+
+        if(this.playerWW == null){
+            return;
+        }
+
+        if(!event.getReason().equals(UpdateCompositionReason.DEATH)){
+            return;
+        }
+
+        if(!event.getKey().equals(this.playerWW.getRole().getKey())){
+            return;
+        }
+
+        if (this.hide) {
+            return;
+        }
+        this.hide = true;
+        event.setCancelled(true);
+    }
+
+    @EventHandler(priority = EventPriority.LOW)
+    public void onUpdate(UpdatePlayerNameTagEvent event) {
+
+        IPlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID())
+                .orElse(null);
+
+        if (playerWW == null) {
+            return;
+        }
+
+        if (!playerWW.isState(StatePlayer.DEATH)) return;
+
+        if(!playerWW.equals(this.playerWW)){
+            return;
+        }
+
+        event.setSuffix(game.translate(this.getKey()));
     }
 
     @EventHandler

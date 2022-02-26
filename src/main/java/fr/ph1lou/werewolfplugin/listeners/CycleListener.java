@@ -29,6 +29,7 @@ import fr.ph1lou.werewolfplugin.RegisterManager;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfplugin.game.LoversManagement;
 import fr.ph1lou.werewolfplugin.roles.lovers.FakeLover;
+import fr.ph1lou.werewolfplugin.statistiks.StatistiksUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -106,6 +107,12 @@ public class CycleListener implements Listener {
         game.setDay(Day.NIGHT);
 
         if (game.isState(StateGame.END)) return;
+
+        BukkitUtils.scheduleSyncDelayedTask(() -> {
+            if(!game.isState(StateGame.END)){
+                Bukkit.broadcastMessage(StatistiksUtils.getMessage());
+            }
+        }, game.getConfig().getTimerValue(TimerBase.DAY_DURATION.getKey()) * 10L);
 
         game.getMapManager().getWorld().setTime(12000);
 

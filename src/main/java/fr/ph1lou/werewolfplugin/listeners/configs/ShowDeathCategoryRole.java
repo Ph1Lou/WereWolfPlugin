@@ -26,7 +26,7 @@ public class ShowDeathCategoryRole extends ListenerManager {
         event.setRole(event.getPlayerWW().getRole().getCamp().getKey());
     }
 
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler
     public void onUpdate(UpdatePlayerNameTagEvent event) {
 
         WereWolfAPI game = this.getGame();

@@ -38,7 +38,11 @@ public class CutClean extends ListenerManager {
 
             case COAL_ORE:
 
-                if (!currentItemType.equals(Material.DIAMOND_PICKAXE) && !currentItemType.equals(Material.IRON_PICKAXE) && !currentItemType.equals(Material.STONE_PICKAXE) && !currentItemType.equals(UniversalMaterial.GOLDEN_PICKAXE.getType()) && !currentItemType.equals(UniversalMaterial.WOODEN_PICKAXE.getType())) {
+                if (!currentItemType.equals(Material.DIAMOND_PICKAXE) &&
+                        !currentItemType.equals(Material.IRON_PICKAXE) &&
+                        !currentItemType.equals(Material.STONE_PICKAXE) &&
+                        !currentItemType.equals(UniversalMaterial.GOLDEN_PICKAXE.getType())
+                        && !currentItemType.equals(UniversalMaterial.WOODEN_PICKAXE.getType())) {
                     return;
                 }
                 block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop());
