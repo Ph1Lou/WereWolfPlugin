@@ -90,10 +90,6 @@ public class ConfigsRegister {
                         ConfigBase.PROXIMITY_CHAT.getKey()));
 
         configsRegister.add(new ConfigRegister("werewolf.name",
-                ConfigBase.HUNTER_CAN_SHOOT.getKey())
-                .setRoleConfig(RolesBase.HUNTER.getKey()));
-
-        configsRegister.add(new ConfigRegister("werewolf.name",
                 ConfigBase.HIDDEN_ROLES.getKey())
                 .addConfig(new HiddenRoles(main))
                 .setLoreKey("werewolf.hidden_roles.description"));
