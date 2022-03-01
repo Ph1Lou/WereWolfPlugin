@@ -286,6 +286,7 @@ public class CycleListener implements Listener {
         }
 
         loverAPIS.forEach(BukkitUtils::registerEvents);
+        loverAPIS.forEach(iLover -> ((FakeLover)iLover).announceLovers());
 
         BukkitUtils.scheduleSyncDelayedTask(() -> {
 

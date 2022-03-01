@@ -255,7 +255,8 @@ public class RolesRegister {
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.CHARMER.getKey(), Charmer.class)
-                            .addCategory(Category.NEUTRAL));
+                            .addCategory(Category.NEUTRAL)
+                            .addIncompatibleRole(RolesBase.SCAMMER.getKey()));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
@@ -418,7 +419,8 @@ public class RolesRegister {
                     .add(new RoleRegister("werewolf.name", RolesBase.SCAMMER.getKey(), Scammer.class)
                             .addCategory(Category.NEUTRAL)
                             .setRandomCompositionAttribute(RandomCompositionAttribute.HYBRID)
-                            .addConfig(Scammer::config));
+                            .addConfig(Scammer::config)
+                            .addIncompatibleRole(RolesBase.CHARMER.getKey()));
 
 
             rolesRegister

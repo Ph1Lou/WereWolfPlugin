@@ -25,6 +25,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -218,6 +219,17 @@ public class Roles implements InventoryProvider {
                     unRemovable.set(true);
                 });
 
+                Optional<String> incompatible = roleRegister
+                        .getIncompatibleRoles()
+                        .stream()
+                        .filter(s -> game.getConfig().getRoleCount(s) > 0)
+                        .map(game::translate)
+                        .findFirst();
+
+                incompatible
+                        .ifPresent(role -> lore2.add(game.translate("werewolf.menu.roles.incompatible",
+                                Formatter.role(role))));
+
                 if (config.getRoleCount(key) > 0) {
                     items.add(ClickableItem.of((
                             new ItemBuilder(roleRegister.getItem().isPresent() ?
@@ -258,6 +270,9 @@ public class Roles implements InventoryProvider {
                         if (e.isShiftClick()) {
                             AdvancedRoleMenu.getInventory(roleRegister).open(player);
                         } else if (e.isLeftClick()) {
+                            if(incompatible.isPresent()){
+                                return;
+                            }
                             if (roleRegister.getRequireRole().isPresent()) {
                                 if (game.getConfig().getRoleCount(roleRegister.getRequireRole().get()) == 0) {
                                     return;

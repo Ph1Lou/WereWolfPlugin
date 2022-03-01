@@ -1129,7 +1129,8 @@
         "zero": "Tout mettre à zéro",
         "previous": "Précédent §b&current& §r»§b &previous& ",
         "next": "Suivant §b&current& §r»§b &next&",
-        "current": "Page §b&current&§r/§b&sum&"
+        "current": "Page §b&current&§r/§b&sum&",
+        "incompatible": "§cRole incompatible chargé : §b&role&"
       },
       "whitelist": {
         "name": "Configuration §bWhiteList",

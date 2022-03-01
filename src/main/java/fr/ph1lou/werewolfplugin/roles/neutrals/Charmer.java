@@ -192,15 +192,11 @@ public class Charmer extends RoleNeutral implements IPower, IAffectedPlayers {
             fakeLover.announceLovers();
         }
         else{
-            this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey(),
-                    "werewolf.role.charmer.announcement",
-                    Formatter.player(this.playerWW.getName()));
-
             this.getPlayerWW().getLovers().stream()
                     .filter(iLover -> iLover instanceof FakeLoverCharmer)
                     .map(iLover -> (FakeLoverCharmer)iLover)
                     .filter(fakeLoverCharmer -> fakeLoverCharmer.getCharmer().equals(this.getPlayerWW()))
-                    .forEach(AbstractLover::announceLovers);
+                    .forEach(FakeLoverCharmer::announceLovers);
         }
     }
 
