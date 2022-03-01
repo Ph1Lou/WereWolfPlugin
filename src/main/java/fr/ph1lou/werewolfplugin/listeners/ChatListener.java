@@ -8,6 +8,7 @@ import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfChatEvent;
 import fr.ph1lou.werewolfapi.game.IModerationManager;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfplugin.statistiks.StatistiksUtils;
 import fr.ph1lou.werewolfplugin.utils.Contributor;
@@ -96,12 +97,42 @@ public class ChatListener implements Listener {
 
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
+        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
         IModerationManager moderationManager = game.getModerationManager();
         String format;
+        Contributor contributor = this.contributors
+                .stream()
+                .filter(contributor1 -> contributor1.getUuid().equals(player.getUniqueId()) ||
+                        ( playerWW != null && contributor1.getUuid().equals(playerWW.getReviewUUID())))
+                .findFirst()
+                .orElse(null);
 
-        if(this.contributors.stream().anyMatch(contributor -> contributor.getUuid().equals(player.getUniqueId()))){
+        if(contributor != null){
+
+            switch(contributor.getLevel()){
+                case 0:
+                    format = "§b✦§r %s"; //Ph1Lou
+                    break;
+                case 1:
+                    format = "§5Ѧ§r %s"; //friend
+                    break;
+                case 2:
+                    format = "§9Ͻ§r %s"; //addon maker
+                    break;
+                case 3:
+                    format = "§4ǂ§r %s"; //donator
+                    break;
+                case 4:
+                    format = "§aΨ§r %s"; //tester
+                    break;
+                default:
+                    format = "§6ø§r %s";
+                    break;
+                    //¤
+            }
+
             format = game.translate("werewolf.commands.admin.chat.template",
-                    Formatter.player("§5✦§r %s"),
+                    Formatter.player(format),
                     Formatter.format("&message&","%s"));
         }
         else {

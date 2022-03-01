@@ -35,7 +35,7 @@ public class NoExtraStones extends ListenerManager {
                         .anyMatch(itemStack1 -> itemStack1.isSimilar(itemStack)))){
             block.setType(Material.AIR);
             Location loc = new Location(block.getWorld(), block.getLocation().getBlockX() + 0.5, block.getLocation().getBlockY() + 0.5, block.getLocation().getBlockZ() + 0.5);
-            block.getWorld().dropItem(loc, new ItemStack(Material.STONE, 1));
+            block.getWorld().dropItem(loc, new ItemStack(Material.COBBLESTONE, 1));
         }
     }
 

@@ -632,7 +632,7 @@ public class Events implements Listener {
     public void onUseMask(UseMaskEvent event) {
 
         if (event.isCancelled()) return;
-        String[] masks = {"mask_strength", "mask_speed", "mask_resistance"};
+        String[] masks = {"werewolf.mask_strength", "werewolf.mask_speed", "werewolf.mask_resistance"};
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.mask",

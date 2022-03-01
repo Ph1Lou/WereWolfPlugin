@@ -118,6 +118,9 @@ public class VoteManager implements Listener, IVoteManager
 			if(this.lastVote!= null){
 				this.tempPlayers.add(this.lastVote);
 			}
+			else{
+				event.setCancelled(true);
+			}
 		}
 		else{
 			this.lastVote = null;

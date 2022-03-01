@@ -75,7 +75,6 @@ public class MisanthropeSister extends ListenerManager {
     public void onRequestWerewolfList(AppearInWereWolfListEvent event){
         if(this.sisterWW != null && event.getPlayerUUID().equals(this.sisterWW.getUUID())){
             event.setAppear(false);
-            this.sisterWW.sendMessageWithKey(Prefix.RED.getKey(),"werewolf.commands.admin.ww_chat.not_access");
         }
     }
 

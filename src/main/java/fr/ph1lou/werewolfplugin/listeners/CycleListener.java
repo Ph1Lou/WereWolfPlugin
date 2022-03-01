@@ -108,11 +108,13 @@ public class CycleListener implements Listener {
 
         if (game.isState(StateGame.END)) return;
 
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
-            if(!game.isState(StateGame.END)){
-                Bukkit.broadcastMessage(StatistiksUtils.getMessage());
-            }
-        }, game.getConfig().getTimerValue(TimerBase.DAY_DURATION.getKey()) * 10L);
+        if(event.getNumber()%2==0){
+            BukkitUtils.scheduleSyncDelayedTask(() -> {
+                if(!game.isState(StateGame.END)){
+                    Bukkit.broadcastMessage(StatistiksUtils.getMessage());
+                }
+            }, game.getConfig().getTimerValue(TimerBase.DAY_DURATION.getKey()) * 10L);
+        }
 
         game.getMapManager().getWorld().setTime(12000);
 

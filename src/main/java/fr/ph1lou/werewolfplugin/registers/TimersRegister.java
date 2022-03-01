@@ -262,6 +262,7 @@ public class TimersRegister {
                 .add(new TimerRegister("werewolf.name",
                         TimerBase.SCAM_DELAY.getKey())
                         .setDefaultValue(9)
+                        .setPitch(1)
                         .setRoleTimer(RolesBase.SCAMMER.getKey()));
 
         timersRegister

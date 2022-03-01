@@ -156,9 +156,9 @@ public class AdvancedConfigRole implements InventoryProvider {
 
 
                         if (e.isLeftClick()) {
-                            config.moveTimer(timerRegister.getKey(), 10);
-                        } else if (config.getDistanceFox() - 5 > 0) {
-                            config.moveTimer(timerRegister.getKey(), -10);
+                            config.moveTimer(timerRegister.getKey(), timerRegister.getPitch());
+                        } else if (config.getTimerValue(timerRegister.getKey()) - timerRegister.getPitch() > 0) {
+                            config.moveTimer(timerRegister.getKey(), - timerRegister.getPitch());
                         }
 
                         e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
