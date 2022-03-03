@@ -76,7 +76,7 @@ public class LanguageManager implements Listener {
     private void updateLanguage(UpdateLanguageEvent event) {
         StatistiksUtils.loadMessages(main);
         this.language.clear();
-        this.language.putAll(loadTranslations(main, FileUtils_.loadContent(buildLanguageFile(main, "fr"))));
+        this.language.putAll(loadTranslations(main, FileUtils_.loadContent(buildLanguageFile(main, "fr_FR"))));
         this.extraTexts.clear();
 
         this.main.getRegisterManager().getAddonsRegister().forEach(addon -> {

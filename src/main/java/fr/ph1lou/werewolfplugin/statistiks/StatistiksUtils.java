@@ -37,23 +37,15 @@ public class StatistiksUtils {
         return messages.length == 0 ? "" : messages[index++%messages.length];
     }
 
-    public static List<Contributor> getContributors(){
+    public static List<? extends Contributor> getContributors(){
         return contributors;
     }
 
     public static void loadMessages(Main main){
 
         String language = main.getConfig().getString("lang");
-        switch (language){
-            case "fr":
-                language="fr_FR";
-                break;
-            case "en":
-                language="en_EN";
-                break;
-        }
-        try {
 
+        try {
             URL url = new URL("https://api.ph1lou.fr/messages/"+language);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
@@ -75,7 +67,7 @@ public class StatistiksUtils {
         }
     }
 
-    public static void loadContributors(Main main){
+    public static void loadContributors(){
 
         try {
 

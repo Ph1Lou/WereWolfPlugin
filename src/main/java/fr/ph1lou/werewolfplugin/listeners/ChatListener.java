@@ -1,6 +1,5 @@
 package fr.ph1lou.werewolfplugin.listeners;
 
-
 import fr.ph1lou.werewolfapi.enums.ConfigBase;
 import fr.ph1lou.werewolfapi.enums.Prefix;
 import fr.ph1lou.werewolfapi.enums.Sound;
@@ -18,7 +17,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -26,7 +24,7 @@ import java.util.UUID;
 public class ChatListener implements Listener {
 
     private final WereWolfAPI game;
-    private final List<Contributor> contributors;
+    private final List<? extends Contributor> contributors;
 
     public ChatListener(WereWolfAPI game) {
         this.game = game;
@@ -88,8 +86,6 @@ public class ChatListener implements Listener {
                     Formatter.format("&message&",sb.toString())));
             Sound.ANVIL_USE.play(recipient);
         }
-
-
     }
 
     @EventHandler
@@ -103,7 +99,8 @@ public class ChatListener implements Listener {
         Contributor contributor = this.contributors
                 .stream()
                 .filter(contributor1 -> contributor1.getUuid().equals(player.getUniqueId()) ||
-                        ( playerWW != null && contributor1.getUuid().equals(playerWW.getReviewUUID())))
+                        (playerWW != null &&
+                                contributor1.getUuid().equals(playerWW.getReviewUUID())))
                 .findFirst()
                 .orElse(null);
 

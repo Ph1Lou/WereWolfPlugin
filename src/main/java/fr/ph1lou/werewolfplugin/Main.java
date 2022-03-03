@@ -66,7 +66,7 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
                     Bukkit.getPluginManager().callEvent(actionBarEvent);
                     VersionUtils.getVersionUtils().sendActionBar(player, actionBarEvent.getActionBar());
                 }), 0, 4);
-        StatistiksUtils.loadContributors(this);
+        StatistiksUtils.loadContributors();
     }
 
     @Override

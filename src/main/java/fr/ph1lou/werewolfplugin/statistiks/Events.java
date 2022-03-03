@@ -149,6 +149,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -179,7 +180,7 @@ public class Events implements Listener {
     public void onGameStart(StartEvent event) {
         UUID serverUUID;
         try{
-            serverUUID = UUID.fromString(main.getConfig().getString("server_uuid"));
+            serverUUID = UUID.fromString(Objects.requireNonNull(main.getConfig().getString("server_uuid")));
         }
         catch (Exception e){
             serverUUID = UUID.randomUUID();

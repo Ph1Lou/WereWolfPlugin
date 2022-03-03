@@ -61,12 +61,12 @@ public class Languages implements InventoryProvider {
         en.setDisplayName("English");
         en.setLore(Collections.singletonList("By Jormunth"));
         contents.set(0, 2, ClickableItem.of((en.build()), e -> {
-            main.getConfig().set("lang", "en");
+            main.getConfig().set("lang", "en_EN");
             Bukkit.getPluginManager().callEvent(new UpdateLanguageEvent());
             Languages.INVENTORY.open(player);
         }));
         contents.set(0, 4, ClickableItem.of((fr.build()), e -> {
-            main.getConfig().set("lang", "fr");
+            main.getConfig().set("lang", "fr_FR");
             Bukkit.getPluginManager().callEvent(new UpdateLanguageEvent());
             Languages.INVENTORY.open(player);
         }));

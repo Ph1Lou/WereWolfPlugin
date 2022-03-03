@@ -18,6 +18,9 @@ public class SafeMiner extends ListenerManager {
         if(getGame().getConfig().getTimerValue(TimerBase.DIGGING.getKey()) <= 0){
             return;
         }
+        if(event.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)){
+            return;
+        }
 
         if(event.getEntity() instanceof Player){
             int y = event.getEntity().getLocation().getBlockY();

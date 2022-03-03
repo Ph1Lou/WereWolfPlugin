@@ -10,7 +10,7 @@ public class RegisterManager extends Register {
 
     public RegisterManager(Main main) {
         super(main);
-        this.addonRegister = new AddonRegister("","fr",main);
+        this.addonRegister = new AddonRegister("werewolf.name","fr_FR",main);
         instance = this;
     }
 
