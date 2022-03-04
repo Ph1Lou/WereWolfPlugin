@@ -1,5 +1,5 @@
-"werewolf.role.cupid.display":
-  '0':
+werewolf.role.cupid.display:
+  0:
     ==: org.bukkit.inventory.ItemStack
     type: ENCHANTED_BOOK
     meta:
@@ -8,81 +8,87 @@
       stored-enchants:
         ARROW_KNOCKBACK: 1
         ARROW_DAMAGE: 2
-  '1':
+  1:
     ==: org.bukkit.inventory.ItemStack
     type: ARROW
     amount: 64
-  '2':
+  2:
     ==: org.bukkit.inventory.ItemStack
     type: STRING
     amount: 3
 
-"werewolf.role.mischievous_werewolf.display":
-  '0':
+werewolf.role.mischievous_werewolf.display:
+  0:
     ==: org.bukkit.inventory.ItemStack
     type: TNT
     amount: 5
-"werewolf.role.witch.display":
-  '0':
-    ==: org.bukkit.inventory.ItemStack
-    type: POTION
-    damage: 16389
-  '1':
-    ==: org.bukkit.inventory.ItemStack
-    type: POTION
-    damage: 16385
-  '2':
-    ==: org.bukkit.inventory.ItemStack
-    type: POTION
-    damage: 16393
-  '3':
-    ==: org.bukkit.inventory.ItemStack
-    type: POTION
-    damage: 16460
-    amount: 2
+werewolf.role.witch.display:
+  0:
+    potion_data: 16389
+    item:
+      ==: org.bukkit.inventory.ItemStack
+      type: POTION
+  1:
+    potion_data: 16385
+    item:
+      ==: org.bukkit.inventory.ItemStack
+      type: POTION
+  2:
+    potion_data: 16393
+    item:
+      ==: org.bukkit.inventory.ItemStack
+      type: POTION
+  3:
+    potion_data: 16460
+    item:
+      ==: org.bukkit.inventory.ItemStack
+      type: POTION
+      amount: 2
 
-"werewolf.role.little_girl.display":
-  '0':
+werewolf.role.little_girl.display:
+  0:
     ==: org.bukkit.inventory.ItemStack
     type: TNT
     amount: 5
-"werewolf.role.protector.display":
-  '0':
-    ==: org.bukkit.inventory.ItemStack
-    type: POTION
-    damage: 16389
-    amount: 3
-"werewolf.role.librarian.display":
-  '0':
-    ==: org.bukkit.inventory.ItemStack
-    type: BOOKSHELF
-    amount: 4
-"werewolf.role.chatty_seer.display":
-  '0':
+werewolf.role.protector.display:
+  0:
+    potion_data: 16389
+    item:
+      ==: org.bukkit.inventory.ItemStack
+      type: POTION
+      amount: 3
+werewolf.role.librarian.display:
+  0:
     ==: org.bukkit.inventory.ItemStack
     type: BOOKSHELF
     amount: 4
-  '1':
+werewolf.role.chatty_seer.display:
+  0:
+    ==: org.bukkit.inventory.ItemStack
+    type: BOOKSHELF
+    amount: 4
+  1:
     ==: org.bukkit.inventory.ItemStack
     type: OBSIDIAN
     amount: 4
-"werewolf.role.guard.display":
-  '0':
-    ==: org.bukkit.inventory.ItemStack
-    type: POTION
-    damage: 16393
-"werewolf.role.seer.display":
-  '0':
+werewolf.role.guard.display:
+  0:
+    potion_data: 16393
+    item:
+      ==: org.bukkit.inventory.ItemStack
+      type: POTION
+werewolf.role.seer.display:
+  0:
     ==: org.bukkit.inventory.ItemStack
     type: BOOKSHELF
     amount: 4
-  '1':
+  1:
     ==: org.bukkit.inventory.ItemStack
     type: OBSIDIAN
     amount: 4
 
-"werewolf.role.raven.display":
-  '0':
+werewolf.role.raven.display:
+  0:
     ==: org.bukkit.inventory.ItemStack
     type: ENCHANTED_BOOK
     meta:
@@ -90,8 +96,8 @@
       meta-type: ENCHANTED
       stored-enchants:
         PROTECTION_FALL: 3
-"werewolf.role.assassin.display":
-  '0':
+werewolf.role.barbarian.display:
+  0:
     ==: org.bukkit.inventory.ItemStack
     type: ENCHANTED_BOOK
     meta:
@@ -99,24 +105,8 @@
       meta-type: ENCHANTED
       stored-enchants:
         DAMAGE_ALL: 3
-  '1':
-    ==: org.bukkit.inventory.ItemStack
-    type: ENCHANTED_BOOK
-    meta:
-      ==: ItemMeta
-      meta-type: ENCHANTED
-      stored-enchants:
-        PROTECTION_ENVIRONMENTAL: 3
-  '2':
-    ==: org.bukkit.inventory.ItemStack
-    type: ENCHANTED_BOOK
-    meta:
-      ==: ItemMeta
-      meta-type: ENCHANTED
-      stored-enchants:
-        ARROW_DAMAGE: 3
-"werewolf.role.serial_killer.display":
-  '0':
+werewolf.role.assassin.display:
+  0:
     ==: org.bukkit.inventory.ItemStack
     type: ENCHANTED_BOOK
     meta:
@@ -124,7 +114,7 @@
       meta-type: ENCHANTED
       stored-enchants:
         DAMAGE_ALL: 3
-  '1':
+  1:
     ==: org.bukkit.inventory.ItemStack
     type: ENCHANTED_BOOK
     meta:
@@ -132,7 +122,7 @@
       meta-type: ENCHANTED
       stored-enchants:
         PROTECTION_ENVIRONMENTAL: 3
-  '2':
+  2:
     ==: org.bukkit.inventory.ItemStack
     type: ENCHANTED_BOOK
     meta:
@@ -140,20 +130,47 @@
       meta-type: ENCHANTED
       stored-enchants:
         ARROW_DAMAGE: 3
-"werewolf.role.infect_father_of_the_wolves.display":
-  '0':
+werewolf.role.serial_killer.display:
+  0:
     ==: org.bukkit.inventory.ItemStack
-    type: POTION
-    damage: 16453
-    amount: 2
+    type: ENCHANTED_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        DAMAGE_ALL: 3
+  1:
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        PROTECTION_ENVIRONMENTAL: 3
+  2:
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        ARROW_DAMAGE: 3
+werewolf.role.infect_father_of_the_wolves.display:
+  0:
+    potion_data: 16453
+    item:
+      ==: org.bukkit.inventory.ItemStack
+      type: POTION
+      amount: 2
 
-"werewolf.role.rival.display":
-  '0':
-    ==: org.bukkit.inventory.ItemStack
-    type: POTION
-    damage: 16460
-    amount: 2
-  '1':
+werewolf.role.rival.display:
+  0:
+    potion_data: 16460
+    item:
+      ==: org.bukkit.inventory.ItemStack
+      type: POTION
+      amount: 2
+  1:
     ==: org.bukkit.inventory.ItemStack
     type: ENCHANTED_BOOK
     meta:
@@ -162,17 +179,35 @@
       stored-enchants:
         ARROW_KNOCKBACK: 1
         ARROW_DAMAGE: 2
-  '2':
+  2:
     ==: org.bukkit.inventory.ItemStack
     type: ARROW
     amount: 64
-  '3':
+  3:
     ==: org.bukkit.inventory.ItemStack
     type: STRING
     amount: 3
 
-"werewolf.role.priestess.display":
-  '0':
+werewolf.role.priestess.display:
+  0:
     ==: org.bukkit.inventory.ItemStack
     type: OBSIDIAN
     amount: 4
+
+werewolf.role.hunter.display:
+  0:
+    ==: org.bukkit.inventory.ItemStack
+    type: STRING
+    amount: 3
+  1:
+    ==: org.bukkit.inventory.ItemStack
+    type: ARROW
+    amount: 64
+  2:
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        ARROW_DAMAGE: 3

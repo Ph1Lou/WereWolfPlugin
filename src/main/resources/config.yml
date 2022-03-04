@@ -4,13 +4,14 @@
 
 # Link : https://www.spigotmc.org/resources/loup-garou-uhc.73113/
 
-# Version 1.7.2
+# Version 1.9 SNAPSHOT
 
 # You are not allowed to claim this plugin as your own.
 
 # Copyright : All Rights Reserved - 2020-2021
-# Available (en, fr)
+# Available (en_EN, fr_FR)
 
-lang: fr
+lang: fr_FR
 default_lobby: true
+server_uuid:
 

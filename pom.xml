@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.github.ph1lou</groupId>
+    <groupId>fr.ph1lou</groupId>
     <artifactId>werewolfplugin</artifactId>
-    <version>1.8-SNAPSHOT</version>
+    <version>1.9-SNAPSHOT</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -48,8 +48,8 @@
             <url>https://jitpack.io</url>
         </repository>
         <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+            <id>codemc-snapshots</id>
+            <url>https://repo.codemc.io/repository/maven-snapshots/</url>
         </repository>
     </repositories>
 
@@ -59,54 +59,54 @@
             <artifactId>minimal-json</artifactId>
             <version>0.9.5</version>
         </dependency>
-
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
-            <version>1.8.8-R0.1-SNAPSHOT</version>
+            <version>1.18-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>fr.mrmicky</groupId>
             <artifactId>FastBoard</artifactId>
-            <version>eb91b72c78</version>
+            <version>v1.2.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.WesJD.AnvilGUI</groupId>
+            <groupId>net.wesjd</groupId>
             <artifactId>anvilgui</artifactId>
-            <version>d1cc0a91c4</version>
+            <version>1.5.3-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>io.github.ph1lou</groupId>
+            <groupId>fr.ph1lou</groupId>
             <artifactId>werewolfapi</artifactId>
-            <version>1.5</version>
+            <version>1.9</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.7</version>
         </dependency>
-
-
         <dependency>
             <groupId>com.github.Tanju42</groupId>
             <artifactId>smart-invs-fork</artifactId>
             <version>1.2.9</version>
         </dependency>
-
         <dependency>
             <groupId>org.javatuples</groupId>
             <artifactId>javatuples</artifactId>
             <version>1.2</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-artifact</artifactId>
             <version>3.0.3</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.pieterdebot.biomemapping</groupId>
+            <artifactId>BiomeMapping</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
 
