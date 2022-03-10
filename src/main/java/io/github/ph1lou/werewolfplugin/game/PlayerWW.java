@@ -551,6 +551,25 @@ public class PlayerWW implements IPlayerWW {
     }
 
     @Override
+    public double getHealth() {
+        return Bukkit.getPlayer(uuid).getHealth();
+    }
+
+    @Override
+    public void addHealth(double v) {
+        Player player = Bukkit.getPlayer(uuid);
+
+        player.setHealth(player.getHealth() + v);
+    }
+
+    @Override
+    public void removeHealth(double v) {
+        Player player = Bukkit.getPlayer(uuid);
+
+        player.setHealth(player.getHealth() - v);
+    }
+
+    @Override
     public @NotNull Location getLocation() {
 
         Player player = Bukkit.getPlayer(uuid);

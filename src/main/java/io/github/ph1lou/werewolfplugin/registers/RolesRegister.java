@@ -18,36 +18,7 @@ import io.github.ph1lou.werewolfplugin.roles.neutrals.Succubus;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.Thief;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.WhiteWereWolf;
 import io.github.ph1lou.werewolfplugin.roles.neutrals.WillOTheWisp;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Analyst;
-import io.github.ph1lou.werewolfplugin.roles.villagers.BearTrainer;
-import io.github.ph1lou.werewolfplugin.roles.villagers.ChattySeer;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Citizen;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Comedian;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Cupid;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Detective;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Elder;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Fox;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Guard;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Hermit;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Librarian;
-import io.github.ph1lou.werewolfplugin.roles.villagers.LittleGirl;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Oracle;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Priestess;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Protector;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Raven;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Seer;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Shaman;
-import io.github.ph1lou.werewolfplugin.roles.villagers.SiameseTwin;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Sister;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Stud;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Trapper;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Troublemaker;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Twin;
-import io.github.ph1lou.werewolfplugin.roles.villagers.VillageIdiot;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Villager;
-import io.github.ph1lou.werewolfplugin.roles.villagers.WildChild;
-import io.github.ph1lou.werewolfplugin.roles.villagers.Witch;
-import io.github.ph1lou.werewolfplugin.roles.villagers.WolfDog;
+import io.github.ph1lou.werewolfplugin.roles.villagers.*;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.AlphaWereWolf;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.AvengerWereWolf;
 import io.github.ph1lou.werewolfplugin.roles.werewolfs.BigBadWerewolf;
@@ -383,6 +354,12 @@ public class RolesRegister {
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.ALPHA_WEREWOLF.getKey(), AlphaWereWolf.class)
                             .addCategory(Category.WEREWOLF));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.MIRE.getKey(), Mire.class)
+                            .addCategory(Category.VILLAGER)
+                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name", RolesBase.ORACLE.getKey(), Oracle.class)
