@@ -92,11 +92,9 @@ public class SmallFeaturesListener implements Listener {
                 else{
                     VersionUtils.getVersionUtils().setItemInHand(player,null);
                 }
-
                 if (game.getConfig().getGoldenAppleParticles() == 2) {
                     this.addGoldenPotionEffectsWithParticles(player);
                 }
-
                 else if (game.getConfig().getGoldenAppleParticles() == 1) {
 
                     GoldenAppleParticleEvent goldenAppleParticleEvent =
@@ -149,7 +147,6 @@ public class SmallFeaturesListener implements Listener {
         List<ItemStack> loots = event.getDrops();
 
         loots.clear();
-
         if (Math.random() * 100 < game.getConfig().getPearlRate()) {
             loots.add(new ItemStack(Material.ENDER_PEARL));
         }
