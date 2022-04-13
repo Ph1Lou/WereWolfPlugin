@@ -282,7 +282,13 @@ public class DeathListener implements Listener {
 
         playerWW.setState(StatePlayer.ALIVE);
         playerWW.getRole().addAuraModifier(new AuraModifier("resurrection", Aura.NEUTRAL, 10, false));
-        playerWW.getRole().recoverPotionEffects();
+
+        Player player = Bukkit.getPlayer(playerWW.getUUID());
+
+        if(player != null){
+            ((PlayerWW)playerWW).updatePotionEffects(player);
+        }
+
         playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.announcement.resurrection");
         game.getMapManager().transportation(playerWW, Math.random() * Math.PI * 2);
 
