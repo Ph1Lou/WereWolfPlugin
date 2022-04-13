@@ -18,6 +18,8 @@
 ## Spigot api 
 <https://www.spigotmc.org/>
 
+## Patch Biomes
+<https://github.com/Mezy/BiomeMapping>
 
 ## License
 

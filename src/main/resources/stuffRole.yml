@@ -96,6 +96,15 @@ werewolf.role.raven.display:
       meta-type: ENCHANTED
       stored-enchants:
         PROTECTION_FALL: 3
+werewolf.role.barbarian.display:
+  0:
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        DAMAGE_ALL: 3
 werewolf.role.assassin.display:
   0:
     ==: org.bukkit.inventory.ItemStack
@@ -184,3 +193,21 @@ werewolf.role.priestess.display:
     ==: org.bukkit.inventory.ItemStack
     type: OBSIDIAN
     amount: 4
+
+werewolf.role.hunter.display:
+  0:
+    ==: org.bukkit.inventory.ItemStack
+    type: STRING
+    amount: 3
+  1:
+    ==: org.bukkit.inventory.ItemStack
+    type: ARROW
+    amount: 64
+  2:
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        ARROW_DAMAGE: 3
