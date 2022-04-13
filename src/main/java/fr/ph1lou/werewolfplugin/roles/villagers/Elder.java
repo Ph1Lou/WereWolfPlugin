@@ -58,11 +58,10 @@ public class Elder extends RoleVillage implements IPower {
     @Override
     public void recoverPotionEffect() {
 
-        if (!hasPower()) return;
-
         if(!isAbilityEnabled()) return;
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,"elder"));
+        this.getPlayerWW().addPotionModifier(PotionModifier
+                .add(PotionEffectType.DAMAGE_RESISTANCE,"elder"));
     }
 
     @Override

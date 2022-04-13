@@ -196,7 +196,9 @@ public class VoteManager implements Listener, IVoteManager
 							}
 						});
 			}
-			Bukkit.getPluginManager().callEvent(new NewVoteResultEvent(playerWW, werewolfWW));
+			if(playerWW != null && werewolfWW != null){
+				Bukkit.getPluginManager().callEvent(new NewVoteResultEvent(playerWW, werewolfWW));
+			}
 			return;
 		}
 		if (playerWW == null) {
