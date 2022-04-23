@@ -62,6 +62,24 @@ werewolf.role.librarian.display:
     ==: org.bukkit.inventory.ItemStack
     type: BOOKSHELF
     amount: 4
+
+werewolf.role.story_teller.display:
+  0:
+    ==: org.bukkit.inventory.ItemStack
+    type: BOOKSHELF
+    amount: 2
+
+werewolf.role.benefactor.display:
+  0:
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    amount: 2
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        PROTECTION_ENVIRONMENTAL: 2
+
 werewolf.role.chatty_seer.display:
   0:
     ==: org.bukkit.inventory.ItemStack

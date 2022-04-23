@@ -11,6 +11,7 @@ import fr.ph1lou.werewolfplugin.commands.roles.neutral.charmer.CommandCharmer;
 import fr.ph1lou.werewolfplugin.commands.roles.neutral.necromancer.CommandNecromancer;
 import fr.ph1lou.werewolfplugin.commands.roles.neutral.succubus.CommandSuccubus;
 import fr.ph1lou.werewolfplugin.commands.roles.neutral.thug.CommandThug;
+import fr.ph1lou.werewolfplugin.commands.roles.villager.benefactor.CommandBenefactor;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.citizen.CommandCitizenCancelVote;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.citizen.CommandCitizenSeeVote;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.comedian.CommandComedian;
@@ -25,6 +26,7 @@ import fr.ph1lou.werewolfplugin.commands.roles.villager.info.librarian.CommandLi
 import fr.ph1lou.werewolfplugin.commands.roles.villager.info.librarian.CommandSendToLibrarian;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.info.oracle.CommandOracle;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.info.seer.CommandSeer;
+import fr.ph1lou.werewolfplugin.commands.roles.villager.spy.CommandSpy;
 import fr.ph1lou.werewolfplugin.commands.utilities.CommandWish;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.priestess.CommandPriestess;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.protector.CommandProtector;
@@ -546,6 +548,23 @@ public class CommandsRegister {
                 .setRequiredAbilityEnabled()
                 .setRequiredPower()
                 .unsetAutoCompletion()
+                .addStateAccess(StatePlayer.ALIVE)
+                .addArgNumbers(1));
+
+        commandsRegister
+                .add(new CommandRegister("werewolf.name",
+                        "werewolf.role.spy.command", new CommandSpy())
+                        .addRoleKey(RolesBase.SPY.getKey())
+                        .setRequiredPower()
+                        .setRequiredAbilityEnabled()
+                        .addStateAccess(StatePlayer.ALIVE)
+                        .addStateWW(StateGame.GAME)
+                        .addArgNumbers(1));
+
+        commandsRegister.add(new CommandRegister("werewolf.name", "werewolf.role.benefactor.command", new CommandBenefactor())
+                .setRequiredAbilityEnabled()
+                .addRoleKey(RolesBase.BENEFACTOR.getKey())
+                .addStateWW(StateGame.GAME)
                 .addStateAccess(StatePlayer.ALIVE)
                 .addArgNumbers(1));
 

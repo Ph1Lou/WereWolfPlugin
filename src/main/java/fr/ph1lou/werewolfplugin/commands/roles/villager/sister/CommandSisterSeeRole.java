@@ -7,6 +7,7 @@ import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.Prefix;
 import fr.ph1lou.werewolfapi.events.roles.sister.SisterSeeRoleEvent;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -31,6 +32,8 @@ public class CommandSisterSeeRole implements ICommand {
         affectedPlayers.removeAffectedPlayer(killerWW);
 
         SisterSeeRoleEvent sisterSeeRoleEvent = new SisterSeeRoleEvent(playerWW, killerWW);
+
+        Bukkit.getPluginManager().callEvent(sisterSeeRoleEvent);
 
         if (sisterSeeRoleEvent.isCancelled()) {
             playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");

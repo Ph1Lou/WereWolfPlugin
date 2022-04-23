@@ -24,6 +24,7 @@ import fr.ph1lou.werewolfplugin.roles.neutrals.WhiteWereWolf;
 import fr.ph1lou.werewolfplugin.roles.neutrals.WillOTheWisp;
 import fr.ph1lou.werewolfplugin.roles.villagers.Analyst;
 import fr.ph1lou.werewolfplugin.roles.villagers.BearTrainer;
+import fr.ph1lou.werewolfplugin.roles.villagers.Benefactor;
 import fr.ph1lou.werewolfplugin.roles.villagers.ChattySeer;
 import fr.ph1lou.werewolfplugin.roles.villagers.Citizen;
 import fr.ph1lou.werewolfplugin.roles.villagers.Comedian;
@@ -42,12 +43,15 @@ import fr.ph1lou.werewolfplugin.roles.villagers.Occultist;
 import fr.ph1lou.werewolfplugin.roles.villagers.Oracle;
 import fr.ph1lou.werewolfplugin.roles.villagers.Priestess;
 import fr.ph1lou.werewolfplugin.roles.villagers.Protector;
+import fr.ph1lou.werewolfplugin.roles.villagers.Rabbit;
 import fr.ph1lou.werewolfplugin.roles.villagers.Raven;
 import fr.ph1lou.werewolfplugin.roles.villagers.Seer;
 import fr.ph1lou.werewolfplugin.roles.villagers.Servitor;
 import fr.ph1lou.werewolfplugin.roles.villagers.Shaman;
 import fr.ph1lou.werewolfplugin.roles.villagers.SiameseTwin;
 import fr.ph1lou.werewolfplugin.roles.villagers.Sister;
+import fr.ph1lou.werewolfplugin.roles.villagers.Spy;
+import fr.ph1lou.werewolfplugin.roles.villagers.StoryTeller;
 import fr.ph1lou.werewolfplugin.roles.villagers.Stud;
 import fr.ph1lou.werewolfplugin.roles.villagers.Trapper;
 import fr.ph1lou.werewolfplugin.roles.villagers.Troublemaker;
@@ -470,6 +474,28 @@ public class RolesRegister {
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.DEVOTED_SERVANT.getKey(), DevotedServant.class)
                             .addCategory(Category.VILLAGER));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.STORY_TELLER.getKey(), StoryTeller.class)
+                            .addCategory(Category.VILLAGER));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.SPY.getKey(), Spy.class)
+                            .addCategory(Category.VILLAGER));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.BENEFACTOR.getKey(), Benefactor.class)
+                            .addCategory(Category.VILLAGER)
+                            .setRandomCompositionAttribute(RandomCompositionAttribute.VILLAGER));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.RABBIT.getKey(), Rabbit.class)
+                            .addCategory(Category.VILLAGER)
+                            .setRandomCompositionAttribute(RandomCompositionAttribute.VILLAGER));
 
         } catch (NoSuchMethodException e) {
             e.printStackTrace();

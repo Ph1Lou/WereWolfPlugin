@@ -728,6 +728,37 @@
         "perform": "Vous venez de demander à voler le rôle de &player&",
         "resurrection": "Vous n'avez pas pu voler le rôle de &player& qui a été ressuscité",
         "description": "Vous pouvez voler les pouvoirs d'un joueur du Village (1 fois par partie) au moment de sa mort par un autre joueur. Celui-ci est alors affiché en tant que Servante Dévouée."
+      },
+      "story_teller": {
+        "display": "Conteuse",
+        "items": "§bDeux§f Bibliothèques",
+        "players": "Joueurs ayant agit pendant la journée : &players&",
+        "description": "Au bout du 5em jour, elle reçoit chaque matin une liste de joueurs ayant agi pendant la journée écoulé."
+      },
+      "spy": {
+        "display": "Espion",
+        "command": "spy",
+        "description": "Au bout du 5em jour, vous pouvez espionner un joueur. Vous recevez le nombre d’Actions racontables effectuées par le joueur le jour d'après",
+        "use_power": "Vous pouvez espionner un nouveau joueur §b/ww spy",
+        "result": "Le joueur &player& a effectué &number& action(s) racontable(s)",
+        "perform": "Vous commencez à espionner §b&player&"
+      },
+      "benefactor": {
+        "display": "Bienfaiteur",
+        "description": "3 fois dans la partie, vous pouvez donner au joueur de votre choix (excepté vous-même) 1 ♥ permanent.",
+        "effect": "Vous obtenez un effet Regeneration lent (1 ♥ toutes les 3 minutes) une fois votre pouvoir entièrement consommé",
+        "items": "2 livres protection II",
+        "command": "vie",
+        "command_description": "/ww vie",
+        "too_many_players": "Vous avez déja utilisé votre pouvoir sur §b3 §fjoueurs",
+        "already_use_on_player": "Vous avez déjà utilisé votre pouvoir sur ce joueur",
+        "perform": "Vous avez donné §b1 ♥ §f à §b&player& §f!",
+        "target_message": "Le bienfaiteur vous a fait don de §b1 ♥ §f!"
+      },
+      "rabbit": {
+        "display": "Lapin",
+        "description": "Lorsque vous avez moins de 6 ♥, tous les joueurs du Village autour de vous (rayon de 20 blocs) subissent 10% de dégâts en moins sauf ceux qui possèdent un effet de Resistance.",
+        "effects": "Faiblesse I la nuit, Vitesse en fonction de votre barre de vie : 10% à 3 ♥ et + | 20% en dessous de 3 ♥"
       }
     },
     "vote": {
@@ -1012,7 +1043,7 @@
         "messages": [
           "Rôles à aura Lumineuse :",
           "§cChien-Loup (Loup), Loup-Garou Mystique, Loup-Garou Grimeur",
-          "§bVoyante, Renard, Montreur d'Ours, Tombeur, Bibliothécaire, Trappeur, Prêtresse, Jumeaux, Analyste, Soeurs, Salvateur, Citoyen, Idiot du Village, Simple Villageois, Vieux Sage, Serviteur, Marchande de Fruit",
+          "§bVoyante, Renard, Montreur d'Ours, Tombeur, Bibliothécaire, Trappeur, Prêtresse, Jumeaux, Analyste, Soeurs, Salvateur, Citoyen, Idiot du Village, Simple Villageois, Vieux Sage, Serviteur, Marchande de Fruit, Conteuse",
           "§aAnge, Charmeuse, Feu Follet, Joueur de Flûte, §6Cupidon",
           "Rôles à aura Neutre :",
           "§cLoup-Garou Perfide, Loup-Garou Amnésique, Loup-Garou Craintif, Loup-Garou Vengeur",

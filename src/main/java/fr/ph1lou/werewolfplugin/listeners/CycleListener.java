@@ -302,7 +302,7 @@ public class CycleListener implements Listener {
                 ((LoversManagement)game.getLoversManager()).repartition();
             }
 
-        }, 1800L);
+        }, 1200L);
     }
     @EventHandler
     public void onRepartition(RepartitionEvent event) {

@@ -221,6 +221,17 @@ werewolf.role.serial_killer.display:
       stored-enchants:
         ARROW_DAMAGE: 3
 
+werewolf.role.benefactor.display:
+  0:
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    amount: 2
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        PROTECTION_ENVIRONMENTAL: 2
+
 werewolf.role.infect_father_of_the_wolves.display:
   0:
     potion_data: 16453

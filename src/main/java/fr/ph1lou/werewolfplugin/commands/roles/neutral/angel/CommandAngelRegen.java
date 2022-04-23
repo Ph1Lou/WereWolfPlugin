@@ -62,6 +62,8 @@ public class CommandAngelRegen implements ICommand {
         RegenerationEvent event = new RegenerationEvent(playerWW, ((IAffectedPlayers) guardianAngel)
                 .getAffectedPlayers().get(0));
 
+        Bukkit.getPluginManager().callEvent(event);
+
         if (event.isCancelled()) {
             playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
             return;
