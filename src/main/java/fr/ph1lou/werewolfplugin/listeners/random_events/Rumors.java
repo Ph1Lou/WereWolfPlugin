@@ -1,7 +1,6 @@
 package fr.ph1lou.werewolfplugin.listeners.random_events;
 
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Prefix;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
@@ -51,7 +50,7 @@ public class Rumors extends ListenerManager {
 
                     TextComponent textComponent = new TextComponent(
                             game.translate(
-                                    Prefix.YELLOW.getKey() , "werewolf.random_events.rumors.message"));
+                                     "werewolf.random_events.rumors.message"));
                     textComponent.setClickEvent(
                             new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,
                                     String.format("/ww %s",
@@ -65,10 +64,14 @@ public class Rumors extends ListenerManager {
                                 register(false);
                                 List<String> rumors = new ArrayList<>(this.rumors.values());
 
+                                if(rumors.size() == 0){
+                                    return;
+                                }
+
                                 Collections.shuffle(rumors, game.getRandom());
 
                                 Bukkit.broadcastMessage(game.translate("werewolf.random_events.rumors.rumors_announcement",
-                                        Formatter.format("&rumors&", String.join(", ", rumors))));
+                                        Formatter.format("&rumors&", String.join("\n", rumors))));
                             }
                         }
                     }, 20L * 60);

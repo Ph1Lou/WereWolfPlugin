@@ -9,6 +9,7 @@ import fr.ph1lou.werewolfapi.enums.TimerBase;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
+import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -112,6 +113,10 @@ public class Interpreter extends RoleVillage implements IPower {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onNight(NightEvent nightEvent){
 
+        if(!this.getPlayerWW().getRole().equals(this)){
+            return;
+        }
+
         BukkitUtils.scheduleSyncDelayedTask(() -> {
             if(!this.isAbilityEnabled()){
                 return;
@@ -125,14 +130,31 @@ public class Interpreter extends RoleVillage implements IPower {
 
             this.roles.forEach(roleRegister -> this.getPlayerWW()
                     .sendMessage(changeRole(roleRegister.getKey())));
-        }, game.getConfig().getTimerValue(TimerBase.DAY_DURATION.getKey()) * 60L * 4 / 5L);
+        }, game.getConfig().getTimerValue(TimerBase.DAY_DURATION.getKey()) * 20L * 4 / 5L);
 
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onDeath(FinalDeathEvent event){
+
+        if(!event.getPlayerWW().equals(this.getPlayerWW())){
+            return;
+        }
+
+        if(this.getPlayerWW().getRole().equals(this)){
+            return;
+        }
+
+        HandlerList.unregisterAll(this.getPlayerWW().getRole());
+        this.getPlayerWW().setRole(this);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onDay(DayEvent event){
 
-        this.setPower(false);
+        if(!this.getPlayerWW().getRole().equals(this)){
+            return;
+        }
 
         if(!this.isAbilityEnabled()){
             return;
@@ -142,7 +164,14 @@ public class Interpreter extends RoleVillage implements IPower {
             return;
         }
 
+        if(!this.hasPower()){
+            return;
+        }
+
         this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey(), "werewolf.check.end_selection");
+
+        this.setPower(false);
+
     }
 
     public boolean isRoleValid(String roleKey){
@@ -159,9 +188,9 @@ public class Interpreter extends RoleVillage implements IPower {
                             this.getPlayerWW(),
                             roleRegister.getKey());
 
-                    BukkitUtils.registerListener(role);
+                    role.recoverPotionEffects();
 
-                    HandlerList.unregisterAll(this);
+                    BukkitUtils.registerListener(role);
 
                     this.getPlayerWW().setRole(role);
 
@@ -169,14 +198,13 @@ public class Interpreter extends RoleVillage implements IPower {
 
                     BukkitUtils.scheduleSyncDelayedTask(() -> {
 
-                        if (!game.isState(StateGame.END)) {
-                            BukkitUtils.registerListener(this);
+                        if (!game.isState(StateGame.END) && !this.getPlayerWW().isState(StatePlayer.DEATH)) {
                             HandlerList.unregisterAll(role);
                             this.getPlayerWW().setRole(this);
                             Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
                             this.getPlayerWW().sendMessageWithKey(Prefix.GREEN.getKey(),"werewolf.role.interpreter.end");
                         }
-                    }, game.getConfig().getTimerValue(TimerBase.DAY_DURATION.getKey()) * 60 * 2L);
+                    }, (long) (game.getConfig().getTimerValue(TimerBase.DAY_DURATION.getKey()) * 20 * 1.6));
 
                     this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey(), "werewolf.role.interpreter.perform",
                             Formatter.role(game.translate(roleKey)));

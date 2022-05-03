@@ -7,13 +7,13 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
-import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.LoverType;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.game.IConfiguration;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.registers.impl.RoleRegister;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import fr.ph1lou.werewolfplugin.Main;
@@ -193,100 +193,103 @@ public class Roles implements InventoryProvider {
 
         List<ClickableItem> items = new ArrayList<>();
 
+        main.getRegisterManager().getRolesRegister()
+                .stream()
+                .sorted((o1, o2) -> game.translate(o1.getKey()).compareToIgnoreCase(game.translate(o2.getKey())))
+                .forEach(roleRegister -> {
 
-        for (RoleRegister roleRegister : main.getRegisterManager().getRolesRegister()) {
+                    if (roleRegister.getCategories().contains(this.category)) {
 
-            if (roleRegister.getCategories().contains(this.category)) {
+                        String key = roleRegister.getKey();
+                        AtomicBoolean unRemovable = new AtomicBoolean(false);
+                        List<String> lore2 = new ArrayList<>(lore);
+                        roleRegister.getLoreKey()
+                                .stream()
+                                .map(game::translate)
+                                .map(s -> Arrays.stream(s.split("\\n"))
+                                        .collect(Collectors.toList())).forEach(lore2::addAll);
+                        roleRegister.getRequireRoles().forEach(roleKey -> lore2.add(game.translate("werewolf.menu.roles.need",
+                                Formatter.role(game.translate(roleKey)))));
+                        main.getRegisterManager().getRolesRegister().stream()
+                                .filter(roleRegister1 -> roleRegister1.getRequireRoles().stream()
+                                        .anyMatch(requiredRole -> requiredRole.equals(roleRegister1.getKey())))
+                                .map(RoleRegister::getKey)
+                                .filter(roleRegister1Key -> game.getConfig().getRoleCount(roleRegister1Key) > 0)
+                                .findFirst().ifPresent(role -> {
+                                    lore2.add(game.translate("werewolf.menu.roles.dependant_load",
+                                            Formatter.role(game.translate(role))));
+                                    unRemovable.set(true);
+                                });
 
-                String key = roleRegister.getKey();
-                AtomicBoolean unRemovable = new AtomicBoolean(false);
-                List<String> lore2 = new ArrayList<>(lore);
-                roleRegister.getLoreKey()
-                        .stream()
-                        .map(game::translate)
-                        .map(s -> Arrays.stream(s.split("\\n"))
-                                .collect(Collectors.toList())).forEach(lore2::addAll);
-                roleRegister.getRequireRoles().forEach(roleKey -> lore2.add(game.translate("werewolf.menu.roles.need",
-                        Formatter.role(game.translate(roleKey)))));
-                main.getRegisterManager().getRolesRegister().stream()
-                        .filter(roleRegister1 -> roleRegister1.getRequireRoles().stream()
-                                .anyMatch(requiredRole -> requiredRole.equals(roleRegister1.getKey())))
-                        .map(RoleRegister::getKey)
-                        .filter(roleRegister1Key -> game.getConfig().getRoleCount(roleRegister1Key) > 0)
-                        .findFirst().ifPresent(role -> {
-                    lore2.add(game.translate("werewolf.menu.roles.dependant_load",
-                            Formatter.role(game.translate(role))));
-                    unRemovable.set(true);
+                        Optional<String> incompatible = roleRegister
+                                .getIncompatibleRoles()
+                                .stream()
+                                .filter(s -> game.getConfig().getRoleCount(s) > 0)
+                                .map(game::translate)
+                                .findFirst();
+
+                        incompatible
+                                .ifPresent(role -> lore2.add(game.translate("werewolf.menu.roles.incompatible",
+                                        Formatter.role(role))));
+
+                        if (config.getRoleCount(key) > 0) {
+                            items.add(ClickableItem.of((
+                                    new ItemBuilder(roleRegister.getItem().isPresent() ?
+                                            roleRegister.getItem().get() :
+                                            UniversalMaterial.GREEN_TERRACOTTA.getStack())
+                                            .setAmount(config.getRoleCount(key))
+                                            .setLore(lore2)
+                                            .setDisplayName(game.translate(roleRegister.getKey()))
+                                            .build()), e -> {
+
+                                if (e.isShiftClick()) {
+                                    AdvancedRoleMenu.getInventory(roleRegister).open(player);
+                                } else if (e.isLeftClick()) {
+                                    selectPlus(game, key);
+                                } else if (e.isRightClick()) {
+                                    int count = game.getConfig().getRoleCount(key);
+                                    if (!unRemovable.get() || count > 1) {
+                                        if (roleRegister.isRequireDouble() && count == 2) {
+                                            selectMinus(game, key);
+                                        }
+                                        selectMinus(game, key);
+                                    }
+                                }
+                            }));
+                        } else {
+
+                            if (roleRegister.getItem().isPresent()) {
+                                lore2.add(0, game.translate("werewolf.utils.none"));
+                            }
+
+                            items.add(ClickableItem.of((new ItemBuilder(roleRegister.getItem().isPresent() ?
+                                    roleRegister.getItem().get() :
+                                    UniversalMaterial.RED_TERRACOTTA.getStack())
+                                    .setAmount(1)
+                                    .setLore(lore2)
+                                    .setDisplayName(game.translate(roleRegister.getKey())).build()), e -> {
+
+                                if (e.isShiftClick()) {
+                                    AdvancedRoleMenu.getInventory(roleRegister).open(player);
+                                } else if (e.isLeftClick()) {
+                                    if(incompatible.isPresent()){
+                                        return;
+                                    }
+                                    if (roleRegister.getRequireRoles().stream()
+                                            .anyMatch(requireRole -> game.getConfig().getRoleCount(requireRole) == 0)) {
+                                        return;
+                                    }
+                                    if (roleRegister.isRequireDouble()) {
+                                        selectPlus(game, key);
+                                    }
+                                    selectPlus(game, key);
+                                }
+                            }));
+                        }
+
+                    }
                 });
 
-                Optional<String> incompatible = roleRegister
-                        .getIncompatibleRoles()
-                        .stream()
-                        .filter(s -> game.getConfig().getRoleCount(s) > 0)
-                        .map(game::translate)
-                        .findFirst();
-
-                incompatible
-                        .ifPresent(role -> lore2.add(game.translate("werewolf.menu.roles.incompatible",
-                                Formatter.role(role))));
-
-                if (config.getRoleCount(key) > 0) {
-                    items.add(ClickableItem.of((
-                            new ItemBuilder(roleRegister.getItem().isPresent() ?
-                                    roleRegister.getItem().get() :
-                                    UniversalMaterial.GREEN_TERRACOTTA.getStack())
-                                    .setAmount(config.getRoleCount(key))
-                                    .setLore(lore2)
-                                    .setDisplayName(game.translate(roleRegister.getKey()))
-                                    .build()), e -> {
-
-                        if (e.isShiftClick()) {
-                            AdvancedRoleMenu.getInventory(roleRegister).open(player);
-                        } else if (e.isLeftClick()) {
-                            selectPlus(game, key);
-                        } else if (e.isRightClick()) {
-                            int count = game.getConfig().getRoleCount(key);
-                            if (!unRemovable.get() || count > 1) {
-                                if (roleRegister.isRequireDouble() && count == 2) {
-                                    selectMinus(game, key);
-                                }
-                                selectMinus(game, key);
-                            }
-                        }
-                    }));
-                } else {
-
-                    if (roleRegister.getItem().isPresent()) {
-                        lore2.add(0, game.translate("werewolf.utils.none"));
-                    }
-
-                    items.add(ClickableItem.of((new ItemBuilder(roleRegister.getItem().isPresent() ?
-                            roleRegister.getItem().get() :
-                            UniversalMaterial.RED_TERRACOTTA.getStack())
-                            .setAmount(1)
-                            .setLore(lore2)
-                            .setDisplayName(game.translate(roleRegister.getKey())).build()), e -> {
-
-                        if (e.isShiftClick()) {
-                            AdvancedRoleMenu.getInventory(roleRegister).open(player);
-                        } else if (e.isLeftClick()) {
-                            if(incompatible.isPresent()){
-                                return;
-                            }
-                            if (roleRegister.getRequireRoles().stream()
-                                    .anyMatch(requireRole -> game.getConfig().getRoleCount(requireRole) == 0)) {
-                                return;
-                            }
-                            if (roleRegister.isRequireDouble()) {
-                                selectPlus(game, key);
-                            }
-                            selectPlus(game, key);
-                        }
-                    }));
-                }
-
-            }
-        }
         if (items.size() > 36) {
             pagination.setItems(items.toArray(new ClickableItem[0]));
             pagination.setItemsPerPage(27);
@@ -301,19 +304,19 @@ public class Roles implements InventoryProvider {
             contents.set(4, 2, ClickableItem.of(new ItemBuilder(Material.ARROW)
                             .setDisplayName(game.translate("werewolf.menu.roles.previous",
                                     Formatter.format("&current&",page),
-                                                    Formatter.format("&previous&",pagination.isFirst() ? page : page - 1)))
+                                    Formatter.format("&previous&",pagination.isFirst() ? page : page - 1)))
                             .build(),
                     e -> getInventory(player, this.category).open(player, pagination.previous().getPage())));
             contents.set(4, 6, ClickableItem.of(new ItemBuilder(Material.ARROW)
                             .setDisplayName(game.translate("werewolf.menu.roles.next",
-                                                    Formatter.format("&current&",page),
-                                                                    Formatter.format("&next&",pagination.isLast() ? page : page + 1)))
+                                    Formatter.format("&current&",page),
+                                    Formatter.format("&next&",pagination.isLast() ? page : page + 1)))
                             .build(),
                     e -> getInventory(player, this.category).open(player, pagination.next().getPage())));
             contents.set(4, 4, ClickableItem.empty(new ItemBuilder(UniversalMaterial.SIGN.getType())
                     .setDisplayName(game.translate("werewolf.menu.roles.current",
-                                    Formatter.format("&current&",page),
-                                                    Formatter.format("&sum&",items.size() / 27 + 1)))
+                            Formatter.format("&current&",page),
+                            Formatter.format("&sum&",items.size() / 27 + 1)))
                     .build()));
         } else {
             int i = 0;

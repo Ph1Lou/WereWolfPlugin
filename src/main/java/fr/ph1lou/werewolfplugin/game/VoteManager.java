@@ -254,10 +254,9 @@ public class VoteManager implements Listener, IVoteManager
 				!this.isStatus(VoteStatus.NOT_BEGIN)) {
 
 			this.resetVote();
-			Bukkit.broadcastMessage(this.game.translate("werewolf.utils.bar"));
+			Bukkit.getOnlinePlayers().forEach(Sound.CHICKEN_HURT::play);
 			Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE.getKey(), "werewolf.vote.vote_time",
 					Formatter.timer(Utils.conversion(duration))));
-			Bukkit.broadcastMessage(this.game.translate("werewolf.utils.bar"));
 			this.setStatus(VoteStatus.IN_PROGRESS);
 			BukkitUtils.scheduleSyncDelayedTask(() -> {
 				if (!this.game.isState(StateGame.END)) {

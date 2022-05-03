@@ -81,6 +81,7 @@ public class Stuff implements IStuffManager {
 
         int pos = 0;
         FileConfiguration config = getOrCreateCustomConfig(main, configName);
+
         if (config == null) {
             Bukkit.getLogger().warning("[pluginLG] backup error");
             return;
@@ -219,6 +220,7 @@ public class Stuff implements IStuffManager {
     private void setItem(FileConfiguration file, String path,@Nullable ItemStack item){
 
         if(item == null){
+            file.set(path,null);
             return;
         }
 

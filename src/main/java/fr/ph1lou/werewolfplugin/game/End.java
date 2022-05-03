@@ -39,6 +39,10 @@ public class End {
 
     public void checkVictory() {
 
+        if(game.isDebug()){
+            return;
+        }
+
         if (game.getConfig().isTrollSV()) return;
 
         if (game.isState(StateGame.END)) return;

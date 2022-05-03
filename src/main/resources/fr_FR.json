@@ -764,9 +764,9 @@
       "interpreter": {
         "display": "Interprete",
         "description": "Vous disposez d’une liste de 3 rôles du Village qui ne font pas partie de la composition",
-        "power": "Vous pouvez incarner une fois dans la partie pendant un jour, l'un des rôles suivants :§b&roles&",
+        "power": "Vous pouvez incarner une fois dans la partie pendant un jour, l'un des rôles suivants : §b&roles&",
         "click": "Cliquez ici pour devenir §b&role&, vous pouvez cliquer jusqu'au matin",
-        "perform": "Vous devenez §b&role& pendant un jour",
+        "perform": "Vous devenez §b&role&§f pendant un jour",
         "command": "changerole",
         "end": "Vous redevenez §bInterprete"
       },
@@ -1253,9 +1253,6 @@
         "punch": "Punch §b&number&",
         "depth_rider": "Depth Strider §b&number&"
       },
-      "advanced_config_roles": {
-        "name": "Configuration Avancée §bRole"
-      },
       "timers": {
         "command": "timers",
         "description": "Pour voir les timers",
@@ -1390,7 +1387,7 @@
     "random_events": {
       "exposed": {
         "name": "Exposed",
-        "message": "[§5Exposed§r] Le rôle de §b&player&§f se trouve dans la liste suivante §b&role1& §f&role2& §b&role3&",
+        "message": "[§5Exposed§r] Le rôle de §b&player&§f se trouve dans la liste suivante §b&role1&, §f&role2& et §b&role3&",
         "description": "Deux fois dans la partie \n(dans les intervalles [65~80 min] et [100~115 min]), \nun joueur choisi aléatoirement voit son pseudo \naffiché dans le chat à côté de 3 rôles\n toujours représentés dans la partie. \nParmi ces 3 rôles se trouvent : son rôle, un rôle d’un camp différent, \nun rôle aléatoire parmi tous les autres.\nUn joueur ne peut pas être exposé deux fois dans la même partie."
       },
       "loot_box": {
@@ -1458,11 +1455,11 @@
       "rumors": {
         "name": "Rumeurs",
         "description": "Une fois dans la partie, entre 80 et 120 minutes,\n un message annonce aux joueurs qu’ils ont 20 secondes pour envoyer un message dans le chat.\n Les messages de tous les joueurs sont ensuite affichés anonymement\n et dans le désordre. Seul le Citoyen pourra voir le pseudo\n du joueur ayant écrit une des rumeurs.",
-        "message": "[§5Rumeur§r] Vous avez §b20§f secondes pour envoyer un message, cliquez ici",
+        "message": "[§5Rumeur§r] Vous avez §b20§f secondes pour envoyer un message, §bcliquez ici",
         "rumors_announcement": "[§5Rumeur§r] Les rumeurs sont : &rumors&",
         "command": "rumor",
         "no_rumor": "L'évenement Rumeurs n'est pas en cours",
-        "perform": "Votre rumeur a été envoyée ou actualisé"
+        "perform": "Votre rumeur a été envoyée ou actualisée"
       }
     },
     "check": {
@@ -1508,7 +1505,7 @@
       "debug": "§fMode §4debug",
       "none": "§4Aucun",
       "author": "§fAuteur(s) :",
-      "bar": "\n§r§b§m§l-+-----------------------------------+-§r§r§r§f\n"
+      "bar": "§r§b§m§l-+-----------------------------------+-§r§r§r§f"
     },
     "categories": {
       "villager": "Villageois",

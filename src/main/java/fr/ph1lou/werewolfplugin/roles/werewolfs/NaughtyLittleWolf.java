@@ -29,9 +29,14 @@ public class NaughtyLittleWolf extends RoleWereWolf {
                 .build();
     }
 
-
     @Override
     public void recoverPower() {
+
+    }
+
+
+    @Override
+    public void recoverPotionEffect() {
         if (game.isDay(Day.NIGHT)) {
             this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.SPEED, "naughty"));
         }

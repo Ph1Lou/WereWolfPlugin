@@ -30,8 +30,9 @@ public class CommandRumor implements ICommand {
             return;
         }
 
-        if(RegisterManager.get().getRandomEventsRegister().
-        stream().filter(randomEventRegister -> randomEventRegister.getKey().equals(RandomEvent.RUMORS.getKey()))
+        if(!RegisterManager.get().getRandomEventsRegister()
+                        .stream()
+                .filter(randomEventRegister -> randomEventRegister.getKey().equals(RandomEvent.RUMORS.getKey()))
                 .findFirst()
                 .map(randomEventRegister -> ((Rumors)randomEventRegister.getRandomEvent()).isActive())
                 .orElse(false)){
