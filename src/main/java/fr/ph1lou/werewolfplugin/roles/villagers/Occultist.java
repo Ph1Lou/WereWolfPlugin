@@ -59,7 +59,7 @@ public class Occultist extends Villager{
                 return;
             }
             this.deaths.addAll(this.troublemakers);
-            Collections.shuffle(this.deaths);
+            Collections.shuffle(this.deaths, game.getRandom());
             this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey(),"werewolf.role.occultist.last_wishes");
             for(IPlayerWW playerWW : this.deaths){
                 playerWW.getWish().ifPresent(wish -> this.getPlayerWW().sendMessage(new TextComponent(" -> " + wish )));

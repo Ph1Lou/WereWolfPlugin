@@ -187,7 +187,7 @@ public class Charmer extends RoleNeutral implements IPower, IAffectedPlayers {
 
             FakeLoverCharmer fakeLover = new FakeLoverCharmer(game,new ArrayList<>(Arrays.asList(this.getPlayerWW(), playerWW)), this.getPlayerWW());
             game.getLoversManager().addLover(fakeLover);
-            BukkitUtils.registerEvents(fakeLover);
+            BukkitUtils.registerListener(fakeLover);
             fakeLover.announceLovers();
         }
         else{

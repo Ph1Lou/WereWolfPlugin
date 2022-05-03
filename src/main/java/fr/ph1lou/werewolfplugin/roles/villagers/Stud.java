@@ -85,7 +85,7 @@ public class Stud extends RoleVillage implements IPower {
         Lover lover = new Lover(game, new ArrayList<>(Arrays.asList(getPlayerWW(), killerWW.get())));
 
         game.getLoversManager().addLover(lover);
-        BukkitUtils.registerEvents(lover);
+        BukkitUtils.registerListener(lover);
         lover.announceLovers();
 
         event.setCancelled(true);

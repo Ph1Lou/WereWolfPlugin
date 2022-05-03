@@ -7,6 +7,7 @@ import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.registers.interfaces.IRegisterManager;
 import fr.ph1lou.werewolfapi.statistics.impl.GameReview;
+import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import fr.ph1lou.werewolfplugin.commands.Admin;
 import fr.ph1lou.werewolfplugin.commands.Command;
@@ -52,8 +53,8 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
                         ServicePriority.Normal);
         this.invManager.init();
 
-        Bukkit.getPluginManager().registerEvents(new Events(this), this);
-        Bukkit.getPluginManager().registerEvents(languageManager, this);
+        BukkitUtils.registerListener(new Events(this));
+        BukkitUtils.registerListener(languageManager);
         currentGame = new GameManager(this);
         Objects.requireNonNull(getCommand("a")).setExecutor(new Admin(this));
         Objects.requireNonNull(getCommand("ww")).setExecutor(new Command(this));

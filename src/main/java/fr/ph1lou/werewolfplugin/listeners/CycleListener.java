@@ -211,7 +211,7 @@ public class CycleListener implements Listener {
                                                         playerWW,
                                                         roleRegister.getKey());
 
-                                        BukkitUtils.registerEvents(role);
+                                        BukkitUtils.registerListener(role);
 
                                         playerWW.setRole(role);
                                     } catch (InstantiationException |
@@ -285,7 +285,7 @@ public class CycleListener implements Listener {
                             playerWWS.remove(0))));
         }
 
-        loverAPIS.forEach(BukkitUtils::registerEvents);
+        loverAPIS.forEach(BukkitUtils::registerListener);
         loverAPIS.forEach(iLover -> ((FakeLover)iLover).announceLovers());
 
         BukkitUtils.scheduleSyncDelayedTask(() -> {
@@ -337,7 +337,7 @@ public class CycleListener implements Listener {
                 IRole role = (IRole) roleRegister.getConstructors().newInstance(game,
                         playerWW,
                         roleRegister.getKey());
-                BukkitUtils.registerEvents(role);
+                BukkitUtils.registerListener(role);
                 playerWW.setRole(role);
                 Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(playerWW));
             } catch (IllegalAccessException | InstantiationException | InvocationTargetException exception) {

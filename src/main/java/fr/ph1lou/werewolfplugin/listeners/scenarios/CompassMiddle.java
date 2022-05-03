@@ -45,7 +45,7 @@ public class CompassMiddle extends ListenerManager {
 
         if (isActive) {
             if (!isRegister()) {
-                BukkitUtils.registerEvents(this);
+                BukkitUtils.registerListener(this);
                 Bukkit.getOnlinePlayers()
                         .forEach(player -> player.setCompassTarget(player
                                 .getWorld()

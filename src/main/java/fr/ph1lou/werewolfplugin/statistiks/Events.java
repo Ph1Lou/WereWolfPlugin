@@ -42,6 +42,8 @@ import fr.ph1lou.werewolfapi.events.random_events.InfectionRandomEvent;
 import fr.ph1lou.werewolfapi.events.random_events.LootBoxEvent;
 import fr.ph1lou.werewolfapi.events.random_events.MysanthropeSisterEvent;
 import fr.ph1lou.werewolfapi.events.random_events.PutrefactionEvent;
+import fr.ph1lou.werewolfapi.events.random_events.RumorsEvent;
+import fr.ph1lou.werewolfapi.events.random_events.RumorsWriteEvent;
 import fr.ph1lou.werewolfapi.events.random_events.SwapEvent;
 import fr.ph1lou.werewolfapi.events.random_events.TroupleEvent;
 import fr.ph1lou.werewolfapi.events.roles.InvisibleEvent;
@@ -58,7 +60,7 @@ import fr.ph1lou.werewolfapi.events.roles.avenger_werewolf.DeathAvengerListEvent
 import fr.ph1lou.werewolfapi.events.roles.avenger_werewolf.RegisterAvengerListEvent;
 import fr.ph1lou.werewolfapi.events.roles.barbarian.BarbarianEvent;
 import fr.ph1lou.werewolfapi.events.roles.bear_trainer.GrowlEvent;
-import fr.ph1lou.werewolfapi.events.roles.benefactor.BenefactorGiveHeart;
+import fr.ph1lou.werewolfapi.events.roles.benefactor.BenefactorGiveHeartEvent;
 import fr.ph1lou.werewolfapi.events.roles.charmer.CharmedDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.charmer.CharmerEvent;
 import fr.ph1lou.werewolfapi.events.roles.charmer.CharmerGetEffectDeathEvent;
@@ -86,7 +88,11 @@ import fr.ph1lou.werewolfapi.events.roles.guard.GuardEvent;
 import fr.ph1lou.werewolfapi.events.roles.guard.GuardResurrectionEvent;
 import fr.ph1lou.werewolfapi.events.roles.howling_werewolf.HowlEvent;
 import fr.ph1lou.werewolfapi.events.roles.hunter.HunterShotEvent;
+import fr.ph1lou.werewolfapi.events.roles.illusionist.IllusionistActivatePowerEvent;
+import fr.ph1lou.werewolfapi.events.roles.illusionist.IllusionistAddPlayerOnWerewolfListEvent;
+import fr.ph1lou.werewolfapi.events.roles.illusionist.IllusionistGetNamesEvent;
 import fr.ph1lou.werewolfapi.events.roles.infect_father_of_the_wolves.InfectionEvent;
+import fr.ph1lou.werewolfapi.events.roles.interpreter.InterpreterEvent;
 import fr.ph1lou.werewolfapi.events.roles.librarian.LibrarianDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.librarian.LibrarianGiveBackEvent;
 import fr.ph1lou.werewolfapi.events.roles.librarian.LibrarianRequestEvent;
@@ -1537,11 +1543,68 @@ public class Events implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onBenefactorGiveHeart(BenefactorGiveHeart event) {
+    public void onBenefactorGiveHeart(BenefactorGiveHeartEvent event) {
         if (event.isCancelled()) return;
 
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.benefactor_give_heart_event",
                 event.getPlayerWW(), event.getTargetWW(),  main.getWereWolfAPI().getTimer())
                 .setActionableStory(true));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onInterpretGetRole(InterpreterEvent event) {
+        if (event.isCancelled()) return;
+
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.interpret_event",
+                event.getPlayerWW(),  main.getWereWolfAPI().getTimer(), event.getRoleKey()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onIllusionistActivatePower(IllusionistActivatePowerEvent event) {
+        if (event.isCancelled()) return;
+
+        main.getCurrentGameReview()
+                .addRegisteredAction(new RegisteredAction("werewolf.illusionist_activate_event",
+                event.getPlayerWW(),  main.getWereWolfAPI().getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onIllusionistGetNames(IllusionistGetNamesEvent event) {
+        if (event.isCancelled()) return;
+
+        main.getCurrentGameReview()
+                .addRegisteredAction(new RegisteredAction("werewolf.illusionist_get_names_event",
+                        event.getPlayerWW(),event.getPlayerWWS(), main.getWereWolfAPI().getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onIllusionistAddPlayer(IllusionistAddPlayerOnWerewolfListEvent event) {
+        if (event.isCancelled()) return;
+
+        main.getCurrentGameReview()
+                .addRegisteredAction(new RegisteredAction("werewolf.illusionist_add_player_event",
+                        event.getPlayerWW(),event.getTargetWW(), main.getWereWolfAPI().getTimer())
+                        .setActionableStory(true));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onRumorsEnable(RumorsEvent event) {
+        if (event.isCancelled()) return;
+
+        main.getCurrentGameReview()
+                .addRegisteredAction(new RegisteredAction("werewolf.rumors_event",
+                         main.getWereWolfAPI().getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onRumorsWrite(RumorsWriteEvent event) {
+
+        if (event.isCancelled()) return;
+
+        main.getCurrentGameReview()
+                .addRegisteredAction(new RegisteredAction("werewolf.rumors_write_event",
+                        event.getPlayerWW(),
+                        main.getWereWolfAPI().getTimer(),
+                        event.getMessage()));
     }
 }

@@ -3,7 +3,7 @@ package fr.ph1lou.werewolfplugin.commands.roles.villager.benefactor;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.enums.Prefix;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.events.roles.benefactor.BenefactorGiveHeart;
+import fr.ph1lou.werewolfapi.events.roles.benefactor.BenefactorGiveHeartEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -16,10 +16,11 @@ public class CommandBenefactor implements ICommand {
     @Override
     public void execute(WereWolfAPI game, Player player, String[] args) {
         IPlayerWW playerWW = game.getPlayerWW(player.getUniqueId()).orElse(null);
+
         if(playerWW == null) return;
 
         IRole benefactor = playerWW.getRole();
-        if(benefactor == null) return;
+
         if(!(benefactor instanceof IAffectedPlayers)) return;
 
         if(((IAffectedPlayers) benefactor).getAffectedPlayers().size() >= 3) {
@@ -51,7 +52,7 @@ public class CommandBenefactor implements ICommand {
             return;
         }
 
-        BenefactorGiveHeart event = new BenefactorGiveHeart(playerWW, targetWW);
+        BenefactorGiveHeartEvent event = new BenefactorGiveHeartEvent(playerWW, targetWW);
         Bukkit.getPluginManager().callEvent(event);
         if(event.isCancelled()) {
             playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");

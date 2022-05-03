@@ -29,7 +29,7 @@ public class CatEyes extends ListenerManager {
         if (isActive) {
             if (!isRegister()) {
                 this.getGame().getPlayersWW().forEach(playerWW -> playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION,"cat_eyes")));
-                BukkitUtils.registerEvents(this);
+                BukkitUtils.registerListener(this);
                 register = true;
             }
         } else if (isRegister()) {

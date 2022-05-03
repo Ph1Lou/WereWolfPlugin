@@ -81,7 +81,7 @@ public class Twin extends RoleVillage {
                 .filter(playerWW -> !playerWW.equals(this.getPlayerWW()))
                 .collect(Collectors.toList()));
 
-        Collections.shuffle(this.twinList);
+        Collections.shuffle(this.twinList, game.getRandom());
 
         TwinRevealEvent twinRevealEvent = new TwinRevealEvent(this.getPlayerWW(), new HashSet<>(this.twinList));
 
@@ -182,7 +182,7 @@ public class Twin extends RoleVillage {
                                 Formatter.format("&list&",twinListEvent.getPlayerWWS().stream().map(IPlayerWW::getName).collect(Collectors.joining(", "))));
                     }
                     else{
-                        Collections.shuffle(nearPlayers);
+                        Collections.shuffle(nearPlayers, game.getRandom());
 
                         if(nearPlayers.isEmpty()){
                             return;

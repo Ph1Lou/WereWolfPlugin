@@ -206,13 +206,13 @@ public class Roles implements InventoryProvider {
                         .map(game::translate)
                         .map(s -> Arrays.stream(s.split("\\n"))
                                 .collect(Collectors.toList())).forEach(lore2::addAll);
-                roleRegister.getRequireRole().ifPresent(roleKey -> lore2.add(game.translate("werewolf.menu.roles.need",
+                roleRegister.getRequireRoles().forEach(roleKey -> lore2.add(game.translate("werewolf.menu.roles.need",
                         Formatter.role(game.translate(roleKey)))));
                 main.getRegisterManager().getRolesRegister().stream()
-                        .filter(roleRegister1 -> roleRegister1.getRequireRole().isPresent())
-                        .filter(roleRegister1 -> game.getConfig().getRoleCount(roleRegister1.getKey()) > 0)
-                        .filter(roleRegister1 -> roleRegister1.getRequireRole().get().equals(key))
+                        .filter(roleRegister1 -> roleRegister1.getRequireRoles().stream()
+                                .anyMatch(requiredRole -> requiredRole.equals(roleRegister1.getKey())))
                         .map(RoleRegister::getKey)
+                        .filter(roleRegister1Key -> game.getConfig().getRoleCount(roleRegister1Key) > 0)
                         .findFirst().ifPresent(role -> {
                     lore2.add(game.translate("werewolf.menu.roles.dependant_load",
                             Formatter.role(game.translate(role))));
@@ -273,10 +273,9 @@ public class Roles implements InventoryProvider {
                             if(incompatible.isPresent()){
                                 return;
                             }
-                            if (roleRegister.getRequireRole().isPresent()) {
-                                if (game.getConfig().getRoleCount(roleRegister.getRequireRole().get()) == 0) {
-                                    return;
-                                }
+                            if (roleRegister.getRequireRoles().stream()
+                                    .anyMatch(requireRole -> game.getConfig().getRoleCount(requireRole) == 0)) {
+                                return;
                             }
                             if (roleRegister.isRequireDouble()) {
                                 selectPlus(game, key);

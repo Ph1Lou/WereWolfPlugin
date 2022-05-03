@@ -9,6 +9,7 @@ import fr.ph1lou.werewolfplugin.listeners.random_events.Infection;
 import fr.ph1lou.werewolfplugin.listeners.random_events.LootBox;
 import fr.ph1lou.werewolfplugin.listeners.random_events.Putrefaction;
 import fr.ph1lou.werewolfplugin.listeners.random_events.MisanthropeSister;
+import fr.ph1lou.werewolfplugin.listeners.random_events.Rumors;
 import fr.ph1lou.werewolfplugin.listeners.random_events.Swap;
 import fr.ph1lou.werewolfplugin.listeners.random_events.Triple;
 import fr.ph1lou.werewolfapi.enums.RandomEvent;
@@ -95,6 +96,12 @@ public class EventRandomsRegister {
                 .add(new RandomEventRegister("werewolf.name",
                         RandomEvent.SISTER_MISANTHROPE.getKey(), new MisanthropeSister(main))
                         .setLoreKey("werewolf.random_events.sister_misanthrope.description")
+                        .setDefaultValue(1));
+
+        eventRandomsRegister
+                .add(new RandomEventRegister("werewolf.name",
+                        RandomEvent.RUMORS.getKey(), new Rumors(main))
+                        .setLoreKey("werewolf.random_events.rumors.description")
                         .setDefaultValue(1));
 
 

@@ -113,7 +113,7 @@ public class LoversManagement implements ILoverManager {
 		this.lovers
 				.forEach(lovers -> {
 					BukkitUtils
-							.registerEvents(lovers);
+							.registerListener(lovers);
 					lovers.getLovers().forEach(playerWW -> Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(playerWW)));
 				});
 		Bukkit.getPluginManager().callEvent(new RevealLoversEvent(this.lovers));

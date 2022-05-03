@@ -1,5 +1,6 @@
 package fr.ph1lou.werewolfplugin.registers;
 
+import fr.ph1lou.werewolfplugin.commands.randomevents.rumors.CommandRumor;
 import fr.ph1lou.werewolfplugin.commands.roles.hybrid.wildchild.CommandWildChild;
 import fr.ph1lou.werewolfplugin.commands.roles.hybrid.wolfdog.CommandWolfDog;
 import fr.ph1lou.werewolfplugin.commands.roles.lovers.CommandLovers;
@@ -20,12 +21,14 @@ import fr.ph1lou.werewolfplugin.commands.roles.villager.devoted_servant.CommandD
 import fr.ph1lou.werewolfplugin.commands.roles.villager.fruitmerchant.CommandFruitMerchant;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.guard.CommandGuard;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.hunter.CommandHunter;
+import fr.ph1lou.werewolfplugin.commands.roles.villager.illusionist.CommandIllusionist;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.info.detective.CommandDetective;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.info.fox.CommandFox;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.info.librarian.CommandLibrarian;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.info.librarian.CommandSendToLibrarian;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.info.oracle.CommandOracle;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.info.seer.CommandSeer;
+import fr.ph1lou.werewolfplugin.commands.roles.villager.interpreter.CommandInterpreter;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.spy.CommandSpy;
 import fr.ph1lou.werewolfplugin.commands.utilities.CommandWish;
 import fr.ph1lou.werewolfplugin.commands.roles.villager.priestess.CommandPriestess;
@@ -567,6 +570,30 @@ public class CommandsRegister {
                 .addStateWW(StateGame.GAME)
                 .addStateAccess(StatePlayer.ALIVE)
                 .addArgNumbers(1));
+
+        commandsRegister.add(new CommandRegister("werewolf.name", "werewolf.role.interpreter.command", new CommandInterpreter())
+                .setRequiredAbilityEnabled()
+                .setRequiredPower()
+                .addRoleKey(RolesBase.INTERPRETER.getKey())
+                .addStateWW(StateGame.GAME)
+                .addStateAccess(StatePlayer.ALIVE)
+                .unsetAutoCompletion()
+                .addArgNumbers(1));
+
+        commandsRegister.add(new CommandRegister("werewolf.name", "werewolf.role.illusionist.command", new CommandIllusionist())
+                .setRequiredAbilityEnabled()
+                .setRequiredPower()
+                .addRoleKey(RolesBase.ILLUSIONIST.getKey())
+                .addStateWW(StateGame.GAME)
+                .addStateAccess(StatePlayer.ALIVE)
+                .addArgNumbers(0));
+
+        commandsRegister.add(new CommandRegister("werewolf.name", "werewolf.random_events.rumors.command", new CommandRumor())
+                .addStateWW(StateGame.GAME)
+                .addStateAccess(StatePlayer.ALIVE)
+                .unsetAutoCompletion());
+
+
 
         return commandsRegister;
     }

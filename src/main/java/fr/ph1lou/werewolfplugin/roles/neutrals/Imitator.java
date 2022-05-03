@@ -139,7 +139,7 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
         IRole roleClone = role.publicClone();
         this.getPlayerWW().setRole(roleClone);
         assert roleClone != null;
-        BukkitUtils.registerEvents(roleClone);
+        BukkitUtils.registerListener(roleClone);
         if (this.isInfected()) {
             roleClone.setInfected();
         } else if (roleClone.isWereWolf()) {

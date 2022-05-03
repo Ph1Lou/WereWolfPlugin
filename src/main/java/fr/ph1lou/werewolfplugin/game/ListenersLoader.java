@@ -44,7 +44,7 @@ public class ListenersLoader {
         this.listeners.add(new DeathListener(this.game));
         this.listeners.add(new DamagesListener(this.game));
         this.listeners.add((Listener) this.game.getVoteManager());
-        this.listeners.forEach(BukkitUtils::registerEvents);
+        this.listeners.forEach(BukkitUtils::registerListener);
 
         update();
     }

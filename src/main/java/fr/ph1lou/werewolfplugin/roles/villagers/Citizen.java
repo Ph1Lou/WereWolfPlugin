@@ -11,6 +11,7 @@ import fr.ph1lou.werewolfapi.enums.TimerBase;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.NewVoteResultEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteEndEvent;
+import fr.ph1lou.werewolfapi.events.random_events.RumorsWriteEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -93,6 +94,9 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
+        if(!this.isAbilityEnabled()){
+            return;
+        }
         if (this.game.getConfig().isConfigActive(ConfigBase.NEW_VOTE.getKey())) {
             return;
         }
@@ -107,12 +111,17 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
     @NotNull
     @Override
     public String getDescription() {
-        return new DescriptionBuilder(this.game, this).setDescription(this.game.translate(this.game.getConfig().isConfigActive(ConfigBase.NEW_VOTE.getKey()) ? "werewolf.role.citizen.description_new_vote" : "werewolf.role.citizen.description")).addExtraLines(this.game.translate("werewolf.role.citizen.description_extra")).build();
+        return new DescriptionBuilder(this.game, this)
+                .setDescription(this.game.translate(this.game.getConfig()
+                        .isConfigActive(ConfigBase.NEW_VOTE.getKey()) ? "werewolf.role.citizen.description_new_vote" : "werewolf.role.citizen.description")).addExtraLines(this.game.translate("werewolf.role.citizen.description_extra")).build();
     }
 
     @EventHandler
     public void onDay(DayEvent event) {
         if (this.getPlayerWW().isState(StatePlayer.DEATH)) {
+            return;
+        }
+        if(!this.isAbilityEnabled()){
             return;
         }
         if (!this.game.getConfig().isConfigActive(ConfigBase.HIDE_COMPOSITION.getKey())) {
@@ -134,6 +143,9 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
     @EventHandler
     public void onNewVote(NewVoteResultEvent event) {
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
+            return;
+        }
+        if(!this.isAbilityEnabled()){
             return;
         }
         if (event.getPlayerVotedByWerewolfWW() != null && this.hasPower()) {
@@ -172,5 +184,22 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
         seeVote.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/ww %s %s", this.game.translate("werewolf.role.citizen.command_1"),
                 werewolf.toString())));
         return seeVote;
+    }
+
+    @EventHandler
+    public void onRumor(RumorsWriteEvent event){
+        if(event.isCancelled()){
+            return;
+        }
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
+            return;
+        }
+        if(!this.isAbilityEnabled()){
+            return;
+        }
+
+        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN.getKey(), "werewolf.role.citizen.rumor",
+                Formatter.player(event.getPlayerWW().getName()),
+                Formatter.format("&message&", event.getMessage()));
     }
 }

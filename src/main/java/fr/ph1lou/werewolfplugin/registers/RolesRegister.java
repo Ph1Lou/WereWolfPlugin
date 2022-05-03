@@ -1,7 +1,7 @@
 package fr.ph1lou.werewolfplugin.registers;
 
 import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.enums.RandomCompositionAttribute;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.RolesBase;
 import fr.ph1lou.werewolfapi.registers.impl.RoleRegister;
 import fr.ph1lou.werewolfplugin.roles.neutrals.AmnesicWerewolf;
@@ -37,6 +37,8 @@ import fr.ph1lou.werewolfplugin.roles.villagers.Fox;
 import fr.ph1lou.werewolfplugin.roles.villagers.FruitMerchant;
 import fr.ph1lou.werewolfplugin.roles.villagers.Guard;
 import fr.ph1lou.werewolfplugin.roles.villagers.Hermit;
+import fr.ph1lou.werewolfplugin.roles.villagers.Illusionist;
+import fr.ph1lou.werewolfplugin.roles.villagers.Interpreter;
 import fr.ph1lou.werewolfplugin.roles.villagers.Librarian;
 import fr.ph1lou.werewolfplugin.roles.villagers.LittleGirl;
 import fr.ph1lou.werewolfplugin.roles.villagers.Occultist;
@@ -93,85 +95,102 @@ public class RolesRegister {
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.WEREWOLF.getKey(), WereWolf.class)
-                            .addCategory(Category.WEREWOLF));
+                            .addCategory(Category.WEREWOLF)
+                            .addAttribute(RoleAttribute.WEREWOLF));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.FALSIFIER_WEREWOLF.getKey(), FalsifierWereWolf.class)
-                            .addCategory(Category.WEREWOLF));
+                            .addCategory(Category.WEREWOLF)
+                            .addAttribute(RoleAttribute.WEREWOLF));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.GUARD.getKey(), Guard.class)
-                            .addCategory(Category.VILLAGER));
+                            .addCategory(Category.VILLAGER)
+                            .addAttribute(RoleAttribute.VILLAGER));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.NAUGHTY_LITTLE_WOLF.getKey(), NaughtyLittleWolf.class)
-                            .addCategory(Category.WEREWOLF));
+                            .addCategory(Category.WEREWOLF)
+                            .addAttribute(RoleAttribute.WEREWOLF));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.INFECT.getKey(), InfectFatherOfTheWolves.class)
                             .addCategory(Category.WEREWOLF)
+                            .addAttribute(RoleAttribute.WEREWOLF)
                             .setWeight(1.5f));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.MISCHIEVOUS_WEREWOLF.getKey(), MischievousWereWolf.class)
-                            .addCategory(Category.WEREWOLF));
+                            .addCategory(Category.WEREWOLF)
+                            .addAttribute(RoleAttribute.WEREWOLF));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.MYSTICAL_WEREWOLF.getKey(), MysticalWereWolf.class)
-                            .addCategory(Category.WEREWOLF));
+                            .addCategory(Category.WEREWOLF)
+                            .addAttribute(RoleAttribute.WEREWOLF));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.CUPID.getKey(), Cupid.class)
-                            .addCategory(Category.VILLAGER));
+                            .addCategory(Category.VILLAGER)
+                            .addAttribute(RoleAttribute.HYBRID));
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.WITCH.getKey(), Witch.class)
-                            .addCategory(Category.VILLAGER));
+                            .addCategory(Category.VILLAGER)
+                            .addAttribute(RoleAttribute.VILLAGER));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.HOWLING_WEREWOLF.getKey(), HowlingWerewolf.class)
-                            .addCategory(Category.WEREWOLF));
+                            .addCategory(Category.WEREWOLF)
+                            .addAttribute(RoleAttribute.WEREWOLF));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.ELDER.getKey(), Elder.class)
-                            .addCategory(Category.VILLAGER));
+                            .addCategory(Category.VILLAGER)
+                            .addAttribute(RoleAttribute.VILLAGER));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.FOX.getKey(), Fox.class)
                             .addCategory(Category.VILLAGER)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION)
+                            .addAttribute(RoleAttribute.VILLAGER)
+                            .addAttribute(RoleAttribute.INFORMATION)
                             .addConfig(Fox::config1)
                             .addConfig(Fox::config2));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.LITTLE_GIRL.getKey(), LittleGirl.class)
-                            .addCategory(Category.VILLAGER));
+                            .addCategory(Category.VILLAGER)
+                            .addAttribute(RoleAttribute.VILLAGER));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.CITIZEN.getKey(), Citizen.class)
-                            .addCategory(Category.VILLAGER));
+                            .addCategory(Category.VILLAGER)
+                            .addAttribute(RoleAttribute.VILLAGER)
+                            .addAttribute(RoleAttribute.MINOR_INFORMATION));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.COMEDIAN.getKey(), Comedian.class)
-                            .addCategory(Category.VILLAGER));
+                            .addCategory(Category.VILLAGER)
+                            .addAttribute(RoleAttribute.VILLAGER));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.SISTER.getKey(), Sister.class)
                             .addCategory(Category.VILLAGER)
+                            .addAttribute(RoleAttribute.VILLAGER)
                             .setRequireDouble()
                             .addConfig(Sister::config));
 
@@ -179,250 +198,289 @@ public class RolesRegister {
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.TWIN.getKey(), Twin.class)
                             .addCategory(Category.VILLAGER)
+                            .addAttribute(RoleAttribute.VILLAGER)
                             .setRequireDouble()
                             .addConfig(Twin::config));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.STUD.getKey(), Stud.class)
-                            .addCategory(Category.VILLAGER));
+                            .addCategory(Category.VILLAGER)
+                            .addAttribute(RoleAttribute.HYBRID));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.SIAMESE_TWIN.getKey(), SiameseTwin.class)
                             .addCategory(Category.VILLAGER)
+                            .addAttribute(RoleAttribute.VILLAGER)
                             .setRequireDouble());
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.RAVEN.getKey(), Raven.class)
-                            .addCategory(Category.VILLAGER));
+                            .addCategory(Category.VILLAGER)
+                            .addAttribute(RoleAttribute.VILLAGER));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.PROTECTOR.getKey(), Protector.class)
-                            .addCategory(Category.VILLAGER));
+                            .addCategory(Category.VILLAGER)
+                            .addAttribute(RoleAttribute.VILLAGER));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.TRAPPER.getKey(), Trapper.class)
-                            .addCategory(Category.VILLAGER));
+                            .addCategory(Category.VILLAGER)
+                            .addAttribute(RoleAttribute.VILLAGER));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.TROUBLEMAKER.getKey(), Troublemaker.class)
-                            .addCategory(Category.VILLAGER));
+                            .addCategory(Category.VILLAGER)
+                            .addAttribute(RoleAttribute.VILLAGER));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.BEAR_TRAINER.getKey(), BearTrainer.class)
                             .addCategory(Category.VILLAGER)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION)
+                            .addAttribute(RoleAttribute.VILLAGER)
+                            .addAttribute(RoleAttribute.INFORMATION)
                             .addConfig(BearTrainer::config));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.SEER.getKey(), Seer.class)
                             .addCategory(Category.VILLAGER)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION));
+                            .addAttribute(RoleAttribute.VILLAGER)
+                            .addAttribute(RoleAttribute.INFORMATION));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.CHATTY_SEER.getKey(), ChattySeer.class)
                             .addCategory(Category.VILLAGER)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION));
+                            .addAttribute(RoleAttribute.VILLAGER)
+                            .addAttribute(RoleAttribute.INFORMATION));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.DETECTIVE.getKey(), Detective.class)
                             .addCategory(Category.VILLAGER)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION));
+                            .addAttribute(RoleAttribute.VILLAGER)
+                            .addAttribute(RoleAttribute.INFORMATION));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.ANALYST.getKey(), Analyst.class)
                             .addCategory(Category.VILLAGER)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION));
+                            .addAttribute(RoleAttribute.VILLAGER)
+                            .addAttribute(RoleAttribute.MINOR_INFORMATION));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.WILD_CHILD.getKey(), WildChild.class)
                             .addCategory(Category.VILLAGER)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.HYBRID));
+                            .addAttribute(RoleAttribute.HYBRID));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.SUCCUBUS.getKey(), Succubus.class)
                             .addCategory(Category.NEUTRAL)
+                            .addAttribute(RoleAttribute.NEUTRAL)
                             .addConfig(Succubus::config));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.CHARMER.getKey(), Charmer.class)
                             .addCategory(Category.NEUTRAL)
+                            .addAttribute(RoleAttribute.NEUTRAL)
                             .addIncompatibleRole(RolesBase.SCAMMER.getKey()));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.ANGEL.getKey(), Angel.class)
+                            .addAttribute(RoleAttribute.NEUTRAL)
                             .addCategory(Category.NEUTRAL));
 
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.FALLEN_ANGEL.getKey(), FallenAngel.class)
+                            .addAttribute(RoleAttribute.NEUTRAL)
                             .addCategory(Category.NEUTRAL));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.GUARDIAN_ANGEL.getKey(), GuardianAngel.class)
+                            .addAttribute(RoleAttribute.NEUTRAL)
                             .addCategory(Category.NEUTRAL));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.WILL_O_THE_WISP.getKey(), WillOTheWisp.class)
                             .addCategory(Category.NEUTRAL)
+                            .addAttribute(RoleAttribute.NEUTRAL)
                             .addConfig(WillOTheWisp::config));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.BIG_BAD_WEREWOLF.getKey(), BigBadWerewolf.class)
-                            .addCategory(Category.WEREWOLF));
+                            .addCategory(Category.WEREWOLF)
+                            .addAttribute(RoleAttribute.WEREWOLF));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.FEARFUL_WEREWOLF.getKey(), FearFulWerewolf.class)
                             .addCategory(Category.WEREWOLF)
-                            .addConfig(FearFulWerewolf::config));
+                            .addConfig(FearFulWerewolf::config)
+                            .addAttribute(RoleAttribute.WEREWOLF));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.HERMIT.getKey(), Hermit.class)
                             .addCategory(Category.VILLAGER)
+                            .addAttribute(RoleAttribute.VILLAGER)
                             .addConfig(Hermit::config));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.ASSASSIN.getKey(), Assassin.class)
-                            .addCategory(Category.NEUTRAL));
+                            .addCategory(Category.NEUTRAL)
+                            .addAttribute(RoleAttribute.NEUTRAL));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.SERIAL_KILLER.getKey(), SerialKiller.class)
-                            .addCategory(Category.NEUTRAL));
+                            .addCategory(Category.NEUTRAL)
+                            .addAttribute(RoleAttribute.NEUTRAL));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.AMNESIAC_WEREWOLF.getKey(), AmnesicWerewolf.class)
                             .addCategory(Category.NEUTRAL)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.HYBRID));
+                            .addAttribute(RoleAttribute.HYBRID));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.WHITE_WEREWOLF.getKey(), WhiteWereWolf.class)
                             .addCategory(Category.NEUTRAL)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.HYBRID));
+                            .addAttribute(RoleAttribute.HYBRID));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.THIEF.getKey(), Thief.class)
                             .addCategory(Category.NEUTRAL)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.HYBRID));
+                            .addAttribute(RoleAttribute.HYBRID));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.FLUTE_PLAYER.getKey(), FlutePlayer.class)
                             .addCategory(Category.NEUTRAL)
+                            .addAttribute(RoleAttribute.NEUTRAL)
                             .addConfig(FlutePlayer::config));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.LIBRARIAN.getKey(), Librarian.class)
-                            .addCategory(Category.VILLAGER));
+                            .addCategory(Category.VILLAGER)
+                            .addAttribute(RoleAttribute.VILLAGER)
+                            .addAttribute(RoleAttribute.MINOR_INFORMATION));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.VILLAGER.getKey(),
                             Villager.class)
-                            .addCategory(Category.VILLAGER));
+                            .addCategory(Category.VILLAGER)
+                            .addAttribute(RoleAttribute.VILLAGER));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.WOLF_DOG.getKey(),
                             WolfDog.class)
-                            .addCategory(Category.VILLAGER));
+                            .addCategory(Category.VILLAGER)
+                            .addAttribute(RoleAttribute.HYBRID));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.RIVAL.getKey(), Rival.class)
                             .addCategory(Category.NEUTRAL)
-                            .setRequireAnotherRole(RolesBase.CUPID.getKey()));
+                            .addAttribute(RoleAttribute.NEUTRAL)
+                            .addRequireAnotherRole(RolesBase.CUPID.getKey()));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.VILLAGE_IDIOT.getKey(), VillageIdiot.class)
-                            .addCategory(Category.VILLAGER));
+                            .addCategory(Category.VILLAGER)
+                            .addAttribute(RoleAttribute.VILLAGER));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.IMITATOR.getKey(), Imitator.class)
-                            .addCategory(Category.NEUTRAL));
+                            .addCategory(Category.NEUTRAL)
+                            .addAttribute(RoleAttribute.NEUTRAL));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.GRIMY_WEREWOLF.getKey(), GrimyWereWolf.class)
-                            .addCategory(Category.WEREWOLF));
+                            .addCategory(Category.WEREWOLF)
+                            .addAttribute(RoleAttribute.WEREWOLF));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.PRIESTESS.getKey(), Priestess.class)
                             .addCategory(Category.VILLAGER)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION)
+                            .addAttribute(RoleAttribute.VILLAGER)
+                            .addAttribute(RoleAttribute.INFORMATION)
                             .addConfig(Priestess::config));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.AVENGER_WEREWOLF.getKey(), AvengerWereWolf.class)
                             .addCategory(Category.WEREWOLF)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.WEREWOLF)
+                            .addAttribute(RoleAttribute.WEREWOLF)
                             .addConfig(AvengerWereWolf::config));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.SHAMAN.getKey(), Shaman.class)
                             .addCategory(Category.VILLAGER)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION));
+                            .addAttribute(RoleAttribute.VILLAGER)
+                            .addAttribute(RoleAttribute.MINOR_INFORMATION));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.ALPHA_WEREWOLF.getKey(), AlphaWereWolf.class)
-                            .addCategory(Category.WEREWOLF));
+                            .addCategory(Category.WEREWOLF)
+                            .addAttribute(RoleAttribute.WEREWOLF));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name", RolesBase.ORACLE.getKey(), Oracle.class)
                             .addCategory(Category.VILLAGER)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION));
+                            .addAttribute(RoleAttribute.VILLAGER)
+                            .addAttribute(RoleAttribute.MINOR_INFORMATION));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name", RolesBase.WISE_ELDER.getKey(), WiseElder.class)
                             .addCategory(Category.VILLAGER)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.INFORMATION)
+                            .addAttribute(RoleAttribute.VILLAGER)
+                            .addAttribute(RoleAttribute.MINOR_INFORMATION)
                             .addConfig(WiseElder::config));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name", RolesBase.TENEBROUS_WEREWOLF.getKey(), TenebrousWerewolf.class)
                             .addCategory(Category.WEREWOLF)
-                            .addConfig(TenebrousWerewolf::configDistance));
+                            .addConfig(TenebrousWerewolf::configDistance)
+                            .addAttribute(RoleAttribute.WEREWOLF));
 
-          rolesRegister
+            rolesRegister
                     .add(new RoleRegister("werewolf.name", RolesBase.SERVITOR.getKey(), Servitor.class)
                             .addCategory(Category.VILLAGER)
+                            .addAttribute(RoleAttribute.VILLAGER)
                             .addConfig(Servitor::config));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name", RolesBase.SCAMMER.getKey(), Scammer.class)
                             .addCategory(Category.NEUTRAL)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.HYBRID)
+                            .addAttribute(RoleAttribute.HYBRID)
                             .addConfig(Scammer::config)
                             .addIncompatibleRole(RolesBase.CHARMER.getKey()));
 
@@ -430,28 +488,37 @@ public class RolesRegister {
             rolesRegister
                     .add(new RoleRegister("werewolf.name", RolesBase.FRUIT_MERCHANT.getKey(), FruitMerchant.class)
                             .addCategory(Category.VILLAGER)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.MINOR_INFORMATION)
+                            .addAttribute(RoleAttribute.VILLAGER)
+                            .addAttribute(RoleAttribute.MINOR_INFORMATION)
                             .addConfig(FruitMerchant::config));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name", RolesBase.DRUID.getKey(), Druid.class)
                             .addCategory(Category.VILLAGER)
-                            .addConfig(Druid::config));
+                            .addConfig(Druid::config)
+                            .addAttribute(RoleAttribute.VILLAGER)
+                            .addAttribute(RoleAttribute.MINOR_INFORMATION));
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.OCCULTIST.getKey(), Occultist.class)
-                            .addCategory(Category.VILLAGER));
+                            .addCategory(Category.VILLAGER)
+                            .addAttribute(RoleAttribute.VILLAGER)
+                            .addAttribute(RoleAttribute.MINOR_INFORMATION));
 
             rolesRegister
 
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.HUNTER.getKey(), Hunter.class)
-                            .addCategory(Category.VILLAGER));
+                            .addCategory(Category.VILLAGER)
+                            .addAttribute(RoleAttribute.VILLAGER));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.GRAVEDIGGER.getKey(), Gravedigger.class)
-                            .addCategory(Category.VILLAGER).setRandomCompositionAttribute(RandomCompositionAttribute.MINOR_INFORMATION));
+                            .addCategory(Category.VILLAGER)
+                            .addAttribute(RoleAttribute.VILLAGER)
+                            .addAttribute(RoleAttribute.MINOR_INFORMATION));
+
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.THUG.getKey(), Thug.class)
@@ -462,40 +529,59 @@ public class RolesRegister {
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.BARBARIAN.getKey(), Barbarian.class)
                             .addCategory(Category.NEUTRAL)
+                            .addAttribute(RoleAttribute.NEUTRAL)
                             .addConfig(Barbarian::config));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.NECROMANCER.getKey(), Necromancer.class)
                             .addCategory(Category.NEUTRAL)
+                            .addAttribute(RoleAttribute.NEUTRAL)
                             .addConfig(Necromancer::config));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.DEVOTED_SERVANT.getKey(), DevotedServant.class)
-                            .addCategory(Category.VILLAGER));
+                            .addCategory(Category.VILLAGER)
+                            .addAttribute(RoleAttribute.VILLAGER));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.STORY_TELLER.getKey(), StoryTeller.class)
+                            .addAttribute(RoleAttribute.VILLAGER)
+                            .addAttribute(RoleAttribute.INFORMATION)
                             .addCategory(Category.VILLAGER));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.SPY.getKey(), Spy.class)
-                            .addCategory(Category.VILLAGER));
+                            .addCategory(Category.VILLAGER)
+                            .addAttribute(RoleAttribute.VILLAGER)
+                            .addAttribute(RoleAttribute.MINOR_INFORMATION));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.BENEFACTOR.getKey(), Benefactor.class)
                             .addCategory(Category.VILLAGER)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.VILLAGER));
+                            .addAttribute(RoleAttribute.VILLAGER));
 
             rolesRegister
                     .add(new RoleRegister("werewolf.name",
                             RolesBase.RABBIT.getKey(), Rabbit.class)
                             .addCategory(Category.VILLAGER)
-                            .setRandomCompositionAttribute(RandomCompositionAttribute.VILLAGER));
+                            .addAttribute(RoleAttribute.VILLAGER));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.INTERPRETER.getKey(), Interpreter.class)
+                            .addCategory(Category.VILLAGER)
+                            .addAttribute(RoleAttribute.VILLAGER));
+
+            rolesRegister
+                    .add(new RoleRegister("werewolf.name",
+                            RolesBase.ILLUSIONIST.getKey(), Illusionist.class)
+                            .addCategory(Category.VILLAGER)
+                            .addAttribute(RoleAttribute.VILLAGER));
 
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
@@ -504,5 +590,7 @@ public class RolesRegister {
         return rolesRegister;
 
     }
+
+    //todo Astronome minor informations
 
 }

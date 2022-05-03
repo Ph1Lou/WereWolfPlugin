@@ -148,7 +148,7 @@ public class Rival extends RoleNeutral implements IPower {
 
         playerWW1S.addAll(lover.getLovers());
 
-        Collections.shuffle(playerWW1S);
+        Collections.shuffle(playerWW1S, game.getRandom());
 
         if (playerWW1S.isEmpty()) return;
 

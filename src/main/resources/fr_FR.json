@@ -128,7 +128,8 @@
         "new_vote_count": "Le joueur &player& a reçu &number& votes.",
         "hide_composition": "Il y a &number& rôle dans la composition parmi : &role1&, &role2&, &role3&",
         "werewolf_new_vote": "Aucun joueur n'a été voté par les Loups Garous",
-        "click_to_see_werewolf_vote": "Cliquez ici pour voir le résultat du vote Loup Garou"
+        "click_to_see_werewolf_vote": "Cliquez ici pour voir le résultat du vote Loup Garou",
+        "rumor": "Le joueur §b&player&§f a écrit la rumeur &message&"
       },
       "angel": {
         "display": "Ange",
@@ -759,6 +760,26 @@
         "display": "Lapin",
         "description": "Lorsque vous avez moins de 6 ♥, tous les joueurs du Village autour de vous (rayon de 20 blocs) subissent 10% de dégâts en moins sauf ceux qui possèdent un effet de Resistance.",
         "effects": "Faiblesse I la nuit, Vitesse en fonction de votre barre de vie : 10% à 3 ♥ et + | 20% en dessous de 3 ♥"
+      },
+      "interpreter": {
+        "display": "Interprete",
+        "description": "Vous disposez d’une liste de 3 rôles du Village qui ne font pas partie de la composition",
+        "power": "Vous pouvez incarner une fois dans la partie pendant un jour, l'un des rôles suivants :§b&roles&",
+        "click": "Cliquez ici pour devenir §b&role&, vous pouvez cliquer jusqu'au matin",
+        "perform": "Vous devenez §b&role& pendant un jour",
+        "command": "changerole",
+        "end": "Vous redevenez §bInterprete"
+      },
+      "illusionist": {
+        "display": "Illusionniste",
+        "description": "À la première mort suivant l’activation de votre pouvoir, le pseudo d’un joueur aléatoire sera ajouté à la liste des Loups",
+        "power": "Une minute plus tard, le joueur le saura et vous recevrez une liste de trois pseudos contenant celui-ci.",
+        "activate": "Pour activer votre pouvoir §b/ww activate",
+        "already_activate": "Votre pouvoir est §aactivé",
+        "reveal": "L'§bIllusioniste§f vous a ajouté à la liste des Loups Garous",
+        "reveal_pseudos": "Le pseudo du joueur que vous avez ajouté à la liste des Loups est parmi : §b&names&",
+        "command": "activate",
+        "perform": "Votre pouvoir a été activé"
       }
     },
     "vote": {
@@ -1433,6 +1454,15 @@
         "name": "Soeur Misanthrope",
         "message": "[§5Soeur Misanthrope§r] Vous passez dans le camp des Loups Garous, mais vous n'apparaissez pas dans la liste des Loups et ne pouvez pas interagir avec le chat des Loups.",
         "description" : "À la révélation de la liste des Loups, \nune des Soeurs apprend qu'elle est dans le camp des Loups \n(elle a accès à la liste, obtient Force I la nuit mais n'apparaît pas dans la liste \net ne peut pas interagir avec le chat des Loups."
+      },
+      "rumors": {
+        "name": "Rumeurs",
+        "description": "Une fois dans la partie, entre 80 et 120 minutes,\n un message annonce aux joueurs qu’ils ont 20 secondes pour envoyer un message dans le chat.\n Les messages de tous les joueurs sont ensuite affichés anonymement\n et dans le désordre. Seul le Citoyen pourra voir le pseudo\n du joueur ayant écrit une des rumeurs.",
+        "message": "[§5Rumeur§r] Vous avez §b20§f secondes pour envoyer un message, cliquez ici",
+        "rumors_announcement": "[§5Rumeur§r] Les rumeurs sont : &rumors&",
+        "command": "rumor",
+        "no_rumor": "L'évenement Rumeurs n'est pas en cours",
+        "perform": "Votre rumeur a été envoyée ou actualisé"
       }
     },
     "check": {

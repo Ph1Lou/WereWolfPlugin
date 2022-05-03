@@ -155,7 +155,7 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
         target.clearPotionEffects();
         newRole.disableAbilities();
         target.setRole(newRole);
-        BukkitUtils.registerEvents(target.getRole());
+        BukkitUtils.registerListener(target.getRole());
         this.getPlayerWW().sendMessageWithKey(Prefix.GREEN.getKey(),"werewolf.role.scammer.message",
                 Formatter.player(target.getName()));
     }
