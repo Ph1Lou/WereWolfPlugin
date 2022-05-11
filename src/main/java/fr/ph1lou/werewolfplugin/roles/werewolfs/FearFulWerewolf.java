@@ -1,14 +1,11 @@
 package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
-import fr.minuskube.inv.ClickableItem;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.game.IConfiguration;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.Day;
-import fr.ph1lou.werewolfapi.enums.RolesBase;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.enums.UpdateCompositionReason;
@@ -17,8 +14,12 @@ import fr.ph1lou.werewolfapi.events.game.game_cycle.UpdateCompositionEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AnnouncementLoverDeathEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleWereWolf;
-import fr.ph1lou.werewolfapi.utils.ItemBuilder;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -27,10 +28,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
+@Role(key = RoleBase.FEARFUL_WEREWOLF, 
+        category = Category.WEREWOLF, 
+        attributes = {RoleAttribute.WEREWOLF},
+        intValues = {@IntValue(key = "werewolf.role.fearful_werewolf.distance",
+        defaultValue = 20, meetUpValue = 20, step = 4, item = UniversalMaterial.MAGENTA_WOOL)})
 public class FearFulWerewolf extends RoleWereWolf {
     public FearFulWerewolf(WereWolfAPI game, IPlayerWW playerWW, String key) {
         super(game, playerWW, key);
@@ -40,7 +44,7 @@ public class FearFulWerewolf extends RoleWereWolf {
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game,this)
                 .setDescription(game.translate("werewolf.role.fearful_werewolf.description",
-                        Formatter.number(game.getConfig().getDistanceFearfulWerewolf())))
+                        Formatter.number(game.getConfig().getValue(RoleBase.FEARFUL_WEREWOLF, "werewolf.role.fearful_werewolf.distance"))))
                 .setEffects(game.translate("werewolf.role.fearful_werewolf.effects"))
                 .build();
     }
@@ -57,7 +61,7 @@ public class FearFulWerewolf extends RoleWereWolf {
             return;
         }
 
-        if(!event.getKey().equals(RolesBase.FEARFUL_WEREWOLF.getKey())){
+        if(!event.getKey().equals(RoleBase.FEARFUL_WEREWOLF)){
             return;
         }
 
@@ -127,7 +131,7 @@ public class FearFulWerewolf extends RoleWereWolf {
                     Location fearful = this.getPlayerWW().getLocation();
                     Location player = iPlayerWW.getLocation();
                     return (fearful.getWorld() == player.getWorld() &&
-                    fearful.distance(player) < game.getConfig().getDistanceFearfulWerewolf());
+                    fearful.distance(player) < game.getConfig().getValue(RoleBase.FEARFUL_WEREWOLF, "werewolf.role.fearful_werewolf.distance"));
                 })
                 .count();
 
@@ -193,32 +197,5 @@ public class FearFulWerewolf extends RoleWereWolf {
         this.getPlayerWW()
                 .addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS,
                         "fearful",0));
-    }
-
-    public static ClickableItem config(WereWolfAPI game) {
-
-        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
-                game.translate("werewolf.menu.right"));
-        IConfiguration config = game.getConfig();
-
-        return ClickableItem.of((new ItemBuilder(
-                UniversalMaterial.MAGENTA_WOOL.getStack())
-                .setDisplayName(game.translate("werewolf.menu.advanced_tool.fearful_werewolf",
-                        Formatter.number(config.getDistanceFearfulWerewolf())))
-                .setLore(lore).build()), e -> {
-            if (e.isLeftClick()) {
-                config.setDistanceFearfulWerewolf((config.getDistanceFearfulWerewolf() + 2));
-            } else if (config.getDistanceFearfulWerewolf() - 2 > 0) {
-                config.setDistanceFearfulWerewolf(config.getDistanceFearfulWerewolf() - 2);
-            }
-
-
-            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setLore(lore)
-                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.fearful_werewolf",
-                            Formatter.number(config.getDistanceFearfulWerewolf())))
-                    .build());
-
-        });
     }
 }

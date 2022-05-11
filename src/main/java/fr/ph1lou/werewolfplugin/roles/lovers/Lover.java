@@ -6,8 +6,8 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.LoverType;
-import fr.ph1lou.werewolfapi.enums.Prefix;
-import fr.ph1lou.werewolfapi.enums.RolesBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AnnouncementLoverDeathEvent;
@@ -102,7 +102,7 @@ public class Lover extends AbstractLover {
 
         this.game.getPlayersWW()
                 .stream().map(IPlayerWW::getRole)
-                .filter(roles -> roles.isKey(RolesBase.CUPID.getKey()))
+                .filter(roles -> roles.isKey(RoleBase.CUPID))
                 .map(roles -> (IAffectedPlayers) roles)
                 .filter(affectedPlayers -> affectedPlayers.getAffectedPlayers().contains(playerWW))
                 .forEach(affectedPlayers -> {
@@ -154,10 +154,10 @@ public class Lover extends AbstractLover {
 
         if (lovers.contains(playerWW)) return;
 
-        lovers.forEach(playerWW1 -> playerWW1.sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.random_events.triple.lover_join",
+        lovers.forEach(playerWW1 -> playerWW1.sendMessageWithKey(Prefix.GREEN , "werewolf.random_events.triple.lover_join",
                 Formatter.player(playerWW.getName())));
 
-        playerWW.sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.random_events.triple.join", Formatter.format("&lovers&",getLovers().stream()
+        playerWW.sendMessageWithKey(Prefix.GREEN , "werewolf.random_events.triple.join", Formatter.format("&lovers&",getLovers().stream()
                 .map(IPlayerWW::getName)
                 .collect(Collectors.joining(" "))));
 

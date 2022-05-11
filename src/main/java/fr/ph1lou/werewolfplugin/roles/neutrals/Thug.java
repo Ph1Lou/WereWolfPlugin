@@ -1,8 +1,12 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
-import fr.minuskube.inv.ClickableItem;
+import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
@@ -13,7 +17,6 @@ import fr.ph1lou.werewolfapi.events.game.life_cycle.DeathItemsEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.thug.ThugRecoverGoldenAppleEvent;
 import fr.ph1lou.werewolfapi.events.roles.thug.ThugRevealEvent;
-import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -22,7 +25,6 @@ import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -33,12 +35,17 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
+
+@Role(key = RoleBase.THUG, 
+        category = Category.NEUTRAL, 
+        attributes = {RoleAttribute.NEUTRAL},
+        intValues = {@IntValue(key = "werewolf.role.thug.distance",
+        defaultValue = 25, meetUpValue = 25, step = 5, item = UniversalMaterial.GRAY_WOOL)})
 public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
 
     private int probability = 10;
@@ -57,7 +64,7 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this).setDescription(game.translate("werewolf.role.thug.description",
-                        Formatter.number(game.getConfig().getDistanceThug())))
+                        Formatter.number(game.getConfig().getValue(RoleBase.THUG, "werewolf.role.thug.distance"))))
                 .setEffects(game.translate("werewolf.role.thug.effect"))
                 .setPower(game.translate("werewolf.role.thug.power", Formatter.number(this.probability)))
                 .build();
@@ -84,7 +91,7 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
         if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
             return;
         }
-        this.getPlayerWW().sendMessageWithKey(Prefix.BLUE.getKey(),"werewolf.role.thug.command_message");
+        this.getPlayerWW().sendMessageWithKey(Prefix.BLUE,"werewolf.role.thug.command_message");
 
     }
 
@@ -130,12 +137,12 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
 
                     if(!this.hasPower2()){
                         this.setPower2(true);
-                        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey(),"werewolf.role.thug.resistance");
+                        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.role.thug.resistance");
                         this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,"thug"));
                     }
 
                     if(!event.getPlayerWW().getPlayersKills().isEmpty()){
-                        this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE.getKey(),
+                        this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE,
                                 "werewolf.role.thug.new_heart",
                                 Formatter.player(event.getPlayerWW().getName()));
                         this.getPlayerWW().addPlayerMaxHealth(2);
@@ -221,7 +228,7 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
 
         probability+=10;
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.BLUE.getKey(),"werewolf.role.thug.get_apple",
+        this.getPlayerWW().sendMessageWithKey(Prefix.BLUE,"werewolf.role.thug.get_apple",
                 Formatter.format("&number2&",this.probability),
                 Formatter.number(thugRecoverGoldenAppleEvent.getGoldenApple()),
                 Formatter.player(event.getPlayerWW().getName()));
@@ -291,34 +298,5 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
         }
 
         event.setVisibility(false);
-    }
-
-
-
-    public static ClickableItem config(WereWolfAPI game) {
-        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
-                game.translate("werewolf.menu.right"));
-        IConfiguration config = game.getConfig();
-
-        return ClickableItem.of((
-                new ItemBuilder(UniversalMaterial.GRAY_WOOL.getStack())
-                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.thug",
-                                Formatter.number(config.getDistanceThug())))
-                        .setLore(lore).build()), e -> {
-
-            if (e.isLeftClick()) {
-                config.setDistanceThug((config.getDistanceThug() + 2));
-            } else if (config.getDistanceThug() - 2 > 0) {
-                config.setDistanceThug(config.getDistanceThug() - 2);
-            }
-
-
-            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setLore(lore)
-                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.thug",
-                            Formatter.number(config.getDistanceThug())))
-                    .build());
-
-        });
     }
 }

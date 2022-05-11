@@ -1,6 +1,10 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfplugin.roles.lovers.Lover;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.lovers.ILover;
@@ -24,6 +28,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 
+@Role(key = RoleBase.STUD,
+          category = Category.VILLAGER,
+          attributes = {RoleAttribute.HYBRID})
 public class Stud extends RoleVillage implements IPower {
     private boolean power = true;
 

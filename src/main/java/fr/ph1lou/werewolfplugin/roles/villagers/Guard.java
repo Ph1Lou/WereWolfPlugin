@@ -1,13 +1,17 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.enums.TimerBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.ThirdDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.guard.GuardResurrectionEvent;
@@ -22,6 +26,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+@Role(key = RoleBase.GUARD, category = Category.VILLAGER,
+        attributes = RoleAttribute.VILLAGER)
 public class Guard extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
@@ -66,15 +72,15 @@ public class Guard extends RoleWithLimitedSelectionDuration implements IAffected
         Bukkit.getPluginManager().callEvent(guardResurrectionEvent);
 
         if (guardResurrectionEvent.isCancelled()) {
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
             return;
         }
 
         this.game.resurrection(this.last);
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.guard.resurrection");
+        this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.role.guard.resurrection");
 
-        this.last.sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.role.guard.protect");
+        this.last.sendMessageWithKey(Prefix.GREEN , "werewolf.role.guard.protect");
 
         event.setCancelled(true);
 
@@ -114,9 +120,9 @@ public class Guard extends RoleWithLimitedSelectionDuration implements IAffected
         this.setPower(true);
 
         this.getPlayerWW().sendMessageWithKey(
-                Prefix.YELLOW.getKey() , "werewolf.role.guard.message",
+                Prefix.YELLOW , "werewolf.role.guard.message",
                 Formatter.timer(Utils.conversion(
-                        this.game.getConfig().getTimerValue(TimerBase.POWER_DURATION.getKey()))));
+                        this.game.getConfig().getTimerValue(TimerBase.POWER_DURATION))));
     }
 
     @Override

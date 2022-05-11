@@ -1,7 +1,12 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
-import fr.ph1lou.werewolfapi.enums.ConfigBase;
+import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -21,6 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Role(key = RoleBase.CUPID, category = Category.VILLAGER,
+           attributes = {RoleAttribute.HYBRID},
+            configurations = {@Configuration(key = ConfigBase.RANDOM_CUPID)})
 public class Cupid extends RoleVillage implements IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
@@ -71,7 +79,7 @@ public class Cupid extends RoleVillage implements IAffectedPlayers, IPower {
                 .addExtraLines(game.translate("werewolf.role.cupid.lover",
                                 Formatter.format("&lovers&",this.affectedPlayer.isEmpty() ?
                                 this.hasPower() ?
-                                        game.getConfig().isConfigActive(ConfigBase.RANDOM_CUPID.getKey()) ?
+                                        game.getConfig().isConfigActive(ConfigBase.RANDOM_CUPID) ?
                                         game.translate("werewolf.role.cupid.wait",Formatter.timer(Utils.conversion(
                                                 game.getConfig()
                                                         .getTimerValue("werewolf.menu.timers.lover_duration")))):

@@ -1,15 +1,18 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
-import fr.minuskube.inv.ClickableItem;
-import fr.ph1lou.werewolfapi.enums.Prefix;
-import fr.ph1lou.werewolfapi.enums.RolesBase;
+import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.annotations.Timer;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.enums.TimerBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.random_events.SwapEvent;
 import fr.ph1lou.werewolfapi.events.roles.scammer.ScamEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.NewWereWolfEvent;
-import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -19,7 +22,6 @@ import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
-import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfplugin.roles.villagers.Villager;
 import fr.ph1lou.werewolfplugin.roles.werewolfs.WereWolf;
@@ -31,7 +33,6 @@ import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,11 +41,18 @@ import java.util.Optional;
 /**
  * @author Héphaïsto
  */
+
+@Role(key = RoleBase.SCAMMER, 
+        category = Category.NEUTRAL, 
+        attributes = {RoleAttribute.HYBRID},
+        incompatibleRoles = {RoleBase.CHARMER},
+        timers = {@Timer(key = TimerBase.SCAM_DELAY, defaultValue = 9, meetUpValue = 5)},
+        intValues = {@IntValue(key = "werewolf.role.scammer.distance",
+                defaultValue = 20, meetUpValue = 20, step = 2, item = UniversalMaterial.BROWN_WOOL)})
 public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
     private final Map<IPlayerWW, Integer> affectedPlayer = new HashMap<>();
     private boolean power = true;
     private int count = 0;
-
     public Scammer(WereWolfAPI game, IPlayerWW playerWW, String key) {
         super(game, playerWW, key);
     }
@@ -53,8 +61,8 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.scammer.description",
-                        Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.SCAM_DELAY.getKey()))),
-                        Formatter.number(game.getConfig().getDistanceScammer())))
+                        Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.SCAM_DELAY))),
+                        Formatter.number(game.getConfig().getValue(RoleBase.SCAMMER, "werewolf.role.scammer.distance"))))
                 .build();
     }
 
@@ -70,7 +78,7 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
             return;
         }
 
-        this.count = this.count++ % game.getConfig().getTimerValue(TimerBase.SCAM_DELAY.getKey());
+        this.count = this.count++ % game.getConfig().getTimerValue(TimerBase.SCAM_DELAY);
 
         if(count != 0){
             return;
@@ -123,7 +131,7 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
         Bukkit.getPluginManager().callEvent(new SwapEvent(this.getPlayerWW(),target));
         IRole newRole;
         if (targetRole.isWereWolf()) {
-            newRole = new WereWolf(game, target, RolesBase.WEREWOLF.getKey());
+            newRole = new WereWolf(game, target, RoleBase.WEREWOLF);
             if(targetRole.isNeutral()){
                 if(targetRole.isSolitary()){
                     newRole.setSolitary(true);
@@ -132,11 +140,11 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
                     newRole.setTransformedToNeutral(true);
                 }
             }
-            target.sendMessageWithKey(Prefix.ORANGE.getKey(),"werewolf.role.scammer.message_werewolf");
+            target.sendMessageWithKey(Prefix.ORANGE,"werewolf.role.scammer.message_werewolf");
 
         } else {
-            newRole = new Villager(game, target, RolesBase.VILLAGER.getKey());
-            target.sendMessageWithKey(Prefix.ORANGE.getKey(),"werewolf.role.scammer.message_villager");
+            newRole = new Villager(game, target, RoleBase.VILLAGER);
+            target.sendMessageWithKey(Prefix.ORANGE,"werewolf.role.scammer.message_villager");
         }
         if (this.isInfected()) {
             targetRole.setInfected();
@@ -156,7 +164,7 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
         newRole.disableAbilities();
         target.setRole(newRole);
         BukkitUtils.registerListener(target.getRole());
-        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN.getKey(),"werewolf.role.scammer.message",
+        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,"werewolf.role.scammer.message",
                 Formatter.player(target.getName()));
     }
 
@@ -189,32 +197,7 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
      */
     private boolean checkDistance(IPlayerWW player, Location location) {
         return player.getLocation().getWorld() == location.getWorld() &&
-                player.getLocation().distance(location) < game.getConfig().getDistanceScammer();
-    }
-
-    public static ClickableItem config(WereWolfAPI game) {
-        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
-                game.translate("werewolf.menu.right"));
-        IConfiguration config = game.getConfig();
-
-        return ClickableItem.of((
-                new ItemBuilder(UniversalMaterial.BROWN_WOOL.getStack())
-                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.scammer",
-                                Formatter.number(config.getDistanceScammer())))
-                        .setLore(lore).build()), e -> {
-            if (e.isLeftClick()) {
-                config.setDistanceScammer((config.getDistanceScammer() + 5));
-            } else if (config.getDistanceScammer() - 5 > 0) {
-                config.setDistanceScammer(config.getDistanceScammer() - 5);
-            }
-
-            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setLore(lore)
-                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.scammer",
-                            Formatter.number(config.getDistanceScammer())))
-                    .build());
-
-        });
+                player.getLocation().distance(location) < game.getConfig().getValue(RoleBase.SCAMMER, "werewolf.role.scammer.distance");
     }
 
     @Override

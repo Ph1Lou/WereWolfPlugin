@@ -1,22 +1,25 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
-import fr.minuskube.inv.ClickableItem;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.game.IConfiguration;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.annotations.Timer;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.enums.TimerBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.fruitmerchant.FruitMerchantDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.fruitmerchant.GoldenCount;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
-import fr.ph1lou.werewolfapi.utils.ItemBuilder;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -27,11 +30,18 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+@Role(key = RoleBase.FRUIT_MERCHANT,
+         category = Category.VILLAGER, 
+         attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION},
+         timers = {@Timer(key = TimerBase.FRUIT_MERCHANT_COOL_DOWN,
+                 defaultValue = 1200, meetUpValue = 600)},
+ intValues = {@IntValue(key = "werewolf.role.fruit_merchant.distance",
+         defaultValue = 50, meetUpValue = 50, step = 5, item = UniversalMaterial.ORANGE_WOOL)})
 public class FruitMerchant extends RoleVillage implements IAffectedPlayers, IPower {
 
     private boolean power = true;
@@ -46,10 +56,10 @@ public class FruitMerchant extends RoleVillage implements IAffectedPlayers, IPow
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game,this)
                 .setDescription(game.translate("werewolf.role.fruit_merchant.description",
-                        Formatter.number(game.getConfig().getDistanceFruitMerchant()),
+                        Formatter.number(game.getConfig().getValue(RoleBase.FRUIT_MERCHANT, "werewolf.role.fruit_merchant.distance")),
                         Formatter.timer(Utils
                                 .conversion(game.getConfig()
-                                        .getTimerValue(TimerBase.FRUIT_MERCHANT_COOL_DOWN.getKey())/2))))
+                                        .getTimerValue(TimerBase.FRUIT_MERCHANT_COOL_DOWN)/2))))
                 .setPower(game.translate("werewolf.role.fruit_merchant.power"))
                 .build();
     }
@@ -112,11 +122,11 @@ public class FruitMerchant extends RoleVillage implements IAffectedPlayers, IPow
         Bukkit.getPluginManager().callEvent(fruitMerchantDeathEvent);
 
         if(fruitMerchantDeathEvent.isCancelled()){
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
             return;
         }
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey(),"werewolf.role.fruit_merchant.info",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.role.fruit_merchant.info",
                 Formatter.player(event.getPlayerWW().getName()),
                 Formatter.number(fruitMerchantDeathEvent.getGoldenAppleCount().getOldCount()),
                 Formatter.format("&number2&", fruitMerchantDeathEvent.getGoldenAppleCount().getNewCount()));
@@ -156,32 +166,5 @@ public class FruitMerchant extends RoleVillage implements IAffectedPlayers, IPow
         }
 
         player.setFoodLevel(player.getFoodLevel()+1);
-    }
-
-    public static ClickableItem config(WereWolfAPI game) {
-        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
-                game.translate("werewolf.menu.right"));
-        IConfiguration config = game.getConfig();
-
-        return ClickableItem.of((
-                new ItemBuilder(UniversalMaterial.ORANGE_WOOL.getStack())
-                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.fruit_merchant",
-                                Formatter.number(config.getDistanceFruitMerchant())))
-                        .setLore(lore).build()), e -> {
-
-            if (e.isLeftClick()) {
-                config.setDistanceFruitMerchant((config.getDistanceFruitMerchant() + 2));
-            } else if (config.getDistanceFruitMerchant() - 2 > 0) {
-                config.setDistanceFruitMerchant(config.getDistanceFruitMerchant() - 2);
-            }
-
-
-            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setLore(lore)
-                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.fruit_merchant",
-                            Formatter.number(config.getDistanceFruitMerchant())))
-                    .build());
-
-        });
     }
 }

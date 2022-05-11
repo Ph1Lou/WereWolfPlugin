@@ -1,6 +1,10 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.actionablestory.ActionableStoryEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
@@ -20,6 +24,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 
+@Role(key = RoleBase.SPY,
+        category = Category.VILLAGER,
+        attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION})
 public class Spy extends RoleVillage implements IAffectedPlayers, IPower {
 
     @Nullable
@@ -96,10 +103,10 @@ public class Spy extends RoleVillage implements IAffectedPlayers, IPower {
                     Bukkit.getPluginManager().callEvent(spyResultEvent);
 
                     if(spyResultEvent.isCancelled()){
-                        this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+                        this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
                     }
                     else{
-                        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN.getKey(),
+                        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,
                                 "werewolf.role.spy.result",
                                 Formatter.player(this.playerWW.getName()),
                                 Formatter.number(this.count));
@@ -107,7 +114,7 @@ public class Spy extends RoleVillage implements IAffectedPlayers, IPower {
                 }
             }
 
-            this.getPlayerWW().sendMessageWithKey(Prefix.GREEN.getKey(),"werewolf.role.spy.use_power");
+            this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,"werewolf.role.spy.use_power");
         }
 
         this.count = 0;

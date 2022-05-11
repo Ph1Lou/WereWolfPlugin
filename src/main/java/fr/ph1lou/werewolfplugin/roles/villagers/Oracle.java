@@ -1,9 +1,14 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
-import fr.ph1lou.werewolfapi.enums.ConfigBase;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.enums.TimerBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
@@ -20,6 +25,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+@Role(key = RoleBase.ORACLE,
+        category = Category.VILLAGER,
+        attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION},
+        configurations = {@Configuration(key = ConfigBase.ORACLE_EVERY_OTHER_DAY)})
 public class Oracle extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
     private int dayNumber = -8;
@@ -61,7 +70,7 @@ public class Oracle extends RoleWithLimitedSelectionDuration implements IAffecte
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if (game.getConfig().isConfigActive(ConfigBase.ORACLE_EVERY_OTHER_DAY.getKey()) &&
+        if (game.getConfig().isConfigActive(ConfigBase.ORACLE_EVERY_OTHER_DAY) &&
                 event.getNumber() == dayNumber + 1) {
             return;
         }
@@ -75,10 +84,10 @@ public class Oracle extends RoleWithLimitedSelectionDuration implements IAffecte
         }
 
         this.getPlayerWW().sendMessageWithKey(
-                Prefix.YELLOW.getKey() , "werewolf.role.oracle.perform",
+                Prefix.YELLOW , "werewolf.role.oracle.perform",
                 Formatter.timer(Utils.conversion(
                         game.getConfig()
-                                .getTimerValue(TimerBase.POWER_DURATION.getKey()))));
+                                .getTimerValue(TimerBase.POWER_DURATION))));
     }
 
     @Override

@@ -1,13 +1,17 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.lovers.ILover;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
@@ -32,6 +36,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+
+@Role(key = RoleBase.THIEF,
+        category = Category.NEUTRAL,
+        attributes = {RoleAttribute.HYBRID})
 public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
@@ -165,9 +173,9 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
         }
         this.getPlayerWW().addDeathRole(this.getKey());
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.thief.realized_theft",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.role.thief.realized_theft",
                 Formatter.role(game.translate(role.getKey())));
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.thief.details");
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.role.thief.details");
 
         this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,"thief",0));
 

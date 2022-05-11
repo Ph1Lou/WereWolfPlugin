@@ -1,15 +1,18 @@
 package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Camp;
-import fr.ph1lou.werewolfapi.enums.ConfigBase;
-import fr.ph1lou.werewolfapi.enums.Prefix;
-import fr.ph1lou.werewolfapi.enums.RolesBase;
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UpdateCompositionReason;
 import fr.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
@@ -28,6 +31,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+@Role(key = RoleBase.GRIMY_WEREWOLF,
+        category = Category.WEREWOLF, 
+        attributes = {RoleAttribute.WEREWOLF})
 public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
@@ -72,7 +78,7 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
     @Override
     public void recoverPower() {
         if (!game.getConfig().isTrollSV()) {
-            game.getConfig().addOneRole(RolesBase.WEREWOLF.getKey());
+            game.getConfig().addOneRole(RoleBase.WEREWOLF);
         }
     }
 
@@ -82,11 +88,11 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
         if (!event.getPlayerWW().equals(this.getPlayerWW())) return;
 
         if (this.power) {
-            game.getConfig().removeOneRole(RolesBase.WEREWOLF.getKey());
+            game.getConfig().removeOneRole(RoleBase.WEREWOLF);
             this.power = false;
         } else if (!this.affectedPlayer.isEmpty()) {
             game.getConfig().removeOneRole(this.affectedPlayer.get(0).getRole().getKey());
-            Bukkit.broadcastMessage(game.translate(Prefix.GREEN.getKey() , "werewolf.role.grimy_werewolf.actualize",
+            Bukkit.broadcastMessage(game.translate(Prefix.GREEN , "werewolf.role.grimy_werewolf.actualize",
                     Formatter.role(game.translate(this.affectedPlayer.get(0).getRole().getKey()))));
         }
 
@@ -100,7 +106,7 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
         }
 
         if (event.getPlayerWW().equals(this.affectedPlayer.get(0))) {
-            event.setRole(RolesBase.WEREWOLF.getKey());
+            event.setRole(RoleBase.WEREWOLF);
         }
     }
 
@@ -121,14 +127,14 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
         Bukkit.getPluginManager().callEvent(grimEvent);
 
         if (grimEvent.isCancelled()) {
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
             return;
         }
-        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.role.grimy_werewolf.perform",
+        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN , "werewolf.role.grimy_werewolf.perform",
                 Formatter.player(event.getPlayerWW().getName()),
                 Formatter.role(game.translate(event.getPlayerWW().getRole().getKey())));
 
-        game.getConfig().removeOneRole(RolesBase.WEREWOLF.getKey());
+        game.getConfig().removeOneRole(RoleBase.WEREWOLF);
         this.affectedPlayer.add(event.getPlayerWW());
     }
 
@@ -167,12 +173,12 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
 
         if (!this.affectedPlayer.contains(playerWW)) return;
 
-        if (game.getConfig().isConfigActive(ConfigBase.SHOW_ROLE_TO_DEATH.getKey())) {
+        if (game.getConfig().isConfigActive(ConfigBase.SHOW_ROLE_TO_DEATH)) {
             event.setSuffix(event.getSuffix()
                     .replace(game.translate(playerWW.getRole().getKey()),
                             "")
-                    + game.translate(RolesBase.WEREWOLF.getKey()));
-        } else if (game.getConfig().isConfigActive(ConfigBase.SHOW_ROLE_CATEGORY_TO_DEATH.getKey())) {
+                    + game.translate(RoleBase.WEREWOLF));
+        } else if (game.getConfig().isConfigActive(ConfigBase.SHOW_ROLE_CATEGORY_TO_DEATH)) {
             event.setSuffix(event.getSuffix()
                     .replace(game.translate(playerWW.getRole().getCamp().getKey()),
                             "")

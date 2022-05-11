@@ -3,7 +3,7 @@ package fr.ph1lou.werewolfplugin.utils.random_config;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.enums.RolesBase;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.registers.impl.RoleRegister;
 
 import java.util.HashMap;
@@ -39,7 +39,7 @@ public class RandomConfig {
             numberWereWolf = playerSize / 3 - 6;
         }
 
-        composition.merge(RolesBase.WEREWOLF.getKey(), numberWereWolf, Integer::sum);
+        composition.merge(RoleBase.WEREWOLF, numberWereWolf, Integer::sum);
         werewolfWeight += numberWereWolf;
 
         onComposition(playerSize, 3, werewolfWeight, roles, RoleAttribute.WEREWOLF, composition, multipleRole);
@@ -53,7 +53,7 @@ public class RandomConfig {
         onComposition(playerSize, 3, 0, roles, RoleAttribute.VILLAGER, composition, multipleRole);
 
         while (composition.values().stream().mapToInt(value -> value).sum() < playerSize) {
-            composition.merge(RolesBase.VILLAGER.getKey(), 1, Integer::sum);
+            composition.merge(RoleBase.VILLAGER, 1, Integer::sum);
         }
 
         return composition;

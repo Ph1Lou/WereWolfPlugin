@@ -10,7 +10,7 @@ import fr.ph1lou.werewolfplugin.save.FileUtils_;
 import fr.ph1lou.werewolfplugin.save.Serializer;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
@@ -100,7 +100,7 @@ public class Save implements InventoryProvider {
                                     Formatter.format("&save&",files[j].getName())))
                             .build()), e -> {
                         load(main);
-                        player.sendMessage(game.translate(Prefix.GREEN.getKey() , "werewolf.menu.save.load_message",
+                        player.sendMessage(game.translate(Prefix.GREEN , "werewolf.menu.save.load_message",
                                 Formatter.format("&save&",files[j].getName())));
                     }));
             contents.set(1, 5, ClickableItem.of((
@@ -108,7 +108,7 @@ public class Save implements InventoryProvider {
                             .setDisplayName(game.translate("werewolf.menu.save.delete",
                                     Formatter.format("&save&",files[j].getName())))
                             .build()), e -> {
-                player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.menu.save.delete_message",
+                player.sendMessage(game.translate(Prefix.RED , "werewolf.menu.save.delete_message",
                         Formatter.format("&save&",files[j].getName())));
                 erase(main);
             }));
@@ -139,8 +139,8 @@ public class Save implements InventoryProvider {
         if (files == null || files.length < 8) {
             FileUtils_.save(file, Serializer.serialize(game.getConfig()));
             game.getStuffs().save(saveName);
-            player.sendMessage(game.translate(Prefix.GREEN.getKey() , "werewolf.menu.save.success"));
-        } else player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.menu.save.failure"));
+            player.sendMessage(game.translate(Prefix.GREEN , "werewolf.menu.save.success"));
+        } else player.sendMessage(game.translate(Prefix.RED , "werewolf.menu.save.failure"));
     }
 
     public void erase(Main main) {
@@ -152,12 +152,12 @@ public class Save implements InventoryProvider {
 
         File file = new File(main.getDataFolder() + File.separator + "configs", files[j].getName());
         if (!file.delete()) {
-            Bukkit.getConsoleSender().sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.menu.save.delete_failed",
+            Bukkit.getConsoleSender().sendMessage(game.translate(Prefix.RED , "werewolf.menu.save.delete_failed",
                     Formatter.format("&save&",files[j].getName())));
         }
         file = new File(main.getDataFolder() + File.separator + "stuffs", files[j].getName().replaceFirst(".json", ".yml"));
         if (!file.delete()) {
-            Bukkit.getConsoleSender().sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.menu.save.delete_failed",
+            Bukkit.getConsoleSender().sendMessage(game.translate(Prefix.RED , "werewolf.menu.save.delete_failed",
                     Formatter.format("&save&",files[j].getName().replaceFirst(".json", ".yml"))));
         }
 

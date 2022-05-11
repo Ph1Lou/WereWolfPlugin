@@ -1,7 +1,7 @@
 package fr.ph1lou.werewolfplugin.listeners;
 
 import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -89,7 +89,7 @@ public class DeathListener implements Listener {
             playerWW.setItemDeath(inv.getContents());
 
             player.setGameMode(GameMode.ADVENTURE);
-            player.sendMessage(game.translate(Prefix.ORANGE.getKey() , "werewolf.announcement.potential_revive"));
+            player.sendMessage(game.translate(Prefix.ORANGE , "werewolf.announcement.potential_revive"));
 
             if (player.getKiller() != null) {
 
@@ -206,7 +206,7 @@ public class DeathListener implements Listener {
                         new Formatter[]{Formatter.player( announcementDeathEvent.getPlayerName()),
                                 Formatter.role(game.translate(announcementDeathEvent.getRole()))});
                 announcementDeathEvent.getTargetPlayer().sendMessageWithKey("werewolf.utils.bar");
-                announcementDeathEvent.getTargetPlayer().sendMessageWithKey(Prefix.RED.getKey(),announcementDeathEvent.getFormat(),formatters);
+                announcementDeathEvent.getTargetPlayer().sendMessageWithKey(Prefix.RED,announcementDeathEvent.getFormat(),formatters);
                 announcementDeathEvent.getTargetPlayer().sendMessageWithKey("werewolf.utils.bar");
                 announcementDeathEvent.getTargetPlayer().sendSound(Sound.AMBIENCE_THUNDER);
             }
@@ -258,7 +258,7 @@ public class DeathListener implements Listener {
 
             player.setGameMode(GameMode.SPECTATOR);
             TextComponent msg = new TextComponent(game.translate("werewolf.utils.bar")+
-                    game.translate(Prefix.YELLOW.getKey(),"werewolf.bug") +
+                    game.translate(Prefix.YELLOW,"werewolf.bug") +
                     game.translate("werewolf.utils.bar"));
             msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
                     "https://discord.gg/GXXCVUA"));
@@ -266,7 +266,7 @@ public class DeathListener implements Listener {
             if (game.getConfig().getSpectatorMode() == 0 &&
                     !player.isOp() &&
                     !game.getModerationManager().isStaff(player.getUniqueId())) {
-                player.kickPlayer(game.translate(Prefix.RED.getKey() , "werewolf.check.spectator_disabled"));
+                player.kickPlayer(game.translate(Prefix.RED , "werewolf.check.spectator_disabled"));
             }
             Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(player));
         }
@@ -274,7 +274,7 @@ public class DeathListener implements Listener {
     }
 
     private String sendOriginalDeathMessage(IPlayerWW playerWW) {
-        return game.translate("werewolf.utils.bar") + game.translate(Prefix.RED.getKey() , "werewolf.announcement.death_message_with_role",
+        return game.translate("werewolf.utils.bar") + game.translate(Prefix.RED , "werewolf.announcement.death_message_with_role",
                 Formatter.player( playerWW.getName()),
                 Formatter.role( game.translate(playerWW.getRole().getKey())))
                 + game.translate("werewolf.utils.bar");
@@ -298,7 +298,7 @@ public class DeathListener implements Listener {
             ((PlayerWW)playerWW).updatePotionEffects(player);
         }
 
-        playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.announcement.resurrection");
+        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.announcement.resurrection");
         game.getMapManager().transportation(playerWW, Math.random() * Math.PI * 2);
 
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(playerWW));

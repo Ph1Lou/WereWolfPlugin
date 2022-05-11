@@ -1,12 +1,14 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.info.fox;
 
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.commands.ICommand;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.fox.BeginSniffEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.ILimitedUse;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
@@ -18,6 +20,10 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+@RoleCommand(key = "werewolf.role.fox.command",
+        roleKeys = RoleBase.FOX,
+        requiredPower = true,
+        argNumbers = 1)
 public class CommandFox implements ICommand {
 
     @Override
@@ -33,24 +39,24 @@ public class CommandFox implements ICommand {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.offline_player");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.offline_player");
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (argUUID.equals(uuid)) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.not_yourself");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.not_yourself");
             return;
         }
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.player_not_found");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.player_not_found");
             return;
         }
 
-        if (((ILimitedUse) fox).getUse() >= game.getConfig().getUseOfFlair()) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.power");
+        if (((ILimitedUse) fox).getUse() >= game.getConfig().getValue(RoleBase.FOX, "nose")) {
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.power");
             return;
         }
 
@@ -58,8 +64,8 @@ public class CommandFox implements ICommand {
         Location locationTarget = playerArg.getLocation();
 
         if (player.getWorld().equals(playerArg.getWorld())) {
-            if (location.distance(locationTarget) > game.getConfig().getDistanceFox()) {
-                playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.fox.not_enough_near");
+            if (location.distance(locationTarget) > game.getConfig().getValue(RoleBase.FOX, "distance")) {
+                playerWW.sendMessageWithKey(Prefix.RED , "werewolf.role.fox.not_enough_near");
                 return;
             }
         } else {
@@ -73,7 +79,7 @@ public class CommandFox implements ICommand {
         Bukkit.getPluginManager().callEvent(beginSniffEvent);
 
         if (beginSniffEvent.isCancelled()) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
             return;
         }
 
@@ -81,7 +87,7 @@ public class CommandFox implements ICommand {
         ((IAffectedPlayers) fox).addAffectedPlayer(playerWW1);
         ((IProgress) fox).setProgress(0f);
 
-        playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.fox.smell_beginning",
+        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.fox.smell_beginning",
                 Formatter.player(playerArg.getName()));
     }
 }

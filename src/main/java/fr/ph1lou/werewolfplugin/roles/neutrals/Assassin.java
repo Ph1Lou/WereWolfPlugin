@@ -1,6 +1,10 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
@@ -20,6 +24,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
+
+@Role(key = RoleBase.ASSASSIN,
+        category = Category.NEUTRAL,
+        attributes = {RoleAttribute.NEUTRAL})
 public class Assassin extends RoleNeutral {
 
     public Assassin(WereWolfAPI api, IPlayerWW playerWW, String key) {

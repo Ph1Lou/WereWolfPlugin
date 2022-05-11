@@ -1,11 +1,15 @@
 package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
@@ -21,6 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Role(key = RoleBase.INFECT, category= Category.WEREWOLF,
+        attributes = {RoleAttribute.WEREWOLF},
+        weight = 1.5f)
 public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
@@ -111,7 +118,7 @@ public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPl
 
         TextComponent infectMessage = new TextComponent(
                 game.translate(
-                        Prefix.YELLOW.getKey() , "werewolf.role.infect_father_of_the_wolves.infection_message",
+                        Prefix.YELLOW , "werewolf.role.infect_father_of_the_wolves.infection_message",
                         Formatter.player(playerWW.getName())));
         infectMessage.setClickEvent(
                 new ClickEvent(ClickEvent.Action.RUN_COMMAND,

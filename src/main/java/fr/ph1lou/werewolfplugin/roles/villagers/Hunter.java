@@ -1,7 +1,13 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfKillEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -20,7 +26,10 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author havwila
  */
-
+@Role(key = RoleBase.HUNTER,
+        category = Category.VILLAGER,
+        attributes = {RoleAttribute.VILLAGER},
+        configurations = {@Configuration(key = ConfigBase.HUNTER_CAN_SHOOT)})
 public class Hunter extends RoleVillage implements IPower {
 
     private boolean power = false;
@@ -59,9 +68,9 @@ public class Hunter extends RoleVillage implements IPower {
         if (playerWW.equals(this.getPlayerWW())) {
             if (game.getConfig().isConfigActive("werewolf.role.hunter.can_shoot")) {
                 this.setPower(true);
-                getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey(), "werewolf.role.hunter.perform");
+                getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.role.hunter.perform");
                 BukkitUtils.scheduleSyncDelayedTask(() -> {
-                    getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey(), "werewolf.check.end_selection");
+                    getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.check.end_selection");
                     setPower(false);
                 }, 20 * 30);
             }
@@ -72,7 +81,7 @@ public class Hunter extends RoleVillage implements IPower {
 
         if (playerWW.getLastKiller().isPresent() && playerWW.getLastKiller().get().equals(getPlayerWW())) {
             damageBonus += 0.1;
-            getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey(), "werewolf.role.hunter.werewolf_slain");
+            getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.role.hunter.werewolf_slain");
         }
     }
 

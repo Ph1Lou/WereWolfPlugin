@@ -1,8 +1,8 @@
 package fr.ph1lou.werewolfplugin.listeners;
 
 
-import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Material;
@@ -62,7 +62,7 @@ public class PatchPotions implements Listener {
                 .map(Optional::get)
                 .forEach(playerWW -> event.getPotion().getEffects().forEach(potionEffect -> playerWW.addPotionModifier(PotionModifier.add(
                         potionEffect.getType(),
-                        potionEffect.getDuration(),
+                        Math.max(2,potionEffect.getDuration()), //For paper instant splash potion doesn't work with 1 tick duration
                         potionEffect.getAmplifier(),
                         "splash_potion"))));
     }

@@ -1,15 +1,19 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.ConfigBase;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.enums.TimerBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.trouble_maker.TroubleMakerDeathEvent;
@@ -26,6 +30,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Role(key = RoleBase.TROUBLEMAKER,
+        category = Category.VILLAGER,
+        attributes = {RoleAttribute.VILLAGER})
 public class Troublemaker extends RoleVillage implements IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
@@ -45,7 +52,7 @@ public class Troublemaker extends RoleVillage implements IAffectedPlayers, IPowe
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         Bukkit.getPluginManager().callEvent(new TroubleMakerDeathEvent(getPlayerWW()));
-        Bukkit.broadcastMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.role.troublemaker.troublemaker_death"));
+        Bukkit.broadcastMessage(game.translate(Prefix.YELLOW , "werewolf.role.troublemaker.troublemaker_death"));
 
         AtomicInteger i = new AtomicInteger();
 
@@ -112,11 +119,11 @@ public class Troublemaker extends RoleVillage implements IAffectedPlayers, IPowe
             return;
         }
 
-        if (!game.getConfig().isConfigActive(ConfigBase.WEREWOLF_CHAT.getKey())) return;
+        if (!game.getConfig().isConfigActive(ConfigBase.WEREWOLF_CHAT)) return;
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.commands.admin.ww_chat.announce",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.commands.ww_chat.announce",
                 Formatter.timer(Utils.conversion(game.getConfig()
-                        .getTimerValue(TimerBase.WEREWOLF_CHAT_DURATION.getKey()))),
+                        .getTimerValue(TimerBase.WEREWOLF_CHAT_DURATION))),
                 Formatter.number(game.getConfig().getWereWolfChatMaxMessage()));
 
     }

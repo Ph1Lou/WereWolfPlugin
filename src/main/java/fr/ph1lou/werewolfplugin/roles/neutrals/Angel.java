@@ -1,7 +1,11 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
-
-import fr.ph1lou.werewolfapi.enums.ConfigBase;
+import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.annotations.Timer;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -10,11 +14,11 @@ import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.AngelForm;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Day;
-import fr.ph1lou.werewolfapi.enums.Prefix;
-import fr.ph1lou.werewolfapi.enums.RolesBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.enums.TimerBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.ActionBarEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
@@ -48,12 +52,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+
+@Role(key = RoleBase.ANGEL,
+        category = Category.NEUTRAL,
+        attributes = {RoleAttribute.NEUTRAL},
+        timers = {@Timer(key = TimerBase.ANGEL_DURATION,
+                defaultValue = 240, meetUpValue = 240,
+        decrementAfterRole = true,
+        onZero = AutoAngelEvent.class)},
+        configurations = {@Configuration(key = ConfigBase.SWEET_ANGEL)}
+)
 public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse {
 
     private int use = 0;
     private AngelForm choice = AngelForm.ANGEL;
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
-
 
     public Angel(WereWolfAPI api, IPlayerWW playerWW, String key) {
         super(api, playerWW, key);
@@ -116,7 +129,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
                             game.translate("werewolf.description.power",
                                     Formatter.format("&on&",game.translate("werewolf.role.fallen_angel.wait",
                                             Formatter.timer(Utils.conversion(game.getConfig()
-                                                    .getTimerValue(TimerBase.ANGEL_DURATION.getKey()))))))
+                                                    .getTimerValue(TimerBase.ANGEL_DURATION))))))
                             : game.translate("werewolf.role.angel.target",
                                     Formatter.format("&target&",affectedPlayer.get(0).getName())))
                     .build();
@@ -126,14 +139,14 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
 
             return new DescriptionBuilder(game, this)
                     .setEffects(game.translate("werewolf.role.guardian_angel.effect"))
-                    .setDescription(game.getConfig().isConfigActive(ConfigBase.SWEET_ANGEL.getKey()) ?
+                    .setDescription(game.getConfig().isConfigActive(ConfigBase.SWEET_ANGEL) ?
                             game.translate("werewolf.role.guardian_angel.description") :
                             game.translate("werewolf.role.guardian_angel.description_patch"))
                     .addExtraLines(affectedPlayer.isEmpty() ?
                             game.translate("werewolf.description.power",
                                     Formatter.format("&on&",game.translate("werewolf.role.guardian_angel.wait",Formatter.timer(
                                             Utils.conversion(
-                                                    game.getConfig().getTimerValue(TimerBase.ANGEL_DURATION.getKey())))))) :
+                                                    game.getConfig().getTimerValue(TimerBase.ANGEL_DURATION)))))) :
                             game.translate("werewolf.role.guardian_angel.protege",
                                     Formatter.player(affectedPlayer.get(0).getName()),
                                     Formatter.role(game.translate(affectedPlayer.get(0).getRole().getKey()))))
@@ -174,19 +187,19 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
                         if (targetWW.getKillers().contains(getPlayerWW())) {
                             extraHearts += 6;
                             sb.append(game.translate(
-                                    Prefix.YELLOW.getKey() , "werewolf.role.fallen_angel.deadly_target"));
+                                    Prefix.YELLOW , "werewolf.role.fallen_angel.deadly_target"));
                         } else {
                             sb.append(game.translate(
-                                    Prefix.RED.getKey() , "werewolf.role.fallen_angel.deadly_target_by_other"));
+                                    Prefix.RED , "werewolf.role.fallen_angel.deadly_target_by_other"));
                         }
 
                     } else {
-                        if (game.getConfig().isConfigActive(ConfigBase.SWEET_ANGEL.getKey())) {
+                        if (game.getConfig().isConfigActive(ConfigBase.SWEET_ANGEL)) {
                             sb.append(game.translate(
-                                    Prefix.YELLOW.getKey() , "werewolf.role.guardian_angel.protege_death"));
+                                    Prefix.YELLOW , "werewolf.role.guardian_angel.protege_death"));
                         } else {
                             sb.append(game.translate(
-                                    Prefix.YELLOW.getKey() , "werewolf.role.guardian_angel.protege_death_patch"));
+                                    Prefix.YELLOW , "werewolf.role.guardian_angel.protege_death_patch"));
                         }
                     }
 
@@ -194,13 +207,13 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
                 } else if (isChoice(AngelForm.FALLEN_ANGEL)) {
 
                     sb.append(game.translate(
-                            Prefix.YELLOW.getKey() , "werewolf.role.fallen_angel.reveal_target",
+                            Prefix.YELLOW , "werewolf.role.fallen_angel.reveal_target",
                             Formatter.format("&target&",targetWW.getName()),
                             Formatter.role(game.translate(targetWW.getRole().getKey()))));
                 } else {
                     extraHearts += 6;
                     sb.append(game.translate(
-                            Prefix.YELLOW.getKey() , "werewolf.role.guardian_angel.reveal_protege",
+                            Prefix.YELLOW , "werewolf.role.guardian_angel.reveal_protege",
                             Formatter.player(targetWW.getName()),
                             Formatter.role(game.translate(targetWW.getRole().getKey()))));
                 }
@@ -218,7 +231,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
 
 
         TextComponent guardian = new TextComponent(
-                ChatColor.AQUA + game.translate(RolesBase.GUARDIAN_ANGEL.getKey()));
+                ChatColor.AQUA + game.translate(RoleBase.GUARDIAN_ANGEL));
         guardian.setClickEvent(new ClickEvent(
                 ClickEvent.Action.RUN_COMMAND,
                 String.format("/ww %s",
@@ -228,13 +241,13 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
                         HoverEvent.Action.SHOW_TEXT,
                         new ComponentBuilder(
                                 game.translate(
-                                        game.getConfig().isConfigActive(ConfigBase.SWEET_ANGEL.getKey())
+                                        game.getConfig().isConfigActive(ConfigBase.SWEET_ANGEL)
                                                 ? "werewolf.role.angel.guardian_choice" :
                                                 "werewolf.role.angel.guardian_choice_patch"))
                                 .create()));
 
         TextComponent fallen = new TextComponent(
-                ChatColor.AQUA + game.translate(RolesBase.FALLEN_ANGEL.getKey()));
+                ChatColor.AQUA + game.translate(RoleBase.FALLEN_ANGEL));
         fallen.setClickEvent(new ClickEvent(
                 ClickEvent.Action.RUN_COMMAND,
                 String.format("/ww %s",
@@ -248,7 +261,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
                                 .create()));
 
         TextComponent choice = new TextComponent(
-                game.translate(Prefix.YELLOW.getKey() , "werewolf.role.angel.angel_choice"));
+                game.translate(Prefix.YELLOW , "werewolf.role.angel.angel_choice"));
 
         choice.addExtra(guardian);
         choice.addExtra(new TextComponent(
@@ -258,7 +271,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
                 game.translate("werewolf.role.angel.time",
                         Formatter.timer(Utils.conversion(
                                 game.getConfig().getTimerValue(
-                                        TimerBase.ANGEL_DURATION.getKey()))
+                                        TimerBase.ANGEL_DURATION))
                 ))));
 
         return choice;
@@ -288,38 +301,37 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
 
             if (game.getRandom().nextBoolean()) {
                 this.getPlayerWW().sendMessageWithKey(
-                        Prefix.YELLOW.getKey() , "werewolf.role.angel.angel_choice_perform",
-                        Formatter.format("&form&",game.translate(RolesBase.FALLEN_ANGEL.getKey())));
+                        Prefix.YELLOW , "werewolf.role.angel.angel_choice_perform",
+                        Formatter.format("&form&",game.translate(RoleBase.FALLEN_ANGEL)));
                 setChoice(AngelForm.FALLEN_ANGEL);
                 if (game.isDay(Day.NIGHT)) {
                     this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,"fallen_angel"));
                 }
             } else {
                 this.getPlayerWW().sendMessageWithKey(
-                        Prefix.YELLOW.getKey() , "werewolf.role.angel.angel_choice_perform",
-                        Formatter.format("&form&",game.translate(RolesBase.GUARDIAN_ANGEL.getKey())));
+                        Prefix.YELLOW , "werewolf.role.angel.angel_choice_perform",
+                        Formatter.format("&form&",game.translate(RoleBase.GUARDIAN_ANGEL)));
                 setChoice(AngelForm.GUARDIAN_ANGEL);
             }
             Bukkit.getPluginManager().callEvent(new AngelChoiceEvent(this.getPlayerWW(), getChoice()));
         }
 
-        IPlayerWW targetWW = game.autoSelect(getPlayerWW());
+        IPlayerWW targetWW = Utils.autoSelect(game, getPlayerWW());
         addAffectedPlayer(targetWW);
 
         if (isChoice(AngelForm.FALLEN_ANGEL)) {
             this.getPlayerWW().sendMessageWithKey(
-                    Prefix.YELLOW.getKey() , "werewolf.role.fallen_angel.reveal_target",
+                    Prefix.YELLOW , "werewolf.role.fallen_angel.reveal_target",
                     Formatter.format("&target&",targetWW.getName()),
                     Formatter.role(game.translate(targetWW.getRole().getKey())));
-            this.getPlayerWW().sendSound(Sound.PORTAL_TRIGGER);
         } else {
             this.getPlayerWW().addPlayerMaxHealth(6);
             this.getPlayerWW().sendMessageWithKey(
-                    Prefix.YELLOW.getKey() , "werewolf.role.guardian_angel.reveal_protege",
+                    Prefix.YELLOW , "werewolf.role.guardian_angel.reveal_protege",
                     Formatter.player(targetWW.getName()),
                     Formatter.role(game.translate(targetWW.getRole().getKey())));
-            this.getPlayerWW().sendSound(Sound.PORTAL_TRIGGER);
         }
+        this.getPlayerWW().sendSound(Sound.PORTAL_TRIGGER);
 
         Bukkit.getPluginManager().callEvent(
                 new AngelTargetEvent(this.getPlayerWW(), targetWW));
@@ -336,7 +348,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         StringBuilder sb = event.getEndMessage();
-        if (isKey(RolesBase.ANGEL.getKey()) && !isChoice(AngelForm.ANGEL)) {
+        if (isKey(RoleBase.ANGEL) && !isChoice(AngelForm.ANGEL)) {
             sb.append(", ").append(game.translate("werewolf.role.angel.choice",
                     Formatter.format("&form&",game.translate(isChoice(AngelForm.ANGEL) ?
                             "werewolf.role.angel.display" :
@@ -367,18 +379,18 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
                 Bukkit.getPluginManager().callEvent(
                         new FallenAngelTargetDeathEvent(this.getPlayerWW(), playerWW));
                 this.getPlayerWW().addPlayerMaxHealth(6);
-                this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.fallen_angel.deadly_target");
+                this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.role.fallen_angel.deadly_target");
             }
 
         } else if (isChoice(AngelForm.GUARDIAN_ANGEL)) {
             this.getPlayerWW().removePlayerMaxHealth(6);
 
-            if (game.getConfig().isConfigActive(ConfigBase.SWEET_ANGEL.getKey())) {
+            if (game.getConfig().isConfigActive(ConfigBase.SWEET_ANGEL)) {
                 this.getPlayerWW().sendMessageWithKey(
-                        Prefix.YELLOW.getKey() , "werewolf.role.guardian_angel.protege_death");
+                        Prefix.YELLOW , "werewolf.role.guardian_angel.protege_death");
             } else {
                 this.getPlayerWW().sendMessageWithKey(
-                        Prefix.YELLOW.getKey() , "werewolf.role.guardian_angel.protege_death_patch");
+                        Prefix.YELLOW , "werewolf.role.guardian_angel.protege_death_patch");
             }
         }
 
@@ -401,11 +413,11 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (isChoice(AngelForm.FALLEN_ANGEL)) {
-            this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE.getKey() , "werewolf.role.fallen_angel.new_target",
+            this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE , "werewolf.role.fallen_angel.new_target",
                     Formatter.format("&target&",targetName),
                     Formatter.role(game.translate(thiefWW.getRole().getKey())));
         } else if (isChoice(AngelForm.GUARDIAN_ANGEL)) {
-            this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE.getKey() , "werewolf.role.guardian_angel.new_protege",
+            this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE , "werewolf.role.guardian_angel.new_protege",
                     Formatter.player(targetName),
                     Formatter.role(game.translate(thiefWW.getRole().getKey())));
         }
@@ -446,7 +458,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
     @Override
     public boolean isNeutral() {
         return super.isNeutral() &&
-                (!game.getConfig().isConfigActive(ConfigBase.SWEET_ANGEL.getKey())
+                (!game.getConfig().isConfigActive(ConfigBase.SWEET_ANGEL)
                         || !choice.equals(AngelForm.GUARDIAN_ANGEL)
                         || affectedPlayer.isEmpty()
                         || !affectedPlayer.get(0).isState(StatePlayer.DEATH));
@@ -512,8 +524,8 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
                     .stream()
                     .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                     .map(IPlayerWW::getRole)
-                    .filter(roles -> roles.isKey(RolesBase.ANGEL.getKey())
-                            || roles.isKey(RolesBase.GUARDIAN_ANGEL.getKey()))
+                    .filter(roles -> roles.isKey(RoleBase.ANGEL)
+                            || roles.isKey(RoleBase.GUARDIAN_ANGEL))
                     .map(iRole -> (Angel) iRole)
                     .filter(roles -> roles.isChoice(AngelForm.GUARDIAN_ANGEL))
                     .forEach(role -> {
@@ -528,7 +540,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
 
         if (game.getPlayersCount() == list.size()) {
             event.setCancelled(true);
-            event.setVictoryTeam(RolesBase.GUARDIAN_ANGEL.getKey());
+            event.setVictoryTeam(RoleBase.GUARDIAN_ANGEL);
         }
     }
 

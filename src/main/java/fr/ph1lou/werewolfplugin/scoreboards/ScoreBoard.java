@@ -6,12 +6,12 @@ import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.game.IModerationManager;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.enums.ConfigBase;
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.enums.LoverType;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.enums.TimerBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.registers.impl.RoleRegister;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
@@ -70,7 +70,7 @@ public class ScoreBoard {
 			if (!playerWW.isState(StatePlayer.DEATH)) {
 
 				if (!game.isState(StateGame.GAME)) {
-					role = Utils.conversion(game.getConfig().getTimerValue(TimerBase.ROLE_DURATION.getKey()));
+					role = Utils.conversion(game.getConfig().getTimerValue(TimerBase.ROLE_DURATION));
 				} else {
 					role = game.translate(playerWW.getRole().getKey());
 				}
@@ -98,9 +98,9 @@ public class ScoreBoard {
 		String borderSize = String.valueOf(Math.round(wb.getSize()));
 		String border;
 
-		if (game.getConfig().getTimerValue(TimerBase.BORDER_BEGIN.getKey()) > 0) {
+		if (game.getConfig().getTimerValue(TimerBase.BORDER_BEGIN) > 0) {
 			border = Utils.conversion(game.getConfig()
-					.getTimerValue(TimerBase.BORDER_BEGIN.getKey()));
+					.getTimerValue(TimerBase.BORDER_BEGIN));
 		} else {
 			border = game.translate("werewolf.utils.on");
 			if (wb.getSize() > game.getConfig().getBorderMin()) {
@@ -111,7 +111,7 @@ public class ScoreBoard {
 		scoreboard2.clear();
 
 		this.day = game.getTimer() / game.getConfig()
-				.getTimerValue(TimerBase.DAY_DURATION.getKey()) / 2 + 1;
+				.getTimerValue(TimerBase.DAY_DURATION) / 2 + 1;
 		this.dayState = game.translate(game.isDay(Day.DAY) ?
 				"werewolf.score_board.day" : "werewolf.score_board.night");
 
@@ -219,7 +219,7 @@ public class ScoreBoard {
 
 		roles.clear();
 
-		if (!game.getConfig().isConfigActive(ConfigBase.HIDE_COMPOSITION.getKey())
+		if (!game.getConfig().isConfigActive(ConfigBase.HIDE_COMPOSITION)
 				&& TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) % 60 >= 30) {
 			updateScoreBoardRole();
 		}

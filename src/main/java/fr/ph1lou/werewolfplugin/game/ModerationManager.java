@@ -3,7 +3,7 @@ package fr.ph1lou.werewolfplugin.game;
 import fr.ph1lou.werewolfplugin.commands.Admin;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.game.IModerationManager;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import org.bukkit.Bukkit;
@@ -52,7 +52,7 @@ public class ModerationManager implements IModerationManager {
 
         if (!this.queue.contains(uuid)) {
             this.queue.add(uuid);
-            Bukkit.broadcastMessage(this.game.translate(Prefix.YELLOW.getKey() , "werewolf.announcement.queue",
+            Bukkit.broadcastMessage(this.game.translate(Prefix.YELLOW , "werewolf.announcement.queue",
                     Formatter.player(player.getName()),
                     Formatter.number(this.queue.indexOf(uuid) + 1)));
             player.sendMessage(this.game.translate("werewolf.announcement.rank"));

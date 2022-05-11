@@ -1,10 +1,14 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.ActionBarEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
@@ -20,6 +24,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+
+@Role(key = RoleBase.TRAPPER,
+        category = Category.VILLAGER,
+        attributes = {RoleAttribute.VILLAGER})
 public class Trapper extends RoleVillage implements IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
@@ -71,7 +79,7 @@ public class Trapper extends RoleVillage implements IAffectedPlayers, IPower {
         setPower(true);
 
         this.getPlayerWW().sendMessageWithKey(
-                Prefix.YELLOW.getKey() , "werewolf.role.trapper.tracking_message");
+                Prefix.YELLOW , "werewolf.role.trapper.tracking_message");
     }
 
 

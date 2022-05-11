@@ -1,12 +1,14 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.troublemaker;
 
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.commands.ICommand;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.trouble_maker.TroubleMakerEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
@@ -15,6 +17,10 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+@RoleCommand(key = "werewolf.role.troublemaker.command",
+        roleKeys = RoleBase.TROUBLEMAKER,
+        requiredPower = true,
+        argNumbers = 1)
 public class CommandTroubleMaker implements ICommand {
 
     @Override
@@ -29,14 +35,14 @@ public class CommandTroubleMaker implements ICommand {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.offline_player"));
+            player.sendMessage(game.translate(Prefix.RED , "werewolf.check.offline_player"));
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.player_not_found"));
+            player.sendMessage(game.translate(Prefix.RED , "werewolf.check.player_not_found"));
             return;
         }
 
@@ -45,15 +51,15 @@ public class CommandTroubleMaker implements ICommand {
         Bukkit.getPluginManager().callEvent(troubleMakerEvent);
 
         if (troubleMakerEvent.isCancelled()) {
-            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.cancel"));
+            player.sendMessage(game.translate(Prefix.RED , "werewolf.check.cancel"));
             return;
         }
 
         ((IAffectedPlayers) troublemaker).addAffectedPlayer(playerWW1);
 
-        playerWW1.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.troublemaker.get_switch");
+        playerWW1.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.troublemaker.get_switch");
         game.getMapManager().transportation(playerWW1, Math.random() * 2 * Math.PI);
-        player.sendMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.role.troublemaker.troublemaker_perform",
+        player.sendMessage(game.translate(Prefix.YELLOW , "werewolf.role.troublemaker.troublemaker_perform",
                 Formatter.player(playerArg.getName())));
     }
 }

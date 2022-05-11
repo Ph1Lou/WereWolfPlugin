@@ -1,10 +1,12 @@
 package fr.ph1lou.werewolfplugin.commands.admin.ingame;
 
+import fr.ph1lou.werewolfapi.annotations.AdminCommand;
+import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -12,6 +14,11 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+@AdminCommand(key = "werewolf.commands.admin.tp_group.command",
+        descriptionKey = "werewolf.commands.admin.tp_group.description",
+        argNumbers = {1, 2},
+        moderatorAccess = true,
+        stateGame = StateGame.GAME)
 public class CommandTPGroup implements ICommand {
 
     @Override
@@ -21,14 +28,14 @@ public class CommandTPGroup implements ICommand {
         String playerName = player.getName();
 
         if (playerArg == null) {
-            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.offline_player"));
+            player.sendMessage(game.translate(Prefix.RED , "werewolf.check.offline_player"));
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         IPlayerWW playerWW = game.getPlayerWW(argUUID).orElse(null);
 
         if (playerWW == null) {
-            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.player_not_found"));
+            player.sendMessage(game.translate(Prefix.RED , "werewolf.check.player_not_found"));
             return;
         }
 
@@ -56,14 +63,14 @@ public class CommandTPGroup implements ICommand {
                     if (p.getLocation().distance(location) <= d) {
                         size--;
                         sb.append(p.getName()).append(" ");
-                        playerWW1.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.commands.admin.tp_group.perform",
+                        playerWW1.sendMessageWithKey(Prefix.YELLOW , "werewolf.commands.admin.tp_group.perform",
                                 Formatter.player(playerName));
                         game.getMapManager().transportation(playerWW1, r);
                     }
                 }
             }
         }
-        Bukkit.getConsoleSender().sendMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.commands.admin.tp_group.broadcast",
+        Bukkit.getConsoleSender().sendMessage(game.translate(Prefix.YELLOW , "werewolf.commands.admin.tp_group.broadcast",
                 Formatter.format("&players&",sb.toString()),
                 Formatter.player(playerName)));
     }

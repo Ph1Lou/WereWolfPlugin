@@ -1,13 +1,18 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 
-import fr.minuskube.inv.ClickableItem;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.game.IConfiguration;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.*;
+import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.annotations.Timer;
+import fr.ph1lou.werewolfapi.enums.Aura;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.enums.Sound;
+import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.WinConditionsCheckEvent;
@@ -15,11 +20,14 @@ import fr.ph1lou.werewolfapi.events.lovers.AroundLoverEvent;
 import fr.ph1lou.werewolfapi.events.roles.StealEvent;
 import fr.ph1lou.werewolfapi.events.roles.succubus.CharmEvent;
 import fr.ph1lou.werewolfapi.events.roles.succubus.SuccubusResurrectionEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IProgress;
-import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
-import fr.ph1lou.werewolfapi.utils.ItemBuilder;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -29,11 +37,17 @@ import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+
+@Role(key = RoleBase.SUCCUBUS, 
+        category = Category.NEUTRAL, 
+        attributes = {RoleAttribute.NEUTRAL},
+        timers = {@Timer(key = TimerBase.SUCCUBUS_DURATION, defaultValue = 180, meetUpValue = 60)},
+        intValues = {@IntValue(key = "werewolf.role.succubus.distance", defaultValue = 20, meetUpValue = 20, step = 4, item = UniversalMaterial.PURPLE_WOOL)})
 public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers, IPower {
+
 
     private float progress = 0;
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
@@ -90,7 +104,7 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
                 .setDescription(game.translate("werewolf.role.succubus.description",
                                 Formatter.timer(
                                         Utils.conversion(game.getConfig()
-                                                .getTimerValue(TimerBase.SUCCUBUS_DURATION.getKey())))))
+                                                .getTimerValue(TimerBase.SUCCUBUS_DURATION)))))
                 .setPower(game.translate( "werewolf.role.succubus.progress_charm",
                         Formatter.format("&progress&",Math.min(100, Math.floor(this.getProgress())))))
                 .addExtraLines(game.translate("werewolf.role.succubus.charm",
@@ -117,13 +131,13 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
 
         IPlayerWW affectedWW = getAffectedPlayers().get(0);
 
-        affectedWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.succubus.get_charmed",
+        affectedWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.succubus.get_charmed",
                 Formatter.player(this.getPlayerWW().getName()));
     }
 
     @Override
     public void recoverPower() {
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.succubus.charming_message");
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.role.succubus.charming_message");
     }
 
     @Override
@@ -156,7 +170,7 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
 
         if (succubusLocation.getWorld() == playerLocation.getWorld()) {
             if (succubusLocation.distance(playerLocation) >
-                    game.getConfig().getDistanceSuccubus()) {
+                    game.getConfig().getValue(RoleBase.SUCCUBUS, "werewolf.role.succubus.distance")) {
                 return;
             }
         } else {
@@ -164,14 +178,14 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
         }
 
         float temp = getProgress() + 100f /
-                (game.getConfig().getTimerValue(TimerBase.SUCCUBUS_DURATION.getKey()) + 1);
+                (game.getConfig().getTimerValue(TimerBase.SUCCUBUS_DURATION) + 1);
 
         setProgress(temp);
 
         if (temp % 10 > 0 && temp % 10 <= 100f /
-                (game.getConfig().getTimerValue(TimerBase.SUCCUBUS_DURATION.getKey()) + 1)) {
+                (game.getConfig().getTimerValue(TimerBase.SUCCUBUS_DURATION) + 1)) {
             this.getPlayerWW().sendMessageWithKey(
-                    Prefix.YELLOW.getKey() , "werewolf.role.succubus.progress_charm",
+                    Prefix.YELLOW , "werewolf.role.succubus.progress_charm",
                     Formatter.format("&progress&",Math.min(100, Math.floor(temp))));
         }
 
@@ -183,15 +197,15 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
 
             if (!charmEvent.isCancelled()) {
                 charmedWW.sendMessageWithKey(
-                        Prefix.YELLOW.getKey() , "werewolf.role.succubus.get_charmed",
+                        Prefix.YELLOW , "werewolf.role.succubus.get_charmed",
                         Formatter.player(this.getPlayerWW().getName()));
                 charmedWW.sendSound(Sound.PORTAL_TRAVEL);
                 this.getPlayerWW().sendMessageWithKey(
-                        Prefix.GREEN.getKey() , "werewolf.role.succubus.charming_perform",
+                        Prefix.GREEN , "werewolf.role.succubus.charming_perform",
                         Formatter.player(charmedWW.getName()));
                 game.checkVictory(); //todo pose soucis quand que 2 joueurs
             } else {
-                this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+                this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
             }
 
             setProgress(0f);
@@ -211,10 +225,10 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
         removeAffectedPlayer(playerWW);
         addAffectedPlayer(thiefWW);
 
-        thiefWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.succubus.get_charmed",
+        thiefWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.succubus.get_charmed",
                 Formatter.player(this.getPlayerWW().getName()));
 
-        playerWW.sendMessageWithKey(Prefix.ORANGE.getKey() , "werewolf.role.succubus.change",
+        playerWW.sendMessageWithKey(Prefix.ORANGE , "werewolf.role.succubus.change",
                 Formatter.player(thiefWW.getName()));
     }
 
@@ -230,7 +244,7 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
 
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.succubus.charming_message");
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.role.succubus.charming_message");
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -257,7 +271,7 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
         Bukkit.getPluginManager().callEvent(succubusResurrectionEvent);
 
         if (succubusResurrectionEvent.isCancelled()) {
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
             return;
         }
 
@@ -269,7 +283,7 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
         } else {
             target.damage(10000);
             target.sendMessage(game.translate(
-                    Prefix.YELLOW.getKey() , "werewolf.role.succubus.free_of_succubus"));
+                    Prefix.YELLOW , "werewolf.role.succubus.free_of_succubus"));
         }
 
         game.resurrection(getPlayerWW());
@@ -299,7 +313,7 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
                     .stream()
                     .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                     .map(IPlayerWW::getRole)
-                    .filter(roles -> roles.isKey(RolesBase.SUCCUBUS.getKey()))
+                    .filter(roles -> roles.isKey(RoleBase.SUCCUBUS))
                     .forEach(role -> {
                         if (((IAffectedPlayers) role).getAffectedPlayers().contains(playerWW)) {
                             if (!list.contains(role.getPlayerWW())) {
@@ -312,7 +326,7 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
 
         if (game.getPlayersCount() == list.size()) {
             event.setCancelled(true);
-            event.setVictoryTeam(RolesBase.SUCCUBUS.getKey());
+            event.setVictoryTeam(RoleBase.SUCCUBUS);
         }
     }
 
@@ -335,31 +349,5 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
             }
         }
     }
-
-    public static ClickableItem config(WereWolfAPI game) {
-
-        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
-                game.translate("werewolf.menu.right"));
-        IConfiguration config = game.getConfig();
-
-        return ClickableItem.of((new ItemBuilder(
-                UniversalMaterial.PURPLE_WOOL.getStack())
-                .setDisplayName(game.translate("werewolf.menu.advanced_tool.succubus",
-                                Formatter.number(config.getDistanceSuccubus())))
-                .setLore(lore).build()), e -> {
-            if (e.isLeftClick()) {
-                config.setDistanceSuccubus((config.getDistanceSuccubus() + 5));
-            } else if (config.getDistanceSuccubus() - 5 > 0) {
-                config.setDistanceSuccubus(config.getDistanceSuccubus() - 5);
-            }
-
-
-            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setLore(lore)
-                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.succubus",
-                                    Formatter.number(config.getDistanceSuccubus())))
-                    .build());
-
-        });
-    }
+    
 }

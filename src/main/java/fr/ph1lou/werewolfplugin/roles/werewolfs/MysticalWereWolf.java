@@ -1,12 +1,16 @@
 package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.mystical_werewolf.MysticalWerewolfRevelationEvent;
@@ -20,6 +24,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Role(key = RoleBase.MYSTICAL_WEREWOLF,
+         category = Category.WEREWOLF,
+         attributes = RoleAttribute.WEREWOLF)
 public class MysticalWereWolf extends RoleWereWolf {
 
     public MysticalWereWolf(WereWolfAPI api, IPlayerWW playerWW, String key) {
@@ -51,7 +58,7 @@ public class MysticalWereWolf extends RoleWereWolf {
 
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.mystical_werewolf.no_message");
+        this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.role.mystical_werewolf.no_message");
         event.setCancelled(true);
     }
 
@@ -67,7 +74,7 @@ public class MysticalWereWolf extends RoleWereWolf {
         if (!event.getPlayerWW().getRole().isWereWolf()) return;
 
         if (!isAbilityEnabled()) {
-            getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.mystical_werewolf.ability_disabled");
+            getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.role.mystical_werewolf.ability_disabled");
             return;
         }
 
@@ -82,7 +89,7 @@ public class MysticalWereWolf extends RoleWereWolf {
 
         Bukkit.getPluginManager().callEvent(new MysticalWerewolfRevelationEvent(this.getPlayerWW(), roleWW));
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.mystical_werewolf.werewolf_death",
+        this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.role.mystical_werewolf.werewolf_death",
                 Formatter.player(roleWW.getName()),
                 Formatter.role(game.translate(roleWW.getRole().getKey())));
     }

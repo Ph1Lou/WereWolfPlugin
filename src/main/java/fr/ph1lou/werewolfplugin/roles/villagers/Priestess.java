@@ -1,34 +1,39 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
-import fr.minuskube.inv.ClickableItem;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.game.IConfiguration;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.enums.TimerBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.UpdateCompositionEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
-import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleWithLimitedSelectionDuration;
-import fr.ph1lou.werewolfapi.utils.ItemBuilder;
+import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+@Role(key = RoleBase.PRIESTESS,
+        category = Category.VILLAGER,
+        attributes = {RoleAttribute.VILLAGER, RoleAttribute.INFORMATION},
+        intValues = {@IntValue(key = "werewolf.role.priestess.distance_field", defaultValue = 10, meetUpValue = 10, step = 2, item = UniversalMaterial.BLUE_WOOL)})
 public class Priestess extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
@@ -67,7 +72,7 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
 
         if (!event.getPlayerWW().getRole().isWereWolf()) return;
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.role.priestess.werewolf_death");
+        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN , "werewolf.role.priestess.werewolf_death");
 
         this.affectedPlayer.remove(event.getPlayerWW());
 
@@ -84,11 +89,11 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
         setPower(true);
 
         this.getPlayerWW().sendMessageWithKey(
-                Prefix.YELLOW.getKey() , "werewolf.role.priestess.perform",
-                Formatter.number(game.getConfig().getDistancePriestess()),
+                Prefix.YELLOW , "werewolf.role.priestess.perform",
+                Formatter.number(game.getConfig().getValue(RoleBase.PRIESTESS, "werewolf.role.priestess.distance_field")),
                 Formatter.timer(Utils.conversion(
                         game.getConfig()
-                                .getTimerValue(TimerBase.POWER_DURATION.getKey()))));
+                                .getTimerValue(TimerBase.POWER_DURATION))));
     }
 
 
@@ -174,33 +179,5 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
         if (!playerWW.isState(StatePlayer.DEATH)) return;
 
         event.setSuffix("");
-    }
-
-    public static ClickableItem config(WereWolfAPI game) {
-
-        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
-                game.translate("werewolf.menu.right"));
-        IConfiguration config = game.getConfig();
-
-        return ClickableItem.of((
-                new ItemBuilder(UniversalMaterial.BLUE_WOOL.getStack())
-                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.priestess",
-                                        Formatter.number(config.getDistancePriestess())))
-                        .setLore(lore).build()), e -> {
-
-            if (e.isLeftClick()) {
-                config.setDistancePriestess((config.getDistancePriestess() + 2));
-            } else if (config.getDistancePriestess() - 2 > 0) {
-                config.setDistancePriestess(config.getDistancePriestess() - 2);
-            }
-
-
-            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setLore(lore)
-                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.priestess",
-                                    Formatter.number(config.getDistancePriestess())))
-                    .build());
-
-        });
     }
 }

@@ -1,6 +1,6 @@
 package fr.ph1lou.werewolfplugin.save;
 
-import fr.ph1lou.werewolfapi.enums.RolesBase;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.registers.impl.ConfigRegister;
 import fr.ph1lou.werewolfapi.registers.impl.RandomEventRegister;
@@ -25,7 +25,6 @@ public class Configuration implements IConfiguration {
     private int resistanceRate;
     private int appleRate;
     private int flintRate;
-    private int distanceFlutePlayer;
     private int pearlRate;
     private int xpBoost;
     private int playerRequiredBeforeVotingEnds;
@@ -37,24 +36,7 @@ public class Configuration implements IConfiguration {
     private int limitPowerBow;
     private int limitPunch;
     private int limitKnockBack;
-    private int useOfFlair;
     private int goldenAppleParticles;
-    private int distanceBearTrainer;
-    private int distanceSuccubus;
-    private int distanceWiseElder;
-    private int distanceServitor;
-    private int distanceScammer;
-    private int distanceAmnesiacLovers;
-    private int distancePriestess;
-    private int distanceSister;
-    private int distanceTwin;
-    private int distanceHowlingWerewolf;
-    private int distanceWillOTheWisp;
-    private int distanceHermit;
-    private int distanceFox;
-    private int distanceFearfulWerewolf;
-    private int distanceAvengerWerewolf;
-    private int distanceDruid;
     private boolean trollSV;
     private int borderMax;
     private int borderMin;
@@ -67,12 +49,6 @@ public class Configuration implements IConfiguration {
     private double borderSpeed ;
     private int werewolfChatMaxMessage;
     private boolean trollLover;
-    private int distanceFruitMerchant;
-    private int distanceTenebrousWerewolf;
-    private int distanceGravedigger;
-    private int thugDistance;
-    private int barbarianDistance;
-    private int necromancerDistance;
 
     public Configuration(){
         this.timerValues = new HashMap<>();
@@ -85,7 +61,6 @@ public class Configuration implements IConfiguration {
         this.resistanceRate = 20;
         this.appleRate = 2;
         this.flintRate = 10;
-        this.distanceFlutePlayer = 20;
         this.pearlRate = 30;
         this.xpBoost = 500;
         this.playerRequiredBeforeVotingEnds = 10;
@@ -97,42 +72,20 @@ public class Configuration implements IConfiguration {
         this.limitPowerBow = 3;
         this.limitPunch = 1;
         this.limitKnockBack = 1;
-        this.useOfFlair = 3;
         this.goldenAppleParticles = 1;
-        this.distanceBearTrainer = 50;
-        this.distanceSuccubus = 20;
-        this.distanceAmnesiacLovers = 15;
-        this.distancePriestess = 10;
-        this.distanceSister = 20;
-        this.distanceTwin = 50;
-        this.distanceHowlingWerewolf = 80;
-        this.distanceWillOTheWisp = 50;
-        this.distanceHermit = 20;
-        this.distanceFox = 20;
-        this.distanceFearfulWerewolf = 20;
-        this.distanceAvengerWerewolf = 10;
-        this.distanceDruid=50;
+        //this.distanceAmnesiacLovers = 15;
         this.trollSV = false;
         this.borderMax = 2000;
         this.borderMin = 300;
         this.limitDepthStrider = 0;
         this.knockBackMode = 0;
-        this.trollKey = RolesBase.VILLAGER.getKey();
+        this.trollKey = RoleBase.VILLAGER;
         this.spectatorMode = 2;  // 0 no Spectators, 1 allowed for death players, 2 for all players;
         this.whiteList = false;
         this.playerMax = 30;
         this.borderSpeed = 0.3;
         this.werewolfChatMaxMessage = 1;
         this.trollLover = false;
-        this.distanceFruitMerchant=50;
-        this.distanceWiseElder = 15;
-        this.distanceServitor = 25;
-        this.distanceScammer = 20;
-        this.distanceTenebrousWerewolf = 50;
-        this.distanceGravedigger = 70;
-        this.thugDistance=25;
-        this.barbarianDistance=25;
-        this.necromancerDistance=70;
     }
 
     public Configuration(IRegisterManager registerManager) {
@@ -296,16 +249,6 @@ public class Configuration implements IConfiguration {
     }
 
     @Override
-    public int getUseOfFlair() {
-        return useOfFlair;
-    }
-
-    @Override
-    public void setUseOfFlair(int useOfFlair) {
-        this.useOfFlair = useOfFlair;
-    }
-
-    @Override
     public int getGoldenAppleParticles() {
         return goldenAppleParticles;
     }
@@ -315,55 +258,6 @@ public class Configuration implements IConfiguration {
         this.goldenAppleParticles = goldenAppleParticles;
     }
 
-    @Override
-    public int getDistanceBearTrainer() {
-        return distanceBearTrainer;
-    }
-
-    @Override
-    public void setDistanceBearTrainer(int distanceBearTrainer) {
-        this.distanceBearTrainer = distanceBearTrainer;
-    }
-
-    @Override
-    public int getDistanceDruid() {
-        return this.distanceDruid;
-    }
-
-    @Override
-    public void setDistanceDruid(int distanceDruid) {
-        this.distanceDruid=distanceDruid;
-    }
-
-    @Override
-    public int getDistanceFox() {
-        return distanceFox;
-    }
-
-    @Override
-    public void setDistanceFox(int distanceFox) {
-        this.distanceFox = distanceFox;
-    }
-
-    @Override
-    public int getDistanceHowlingWerewolf() {
-        return this.distanceHowlingWerewolf;
-    }
-
-    @Override
-    public void setDistanceHowlingWerewolf(int distanceHowlingWerewolf) {
-        this.distanceHowlingWerewolf = distanceHowlingWerewolf;
-    }
-
-    @Override
-    public int getDistanceTwin() {
-        return this.distanceTwin;
-    }
-
-    @Override
-    public void setDistanceTwin(int distanceTwin) {
-        this.distanceTwin = distanceTwin;
-    }
 
     @Override
     public int getResistanceRate() {
@@ -386,16 +280,6 @@ public class Configuration implements IConfiguration {
     }
 
     @Override
-    public int getDistanceSuccubus() {
-        return distanceSuccubus;
-    }
-
-    @Override
-    public void setDistanceSuccubus(int distanceSuccubus) {
-        this.distanceSuccubus = distanceSuccubus;
-    }
-
-    @Override
     public int getBorderMax() {
         return borderMax;
     }
@@ -413,36 +297,6 @@ public class Configuration implements IConfiguration {
     @Override
     public void setBorderMin(int borderMin) {
         this.borderMin = borderMin;
-    }
-
-    @Override
-    public int getDistanceAmnesiacLovers() {
-        return distanceAmnesiacLovers;
-    }
-
-    @Override
-    public void setDistanceAmnesiacLovers(int distanceAmnesiacLovers) {
-        this.distanceAmnesiacLovers = distanceAmnesiacLovers;
-    }
-
-    @Override
-    public int getDistanceFlutePlayer() {
-        return this.distanceFlutePlayer;
-    }
-
-    @Override
-    public void setDistanceFlutePlayer(int distanceFlutePlayer) {
-        this.distanceFlutePlayer = distanceFlutePlayer;
-    }
-
-    @Override
-    public int getDistanceFruitMerchant() {
-        return this.distanceFruitMerchant;
-    }
-
-    @Override
-    public void setDistanceFruitMerchant(int distanceFruitMerchant) {
-        this.distanceFruitMerchant=distanceFruitMerchant;
     }
 
     @Override
@@ -621,36 +475,6 @@ public class Configuration implements IConfiguration {
     }
 
     @Override
-    public int getDistanceSister() {
-        return distanceSister;
-    }
-
-    @Override
-    public void setDistanceSister(int i) {
-        this.distanceSister = i;
-    }
-
-    @Override
-    public int getDistancePriestess() {
-        return distancePriestess;
-    }
-
-    @Override
-    public void setDistancePriestess(int i) {
-        this.distancePriestess = i;
-    }
-
-    @Override
-    public int getDistanceAvengerWerewolf() {
-        return this.distanceAvengerWerewolf;
-    }
-
-    @Override
-    public void setDistanceAvengerWerewolf(int i) {
-        this.distanceAvengerWerewolf = i;
-    }
-
-    @Override
     public boolean isTrollLover() {
         return this.trollLover;
     }
@@ -661,115 +485,26 @@ public class Configuration implements IConfiguration {
     }
 
     @Override
-    public int getDistanceWiseElder() {
-        return distanceWiseElder;
+    public int getValue(String baseKey, String key) {
+        return 0;//todo
     }
 
     @Override
-    public void setDistanceWiseElder(int i) {
-        distanceWiseElder = i;
+    public void setValue(String baseKey, String key, int value) {
+//todo
     }
 
     @Override
-    public int getDistanceServitor() {
-        return distanceServitor;
+    public boolean isMeetUp() {
+        return false;//todo
     }
 
     @Override
-    public void setDistanceServitor(int i) {
-        distanceServitor = i;
+    public void setMeetUp(boolean b) {
+//todo
     }
 
     public void addRegister(RegisterManager registerManager) {
         this.registerManager = registerManager;
-    }
-
-    @Override
-    public int getDistanceFearfulWerewolf() {
-        return distanceFearfulWerewolf;
-    }
-
-    @Override
-    public void setDistanceFearfulWerewolf(int distanceFearfulWerewolf) {
-        this.distanceFearfulWerewolf = distanceFearfulWerewolf;
-    }
-
-    @Override
-    public int getDistanceHermit() {
-        return this.distanceHermit;
-    }
-
-    @Override
-    public void setDistanceHermit(int distanceHermit) {
-        this.distanceHermit = distanceHermit;
-    }
-
-    @Override
-    public int getDistanceWillOTheWisp() {
-        return this.distanceWillOTheWisp;
-    }
-
-    @Override
-    public void setDistanceWillOTheWisp(int distanceWillOTheWisp) {
-        this.distanceWillOTheWisp = distanceWillOTheWisp;
-    }
-
-    @Override
-    public int getDistanceScammer() {
-        return distanceScammer;
-    }
-
-    @Override
-    public void setDistanceScammer(int distanceScammer) {
-        this.distanceScammer = distanceScammer;
-    }
-
-    @Override
-    public int getDistanceTenebrous() {
-        return this.distanceTenebrousWerewolf;
-    }
-
-    @Override
-    public void setDistanceTenebrous(int distance) {
-        this.distanceTenebrousWerewolf = distance;
-    }
-
-    @Override
-    public void setDistanceGravedigger(int i) {
-        this.distanceGravedigger = i;
-    }
-
-    @Override
-    public int getDistanceGravedigger() {
-        return this.distanceGravedigger;
-    }
-      
-    public int getDistanceBarbarian() {
-        return this.barbarianDistance;
-    }
-
-    @Override
-    public void setDistanceBarbarian(int distance) {
-        this.barbarianDistance = distance;
-    }
-
-    @Override
-    public int getDistanceNecromancer() {
-        return this.necromancerDistance;
-    }
-
-    @Override
-    public void setDistanceNecromancer(int distance) {
-        this.necromancerDistance = distance;
-    }
-
-    @Override
-    public int getDistanceThug() {
-        return this.thugDistance;
-    }
-
-    @Override
-    public void setDistanceThug(int distance) {
-        this.thugDistance=distance;
     }
 }

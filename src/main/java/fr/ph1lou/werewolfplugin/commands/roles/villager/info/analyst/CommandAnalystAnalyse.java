@@ -1,16 +1,18 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.info.analyst;
 
-import fr.ph1lou.werewolfapi.player.impl.AuraModifier;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.commands.ICommand;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Camp;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.analyst.AnalystExtraDetailsEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.impl.AuraModifier;
+import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfplugin.roles.villagers.Analyst;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -19,6 +21,9 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@RoleCommand(key = "werewolf.role.analyst.command_analyse",
+        roleKeys = RoleBase.ANALYST,
+        argNumbers = 1)
 public class CommandAnalystAnalyse implements ICommand {
 
     @Override
@@ -38,24 +43,24 @@ public class CommandAnalystAnalyse implements ICommand {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.offline_player");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.offline_player");
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.player_not_found");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.player_not_found");
             return;
         }
 
         if(!analyst.getAffectedPlayers().contains(playerWW1)){
-            playerWW.sendMessageWithKey(Prefix.ORANGE.getKey(),"werewolf.role.analyst.not_affected");
+            playerWW.sendMessageWithKey(Prefix.ORANGE,"werewolf.role.analyst.not_affected");
             return;
         }
 
         if(!analyst.isPower2()){
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.power");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.power");
             return;
         }
 
@@ -71,11 +76,11 @@ public class CommandAnalystAnalyse implements ICommand {
         Bukkit.getPluginManager().callEvent(analystEvent);
 
         if(analystEvent.isCancelled()){
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
             return;
         }
 
-        playerWW.sendMessageWithKey(Prefix.GREEN.getKey(),"werewolf.role.analyst.effects",
+        playerWW.sendMessageWithKey(Prefix.GREEN,"werewolf.role.analyst.effects",
                 Formatter.player(playerWW1.getName()),
                 Formatter.format("&list&",analystEvent.getPotions()
                         .stream()
@@ -83,10 +88,10 @@ public class CommandAnalystAnalyse implements ICommand {
                         .collect(Collectors.joining(", "))));
 
         if(playerWW1.getRole().isCamp(Camp.VILLAGER)){
-            playerWW1.sendMessageWithKey(Prefix.RED.getKey(),"werewolf.role.analyst.call_back");
+            playerWW1.sendMessageWithKey(Prefix.RED,"werewolf.role.analyst.call_back");
         }
         else{
-            playerWW1.sendMessageWithKey(Prefix.RED.getKey(),"werewolf.role.analyst.call_back_no_villager",
+            playerWW1.sendMessageWithKey(Prefix.RED,"werewolf.role.analyst.call_back_no_villager",
                     Formatter.player(playerWW.getName()));
         }
 

@@ -181,14 +181,13 @@ public class TimersGUI implements InventoryProvider {
 
                 items.add(ClickableItem.of((new ItemBuilder(timerRegister.getKey().equals(key) ?
                                 Material.FEATHER :
-                                Material.ANVIL)
+                                UniversalMaterial.ANVIL.getType())
                                 .setLore(lore)
                                 .setDisplayName(game.translate(timerRegister.getKey(),
                                         Formatter.timer(Utils.conversion(config.getTimerValue(timerRegister.getKey())))))
                                 .build()),
                         e -> this.key = timerRegister.getKey()));
             }
-
         });
 
         if (items.size() > 45) {

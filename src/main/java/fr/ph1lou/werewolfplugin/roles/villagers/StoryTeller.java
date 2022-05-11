@@ -1,7 +1,11 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.actionablestory.ActionableStoryEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
@@ -19,6 +23,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
+@Role(key = RoleBase.STORY_TELLER,
+        category = Category.VILLAGER, attributes = {RoleAttribute.VILLAGER,
+        RoleAttribute.INFORMATION})
 public class StoryTeller extends RoleVillage {
 
     private final Set<IPlayerWW> players = new HashSet<>();
@@ -48,10 +56,10 @@ public class StoryTeller extends RoleVillage {
                         Bukkit.getPluginManager().callEvent(storyTellerEvent);
 
                         if(storyTellerEvent.isCancelled()){
-                            this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+                            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
                         }
                         else{
-                            this.getPlayerWW().sendMessageWithKey(Prefix.GREEN.getKey(),
+                            this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,
                                     "werewolf.role.story_teller.players",
                                     Formatter.format("&players&", this.players.stream()
                                             .map(IPlayerWW::getName)

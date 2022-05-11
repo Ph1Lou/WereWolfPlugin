@@ -1,8 +1,12 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Camp;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UpdateCompositionReason;
 import fr.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
@@ -32,6 +36,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 
+
+@Role(key = RoleBase.DEVOTED_SERVANT,
+           category = Category.VILLAGER,
+           attributes = {RoleAttribute.VILLAGER})
 public class DevotedServant extends RoleVillage implements IPower, IAffectedPlayers {
 
     @Nullable
@@ -124,7 +132,7 @@ public class DevotedServant extends RoleVillage implements IPower, IAffectedPlay
 
         TextComponent resurrectionMessage = new TextComponent(
                 game.translate(
-                        Prefix.YELLOW.getKey() , "werewolf.role.devoted_servant.click"));
+                        Prefix.YELLOW , "werewolf.role.devoted_servant.click"));
         resurrectionMessage.setClickEvent(
                 new ClickEvent(ClickEvent.Action.RUN_COMMAND,
                         String.format("/ww %s %s",
@@ -145,7 +153,7 @@ public class DevotedServant extends RoleVillage implements IPower, IAffectedPlay
 
             if(!this.playerWW.isState(StatePlayer.DEATH)){
                 this.playerWW = null;
-                this.getPlayerWW().sendMessageWithKey(Prefix.GREEN.getKey(),"werewolf.role.devoted_servant.resurrection",
+                this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,"werewolf.role.devoted_servant.resurrection",
                         Formatter.player(event.getPlayerWW().getName()));
                 return;
             }
@@ -157,7 +165,7 @@ public class DevotedServant extends RoleVillage implements IPower, IAffectedPlay
             this.setPower(false);
 
             if(devotedServantEvent.isCancelled()){
-                this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+                this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
                 return;
             }
 
@@ -181,7 +189,7 @@ public class DevotedServant extends RoleVillage implements IPower, IAffectedPlay
             roleClone.recoverPower();
             roleClone.recoverPotionEffects();
 
-            this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE.getKey(),
+            this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE,
                     "werewolf.role.devoted_servant.steal",
                     Formatter.player(event.getPlayerWW().getName()));
         },15*20);

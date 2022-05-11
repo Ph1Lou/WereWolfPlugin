@@ -4,10 +4,10 @@ import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StateGame;
-import fr.ph1lou.werewolfapi.enums.TimerBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.ActionBarEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
@@ -149,13 +149,13 @@ public class TransportationTask implements Listener {
 
             if (this.game.getPlayerWW(player.getUniqueId()).isPresent()) {
                 player.setGameMode(GameMode.SURVIVAL);
-                player.sendMessage(this.game.translate(Prefix.YELLOW.getKey() , "werewolf.announcement.start.message",
-                        Formatter.timer(Utils.conversion(this.game.getConfig().getTimerValue(TimerBase.INVULNERABILITY.getKey())))));
+                player.sendMessage(this.game.translate(Prefix.YELLOW , "werewolf.announcement.start.message",
+                        Formatter.timer(Utils.conversion(this.game.getConfig().getTimerValue(TimerBase.INVULNERABILITY)))));
             } else {
                 player.teleport(this.game.getMapManager().getWorld().getSpawnLocation());
                 player.setGameMode(GameMode.SPECTATOR);
                 if(game.getConfig().getSpectatorMode() < 2){
-                    player.kickPlayer(game.translate(Prefix.RED.getKey() , "werewolf.check.spectator_disabled"));
+                    player.kickPlayer(game.translate(Prefix.RED , "werewolf.check.spectator_disabled"));
                 }
             }
 

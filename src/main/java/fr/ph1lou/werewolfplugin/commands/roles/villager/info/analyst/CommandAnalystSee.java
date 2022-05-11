@@ -1,13 +1,15 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.info.analyst;
 
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.commands.ICommand;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.analyst.AnalystEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.ILimitedUse;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
@@ -20,6 +22,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+@RoleCommand(key = "werewolf.role.analyst.command_see",
+        roleKeys = RoleBase.ANALYST,
+        requiredPower = true,
+        argNumbers = 1)
 public class CommandAnalystSee implements ICommand {
 
     @Override
@@ -35,14 +41,14 @@ public class CommandAnalystSee implements ICommand {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.offline_player");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.offline_player");
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.player_not_found");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.player_not_found");
             return;
         }
 
@@ -51,7 +57,7 @@ public class CommandAnalystSee implements ICommand {
 
         if(analyst instanceof ILimitedUse){
             if(((ILimitedUse)analyst).getUse() >= 5){
-                playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.power");
+                playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.power");
                 return;
             }
             ((ILimitedUse)analyst).setUse(((ILimitedUse)analyst).getUse()+1);
@@ -69,7 +75,7 @@ public class CommandAnalystSee implements ICommand {
         Bukkit.getPluginManager().callEvent(analystEvent);
 
         if(analystEvent.isCancelled()){
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
             return;
         }
 
@@ -78,11 +84,11 @@ public class CommandAnalystSee implements ICommand {
         }
 
         if(analystEvent.hasEffect()){
-            playerWW.sendMessageWithKey(Prefix.GREEN.getKey(),"werewolf.role.analyst.has_effects",
+            playerWW.sendMessageWithKey(Prefix.GREEN,"werewolf.role.analyst.has_effects",
                     Formatter.player(playerWW1.getName()));
         }
         else{
-            playerWW.sendMessageWithKey(Prefix.RED.getKey(),"werewolf.role.analyst.no_effects",
+            playerWW.sendMessageWithKey(Prefix.RED,"werewolf.role.analyst.no_effects",
                     Formatter.player(playerWW1.getName()));
         }
     }

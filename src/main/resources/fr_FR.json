@@ -60,7 +60,8 @@
         "reveal_killer_name": "Votre soeur a été tué par §b&player&",
         "reveal_killer_role": "Votre soeur a été tué par un §b&role&",
         "sisters_list": "Liste de vos Soeurs : §b&list&\n",
-        "sisters": "Soeurs : §b&list&"
+        "sisters": "Soeurs : §b&list&",
+        "distance": "Champ d'action des Soeurs §b&number&"
       },
       "wolf_dog": {
         "display": "Chien Loup",
@@ -208,7 +209,9 @@
         "progress": "Progression du Flair §b&progress&%",
         "smell": "Vous avez été flairé par un §bRenard§f il y a 5 minutes",
         "command": "flairer",
-        "fox_smell_duration": "Durée du Flair du Renard (§b&timer&§r)"
+        "fox_smell_duration": "Durée du Flair du Renard (§b&timer&§r)",
+        "fox_smell_number": "Nombre de Flair du Renard §b&number&",
+        "distance": "Champ d'action du Renard §b&number&"
       },
       "raven": {
         "display": "Corbeau",
@@ -324,7 +327,8 @@
         "message": "§b&player&§r est dans le camp des §b&camp&",
         "werewolf_death": "Un Loup Garou que vous avez espionné est mort, vous regagnez 1 coeur",
         "perform": "Découvrez le camp d'un joueur à moins de §b&number&§r blocs de vous avec §b/ww spec§r vous avez §b&timer&",
-        "distance": "Vous devez être à moins de &number& blocs du joueur"
+        "distance": "Vous devez être à moins de &number& blocs du joueur",
+        "distance_field": "Champ d'action de la Prêtresse §b&number&"
       },
       "oracle": {
         "display": "Oracle",
@@ -362,14 +366,16 @@
         "display": "Montreur d'Ours",
         "description": "Vous avez la particularité de grogner au début du jour si un Loup-Garou se trouve dans votre voisinage de §b&number&§f blocs. Un message sera envoyé dans le chat global.",
         "growling_message": "&growling&",
-        "growling": "Grrrr "
+        "growling": "Grrrr ",
+        "distance": "Champ d'action du Montreur d'Ours §b&number&"
       },
       "avenger_werewolf": {
         "display": "Loup Garou Vengeur",
         "power": "7 cœurs au départ. Lorsque un Loup Garou enregistré meurt, vous gagnez 1 cœur permanent supplémentaire.",
         "description": "Lorsque vous croisez d'autres Loup Garou à moins de §b&number&§f blocs, ceux-ci sont enregistrés.",
         "add": "§b&player&§f a été enregistré",
-        "remove": "§b&player&§f était dans votre liste d'enregistrement, vous récupérez un coeur permanent supplémentaire"
+        "remove": "§b&player&§f était dans votre liste d'enregistrement, vous récupérez un coeur permanent supplémentaire",
+        "distance": "Champ d'action du Loup Garou Vengeur §b&number&"
       },
       "white_werewolf": {
         "display": "Loup Garou Blanc",
@@ -461,7 +467,8 @@
         "day": "Vous pouvez de nouveau donner une flûte à quelqu'un (stock actuel §b&number&§f)",
         "craft": "Vous venez de fabriquer une nouvelle flûte (§f&number&§f flûte(s) en stock), faites clique droit sur un joueur pour lui donner sans éveiller les soupcons. Il charmera les personnes autour de lui tant qu'il ne remarque pas la flûte dans son inventaire",
         "perform": "Vous venez de réaliser §bvotre flûte§f, vous commencez à charmer les personnes à §b&number&§f blocks de vous",
-        "item": "Flûte magique"
+        "item": "Flûte magique",
+        "distance": "Champ d'action du Joueur de Flûte §b&number&"
       },
       "librarian": {
         "display": "Bibliothécaire",
@@ -515,7 +522,8 @@
         "progress_charm": "Progression du Charme §b&progress&%",
         "command": "charmer",
         "change": "Votre charmée est maintenant §b&player&",
-        "succubus_duration": "Durée du Charme du Succube (§b&timer&§r)"
+        "succubus_duration": "Durée du Charme du Succube (§b&timer&§r)",
+        "distance": "Champ d'action du Succube §b&number&"
       },
       "shaman": {
         "display": "Chaman",
@@ -545,12 +553,14 @@
       "fearful_werewolf": {
         "display": "Loup Garou Craintif",
         "description": "Vous disposez d'effets dépendant du nombre de loups garous présent à &number& blocs autour de vous. Vous ne pouvez pas voter, et votre mort ne sera pas annoncée dans le chat global",
-        "effects": "4 LG ou plus : Faiblesse, 2 LG ou moins : Resistance le Jour, Force la nuit, Seul : Vitesse"
+        "effects": "4 LG ou plus : Faiblesse, 2 LG ou moins : Resistance le Jour, Force la nuit, Seul : Vitesse",
+        "distance": "Champ d'action du Loup-Garou Craintif §b&number&"
       },
       "hermit": {
         "display": "Ermite",
         "description": "Vous disposez d'effets dépendant du nombre de personnes présent à &number& blocs autour de vous. Vous ne pouvez pas voter, et votre mort ne sera pas annoncée dans le chat global",
-        "effects": "5 personnes ou plus : Faiblesse sinon Resistance la Nuit, Force le Jour, Seul : Vitesse"
+        "effects": "5 personnes ou plus : Faiblesse sinon Resistance la Nuit, Force le Jour, Seul : Vitesse",
+        "distance": "Champ d'action de l'Ermite §b&number&"
       },
       "big_bad_werewolf": {
         "display": "Grand Méchant Loup",
@@ -565,12 +575,14 @@
         "command_info": "Invisible : vous pouvez, encore §b&number&§f fois pendant la partie, vous tp &number2& blocs en avant avec /ww tp",
         "should_be_invisible": "Vous devez être invisible pour utiliser cette commande",
         "role_reveal": "Un joueur situé à moins de §b&number&§f blocs est §b&role&",
-        "use_tp": "Vous pouvez encore utiliser §b&number&§f fois votre commande §b/ww tp§f "
+        "use_tp": "Vous pouvez encore utiliser §b&number&§f fois votre commande §b/ww tp§f ",
+        "distance": "Champ d'action du Feu Follet §b&number&"
       },
       "howling_werewolf": {
         "display": "Loup Garou Hurleur",
         "description": "À chaque début de nuit, vous hurlez si il y a plus de 5 joueurs à &number& blocs de vous. En fonction du nombre de non Loup qui ont entendu votre cri, vous gagnez des slots de coeurs supplémentaires pendant cinq minutes. [2 ou 3 = 1♥ / 4 ou 5 = 2♥ / 6+ = 3♥]",
-        "message": "Il y avait §b&number&§f personne(s) non Loup Garou autour de vous. Vous gagnez ainsi §b&heart&§f coeurs en plus pendant 5 minutes"
+        "message": "Il y avait §b&number&§f personne(s) non Loup Garou autour de vous. Vous gagnez ainsi §b&heart&§f coeurs en plus pendant 5 minutes",
+        "distance": "Champ d'action du Loup Garou Hurleur §b&number&"
       },
       "twin": {
         "display": "Jumeau",
@@ -582,7 +594,8 @@
         "list_near": "Voici la liste des joueurs à moins de &number& blocs de votre Jumeau, &list&",
         "role_near": "Un joueur situé à moins de &number& blocs de votre Jumeau est §b&role&§f",
         "death": "Votre Jumeau &player& est mort, de rage vous disposez de cinq minutes de Force et de Vitesse",
-        "twin_duration": "Durée pour la révélation des Jumeaux (§b&timer&§r)"
+        "twin_duration": "Durée pour la révélation des Jumeaux (§b&timer&§r)",
+        "distance": "Champ d'action des Jumeaux §b&number&"
       },
       "analyst": {
         "display": "Analyste",
@@ -605,18 +618,20 @@
         "description": "Vous avez un Maître choisi aléatoirement chaque matin. Si il vous tue, vous ressuscitez.\nLes Maîtres n'ont aucune information",
         "effects": "Force I, si votre maître est à moins de &number& blocs de vous",
         "effects_death": "Faiblesse I, si votre maître est à moins de &number& blocs de vous",
-        "resurrection": "Votre maître &player& vous a tué, il devient définitif et vous donne Faiblesse I à &number& blocs de vous"
+        "resurrection": "Votre maître &player& vous a tué, il devient définitif et vous donne Faiblesse I à &number& blocs de vous",
+        "distance": "Champ d'action du Serviteur §b&number&"
       },
       "scammer": {
         "display": "Escroc",
         "message_villager": "L'§bEscroc§f vous a escroqué, vous devenez §bSimple Villageois§f",
         "message_werewolf": "L'§bEscroc§f vous a escroqué, vous devenez §bLoup Garou§f sans pouvoir",
-        "description": "Vous volez progressivement le rôle des joueurs a §b&number&§f blocs de vous au rythme de 1% toutes les &timer&. Le premier joueur escroqué devient Loup-Garou sans pouvoir s’il était dans le camp des Loups sinon Simple Villageois",
+        "description": "Vous volez progressivement le rôle des joueurs à §b&number&§f blocs de vous au rythme de 1% toutes les §b&timer&§f. Le premier joueur escroqué devient Loup-Garou sans pouvoir s’il était dans le camp des Loups sinon Simple Villageois",
         "config": {
           "lore": "Modifier le délai entre chaque mise à jour du %",
           "name": "Délai Escroc &timer&"
         },
-        "message": "Vous venez d'escroquer le rôle de &player&"
+        "message": "Vous venez d'escroquer le rôle de &player&",
+        "distance": "Champ d'action de l'Escroc §b&number&"
       },
       "fruit_merchant": {
         "display": "Marchande de Fruit",
@@ -627,19 +642,21 @@
         "fruit_merchant_cooldown": "Cooldown de la Marchande de Fruit (§b&timer&§r)",
         "recover": "Vous venez de récupérer votre pouvoir. Faites §b/ww compter§f pour le réutiliser",
         "description": "Avec §b/ww compter§f, vous pouvez compter les pommes d'or des joueurs à §b&number&§f blocs de vous.",
-        "power": "1 chance sur 4 de régénérer 3 ♥ avec les pommes d’or, la nourriture vous donne 1 gigot de plus."
+        "power": "1 chance sur 4 de régénérer 3 ♥ avec les pommes d’or, la nourriture vous donne 1 gigot de plus.",
+        "distance": "Champ d'action de la Marchande de fruit §b&number&"
       },
       "druid": {
         "display": "Druide",
         "perform": "Vous venez d'utiliser votre pouvoir, il y a &number& aura(s) sombre(s) à &blocks& blocs de vous",
         "description": "Vous pouvez connaître le nombre d’auras obscures dans un rayon de &number& blocs en mangeant une pomme d’or accroupi pendant la nuit",
-        "day": "Vous pouvez de nouveau utiliser votre pouvoir"
-
+        "day": "Vous pouvez de nouveau utiliser votre pouvoir",
+        "distance": "Champ d'action du Druide §b&number&"
       },
       "wise_elder": {
         "display": "Vieux sage",
         "description": "A partir du jour 6, vous disposez d'un compteur pour chaque type d'Aura\nPour chaque seconde passée à moins de &number& blocs d'un joueur, le compteur correspondant à son aura s'incrémente.",
-        "end_of_cycle": "Vous recevez le contenu des compteurs => \nCompteur Aura §fNeutre§f: &neutral&§r.\n Compteur Aura §0Obscure§f: &dark&§r.\n Compteur Aura §eLumineuse§f: &light&"
+        "end_of_cycle": "Vous recevez le contenu des compteurs => \nCompteur Aura §fNeutre§f: &neutral&§r.\n Compteur Aura §0Obscure§f: &dark&§r.\n Compteur Aura §eLumineuse§f: &light&",
+        "distance": "Champ d'action du Vieux Sage §b&number&"
       },
       "tenebrous_werewolf": {
         "display": "Loup Ténébreux",
@@ -695,7 +712,8 @@
         "get_apple": "Vous recevez §b&number&§f pommes d'or du stuff du cadavre de §b&player&§f, la probabilité que votre prochaine meurtre affiche votre rôle augmente de §b10%§f à &number1&%",
         "perform": "Vous venez de masquer le nametag de §b&player&",
         "alert": "Le §bVoyou§f vient de masquer votre nametag jusqu'au prochain matin",
-        "command": "masquer"
+        "command": "masquer",
+        "distance": "Champ d'action du Voyou §b&number&"
       },
       "barbarian": {
         "display": "Barbare",
@@ -704,7 +722,8 @@
         "click_message": "Vous pouvez dissimuler le rôle à la mort de &player&, (vous avez §b14§f secondes)",
         "command": "barbarian_hide",
         "item": "Livre Tranchant III",
-        "perform": "Vous venez de dissimuler le rôle de &player&"
+        "perform": "Vous venez de dissimuler le rôle de &player&",
+        "distance": "Champ d'action du Barbare §b&number&"
       },
       "necromancer": {
         "description": "Après activation de votre pouvoir, vous ressuscitez le 1er joueur qui meurt à - de §b&number&§f blocs et lui volez de la vie progressivement",
@@ -888,14 +907,6 @@
           "description1": "Pour envoyer un message pour faire respecter les groupes",
           "description2": "Pour changer la taille des groupes"
         },
-        "anonymous_chat": {
-          "command": "?",
-          "send": "[§b&player&§r] &message& (Cliquez pour répondre)",
-          "anonyme": "Anonyme",
-          "failure": "Votre message n'a pas pu être envoyé. Aucun Staff de connecté",
-          "description": "Pour envoyer un message anonyme",
-          "empty": "Vous devez envoyer un message après le ?"
-        },
         "info": {
           "command": "info",
           "send": "§b§l[Info]§r » §b&message&",
@@ -912,18 +923,6 @@
           "off": "Le Chat est §bdésactivé",
           "template": "&player& : &message&",
           "description": "Pour activer/désactiver le chat"
-        },
-        "ww_chat": {
-          "name": "chatlg",
-          "prefix": "[§cChat LG§r] &message&",
-          "modo": "[§c&name&§r] &message&",
-          "announce": "Vous avez §b&timer&§f secondes pour écrire §b&number&§f message(s) dans le chat des Loups Garous §b/ww chatlg§r <message>, attention des rôles peuvent voit le contenu du chat",
-          "timer": "Le temps pour parler dans le chat des Loups Garous est écoulé",
-          "not_access": "Vous ne pouvez pas parler dans le chat des Loups Garous",
-          "disable": "Le chat des Loups Garous est désactivé",
-          "number": "§b&number&§r messages par cycle dans le chat Loup Garou",
-          "speak_number": "Vous ne pouvez parler que §b&number&§r fois par cycle",
-          "drunken": "Attention, le loup bourré est présent dans cette partie"
         },
         "stuff_start": {
           "command": "lootStart",
@@ -1044,11 +1043,32 @@
         "help": {
           "command": "h",
           "help": "Commandes disponibles :\n"
+        },
+        "inventory": {
+          "command": "inv",
+          "description": "Pour voir l'inventaire d'un joueur"
         }
       },
-      "inventory": {
-        "command": "inv",
-        "description": "Pour voir l'inventaire d'un joueur"
+      "anonymous_chat": {
+        "command": "?",
+        "send": "[§b&player&§r] &message& (Cliquez pour répondre)",
+        "anonyme": "Anonyme",
+        "failure": "Votre message n'a pas pu être envoyé. Aucun Staff de connecté",
+        "description": "Pour envoyer un message anonyme",
+        "empty": "Vous devez envoyer un message après le ?"
+      },
+      "ww_chat": {
+        "name": "chatlg",
+        "prefix": "[§cChat LG§r] &message&",
+        "modo": "[§c&name&§r] &message&",
+        "announce": "Vous avez §b&timer&§f secondes pour écrire §b&number&§f message(s) dans le chat des Loups Garous §b/ww chatlg§r <message>, attention des rôles peuvent voit le contenu du chat",
+        "timer": "Le temps pour parler dans le chat des Loups Garous est écoulé",
+        "not_access": "Vous ne pouvez pas parler dans le chat des Loups Garous",
+        "disable": "Le chat des Loups Garous est désactivé",
+        "number": "§b&number&§r messages par cycle dans le chat Loup Garou",
+        "speak_number": "Vous ne pouvez parler que §b&number&§r fois par cycle",
+        "drunken": "Attention, le loup bourré est présent dans cette partie",
+        "description": "Commande pour parler dans le chat des Loups Garous"
       },
       "message": {
         "send": "[Message envoyé à §b&player&§r] » §b&message&",
@@ -1137,10 +1157,6 @@
         "troll_lover_off": "Troll Saint Valentin §4Désactivé",
         "troll_set": "§bShift§f-Clique pour configurer",
         "resistance": "Resistance §b&number&%",
-        "succubus": "Champ d'action du Succube §b&number&",
-        "sister": "Champ d'action des Soeurs §b&number&",
-        "priestess": "Champ d'action de la Prêtresse §b&number&",
-        "fox_smell_number": "Nombre de Flair du Renard §b&number&",
         "ender_pearl": "Taux de Drop EnderPearl §b&number&%",
         "flint": "Taux de Drop des Silex §b&number&%",
         "apple": "Taux de Drop des Pommes §b&number&%",
@@ -1152,22 +1168,6 @@
         "particles_on": "§bActivé§r pour tous les joueurs",
         "particles_off": "§4Désactivé§r pour tous les joueurs",
         "exception": "§6Désactivé pour la Petite Fille et le Loup Garou Perfide invisible",
-        "fox": "Champ d'action du Renard §b&number&",
-        "avenger_werewolf": "Champ d'action du Loup Garou Vengeur §b&number&",
-        "flute_player": "Champ d'action du Joueur de Flûte §b&number&",
-        "bear_trainer": "Champ d'action du Montreur d'Ours §b&number&",
-        "wise_elder": "Champ d'action du Vieux Sage §b&number&",
-        "servitor": "Champ d'action du Serviteur §b&number&",
-        "scammer": "Champ d'action de l'Escroc §b&number&",
-        "fearful_werewolf": "Champ d'action du Loup-Garou Craintif §b&number&",
-        "hermit": "Champ d'action de l'Ermite §b&number&",
-        "will_o_the_wisp": "Champ d'action du Feu Follet §b&number&",
-        "howling_werewolf": "Champ d'action du Loup Garou Hurleur §b&number&",
-        "druid": "Champ d'action du Druide §b&number&",
-        "twin": "Champ d'action des Jumeaux §b&number&",
-        "fruit_merchant": "Champ d'action de la Marchande de fruit §b&number&",
-        "thug": "Champ d'action du Voyou §b&number&",
-        "barbarian": "Champ d'action du Barbare §b&number&"
       },
       "troll": "Configuration §bTroll",
       "roles": {

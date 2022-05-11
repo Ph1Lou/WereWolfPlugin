@@ -1,6 +1,10 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -20,6 +24,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
+@Role(key = RoleBase.SERIAL_KILLER,
+         category = Category.NEUTRAL, attributes = {RoleAttribute.NEUTRAL})
 public class SerialKiller extends RoleNeutral implements IPower {
 
     public SerialKiller(WereWolfAPI api, IPlayerWW playerWW, String key) {

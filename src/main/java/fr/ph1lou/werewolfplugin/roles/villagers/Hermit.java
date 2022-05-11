@@ -1,14 +1,11 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
-import fr.minuskube.inv.ClickableItem;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.game.IConfiguration;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.Day;
-import fr.ph1lou.werewolfapi.enums.RolesBase;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.enums.UpdateCompositionReason;
@@ -17,8 +14,12 @@ import fr.ph1lou.werewolfapi.events.game.game_cycle.UpdateCompositionEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AnnouncementLoverDeathEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
-import fr.ph1lou.werewolfapi.utils.ItemBuilder;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -27,10 +28,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
+
+@Role(key = RoleBase.HERMIT, 
+        category = Category.VILLAGER, attributes = {RoleAttribute.VILLAGER},
+        intValues = {@IntValue(key = "werewolf.role.hermit.distance", defaultValue = 20, meetUpValue = 20, step = 4, item = UniversalMaterial.WHITE_WOOL)})
 public class Hermit extends RoleVillage {
     public Hermit(WereWolfAPI game, IPlayerWW playerWW, String key) {
         super(game, playerWW, key);
@@ -40,7 +43,7 @@ public class Hermit extends RoleVillage {
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game,this)
                 .setDescription(game.translate("werewolf.role.hermit.description",
-                        Formatter.number(game.getConfig().getDistanceHermit())))
+                        Formatter.number(game.getConfig().getValue(RoleBase.HERMIT, "werewolf.role.hermit.distance"))))
                 .setEffects(game.translate("werewolf.role.hermit.effects"))
                 .build();
     }
@@ -113,7 +116,7 @@ public class Hermit extends RoleVillage {
             return;
         }
 
-        if(!event.getKey().equals(RolesBase.HERMIT.getKey())){
+        if(!event.getKey().equals(RoleBase.HERMIT)){
             return;
         }
 
@@ -141,7 +144,7 @@ public class Hermit extends RoleVillage {
                     Location hermit = this.getPlayerWW().getLocation();
                     Location player = iPlayerWW.getLocation();
                     return (hermit.getWorld() == player.getWorld() &&
-                    hermit.distance(player) < game.getConfig().getDistanceHermit());
+                    hermit.distance(player) < game.getConfig().getValue(RoleBase.HERMIT, "werewolf.role.hermit.distance"));
                 })
                 .count();
 
@@ -190,32 +193,5 @@ public class Hermit extends RoleVillage {
                                 "hermit"));
             }
         }
-    }
-
-    public static ClickableItem config(WereWolfAPI game) {
-
-        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
-                game.translate("werewolf.menu.right"));
-        IConfiguration config = game.getConfig();
-
-        return ClickableItem.of((new ItemBuilder(
-                UniversalMaterial.WHITE_WOOL.getStack())
-                .setDisplayName(game.translate("werewolf.menu.advanced_tool.hermit",
-                        Formatter.number(config.getDistanceHermit())))
-                .setLore(lore).build()), e -> {
-            if (e.isLeftClick()) {
-                config.setDistanceHermit((config.getDistanceHermit() + 2));
-            } else if (config.getDistanceHermit() - 2 > 0) {
-                config.setDistanceHermit(config.getDistanceHermit() - 2);
-            }
-
-
-            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setLore(lore)
-                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.hermit",
-                            Formatter.number(config.getDistanceHermit())))
-                    .build());
-
-        });
     }
 }

@@ -5,7 +5,7 @@ import fr.ph1lou.werewolfapi.lovers.ILover;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.LoverType;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
@@ -63,7 +63,7 @@ public class CursedLover implements ILover, Listener {
         Bukkit.getPluginManager().callEvent(
                 new CursedLoverDeathEvent(event.getPlayerWW(), playerWW1));
 
-        playerWW1.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.cursed_lover.death_cursed_lover");
+        playerWW1.sendMessageWithKey(Prefix.RED , "werewolf.role.cursed_lover.death_cursed_lover");
 
         playerWW1.removePlayerMaxHealth(2);
 

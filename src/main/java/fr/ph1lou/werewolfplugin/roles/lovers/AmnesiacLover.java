@@ -1,10 +1,6 @@
 package fr.ph1lou.werewolfplugin.roles.lovers;
 
 import com.google.common.collect.Sets;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.lovers.ILover;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.LoverType;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StateGame;
@@ -18,6 +14,10 @@ import fr.ph1lou.werewolfapi.events.lovers.AmnesiacLoverDeathEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AnnouncementLoverDeathEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AroundLoverEvent;
 import fr.ph1lou.werewolfapi.events.lovers.RevealAmnesiacLoversEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.lovers.ILover;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -113,7 +113,7 @@ public class AmnesiacLover implements ILover, Listener {
         }
 
         if (player1.getLocation().distance(player2.getLocation()) <
-                this.game.getConfig().getDistanceAmnesiacLovers()) {
+                this.game.getConfig().getValue(LoverType.AMNESIAC_LOVER.getKey(), "distance")) {
 
             Bukkit.getPluginManager().callEvent(new RevealAmnesiacLoversEvent(
                     Sets.newHashSet(this.amnesiacLover1, this.amnesiacLover2)));

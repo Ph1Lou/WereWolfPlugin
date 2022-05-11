@@ -1,8 +1,11 @@
 package fr.ph1lou.werewolfplugin.commands.roles.werewolf;
 
+import fr.ph1lou.werewolfapi.annotations.Command;
 import fr.ph1lou.werewolfapi.commands.ICommand;
-import fr.ph1lou.werewolfapi.enums.ConfigBase;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.enums.StateGame;
+import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfCanSpeakInChatEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfChatEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -13,6 +16,10 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+@Command(key = "werewolf.commands.ww_chat.name",
+        descriptionKey = "werewolf.commands.ww_chat.description",
+        statePlayer = StatePlayer.ALIVE,
+        stateGame = StateGame.GAME)
 public class CommandWereWolfChat implements ICommand {
 
     @Override
@@ -23,8 +30,8 @@ public class CommandWereWolfChat implements ICommand {
 
         if (playerWW == null) return;
 
-        if (!game.getConfig().isConfigActive(ConfigBase.WEREWOLF_CHAT.getKey())) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.commands.admin.ww_chat.disable");
+        if (!game.getConfig().isConfigActive(ConfigBase.WEREWOLF_CHAT)) {
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.commands.ww_chat.disable");
             return;
         }
 
@@ -49,14 +56,14 @@ public class CommandWereWolfChat implements ICommand {
                     WereWolfChatEvent wereWolfChatEvent = new WereWolfChatEvent(playerWW, sb.toString());
                     Bukkit.getPluginManager().callEvent(wereWolfChatEvent);
                 } else {
-                    playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.commands.admin.ww_chat.timer");
+                    playerWW.sendMessageWithKey(Prefix.RED , "werewolf.commands.ww_chat.timer");
                 }
             } else {
-                playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.commands.admin.ww_chat.speak_number",
+                playerWW.sendMessageWithKey(Prefix.RED , "werewolf.commands.ww_chat.speak_number",
                         Formatter.number(game.getConfig().getWereWolfChatMaxMessage()));
             }
 
 
-        } else playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.commands.admin.ww_chat.not_access");
+        } else playerWW.sendMessageWithKey(Prefix.RED , "werewolf.commands.ww_chat.not_access");
     }
 }

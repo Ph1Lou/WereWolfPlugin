@@ -1,9 +1,5 @@
 package fr.ph1lou.werewolfplugin;
 
-import fr.ph1lou.werewolfplugin.registers.EventRandomsRegister;
-import fr.ph1lou.werewolfplugin.registers.RolesRegister;
-import fr.ph1lou.werewolfplugin.registers.ScenariosRegister;
-import fr.ph1lou.werewolfplugin.registers.TimersRegister;
 import fr.ph1lou.werewolfapi.registers.impl.AddonRegister;
 import fr.ph1lou.werewolfapi.registers.impl.CommandRegister;
 import fr.ph1lou.werewolfapi.registers.impl.ConfigRegister;
@@ -13,9 +9,6 @@ import fr.ph1lou.werewolfapi.registers.impl.RandomEventRegister;
 import fr.ph1lou.werewolfapi.registers.impl.RoleRegister;
 import fr.ph1lou.werewolfapi.registers.impl.ScenarioRegister;
 import fr.ph1lou.werewolfapi.registers.impl.TimerRegister;
-import fr.ph1lou.werewolfplugin.registers.AdminCommandsRegister;
-import fr.ph1lou.werewolfplugin.registers.CommandsRegister;
-import fr.ph1lou.werewolfplugin.registers.ConfigsRegister;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,23 +23,17 @@ public class Register implements IRegisterManager {
 
     private final String key;
     private final Map<AddonRegister,Register> addonsRegister = new HashMap<>();
-    private final List<RoleRegister> rolesRegister;
-    private final List<ScenarioRegister> scenariosRegister;
-    private final List<ConfigRegister> configsRegister;
-    private final List<TimerRegister> timersRegister;
-    private final List<CommandRegister> commandsRegister;
-    private final List<CommandRegister> adminCommandsRegister;
-    private final List<RandomEventRegister> eventRandomsRegister;
+    private List<RoleRegister> rolesRegister;
+    private List<ScenarioRegister> scenariosRegister;
+    private List<ConfigRegister> configsRegister;
+    private List<TimerRegister> timersRegister;
+    private List<CommandRegister> commandsRegister;
+    private List<CommandRegister> adminCommandsRegister;
+    private List<RandomEventRegister> eventRandomsRegister;
 
     public Register(Main main){
         this.key = "werewolf.name";
-        this.rolesRegister = RolesRegister.registerRoles();
-        this.scenariosRegister = ScenariosRegister.registerScenarios(main);
-        this.configsRegister = ConfigsRegister.registerConfigs(main);
-        this.timersRegister = TimersRegister.registerTimers();
-        this.commandsRegister = CommandsRegister.registerCommands();
-        this.adminCommandsRegister = AdminCommandsRegister.registerAdminCommands();
-        this.eventRandomsRegister = EventRandomsRegister.registerRandomEvents(main);
+
     }
 
     public Register(String key){

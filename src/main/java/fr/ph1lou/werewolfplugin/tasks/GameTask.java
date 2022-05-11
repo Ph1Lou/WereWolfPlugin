@@ -1,12 +1,14 @@
 package fr.ph1lou.werewolfplugin.tasks;
 
 
+import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfplugin.RegisterManager;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfplugin.save.Configuration;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import org.bukkit.World;
+import org.bukkit.WorldBorder;
 import org.bukkit.scheduler.BukkitRunnable;
 
 
@@ -45,6 +47,15 @@ public class GameTask extends BukkitRunnable {
 				exception.printStackTrace();
 			}
 		});
+
+		//World Border
+		IConfiguration config = game.getConfig();
+		WorldBorder worldBorder = world.getWorldBorder();
+
+		if (config.getBorderMax() != config.getBorderMin()) {
+			worldBorder.setSize(config.getBorderMin(), (long) ((long) Math.abs(worldBorder.getSize() - config.getBorderMin()) / config.getBorderSpeed()));
+			config.setBorderMax((int) (worldBorder.getSize()));
+		}
 
 
 		world.setTime((long) (world.getTime() + 20 *

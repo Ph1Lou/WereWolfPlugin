@@ -1,12 +1,13 @@
 package fr.ph1lou.werewolfplugin.commands.admin.ingame;
 
+import fr.ph1lou.werewolfapi.annotations.AdminCommand;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.game.IModerationManager;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
@@ -17,6 +18,9 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+@AdminCommand(key = "werewolf.commands.admin.moderator.command",
+        descriptionKey = "",
+        argNumbers = 1)
 public class CommandModerator implements ICommand {
 
 
@@ -29,7 +33,7 @@ public class CommandModerator implements ICommand {
         Player moderator = Bukkit.getPlayer(args[0]);
 
         if (moderator == null) {
-            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.offline_player"));
+            player.sendMessage(game.translate(Prefix.RED , "werewolf.check.offline_player"));
             return;
         }
 
@@ -37,7 +41,7 @@ public class CommandModerator implements ICommand {
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (moderationManager.getModerators().contains(argUUID)) {
-            Bukkit.broadcastMessage(game.translate(Prefix.RED.getKey() , "werewolf.commands.admin.moderator.remove",
+            Bukkit.broadcastMessage(game.translate(Prefix.RED , "werewolf.commands.admin.moderator.remove",
                     Formatter.player(moderator.getName())));
             moderationManager.getModerators().remove(argUUID);
 
@@ -51,7 +55,7 @@ public class CommandModerator implements ICommand {
 
         if (!game.isState(StateGame.LOBBY)) {
             if (playerWW1 != null && !playerWW1.isState(StatePlayer.DEATH)) {
-                player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.commands.admin.moderator.player_living"));
+                player.sendMessage(game.translate(Prefix.RED , "werewolf.commands.admin.moderator.player_living"));
                 return;
             }
         } else {
@@ -64,7 +68,7 @@ public class CommandModerator implements ICommand {
         }
         moderator.setGameMode(GameMode.SPECTATOR);
         moderationManager.addModerator(argUUID);
-        Bukkit.broadcastMessage(game.translate(Prefix.GREEN.getKey() , "werewolf.commands.admin.moderator.add",
+        Bukkit.broadcastMessage(game.translate(Prefix.GREEN , "werewolf.commands.admin.moderator.add",
                 Formatter.player(moderator.getName())));
         Bukkit.getPluginManager().callEvent(new ModeratorEvent(argUUID, true));
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(moderator));

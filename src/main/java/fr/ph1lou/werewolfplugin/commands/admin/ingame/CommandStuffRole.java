@@ -1,10 +1,12 @@
 package fr.ph1lou.werewolfplugin.commands.admin.ingame;
 
+import fr.ph1lou.werewolfapi.annotations.AdminCommand;
+import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.game.IStuffManager;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.events.UpdateStuffEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -14,8 +16,12 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
+@AdminCommand(key = "werewolf.commands.admin.loot_role.command", descriptionKey = "",
+        stateGame = {StateGame.LOBBY, StateGame.TRANSPORTATION, StateGame.START},
+        argNumbers = 1,
+        autoCompletion = false,
+        moderatorAccess = true)
 public class CommandStuffRole implements ICommand {
-
 
     @Override
     public void execute(WereWolfAPI game, Player player, String[] args) {
@@ -24,7 +30,7 @@ public class CommandStuffRole implements ICommand {
         UUID uuid = player.getUniqueId();
 
         if (!stuffManager.getStuffRoles().containsKey(args[0])) {
-            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.invalid_key"));
+            player.sendMessage(game.translate(Prefix.RED , "werewolf.check.invalid_key"));
             return;
         }
 
@@ -32,7 +38,7 @@ public class CommandStuffRole implements ICommand {
         for (ItemStack i : player.getInventory().getContents()) {
             stuffManager.getStuffRoles().get(args[0]).add(i);
         }
-        player.sendMessage(game.translate(Prefix.GREEN.getKey() , "werewolf.commands.admin.loot_role.perform",
+        player.sendMessage(game.translate(Prefix.GREEN , "werewolf.commands.admin.loot_role.perform",
                 Formatter.role(game.translate(args[0]))));
 
         Inventory inventory;

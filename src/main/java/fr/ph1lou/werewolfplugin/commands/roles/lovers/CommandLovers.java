@@ -1,15 +1,16 @@
 package fr.ph1lou.werewolfplugin.commands.roles.lovers;
 
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.commands.ICommand;
-import fr.ph1lou.werewolfapi.lovers.ILover;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.LoverType;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.lovers.DonEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.lovers.ILover;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfplugin.roles.lovers.AmnesiacLover;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -20,6 +21,8 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+@RoleCommand(key = "werewolf.role.lover.command", roleKeys = {},
+        argNumbers = {1, 2})
 public class CommandLovers implements ICommand {
 
     @Override
@@ -32,7 +35,7 @@ public class CommandLovers implements ICommand {
         if (playerWW == null) return;
 
         if (playerWW.getLovers().isEmpty()) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.lover.not_in_pairs");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.role.lover.not_in_pairs");
             return;
         }
 
@@ -41,12 +44,12 @@ public class CommandLovers implements ICommand {
         try {
             heart = Integer.parseInt(args[0]);
         } catch (NumberFormatException ignored) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.number_required");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.number_required");
             return;
         }
 
         if (heart >= 100) {
-            playerWW.sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.role.lover.100");
+            playerWW.sendMessageWithKey(Prefix.GREEN , "werewolf.role.lover.100");
             return;
         }
 
@@ -58,7 +61,7 @@ public class CommandLovers implements ICommand {
                     .collect(Collectors.toList());
 
             if(lovers.isEmpty()){
-                playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.lover.not_in_pairs");
+                playerWW.sendMessageWithKey(Prefix.RED , "werewolf.role.lover.not_in_pairs");
                 return;
             }
 
@@ -75,7 +78,7 @@ public class CommandLovers implements ICommand {
                         .collect(Collectors.toList());
 
                 if(lovers2.isEmpty()){
-                    playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.player_not_found");
+                    playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.player_not_found");
                     return;
                 }
                 lovers2.forEach(playerWW1 -> {
@@ -90,18 +93,18 @@ public class CommandLovers implements ICommand {
                             if (!donEvent.isCancelled()) {
                                 playerCouple.setHealth(playerCouple.getHealth() + don);
                                 temp.updateAndGet(v -> v + don);
-                                playerWW1.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.lover.received",
+                                playerWW1.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.lover.received",
                                         Formatter.number(heart),
                                         Formatter.player(playerName));
-                                playerWW.sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.role.lover.complete",
+                                playerWW.sendMessageWithKey(Prefix.GREEN , "werewolf.role.lover.complete",
                                         Formatter.number(heart),
                                         Formatter.player(playerCouple.getName()));
                                 playerWW.sendSound(Sound.PORTAL);
                             } else {
-                                playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+                                playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
                             }
                         } else {
-                            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.lover.too_many_heart",
+                            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.role.lover.too_many_heart",
                                     Formatter.player(playerCouple.getName()));
                         }
                     }
@@ -112,13 +115,13 @@ public class CommandLovers implements ICommand {
         }
         else {
             if (args[1].equals(playerName)) {
-                playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.not_yourself");
+                playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.not_yourself");
                 return;
             }
             Player playerCouple = Bukkit.getPlayer(args[1]);
 
             if (playerCouple == null) {
-                playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.offline_player");
+                playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.offline_player");
                 return;
             }
 
@@ -128,7 +131,7 @@ public class CommandLovers implements ICommand {
             if (playerWW1 == null) return;
 
             if (!playerWW1.isState(StatePlayer.ALIVE)) {
-                playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.player_not_found");
+                playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.player_not_found");
                 return;
             }
 
@@ -151,18 +154,18 @@ public class CommandLovers implements ICommand {
                         if (!donEvent.isCancelled()) {
                             playerCouple.setHealth(playerCouple.getHealth() + don);
                             player.setHealth(player.getHealth() - don);
-                            playerWW1.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.lover.received",
+                            playerWW1.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.lover.received",
                                     Formatter.number(heart),
                                     Formatter.player(playerName));
-                            playerWW.sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.role.lover.complete",
+                            playerWW.sendMessageWithKey(Prefix.GREEN , "werewolf.role.lover.complete",
                                     Formatter.number(heart),
                                     Formatter.player(playerCouple.getName()));
                             playerWW.sendSound( Sound.PORTAL);
                         } else {
-                            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+                            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
                         }
                     } else {
-                        playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.lover.too_many_heart",
+                        playerWW.sendMessageWithKey(Prefix.RED , "werewolf.role.lover.too_many_heart",
                                 Formatter.player(playerCouple.getName()));
                     }
                 });
@@ -174,10 +177,10 @@ public class CommandLovers implements ICommand {
                         .findFirst();
 
                 if(iLover2.isPresent()){
-                    playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.lover.not_lover");
+                    playerWW.sendMessageWithKey(Prefix.RED , "werewolf.role.lover.not_lover");
                 }
                 else{
-                    playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.lover.not_in_pairs");
+                    playerWW.sendMessageWithKey(Prefix.RED , "werewolf.role.lover.not_in_pairs");
                 }
             }
 

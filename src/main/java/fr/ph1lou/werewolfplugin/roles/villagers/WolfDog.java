@@ -1,6 +1,10 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -8,10 +12,10 @@ import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Camp;
-import fr.ph1lou.werewolfapi.enums.ConfigBase;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.enums.TimerBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
@@ -26,6 +30,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
+ @Role(key = RoleBase.WOLF_DOG,
+         category = Category.VILLAGER,
+         attributes = {RoleAttribute.HYBRID})
 public class WolfDog extends RoleVillage implements ITransformed, IPower {
 
     private boolean transformed = false;
@@ -54,11 +61,11 @@ public class WolfDog extends RoleVillage implements ITransformed, IPower {
     @Override
     public void recoverPower() {
 
-        int timer = game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST.getKey());
+        int timer = game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST);
 
         if (timer > 0) {
-            this.getPlayerWW().sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.role.wolf_dog.transform",
-                    Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST.getKey()))));
+            this.getPlayerWW().sendMessageWithKey(Prefix.GREEN , "werewolf.role.wolf_dog.transform",
+                    Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST))));
         }
     }
 
@@ -76,7 +83,7 @@ public class WolfDog extends RoleVillage implements ITransformed, IPower {
     public void onWereWolfList(WereWolfListEvent event) {
 
         if (this.power) {
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.wolf_dog.time_over");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.role.wolf_dog.time_over");
         }
         this.power = false;
     }
@@ -111,7 +118,7 @@ public class WolfDog extends RoleVillage implements ITransformed, IPower {
         if (transformed || !super.isWereWolf()) return;
 
 
-        if (!game.getConfig().isConfigActive(ConfigBase.WEREWOLF_CHAT.getKey())) return;
+        if (!game.getConfig().isConfigActive(ConfigBase.WEREWOLF_CHAT)) return;
 
         openWereWolfChat();
 

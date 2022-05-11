@@ -1,11 +1,15 @@
 package fr.ph1lou.werewolfplugin.commands.utilities;
 
+import fr.ph1lou.werewolfapi.annotations.Command;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.registers.impl.ConfigRegister;
 import fr.ph1lou.werewolfplugin.RegisterManager;
 import org.bukkit.entity.Player;
 
+@Command(key = "werewolf.menu.global.command",
+        descriptionKey = "werewolf.menu.global.description",
+        argNumbers = 0)
 public class CommandRules implements ICommand {
 
     @Override

@@ -2,13 +2,17 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Camp;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.elder.ElderResurrectionEvent;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
@@ -21,6 +25,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
+
+@Role(key = RoleBase.ELDER, category = Category.VILLAGER,
+        attributes = RoleAttribute.VILLAGER)
 public class Elder extends RoleVillage implements IPower {
 
     private boolean power = true;
@@ -95,13 +102,13 @@ public class Elder extends RoleVillage implements IPower {
         setPower(false);
 
         if (elderResurrectionEvent.isCancelled()) {
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
         } else {
             if (elderResurrectionEvent.isKillerAVillager()) {
                 killerWW.ifPresent(playerWW -> {
                     playerWW.removePlayerHealth(10);
                     playerWW.getRole().disableAbilities();
-                    playerWW.sendMessageWithKey(Prefix.RED.getKey(),"werewolf.role.elder.info_villager");
+                    playerWW.sendMessageWithKey(Prefix.RED,"werewolf.role.elder.info_villager");
                 });
             }
             else{

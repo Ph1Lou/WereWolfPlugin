@@ -1,5 +1,6 @@
 package fr.ph1lou.werewolfplugin.commands.utilities;
 
+import fr.ph1lou.werewolfapi.annotations.Command;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -7,8 +8,10 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 
+@Command(key = "werewolf.menu.enchantments.command",
+        descriptionKey = "werewolf.menu.enchantments.description",
+        argNumbers = 0)
 public class CommandEnchantment implements ICommand {
-
 
     @Override
     public void execute(WereWolfAPI game, Player player, String[] args) {

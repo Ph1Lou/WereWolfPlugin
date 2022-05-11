@@ -5,7 +5,7 @@ import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.registers.impl.CommandRegister;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import org.bukkit.command.CommandSender;
@@ -37,7 +37,7 @@ public class Command implements TabExecutor {
         WereWolfAPI game = main.getWereWolfAPI();
 
         if (!(sender instanceof Player)) {
-            sender.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.console"));
+            sender.sendMessage(game.translate(Prefix.RED , "werewolf.check.console"));
             return true;
         }
 
@@ -84,7 +84,7 @@ public class Command implements TabExecutor {
             IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
 
             if (playerWW == null) {
-                return game.translate(Prefix.RED.getKey() , "werewolf.check.not_in_game");
+                return game.translate(Prefix.RED , "werewolf.check.not_in_game");
             }
 
             if (commandRegister.isRoleOnly()) {
@@ -94,24 +94,24 @@ public class Command implements TabExecutor {
             }
 
             if (!commandRegister.isStateAccess(playerWW.getState())) {
-                return game.translate(Prefix.RED.getKey() , "werewolf.check.state_player");
+                return game.translate(Prefix.RED , "werewolf.check.state_player");
             }
 
             if (commandRegister.isRequiredPower() && (!(playerWW.getRole() instanceof IPower) || !((IPower) playerWW.getRole()).hasPower())) {
-                return game.translate(Prefix.RED.getKey() , "werewolf.check.power");
+                return game.translate(Prefix.RED , "werewolf.check.power");
             }
 
             if (commandRegister.isRequiredAbilityEnabled() && !playerWW.getRole().isAbilityEnabled()) {
-                return game.translate(Prefix.RED.getKey() , "werewolf.check.ability_disabled");
+                return game.translate(Prefix.RED , "werewolf.check.ability_disabled");
             }
         }
 
         if (!commandRegister.isStateWW(game.getState())) {
-            return game.translate(Prefix.RED.getKey() , "werewolf.check.state");
+            return game.translate(Prefix.RED , "werewolf.check.state");
         }
 
         if (!commandRegister.isArgNumbers(args.length)) {
-            return game.translate(Prefix.RED.getKey() , "werewolf.check.parameters",
+            return game.translate(Prefix.RED , "werewolf.check.parameters",
                     Formatter.number(commandRegister.getMinArgNumbers()));
         }
 

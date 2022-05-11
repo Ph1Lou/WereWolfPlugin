@@ -1,11 +1,15 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.Day;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
@@ -20,8 +24,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
+@Role(key = RoleBase.AMNESIAC_WEREWOLF,
+        category = Category.NEUTRAL,
+        attributes = {RoleAttribute.HYBRID})
 public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
-
 
     private boolean transformed = false;
 
@@ -74,7 +80,7 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
         Bukkit.getPluginManager().callEvent(amnesiacTransformationEvent);
 
         if (amnesiacTransformationEvent.isCancelled()) {
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.transformation");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.transformation");
             return;
         }
 

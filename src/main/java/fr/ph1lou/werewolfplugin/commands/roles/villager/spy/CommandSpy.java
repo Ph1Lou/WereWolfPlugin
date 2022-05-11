@@ -1,7 +1,9 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.spy;
 
+import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.commands.ICommand;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.spy.SpyChoseEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -15,6 +17,10 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+@RoleCommand(key = "werewolf.role.spy.command",
+        roleKeys = RoleBase.SPY,
+        argNumbers = 1,
+        requiredPower = true)
 public class CommandSpy implements ICommand {
 
     @Override
@@ -30,19 +36,19 @@ public class CommandSpy implements ICommand {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.offline_player");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.offline_player");
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.player_not_found");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.player_not_found");
             return;
         }
 
         if (((IAffectedPlayers) spy).getAffectedPlayers().contains(playerWW1)) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.already_get_power");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.already_get_power");
             return;
         }
 
@@ -53,14 +59,14 @@ public class CommandSpy implements ICommand {
         Bukkit.getPluginManager().callEvent(spyChoseEvent);
 
         if (spyChoseEvent.isCancelled()) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
             return;
         }
 
         ((IAffectedPlayers) spy).clearAffectedPlayer();
         ((IAffectedPlayers) spy).addAffectedPlayer(playerWW1);
 
-        playerWW.sendMessageWithKey(Prefix.ORANGE.getKey(), "werewolf.role.spy.perform",
+        playerWW.sendMessageWithKey(Prefix.ORANGE, "werewolf.role.spy.perform",
                 Formatter.player(playerWW1.getName()));
     }
 }

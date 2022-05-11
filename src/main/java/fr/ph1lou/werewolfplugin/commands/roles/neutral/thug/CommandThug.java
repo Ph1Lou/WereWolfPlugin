@@ -1,7 +1,9 @@
 package fr.ph1lou.werewolfplugin.commands.roles.neutral.thug;
 
+import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.commands.ICommand;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.roles.thug.ThugEvent;
@@ -16,6 +18,10 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+@RoleCommand(key = "werewolf.role.thug.command",
+        roleKeys = RoleBase.THUG,
+        argNumbers = 1,
+        requiredPower = true)
 public class CommandThug implements ICommand {
 
     @Override
@@ -31,19 +37,19 @@ public class CommandThug implements ICommand {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.offline_player");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.offline_player");
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.player_not_found");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.player_not_found");
             return;
         }
 
         if (((IAffectedPlayers) thug).getAffectedPlayers().contains(playerWW1)) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.already_get_power");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.already_get_power");
             return;
         }
 
@@ -55,16 +61,16 @@ public class CommandThug implements ICommand {
         Bukkit.getPluginManager().callEvent(thugEvent);
 
         if (thugEvent.isCancelled()) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
             return;
         }
 
         ((IAffectedPlayers) thug).clearAffectedPlayer();
         ((IAffectedPlayers) thug).addAffectedPlayer(playerWW1);
 
-        playerWW.sendMessageWithKey(Prefix.YELLOW.getKey(),"werewolf.role.thug.perform",Formatter.player(playerWW1.getName()));
+        playerWW.sendMessageWithKey(Prefix.YELLOW,"werewolf.role.thug.perform",Formatter.player(playerWW1.getName()));
 
-        playerWW1.sendMessageWithKey(Prefix.RED.getKey(),"werewolf.role.thug.alert");
+        playerWW1.sendMessageWithKey(Prefix.RED,"werewolf.role.thug.alert");
 
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(playerWW1));
     }

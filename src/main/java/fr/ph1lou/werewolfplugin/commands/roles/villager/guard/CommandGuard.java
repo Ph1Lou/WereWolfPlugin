@@ -1,14 +1,16 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.guard;
 
-import fr.ph1lou.werewolfapi.player.impl.AuraModifier;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.commands.ICommand;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.guard.GuardEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.impl.AuraModifier;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfplugin.roles.villagers.Guard;
@@ -17,8 +19,11 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+@RoleCommand(key = "werewolf.role.guard.command",
+        roleKeys = RoleBase.GUARD,
+        requiredPower = true,
+        argNumbers = 1)
 public class CommandGuard implements ICommand {
-
 
     @Override
     public void execute(WereWolfAPI game, Player player, String[] args) {
@@ -33,24 +38,24 @@ public class CommandGuard implements ICommand {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.offline_player");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.offline_player");
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.player_not_found");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.player_not_found");
             return;
         }
 
         if (((IAffectedPlayers) guard).getAffectedPlayers().contains(playerWW1)) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.already_get_power");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.already_get_power");
             return;
         }
 
         if(!guard.isPowerFinal()){
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.power");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.power");
             return;
         }
 
@@ -61,7 +66,7 @@ public class CommandGuard implements ICommand {
         Bukkit.getPluginManager().callEvent(guardEvent);
 
         if (guardEvent.isCancelled()) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
             return;
         }
 
@@ -71,7 +76,7 @@ public class CommandGuard implements ICommand {
                 40,
                 true));
 
-        playerWW.sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.role.guard.perform",
+        playerWW.sendMessageWithKey(Prefix.GREEN , "werewolf.role.guard.perform",
                 Formatter.player(playerArg.getName()));
     }
 }

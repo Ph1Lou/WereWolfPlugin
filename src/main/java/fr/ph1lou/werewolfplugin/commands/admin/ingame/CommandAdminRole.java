@@ -1,5 +1,7 @@
 package fr.ph1lou.werewolfplugin.commands.admin.ingame;
 
+import fr.ph1lou.werewolfapi.annotations.AdminCommand;
+import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfplugin.roles.neutrals.Angel;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.commands.ICommand;
@@ -8,8 +10,8 @@ import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.AngelForm;
 import fr.ph1lou.werewolfapi.enums.LoverType;
-import fr.ph1lou.werewolfapi.enums.Prefix;
-import fr.ph1lou.werewolfapi.enums.RolesBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
@@ -20,8 +22,13 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
+@AdminCommand(key = "werewolf.commands.admin.role.command", 
+        descriptionKey = "werewolf.commands.admin.role.description",
+        stateGame = {StateGame.GAME, StateGame.END},
+        argNumbers = {0, 1},
+        moderatorAccess = true)
 public class CommandAdminRole implements ICommand {
-
+    
     @Override
     public void execute(WereWolfAPI game, Player player, String[] args) {
 
@@ -30,7 +37,7 @@ public class CommandAdminRole implements ICommand {
 
         if (playerWW != null &&
                 playerWW.isState(StatePlayer.ALIVE)) {
-            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.commands.admin.role.in_game"));
+            player.sendMessage(game.translate(Prefix.RED , "werewolf.commands.admin.role.in_game"));
             return;
         }
 
@@ -52,7 +59,7 @@ public class CommandAdminRole implements ICommand {
                 .forEach(playerWW1 -> playerAtomicUUID.set(playerWW1.getUUID()));
 
         if (playerAtomicUUID.get() == null) {
-            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.not_in_game_player"));
+            player.sendMessage(game.translate(Prefix.RED , "werewolf.check.not_in_game_player"));
             return;
         }
 
@@ -60,7 +67,7 @@ public class CommandAdminRole implements ICommand {
         IPlayerWW targetWW = game.getPlayerWW(playerUUID).orElse(null);
 
         if (targetWW == null) {
-            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.not_in_game_player"));
+            player.sendMessage(game.translate(Prefix.RED , "werewolf.check.not_in_game_player"));
             return;
         }
 
@@ -69,13 +76,13 @@ public class CommandAdminRole implements ICommand {
                 Formatter.player(args[0]),
                 Formatter.role(game.translate(role.getKey()))));
 
-        if (role instanceof Angel && role.isKey(RolesBase.ANGEL.getKey()) &&
+        if (role instanceof Angel && role.isKey(RoleBase.ANGEL) &&
                 !((Angel) role).isChoice(AngelForm.ANGEL)) {
 
             player.sendMessage(game.translate("werewolf.role.angel.choice_form",
                     Formatter.format("&form&",game.translate(((Angel) role).isChoice(AngelForm.FALLEN_ANGEL) ?
-                            RolesBase.FALLEN_ANGEL.getKey() :
-                            RolesBase.GUARDIAN_ANGEL.getKey()))));
+                            RoleBase.FALLEN_ANGEL :
+                            RoleBase.GUARDIAN_ANGEL))));
         }
         if (role instanceof IPower) {
             player.sendMessage(game.translate("werewolf.commands.admin.role.power",
@@ -123,11 +130,11 @@ public class CommandAdminRole implements ICommand {
             }
         }
 
-        if (role.isKey(RolesBase.SISTER.getKey())) {
+        if (role.isKey(RoleBase.SISTER)) {
             sb = new StringBuilder();
 
             for (IPlayerWW playerWW1 : game.getPlayersWW()) {
-                if (playerWW1.getRole().isKey(RolesBase.SISTER.getKey()) && !playerWW1.equals(targetWW)) {
+                if (playerWW1.getRole().isKey(RoleBase.SISTER) && !playerWW1.equals(targetWW)) {
                     sb.append(playerWW1.getName()).append(" ");
                 }
             }
@@ -138,11 +145,11 @@ public class CommandAdminRole implements ICommand {
             }
         }
 
-        if (role.isKey(RolesBase.SIAMESE_TWIN.getKey())) {
+        if (role.isKey(RoleBase.SIAMESE_TWIN)) {
             sb = new StringBuilder();
 
             for (IPlayerWW playerWW1 : game.getPlayersWW()) {
-                if (playerWW1.getRole().isKey(RolesBase.SIAMESE_TWIN.getKey()) && !playerWW1.equals(targetWW)) {
+                if (playerWW1.getRole().isKey(RoleBase.SIAMESE_TWIN) && !playerWW1.equals(targetWW)) {
                     sb.append(playerWW1.getName()).append(" ");
                 }
             }

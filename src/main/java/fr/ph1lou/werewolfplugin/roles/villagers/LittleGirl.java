@@ -1,13 +1,17 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.DeathItemsEvent;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.Day;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
@@ -39,6 +43,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
+@Role(key = RoleBase.LITTLE_GIRL,
+        category = Category.VILLAGER,
+        attributes = RoleAttribute.VILLAGER)
 public class LittleGirl extends RoleVillage implements IInvisible {
 
     private boolean invisible = false;
@@ -56,7 +63,7 @@ public class LittleGirl extends RoleVillage implements IInvisible {
         }
 
         this.getPlayerWW().sendMessageWithKey(
-                Prefix.YELLOW.getKey() , "werewolf.role.little_girl.remove_armor");
+                Prefix.YELLOW , "werewolf.role.little_girl.remove_armor");
     }
 
     @EventHandler
@@ -76,7 +83,7 @@ public class LittleGirl extends RoleVillage implements IInvisible {
                 new InvisibleEvent(this.getPlayerWW(),
                         false));
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.little_girl.visible");
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.role.little_girl.visible");
     }
 
     @EventHandler
@@ -101,7 +108,7 @@ public class LittleGirl extends RoleVillage implements IInvisible {
         }
 
         this.getPlayerWW().sendMessageWithKey(
-                Prefix.ORANGE.getKey() , "werewolf.role.little_girl.soon_to_be_day");
+                Prefix.ORANGE , "werewolf.role.little_girl.soon_to_be_day");
     }
 
     @Override
@@ -239,11 +246,11 @@ public class LittleGirl extends RoleVillage implements IInvisible {
                 inventory.getItem(39) == null) {
             if (!this.isInvisible()) {
                 if (!isAbilityEnabled()) {
-                    getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.ability_disabled");
+                    getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.ability_disabled");
                     return;
                 }
 
-                player.sendMessage(game.translate(Prefix.GREEN.getKey() , "werewolf.role.little_girl.remove_armor_perform"));
+                player.sendMessage(game.translate(Prefix.GREEN , "werewolf.role.little_girl.remove_armor_perform"));
                 this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INVISIBILITY,"little_girl"));
 
                 if (isInfected()) {
@@ -256,7 +263,7 @@ public class LittleGirl extends RoleVillage implements IInvisible {
             }
         } else if (this.isInvisible()) {
             player.sendMessage(game.translate(
-                    Prefix.YELLOW.getKey() , "werewolf.role.little_girl.visible"));
+                    Prefix.YELLOW , "werewolf.role.little_girl.visible"));
             if (this.isInfected()) {
                 this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"werewolf"));
             }
@@ -296,7 +303,7 @@ public class LittleGirl extends RoleVillage implements IInvisible {
     public void disableAbilitiesRole() {
 
         if (isInvisible()) {
-            getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.little_girl.ability_disabled");
+            getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.role.little_girl.ability_disabled");
             this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"werewolf",0));
 
             this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INVISIBILITY,"little_girl",0));

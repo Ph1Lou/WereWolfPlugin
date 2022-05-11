@@ -1,7 +1,9 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.hunter;
 
+import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.commands.ICommand;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.hunter.HunterShotEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -13,6 +15,11 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+@RoleCommand(key = "werewolf.role.hunter.command",
+        roleKeys = RoleBase.HUNTER,
+        requiredPower = true,
+        statePlayer = StatePlayer.DEATH,
+        argNumbers = 1)
 public class CommandHunter implements ICommand {
 
     @Override
@@ -40,7 +47,7 @@ public class CommandHunter implements ICommand {
         }
 
         if (playerWW.getLastKiller().isPresent() && playerWW.getLastKiller().get().equals(targetWW)) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey(), "werewolf.role.hunter.invalid_target");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.role.hunter.invalid_target");
             return;
         }
         ((IPower) playerWW.getRole()).setPower(false);
@@ -50,6 +57,6 @@ public class CommandHunter implements ICommand {
         if (event.isCancelled()) return;
 
         event.getTarget().removePlayerHealth(10);
-        Bukkit.broadcastMessage(game.translate(Prefix.RED.getKey(), "werewolf.role.hunter.success", Formatter.format("&target&", event.getTarget().getName())));
+        Bukkit.broadcastMessage(game.translate(Prefix.RED, "werewolf.role.hunter.success", Formatter.format("&target&", event.getTarget().getName())));
     }
 }

@@ -221,7 +221,7 @@ public class AdvancedConfig implements InventoryProvider {
         contents.set(2, 0, ClickableItem.of((
                 new ItemBuilder(UniversalMaterial.BOOK.getStack())
                         .setLore(lore).setDisplayName(
-                        game.translate("werewolf.commands.admin.ww_chat.number",
+                        game.translate("werewolf.commands.ww_chat.number",
                                         Formatter.number(config.getWereWolfChatMaxMessage())))
                         .build()), e -> {
             if (e.isLeftClick()) {
@@ -233,7 +233,7 @@ public class AdvancedConfig implements InventoryProvider {
 
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setLore(lore).setDisplayName(
-                            game.translate("werewolf.commands.admin.ww_chat.number",
+                            game.translate("werewolf.commands.ww_chat.number",
                                             Formatter.number(config.getWereWolfChatMaxMessage())))
                     .build());
 

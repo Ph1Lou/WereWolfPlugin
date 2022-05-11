@@ -4,7 +4,7 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.game.IModerationManager;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.registers.impl.CommandRegister;
 import fr.ph1lou.werewolfplugin.Main;
 import org.bukkit.command.Command;
@@ -39,7 +39,7 @@ public class Admin implements TabExecutor {
         WereWolfAPI game = main.getWereWolfAPI();
 
         if (!(sender instanceof Player)) {
-            sender.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.console"));
+            sender.sendMessage(game.translate(Prefix.RED , "werewolf.check.console"));
             return true;
         }
 
@@ -84,14 +84,14 @@ public class Admin implements TabExecutor {
 
         if (!commandRegister.isStateWW(game.getState())) {
             if (seePermissionMessages) {
-                player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.state"));
+                player.sendMessage(game.translate(Prefix.RED , "werewolf.check.state"));
             }
             return false;
         }
 
         if (!commandRegister.isArgNumbers(args)) {
             if (seePermissionMessages) {
-                player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.parameters",
+                player.sendMessage(game.translate(Prefix.RED , "werewolf.check.parameters",
                         Formatter.number(commandRegister.getMinArgNumbers())));
             }
             return false;
@@ -99,7 +99,7 @@ public class Admin implements TabExecutor {
 
         if (!checkPermission(commandRegister, player)) {
             if (seePermissionMessages) {
-                player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.permission_denied"));
+                player.sendMessage(game.translate(Prefix.RED , "werewolf.check.permission_denied"));
             }
             return false;
         }

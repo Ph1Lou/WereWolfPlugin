@@ -1,8 +1,9 @@
 package fr.ph1lou.werewolfplugin.commands.admin.ingame;
 
+import fr.ph1lou.werewolfapi.annotations.AdminCommand;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.registers.impl.CommandRegister;
 import fr.ph1lou.werewolfapi.registers.interfaces.IRegisterManager;
 import fr.ph1lou.werewolfplugin.RegisterManager;
@@ -12,6 +13,9 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 
+@AdminCommand(key = "werewolf.commands.admin.help.command",
+        descriptionKey = "",
+        moderatorAccess = true)
 public class CommandAdminHelp implements ICommand {
 
     @Override
@@ -19,7 +23,7 @@ public class CommandAdminHelp implements ICommand {
 
         IRegisterManager registerManager = RegisterManager.get();
 
-        TextComponent textComponent1 = new TextComponent(game.translate(Prefix.GREEN.getKey() , "werewolf.commands.admin.help.help"));
+        TextComponent textComponent1 = new TextComponent(game.translate(Prefix.GREEN , "werewolf.commands.admin.help.help"));
 
         for (CommandRegister adminCommand : registerManager.getAdminCommandsRegister()) {
             if (!adminCommand.getDescription().isEmpty()) {

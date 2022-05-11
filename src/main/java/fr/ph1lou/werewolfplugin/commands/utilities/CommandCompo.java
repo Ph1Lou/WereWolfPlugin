@@ -1,27 +1,30 @@
 package fr.ph1lou.werewolfplugin.commands.utilities;
 
+import fr.ph1lou.werewolfapi.annotations.Command;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.enums.ConfigBase;
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.enums.LoverType;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfplugin.RegisterManager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+@Command(key = "werewolf.menu.roles.command_2",
+        descriptionKey = "werewolf.menu.roles.description2",
+        argNumbers = 0)
 public class CommandCompo implements ICommand {
-
 
     @Override
     public void execute(WereWolfAPI game, Player player, String[] args) {
 
 
-        if (game.getConfig().isConfigActive(ConfigBase.HIDE_COMPOSITION.getKey())) {
+        if (game.getConfig().isConfigActive(ConfigBase.HIDE_COMPOSITION)) {
 
-            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.commands.compo.composition_hide"));
+            player.sendMessage(game.translate(Prefix.RED , "werewolf.commands.compo.composition_hide"));
 
             return;
         }

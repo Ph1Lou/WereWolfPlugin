@@ -1,9 +1,10 @@
 package fr.ph1lou.werewolfplugin.commands.admin.ingame;
 
+import fr.ph1lou.werewolfapi.annotations.AdminCommand;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.game.IStuffManager;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.events.UpdateStuffEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -13,6 +14,10 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
+@AdminCommand(key = "werewolf.commands.admin.loot_death.command", descriptionKey = "",
+        moderatorAccess = true,
+        autoCompletion = false,
+        argNumbers = 0)
 public class CommandLootDeath implements ICommand {
 
     @Override
@@ -26,7 +31,7 @@ public class CommandLootDeath implements ICommand {
         for (ItemStack i : player.getInventory().getContents()) {
             stuffManager.addDeathLoot(i);
         }
-        player.sendMessage(game.translate(Prefix.GREEN.getKey() , "werewolf.commands.admin.loot_death.perform"));
+        player.sendMessage(game.translate(Prefix.GREEN , "werewolf.commands.admin.loot_death.perform"));
         player.getInventory().clear();
         player.setGameMode(GameMode.ADVENTURE);
 

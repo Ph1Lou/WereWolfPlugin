@@ -13,7 +13,7 @@ import fr.ph1lou.werewolfapi.GetWereWolfAPI;
 import fr.ph1lou.werewolfapi.game.IStuffManager;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.registers.impl.RoleRegister;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
@@ -138,7 +138,7 @@ public class AdvancedRoleMenu implements InventoryProvider {
                 player.getInventory().addItem(item);
             }
         }
-        TextComponent msg = new TextComponent(game.translate(Prefix.YELLOW.getKey() , "werewolf.commands.admin.loot_role.valid",
+        TextComponent msg = new TextComponent(game.translate(Prefix.YELLOW , "werewolf.commands.admin.loot_role.valid",
                 Formatter.role(game.translate(register.getKey()))));
         msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/a %s %s", game.translate("werewolf.commands.admin.loot_role.command"), this.register.getKey())));
         player.spigot().sendMessage(msg);

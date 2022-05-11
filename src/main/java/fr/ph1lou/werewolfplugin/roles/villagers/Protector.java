@@ -1,6 +1,10 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.player.impl.AuraModifier;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -8,9 +12,9 @@ import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.enums.TimerBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.roles.StealEvent;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
@@ -27,6 +31,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+ @Role(key = RoleBase.PROTECTOR,
+         category = Category.VILLAGER,
+         attributes = {RoleAttribute.VILLAGER})
 public class Protector extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
@@ -68,7 +75,7 @@ public class Protector extends RoleWithLimitedSelectionDuration implements IAffe
 
             this.last.addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,"protector",0));
             this.last.getRole().removeAuraModifier("protection");
-            this.last.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.protector.no_longer_protected");
+            this.last.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.protector.no_longer_protected");
             this.last = null;
         }
 
@@ -79,9 +86,9 @@ public class Protector extends RoleWithLimitedSelectionDuration implements IAffe
         }
 
         this.getPlayerWW().sendMessageWithKey(
-                Prefix.YELLOW.getKey() , "werewolf.role.protector.protection_message",
+                Prefix.YELLOW , "werewolf.role.protector.protection_message",
                 Formatter.timer(Utils.conversion(
-                        game.getConfig().getTimerValue(TimerBase.POWER_DURATION.getKey()))));
+                        game.getConfig().getTimerValue(TimerBase.POWER_DURATION))));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

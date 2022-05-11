@@ -8,7 +8,7 @@ import fr.minuskube.inv.content.InventoryProvider;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
@@ -57,7 +57,7 @@ public class Maps implements InventoryProvider {
                                             Formatter.format("&world&",file.getName()))).build()),
                     e -> {
                         if (!game.isState(StateGame.LOBBY)) {
-                            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.game_in_progress"));
+                            player.sendMessage(game.translate(Prefix.RED , "werewolf.check.game_in_progress"));
                             return;
                         }
                         try {
@@ -75,7 +75,7 @@ public class Maps implements InventoryProvider {
                                 .setDisplayName(game.translate("werewolf.menu.maps.new")).build()),
                 e -> BukkitUtils.scheduleSyncDelayedTask(() -> {
                     if (!game.isState(StateGame.LOBBY)) {
-                        player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.game_in_progress"));
+                        player.sendMessage(game.translate(Prefix.RED , "werewolf.check.game_in_progress"));
                         return;
                     }
                     try {

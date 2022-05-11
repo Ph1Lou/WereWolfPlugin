@@ -1,6 +1,10 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.Day;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
@@ -17,9 +21,13 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
+
+@Role(key = RoleBase.RABBIT,
+        category = Category.VILLAGER,
+        attributes = {RoleAttribute.VILLAGER})
 public class Rabbit extends RoleVillage {
 
-    private static float defaultWalkSpeed = 0.2f;
+    private static final float defaultWalkSpeed = 0.2f;
     private boolean belowHearts = false;//pr éviter de reset la speed quand ya pas de changement de vie
 
     public Rabbit(WereWolfAPI game, IPlayerWW playerWW, String key) {

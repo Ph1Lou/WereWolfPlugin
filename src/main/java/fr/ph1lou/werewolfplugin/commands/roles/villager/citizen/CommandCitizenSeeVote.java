@@ -1,8 +1,8 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.citizen;
 
 import fr.ph1lou.werewolfapi.commands.ICommand;
-import fr.ph1lou.werewolfapi.enums.ConfigBase;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.VoteStatus;
 import fr.ph1lou.werewolfapi.events.roles.citizen.CitizenSeeVoteEvent;
 import fr.ph1lou.werewolfapi.events.roles.citizen.CitizenSeeWerewolfVoteEvent;
@@ -25,7 +25,7 @@ public class CommandCitizenSeeVote implements ICommand
             return;
         }
         Citizen citizen = (Citizen)playerWW.getRole();
-        if (!game.getConfig().isConfigActive(ConfigBase.NEW_VOTE.getKey())) {
+        if (!game.getConfig().isConfigActive(ConfigBase.NEW_VOTE)) {
             this.oldVote(game, playerWW, citizen);
             return;
         }
@@ -48,37 +48,37 @@ public class CommandCitizenSeeVote implements ICommand
             return;
         }
         if (!citizen.hasPower()) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey(), "werewolf.check.power");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.power");
             return;
         }
         citizen.setPower(false);
         CitizenSeeWerewolfVoteEvent event1 = new CitizenSeeWerewolfVoteEvent(playerWW, playerWW2);
         Bukkit.getPluginManager().callEvent(event1);
         if (event1.isCancelled()) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey(), "werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
-        playerWW.sendMessageWithKey(Prefix.RED.getKey(), "werewolf.vote.new_vote_werewolf",
+        playerWW.sendMessageWithKey(Prefix.RED, "werewolf.vote.new_vote_werewolf",
                 Formatter.player(event1.getTargetWW().getName()));
     }
 
     private void oldVote(WereWolfAPI game, IPlayerWW playerWW, Citizen citizen) {
         if (citizen.getUse() >= 2) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey(), "werewolf.check.power");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.power");
             return;
         }
         if (!game.getVoteManager().isStatus(VoteStatus.WAITING)) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey(), "werewolf.check.power");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.power");
             return;
         }
         citizen.setUse(citizen.getUse() + 1);
         CitizenSeeVoteEvent seeVoteEvent = new CitizenSeeVoteEvent(playerWW, game.getVoteManager().getVotes());
         Bukkit.getPluginManager().callEvent(seeVoteEvent);
         if (seeVoteEvent.isCancelled()) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey(), "werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
-        playerWW.sendMessageWithKey(Prefix.GREEN.getKey(), "werewolf.role.citizen.count_votes");
+        playerWW.sendMessageWithKey(Prefix.GREEN, "werewolf.role.citizen.count_votes");
 
         game.getVoteManager().getPlayerVotes()
                 .forEach((voterWW, voteWW) -> playerWW.sendMessageWithKey("werewolf.role.citizen.see_vote",

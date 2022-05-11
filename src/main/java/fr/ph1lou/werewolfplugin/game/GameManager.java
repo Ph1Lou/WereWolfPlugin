@@ -2,9 +2,8 @@ package fr.ph1lou.werewolfplugin.game;
 
 import fr.mrmicky.fastboard.FastBoard;
 import fr.ph1lou.werewolfapi.enums.Day;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StateGame;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.UpdateLanguageEvent;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.LoadEvent;
@@ -52,7 +51,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class GameManager implements WereWolfAPI {
 
@@ -120,10 +118,10 @@ public class GameManager implements WereWolfAPI {
         if (moderationManager.getWhiteListedPlayers().contains(uuid)) {
             finalJoin(player);
         } else if (this.getPlayersCount() >= configuration.getPlayerMax()) {
-            player.sendMessage(translate(Prefix.RED.getKey() , "werewolf.check.full"));
+            player.sendMessage(translate(Prefix.RED , "werewolf.check.full"));
             moderationManager.addQueue(player);
         } else if (configuration.isWhiteList()) {
-            player.sendMessage(translate(Prefix.RED.getKey() , "werewolf.commands.admin.whitelist.player_not_whitelisted"));
+            player.sendMessage(translate(Prefix.RED , "werewolf.commands.admin.whitelist.player_not_whitelisted"));
             moderationManager.addQueue(player);
         } else {
             finalJoin(player);
@@ -156,12 +154,12 @@ public class GameManager implements WereWolfAPI {
             DefaultArtifactVersion loadVersion = new DefaultArtifactVersion(main.getDescription().getVersion());
 
             if (loadVersion.compareTo(siteVersion) == 0) {
-                player.sendMessage(this.translate(Prefix.GREEN.getKey() , "werewolf.update.up_to_date"));
+                player.sendMessage(this.translate(Prefix.GREEN , "werewolf.update.up_to_date"));
             } else if (loadVersion.compareTo(siteVersion) < 0) {
-                player.sendMessage(this.translate(Prefix.ORANGE.getKey() , "werewolf.update.out_of_date"));
+                player.sendMessage(this.translate(Prefix.ORANGE , "werewolf.update.out_of_date"));
             }
             else {
-                player.sendMessage(this.translate(Prefix.GREEN.getKey() , "werewolf.update.snapshot"));
+                player.sendMessage(this.translate(Prefix.GREEN , "werewolf.update.snapshot"));
             }
         });
 
@@ -337,22 +335,6 @@ public class GameManager implements WereWolfAPI {
     @Override
     public Random getRandom() {
         return r;
-    }
-
-    @Override
-    public IPlayerWW autoSelect(IPlayerWW playerWW) {
-
-        List<IPlayerWW> players = playerLG.values()
-                .stream()
-                .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
-                .filter(playerWW1 -> !playerWW1.equals(playerWW))
-                .collect(Collectors.toList());
-
-        if (players.isEmpty()) {
-            return playerWW;
-        }
-
-        return players.get((int) Math.floor(getRandom().nextFloat() * players.size()));
     }
 
     @Override

@@ -170,12 +170,12 @@ public class Events implements Listener {
     }
 
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onGameEnd(StopEvent event) {
       StatistiksUtils.postGame(main, main.getCurrentGameReview());
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onWin(WinEvent event) {
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.win",
@@ -183,7 +183,7 @@ public class Events implements Listener {
         main.getCurrentGameReview().end(event.getRole(), event.getPlayers());
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onGameStart(StartEvent event) {
         UUID serverUUID;
         try{
@@ -198,7 +198,7 @@ public class Events implements Listener {
 
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDeath(PlayerWWDeathEvent event) {
         WereWolfAPI api = main.getWereWolfAPI();
 
@@ -207,7 +207,7 @@ public class Events implements Listener {
                 .setActionableStory(true));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onFinalDeath(FinalDeathEvent event) {
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
@@ -217,12 +217,10 @@ public class Events implements Listener {
     }
 
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onCustom(CustomEvent event) {
 
-        if (event.isCancelled()) return;
-
-        if(event.getEvent().startsWith("werewolf.") || event.getEvent().split("\\.").length < 2){
+                if(event.getEvent().startsWith("werewolf.") || event.getEvent().split("\\.").length < 2){
             return;
         }
 
@@ -236,11 +234,8 @@ public class Events implements Listener {
                         event.getExtraInt()).setActionableStory(event.isActionableStory()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onInfection(InfectionEvent event) {
-
-        if (event.isCancelled()) return;
-
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.infection",
@@ -248,21 +243,16 @@ public class Events implements Listener {
                 .setActionableStory(true));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onGrim(GrimEvent event) {
-
-        if (event.isCancelled()) return;
-
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.grim",
                 event.getPlayerWW(), event.getTargetWW(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onReviveElder(ElderResurrectionEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
@@ -271,10 +261,8 @@ public class Events implements Listener {
                 event.isKillerAVillager() ? "werewolf.elder_kill_by_villager" : "werewolf.elder_not_kill_by_villager"));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onRevive(ResurrectionEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
@@ -284,10 +272,8 @@ public class Events implements Listener {
                                 playerWW, api.getTimer()).setActionableStory(true));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onWitchRevive(WitchResurrectionEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview()
@@ -297,7 +283,7 @@ public class Events implements Listener {
                                 .setActionableStory(true));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onLoverDeath(LoverDeathEvent event) {
 
         List<? extends IPlayerWW> lovers = event.getLover().getLovers();
@@ -307,7 +293,7 @@ public class Events implements Listener {
                         new RegisteredAction("werewolf.lover_death", new HashSet<>(lovers), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onAmnesiacLoverDeath(AmnesiacLoverDeathEvent event) {
 
         WereWolfAPI api = main.getWereWolfAPI();
@@ -317,7 +303,7 @@ public class Events implements Listener {
                                 event.getPlayerWW1(), event.getPlayerWW2(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onCursedLoverDeath(CursedLoverDeathEvent event) {
 
         WereWolfAPI api = main.getWereWolfAPI();
@@ -327,10 +313,8 @@ public class Events implements Listener {
                                 event.getPlayerWW1(), event.getPlayerWW2(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onProtection(ProtectionEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
@@ -339,7 +323,7 @@ public class Events implements Listener {
                 playerWW, targetWW, api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onModel(ModelEvent event) {
 
         WereWolfAPI api = main.getWereWolfAPI();
@@ -349,10 +333,8 @@ public class Events implements Listener {
                 playerWW, targetWW, api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onCharmed(CharmEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW targetWW = event.getTargetWW();
@@ -361,17 +343,15 @@ public class Events implements Listener {
                 playerWW, targetWW, api.getTimer()).setActionableStory(true));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEnchanted(EnchantedEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.enchanted",
                 event.getPlayerWW(), event.getTargetWW(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEnchantedAll(AllPlayerEnchantedEvent event) {
 
         WereWolfAPI api = main.getWereWolfAPI();
@@ -379,30 +359,24 @@ public class Events implements Listener {
                 event.getPlayerWW(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onFindFlute(FindFluteEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.find_flute",
                 event.getPlayerWW(), event.getTargetWW(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onGiveFlute(GiveFluteEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.give_flute",
                 event.getPlayerWW(), event.getTargetWW(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onCursed(CurseEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
@@ -411,7 +385,7 @@ public class Events implements Listener {
                 playerWW, targetWW, api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDesignedLover(CupidLoversEvent event) {
 
         WereWolfAPI api = main.getWereWolfAPI();
@@ -421,7 +395,7 @@ public class Events implements Listener {
                 playerWW, lovers, api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSteal(StealEvent event) {
 
         WereWolfAPI api = main.getWereWolfAPI();
@@ -431,10 +405,8 @@ public class Events implements Listener {
                 playerWW, api.getTimer(), event.getRole()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onGrowl(GrowlEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         Set<IPlayerWW> growled = event.getPlayerWWS();
@@ -443,10 +415,8 @@ public class Events implements Listener {
                 growled, api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBeginSniff(BeginSniffEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW targetWW = event.getTargetWW();
@@ -455,10 +425,8 @@ public class Events implements Listener {
                 playerWW, targetWW, api.getTimer()).setActionableStory(true));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBeginCharm(BeginCharmEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW targetWW = event.getTargetWW();
@@ -467,10 +435,8 @@ public class Events implements Listener {
                 playerWW, targetWW, api.getTimer()).setActionableStory(true));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSniff(SniffEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW targetWW = event.getTargetWW();
@@ -480,10 +446,8 @@ public class Events implements Listener {
                 event.isWereWolf() ? "werewolf.role.fox.werewolf" : "werewolf.role.fox.not_werewolf"));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSee(SeerEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW targetWW = event.getTargetWW();
@@ -492,10 +456,8 @@ public class Events implements Listener {
                 playerWW, targetWW, api.getTimer(), event.getCamp()).setActionableStory(true));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onTrack(TrackEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
@@ -504,10 +466,8 @@ public class Events implements Listener {
                 playerWW, targetWW, api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onTrouble(TroubleMakerEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
@@ -516,10 +476,8 @@ public class Events implements Listener {
                 playerWW, targetWW, api.getTimer()).setActionableStory(true));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onGiveBook(LibrarianRequestEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
@@ -528,7 +486,7 @@ public class Events implements Listener {
                 playerWW, targetWW, api.getTimer()).setActionableStory(true));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onLibrarianDeath(LibrarianDeathEvent event) {
 
         WereWolfAPI api = main.getWereWolfAPI();
@@ -537,10 +495,8 @@ public class Events implements Listener {
                 playerWW, api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEnquire(InvestigateEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         Set<IPlayerWW> IPlayerWWS = event.getPlayerWWs();
@@ -551,7 +507,7 @@ public class Events implements Listener {
                         "werewolf.role.detective.opposing_camp"));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onTroubleDeath(TroubleMakerDeathEvent event) {
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
@@ -559,7 +515,7 @@ public class Events implements Listener {
                 playerWW, api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onInvisible(InvisibleEvent event) {
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
@@ -567,10 +523,8 @@ public class Events implements Listener {
                 playerWW, api.getTimer(), event.isInvisible() ? "invisible" : "visible"));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onVoteSee(CitizenSeeVoteEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
@@ -578,10 +532,8 @@ public class Events implements Listener {
                 playerWW, api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onVoteCancel(CitizenCancelVoteEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
@@ -589,10 +541,8 @@ public class Events implements Listener {
                 playerWW, event.getVoteWW(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onVoteSeeWerewolf(CitizenSeeWerewolfVoteEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
@@ -600,10 +550,8 @@ public class Events implements Listener {
                 playerWW, event.getTargetWW(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onVote(VoteEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
@@ -612,7 +560,7 @@ public class Events implements Listener {
                 playerWW, targetWW, api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onNewWereWolf(NewWereWolfEvent event) {
 
         WereWolfAPI api = main.getWereWolfAPI();
@@ -621,10 +569,9 @@ public class Events implements Listener {
                 playerWW, api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onUseMask(UseMaskEvent event) {
 
-        if (event.isCancelled()) return;
         String[] masks = {"werewolf.mask_strength", "werewolf.mask_speed", "werewolf.mask_resistance"};
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
@@ -632,10 +579,8 @@ public class Events implements Listener {
                 playerWW, api.getTimer(), masks[event.getMask()]).setActionableStory(true));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onWildChildTransformation(WildChildTransformationEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
@@ -644,10 +589,8 @@ public class Events implements Listener {
                 playerWW, modelWW, api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onAmnesiacTransformation(AmnesiacTransformationEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
@@ -656,10 +599,8 @@ public class Events implements Listener {
                 playerWW, villager, api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onVoteResult(VoteResultEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
@@ -667,10 +608,8 @@ public class Events implements Listener {
                 playerWW, api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSuccubusResurrection(SuccubusResurrectionEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
@@ -679,10 +618,8 @@ public class Events implements Listener {
                 playerWW, targetWW, api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSisterDeathName(SisterSeeNameEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
 
@@ -691,10 +628,8 @@ public class Events implements Listener {
                 .setActionableStory(true));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSisterDeathRole(SisterSeeRoleEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
 
@@ -704,7 +639,7 @@ public class Events implements Listener {
                 .setActionableStory(true));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDay(DayEvent event) {
 
         WereWolfAPI api = main.getWereWolfAPI();
@@ -712,14 +647,14 @@ public class Events implements Listener {
                 api.getTimer(), event.getNumber()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onNight(NightEvent event) {
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.night",
                 api.getTimer(), event.getNumber()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onLoverReveal(RevealLoversEvent event) {
         WereWolfAPI api = main.getWereWolfAPI();
         for (ILover lover : event.getLovers()) {
@@ -729,7 +664,7 @@ public class Events implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onStudLoverReveal(StudLoverEvent event) {
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.stud_lover",
@@ -737,17 +672,15 @@ public class Events implements Listener {
 
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onAmnesiacLoverReveal(RevealAmnesiacLoversEvent event) {
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.amnesiac_lover_revelation",
                 event.getPlayerWWS(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onNewDisplayRole(NewDisplayRole event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.new_display_role",
@@ -755,7 +688,7 @@ public class Events implements Listener {
 
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onTarget(AngelTargetEvent event) {
 
         WereWolfAPI api = main.getWereWolfAPI();
@@ -766,7 +699,7 @@ public class Events implements Listener {
     }
 
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onTargetDeath(AngelTargetDeathEvent event) {
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
@@ -775,7 +708,7 @@ public class Events implements Listener {
                 playerWW, targetWW, api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSKKill(SerialKillerEvent event) {
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
@@ -784,7 +717,7 @@ public class Events implements Listener {
                 playerWW, targetWW, api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onFallenAngelKill(FallenAngelTargetDeathEvent event) {
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
@@ -793,7 +726,7 @@ public class Events implements Listener {
                 playerWW, targetWW, api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onAngelChoice(AngelChoiceEvent event) {
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
@@ -801,73 +734,71 @@ public class Events implements Listener {
                 playerWW, api.getTimer(), event.getChoice().toString()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onWereWolfList(WereWolfListEvent event) {
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.werewolf_list",
                 api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onRepartition(RepartitionEvent event) {
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.repartition",
                 api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onTroll(TrollEvent event) {
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.troll",
                 api.getTimer(), api.getConfig().getTrollKey()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onTrollLover(TrollLoverEvent event) {
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.troll_lover",
                 api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPVP(PVPEvent event) {
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.pvp",
                 api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onInvulnerability(InvulnerabilityEvent event) {
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.invulnerability",
                 api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBorderStart(BorderStartEvent event) {
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.border_start",
                 api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBorderStop(BorderStopEvent event) {
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.border_stop",
                 api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDiggingEnd(DiggingEndEvent event) {
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.digging_end",
                 api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDon(DonEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
@@ -878,10 +809,8 @@ public class Events implements Listener {
                         receiverWW, api.getTimer(), event.getDon()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onGiveBack(LibrarianGiveBackEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
@@ -890,10 +819,8 @@ public class Events implements Listener {
                 playerWW, targetWW, api.getTimer(), event.getInfo()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onAngelRegeneration(RegenerationEvent event) {
-        if (event.isCancelled()) return;
-
         WereWolfAPI api = main.getWereWolfAPI();
 
         IPlayerWW playerWW = event.getPlayerWW();
@@ -904,10 +831,8 @@ public class Events implements Listener {
 
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDogTransformation(WolfDogChooseWereWolfForm event) {
-        if (event.isCancelled()) return;
-
         WereWolfAPI api = main.getWereWolfAPI();
 
         IPlayerWW playerWW = event.getPlayerWW();
@@ -916,10 +841,8 @@ public class Events implements Listener {
 
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onRivalAnnouncement(RivalAnnouncementEvent event) {
-        if (event.isCancelled()) return;
-
         WereWolfAPI api = main.getWereWolfAPI();
 
 
@@ -927,7 +850,7 @@ public class Events implements Listener {
                 event.getPlayerWW(), new HashSet<>(event.getPlayerWWs()), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onLoverRivalDeath(RivalLoverDeathEvent event) {
 
         WereWolfAPI api = main.getWereWolfAPI();
@@ -936,10 +859,8 @@ public class Events implements Listener {
                 event.getPlayerWW(), new HashSet<>(event.getPlayerWWs()), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onRivalLover(RivalLoverEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
 
@@ -947,10 +868,8 @@ public class Events implements Listener {
                 event.getPlayerWW(), event.getTargetWW(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onVillageIdiotResurrection(VillageIdiotEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
 
@@ -958,10 +877,8 @@ public class Events implements Listener {
                 event.getPlayerWW(), event.getTargetWW(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onMysticalReveal(MysticalWerewolfRevelationEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
 
@@ -969,10 +886,8 @@ public class Events implements Listener {
                 event.getPlayerWW(), event.getTargetWW(), api.getTimer(), event.getTargetWW().getRole().getKey()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onWereWolfChat(WereWolfChatEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
 
@@ -981,10 +896,8 @@ public class Events implements Listener {
 
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPriestessSpec(PriestessEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
 
@@ -994,7 +907,7 @@ public class Events implements Listener {
 
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onVillagerKit(VillagerKitEvent event) {
 
         WereWolfAPI api = main.getWereWolfAPI();
@@ -1003,10 +916,8 @@ public class Events implements Listener {
                 event.getPlayerWW(), api.getTimer(), event.getKit()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onExposed(ExposedEvent event) {
-        if (event.isCancelled()) return;
-
         WereWolfAPI api = main.getWereWolfAPI();
 
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.exposed",
@@ -1014,10 +925,8 @@ public class Events implements Listener {
 
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onLootBox_(LootBoxEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
 
@@ -1026,7 +935,7 @@ public class Events implements Listener {
 
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onFindAllLootBox(FindAllLootBoxEvent event) {
 
         WereWolfAPI api = main.getWereWolfAPI();
@@ -1036,70 +945,56 @@ public class Events implements Listener {
 
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onRandomInfection(InfectionRandomEvent event) {
-        if (event.isCancelled()) return;
-
         WereWolfAPI api = main.getWereWolfAPI();
 
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.random_infection",
                 event.getPlayerWW(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBearingRitual(BearingRitualEvent event) {
-        if (event.isCancelled()) return;
-
         WereWolfAPI api = main.getWereWolfAPI();
 
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.bearing_ritual_event",
                 api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPutrefaction(PutrefactionEvent event) {
-        if (event.isCancelled()) return;
-
         WereWolfAPI api = main.getWereWolfAPI();
 
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.putrefaction_event",
                 api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onGodMiracle(GodMiracleEvent event) {
-        if (event.isCancelled()) return;
-
         WereWolfAPI api = main.getWereWolfAPI();
 
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.god_miracle_event",
                 event.getPlayerWW(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSwap(SwapEvent event) {
-        if (event.isCancelled()) return;
-
         WereWolfAPI api = main.getWereWolfAPI();
 
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.swap_event",
                 event.getPlayerWW1(), event.getPlayerWW2(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onLoneWolf(LoneWolfEvent event) {
-        if (event.isCancelled()) return;
-
         WereWolfAPI api = main.getWereWolfAPI();
 
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.lone_wolf",
                 event.getPlayerWW(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onGuard(GuardEvent event) {
-        if (event.isCancelled()) return;
-
         WereWolfAPI api = main.getWereWolfAPI();
 
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.guard_event",
@@ -1107,20 +1002,16 @@ public class Events implements Listener {
                 .setActionableStory(true));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onGuardResurrection(GuardResurrectionEvent event) {
-        if (event.isCancelled()) return;
-
         WereWolfAPI api = main.getWereWolfAPI();
 
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.guard_resurrection",
                 event.getPlayerWW(), event.getTargetWW(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onTrouple(TroupleEvent event) {
-        if (event.isCancelled()) return;
-
         WereWolfAPI api = main.getWereWolfAPI();
 
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.trouple_event",
@@ -1128,10 +1019,8 @@ public class Events implements Listener {
     }
 
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onRegisterAvenger(RegisterAvengerListEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
@@ -1139,10 +1028,8 @@ public class Events implements Listener {
                 playerWW, event.getTargetWW(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDeathListAvenger(DeathAvengerListEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
@@ -1150,40 +1037,32 @@ public class Events implements Listener {
                 playerWW, event.getTargetWW(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDrunkenWerewolf(DrunkenWereWolfEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.drunken_werewolf",
                 event.getPlayerWW(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onAmnesic(AmnesicEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.amnesic_design",
                 event.getPlayerWW(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onAmnesicReveal(AmnesicTransformEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.amnesic_transform",
                 event.getPlayerWW(), event.getTargetWW(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onShaman(ShamanEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.shaman",
@@ -1191,20 +1070,16 @@ public class Events implements Listener {
                 .setActionableStory(true));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onOracle(OracleEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.oracle_see",
                 event.getPlayerWW(), event.getTargetWW(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onCharmedDeath(CharmedDeathEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.charmed_death_event",
@@ -1212,30 +1087,24 @@ public class Events implements Listener {
                 event.isBeforeCountDown()?"werewolf.before_count_down":"werewolf.after_count_down"));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onCharmerGetEffect(CharmerGetEffectDeathEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.charmer_get_effect",
                 event.getPlayerWW(),new HashSet<>(event.getLover().getLovers()), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onCharmerCharmed(CharmerEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.charmer_charmed",
                 event.getPlayerWW(),event.getTargetWW(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onWispTeleport(WillOTheWispTeleportEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.will_o_the_wisp_teleport",
@@ -1243,60 +1112,48 @@ public class Events implements Listener {
                 .setActionableStory(true));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onWispRecoverRole(WillOTheWispRecoverRoleEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.will_o_the_wisp_recover_role",
                 event.getPlayerWW(),event.getTargetWW(),api.getTimer(),event.getRoleKey()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onTwin(TwinRevealEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.twin_reveal",
                 event.getPlayerWW(),event.getPlayerWWS(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onTwinList(TwinListEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.twin_list",
                 event.getPlayerWW(),event.getPlayerWWS(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onTwinRole(TwinRoleEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.twin_role",
                 event.getPlayerWW(),event.getTargetWW(),api.getTimer(),event.getTargetWW().getRole().getKey()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onWerewolfHowler(HowlEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.werewolf_howler",
                 event.getPlayerWW(),event.getPlayerWWS(),api.getTimer(), event.getNotWerewolfSize()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onAnalystAnalyst(AnalystExtraDetailsEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.analyst_analyst",
@@ -1305,10 +1162,8 @@ public class Events implements Listener {
                 .setActionableStory(true));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onAnalystSee(AnalystEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.analyst_see",
@@ -1317,10 +1172,8 @@ public class Events implements Listener {
                 .setActionableStory(true));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onFruitMerchant(FruitMerchantDeathEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.fruit_merchant_death",
@@ -1328,10 +1181,8 @@ public class Events implements Listener {
                 String.valueOf(event.getGoldenAppleCount().getOldCount()),event.getGoldenAppleCount().getNewCount()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onFruitMerchantCommand(FruitMerchantCommandEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.fruit_merchant_command",
@@ -1339,31 +1190,24 @@ public class Events implements Listener {
                 .setActionableStory(true));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onFruitMerchantRecoverInformation(FruitMerchantRecoverInformationEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.fruit_merchant_recover",
                 event.getPlayerWW(), event.getPlayerWWS(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDruidInfo(DruidUsePowerEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.druid_power",
                 event.getPlayerWW(),api.getTimer(),event.getDarkAura()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onRevealAuraAmount(WiseElderRevealAuraAmountEvent event) {
-
-        if (event.isCancelled()) return;
-
 
         WereWolfAPI api = main.getWereWolfAPI();
 
@@ -1375,10 +1219,8 @@ public class Events implements Listener {
     }
 
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onRevealAuraAmount(ServitorMasterChosenEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
 
@@ -1386,10 +1228,8 @@ public class Events implements Listener {
                 event.getPlayerWW(), event.getTargetWW(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDefinitiveMaster(ServitorDefinitiveMasterEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.servitor_definitive_master",
@@ -1397,10 +1237,8 @@ public class Events implements Listener {
 
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onScammer(ScamEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.scam_event",
@@ -1408,30 +1246,24 @@ public class Events implements Listener {
                 .setActionableStory(true));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onNewVote(NewVoteResultEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.new_vote",
                 event.getPlayerVotedByVillagerWW(), event.getPlayerVotedByWerewolfWW(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onMysanthropeSister(MysanthropeSisterEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.mysanthrope_sister",
                 event.getPlayerWW(), api.getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onTenebrous(TenebrousEvent event) {
-
-        if (event.isCancelled()) return;
 
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.tenebrous",
@@ -1440,168 +1272,134 @@ public class Events implements Listener {
                 .setActionableStory(true));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onWishEvent(WishChangeEvent event) {
-        if (event.isCancelled()) return;
+
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.wish_change",
                 event.getPlayerWW(), main.getWereWolfAPI().getTimer(), event.getWish()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onRevealWishes(OccultistRevealWishes event) {
-        if (event.isCancelled()) return;
+
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.reveal_wishes_occultist",
                 event.getPlayerWW(), main.getWereWolfAPI().getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onThugCommand(ThugEvent event) {
-        if (event.isCancelled()) return;
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.thug_command",
                 event.getPlayerWW(), event.getTargetWW(), main.getWereWolfAPI().getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onThugGoldenApple(ThugRecoverGoldenAppleEvent event) {
-        if (event.isCancelled()) return;
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.thug_recover_golden_apple",
                 event.getPlayerWW(), event.getTargetWW(),  main.getWereWolfAPI().getTimer(), event.getGoldenApple()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onThugRevealEvent(ThugRevealEvent event) {
-        if (event.isCancelled()) return;
-
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.thug_reveal_event",
+                main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.thug_reveal_event",
                 event.getPlayerWW(), main.getWereWolfAPI().getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBarbarianEvent(BarbarianEvent event) {
-        if (event.isCancelled()) return;
-
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.barbarian_event",
+                main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.barbarian_event",
                 event.getPlayerWW(), event.getTargetWW(),  main.getWereWolfAPI().getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onNecromancerEvent(NecromancerResurrectionEvent event) {
-        if (event.isCancelled()) return;
-
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.necromancer_event",
+                main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.necromancer_event",
                 event.getPlayerWW(), event.getTargetWW(),  main.getWereWolfAPI().getTimer())
                 .setActionableStory(true));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onGraveDiggerEvent(TriggerGravediggerClueEvent event) {
-        if (event.isCancelled()) return;
-
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.gravedigger_event",
+                main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.gravedigger_event",
                 event.getGravedigger(), event.getPlayerWW(),  main.getWereWolfAPI().getTimer(), event.getClueCount()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onHunterShoot(HunterShotEvent event) {
-        if (event.isCancelled()) return;
-
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.hunter_shoot_event",
+                main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.hunter_shoot_event",
                 event.getSource(), event.getTarget(),  main.getWereWolfAPI().getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDevotedServant(DevotedServantEvent event) {
-        if (event.isCancelled()) return;
-
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.devoted_servant_event",
+                main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.devoted_servant_event",
                 event.getPlayerWW(), event.getTargetWW(),  main.getWereWolfAPI().getTimer())
                 .setActionableStory(true));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onStoryTeller(StoryTellerEvent event) {
-        if (event.isCancelled()) return;
-
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.story_teller_event",
+                main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.story_teller_event",
                 event.getPlayerWW(), event.getPlayerWWS(),  main.getWereWolfAPI().getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSpy(SpyChoseEvent event) {
-        if (event.isCancelled()) return;
-
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.spy_choose_event",
+                main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.spy_choose_event",
                 event.getPlayerWW(), event.getTargetWW(),  main.getWereWolfAPI().getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSpyResult(SpyResultEvent event) {
-        if (event.isCancelled()) return;
-
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.spy_result_event",
+                main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.spy_result_event",
                 event.getPlayerWW(), event.getTargetWW(),  main.getWereWolfAPI().getTimer(), event.getActionsNumber()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBenefactorGiveHeart(BenefactorGiveHeartEvent event) {
-        if (event.isCancelled()) return;
-
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.benefactor_give_heart_event",
+                main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.benefactor_give_heart_event",
                 event.getPlayerWW(), event.getTargetWW(),  main.getWereWolfAPI().getTimer())
                 .setActionableStory(true));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onInterpretGetRole(InterpreterEvent event) {
-        if (event.isCancelled()) return;
-
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.interpret_event",
+                main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.interpret_event",
                 event.getPlayerWW(),  main.getWereWolfAPI().getTimer(), event.getRoleKey()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onIllusionistActivatePower(IllusionistActivatePowerEvent event) {
-        if (event.isCancelled()) return;
-
-        main.getCurrentGameReview()
+                main.getCurrentGameReview()
                 .addRegisteredAction(new RegisteredAction("werewolf.illusionist_activate_event",
                 event.getPlayerWW(),  main.getWereWolfAPI().getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onIllusionistGetNames(IllusionistGetNamesEvent event) {
-        if (event.isCancelled()) return;
-
-        main.getCurrentGameReview()
+                main.getCurrentGameReview()
                 .addRegisteredAction(new RegisteredAction("werewolf.illusionist_get_names_event",
                         event.getPlayerWW(),event.getPlayerWWS(), main.getWereWolfAPI().getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onIllusionistAddPlayer(IllusionistAddPlayerOnWerewolfListEvent event) {
-        if (event.isCancelled()) return;
-
-        main.getCurrentGameReview()
+                main.getCurrentGameReview()
                 .addRegisteredAction(new RegisteredAction("werewolf.illusionist_add_player_event",
                         event.getPlayerWW(),event.getTargetWW(), main.getWereWolfAPI().getTimer())
                         .setActionableStory(true));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onRumorsEnable(RumorsEvent event) {
-        if (event.isCancelled()) return;
-
-        main.getCurrentGameReview()
+                main.getCurrentGameReview()
                 .addRegisteredAction(new RegisteredAction("werewolf.rumors_event",
                          main.getWereWolfAPI().getTimer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onRumorsWrite(RumorsWriteEvent event) {
 
-        if (event.isCancelled()) return;
-
-        main.getCurrentGameReview()
+                main.getCurrentGameReview()
                 .addRegisteredAction(new RegisteredAction("werewolf.rumors_write_event",
                         event.getPlayerWW(),
                         main.getWereWolfAPI().getTimer(),

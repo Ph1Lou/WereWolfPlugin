@@ -1,14 +1,17 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
-import fr.minuskube.inv.ClickableItem;
+import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FirstDeathEvent;
-import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -16,7 +19,6 @@ import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Arrow;
@@ -28,11 +30,18 @@ import org.bukkit.projectiles.ProjectileSource;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Role(key = RoleBase.BARBARIAN, 
+        category = Category.NEUTRAL, 
+        attributes = {RoleAttribute.NEUTRAL},
+        intValues = {@IntValue(key = "werewolf.role.barbarian.distance",
+                defaultValue = 25, 
+                meetUpValue = 25, 
+                step = 5, 
+                item = UniversalMaterial.GRAY_WOOL)})
 public class Barbarian extends RoleNeutral implements IPower, IAffectedPlayers {
     @Nullable
     private IPlayerWW playerWW;
@@ -47,7 +56,7 @@ public class Barbarian extends RoleNeutral implements IPower, IAffectedPlayers {
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.barbarian.description",
-                        Formatter.number(game.getConfig().getDistanceBarbarian())))
+                        Formatter.number(game.getConfig().getValue(RoleBase.BARBARIAN, "werewolf.role.barbarian.distance"))))
                 .setPower(game.translate("werewolf.role.barbarian.power"))
                 .setItems(game.translate("werewolf.role.barbarian.item"))
                 .build();
@@ -77,13 +86,13 @@ public class Barbarian extends RoleNeutral implements IPower, IAffectedPlayers {
         }
 
         if(event.getPlayerWW().getDeathLocation().distance(this.getPlayerWW().getLocation())
-                > game.getConfig().getDistanceBarbarian()){
+                > game.getConfig().getValue(RoleBase.BARBARIAN, "werewolf.role.barbarian.distance")){
             return;
         }
 
         TextComponent hideMessage = new TextComponent(
                 game.translate(
-                        Prefix.YELLOW.getKey() , "werewolf.role.barbarian.click_message",
+                        Prefix.YELLOW , "werewolf.role.barbarian.click_message",
                         Formatter.player(event.getPlayerWW().getName())));
         hideMessage.setClickEvent(
                 new ClickEvent(ClickEvent.Action.RUN_COMMAND,
@@ -193,32 +202,5 @@ public class Barbarian extends RoleNeutral implements IPower, IAffectedPlayers {
     @Override
     public boolean hasPower() {
         return this.power;
-    }
-
-    public static ClickableItem config(WereWolfAPI game) {
-        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
-                game.translate("werewolf.menu.right"));
-        IConfiguration config = game.getConfig();
-
-        return ClickableItem.of((
-                new ItemBuilder(UniversalMaterial.GRAY_WOOL.getStack())
-                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.barbarian",
-                                Formatter.number(config.getDistanceBarbarian())))
-                        .setLore(lore).build()), e -> {
-
-            if (e.isLeftClick()) {
-                config.setDistanceBarbarian((config.getDistanceBarbarian() + 2));
-            } else if (config.getDistanceBarbarian() - 2 > 0) {
-                config.setDistanceBarbarian(config.getDistanceBarbarian() - 2);
-            }
-
-
-            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setLore(lore)
-                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.barbarian",
-                            Formatter.number(config.getDistanceBarbarian())))
-                    .build());
-
-        });
     }
 }

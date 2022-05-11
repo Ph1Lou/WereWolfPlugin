@@ -1,6 +1,10 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -29,6 +33,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+@Role(key = RoleBase.ILLUSIONIST,
+        category = Category.VILLAGER,
+        attributes = {RoleAttribute.VILLAGER})
 public class Illusionist extends RoleVillage implements IPower, IAffectedPlayers {
 
     private boolean power = true;
@@ -87,7 +95,7 @@ public class Illusionist extends RoleVillage implements IPower, IAffectedPlayers
         Bukkit.getPluginManager().callEvent(illusionistAddPlayerOnWerewolfListEvent);
 
         if(illusionistAddPlayerOnWerewolfListEvent.isCancelled()){
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
             return;
         }
 
@@ -99,7 +107,7 @@ public class Illusionist extends RoleVillage implements IPower, IAffectedPlayers
                 .filter(playerWW1 -> playerWW1.getRole().isWereWolf())
                 .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                 .forEach(player1 -> {
-                    player1.sendMessageWithKey(Prefix.RED.getKey() ,"werewolf.role.werewolf.new_werewolf");
+                    player1.sendMessageWithKey(Prefix.RED ,"werewolf.role.werewolf.new_werewolf");
                     Sound.WOLF_HOWL.play(player1);
                 });
 
@@ -107,7 +115,7 @@ public class Illusionist extends RoleVillage implements IPower, IAffectedPlayers
 
             if(!game.isState(StateGame.END) && this.getPlayerWW().isState(StatePlayer.ALIVE)){
 
-                playerWW.sendMessageWithKey(Prefix.GREEN.getKey(),"werewolf.role.illusionist.reveal");
+                playerWW.sendMessageWithKey(Prefix.GREEN,"werewolf.role.illusionist.reveal");
                 List<IPlayerWW> players1WW = game.getPlayersWW()
                         .stream()
                         .filter(playerWW1 -> !playerWW1.equals(this.getPlayerWW()))
@@ -133,11 +141,11 @@ public class Illusionist extends RoleVillage implements IPower, IAffectedPlayers
                 Bukkit.getPluginManager().callEvent(illusionistGetNamesEvent);
 
                 if(illusionistGetNamesEvent.isCancelled()){
-                    this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+                    this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
                     return;
                 }
 
-                this.getPlayerWW().sendMessageWithKey(Prefix.GREEN.getKey(),
+                this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,
                         "werewolf.role.illusionist.reveal_pseudos",
                         Formatter.format("&names&", finalPlayersWW.stream().map(IPlayerWW::getName)
                                 .collect(Collectors.joining(", "))));

@@ -1,12 +1,17 @@
 package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
 import fr.minuskube.inv.ClickableItem;
+import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -28,6 +33,11 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
+@Role(key = RoleBase.HOWLING_WEREWOLF, category = Category.WEREWOLF,
+        attributes = {RoleAttribute.WEREWOLF},
+        intValues = {@IntValue(key = "werewolf.role.howling_werewolf.distance",
+                defaultValue = 80, meetUpValue = 80, step = 2, item = UniversalMaterial.LIGHT_GRAY_WOOL)})
 public class HowlingWerewolf extends RoleWereWolf {
     public HowlingWerewolf(WereWolfAPI game, IPlayerWW playerWW, String key) {
         super(game, playerWW, key);
@@ -37,7 +47,7 @@ public class HowlingWerewolf extends RoleWereWolf {
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game,this)
                 .setDescription(game.translate("werewolf.role.howling_werewolf.description",
-                        Formatter.number(game.getConfig().getDistanceHowlingWerewolf())))
+                        Formatter.number(game.getConfig().getValue(RoleBase.HOWLING_WEREWOLF, "werewolf.role.howling_werewolf.distance"))))
                 .setEffects(game.translate("werewolf.description.werewolf"))
                 .build();
     }
@@ -64,7 +74,7 @@ public class HowlingWerewolf extends RoleWereWolf {
                     Location location = playerWW.getLocation();
                     Location playerLocation = this.getPlayerWW().getLocation();
                     return location.getWorld() == playerLocation.getWorld() &&
-                            location.distance(playerLocation) < game.getConfig().getDistanceHowlingWerewolf();
+                            location.distance(playerLocation) < game.getConfig().getValue(RoleBase.HOWLING_WEREWOLF, "werewolf.role.howling_werewolf.distance");
                 })
                 .collect(Collectors.toSet());
 
@@ -80,7 +90,7 @@ public class HowlingWerewolf extends RoleWereWolf {
         Bukkit.getPluginManager().callEvent(howlEvent);
 
         if(howlEvent.isCancelled()){
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
             return;
         }
 
@@ -104,7 +114,7 @@ public class HowlingWerewolf extends RoleWereWolf {
 
         this.getPlayerWW().addPlayerMaxHealth(finalHeart);
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey(),"werewolf.role.howling_werewolf.message",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.role.howling_werewolf.message",
                 Formatter.number(howlEvent.getNotWerewolfSize()),
                 Formatter.format("&heart&",heart));
 
@@ -122,21 +132,23 @@ public class HowlingWerewolf extends RoleWereWolf {
 
         return ClickableItem.of((
                 new ItemBuilder(UniversalMaterial.LIGHT_GRAY_WOOL.getStack())
-                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.howling_werewolf",
-                                Formatter.number(config.getDistanceHowlingWerewolf())))
+                        .setDisplayName(game.translate("werewolf.role.howling_werewolf.distance",
+                                Formatter.number(config.getValue(RoleBase.HOWLING_WEREWOLF, "werewolf.role.howling_werewolf.distance"))))
                         .setLore(lore).build()), e -> {
 
             if (e.isLeftClick()) {
-                config.setDistanceHowlingWerewolf((config.getDistanceHowlingWerewolf() + 2));
-            } else if (config.getDistanceHowlingWerewolf() - 2 > 0) {
-                config.setDistanceHowlingWerewolf(config.getDistanceHowlingWerewolf() - 2);
+                config.setValue(RoleBase.HOWLING_WEREWOLF, "werewolf.role.howling_werewolf.distance",
+                        config.getValue(RoleBase.HOWLING_WEREWOLF, "werewolf.role.howling_werewolf.distance") + 2);
+            } else if (config.getValue(RoleBase.HOWLING_WEREWOLF, "werewolf.role.howling_werewolf.distance") - 2 > 0) {
+                config.setValue(RoleBase.HOWLING_WEREWOLF, "werewolf.role.howling_werewolf.distance",
+                        config.getValue(RoleBase.HOWLING_WEREWOLF, "werewolf.role.howling_werewolf.distance") - 2);
             }
 
 
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setLore(lore)
-                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.howling_werewolf",
-                            Formatter.number(config.getDistanceHowlingWerewolf())))
+                    .setDisplayName(game.translate("werewolf.role.howling_werewolf.distance",
+                            Formatter.number(config.getValue(RoleBase.HOWLING_WEREWOLF, "werewolf.role.howling_werewolf.distance"))))
                     .build());
 
         });

@@ -7,7 +7,7 @@ import fr.ph1lou.werewolfapi.lovers.ILover;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfplugin.utils.MessageAction;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
-import fr.ph1lou.werewolfapi.enums.RolesBase;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -75,7 +75,7 @@ public class PlayerWW implements IPlayerWW {
         this.uuid = player.getUniqueId();
         this.name = player.getName();
         this.role = new Villager(api, this,
-                RolesBase.VILLAGER.getKey());
+                RoleBase.VILLAGER);
         this.game = api;
         try {
             this.mojangUUID = getUUID(name);

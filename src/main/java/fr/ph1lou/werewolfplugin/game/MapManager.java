@@ -5,7 +5,7 @@ import fr.ph1lou.werewolfplugin.worldloader.WorldFillTask;
 import fr.ph1lou.werewolfapi.game.IMapManager;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import org.apache.commons.io.FileUtils;
@@ -53,9 +53,9 @@ public class MapManager implements IMapManager {
         if (wft == null || wft.getPercentageCompleted() == 100) {
             wft = new WorldFillTask(world, chunksPerRun, mapRadius);
             wft.setTaskID(BukkitUtils.scheduleSyncRepeatingTask(wft, 1, 1));
-            sender.sendMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.commands.admin.generation.perform"));
+            sender.sendMessage(game.translate(Prefix.YELLOW , "werewolf.commands.admin.generation.perform"));
         } else {
-            sender.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.commands.admin.generation.already_start"));
+            sender.sendMessage(game.translate(Prefix.RED , "werewolf.commands.admin.generation.already_start"));
         }
     }
 
@@ -66,7 +66,7 @@ public class MapManager implements IMapManager {
     }
 
     public void createMap(boolean roofed) {
-        Bukkit.broadcastMessage(main.getWereWolfAPI().translate(Prefix.RED.getKey() , "werewolf.commands.admin.preview.create"));
+        Bukkit.broadcastMessage(main.getWereWolfAPI().translate(Prefix.RED , "werewolf.commands.admin.preview.create"));
         WorldCreator wc = new WorldCreator("werewolf_map");
         wc.environment(World.Environment.NORMAL);
         wc.type(WorldType.NORMAL);

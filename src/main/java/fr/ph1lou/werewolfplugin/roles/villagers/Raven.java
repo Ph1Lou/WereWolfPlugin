@@ -1,15 +1,19 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.enums.TimerBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteEvent;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
@@ -26,6 +30,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Role(key = RoleBase.RAVEN,
+         category = Category.VILLAGER,
+         attributes = {RoleAttribute.VILLAGER})
 public class Raven extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
@@ -66,7 +73,7 @@ public class Raven extends RoleWithLimitedSelectionDuration implements IAffected
             this.last.addPotionModifier(PotionModifier.remove(PotionEffectType.JUMP,"raven",0));
 
             this.last.getRole().removeAuraModifier("cursed");
-            this.last.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.raven.no_longer_curse");
+            this.last.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.raven.no_longer_curse");
             this.last = null;
         }
 
@@ -76,10 +83,10 @@ public class Raven extends RoleWithLimitedSelectionDuration implements IAffected
 
         setPower(true);
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.raven.curse_message",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.role.raven.curse_message",
                 Formatter.timer(Utils.conversion(
                         game.getConfig()
-                                .getTimerValue(TimerBase.POWER_DURATION.getKey()))));
+                                .getTimerValue(TimerBase.POWER_DURATION))));
     }
 
 

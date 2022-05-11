@@ -1,11 +1,13 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.enums.RolesBase;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.enums.TimerBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
@@ -37,6 +39,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
+@Role(key = RoleBase.INTERPRETER,
+        category = Category.VILLAGER, 
+        attributes = {RoleAttribute.VILLAGER})
 public class Interpreter extends RoleVillage implements IPower {
 
     private boolean power = false;
@@ -48,7 +54,7 @@ public class Interpreter extends RoleVillage implements IPower {
                 .stream()
                 .filter(roleRegister -> roleRegister.getAttributes().contains(RoleAttribute.VILLAGER))
                 .filter(roleRegister -> !roleRegister.isRequireDouble())
-                .filter(roleRegister -> !roleRegister.getKey().equals(RolesBase.INTERPRETER.getKey()))
+                .filter(roleRegister -> !roleRegister.getKey().equals(RoleBase.INTERPRETER))
                 .filter(roleRegister -> game.getConfig().getRoleCount(roleRegister.getKey()) == 0)
                 .filter(roleRegister -> roleRegister.getAttributes().contains(RoleAttribute.INFORMATION))
                 .collect(Collectors.toList());
@@ -65,7 +71,7 @@ public class Interpreter extends RoleVillage implements IPower {
                 .stream()
                 .filter(roleRegister -> !this.roles.contains(roleRegister))
                 .filter(roleRegister -> !roleRegister.isRequireDouble())
-                .filter(roleRegister -> !roleRegister.getKey().equals(RolesBase.INTERPRETER.getKey()))
+                .filter(roleRegister -> !roleRegister.getKey().equals(RoleBase.INTERPRETER))
                 .filter(roleRegister -> roleRegister.getAttributes().contains(RoleAttribute.VILLAGER))
                 .filter(roleRegister -> game.getConfig().getRoleCount(roleRegister.getKey()) == 0)
                 .filter(roleRegister -> !roleRegister.getAttributes().contains(RoleAttribute.MINOR_INFORMATION))
@@ -84,7 +90,7 @@ public class Interpreter extends RoleVillage implements IPower {
                 .stream()
                 .filter(roleRegister -> !this.roles.contains(roleRegister))
                 .filter(roleRegister -> !roleRegister.isRequireDouble())
-                .filter(roleRegister -> !roleRegister.getKey().equals(RolesBase.INTERPRETER.getKey()))
+                .filter(roleRegister -> !roleRegister.getKey().equals(RoleBase.INTERPRETER))
                 .filter(roleRegister -> roleRegister.getAttributes().contains(RoleAttribute.VILLAGER))
                 .filter(roleRegister -> game.getConfig().getRoleCount(roleRegister.getKey()) == 0)
                 .filter(roleRegister -> !roleRegister.getAttributes().contains(RoleAttribute.INFORMATION))
@@ -130,7 +136,7 @@ public class Interpreter extends RoleVillage implements IPower {
 
             this.roles.forEach(roleRegister -> this.getPlayerWW()
                     .sendMessage(changeRole(roleRegister.getKey())));
-        }, game.getConfig().getTimerValue(TimerBase.DAY_DURATION.getKey()) * 20L * 4 / 5L);
+        }, game.getConfig().getTimerValue(TimerBase.DAY_DURATION) * 20L * 4 / 5L);
 
     }
 
@@ -168,7 +174,7 @@ public class Interpreter extends RoleVillage implements IPower {
             return;
         }
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey(), "werewolf.check.end_selection");
+        this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.end_selection");
 
         this.setPower(false);
 
@@ -202,11 +208,11 @@ public class Interpreter extends RoleVillage implements IPower {
                             HandlerList.unregisterAll(role);
                             this.getPlayerWW().setRole(this);
                             Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
-                            this.getPlayerWW().sendMessageWithKey(Prefix.GREEN.getKey(),"werewolf.role.interpreter.end");
+                            this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,"werewolf.role.interpreter.end");
                         }
-                    }, (long) (game.getConfig().getTimerValue(TimerBase.DAY_DURATION.getKey()) * 20 * 1.6));
+                    }, (long) (game.getConfig().getTimerValue(TimerBase.DAY_DURATION) * 20 * 1.6));
 
-                    this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey(), "werewolf.role.interpreter.perform",
+                    this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.role.interpreter.perform",
                             Formatter.role(game.translate(roleKey)));
                     return true;
                 } catch (InstantiationException |
@@ -226,7 +232,7 @@ public class Interpreter extends RoleVillage implements IPower {
     }
 
     private TextComponent changeRole(String roleKey) {
-        TextComponent textComponent = new TextComponent(this.game.translate(Prefix.GREEN.getKey(),"werewolf.role.interpreter.click",
+        TextComponent textComponent = new TextComponent(this.game.translate(Prefix.GREEN,"werewolf.role.interpreter.click",
                 Formatter.role(game.translate(roleKey))));
         textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/ww %s %s",
                 this.game.translate("werewolf.role.interpreter.command"), roleKey)));
