@@ -30,7 +30,7 @@ import java.util.Optional;
 
 @Role(key = RoleBase.STUD,
           category = Category.VILLAGER,
-          attributes = {RoleAttribute.HYBRID})
+          attributes = RoleAttribute.HYBRID)
 public class Stud extends RoleVillage implements IPower {
     private boolean power = true;
 

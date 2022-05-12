@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Role(key = RoleBase.TROUBLEMAKER,
         category = Category.VILLAGER,
-        attributes = {RoleAttribute.VILLAGER})
+        attributes = RoleAttribute.VILLAGER)
 public class Troublemaker extends RoleVillage implements IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();

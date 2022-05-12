@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
 
 @Role(key = RoleBase.RIVAL,
         category = Category.NEUTRAL,
-        attributes = {RoleAttribute.NEUTRAL},
+        attributes = RoleAttribute.NEUTRAL,
         timers = {@Timer(key = TimerBase.RIVAL_DURATION,
                 defaultValue = 2400, meetUpValue = 2400,
         decrementAfterRole = true,

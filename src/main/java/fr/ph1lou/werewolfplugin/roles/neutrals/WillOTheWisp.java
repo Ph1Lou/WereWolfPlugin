@@ -50,7 +50,7 @@ import java.util.stream.Collectors;
 
 
 @Role(key = RoleBase.WILL_O_THE_WISP, 
-            category = Category.NEUTRAL, attributes = {RoleAttribute.NEUTRAL},
+            category = Category.NEUTRAL, attributes = RoleAttribute.NEUTRAL,
         intValues = {@IntValue(key = WillOTheWisp.DISTANCE,
         defaultValue = 50, meetUpValue = 50, step = 5, item = UniversalMaterial.YELLOW_WOOL)})
 public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse {

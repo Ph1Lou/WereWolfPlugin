@@ -33,7 +33,7 @@ import java.util.UUID;
 
  @Role(key = RoleBase.PROTECTOR,
          category = Category.VILLAGER,
-         attributes = {RoleAttribute.VILLAGER})
+         attributes = RoleAttribute.VILLAGER)
 public class Protector extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();

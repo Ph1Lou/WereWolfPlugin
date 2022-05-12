@@ -25,7 +25,8 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 @Role(key = RoleBase.SERIAL_KILLER,
-         category = Category.NEUTRAL, attributes = RoleAttribute.NEUTRAL)
+         category = Category.NEUTRAL,
+        attributes = RoleAttribute.NEUTRAL)
 public class SerialKiller extends RoleNeutral implements IPower {
 
     public static final String POTION = "serial_killer";

@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 
 @Role(key = RoleBase.TWIN, 
         category = Category.VILLAGER,
-        attributes = {RoleAttribute.VILLAGER},
+        attributes = RoleAttribute.VILLAGER,
         requireDouble = true,
         timers = {@Timer(key = TimerBase.TWIN_DURATION,
                 defaultValue = 1800, meetUpValue = 1800,

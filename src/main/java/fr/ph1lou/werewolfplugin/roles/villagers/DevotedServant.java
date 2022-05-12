@@ -39,7 +39,7 @@ import java.util.List;
 
 @Role(key = RoleBase.DEVOTED_SERVANT,
            category = Category.VILLAGER,
-           attributes = {RoleAttribute.VILLAGER})
+           attributes = RoleAttribute.VILLAGER)
 public class DevotedServant extends RoleVillage implements IPower, IAffectedPlayers {
 
     @Nullable

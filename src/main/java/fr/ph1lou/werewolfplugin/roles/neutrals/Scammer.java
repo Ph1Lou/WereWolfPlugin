@@ -44,7 +44,7 @@ import java.util.Optional;
 
 @Role(key = RoleBase.SCAMMER, 
         category = Category.NEUTRAL, 
-        attributes = {RoleAttribute.HYBRID},
+        attributes = RoleAttribute.HYBRID,
         incompatibleRoles = {RoleBase.CHARMER},
         timers = {@Timer(key = TimerBase.SCAM_DELAY, defaultValue = 9, meetUpValue = 5)},
         intValues = {@IntValue(key = Scammer.DISTANCE,

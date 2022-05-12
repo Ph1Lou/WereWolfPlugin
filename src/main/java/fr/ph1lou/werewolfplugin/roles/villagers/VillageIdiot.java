@@ -27,7 +27,7 @@ import java.util.Optional;
 
 @Role(key = RoleBase.VILLAGE_IDIOT,
         category = Category.VILLAGER,
-        attributes = {RoleAttribute.VILLAGER})
+        attributes = RoleAttribute.VILLAGER)
 public class VillageIdiot extends RoleVillage implements IPower {
 
     private boolean power = true;

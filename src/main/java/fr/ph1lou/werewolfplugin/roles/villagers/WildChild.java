@@ -41,7 +41,7 @@ import java.util.List;
                 defaultValue = 240, meetUpValue = 240,
         decrementAfterRole = true,
         onZero = AutoModelEvent.class)},
-        attributes = {RoleAttribute.HYBRID})
+        attributes = RoleAttribute.HYBRID)
 public class WildChild extends RoleVillage implements IAffectedPlayers, ITransformed, IPower {
 
     boolean transformed = false;

@@ -33,8 +33,8 @@ import java.util.Optional;
 @Role(key = RoleBase.FEARFUL_WEREWOLF, 
         category = Category.WEREWOLF, 
         attributes = {RoleAttribute.WEREWOLF},
-        intValues = {@IntValue(key = FearFulWerewolf.DISTANCE,
-        defaultValue = 20, meetUpValue = 20, step = 4, item = UniversalMaterial.MAGENTA_WOOL)})
+        intValues = @IntValue(key = FearFulWerewolf.DISTANCE,
+        defaultValue = 20, meetUpValue = 20, step = 4, item = UniversalMaterial.MAGENTA_WOOL))
 public class FearFulWerewolf extends RoleWereWolf {
     public FearFulWerewolf(WereWolfAPI game, IPlayerWW playerWW) {
         super(game, playerWW);

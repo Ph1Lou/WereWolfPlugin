@@ -39,7 +39,7 @@ import java.util.List;
 
 @Role(key = RoleBase.THIEF,
         category = Category.NEUTRAL,
-        attributes = {RoleAttribute.HYBRID})
+        attributes = RoleAttribute.HYBRID)
 public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();

@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Role(key = RoleBase.WITCH, category = Category.VILLAGER,
-         attributes = {RoleAttribute.VILLAGER},
+         attributes = RoleAttribute.VILLAGER,
 configurations = {@Configuration(key = ConfigBase.WITCH_AUTO_RESURRECTION, defaultValue = true)})
 public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
 

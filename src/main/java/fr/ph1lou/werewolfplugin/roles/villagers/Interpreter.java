@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
 
 @Role(key = RoleBase.INTERPRETER,
         category = Category.VILLAGER, 
-        attributes = {RoleAttribute.VILLAGER})
+        attributes = RoleAttribute.VILLAGER)
 public class Interpreter extends RoleVillage implements IPower {
 
     private boolean power = false;

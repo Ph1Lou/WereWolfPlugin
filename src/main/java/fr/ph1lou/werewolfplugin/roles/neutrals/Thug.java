@@ -43,7 +43,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Role(key = RoleBase.THUG, 
         category = Category.NEUTRAL, 
-        attributes = {RoleAttribute.NEUTRAL},
+        attributes = RoleAttribute.NEUTRAL,
         intValues = {@IntValue(key = Thug.DISTANCE,
         defaultValue = 25, meetUpValue = 25, step = 5, item = UniversalMaterial.GRAY_WOOL)})
 public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {

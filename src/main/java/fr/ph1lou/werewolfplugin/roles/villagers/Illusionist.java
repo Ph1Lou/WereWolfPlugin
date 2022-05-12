@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 
 @Role(key = RoleBase.ILLUSIONIST,
         category = Category.VILLAGER,
-        attributes = {RoleAttribute.VILLAGER})
+        attributes = RoleAttribute.VILLAGER)
 public class Illusionist extends RoleVillage implements IPower, IAffectedPlayers {
 
     private boolean power = true;

@@ -27,8 +27,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Role(key = RoleBase.CUPID, category = Category.VILLAGER,
-           attributes = {RoleAttribute.HYBRID},
-            configurations = {@Configuration(key = ConfigBase.RANDOM_CUPID)})
+           attributes = RoleAttribute.HYBRID,
+            configurations = @Configuration(key = ConfigBase.RANDOM_CUPID))
 public class Cupid extends RoleVillage implements IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();

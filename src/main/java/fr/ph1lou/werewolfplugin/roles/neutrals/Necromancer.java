@@ -33,7 +33,7 @@ import java.util.Optional;
 
 @Role(key = RoleBase.NECROMANCER, 
         category = Category.NEUTRAL, 
-        attributes = {RoleAttribute.NEUTRAL},
+        attributes = RoleAttribute.NEUTRAL,
         intValues = {@IntValue(key = Necromancer.DISTANCE,
                 defaultValue = 70, meetUpValue = 70, step = 0.0, item = UniversalMaterial.BLACK_WOOL)})
 public class Necromancer extends RoleNeutral implements IPower, IProgress {

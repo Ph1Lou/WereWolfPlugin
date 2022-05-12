@@ -34,7 +34,7 @@ import java.util.Optional;
 
 @Role(key = RoleBase.SERVITOR,
         category = Category.VILLAGER,
-        attributes = {RoleAttribute.VILLAGER},
+        attributes = RoleAttribute.VILLAGER,
 intValues = {@IntValue(key = Servitor.DISTANCE,
         defaultValue = 25, 
         meetUpValue = 25, 

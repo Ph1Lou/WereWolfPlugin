@@ -43,9 +43,13 @@ import java.util.List;
 
 @Role(key = RoleBase.SUCCUBUS, 
         category = Category.NEUTRAL, 
-        attributes = {RoleAttribute.NEUTRAL},
-        timers = {@Timer(key = TimerBase.SUCCUBUS_DURATION, defaultValue = 180, meetUpValue = 60)},
-        intValues = {@IntValue(key = Succubus.DISTANCE, defaultValue = 20, meetUpValue = 20, step = 4, item = UniversalMaterial.PURPLE_WOOL)})
+        attributes = RoleAttribute.NEUTRAL,
+        timers = @Timer(key = TimerBase.SUCCUBUS_DURATION, defaultValue = 180, meetUpValue = 60),
+        intValues = @IntValue(key = Succubus.DISTANCE,
+                defaultValue = 20,
+                meetUpValue = 20,
+                step = 4,
+                item = UniversalMaterial.PURPLE_WOOL))
 public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers, IPower {
 
     public static final String DISTANCE = "werewolf.role.succubus.distance";

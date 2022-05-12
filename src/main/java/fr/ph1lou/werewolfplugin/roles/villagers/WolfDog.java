@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
 
  @Role(key = RoleBase.WOLF_DOG,
          category = Category.VILLAGER,
-         attributes = {RoleAttribute.HYBRID})
+         attributes = RoleAttribute.HYBRID)
 public class WolfDog extends RoleVillage implements ITransformed, IPower {
 
     private boolean transformed = false;

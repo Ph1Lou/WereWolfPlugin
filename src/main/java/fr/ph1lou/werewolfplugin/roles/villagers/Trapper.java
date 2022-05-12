@@ -27,7 +27,7 @@ import java.util.List;
 
 @Role(key = RoleBase.TRAPPER,
         category = Category.VILLAGER,
-        attributes = {RoleAttribute.VILLAGER})
+        attributes = RoleAttribute.VILLAGER)
 public class Trapper extends RoleVillage implements IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();

@@ -23,7 +23,7 @@ import java.util.Objects;
 
 @Role(key = RoleBase.SIAMESE_TWIN,
         category = Category.VILLAGER, 
-        attributes = {RoleAttribute.VILLAGER},
+        attributes = RoleAttribute.VILLAGER,
         requireDouble = true)
 public class SiameseTwin extends RoleVillage {
 
