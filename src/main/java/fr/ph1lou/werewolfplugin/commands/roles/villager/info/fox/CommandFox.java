@@ -14,6 +14,7 @@ import fr.ph1lou.werewolfapi.role.interfaces.ILimitedUse;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IProgress;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
+import fr.ph1lou.werewolfplugin.roles.villagers.Fox;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -55,7 +56,7 @@ public class CommandFox implements ICommand {
             return;
         }
 
-        if (((ILimitedUse) fox).getUse() >= game.getConfig().getValue(RoleBase.FOX, "nose")) {
+        if (((ILimitedUse) fox).getUse() >= game.getConfig().getValue(RoleBase.FOX, Fox.SMELL_NUMBER)) {
             playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.power");
             return;
         }
@@ -64,7 +65,7 @@ public class CommandFox implements ICommand {
         Location locationTarget = playerArg.getLocation();
 
         if (player.getWorld().equals(playerArg.getWorld())) {
-            if (location.distance(locationTarget) > game.getConfig().getValue(RoleBase.FOX, "distance")) {
+            if (location.distance(locationTarget) > game.getConfig().getValue(RoleBase.FOX, Fox.DISTANCE)) {
                 playerWW.sendMessageWithKey(Prefix.RED , "werewolf.role.fox.not_enough_near");
                 return;
             }

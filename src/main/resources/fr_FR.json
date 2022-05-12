@@ -432,7 +432,8 @@
       },
       "amnesiac_lover": {
         "display": "Couple Amnésique",
-        "not_enough_players": "Il n'y a pas assez de personnes pour former un couple amnésique"
+        "not_enough_players": "Il n'y a pas assez de personnes pour former un couple amnésique",
+        "distance": "Champ d'action du couple amnésique"
       },
       "fake_lover": {
         "display": "Couple"

@@ -12,6 +12,7 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
+import fr.ph1lou.werewolfplugin.roles.villagers.Priestess;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -49,9 +50,9 @@ public class CommandPriestess implements ICommand {
 
         if (!player.getWorld().equals(playerArg.getWorld()) ||
                 player.getLocation().distance(playerArg.getLocation()) >
-                        game.getConfig().getValue(RoleBase.PRIESTESS, "distance")) {
+                        game.getConfig().getValue(RoleBase.PRIESTESS, Priestess.DISTANCE)) {
             playerWW.sendMessageWithKey(Prefix.RED , "werewolf.role.priestess.distance",
-                    Formatter.number(game.getConfig().getValue(RoleBase.PRIESTESS, "distance")));
+                    Formatter.number(game.getConfig().getValue(RoleBase.PRIESTESS, Priestess.DISTANCE)));
             return;
         }
 

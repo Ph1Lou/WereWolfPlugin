@@ -33,8 +33,11 @@ import java.util.Optional;
 
 @Role(key = RoleBase.HERMIT, 
         category = Category.VILLAGER, attributes = {RoleAttribute.VILLAGER},
-        intValues = {@IntValue(key = "werewolf.role.hermit.distance", defaultValue = 20, meetUpValue = 20, step = 4, item = UniversalMaterial.WHITE_WOOL)})
+        intValues = {@IntValue(key = Hermit.DISTANCE, defaultValue = 20, meetUpValue = 20, step = 4, item = UniversalMaterial.WHITE_WOOL)})
 public class Hermit extends RoleVillage {
+
+    public static final String DISTANCE = "werewolf.role.hermit.distance";
+
     public Hermit(WereWolfAPI game, IPlayerWW playerWW) {
         super(game, playerWW);
     }
@@ -43,7 +46,7 @@ public class Hermit extends RoleVillage {
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game,this)
                 .setDescription(game.translate("werewolf.role.hermit.description",
-                        Formatter.number(game.getConfig().getValue(RoleBase.HERMIT, "werewolf.role.hermit.distance"))))
+                        Formatter.number(game.getConfig().getValue(RoleBase.HERMIT, DISTANCE))))
                 .setEffects(game.translate("werewolf.role.hermit.effects"))
                 .build();
     }
@@ -144,7 +147,7 @@ public class Hermit extends RoleVillage {
                     Location hermit = this.getPlayerWW().getLocation();
                     Location player = iPlayerWW.getLocation();
                     return (hermit.getWorld() == player.getWorld() &&
-                    hermit.distance(player) < game.getConfig().getValue(RoleBase.HERMIT, "werewolf.role.hermit.distance"));
+                    hermit.distance(player) < game.getConfig().getValue(RoleBase.HERMIT, DISTANCE));
                 })
                 .count();
 

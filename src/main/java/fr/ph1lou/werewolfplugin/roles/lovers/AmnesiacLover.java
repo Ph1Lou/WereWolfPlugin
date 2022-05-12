@@ -1,10 +1,14 @@
 package fr.ph1lou.werewolfplugin.roles.lovers;
 
 import com.google.common.collect.Sets;
+import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.Lover;
+import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.enums.LoverType;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.ActionBarEvent;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
@@ -33,7 +37,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+@Lover(key = LoverBase.AMNESIAC_LOVER,
+        intValues = @IntValue(key = AmnesiacLover.DISTANCE,
+                defaultValue = 15,
+                meetUpValue = 15,
+                step = 2, item = UniversalMaterial.PINK_WOOL))
 public class AmnesiacLover implements ILover, Listener {
+
+    public static final String DISTANCE = "werewolf.role.amnesiac_lover.distance";
 
     private final WereWolfAPI game;
     private IPlayerWW amnesiacLover1;
@@ -113,7 +124,7 @@ public class AmnesiacLover implements ILover, Listener {
         }
 
         if (player1.getLocation().distance(player2.getLocation()) <
-                this.game.getConfig().getValue(LoverType.AMNESIAC_LOVER.getKey(), "distance")) {
+                this.game.getConfig().getValue(LoverType.AMNESIAC_LOVER.getKey(), DISTANCE)) {
 
             Bukkit.getPluginManager().callEvent(new RevealAmnesiacLoversEvent(
                     Sets.newHashSet(this.amnesiacLover1, this.amnesiacLover2)));

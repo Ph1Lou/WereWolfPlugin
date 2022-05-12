@@ -41,7 +41,7 @@ import java.util.Objects;
 @Role(key = RoleBase.SISTER, 
         category = Category.VILLAGER, 
         attributes = {RoleAttribute.VILLAGER}, 
-        intValues = {@IntValue(key = "werewolf.role.sister.distance",
+        intValues = {@IntValue(key = Sister.DISTANCE,
                 defaultValue = 20, 
                 meetUpValue = 20, 
                 step = 2, 
@@ -49,6 +49,7 @@ import java.util.Objects;
         requireDouble = true)
 public class Sister extends RoleVillage implements IAffectedPlayers {
 
+    public static final String DISTANCE = "werewolf.role.sister.distance";
     final List<IPlayerWW> killerWWS = new ArrayList<>();
 
     public Sister(WereWolfAPI api, IPlayerWW playerWW) {
@@ -74,7 +75,7 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.sister.description"))
                 .setEffects(game.translate("werewolf.role.sister.effect",
-                        Formatter.number( game.getConfig().getValue(RoleBase.SISTER, "werewolf.role.twin.distance"))))
+                        Formatter.number( game.getConfig().getValue(RoleBase.SISTER, DISTANCE))))
                 .addExtraLines(extraLines)
                 .build();
     }
@@ -124,7 +125,7 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
                 .map(Bukkit::getPlayer)
                 .filter(Objects::nonNull)
                 .filter(player -> player.getWorld().equals(location.getWorld()) &&
-                        location.distance(player.getLocation()) < game.getConfig().getValue(RoleBase.SISTER, "werewolf.role.twin.distance"))
+                        location.distance(player.getLocation()) < game.getConfig().getValue(RoleBase.SISTER, DISTANCE))
                 .findFirst()
                 .orElse(null) != null;
 

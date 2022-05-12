@@ -37,10 +37,11 @@ import java.util.stream.Collectors;
 @Role(key = RoleBase.DRUID, 
         category = Category.VILLAGER, 
         attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION},
-        intValues = {@IntValue(key = "werewolf.role.druid.distance",
+        intValues = {@IntValue(key = Druid.DISTANCE,
                 defaultValue = 50, meetUpValue = 50, step = 5, item = UniversalMaterial.CYAN_WOOL)})
 public class Druid extends RoleVillage implements IPower {
 
+    public static final String DISTANCE = "werewolf.role.druid.distance";
     private boolean power = true;
 
     public Druid(WereWolfAPI game, IPlayerWW playerWW) {
@@ -51,7 +52,7 @@ public class Druid extends RoleVillage implements IPower {
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.druid.description",
-                        Formatter.number(game.getConfig().getValue(RoleBase.DRUID, "werewolf.role.druid.distance"))))
+                        Formatter.number(game.getConfig().getValue(RoleBase.DRUID, DISTANCE))))
                 .build();
     }
 
@@ -110,7 +111,7 @@ public class Druid extends RoleVillage implements IPower {
                 .filter(playerWW1 -> {
                     Location location= playerWW1.getLocation();
                     return location.getWorld() == world &&
-                            location.distance(this.getPlayerWW().getLocation()) < game.getConfig().getValue(RoleBase.DRUID, "werewolf.role.druid.distance");
+                            location.distance(this.getPlayerWW().getLocation()) < game.getConfig().getValue(RoleBase.DRUID, DISTANCE);
                 })
                 .filter(playerWW1 -> playerWW1.getRole().getAura() == Aura.DARK)
                 .collect(Collectors.toList());
@@ -126,7 +127,7 @@ public class Druid extends RoleVillage implements IPower {
 
         this.getPlayerWW().sendMessageWithKey(Prefix.BLUE,"werewolf.role.druid.perform",
                 Formatter.number(druidUsePowerEvent.getDarkAura()),
-                Formatter.format("&blocks&",game.getConfig().getValue(RoleBase.DRUID, "werewolf.role.druid.distance")));
+                Formatter.format("&blocks&",game.getConfig().getValue(RoleBase.DRUID, DISTANCE)));
 
     }
 

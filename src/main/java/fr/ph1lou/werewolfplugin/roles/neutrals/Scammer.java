@@ -47,9 +47,12 @@ import java.util.Optional;
         attributes = {RoleAttribute.HYBRID},
         incompatibleRoles = {RoleBase.CHARMER},
         timers = {@Timer(key = TimerBase.SCAM_DELAY, defaultValue = 9, meetUpValue = 5)},
-        intValues = {@IntValue(key = "werewolf.role.scammer.distance",
+        intValues = {@IntValue(key = Scammer.DISTANCE,
                 defaultValue = 20, meetUpValue = 20, step = 2, item = UniversalMaterial.BROWN_WOOL)})
 public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
+
+    public static final String DISTANCE = "werewolf.role.scammer.distance";
+
     private final Map<IPlayerWW, Integer> affectedPlayer = new HashMap<>();
     private boolean power = true;
     private int count = 0;
@@ -62,7 +65,7 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.scammer.description",
                         Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.SCAM_DELAY))),
-                        Formatter.number(game.getConfig().getValue(RoleBase.SCAMMER, "werewolf.role.scammer.distance"))))
+                        Formatter.number(game.getConfig().getValue(RoleBase.SCAMMER, DISTANCE))))
                 .build();
     }
 
@@ -197,7 +200,7 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
      */
     private boolean checkDistance(IPlayerWW player, Location location) {
         return player.getLocation().getWorld() == location.getWorld() &&
-                player.getLocation().distance(location) < game.getConfig().getValue(RoleBase.SCAMMER, "werewolf.role.scammer.distance");
+                player.getLocation().distance(location) < game.getConfig().getValue(RoleBase.SCAMMER, DISTANCE);
     }
 
     @Override

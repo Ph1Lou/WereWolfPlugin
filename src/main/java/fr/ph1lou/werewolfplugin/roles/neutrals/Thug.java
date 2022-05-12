@@ -44,9 +44,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Role(key = RoleBase.THUG, 
         category = Category.NEUTRAL, 
         attributes = {RoleAttribute.NEUTRAL},
-        intValues = {@IntValue(key = "werewolf.role.thug.distance",
+        intValues = {@IntValue(key = Thug.DISTANCE,
         defaultValue = 25, meetUpValue = 25, step = 5, item = UniversalMaterial.GRAY_WOOL)})
 public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
+
+    public static final String DISTANCE = "werewolf.role.thug.distance";
 
     private int probability = 10;
     private boolean power = false;
@@ -64,7 +66,7 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this).setDescription(game.translate("werewolf.role.thug.description",
-                        Formatter.number(game.getConfig().getValue(RoleBase.THUG, "werewolf.role.thug.distance"))))
+                        Formatter.number(game.getConfig().getValue(RoleBase.THUG, DISTANCE))))
                 .setEffects(game.translate("werewolf.role.thug.effect"))
                 .setPower(game.translate("werewolf.role.thug.power", Formatter.number(this.probability)))
                 .build();

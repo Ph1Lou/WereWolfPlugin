@@ -44,7 +44,7 @@ public class CommandTenebrous implements ICommand {
 
         Location location = playerWW.getLocation();
 
-        int range = game.getConfig().getValue(RoleBase.TENEBROUS_WEREWOLF, "distance");
+        int range = game.getConfig().getValue(RoleBase.TENEBROUS_WEREWOLF, TenebrousWerewolf.DISTANCE);
 
         List<IPlayerWW> affectedPlayers = game.getPlayersWW().stream()
                 .filter(player1 -> player1.isState(StatePlayer.ALIVE))

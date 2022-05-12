@@ -68,7 +68,6 @@ public class Configuration implements IConfiguration {
         this.limitPunch = 1;
         this.limitKnockBack = 1;
         this.goldenAppleParticles = 1;
-        //this.distanceAmnesiacLovers = 15;
         this.trollSV = false;
         this.borderMax = 2000;
         this.borderMin = 300;

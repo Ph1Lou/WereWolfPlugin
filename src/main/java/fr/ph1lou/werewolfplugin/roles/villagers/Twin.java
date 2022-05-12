@@ -1,22 +1,15 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
-import fr.minuskube.inv.ClickableItem;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.annotations.Timer;
-import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.game.IConfiguration;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
@@ -24,8 +17,12 @@ import fr.ph1lou.werewolfapi.events.roles.twin.AutoTwinEvent;
 import fr.ph1lou.werewolfapi.events.roles.twin.TwinListEvent;
 import fr.ph1lou.werewolfapi.events.roles.twin.TwinRevealEvent;
 import fr.ph1lou.werewolfapi.events.roles.twin.TwinRoleEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
-import fr.ph1lou.werewolfapi.utils.ItemBuilder;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -49,10 +46,12 @@ import java.util.stream.Collectors;
                 defaultValue = 1800, meetUpValue = 1800,
         decrementAfterRole = true,
         onZero = AutoTwinEvent.class)},
-        intValues = {@IntValue(key = "werewolf.role.twin.distance",
+        intValues = {@IntValue(key = Twin.DISTANCE,
                 defaultValue = 50,
                 meetUpValue = 50, step = 5, item = UniversalMaterial.GREEN_WOOL)})
 public class Twin extends RoleVillage {
+
+    public static final String DISTANCE = "werewolf.role.twin.distance";
 
     @Nullable
     private List<IPlayerWW> twinList;
@@ -66,9 +65,9 @@ public class Twin extends RoleVillage {
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.twin.description",
-                        Formatter.number(game.getConfig().getValue(RoleBase.TWIN, "werewolf.role.twin.distance")),
-                        Formatter.format("&number2&",game.getConfig().getValue(RoleBase.TWIN, "werewolf.role.twin.distance")*2)))
-                .setEffects(game.translate("werewolf.role.twin.effects",Formatter.number(game.getConfig().getValue(RoleBase.TWIN, "werewolf.role.twin.distance"))))
+                        Formatter.number(game.getConfig().getValue(RoleBase.TWIN, DISTANCE)),
+                        Formatter.format("&number2&",game.getConfig().getValue(RoleBase.TWIN, DISTANCE)*2)))
+                .setEffects(game.translate("werewolf.role.twin.effects",Formatter.number(game.getConfig().getValue(RoleBase.TWIN, DISTANCE))))
                 .setPower(this.twinList == null ?
                         game.translate("werewolf.role.twin.timer", Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.TWIN_DURATION))))
                         : game.translate("werewolf.role.twin.twin_list", Formatter.format("&role&", this.twinList
@@ -165,7 +164,7 @@ public class Twin extends RoleVillage {
                         return;
                     }
 
-                    if(twinLocation.distance(playerLocation) < game.getConfig().getValue(RoleBase.TWIN, "werewolf.role.twin.distance") * 2){
+                    if(twinLocation.distance(playerLocation) < game.getConfig().getValue(RoleBase.TWIN, DISTANCE) * 2){
                         this.getPlayerWW().sendMessageWithKey(Prefix.RED,"werewolf.role.twin.too_near");
                         return;
                     }
@@ -179,7 +178,7 @@ public class Twin extends RoleVillage {
                                 Location location = playerWW1.getLocation();
 
                                 return twinLocation.getWorld() == location.getWorld() &&
-                                        twinLocation.distance(location) < game.getConfig().getValue(RoleBase.TWIN, "werewolf.role.twin.distance");
+                                        twinLocation.distance(location) < game.getConfig().getValue(RoleBase.TWIN, DISTANCE);
 
                             })
                             .collect(Collectors.toList());
@@ -196,7 +195,7 @@ public class Twin extends RoleVillage {
                         }
 
                         this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE,"werewolf.role.twin.list_near",
-                        Formatter.number(game.getConfig().getValue(RoleBase.TWIN, "werewolf.role.twin.distance")),
+                        Formatter.number(game.getConfig().getValue(RoleBase.TWIN, DISTANCE)),
                                 Formatter.format("&list&",twinListEvent.getPlayerWWS().stream().map(IPlayerWW::getName).collect(Collectors.joining(", "))));
                     }
                     else{
@@ -216,39 +215,10 @@ public class Twin extends RoleVillage {
                         }
 
                         this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE,"werewolf.role.twin.role_near",
-                                Formatter.number(game.getConfig().getValue(RoleBase.TWIN, "werewolf.role.twin.distance")),
+                                Formatter.number(game.getConfig().getValue(RoleBase.TWIN, DISTANCE)),
                                 Formatter.role(game.translate(twinRoleEvent.getTargetWW().getRole().getKey())));
                     }
                 });
-    }
-
-    public static ClickableItem config(WereWolfAPI game) {
-        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
-                game.translate("werewolf.menu.right"));
-        IConfiguration config = game.getConfig();
-
-        return ClickableItem.of((
-                new ItemBuilder(UniversalMaterial.GREEN_WOOL.getStack())
-                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.twin",
-                                Formatter.number(config.getValue(RoleBase.TWIN, "werewolf.role.twin.distance"))))
-                        .setLore(lore).build()), e -> {
-
-            if (e.isLeftClick()) {
-                config.setValue(RoleBase.TWIN, "werewolf.role.twin.distance",
-                        config.getValue(RoleBase.TWIN, "werewolf.role.twin.distance") + 2);
-            } else if (config.getValue(RoleBase.TWIN, "werewolf.role.twin.distance") - 2 > 0) {
-                config.setValue(RoleBase.TWIN, "werewolf.role.twin.distance",
-                        config.getValue(RoleBase.TWIN, "werewolf.role.twin.distance") - 2);
-            }
-
-
-            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setLore(lore)
-                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.twin",
-                            Formatter.number(config.getValue(RoleBase.TWIN, "werewolf.role.twin.distance"))))
-                    .build());
-
-        });
     }
 
 }

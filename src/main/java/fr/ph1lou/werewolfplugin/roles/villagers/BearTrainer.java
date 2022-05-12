@@ -37,12 +37,14 @@ import java.util.stream.Collectors;
         category = Category.VILLAGER,
         attributes = {RoleAttribute.VILLAGER,
                 RoleAttribute.INFORMATION},
-        intValues = {@IntValue(key = "werewolf.role.bear_trainer.distance",
+        intValues = {@IntValue(key = BearTrainer.DISTANCE,
                 defaultValue = 50,
                 meetUpValue = 50,
                 step = 5,
                 item = UniversalMaterial.BROWN_WOOL)})
 public class BearTrainer extends RoleVillage {
+
+    public static final String DISTANCE = "werewolf.role.bear_trainer.distance";
 
     public BearTrainer(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
@@ -65,7 +67,7 @@ public class BearTrainer extends RoleVillage {
                 .stream()
                 .filter(player1 -> player1.getWorld().equals(oursLocation.getWorld())
                         && oursLocation.distance(player1.getLocation())
-                        < game.getConfig().getValue(RoleBase.BEAR_TRAINER, "distance"))
+                        < game.getConfig().getValue(RoleBase.BEAR_TRAINER, DISTANCE))
                 .map(Entity::getUniqueId)
                 .map(game::getPlayerWW)
                 .filter(Optional::isPresent)
@@ -130,7 +132,7 @@ public class BearTrainer extends RoleVillage {
 
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.bear_trainer.description",
-                                Formatter.number(game.getConfig().getValue(RoleBase.BEAR_TRAINER, "distance"))))
+                                Formatter.number(game.getConfig().getValue(RoleBase.BEAR_TRAINER, DISTANCE))))
                 .build();
     }
 

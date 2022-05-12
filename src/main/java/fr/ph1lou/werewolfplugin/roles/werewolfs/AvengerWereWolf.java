@@ -30,9 +30,11 @@ import java.util.Optional;
 @Role(key = RoleBase.AVENGER_WEREWOLF, 
           category = Category.WEREWOLF, 
           attributes = RoleAttribute.WEREWOLF,
-        intValues = {@IntValue(key = "werewolf.role.avenger_werewolf.distance",
+        intValues = {@IntValue(key = AvengerWereWolf.DISTANCE,
         defaultValue = 10, meetUpValue = 10, step = 2, item = UniversalMaterial.RED_WOOL)})
 public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
+
+    public static final String DISTANCE = "werewolf.role.avenger_werewolf.distance";
 
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
 
@@ -47,7 +49,7 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.avenger_werewolf.description",
                                 Formatter.number(game.getConfig()
-                                        .getValue(RoleBase.AVENGER_WEREWOLF, "distance"))))
+                                        .getValue(RoleBase.AVENGER_WEREWOLF, DISTANCE))))
                 .setPower(game.translate("werewolf.role.avenger_werewolf.power"))
                 .setEffects(game.translate("werewolf.description.werewolf"))
                 .build();
@@ -99,7 +101,7 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
                     Location playerLocation = this.getPlayerWW().getLocation();
                     if (playerLocation.getWorld() == playerWW.getLocation().getWorld()) {
                         return playerLocation.distance(playerWW.getLocation()) < game.getConfig()
-                                .getValue(RoleBase.AVENGER_WEREWOLF, "distance");
+                                .getValue(RoleBase.AVENGER_WEREWOLF, DISTANCE);
                     }
                     return false;
                 })

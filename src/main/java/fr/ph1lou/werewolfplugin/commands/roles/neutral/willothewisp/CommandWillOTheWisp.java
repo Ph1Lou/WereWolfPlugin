@@ -11,6 +11,7 @@ import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.role.interfaces.IInvisible;
 import fr.ph1lou.werewolfapi.role.interfaces.ILimitedUse;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
+import fr.ph1lou.werewolfplugin.roles.neutrals.WillOTheWisp;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
@@ -57,7 +58,7 @@ public class CommandWillOTheWisp implements ICommand {
         Vector vector = player.getEyeLocation().getDirection();
         vector
                 .normalize()
-                .multiply(game.getConfig().getValue(RoleBase.WILL_O_THE_WISP, "distance"))
+                .multiply(game.getConfig().getValue(RoleBase.WILL_O_THE_WISP, WillOTheWisp.DISTANCE))
                 .setY(player.getWorld().getHighestBlockYAt(player.getLocation()) - player.getLocation().getBlockY() + 10);
 
         playerWW.teleport(playerWW.getLocation().add(vector));

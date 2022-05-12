@@ -11,6 +11,7 @@ import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
+import fr.ph1lou.werewolfplugin.roles.neutrals.Succubus;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -61,7 +62,7 @@ public class CommandSuccubus implements ICommand {
         Location locationTarget = playerArg.getLocation();
 
         if (player.getWorld().equals(playerArg.getWorld())) {
-            if (location.distance(locationTarget) > game.getConfig().getValue(RoleBase.SUCCUBUS, "distance")) {
+            if (location.distance(locationTarget) > game.getConfig().getValue(RoleBase.SUCCUBUS, Succubus.DISTANCE)) {
                 playerWW.sendMessageWithKey(Prefix.RED , "werewolf.role.succubus.not_enough_near");
                 return;
             }

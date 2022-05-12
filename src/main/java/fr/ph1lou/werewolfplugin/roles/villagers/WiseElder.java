@@ -31,12 +31,14 @@ import java.util.Optional;
 @Role(key = RoleBase.WISE_ELDER, 
         category = Category.VILLAGER, 
         attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION},
-intValues = {@IntValue(key = "werewolf.role.wise_elder.distance",
+intValues = {@IntValue(key = WiseElder.DISTANCE,
         defaultValue = 15, 
         meetUpValue = 15, 
         step = 3, 
         item = UniversalMaterial.BROWN_WOOL)})
 public class WiseElder extends RoleVillage {
+
+    public static final String DISTANCE = "werewolf.role.wise_elder.distance";
 
     private int neutralCounter;
     private int darkCounter;
@@ -51,7 +53,7 @@ public class WiseElder extends RoleVillage {
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.wise_elder.description",
-                        Formatter.number(game.getConfig().getValue(RoleBase.WISE_ELDER, "werewolf.role.wise_elder.distance"))))
+                        Formatter.number(game.getConfig().getValue(RoleBase.WISE_ELDER, WiseElder.DISTANCE))))
                 .build();
     }
 
@@ -149,6 +151,6 @@ public class WiseElder extends RoleVillage {
      */
     private boolean checkDistance(IPlayerWW player, Location location) {
         return player.getLocation().getWorld() == location.getWorld() &&
-                player.getLocation().distance(location) < game.getConfig().getValue(RoleBase.WISE_ELDER, "werewolf.role.wise_elder.distance");
+                player.getLocation().distance(location) < game.getConfig().getValue(RoleBase.WISE_ELDER, WiseElder.DISTANCE);
     }
 }

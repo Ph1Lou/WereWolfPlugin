@@ -43,9 +43,11 @@ import java.util.stream.Collectors;
 @Role(key = RoleBase.GRAVEDIGGER,
         category = Category.VILLAGER,
         attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION},
-        intValues = {@IntValue(key = "werewolf.role.gravedigger.config",
+        intValues = {@IntValue(key = Gravedigger.DISTANCE,
         defaultValue = 70, meetUpValue = 70, step = 5, item = UniversalMaterial.BIRCH_LEAVES)})
 public class Gravedigger extends RoleVillage implements IAffectedPlayers {
+
+    public static final String DISTANCE = "werewolf.role.gravedigger.config";
 
     public Gravedigger(WereWolfAPI game, IPlayerWW playerWW) {
         super(game, playerWW);
@@ -59,7 +61,7 @@ public class Gravedigger extends RoleVillage implements IAffectedPlayers {
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.gravedigger.description",
-                        Formatter.number(game.getConfig().getValue(RoleBase.GRAVEDIGGER, "werewolf.role.gravedigger.config"))))
+                        Formatter.number(game.getConfig().getValue(RoleBase.GRAVEDIGGER, DISTANCE))))
                 .build();
     }
 
@@ -112,7 +114,7 @@ public class Gravedigger extends RoleVillage implements IAffectedPlayers {
                 .filter(player -> {
                     try {
                         return deathLocation.distance(player.getLocation()) < game.getConfig()
-                                .getValue(RoleBase.GRAVEDIGGER, "werewolf.role.gravedigger.config");
+                                .getValue(RoleBase.GRAVEDIGGER, DISTANCE);
                     } catch (Exception ignored) {
                         return false;
                     }

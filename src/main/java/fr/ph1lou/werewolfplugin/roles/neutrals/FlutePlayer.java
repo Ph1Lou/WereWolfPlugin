@@ -61,10 +61,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Role(key = RoleBase.FLUTE_PLAYER, 
         category = Category.NEUTRAL, 
         attributes = {RoleAttribute.NEUTRAL},
-        intValues = {@IntValue(key = "werewolf.role.flute_player.distance",
+        intValues = {@IntValue(key = FlutePlayer.DISTANCE,
         defaultValue = 20, meetUpValue = 20, step = 4, item = UniversalMaterial.LIGHT_BLUE_WOOL)})
 
 public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers {
+
+    public static final String DISTANCE = "werewolf.role.flute_player.distance";
 
     private static ItemStack flute;
     private final List<IPlayerWW> flutedPlayer = new ArrayList<>();
@@ -128,7 +130,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
 
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.flute_player.description",
-                                Formatter.number(game.getConfig().getValue(RoleBase.FLUTE_PLAYER, "werewolf.role.flute_player.distance"))))
+                                Formatter.number(game.getConfig().getValue(RoleBase.FLUTE_PLAYER, DISTANCE))))
                 .setPower(game.translate("werewolf.role.flute_player.power"))
                 .setItems(game.translate("werewolf.role.flute_player.craft_description"))
                 .setEffects(game.translate("werewolf.role.flute_player.effect"))
@@ -159,7 +161,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
         if (!this.hasOwnFlute) {
             this.hasOwnFlute = true;
             this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.role.flute_player.perform",
-                    Formatter.number(game.getConfig().getValue(RoleBase.FLUTE_PLAYER, "werewolf.role.flute_player.distance")));
+                    Formatter.number(game.getConfig().getValue(RoleBase.FLUTE_PLAYER, DISTANCE)));
         } else {
             this.fluteInStore++;
             this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.role.flute_player.craft",
@@ -304,7 +306,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
     private boolean checkDistance(Location player, Player player1) {
         return player.getWorld() == player1.getWorld() &&
                 player.distance(player1.getLocation())
-                        < game.getConfig().getValue(RoleBase.FLUTE_PLAYER, "werewolf.role.flute_player.distance");
+                        < game.getConfig().getValue(RoleBase.FLUTE_PLAYER, DISTANCE);
     }
 
     @EventHandler
