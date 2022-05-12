@@ -2,15 +2,8 @@ package fr.ph1lou.werewolfplugin.utils;
 
 import com.google.common.reflect.ClassPath;
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
-import fr.ph1lou.werewolfplugin.Main;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -22,7 +15,7 @@ public class ReflectionUtils {
                 .stream()
                 .filter(clazz -> clazz.getPackageName()
                         .startsWith(packageName))
-                .map(clazz -> clazz.load())
+                .map(ClassPath.ClassInfo::load)
                 .collect(Collectors.toSet());
     }
 

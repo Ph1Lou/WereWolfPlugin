@@ -81,10 +81,8 @@ public class LanguageManager implements Listener {
 
         this.main.getRegisterManager().getAddonsRegister().forEach(addon -> {
             String defaultLanguages = addon.getMetaDatas().defaultLanguage();
-            addon.getObject().ifPresent(javaPlugin -> {
-                this.extraTexts.putAll(loadTranslations(javaPlugin,
-                        FileUtils_.loadContent(buildLanguageFile(javaPlugin, defaultLanguages))));
-            });
+            addon.getObject().ifPresent(javaPlugin -> this.extraTexts.putAll(loadTranslations(javaPlugin,
+                    FileUtils_.loadContent(buildLanguageFile(javaPlugin, defaultLanguages)))));
         });
     }
 

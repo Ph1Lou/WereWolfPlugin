@@ -25,8 +25,10 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 @Role(key = RoleBase.SERIAL_KILLER,
-         category = Category.NEUTRAL, attributes = {RoleAttribute.NEUTRAL})
+         category = Category.NEUTRAL, attributes = RoleAttribute.NEUTRAL)
 public class SerialKiller extends RoleNeutral implements IPower {
+
+    public static final String POTION = "serial_killer";
 
     public SerialKiller(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
@@ -112,7 +114,7 @@ public class SerialKiller extends RoleNeutral implements IPower {
 
         if (!hasPower()) return;
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"serial_killer"));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,POTION));
     }
 
     @Override
@@ -134,7 +136,7 @@ public class SerialKiller extends RoleNeutral implements IPower {
                 this.getPlayerWW(),
                 playerWW));
         if (hasPower()) {
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"serial_killer",0));
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,POTION,0));
             setPower(false);
         }
         if (!isAbilityEnabled()) return;
@@ -148,7 +150,7 @@ public class SerialKiller extends RoleNeutral implements IPower {
     public void disableAbilitiesRole() {
 
         if (this.hasPower()) {
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"serial_killer",0));
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,POTION,0));
         }
 
     }

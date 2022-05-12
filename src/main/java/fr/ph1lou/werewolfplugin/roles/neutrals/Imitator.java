@@ -38,8 +38,10 @@ import java.util.List;
 
 @Role(key = RoleBase.IMITATOR,
         category = Category.NEUTRAL,
-        attributes = {RoleAttribute.NEUTRAL})
+        attributes = RoleAttribute.NEUTRAL)
 public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
+
+    public static final String POTION = "imitator";
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private boolean power = true;
@@ -164,7 +166,7 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.role.thief.details");
 
         this.getPlayerWW()
-                .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"imitator",0));
+                .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,POTION,0));
         Bukkit.getPluginManager().callEvent(new StealEvent(this.getPlayerWW(),
                 playerWW,
                 roleClone.getKey()));
@@ -201,13 +203,13 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
 
         if(!isAbilityEnabled()) return;
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"imitator"));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,POTION));
 
     }
 
     @Override
     public void disableAbilitiesRole() {
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"imitator",0));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,POTION,0));
     }
 }

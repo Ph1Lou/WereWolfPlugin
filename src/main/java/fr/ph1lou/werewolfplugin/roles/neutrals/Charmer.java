@@ -41,12 +41,14 @@ import java.util.stream.Collectors;
 
 @Role(key = RoleBase.CHARMER,
         category = Category.NEUTRAL,
-        attributes = {RoleAttribute.NEUTRAL},
-        timers = {@Timer(key = TimerBase.CHARMER_COUNTDOWN,
+        attributes = RoleAttribute.NEUTRAL,
+        timers = @Timer(key = TimerBase.CHARMER_COUNTDOWN,
                 defaultValue = 6000, meetUpValue = 3000,
-        decrementAfterRole = true)},
+        decrementAfterRole = true),
         incompatibleRoles = {RoleBase.SCAMMER})
 public class Charmer extends RoleNeutral implements IPower, IAffectedPlayers {
+
+    public static final String POTION = "charmer";
 
     @Nullable
     private IPlayerWW playerWW;
@@ -135,9 +137,9 @@ public class Charmer extends RoleNeutral implements IPower, IAffectedPlayers {
             return;
         }
         this.getPlayerWW().addPotionModifier(PotionModifier
-                .add(PotionEffectType.ABSORPTION,Integer.MAX_VALUE,4,"charmer"));
+                .add(PotionEffectType.ABSORPTION,Integer.MAX_VALUE,4,POTION));
         this.getPlayerWW().addPotionModifier(PotionModifier
-                .add(PotionEffectType.SPEED,"charmer"));
+                .add(PotionEffectType.SPEED,POTION));
         this.getPlayerWW().sendMessageWithKey(Prefix.LIGHT_BLUE,
                 "werewolf.role.charmer.lover_death");
     }

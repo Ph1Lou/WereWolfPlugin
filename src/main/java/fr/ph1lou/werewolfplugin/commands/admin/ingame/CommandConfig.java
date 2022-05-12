@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 @AdminCommand(key = "werewolf.menu.command",
         descriptionKey = "werewolf.menu.description",
         moderatorAccess = true,
-        hostAccess = true,
         argNumbers = 0)
 public class CommandConfig implements ICommand {
 

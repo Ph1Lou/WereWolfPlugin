@@ -55,12 +55,12 @@ import java.util.List;
 
 @Role(key = RoleBase.ANGEL,
         category = Category.NEUTRAL,
-        attributes = {RoleAttribute.NEUTRAL},
-        timers = {@Timer(key = TimerBase.ANGEL_DURATION,
+        attributes = RoleAttribute.NEUTRAL,
+        timers = @Timer(key = TimerBase.ANGEL_DURATION,
                 defaultValue = 240, meetUpValue = 240,
         decrementAfterRole = true,
-        onZero = AutoAngelEvent.class)},
-        configurations = {@Configuration(key = ConfigBase.SWEET_ANGEL)}
+        onZero = AutoAngelEvent.class),
+        configurations = @Configuration(key = ConfigBase.SWEET_ANGEL)
 )
 public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse {
 

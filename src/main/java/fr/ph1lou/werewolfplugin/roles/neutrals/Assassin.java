@@ -30,6 +30,8 @@ import org.jetbrains.annotations.NotNull;
         attributes = RoleAttribute.NEUTRAL)
 public class Assassin extends RoleNeutral {
 
+    public static final String POTION = "assassin";
+
     public Assassin(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
     }
@@ -38,7 +40,7 @@ public class Assassin extends RoleNeutral {
     public void onNight(NightEvent event) {
 
         this.getPlayerWW()
-                .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"assassin",0));
+                .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,POTION,0));
 
     }
 
@@ -48,7 +50,7 @@ public class Assassin extends RoleNeutral {
         if (!isAbilityEnabled()) return;
 
         this.getPlayerWW()
-                .addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"assassin"));
+                .addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,POTION));
 
     }
 
@@ -123,7 +125,7 @@ public class Assassin extends RoleNeutral {
 
         if (!isAbilityEnabled()) return;
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"assassin"));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,POTION));
     }
 
     @Override
@@ -134,6 +136,6 @@ public class Assassin extends RoleNeutral {
     @Override
     public void disableAbilitiesRole() {
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"assassin",0));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,POTION,0));
     }
 }

@@ -36,12 +36,12 @@ import java.util.Set;
 
 @Role(key = RoleBase.BARBARIAN, 
         category = Category.NEUTRAL, 
-        attributes = {RoleAttribute.NEUTRAL},
-        intValues = {@IntValue(key = Barbarian.DISTANCE,
+        attributes = RoleAttribute.NEUTRAL,
+        intValues = @IntValue(key = Barbarian.DISTANCE,
                 defaultValue = 25, 
                 meetUpValue = 25, 
                 step = 5, 
-                item = UniversalMaterial.GRAY_WOOL)})
+                item = UniversalMaterial.GRAY_WOOL))
 public class Barbarian extends RoleNeutral implements IPower, IAffectedPlayers {
 
     public static final String DISTANCE = "werewolf.role.barbarian.distance";

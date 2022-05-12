@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
         descriptionKey = "werewolf.commands.admin.generation.description",
         stateGame = StateGame.LOBBY,
         argNumbers = 0,
-        hostAccess = true,
         moderatorAccess = true)
 public class CommandGeneration implements ICommand {
 

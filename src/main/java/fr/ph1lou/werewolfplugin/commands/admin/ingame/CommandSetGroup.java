@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 
 @AdminCommand(key = "werewolf.commands.admin.group.command_2",
         descriptionKey = "werewolf.commands.admin.group.description2",
-        hostAccess = true,
         moderatorAccess = true,
         argNumbers = 1)
 public class CommandSetGroup implements ICommand {

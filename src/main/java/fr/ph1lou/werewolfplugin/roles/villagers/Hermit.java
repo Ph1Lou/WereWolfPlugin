@@ -32,11 +32,13 @@ import java.util.Optional;
 
 
 @Role(key = RoleBase.HERMIT, 
-        category = Category.VILLAGER, attributes = {RoleAttribute.VILLAGER},
-        intValues = {@IntValue(key = Hermit.DISTANCE, defaultValue = 20, meetUpValue = 20, step = 4, item = UniversalMaterial.WHITE_WOOL)})
+        category = Category.VILLAGER, attributes = RoleAttribute.VILLAGER,
+        intValues = @IntValue(key = Hermit.DISTANCE, defaultValue = 20,
+                meetUpValue = 20, step = 4, item = UniversalMaterial.WHITE_WOOL))
 public class Hermit extends RoleVillage {
 
     public static final String DISTANCE = "werewolf.role.hermit.distance";
+    public static final String POTION = "hermit";
 
     public Hermit(WereWolfAPI game, IPlayerWW playerWW) {
         super(game, playerWW);
@@ -61,16 +63,16 @@ public class Hermit extends RoleVillage {
 
         this.getPlayerWW()
                 .addPotionModifier(PotionModifier.remove(PotionEffectType.SPEED,
-                        "hermit",0));
+                        POTION,0));
         this.getPlayerWW()
                 .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
-                        "hermit",0));
+                        POTION,0));
         this.getPlayerWW()
                 .addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
-                        "hermit",0));
+                        POTION,0));
         this.getPlayerWW()
                 .addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS,
-                        "hermit",0));
+                        POTION,0));
     }
 
     @EventHandler
@@ -154,46 +156,46 @@ public class Hermit extends RoleVillage {
         if(number == 0){
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.add(PotionEffectType.SPEED,
-                            "hermit"));
+                            POTION));
         }
         else{
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.remove(PotionEffectType.SPEED,
-                            "hermit",0));
+                            POTION,0));
         }
 
         if(number >= 5){
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.add(PotionEffectType.WEAKNESS,
-                            "hermit"));
+                            POTION));
 
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
-                            "hermit",0));
+                            POTION,0));
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
-                            "hermit",0));
+                            POTION,0));
         }
         else{
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS,
-                            "hermit",0));
+                            POTION,0));
             
             if(game.isDay(Day.DAY)){
                 this.getPlayerWW()
                         .addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
-                                "hermit",0));
+                                POTION,0));
                 this.getPlayerWW()
                         .addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,
-                                "hermit"));
+                                POTION));
             }
             else{
                 this.getPlayerWW()
                         .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
-                                "hermit",0));
+                                POTION,0));
                 this.getPlayerWW()
                         .addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,
-                                "hermit"));
+                                POTION));
             }
         }
     }

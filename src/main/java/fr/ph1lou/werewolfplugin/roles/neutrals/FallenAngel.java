@@ -13,7 +13,7 @@ import org.bukkit.Bukkit;
 
 @Role(key = RoleBase.FALLEN_ANGEL,
         category = Category.NEUTRAL,
-        attributes = {RoleAttribute.NEUTRAL})
+        attributes = RoleAttribute.NEUTRAL)
 public class FallenAngel extends Angel {
 
     public FallenAngel(WereWolfAPI api, IPlayerWW playerWW) {

@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 @AdminCommand(key = "werewolf.commands.admin.chat.command",
         descriptionKey = "werewolf.commands.admin.chat.description",
         moderatorAccess = true,
-        hostAccess = true,
         argNumbers = 0)
 public class CommandChat implements ICommand {
 

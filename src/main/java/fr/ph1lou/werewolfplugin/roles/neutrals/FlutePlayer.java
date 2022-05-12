@@ -60,9 +60,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @Role(key = RoleBase.FLUTE_PLAYER, 
         category = Category.NEUTRAL, 
-        attributes = {RoleAttribute.NEUTRAL},
-        intValues = {@IntValue(key = FlutePlayer.DISTANCE,
-        defaultValue = 20, meetUpValue = 20, step = 4, item = UniversalMaterial.LIGHT_BLUE_WOOL)})
+        attributes = RoleAttribute.NEUTRAL,
+        intValues = @IntValue(key = FlutePlayer.DISTANCE,
+        defaultValue = 20, meetUpValue = 20, step = 4, item = UniversalMaterial.LIGHT_BLUE_WOOL))
 
 public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers {
 

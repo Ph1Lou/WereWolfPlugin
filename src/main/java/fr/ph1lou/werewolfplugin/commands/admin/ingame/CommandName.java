@@ -8,8 +8,8 @@ import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import org.bukkit.entity.Player;
 
 @AdminCommand(key = "werewolf.commands.admin.set_game_name.command",
-        descriptionKey = "werewolf.commands.admin.set_game_name.description",
-        hostAccess = true)
+        descriptionKey = "werewolf.commands.admin.set_game_name.description"
+)
 public class CommandName implements ICommand {
 
     @Override

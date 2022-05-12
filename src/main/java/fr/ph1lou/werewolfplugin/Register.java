@@ -57,14 +57,14 @@ public class Register implements IRegisterManager {
     public <T> T instantiate(Class<T> clazz){
         if(ListenerManager.class.isAssignableFrom(clazz)){
             try {
-                return (T) clazz.getConstructor(GetWereWolfAPI.class).newInstance(main);
+                return clazz.getConstructor(GetWereWolfAPI.class).newInstance(main);
             } catch (InstantiationException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
             }
         }
         if(ICommand.class.isAssignableFrom(clazz)){
             try {
-                return (T) clazz.getConstructor().newInstance();
+                return clazz.getConstructor().newInstance();
             } catch (InstantiationException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
             }

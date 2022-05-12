@@ -13,7 +13,7 @@ import org.bukkit.Bukkit;
 
 @Role(key = RoleBase.GUARDIAN_ANGEL,
         category = Category.NEUTRAL,
-        attributes = {RoleAttribute.NEUTRAL})
+        attributes = RoleAttribute.NEUTRAL)
 public class GuardianAngel extends Angel {
 
 
