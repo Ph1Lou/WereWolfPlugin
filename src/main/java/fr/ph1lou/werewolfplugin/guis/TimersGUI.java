@@ -166,27 +166,25 @@ public class TimersGUI implements InventoryProvider {
 
 
         main.getRegisterManager().getTimersRegister()
-                .stream()
-                .filter(timerRegister -> !timerRegister.getRoleKey().isPresent() || game.isDebug())
                 .forEach(timerRegister -> {
 
             List<String> lore = new ArrayList<>();
-            timerRegister.getLoreKey().stream()
+                    Arrays.stream(timerRegister.getMetaDatas().loreKey())
                     .map(game::translate)
                     .map(s -> Arrays.stream(s.split("\\n"))
                             .collect(Collectors.toList()))
                     .forEach(lore::addAll);
 
-            if (game.getConfig().getTimerValue(timerRegister.getKey()) >= 0 || game.isDebug()) {
+            if (game.getConfig().getTimerValue(timerRegister.getMetaDatas().key()) >= 0 || game.isDebug()) {
 
-                items.add(ClickableItem.of((new ItemBuilder(timerRegister.getKey().equals(key) ?
+                items.add(ClickableItem.of((new ItemBuilder(timerRegister.getMetaDatas().key().equals(key) ?
                                 Material.FEATHER :
                                 UniversalMaterial.ANVIL.getType())
                                 .setLore(lore)
-                                .setDisplayName(game.translate(timerRegister.getKey(),
-                                        Formatter.timer(Utils.conversion(config.getTimerValue(timerRegister.getKey())))))
+                                .setDisplayName(game.translate(timerRegister.getMetaDatas().key(),
+                                        Formatter.timer(Utils.conversion(config.getTimerValue(timerRegister.getMetaDatas().key())))))
                                 .build()),
-                        e -> this.key = timerRegister.getKey()));
+                        e -> this.key = timerRegister.getMetaDatas().key()));
             }
         });
 

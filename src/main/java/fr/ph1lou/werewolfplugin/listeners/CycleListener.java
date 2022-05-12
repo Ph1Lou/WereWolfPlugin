@@ -13,7 +13,7 @@ import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
-import fr.ph1lou.werewolfplugin.RegisterManager;
+import fr.ph1lou.werewolfplugin.Register;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfplugin.statistiks.StatistiksUtils;
 import org.bukkit.Bukkit;
@@ -141,8 +141,11 @@ public class CycleListener implements Listener {
 
     @EventHandler
     public void onStart(StartEvent event) {
-        RegisterManager.get().getRandomEventsRegister()
-                .forEach(randomEventRegister -> randomEventRegister.getRandomEvent()
-                        .register(game.getRandom().nextDouble() * 100 < game.getConfig().getProbability(randomEventRegister.getKey())));
+        Register.get().getRandomEventsRegister()
+                .forEach(randomEventRegister -> randomEventRegister.getObject().ifPresent(listenerManager ->
+                    listenerManager
+                            .register(game.getRandom().nextDouble() * 100 <
+                                    game.getConfig()
+                                            .getProbability(randomEventRegister.getMetaDatas().key()))));
     }
 }

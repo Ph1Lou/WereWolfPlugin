@@ -8,14 +8,16 @@ import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.LoverType;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.registers.impl.RoleRegister;
+import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
+import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Material;
@@ -62,8 +64,8 @@ public class Roles implements InventoryProvider {
 
         contents.set(0, 8, ClickableItem.of((new ItemBuilder(UniversalMaterial.BARRIER.getType())
                 .setDisplayName(game.translate("werewolf.menu.roles.zero")).build()), e -> {
-            for (RoleRegister roleRegister : main.getRegisterManager().getRolesRegister()) {
-                config.setRole(roleRegister.getKey(), 0);
+            for (Wrapper<IRole, Role> roleRegister : main.getRegisterManager().getRolesRegister()) {
+                config.setRole(roleRegister.getMetaDatas().key(), 0);
             }
             config.setLoverCount(LoverType.LOVER.getKey(), 0);
             config.setLoverCount(LoverType.AMNESIAC_LOVER.getKey(), 0);
@@ -195,25 +197,26 @@ public class Roles implements InventoryProvider {
 
         main.getRegisterManager().getRolesRegister()
                 .stream()
-                .sorted((o1, o2) -> game.translate(o1.getKey()).compareToIgnoreCase(game.translate(o2.getKey())))
+                .sorted((o1, o2) -> game.translate(o1.getMetaDatas().key())
+                        .compareToIgnoreCase(game.translate(o2.getMetaDatas().key())))
                 .forEach(roleRegister -> {
 
-                    if (roleRegister.getCategories().contains(this.category)) {
+                    if (roleRegister.getMetaDatas().category() == this.category) {
 
-                        String key = roleRegister.getKey();
+                        String key = roleRegister.getMetaDatas().key();
                         AtomicBoolean unRemovable = new AtomicBoolean(false);
                         List<String> lore2 = new ArrayList<>(lore);
-                        roleRegister.getLoreKey()
-                                .stream()
+                        Arrays.stream(roleRegister.getMetaDatas().loreKey())
                                 .map(game::translate)
                                 .map(s -> Arrays.stream(s.split("\\n"))
                                         .collect(Collectors.toList())).forEach(lore2::addAll);
-                        roleRegister.getRequireRoles().forEach(roleKey -> lore2.add(game.translate("werewolf.menu.roles.need",
+                        Arrays.stream(roleRegister.getMetaDatas().requireRoles())
+                                .forEach(roleKey -> lore2.add(game.translate("werewolf.menu.roles.need",
                                 Formatter.role(game.translate(roleKey)))));
                         main.getRegisterManager().getRolesRegister().stream()
-                                .filter(roleRegister1 -> roleRegister1.getRequireRoles().stream()
-                                        .anyMatch(requiredRole -> requiredRole.equals(roleRegister1.getKey())))
-                                .map(RoleRegister::getKey)
+                                .filter(roleRegister1 -> Arrays.stream(roleRegister1.getMetaDatas().requireRoles())
+                                        .anyMatch(requiredRole -> requiredRole.equals(roleRegister1.getMetaDatas().key())))
+                                .map(iRoleRoleWrapper -> iRoleRoleWrapper.getMetaDatas().key())
                                 .filter(roleRegister1Key -> game.getConfig().getRoleCount(roleRegister1Key) > 0)
                                 .findFirst().ifPresent(role -> {
                                     lore2.add(game.translate("werewolf.menu.roles.dependant_load",
@@ -221,9 +224,7 @@ public class Roles implements InventoryProvider {
                                     unRemovable.set(true);
                                 });
 
-                        Optional<String> incompatible = roleRegister
-                                .getIncompatibleRoles()
-                                .stream()
+                        Optional<String> incompatible = Arrays.stream(roleRegister.getMetaDatas().incompatibleRoles())
                                 .filter(s -> game.getConfig().getRoleCount(s) > 0)
                                 .map(game::translate)
                                 .findFirst();
@@ -234,12 +235,10 @@ public class Roles implements InventoryProvider {
 
                         if (config.getRoleCount(key) > 0) {
                             items.add(ClickableItem.of((
-                                    new ItemBuilder(roleRegister.getItem().isPresent() ?
-                                            roleRegister.getItem().get() :
-                                            UniversalMaterial.GREEN_TERRACOTTA.getStack())
+                                    new ItemBuilder(UniversalMaterial.GREEN_TERRACOTTA.getStack())
                                             .setAmount(config.getRoleCount(key))
                                             .setLore(lore2)
-                                            .setDisplayName(game.translate(roleRegister.getKey()))
+                                            .setDisplayName(game.translate(key))
                                             .build()), e -> {
 
                                 if (e.isShiftClick()) {
@@ -249,7 +248,7 @@ public class Roles implements InventoryProvider {
                                 } else if (e.isRightClick()) {
                                     int count = game.getConfig().getRoleCount(key);
                                     if (!unRemovable.get() || count > 1) {
-                                        if (roleRegister.isRequireDouble() && count == 2) {
+                                        if (roleRegister.getMetaDatas().requireDouble() && count == 2) {
                                             selectMinus(game, key);
                                         }
                                         selectMinus(game, key);
@@ -258,16 +257,10 @@ public class Roles implements InventoryProvider {
                             }));
                         } else {
 
-                            if (roleRegister.getItem().isPresent()) {
-                                lore2.add(0, game.translate("werewolf.utils.none"));
-                            }
-
-                            items.add(ClickableItem.of((new ItemBuilder(roleRegister.getItem().isPresent() ?
-                                    roleRegister.getItem().get() :
-                                    UniversalMaterial.RED_TERRACOTTA.getStack())
+                            items.add(ClickableItem.of((new ItemBuilder(UniversalMaterial.RED_TERRACOTTA.getStack())
                                     .setAmount(1)
                                     .setLore(lore2)
-                                    .setDisplayName(game.translate(roleRegister.getKey())).build()), e -> {
+                                    .setDisplayName(game.translate(key)).build()), e -> {
 
                                 if (e.isShiftClick()) {
                                     AdvancedRoleMenu.getInventory(roleRegister).open(player);
@@ -275,11 +268,11 @@ public class Roles implements InventoryProvider {
                                     if(incompatible.isPresent()){
                                         return;
                                     }
-                                    if (roleRegister.getRequireRoles().stream()
+                                    if (Arrays.stream(roleRegister.getMetaDatas().requireRoles())
                                             .anyMatch(requireRole -> game.getConfig().getRoleCount(requireRole) == 0)) {
                                         return;
                                     }
-                                    if (roleRegister.isRequireDouble()) {
+                                    if (roleRegister.getMetaDatas().requireDouble()) {
                                         selectPlus(game, key);
                                     }
                                     selectPlus(game, key);
@@ -350,9 +343,9 @@ public class Roles implements InventoryProvider {
 
     private int count(GetWereWolfAPI main, Category category) {
         int i = 0;
-        for (RoleRegister roleRegister : main.getRegisterManager().getRolesRegister()) {
-            if (roleRegister.getCategories().contains(category)) {
-                i += main.getWereWolfAPI().getConfig().getRoleCount(roleRegister.getKey());
+        for (Wrapper<IRole, Role> roleRegister : main.getRegisterManager().getRolesRegister()) {
+            if (roleRegister.getMetaDatas().category() == category) {
+                i += main.getWereWolfAPI().getConfig().getRoleCount(roleRegister.getMetaDatas().key());
             }
 
         }

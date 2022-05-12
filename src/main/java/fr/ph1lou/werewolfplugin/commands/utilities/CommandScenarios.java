@@ -1,15 +1,17 @@
 package fr.ph1lou.werewolfplugin.commands.utilities;
 
-import fr.ph1lou.werewolfapi.annotations.Command;
+import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
+import fr.ph1lou.werewolfapi.annotations.Scenario;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.registers.impl.ScenarioRegister;
-import fr.ph1lou.werewolfplugin.RegisterManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.utils.Wrapper;
+import fr.ph1lou.werewolfplugin.Register;
 import org.bukkit.entity.Player;
 
-@Command(key = "werewolf.menu.scenarios.command",
+@PlayerCommand(key = "werewolf.menu.scenarios.command",
         descriptionKey = "werewolf.menu.scenarios.description",
         argNumbers = 0)
 public class CommandScenarios implements ICommand {
@@ -26,10 +28,10 @@ public class CommandScenarios implements ICommand {
 
         StringBuilder sb = new StringBuilder(game.translate(Prefix.GREEN , "werewolf.menu.scenarios.list"));
         int i = 0;
-        for (ScenarioRegister scenarioRegister : RegisterManager.get().getScenariosRegister()) {
-            if (game.getConfig().isScenarioActive(scenarioRegister.getKey())) {
+        for (Wrapper<ListenerManager, Scenario> scenarioRegister : Register.get().getScenariosRegister()) {
+            if (game.getConfig().isScenarioActive(scenarioRegister.getMetaDatas().key())) {
                 sb.append(i % 2 == 0 ? "§b" : "")
-                        .append(game.translate(scenarioRegister.getKey()))
+                        .append(game.translate(scenarioRegister.getMetaDatas().key()))
                         .append("§f, ");
                 i++;
             }

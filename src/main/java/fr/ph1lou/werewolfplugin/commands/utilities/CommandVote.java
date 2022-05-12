@@ -1,6 +1,6 @@
 package fr.ph1lou.werewolfplugin.commands.utilities;
 
-import fr.ph1lou.werewolfapi.annotations.Command;
+import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-@Command(key = "werewolf.vote.command",
+@PlayerCommand(key = "werewolf.vote.command",
         descriptionKey = "",
         statePlayer = StatePlayer.ALIVE,
         stateGame = StateGame.GAME,

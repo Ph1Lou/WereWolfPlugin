@@ -7,6 +7,9 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.role.interfaces.IRole;
+import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
@@ -14,13 +17,13 @@ import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
-import fr.ph1lou.werewolfapi.registers.impl.RoleRegister;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,18 +91,23 @@ public class TrollChoice implements InventoryProvider {
 
         List<ClickableItem> items = new ArrayList<>();
 
-        for (RoleRegister roleRegister : main.getRegisterManager().getRolesRegister()) {
+        for (Wrapper<IRole, Role> roleRegister : main.getRegisterManager().getRolesRegister()) {
 
-            if (roleRegister.getCategories().contains(categories.getOrDefault(uuid, Category.WEREWOLF))) {
+            if (roleRegister.getMetaDatas().category() == categories.getOrDefault(uuid, Category.WEREWOLF)) {
 
-                String key = roleRegister.getKey();
-                List<String> lore = roleRegister.getLoreKey().stream().map(game::translate).collect(Collectors.toList());
+                String key = roleRegister.getMetaDatas().key();
+                List<String> lore = Arrays.stream(roleRegister.getMetaDatas().loreKey())
+                        .map(game::translate)
+                        .collect(Collectors.toList());
 
                 if (config.getTrollKey().equals(key)) {
-                    items.add(ClickableItem.empty(new ItemBuilder(UniversalMaterial.GREEN_TERRACOTTA.getStack()).setLore(lore).setDisplayName(game.translate(roleRegister.getKey())).build()));
+                    items.add(ClickableItem.empty(new ItemBuilder(UniversalMaterial.GREEN_TERRACOTTA.getStack()).setLore(lore)
+                            .setDisplayName(game.translate(roleRegister.getMetaDatas().key())).build()));
                 } else {
-                    items.add(ClickableItem.of((new ItemBuilder(UniversalMaterial.RED_TERRACOTTA.getStack()).setLore(lore).setDisplayName(game.translate(roleRegister.getKey())).build()), event ->
-                            config.setTrollKey(roleRegister.getKey())));
+                    items.add(ClickableItem.of((new ItemBuilder(UniversalMaterial.RED_TERRACOTTA.getStack())
+                            .setLore(lore)
+                            .setDisplayName(game.translate(roleRegister.getMetaDatas().key())).build()), event ->
+                            config.setTrollKey(roleRegister.getMetaDatas().key())));
                 }
 
             }

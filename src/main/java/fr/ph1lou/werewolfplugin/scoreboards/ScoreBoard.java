@@ -1,7 +1,10 @@
 package fr.ph1lou.werewolfplugin.scoreboards;
 
 import fr.mrmicky.fastboard.FastBoard;
-import fr.ph1lou.werewolfplugin.RegisterManager;
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.role.interfaces.IRole;
+import fr.ph1lou.werewolfapi.utils.Wrapper;
+import fr.ph1lou.werewolfplugin.Register;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.game.IModerationManager;
@@ -12,7 +15,6 @@ import fr.ph1lou.werewolfapi.enums.LoverType;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
-import fr.ph1lou.werewolfapi.registers.impl.RoleRegister;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Bukkit;
@@ -155,15 +157,15 @@ public class ScoreBoard {
 					.append(game.translate(LoverType.CURSED_LOVER.getKey()));
 			roles.add(sb.substring(0, Math.min(30, sb.length())));
 		}
-		for (RoleRegister roleRegister : RegisterManager.get().getRolesRegister()) {
-			String key = roleRegister.getKey();
+		for (Wrapper<IRole, Role> roleRegister : Register.get().getRolesRegister()) {
+			String key = roleRegister.getMetaDatas().key();
 			if (game.getConfig().getRoleCount(key) > 0) {
 				StringBuilder sb = new StringBuilder();
 				sb
 						.append("§3")
 						.append(game.getConfig().getRoleCount(key))
 						.append("§f ")
-						.append(game.translate(roleRegister.getKey()));
+						.append(game.translate(key));
 				roles.add(sb.substring(0, Math.min(30, sb.length())));
 			}
 		}

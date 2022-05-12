@@ -1,6 +1,6 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.info.librarian;
 
-import fr.ph1lou.werewolfapi.annotations.Command;
+import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.commands.ICommand;
@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@Command(key = "werewolf.role.librarian.request_command",
+@PlayerCommand(key = "werewolf.role.librarian.request_command",
         descriptionKey = "",
         autoCompletion = false)
 public class CommandSendToLibrarian implements ICommand {

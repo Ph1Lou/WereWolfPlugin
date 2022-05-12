@@ -2,11 +2,12 @@ package fr.ph1lou.werewolfplugin.save;
 
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.WriterConfig;
+import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
-import fr.ph1lou.werewolfapi.registers.interfaces.IRegisterManager;
-import fr.ph1lou.werewolfapi.registers.impl.RoleRegister;
+import fr.ph1lou.werewolfapi.registers.IRegisterManager;
+import fr.ph1lou.werewolfapi.role.interfaces.IRole;
+import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Main;
-import fr.ph1lou.werewolfplugin.RegisterManager;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 
@@ -49,15 +50,15 @@ public class FileUtils_ {
             game.setConfig(Serializer.deserialize(loadContent(file)));
             game.setRoleInitialSize(0);
             game.getModerationManager().checkQueue();
-            ((Configuration) game.getConfig()).addRegister((RegisterManager) main.getRegisterManager());
+            ((Configuration) game.getConfig()).addRegister(main.getRegisterManager());
             game.getListenersLoader().update();
         }
 
         IConfiguration config = game.getConfig();
         IRegisterManager register = main.getRegisterManager();
 
-        for (RoleRegister roleRegister : register.getRolesRegister()) {
-            String key = roleRegister.getKey();
+        for (Wrapper<IRole, Role> roleRegister : register.getRolesRegister()) {
+            String key = roleRegister.getMetaDatas().key();
             game.setRoleInitialSize(game.getRoleInitialSize() + config.getRoleCount(key));
         }
 

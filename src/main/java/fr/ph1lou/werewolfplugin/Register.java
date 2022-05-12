@@ -1,245 +1,200 @@
 package fr.ph1lou.werewolfplugin;
 
-import fr.ph1lou.werewolfapi.registers.impl.AddonRegister;
-import fr.ph1lou.werewolfapi.registers.impl.CommandRegister;
-import fr.ph1lou.werewolfapi.registers.impl.ConfigRegister;
-import fr.ph1lou.werewolfapi.registers.interfaces.IRegister;
-import fr.ph1lou.werewolfapi.registers.interfaces.IRegisterManager;
-import fr.ph1lou.werewolfapi.registers.impl.RandomEventRegister;
-import fr.ph1lou.werewolfapi.registers.impl.RoleRegister;
-import fr.ph1lou.werewolfapi.registers.impl.ScenarioRegister;
-import fr.ph1lou.werewolfapi.registers.impl.TimerRegister;
+import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.annotations.Addon;
+import fr.ph1lou.werewolfapi.annotations.AdminCommand;
+import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.Event;
+import fr.ph1lou.werewolfapi.annotations.Lover;
+import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.annotations.RoleCommand;
+import fr.ph1lou.werewolfapi.annotations.Scenario;
+import fr.ph1lou.werewolfapi.annotations.Timer;
+import fr.ph1lou.werewolfapi.commands.ICommand;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.lovers.ILover;
+import fr.ph1lou.werewolfapi.registers.IRegisterManager;
+import fr.ph1lou.werewolfapi.role.interfaces.IRole;
+import fr.ph1lou.werewolfapi.utils.Wrapper;
+import fr.ph1lou.werewolfplugin.utils.ReflectionUtils;
+import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Register implements IRegisterManager {
 
-    private final String key;
-    private final Map<AddonRegister,Register> addonsRegister = new HashMap<>();
-    private List<RoleRegister> rolesRegister;
-    private List<ScenarioRegister> scenariosRegister;
-    private List<ConfigRegister> configsRegister;
-    private List<TimerRegister> timersRegister;
-    private List<CommandRegister> commandsRegister;
-    private List<CommandRegister> adminCommandsRegister;
-    private List<RandomEventRegister> eventRandomsRegister;
+    private final Set<Wrapper<IRole, Role>> roles = new HashSet<>();
+    private final Set<Wrapper<ListenerManager, Scenario>> scenarios = new HashSet<>();
+    private final Set<Wrapper<ListenerManager, Event>> events = new HashSet<>();
+    private final Set<Wrapper<ICommand, PlayerCommand>> commands = new HashSet<>();
+    private final Set<Wrapper<ICommand, RoleCommand>> roleCommands = new HashSet<>();
+    private final Set<Wrapper<ICommand, AdminCommand>> adminCommands = new HashSet<>();
 
-    public Register(Main main){
-        this.key = "werewolf.name";
+    private final Set<Wrapper<?, Configuration>> configurations = new HashSet<>();
+    private final Set<Wrapper<?, Timer>> timers = new HashSet<>();
 
+    private final Set<Wrapper<ILover, Lover>> lovers = new HashSet<>();
+    private final GetWereWolfAPI main;
+
+    public static Register get() {
+        return INSTANCE;
     }
 
-    public Register(String key){
-        this.key =key;
-        this.rolesRegister = new ArrayList<>();
-        this.scenariosRegister = new ArrayList<>();
-        this.configsRegister = new ArrayList<>();
-        this.timersRegister = new ArrayList<>();
-        this.commandsRegister = new ArrayList<>();
-        this.adminCommandsRegister = new ArrayList<>();
-        this.eventRandomsRegister = new ArrayList<>();
+    private static Register INSTANCE;
+
+    public Register(GetWereWolfAPI main){
+        this.main = main;
+        INSTANCE = this;
+        this.register("fr.ph1lou.werewolfplugin", main.getClass().getAnnotation(Addon.class));
     }
 
-    @Override
-    public Optional<IRegisterManager> getRegister(String key){
-        if(this.key.equals(key)){
-            return Optional.of(this);
+
+
+    public <T> T instantiate(Class<T> clazz){
+        if(ListenerManager.class.isAssignableFrom(clazz)){
+            try {
+                return (T) clazz.getConstructor(GetWereWolfAPI.class).newInstance(main);
+            } catch (InstantiationException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
         }
-        if(this.addonsRegister.isEmpty()){
-            return Optional.empty();
+        if(ICommand.class.isAssignableFrom(clazz)){
+            try {
+                return (T) clazz.getConstructor().newInstance();
+            } catch (InstantiationException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
         }
-        return this.addonsRegister
-                .values()
-                .stream()
-                .map(addonRegister -> addonRegister.getRegister(key))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .findFirst();
+        return null;
     }
 
-    @Override
-    public List<? extends RoleRegister> getRolesRegister() {
-        List<RoleRegister> rolesRegister1 = this.addonsRegister
-                .values()
-                .stream().map(Register::getRolesRegister)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
-        rolesRegister1.addAll(this.rolesRegister);
+    public void register(String packageName, Addon addon){
 
-        return rolesRegister1;
-    }
+        try {
+            ReflectionUtils.findAllClasses(main, packageName)
+                    .forEach(clazz -> {
+                        if(clazz.getAnnotation(Role.class) != null){
 
-    @Override
-    public List<? extends ScenarioRegister> getScenariosRegister() {
-        List<ScenarioRegister> scenariosRegister1 = this.addonsRegister
-                .values()
-                .stream()
-                .map(Register::getScenariosRegister)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
-        scenariosRegister1.addAll(this.scenariosRegister);
+                            if(IRole.class.isAssignableFrom(clazz)){
 
-        return scenariosRegister1;
-    }
-
-    @Override
-    public List<? extends ConfigRegister> getConfigsRegister() {
-        List<ConfigRegister> scenariosRegister1 = this.addonsRegister
-                .values()
-                .stream()
-                .map(Register::getConfigsRegister)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
-        scenariosRegister1.addAll(this.configsRegister);
-
-        return scenariosRegister1;
-    }
-
-    @Override
-    public List<? extends TimerRegister> getTimersRegister() {
-        List<TimerRegister> timerRegisters = this.addonsRegister
-                .values()
-                .stream()
-                .map(Register::getTimersRegister)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
-        timerRegisters.addAll(this.timersRegister);
-
-        return timerRegisters;
-    }
-
-    @Override
-    public List<? extends CommandRegister> getCommandsRegister() {
-        List<CommandRegister> commandRegisters = this.addonsRegister
-                .values()
-                .stream()
-                .map(Register::getCommandsRegister)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
-        commandRegisters.addAll(this.commandsRegister);
-
-        return commandRegisters;
-    }
-
-    @Override
-    public List<? extends CommandRegister> getAdminCommandsRegister() {
-        List<CommandRegister> commandRegisters = this.addonsRegister
-                .values()
-                .stream()
-                .map(Register::getAdminCommandsRegister)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
-        commandRegisters.addAll(this.adminCommandsRegister);
-
-        return commandRegisters;
-    }
-
-    @Override
-    public List<? extends AddonRegister> getAddonsRegister() {
-        List<AddonRegister> addonRegisters = this.addonsRegister
-                .values()
-                .stream()
-                .map(Register::getAddonsRegister)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
-        addonRegisters.addAll(this.addonsRegister.keySet());
-
-        return addonRegisters;
-    }
-
-    @Override
-    public List<? extends RandomEventRegister> getRandomEventsRegister() {
-        List<RandomEventRegister> randomEventRegisters = this.addonsRegister
-                .values()
-                .stream()
-                .map(Register::getRandomEventsRegister)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
-        randomEventRegisters.addAll(this.eventRandomsRegister);
-
-        return randomEventRegisters;
-    }
-
-    @Override
-    public void registerAddon(AddonRegister addonRegister) {
-        List<AddonRegister> addonRegisters = new ArrayList<>();
-        register(addonRegister,
-                addonRegisters,
-                iRegisterManager -> iRegisterManager.registerAddon(addonRegister));
-        if(!addonRegisters.isEmpty()){
-            this.addonsRegister.put(addonRegister,new Register(addonRegister.getKey()));
+                                this.roles.add(new Wrapper<>((Class<IRole>)clazz,
+                                        clazz.getAnnotation(Role.class),
+                                        addon.key(),
+                                        null));
+                            }
+                        }
+                        else if(clazz.getAnnotation(Scenario.class) != null){
+                            if(ListenerManager.class.isAssignableFrom(clazz)){
+                                this.scenarios.add(new Wrapper<>((Class<ListenerManager>)clazz,
+                                        clazz.getAnnotation(Scenario.class),
+                                        addon.key(),
+                                        this.instantiate((Class<ListenerManager>)clazz)));
+                            }
+                        }
+                        else if(clazz.getAnnotation(Event.class) != null){
+                            if(ListenerManager.class.isAssignableFrom(clazz)){
+                                this.events.add(new Wrapper<>((Class<ListenerManager>)clazz,
+                                        clazz.getAnnotation(Event.class),
+                                        addon.key(),
+                                        this.instantiate((Class<ListenerManager>)clazz)));
+                            }
+                        }
+                        else if(clazz.getAnnotation(Configuration.class) != null){
+                            this.configurations.add(new Wrapper<>((Class<ICommand>)clazz,
+                                    clazz.getAnnotation(Configuration.class),
+                                    addon.key(),
+                                    this.instantiate((Class<ICommand>)clazz)));
+                        }
+                        else if(clazz.getAnnotation(Timer.class) != null){
+                            this.timers.add(new Wrapper<>((Class<ICommand>)clazz,
+                                    clazz.getAnnotation(Timer.class),
+                                    addon.key(),
+                                    this.instantiate((Class<ICommand>)clazz)));
+                        }
+                        else if(clazz.getAnnotation(PlayerCommand.class) != null){
+                            if(ICommand.class.isAssignableFrom(clazz)){
+                                this.commands.add(new Wrapper<>((Class<ICommand>)clazz,
+                                        clazz.getAnnotation(PlayerCommand.class),
+                                        addon.key(),
+                                        this.instantiate((Class<ICommand>)clazz)));
+                            }
+                        }
+                        else if(clazz.getAnnotation(RoleCommand.class) != null){
+                            if(ICommand.class.isAssignableFrom(clazz)){
+                                this.roleCommands.add(new Wrapper<>((Class<ICommand>)clazz,
+                                        clazz.getAnnotation(RoleCommand.class),
+                                        addon.key(),
+                                        this.instantiate((Class<ICommand>)clazz)));
+                            }
+                        }
+                        else if(clazz.getAnnotation(AdminCommand.class) != null){
+                            if(ICommand.class.isAssignableFrom(clazz)){
+                                this.adminCommands.add(new Wrapper<>((Class<ICommand>)clazz,
+                                        clazz.getAnnotation(AdminCommand.class),
+                                        addon.key(),
+                                        this.instantiate((Class<ICommand>)clazz)));
+                            }
+                        }
+                        else if(clazz.getAnnotation(Lover.class) != null){
+                            if(ILover.class.isAssignableFrom(clazz)){
+                                this.lovers.add(new Wrapper<>((Class<ILover>)clazz,
+                                        clazz.getAnnotation(Lover.class),
+                                        addon.key(),
+                                        null));
+                            }
+                        }
+                    });
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
-    public void registerRole(RoleRegister roleRegister) {
-        register(roleRegister,
-                this.rolesRegister,
-                iRegisterManager -> iRegisterManager.registerRole(roleRegister));
+    public Set<Wrapper<IRole, Role>> getRolesRegister() {
+        return this.roles;
     }
 
     @Override
-    public void registerScenario(ScenarioRegister scenarioRegister) {
-        register(scenarioRegister,
-                this.scenariosRegister,
-                iRegisterManager -> iRegisterManager.registerScenario(scenarioRegister));
+    public Set<Wrapper<ListenerManager, Scenario>> getScenariosRegister() {
+        return this.scenarios;
     }
 
     @Override
-    public void registerConfig(ConfigRegister configRegister) {
-        register(configRegister,
-                this.configsRegister,
-                iRegisterManager -> iRegisterManager.registerConfig(configRegister));
+    public Set<Wrapper<?, Configuration>> getConfigsRegister() {
+        return this.configurations;
     }
 
     @Override
-    public void registerTimer(TimerRegister timerRegister) {
-        register(timerRegister,
-                this.timersRegister,
-                iRegisterManager -> iRegisterManager.registerTimer(timerRegister));
+    public Set<Wrapper<?, Timer>> getTimersRegister() {
+        return this.timers;
     }
 
     @Override
-    public void registerCommands(CommandRegister commandRegister) {
-        register(commandRegister,
-                this.commandsRegister,
-                iRegisterManager -> iRegisterManager.registerCommands(commandRegister));
+    public Set<Wrapper<ICommand, PlayerCommand>> getPlayerCommandsRegister() {
+        return this.commands;
     }
 
     @Override
-    public void registerRandomEvents(RandomEventRegister randomEventRegister) {
-        register(randomEventRegister,
-                this.eventRandomsRegister,
-                iRegisterManager -> iRegisterManager.registerRandomEvents(randomEventRegister));
+    public Set<Wrapper<ICommand, RoleCommand>> getRoleCommandsRegister() {
+        return this.roleCommands;
     }
 
     @Override
-    public void registerAdminCommands(CommandRegister commandRegister) {
-        register(commandRegister,
-                this.adminCommandsRegister,
-                iRegisterManager -> iRegisterManager.registerAdminCommands(commandRegister));
+    public Set<Wrapper<ICommand, AdminCommand>> getAdminCommandsRegister() {
+        return this.adminCommands;
     }
 
-    private <A extends IRegister> void register(A register, List<A> registerList, Consumer<IRegisterManager> registers) {
-        Optional<AddonRegister> addonRegister = this.addonsRegister
-                .keySet()
-                .stream()
-                .filter(addonRegister1 -> addonRegister1.getKey().equals(register.getKey()))
-                .findFirst();
-
-        if(addonRegister.isPresent()){
-            registers.accept(this.addonsRegister.get(addonRegister.get()));
-        }
-        else{
-            registerList.add(register);
-        }
+    @Override
+    public Set<Wrapper<JavaPlugin, Addon>> getAddonsRegister() {
+        return new HashSet<>();
     }
 
+    @Override
+    public Set<Wrapper<ListenerManager, Event>> getRandomEventsRegister() {
+        return this.events;
+    }
 }

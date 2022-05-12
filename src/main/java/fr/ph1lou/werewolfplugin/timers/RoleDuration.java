@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.timers;
 
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -11,13 +12,14 @@ import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.TrollEvent;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
 import fr.ph1lou.werewolfapi.lovers.ILover;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.registers.impl.RoleRegister;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
-import fr.ph1lou.werewolfplugin.RegisterManager;
+import fr.ph1lou.werewolfapi.utils.Wrapper;
+import fr.ph1lou.werewolfplugin.Register;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -50,7 +52,7 @@ public class RoleDuration extends ListenerManager {
         game.setState(StateGame.GAME);
 
         List<IPlayerWW> playerWWS = new ArrayList<>(game.getPlayersWW());
-        List<RoleRegister> config = new ArrayList<>();
+        List<Wrapper<IRole, Role>> config = new ArrayList<>();
 
         game.getConfig().setConfig(ConfigBase.CHAT, false);
 
@@ -61,9 +63,9 @@ public class RoleDuration extends ListenerManager {
                                 playerWWS.size() -
                                 game.getRoleInitialSize()));
 
-        RegisterManager.get().getRolesRegister()
+        Register.get().getRolesRegister()
                 .forEach(roleRegister -> {
-                    for (int i = 0; i < game.getConfig().getRoleCount(roleRegister.getKey()); i++) {
+                    for (int i = 0; i < game.getConfig().getRoleCount(roleRegister.getMetaDatas().key()); i++) {
                         config.add(roleRegister);
                     }
                 });
@@ -72,15 +74,17 @@ public class RoleDuration extends ListenerManager {
 
         while (!playerWWS.isEmpty()) {
             IPlayerWW playerWW = playerWWS.remove(0);
-            RoleRegister roleRegister = config.remove(0);
+            Wrapper<IRole, Role> roleRegister = config.remove(0);
             try {
-                IRole role = (IRole) roleRegister.getConstructors().newInstance(game,
+                IRole role = roleRegister.getClazz().getConstructor(WereWolfAPI.class,
+                        IPlayerWW.class,
+                        String.class).newInstance(game,
                         playerWW,
-                        roleRegister.getKey());
+                        roleRegister.getMetaDatas().key());
                 BukkitUtils.registerListener(role);
                 playerWW.setRole(role);
                 Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(playerWW));
-            } catch (IllegalAccessException | InstantiationException | InvocationTargetException exception) {
+            } catch (IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException exception) {
                 exception.printStackTrace();
             }
         }
@@ -108,25 +112,25 @@ public class RoleDuration extends ListenerManager {
         game.setState(StateGame.GAME);
         game.getConfig().setConfig(ConfigBase.CHAT, false);
 
-        RegisterManager.get().getRolesRegister()
+        Register.get().getRolesRegister()
                 .forEach(roleRegister -> {
 
-                    if (roleRegister.getKey().equals(game.getConfig().getTrollKey())) {
+                    if (roleRegister.getMetaDatas().key().equals(game.getConfig().getTrollKey())) {
 
                         game.getPlayersWW()
                                 .forEach(playerWW -> {
                                     try {
-                                        IRole role = (IRole) roleRegister.getConstructors()
+                                        IRole role = roleRegister.getClazz().getConstructor(WereWolfAPI.class,
+                                                        IPlayerWW.class,
+                                                        String.class)
                                                 .newInstance(game,
                                                         playerWW,
-                                                        roleRegister.getKey());
+                                                        roleRegister.getMetaDatas().key());
 
                                         BukkitUtils.registerListener(role);
 
                                         playerWW.setRole(role);
-                                    } catch (InstantiationException |
-                                            InvocationTargetException |
-                                            IllegalAccessException exception) {
+                                    } catch (InstantiationException | InvocationTargetException | IllegalAccessException | NoSuchMethodException exception) {
                                         exception.printStackTrace();
                                     }
                                 });

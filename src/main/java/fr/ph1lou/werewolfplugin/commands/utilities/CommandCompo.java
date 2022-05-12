@@ -1,19 +1,19 @@
 package fr.ph1lou.werewolfplugin.commands.utilities;
 
-import fr.ph1lou.werewolfapi.annotations.Command;
+import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.enums.LoverType;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfplugin.RegisterManager;
+import fr.ph1lou.werewolfplugin.Register;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@Command(key = "werewolf.menu.roles.command_2",
+@PlayerCommand(key = "werewolf.menu.roles.command_2",
         descriptionKey = "werewolf.menu.roles.description2",
         argNumbers = 0)
 public class CommandCompo implements ICommand {
@@ -72,17 +72,18 @@ public class CommandCompo implements ICommand {
         AtomicBoolean atomicBoolean = new AtomicBoolean(false);
         sb.append("§f : ");
 
-        RegisterManager.get().getRolesRegister().stream()
-                .filter(roleRegister -> roleRegister.getCategories().contains(category))
+        Register.get().getRolesRegister().stream()
+                .filter(roleRegister -> roleRegister.getMetaDatas()
+                        .category() == category)
                 .forEach(roleRegister -> {
-                    String key = roleRegister.getKey();
+                    String key = roleRegister.getMetaDatas().key();
                     int number = game.getConfig().getRoleCount(key);
                     if (number > 0) {
                         if (number == 1) {
-                            sb.append(game.translate(roleRegister.getKey()))
+                            sb.append(game.translate(roleRegister.getMetaDatas().key()))
                                     .append(", ");
                         } else {
-                            sb.append(game.translate(roleRegister.getKey()))
+                            sb.append(game.translate(roleRegister.getMetaDatas().key()))
                                     .append(" (§b").append(game.getConfig().getRoleCount(key))
                                     .append("§f), ");
                         }

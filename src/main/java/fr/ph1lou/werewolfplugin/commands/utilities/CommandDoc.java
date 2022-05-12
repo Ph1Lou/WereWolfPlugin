@@ -1,6 +1,6 @@
 package fr.ph1lou.werewolfplugin.commands.utilities;
 
-import fr.ph1lou.werewolfapi.annotations.Command;
+import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -8,7 +8,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 
-@Command(key = "werewolf.commands.doc.command",
+@PlayerCommand(key = "werewolf.commands.doc.command",
         descriptionKey = "werewolf.commands.doc.description",
         argNumbers = 0)
 public class CommandDoc implements ICommand {

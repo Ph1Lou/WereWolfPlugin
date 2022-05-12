@@ -1,6 +1,6 @@
 package fr.ph1lou.werewolfplugin.commands.roles.werewolf;
 
-import fr.ph1lou.werewolfapi.annotations.Command;
+import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -12,13 +12,13 @@ import fr.ph1lou.werewolfapi.events.werewolf.RequestSeeWereWolfListEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfplugin.RegisterManager;
+import fr.ph1lou.werewolfplugin.Register;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-@Command(key = "werewolf.role.werewolf.command",
+@PlayerCommand(key = "werewolf.role.werewolf.command",
         descriptionKey = "",
         argNumbers = 0,
         stateGame = StateGame.GAME,
@@ -59,9 +59,10 @@ public class CommandWereWolf implements ICommand {
             }
         }
         playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.werewolf.werewolf_list", Formatter.format("&list&",list.toString()));
-        if (RegisterManager.get().getRandomEventsRegister().stream()
-                .filter(randomEventRegister -> randomEventRegister.getKey().equals(EventBase.DRUNKEN_WEREWOLF))
-                .anyMatch(randomEventRegister -> randomEventRegister.getRandomEvent().isRegister())) {
+        if (Register.get().getRandomEventsRegister().stream()
+                .filter(randomEventRegister -> randomEventRegister.getMetaDatas().key().equals(EventBase.DRUNKEN_WEREWOLF))
+                .anyMatch(randomEventRegister -> randomEventRegister.getObject().isPresent() &&
+                        randomEventRegister.getObject().get().isRegister())) {
             playerWW.sendMessageWithKey("werewolf.commands.ww_chat.drunken");
         }
 

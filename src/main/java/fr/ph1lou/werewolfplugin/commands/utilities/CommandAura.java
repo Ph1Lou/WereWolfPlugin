@@ -1,12 +1,12 @@
 package fr.ph1lou.werewolfplugin.commands.utilities;
 
-import fr.ph1lou.werewolfapi.annotations.Command;
+import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import org.bukkit.entity.Player;
 
-@Command(key = "werewolf.commands.aura.command",
+@PlayerCommand(key = "werewolf.commands.aura.command",
         descriptionKey = "werewolf.menu.aura.description",
         argNumbers = 0)
 public class CommandAura implements ICommand {

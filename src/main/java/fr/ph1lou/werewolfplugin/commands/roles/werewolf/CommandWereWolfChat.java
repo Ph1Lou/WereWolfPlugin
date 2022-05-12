@@ -1,6 +1,6 @@
 package fr.ph1lou.werewolfplugin.commands.roles.werewolf;
 
-import fr.ph1lou.werewolfapi.annotations.Command;
+import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-@Command(key = "werewolf.commands.ww_chat.name",
+@PlayerCommand(key = "werewolf.commands.ww_chat.name",
         descriptionKey = "werewolf.commands.ww_chat.description",
         statePlayer = StatePlayer.ALIVE,
         stateGame = StateGame.GAME)

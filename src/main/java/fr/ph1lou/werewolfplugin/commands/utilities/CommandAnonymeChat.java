@@ -1,6 +1,6 @@
 package fr.ph1lou.werewolfplugin.commands.utilities;
 
-import fr.ph1lou.werewolfapi.annotations.Command;
+import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@Command(key = "werewolf.commands.anonymous_chat.command",
+@PlayerCommand(key = "werewolf.commands.anonymous_chat.command",
         descriptionKey = "werewolf.commands.anonymous_chat.description",
         stateGame = {StateGame.START, StateGame.GAME},
         statePlayer = StatePlayer.ALIVE)

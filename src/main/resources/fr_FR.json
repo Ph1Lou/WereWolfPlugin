@@ -1167,7 +1167,7 @@
         "particles": "Particules des Pommes d'Or",
         "particles_on": "§bActivé§r pour tous les joueurs",
         "particles_off": "§4Désactivé§r pour tous les joueurs",
-        "exception": "§6Désactivé pour la Petite Fille et le Loup Garou Perfide invisible",
+        "exception": "§6Désactivé pour la Petite Fille et le Loup Garou Perfide invisible"
       },
       "troll": "Configuration §bTroll",
       "roles": {
@@ -1503,7 +1503,6 @@
       "pve": "§bPVE",
       "on": "§bON",
       "debug": "§fMode §4debug",
-      "none": "§4Aucun",
       "author": "§fAuteur(s) :",
       "bar": "§r§b§m§l-+-----------------------------------+-§r§r§r§f"
     },

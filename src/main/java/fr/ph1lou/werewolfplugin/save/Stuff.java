@@ -1,9 +1,11 @@
 package fr.ph1lou.werewolfplugin.save;
 
+import fr.ph1lou.werewolfapi.annotations.Addon;
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.role.interfaces.IRole;
+import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfapi.game.IStuffManager;
-import fr.ph1lou.werewolfapi.registers.impl.AddonRegister;
-import fr.ph1lou.werewolfapi.registers.impl.RoleRegister;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -14,6 +16,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.io.IOException;
@@ -67,9 +70,11 @@ public class Stuff implements IStuffManager {
     @Override
     public void save(String configName) {
 
-        for(AddonRegister addon:main.getRegisterManager().getAddonsRegister()){
-            Plugin plugin = addon.getPlugin();
-            saveStuffRole(plugin,configName,addon.getAddonKey());
+        for(Wrapper<JavaPlugin, Addon> addon:main.getRegisterManager().getAddonsRegister()){
+            addon.getObject()
+                    .ifPresent(javaPlugin -> saveStuffRole(javaPlugin,
+                            configName,
+                            addon.getMetaDatas().key()));
         }
 
         saveStuffRole(main,configName, "werewolf.name");
@@ -106,7 +111,7 @@ public class Stuff implements IStuffManager {
 
     }
 
-    private void saveStuffRole(Plugin plugin,String configName, String addonKey) {
+    private void saveStuffRole(JavaPlugin plugin,String configName, String addonKey) {
 
         int pos = 0;
         FileConfiguration config = getOrCreateCustomConfig(plugin, configName);
@@ -115,9 +120,9 @@ public class Stuff implements IStuffManager {
             return;
         }
 
-        for (RoleRegister roleRegister:main.getRegisterManager().getRolesRegister()) {
+        for (Wrapper<IRole, Role> roleRegister:main.getRegisterManager().getRolesRegister()) {
             if(roleRegister.getAddonKey().equals(addonKey)){
-                String key = roleRegister.getKey();
+                String key = roleRegister.getMetaDatas().key();
                 for (ItemStack i : stuffRoles.get(key)) {
                     this.setItem(config,key + "." + pos,i);
                     pos++;
@@ -152,10 +157,10 @@ public class Stuff implements IStuffManager {
         }
         FileConfiguration config = getOrCreateCustomConfig(plugin, configName);
 
-        for (RoleRegister roleRegister : main.getRegisterManager().getRolesRegister()) {
+        for (Wrapper<IRole, Role> roleRegister : main.getRegisterManager().getRolesRegister()) {
 
             if (roleRegister.getAddonKey().equals(addonKey)) {
-                String key = roleRegister.getKey();
+                String key = roleRegister.getMetaDatas().key();
                 temp.put(key, new ArrayList<>());
                 ConfigurationSection configurationSection = config.getConfigurationSection(key);
                 if (configurationSection != null) {
@@ -267,8 +272,9 @@ public class Stuff implements IStuffManager {
 
         main.getRegisterManager()
                 .getAddonsRegister()
-                .forEach(addonRegister -> stuffRoles.putAll(loadStuff(addonRegister.getPlugin(),
-                        addonRegister.getAddonKey(), configName)));
+                .forEach(addonRegister -> addonRegister.getObject()
+                        .ifPresent(javaPlugin -> stuffRoles.putAll(loadStuff(javaPlugin,
+                        addonRegister.getAddonKey(), configName))));
         stuffRoles.putAll(loadStuff(main,
                 "werewolf.name",
                 configName));

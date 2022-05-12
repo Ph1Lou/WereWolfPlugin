@@ -2,12 +2,7 @@ package fr.ph1lou.werewolfplugin.save;
 
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
-import fr.ph1lou.werewolfapi.registers.impl.ConfigRegister;
-import fr.ph1lou.werewolfapi.registers.impl.RandomEventRegister;
-import fr.ph1lou.werewolfapi.registers.impl.ScenarioRegister;
-import fr.ph1lou.werewolfapi.registers.impl.TimerRegister;
-import fr.ph1lou.werewolfapi.registers.interfaces.IRegisterManager;
-import fr.ph1lou.werewolfplugin.RegisterManager;
+import fr.ph1lou.werewolfapi.registers.IRegisterManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -301,12 +296,16 @@ public class Configuration implements IConfiguration {
 
     @Override
     public int getTimerValue(String key) {
-        return timerValues.getOrDefault(key, registerManager.getTimersRegister().stream().filter(timerRegister -> timerRegister.getKey().equals(key)).findFirst().map(TimerRegister::getDefaultValue).orElse(0));
+        return timerValues.getOrDefault(key, registerManager.getTimersRegister()
+                .stream().filter(timerRegister -> timerRegister.getMetaDatas().key().equals(key))
+                .findFirst().map(timerWrapper -> timerWrapper.getMetaDatas().defaultValue()).orElse(0));
     }
 
     @Override
     public boolean isConfigActive(String key) {
-        return configValues.getOrDefault(key, registerManager.getConfigsRegister().stream().filter(configRegister -> configRegister.getKey().equals(key)).findFirst().map(ConfigRegister::getDefaultValue).orElse(false));
+        return configValues.getOrDefault(key, registerManager.getConfigsRegister()
+                .stream().filter(configRegister -> configRegister.getMetaDatas().key().equals(key))
+                .findFirst().map(configurationWrapper -> configurationWrapper.getMetaDatas().defaultValue()).orElse(false));
     }
 
     @Override
@@ -339,9 +338,9 @@ public class Configuration implements IConfiguration {
         return scenarioValues
                 .getOrDefault(key, registerManager.getScenariosRegister()
                         .stream()
-                        .filter(scenarioRegister -> scenarioRegister.getKey().equals(key))
+                        .filter(scenarioRegister -> scenarioRegister.getMetaDatas().key().equals(key))
                         .findFirst()
-                        .map(ScenarioRegister::getDefaultValue)
+                        .map(listenerManagerScenarioWrapper -> listenerManagerScenarioWrapper.getMetaDatas().defaultValue())
                         .orElse(false));
     }
 
@@ -451,7 +450,10 @@ public class Configuration implements IConfiguration {
 
     @Override
     public int getProbability(String key) {
-        return randomEventsValues.getOrDefault(key, registerManager.getRandomEventsRegister().stream().filter(randomEventRegister -> randomEventRegister.getKey().equals(key)).findFirst().map(RandomEventRegister::getDefaultValue).orElse(0));
+        return randomEventsValues.getOrDefault(key, registerManager.getRandomEventsRegister().stream()
+                .filter(randomEventRegister -> randomEventRegister.getMetaDatas().key().equals(key)).findFirst()
+                .map(listenerManagerEventWrapper -> listenerManagerEventWrapper.getMetaDatas().defaultValue())
+                .orElse(0));
     }
 
     @Override
@@ -504,7 +506,7 @@ public class Configuration implements IConfiguration {
 //todo
     }
 
-    public void addRegister(RegisterManager registerManager) {
+    public void addRegister(IRegisterManager registerManager) {
         this.registerManager = registerManager;
     }
 }

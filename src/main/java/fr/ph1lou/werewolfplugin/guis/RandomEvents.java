@@ -7,6 +7,9 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
+import fr.ph1lou.werewolfapi.annotations.Event;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -14,7 +17,6 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
-import fr.ph1lou.werewolfapi.registers.impl.RandomEventRegister;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -58,7 +60,7 @@ public class RandomEvents implements InventoryProvider {
 
         main.getRegisterManager().getRandomEventsRegister()
                 .forEach(randomEventRegister -> {
-                    String key = randomEventRegister.getKey();
+                    String key = randomEventRegister.getMetaDatas().key();
                     ItemStack itemStack = getItemStack(game, randomEventRegister);
 
                     items.add(ClickableItem.of((itemStack), e -> {
@@ -68,7 +70,7 @@ public class RandomEvents implements InventoryProvider {
                             config.setProbability(key, (probability + 1) % 101);
                             if (probability == 0) {
                                 if (!game.isState(StateGame.LOBBY)) {
-                                    randomEventRegister.getRandomEvent().register(game.getRandom().nextDouble() * 100 < game.getConfig().getProbability(key));
+                                    randomEventRegister.getObject().ifPresent(listenerManager -> listenerManager.register(game.getRandom().nextDouble() * 100 < game.getConfig().getProbability(key)));
                                 }
                             }
                             e.setCurrentItem(getItemStack(game, randomEventRegister));
@@ -77,7 +79,8 @@ public class RandomEvents implements InventoryProvider {
                             int probability = config.getProbability(key);
                             config.setProbability(key, ((probability - 1) + 101) % 101);
                             if (probability == 1) {
-                                randomEventRegister.getRandomEvent().register(false);
+                                randomEventRegister.getObject().ifPresent(listenerManager -> listenerManager.register(false));
+
                             }
                             e.setCurrentItem(getItemStack(game, randomEventRegister));
                         }
@@ -123,14 +126,14 @@ public class RandomEvents implements InventoryProvider {
                 });
     }
 
-    private ItemStack getItemStack(GameManager game, RandomEventRegister randomEventRegister) {
+    private ItemStack getItemStack(GameManager game, Wrapper<ListenerManager, Event> randomEventRegister) {
 
-        String key = randomEventRegister.getKey();
+        String key = randomEventRegister.getMetaDatas().key();
         IConfiguration config = game.getConfig();
         List<String> lore2 = new ArrayList<>(Arrays.asList(game.translate("werewolf.menu.left"),
                 game.translate("werewolf.menu.right")));
         List<String> lore = new ArrayList<>();
-        randomEventRegister.getLoreKey().stream().map(game::translate)
+        Arrays.stream(randomEventRegister.getMetaDatas().loreKey()).map(game::translate)
                 .map(s -> Arrays.stream(s.split("\\n"))
                 .collect(Collectors.toList())).forEach(lore::addAll);
         ItemStack itemStack;

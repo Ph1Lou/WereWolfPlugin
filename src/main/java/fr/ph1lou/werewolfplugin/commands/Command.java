@@ -1,12 +1,15 @@
 package fr.ph1lou.werewolfplugin.commands;
 
 
+import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
+import fr.ph1lou.werewolfapi.annotations.RoleCommand;
+import fr.ph1lou.werewolfapi.commands.ICommand;
+import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.registers.impl.CommandRegister;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -19,6 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class Command implements TabExecutor {
@@ -57,10 +61,15 @@ public class Command implements TabExecutor {
         WereWolfAPI game = main.getWereWolfAPI();
         List<String> messages = new ArrayList<>();
 
-        main.getRegisterManager().getCommandsRegister()
+        main.getRegisterManager().getRoleCommandsRegister()
                 .stream()
-                .filter(commandRegister1 -> game.translate(commandRegister1.getKey()).equalsIgnoreCase(commandName))
+                .filter(commandRegister1 -> game.translate(commandRegister1.getMetaDatas().key()).equalsIgnoreCase(commandName))
                 .forEach(commandRegister1 -> messages.add(checkCommands(game, player, commandRegister1, args)));
+
+        main.getRegisterManager().getPlayerCommandsRegister()
+                .stream()
+                .filter(commandRegister1 -> game.translate(commandRegister1.getMetaDatas().key()).equalsIgnoreCase(commandName))
+                .forEach(commandRegister1 -> messages.add(checkCommand(game, player, commandRegister1, args)));
 
         if (messages.isEmpty()) {
             execute("h", player, new String[0]);
@@ -75,48 +84,93 @@ public class Command implements TabExecutor {
 
     }
 
-    private String checkCommands(WereWolfAPI game, Player player, CommandRegister commandRegister, String[] args) {
+    private String checkCommands(WereWolfAPI game, Player player, Wrapper<ICommand, RoleCommand> wrapper, String[] args) {
 
         UUID uuid = player.getUniqueId();
+        RoleCommand command = wrapper.getMetaDatas();
+        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
 
-        if (commandRegister.isRequiredPlayerInGame()) {
-
-            IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
-
+        if (command.roleKeys().length > 0) {
             if (playerWW == null) {
                 return game.translate(Prefix.RED , "werewolf.check.not_in_game");
             }
-
-            if (commandRegister.isRoleOnly()) {
-                if (!commandRegister.isRoleKey(playerWW.getRole().getKey())) {
-                    return "ignored";
-                }
+            if (Arrays.stream(command.roleKeys()).noneMatch(s -> s.equals(playerWW.getRole().getKey()))) {
+                return "ignored";
             }
+        }
 
-            if (!commandRegister.isStateAccess(playerWW.getState())) {
+        if (command.statePlayer().length > 0) {
+            if (playerWW == null) {
+                return game.translate(Prefix.RED , "werewolf.check.not_in_game");
+            }
+            if(Arrays.stream(command.statePlayer()).noneMatch(statePlayer -> statePlayer == playerWW.getState())){
                 return game.translate(Prefix.RED , "werewolf.check.state_player");
             }
+        }
 
-            if (commandRegister.isRequiredPower() && (!(playerWW.getRole() instanceof IPower) || !((IPower) playerWW.getRole()).hasPower())) {
+        if (command.requiredPower()) {
+            if (playerWW == null) {
+                return game.translate(Prefix.RED , "werewolf.check.not_in_game");
+            }
+            if(!(playerWW.getRole() instanceof IPower) || !((IPower) playerWW.getRole()).hasPower()){
                 return game.translate(Prefix.RED , "werewolf.check.power");
             }
+        }
 
-            if (commandRegister.isRequiredAbilityEnabled() && !playerWW.getRole().isAbilityEnabled()) {
+        if(command.requiredAbilityEnabled()){
+            if (playerWW == null) {
+                return game.translate(Prefix.RED , "werewolf.check.not_in_game");
+            }
+            if (!playerWW.getRole().isAbilityEnabled()) {
                 return game.translate(Prefix.RED , "werewolf.check.ability_disabled");
             }
         }
 
-        if (!commandRegister.isStateWW(game.getState())) {
-            return game.translate(Prefix.RED , "werewolf.check.state");
+        if(command.stateGame().length > 0){
+            if (Arrays.stream(command.stateGame()).noneMatch(stateGame -> stateGame == game.getState())) {
+                return game.translate(Prefix.RED , "werewolf.check.state");
+            }
         }
 
-        if (!commandRegister.isArgNumbers(args.length)) {
-            return game.translate(Prefix.RED , "werewolf.check.parameters",
-                    Formatter.number(commandRegister.getMinArgNumbers()));
+        if(command.argNumbers().length > 0){
+            if (Arrays.stream(command.argNumbers()).noneMatch(argNumber -> argNumber == args.length)) {
+                return game.translate(Prefix.RED , "werewolf.check.parameters",
+                        Formatter.number(Arrays.stream(command.argNumbers()).min().orElse(0)));
+            }
+        }
+        wrapper.getObject().ifPresent(iCommand -> iCommand.execute(game,player, args));
+        return "";
+    }
+
+    private String checkCommand(WereWolfAPI game, Player player, Wrapper<ICommand, PlayerCommand> wrapper, String[] args) {
+
+        UUID uuid = player.getUniqueId();
+        PlayerCommand command = wrapper.getMetaDatas();
+        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
+
+
+        if (command.statePlayer().length > 0) {
+            if (playerWW == null) {
+                return game.translate(Prefix.RED , "werewolf.check.not_in_game");
+            }
+            if(Arrays.stream(command.statePlayer()).noneMatch(statePlayer -> statePlayer == playerWW.getState())){
+                return game.translate(Prefix.RED , "werewolf.check.state_player");
+            }
         }
 
-        commandRegister.getCommand().execute(game,player, args);
+        if(command.stateGame().length > 0){
+            if (Arrays.stream(command.stateGame()).noneMatch(stateGame -> stateGame == game.getState())) {
+                return game.translate(Prefix.RED , "werewolf.check.state");
+            }
+        }
 
+        if(command.argNumbers().length > 0){
+            if (Arrays.stream(command.argNumbers()).noneMatch(argNumber -> argNumber == args.length)) {
+                return game.translate(Prefix.RED , "werewolf.check.parameters",
+                        Formatter.number(Arrays.stream(command.argNumbers()).min().orElse(0)));
+            }
+        }
+        wrapper.getObject().ifPresent(iCommand -> iCommand.execute(game,player, args));
         return "";
     }
 
@@ -135,14 +189,26 @@ public class Command implements TabExecutor {
             return null;
         }
 
-        return main.getRegisterManager().getCommandsRegister().stream()
-                .filter(commandRegister -> (args[0].isEmpty() || game.translate(commandRegister.getKey()).contains(args[0])))
-                .filter(commandRegister -> !commandRegister.isRoleOnly() || (playerWW != null && commandRegister.isRoleKey(playerWW.getRole().getKey())))
-                .filter(CommandRegister::isAutoCompletion)
-                .filter(commandRegister -> commandRegister.isStateWW(game.getState()))
-                .filter(commandRegister -> !commandRegister.isRequiredPlayerInGame() || playerWW != null)
-                .filter(commandRegister -> playerWW == null || commandRegister.isStateAccess(playerWW.getState()))
-                .map(commandRegister -> game.translate(commandRegister.getKey()))
+        return Stream.concat(main.getRegisterManager().getRoleCommandsRegister().stream()
+                .filter(commandRegister -> (args[0].isEmpty() || game.translate(commandRegister.getMetaDatas().key()).contains(args[0])))
+                .filter(commandRegister -> commandRegister.getMetaDatas().roleKeys().length == 0 ||
+                        (playerWW != null && Arrays.stream(commandRegister.getMetaDatas().roleKeys()).anyMatch(roleKey -> roleKey.equals(playerWW.getRole().getKey()))))
+                .filter(iCommandCommandWrapper -> iCommandCommandWrapper.getMetaDatas().autoCompletion())
+                .filter(commandRegister -> commandRegister.getMetaDatas().stateGame().length == 0 ||
+                        Arrays.stream(commandRegister.getMetaDatas().stateGame()).anyMatch(stateGame -> stateGame == game.getState()))
+                .filter(commandRegister -> playerWW == null ||
+                        commandRegister.getMetaDatas().statePlayer().length == 0 ||
+                        Arrays.stream(commandRegister.getMetaDatas().statePlayer()).anyMatch(statePlayer -> statePlayer == playerWW.getState()))
+                .map(commandRegister -> game.translate(commandRegister.getMetaDatas().key())),
+                main.getRegisterManager().getPlayerCommandsRegister().stream()
+                        .filter(commandRegister -> (args[0].isEmpty() || game.translate(commandRegister.getMetaDatas().key()).contains(args[0])))
+                        .filter(iCommandCommandWrapper -> iCommandCommandWrapper.getMetaDatas().autoCompletion())
+                        .filter(commandRegister -> commandRegister.getMetaDatas().stateGame().length == 0 ||
+                                Arrays.stream(commandRegister.getMetaDatas().stateGame()).anyMatch(stateGame -> stateGame == game.getState()))
+                        .filter(commandRegister -> playerWW == null ||
+                                commandRegister.getMetaDatas().statePlayer().length == 0 ||
+                                Arrays.stream(commandRegister.getMetaDatas().statePlayer()).anyMatch(statePlayer -> statePlayer == playerWW.getState()))
+                        .map(commandRegister -> game.translate(commandRegister.getMetaDatas().key())))
                 .collect(Collectors.toList());
     }
 }

@@ -19,14 +19,13 @@ import fr.ph1lou.werewolfapi.events.random_events.RumorsWriteEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.registers.impl.RoleRegister;
 import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.ILimitedUse;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.Utils;
-import fr.ph1lou.werewolfplugin.RegisterManager;
+import fr.ph1lou.werewolfplugin.Register;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -134,7 +133,10 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
         if (!this.game.getConfig().isConfigActive(ConfigBase.HIDE_COMPOSITION)) {
             return;
         }
-        List<String> roles = RegisterManager.get().getRolesRegister().stream().map(RoleRegister::getKey).collect(Collectors.toList());
+        List<String> roles = Register.get()
+                .getRolesRegister().stream()
+                .map(iRoleRoleWrapper -> iRoleRoleWrapper.getMetaDatas().key())
+                .collect(Collectors.toList());
         if (roles.size() < 3) {
             return;
         }

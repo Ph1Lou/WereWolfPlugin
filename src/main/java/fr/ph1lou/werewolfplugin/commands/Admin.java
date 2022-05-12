@@ -1,11 +1,12 @@
 package fr.ph1lou.werewolfplugin.commands;
 
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.game.IModerationManager;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.annotations.AdminCommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.registers.impl.CommandRegister;
+import fr.ph1lou.werewolfapi.commands.ICommand;
+import fr.ph1lou.werewolfapi.game.IModerationManager;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Main;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -57,11 +58,11 @@ public class Admin implements TabExecutor {
 
     private void execute(String commandName, Player player, String[] args) {
 
-        CommandRegister commandRegister = null;
+        Wrapper<ICommand, AdminCommand> commandRegister = null;
         WereWolfAPI game = main.getWereWolfAPI();
 
-        for (CommandRegister commandRegister1 : main.getRegisterManager().getAdminCommandsRegister()) {
-            if (game.translate(commandRegister1.getKey()).equalsIgnoreCase(commandName)) {
+        for (Wrapper<ICommand, AdminCommand> commandRegister1 : main.getRegisterManager().getAdminCommandsRegister()) {
+            if (game.translate(commandRegister1.getMetaDatas().key()).equalsIgnoreCase(commandName)) {
                 commandRegister = commandRegister1;
             }
         }
@@ -72,27 +73,30 @@ public class Admin implements TabExecutor {
         }
 
         if (accessCommand(commandRegister, player, args.length, true)) {
-            commandRegister.getCommand().execute(game,player, args);
+            commandRegister.getObject().ifPresent(iCommand -> iCommand.execute(game,player, args));
         }
 
     }
 
 
-    public boolean accessCommand(CommandRegister commandRegister, Player player, int args, boolean seePermissionMessages) {
+    public boolean accessCommand(Wrapper<ICommand, AdminCommand> commandRegister, Player player, int args, boolean seePermissionMessages) {
 
         WereWolfAPI game = main.getWereWolfAPI();
 
-        if (!commandRegister.isStateWW(game.getState())) {
+        if (commandRegister.getMetaDatas().stateGame().length > 0 &&
+                Arrays.stream(commandRegister.getMetaDatas().stateGame())
+                        .noneMatch(stateGame -> stateGame == game.getState())) {
             if (seePermissionMessages) {
                 player.sendMessage(game.translate(Prefix.RED , "werewolf.check.state"));
             }
             return false;
         }
 
-        if (!commandRegister.isArgNumbers(args)) {
+        if (commandRegister.getMetaDatas().argNumbers().length > 0 &&
+            Arrays.stream(commandRegister.getMetaDatas().argNumbers()).noneMatch(value -> value == args)) {
             if (seePermissionMessages) {
                 player.sendMessage(game.translate(Prefix.RED , "werewolf.check.parameters",
-                        Formatter.number(commandRegister.getMinArgNumbers())));
+                        Formatter.number(Arrays.stream(commandRegister.getMetaDatas().argNumbers()).min().orElse(0))));
             }
             return false;
         }
@@ -109,28 +113,28 @@ public class Admin implements TabExecutor {
 
 
     public boolean checkAccess(String commandeKey, Player player, boolean seePermissionMessages) {
-        for (CommandRegister commandRegister : main.getRegisterManager().getAdminCommandsRegister()) {
-            if (commandRegister.getKey().equals(commandeKey)) {
-                return accessCommand(commandRegister, player, commandRegister.getMinArgNumbers(), seePermissionMessages);
+        for (Wrapper<ICommand, AdminCommand> commandRegister : main.getRegisterManager().getAdminCommandsRegister()) {
+            if (commandRegister.getMetaDatas().key().equals(commandeKey)) {
+                return accessCommand(commandRegister, player, Arrays.stream(commandRegister.getMetaDatas().argNumbers()).min().orElse(0), seePermissionMessages);
             }
         }
         return false;
     }
 
 
-    private boolean checkPermission(CommandRegister commandRegister, Player player) {
+    private boolean checkPermission(Wrapper<ICommand, AdminCommand> commandRegister, Player player) {
 
         WereWolfAPI game = main.getWereWolfAPI();
         IModerationManager moderationManager = game.getModerationManager();
         UUID uuid = player.getUniqueId();
 
-        boolean pass = commandRegister.isHostAccess() && moderationManager.getHosts().contains(uuid);
+        boolean pass = commandRegister.getMetaDatas().hostAccess() && moderationManager.getHosts().contains(uuid);
 
-        if (commandRegister.isModeratorAccess() && moderationManager.getModerators().contains(uuid)) {
+        if (commandRegister.getMetaDatas().moderatorAccess() && moderationManager.getModerators().contains(uuid)) {
             pass = true;
         }
 
-        if (player.hasPermission("a." + game.translate(commandRegister.getKey()))) {
+        if (player.hasPermission("a." + game.translate(commandRegister.getMetaDatas().key()))) {
             pass = true;
         }
 
@@ -145,21 +149,18 @@ public class Admin implements TabExecutor {
 
         Player player = (Player) sender;
         WereWolfAPI game = main.getWereWolfAPI();
-        UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
 
         if (args.length > 1) {
             return null;
         }
 
         return main.getRegisterManager().getAdminCommandsRegister().stream()
-                .filter(commandRegister -> (args[0].isEmpty() || game.translate(commandRegister.getKey()).contains(args[0])))
-                .filter(CommandRegister::isAutoCompletion)
+                .filter(commandRegister -> (args[0].isEmpty() || game.translate(commandRegister.getMetaDatas().key()).contains(args[0])))
+                .filter(iCommandAdminCommandWrapper -> iCommandAdminCommandWrapper.getMetaDatas().autoCompletion())
                 .filter(commandRegister -> checkPermission(commandRegister, player))
-                .filter(commandRegister -> commandRegister.isStateWW(game.getState()))
-                .filter(commandRegister -> !commandRegister.isRequiredPlayerInGame() || playerWW != null)
-                .filter(commandRegister -> playerWW == null || commandRegister.isStateAccess(playerWW.getState()))
-                .map(commandRegister -> game.translate(commandRegister.getKey()))
+                .filter(commandRegister -> commandRegister.getMetaDatas().stateGame().length == 0 ||
+                        Arrays.stream(commandRegister.getMetaDatas().stateGame()).anyMatch(stateGame -> stateGame == game.getState()))
+                .map(commandRegister -> game.translate(commandRegister.getMetaDatas().key()))
                 .collect(Collectors.toList());
     }
 

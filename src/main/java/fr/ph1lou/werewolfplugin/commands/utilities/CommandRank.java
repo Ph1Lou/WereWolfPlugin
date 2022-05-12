@@ -1,6 +1,6 @@
 package fr.ph1lou.werewolfplugin.commands.utilities;
 
-import fr.ph1lou.werewolfapi.annotations.Command;
+import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.UUID;
 
-@Command(key = "werewolf.menu.rank.command",
+@PlayerCommand(key = "werewolf.menu.rank.command",
         descriptionKey = "werewolf.menu.rank.description",
         stateGame = StateGame.LOBBY,
         argNumbers = 0)

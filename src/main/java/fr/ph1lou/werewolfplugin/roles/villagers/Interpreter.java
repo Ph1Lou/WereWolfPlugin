@@ -15,13 +15,13 @@ import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.registers.impl.RoleRegister;
 import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
-import fr.ph1lou.werewolfplugin.RegisterManager;
+import fr.ph1lou.werewolfapi.utils.Wrapper;
+import fr.ph1lou.werewolfplugin.Register;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -33,6 +33,7 @@ import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -46,17 +47,19 @@ import java.util.stream.Collectors;
 public class Interpreter extends RoleVillage implements IPower {
 
     private boolean power = false;
-    private final Set<RoleRegister> roles = new HashSet<>();
+    private final Set<Wrapper<IRole, Role>> roles = new HashSet<>();
 
     public Interpreter(WereWolfAPI game, IPlayerWW playerWW, String key) {
         super(game, playerWW, key);
-        List<RoleRegister> roles = RegisterManager.get().getRolesRegister()
+        List<Wrapper<IRole, Role>> roles = Register.get().getRolesRegister()
                 .stream()
-                .filter(roleRegister -> roleRegister.getAttributes().contains(RoleAttribute.VILLAGER))
-                .filter(roleRegister -> !roleRegister.isRequireDouble())
-                .filter(roleRegister -> !roleRegister.getKey().equals(RoleBase.INTERPRETER))
-                .filter(roleRegister -> game.getConfig().getRoleCount(roleRegister.getKey()) == 0)
-                .filter(roleRegister -> roleRegister.getAttributes().contains(RoleAttribute.INFORMATION))
+                .filter(roleRegister -> Arrays.stream(roleRegister.getMetaDatas().attributes())
+                        .anyMatch(roleAttribute -> roleAttribute == RoleAttribute.VILLAGER))
+                .filter(roleRegister -> !roleRegister.getMetaDatas().requireDouble())
+                .filter(roleRegister -> !roleRegister.getMetaDatas().key().equals(RoleBase.INTERPRETER))
+                .filter(roleRegister -> game.getConfig().getRoleCount(roleRegister.getMetaDatas().key()) == 0)
+                .filter(roleRegister -> Arrays.stream(roleRegister.getMetaDatas().attributes())
+                        .anyMatch(roleAttribute -> roleAttribute == RoleAttribute.INFORMATION))
                 .collect(Collectors.toList());
 
         if(roles.size() == 0){
@@ -67,15 +70,18 @@ public class Interpreter extends RoleVillage implements IPower {
 
         this.roles.add(roles.get(0));
 
-        roles = RegisterManager.get().getRolesRegister()
+        roles = Register.get().getRolesRegister()
                 .stream()
                 .filter(roleRegister -> !this.roles.contains(roleRegister))
-                .filter(roleRegister -> !roleRegister.isRequireDouble())
-                .filter(roleRegister -> !roleRegister.getKey().equals(RoleBase.INTERPRETER))
-                .filter(roleRegister -> roleRegister.getAttributes().contains(RoleAttribute.VILLAGER))
-                .filter(roleRegister -> game.getConfig().getRoleCount(roleRegister.getKey()) == 0)
-                .filter(roleRegister -> !roleRegister.getAttributes().contains(RoleAttribute.MINOR_INFORMATION))
-                .filter(roleRegister -> !roleRegister.getAttributes().contains(RoleAttribute.INFORMATION))
+                .filter(roleRegister -> !roleRegister.getMetaDatas().requireDouble())
+                .filter(roleRegister -> !roleRegister.getMetaDatas().key().equals(RoleBase.INTERPRETER))
+                .filter(roleRegister -> Arrays.stream(roleRegister.getMetaDatas().attributes())
+                        .anyMatch(roleAttribute -> roleAttribute == RoleAttribute.VILLAGER))
+                .filter(roleRegister -> game.getConfig().getRoleCount(roleRegister.getMetaDatas().key()) == 0)
+                .filter(roleRegister -> Arrays.stream(roleRegister.getMetaDatas().attributes())
+                        .noneMatch(roleAttribute -> roleAttribute == RoleAttribute.MINOR_INFORMATION))
+                .filter(roleRegister -> Arrays.stream(roleRegister.getMetaDatas().attributes())
+                        .noneMatch(roleAttribute -> roleAttribute == RoleAttribute.INFORMATION))
                 .collect(Collectors.toList());
 
         if(roles.size() == 0){
@@ -86,14 +92,16 @@ public class Interpreter extends RoleVillage implements IPower {
 
         this.roles.add(roles.get(0));
 
-        roles = RegisterManager.get().getRolesRegister()
+        roles = Register.get().getRolesRegister()
                 .stream()
                 .filter(roleRegister -> !this.roles.contains(roleRegister))
-                .filter(roleRegister -> !roleRegister.isRequireDouble())
-                .filter(roleRegister -> !roleRegister.getKey().equals(RoleBase.INTERPRETER))
-                .filter(roleRegister -> roleRegister.getAttributes().contains(RoleAttribute.VILLAGER))
-                .filter(roleRegister -> game.getConfig().getRoleCount(roleRegister.getKey()) == 0)
-                .filter(roleRegister -> !roleRegister.getAttributes().contains(RoleAttribute.INFORMATION))
+                .filter(roleRegister -> !roleRegister.getMetaDatas().requireDouble())
+                .filter(roleRegister -> !roleRegister.getMetaDatas().key().equals(RoleBase.INTERPRETER))
+                .filter(roleRegister -> Arrays.stream(roleRegister.getMetaDatas().attributes())
+                        .anyMatch(roleAttribute -> roleAttribute == RoleAttribute.VILLAGER))
+                .filter(roleRegister -> game.getConfig().getRoleCount(roleRegister.getMetaDatas().key()) == 0)
+                .filter(roleRegister -> Arrays.stream(roleRegister.getMetaDatas().attributes())
+                        .noneMatch(roleAttribute -> roleAttribute == RoleAttribute.INFORMATION))
                 .collect(Collectors.toList());
 
         if(roles.size() == 0){
@@ -111,7 +119,7 @@ public class Interpreter extends RoleVillage implements IPower {
                 .setDescription(game.translate("werewolf.role.interpreter.description"))
                 .setPower(game.translate("werewolf.role.interpreter.power",
                         Formatter.format("&roles&",
-                                this.roles.stream().map(roleRegister -> game.translate(roleRegister.getKey()))
+                                this.roles.stream().map(roleRegister -> game.translate(roleRegister.getMetaDatas().key()))
                                         .collect(Collectors.joining(", ")))))
                 .build();
     }
@@ -135,7 +143,7 @@ public class Interpreter extends RoleVillage implements IPower {
             this.setPower(true);
 
             this.roles.forEach(roleRegister -> this.getPlayerWW()
-                    .sendMessage(changeRole(roleRegister.getKey())));
+                    .sendMessage(changeRole(roleRegister.getMetaDatas().key())));
         }, game.getConfig().getTimerValue(TimerBase.DAY_DURATION) * 20L * 4 / 5L);
 
     }
@@ -181,18 +189,21 @@ public class Interpreter extends RoleVillage implements IPower {
     }
 
     public boolean isRoleValid(String roleKey){
-        return this.roles.stream().anyMatch(roleRegister -> roleRegister.getKey().equals(roleKey));
+        return this.roles.stream().anyMatch(roleRegister -> roleRegister.getMetaDatas().key().equals(roleKey));
     }
 
     public void activateRole(String roleKey){
 
         this.roles.removeIf(roleRegister -> {
-            if (roleRegister.getKey().equals(roleKey)) {
+            if (roleRegister.getMetaDatas().key().equals(roleKey)) {
 
                 try {
-                    IRole role = (IRole) roleRegister.getConstructors().newInstance(game,
+                    IRole role = roleRegister.getClazz()
+                            .getConstructor(WereWolfAPI.class,
+                                    IPlayerWW.class,
+                                    String.class).newInstance(game,
                             this.getPlayerWW(),
-                            roleRegister.getKey());
+                            roleRegister.getMetaDatas().key());
 
                     role.recoverPotionEffects();
 
@@ -215,9 +226,7 @@ public class Interpreter extends RoleVillage implements IPower {
                     this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.role.interpreter.perform",
                             Formatter.role(game.translate(roleKey)));
                     return true;
-                } catch (InstantiationException |
-                        IllegalAccessException |
-                        InvocationTargetException ignored) {
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException ignored) {
                 }
 
             }

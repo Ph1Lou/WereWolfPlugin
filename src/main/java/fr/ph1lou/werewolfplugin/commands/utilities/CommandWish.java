@@ -1,6 +1,6 @@
 package fr.ph1lou.werewolfplugin.commands.utilities;
 
-import fr.ph1lou.werewolfapi.annotations.Command;
+import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StateGame;
@@ -13,7 +13,7 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-@Command(key = "werewolf.wish.command",
+@PlayerCommand(key = "werewolf.wish.command",
         descriptionKey = "werewolf.wish.command_description",
         statePlayer = StatePlayer.ALIVE,
         stateGame = StateGame.GAME)

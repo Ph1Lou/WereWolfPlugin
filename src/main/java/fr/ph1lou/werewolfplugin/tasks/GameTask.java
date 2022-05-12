@@ -1,15 +1,19 @@
 package fr.ph1lou.werewolfplugin.tasks;
 
 
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
-import fr.ph1lou.werewolfplugin.RegisterManager;
+import fr.ph1lou.werewolfplugin.Register;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfplugin.save.Configuration;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.enums.StateGame;
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.lang.reflect.InvocationTargetException;
 
 
 public class GameTask extends BukkitRunnable {
@@ -65,14 +69,24 @@ public class GameTask extends BukkitRunnable {
 
 		game.setTimer(game.getTimer()+1);
 
-		RegisterManager.get().getTimersRegister()
+		Register.get().getTimersRegister()
 				.forEach(timerRegister -> {
 
-					if (timerRegister.getPredicate().test(game)) {
-						if (game.getConfig().getTimerValue(timerRegister.getKey()) == 0) {
-							timerRegister.getConsumer().accept(game);
+					if (timerRegister.getMetaDatas().decrement() ||
+							(timerRegister.getMetaDatas().decrementAfterRole() &&
+									!game.getConfig().isTrollSV() &&
+									game.getConfig().getTimerValue(TimerBase.ROLE_DURATION) < 0)) {
+						if (game.getConfig().getTimerValue(timerRegister.getMetaDatas().key()) == 0) {
+							try {
+								Bukkit.getPluginManager().callEvent(
+										timerRegister.getMetaDatas().onZero().getConstructor()
+												.newInstance()
+								);
+							} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+								e.printStackTrace();
+							}
 						}
-						((Configuration) game.getConfig()).decreaseTimer(timerRegister.getKey());
+						((Configuration) game.getConfig()).decreaseTimer(timerRegister.getMetaDatas().key());
 					}
 				});
 

@@ -2,10 +2,12 @@ package fr.ph1lou.werewolfplugin;
 
 import fr.minuskube.inv.InventoryManager;
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.annotations.Addon;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.ActionBarEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.registers.interfaces.IRegisterManager;
+import fr.ph1lou.werewolfapi.registers.IRegisterManager;
 import fr.ph1lou.werewolfapi.statistics.impl.GameReview;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
@@ -23,13 +25,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
+@Addon(key = "werewolf.name", loreKeys = {},
+        item = UniversalMaterial.ANVIL,
+        defaultLanguage = "fr_FR", authorsUuid = {})
 public class Main extends JavaPlugin implements GetWereWolfAPI {
 
     private final LanguageManager languageManager = new LanguageManager(this);
     private GameManager currentGame;
-    private final RegisterManager registerManager = new RegisterManager(this);
+    private final Register registerManager = new Register(this);
     private final InventoryManager invManager = new InventoryManager(this);
     private GameReview currentGameReview;
 
@@ -88,11 +92,6 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
     @Override
     public IRegisterManager getRegisterManager() {
         return this.registerManager;
-    }
-
-    @Override
-    public Optional<IRegisterManager> getAddonRegisterManager(String addonKey) {
-        return this.registerManager.getRegister(addonKey);
     }
 
     public void createGame() {

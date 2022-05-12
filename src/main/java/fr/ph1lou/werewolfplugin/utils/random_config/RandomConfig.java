@@ -1,10 +1,12 @@
 package fr.ph1lou.werewolfplugin.utils.random_config;
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.role.interfaces.IRole;
+import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.registers.impl.RoleRegister;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,9 +26,9 @@ public class RandomConfig {
 
         WereWolfAPI game = main.getWereWolfAPI();
 
-        Set<RoleRegister> roles = main.getRegisterManager().getRolesRegister()
+        Set<Wrapper<IRole, Role>> roles = main.getRegisterManager().getRolesRegister()
                 .stream()
-                .filter(roleRegister -> !blackList.contains(roleRegister.getKey()))
+                .filter(roleRegister -> !blackList.contains(roleRegister.getMetaDatas().key()))
                 .collect(Collectors.toSet());
 
 
@@ -60,7 +62,7 @@ public class RandomConfig {
     }
 
 
-    private void onComposition(int playerSize, int proportion, int weight, Set<RoleRegister> pool, RoleAttribute RoleAttribute, Map<String, Integer> composition, boolean multipleRole) {
+    private void onComposition(int playerSize, int proportion, int weight, Set<Wrapper<IRole, Role>> pool, RoleAttribute RoleAttribute, Map<String, Integer> composition, boolean multipleRole) {
 
 
     }
