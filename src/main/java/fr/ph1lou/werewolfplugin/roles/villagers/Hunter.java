@@ -35,8 +35,8 @@ public class Hunter extends RoleVillage implements IPower {
     private boolean power = false;
     private double damageBonus = 0;
 
-    public Hunter(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public Hunter(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
     }
 
     @Override

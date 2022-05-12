@@ -48,8 +48,8 @@ public class FruitMerchant extends RoleVillage implements IAffectedPlayers, IPow
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
     private final Map<IPlayerWW,Integer> goldenAppleNumber = new HashMap<>();
 
-    public FruitMerchant(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public FruitMerchant(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
     }
 
     @Override

@@ -68,8 +68,8 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
     private AngelForm choice = AngelForm.ANGEL;
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
 
-    public Angel(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Angel(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     @Override

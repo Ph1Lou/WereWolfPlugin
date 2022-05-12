@@ -17,8 +17,8 @@ import org.jetbrains.annotations.NotNull;
         attributes = {RoleAttribute.HYBRID})
 public class WhiteWereWolf extends RoleNeutral {
 
-    public WhiteWereWolf(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public WhiteWereWolf(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
 

@@ -38,8 +38,8 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
 
-    public Priestess(WereWolfAPI main, IPlayerWW playerWW, String key) {
-        super(main, playerWW, key);
+    public Priestess(WereWolfAPI main, IPlayerWW playerWW) {
+        super(main, playerWW);
 
         setPower(false);
     }

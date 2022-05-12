@@ -52,8 +52,8 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
     private float progress = 0;
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
 
-    public Succubus(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Succubus(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     private boolean power = true;

@@ -44,8 +44,8 @@ public class Servitor extends RoleVillage implements IPower {
     private boolean power = true;
     private IPlayerWW master;
 
-    public Servitor(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public Servitor(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
     }
 
     @Override

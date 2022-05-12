@@ -44,8 +44,8 @@ public class Necromancer extends RoleNeutral implements IPower, IProgress {
     private float progress = 0;
     private int health = 0;
 
-    public Necromancer(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public Necromancer(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
     }
 
     @Override

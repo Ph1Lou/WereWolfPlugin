@@ -53,8 +53,8 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
     private final Map<IPlayerWW, Integer> affectedPlayer = new HashMap<>();
     private boolean power = true;
     private int count = 0;
-    public Scammer(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public Scammer(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
     }
 
     @Override
@@ -131,7 +131,7 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
         Bukkit.getPluginManager().callEvent(new SwapEvent(this.getPlayerWW(),target));
         IRole newRole;
         if (targetRole.isWereWolf()) {
-            newRole = new WereWolf(game, target, RoleBase.WEREWOLF);
+            newRole = new WereWolf(game, target);
             if(targetRole.isNeutral()){
                 if(targetRole.isSolitary()){
                     newRole.setSolitary(true);
@@ -143,7 +143,7 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
             target.sendMessageWithKey(Prefix.ORANGE,"werewolf.role.scammer.message_werewolf");
 
         } else {
-            newRole = new Villager(game, target, RoleBase.VILLAGER);
+            newRole = new Villager(game, target);
             target.sendMessageWithKey(Prefix.ORANGE,"werewolf.role.scammer.message_villager");
         }
         if (this.isInfected()) {

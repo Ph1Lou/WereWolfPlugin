@@ -26,8 +26,8 @@ public class BigBadWerewolf extends RoleWereWolf implements IPower {
 
     private boolean power = true;
 
-    public BigBadWerewolf(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public BigBadWerewolf(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
     }
 
     @Override

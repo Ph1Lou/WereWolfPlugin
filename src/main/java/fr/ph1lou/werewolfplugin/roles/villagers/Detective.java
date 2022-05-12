@@ -35,8 +35,8 @@ public class Detective extends RoleWithLimitedSelectionDuration implements IAffe
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private int dayNumber = -8;
 
-    public Detective(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Detective(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
         setPower(false);
     }
 

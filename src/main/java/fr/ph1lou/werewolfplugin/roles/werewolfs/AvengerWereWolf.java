@@ -36,8 +36,8 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
 
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
 
-    public AvengerWereWolf(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public AvengerWereWolf(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
 

@@ -47,8 +47,8 @@ public class DevotedServant extends RoleVillage implements IPower, IAffectedPlay
     private boolean power = true;
     private boolean hide = false;
 
-    public DevotedServant(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public DevotedServant(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
     }
 
     @EventHandler

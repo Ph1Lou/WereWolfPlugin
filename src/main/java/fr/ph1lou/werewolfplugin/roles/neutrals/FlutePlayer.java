@@ -78,8 +78,8 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
 
     private int fluteInStore = 0;
 
-    public FlutePlayer(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public FlutePlayer(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
         this.registerCustomCraft();
     }
 

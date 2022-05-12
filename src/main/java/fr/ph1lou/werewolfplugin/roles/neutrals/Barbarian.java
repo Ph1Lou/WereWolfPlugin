@@ -48,8 +48,8 @@ public class Barbarian extends RoleNeutral implements IPower, IAffectedPlayers {
     private boolean power = true;
     private final Set<IPlayerWW> damagedPlayers = new HashSet<>();
 
-    public Barbarian(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public Barbarian(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
     }
 
     @Override

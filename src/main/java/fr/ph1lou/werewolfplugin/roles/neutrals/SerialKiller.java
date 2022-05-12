@@ -28,8 +28,8 @@ import org.jetbrains.annotations.NotNull;
          category = Category.NEUTRAL, attributes = {RoleAttribute.NEUTRAL})
 public class SerialKiller extends RoleNeutral implements IPower {
 
-    public SerialKiller(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public SerialKiller(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     private boolean power = true;

@@ -47,8 +47,8 @@ public class WildChild extends RoleVillage implements IAffectedPlayers, ITransfo
     boolean transformed = false;
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
 
-    public WildChild(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public WildChild(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     private boolean power = true;

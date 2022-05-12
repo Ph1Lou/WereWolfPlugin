@@ -29,8 +29,8 @@ import java.util.List;
         attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION})
 public class Shaman extends RoleVillage implements IAffectedPlayers {
 
-    public Shaman(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Shaman(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();

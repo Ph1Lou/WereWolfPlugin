@@ -59,8 +59,8 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
     private int use=0;
     private int timer=-1;
 
-    public WillOTheWisp(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public WillOTheWisp(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
     }
 
     @Override

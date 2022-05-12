@@ -51,8 +51,8 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
 
     final List<IPlayerWW> killerWWS = new ArrayList<>();
 
-    public Sister(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Sister(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
 

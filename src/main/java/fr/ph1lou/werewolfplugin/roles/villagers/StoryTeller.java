@@ -31,8 +31,8 @@ public class StoryTeller extends RoleVillage {
 
     private final Set<IPlayerWW> players = new HashSet<>();
 
-    public StoryTeller(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public StoryTeller(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
     }
 
     @EventHandler

@@ -39,8 +39,8 @@ import java.util.stream.Collectors;
         intValues = {@IntValue(key = "werewolf.role.howling_werewolf.distance",
                 defaultValue = 80, meetUpValue = 80, step = 2, item = UniversalMaterial.LIGHT_GRAY_WOOL)})
 public class HowlingWerewolf extends RoleWereWolf {
-    public HowlingWerewolf(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public HowlingWerewolf(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
     }
 
     @Override

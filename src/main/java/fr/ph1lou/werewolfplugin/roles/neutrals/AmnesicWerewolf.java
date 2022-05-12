@@ -26,13 +26,13 @@ import org.jetbrains.annotations.NotNull;
 
 @Role(key = RoleBase.AMNESIAC_WEREWOLF,
         category = Category.NEUTRAL,
-        attributes = {RoleAttribute.HYBRID})
+        attributes = RoleAttribute.HYBRID)
 public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
 
     private boolean transformed = false;
 
-    public AmnesicWerewolf(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public AmnesicWerewolf(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     @EventHandler

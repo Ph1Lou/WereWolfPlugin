@@ -44,8 +44,8 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private boolean power = true;
 
-    public Imitator(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Imitator(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     @Override

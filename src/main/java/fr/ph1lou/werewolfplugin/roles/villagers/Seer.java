@@ -39,8 +39,8 @@ public class Seer extends RoleWithLimitedSelectionDuration implements IAffectedP
 
     private boolean disablePower = false;
 
-    public Seer(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Seer(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
         setPower(false);
     }
 

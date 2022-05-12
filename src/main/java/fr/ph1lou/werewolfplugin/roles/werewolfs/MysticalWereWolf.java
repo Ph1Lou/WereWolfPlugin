@@ -29,8 +29,8 @@ import java.util.stream.Collectors;
          attributes = RoleAttribute.WEREWOLF)
 public class MysticalWereWolf extends RoleWereWolf {
 
-    public MysticalWereWolf(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public MysticalWereWolf(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
 

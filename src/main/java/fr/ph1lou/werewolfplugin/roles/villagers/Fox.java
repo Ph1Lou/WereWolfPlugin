@@ -56,8 +56,8 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
     private boolean power = false;
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
 
-    public Fox(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Fox(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     @Override

@@ -34,8 +34,8 @@ public class Spy extends RoleVillage implements IAffectedPlayers, IPower {
     private int count = 0;
     private boolean power = false;
 
-    public Spy(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public Spy(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
     }
 
     @Override

@@ -34,8 +34,8 @@ public class Cupid extends RoleVillage implements IAffectedPlayers, IPower {
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private boolean power = true;
 
-    public Cupid(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Cupid(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     @Override

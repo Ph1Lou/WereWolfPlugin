@@ -45,8 +45,8 @@ public class Illusionist extends RoleVillage implements IPower, IAffectedPlayers
 
     private IPlayerWW playerWW;
 
-    public Illusionist(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public Illusionist(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
     }
 
     @Override

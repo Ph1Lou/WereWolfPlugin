@@ -31,8 +31,8 @@ public class Librarian extends RoleVillage implements ILimitedUse, IAffectedPlay
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private final List<String> storage = new ArrayList<>();
 
-    public Librarian(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Librarian(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     @Override

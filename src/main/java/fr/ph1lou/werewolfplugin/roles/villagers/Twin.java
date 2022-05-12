@@ -57,8 +57,8 @@ public class Twin extends RoleVillage {
     @Nullable
     private List<IPlayerWW> twinList;
 
-    public Twin(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Twin(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
 

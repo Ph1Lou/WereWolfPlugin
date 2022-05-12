@@ -34,8 +34,8 @@ public class Oracle extends RoleWithLimitedSelectionDuration implements IAffecte
     private int dayNumber = -8;
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
 
-    public Oracle(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public Oracle(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
         setPower(false);
     }
 

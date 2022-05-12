@@ -36,7 +36,7 @@ public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPl
     public InfectFatherOfTheWolves(WereWolfAPI api,
                                    IPlayerWW playerWW,
                                    String key) {
-        super(api, playerWW, key);
+        super(api, playerWW);
     }
 
     @Override

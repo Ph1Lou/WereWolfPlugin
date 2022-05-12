@@ -27,11 +27,11 @@ import org.jetbrains.annotations.NotNull;
 
 @Role(key = RoleBase.ASSASSIN,
         category = Category.NEUTRAL,
-        attributes = {RoleAttribute.NEUTRAL})
+        attributes = RoleAttribute.NEUTRAL)
 public class Assassin extends RoleNeutral {
 
-    public Assassin(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Assassin(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

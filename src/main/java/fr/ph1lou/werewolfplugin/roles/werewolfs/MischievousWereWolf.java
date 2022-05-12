@@ -50,8 +50,8 @@ public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
 
     private boolean invisible = false;
 
-    public MischievousWereWolf(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public MischievousWereWolf(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     @EventHandler

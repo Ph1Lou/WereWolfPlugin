@@ -37,8 +37,8 @@ public class Analyst extends RoleWithLimitedSelectionDuration implements ILimite
     private boolean power2 = true;
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
 
-    public Analyst(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public Analyst(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
         this.setPower(false);
     }
 

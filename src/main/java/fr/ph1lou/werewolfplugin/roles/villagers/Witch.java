@@ -36,8 +36,8 @@ public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private boolean power = true;
 
-    public Witch(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Witch(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
 

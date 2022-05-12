@@ -57,8 +57,8 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
     private IPlayerWW deathPlayerWithRoleRevealed;
 
 
-    public Thug(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public Thug(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
     }
 
     @Override

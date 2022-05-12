@@ -22,8 +22,8 @@ import org.jetbrains.annotations.NotNull;
         attributes = {RoleAttribute.WEREWOLF})
 public class AlphaWereWolf extends RoleWereWolf {
 
-    public AlphaWereWolf(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public AlphaWereWolf(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
     }
 
     @Override

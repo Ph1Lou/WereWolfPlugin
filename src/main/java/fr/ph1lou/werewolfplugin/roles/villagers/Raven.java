@@ -38,9 +38,9 @@ public class Raven extends RoleWithLimitedSelectionDuration implements IAffected
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private IPlayerWW last;
 
-    public Raven(WereWolfAPI api, IPlayerWW playerWW, String key) {
+    public Raven(WereWolfAPI api, IPlayerWW playerWW) {
 
-        super(api, playerWW, key);
+        super(api, playerWW);
         setPower(false);
     }
 

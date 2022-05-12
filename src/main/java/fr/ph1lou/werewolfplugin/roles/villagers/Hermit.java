@@ -35,8 +35,8 @@ import java.util.Optional;
         category = Category.VILLAGER, attributes = {RoleAttribute.VILLAGER},
         intValues = {@IntValue(key = "werewolf.role.hermit.distance", defaultValue = 20, meetUpValue = 20, step = 4, item = UniversalMaterial.WHITE_WOOL)})
 public class Hermit extends RoleVillage {
-    public Hermit(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public Hermit(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
     }
 
     @Override

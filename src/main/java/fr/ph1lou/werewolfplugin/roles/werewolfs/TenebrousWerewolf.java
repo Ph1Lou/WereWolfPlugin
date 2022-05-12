@@ -37,8 +37,8 @@ public class TenebrousWerewolf extends RoleWereWolf implements IPower, IAffected
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
     private boolean power = true;
 
-    public TenebrousWerewolf(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public TenebrousWerewolf(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     @Override

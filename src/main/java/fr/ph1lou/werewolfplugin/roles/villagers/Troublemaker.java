@@ -38,8 +38,8 @@ public class Troublemaker extends RoleVillage implements IAffectedPlayers, IPowe
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private boolean power = true;
 
-    public Troublemaker(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Troublemaker(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     @EventHandler

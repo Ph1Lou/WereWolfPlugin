@@ -43,8 +43,8 @@ public class WiseElder extends RoleVillage {
     private int lightCounter;
     private boolean active;
 
-    public WiseElder(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public WiseElder(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
     }
 
     @Override

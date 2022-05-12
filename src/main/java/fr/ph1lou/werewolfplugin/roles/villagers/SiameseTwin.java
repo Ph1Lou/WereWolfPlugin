@@ -27,8 +27,8 @@ import java.util.Objects;
         requireDouble = true)
 public class SiameseTwin extends RoleVillage {
 
-    public SiameseTwin(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public SiameseTwin(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     @Override

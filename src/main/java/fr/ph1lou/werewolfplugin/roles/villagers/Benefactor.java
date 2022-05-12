@@ -21,8 +21,8 @@ import java.util.List;
 public class Benefactor extends RoleVillage implements IAffectedPlayers {
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
 
-    public Benefactor(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public Benefactor(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
     }
 
     @Override

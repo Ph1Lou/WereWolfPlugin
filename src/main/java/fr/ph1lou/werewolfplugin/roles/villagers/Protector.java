@@ -40,8 +40,8 @@ public class Protector extends RoleWithLimitedSelectionDuration implements IAffe
     private IPlayerWW last;
 
 
-    public Protector(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Protector(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
         setPower(false);
     }
 

@@ -16,8 +16,8 @@ import org.bukkit.Bukkit;
         attributes = {RoleAttribute.NEUTRAL})
 public class FallenAngel extends Angel {
 
-    public FallenAngel(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public FallenAngel(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
         setChoice(AngelForm.FALLEN_ANGEL);
         Bukkit.getPluginManager().callEvent(
                 new AngelChoiceEvent(this.getPlayerWW(), AngelForm.FALLEN_ANGEL));

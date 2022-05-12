@@ -49,8 +49,8 @@ public class Interpreter extends RoleVillage implements IPower {
     private boolean power = false;
     private final Set<Wrapper<IRole, Role>> roles = new HashSet<>();
 
-    public Interpreter(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public Interpreter(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
         List<Wrapper<IRole, Role>> roles = Register.get().getRolesRegister()
                 .stream()
                 .filter(roleRegister -> Arrays.stream(roleRegister.getMetaDatas().attributes())

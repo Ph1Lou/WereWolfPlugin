@@ -74,8 +74,7 @@ public class PlayerWW implements IPlayerWW {
         this.spawn = player.getWorld().getSpawnLocation();
         this.uuid = player.getUniqueId();
         this.name = player.getName();
-        this.role = new Villager(api, this,
-                RoleBase.VILLAGER);
+        this.role = new Villager(api, this);
         this.game = api;
         try {
             this.mojangUUID = getUUID(name);

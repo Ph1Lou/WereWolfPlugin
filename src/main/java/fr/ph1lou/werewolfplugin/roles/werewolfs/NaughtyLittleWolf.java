@@ -24,8 +24,8 @@ import org.jetbrains.annotations.NotNull;
         attributes = RoleAttribute.WEREWOLF)
 public class NaughtyLittleWolf extends RoleWereWolf {
 
-    public NaughtyLittleWolf(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public NaughtyLittleWolf(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
 

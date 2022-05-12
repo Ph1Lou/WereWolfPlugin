@@ -38,8 +38,8 @@ public class Occultist extends Villager{
     private final List<IPlayerWW> deaths = new ArrayList<>();
     private final List<IPlayerWW> troublemakers = new ArrayList<>();
 
-    public Occultist(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Occultist(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     @EventHandler

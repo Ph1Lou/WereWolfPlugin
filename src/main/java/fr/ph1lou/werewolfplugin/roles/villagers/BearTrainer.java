@@ -44,8 +44,8 @@ import java.util.stream.Collectors;
                 item = UniversalMaterial.BROWN_WOOL)})
 public class BearTrainer extends RoleVillage {
 
-    public BearTrainer(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public BearTrainer(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     @EventHandler

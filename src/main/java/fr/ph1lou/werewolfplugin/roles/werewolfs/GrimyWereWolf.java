@@ -40,8 +40,8 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
     private boolean power = true;
     private boolean hide = false;
 
-    public GrimyWereWolf(WereWolfAPI main, IPlayerWW playerWW, String key) {
-        super(main, playerWW, key);
+    public GrimyWereWolf(WereWolfAPI main, IPlayerWW playerWW) {
+        super(main, playerWW);
     }
 
     @Override

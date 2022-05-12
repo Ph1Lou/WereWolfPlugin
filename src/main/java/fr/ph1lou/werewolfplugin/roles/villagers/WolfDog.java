@@ -38,8 +38,8 @@ public class WolfDog extends RoleVillage implements ITransformed, IPower {
     private boolean transformed = false;
     private boolean power = true;
 
-    public WolfDog(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public WolfDog(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     @Override

@@ -47,8 +47,8 @@ import java.util.stream.Collectors;
         defaultValue = 70, meetUpValue = 70, step = 5, item = UniversalMaterial.BIRCH_LEAVES)})
 public class Gravedigger extends RoleVillage implements IAffectedPlayers {
 
-    public Gravedigger(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public Gravedigger(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
     }
 
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();

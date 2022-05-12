@@ -48,8 +48,8 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
     private final List<IPlayerWW> affectedPlayer;
     private boolean power;
 
-    public Citizen(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Citizen(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
         this.use = 0;
         this.affectedPlayer = new ArrayList<>();
         this.power = true;

@@ -31,8 +31,8 @@ public class FalsifierWereWolf extends RoleWereWolf {
 
     private Aura displayAura;
 
-    public FalsifierWereWolf(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public FalsifierWereWolf(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
         this.setDisplayCamp(Camp.VILLAGER.getKey());
         this.setDisplayRole(RoleBase.VILLAGER);
         this.displayAura = Aura.LIGHT;

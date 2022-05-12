@@ -16,8 +16,8 @@ import org.jetbrains.annotations.NotNull;
                 RoleAttribute.INFORMATION})
 public class ChattySeer extends Seer {
 
-    public ChattySeer(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public ChattySeer(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     @Override

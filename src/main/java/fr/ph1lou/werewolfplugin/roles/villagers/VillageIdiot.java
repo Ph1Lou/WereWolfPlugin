@@ -33,8 +33,8 @@ public class VillageIdiot extends RoleVillage implements IPower {
     private boolean power = true;
 
 
-    public VillageIdiot(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public VillageIdiot(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     public @NotNull String getDescription() {

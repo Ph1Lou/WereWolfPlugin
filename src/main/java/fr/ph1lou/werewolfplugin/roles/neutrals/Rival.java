@@ -63,8 +63,8 @@ public class Rival extends RoleNeutral implements IPower {
 
     private boolean power = true;
 
-    public Rival(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Rival(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
 

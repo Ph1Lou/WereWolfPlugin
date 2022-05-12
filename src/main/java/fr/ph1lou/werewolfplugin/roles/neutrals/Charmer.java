@@ -53,8 +53,8 @@ public class Charmer extends RoleNeutral implements IPower, IAffectedPlayers {
 
     private boolean power = true;
 
-    public Charmer(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Charmer(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     @Override

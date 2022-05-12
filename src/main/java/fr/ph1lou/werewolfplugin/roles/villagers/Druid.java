@@ -43,8 +43,8 @@ public class Druid extends RoleVillage implements IPower {
 
     private boolean power = true;
 
-    public Druid(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public Druid(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
     }
 
     @Override

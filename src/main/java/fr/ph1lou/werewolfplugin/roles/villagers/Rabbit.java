@@ -30,8 +30,8 @@ public class Rabbit extends RoleVillage {
     private static final float defaultWalkSpeed = 0.2f;
     private boolean belowHearts = false;//pr éviter de reset la speed quand ya pas de changement de vie
 
-    public Rabbit(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public Rabbit(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
     }
 
     @Override

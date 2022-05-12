@@ -32,8 +32,8 @@ public class Trapper extends RoleVillage implements IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
 
-    public Trapper(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Trapper(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
         setPower(false);
     }
 

@@ -34,8 +34,8 @@ import java.util.Optional;
 public class Stud extends RoleVillage implements IPower {
     private boolean power = true;
 
-    public Stud(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Stud(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
 

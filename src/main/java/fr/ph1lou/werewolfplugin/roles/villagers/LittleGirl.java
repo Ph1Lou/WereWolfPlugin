@@ -50,8 +50,8 @@ public class LittleGirl extends RoleVillage implements IInvisible {
 
     private boolean invisible = false;
 
-    public LittleGirl(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public LittleGirl(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
 

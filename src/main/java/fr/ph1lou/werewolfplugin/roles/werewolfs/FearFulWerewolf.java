@@ -36,8 +36,8 @@ import java.util.Optional;
         intValues = {@IntValue(key = "werewolf.role.fearful_werewolf.distance",
         defaultValue = 20, meetUpValue = 20, step = 4, item = UniversalMaterial.MAGENTA_WOOL)})
 public class FearFulWerewolf extends RoleWereWolf {
-    public FearFulWerewolf(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public FearFulWerewolf(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
     }
 
     @Override

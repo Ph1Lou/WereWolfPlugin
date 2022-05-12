@@ -38,8 +38,8 @@ public class Guard extends RoleWithLimitedSelectionDuration implements IAffected
     private boolean powerFinal = true;
 
 
-    public Guard(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Guard(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     @Override
