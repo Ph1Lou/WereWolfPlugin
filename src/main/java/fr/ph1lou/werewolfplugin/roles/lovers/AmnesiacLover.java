@@ -38,7 +38,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Lover(key = LoverBase.AMNESIAC_LOVER,
-        intValues = @IntValue(key = AmnesiacLover.DISTANCE,
+        configValues = @IntValue(key = AmnesiacLover.DISTANCE,
                 defaultValue = 15,
                 meetUpValue = 15,
                 step = 2, item = UniversalMaterial.PINK_WOOL))
@@ -124,7 +124,7 @@ public class AmnesiacLover implements ILover, Listener {
         }
 
         if (player1.getLocation().distance(player2.getLocation()) <
-                this.game.getConfig().getValue(LoverType.AMNESIAC_LOVER.getKey(), DISTANCE)) {
+                this.game.getConfig().getValue(DISTANCE)) {
 
             Bukkit.getPluginManager().callEvent(new RevealAmnesiacLoversEvent(
                     Sets.newHashSet(this.amnesiacLover1, this.amnesiacLover2)));

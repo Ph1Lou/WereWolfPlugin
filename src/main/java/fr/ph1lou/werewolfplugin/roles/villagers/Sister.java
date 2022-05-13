@@ -41,7 +41,7 @@ import java.util.Objects;
 @Role(key = RoleBase.SISTER, 
         category = Category.VILLAGER, 
         attributes = RoleAttribute.VILLAGER, 
-        intValues = {@IntValue(key = Sister.DISTANCE,
+        configValues = {@IntValue(key = Sister.DISTANCE,
                 defaultValue = 20, 
                 meetUpValue = 20, 
                 step = 2, 
@@ -75,7 +75,7 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.sister.description"))
                 .setEffects(game.translate("werewolf.role.sister.effect",
-                        Formatter.number( game.getConfig().getValue(RoleBase.SISTER, DISTANCE))))
+                        Formatter.number( game.getConfig().getValue(DISTANCE))))
                 .addExtraLines(extraLines)
                 .build();
     }
@@ -125,7 +125,7 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
                 .map(Bukkit::getPlayer)
                 .filter(Objects::nonNull)
                 .filter(player -> player.getWorld().equals(location.getWorld()) &&
-                        location.distance(player.getLocation()) < game.getConfig().getValue(RoleBase.SISTER, DISTANCE))
+                        location.distance(player.getLocation()) < game.getConfig().getValue(DISTANCE))
                 .findFirst()
                 .orElse(null) != null;
 

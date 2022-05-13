@@ -2,7 +2,8 @@ package fr.ph1lou.werewolfplugin;
 
 import fr.minuskube.inv.InventoryManager;
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
-import fr.ph1lou.werewolfapi.annotations.Addon;
+import fr.ph1lou.werewolfapi.annotations.Author;
+import fr.ph1lou.werewolfapi.annotations.ModuleWerewolf;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.ActionBarEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
@@ -26,11 +27,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.List;
 import java.util.Objects;
 
-@Addon(key = "werewolf.name", loreKeys = {},
+@ModuleWerewolf(key = Main.KEY, loreKeys = "werewolf.description",
         item = UniversalMaterial.ANVIL,
-        defaultLanguage = "fr_FR", authorsUuid = {})
+        defaultLanguage = "fr_FR", authors = @Author(uuid = "056be797-2a0b-4807-9af5-37faf5384396", name = "Ph1Lou"))
 public class Main extends JavaPlugin implements GetWereWolfAPI {
 
+    public static final String KEY = "werewolf.name";
     private final LanguageManager languageManager = new LanguageManager(this);
     private GameManager currentGame;
     private final Register registerManager = new Register(this);

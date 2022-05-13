@@ -56,7 +56,7 @@ public class CommandFruitMerchant implements ICommand {
                     Location location = iPlayerWW.getLocation();
                     return location.getWorld() == player.getWorld() &&
                             location.distance(player.getLocation()) <
-                                    game.getConfig().getValue(RoleBase.FRUIT_MERCHANT, FruitMerchant.DISTANCE);
+                                    game.getConfig().getValue(FruitMerchant.DISTANCE);
                 })
                 .collect(Collectors.toSet());
 

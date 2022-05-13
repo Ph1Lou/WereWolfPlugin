@@ -35,7 +35,7 @@ import java.util.Optional;
 @Role(key = RoleBase.SERVITOR,
         category = Category.VILLAGER,
         attributes = RoleAttribute.VILLAGER,
-intValues = {@IntValue(key = Servitor.DISTANCE,
+configValues = {@IntValue(key = Servitor.DISTANCE,
         defaultValue = 25, 
         meetUpValue = 25, 
         step = 5, 
@@ -55,7 +55,7 @@ public class Servitor extends RoleVillage implements IPower {
         return new DescriptionBuilder(game,this)
                 .setDescription(game.translate("werewolf.role.servitor.description"))
                 .setEffects(game.translate(this.hasPower()?"werewolf.role.servitor.effects":"werewolf.role.servitor.effects_death",
-                        Formatter.number(game.getConfig().getValue(RoleBase.SERVITOR, DISTANCE))))
+                        Formatter.number(game.getConfig().getValue(DISTANCE))))
                 .build();
     }
 
@@ -118,7 +118,7 @@ public class Servitor extends RoleVillage implements IPower {
             event.setCancelled(true);
             this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE,"werewolf.role.servitor.resurrection",
                     Formatter.player(lastKiller.get().getName()),
-                    Formatter.number(game.getConfig().getValue(RoleBase.SERVITOR, DISTANCE)));
+                    Formatter.number(game.getConfig().getValue(DISTANCE)));
             autoResurrection();
         }
     }
@@ -180,7 +180,7 @@ public class Servitor extends RoleVillage implements IPower {
      */
     private boolean checkDistance(IPlayerWW player, Location location) {
         return player.getLocation().getWorld() == location.getWorld() &&
-                player.getLocation().distance(location) < game.getConfig().getValue(RoleBase.SERVITOR, DISTANCE);
+                player.getLocation().distance(location) < game.getConfig().getValue(DISTANCE);
     }
     
     @Override

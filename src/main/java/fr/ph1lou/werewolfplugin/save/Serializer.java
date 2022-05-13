@@ -19,12 +19,21 @@ public class Serializer {
         return gson().toJson(config);
     }
 
+    public static String serialize(StorageConfiguration config) {
+        return gson().toJson(config);
+    }
+
+
     public static String serialize(GameReview game) {
         return gson().toJson(game);
     }
 
     public static Configuration deserialize(String json) {
         return gson().fromJson(json, Configuration.class);
+    }
+
+    public static StorageConfiguration deserializeConfiguration(String json) {
+        return gson().fromJson(json, StorageConfiguration.class);
     }
 
 }

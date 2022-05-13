@@ -5,15 +5,14 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
-import fr.ph1lou.werewolfplugin.Main;
-import fr.ph1lou.werewolfplugin.save.FileUtils_;
-import fr.ph1lou.werewolfplugin.save.Serializer;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
+import fr.ph1lou.werewolfplugin.Main;
+import fr.ph1lou.werewolfplugin.save.ConfigurationLoader;
 import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -127,17 +126,16 @@ public class Save implements InventoryProvider {
 
         if (files == null || files.length <= j) return;
 
-        FileUtils_.loadConfig(main, files[j].getName().replace(".json", ""));
+        ConfigurationLoader.loadConfig(main, files[j].getName().replace(".json", ""));
         game.getStuffs().load(files[j].getName().replace(".json", ""));
     }
 
     public void save(Main main, String saveName, Player player) {
         WereWolfAPI game = main.getWereWolfAPI();
-        File file = new File(main.getDataFolder() + File.separator + "configs", saveName + ".json");
         File repertoire = new File(main.getDataFolder() + File.separator + "configs");
         File[] files = repertoire.listFiles();
         if (files == null || files.length < 8) {
-            FileUtils_.save(file, Serializer.serialize(game.getConfig()));
+            ConfigurationLoader.saveConfig(main, saveName);
             game.getStuffs().save(saveName);
             player.sendMessage(game.translate(Prefix.GREEN , "werewolf.menu.save.success"));
         } else player.sendMessage(game.translate(Prefix.RED , "werewolf.menu.save.failure"));

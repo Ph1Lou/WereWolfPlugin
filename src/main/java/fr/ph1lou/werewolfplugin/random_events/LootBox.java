@@ -1,5 +1,6 @@
 package fr.ph1lou.werewolfplugin.random_events;
 
+import fr.ph1lou.werewolfapi.GetWereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Event;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -46,7 +47,7 @@ public class LootBox extends ListenerManager {
     private final List<Location> chestLocation = new ArrayList<>();
     private boolean eventActive = false;
 
-    public LootBox(Main main) {
+    public LootBox(GetWereWolfAPI main) {
         super(main);
     }
 

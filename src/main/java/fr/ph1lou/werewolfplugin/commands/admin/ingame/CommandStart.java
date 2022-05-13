@@ -1,23 +1,21 @@
 package fr.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import fr.ph1lou.werewolfapi.annotations.AdminCommand;
-import fr.ph1lou.werewolfplugin.Main;
-import fr.ph1lou.werewolfplugin.game.GameManager;
-import fr.ph1lou.werewolfplugin.save.FileUtils_;
-import fr.ph1lou.werewolfplugin.save.Serializer;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.commands.ICommand;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfplugin.Main;
+import fr.ph1lou.werewolfplugin.game.GameManager;
+import fr.ph1lou.werewolfplugin.save.ConfigurationLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.text.DecimalFormat;
 
 @AdminCommand(key = "werewolf.commands.admin.start.command",
@@ -55,14 +53,7 @@ public class CommandStart implements ICommand {
         wb.setSize(game.getConfig().getBorderMax());
         wb.setWarningDistance((int) (wb.getSize() / 7));
         ((GameManager) game).setState(StateGame.TRANSPORTATION);
-        File file = new File(
-                JavaPlugin.getPlugin(Main.class).getDataFolder() +
-                        File.separator +
-                        "configs" +
-                        File.separator,
-                "saveCurrent.json");
-
-        FileUtils_.save(file, Serializer.serialize(game.getConfig()));
+        ConfigurationLoader.saveConfig(JavaPlugin.getPlugin(Main.class), "saveCurrent");
         game.getStuffs().save("saveCurrent");
         Bukkit.getPluginManager().callEvent(new StartEvent(game));
     }

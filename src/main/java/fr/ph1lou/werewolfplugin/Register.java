@@ -1,11 +1,11 @@
 package fr.ph1lou.werewolfplugin;
 
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
-import fr.ph1lou.werewolfapi.annotations.Addon;
 import fr.ph1lou.werewolfapi.annotations.AdminCommand;
 import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.annotations.Event;
 import fr.ph1lou.werewolfapi.annotations.Lover;
+import fr.ph1lou.werewolfapi.annotations.ModuleWerewolf;
 import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
@@ -23,9 +23,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
+@SuppressWarnings({"unchecked"})
 public class Register implements IRegisterManager {
+
+    private final Set<Wrapper<JavaPlugin, ModuleWerewolf>> addons = new HashSet<>();
 
     private final Set<Wrapper<IRole, Role>> roles = new HashSet<>();
     private final Set<Wrapper<ListenerManager, Scenario>> scenarios = new HashSet<>();
@@ -46,10 +50,15 @@ public class Register implements IRegisterManager {
 
     private static Register INSTANCE;
 
-    public Register(GetWereWolfAPI main){
+    //check keys prefix
+    public Register(Main main){
         this.main = main;
         INSTANCE = this;
-        this.register("fr.ph1lou.werewolfplugin", main.getClass().getAnnotation(Addon.class));
+        this.addons.add(new Wrapper<>(JavaPlugin.class,
+                main.getClass().getAnnotation(ModuleWerewolf.class),
+                Main.KEY,
+                main));
+        this.register("fr.ph1lou.werewolfplugin", main.getClass().getAnnotation(ModuleWerewolf.class));
     }
 
 
@@ -72,7 +81,7 @@ public class Register implements IRegisterManager {
         return null;
     }
 
-    public void register(String packageName, Addon addon){
+    public void register(String packageName, ModuleWerewolf addon){
 
         try {
             ReflectionUtils.findAllClasses(main, packageName)
@@ -154,8 +163,59 @@ public class Register implements IRegisterManager {
     }
 
     @Override
+    public Optional<String> getModuleKey(String key) {
+        String addonKey = this.roles.stream()
+                .filter(iRoleRoleWrapper -> iRoleRoleWrapper.getMetaDatas().key().equals(key))
+                .map(Wrapper::getAddonKey)
+                .findFirst()
+                .orElseGet(() -> this.configurations.stream()
+                        .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key))
+                        .map(Wrapper::getAddonKey)
+                        .findFirst()
+                        .orElseGet(() -> this.timers.stream()
+                                .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key))
+                                .map(Wrapper::getAddonKey)
+                                .findFirst()
+                                .orElseGet(() -> this.scenarios.stream()
+                                        .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key))
+                                        .map(Wrapper::getAddonKey)
+                                        .findFirst()
+                                        .orElseGet(() -> this.events.stream()
+                                                .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key))
+                                                .map(Wrapper::getAddonKey)
+                                                .findFirst()
+                                                .orElseGet(() -> this.roleCommands.stream()
+                                                        .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key))
+                                                        .map(Wrapper::getAddonKey)
+                                                        .findFirst()
+                                                        .orElseGet(() -> this.commands.stream()
+                                                                .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key))
+                                                                .map(Wrapper::getAddonKey)
+                                                                .findFirst()
+                                                                .orElseGet(() -> this.adminCommands.stream()
+                                                                        .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key))
+                                                                        .map(Wrapper::getAddonKey)
+                                                                        .findFirst()
+                                                                        .orElseGet(() -> this.lovers.stream()
+                                                                                .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key))
+                                                                                .map(Wrapper::getAddonKey)
+                                                                                .findFirst()
+                                                                                .orElse("")))))))));
+
+        if(addonKey.isEmpty()){
+            return Optional.empty();
+        }
+        return Optional.of(addonKey);
+    }
+
+    @Override
     public Set<Wrapper<IRole, Role>> getRolesRegister() {
         return this.roles;
+    }
+
+    @Override
+    public Set<Wrapper<ILover, Lover>> getLoversRegister() {
+        return this.lovers;
     }
 
     @Override
@@ -189,8 +249,8 @@ public class Register implements IRegisterManager {
     }
 
     @Override
-    public Set<Wrapper<JavaPlugin, Addon>> getAddonsRegister() {
-        return new HashSet<>();
+    public Set<Wrapper<JavaPlugin, ModuleWerewolf>> getModulesRegister() {
+        return this.addons;
     }
 
     @Override

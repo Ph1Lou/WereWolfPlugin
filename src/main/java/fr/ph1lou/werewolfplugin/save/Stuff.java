@@ -1,6 +1,6 @@
 package fr.ph1lou.werewolfplugin.save;
 
-import fr.ph1lou.werewolfapi.annotations.Addon;
+import fr.ph1lou.werewolfapi.annotations.ModuleWerewolf;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.utils.Wrapper;
@@ -70,7 +70,7 @@ public class Stuff implements IStuffManager {
     @Override
     public void save(String configName) {
 
-        for(Wrapper<JavaPlugin, Addon> addon:main.getRegisterManager().getAddonsRegister()){
+        for(Wrapper<JavaPlugin, ModuleWerewolf> addon:main.getRegisterManager().getModulesRegister()){
             addon.getObject()
                     .ifPresent(javaPlugin -> saveStuffRole(javaPlugin,
                             configName,
@@ -271,7 +271,7 @@ public class Stuff implements IStuffManager {
         stuffRoles.clear();
 
         main.getRegisterManager()
-                .getAddonsRegister()
+                .getModulesRegister()
                 .forEach(addonRegister -> addonRegister.getObject()
                         .ifPresent(javaPlugin -> stuffRoles.putAll(loadStuff(javaPlugin,
                         addonRegister.getAddonKey(), configName))));

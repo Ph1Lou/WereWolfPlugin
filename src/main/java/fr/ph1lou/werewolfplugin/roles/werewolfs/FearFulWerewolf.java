@@ -32,8 +32,8 @@ import java.util.Optional;
 
 @Role(key = RoleBase.FEARFUL_WEREWOLF, 
         category = Category.WEREWOLF, 
-        attributes = {RoleAttribute.WEREWOLF},
-        intValues = @IntValue(key = FearFulWerewolf.DISTANCE,
+        attributes = RoleAttribute.WEREWOLF,
+        configValues = @IntValue(key = FearFulWerewolf.DISTANCE,
         defaultValue = 20, meetUpValue = 20, step = 4, item = UniversalMaterial.MAGENTA_WOOL))
 public class FearFulWerewolf extends RoleWereWolf {
     public FearFulWerewolf(WereWolfAPI game, IPlayerWW playerWW) {
@@ -46,7 +46,7 @@ public class FearFulWerewolf extends RoleWereWolf {
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game,this)
                 .setDescription(game.translate("werewolf.role.fearful_werewolf.description",
-                        Formatter.number(game.getConfig().getValue(RoleBase.FEARFUL_WEREWOLF, DISTANCE))))
+                        Formatter.number(game.getConfig().getValue(DISTANCE))))
                 .setEffects(game.translate("werewolf.role.fearful_werewolf.effects"))
                 .build();
     }
@@ -133,7 +133,7 @@ public class FearFulWerewolf extends RoleWereWolf {
                     Location fearful = this.getPlayerWW().getLocation();
                     Location player = iPlayerWW.getLocation();
                     return (fearful.getWorld() == player.getWorld() &&
-                    fearful.distance(player) < game.getConfig().getValue(RoleBase.FEARFUL_WEREWOLF, DISTANCE));
+                    fearful.distance(player) < game.getConfig().getValue(DISTANCE));
                 })
                 .count();
 

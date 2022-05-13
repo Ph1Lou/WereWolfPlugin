@@ -35,7 +35,9 @@ public class WhiteList implements InventoryProvider {
         Main main = JavaPlugin.getPlugin(Main.class);
         WereWolfAPI game = main.getWereWolfAPI();
 
-        contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType()).setDisplayName(game.translate("werewolf.menu.return")).build()), e -> Config.INVENTORY.open(player)));
+        contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType())
+                .setDisplayName(game.translate("werewolf.menu.return")).build()),
+                e -> Config.INVENTORY.open(player)));
     }
 
     @Override
@@ -45,11 +47,18 @@ public class WhiteList implements InventoryProvider {
         WereWolfAPI game = main.getWereWolfAPI();
         IConfiguration config = game.getConfig();
 
-        contents.set(0, 2, ClickableItem.of((new ItemBuilder(UniversalMaterial.MAP.getType()).setDisplayName(config.isWhiteList() ? game.translate("werewolf.menu.whitelist.close") : game.translate("werewolf.menu.whitelist.open")).build()), e -> {
+        contents.set(0, 2, ClickableItem.of((new ItemBuilder(UniversalMaterial.MAP.getType()).setDisplayName(config.isWhiteList() ?
+                game.translate("werewolf.menu.whitelist.close") :
+                game.translate("werewolf.menu.whitelist.open")).build()), e -> {
             config.setWhiteList(!config.isWhiteList());
             game.getModerationManager().checkQueue();
         }));
-        contents.set(1, 1, ClickableItem.of((new ItemBuilder(UniversalMaterial.SKELETON_SKULL.getStack()).setDisplayName(game.translate("werewolf.menu.whitelist.spectator_mode")).setLore(Collections.singletonList(Arrays.asList(game.translate("werewolf.menu.whitelist.disable"), game.translate("werewolf.menu.whitelist.death_only"), game.translate("werewolf.menu.whitelist.enable")).get(config.getSpectatorMode()))).build()), e -> {
+        contents.set(1, 1, ClickableItem.of((new ItemBuilder(UniversalMaterial.SKELETON_SKULL.getStack())
+                .setDisplayName(game.translate("werewolf.menu.whitelist.spectator_mode"))
+                .setLore(Collections.singletonList(Arrays.asList(game.translate("werewolf.menu.whitelist.disable"),
+                        game.translate("werewolf.menu.whitelist.death_only"),
+                game.translate("werewolf.menu.whitelist.enable")).get(config.getSpectatorMode())))
+                .build()), e -> {
             if (e.isLeftClick()) {
                 config.setSpectatorMode((config.getSpectatorMode() + 1) % 3);
             } else config.setSpectatorMode((config.getSpectatorMode() + 2) % 3);

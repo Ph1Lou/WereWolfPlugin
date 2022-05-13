@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 
 @Role(key = RoleBase.HOWLING_WEREWOLF, category = Category.WEREWOLF,
         attributes = {RoleAttribute.WEREWOLF},
-        intValues = {@IntValue(key = HowlingWerewolf.DISTANCE,
+        configValues = {@IntValue(key = HowlingWerewolf.DISTANCE,
                 defaultValue = 80, meetUpValue = 80, step = 2, item = UniversalMaterial.LIGHT_GRAY_WOOL)})
 public class HowlingWerewolf extends RoleWereWolf {
 
@@ -45,7 +45,7 @@ public class HowlingWerewolf extends RoleWereWolf {
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game,this)
                 .setDescription(game.translate("werewolf.role.howling_werewolf.description",
-                        Formatter.number(game.getConfig().getValue(RoleBase.HOWLING_WEREWOLF, DISTANCE))))
+                        Formatter.number(game.getConfig().getValue(DISTANCE))))
                 .setEffects(game.translate("werewolf.description.werewolf"))
                 .build();
     }
@@ -72,7 +72,7 @@ public class HowlingWerewolf extends RoleWereWolf {
                     Location location = playerWW.getLocation();
                     Location playerLocation = this.getPlayerWW().getLocation();
                     return location.getWorld() == playerLocation.getWorld() &&
-                            location.distance(playerLocation) < game.getConfig().getValue(RoleBase.HOWLING_WEREWOLF, DISTANCE);
+                            location.distance(playerLocation) < game.getConfig().getValue(DISTANCE);
                 })
                 .collect(Collectors.toSet());
 

@@ -46,7 +46,7 @@ import java.util.List;
         attributes = {RoleAttribute.VILLAGER,
                 RoleAttribute.INFORMATION},
         timers = {@Timer(key = TimerBase.FOX_SMELL_DURATION, defaultValue = 90, meetUpValue = 30)},
-        intValues = {
+        configValues = {
                 @IntValue(key = Fox.SMELL_NUMBER, defaultValue = 3, meetUpValue = 3, step = 1, item = UniversalMaterial.CARROT),
                 @IntValue(key = Fox.DISTANCE, defaultValue = 20, meetUpValue = 20, step = 5, item = UniversalMaterial.ORANGE_WOOL)})
 public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffectedPlayers, IPower {
@@ -132,7 +132,7 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
     @EventHandler(priority = EventPriority.HIGH)
     public void onDay(DayEvent event) {
 
-        if (getUse() >= game.getConfig().getValue(RoleBase.FOX, SMELL_NUMBER)) {
+        if (getUse() >= game.getConfig().getValue(SMELL_NUMBER)) {
             return;
         }
 
@@ -143,7 +143,7 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
         }
 
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.role.fox.smell_message",
-                Formatter.number(game.getConfig().getValue(RoleBase.FOX, SMELL_NUMBER) - getUse()));
+                Formatter.number(game.getConfig().getValue(SMELL_NUMBER) - getUse()));
     }
 
 
@@ -152,10 +152,10 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
 
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.fox.description",
-                        Formatter.number(game.getConfig().getValue(RoleBase.FOX, DISTANCE)),
+                        Formatter.number(game.getConfig().getValue(DISTANCE)),
                                 Formatter.timer(Utils.conversion(game.getConfig()
                                 .getTimerValue(TimerBase.FOX_SMELL_DURATION))),
-                                Formatter.format("&number1&",game.getConfig().getValue(RoleBase.FOX, SMELL_NUMBER) - use)))
+                                Formatter.format("&number1&",game.getConfig().getValue(SMELL_NUMBER) - use)))
                 .setEffects(game.translate("werewolf.role.fox.effect"))
                 .setPower(game.translate( "werewolf.role.fox.progress",
                         Formatter.format("&progress&",Math.min(100, Math.floor(this.getProgress())))))
@@ -192,7 +192,7 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
         }
 
         if (renardLocation.distance(playerLocation) >
-                game.getConfig().getValue(RoleBase.FOX, DISTANCE)) {
+                game.getConfig().getValue(DISTANCE)) {
             return;
         }
 

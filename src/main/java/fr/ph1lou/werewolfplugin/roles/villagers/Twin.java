@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
                 defaultValue = 1800, meetUpValue = 1800,
         decrementAfterRole = true,
         onZero = AutoTwinEvent.class)},
-        intValues = {@IntValue(key = Twin.DISTANCE,
+        configValues = {@IntValue(key = Twin.DISTANCE,
                 defaultValue = 50,
                 meetUpValue = 50, step = 5, item = UniversalMaterial.GREEN_WOOL)})
 public class Twin extends RoleVillage {
@@ -65,9 +65,9 @@ public class Twin extends RoleVillage {
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.twin.description",
-                        Formatter.number(game.getConfig().getValue(RoleBase.TWIN, DISTANCE)),
-                        Formatter.format("&number2&",game.getConfig().getValue(RoleBase.TWIN, DISTANCE)*2)))
-                .setEffects(game.translate("werewolf.role.twin.effects",Formatter.number(game.getConfig().getValue(RoleBase.TWIN, DISTANCE))))
+                        Formatter.number(game.getConfig().getValue(DISTANCE)),
+                        Formatter.format("&number2&",game.getConfig().getValue(DISTANCE)*2)))
+                .setEffects(game.translate("werewolf.role.twin.effects",Formatter.number(game.getConfig().getValue(DISTANCE))))
                 .setPower(this.twinList == null ?
                         game.translate("werewolf.role.twin.timer", Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.TWIN_DURATION))))
                         : game.translate("werewolf.role.twin.twin_list", Formatter.format("&role&", this.twinList
@@ -164,7 +164,7 @@ public class Twin extends RoleVillage {
                         return;
                     }
 
-                    if(twinLocation.distance(playerLocation) < game.getConfig().getValue(RoleBase.TWIN, DISTANCE) * 2){
+                    if(twinLocation.distance(playerLocation) < game.getConfig().getValue(DISTANCE) * 2){
                         this.getPlayerWW().sendMessageWithKey(Prefix.RED,"werewolf.role.twin.too_near");
                         return;
                     }
@@ -178,7 +178,7 @@ public class Twin extends RoleVillage {
                                 Location location = playerWW1.getLocation();
 
                                 return twinLocation.getWorld() == location.getWorld() &&
-                                        twinLocation.distance(location) < game.getConfig().getValue(RoleBase.TWIN, DISTANCE);
+                                        twinLocation.distance(location) < game.getConfig().getValue(DISTANCE);
 
                             })
                             .collect(Collectors.toList());
@@ -195,7 +195,7 @@ public class Twin extends RoleVillage {
                         }
 
                         this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE,"werewolf.role.twin.list_near",
-                        Formatter.number(game.getConfig().getValue(RoleBase.TWIN, DISTANCE)),
+                        Formatter.number(game.getConfig().getValue(DISTANCE)),
                                 Formatter.format("&list&",twinListEvent.getPlayerWWS().stream().map(IPlayerWW::getName).collect(Collectors.joining(", "))));
                     }
                     else{
@@ -215,7 +215,7 @@ public class Twin extends RoleVillage {
                         }
 
                         this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE,"werewolf.role.twin.role_near",
-                                Formatter.number(game.getConfig().getValue(RoleBase.TWIN, DISTANCE)),
+                                Formatter.number(game.getConfig().getValue(DISTANCE)),
                                 Formatter.role(game.translate(twinRoleEvent.getTargetWW().getRole().getKey())));
                     }
                 });

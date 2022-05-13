@@ -62,7 +62,7 @@ public class CommandSuccubus implements ICommand {
         Location locationTarget = playerArg.getLocation();
 
         if (player.getWorld().equals(playerArg.getWorld())) {
-            if (location.distance(locationTarget) > game.getConfig().getValue(RoleBase.SUCCUBUS, Succubus.DISTANCE)) {
+            if (location.distance(locationTarget) > game.getConfig().getValue(Succubus.DISTANCE)) {
                 playerWW.sendMessageWithKey(Prefix.RED , "werewolf.role.succubus.not_enough_near");
                 return;
             }

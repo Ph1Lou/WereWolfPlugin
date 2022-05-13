@@ -45,7 +45,7 @@ import java.util.List;
         category = Category.NEUTRAL, 
         attributes = RoleAttribute.NEUTRAL,
         timers = @Timer(key = TimerBase.SUCCUBUS_DURATION, defaultValue = 180, meetUpValue = 60),
-        intValues = @IntValue(key = Succubus.DISTANCE,
+        configValues = @IntValue(key = Succubus.DISTANCE,
                 defaultValue = 20,
                 meetUpValue = 20,
                 step = 4,
@@ -174,7 +174,7 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
 
         if (succubusLocation.getWorld() == playerLocation.getWorld()) {
             if (succubusLocation.distance(playerLocation) >
-                    game.getConfig().getValue(RoleBase.SUCCUBUS, DISTANCE)) {
+                    game.getConfig().getValue(DISTANCE)) {
                 return;
             }
         } else {

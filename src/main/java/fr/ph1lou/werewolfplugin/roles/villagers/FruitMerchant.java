@@ -40,7 +40,7 @@ import java.util.Map;
          attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION},
          timers = {@Timer(key = TimerBase.FRUIT_MERCHANT_COOL_DOWN,
                  defaultValue = 1200, meetUpValue = 600)},
- intValues = {@IntValue(key = FruitMerchant.DISTANCE,
+ configValues = {@IntValue(key = FruitMerchant.DISTANCE,
          defaultValue = 50, meetUpValue = 50, step = 5, item = UniversalMaterial.ORANGE_WOOL)})
 public class FruitMerchant extends RoleVillage implements IAffectedPlayers, IPower {
 
@@ -58,7 +58,7 @@ public class FruitMerchant extends RoleVillage implements IAffectedPlayers, IPow
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game,this)
                 .setDescription(game.translate("werewolf.role.fruit_merchant.description",
-                        Formatter.number(game.getConfig().getValue(RoleBase.FRUIT_MERCHANT, DISTANCE)),
+                        Formatter.number(game.getConfig().getValue(DISTANCE)),
                         Formatter.timer(Utils
                                 .conversion(game.getConfig()
                                         .getTimerValue(TimerBase.FRUIT_MERCHANT_COOL_DOWN)/2))))

@@ -33,7 +33,7 @@ import java.util.List;
 @Role(key = RoleBase.PRIESTESS,
         category = Category.VILLAGER,
         attributes = {RoleAttribute.VILLAGER, RoleAttribute.INFORMATION},
-        intValues = {@IntValue(key = Priestess.DISTANCE, defaultValue = 10, meetUpValue = 10, step = 2, item = UniversalMaterial.BLUE_WOOL)})
+        configValues = {@IntValue(key = Priestess.DISTANCE, defaultValue = 10, meetUpValue = 10, step = 2, item = UniversalMaterial.BLUE_WOOL)})
 public class Priestess extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
     public static final String DISTANCE = "werewolf.role.priestess.distance_field";
@@ -92,7 +92,7 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
 
         this.getPlayerWW().sendMessageWithKey(
                 Prefix.YELLOW , "werewolf.role.priestess.perform",
-                Formatter.number(game.getConfig().getValue(RoleBase.PRIESTESS, DISTANCE)),
+                Formatter.number(game.getConfig().getValue(DISTANCE)),
                 Formatter.timer(Utils.conversion(
                         game.getConfig()
                                 .getTimerValue(TimerBase.POWER_DURATION))));

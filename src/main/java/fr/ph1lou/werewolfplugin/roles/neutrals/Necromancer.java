@@ -34,8 +34,8 @@ import java.util.Optional;
 @Role(key = RoleBase.NECROMANCER, 
         category = Category.NEUTRAL, 
         attributes = RoleAttribute.NEUTRAL,
-        intValues = {@IntValue(key = Necromancer.DISTANCE,
-                defaultValue = 70, meetUpValue = 70, step = 0.0, item = UniversalMaterial.BLACK_WOOL)})
+        configValues = {@IntValue(key = Necromancer.DISTANCE,
+                defaultValue = 70, meetUpValue = 70, step = 5, item = UniversalMaterial.BLACK_WOOL)})
 public class Necromancer extends RoleNeutral implements IPower, IProgress {
 
     public static final String DISTANCE = "werewolf.role.necromancer.config";
@@ -53,7 +53,7 @@ public class Necromancer extends RoleNeutral implements IPower, IProgress {
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.necromancer.description",
-                        Formatter.number(game.getConfig().getValue(RoleBase.NECROMANCER, DISTANCE))))
+                        Formatter.number(game.getConfig().getValue(DISTANCE))))
                 .setPower(game.translate(this.power?"werewolf.role.necromancer.power_disable":
                         "werewolf.role.necromancer.power_enable",
                         Formatter.number((int) Math.min(100, Math.floor(this.getProgress())))))
@@ -86,7 +86,7 @@ public class Necromancer extends RoleNeutral implements IPower, IProgress {
 
         if(event.getPlayerWW().getDeathLocation()
                 .distance(this.getPlayerWW().getLocation())
-                > game.getConfig().getValue(RoleBase.NECROMANCER, DISTANCE)){
+                > game.getConfig().getValue(DISTANCE)){
             return;
         }
 
@@ -205,12 +205,12 @@ public class Necromancer extends RoleNeutral implements IPower, IProgress {
                 .distance(this.getPlayerWW().getLocation());
 
         if(distance >
-                game.getConfig().getValue(RoleBase.NECROMANCER, DISTANCE)){
+                game.getConfig().getValue(DISTANCE)){
             return;
         }
 
-        this.progress += game.getConfig().getValue(RoleBase.NECROMANCER, DISTANCE) /
-                Math.max(distance, game.getConfig().getValue(RoleBase.NECROMANCER, DISTANCE)/4f)
+        this.progress += game.getConfig().getValue(DISTANCE) /
+                Math.max(distance, game.getConfig().getValue(DISTANCE)/4f)
                 *
                 1 / 6f;
 

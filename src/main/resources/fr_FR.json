@@ -1,6 +1,7 @@
 {
   "werewolf": {
     "name": "WereWolfPlugin",
+    "description": "Plugin de base",
     "role": {
       "serial_killer": {
         "display": "Tueur en Série",
@@ -433,7 +434,7 @@
       "amnesiac_lover": {
         "display": "Couple Amnésique",
         "not_enough_players": "Il n'y a pas assez de personnes pour former un couple amnésique",
-        "distance": "Champ d'action du couple amnésique"
+        "distance": "Champ d'action du couple amnésique §b&number&"
       },
       "fake_lover": {
         "display": "Couple"

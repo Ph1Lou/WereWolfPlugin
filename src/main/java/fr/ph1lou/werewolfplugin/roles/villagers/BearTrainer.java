@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
         category = Category.VILLAGER,
         attributes = {RoleAttribute.VILLAGER,
                 RoleAttribute.INFORMATION},
-        intValues = {@IntValue(key = BearTrainer.DISTANCE,
+        configValues = {@IntValue(key = BearTrainer.DISTANCE,
                 defaultValue = 50,
                 meetUpValue = 50,
                 step = 5,
@@ -67,7 +67,7 @@ public class BearTrainer extends RoleVillage {
                 .stream()
                 .filter(player1 -> player1.getWorld().equals(oursLocation.getWorld())
                         && oursLocation.distance(player1.getLocation())
-                        < game.getConfig().getValue(RoleBase.BEAR_TRAINER, DISTANCE))
+                        < game.getConfig().getValue(DISTANCE))
                 .map(Entity::getUniqueId)
                 .map(game::getPlayerWW)
                 .filter(Optional::isPresent)
@@ -132,7 +132,7 @@ public class BearTrainer extends RoleVillage {
 
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.bear_trainer.description",
-                                Formatter.number(game.getConfig().getValue(RoleBase.BEAR_TRAINER, DISTANCE))))
+                                Formatter.number(game.getConfig().getValue(DISTANCE))))
                 .build();
     }
 

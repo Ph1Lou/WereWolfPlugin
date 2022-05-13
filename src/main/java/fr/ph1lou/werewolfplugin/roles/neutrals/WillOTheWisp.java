@@ -51,7 +51,7 @@ import java.util.stream.Collectors;
 
 @Role(key = RoleBase.WILL_O_THE_WISP, 
             category = Category.NEUTRAL, attributes = RoleAttribute.NEUTRAL,
-        intValues = {@IntValue(key = WillOTheWisp.DISTANCE,
+        configValues = {@IntValue(key = WillOTheWisp.DISTANCE,
         defaultValue = 50, meetUpValue = 50, step = 5, item = UniversalMaterial.YELLOW_WOOL)})
 public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse {
 
@@ -68,11 +68,11 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game,this)
                 .setDescription(game.translate("werewolf.role.will_o_the_wisp.description",
-                        Formatter.number(game.getConfig().getValue(RoleBase.WILL_O_THE_WISP, DISTANCE))))
+                        Formatter.number(game.getConfig().getValue(DISTANCE))))
                 .setEffects(game.translate("werewolf.role.will_o_the_wisp.effects"))
                 .setCommand(game.translate("werewolf.role.will_o_the_wisp.command_info",
                         Formatter.number(2-this.use),
-                        Formatter.format("&number2&", game.getConfig().getValue(RoleBase.WILL_O_THE_WISP, DISTANCE))))
+                        Formatter.format("&number2&", game.getConfig().getValue(DISTANCE))))
                 .build();
     }
 
@@ -159,7 +159,7 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
                     Location wildLocation = this.getPlayerWW().getLocation();
                     Location playerLocation = playerWW.getLocation();
                     return wildLocation.getWorld() == playerLocation.getWorld() &&
-                            wildLocation.distance(playerLocation) < game.getConfig().getValue(RoleBase.WILL_O_THE_WISP, DISTANCE);
+                            wildLocation.distance(playerLocation) < game.getConfig().getValue(DISTANCE);
                 })
                 .collect(Collectors.toList());
 
@@ -181,7 +181,7 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
         }
 
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.role.will_o_the_wisp.role_reveal",
-                Formatter.number(game.getConfig().getValue(RoleBase.WILL_O_THE_WISP, DISTANCE)),
+                Formatter.number(game.getConfig().getValue(DISTANCE)),
                 Formatter.role(game.translate(event1.getRoleKey())));
 
     }

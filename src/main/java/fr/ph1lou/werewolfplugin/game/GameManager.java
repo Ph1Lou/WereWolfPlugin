@@ -25,6 +25,7 @@ import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import fr.ph1lou.werewolfapi.vote.IVoteManager;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.save.Configuration;
+import fr.ph1lou.werewolfplugin.save.ConfigurationLoader;
 import fr.ph1lou.werewolfplugin.save.FileUtils_;
 import fr.ph1lou.werewolfplugin.save.LanguageManager;
 import fr.ph1lou.werewolfplugin.save.Stuff;
@@ -84,7 +85,6 @@ public class GameManager implements WereWolfAPI {
     public GameManager(Main main) {
         this.main = main;
         this.randomConfig = new RandomConfig(main);
-        this.configuration = new Configuration(main.getRegisterManager());
         this.mapManager = new MapManager(main);
         this.stuff = new Stuff(main);
         this.listenersLoader = new ListenersLoader(this);
@@ -99,7 +99,7 @@ public class GameManager implements WereWolfAPI {
 
         BukkitUtils.scheduleSyncDelayedTask(() -> {
             Bukkit.getPluginManager().callEvent(new UpdateLanguageEvent());
-            FileUtils_.loadConfig(main, "saveCurrent");
+            ConfigurationLoader.loadConfig(main, "saveCurrent");
             main.getWereWolfAPI().getStuffs().load("saveCurrent");
             listenersLoader.init();
             this.gameName = this.translate("werewolf.score_board.default_game_name");

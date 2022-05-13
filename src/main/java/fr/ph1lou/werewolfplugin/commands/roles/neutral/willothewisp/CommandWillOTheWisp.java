@@ -58,7 +58,7 @@ public class CommandWillOTheWisp implements ICommand {
         Vector vector = player.getEyeLocation().getDirection();
         vector
                 .normalize()
-                .multiply(game.getConfig().getValue(RoleBase.WILL_O_THE_WISP, WillOTheWisp.DISTANCE))
+                .multiply(game.getConfig().getValue(WillOTheWisp.DISTANCE))
                 .setY(player.getWorld().getHighestBlockYAt(player.getLocation()) - player.getLocation().getBlockY() + 10);
 
         playerWW.teleport(playerWW.getLocation().add(vector));

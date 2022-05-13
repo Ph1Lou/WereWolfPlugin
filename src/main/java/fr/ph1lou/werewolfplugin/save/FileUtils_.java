@@ -40,30 +40,6 @@ public class FileUtils_ {
         }
     }
 
-    public static void loadConfig(Main main, String name){
-
-        GameManager game = (GameManager) main.getWereWolfAPI();
-
-        File file = new File(main.getDataFolder() + File.separator + "configs" + File.separator, name + ".json");
-
-        if (file.exists()) {
-            game.setConfig(Serializer.deserialize(loadContent(file)));
-            game.setRoleInitialSize(0);
-            game.getModerationManager().checkQueue();
-            ((Configuration) game.getConfig()).addRegister(main.getRegisterManager());
-            game.getListenersLoader().update();
-        }
-
-        IConfiguration config = game.getConfig();
-        IRegisterManager register = main.getRegisterManager();
-
-        for (Wrapper<IRole, Role> roleRegister : register.getRolesRegister()) {
-            String key = roleRegister.getMetaDatas().key();
-            game.setRoleInitialSize(game.getRoleInitialSize() + config.getRoleCount(key));
-        }
-
-        save(file, Serializer.serialize(game.getConfig()));
-    }
 
     public static void save(File file, String text) {
 

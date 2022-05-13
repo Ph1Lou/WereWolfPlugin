@@ -5,7 +5,8 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
-import fr.ph1lou.werewolfapi.annotations.Addon;
+import fr.ph1lou.werewolfapi.annotations.Author;
+import fr.ph1lou.werewolfapi.annotations.ModuleWerewolf;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
@@ -15,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,12 +42,13 @@ public class AddonMenu implements InventoryProvider {
 
 
 
-        for (Wrapper<JavaPlugin, Addon> addon : main.getRegisterManager().getAddonsRegister()) {
+        for (Wrapper<JavaPlugin, ModuleWerewolf> addon : main.getRegisterManager().getModulesRegister()) {
 
             List<String> lore = Arrays.stream(addon.getMetaDatas().loreKeys())
                     .map(game::translate).collect(Collectors.toList());
             lore.add(game.translate("werewolf.utils.author"));
-            lore.addAll(Arrays.asList(addon.getMetaDatas().authorsUuid()));
+            lore.addAll(Collections.singletonList(Arrays.stream(addon.getMetaDatas().authors())
+                    .map(Author::name).collect(Collectors.joining(", "))));
 
             contents.set(i / 9, i % 9, ClickableItem.empty(new ItemBuilder(addon.getMetaDatas().item().getStack())
                     .setDisplayName(game.translate(addon.getMetaDatas().key())).setLore(lore).build()));

@@ -50,9 +50,9 @@ public class CommandPriestess implements ICommand {
 
         if (!player.getWorld().equals(playerArg.getWorld()) ||
                 player.getLocation().distance(playerArg.getLocation()) >
-                        game.getConfig().getValue(RoleBase.PRIESTESS, Priestess.DISTANCE)) {
+                        game.getConfig().getValue(Priestess.DISTANCE)) {
             playerWW.sendMessageWithKey(Prefix.RED , "werewolf.role.priestess.distance",
-                    Formatter.number(game.getConfig().getValue(RoleBase.PRIESTESS, Priestess.DISTANCE)));
+                    Formatter.number(game.getConfig().getValue(Priestess.DISTANCE)));
             return;
         }
 

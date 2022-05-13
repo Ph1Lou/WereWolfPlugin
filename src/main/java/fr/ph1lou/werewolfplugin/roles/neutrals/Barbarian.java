@@ -37,7 +37,7 @@ import java.util.Set;
 @Role(key = RoleBase.BARBARIAN, 
         category = Category.NEUTRAL, 
         attributes = RoleAttribute.NEUTRAL,
-        intValues = @IntValue(key = Barbarian.DISTANCE,
+        configValues = @IntValue(key = Barbarian.DISTANCE,
                 defaultValue = 25, 
                 meetUpValue = 25, 
                 step = 5, 
@@ -58,7 +58,7 @@ public class Barbarian extends RoleNeutral implements IPower, IAffectedPlayers {
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.barbarian.description",
-                        Formatter.number(game.getConfig().getValue(RoleBase.BARBARIAN, DISTANCE))))
+                        Formatter.number(game.getConfig().getValue(DISTANCE))))
                 .setPower(game.translate("werewolf.role.barbarian.power"))
                 .setItems(game.translate("werewolf.role.barbarian.item"))
                 .build();
@@ -88,7 +88,7 @@ public class Barbarian extends RoleNeutral implements IPower, IAffectedPlayers {
         }
 
         if(event.getPlayerWW().getDeathLocation().distance(this.getPlayerWW().getLocation())
-                > game.getConfig().getValue(RoleBase.BARBARIAN, DISTANCE)){
+                > game.getConfig().getValue(DISTANCE)){
             return;
         }
 

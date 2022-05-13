@@ -33,7 +33,7 @@ import java.util.Optional;
 
 @Role(key = RoleBase.HERMIT, 
         category = Category.VILLAGER, attributes = RoleAttribute.VILLAGER,
-        intValues = @IntValue(key = Hermit.DISTANCE, defaultValue = 20,
+        configValues = @IntValue(key = Hermit.DISTANCE, defaultValue = 20,
                 meetUpValue = 20, step = 4, item = UniversalMaterial.WHITE_WOOL))
 public class Hermit extends RoleVillage {
 
@@ -48,7 +48,7 @@ public class Hermit extends RoleVillage {
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game,this)
                 .setDescription(game.translate("werewolf.role.hermit.description",
-                        Formatter.number(game.getConfig().getValue(RoleBase.HERMIT, DISTANCE))))
+                        Formatter.number(game.getConfig().getValue(DISTANCE))))
                 .setEffects(game.translate("werewolf.role.hermit.effects"))
                 .build();
     }
@@ -149,7 +149,7 @@ public class Hermit extends RoleVillage {
                     Location hermit = this.getPlayerWW().getLocation();
                     Location player = iPlayerWW.getLocation();
                     return (hermit.getWorld() == player.getWorld() &&
-                    hermit.distance(player) < game.getConfig().getValue(RoleBase.HERMIT, DISTANCE));
+                    hermit.distance(player) < game.getConfig().getValue(DISTANCE));
                 })
                 .count();
 

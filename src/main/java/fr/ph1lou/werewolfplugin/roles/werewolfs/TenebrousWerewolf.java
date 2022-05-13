@@ -30,7 +30,7 @@ import java.util.List;
         category = Category.WEREWOLF, 
         attributes = {RoleAttribute.WEREWOLF},
         timers = {@Timer(key = TimerBase.WEREWOLF_TENEBROUS_DURATION, defaultValue = 30, meetUpValue = 20)},
-        intValues = {@IntValue(key = TenebrousWerewolf.DISTANCE,
+        configValues = {@IntValue(key = TenebrousWerewolf.DISTANCE,
                 defaultValue = 50, meetUpValue = 50, step = 5, item = UniversalMaterial.BLACK_WOOL)})
 public class TenebrousWerewolf extends RoleWereWolf implements IPower, IAffectedPlayers {
 
@@ -56,7 +56,7 @@ public class TenebrousWerewolf extends RoleWereWolf implements IPower, IAffected
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.tenebrous_werewolf.description",
-                        Formatter.format("&range&", game.getConfig().getValue(RoleBase.TENEBROUS_WEREWOLF, DISTANCE)),
+                        Formatter.format("&range&", game.getConfig().getValue(DISTANCE)),
                         Formatter.format("&time&", game.getConfig().getTimerValue(TimerBase.WEREWOLF_TENEBROUS_DURATION))))
                 .setEffects(game.translate("werewolf.description.werewolf"))
                 .setCommand(game.translate("werewolf.role.tenebrous_werewolf.description_command"))

@@ -55,7 +55,7 @@ public class AdvancedRoleMenu implements InventoryProvider {
                 .provider(new AdvancedRoleMenu(register))
                 .size(Math.min(54, (Math.max(0, ((register.getMetaDatas().configurations().length
                 +register.getMetaDatas().timers().length +
-                        register.getMetaDatas().intValues().length)
+                        register.getMetaDatas().configValues().length)
                         * 2 - 6)) / 9 + 1) * 9) / 9, 9)
                 .title(game.translate("werewolf.menu.advanced_tool_role.menu",
                                 Formatter.role(game.translate(register.getMetaDatas().key()))))
@@ -82,14 +82,13 @@ public class AdvancedRoleMenu implements InventoryProvider {
     public void update(Player player, InventoryContents contents) {
 
         Main main = JavaPlugin.getPlugin(Main.class);
-        WereWolfAPI game = main.getWereWolfAPI();
 
         AtomicInteger i = new AtomicInteger(4);
 
-       // register.getConfig().forEach(clickableItem -> {
-       //     contents.set(i.get() / 9, i.get() % 9, clickableItem.apply(game));
-       //     i.set(i.get() + 2);
-       // });
+        this.getIntConfigRole(main, this.register).forEach(clickableItem -> {
+            contents.set(i.get() / 9, i.get() % 9, clickableItem);
+            i.set(i.get() + 2);
+        });
 
         this.getTimersRole(main, this.register).forEach(clickableItem -> {
             contents.set(i.get() / 9, i.get() % 9, clickableItem);
@@ -100,7 +99,6 @@ public class AdvancedRoleMenu implements InventoryProvider {
             contents.set(i.get() / 9, i.get() % 9, clickableItem);
             i.set(i.get() + 2);
         });
-
     }
 
 
@@ -193,5 +191,41 @@ public class AdvancedRoleMenu implements InventoryProvider {
                     });
                 }).collect(Collectors.toList());
     }
+
+    public List<ClickableItem> getIntConfigRole(GetWereWolfAPI main, Wrapper<IRole, Role> roleRegister){
+
+        WereWolfAPI game = main.getWereWolfAPI();
+        return Arrays.stream(roleRegister.getMetaDatas().configValues())
+                .map(intValue -> {
+                    IConfiguration config = game.getConfig();
+                    List<String> lore = new ArrayList<>(Arrays.asList(game.translate("werewolf.menu.left"),
+                            game.translate("werewolf.menu.right")));
+
+                    return ClickableItem.of(new ItemBuilder(intValue.item().getStack())
+                            .setLore(lore)
+                            .setDisplayName(game.translate(intValue.key(),
+                                    Formatter.number(config.getValue(intValue.key()))))
+                            .build(),e -> {
+
+                        if (e.isLeftClick()) {
+                            config.setValue(intValue.key(),
+                                    config.getValue(intValue.key()) + intValue.step());
+                        } else if (config.getValue(intValue.key()) - intValue.step() > 0) {
+                            config.setValue(intValue.key(),
+                                    config.getValue(intValue.key()) - intValue.step());
+                        }
+
+                        e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                                .setLore(lore)
+                                .setDisplayName(game.translate(intValue.key(),
+                                        Formatter.number(config.getValue(intValue.key()))))
+                                .build());
+                    });
+                }).collect(Collectors.toList());
+    }
+
+
+
+
 }
 

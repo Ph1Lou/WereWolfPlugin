@@ -56,7 +56,7 @@ public class CommandFox implements ICommand {
             return;
         }
 
-        if (((ILimitedUse) fox).getUse() >= game.getConfig().getValue(RoleBase.FOX, Fox.SMELL_NUMBER)) {
+        if (((ILimitedUse) fox).getUse() >= game.getConfig().getValue(Fox.SMELL_NUMBER)) {
             playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.power");
             return;
         }
@@ -65,7 +65,7 @@ public class CommandFox implements ICommand {
         Location locationTarget = playerArg.getLocation();
 
         if (player.getWorld().equals(playerArg.getWorld())) {
-            if (location.distance(locationTarget) > game.getConfig().getValue(RoleBase.FOX, Fox.DISTANCE)) {
+            if (location.distance(locationTarget) > game.getConfig().getValue(Fox.DISTANCE)) {
                 playerWW.sendMessageWithKey(Prefix.RED , "werewolf.role.fox.not_enough_near");
                 return;
             }
