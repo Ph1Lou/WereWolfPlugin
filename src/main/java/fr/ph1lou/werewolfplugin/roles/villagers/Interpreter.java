@@ -200,10 +200,8 @@ public class Interpreter extends RoleVillage implements IPower {
                 try {
                     IRole role = roleRegister.getClazz()
                             .getConstructor(WereWolfAPI.class,
-                                    IPlayerWW.class,
-                                    String.class).newInstance(game,
-                            this.getPlayerWW(),
-                            roleRegister.getMetaDatas().key());
+                                    IPlayerWW.class).newInstance(game,
+                            this.getPlayerWW());
 
                     role.recoverPotionEffects();
 

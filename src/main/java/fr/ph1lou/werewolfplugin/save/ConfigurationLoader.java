@@ -2,7 +2,6 @@ package fr.ph1lou.werewolfplugin.save;
 
 import fr.ph1lou.werewolfapi.annotations.ModuleWerewolf;
 import fr.ph1lou.werewolfapi.annotations.Role;
-import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Main;
@@ -17,7 +16,7 @@ import java.util.Optional;
 
 public class ConfigurationLoader {
 
-    public static void loadConfig(Main main, String name){
+    public static Configuration loadConfig(Main main, String name){
 
         GameManager game = (GameManager) main.getWereWolfAPI();
         Map<String, StorageConfiguration> configurationMap = new HashMap<>();
@@ -36,13 +35,13 @@ public class ConfigurationLoader {
         }
 
         if(!file.exists()){
-            game.setConfig(new Configuration().setConfigurations(configurationMap));
-            return;
+            return new Configuration().setConfigurations(configurationMap);
         }
 
-        game.setConfig(Serializer.deserialize(FileUtils_.loadContent(file))
-                .setConfigurations(configurationMap));
-        IConfiguration config = game.getConfig();
+        Configuration config = Serializer.deserialize(FileUtils_.loadContent(file))
+                .setConfigurations(configurationMap);
+
+
         game.setRoleInitialSize(0);
         game.getModerationManager().checkQueue();
         game.getListenersLoader().update();
@@ -51,6 +50,8 @@ public class ConfigurationLoader {
             String key = roleRegister.getMetaDatas().key();
             game.setRoleInitialSize(game.getRoleInitialSize() + config.getRoleCount(key));
         }
+
+        return config;
     }
     public static StorageConfiguration loadConfig(JavaPlugin plugin, String name){
 

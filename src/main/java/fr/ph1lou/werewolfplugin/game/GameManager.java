@@ -1,8 +1,8 @@
 package fr.ph1lou.werewolfplugin.game;
 
 import fr.mrmicky.fastboard.FastBoard;
-import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.events.UpdateLanguageEvent;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
@@ -26,7 +26,6 @@ import fr.ph1lou.werewolfapi.vote.IVoteManager;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.save.Configuration;
 import fr.ph1lou.werewolfplugin.save.ConfigurationLoader;
-import fr.ph1lou.werewolfplugin.save.FileUtils_;
 import fr.ph1lou.werewolfplugin.save.LanguageManager;
 import fr.ph1lou.werewolfplugin.save.Stuff;
 import fr.ph1lou.werewolfplugin.scoreboards.ScoreBoard;
@@ -96,11 +95,11 @@ public class GameManager implements WereWolfAPI {
             }
         }
         setDay(Day.DAY);
+        this.configuration = ConfigurationLoader.loadConfig(main, "saveCurrent");
+        this.getStuffs().load("saveCurrent");
 
         BukkitUtils.scheduleSyncDelayedTask(() -> {
             Bukkit.getPluginManager().callEvent(new UpdateLanguageEvent());
-            ConfigurationLoader.loadConfig(main, "saveCurrent");
-            main.getWereWolfAPI().getStuffs().load("saveCurrent");
             listenersLoader.init();
             this.gameName = this.translate("werewolf.score_board.default_game_name");
         });

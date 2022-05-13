@@ -77,10 +77,8 @@ public class RoleDuration extends ListenerManager {
             Wrapper<IRole, Role> roleRegister = config.remove(0);
             try {
                 IRole role = roleRegister.getClazz().getConstructor(WereWolfAPI.class,
-                        IPlayerWW.class,
-                        String.class).newInstance(game,
-                        playerWW,
-                        roleRegister.getMetaDatas().key());
+                        IPlayerWW.class).newInstance(game,
+                        playerWW);
                 BukkitUtils.registerListener(role);
                 playerWW.setRole(role);
                 Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(playerWW));
@@ -121,11 +119,9 @@ public class RoleDuration extends ListenerManager {
                                 .forEach(playerWW -> {
                                     try {
                                         IRole role = roleRegister.getClazz().getConstructor(WereWolfAPI.class,
-                                                        IPlayerWW.class,
-                                                        String.class)
+                                                        IPlayerWW.class)
                                                 .newInstance(game,
-                                                        playerWW,
-                                                        roleRegister.getMetaDatas().key());
+                                                        playerWW);
 
                                         BukkitUtils.registerListener(role);
 

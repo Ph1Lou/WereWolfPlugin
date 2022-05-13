@@ -79,7 +79,7 @@ public class ListenersLoader {
                         .ifPresent(object -> {
                             if(object instanceof ListenerManager){
                                 ((ListenerManager)object).register(game.getConfig()
-                                        .isScenarioActive(configurationWrapper.getMetaDatas().key()));
+                                        .isConfigActive(configurationWrapper.getMetaDatas().key()));
                             }
                         }));
 
@@ -87,8 +87,7 @@ public class ListenersLoader {
                 .forEach(timerWrapper -> timerWrapper.getObject()
                         .ifPresent(object -> {
                             if(object instanceof ListenerManager){
-                                ((ListenerManager)object).register(game.getConfig()
-                                        .isScenarioActive(timerWrapper.getMetaDatas().key()));
+                                ((ListenerManager)object).register(true);
                             }
                         }));
     }

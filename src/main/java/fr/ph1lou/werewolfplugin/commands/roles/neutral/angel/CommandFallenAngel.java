@@ -1,13 +1,13 @@
 package fr.ph1lou.werewolfplugin.commands.roles.neutral.angel;
 
 
-import fr.ph1lou.werewolfapi.annotations.AdminCommand;
-import fr.ph1lou.werewolfapi.commands.ICommand;
-import fr.ph1lou.werewolfapi.enums.AngelForm;
-import fr.ph1lou.werewolfapi.enums.Day;
+import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.commands.ICommand;
+import fr.ph1lou.werewolfapi.enums.AngelForm;
+import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.events.roles.angel.AngelChoiceEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
@@ -21,8 +21,8 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.UUID;
 
-@AdminCommand(key = "werewolf.role.angel.command_2",
-        descriptionKey = RoleBase.ANGEL,
+@RoleCommand(key = "werewolf.role.angel.command_2",
+        roleKeys = RoleBase.ANGEL,
         autoCompletion = false,
         argNumbers = 0)
 public class CommandFallenAngel implements ICommand {

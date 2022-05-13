@@ -1,7 +1,7 @@
 {
   "werewolf": {
     "name": "WereWolfPlugin",
-    "description": "Plugin de base",
+    "description_plugin": "Plugin de base",
     "role": {
       "serial_killer": {
         "display": "Tueur en Série",

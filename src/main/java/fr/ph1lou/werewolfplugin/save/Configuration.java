@@ -391,7 +391,7 @@ public class Configuration implements IConfiguration {
     public void removeOneRole(String key) {
         Register.get().getModuleKey(key).ifPresent(addonKey -> {
             if(this.storageConfigurations.containsKey(addonKey)){
-                this.storageConfigurations.get(addonKey).removeOneLover(key);
+                this.storageConfigurations.get(addonKey).removeOneRole(key);
             }
         });
     }

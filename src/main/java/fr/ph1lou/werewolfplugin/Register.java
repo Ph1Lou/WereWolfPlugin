@@ -22,6 +22,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -164,48 +165,92 @@ public class Register implements IRegisterManager {
 
     @Override
     public Optional<String> getModuleKey(String key) {
-        String addonKey = this.roles.stream()
-                .filter(iRoleRoleWrapper -> iRoleRoleWrapper.getMetaDatas().key().equals(key))
-                .map(Wrapper::getAddonKey)
-                .findFirst()
-                .orElseGet(() -> this.configurations.stream()
-                        .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key))
-                        .map(Wrapper::getAddonKey)
-                        .findFirst()
-                        .orElseGet(() -> this.timers.stream()
-                                .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key))
-                                .map(Wrapper::getAddonKey)
-                                .findFirst()
-                                .orElseGet(() -> this.scenarios.stream()
-                                        .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key))
-                                        .map(Wrapper::getAddonKey)
-                                        .findFirst()
-                                        .orElseGet(() -> this.events.stream()
-                                                .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key))
-                                                .map(Wrapper::getAddonKey)
-                                                .findFirst()
-                                                .orElseGet(() -> this.roleCommands.stream()
-                                                        .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key))
-                                                        .map(Wrapper::getAddonKey)
-                                                        .findFirst()
-                                                        .orElseGet(() -> this.commands.stream()
-                                                                .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key))
-                                                                .map(Wrapper::getAddonKey)
-                                                                .findFirst()
-                                                                .orElseGet(() -> this.adminCommands.stream()
-                                                                        .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key))
-                                                                        .map(Wrapper::getAddonKey)
-                                                                        .findFirst()
-                                                                        .orElseGet(() -> this.lovers.stream()
-                                                                                .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key))
-                                                                                .map(Wrapper::getAddonKey)
-                                                                                .findFirst()
+        String addonKey = this.checkRoles(key)
+                .orElseGet(() -> this.checkConfigurations(key)
+                        .orElseGet(() -> this.checkTimers(key)
+                                .orElseGet(() -> this.checkScenarios(key)
+                                        .orElseGet(() -> this.checkEvents(key)
+                                                .orElseGet(() -> this.checkRoleCommands(key)
+                                                        .orElseGet(() -> this.checkCommands(key)
+                                                                .orElseGet(() -> this.checkAdminCommands(key)
+                                                                        .orElseGet(() -> this.checkLovers(key)
                                                                                 .orElse("")))))))));
 
         if(addonKey.isEmpty()){
             return Optional.empty();
         }
         return Optional.of(addonKey);
+    }
+
+    private Optional<String> checkLovers(String key) {
+        return this.lovers.stream()
+                .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key))
+                .map(Wrapper::getAddonKey)
+                .findFirst();
+    }
+
+    private Optional<String> checkAdminCommands(String key) {
+        return this.adminCommands.stream()
+                .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key))
+                .map(Wrapper::getAddonKey)
+                .findFirst();
+    }
+
+    private Optional<String> checkCommands(String key) {
+        return this.commands.stream()
+                .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key))
+                .map(Wrapper::getAddonKey)
+                .findFirst();
+    }
+
+    private Optional<String> checkRoleCommands(String key) {
+        return this.roleCommands.stream()
+                .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key))
+                .map(Wrapper::getAddonKey)
+                .findFirst();
+    }
+
+    private Optional<String> checkEvents(String key) {
+        return this.events.stream()
+                .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key) ||
+                        Arrays.stream(configurationWrapper.getMetaDatas().configValues()).anyMatch(intValue -> intValue.key().equals(key)) ||
+                        Arrays.stream(configurationWrapper.getMetaDatas().configurations()).anyMatch(configuration -> configuration.key().equals(key)) ||
+                        Arrays.stream(configurationWrapper.getMetaDatas().timers()).anyMatch(timer -> timer.key().equals(key)))
+                .map(Wrapper::getAddonKey)
+                .findFirst();
+    }
+
+    private Optional<String> checkScenarios(String key) {
+        return this.scenarios.stream()
+                .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key) ||
+                        Arrays.stream(configurationWrapper.getMetaDatas().configValues()).anyMatch(intValue -> intValue.key().equals(key)))
+                .map(Wrapper::getAddonKey)
+                .findFirst();
+    }
+
+    private Optional<String> checkTimers(String key) {
+        return this.timers.stream()
+                .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key))
+                .map(Wrapper::getAddonKey)
+                .findFirst();
+    }
+
+    private Optional<String> checkConfigurations(String key) {
+        return this.configurations.stream()
+                .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key) ||
+                        Arrays.stream(configurationWrapper.getMetaDatas().configValues()).anyMatch(intValue -> intValue.key().equals(key)))
+                .map(Wrapper::getAddonKey)
+                .findFirst();
+    }
+
+    private Optional<String> checkRoles(String key) {
+        return this.roles.stream()
+                .filter(iRoleRoleWrapper -> iRoleRoleWrapper.getMetaDatas().key().equals(key) ||
+                        Arrays.stream(iRoleRoleWrapper.getMetaDatas().timers()).anyMatch(timer -> timer.key().equals(key)) ||
+                        Arrays.stream(iRoleRoleWrapper.getMetaDatas().configurations()).anyMatch(configuration -> configuration.key().equals(key)) ||
+                        Arrays.stream(iRoleRoleWrapper.getMetaDatas().configValues()).anyMatch(intValue -> intValue.key().equals(key)))
+                .map(Wrapper::getAddonKey)
+                .findFirst();
     }
 
     @Override
