@@ -257,8 +257,8 @@ public class DeathListener implements Listener {
         if (player != null) {
 
             player.setGameMode(GameMode.SPECTATOR);
-            TextComponent msg = new TextComponent(game.translate("werewolf.utils.bar")+
-                    game.translate(Prefix.YELLOW,"werewolf.bug") +
+            TextComponent msg = new TextComponent(game.translate("werewolf.utils.bar")+ "\n" +
+                    game.translate(Prefix.YELLOW,"werewolf.bug") + "\n" +
                     game.translate("werewolf.utils.bar"));
             msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
                     "https://discord.gg/GXXCVUA"));

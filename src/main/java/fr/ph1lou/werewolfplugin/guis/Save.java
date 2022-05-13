@@ -12,6 +12,7 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import fr.ph1lou.werewolfplugin.Main;
+import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfplugin.save.ConfigurationLoader;
 import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.Bukkit;
@@ -126,7 +127,7 @@ public class Save implements InventoryProvider {
 
         if (files == null || files.length <= j) return;
 
-        ConfigurationLoader.loadConfig(main, files[j].getName().replace(".json", ""));
+        ConfigurationLoader.loadConfig(main, (GameManager) game, files[j].getName().replace(".json", ""));
         game.getStuffs().load(files[j].getName().replace(".json", ""));
     }
 

@@ -3,6 +3,7 @@ package fr.ph1lou.werewolfplugin.save;
 import fr.ph1lou.werewolfapi.annotations.ModuleWerewolf;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
+import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.Register;
@@ -16,9 +17,8 @@ import java.util.Optional;
 
 public class ConfigurationLoader {
 
-    public static Configuration loadConfig(Main main, String name){
+    public static Configuration loadConfig(Main main, GameManager game, String name){
 
-        GameManager game = (GameManager) main.getWereWolfAPI();
         Map<String, StorageConfiguration> configurationMap = new HashMap<>();
 
         File file = new File(main.getDataFolder()
@@ -26,7 +26,7 @@ public class ConfigurationLoader {
                 + File.separator, name + ".json");
 
         configurationMap.put(Main.KEY,
-                loadConfig((JavaPlugin) main, name).setAddonKey(Main.KEY));
+                loadConfig(main, name).setAddonKey(Main.KEY));
 
         for (Wrapper<JavaPlugin, ModuleWerewolf> addonWrapper : Register.get().getModulesRegister()) {
             addonWrapper.getObject()
@@ -44,7 +44,8 @@ public class ConfigurationLoader {
 
         game.setRoleInitialSize(0);
         game.getModerationManager().checkQueue();
-        game.getListenersLoader().update();
+        BukkitUtils.scheduleSyncDelayedTask(() -> game.getListenersLoader().update());
+
 
         for (Wrapper<IRole, Role> roleRegister : Register.get().getRolesRegister()) {
             String key = roleRegister.getMetaDatas().key();

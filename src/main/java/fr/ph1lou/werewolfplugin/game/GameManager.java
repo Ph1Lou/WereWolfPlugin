@@ -95,7 +95,7 @@ public class GameManager implements WereWolfAPI {
             }
         }
         setDay(Day.DAY);
-        this.configuration = ConfigurationLoader.loadConfig(main, "saveCurrent");
+        this.configuration = ConfigurationLoader.loadConfig(main,this, "saveCurrent");
         this.getStuffs().load("saveCurrent");
 
         BukkitUtils.scheduleSyncDelayedTask(() -> {
