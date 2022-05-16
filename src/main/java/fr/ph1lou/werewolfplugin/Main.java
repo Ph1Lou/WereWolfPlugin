@@ -37,7 +37,7 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
     public static final String KEY = "werewolf.name";
     private final LanguageManager languageManager = new LanguageManager(this);
     private GameManager currentGame;
-    private final Register registerManager = new Register(this);
+    private Register registerManager;
     private final InventoryManager invManager = new InventoryManager(this);
     private GameReview currentGameReview;
 
@@ -60,21 +60,24 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
                         this,
                         ServicePriority.Normal);
         this.invManager.init();
-
         BukkitUtils.registerListener(new Events(this));
         BukkitUtils.registerListener(languageManager);
-        currentGame = new GameManager(this);
         Objects.requireNonNull(getCommand("a")).setExecutor(new Admin(this));
         Objects.requireNonNull(getCommand("ww")).setExecutor(new Command(this));
-        MapManager mapManager = (MapManager) currentGame.getMapManager();
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(this, mapManager::init);
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> Bukkit.getOnlinePlayers()
-                .forEach(player -> {
-                    ActionBarEvent actionBarEvent = new ActionBarEvent(player.getUniqueId());
-                    Bukkit.getPluginManager().callEvent(actionBarEvent);
-                    VersionUtils.getVersionUtils().sendActionBar(player, actionBarEvent.getActionBar());
-                }), 0, 4);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+            this.registerManager = new Register(this);
+            this.currentGame = new GameManager(this);
+            MapManager mapManager = (MapManager) currentGame.getMapManager();
+            mapManager.init();
+            Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> Bukkit.getOnlinePlayers()
+                    .forEach(player -> {
+                        ActionBarEvent actionBarEvent = new ActionBarEvent(player.getUniqueId());
+                        Bukkit.getPluginManager().callEvent(actionBarEvent);
+                        VersionUtils.getVersionUtils().sendActionBar(player, actionBarEvent.getActionBar());
+                    }), 0, 4);
+        });
+
         StatistiksUtils.loadContributors();
     }
 

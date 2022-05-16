@@ -1,18 +1,18 @@
 package fr.ph1lou.werewolfplugin.tasks;
 
-import fr.ph1lou.werewolfplugin.Main;
-import fr.ph1lou.werewolfplugin.game.GameManager;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StateGame;
-import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.ActionBarEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
+import fr.ph1lou.werewolfplugin.Main;
+import fr.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -154,7 +154,8 @@ public class TransportationTask implements Listener {
             } else {
                 player.teleport(this.game.getMapManager().getWorld().getSpawnLocation());
                 player.setGameMode(GameMode.SPECTATOR);
-                if(game.getConfig().getSpectatorMode() < 2){
+                if(game.getConfig().getSpectatorMode() < 2 && !player.isOp() &&
+                !game.getModerationManager().isStaff(player.getUniqueId())){
                     player.kickPlayer(game.translate(Prefix.RED , "werewolf.check.spectator_disabled"));
                 }
             }

@@ -122,9 +122,10 @@ public class PlayerListener implements Listener {
 		IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
 
 		if (!game.isState(StateGame.LOBBY)) {
-			if(!game.getModerationManager().isStaff(uuid)){
+			if(!game.getModerationManager().isStaff(uuid) && !player.isOp()){
 
-				if (game.getConfig().getSpectatorMode() == 0 && (playerWW == null || playerWW.isState(StatePlayer.DEATH))){
+				if (game.getConfig().getSpectatorMode() == 0 &&
+						(playerWW == null || playerWW.isState(StatePlayer.DEATH))){
 					event.setResult(PlayerLoginEvent.Result.KICK_OTHER);
 					event.setKickMessage(game.translate(Prefix.RED , "werewolf.check.spectator_disabled"));
 				}
@@ -186,15 +187,9 @@ public class PlayerListener implements Listener {
 				event.setJoinMessage(game.translate(Prefix.YELLOW , "werewolf.announcement.join_in_game",
 						Formatter.player(playerName)));
 			} else if (playerWW.isState(StatePlayer.DEATH)) {
-
-				if (game.getConfig().getSpectatorMode() == 0 &&
-						!moderationManager.isStaff(player.getUniqueId()) && !player.isOp()) {
-					player.kickPlayer(game.translate(Prefix.RED , "werewolf.check.spectator_disabled"));
-				} else{
-					player.setGameMode(GameMode.SPECTATOR);
-					event.setJoinMessage(game.translate("werewolf.announcement.join_in_spec",
-							Formatter.player(playerName)));
-				}
+				player.setGameMode(GameMode.SPECTATOR);
+				event.setJoinMessage(game.translate("werewolf.announcement.join_in_spec",
+						Formatter.player(playerName)));
 			}
 		}
 		else {
