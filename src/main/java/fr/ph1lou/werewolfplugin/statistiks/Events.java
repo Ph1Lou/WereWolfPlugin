@@ -1,7 +1,7 @@
 package fr.ph1lou.werewolfplugin.statistiks;
 
 import com.google.common.collect.Sets;
-import fr.ph1lou.werewolfapi.enums.LoverType;
+import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.events.CustomEvent;
 import fr.ph1lou.werewolfapi.events.TrollEvent;
 import fr.ph1lou.werewolfapi.events.TrollLoverEvent;
@@ -659,7 +659,7 @@ public class Events implements Listener {
         WereWolfAPI api = main.getWereWolfAPI();
         for (ILover lover : event.getLovers()) {
             main.getCurrentGameReview().addRegisteredAction(new RegisteredAction(
-                    lover.isKey(LoverType.CURSED_LOVER.getKey()) ? "werewolf.cursed_lover_revelation" :
+                    lover.isKey(LoverBase.CURSED_LOVER) ? "werewolf.cursed_lover_revelation" :
                             "werewolf.lover_revelation", Sets.newHashSet(lover.getLovers()), api.getTimer()));
         }
     }

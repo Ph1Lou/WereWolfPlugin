@@ -4,7 +4,6 @@ import com.google.common.collect.Sets;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Lover;
 import fr.ph1lou.werewolfapi.basekeys.LoverBase;
-import fr.ph1lou.werewolfapi.enums.LoverType;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -103,7 +102,7 @@ public class AmnesiacLover implements ILover, Listener {
         Bukkit.getPluginManager().callEvent(
                 new AmnesiacLoverDeathEvent(event.getPlayerWW(), playerWW1));
         game.death(playerWW1);
-        game.getConfig().removeOneLover(LoverType.AMNESIAC_LOVER.getKey());
+        game.getConfig().removeOneLover(LoverBase.AMNESIAC_LOVER);
     }
 
 
@@ -134,7 +133,7 @@ public class AmnesiacLover implements ILover, Listener {
             this.find = true;
             announceAmnesiacLoversOnJoin(this.amnesiacLover1);
             announceAmnesiacLoversOnJoin(this.amnesiacLover2);
-            game.getConfig().addOneLover(LoverType.AMNESIAC_LOVER.getKey());
+            game.getConfig().addOneLover(LoverBase.AMNESIAC_LOVER);
             game.checkVictory();
 
         }
@@ -242,7 +241,7 @@ public class AmnesiacLover implements ILover, Listener {
 
     @Override
     public String getKey() {
-        return LoverType.AMNESIAC_LOVER.getKey();
+        return LoverBase.AMNESIAC_LOVER;
     }
 
     @Override

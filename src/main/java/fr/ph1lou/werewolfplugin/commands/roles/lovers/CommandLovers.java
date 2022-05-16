@@ -1,8 +1,8 @@
 package fr.ph1lou.werewolfplugin.commands.roles.lovers;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
+import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.commands.ICommand;
-import fr.ph1lou.werewolfapi.enums.LoverType;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -56,8 +56,8 @@ public class CommandLovers implements ICommand {
         if (args.length == 1) {
 
             List<ILover> lovers =  playerWW.getLovers().stream()
-                    .filter(loverAPI1 -> !loverAPI1.isKey(LoverType.CURSED_LOVER.getKey()))
-                    .filter(loverAPI1 -> !loverAPI1.isKey(LoverType.AMNESIAC_LOVER.getKey()) || ((AmnesiacLover) loverAPI1).isRevealed())
+                    .filter(loverAPI1 -> !loverAPI1.isKey(LoverBase.CURSED_LOVER))
+                    .filter(loverAPI1 -> !loverAPI1.isKey(LoverBase.AMNESIAC_LOVER) || ((AmnesiacLover) loverAPI1).isRevealed())
                     .collect(Collectors.toList());
 
             if(lovers.isEmpty()){
@@ -138,9 +138,9 @@ public class CommandLovers implements ICommand {
             double don = player.getHealth() * heart / 100f;
 
             Optional<? extends ILover> iLover = playerWW.getLovers().stream()
-                    .filter(loverAPI1 -> !loverAPI1.isKey(LoverType.CURSED_LOVER.getKey()))
+                    .filter(loverAPI1 -> !loverAPI1.isKey(LoverBase.CURSED_LOVER))
                     .filter(loverAPI1 -> loverAPI1.getLovers().contains(playerWW1))
-                    .filter(loverAPI1 -> !loverAPI1.isKey(LoverType.AMNESIAC_LOVER.getKey()) || ((AmnesiacLover) loverAPI1).isRevealed())
+                    .filter(loverAPI1 -> !loverAPI1.isKey(LoverBase.AMNESIAC_LOVER) || ((AmnesiacLover) loverAPI1).isRevealed())
                     .findFirst();
 
             if (iLover.isPresent()) {
@@ -172,8 +172,8 @@ public class CommandLovers implements ICommand {
             } else {
 
                 Optional<? extends ILover> iLover2 = playerWW.getLovers().stream()
-                        .filter(loverAPI1 -> !loverAPI1.isKey(LoverType.CURSED_LOVER.getKey()))
-                        .filter(loverAPI1 -> !loverAPI1.isKey(LoverType.AMNESIAC_LOVER.getKey()) || ((AmnesiacLover) loverAPI1).isRevealed())
+                        .filter(loverAPI1 -> !loverAPI1.isKey(LoverBase.CURSED_LOVER))
+                        .filter(loverAPI1 -> !loverAPI1.isKey(LoverBase.AMNESIAC_LOVER) || ((AmnesiacLover) loverAPI1).isRevealed())
                         .findFirst();
 
                 if(iLover2.isPresent()){

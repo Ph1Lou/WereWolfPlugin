@@ -1,10 +1,11 @@
 package fr.ph1lou.werewolfplugin.roles.lovers;
 
+import fr.ph1lou.werewolfapi.annotations.Lover;
+import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.lovers.ILover;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.LoverType;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -26,6 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+@Lover(key = LoverBase.CURSED_LOVER)
 public class CursedLover implements ILover, Listener {
 
     private final WereWolfAPI game;
@@ -67,7 +69,7 @@ public class CursedLover implements ILover, Listener {
 
         playerWW1.removePlayerMaxHealth(2);
 
-        this.game.getConfig().removeOneLover(LoverType.CURSED_LOVER.getKey());
+        this.game.getConfig().removeOneLover(LoverBase.CURSED_LOVER);
     }
 
     public void announceCursedLoversOnJoin(IPlayerWW playerWW) {
@@ -157,7 +159,7 @@ public class CursedLover implements ILover, Listener {
 
     @Override
     public String getKey() {
-        return LoverType.CURSED_LOVER.getKey();
+        return LoverBase.CURSED_LOVER;
     }
 
     @Override

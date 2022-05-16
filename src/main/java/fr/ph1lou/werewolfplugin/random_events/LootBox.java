@@ -18,7 +18,6 @@ import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.random_events.FindAllLootBoxEvent;
 import fr.ph1lou.werewolfapi.events.random_events.LootBoxEvent;
 import fr.ph1lou.werewolfapi.utils.Utils;
-import fr.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;

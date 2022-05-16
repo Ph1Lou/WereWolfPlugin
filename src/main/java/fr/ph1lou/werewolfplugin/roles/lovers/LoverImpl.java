@@ -1,5 +1,7 @@
 package fr.ph1lou.werewolfplugin.roles.lovers;
 
+import fr.ph1lou.werewolfapi.annotations.Lover;
+import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.permissions.UpdateModeratorNameTagEvent;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -22,10 +24,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class Lover extends AbstractLover {
+@Lover(key = LoverBase.LOVER)
+public class LoverImpl extends AbstractLover {
 
 
-    public Lover(WereWolfAPI game, List<IPlayerWW> lovers) {
+    public LoverImpl(WereWolfAPI game, List<IPlayerWW> lovers) {
         super(game, lovers);
     }
 
@@ -66,7 +69,7 @@ public class Lover extends AbstractLover {
                 });
         Bukkit.getPluginManager().callEvent(new LoverDeathEvent(this));
 
-        this.game.getConfig().removeOneLover(LoverType.LOVER.getKey());
+        this.game.getConfig().removeOneLover(LoverBase.LOVER);
     }
 
     @EventHandler

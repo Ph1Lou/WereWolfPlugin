@@ -1,11 +1,14 @@
 package fr.ph1lou.werewolfplugin.roles.lovers;
 
+import fr.ph1lou.werewolfapi.annotations.Lover;
+import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.LoverType;
 
 import java.util.List;
 
+@Lover(key = LoverBase.FAKE_LOVER)
 public class FakeLover extends AbstractLover {
 
     public FakeLover(WereWolfAPI game, List<IPlayerWW> lovers) {

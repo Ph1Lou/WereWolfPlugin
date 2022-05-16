@@ -2,27 +2,27 @@ package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.annotations.Timer;
+import fr.ph1lou.werewolfapi.basekeys.LoverBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.LoverType;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.lovers.LoverDeathEvent;
 import fr.ph1lou.werewolfapi.events.lovers.RevealLoversEvent;
 import fr.ph1lou.werewolfapi.events.roles.charmer.CharmedDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.charmer.CharmerGetEffectDeathEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
-import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfplugin.roles.lovers.FakeLoverCharmer;
@@ -121,8 +121,8 @@ public class Charmer extends RoleNeutral implements IPower, IAffectedPlayers {
     public void onLoverDead(LoverDeathEvent event){
 
 
-        if(!event.getLover().getKey().equals(LoverType.LOVER.getKey()) &&
-                !event.getLover().getKey().equals(LoverType.AMNESIAC_LOVER.getKey())){
+        if(!event.getLover().getKey().equals(LoverBase.LOVER) &&
+                !event.getLover().getKey().equals(LoverBase.AMNESIAC_LOVER)){
             return;
         }
 

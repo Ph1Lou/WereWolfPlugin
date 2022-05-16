@@ -2,13 +2,6 @@ package fr.ph1lou.werewolfplugin.save;
 
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.WriterConfig;
-import fr.ph1lou.werewolfapi.annotations.Role;
-import fr.ph1lou.werewolfapi.game.IConfiguration;
-import fr.ph1lou.werewolfapi.registers.IRegisterManager;
-import fr.ph1lou.werewolfapi.role.interfaces.IRole;
-import fr.ph1lou.werewolfapi.utils.Wrapper;
-import fr.ph1lou.werewolfplugin.Main;
-import fr.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 
 import java.io.BufferedReader;

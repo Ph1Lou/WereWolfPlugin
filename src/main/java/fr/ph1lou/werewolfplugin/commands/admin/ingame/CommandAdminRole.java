@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import fr.ph1lou.werewolfapi.annotations.AdminCommand;
+import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfplugin.roles.neutrals.Angel;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -9,7 +10,6 @@ import fr.ph1lou.werewolfapi.lovers.ILover;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.AngelForm;
-import fr.ph1lou.werewolfapi.enums.LoverType;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -103,7 +103,7 @@ public class CommandAdminRole implements ICommand {
                     .filter(playerWW1 -> !targetWW.equals(playerWW1))
                     .forEach(playerWW1 -> sb.append(playerWW1.getName()).append(" "));
 
-            if (!lover.isKey(LoverType.CURSED_LOVER.getKey())) {
+            if (!lover.isKey(LoverBase.CURSED_LOVER)) {
                 if (sb.length() != 0) {
                     player.sendMessage(game.translate("werewolf.commands.admin.role.lover",
                             Formatter.player(sb.toString())));

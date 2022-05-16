@@ -3,16 +3,16 @@ package fr.ph1lou.werewolfplugin.random_events;
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Event;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
+import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.LoverType;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.lovers.RevealLoversEvent;
 import fr.ph1lou.werewolfapi.events.random_events.TroupleEvent;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
-import fr.ph1lou.werewolfplugin.roles.lovers.Lover;
+import fr.ph1lou.werewolfplugin.roles.lovers.LoverImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 
@@ -34,15 +34,15 @@ public class Triple extends ListenerManager {
         BukkitUtils.scheduleSyncDelayedTask(() -> {
             if (game.isState(StateGame.GAME)) {
                 if (isRegister()) {
-                    List<Lover> lovers = game.getLoversManager().getLovers().stream()
-                            .filter(ILover -> ILover.isKey(LoverType.LOVER.getKey()))
-                            .map(ILover -> (Lover) ILover)
+                    List<LoverImpl> loverImpls = game.getLoversManager().getLovers().stream()
+                            .filter(ILover -> ILover.isKey(LoverBase.LOVER))
+                            .map(ILover -> (LoverImpl) ILover)
                             .collect(Collectors.toList());
 
-                    if (lovers.isEmpty()) return;
+                    if (loverImpls.isEmpty()) return;
 
-                    Lover lover = lovers.get((int) Math.floor(
-                            game.getRandom().nextFloat() * lovers.size()));
+                    LoverImpl loverImpl = loverImpls.get((int) Math.floor(
+                            game.getRandom().nextFloat() * loverImpls.size()));
 
                     List<IPlayerWW> playerWWS = game.getPlayersWW().stream()
                             .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
@@ -53,12 +53,12 @@ public class Triple extends ListenerManager {
 
                     IPlayerWW playerWW = playerWWS.get((int) Math.floor(game.getRandom().nextDouble() * playerWWS.size()));
 
-                    TroupleEvent troupleEvent = new TroupleEvent(playerWW, new HashSet<>(lover.getLovers()));
+                    TroupleEvent troupleEvent = new TroupleEvent(playerWW, new HashSet<>(loverImpl.getLovers()));
                     Bukkit.getPluginManager().callEvent(troupleEvent);
 
                     if (troupleEvent.isCancelled()) return;
 
-                    lover.addLover(playerWW);
+                    loverImpl.addLover(playerWW);
 
                     register(false);
                 }

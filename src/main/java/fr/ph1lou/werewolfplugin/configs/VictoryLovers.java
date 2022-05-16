@@ -3,7 +3,7 @@ package fr.ph1lou.werewolfplugin.configs;
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
-import fr.ph1lou.werewolfapi.enums.LoverType;
+import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.events.game.utils.WinConditionsCheckEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
@@ -26,13 +26,13 @@ public class VictoryLovers extends ListenerManager {
         WereWolfAPI game = this.getGame();
 
         if (game.getLoversManager().getLovers().stream()
-                .filter(ILover::isAlive).anyMatch(ILover -> ILover.isKey(LoverType.LOVER.getKey()))) {
+                .filter(ILover::isAlive).anyMatch(ILover -> ILover.isKey(LoverBase.LOVER))) {
             event.setCancelled(true);
             return;
         }
 
         if (game.getLoversManager().getLovers().stream()
-                .filter(ILover::isAlive).anyMatch(ILover -> ILover.isKey(LoverType.AMNESIAC_LOVER.getKey()))) {
+                .filter(ILover::isAlive).anyMatch(ILover -> ILover.isKey(LoverBase.AMNESIAC_LOVER))) {
             event.setCancelled(true);
         }
     }

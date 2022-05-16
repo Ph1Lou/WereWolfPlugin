@@ -1,12 +1,12 @@
 package fr.ph1lou.werewolfplugin.game;
 
 
+import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
-import fr.ph1lou.werewolfapi.enums.LoverType;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -54,11 +54,11 @@ public class End {
         }
         IConfiguration config = game.getConfig();
 
-        if (config.getLoverCount(LoverType.AMNESIAC_LOVER.getKey()) *
-                config.getLoverCount(LoverType.LOVER.getKey()) <= 1) {
+        if (config.getLoverCount(LoverBase.AMNESIAC_LOVER) *
+                config.getLoverCount(LoverBase.LOVER) <= 1) {
 
             game.getLoversManager().getLovers().stream()
-                    .filter(lover -> lover.isKey(LoverType.AMNESIAC_LOVER.getKey()) || lover.isKey(LoverType.LOVER.getKey()))
+                    .filter(lover -> lover.isKey(LoverBase.AMNESIAC_LOVER) || lover.isKey(LoverBase.LOVER))
                     .forEach(lover -> {
                         Set<IPlayerWW> lovers = new HashSet<>(lover.getLovers());
 

@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.commands.utilities;
 
 import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
+import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.Category;
@@ -31,27 +32,27 @@ public class CommandCompo implements ICommand {
 
         StringBuilder sb = new StringBuilder(game.translate("werewolf.commands.compo._"));
         sb.append(ChatColor.WHITE);
-        if (game.getConfig().getLoverCount(LoverType.LOVER.getKey()) > 0) {
-            sb.append(LoverType.LOVER.getChatColor()).append(game.translate(LoverType.LOVER.getKey())).append(ChatColor.WHITE);
-            if (game.getConfig().getLoverCount(LoverType.LOVER.getKey()) == 1) {
+        if (game.getConfig().getLoverCount(LoverBase.LOVER) > 0) {
+            sb.append(LoverType.LOVER.getChatColor()).append(game.translate(LoverBase.LOVER)).append(ChatColor.WHITE);
+            if (game.getConfig().getLoverCount(LoverBase.LOVER) == 1) {
                 sb.append(", ");
             } else {
-                sb.append(" (§b").append(game.getConfig().getLoverCount(LoverType.LOVER.getKey())).append("§f), ");
+                sb.append(" (§b").append(game.getConfig().getLoverCount(LoverBase.LOVER)).append("§f), ");
             }
         }
-        if (game.getConfig().getLoverCount(LoverType.AMNESIAC_LOVER.getKey()) > 0) {
-            sb.append(LoverType.AMNESIAC_LOVER.getChatColor()).append(game.translate(LoverType.AMNESIAC_LOVER.getKey())).append(ChatColor.WHITE);
-            if (game.getConfig().getLoverCount(LoverType.AMNESIAC_LOVER.getKey()) == 1) {
+        if (game.getConfig().getLoverCount(LoverBase.AMNESIAC_LOVER) > 0) {
+            sb.append(LoverType.AMNESIAC_LOVER.getChatColor()).append(game.translate(LoverBase.AMNESIAC_LOVER)).append(ChatColor.WHITE);
+            if (game.getConfig().getLoverCount(LoverBase.AMNESIAC_LOVER) == 1) {
                 sb.append(", ");
             } else {
-                sb.append(" (§b").append(game.getConfig().getLoverCount(LoverType.AMNESIAC_LOVER.getKey())).append("§f), ");
+                sb.append(" (§b").append(game.getConfig().getLoverCount(LoverBase.AMNESIAC_LOVER)).append("§f), ");
             }
         }
 
-        if (game.getConfig().getLoverCount(LoverType.CURSED_LOVER.getKey()) > 0) {
-            sb.append(LoverType.CURSED_LOVER.getChatColor()).append(game.translate(LoverType.CURSED_LOVER.getKey())).append(ChatColor.WHITE);
-            if (game.getConfig().getLoverCount(LoverType.CURSED_LOVER.getKey()) != 1) {
-                sb.append(" (§b").append(game.getConfig().getLoverCount(LoverType.CURSED_LOVER.getKey())).append("§f)");
+        if (game.getConfig().getLoverCount(LoverBase.CURSED_LOVER) > 0) {
+            sb.append(LoverType.CURSED_LOVER.getChatColor()).append(game.translate(LoverBase.CURSED_LOVER)).append(ChatColor.WHITE);
+            if (game.getConfig().getLoverCount(LoverBase.CURSED_LOVER) != 1) {
+                sb.append(" (§b").append(game.getConfig().getLoverCount(LoverBase.CURSED_LOVER)).append("§f)");
             }
         } else {
             sb.replace(sb.length() - 2, sb.length(), "");

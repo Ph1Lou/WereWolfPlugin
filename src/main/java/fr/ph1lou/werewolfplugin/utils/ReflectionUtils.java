@@ -18,13 +18,4 @@ public class ReflectionUtils {
                 .map(ClassPath.ClassInfo::load)
                 .collect(Collectors.toSet());
     }
-
-    private static Class<?> getClass(String className, String packageName) {
-        try {
-            return Class.forName(packageName + "."
-                    + className.substring(0, className.lastIndexOf('.')));
-        } catch (ClassNotFoundException ignored) {
-        }
-        return null;
-    }
 }

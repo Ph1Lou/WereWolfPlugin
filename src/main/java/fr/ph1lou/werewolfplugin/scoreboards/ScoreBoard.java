@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.scoreboards;
 
 import fr.mrmicky.fastboard.FastBoard;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Register;
@@ -11,7 +12,6 @@ import fr.ph1lou.werewolfapi.game.IModerationManager;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.enums.Day;
-import fr.ph1lou.werewolfapi.enums.LoverType;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
@@ -135,26 +135,26 @@ public class ScoreBoard {
 	private void updateScoreBoardRole(){
 
 
-		if (game.getConfig().getLoverCount(LoverType.LOVER.getKey()) > 0) {
+		if (game.getConfig().getLoverCount(LoverBase.LOVER) > 0) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("§3")
-					.append(game.getConfig().getLoverCount(LoverType.LOVER.getKey()))
+					.append(game.getConfig().getLoverCount(LoverBase.LOVER))
 					.append("§f ")
-					.append(game.translate(LoverType.LOVER.getKey()));
+					.append(game.translate(LoverBase.LOVER));
 			roles.add(sb.substring(0, Math.min(30, sb.length())));
 		}
-		if (game.getConfig().getLoverCount(LoverType.AMNESIAC_LOVER.getKey()) > 0) {
+		if (game.getConfig().getLoverCount(LoverBase.AMNESIAC_LOVER) > 0) {
 			StringBuilder sb = new StringBuilder();
-			sb.append("§3").append(game.getConfig().getLoverCount(LoverType.AMNESIAC_LOVER.getKey()))
+			sb.append("§3").append(game.getConfig().getLoverCount(LoverBase.AMNESIAC_LOVER))
 					.append("§f ")
-					.append(game.translate(LoverType.AMNESIAC_LOVER.getKey()));
+					.append(game.translate(LoverBase.AMNESIAC_LOVER));
 			roles.add(sb.substring(0, Math.min(30, sb.length())));
 		}
-		if (game.getConfig().getLoverCount(LoverType.CURSED_LOVER.getKey()) > 0) {
+		if (game.getConfig().getLoverCount(LoverBase.CURSED_LOVER) > 0) {
 			StringBuilder sb = new StringBuilder();
-			sb.append("§3").append(game.getConfig().getLoverCount(LoverType.CURSED_LOVER.getKey()))
+			sb.append("§3").append(game.getConfig().getLoverCount(LoverBase.CURSED_LOVER))
 					.append("§f ")
-					.append(game.translate(LoverType.CURSED_LOVER.getKey()));
+					.append(game.translate(LoverBase.CURSED_LOVER));
 			roles.add(sb.substring(0, Math.min(30, sb.length())));
 		}
 		for (Wrapper<IRole, Role> roleRegister : Register.get().getRolesRegister()) {

@@ -2,10 +2,11 @@ package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.annotations.Timer;
+import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
-import fr.ph1lou.werewolfplugin.roles.lovers.Lover;
+import fr.ph1lou.werewolfplugin.roles.lovers.LoverImpl;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.lovers.ILover;
@@ -100,7 +101,7 @@ public class Rival extends RoleNeutral implements IPower {
         if (event.getLovers().isEmpty()) return;
 
         List<ILover> loverAPIs = event.getLovers().stream()
-                .filter(ILover -> !ILover.isKey(LoverType.CURSED_LOVER.getKey()))
+                .filter(ILover -> !ILover.isKey(LoverBase.CURSED_LOVER))
                 .filter(loverAPI1 -> !loverAPI1.getLovers().contains(getPlayerWW()))
                 .collect(Collectors.toList());
 
@@ -111,7 +112,7 @@ public class Rival extends RoleNeutral implements IPower {
 
         this.lover = loverAPIs.get((int) Math.floor(game.getRandom().nextFloat() * loverAPIs.size()));
 
-        if (lover instanceof Lover) {
+        if (lover instanceof LoverImpl) {
             this.cupidWW = game.getPlayersWW()
                     .stream().map(IPlayerWW::getRole)
                     .filter(roles -> roles.isKey(RoleBase.CUPID))
@@ -186,8 +187,8 @@ public class Rival extends RoleNeutral implements IPower {
     public void onLoverDeath(LoverDeathEvent event) {
 
         String loverKey = event.getLover().getKey();
-        if(loverKey.equals(LoverType.LOVER.getKey()) ||
-        loverKey.equals(LoverType.AMNESIAC_LOVER.getKey())){
+        if(loverKey.equals(LoverBase.LOVER) ||
+        loverKey.equals(LoverBase.AMNESIAC_LOVER)){
             List<? extends IPlayerWW> lovers = event.getLover().getLovers();
             if(lovers.size() >= 2){
                 loverDeath(lovers.get(0), lovers.get(1));

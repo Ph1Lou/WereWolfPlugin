@@ -75,7 +75,9 @@ public class GameTask extends BukkitRunnable {
 					if (timerRegister.getMetaDatas().decrement() ||
 							(timerRegister.getMetaDatas().decrementAfterRole() &&
 									!game.getConfig().isTrollSV() &&
-									game.getConfig().getTimerValue(TimerBase.ROLE_DURATION) < 0)) {
+									game.getConfig().getTimerValue(TimerBase.ROLE_DURATION) < 0) ||
+							(!timerRegister.getMetaDatas().decrementAfterTimer().equals("") &&
+									game.getConfig().getTimerValue(timerRegister.getMetaDatas().decrementAfterTimer()) < 0)) {
 						if (game.getConfig().getTimerValue(timerRegister.getMetaDatas().key()) == 0) {
 							try {
 								Bukkit.getPluginManager().callEvent(
