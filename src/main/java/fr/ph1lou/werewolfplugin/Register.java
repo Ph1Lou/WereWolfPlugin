@@ -61,8 +61,8 @@ public class Register implements IRegisterManager {
             ModuleWerewolf moduleWerewolf = plugin.getClass().getAnnotation(ModuleWerewolf.class);
             if(moduleWerewolf != null){
 
-                if(moduleWerewolf.key().startsWith("werewolf.")){
-                    Bukkit.getLogger().warning("Addon keys can't start with 'werewolf.'");
+                if(moduleWerewolf.key().startsWith("werewolf.") && !plugin.equals(main)){
+                    Bukkit.getLogger().warning(String.format("Addon keys %s can't start with 'werewolf.'", moduleWerewolf.key()));
                     continue;
                 }
 
