@@ -60,12 +60,29 @@ public class Register implements IRegisterManager {
         for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
             ModuleWerewolf moduleWerewolf = plugin.getClass().getAnnotation(ModuleWerewolf.class);
             if(moduleWerewolf != null){
+
+                if(moduleWerewolf.key().startsWith("werewolf.")){
+                    Bukkit.getLogger().warning("Addon keys can't start with 'werewolf.'");
+                    continue;
+                }
+
+                String prefix = moduleWerewolf.key().split("\\.")[0];
+
+
+                if(this.modules.stream().anyMatch(javaPluginModuleWerewolfWrapper -> javaPluginModuleWerewolfWrapper.getAddonKey().split("\\.")[0]
+                        .equals(prefix))){
+                    Bukkit.getLogger().warning(String.format("An addon key already starts with %s", prefix));
+                    continue;
+                }
+
                 this.modules.add(new Wrapper<>(JavaPlugin.class,
                         moduleWerewolf,
                         moduleWerewolf.key(),
                         (JavaPlugin)plugin));
                 this.register(plugin.getClass().getPackage().getName(),
-                        moduleWerewolf);
+                        moduleWerewolf,
+                        plugin,
+                        prefix);
             }
         }
     }
@@ -90,79 +107,173 @@ public class Register implements IRegisterManager {
         return null;
     }
 
-    public void register(String packageName, ModuleWerewolf addon){
+    public void register(String packageName, ModuleWerewolf addon, Plugin plugin, String prefix){
 
         try {
-            ReflectionUtils.findAllClasses(main, packageName)
+            ReflectionUtils.findAllClasses(plugin, packageName)
                     .forEach(clazz -> {
+
                         if(clazz.getAnnotation(Role.class) != null){
 
                             if(IRole.class.isAssignableFrom(clazz)){
 
-                                this.roles.add(new Wrapper<>((Class<IRole>)clazz,
-                                        clazz.getAnnotation(Role.class),
-                                        addon.key(),
-                                        null));
+                                Role role = clazz.getAnnotation(Role.class);
+
+                                if(role.key().startsWith(prefix)){
+                                    this.roles.add(new Wrapper<>((Class<IRole>)clazz,
+                                            role,
+                                            addon.key(),
+                                            null));
+                                }
+                                else{
+                                    Bukkit.getLogger().warning(String.format(
+                                            "The role key %s does not have the same prefix as the addon key %s",
+                                            role.key(), prefix));
+                                }
+
                             }
                         }
                         else if(clazz.getAnnotation(Scenario.class) != null){
                             if(ListenerManager.class.isAssignableFrom(clazz)){
-                                this.scenarios.add(new Wrapper<>((Class<ListenerManager>)clazz,
-                                        clazz.getAnnotation(Scenario.class),
-                                        addon.key(),
-                                        this.instantiate((Class<ListenerManager>)clazz)));
+
+                                Scenario scenario = clazz.getAnnotation(Scenario.class);
+
+                                if(scenario.key().startsWith(prefix)){
+                                    this.scenarios.add(new Wrapper<>((Class<ListenerManager>)clazz,
+                                            scenario,
+                                            addon.key(),
+                                            this.instantiate((Class<ListenerManager>)clazz)));
+                                }
+                                else{
+                                    Bukkit.getLogger().warning(String.format(
+                                            "The scenario key %s does not have the same prefix as the addon key %s",
+                                            scenario.key(), prefix));
+                                }
+
                             }
                         }
                         else if(clazz.getAnnotation(Event.class) != null){
                             if(ListenerManager.class.isAssignableFrom(clazz)){
-                                this.events.add(new Wrapper<>((Class<ListenerManager>)clazz,
-                                        clazz.getAnnotation(Event.class),
-                                        addon.key(),
-                                        this.instantiate((Class<ListenerManager>)clazz)));
+
+                                Event event = clazz.getAnnotation(Event.class);
+
+                                if(event.key().startsWith(prefix)){
+                                    this.events.add(new Wrapper<>((Class<ListenerManager>)clazz,
+                                            event,
+                                            addon.key(),
+                                            this.instantiate((Class<ListenerManager>)clazz)));
+                                }
+                                else{
+                                    Bukkit.getLogger().warning(String.format(
+                                            "The event key %s does not have the same prefix as the addon key %s",
+                                            event.key(), prefix));
+                                }
                             }
                         }
                         else if(clazz.getAnnotation(Configuration.class) != null){
-                            this.configurations.add(new Wrapper<>((Class<ICommand>)clazz,
-                                    clazz.getAnnotation(Configuration.class),
-                                    addon.key(),
-                                    this.instantiate((Class<ICommand>)clazz)));
-                        }
-                        else if(clazz.getAnnotation(Timer.class) != null){
-                            this.timers.add(new Wrapper<>((Class<ICommand>)clazz,
-                                    clazz.getAnnotation(Timer.class),
-                                    addon.key(),
-                                    this.instantiate((Class<ICommand>)clazz)));
-                        }
-                        else if(clazz.getAnnotation(PlayerCommand.class) != null){
-                            if(ICommand.class.isAssignableFrom(clazz)){
-                                this.commands.add(new Wrapper<>((Class<ICommand>)clazz,
-                                        clazz.getAnnotation(PlayerCommand.class),
+
+                            Configuration configuration = clazz.getAnnotation(Configuration.class);
+
+                            if(configuration.key().startsWith(prefix)){
+                                this.configurations.add(new Wrapper<>((Class<ICommand>)clazz,
+                                        configuration,
                                         addon.key(),
                                         this.instantiate((Class<ICommand>)clazz)));
+                            }
+                            else{
+                                Bukkit.getLogger().warning(String.format(
+                                        "The configuration key %s does not have the same prefix as the addon key %s",
+                                        configuration.key(), prefix));
+                            }
+                        }
+                        else if(clazz.getAnnotation(Timer.class) != null){
+
+                            Timer timer = clazz.getAnnotation(Timer.class);
+
+                            if(timer.key().startsWith(prefix)){
+                                this.timers.add(new Wrapper<>((Class<ICommand>)clazz,
+                                        timer,
+                                        addon.key(),
+                                        this.instantiate((Class<ICommand>)clazz)));
+                            }
+                            else{
+                                Bukkit.getLogger().warning(String.format(
+                                        "The timer key %s does not have the same prefix as the addon key %s",
+                                        timer.key(), prefix));
+                            }
+                        }
+                        else if(clazz.getAnnotation(PlayerCommand.class) != null){
+
+                            if(ICommand.class.isAssignableFrom(clazz)){
+
+                                PlayerCommand playerCommand = clazz.getAnnotation(PlayerCommand.class);
+
+                                if(playerCommand.key().startsWith(prefix)){
+                                    this.commands.add(new Wrapper<>((Class<ICommand>)clazz,
+                                            playerCommand,
+                                            addon.key(),
+                                            this.instantiate((Class<ICommand>)clazz)));
+                                }
+                                else {
+                                    Bukkit.getLogger().warning(String.format(
+                                            "The playercommand key %s does not have the same prefix as the addon key %s",
+                                            playerCommand.key(), prefix));
+                                }
                             }
                         }
                         else if(clazz.getAnnotation(RoleCommand.class) != null){
                             if(ICommand.class.isAssignableFrom(clazz)){
-                                this.roleCommands.add(new Wrapper<>((Class<ICommand>)clazz,
-                                        clazz.getAnnotation(RoleCommand.class),
-                                        addon.key(),
-                                        this.instantiate((Class<ICommand>)clazz)));
+
+                                RoleCommand roleCommand = clazz.getAnnotation(RoleCommand.class);
+
+                                if(roleCommand.key().startsWith(prefix)){
+                                    this.roleCommands.add(new Wrapper<>((Class<ICommand>)clazz,
+                                            roleCommand,
+                                            addon.key(),
+                                            this.instantiate((Class<ICommand>)clazz)));
+                                }
+                                else {
+                                    Bukkit.getLogger().warning(String.format(
+                                            "The rolecommand key %s does not have the same prefix as the addon key %s",
+                                            roleCommand.key(), prefix));
+                                }
                             }
                         }
                         else if(clazz.getAnnotation(AdminCommand.class) != null){
                             if(ICommand.class.isAssignableFrom(clazz)){
-                                this.adminCommands.add(new Wrapper<>((Class<ICommand>)clazz,
-                                        clazz.getAnnotation(AdminCommand.class),
-                                        addon.key(),
-                                        this.instantiate((Class<ICommand>)clazz)));
+
+                                AdminCommand adminCommand = clazz.getAnnotation(AdminCommand.class);
+
+                                if(adminCommand.key().startsWith(prefix)){
+                                    this.adminCommands.add(new Wrapper<>((Class<ICommand>)clazz,
+                                            adminCommand,
+                                            addon.key(),
+                                            this.instantiate((Class<ICommand>)clazz)));
+                                }
+                                else {
+                                    Bukkit.getLogger().warning(String.format(
+                                            "The admincommand key %s does not have the same prefix as the addon key %s",
+                                            adminCommand.key(), prefix));
+                                }
                             }
                         }
                         else if(clazz.getAnnotation(Lover.class) != null){
                             if(ILover.class.isAssignableFrom(clazz)){
-                                this.lovers.add(new Wrapper<>((Class<ILover>)clazz,
-                                        clazz.getAnnotation(Lover.class),
-                                        addon.key(),
-                                        null));
+
+                                Lover lover = clazz.getAnnotation(Lover.class);
+
+                                if(lover.key().startsWith(prefix)){
+                                    this.lovers.add(new Wrapper<>((Class<ILover>)clazz,
+                                            lover,
+                                            addon.key(),
+                                            null));
+                                }
+                                else {
+                                    Bukkit.getLogger().warning(String.format(
+                                            "The lover key %s does not have the same prefix as the addon key %s",
+                                            lover.key(), prefix));
+                                }
+
                             }
                         }
                     });
