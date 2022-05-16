@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @AdminCommand(key = "werewolf.commands.late.command",
         descriptionKey = "werewolf.commands.late.description",
-        stateGame = {StateGame.TRANSPORTATION, StateGame.START},
+        statesGame = {StateGame.TRANSPORTATION, StateGame.START},
         argNumbers = 1,
         moderatorAccess = true)
 public class CommandLate implements ICommand {

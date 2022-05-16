@@ -18,7 +18,7 @@ import java.util.UUID;
 @RoleCommand(key = "werewolf.role.hunter.command",
         roleKeys = RoleBase.HUNTER,
         requiredPower = true,
-        statePlayer = StatePlayer.DEATH,
+        statesPlayer = StatePlayer.DEATH,
         argNumbers = 1)
 public class CommandHunter implements ICommand {
 

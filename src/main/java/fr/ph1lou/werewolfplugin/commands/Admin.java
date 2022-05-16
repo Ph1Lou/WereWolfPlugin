@@ -83,8 +83,8 @@ public class Admin implements TabExecutor {
 
         WereWolfAPI game = main.getWereWolfAPI();
 
-        if (commandRegister.getMetaDatas().stateGame().length > 0 &&
-                Arrays.stream(commandRegister.getMetaDatas().stateGame())
+        if (commandRegister.getMetaDatas().statesGame().length > 0 &&
+                Arrays.stream(commandRegister.getMetaDatas().statesGame())
                         .noneMatch(stateGame -> stateGame == game.getState())) {
             if (seePermissionMessages) {
                 player.sendMessage(game.translate(Prefix.RED , "werewolf.check.state"));
@@ -158,8 +158,8 @@ public class Admin implements TabExecutor {
                 .filter(commandRegister -> (args[0].isEmpty() || game.translate(commandRegister.getMetaDatas().key()).contains(args[0])))
                 .filter(iCommandAdminCommandWrapper -> iCommandAdminCommandWrapper.getMetaDatas().autoCompletion())
                 .filter(commandRegister -> checkPermission(commandRegister, player))
-                .filter(commandRegister -> commandRegister.getMetaDatas().stateGame().length == 0 ||
-                        Arrays.stream(commandRegister.getMetaDatas().stateGame()).anyMatch(stateGame -> stateGame == game.getState()))
+                .filter(commandRegister -> commandRegister.getMetaDatas().statesGame().length == 0 ||
+                        Arrays.stream(commandRegister.getMetaDatas().statesGame()).anyMatch(stateGame -> stateGame == game.getState()))
                 .map(commandRegister -> game.translate(commandRegister.getMetaDatas().key()))
                 .collect(Collectors.toList());
     }

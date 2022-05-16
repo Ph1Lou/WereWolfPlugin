@@ -16,7 +16,7 @@ import java.util.UUID;
 
 @AdminCommand(key = "werewolf.commands.admin.stuff_start.command",
         descriptionKey = "",
-        stateGame = StateGame.LOBBY,
+        statesGame = StateGame.LOBBY,
         argNumbers = 0,
         autoCompletion = false,
         moderatorAccess = true)

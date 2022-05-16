@@ -21,8 +21,8 @@ import java.util.UUID;
 @PlayerCommand(key = "werewolf.role.werewolf.command",
         descriptionKey = "",
         argNumbers = 0,
-        stateGame = StateGame.GAME,
-        statePlayer = StatePlayer.ALIVE)
+        statesGame = StateGame.GAME,
+        statesPlayer = StatePlayer.ALIVE)
 public class CommandWereWolf implements ICommand {
 
     @Override

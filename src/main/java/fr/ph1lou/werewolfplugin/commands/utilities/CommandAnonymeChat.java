@@ -19,8 +19,8 @@ import java.util.UUID;
 
 @PlayerCommand(key = "werewolf.commands.anonymous_chat.command",
         descriptionKey = "werewolf.commands.anonymous_chat.description",
-        stateGame = {StateGame.START, StateGame.GAME},
-        statePlayer = StatePlayer.ALIVE)
+        statesGame = {StateGame.START, StateGame.GAME},
+        statesPlayer = StatePlayer.ALIVE)
 public class CommandAnonymeChat implements ICommand {
 
     private final int cesar = (int) (Math.random() * 26) + 1;

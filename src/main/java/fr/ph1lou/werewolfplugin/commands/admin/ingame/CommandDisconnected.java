@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 @AdminCommand(key = "werewolf.commands.admin.disconnected.command",
         descriptionKey = "werewolf.commands.admin.disconnected.description",
         moderatorAccess = true,
-        stateGame = {StateGame.START, StateGame.GAME},
+        statesGame = {StateGame.START, StateGame.GAME},
         argNumbers = 0)
 public class CommandDisconnected implements ICommand {
 

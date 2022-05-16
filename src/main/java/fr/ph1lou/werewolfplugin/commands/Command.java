@@ -99,11 +99,11 @@ public class Command implements TabExecutor {
             }
         }
 
-        if (command.statePlayer().length > 0) {
+        if (command.statesPlayer().length > 0) {
             if (playerWW == null) {
                 return game.translate(Prefix.RED , "werewolf.check.not_in_game");
             }
-            if(Arrays.stream(command.statePlayer()).noneMatch(statePlayer -> statePlayer == playerWW.getState())){
+            if(Arrays.stream(command.statesPlayer()).noneMatch(statePlayer -> statePlayer == playerWW.getState())){
                 return game.translate(Prefix.RED , "werewolf.check.state_player");
             }
         }
@@ -126,8 +126,8 @@ public class Command implements TabExecutor {
             }
         }
 
-        if(command.stateGame().length > 0){
-            if (Arrays.stream(command.stateGame()).noneMatch(stateGame -> stateGame == game.getState())) {
+        if(command.statesGame().length > 0){
+            if (Arrays.stream(command.statesGame()).noneMatch(stateGame -> stateGame == game.getState())) {
                 return game.translate(Prefix.RED , "werewolf.check.state");
             }
         }
@@ -149,17 +149,17 @@ public class Command implements TabExecutor {
         IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
 
 
-        if (command.statePlayer().length > 0) {
+        if (command.statesPlayer().length > 0) {
             if (playerWW == null) {
                 return game.translate(Prefix.RED , "werewolf.check.not_in_game");
             }
-            if(Arrays.stream(command.statePlayer()).noneMatch(statePlayer -> statePlayer == playerWW.getState())){
+            if(Arrays.stream(command.statesPlayer()).noneMatch(statePlayer -> statePlayer == playerWW.getState())){
                 return game.translate(Prefix.RED , "werewolf.check.state_player");
             }
         }
 
-        if(command.stateGame().length > 0){
-            if (Arrays.stream(command.stateGame()).noneMatch(stateGame -> stateGame == game.getState())) {
+        if(command.statesGame().length > 0){
+            if (Arrays.stream(command.statesGame()).noneMatch(stateGame -> stateGame == game.getState())) {
                 return game.translate(Prefix.RED , "werewolf.check.state");
             }
         }
@@ -194,20 +194,20 @@ public class Command implements TabExecutor {
                 .filter(commandRegister -> commandRegister.getMetaDatas().roleKeys().length == 0 ||
                         (playerWW != null && Arrays.stream(commandRegister.getMetaDatas().roleKeys()).anyMatch(roleKey -> roleKey.equals(playerWW.getRole().getKey()))))
                 .filter(iCommandCommandWrapper -> iCommandCommandWrapper.getMetaDatas().autoCompletion())
-                .filter(commandRegister -> commandRegister.getMetaDatas().stateGame().length == 0 ||
-                        Arrays.stream(commandRegister.getMetaDatas().stateGame()).anyMatch(stateGame -> stateGame == game.getState()))
+                .filter(commandRegister -> commandRegister.getMetaDatas().statesGame().length == 0 ||
+                        Arrays.stream(commandRegister.getMetaDatas().statesGame()).anyMatch(stateGame -> stateGame == game.getState()))
                 .filter(commandRegister -> playerWW == null ||
-                        commandRegister.getMetaDatas().statePlayer().length == 0 ||
-                        Arrays.stream(commandRegister.getMetaDatas().statePlayer()).anyMatch(statePlayer -> statePlayer == playerWW.getState()))
+                        commandRegister.getMetaDatas().statesPlayer().length == 0 ||
+                        Arrays.stream(commandRegister.getMetaDatas().statesPlayer()).anyMatch(statePlayer -> statePlayer == playerWW.getState()))
                 .map(commandRegister -> game.translate(commandRegister.getMetaDatas().key())),
                 main.getRegisterManager().getPlayerCommandsRegister().stream()
                         .filter(commandRegister -> (args[0].isEmpty() || game.translate(commandRegister.getMetaDatas().key()).contains(args[0])))
                         .filter(iCommandCommandWrapper -> iCommandCommandWrapper.getMetaDatas().autoCompletion())
-                        .filter(commandRegister -> commandRegister.getMetaDatas().stateGame().length == 0 ||
-                                Arrays.stream(commandRegister.getMetaDatas().stateGame()).anyMatch(stateGame -> stateGame == game.getState()))
+                        .filter(commandRegister -> commandRegister.getMetaDatas().statesGame().length == 0 ||
+                                Arrays.stream(commandRegister.getMetaDatas().statesGame()).anyMatch(stateGame -> stateGame == game.getState()))
                         .filter(commandRegister -> playerWW == null ||
-                                commandRegister.getMetaDatas().statePlayer().length == 0 ||
-                                Arrays.stream(commandRegister.getMetaDatas().statePlayer()).anyMatch(statePlayer -> statePlayer == playerWW.getState()))
+                                commandRegister.getMetaDatas().statesPlayer().length == 0 ||
+                                Arrays.stream(commandRegister.getMetaDatas().statesPlayer()).anyMatch(statePlayer -> statePlayer == playerWW.getState()))
                         .map(commandRegister -> game.translate(commandRegister.getMetaDatas().key())))
                 .collect(Collectors.toList());
     }

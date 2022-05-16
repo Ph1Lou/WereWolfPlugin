@@ -15,8 +15,8 @@ import org.bukkit.entity.Player;
 
 @PlayerCommand(key = "werewolf.wish.command",
         descriptionKey = "werewolf.wish.command_description",
-        statePlayer = StatePlayer.ALIVE,
-        stateGame = StateGame.GAME)
+        statesPlayer = StatePlayer.ALIVE,
+        statesGame = StateGame.GAME)
 public class CommandWish implements ICommand {
 
     @Override

@@ -16,7 +16,7 @@ import java.util.UUID;
 @AdminCommand(key = "werewolf.commands.kill.command",
         descriptionKey = "werewolf.commands.kill.description",
         argNumbers = 1,
-        stateGame = {StateGame.START, StateGame.GAME })
+        statesGame = {StateGame.START, StateGame.GAME })
 public class CommandKill implements ICommand {
 
 

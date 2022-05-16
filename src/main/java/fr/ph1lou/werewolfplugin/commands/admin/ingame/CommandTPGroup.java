@@ -18,7 +18,7 @@ import java.util.UUID;
         descriptionKey = "werewolf.commands.admin.tp_group.description",
         argNumbers = {1, 2},
         moderatorAccess = true,
-        stateGame = StateGame.GAME)
+        statesGame = StateGame.GAME)
 public class CommandTPGroup implements ICommand {
 
     @Override

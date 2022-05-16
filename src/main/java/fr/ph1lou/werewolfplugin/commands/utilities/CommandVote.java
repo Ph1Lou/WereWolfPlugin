@@ -14,8 +14,8 @@ import java.util.UUID;
 
 @PlayerCommand(key = "werewolf.vote.command",
         descriptionKey = "",
-        statePlayer = StatePlayer.ALIVE,
-        stateGame = StateGame.GAME,
+        statesPlayer = StatePlayer.ALIVE,
+        statesGame = StateGame.GAME,
         argNumbers = 1)
 public class CommandVote implements ICommand {
 

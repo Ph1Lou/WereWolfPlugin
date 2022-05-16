@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @PlayerCommand(key = "werewolf.menu.rank.command",
         descriptionKey = "werewolf.menu.rank.description",
-        stateGame = StateGame.LOBBY,
+        statesGame = StateGame.LOBBY,
         argNumbers = 0)
 public class CommandRank implements ICommand {
 

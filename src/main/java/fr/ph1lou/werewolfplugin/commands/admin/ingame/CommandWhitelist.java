@@ -16,7 +16,7 @@ import java.util.UUID;
 @AdminCommand(key = "werewolf.commands.admin.whitelist.command",
         descriptionKey = "werewolf.commands.admin.whitelist.description",
         moderatorAccess = true,
-        stateGame = StateGame.LOBBY,
+        statesGame = StateGame.LOBBY,
         argNumbers = 1)
 public class CommandWhitelist implements ICommand {
 

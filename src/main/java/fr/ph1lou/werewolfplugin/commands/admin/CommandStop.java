@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 @AdminCommand(key = "werewolf.commands.admin.stop.command",
         descriptionKey = "werewolf.commands.admin.stop.description",
-        stateGame = {StateGame.START, StateGame.TRANSPORTATION, StateGame.GAME, StateGame.END},
+        statesGame = {StateGame.START, StateGame.TRANSPORTATION, StateGame.GAME, StateGame.END},
         argNumbers = 0)
 public class CommandStop implements ICommand {
 

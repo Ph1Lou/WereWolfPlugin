@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
         descriptionKey = "werewolf.commands.admin.group.description1",
         moderatorAccess = true,
         argNumbers = 0,
-        stateGame = StateGame.GAME)
+        statesGame = StateGame.GAME)
 public class CommandGroup implements ICommand {
 
     @Override

@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 @AdminCommand(key = "werewolf.commands.admin.generation.command",
         descriptionKey = "werewolf.commands.admin.generation.description",
-        stateGame = StateGame.LOBBY,
+        statesGame = StateGame.LOBBY,
         argNumbers = 0,
         moderatorAccess = true)
 public class CommandGeneration implements ICommand {

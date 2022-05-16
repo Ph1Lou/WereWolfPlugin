@@ -11,7 +11,7 @@ import java.io.IOException;
 
 @AdminCommand(key = "werewolf.commands.admin.change.command",
         descriptionKey = "werewolf.commands.admin.change.description",
-        stateGame = StateGame.LOBBY,
+        statesGame = StateGame.LOBBY,
         argNumbers = 0)
 public class CommandChange implements ICommand {
 

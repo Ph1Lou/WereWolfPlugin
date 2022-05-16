@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 @AdminCommand(key = "werewolf.commands.admin.preview.command",
         descriptionKey = "werewolf.commands.admin.preview.description",
-        stateGame = StateGame.LOBBY,
+        statesGame = StateGame.LOBBY,
         argNumbers = 0,
         moderatorAccess = true)
 public class CommandPreview implements ICommand {

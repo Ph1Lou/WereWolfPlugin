@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @AdminCommand(key = "werewolf.commands.admin.revive.command",
         descriptionKey = "werewolf.commands.admin.revive.description",
-        stateGame = StateGame.GAME,
+        statesGame = StateGame.GAME,
         argNumbers = 1)
 public class CommandRevive implements ICommand {
 

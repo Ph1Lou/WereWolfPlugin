@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 @AdminCommand(key = "werewolf.commands.admin.final_heal.command",
         descriptionKey = "werewolf.commands.admin.final_heal.description",
         argNumbers = 0,
-        stateGame = {StateGame.START, StateGame.GAME})
+        statesGame = {StateGame.START, StateGame.GAME})
 public class CommandFinalHeal implements ICommand {
 
     @Override

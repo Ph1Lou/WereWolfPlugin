@@ -18,8 +18,8 @@ import java.util.UUID;
 
 @PlayerCommand(key = "werewolf.commands.ww_chat.name",
         descriptionKey = "werewolf.commands.ww_chat.description",
-        statePlayer = StatePlayer.ALIVE,
-        stateGame = StateGame.GAME)
+        statesPlayer = StatePlayer.ALIVE,
+        statesGame = StateGame.GAME)
 public class CommandWereWolfChat implements ICommand {
 
     @Override

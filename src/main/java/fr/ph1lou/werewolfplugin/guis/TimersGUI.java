@@ -21,6 +21,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -167,26 +168,25 @@ public class TimersGUI implements InventoryProvider {
 
         main.getRegisterManager().getTimersRegister()
                 .stream()
-                .sorted((o1, o2) -> game.translate(o1.getMetaDatas().key())
-                        .compareToIgnoreCase(game.translate(o2.getMetaDatas().key())))
+                .sorted(Comparator.comparingInt(o -> game.getConfig().getTimerValue(o.getMetaDatas().key())))
                 .sorted((o1, o2) -> {
                     if(o1.getMetaDatas().decrement() && o2.getMetaDatas().decrement()){
                         return 0;
                     }
                     if(o1.getMetaDatas().decrement()){
-                        return 1;
+                        return -1;
                     }
                     if(o2.getMetaDatas().decrement()){
-                        return -1;
+                        return 1;
                     }
                     if(o1.getMetaDatas().decrementAfterRole() && o2.getMetaDatas().decrementAfterRole()){
                         return 0;
                     }
                     if(o1.getMetaDatas().decrementAfterRole()){
-                        return 1;
+                        return -1;
                     }
                     if(o2.getMetaDatas().decrementAfterRole()){
-                        return -1;
+                        return 1;
                     }
                     return 0;
                 })

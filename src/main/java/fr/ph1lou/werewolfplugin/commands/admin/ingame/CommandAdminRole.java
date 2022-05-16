@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @AdminCommand(key = "werewolf.commands.admin.role.command", 
         descriptionKey = "werewolf.commands.admin.role.description",
-        stateGame = {StateGame.GAME, StateGame.END},
+        statesGame = {StateGame.GAME, StateGame.END},
         argNumbers = {0, 1},
         moderatorAccess = true)
 public class CommandAdminRole implements ICommand {

@@ -18,8 +18,8 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 @PlayerCommand(key = "werewolf.random_events.rumors.command", descriptionKey = "",
-        stateGame = StateGame.GAME,
-        statePlayer = StatePlayer.ALIVE,
+        statesGame = StateGame.GAME,
+        statesPlayer = StatePlayer.ALIVE,
         autoCompletion = false)
 public class CommandRumor implements ICommand {
 

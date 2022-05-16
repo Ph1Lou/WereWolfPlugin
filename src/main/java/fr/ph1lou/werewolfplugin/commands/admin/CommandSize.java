@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 @AdminCommand(key = "werewolf.commands.admin.size.command",
         descriptionKey = "werewolf.commands.admin.size.description",
         argNumbers = 0,
-        stateGame = StateGame.LOBBY,
+        statesGame = StateGame.LOBBY,
         moderatorAccess = true)
 public class CommandSize implements ICommand {
 

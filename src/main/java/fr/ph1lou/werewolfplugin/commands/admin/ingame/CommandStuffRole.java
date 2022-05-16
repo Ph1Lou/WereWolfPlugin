@@ -17,7 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.UUID;
 
 @AdminCommand(key = "werewolf.commands.admin.loot_role.command", descriptionKey = "",
-        stateGame = {StateGame.LOBBY, StateGame.TRANSPORTATION, StateGame.START},
+        statesGame = {StateGame.LOBBY, StateGame.TRANSPORTATION, StateGame.START},
         argNumbers = 1,
         autoCompletion = false,
         moderatorAccess = true)

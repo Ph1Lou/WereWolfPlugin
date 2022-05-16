@@ -20,7 +20,7 @@ import java.text.DecimalFormat;
 
 @AdminCommand(key = "werewolf.commands.admin.start.command",
         descriptionKey = "werewolf.commands.admin.start.description",
-        stateGame = StateGame.LOBBY,
+        statesGame = StateGame.LOBBY,
         argNumbers = 0)
 public class CommandStart implements ICommand {
 
