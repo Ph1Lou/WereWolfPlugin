@@ -59,6 +59,8 @@ public class GlobalConfigs implements InventoryProvider {
 
         main.getRegisterManager().getConfigsRegister()
                 .stream()
+                .sorted((o1, o2) -> game.translate(o1.getMetaDatas().key())
+                        .compareToIgnoreCase(game.translate(o2.getMetaDatas().key())))
                 .filter(config1 -> (config1.getMetaDatas().appearInMenu())
                         || game.isDebug())
                 .forEach(configRegister -> items.add(getClickableItem(game, configRegister)));

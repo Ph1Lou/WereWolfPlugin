@@ -7,16 +7,13 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
-import fr.ph1lou.werewolfapi.annotations.Scenario;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
-import fr.ph1lou.werewolfapi.utils.Wrapper;
-import fr.ph1lou.werewolfplugin.Main;
-import fr.ph1lou.werewolfplugin.game.GameManager;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.game.IConfiguration;
-import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
+import fr.ph1lou.werewolfplugin.Main;
+import fr.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -61,47 +58,49 @@ public class ScenariosGUI implements InventoryProvider {
         Pagination pagination = contents.pagination();
         List<ClickableItem> items = new ArrayList<>();
 
-        for (Wrapper<ListenerManager, Scenario> scenarioRegister : main.getRegisterManager()
-                .getScenariosRegister()) {
+        main.getRegisterManager()
+                .getScenariosRegister()
+                .stream()
+                .sorted((o1, o2) -> game.translate(o1.getMetaDatas().key())
+                        .compareToIgnoreCase(game.translate(o2.getMetaDatas().key())))
+                .forEach(scenarioRegister -> {
+                    List<String> lore = new ArrayList<>();
+                    Arrays.stream(scenarioRegister.getMetaDatas().loreKey())
+                            .map(game::translate)
+                            .map(s -> Arrays.stream(s.split("\\n")).collect(Collectors.toList()))
+                            .forEach(lore::addAll);
+                    ItemStack itemStack;
 
-            List<String> lore = new ArrayList<>();
-            Arrays.stream(scenarioRegister.getMetaDatas().loreKey())
-                    .map(game::translate)
-                    .map(s -> Arrays.stream(s.split("\\n")).collect(Collectors.toList()))
-                    .forEach(lore::addAll);
-            ItemStack itemStack;
+                    if (config.isScenarioActive(scenarioRegister.getMetaDatas().key())) {
+                        lore.add(0, game.translate("werewolf.utils.enable"));
+                        itemStack = UniversalMaterial.GREEN_TERRACOTTA.getStack();
+                    } else {
+                        lore.add(0, game.translate("werewolf.utils.disable"));
+                        itemStack = UniversalMaterial.RED_TERRACOTTA.getStack();
+                    }
 
-            if (config.isScenarioActive(scenarioRegister.getMetaDatas().key())) {
-                lore.add(0, game.translate("werewolf.utils.enable"));
-                itemStack = UniversalMaterial.GREEN_TERRACOTTA.getStack();
-            } else {
-                lore.add(0, game.translate("werewolf.utils.disable"));
-                itemStack = UniversalMaterial.RED_TERRACOTTA.getStack();
-            }
+                    Optional<String> incompatible = Arrays.stream(scenarioRegister
+                                    .getMetaDatas().incompatibleScenarios())
+                            .filter(s -> game.getConfig().isScenarioActive(s))
+                            .map(game::translate)
+                            .findFirst();
 
-            Optional<String> incompatible = Arrays.stream(scenarioRegister
-                    .getMetaDatas().incompatibleScenarios())
-                    .filter(s -> game.getConfig().isScenarioActive(s))
-                    .map(game::translate)
-                    .findFirst();
-
-            incompatible
-                    .ifPresent(scenario -> lore.add(game.translate("werewolf.menu.scenarios.incompatible",
-                            Formatter.format("&scenario&",scenario))));
+                    incompatible
+                            .ifPresent(scenario -> lore.add(game.translate("werewolf.menu.scenarios.incompatible",
+                                    Formatter.format("&scenario&",scenario))));
 
 
-            items.add(ClickableItem.of((new ItemBuilder(itemStack)
-                    .setDisplayName(game.translate(scenarioRegister.getMetaDatas().key()))
-                    .setLore(lore).build()), e -> {
+                    items.add(ClickableItem.of((new ItemBuilder(itemStack)
+                            .setDisplayName(game.translate(scenarioRegister.getMetaDatas().key()))
+                            .setLore(lore).build()), e -> {
 
-                if (!incompatible.isPresent() || config.isScenarioActive(scenarioRegister.getMetaDatas().key())) {
-                    config.switchScenarioValue(scenarioRegister.getMetaDatas().key());
-                    scenarioRegister.getObject().ifPresent(listenerManager -> listenerManager
-                            .register(config.isScenarioActive(scenarioRegister.getMetaDatas().key())));
-                }
-            }));
-        }
-
+                        if (!incompatible.isPresent() || config.isScenarioActive(scenarioRegister.getMetaDatas().key())) {
+                            config.switchScenarioValue(scenarioRegister.getMetaDatas().key());
+                            scenarioRegister.getObject().ifPresent(listenerManager -> listenerManager
+                                    .register(config.isScenarioActive(scenarioRegister.getMetaDatas().key())));
+                        }
+                    }));
+                });
 
         if (items.size() > 45) {
             pagination.setItems(items.toArray(new ClickableItem[0]));

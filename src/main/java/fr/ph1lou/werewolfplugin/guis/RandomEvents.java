@@ -59,6 +59,9 @@ public class RandomEvents implements InventoryProvider {
         List<ClickableItem> items = new ArrayList<>();
 
         main.getRegisterManager().getRandomEventsRegister()
+                .stream()
+                .sorted((o1, o2) -> game.translate(o1.getMetaDatas().key())
+                        .compareToIgnoreCase(game.translate(o2.getMetaDatas().key())))
                 .forEach(randomEventRegister -> {
                     String key = randomEventRegister.getMetaDatas().key();
                     ItemStack itemStack = getItemStack(game, randomEventRegister);

@@ -166,6 +166,30 @@ public class TimersGUI implements InventoryProvider {
 
 
         main.getRegisterManager().getTimersRegister()
+                .stream()
+                .sorted((o1, o2) -> game.translate(o1.getMetaDatas().key())
+                        .compareToIgnoreCase(game.translate(o2.getMetaDatas().key())))
+                .sorted((o1, o2) -> {
+                    if(o1.getMetaDatas().decrement() && o2.getMetaDatas().decrement()){
+                        return 0;
+                    }
+                    if(o1.getMetaDatas().decrement()){
+                        return 1;
+                    }
+                    if(o2.getMetaDatas().decrement()){
+                        return -1;
+                    }
+                    if(o1.getMetaDatas().decrementAfterRole() && o2.getMetaDatas().decrementAfterRole()){
+                        return 0;
+                    }
+                    if(o1.getMetaDatas().decrementAfterRole()){
+                        return 1;
+                    }
+                    if(o2.getMetaDatas().decrementAfterRole()){
+                        return -1;
+                    }
+                    return 0;
+                })
                 .forEach(timerRegister -> {
 
             List<String> lore = new ArrayList<>();

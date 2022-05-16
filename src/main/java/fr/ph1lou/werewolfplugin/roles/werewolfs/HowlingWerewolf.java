@@ -30,9 +30,9 @@ import java.util.stream.Collectors;
 
 
 @Role(key = RoleBase.HOWLING_WEREWOLF, category = Category.WEREWOLF,
-        attributes = {RoleAttribute.WEREWOLF},
-        configValues = {@IntValue(key = HowlingWerewolf.DISTANCE,
-                defaultValue = 80, meetUpValue = 80, step = 2, item = UniversalMaterial.LIGHT_GRAY_WOOL)})
+        attributes = RoleAttribute.WEREWOLF,
+        configValues = @IntValue(key = HowlingWerewolf.DISTANCE,
+                defaultValue = 80, meetUpValue = 80, step = 5, item = UniversalMaterial.LIGHT_GRAY_WOOL))
 public class HowlingWerewolf extends RoleWereWolf {
 
     public static final String DISTANCE = "werewolf.role.howling_werewolf.distance";

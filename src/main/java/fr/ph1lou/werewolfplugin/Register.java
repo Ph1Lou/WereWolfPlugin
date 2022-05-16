@@ -32,7 +32,7 @@ import java.util.Set;
 @SuppressWarnings({"unchecked"})
 public class Register implements IRegisterManager {
 
-    private final Set<Wrapper<JavaPlugin, ModuleWerewolf>> addons = new HashSet<>();
+    private final Set<Wrapper<JavaPlugin, ModuleWerewolf>> modules = new HashSet<>();
 
     private final Set<Wrapper<IRole, Role>> roles = new HashSet<>();
     private final Set<Wrapper<ListenerManager, Scenario>> scenarios = new HashSet<>();
@@ -60,7 +60,7 @@ public class Register implements IRegisterManager {
         for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
             ModuleWerewolf moduleWerewolf = plugin.getClass().getAnnotation(ModuleWerewolf.class);
             if(moduleWerewolf != null){
-                this.addons.add(new Wrapper<>(JavaPlugin.class,
+                this.modules.add(new Wrapper<>(JavaPlugin.class,
                         moduleWerewolf,
                         moduleWerewolf.key(),
                         (JavaPlugin)plugin));
@@ -303,7 +303,7 @@ public class Register implements IRegisterManager {
 
     @Override
     public Set<Wrapper<JavaPlugin, ModuleWerewolf>> getModulesRegister() {
-        return this.addons;
+        return this.modules;
     }
 
     @Override
