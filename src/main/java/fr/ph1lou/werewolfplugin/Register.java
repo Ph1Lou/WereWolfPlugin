@@ -18,6 +18,8 @@ import fr.ph1lou.werewolfapi.registers.IRegisterManager;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.utils.ReflectionUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -55,11 +57,17 @@ public class Register implements IRegisterManager {
     public Register(Main main){
         this.main = main;
         INSTANCE = this;
-        this.addons.add(new Wrapper<>(JavaPlugin.class,
-                main.getClass().getAnnotation(ModuleWerewolf.class),
-                Main.KEY,
-                main));
-        this.register("fr.ph1lou.werewolfplugin", main.getClass().getAnnotation(ModuleWerewolf.class));
+        for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
+            ModuleWerewolf moduleWerewolf = plugin.getClass().getAnnotation(ModuleWerewolf.class);
+            if(moduleWerewolf != null){
+                this.addons.add(new Wrapper<>(JavaPlugin.class,
+                        moduleWerewolf,
+                        moduleWerewolf.key(),
+                        (JavaPlugin)plugin));
+                this.register(plugin.getClass().getPackage().getName(),
+                        moduleWerewolf);
+            }
+        }
     }
 
 

@@ -85,7 +85,7 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
 
     @Override
     public void onLoad() {
-        new Replacer();
+        Replacer.replaceBiomes();
     }
 
     @Override

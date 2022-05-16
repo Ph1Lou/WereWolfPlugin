@@ -70,7 +70,7 @@ public class Twin extends RoleVillage {
                 .setEffects(game.translate("werewolf.role.twin.effects",Formatter.number(game.getConfig().getValue(DISTANCE))))
                 .setPower(this.twinList == null ?
                         game.translate("werewolf.role.twin.timer", Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.TWIN_DURATION))))
-                        : game.translate("werewolf.role.twin.twin_list", Formatter.format("&role&", this.twinList
+                        : game.translate("werewolf.role.twin.twin_list", Formatter.format("&list&", this.twinList
                                 .stream()
                                 .map(IPlayerWW::getName)
                                 .collect(Collectors.joining(", "))))

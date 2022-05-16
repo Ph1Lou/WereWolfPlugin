@@ -19,6 +19,7 @@ import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Main;
+import fr.ph1lou.werewolfplugin.Register;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -201,7 +202,11 @@ public class Roles implements InventoryProvider {
                         .compareToIgnoreCase(game.translate(o2.getMetaDatas().key())))
                 .forEach(roleRegister -> {
 
-                    if (roleRegister.getMetaDatas().category() == this.category) {
+                    Optional<String> addonKey = Register.get().getModuleKey(roleRegister.getMetaDatas().key());
+                    if (roleRegister.getMetaDatas().category() == this.category ||
+                            (addonKey.isPresent() &&
+                                    !addonKey.get().equals(Main.KEY) &&
+                                    this.category == Category.ADDONS)) {
 
                         String key = roleRegister.getMetaDatas().key();
                         AtomicBoolean unRemovable = new AtomicBoolean(false);
