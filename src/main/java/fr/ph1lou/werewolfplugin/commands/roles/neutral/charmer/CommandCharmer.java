@@ -1,9 +1,9 @@
 package fr.ph1lou.werewolfplugin.commands.roles.neutral.charmer;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
-import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.charmer.CharmerEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -24,15 +24,12 @@ import java.util.UUID;
         roleKeys = RoleBase.CHARMER,
         requiredPower = true,
         argNumbers = 1)
-public class CommandCharmer implements ICommand {
+public class CommandCharmer implements ICommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, Player player, String[] args) {
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
 
-        UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
-
-        if (playerWW == null) return;
+        UUID uuid = playerWW.getUUID();
 
         IRole charmer = playerWW.getRole();
 

@@ -207,7 +207,7 @@ public class Rival extends RoleNeutral implements IPower {
         if (!lover.getLovers().contains(playerWW1) || !lover.getLovers().contains(playerWW2)) return;
 
 
-        int health = 5;
+        double health = 5;
         if (this.getPlayerWW().getMaxHealth() < 10) { //si le joueur a moins de coeurs ont réduit le temps de récupération de coeurs
             health = this.getPlayerWW().getMaxHealth() / 2 - 1; //-1 car le joueur aura un coeur minimum quand il prend les votes
         }

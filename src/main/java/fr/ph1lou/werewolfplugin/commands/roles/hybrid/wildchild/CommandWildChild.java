@@ -1,9 +1,9 @@
 package fr.ph1lou.werewolfplugin.commands.roles.hybrid.wildchild;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
-import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.wild_child.ModelEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -21,15 +21,12 @@ import java.util.UUID;
         roleKeys = RoleBase.WILD_CHILD,
         argNumbers = 1,
         requiredPower = true)
-public class CommandWildChild implements ICommand {
+public class CommandWildChild implements ICommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, Player player, String[] args) {
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
 
-        UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
-
-        if (playerWW == null) return;
+        UUID uuid = playerWW.getUUID();
 
         IRole wildChild = playerWW.getRole();
         Player playerArg = Bukkit.getPlayer(args[0]);

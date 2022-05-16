@@ -1,9 +1,9 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.priestess;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
-import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.priestess.PriestessEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -22,15 +22,10 @@ import java.util.UUID;
         roleKeys = RoleBase.PRIESTESS,
         requiredPower = true,
         argNumbers = 1)
-public class CommandPriestess implements ICommand {
+public class CommandPriestess implements ICommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, Player player, String[] args) {
-
-        UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
-
-        if (playerWW == null) return;
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
 
         IRole priestess = playerWW.getRole();
 
@@ -48,15 +43,15 @@ public class CommandPriestess implements ICommand {
             return;
         }
 
-        if (!player.getWorld().equals(playerArg.getWorld()) ||
-                player.getLocation().distance(playerArg.getLocation()) >
+        if (playerWW.getLocation().getWorld() != playerArg.getWorld() ||
+                playerWW.getLocation().distance(playerArg.getLocation()) >
                         game.getConfig().getValue(Priestess.DISTANCE)) {
             playerWW.sendMessageWithKey(Prefix.RED , "werewolf.role.priestess.distance",
                     Formatter.number(game.getConfig().getValue(Priestess.DISTANCE)));
             return;
         }
 
-        if (player.getHealth() < 5) {
+        if (playerWW.getHealth() < 5) {
             playerWW.sendMessageWithKey(Prefix.RED , "werewolf.role.seer.not_enough_life");
         } else {
             IRole role1 = playerWW1.getRole();

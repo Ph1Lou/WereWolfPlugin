@@ -1,9 +1,9 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.devoted_servant;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
-import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -11,7 +11,6 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -20,15 +19,12 @@ import java.util.UUID;
         requiredPower = true,
         autoCompletion = false,
         argNumbers = 1)
-public class CommandDevotedServant implements ICommand {
+public class CommandDevotedServant implements ICommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, Player player, String[] args) {
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
 
-        UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
-
-        if (playerWW == null) return;
+        UUID uuid = playerWW.getUUID();
 
         IRole devotedServant = playerWW.getRole();
 

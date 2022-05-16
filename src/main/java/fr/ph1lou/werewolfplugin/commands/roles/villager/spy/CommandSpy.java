@@ -1,9 +1,9 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.spy;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
-import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.spy.SpyChoseEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -21,15 +21,10 @@ import java.util.UUID;
         roleKeys = RoleBase.SPY,
         argNumbers = 1,
         requiredPower = true)
-public class CommandSpy implements ICommand {
+public class CommandSpy implements ICommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, Player player, String[] args) {
-
-        UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
-
-        if (playerWW == null) return;
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
 
         IRole spy = playerWW.getRole();
 

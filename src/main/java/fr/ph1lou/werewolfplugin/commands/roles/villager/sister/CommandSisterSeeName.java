@@ -1,16 +1,15 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.sister;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
-import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.events.roles.sister.SisterSeeNameEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -18,15 +17,12 @@ import java.util.UUID;
         roleKeys = RoleBase.SISTER,
         argNumbers = 1,
         autoCompletion = false)
-public class CommandSisterSeeName implements ICommand {
+public class CommandSisterSeeName implements ICommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, Player player, String[] args) {
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
 
-        UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
         IPlayerWW killerWW = args[0].equals("pve") ? null : game.getPlayerWW(UUID.fromString(args[0])).orElse(null);
-        if (playerWW == null) return;
 
         IAffectedPlayers affectedPlayers = (IAffectedPlayers) playerWW.getRole();
 

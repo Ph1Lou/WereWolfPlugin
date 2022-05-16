@@ -1,9 +1,9 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.info.fox;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
-import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.fox.BeginSniffEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -25,15 +25,12 @@ import java.util.UUID;
         roleKeys = RoleBase.FOX,
         requiredPower = true,
         argNumbers = 1)
-public class CommandFox implements ICommand {
+public class CommandFox implements ICommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, Player player, String[] args) {
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
 
-        UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
-
-        if (playerWW == null) return;
+        UUID uuid = playerWW.getUUID();
 
         IRole fox = playerWW.getRole();
 
@@ -61,10 +58,10 @@ public class CommandFox implements ICommand {
             return;
         }
 
-        Location location = player.getLocation();
+        Location location = playerWW.getLocation();
         Location locationTarget = playerArg.getLocation();
 
-        if (player.getWorld().equals(playerArg.getWorld())) {
+        if (location.getWorld() == playerArg.getWorld()) {
             if (location.distance(locationTarget) > game.getConfig().getValue(Fox.DISTANCE)) {
                 playerWW.sendMessageWithKey(Prefix.RED , "werewolf.role.fox.not_enough_near");
                 return;

@@ -4,6 +4,7 @@ package fr.ph1lou.werewolfplugin.commands;
 import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.commands.ICommand;
+import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -84,43 +85,35 @@ public class Command implements TabExecutor {
 
     }
 
-    private String checkCommands(WereWolfAPI game, Player player, Wrapper<ICommand, RoleCommand> wrapper, String[] args) {
+    private String checkCommands(WereWolfAPI game, Player player, Wrapper<ICommandRole, RoleCommand> wrapper, String[] args) {
 
         UUID uuid = player.getUniqueId();
         RoleCommand command = wrapper.getMetaDatas();
         IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
 
+        if (playerWW == null) {
+            return game.translate(Prefix.RED , "werewolf.check.not_in_game");
+        }
+
         if (command.roleKeys().length > 0) {
-            if (playerWW == null) {
-                return game.translate(Prefix.RED , "werewolf.check.not_in_game");
-            }
             if (Arrays.stream(command.roleKeys()).noneMatch(s -> s.equals(playerWW.getRole().getKey()))) {
                 return "ignored";
             }
         }
 
         if (command.statesPlayer().length > 0) {
-            if (playerWW == null) {
-                return game.translate(Prefix.RED , "werewolf.check.not_in_game");
-            }
             if(Arrays.stream(command.statesPlayer()).noneMatch(statePlayer -> statePlayer == playerWW.getState())){
                 return game.translate(Prefix.RED , "werewolf.check.state_player");
             }
         }
 
         if (command.requiredPower()) {
-            if (playerWW == null) {
-                return game.translate(Prefix.RED , "werewolf.check.not_in_game");
-            }
             if(!(playerWW.getRole() instanceof IPower) || !((IPower) playerWW.getRole()).hasPower()){
                 return game.translate(Prefix.RED , "werewolf.check.power");
             }
         }
 
         if(command.requiredAbilityEnabled()){
-            if (playerWW == null) {
-                return game.translate(Prefix.RED , "werewolf.check.not_in_game");
-            }
             if (!playerWW.getRole().isAbilityEnabled()) {
                 return game.translate(Prefix.RED , "werewolf.check.ability_disabled");
             }
@@ -138,7 +131,7 @@ public class Command implements TabExecutor {
                         Formatter.number(Arrays.stream(command.argNumbers()).min().orElse(0)));
             }
         }
-        wrapper.getObject().ifPresent(iCommand -> iCommand.execute(game,player, args));
+        wrapper.getObject().ifPresent(iCommand -> iCommand.execute(game,playerWW, args));
         return "";
     }
 

@@ -1,7 +1,7 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.guard;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
-import fr.ph1lou.werewolfapi.commands.ICommand;
+import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -23,15 +23,10 @@ import java.util.UUID;
         roleKeys = RoleBase.GUARD,
         requiredPower = true,
         argNumbers = 1)
-public class CommandGuard implements ICommand {
+public class CommandGuard implements ICommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, Player player, String[] args) {
-
-        UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
-
-        if (playerWW == null) return;
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
 
         Guard guard = (Guard) playerWW.getRole();
 

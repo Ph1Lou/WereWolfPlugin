@@ -1,9 +1,9 @@
 package fr.ph1lou.werewolfplugin.commands.roles.neutral.thug;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
-import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.roles.thug.ThugEvent;
@@ -22,15 +22,10 @@ import java.util.UUID;
         roleKeys = RoleBase.THUG,
         argNumbers = 1,
         requiredPower = true)
-public class CommandThug implements ICommand {
+public class CommandThug implements ICommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, Player player, String[] args) {
-
-        UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
-
-        if (playerWW == null) return;
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
 
         IRole thug = playerWW.getRole();
 

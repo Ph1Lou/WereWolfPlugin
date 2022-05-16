@@ -1,9 +1,9 @@
 package fr.ph1lou.werewolfplugin.commands.roles.neutral.willothewisp;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
-import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.events.roles.will_o_the_wisp.WillOTheWispTeleportEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
@@ -17,20 +17,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import java.util.UUID;
+import java.util.Objects;
 
 @RoleCommand(key = "werewolf.role.will_o_the_wisp.command",
         roleKeys = RoleBase.WILL_O_THE_WISP,
         argNumbers = 0)
-public class CommandWillOTheWisp implements ICommand {
+public class CommandWillOTheWisp implements ICommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, Player player, String[] args) {
-
-        UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
-
-        if (playerWW == null) return;
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
 
         IRole willOTheWisp = playerWW.getRole();
 
@@ -54,12 +49,12 @@ public class CommandWillOTheWisp implements ICommand {
             playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
             return;
         }
-
-        Vector vector = player.getEyeLocation().getDirection();
+        Player player;
+        Vector vector = playerWW.getEyeLocation().getDirection();
         vector
                 .normalize()
                 .multiply(game.getConfig().getValue(WillOTheWisp.DISTANCE))
-                .setY(player.getWorld().getHighestBlockYAt(player.getLocation()) - player.getLocation().getBlockY() + 10);
+                .setY(Objects.requireNonNull(playerWW.getLocation().getWorld()).getHighestBlockYAt(playerWW.getLocation()) - playerWW.getLocation().getBlockY() + 10);
 
         playerWW.teleport(playerWW.getLocation().add(vector));
         playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.WITHER,

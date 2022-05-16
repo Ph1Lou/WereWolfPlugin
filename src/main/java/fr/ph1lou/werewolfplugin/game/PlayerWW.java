@@ -46,7 +46,7 @@ public class PlayerWW implements IPlayerWW {
     private final Map<PotionModifier,Integer> potionModifiers = new HashMap<>();
     private final List<MessageAction> disconnectedMessages = new ArrayList<>();
     private final List<ItemStack> decoItems = new ArrayList<>();
-    private int maxHealth = 20;
+    private double maxHealth = 20;
     private Location disconnectedLocation = null;
     private int disconnectedChangeHealth = 0;
     @Nullable
@@ -92,7 +92,7 @@ public class PlayerWW implements IPlayerWW {
     }
 
     @Override
-    public void addPlayerHealth(int health) {
+    public void addPlayerHealth(double health) {
 
         Player player = Bukkit.getPlayer(this.uuid);
 
@@ -105,7 +105,7 @@ public class PlayerWW implements IPlayerWW {
     }
 
     @Override
-    public void removePlayerHealth(int health) {
+    public void removePlayerHealth(double health) {
 
         Player player = Bukkit.getPlayer(this.uuid);
 
@@ -119,7 +119,7 @@ public class PlayerWW implements IPlayerWW {
     }
 
     @Override
-    public void addPlayerMaxHealth(int health) {
+    public void addPlayerMaxHealth(double health) {
 
         Player player = Bukkit.getPlayer(uuid);
 
@@ -134,7 +134,7 @@ public class PlayerWW implements IPlayerWW {
     }
 
     @Override
-    public void removePlayerMaxHealth(int health) {
+    public void removePlayerMaxHealth(double health) {
 
         Player player = Bukkit.getPlayer(uuid);
 
@@ -554,8 +554,19 @@ public class PlayerWW implements IPlayerWW {
     }
 
     @Override
-    public int getMaxHealth() {
+    public double getMaxHealth() {
         return maxHealth;
+    }
+
+    @Override
+    public double getHealth() {
+
+        Player player = Bukkit.getPlayer(uuid);
+
+        if (player != null) {
+            return player.getHealth();
+        }
+        return 20d;
     }
 
     @Override
@@ -566,6 +577,13 @@ public class PlayerWW implements IPlayerWW {
         if (player == null) return disconnectedLocation;
 
         return player.getLocation().clone();
+    }
+
+    @Override
+    public @NotNull Location getEyeLocation() {
+        Location loc = this.getLocation();
+        loc.setY(loc.getY() + 1.8);
+        return loc;
     }
 
     @Override

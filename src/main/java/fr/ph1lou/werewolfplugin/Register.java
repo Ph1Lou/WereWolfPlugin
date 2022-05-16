@@ -12,6 +12,7 @@ import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.annotations.Scenario;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.commands.ICommand;
+import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
 import fr.ph1lou.werewolfapi.lovers.ILover;
 import fr.ph1lou.werewolfapi.registers.IRegisterManager;
@@ -38,7 +39,7 @@ public class Register implements IRegisterManager {
     private final Set<Wrapper<ListenerManager, Scenario>> scenarios = new HashSet<>();
     private final Set<Wrapper<ListenerManager, Event>> events = new HashSet<>();
     private final Set<Wrapper<ICommand, PlayerCommand>> commands = new HashSet<>();
-    private final Set<Wrapper<ICommand, RoleCommand>> roleCommands = new HashSet<>();
+    private final Set<Wrapper<ICommandRole, RoleCommand>> roleCommands = new HashSet<>();
     private final Set<Wrapper<ICommand, AdminCommand>> adminCommands = new HashSet<>();
 
     private final Set<Wrapper<?, Configuration>> configurations = new HashSet<>();
@@ -222,15 +223,15 @@ public class Register implements IRegisterManager {
                             }
                         }
                         else if(clazz.getAnnotation(RoleCommand.class) != null){
-                            if(ICommand.class.isAssignableFrom(clazz)){
+                            if(ICommandRole.class.isAssignableFrom(clazz)){
 
                                 RoleCommand roleCommand = clazz.getAnnotation(RoleCommand.class);
 
                                 if(roleCommand.key().startsWith(prefix)){
-                                    this.roleCommands.add(new Wrapper<>((Class<ICommand>)clazz,
+                                    this.roleCommands.add(new Wrapper<>((Class<ICommandRole>)clazz,
                                             roleCommand,
                                             addon.key(),
-                                            this.instantiate((Class<ICommand>)clazz)));
+                                            this.instantiate((Class<ICommandRole>)clazz)));
                                 }
                                 else {
                                     Bukkit.getLogger().warning(String.format(
@@ -403,7 +404,7 @@ public class Register implements IRegisterManager {
     }
 
     @Override
-    public Set<Wrapper<ICommand, RoleCommand>> getRoleCommandsRegister() {
+    public Set<Wrapper<ICommandRole, RoleCommand>> getRoleCommandsRegister() {
         return this.roleCommands;
     }
 

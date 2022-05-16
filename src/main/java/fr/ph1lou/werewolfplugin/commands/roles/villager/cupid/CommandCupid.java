@@ -2,10 +2,10 @@ package fr.ph1lou.werewolfplugin.commands.roles.villager.cupid;
 
 import com.google.common.collect.Sets;
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
-import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.lovers.CupidLoversEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -23,15 +23,12 @@ import java.util.UUID;
         roleKeys = RoleBase.CUPID,
         requiredPower = true,
         argNumbers = 2)
-public class CommandCupid implements ICommand {
+public class CommandCupid implements ICommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, Player player, String[] args) {
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
 
-        UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
-
-        if (playerWW == null) return;
+        UUID uuid = playerWW.getUUID();
 
         IRole cupid = playerWW.getRole();
 

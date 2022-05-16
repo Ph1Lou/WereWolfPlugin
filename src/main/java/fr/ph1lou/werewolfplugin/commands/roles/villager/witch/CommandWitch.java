@@ -1,10 +1,10 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.witch;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
-import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.witch.WitchResurrectionEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -14,7 +14,6 @@ import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -23,15 +22,12 @@ import java.util.UUID;
         argNumbers = 1,
         requiredPower = true,
         autoCompletion = false)
-public class CommandWitch implements ICommand {
+public class CommandWitch implements ICommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, Player player, String[] args) {
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
 
-        UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
-
-        if (playerWW == null) return;
+        UUID uuid = playerWW.getUUID();
 
         IRole witch = playerWW.getRole();
 

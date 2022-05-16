@@ -1,10 +1,11 @@
 package fr.ph1lou.werewolfplugin.commands.roles.lovers;
 
-import fr.ph1lou.werewolfapi.annotations.RoleCommand;
+import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
 import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Sound;
+import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.lovers.DonEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -21,8 +22,10 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-@RoleCommand(key = "werewolf.role.lover.command", roleKeys = {},
-        argNumbers = {1, 2})
+@PlayerCommand(key = "werewolf.role.lover.command", descriptionKey = "",
+        argNumbers = {1, 2},
+        statesGame = StateGame.GAME,
+        statesPlayer = StatePlayer.ALIVE)
 public class CommandLovers implements ICommand {
 
     @Override

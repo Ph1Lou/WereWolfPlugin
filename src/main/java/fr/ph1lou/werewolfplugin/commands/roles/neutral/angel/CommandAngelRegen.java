@@ -1,10 +1,10 @@
 package fr.ph1lou.werewolfplugin.commands.roles.neutral.angel;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
-import fr.ph1lou.werewolfapi.commands.ICommand;
-import fr.ph1lou.werewolfapi.enums.AngelForm;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.commands.ICommandRole;
+import fr.ph1lou.werewolfapi.enums.AngelForm;
 import fr.ph1lou.werewolfapi.events.roles.angel.RegenerationEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
@@ -17,25 +17,20 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.UUID;
-
 @RoleCommand(key = "werewolf.role.guardian_angel.command",
         roleKeys = {RoleBase.ANGEL, RoleBase.GUARDIAN_ANGEL},
         argNumbers = 0)
-public class CommandAngelRegen implements ICommand {
+public class CommandAngelRegen implements ICommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, Player player, String[] args) {
-
-        UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
 
         if (playerWW == null) return;
 
         Angel guardianAngel = (Angel) playerWW.getRole();
 
         if (!guardianAngel.isChoice(AngelForm.GUARDIAN_ANGEL)) {
-            player.sendMessage(game.translate(Prefix.RED , "werewolf.check.state_player"));
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.state_player");
             return;
         }
 

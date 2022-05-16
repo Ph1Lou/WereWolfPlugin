@@ -1,10 +1,10 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.citizen;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.enums.VoteStatus;
 import fr.ph1lou.werewolfapi.events.roles.citizen.CitizenSeeVoteEvent;
 import fr.ph1lou.werewolfapi.events.roles.citizen.CitizenSeeWerewolfVoteEvent;
@@ -13,7 +13,6 @@ import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfplugin.roles.villagers.Citizen;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -21,15 +20,11 @@ import java.util.UUID;
         roleKeys = RoleBase.CITIZEN,
         argNumbers = 0,
         autoCompletion = false)
-public class CommandCitizenSeeVote implements ICommand
+public class CommandCitizenSeeVote implements ICommandRole
 {
     @Override
-    public void execute(WereWolfAPI game, Player player, String[] args) {
-        UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
-        if (playerWW == null) {
-            return;
-        }
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
+
         Citizen citizen = (Citizen)playerWW.getRole();
         if (!game.getConfig().isConfigActive(ConfigBase.NEW_VOTE)) {
             this.oldVote(game, playerWW, citizen);

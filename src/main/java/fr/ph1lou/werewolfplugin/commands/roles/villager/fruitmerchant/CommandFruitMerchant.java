@@ -2,8 +2,8 @@ package fr.ph1lou.werewolfplugin.commands.roles.villager.fruitmerchant;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -19,43 +19,36 @@ import fr.ph1lou.werewolfplugin.roles.villagers.FruitMerchant;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RoleCommand(key = "werewolf.role.fruit_merchant.command",
         roleKeys = RoleBase.FRUIT_MERCHANT,
         requiredPower = true,
         argNumbers = 0)
-public class CommandFruitMerchant implements ICommand {
+public class CommandFruitMerchant implements ICommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, Player player, String[] args) {
-
-        UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
-
-        if (playerWW == null) return;
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
 
         FruitMerchant fruitMerchant = (FruitMerchant) playerWW.getRole();
 
         Set<IPlayerWW> players = Bukkit.getOnlinePlayers()
                 .stream()
                 .map(Entity::getUniqueId)
-                .filter(uuid1 -> !uuid1.equals(player.getUniqueId()))
+                .filter(uuid1 -> !uuid1.equals(playerWW.getUUID()))
                 .map(game::getPlayerWW)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                 .filter(iPlayerWW -> {
                     Location location = iPlayerWW.getLocation();
-                    return location.getWorld() == player.getWorld() &&
-                            location.distance(player.getLocation()) <
+                    return location.getWorld() == playerWW.getLocation().getWorld() &&
+                            location.distance(playerWW.getLocation()) <
                                     game.getConfig().getValue(FruitMerchant.DISTANCE);
                 })
                 .collect(Collectors.toSet());

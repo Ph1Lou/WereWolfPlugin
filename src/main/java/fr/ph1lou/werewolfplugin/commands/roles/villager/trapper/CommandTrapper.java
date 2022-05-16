@@ -1,9 +1,9 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.trapper;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
-import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.trapper.TrackEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -21,21 +21,18 @@ import java.util.UUID;
         roleKeys = RoleBase.TRAPPER,
         requiredPower = true,
         argNumbers = 1)
-public class CommandTrapper implements ICommand {
+public class CommandTrapper implements ICommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, Player player, String[] args) {
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
 
-        UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
-
-        if (playerWW == null) return;
+        UUID uuid = playerWW.getUUID();
 
         IRole trapper = playerWW.getRole();
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            player.sendMessage(game.translate(Prefix.RED , "werewolf.check.offline_player"));
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.offline_player");
             return;
         }
 
@@ -43,17 +40,17 @@ public class CommandTrapper implements ICommand {
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (uuid.equals(argUUID)) {
-            player.sendMessage(game.translate(Prefix.RED , "werewolf.check.not_yourself"));
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.not_yourself");
             return;
         }
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            player.sendMessage(game.translate(Prefix.RED , "werewolf.check.player_not_found"));
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.player_not_found");
             return;
         }
 
         if (((IAffectedPlayers) trapper).getAffectedPlayers().contains(playerWW1)) {
-            player.sendMessage(game.translate(Prefix.RED , "werewolf.check.already_get_power"));
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.already_get_power");
             return;
         }
 
@@ -62,7 +59,7 @@ public class CommandTrapper implements ICommand {
         Bukkit.getPluginManager().callEvent(trackEvent);
 
         if (trackEvent.isCancelled()) {
-            player.sendMessage(game.translate(Prefix.RED , "werewolf.check.cancel"));
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
             return;
         }
 
@@ -70,7 +67,7 @@ public class CommandTrapper implements ICommand {
         ((IAffectedPlayers) trapper).addAffectedPlayer(playerWW1);
 
         playerArg.sendMessage(game.translate(Prefix.YELLOW , "werewolf.role.trapper.get_track"));
-        player.sendMessage(game.translate(Prefix.YELLOW , "werewolf.role.trapper.tracking_perform",
-                Formatter.player(playerArg.getName())));
+        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.trapper.tracking_perform",
+                Formatter.player(playerArg.getName()));
     }
 }

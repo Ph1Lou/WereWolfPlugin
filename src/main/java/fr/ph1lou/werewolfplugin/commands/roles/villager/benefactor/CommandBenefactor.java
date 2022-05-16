@@ -1,9 +1,9 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.benefactor;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
-import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.benefactor.BenefactorGiveHeartEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -17,13 +17,10 @@ import org.bukkit.entity.Player;
 @RoleCommand(key = "werewolf.role.benefactor.command",
         roleKeys = RoleBase.BENEFACTOR,
         argNumbers = 1)
-public class CommandBenefactor implements ICommand {
+public class CommandBenefactor implements ICommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, Player player, String[] args) {
-        IPlayerWW playerWW = game.getPlayerWW(player.getUniqueId()).orElse(null);
-
-        if(playerWW == null) return;
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
 
         IRole benefactor = playerWW.getRole();
 

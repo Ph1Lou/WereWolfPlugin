@@ -1,9 +1,9 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.hunter;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
-import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.hunter.HunterShotEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -20,16 +20,10 @@ import java.util.UUID;
         requiredPower = true,
         statesPlayer = StatePlayer.DEATH,
         argNumbers = 1)
-public class CommandHunter implements ICommand {
+public class CommandHunter implements ICommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, Player player, String[] args) {
-        UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
-
-        if (playerWW == null) {
-            return;
-        }
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
 
         Player playerArg = Bukkit.getPlayer(args[0]);
 

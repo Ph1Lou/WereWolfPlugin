@@ -1,13 +1,13 @@
-package fr.ph1lou.werewolfplugin.commands.roles.werewolf;
+package fr.ph1lou.werewolfplugin.commands.roles.werewolf.tenebrous;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
-import fr.ph1lou.werewolfapi.commands.ICommand;
-import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.commands.ICommandRole;
+import fr.ph1lou.werewolfapi.enums.Aura;
+import fr.ph1lou.werewolfapi.enums.Day;
+import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.tenebrous_werewolf.TenebrousEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.AuraModifier;
@@ -16,26 +16,19 @@ import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfplugin.roles.werewolfs.TenebrousWerewolf;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RoleCommand(key = "werewolf.role.tenebrous_werewolf.command",
         roleKeys = RoleBase.TENEBROUS_WEREWOLF,
         requiredPower = true,
         argNumbers = 0)
-public class CommandTenebrous implements ICommand {
+public class CommandTenebrous implements ICommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, Player player, String[] strings) {
-
-        UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
-
-        if (playerWW == null) return;
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] strings) {
 
         if (game.isDay(Day.DAY)) {
             playerWW.sendMessageWithKey(Prefix.RED,"werewolf.role.tenebrous_werewolf.not_night");

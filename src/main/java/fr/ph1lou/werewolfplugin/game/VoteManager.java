@@ -209,7 +209,7 @@ public class VoteManager implements Listener, IVoteManager
 			Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE, "werewolf.vote.no_result_more_one"));
 			return;
 		}
-		int health = 5;
+		double health = 5;
 		if (playerWW.getMaxHealth() < 10) {
 			health = playerWW.getMaxHealth() / 2 - 1;
 		}
@@ -222,7 +222,7 @@ public class VoteManager implements Listener, IVoteManager
 				playerWW.addPlayerMaxHealth(2);
 			}
 		}, 1200L, 1200L);
-		BukkitUtils.scheduleSyncDelayedTask(() -> Bukkit.getScheduler().cancelTask(task), health * 62L * 20L);
+		BukkitUtils.scheduleSyncDelayedTask(() -> Bukkit.getScheduler().cancelTask(task), (long) (health * 62L * 20L));
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)

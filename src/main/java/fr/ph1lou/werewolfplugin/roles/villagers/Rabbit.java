@@ -51,7 +51,7 @@ public class Rabbit extends RoleVillage {
 
         if(!this.getPlayerWW().isState(StatePlayer.ALIVE) || player == null) return;
 
-        boolean belowHearts = player.getHealth() < 6;
+        boolean belowHearts = this.getPlayerWW().getHealth() < 6;
 
         if(this.belowHearts == belowHearts) return;
 
@@ -66,13 +66,11 @@ public class Rabbit extends RoleVillage {
 
         if(!(event.getEntity() instanceof Player)) return;
 
-        Player player = Bukkit.getPlayer(this.getPlayerUUID());
-
-        if(!this.getPlayerWW().isState(StatePlayer.ALIVE) || player == null) {
+        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        if(player.getHealth() >= 12) {
+        if(this.getPlayerWW().getHealth() >= 12) {
             return;
         }
 
