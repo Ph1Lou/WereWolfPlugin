@@ -3,6 +3,7 @@ package fr.ph1lou.werewolfplugin;
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.AdminCommand;
 import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.DisableAutoLoad;
 import fr.ph1lou.werewolfapi.annotations.Event;
 import fr.ph1lou.werewolfapi.annotations.Lover;
 import fr.ph1lou.werewolfapi.annotations.ModuleWerewolf;
@@ -113,6 +114,12 @@ public class Register implements IRegisterManager {
         try {
             ReflectionUtils.findAllClasses(plugin, packageName)
                     .forEach(clazz -> {
+
+                        if(clazz.getAnnotation(DisableAutoLoad.class) != null){
+                            if(clazz.getAnnotation(DisableAutoLoad.class).isDisable()){
+                                return;
+                            }
+                        }
 
                         if(clazz.getAnnotation(Role.class) != null){
 
