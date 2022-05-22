@@ -62,6 +62,7 @@ public class Command implements TabExecutor {
         WereWolfAPI game = main.getWereWolfAPI();
         List<String> messages = new ArrayList<>();
 
+
         main.getRegisterManager().getRoleCommandsRegister()
                 .stream()
                 .filter(commandRegister1 -> game.translate(commandRegister1.getMetaDatas().key()).equalsIgnoreCase(commandName))
@@ -183,7 +184,7 @@ public class Command implements TabExecutor {
         }
 
         return Stream.concat(main.getRegisterManager().getRoleCommandsRegister().stream()
-                .filter(commandRegister -> (args[0].isEmpty() || game.translate(commandRegister.getMetaDatas().key()).contains(args[0])))
+                .filter(commandRegister -> (args[0].isEmpty() || game.translate(commandRegister.getMetaDatas().key()).startsWith(args[0])))
                 .filter(commandRegister -> commandRegister.getMetaDatas().roleKeys().length == 0 ||
                         (playerWW != null && Arrays.stream(commandRegister.getMetaDatas().roleKeys()).anyMatch(roleKey -> roleKey.equals(playerWW.getRole().getKey()))))
                 .filter(iCommandCommandWrapper -> iCommandCommandWrapper.getMetaDatas().autoCompletion())
@@ -194,7 +195,7 @@ public class Command implements TabExecutor {
                         Arrays.stream(commandRegister.getMetaDatas().statesPlayer()).anyMatch(statePlayer -> statePlayer == playerWW.getState()))
                 .map(commandRegister -> game.translate(commandRegister.getMetaDatas().key())),
                 main.getRegisterManager().getPlayerCommandsRegister().stream()
-                        .filter(commandRegister -> (args[0].isEmpty() || game.translate(commandRegister.getMetaDatas().key()).contains(args[0])))
+                        .filter(commandRegister -> (args[0].isEmpty() || game.translate(commandRegister.getMetaDatas().key()).startsWith(args[0])))
                         .filter(iCommandCommandWrapper -> iCommandCommandWrapper.getMetaDatas().autoCompletion())
                         .filter(commandRegister -> commandRegister.getMetaDatas().statesGame().length == 0 ||
                                 Arrays.stream(commandRegister.getMetaDatas().statesGame()).anyMatch(stateGame -> stateGame == game.getState()))

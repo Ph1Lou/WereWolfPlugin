@@ -4,7 +4,6 @@ import fr.mrmicky.fastboard.FastBoard;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.enums.StateGame;
-import fr.ph1lou.werewolfapi.events.UpdateLanguageEvent;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.LoadEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
@@ -73,7 +72,7 @@ public class GameManager implements WereWolfAPI {
     private final ListenersLoader listenersLoader;
     private final Random r = new Random(System.currentTimeMillis());
     private final UUID gameUUID = UUID.randomUUID();
-    private String gameName="";
+    private String gameName;
     private int groupSize = 5;
     private int playerSize = 0;
     private int timer = 0;
@@ -87,6 +86,7 @@ public class GameManager implements WereWolfAPI {
         this.mapManager = new MapManager(main);
         this.stuff = new Stuff(main);
         this.listenersLoader = new ListenersLoader(this);
+
         File mapFolder = new File(main.getDataFolder() +
                 File.separator + "maps");
         if (!mapFolder.exists()) {
@@ -95,15 +95,13 @@ public class GameManager implements WereWolfAPI {
             }
         }
         setDay(Day.DAY);
-        this.configuration = ConfigurationLoader.loadConfig(main,this, "saveCurrent");
-        this.getStuffs().load("saveCurrent");
-
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
-            Bukkit.getPluginManager().callEvent(new UpdateLanguageEvent());
-            listenersLoader.init();
-            this.gameName = this.translate("werewolf.score_board.default_game_name");
-        });
         setState(StateGame.LOBBY);
+        this.gameName = this.translate("werewolf.score_board.default_game_name");
+    }
+
+    public void init(){
+        ConfigurationLoader.loadConfig(main,this, "saveCurrent");
+        this.getStuffs().load("saveCurrent");
         Bukkit.getPluginManager().callEvent(new LoadEvent(this));
         LobbyTask start = new LobbyTask(this);
         start.runTaskTimer(main, 0, 20);

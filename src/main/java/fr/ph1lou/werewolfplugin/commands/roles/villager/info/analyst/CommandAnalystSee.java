@@ -48,7 +48,7 @@ public class CommandAnalystSee implements ICommandRole {
         }
 
         List<PotionEffectType> effects = Arrays.asList(PotionEffectType.INCREASE_DAMAGE,
-                PotionEffectType.DAMAGE_RESISTANCE, PotionEffectType.WEAKNESS, PotionEffectType.SPEED, PotionEffectType.INVISIBILITY, PotionEffectType.ABSORPTION);
+                PotionEffectType.DAMAGE_RESISTANCE, PotionEffectType.WEAKNESS, PotionEffectType.SPEED, PotionEffectType.INVISIBILITY);
 
         if(analyst instanceof ILimitedUse){
             if(((ILimitedUse)analyst).getUse() >= 5){

@@ -21,6 +21,7 @@ import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Register;
 import fr.ph1lou.werewolfplugin.game.GameManager;
+import fr.ph1lou.werewolfplugin.roles.villagers.Villager;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -75,16 +76,18 @@ public class RoleDuration extends ListenerManager {
         while (!playerWWS.isEmpty()) {
             IPlayerWW playerWW = playerWWS.remove(0);
             Wrapper<IRole, Role> roleRegister = config.remove(0);
+            IRole role;
             try {
-                IRole role = roleRegister.getClazz().getConstructor(WereWolfAPI.class,
+                role = roleRegister.getClazz().getConstructor(WereWolfAPI.class,
                         IPlayerWW.class).newInstance(game,
                         playerWW);
-                BukkitUtils.registerListener(role);
-                playerWW.setRole(role);
-                Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(playerWW));
             } catch (IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException exception) {
                 exception.printStackTrace();
+                role = new Villager(game, playerWW);
             }
+            BukkitUtils.registerListener(role);
+            playerWW.setRole(role);
+            Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(playerWW));
         }
         game.getPlayersWW()
                 .forEach(playerWW -> playerWW.getRole().roleAnnouncement());
@@ -117,18 +120,19 @@ public class RoleDuration extends ListenerManager {
 
                         game.getPlayersWW()
                                 .forEach(playerWW -> {
+                                    IRole role;
                                     try {
-                                        IRole role = roleRegister.getClazz().getConstructor(WereWolfAPI.class,
+                                        role = roleRegister.getClazz().getConstructor(WereWolfAPI.class,
                                                         IPlayerWW.class)
                                                 .newInstance(game,
                                                         playerWW);
-
-                                        BukkitUtils.registerListener(role);
-
-                                        playerWW.setRole(role);
                                     } catch (InstantiationException | InvocationTargetException | IllegalAccessException | NoSuchMethodException exception) {
                                         exception.printStackTrace();
+                                        role = new Villager(game, playerWW);
                                     }
+                                    BukkitUtils.registerListener(role);
+                                    playerWW.setRole(role);
+                                    Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(playerWW));
                                 });
                     }
                 });

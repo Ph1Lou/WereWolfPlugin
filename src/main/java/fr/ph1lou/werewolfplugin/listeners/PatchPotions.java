@@ -62,7 +62,7 @@ public class PatchPotions implements Listener {
                 .map(Optional::get)
                 .forEach(playerWW -> event.getPotion().getEffects().forEach(potionEffect -> playerWW.addPotionModifier(PotionModifier.add(
                         potionEffect.getType(),
-                        Math.max(2,potionEffect.getDuration()), //For paper instant splash potion doesn't work with 1 tick duration
+                        potionEffect.getDuration(),
                         potionEffect.getAmplifier(),
                         "splash_potion"))));
     }

@@ -601,10 +601,10 @@
       },
       "analyst": {
         "display": "Analyste",
-        "description": "Dans &timer&, vous pourrez observer (cinq fois maximum) un joueur le matin pour savoir s’il possède ou non un des effets suivants : Force, Resistance, Faiblesse, Vitesse, Invisibilité, Absorption. Il peut ensuite analyser le joueur (1x par partie) pour connaître précisément le(s) effet(s) qu’il possède. Le joueur analysé en sera informé et s’il n’est pas membre du Village, il obtiendra le pseudo de l’Analyste.",
+        "description": "Dans &timer&, vous pourrez observer (cinq fois maximum) un joueur le matin pour savoir s’il possède ou non un des effets suivants : Force, Resistance, Faiblesse, Vitesse, Invisibilité. Il peut ensuite analyser le joueur (1x par partie) pour connaître précisément le(s) effet(s) qu’il possède. Le joueur analysé en sera informé et s’il n’est pas membre du Village, il obtiendra le pseudo de l’Analyste.",
         "message_see": "Vous pouvez observer encore &number& joueur(s) §b/ww observer§r vous avez §b&timer&",
-        "has_effects": "Le joueur §b&player&§f §aa un des effets suivants§f : Force, Resistance, Faiblesse, Vitesse, Invisibilité, Absorption",
-        "no_effects": "Le joueur §b&player&§f n'a §cpas un des effets suivants§f : Force, Resistance, Faiblesse, Vitesse, Invisibilité, Absorption",
+        "has_effects": "Le joueur §b&player&§f §aa un des effets suivants§f : Force, Resistance, Faiblesse, Vitesse, Invisibilité",
+        "no_effects": "Le joueur §b&player&§f n'a §cpas un des effets suivants§f : Force, Resistance, Faiblesse, Vitesse, Invisibilité",
         "effects": "Le joueur §b&player&§f a les effets suivants : &list&",
         "call_back": "Un §bAnalyste§f vient d'observer vos effets",
         "call_back_no_villager": "L'§bAnalyste§f &player& vient d'observer vos effets",
@@ -833,6 +833,10 @@
       "display": "Rôles Masqués",
       "description": "permet d’activer le système de Rôles masqués sans avoir de Prêtresse dans la composition. \nUn joueur du Village est alors choisi aléatoirement au début de la partie sans qu'il le sache",
       "magic": "§kCoucou"
+    },
+    "thiercelieu": {
+      "name": "Thiercelieu",
+      "description": "Les morts sont annoncées le matin"
     },
     "random_cupid": {
       "display": "Cupidon Aléatoire"
@@ -1256,6 +1260,7 @@
         "depth_rider": "Depth Strider §b&number&"
       },
       "timers": {
+        "list": "Liste des §bTimers §f :\n",
         "command": "timers",
         "description": "Pour voir les timers",
         "name": "Configuration §bTimers",
@@ -1306,6 +1311,7 @@
         "start": "Configuration §bStuff de Départ"
       },
       "global": {
+        "list": "Liste des §bRègles §f :\n",
         "command": "regles",
         "description": "Pour voir la configuration générale",
         "name": "Configuration §bGlobale",
@@ -1499,14 +1505,16 @@
     },
     "bug": "Signalez les bugs en cliquant ici",
     "utils": {
-      "disable": "§4Désactivé ",
-      "enable": "§2Activé ",
+      "disable": "§cDésactivé",
+      "enable": "§aActivé",
       "display": "&field& (§b&value&§r)",
       "pve": "§bPVE",
       "on": "§bON",
       "debug": "§fMode §4debug",
       "author": "§fAuteur(s) :",
-      "bar": "§r§b§m§l-+-----------------------------------+-§r§r§r§f"
+      "bar": "§r§b§m§l-+-----------------------------------+-§r§r§r§f",
+      "cross": "(§cX§f)",
+      "check": "(§aV§f)"
     },
     "categories": {
       "villager": "Villageois",

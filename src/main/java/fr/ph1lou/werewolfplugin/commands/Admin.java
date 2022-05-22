@@ -155,7 +155,7 @@ public class Admin implements TabExecutor {
         }
 
         return main.getRegisterManager().getAdminCommandsRegister().stream()
-                .filter(commandRegister -> (args[0].isEmpty() || game.translate(commandRegister.getMetaDatas().key()).contains(args[0])))
+                .filter(commandRegister -> (args[0].isEmpty() || game.translate(commandRegister.getMetaDatas().key()).startsWith(args[0])))
                 .filter(iCommandAdminCommandWrapper -> iCommandAdminCommandWrapper.getMetaDatas().autoCompletion())
                 .filter(commandRegister -> checkPermission(commandRegister, player))
                 .filter(commandRegister -> commandRegister.getMetaDatas().statesGame().length == 0 ||

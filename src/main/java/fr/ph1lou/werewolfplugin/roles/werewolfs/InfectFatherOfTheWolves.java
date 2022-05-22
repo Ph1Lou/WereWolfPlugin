@@ -34,8 +34,7 @@ public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPl
     private boolean power = true;
 
     public InfectFatherOfTheWolves(WereWolfAPI api,
-                                   IPlayerWW playerWW,
-                                   String key) {
+                                   IPlayerWW playerWW) {
         super(api, playerWW);
     }
 

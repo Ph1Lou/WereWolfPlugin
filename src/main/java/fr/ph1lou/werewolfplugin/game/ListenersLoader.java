@@ -30,9 +30,7 @@ public class ListenersLoader {
 
     public ListenersLoader(WereWolfAPI game) {
         this.game = (GameManager) game;
-    }
 
-    public void init() {
         this.listeners.add(new PlayerListener(this.game));
         this.listeners.add(new SmallFeaturesListener(this.game));
         this.listeners.add(new EnchantmentListener(this.game));
@@ -45,8 +43,6 @@ public class ListenersLoader {
         this.listeners.add(new DamagesListener(this.game));
         this.listeners.add((Listener) this.game.getVoteManager());
         this.listeners.forEach(BukkitUtils::registerListener);
-
-        update();
     }
 
     public void delete() {

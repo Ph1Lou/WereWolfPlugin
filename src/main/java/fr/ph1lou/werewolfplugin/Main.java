@@ -6,6 +6,7 @@ import fr.ph1lou.werewolfapi.annotations.Author;
 import fr.ph1lou.werewolfapi.annotations.ModuleWerewolf;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.ActionBarEvent;
+import fr.ph1lou.werewolfapi.events.UpdateLanguageEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.registers.IRegisterManager;
@@ -67,7 +68,9 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
             this.registerManager = new Register(this);
+            Bukkit.getPluginManager().callEvent(new UpdateLanguageEvent());
             this.currentGame = new GameManager(this);
+            this.currentGame.init();
             MapManager mapManager = (MapManager) currentGame.getMapManager();
             mapManager.init();
             Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> Bukkit.getOnlinePlayers()
@@ -103,6 +106,7 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
 
     public void createGame() {
         this.currentGame = new GameManager(this);
+        this.currentGame.init();
     }
 
     public GameReview getCurrentGameReview() {

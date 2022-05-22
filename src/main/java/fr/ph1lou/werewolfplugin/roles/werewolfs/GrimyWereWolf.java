@@ -98,7 +98,7 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
 
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGH)
     public void onDeathAnnounce(AnnouncementDeathEvent event) {
 
         if (this.affectedPlayer.isEmpty()) {

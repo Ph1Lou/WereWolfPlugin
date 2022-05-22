@@ -72,7 +72,7 @@ public class Shaman extends RoleVillage implements IAffectedPlayers {
         this.getPlayerWW().sendMessage(textComponent);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGH)
     public void onAnnounceDeath(AnnouncementDeathEvent event) {
 
         if (!event.getTargetPlayer().equals(getPlayerWW())) {

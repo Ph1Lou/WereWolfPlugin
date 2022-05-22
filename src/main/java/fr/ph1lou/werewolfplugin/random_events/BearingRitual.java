@@ -1,22 +1,22 @@
 package fr.ph1lou.werewolfplugin.random_events;
 
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
-import fr.ph1lou.werewolfapi.annotations.Scenario;
+import fr.ph1lou.werewolfapi.annotations.Event;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
 import fr.ph1lou.werewolfapi.events.random_events.BearingRitualEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 
-@Scenario(key = EventBase.BEARING_RITUAL, loreKey = "werewolf.random_events.bearing_ritual.description")
+@Event(key = EventBase.BEARING_RITUAL, loreKey = "werewolf.random_events.bearing_ritual.description")
 public class BearingRitual extends ListenerManager {
 
     private boolean active = false;

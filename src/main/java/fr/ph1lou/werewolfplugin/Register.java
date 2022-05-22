@@ -70,7 +70,6 @@ public class Register implements IRegisterManager {
 
                 String prefix = moduleWerewolf.key().split("\\.")[0];
 
-
                 if(this.modules.stream().anyMatch(javaPluginModuleWerewolfWrapper -> javaPluginModuleWerewolfWrapper.getAddonKey().split("\\.")[0]
                         .equals(prefix))){
                     Bukkit.getLogger().warning(String.format("An addon key already starts with %s", prefix));
@@ -106,6 +105,13 @@ public class Register implements IRegisterManager {
                 e.printStackTrace();
             }
         }
+        if(ICommandRole.class.isAssignableFrom(clazz)){
+            try {
+                return clazz.getConstructor().newInstance();
+            } catch (InstantiationException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
         return null;
     }
 
@@ -123,9 +129,9 @@ public class Register implements IRegisterManager {
 
                         if(clazz.getAnnotation(Role.class) != null){
 
-                            if(IRole.class.isAssignableFrom(clazz)){
+                            Role role = clazz.getAnnotation(Role.class);
 
-                                Role role = clazz.getAnnotation(Role.class);
+                            if(IRole.class.isAssignableFrom(clazz)){
 
                                 if(role.key().startsWith(prefix)){
                                     this.roles.add(new Wrapper<>((Class<IRole>)clazz,
@@ -140,11 +146,15 @@ public class Register implements IRegisterManager {
                                 }
 
                             }
+                            else{
+                                Bukkit.getLogger().warning(String.format("Role %s doesn't implement IRole", role.key()));
+                            }
                         }
                         else if(clazz.getAnnotation(Scenario.class) != null){
-                            if(ListenerManager.class.isAssignableFrom(clazz)){
 
-                                Scenario scenario = clazz.getAnnotation(Scenario.class);
+                            Scenario scenario = clazz.getAnnotation(Scenario.class);
+
+                            if(ListenerManager.class.isAssignableFrom(clazz)){
 
                                 if(scenario.key().startsWith(prefix)){
                                     this.scenarios.add(new Wrapper<>((Class<ListenerManager>)clazz,
@@ -159,11 +169,15 @@ public class Register implements IRegisterManager {
                                 }
 
                             }
+                            else{
+                                Bukkit.getLogger().warning(String.format("Scenario %s doesn't extend ListenerManager", scenario.key()));
+                            }
                         }
                         else if(clazz.getAnnotation(Event.class) != null){
-                            if(ListenerManager.class.isAssignableFrom(clazz)){
 
-                                Event event = clazz.getAnnotation(Event.class);
+                            Event event = clazz.getAnnotation(Event.class);
+
+                            if(ListenerManager.class.isAssignableFrom(clazz)){
 
                                 if(event.key().startsWith(prefix)){
                                     this.events.add(new Wrapper<>((Class<ListenerManager>)clazz,
@@ -176,6 +190,9 @@ public class Register implements IRegisterManager {
                                             "The event key %s does not have the same prefix as the addon key %s",
                                             event.key(), prefix));
                                 }
+                            }
+                            else{
+                                Bukkit.getLogger().warning(String.format("Event %s doesn't extend ListenerManager", event.key()));
                             }
                         }
                         else if(clazz.getAnnotation(Configuration.class) != null){
@@ -212,9 +229,9 @@ public class Register implements IRegisterManager {
                         }
                         else if(clazz.getAnnotation(PlayerCommand.class) != null){
 
-                            if(ICommand.class.isAssignableFrom(clazz)){
+                            PlayerCommand playerCommand = clazz.getAnnotation(PlayerCommand.class);
 
-                                PlayerCommand playerCommand = clazz.getAnnotation(PlayerCommand.class);
+                            if(ICommand.class.isAssignableFrom(clazz)){
 
                                 if(playerCommand.key().startsWith(prefix)){
                                     this.commands.add(new Wrapper<>((Class<ICommand>)clazz,
@@ -228,11 +245,15 @@ public class Register implements IRegisterManager {
                                             playerCommand.key(), prefix));
                                 }
                             }
+                            else{
+                                Bukkit.getLogger().warning(String.format("PlayerCommand %s doesn't implement ICommand", playerCommand.key()));
+                            }
                         }
                         else if(clazz.getAnnotation(RoleCommand.class) != null){
-                            if(ICommandRole.class.isAssignableFrom(clazz)){
 
-                                RoleCommand roleCommand = clazz.getAnnotation(RoleCommand.class);
+                            RoleCommand roleCommand = clazz.getAnnotation(RoleCommand.class);
+
+                            if(ICommandRole.class.isAssignableFrom(clazz)){
 
                                 if(roleCommand.key().startsWith(prefix)){
                                     this.roleCommands.add(new Wrapper<>((Class<ICommandRole>)clazz,
@@ -246,11 +267,15 @@ public class Register implements IRegisterManager {
                                             roleCommand.key(), prefix));
                                 }
                             }
+                            else{
+                                Bukkit.getLogger().warning(String.format("RoleCommand %s doesn't implement ICommandRole", roleCommand.key()));
+                            }
                         }
                         else if(clazz.getAnnotation(AdminCommand.class) != null){
-                            if(ICommand.class.isAssignableFrom(clazz)){
 
-                                AdminCommand adminCommand = clazz.getAnnotation(AdminCommand.class);
+                            AdminCommand adminCommand = clazz.getAnnotation(AdminCommand.class);
+
+                            if(ICommand.class.isAssignableFrom(clazz)){
 
                                 if(adminCommand.key().startsWith(prefix)){
                                     this.adminCommands.add(new Wrapper<>((Class<ICommand>)clazz,
@@ -264,11 +289,15 @@ public class Register implements IRegisterManager {
                                             adminCommand.key(), prefix));
                                 }
                             }
+                            else{
+                                Bukkit.getLogger().warning(String.format("AdminCommand %s doesn't implement ICommand", adminCommand.key()));
+                            }
                         }
                         else if(clazz.getAnnotation(Lover.class) != null){
-                            if(ILover.class.isAssignableFrom(clazz)){
 
-                                Lover lover = clazz.getAnnotation(Lover.class);
+                            Lover lover = clazz.getAnnotation(Lover.class);
+
+                            if(ILover.class.isAssignableFrom(clazz)){
 
                                 if(lover.key().startsWith(prefix)){
                                     this.lovers.add(new Wrapper<>((Class<ILover>)clazz,
@@ -281,7 +310,9 @@ public class Register implements IRegisterManager {
                                             "The lover key %s does not have the same prefix as the addon key %s",
                                             lover.key(), prefix));
                                 }
-
+                            }
+                            else{
+                                Bukkit.getLogger().warning(String.format("Lover %s doesn't implement ILover", lover.key()));
                             }
                         }
                     });

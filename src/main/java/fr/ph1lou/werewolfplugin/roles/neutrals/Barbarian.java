@@ -109,7 +109,7 @@ public class Barbarian extends RoleNeutral implements IPower, IAffectedPlayers {
         return Aura.NEUTRAL;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGH)
     public void onMaskedDeathAnnouncement(AnnouncementDeathEvent event){
 
         if(!this.isAbilityEnabled()){
