@@ -1365,20 +1365,23 @@
       "night": "Nuit",
       "day": "Jour",
       "spectator": "Spectateur",
-      "composition": "§3§m------↠§8compo§3§m↞------",
-      "page": "§3§m-----↠§8page &current&/&sum&§3§m↞-----",
-      "score": "§3§m-----↠§8score§3§m↞------",
-      "game_name": "§3§m-----↠§8game§3§m↞------",
-      "name": "§b&name&",
-      "scoreboard_1": [
+      "scoreboard_role": [
+        "§3§m------↠§8compo§3§m↞------",
+        "&roles&",
+        "§3§m-----↠§8page &current&/&sum&§3§m↞-----",
+        "§b&name&"
+        ],
+      "scoreboard_lobby": [
         "§3§m-----↠§8infos§3§m↞------",
         "En attente de joueurs ",
         "§3§m------------------",
         "Joueurs : §b&players&§r/§b&roles&",
         "§3§m------------------",
-        "Joueurs Max : §b&max&"
+        "Joueurs Max : §b&max&",
+        "§3§m-----↠§8game§3§m↞------",
+        "§b&name&"
       ],
-      "scoreboard_2": [
+      "scoreboard_game": [
         "§3§m-----↠§8role§3§m↞-----",
         "Role §b&role&",
         "§3§m----↠§8infos§3§m↞-----",
@@ -1388,7 +1391,15 @@
         "Groupe de §b&group&",
         "§3§m---↠§8bordure§3§m↞----",
         "Bordure §b&border&",
-        "Taille §b&border_size&"
+        "Taille §b&border_size&",
+        "§3§m-----↠§8game§3§m↞------",
+        "§b&name&"
+      ],
+      "scoreboard_score": [
+        "§3§m-----↠§8score§3§m↞------",
+        "&scores&",
+        "§3§m-----↠§8game§3§m↞------",
+        "§b&name&"
       ],
       "default_game_name": "@Ph1Lou_"
     },

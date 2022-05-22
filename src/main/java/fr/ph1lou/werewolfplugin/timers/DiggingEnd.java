@@ -64,7 +64,5 @@ public class DiggingEnd extends ListenerManager {
             block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop());
             block.setType(Material.AIR);
         }
-
-        event.setCancelled(true);
     }
 }

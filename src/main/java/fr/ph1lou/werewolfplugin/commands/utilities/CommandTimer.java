@@ -25,6 +25,8 @@ public class CommandTimer implements ICommand {
         String message = Register.get().getTimersRegister()
                 .stream()
                 .filter(timerWrapper -> game.getConfig().getTimerValue(timerWrapper.getMetaDatas().key()) >= 0)
+                .sorted((o1, o2) -> game.translate(o1.getMetaDatas().key())
+                        .compareToIgnoreCase(game.translate(o2.getMetaDatas().key())))
                 .sorted(Comparator.comparingInt(o -> game.getConfig().getTimerValue(o.getMetaDatas().key())))
                 .sorted((o1, o2) -> {
                     if(o1.getMetaDatas().decrement() && o2.getMetaDatas().decrement()){

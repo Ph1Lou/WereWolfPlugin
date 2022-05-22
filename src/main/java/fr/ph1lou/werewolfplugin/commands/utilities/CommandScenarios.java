@@ -27,6 +27,7 @@ public class CommandScenarios implements ICommand {
         }
 
         StringBuilder sb = new StringBuilder(game.translate(Prefix.GREEN , "werewolf.menu.scenarios.list"));
+
         int i = 0;
         for (Wrapper<ListenerManager, Scenario> scenarioRegister : Register.get().getScenariosRegister()) {
             if (game.getConfig().isScenarioActive(scenarioRegister.getMetaDatas().key())) {

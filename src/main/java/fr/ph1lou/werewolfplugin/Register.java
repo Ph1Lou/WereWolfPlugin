@@ -342,7 +342,10 @@ public class Register implements IRegisterManager {
 
     private Optional<String> checkLovers(String key) {
         return this.lovers.stream()
-                .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key))
+                .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key) ||
+                        Arrays.stream(configurationWrapper.getMetaDatas().configurations()).anyMatch(configuration -> configuration.key().equals(key)) ||
+                        Arrays.stream(configurationWrapper.getMetaDatas().timers()).anyMatch(timer -> timer.key().equals(key)) ||
+                        Arrays.stream(configurationWrapper.getMetaDatas().configValues()).anyMatch(intValue -> intValue.key().equals(key)))
                 .map(Wrapper::getAddonKey)
                 .findFirst();
     }
