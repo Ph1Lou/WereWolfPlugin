@@ -1,4 +1,4 @@
-# WereWolfPlugin
+# WereWolfPlugin LG UHC
 
 # Découvrez l'API du plugin ici
 
