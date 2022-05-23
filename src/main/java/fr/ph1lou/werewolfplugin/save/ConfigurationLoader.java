@@ -2,13 +2,12 @@ package fr.ph1lou.werewolfplugin.save;
 
 import fr.ph1lou.werewolfapi.annotations.ModuleWerewolf;
 import fr.ph1lou.werewolfapi.annotations.Role;
-import fr.ph1lou.werewolfapi.events.UpdateLanguageEvent;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Main;
-import fr.ph1lou.werewolfplugin.Register;
+import fr.ph1lou.werewolfplugin.game.Configuration;
 import fr.ph1lou.werewolfplugin.game.GameManager;
-import org.bukkit.Bukkit;
+import fr.ph1lou.werewolfplugin.game.StorageConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -16,7 +15,31 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+
 public class ConfigurationLoader {
+
+    public static void deleteConfig(Main main, String name){
+
+        File fileConfigPlugin = new File(main.getDataFolder() + File.separator + "configs", name+ ".json");
+        fileConfigPlugin.delete();
+        File fileValuesPlugin = new File(main.getDataFolder()
+                + File.separator + "values"
+                + File.separator, name + ".json");
+
+        fileValuesPlugin.delete();
+
+        for (Wrapper<JavaPlugin, ModuleWerewolf> addonWrapper : main.getRegisterManager().getModulesRegister()) {
+            addonWrapper.getObject()
+                    .ifPresent(javaPlugin -> {
+                        File fileValuesAddon = new File(javaPlugin.getDataFolder()
+                                + File.separator + "values"
+                                + File.separator, name + ".json");
+
+                        fileValuesAddon.delete();
+                    });
+        }
+
+    }
 
     public static void loadConfig(Main main, GameManager game, String name){
 
@@ -29,7 +52,7 @@ public class ConfigurationLoader {
         configurationMap.put(Main.KEY,
                 loadConfig(main, name).setAddonKey(Main.KEY));
 
-        for (Wrapper<JavaPlugin, ModuleWerewolf> addonWrapper : Register.get().getModulesRegister()) {
+        for (Wrapper<JavaPlugin, ModuleWerewolf> addonWrapper : main.getRegisterManager().getModulesRegister()) {
             addonWrapper.getObject()
                     .ifPresent(javaPlugin -> configurationMap.put(addonWrapper.getAddonKey(),
                             loadConfig(javaPlugin, name).setAddonKey(addonWrapper.getAddonKey())));
@@ -49,12 +72,12 @@ public class ConfigurationLoader {
         game.getModerationManager().checkQueue();
         game.getListenersLoader().update();
 
-        for (Wrapper<IRole, Role> roleRegister : Register.get().getRolesRegister()) {
+        for (Wrapper<IRole, Role> roleRegister : main.getRegisterManager().getRolesRegister()) {
             String key = roleRegister.getMetaDatas().key();
             game.setRoleInitialSize(game.getRoleInitialSize() + config.getRoleCount(key));
         }
     }
-    public static StorageConfiguration loadConfig(JavaPlugin plugin, String name){
+    private static StorageConfiguration loadConfig(JavaPlugin plugin, String name){
 
         File file = new File(plugin.getDataFolder()
                 + File.separator + "values"
@@ -78,7 +101,7 @@ public class ConfigurationLoader {
         FileUtils_.save(file, Serializer.serialize(game.getConfig()));
 
         ((Configuration)game.getConfig()).getStorageConfigurations()
-                        .forEach(storageConfiguration -> Register.get()
+                        .forEach(storageConfiguration -> main.getRegisterManager()
                                 .getModulesRegister()
                                 .stream()
                                 .filter(javaPluginAddonWrapper -> javaPluginAddonWrapper.getAddonKey()

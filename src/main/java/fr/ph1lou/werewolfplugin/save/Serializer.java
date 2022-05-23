@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.statistics.impl.GameReview;
+import fr.ph1lou.werewolfplugin.game.Configuration;
+import fr.ph1lou.werewolfplugin.game.StorageConfiguration;
 
 public class Serializer {
 

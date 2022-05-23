@@ -5,32 +5,31 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
-import fr.ph1lou.werewolfplugin.Main;
-import fr.ph1lou.werewolfapi.game.IStuffManager;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.game.IStuffManager;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
+import fr.ph1lou.werewolfplugin.Main;
+import fr.ph1lou.werewolfplugin.save.StuffLoader;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.UUID;
 
-public class Stuffs implements InventoryProvider {
+public class StuffsGUI implements InventoryProvider {
 
 
     public static final SmartInventory INVENTORY = SmartInventory.builder()
             .id("stuffs")
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
-            .provider(new Stuffs())
+            .provider(new StuffsGUI())
             .size(2, 9)
             .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.stuff.name"))
             .closeable(true)
@@ -52,9 +51,12 @@ public class Stuffs implements InventoryProvider {
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
 
-        contents.set(0, 2, ClickableItem.of((new ItemBuilder(Material.EGG).setDisplayName(game.translate("werewolf.menu.stuff.normal"))).build(), e -> game.getStuffs().loadAllStuffDefault()));
-        contents.set(0, 4, ClickableItem.of((new ItemBuilder(UniversalMaterial.GOLDEN_SWORD.getType()).setDisplayName(game.translate("werewolf.menu.stuff.meet_up"))).build(), e -> game.getStuffs().loadAllStuffMeetUP()));
-        contents.set(0, 6, ClickableItem.of((new ItemBuilder(Material.JUKEBOX).setDisplayName(game.translate("werewolf.menu.stuff.chill"))).build(), e -> game.getStuffs().loadStuffChill()));
+        contents.set(0, 2, ClickableItem.of((new ItemBuilder(Material.EGG).setDisplayName(game.translate("werewolf.menu.stuff.normal"))).build(),
+                e -> StuffLoader.loadAllStuffDefault(main, game)));
+        contents.set(0, 4, ClickableItem.of((new ItemBuilder(UniversalMaterial.GOLDEN_SWORD.getType()).setDisplayName(game.translate("werewolf.menu.stuff.meet_up"))).build(),
+                e -> StuffLoader.loadAllStuffMeetUP(main, game)));
+        contents.set(0, 6, ClickableItem.of((new ItemBuilder(Material.JUKEBOX).setDisplayName(game.translate("werewolf.menu.stuff.chill"))).build(),
+                e -> StuffLoader.loadStuffChill(main, game)));
         contents.set(1, 1, ClickableItem.of((new ItemBuilder(Material.BARRIER).setDisplayName(game.translate("werewolf.menu.stuff.delete"))).build(), e -> {
             game.getStuffs().clearStartLoot();
             game.getStuffs().clearDeathLoot();
@@ -73,20 +75,20 @@ public class Stuffs implements InventoryProvider {
             PlayerInventory inventory = player.getInventory();
             player.setGameMode(GameMode.CREATIVE);
 
-            if (!stuffManager.getTempStuff().containsKey(uuid)) {
-
-                Inventory inventoryTemp = Bukkit.createInventory(player, 45);
-
-                for (int j = 0; j < 40; j++) {
-                    inventoryTemp.setItem(j, inventory.getItem(j));
+            if (!stuffManager.isInTempStuff(uuid)) {
+                ItemStack[] items = new ItemStack[40];
+                for (int i = 0; i < 40; i++) {
+                    items[i] = inventory.getItem(i);
                 }
-
-                stuffManager.getTempStuff().put(uuid, inventoryTemp);
+                stuffManager.putTempStuff(uuid, items);
             }
 
-            for (int j = 0; j < 40; j++) {
-                inventory.setItem(j, game.getStuffs().getStartLoot().getItem(j));
-            }
+            inventory.clear();
+
+            ItemStack itemStack = new ItemStack(Material.BARRIER);
+            inventory.setArmorContents(new ItemStack[]{ itemStack, itemStack, itemStack, itemStack});
+
+            game.getStuffs().getStartLoot().forEach(inventory::addItem);
 
             TextComponent msg = new TextComponent(game.translate(Prefix.YELLOW , "werewolf.commands.admin.stuff_start.valid"));
             msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/a %s", game.translate("werewolf.commands.admin.stuff_start.command"))));
@@ -106,24 +108,20 @@ public class Stuffs implements InventoryProvider {
             PlayerInventory inventory = player.getInventory();
             player.setGameMode(GameMode.CREATIVE);
 
-            if (!stuffManager.getTempStuff().containsKey(uuid)) {
-
-                Inventory inventoryTemp = Bukkit.createInventory(player, 45);
-                for (int j = 0; j < 40; j++) {
-                    inventoryTemp.setItem(j, inventory.getItem(j));
+            if (!stuffManager.isInTempStuff(uuid)) {
+                ItemStack[] items = new ItemStack[40];
+                for (int i = 0; i < 40; i++) {
+                    items[i] = inventory.getItem(i);
                 }
-                stuffManager.getTempStuff().put(uuid, inventoryTemp);
+                stuffManager.putTempStuff(uuid, items);
             }
 
-            for (int j = 0; j < 40; j++) {
-                inventory.setItem(j, null);
-            }
+            inventory.clear();
 
-            for (ItemStack i : stuffManager.getDeathLoot()) {
-                if (i != null) {
-                    inventory.addItem(i);
-                }
-            }
+            ItemStack itemStack = new ItemStack(Material.BARRIER);
+            inventory.setArmorContents(new ItemStack[]{ itemStack, itemStack, itemStack, itemStack});
+
+            stuffManager.getDeathLoot().forEach(inventory::addItem);
 
             TextComponent msg = new TextComponent(game.translate(Prefix.YELLOW , "werewolf.commands.admin.loot_death.valid"));
             msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/a %s", game.translate("werewolf.commands.admin.loot_death.command"))));

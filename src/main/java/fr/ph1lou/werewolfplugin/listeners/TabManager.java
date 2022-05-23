@@ -33,7 +33,7 @@ import java.util.UUID;
 
 public class TabManager implements Listener {
 
-    final WereWolfAPI game;
+    private final WereWolfAPI game;
 
     public TabManager(WereWolfAPI game) {
         this.game = game;

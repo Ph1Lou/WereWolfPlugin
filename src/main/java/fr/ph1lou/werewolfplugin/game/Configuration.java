@@ -1,4 +1,4 @@
-package fr.ph1lou.werewolfplugin.save;
+package fr.ph1lou.werewolfplugin.game;
 
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.game.IConfiguration;

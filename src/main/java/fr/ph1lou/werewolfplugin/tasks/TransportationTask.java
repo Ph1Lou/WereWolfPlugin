@@ -23,7 +23,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
@@ -192,16 +191,8 @@ public class TransportationTask implements Listener {
             player.setCompassTarget(playerWW.getSpawn());
             player.setGameMode(GameMode.ADVENTURE);
             this.game.clearPlayer(player);
-            Inventory inventory = player.getInventory();
-
-            for (int j = 0; j < 40; j++) {
-                inventory.setItem(j, this.game.getStuffs().getStartLoot().getItem(j));
-            }
-        } else {
-            for (int j = 0; j < 40; j++) {
-                playerWW.addItem(this.game.getStuffs().getStartLoot().getItem(j));
-            }
         }
+        this.game.getStuffs().getStartLoot().forEach(playerWW::addItem);
 
         playerWW.teleport(spawns.get(i));
     }

@@ -2,22 +2,24 @@ package fr.ph1lou.werewolfplugin.save;
 
 import fr.ph1lou.werewolfapi.annotations.ModuleWerewolf;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.utils.Wrapper;
-import fr.ph1lou.werewolfplugin.Main;
-import fr.ph1lou.werewolfapi.game.IStuffManager;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
+import fr.ph1lou.werewolfplugin.Main;
+import fr.ph1lou.werewolfplugin.Register;
+import fr.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,64 +27,58 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
+
+public class StuffLoader {
 
 
-public class Stuff implements IStuffManager {
-
-    private final Map<String, List<ItemStack>> stuffRoles = new HashMap<>();
-
-    private final Map<UUID, Inventory> tempStuff = new HashMap<>();
-    private final List<ItemStack> deathLoot = new ArrayList<>();
-    private final Inventory startLoot = Bukkit.createInventory(null, 45);
-    private final Main main;
-
-
-    public Stuff(Main main) {
-        this.main = main;
+    public static void deleteStuff(Main main, String replace) {
+        //todo
     }
 
-    @Override
-    public List<ItemStack> getDeathLoot() {
-        return this.deathLoot;
+    public static void loadAllStuffDefault(Main main, WereWolfAPI game) {
+        FileUtils_.copy(main.getResource("stuffRole.yml"),
+                main.getDataFolder() +
+                        File.separator + "stuffs" + File.separator + "stuffRole.yml");
+        loadStuffRole(main, game, "stuffRole");
     }
 
-    @Override
-    public Inventory getStartLoot() {
-        return this.startLoot;
+    public static  void loadAllStuffMeetUP(Main main, WereWolfAPI game) {
+        FileUtils_.copy(main.getResource("stuffMeetUp.yml"),
+                main.getDataFolder() +
+                        File.separator + "stuffs" + File.separator + "stuffMeetUp.yml");
+        loadStuffRole(main, game, "stuffMeetUp");
+        loadStuffStartAndDeath(main, game, "stuffMeetUp");
     }
 
-    @Override
-    public void clearDeathLoot() {
-        deathLoot.clear();
+    public static void loadStuffChill(Main main, WereWolfAPI game) {
+        FileUtils_.copy(main.getResource("stuffChill.yml"), main.getDataFolder() + File.separator + "stuffs" + File.separator + "stuffChill.yml");
+        loadStuffStartAndDeath(main, game, "stuffChill");
     }
 
-    @Override
-    public void clearStartLoot() {
-        startLoot.clear();
+    public static void loadStuff(Main main, GameManager game, String configName) {
+        loadStuffRole(main, game, configName);
+        loadStuffStartAndDeath(main, game,configName);
     }
 
-    @Override
-    public void addDeathLoot(ItemStack i) {
-        deathLoot.add(i);
-    }
+    public static void saveStuff(Main main, String configName) {
 
-    @Override
-    public void save(String configName) {
+        GameManager game = (GameManager) main.getWereWolfAPI();
 
-        for(Wrapper<JavaPlugin, ModuleWerewolf> addon:main.getRegisterManager().getModulesRegister()){
+        for(Wrapper<JavaPlugin, ModuleWerewolf> addon:Register.get().getModulesRegister()){
             addon.getObject()
-                    .ifPresent(javaPlugin -> saveStuffRole(javaPlugin,
+                    .ifPresent(javaPlugin -> saveStuffRole(
+                            javaPlugin,
+                            game,
                             configName,
                             addon.getMetaDatas().key()));
         }
 
-        saveStuffRole(main,configName, "werewolf.name");
-        saveStuffStartAndDeath(configName);
+        saveStuffRole(main, game, configName, "werewolf.name");
+        saveStuffStartAndDeath(main, game, configName);
 
     }
 
-    private void saveStuffStartAndDeath(String configName) {
+    private static void saveStuffStartAndDeath(Main main, WereWolfAPI game, String configName) {
 
         int pos = 0;
         FileConfiguration config = getOrCreateCustomConfig(main, configName);
@@ -92,13 +88,13 @@ public class Stuff implements IStuffManager {
             return;
         }
 
-        for (ItemStack i : startLoot) {
-            this.setItem(config,"start_loot." + pos,i);
+        for (ItemStack i : game.getStuffs().getStartLoot()) {
+            setItem(config,"start_loot." + pos,i);
             pos++;
         }
         pos = 0;
-        for (ItemStack i : deathLoot) {
-            this.setItem(config,"death_loot." + pos, i);
+        for (ItemStack i : game.getStuffs().getDeathLoot()) {
+            setItem(config,"death_loot." + pos, i);
             pos++;
         }
 
@@ -111,7 +107,10 @@ public class Stuff implements IStuffManager {
 
     }
 
-    private void saveStuffRole(JavaPlugin plugin,String configName, String addonKey) {
+    private static void saveStuffRole(JavaPlugin plugin,
+                                      WereWolfAPI game,
+                                      String configName,
+                                      String addonKey) {
 
         int pos = 0;
         FileConfiguration config = getOrCreateCustomConfig(plugin, configName);
@@ -120,11 +119,11 @@ public class Stuff implements IStuffManager {
             return;
         }
 
-        for (Wrapper<IRole, Role> roleRegister:main.getRegisterManager().getRolesRegister()) {
+        for (Wrapper<IRole, Role> roleRegister: Register.get().getRolesRegister()) {
             if(roleRegister.getAddonKey().equals(addonKey)){
                 String key = roleRegister.getMetaDatas().key();
-                for (ItemStack i : stuffRoles.get(key)) {
-                    this.setItem(config,key + "." + pos,i);
+                for (ItemStack i : game.getStuffs().getStuffRole(key)) {
+                    setItem(config,key + "." + pos,i);
                     pos++;
                 }
                 pos = 0;
@@ -141,14 +140,7 @@ public class Stuff implements IStuffManager {
 
     }
 
-    @Override
-    public void load(String configName) {
-        loadStuff(configName);
-        loadStuffStartAndDeath(configName);
-    }
-
-
-    public Map<String, List<ItemStack>> loadStuff(Plugin plugin, String addonKey, String configName) {
+    public static Map<String, List<ItemStack>> loadStuff(Plugin plugin, String addonKey, String configName) {
 
         Map<String, List<ItemStack>> temp = new HashMap<>();
 
@@ -157,7 +149,7 @@ public class Stuff implements IStuffManager {
         }
         FileConfiguration config = getOrCreateCustomConfig(plugin, configName);
 
-        for (Wrapper<IRole, Role> roleRegister : main.getRegisterManager().getRolesRegister()) {
+        for (Wrapper<IRole, Role> roleRegister : Register.get().getRolesRegister()) {
 
             if (roleRegister.getAddonKey().equals(addonKey)) {
                 String key = roleRegister.getMetaDatas().key();
@@ -166,7 +158,7 @@ public class Stuff implements IStuffManager {
                 if (configurationSection != null) {
                     Set<String> sl = configurationSection.getKeys(false);
                     for (String s2 : sl) {
-                        temp.get(key).add(this.getItem(config,key + "." + s2));
+                        temp.get(key).add(getItem(config,key + "." + s2));
                     }
                 }
             }
@@ -174,10 +166,11 @@ public class Stuff implements IStuffManager {
         return temp;
     }
 
-    public void loadStuffStartAndDeath(String configName) {
+    public static void loadStuffStartAndDeath(Main main, WereWolfAPI game, String configName) {
 
-        startLoot.clear();
-        deathLoot.clear();
+        game.getStuffs().clearDeathLoot();
+        game.getStuffs().clearStartLoot();
+
         FileConfiguration config = getOrCreateCustomConfig(main, configName);
 
         ConfigurationSection configurationSection = config.getConfigurationSection("start_loot");
@@ -186,7 +179,7 @@ public class Stuff implements IStuffManager {
             Set<String> sl = configurationSection.getKeys(false);
 
             for (String s : sl) {
-                startLoot.addItem(this.getItem(config,"start_loot." + s));
+                game.getStuffs().addStartLoot(getItem(config,"start_loot." + s));
             }
         }
 
@@ -195,12 +188,12 @@ public class Stuff implements IStuffManager {
         if(configurationSection!=null){
             Set<String> sl = configurationSection.getKeys(false);
             for (String s : sl) {
-                deathLoot.add(this.getItem(config,"death_loot." + s));
+                game.getStuffs().addDeathLoot(getItem(config,"death_loot." + s));
             }
         }
     }
 
-    private ItemStack getItem(FileConfiguration file, String path){
+    private static ItemStack getItem(FileConfiguration file, String path){
 
         ItemStack item;
         if(file.contains(path+".potion_data")){
@@ -222,7 +215,7 @@ public class Stuff implements IStuffManager {
         return item;
     }
 
-    private void setItem(FileConfiguration file, String path,@Nullable ItemStack item){
+    private static void setItem(FileConfiguration file, String path,@Nullable ItemStack item){
 
         if(item == null){
             file.set(path,null);
@@ -240,13 +233,7 @@ public class Stuff implements IStuffManager {
         }
     }
 
-    @Override
-    public void loadStuffChill() {
-        FileUtils_.copy(main.getResource("stuffChill.yml"), main.getDataFolder() + File.separator + "stuffs" + File.separator + "stuffChill.yml");
-        loadStuffStartAndDeath("stuffChill");
-    }
-
-    public FileConfiguration getOrCreateCustomConfig(Plugin plugin, String configName) {
+    private static FileConfiguration getOrCreateCustomConfig(Plugin plugin, String configName) {
         File customConfigFile = new File(plugin.getDataFolder() + File.separator + "stuffs" + File.separator, configName + ".yml");
         FileConfiguration customConfig = null;
         if (!customConfigFile.exists()) {
@@ -266,38 +253,18 @@ public class Stuff implements IStuffManager {
         return customConfig;
     }
 
-    public void loadStuff(String configName) {
+    public static void loadStuffRole(Main main, WereWolfAPI game, String configName) {
 
-        stuffRoles.clear();
+        game.getStuffs().clearStuffRoles();
 
-        main.getRegisterManager()
+        Register.get()
                 .getModulesRegister()
                 .forEach(addonRegister -> addonRegister.getObject()
-                        .ifPresent(javaPlugin -> stuffRoles.putAll(loadStuff(javaPlugin,
-                        addonRegister.getAddonKey(), configName))));
-        stuffRoles.putAll(loadStuff(main,
-                "werewolf.name",
-                configName));
-    }
+                        .ifPresent(javaPlugin -> loadStuff(javaPlugin, addonRegister.getAddonKey(), configName)
+                                .forEach((key, itemStacks) -> game.getStuffs().setStuffRole(key, itemStacks))));
 
 
-    public void loadAllStuffDefault() {
-        loadStuff("stuffRole");
-    }
-
-    public void loadAllStuffMeetUP() {
-        FileUtils_.copy(main.getResource("stuffMeetUp.yml"), main.getDataFolder() + File.separator + "stuffs" + File.separator + "stuffMeetUp.yml");
-        loadStuff("stuffMeetUp");
-        loadStuffStartAndDeath("stuffMeetUp");
-    }
-
-    @Override
-    public Map<String, List<ItemStack>> getStuffRoles() {
-        return stuffRoles;
-    }
-
-    @Override
-    public Map<UUID, Inventory> getTempStuff() {
-        return tempStuff;
+        loadStuff(main, Main.KEY, configName)
+                .forEach((key, itemStacks) -> game.getStuffs().setStuffRole(key, itemStacks));
     }
 }

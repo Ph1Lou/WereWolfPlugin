@@ -35,7 +35,6 @@ import java.util.Set;
 public class Register implements IRegisterManager {
 
     private final Set<Wrapper<JavaPlugin, ModuleWerewolf>> modules = new HashSet<>();
-
     private final Set<Wrapper<IRole, Role>> roles = new HashSet<>();
     private final Set<Wrapper<ListenerManager, Scenario>> scenarios = new HashSet<>();
     private final Set<Wrapper<ListenerManager, Event>> events = new HashSet<>();
@@ -55,7 +54,6 @@ public class Register implements IRegisterManager {
 
     private static Register INSTANCE;
 
-    //check keys prefix
     public Register(Main main){
         this.main = main;
         INSTANCE = this;

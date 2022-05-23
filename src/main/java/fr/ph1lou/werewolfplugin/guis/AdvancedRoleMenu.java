@@ -5,26 +5,26 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
+import fr.ph1lou.werewolfapi.GetWereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
+import fr.ph1lou.werewolfapi.game.IStuffManager;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
+import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Main;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
-import fr.ph1lou.werewolfapi.game.IStuffManager;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
-import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -123,23 +123,20 @@ public class AdvancedRoleMenu implements InventoryProvider {
         PlayerInventory inventory = player.getInventory();
         player.setGameMode(GameMode.CREATIVE);
 
-        if (!stuffManager.getTempStuff().containsKey(uuid)) {
-
-            Inventory inventoryTemp = Bukkit.createInventory(player, 45);
-            for (int j = 0; j < 40; j++) {
-                inventoryTemp.setItem(j, inventory.getItem(j));
+        if (!stuffManager.isInTempStuff(uuid)) {
+            ItemStack[] items = new ItemStack[40];
+            for (int i = 0; i < 40; i++) {
+                items[i] = inventory.getItem(i);
             }
-            stuffManager.getTempStuff().put(uuid, inventoryTemp);
+            stuffManager.putTempStuff(uuid, items);
         }
 
-        for (int j = 0; j < 40; j++) {
-            inventory.setItem(j, null);
-        }
+        inventory.clear();
+        ItemStack itemStack = new ItemStack(Material.BARRIER);
+        inventory.setArmorContents(new ItemStack[]{ itemStack, itemStack, itemStack, itemStack});
 
-        for (ItemStack item : game.getStuffs().getStuffRoles().get(this.register.getMetaDatas().key())) {
-            if (item != null) {
-                player.getInventory().addItem(item);
-            }
+        for (ItemStack item : game.getStuffs().getStuffRole(this.register.getMetaDatas().key())) {
+            player.getInventory().addItem(item);
         }
         TextComponent msg = new TextComponent(game.translate(Prefix.YELLOW , "werewolf.commands.admin.loot_role.valid",
                 Formatter.role(game.translate(register.getMetaDatas().key()))));

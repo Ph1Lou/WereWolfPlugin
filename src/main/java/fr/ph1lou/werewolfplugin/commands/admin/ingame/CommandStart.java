@@ -10,6 +10,7 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfplugin.save.ConfigurationLoader;
+import fr.ph1lou.werewolfplugin.save.StuffLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
@@ -54,7 +55,7 @@ public class CommandStart implements ICommand {
         wb.setWarningDistance((int) (wb.getSize() / 7));
         ((GameManager) game).setState(StateGame.TRANSPORTATION);
         ConfigurationLoader.saveConfig(JavaPlugin.getPlugin(Main.class), "saveCurrent");
-        game.getStuffs().save("saveCurrent");
+        StuffLoader.saveStuff(JavaPlugin.getPlugin(Main.class), "saveCurrent");
         Bukkit.getPluginManager().callEvent(new StartEvent(game));
     }
 }

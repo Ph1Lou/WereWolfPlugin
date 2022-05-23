@@ -1,17 +1,20 @@
 package fr.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import fr.ph1lou.werewolfapi.annotations.AdminCommand;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.enums.StateGame;
+import fr.ph1lou.werewolfapi.events.UpdateStuffEvent;
 import fr.ph1lou.werewolfapi.game.IStuffManager;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.events.UpdateStuffEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.UUID;
 
 @AdminCommand(key = "werewolf.commands.admin.stuff_start.command",
@@ -30,17 +33,21 @@ public class CommandLootStart implements ICommand {
         IStuffManager stuffManager = game.getStuffs();
         UUID uuid = player.getUniqueId();
 
+        if(!stuffManager.isInTempStuff(uuid)){
+            return;
+        }
+
         stuffManager.clearStartLoot();
 
-        if (!stuffManager.getTempStuff().containsKey(uuid)) {
-            stuffManager.getTempStuff().put(uuid, Bukkit.createInventory(player, 45));
+        Arrays.stream(inventory.getContents())
+                .filter(Objects::nonNull)
+                .forEach(stuffManager::addStartLoot);
+
+        ItemStack[] items = stuffManager.recoverTempStuff(uuid);
+        for (int i = 0; i < 40; i++) {
+            player.getInventory().setItem(i, items[i]);
         }
 
-        for (int j = 0; j < 40; j++) {
-            stuffManager.getStartLoot().setItem(j, inventory.getItem(j));
-            inventory.setItem(j, stuffManager.getTempStuff().get(uuid).getItem(j));
-        }
-        stuffManager.getTempStuff().remove(uuid);
         player.sendMessage(game.translate(Prefix.GREEN , "werewolf.commands.admin.stuff_start.perform"));
         player.setGameMode(GameMode.ADVENTURE);
 

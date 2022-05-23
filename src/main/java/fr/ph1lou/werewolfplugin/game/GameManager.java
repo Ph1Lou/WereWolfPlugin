@@ -23,10 +23,9 @@ import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import fr.ph1lou.werewolfapi.vote.IVoteManager;
 import fr.ph1lou.werewolfplugin.Main;
-import fr.ph1lou.werewolfplugin.save.Configuration;
 import fr.ph1lou.werewolfplugin.save.ConfigurationLoader;
 import fr.ph1lou.werewolfplugin.save.LanguageManager;
-import fr.ph1lou.werewolfplugin.save.Stuff;
+import fr.ph1lou.werewolfplugin.save.StuffLoader;
 import fr.ph1lou.werewolfplugin.scoreboards.ScoreBoard;
 import fr.ph1lou.werewolfplugin.tasks.LobbyTask;
 import fr.ph1lou.werewolfplugin.utils.UpdateChecker;
@@ -41,7 +40,6 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -67,7 +65,7 @@ public class GameManager implements WereWolfAPI {
     private final MapManager mapManager;
     private Configuration configuration;
     private final End end = new End(this);
-    private final Stuff stuff;
+    private final StuffManager stuff;
     private final RandomConfig randomConfig;
     private final ListenersLoader listenersLoader;
     private final Random r = new Random(System.currentTimeMillis());
@@ -84,24 +82,16 @@ public class GameManager implements WereWolfAPI {
         this.main = main;
         this.randomConfig = new RandomConfig(main);
         this.mapManager = new MapManager(main);
-        this.stuff = new Stuff(main);
+        this.stuff = new StuffManager();
         this.listenersLoader = new ListenersLoader(this);
-
-        File mapFolder = new File(main.getDataFolder() +
-                File.separator + "maps");
-        if (!mapFolder.exists()) {
-            if (!mapFolder.mkdirs()) {
-                Bukkit.getLogger().warning("[WereWolfPlugin] Folder Map Creation Failed");
-            }
-        }
-        setDay(Day.DAY);
-        setState(StateGame.LOBBY);
+        this.setDay(Day.DAY);
+        this.setState(StateGame.LOBBY);
         this.gameName = this.translate("werewolf.score_board.default_game_name");
     }
 
     public void init(){
         ConfigurationLoader.loadConfig(main,this, "saveCurrent");
-        this.getStuffs().load("saveCurrent");
+        StuffLoader.loadStuff(main, this, "saveCurrent");
         Bukkit.getPluginManager().callEvent(new LoadEvent(this));
         LobbyTask start = new LobbyTask(this);
         start.runTaskTimer(main, 0, 20);
@@ -177,9 +167,7 @@ public class GameManager implements WereWolfAPI {
         playerWW.setSpawn(spawn);
         this.playerSize++;
 
-        for (int j = 0; j < 40; j++) {
-            inventory.setItem(j, this.stuff.getStartLoot().getItem(j));
-        }
+        this.stuff.getStartLoot().forEach(inventory::addItem);
 
         this.mapManager.transportation(playerWW, 0);
     }

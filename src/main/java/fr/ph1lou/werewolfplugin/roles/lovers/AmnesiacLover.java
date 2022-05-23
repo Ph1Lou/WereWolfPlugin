@@ -40,7 +40,10 @@ import java.util.UUID;
         configValues = @IntValue(key = AmnesiacLover.DISTANCE,
                 defaultValue = 15,
                 meetUpValue = 15,
-                step = 2, item = UniversalMaterial.PINK_WOOL))
+                step = 2,
+                item = UniversalMaterial.PINK_WOOL
+        )
+)
 public class AmnesiacLover implements ILover, Listener {
 
     public static final String DISTANCE = "werewolf.role.amnesiac_lover.distance";

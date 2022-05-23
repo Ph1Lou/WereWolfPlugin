@@ -34,6 +34,13 @@ public class MapManager implements IMapManager {
 
     public MapManager(Main main) {
         this.main = main;
+        File mapFolder = new File(main.getDataFolder() +
+                File.separator + "maps");
+        if (!mapFolder.exists()) {
+            if (!mapFolder.mkdirs()) {
+                Bukkit.getLogger().warning("[WereWolfPlugin] Folder Map Creation Failed");
+            }
+        }
     }
 
     public void init() {

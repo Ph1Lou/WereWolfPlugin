@@ -956,7 +956,6 @@
         "delete_message": "Configuration §b&save&§r deleted",
         "success": "Settings §bsaved",
         "failure": "Configuration slots full",
-        "delete_failed": "Error while deleting §b&save&",
         "save_menu": "§bSaves §bMenu"
       },
       "stuff": {

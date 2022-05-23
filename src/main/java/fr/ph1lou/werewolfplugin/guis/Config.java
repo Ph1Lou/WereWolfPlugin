@@ -66,7 +66,7 @@ public class Config implements InventoryProvider {
 
         contents.set(3, 4, ClickableItem.of((new ItemBuilder(UniversalMaterial.CHEST.getType())
                 .setDisplayName(game.translate("werewolf.menu.stuff.name"))
-                .build()), e -> Stuffs.INVENTORY.open(player)));
+                .build()), e -> StuffsGUI.INVENTORY.open(player)));
 
         contents.set(3, 5, ClickableItem.of((new ItemBuilder(Material.GLASS)
                 .setDisplayName(game.translate("werewolf.menu.border.name"))
@@ -88,7 +88,7 @@ public class Config implements InventoryProvider {
 
         contents.set(5, 3, ClickableItem.of((new ItemBuilder(Material.ARMOR_STAND)
                 .setDisplayName(game.translate("werewolf.menu.save.name"))
-                .build()), e -> Save.INVENTORY.open(player)));
+                .build()), e -> SaveGUI.INVENTORY.open(player)));
 
         contents.set(5, 4, ClickableItem.of((new ItemBuilder(Material.EGG)
                 .setDisplayName(game.translate("werewolf.menu.random_events.name"))

@@ -1,10 +1,10 @@
 package fr.ph1lou.werewolfplugin.listeners;
 
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.utils.GoldenAppleParticleEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import fr.ph1lou.werewolfplugin.game.GameManager;
@@ -16,6 +16,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -33,6 +35,26 @@ public class SmallFeaturesListener implements Listener {
 
     public SmallFeaturesListener(WereWolfAPI game) {
         this.game = (GameManager) game;
+    }
+
+    @EventHandler
+    public void onBarrierEditionInventoryMode(InventoryClickEvent event) {
+
+        if(event.getClickedInventory().getType() != InventoryType.PLAYER){
+            return;
+        }
+
+        if(event.getCurrentItem().getType() != Material.BARRIER){
+            return;
+        }
+
+        if(event.getSlotType() != InventoryType.SlotType.ARMOR){
+            return;
+        }
+
+        event.setCancelled(true);
+
+        BukkitUtils.scheduleSyncDelayedTask(() -> ((Player)event.getView().getPlayer()).updateInventory());
     }
 
     @EventHandler

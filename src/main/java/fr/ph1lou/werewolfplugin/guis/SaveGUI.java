@@ -14,8 +14,8 @@ import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfplugin.save.ConfigurationLoader;
+import fr.ph1lou.werewolfplugin.save.StuffLoader;
 import net.wesjd.anvilgui.AnvilGUI;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -23,13 +23,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 
-public class Save implements InventoryProvider {
+public class SaveGUI implements InventoryProvider {
 
 
     public static final SmartInventory INVENTORY = SmartInventory.builder()
             .id("save")
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
-            .provider(new Save())
+            .provider(new SaveGUI())
             .size(2, 9)
             .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.save.name"))
             .closeable(true)
@@ -89,7 +89,7 @@ public class Save implements InventoryProvider {
                 .title(game.translate("werewolf.menu.save.save_menu"))
                 .itemLeft(new ItemStack(Material.EMERALD_BLOCK))
                 .plugin(main)
-                .onClose((player2) -> BukkitUtils.scheduleSyncDelayedTask(() -> Save.INVENTORY.open(player)))
+                .onClose((player2) -> BukkitUtils.scheduleSyncDelayedTask(() -> SaveGUI.INVENTORY.open(player)))
                 .open(player)));
 
         if (files.length != 0) {
@@ -128,7 +128,7 @@ public class Save implements InventoryProvider {
         if (files == null || files.length <= j) return;
 
         ConfigurationLoader.loadConfig(main, (GameManager) game, files[j].getName().replace(".json", ""));
-        game.getStuffs().load(files[j].getName().replace(".json", ""));
+        StuffLoader.loadStuff(main, (GameManager) game, files[j].getName().replace(".json", ""));
     }
 
     public void save(Main main, String saveName, Player player) {
@@ -137,29 +137,19 @@ public class Save implements InventoryProvider {
         File[] files = repertoire.listFiles();
         if (files == null || files.length < 8) {
             ConfigurationLoader.saveConfig(main, saveName);
-            game.getStuffs().save(saveName);
+            StuffLoader.saveStuff(main, saveName);
             player.sendMessage(game.translate(Prefix.GREEN , "werewolf.menu.save.success"));
         } else player.sendMessage(game.translate(Prefix.RED , "werewolf.menu.save.failure"));
     }
 
     public void erase(Main main) {
-        WereWolfAPI game = main.getWereWolfAPI();
+
         File repertoire = new File(main.getDataFolder() + File.separator + "configs");
         File[] files = repertoire.listFiles();
-
         if (files == null || files.length <= j) return;
 
-        File file = new File(main.getDataFolder() + File.separator + "configs", files[j].getName());
-        if (!file.delete()) {
-            Bukkit.getConsoleSender().sendMessage(game.translate(Prefix.RED , "werewolf.menu.save.delete_failed",
-                    Formatter.format("&save&",files[j].getName())));
-        }
-        file = new File(main.getDataFolder() + File.separator + "stuffs", files[j].getName().replaceFirst(".json", ".yml"));
-        if (!file.delete()) {
-            Bukkit.getConsoleSender().sendMessage(game.translate(Prefix.RED , "werewolf.menu.save.delete_failed",
-                    Formatter.format("&save&",files[j].getName().replaceFirst(".json", ".yml"))));
-        }
-
+        ConfigurationLoader.deleteConfig(main, files[j].getName().replace(".json", ""));
+        StuffLoader.deleteStuff(main, files[j].getName().replace(".json", ""));
     }
 }
 

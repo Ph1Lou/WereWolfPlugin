@@ -32,8 +32,8 @@ public class ScoreBoard {
 
 	private int day;
 	private String dayState;
-	private final List<String> scoreboard1 = new ArrayList<>();
-	private final List<String> scoreboard2 = new ArrayList<>();
+	private final List<String> scoreboardLobby = new ArrayList<>();
+	private final List<String> scoreboardGame = new ArrayList<>();
 	private final List<String> scoreboardScore = new ArrayList<>();
 	private final List<String> roles = new ArrayList<>();
 
@@ -43,9 +43,9 @@ public class ScoreBoard {
 
 	public void updateScoreBoard1() {
 
-		scoreboard1.clear();
+		scoreboardLobby.clear();
 
-		scoreboard1.addAll(game.translateArray("werewolf.score_board.scoreboard_lobby",
+		scoreboardLobby.addAll(game.translateArray("werewolf.score_board.scoreboard_lobby",
 						Formatter.format("&players&", game.getPlayersCount()),
 						Formatter.format("&roles&", game.getRoleInitialSize()),
 						Formatter.format("&max&",game.getConfig().getPlayerMax()),
@@ -58,7 +58,7 @@ public class ScoreBoard {
 	public void updateScoreBoard2(FastBoard board) {
 
 		UUID playerUUID = board.getPlayer().getUniqueId();
-		List<String> score = new ArrayList<>(scoreboard2);
+		List<String> score = new ArrayList<>(scoreboardGame);
 		IPlayerWW playerWW = game.getPlayerWW(playerUUID).orElse(null);
 		IModerationManager moderationManager = game.getModerationManager();
 		String role;
@@ -104,7 +104,7 @@ public class ScoreBoard {
 			}
 		}
 
-		scoreboard2.clear();
+		scoreboardGame.clear();
 
 		this.day = game.getTimer() / game.getConfig()
 				.getTimerValue(TimerBase.DAY_DURATION) / 2 + 1;
@@ -112,7 +112,7 @@ public class ScoreBoard {
 				"werewolf.score_board.day" : "werewolf.score_board.night");
 
 
-		scoreboard2.addAll(game.translateArray("werewolf.score_board.scoreboard_game",
+		scoreboardGame.addAll(game.translateArray("werewolf.score_board.scoreboard_game",
 						Formatter.timer(Utils.conversion(game.getTimer())),
 						Formatter.format("&day&", this.day),
 						Formatter.format("&players&", game.getPlayersCount()),
@@ -273,7 +273,7 @@ public class ScoreBoard {
 			} else if (!roles.isEmpty()) {
 				board.updateLines(roles);
 			} else if (game.isState(StateGame.LOBBY)) {
-				board.updateLines(scoreboard1);
+				board.updateLines(scoreboardLobby);
 			} else {
 				updateScoreBoard2(board);
 			}

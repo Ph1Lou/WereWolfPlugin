@@ -1,7 +1,7 @@
 package fr.ph1lou.werewolfplugin.listeners;
 
-import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -36,10 +36,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.UUID;
@@ -80,13 +80,9 @@ public class DeathListener implements Listener {
             playerWW.setState(StatePlayer.JUDGEMENT);
             ((PlayerWW)playerWW).setDeathTime(game.getTimer());
 
-            Inventory inv = Bukkit.createInventory(null, 45);
-
-            for (int i = 0; i < 40; i++) {
-                inv.setItem(i, player.getInventory().getItem(i));
-            }
-
-            playerWW.setItemDeath(inv.getContents());
+            playerWW.setItemDeath( Arrays.stream(player.getInventory().getContents())
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList()));
 
             player.setGameMode(GameMode.ADVENTURE);
             player.sendMessage(game.translate(Prefix.ORANGE , "werewolf.announcement.potential_revive"));
@@ -108,8 +104,6 @@ public class DeathListener implements Listener {
                 Bukkit.getPluginManager().callEvent(new PlayerWWDeathEvent(playerWW, null));
 
             }
-
-
 
             BukkitUtils.scheduleSyncDelayedTask(() -> {
                 if (!game.isState(StateGame.END)) {
@@ -182,12 +176,9 @@ public class DeathListener implements Listener {
             if (player != null) {
                 playerWW.setDeathLocation(player.getLocation());
 
-                Inventory inv = Bukkit.createInventory(null, 45);
-
-                for (int j = 0; j < 40; j++) {
-                    inv.setItem(j, player.getInventory().getItem(j));
-                }
-                playerWW.setItemDeath(inv.getContents());
+                playerWW.setItemDeath( Arrays.stream(player.getInventory().getContents())
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList()));
             }
             playerWW.setDeathTime(game.getTimer());
         }
@@ -247,11 +238,7 @@ public class DeathListener implements Listener {
         Bukkit.getPluginManager().callEvent(deathItemsEvent);
 
         if(!deathItemsEvent.isCancelled()){
-            deathItemsEvent.getItems().forEach(itemStack -> {
-                if(itemStack != null){
-                    world.dropItem(deathItemsEvent.getLocation(), itemStack);
-                }
-            });
+            deathItemsEvent.getItems().forEach(itemStack -> world.dropItem(deathItemsEvent.getLocation(), itemStack));
         }
 
         if (player != null) {

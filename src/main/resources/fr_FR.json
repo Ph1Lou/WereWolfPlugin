@@ -1298,7 +1298,6 @@
         "delete_message": "Configuration §b&save&§r supprimée",
         "success": "Configuration §bsauvegardée",
         "failure": "Slot de configuration plein",
-        "delete_failed": "Erreur lors de la suppression de §b&save&",
         "save_menu": "§bMenu de §bSauvegarde"
       },
       "stuff": {
