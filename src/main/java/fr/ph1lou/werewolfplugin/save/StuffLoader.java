@@ -8,7 +8,6 @@ import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.Register;
-import fr.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -28,41 +27,48 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class StuffLoader {
 
 
-    public static void deleteStuff(Main main, String replace) {
-        //todo
+    public static void deleteStuff(String name) {
+
+        for (Wrapper<JavaPlugin, ModuleWerewolf> addonWrapper : Register.get().getModulesRegister()) {
+            addonWrapper.getObject()
+                    .ifPresent(javaPlugin -> {
+                        File fileValuesAddon = new File(javaPlugin.getDataFolder()
+                                + File.separator + "stuffs"
+                                + File.separator, name + ".yml");
+
+                        fileValuesAddon.delete();
+                    });
+        }
     }
 
-    public static void loadAllStuffDefault(Main main, WereWolfAPI game) {
-        FileUtils_.copy(main.getResource("stuffRole.yml"),
-                main.getDataFolder() +
-                        File.separator + "stuffs" + File.separator + "stuffRole.yml");
-        loadStuffRole(main, game, "stuffRole");
+    public static void loadAllStuffDefault(WereWolfAPI game) {
+        recoverFromPluginRessources("stuffRole");
+        loadStuffRole(game, "stuffRole");
     }
 
-    public static  void loadAllStuffMeetUP(Main main, WereWolfAPI game) {
-        FileUtils_.copy(main.getResource("stuffMeetUp.yml"),
-                main.getDataFolder() +
-                        File.separator + "stuffs" + File.separator + "stuffMeetUp.yml");
-        loadStuffRole(main, game, "stuffMeetUp");
-        loadStuffStartAndDeath(main, game, "stuffMeetUp");
+    public static  void loadAllStuffMeetUP(WereWolfAPI game) {
+
+        recoverFromPluginRessources("stuffMeetUp");
+        loadStuffRole(game, "stuffMeetUp");
+        loadStuffStartAndDeath(game, "stuffMeetUp");
     }
 
-    public static void loadStuffChill(Main main, WereWolfAPI game) {
-        FileUtils_.copy(main.getResource("stuffChill.yml"), main.getDataFolder() + File.separator + "stuffs" + File.separator + "stuffChill.yml");
-        loadStuffStartAndDeath(main, game, "stuffChill");
+    public static void loadStuffChill(WereWolfAPI game) {
+        recoverFromPluginRessources("stuffChill");
+        loadStuffStartAndDeath(game, "stuffChill");
     }
 
-    public static void loadStuff(Main main, GameManager game, String configName) {
-        loadStuffRole(main, game, configName);
-        loadStuffStartAndDeath(main, game,configName);
+    public static void loadStuff(WereWolfAPI game, String configName) {
+        recoverFromPluginRessources(configName);
+        loadStuffRole(game, configName);
+        loadStuffStartAndDeath(game,configName);
     }
 
-    public static void saveStuff(Main main, String configName) {
-
-        GameManager game = (GameManager) main.getWereWolfAPI();
+    public static void saveStuff(WereWolfAPI game, String configName) {
 
         for(Wrapper<JavaPlugin, ModuleWerewolf> addon:Register.get().getModulesRegister()){
             addon.getObject()
@@ -73,12 +79,13 @@ public class StuffLoader {
                             addon.getMetaDatas().key()));
         }
 
-        saveStuffRole(main, game, configName, "werewolf.name");
-        saveStuffStartAndDeath(main, game, configName);
+        saveStuffStartAndDeath(game, configName);
 
     }
 
-    private static void saveStuffStartAndDeath(Main main, WereWolfAPI game, String configName) {
+    private static void saveStuffStartAndDeath(WereWolfAPI game, String configName) {
+
+        Main main = JavaPlugin.getPlugin(Main.class);
 
         int pos = 0;
         FileConfiguration config = getOrCreateCustomConfig(main, configName);
@@ -140,13 +147,10 @@ public class StuffLoader {
 
     }
 
-    public static Map<String, List<ItemStack>> loadStuff(Plugin plugin, String addonKey, String configName) {
+    private static Map<String, List<ItemStack>> loadStuff(Plugin plugin, String addonKey, String configName) {
 
         Map<String, List<ItemStack>> temp = new HashMap<>();
 
-        if (!(new File(plugin.getDataFolder() + File.separator + "stuffs" + File.separator, configName + ".yml")).exists()) {
-            FileUtils_.copy(plugin.getResource("stuffRole.yml"), plugin.getDataFolder() + File.separator + "stuffs" + File.separator + configName + ".yml");
-        }
         FileConfiguration config = getOrCreateCustomConfig(plugin, configName);
 
         for (Wrapper<IRole, Role> roleRegister : Register.get().getRolesRegister()) {
@@ -166,7 +170,9 @@ public class StuffLoader {
         return temp;
     }
 
-    public static void loadStuffStartAndDeath(Main main, WereWolfAPI game, String configName) {
+    private static void loadStuffStartAndDeath(WereWolfAPI game, String configName) {
+
+        Main main = JavaPlugin.getPlugin(Main.class);
 
         game.getStuffs().clearDeathLoot();
         game.getStuffs().clearStartLoot();
@@ -253,7 +259,9 @@ public class StuffLoader {
         return customConfig;
     }
 
-    public static void loadStuffRole(Main main, WereWolfAPI game, String configName) {
+    private static void loadStuffRole(WereWolfAPI game, String configName) {
+
+        Main main = JavaPlugin.getPlugin(Main.class);
 
         game.getStuffs().clearStuffRoles();
 
@@ -266,5 +274,20 @@ public class StuffLoader {
 
         loadStuff(main, Main.KEY, configName)
                 .forEach((key, itemStacks) -> game.getStuffs().setStuffRole(key, itemStacks));
+    }
+
+    private static void recoverFromPluginRessources(String name) {
+        for(Wrapper<JavaPlugin, ModuleWerewolf> addon:Register.get().getModulesRegister()){
+            addon.getObject()
+                    .ifPresent(javaPlugin -> {
+                        FileUtils_.copy(javaPlugin.getResource(name+".yml"),
+                                javaPlugin.getDataFolder() +
+                                        File.separator + "stuffs" + File.separator + name+".yml");
+
+                        if (!(new File(javaPlugin.getDataFolder() + File.separator + "stuffs" + File.separator, name + ".yml")).exists()) {
+                            FileUtils_.copy(javaPlugin.getResource("stuffRole.yml"), javaPlugin.getDataFolder() + File.separator + "stuffs" + File.separator + name + ".yml");
+                        }
+                    });
+        }
     }
 }

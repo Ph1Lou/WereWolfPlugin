@@ -52,11 +52,11 @@ public class StuffsGUI implements InventoryProvider {
         UUID uuid = player.getUniqueId();
 
         contents.set(0, 2, ClickableItem.of((new ItemBuilder(Material.EGG).setDisplayName(game.translate("werewolf.menu.stuff.normal"))).build(),
-                e -> StuffLoader.loadAllStuffDefault(main, game)));
+                e -> StuffLoader.loadAllStuffDefault(game)));
         contents.set(0, 4, ClickableItem.of((new ItemBuilder(UniversalMaterial.GOLDEN_SWORD.getType()).setDisplayName(game.translate("werewolf.menu.stuff.meet_up"))).build(),
-                e -> StuffLoader.loadAllStuffMeetUP(main, game)));
+                e -> StuffLoader.loadAllStuffMeetUP(game)));
         contents.set(0, 6, ClickableItem.of((new ItemBuilder(Material.JUKEBOX).setDisplayName(game.translate("werewolf.menu.stuff.chill"))).build(),
-                e -> StuffLoader.loadStuffChill(main, game)));
+                e -> StuffLoader.loadStuffChill(game)));
         contents.set(1, 1, ClickableItem.of((new ItemBuilder(Material.BARRIER).setDisplayName(game.translate("werewolf.menu.stuff.delete"))).build(), e -> {
             game.getStuffs().clearStartLoot();
             game.getStuffs().clearDeathLoot();

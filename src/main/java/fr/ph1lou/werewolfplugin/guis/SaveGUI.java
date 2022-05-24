@@ -53,6 +53,20 @@ public class SaveGUI implements InventoryProvider {
 
         File repertoire = new File(main.getDataFolder() + File.separator + "configs");
         File[] files = repertoire.listFiles();
+
+        contents.set(1, 0, ClickableItem.of((new ItemBuilder(Material.EMERALD_BLOCK).setDisplayName(game.translate("werewolf.menu.save.new")).build()), e -> new AnvilGUI.Builder()
+                .onComplete((player2, text) -> {
+                    save(main, text, player);
+                    return AnvilGUI.Response.close();
+                })
+                .preventClose()
+                .text(" ")
+                .title(game.translate("werewolf.menu.save.save_menu"))
+                .itemLeft(new ItemStack(Material.EMERALD_BLOCK))
+                .plugin(main)
+                .onClose((player2) -> BukkitUtils.scheduleSyncDelayedTask(() -> SaveGUI.INVENTORY.open(player)))
+                .open(player)));
+
         if (files == null) return;
 
         if (j >= files.length) {
@@ -78,19 +92,6 @@ public class SaveGUI implements InventoryProvider {
                         .build()), e -> j = finalI));
             }
         }
-
-        contents.set(1, 0, ClickableItem.of((new ItemBuilder(Material.EMERALD_BLOCK).setDisplayName(game.translate("werewolf.menu.save.new")).build()), e -> new AnvilGUI.Builder()
-                .onComplete((player2, text) -> {
-                    save(main, text, player);
-                    return AnvilGUI.Response.close();
-                })
-                .preventClose()
-                .text(" ")
-                .title(game.translate("werewolf.menu.save.save_menu"))
-                .itemLeft(new ItemStack(Material.EMERALD_BLOCK))
-                .plugin(main)
-                .onClose((player2) -> BukkitUtils.scheduleSyncDelayedTask(() -> SaveGUI.INVENTORY.open(player)))
-                .open(player)));
 
         if (files.length != 0) {
             contents.set(1, 3,
@@ -126,9 +127,10 @@ public class SaveGUI implements InventoryProvider {
         File[] files = repertoire.listFiles();
 
         if (files == null || files.length <= j) return;
+        String saveName = files[j].getName().replace(".json", "");
 
-        ConfigurationLoader.loadConfig(main, (GameManager) game, files[j].getName().replace(".json", ""));
-        StuffLoader.loadStuff(main, (GameManager) game, files[j].getName().replace(".json", ""));
+        ConfigurationLoader.loadConfig((GameManager) game, saveName);
+        StuffLoader.loadStuff(game, saveName);
     }
 
     public void save(Main main, String saveName, Player player) {
@@ -136,8 +138,8 @@ public class SaveGUI implements InventoryProvider {
         File repertoire = new File(main.getDataFolder() + File.separator + "configs");
         File[] files = repertoire.listFiles();
         if (files == null || files.length < 8) {
-            ConfigurationLoader.saveConfig(main, saveName);
-            StuffLoader.saveStuff(main, saveName);
+            ConfigurationLoader.saveConfig(game, saveName);
+            StuffLoader.saveStuff(game, saveName);
             player.sendMessage(game.translate(Prefix.GREEN , "werewolf.menu.save.success"));
         } else player.sendMessage(game.translate(Prefix.RED , "werewolf.menu.save.failure"));
     }
@@ -147,9 +149,10 @@ public class SaveGUI implements InventoryProvider {
         File repertoire = new File(main.getDataFolder() + File.separator + "configs");
         File[] files = repertoire.listFiles();
         if (files == null || files.length <= j) return;
+        String saveName = files[j].getName().replace(".json", "");
 
-        ConfigurationLoader.deleteConfig(main, files[j].getName().replace(".json", ""));
-        StuffLoader.deleteStuff(main, files[j].getName().replace(".json", ""));
+        ConfigurationLoader.deleteConfig(saveName);
+        StuffLoader.deleteStuff(saveName);
     }
 }
 

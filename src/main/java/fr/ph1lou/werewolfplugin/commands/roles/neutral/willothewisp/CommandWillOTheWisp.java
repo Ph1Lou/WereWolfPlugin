@@ -13,7 +13,6 @@ import fr.ph1lou.werewolfapi.role.interfaces.ILimitedUse;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfplugin.roles.neutrals.WillOTheWisp;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
@@ -49,7 +48,7 @@ public class CommandWillOTheWisp implements ICommandRole {
             playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
             return;
         }
-        Player player;
+
         Vector vector = playerWW.getEyeLocation().getDirection();
         vector
                 .normalize()

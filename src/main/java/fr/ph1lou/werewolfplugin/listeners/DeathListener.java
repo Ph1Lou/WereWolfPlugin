@@ -36,11 +36,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -80,9 +82,14 @@ public class DeathListener implements Listener {
             playerWW.setState(StatePlayer.JUDGEMENT);
             ((PlayerWW)playerWW).setDeathTime(game.getTimer());
 
-            playerWW.setItemDeath( Arrays.stream(player.getInventory().getContents())
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList()));
+            List<ItemStack> items = new ArrayList<>();
+            for (int i = 0; i < 40; i++) {
+                ItemStack item = player.getInventory().getItem(i);
+                if(item != null){
+                    items.add(item);
+                }
+            }
+            playerWW.setItemDeath(items);
 
             player.setGameMode(GameMode.ADVENTURE);
             player.sendMessage(game.translate(Prefix.ORANGE , "werewolf.announcement.potential_revive"));
@@ -176,9 +183,14 @@ public class DeathListener implements Listener {
             if (player != null) {
                 playerWW.setDeathLocation(player.getLocation());
 
-                playerWW.setItemDeath( Arrays.stream(player.getInventory().getContents())
-                        .filter(Objects::nonNull)
-                        .collect(Collectors.toList()));
+                List<ItemStack> items = new ArrayList<>();
+                for (int i = 0; i < 40; i++) {
+                    ItemStack item = player.getInventory().getItem(i);
+                    if(item != null){
+                        items.add(item);
+                    }
+                }
+                playerWW.setItemDeath(items);
             }
             playerWW.setDeathTime(game.getTimer());
         }

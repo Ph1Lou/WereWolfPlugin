@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.save;
 
 import fr.ph1lou.werewolfapi.annotations.ModuleWerewolf;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Main;
@@ -16,17 +17,14 @@ import java.util.Map;
 import java.util.Optional;
 
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class ConfigurationLoader {
 
-    public static void deleteConfig(Main main, String name){
+    public static void deleteConfig(String name){
 
+        Main main = JavaPlugin.getPlugin(Main.class);
         File fileConfigPlugin = new File(main.getDataFolder() + File.separator + "configs", name+ ".json");
         fileConfigPlugin.delete();
-        File fileValuesPlugin = new File(main.getDataFolder()
-                + File.separator + "values"
-                + File.separator, name + ".json");
-
-        fileValuesPlugin.delete();
 
         for (Wrapper<JavaPlugin, ModuleWerewolf> addonWrapper : main.getRegisterManager().getModulesRegister()) {
             addonWrapper.getObject()
@@ -38,19 +36,46 @@ public class ConfigurationLoader {
                         fileValuesAddon.delete();
                     });
         }
+    }
+
+    public static void saveConfig(WereWolfAPI game, String name){
+
+        Main main = JavaPlugin.getPlugin(Main.class);
+
+        File file = new File(main.getDataFolder()
+                + File.separator + "configs"
+                + File.separator, name + ".json");
+
+        FileUtils_.save(file, Serializer.serialize(game.getConfig()));
+
+        ((Configuration)game.getConfig()).getStorageConfigurations()
+                .forEach(storageConfiguration -> main.getRegisterManager()
+                        .getModulesRegister()
+                        .stream()
+                        .filter(javaPluginAddonWrapper -> javaPluginAddonWrapper.getAddonKey()
+                                .equals(storageConfiguration.getAddonKey()))
+                        .map(Wrapper::getObject)
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .findFirst()
+                        .ifPresent(javaPlugin -> {
+                            File file1 = new File(javaPlugin.getDataFolder()
+                                    + File.separator + "values"
+                                    + File.separator, name + ".json");
+                            FileUtils_.save(file1, Serializer.serialize(storageConfiguration));
+                        }));
 
     }
 
-    public static void loadConfig(Main main, GameManager game, String name){
+    public static void loadConfig(GameManager game, String name){
+
+        Main main = JavaPlugin.getPlugin(Main.class);
 
         Map<String, StorageConfiguration> configurationMap = new HashMap<>();
 
         File file = new File(main.getDataFolder()
                 + File.separator + "configs"
                 + File.separator, name + ".json");
-
-        configurationMap.put(Main.KEY,
-                loadConfig(main, name).setAddonKey(Main.KEY));
 
         for (Wrapper<JavaPlugin, ModuleWerewolf> addonWrapper : main.getRegisterManager().getModulesRegister()) {
             addonWrapper.getObject()
@@ -89,34 +114,4 @@ public class ConfigurationLoader {
 
         return Serializer.deserializeConfiguration(FileUtils_.loadContent(file));
     }
-
-    public static void saveConfig(Main main, String name){
-
-        GameManager game = (GameManager) main.getWereWolfAPI();
-
-        File file = new File(main.getDataFolder()
-                + File.separator + "configs"
-                + File.separator, name + ".json");
-
-        FileUtils_.save(file, Serializer.serialize(game.getConfig()));
-
-        ((Configuration)game.getConfig()).getStorageConfigurations()
-                        .forEach(storageConfiguration -> main.getRegisterManager()
-                                .getModulesRegister()
-                                .stream()
-                                .filter(javaPluginAddonWrapper -> javaPluginAddonWrapper.getAddonKey()
-                                        .equals(storageConfiguration.getAddonKey()))
-                                .map(Wrapper::getObject)
-                                .filter(Optional::isPresent)
-                                .map(Optional::get)
-                                .findFirst()
-                                .ifPresent(javaPlugin -> {
-                                    File file1 = new File(javaPlugin.getDataFolder()
-                                            + File.separator + "values"
-                                            + File.separator, name + ".json");
-                                    FileUtils_.save(file1, Serializer.serialize(storageConfiguration));
-                                }));
-
-    }
-
 }

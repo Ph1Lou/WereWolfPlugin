@@ -7,7 +7,6 @@ import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfplugin.save.ConfigurationLoader;
 import fr.ph1lou.werewolfplugin.save.StuffLoader;
@@ -15,7 +14,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.text.DecimalFormat;
 
@@ -54,8 +52,8 @@ public class CommandStart implements ICommand {
         wb.setSize(game.getConfig().getBorderMax());
         wb.setWarningDistance((int) (wb.getSize() / 7));
         ((GameManager) game).setState(StateGame.TRANSPORTATION);
-        ConfigurationLoader.saveConfig(JavaPlugin.getPlugin(Main.class), "saveCurrent");
-        StuffLoader.saveStuff(JavaPlugin.getPlugin(Main.class), "saveCurrent");
+        ConfigurationLoader.saveConfig(game, "saveCurrent");
+        StuffLoader.saveStuff(game, "saveCurrent");
         Bukkit.getPluginManager().callEvent(new StartEvent(game));
     }
 }

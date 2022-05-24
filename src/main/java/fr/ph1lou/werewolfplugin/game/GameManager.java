@@ -90,8 +90,8 @@ public class GameManager implements WereWolfAPI {
     }
 
     public void init(){
-        ConfigurationLoader.loadConfig(main,this, "saveCurrent");
-        StuffLoader.loadStuff(main, this, "saveCurrent");
+        ConfigurationLoader.loadConfig(this, "saveCurrent");
+        StuffLoader.loadStuff(this, "saveCurrent");
         Bukkit.getPluginManager().callEvent(new LoadEvent(this));
         LobbyTask start = new LobbyTask(this);
         start.runTaskTimer(main, 0, 20);
