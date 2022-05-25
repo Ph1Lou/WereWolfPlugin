@@ -29,7 +29,7 @@ import java.util.List;
         attributes = {RoleAttribute.VILLAGER,
                 RoleAttribute.MINOR_INFORMATION},
         timers = {@Timer(key = TimerBase.ANALYSE_DURATION, defaultValue = 1800,
-                meetUpValue = 600,
+                meetUpValue = 6 * 60,
         decrementAfterRole = true)})
 public class Analyst extends RoleWithLimitedSelectionDuration implements ILimitedUse, IAffectedPlayers {
 

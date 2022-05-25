@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 @Role(key = RoleBase.HUNTER,
         category = Category.VILLAGER,
         attributes = RoleAttribute.VILLAGER,
-        configurations = {@Configuration(key = ConfigBase.HUNTER_CAN_SHOOT)})
+        configurations = @Configuration(key = ConfigBase.HUNTER_CAN_SHOOT, meetUpValue = true))
 public class Hunter extends RoleVillage implements IPower {
 
     private boolean power = false;

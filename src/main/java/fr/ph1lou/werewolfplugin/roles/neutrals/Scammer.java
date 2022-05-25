@@ -46,7 +46,7 @@ import java.util.Optional;
         category = Category.NEUTRAL, 
         attributes = RoleAttribute.HYBRID,
         incompatibleRoles = {RoleBase.CHARMER},
-        timers = {@Timer(key = TimerBase.SCAM_DELAY, defaultValue = 9, meetUpValue = 5)},
+        timers = {@Timer(key = TimerBase.SCAM_DELAY, defaultValue = 9, meetUpValue = 3)},
         configValues = {@IntValue(key = Scammer.DISTANCE,
                 defaultValue = 20, meetUpValue = 20, step = 2, item = UniversalMaterial.BROWN_WOOL)})
 public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {

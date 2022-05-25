@@ -459,7 +459,7 @@
         "wait": "Vous devez attendre §bun jour§f avant de transmettre une nouvelle flûte",
         "affected": "§bPersonne affectée§f : §f&list&\n",
         "craft_description": "Pour fabriquer votre flûte, un baton entourer de ingot d'or dans votre établi",
-        "description": "Lorsque vous aurez fabriquer votre flûte, toutes les personnes à §b&number&§f blocks de vous seront charmées progressivement (1% toutes les 6 secondes).",
+        "description": "Lorsque vous aurez fabriquer votre flûte, toutes les personnes à §b&number&§f blocks de vous seront charmées progressivement (1% toutes les &timer& secondes).",
         "power": "Vous pouvez fabriquer des flûtes §bsupplémentaires§f, et les donner furtivement aux joueurs par un §bclique droit§f une fois par cycle. Si le joueur repère la flûte son effet est annulé. Un joueur avec une flûte charmera §bà son insu§f les joueurs autour de lui.",
         "enchanted": "Vous venez d'enchanter §b&player&",
         "transmit": "Vous venez de transmettre une flûte à §b&player&§f il vous en reste §b&number&",
@@ -470,7 +470,8 @@
         "craft": "Vous venez de fabriquer une nouvelle flûte (§f&number&§f flûte(s) en stock), faites clique droit sur un joueur pour lui donner sans éveiller les soupcons. Il charmera les personnes autour de lui tant qu'il ne remarque pas la flûte dans son inventaire",
         "perform": "Vous venez de réaliser §bvotre flûte§f, vous commencez à charmer les personnes à §b&number&§f blocks de vous",
         "item": "Flûte magique",
-        "distance": "Champ d'action du Joueur de Flûte §b&number&"
+        "distance": "Champ d'action du Joueur de Flûte §b&number&",
+        "timer": "Charme 1% toutes les §b&timer&"
       },
       "librarian": {
         "display": "Bibliothécaire",
@@ -755,7 +756,8 @@
         "display": "Conteuse",
         "items": "§bDeux§f Bibliothèques",
         "players": "Joueurs ayant agit pendant la journée : &players&",
-        "description": "Au bout du 5em jour, elle reçoit chaque matin une liste de joueurs ayant agi pendant la journée écoulé."
+        "day": "Pouvoir activé Jour §b&number&",
+        "description": "Au bout du §b&number&§fem jour, elle reçoit chaque matin une liste de joueurs ayant agi pendant la journée écoulé."
       },
       "spy": {
         "display": "Espion",

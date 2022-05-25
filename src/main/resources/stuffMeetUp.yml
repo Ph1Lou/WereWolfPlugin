@@ -269,3 +269,12 @@ werewolf.role.barbarian.display:
       meta-type: ENCHANTED
       stored-enchants:
         DAMAGE_ALL: 3
+werewolf.role.flute_player.display:
+  0:
+    ==: org.bukkit.inventory.ItemStack
+    type: GOLD_INGOT
+    amount: 16
+  1:
+    ==: org.bukkit.inventory.ItemStack
+    type: STICK
+    amount: 2

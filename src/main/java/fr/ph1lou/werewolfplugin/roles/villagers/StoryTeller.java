@@ -1,5 +1,6 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
@@ -7,6 +8,7 @@ import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.actionablestory.ActionableStoryEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.roles.storyteller.StoryTellerEvent;
@@ -26,10 +28,13 @@ import java.util.stream.Collectors;
 
 @Role(key = RoleBase.STORY_TELLER,
         category = Category.VILLAGER, attributes = {RoleAttribute.VILLAGER,
-        RoleAttribute.INFORMATION})
+        RoleAttribute.INFORMATION},
+        configValues = @IntValue(key = StoryTeller.DAY, defaultValue = 5, meetUpValue = 3, step = 1, item = UniversalMaterial.BED))
 public class StoryTeller extends RoleVillage {
 
     private final Set<IPlayerWW> players = new HashSet<>();
+
+    public static final String DAY = "werewolf.role.story_teller.day";
 
     public StoryTeller(WereWolfAPI game, IPlayerWW playerWW) {
         super(game, playerWW);
@@ -43,7 +48,7 @@ public class StoryTeller extends RoleVillage {
     @EventHandler
     public void onDay(DayEvent event){
 
-        if(event.getNumber()>=5){
+        if(event.getNumber()>=game.getConfig().getValue(DAY)){
 
             if(this.getPlayerWW().isState(StatePlayer.ALIVE)){
 
@@ -76,7 +81,8 @@ public class StoryTeller extends RoleVillage {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.story_teller.description"))
+                .setDescription(game.translate("werewolf.role.story_teller.description",
+                        Formatter.number(game.getConfig().getValue(DAY))))
                 .setItems(game.translate("werewolf.role.story_teller.items"))
                 .build();
     }

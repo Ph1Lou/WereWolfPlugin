@@ -50,7 +50,7 @@ import java.util.stream.Collectors;
         category = Category.NEUTRAL,
         attributes = RoleAttribute.NEUTRAL,
         timers = {@Timer(key = TimerBase.RIVAL_DURATION,
-                defaultValue = 2400, meetUpValue = 2400,
+                defaultValue = 2400, meetUpValue = 5*60,
         decrementAfterRole = true,
         onZero = RivalEvent.class)},
         requireRoles = {RoleBase.CUPID})

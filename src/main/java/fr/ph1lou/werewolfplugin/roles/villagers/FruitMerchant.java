@@ -39,7 +39,7 @@ import java.util.Map;
          category = Category.VILLAGER, 
          attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION},
          timers = {@Timer(key = TimerBase.FRUIT_MERCHANT_COOL_DOWN,
-                 defaultValue = 1200, meetUpValue = 600)},
+                 defaultValue = 1200, meetUpValue = 5 * 60)},
  configValues = {@IntValue(key = FruitMerchant.DISTANCE,
          defaultValue = 50, meetUpValue = 50, step = 5, item = UniversalMaterial.ORANGE_WOOL)})
 public class FruitMerchant extends RoleVillage implements IAffectedPlayers, IPower {

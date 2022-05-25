@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
         category = Category.VILLAGER,
         attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION},
         configValues = {@IntValue(key = Gravedigger.DISTANCE,
-        defaultValue = 70, meetUpValue = 70, step = 5, item = UniversalMaterial.BIRCH_LEAVES)})
+        defaultValue = 70, meetUpValue = 30, step = 5, item = UniversalMaterial.BIRCH_LEAVES)})
 public class Gravedigger extends RoleVillage implements IAffectedPlayers {
 
     public static final String DISTANCE = "werewolf.role.gravedigger.config";

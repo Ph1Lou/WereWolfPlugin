@@ -3,6 +3,7 @@ package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -27,6 +28,7 @@ import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
+import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -61,6 +63,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Role(key = RoleBase.FLUTE_PLAYER, 
         category = Category.NEUTRAL, 
         attributes = RoleAttribute.NEUTRAL,
+        timers = @Timer(key = FlutePlayer.TIMER, defaultValue = 6, meetUpValue = 3, step = 1),
         configValues = @IntValue(key = FlutePlayer.DISTANCE,
         defaultValue = 20, meetUpValue = 20, step = 4, item = UniversalMaterial.LIGHT_BLUE_WOOL))
 
@@ -76,6 +79,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
     private boolean hasOwnFlute = false;
     private int timer = 0; //pour faire les calculs une fois toutes les 6 secondes
 
+    public static final String TIMER = "werewolf.role.flute_player.timer";
     private boolean all = false;
 
     private int fluteInStore = 0;
@@ -130,7 +134,8 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
 
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.flute_player.description",
-                                Formatter.number(game.getConfig().getValue(DISTANCE))))
+                                Formatter.number(game.getConfig().getValue(DISTANCE)
+                                ), Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TIMER)))))
                 .setPower(game.translate("werewolf.role.flute_player.power"))
                 .setItems(game.translate("werewolf.role.flute_player.craft_description"))
                 .setEffects(game.translate("werewolf.role.flute_player.effect"))
