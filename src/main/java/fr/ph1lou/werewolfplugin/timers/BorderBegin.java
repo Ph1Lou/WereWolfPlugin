@@ -12,7 +12,7 @@ import org.bukkit.event.EventHandler;
 
 @Timer(key = TimerBase.BORDER_BEGIN,
         defaultValue = 3600,
-        meetUpValue = 3600,
+        meetUpValue = 30 * 60,
         decrement = true,
         onZero = BorderStartEvent.class)
 public class BorderBegin extends ListenerManager {

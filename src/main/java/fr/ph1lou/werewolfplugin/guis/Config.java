@@ -5,6 +5,7 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfapi.enums.Category;
@@ -126,7 +127,7 @@ public class Config implements InventoryProvider {
 
 
         int[] SlotRedGlass = {1, 2, 6, 7, 9, 10, 16, 17, 18, 26, 27, 35, 36, 37, 43, 44, 46, 47, 51, 52};
-        int[] SlotBlackGlass = {3, 5, 11, 12, 14, 15, 19, 20, 21, 23, 24, 25, 28, 34, 38, 39, 41, 42};
+        int[] SlotBlackGlass = {5, 11, 12, 14, 15, 19, 20, 21, 23, 24, 25, 28, 34, 38, 39, 41, 42};
         for (int slotRedGlass : SlotRedGlass) {
             contents.set(slotRedGlass / 9, slotRedGlass % 9, ClickableItem.empty((new ItemBuilder(UniversalMaterial.RED_STAINED_GLASS_PANE.getStack()).build())));
 
@@ -141,6 +142,13 @@ public class Config implements InventoryProvider {
     public void update(Player player, InventoryContents contents) {
 
         WereWolfAPI game = JavaPlugin.getPlugin(Main.class).getWereWolfAPI();
+
+        contents.set(0, 3, ClickableItem.of((new ItemBuilder(Material.GOLD_SWORD)
+                .setDisplayName(game.translate("werewolf.menu.meet_up.button",
+                        Formatter.format("&on&", game.translate(game.getConfig().isMeetUp() ?
+                                "werewolf.utils.on":
+                                "werewolf.utils.off"))))
+                .build()), e -> MeetUpGUI.INVENTORY.open(player)));
 
         if (game.isState(StateGame.LOBBY)) {
             contents.set(0, 4, ClickableItem.of((new ItemBuilder(UniversalMaterial.LIME_WOOL

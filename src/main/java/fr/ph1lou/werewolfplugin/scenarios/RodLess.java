@@ -10,7 +10,7 @@ import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 
-@Scenario(key = ScenarioBase.ROD_LESS, defaultValue = true)
+@Scenario(key = ScenarioBase.ROD_LESS, defaultValue = true, meetUpValue = true)
 public class RodLess extends ListenerManager {
 
     public RodLess(GetWereWolfAPI main) {

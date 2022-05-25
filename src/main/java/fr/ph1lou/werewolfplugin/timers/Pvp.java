@@ -12,7 +12,7 @@ import org.bukkit.event.EventHandler;
 
 @Timer(key = TimerBase.PVP,
         defaultValue = 1500,
-        meetUpValue = 300,
+        meetUpValue = 6 * 60,
         decrement = true,
         onZero = PVPEvent.class)
 public class Pvp extends ListenerManager {

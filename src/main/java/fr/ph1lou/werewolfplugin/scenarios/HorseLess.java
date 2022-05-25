@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.spigotmc.event.entity.EntityMountEvent;
 
-@Scenario(key = ScenarioBase.HORSE_LESS, defaultValue = true)
+@Scenario(key = ScenarioBase.HORSE_LESS, defaultValue = true, meetUpValue = true)
 public class HorseLess extends ListenerManager {
 
     public HorseLess(GetWereWolfAPI main) {

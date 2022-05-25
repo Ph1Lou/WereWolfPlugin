@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.random_events;
 
 import fr.ph1lou.werewolfapi.annotations.Event;
+import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
@@ -26,10 +27,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Event(key = EventBase.EXPOSED,
-        loreKey = "werewolf.random_events.exposed.description")
+        loreKey = "werewolf.random_events.exposed.description",
+        timers = {@Timer(key = Exposed.TIMER_START_1, defaultValue = 65*60, meetUpValue = 20*60),
+                @Timer(key = Exposed.TIMER_START_2, defaultValue = 30*60, meetUpValue = 15*60),
+                @Timer(key = Exposed.PERIOD, defaultValue = 15*60, meetUpValue = 15*60)})
 public class Exposed extends ListenerManager {
   
     private IPlayerWW temp = null;
+    public static final String TIMER_START_1 = "werewolf.random_events.exposed.timer_start_1";
+    public static final String TIMER_START_2 = "werewolf.random_events.exposed.timer_start_2";
+    public static final String PERIOD = "werewolf.random_events.exposed.period";
 
     public Exposed(GetWereWolfAPI main) {
         super(main);
@@ -54,12 +61,12 @@ public class Exposed extends ListenerManager {
                                     register(false);
                                 }
                             }
-                        }, 35 * 60 * 20);
+                        }, game.getConfig().getTimerValue(TIMER_START_2) * 20L);
                     }
 
                 }
             }
-        }, (long) (20 * 60 * 40 + game.getRandom().nextDouble() * 15 * 60 * 20));
+        }, (long) (20L * game.getConfig().getTimerValue(TIMER_START_1) + game.getRandom().nextDouble() * game.getConfig().getTimerValue(PERIOD) * 20));
     }
 
     @Nullable

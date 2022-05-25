@@ -9,6 +9,7 @@ import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
 import fr.ph1lou.werewolfapi.annotations.Event;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.game.GameManager;
@@ -68,7 +69,10 @@ public class RandomEvents implements InventoryProvider {
 
                     items.add(ClickableItem.of((itemStack), e -> {
 
-                        if (e.isLeftClick()) {
+                        if (e.isShiftClick()) {
+                            AdvancedEventMenu.getInventory(randomEventRegister).open(player);
+                        }
+                        else if (e.isLeftClick()) {
                             int probability = config.getProbability(key);
                             config.setProbability(key, (probability + 1) % 101);
                             if (probability == 0) {
@@ -78,7 +82,7 @@ public class RandomEvents implements InventoryProvider {
                             }
                             e.setCurrentItem(getItemStack(game, randomEventRegister));
                         }
-                        if (e.isRightClick()) {
+                        else if (e.isRightClick()) {
                             int probability = config.getProbability(key);
                             config.setProbability(key, ((probability - 1) + 101) % 101);
                             if (probability == 1) {
@@ -134,9 +138,19 @@ public class RandomEvents implements InventoryProvider {
         String key = randomEventRegister.getMetaDatas().key();
         IConfiguration config = game.getConfig();
         List<String> lore2 = new ArrayList<>(Arrays.asList(game.translate("werewolf.menu.left"),
-                game.translate("werewolf.menu.right")));
+                game.translate("werewolf.menu.right"),
+                game.translate("werewolf.menu.shift")));
         List<String> lore = new ArrayList<>();
-        Arrays.stream(randomEventRegister.getMetaDatas().loreKey()).map(game::translate)
+        Arrays.stream(randomEventRegister.getMetaDatas().loreKey())
+                .map(s -> game.translate(s, Arrays.stream(randomEventRegister
+                                .getMetaDatas()
+                                .timers())
+                        .map(timer -> {
+                            String[] timers = timer.key().split("\\.");
+                            return Formatter.format(String.format("&%s&",timers[timers.length - 1]),
+                                    Utils.conversion(game.getConfig().getTimerValue(timer.key())));
+                        })
+                        .toArray(Formatter[]::new)))
                 .map(s -> Arrays.stream(s.split("\\n"))
                 .collect(Collectors.toList())).forEach(lore::addAll);
         ItemStack itemStack;

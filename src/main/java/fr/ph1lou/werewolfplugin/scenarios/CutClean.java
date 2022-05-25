@@ -18,7 +18,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-@Scenario(key = ScenarioBase.CUT_CLEAN, defaultValue = true)
+@Scenario(key = ScenarioBase.CUT_CLEAN, defaultValue = true, meetUpValue = true)
 public class CutClean extends ListenerManager {
 
     public CutClean(GetWereWolfAPI main) {

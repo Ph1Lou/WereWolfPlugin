@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.random_events;
 
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Event;
+import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.StateGame;
@@ -16,8 +17,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 
-@Event(key = EventBase.BEARING_RITUAL, loreKey = "werewolf.random_events.bearing_ritual.description")
+@Event(key = EventBase.BEARING_RITUAL, loreKey = "werewolf.random_events.bearing_ritual.description",
+timers = {@Timer(key = BearingRitual.TIMER_START, defaultValue = 60*60, meetUpValue = 30*60),
+        @Timer(key = BearingRitual.PERIOD, defaultValue = 40*60, meetUpValue = 20*60)})
 public class BearingRitual extends ListenerManager {
+
+    public static final String TIMER_START = "werewolf.random_events.bearing_ritual.timer_start";
+    public static final String PERIOD = "werewolf.random_events.bearing_ritual.period";
 
     private boolean active = false;
 
@@ -52,7 +58,7 @@ public class BearingRitual extends ListenerManager {
                     }, game.getConfig().getTimerValue(TimerBase.DAY_DURATION) * 40L);
                 }
             }
-        }, (long) (20 * 60 * 60 + game.getRandom().nextDouble() * 15 * 60 * 40));
+        }, (long) (20L * game.getConfig().getTimerValue(TIMER_START) + game.getRandom().nextDouble() * 15 * game.getConfig().getTimerValue(PERIOD)));
     }
 
     @EventHandler

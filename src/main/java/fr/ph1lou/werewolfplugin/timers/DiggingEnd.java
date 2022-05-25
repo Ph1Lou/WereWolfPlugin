@@ -21,7 +21,7 @@ import java.util.List;
 
 @Timer(key = TimerBase.DIGGING,
         defaultValue = 4200,
-        meetUpValue = 4200,
+        meetUpValue = 0,
         decrement = true,
         onZero = DiggingEndEvent.class)
 public class DiggingEnd extends ListenerManager {

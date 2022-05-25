@@ -7,7 +7,7 @@ import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
-@Scenario(key = ScenarioBase.NO_NETHER, defaultValue = true)
+@Scenario(key = ScenarioBase.NO_NETHER, defaultValue = true, meetUpValue = true)
 public class NoNether extends ListenerManager {
 
     public NoNether(GetWereWolfAPI main) {

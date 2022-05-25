@@ -12,7 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
-@Scenario(key = ScenarioBase.FINAL_HEAL, defaultValue = true)
+@Scenario(key = ScenarioBase.FINAL_HEAL, defaultValue = true, meetUpValue = true)
 public class FinalHeal extends ListenerManager {
 
     public FinalHeal(GetWereWolfAPI main) {

@@ -80,7 +80,7 @@ public class ConfigurationLoader {
         for (Wrapper<JavaPlugin, ModuleWerewolf> addonWrapper : main.getRegisterManager().getModulesRegister()) {
             addonWrapper.getObject()
                     .ifPresent(javaPlugin -> configurationMap.put(addonWrapper.getAddonKey(),
-                            loadConfig(javaPlugin, name).setAddonKey(addonWrapper.getAddonKey())));
+                            loadConfig(javaPlugin, name).setAddonKey(addonWrapper.getAddonKey(), game)));
         }
 
         Configuration config;

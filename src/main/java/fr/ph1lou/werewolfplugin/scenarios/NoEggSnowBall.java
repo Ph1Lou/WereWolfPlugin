@@ -9,7 +9,7 @@ import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 
-@Scenario(key = ScenarioBase.NO_EGG_SNOWBALL, defaultValue = true)
+@Scenario(key = ScenarioBase.NO_EGG_SNOWBALL, defaultValue = true, meetUpValue = true)
 public class NoEggSnowBall extends ListenerManager {
 
     public NoEggSnowBall(GetWereWolfAPI main) {

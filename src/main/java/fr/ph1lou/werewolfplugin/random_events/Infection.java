@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.random_events;
 
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Event;
+import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
@@ -19,8 +20,13 @@ import org.bukkit.event.EventHandler;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Event(key = EventBase.INFECTION, loreKey = "werewolf.random_events.infection.description")
+@Event(key = EventBase.INFECTION, loreKey = "werewolf.random_events.infection.description",
+        timers = {@Timer(key = Infection.TIMER_START, defaultValue = 60*60, meetUpValue = 30*60),
+                @Timer(key = Infection.PERIOD, defaultValue = 15*60, meetUpValue = 10*60)})
 public class Infection extends ListenerManager {
+
+    public static final String TIMER_START = "werewolf.random_events.infection.timer_start";
+    public static final String PERIOD = "werewolf.random_events.infection.period";
 
     public Infection(GetWereWolfAPI main) {
         super(main);
@@ -64,7 +70,8 @@ public class Infection extends ListenerManager {
                     Bukkit.broadcastMessage(game.translate("werewolf.random_events.infection.message"));
                 }
             }
-        }, (long) (20 * 60 * 60 + game.getRandom().nextDouble() * 15 * 60 * 20));
+        }, (long) (20L * game.getConfig().getTimerValue(TIMER_START) +
+                game.getRandom().nextDouble() * game.getConfig().getTimerValue(PERIOD) * 20));
     }
 
 

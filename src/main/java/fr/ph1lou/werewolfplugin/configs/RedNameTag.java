@@ -7,7 +7,7 @@ import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import org.bukkit.Bukkit;
 
-@Configuration(key = ConfigBase.RED_NAME_TAG, defaultValue = true)
+@Configuration(key = ConfigBase.RED_NAME_TAG, defaultValue = true, meetUpValue = true)
 public class RedNameTag extends ListenerManager {
 
     public RedNameTag(GetWereWolfAPI main) {

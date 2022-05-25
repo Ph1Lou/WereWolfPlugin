@@ -3,6 +3,7 @@ package fr.ph1lou.werewolfplugin.random_events;
 import com.google.common.collect.Sets;
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Event;
+import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
@@ -23,8 +24,13 @@ import org.bukkit.event.EventHandler;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Event(key = EventBase.DISCORD, loreKey = "werewolf.random_events.discord.description")
+@Event(key = EventBase.DISCORD, loreKey = "werewolf.random_events.discord.description",
+        timers = {@Timer(key = Discord.TIMER_START, defaultValue = 55*60, meetUpValue = 20*60),
+                @Timer(key = Discord.PERIOD, defaultValue = 30*60, meetUpValue = 15*60)})
 public class Discord extends ListenerManager {
+
+    public static final String TIMER_START = "werewolf.random_events.discord.timer_start";
+    public static final String PERIOD = "werewolf.random_events.discord.period";
 
     public Discord(GetWereWolfAPI main) {
         super(main);
@@ -104,6 +110,6 @@ public class Discord extends ListenerManager {
                     Bukkit.broadcastMessage(game.translate("werewolf.random_events.discord.message"));
                 }
             }
-        }, (long) (20 * 55 * 60 + game.getRandom().nextDouble() * 20 * 30 * 60));
+        }, (long) (20L * game.getConfig().getTimerValue(TIMER_START) + game.getRandom().nextDouble() * 20 * game.getConfig().getTimerValue(PERIOD)));
     }
 }

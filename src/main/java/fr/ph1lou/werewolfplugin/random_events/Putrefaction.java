@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.random_events;
 
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Event;
+import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -18,8 +19,13 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.util.Objects;
 
-@Event(key = EventBase.PUTREFACTION, loreKey = "werewolf.random_events.putrefaction.description")
+@Event(key = EventBase.PUTREFACTION, loreKey = "werewolf.random_events.putrefaction.description",
+        timers = {@Timer(key = Putrefaction.TIMER_START, defaultValue = 60*60, meetUpValue = 30*60),
+                @Timer(key = Putrefaction.PERIOD, defaultValue = 15*60, meetUpValue = 10*60)})
 public class Putrefaction extends ListenerManager {
+
+    public static final String TIMER_START = "werewolf.random_events.putrefaction.timer_start";
+    public static final String PERIOD = "werewolf.random_events.putrefaction.period";
 
     private boolean active = false;
 
@@ -55,7 +61,8 @@ public class Putrefaction extends ListenerManager {
                     }, game.getConfig().getTimerValue(TimerBase.DAY_DURATION) * 40L);
                 }
             }
-        }, (long) (20 * 60 * 60 + game.getRandom().nextDouble() * 15 * 60 * 20));
+        }, (long) (20L * game.getConfig().getTimerValue(TIMER_START) +
+                game.getRandom().nextDouble() * game.getConfig().getTimerValue(PERIOD) * 20));
     }
 
     @EventHandler

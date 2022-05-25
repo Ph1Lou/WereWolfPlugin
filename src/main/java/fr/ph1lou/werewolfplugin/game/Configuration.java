@@ -69,7 +69,7 @@ public class Configuration implements IConfiguration {
         this.borderSpeed = 0.3;
         this.werewolfChatMaxMessage = 1;
         this.trollLover = false;
-        this.meetup = true;
+        this.meetup = false;
     }
 
     public Configuration setConfigurations(Map<String, StorageConfiguration> storageConfigurations) {
@@ -561,6 +561,11 @@ public class Configuration implements IConfiguration {
                 this.storageConfigurations.get(addonKey).removeOneLover(key);
             }
         });
+    }
+
+    @Override
+    public void resetSwitchMeetUp() {
+        this.storageConfigurations.forEach((s, storageConfiguration) -> storageConfiguration.resetSwitchMeetUp());
     }
 
     @Override

@@ -13,8 +13,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 
 @Timer(key = TimerBase.WEREWOLF_LIST,
-        defaultValue = 600,
-        meetUpValue = 600,
+        defaultValue = 60 * 10,
+        meetUpValue = 60 * 5,
         decrementAfterRole = true,
         onZero = WereWolfListEvent.class)
 public class WerewolfList extends ListenerManager {

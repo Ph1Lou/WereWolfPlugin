@@ -12,7 +12,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.potion.PotionEffectType;
 
 
-@Scenario(key = ScenarioBase.CAT_EYES)
+@Scenario(key = ScenarioBase.CAT_EYES, meetUpValue = true)
 public class CatEyes extends ListenerManager {
 
 

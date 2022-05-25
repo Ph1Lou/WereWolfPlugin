@@ -662,7 +662,7 @@
       },
       "tenebrous_werewolf": {
         "display": "Loup Ténébreux",
-        "description": "Une fois par partie, durant la nuit, vous pouvez donner un effet de Blindness à tous les non-loups dans un rayon de &range& pendant &time& secondes ou jusqu'à ce qu'ils soient attaqués par un loup",
+        "description": "Une fois par partie, durant la nuit, vous pouvez donner un effet de Blindness à tous les non-loups dans un rayon de &number& pendant &time& secondes ou jusqu'à ce qu'ils soient attaqués par un loup",
         "description_command": "/ww tenebres",
         "command": "tenebres",
         "darkness": "Le Loup Ténébreux vous a plongé dans les ténèbres!",
@@ -670,7 +670,7 @@
         "not_night": "Vous ne pouvez pas effectuer cette action le jour",
         "power_available": "Vous pouvez §aencore§f utiliser votre pouvoir",
         "power_not_available": "Vous avez §cdéjà§f utilisé votre pouvoir",
-        "darkness_distance": "Rayon d'action des ténèbres: §b&range&§r blocs",
+        "darkness_distance": "Rayon d'action des ténèbres: §b&number&§r blocs",
         "darkness_duration": "Durée des ténèbres: §b&timer&§r secondes"
       },
       "gravedigger": {
@@ -1155,6 +1155,13 @@
         "menu": "Menu Avancé §b&role&",
         "config": "Configurer le Stuff du §b&role&"
       },
+      "meet_up": {
+        "button": "Mode §bMeetUp§f &on&",
+        "enable": "§aActiver§f Mode MeetUp",
+        "disable": "§cDésactiver§f Mode MeetUp",
+        "name": "Gestion §bMeetUp",
+        "warning": "§cAttention§f, cela supprime vos configurations actuelles"
+      },
       "advanced_tool": {
         "name": "Configuration §bAvancée",
         "troll_on": "Troll §2Activé",
@@ -1302,12 +1309,11 @@
       },
       "stuff": {
         "name": "Configuration §bStuff",
-        "normal": "§bCharger§r Stuff Role normal",
-        "meet_up": "§bCharger§r Stuff MeetUp",
         "chill": "§bCharger§r Stuff Depart Chill",
         "delete": "§4Supprimer§r le Stuff de Départ et de Mort",
         "death": "Configuration §bStuff à la mort",
-        "start": "Configuration §bStuff de Départ"
+        "start": "Configuration §bStuff de Départ",
+        "reset": "§aRecharger§f le Stuff des rôles par défaut"
       },
       "global": {
         "list": "Liste des §bRègles §f :\n",
@@ -1406,25 +1412,31 @@
       "exposed": {
         "name": "Exposed",
         "message": "[§5Exposed§r] Le rôle de §b&player&§f se trouve dans la liste suivante §b&role1&, §f&role2& et §b&role3&",
-        "description": "Deux fois dans la partie \n(dans les intervalles [65~80 min] et [100~115 min]), \nun joueur choisi aléatoirement voit son pseudo \naffiché dans le chat à côté de 3 rôles\n toujours représentés dans la partie. \nParmi ces 3 rôles se trouvent : son rôle, un rôle d’un camp différent, \nun rôle aléatoire parmi tous les autres.\nUn joueur ne peut pas être exposé deux fois dans la même partie."
+        "description": "Deux fois dans la partie \n(L'évenement peut se déclencher pendant une période de §b&period&§f à partir de §b&timer_start_1&§f après les rôles \npuis une deuxième fois §b&timer_start_2&§f après le premier), \nun joueur choisi aléatoirement voit son pseudo \naffiché dans le chat à côté de 3 rôles\ntoujours représentés dans la partie. \nParmi ces 3 rôles se trouvent : son rôle, un rôle d’un camp différent, \nun rôle aléatoire parmi tous les autres.\nUn joueur ne peut pas être exposé deux fois dans la même partie.",
+        "timer_start_1" : "Début du déclenchement 1 (§b&timer&§f)",
+        "timer_start_2" : "Début du déclenchement 2 (§b&timer&§f)",
+        "period" : "Période de déclenchement de l'event (§b&timer&§f)"
       },
       "loot_box": {
         "name": "Loot Box",
-        "description": "Une fois dans la partie, à la mort \nd'un Villageois, des caches apparaissent.\n Une seule contient le nom d'un Ennemi du Village",
+        "description": "Une fois dans la partie, à la mort \nd'un Villageois, des caches apparaissent.\nUne seule contient le nom d'un Ennemi du Village",
         "on_sign": "Bon toutou",
         "all_chest_find": "Toutes les caches ont été trouvées",
         "villager_death": "[§5Loot-Box§r] Avant de mourir, §b&player&§r a fait apparaitre §b&number&§r caches sur la map, une seule renferme le nom d'un Ennemi du Village"
       },
       "infection": {
         "name": "Infection",
-        "description": "Une fois dans la partie infecte un joueur au hasard.\nL'infection se déroule entre 1h et 1h15 après les rôles, \nsi il y a moins de la moitié des joueurs \nqui sont Loups Garous.",
-        "message": "[§5Infection§r] Un joueur aléatoire vient d'être infecté"
+        "description": "Une fois dans la partie infecte un joueur au hasard.\nL'infection peut se déclencher pendant une période de §b&period&§f à partir de §b&timer_start&§f après les rôles ,\nsi il y a moins de la moitié des joueurs \nqui sont Loups Garous.",
+        "message": "[§5Infection§r] Un joueur aléatoire vient d'être infecté",
+        "timer_start" : "Début du déclenchement (§b&timer&§f)",
+        "period" : "Période de déclenchement de l'event (§b&timer&§f)"
       },
       "amnesic": {
         "name": "Amnésique",
-        "message": "[§5Amnesic§r] Vous découvrez que vous êtes en fait un Loup Garou. Vous connaitrez un loup toutes les cinq minutes",
-        "description": "Au moment de la liste des Loups,\n une personne non Loup est choisi aléatoirement\n et devient Amnésique.\n Si elle se fait taper par un Loup Garou \nelle passera dans leur camp \net connaitra un membre des Loups \ntoutes les cinq minutes. \nSi elle n'est pas transformée \nelle garde son camp d'origine",
-        "new": "§b&player&§f est un Loup Garou, prochain pseudo dans cinq minutes"
+        "message": "[§5Amnesic§r] Vous découvrez que vous êtes en fait un Loup Garou. Vous connaitrez un Loup toutes les &timer&",
+        "description": "Au moment de la liste des Loups,\nune personne non Loup est choisi aléatoirement\net devient Amnésique.\nSi elle se fait taper par un Loup Garou \nelle passera dans leur camp \net connaitra un membre des Loups \ntoutes les §b&timer&§f. \nSi elle n'est pas transformée \nelle garde son camp d'origine",
+        "new": "§b&player&§f est un Loup Garou, prochain pseudo dans &timer&",
+        "timer": "Nouveau Loup Garou tout les &timer&"
       },
       "triple": {
         "name": "Trouple",
@@ -1440,30 +1452,36 @@
         "name": "Rituel du coussinet",
         "message": "[§5Rituel du Coussinet§r] Pendant un jour, tout le monde à §bNoFall",
         "end": "[§5Rituel du Coussinet§r] Fin de l'évènement aléatoire",
-        "description": "Une fois dans la partie, pendant un jour \ntout le monde à Nofall. \nL'évènement se déclenche entre 1h et 1h40"
+        "description": "Une fois dans la partie, pendant un jour \ntout le monde à Nofall. \nL'évènement peut se déclencher pendant une période de §b&period&§f à partir de §b&timer_start&§f après les rôles ",
+        "timer_start" : "Début du déclenchement (§b&timer&§f)",
+        "period" : "Période de déclenchement de l'event (§b&timer&§f)"
       },
       "putrefaction": {
         "name": "Putréfaction",
         "message": "[§5Putrefaction§r] Pendant un jour, l'eau fait prendre des dégâts",
         "end": "[§5Putrefaction§r] Fin de l'évènement",
-        "description": "Une fois dans la partie, pendant un jour \nl'eau fait prendre des dégâts.\nL'évènement se déclenche entre 1h et 1h20"
+        "description": "Une fois dans la partie, pendant un jour \nl'eau fait prendre des dégâts.\nL'évènement peut se déclencher pendant une période de §b&period&§f à partir de §b&timer_start&§f après les rôles ",
+        "timer_start" : "Début du déclenchement (§b&timer&§f)",
+        "period" : "Période de déclenchement de l'event (§b&timer&§f)"
       },
       "god_miracle": {
         "name": "God Miracle",
         "message": "[§5God-Miracle§r] Un joueur vient d'être ressuscité",
-        "description": "Une fois dans la partie,\n un joueur tué est ressuscité"
+        "description": "Une fois dans la partie,\nun joueur tué est ressuscité"
       },
       "swap": {
         "name": "Swap",
         "message": "[§5Swap§r] Deux personnes ont leur rôle inversées",
         "concerned": "Votre rôle a été échangé §b/ww role§f pour découvrir le nouveau",
-        "description": "Une fois dans la partie,\n avant l'annonce de la liste des loups\n 2 roles sont échangés"
+        "description": "Une fois dans la partie,\navant l'annonce de la liste des Loups\ndeux roles sont échangés"
       },
       "discord": {
         "name": "Zizanie",
         "message": "[§5Zizanie§r] Un membre du Village passe avec les Loups-Garous, un des Loups devient solitaire, enfin un rôle Solo passe avec le Village",
-        "description": "Entre 55 et 85 minutes après les rôles, \nun membre du Village passe avec les Loups-Garous, \nun des Loups devient solitaire \nenfin un rôle Solo passe avec le Village.",
-        "to_villager": "Vous passez dans le camp des villageois"
+        "description": "Un membre du Village passe avec les Loups-Garous, \nun des Loups devient solitaire \nenfin un rôle Solo passe avec le Village.\nL'évènement peut se déclencher dans une période de §b&period&§f à partir de §b&timer_start&§f après les rôles",
+        "to_villager": "Vous passez dans le camp des villageois",
+        "timer_start" : "Début du déclenchement (§b&timer&§f)",
+        "period" : "Période de déclenchement de l'event (§b&timer&§f)"
       },
       "sister_misanthrope": {
         "name": "Soeur Misanthrope",
@@ -1472,12 +1490,14 @@
       },
       "rumors": {
         "name": "Rumeurs",
-        "description": "Une fois dans la partie, entre 80 et 120 minutes,\n un message annonce aux joueurs qu’ils ont 20 secondes pour envoyer un message dans le chat.\n Les messages de tous les joueurs sont ensuite affichés anonymement\n et dans le désordre. Seul le Citoyen pourra voir le pseudo\n du joueur ayant écrit une des rumeurs.",
+        "description": "Une fois dans la partie, l'évènement peut se déclencher pendant une période de §b&period&§f à partir de §b&timer_start&§f après les rôles,\nun message annonce aux joueurs qu’ils ont 20 secondes pour envoyer un message dans le chat.\nLes messages de tous les joueurs sont ensuite affichés anonymement\net dans le désordre. Seul le Citoyen pourra voir le pseudo\ndu joueur ayant écrit une des rumeurs.",
         "message": "[§5Rumeur§r] Vous avez §b20§f secondes pour envoyer un message, §bcliquez ici",
         "rumors_announcement": "[§5Rumeur§r] Les rumeurs sont : &rumors&",
         "command": "rumor",
         "no_rumor": "L'évenement Rumeurs n'est pas en cours",
-        "perform": "Votre rumeur a été envoyée ou actualisée"
+        "perform": "Votre rumeur a été envoyée ou actualisée",
+        "timer_start" : "Début du déclenchement (§b&timer&§f)",
+        "period" : "Période de déclenchement de l'event (§b&timer&§f)"
       }
     },
     "check": {
@@ -1519,7 +1539,8 @@
       "enable": "§aActivé",
       "display": "&field& (§b&value&§r)",
       "pve": "§bPVE",
-      "on": "§bON",
+      "on": "§aON",
+      "off": "§cOFF",
       "debug": "§fMode §4debug",
       "author": "§fAuteur(s) :",
       "bar": "§r§b§m§l-+-----------------------------------+-§r§r§r§f",

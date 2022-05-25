@@ -7,7 +7,7 @@ import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
-@Scenario(key = ScenarioBase.NO_END, defaultValue = true)
+@Scenario(key = ScenarioBase.NO_END, defaultValue = true, meetUpValue = true)
 public class NoEnd extends ListenerManager {
 
     public NoEnd(GetWereWolfAPI main) {

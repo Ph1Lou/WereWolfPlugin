@@ -14,7 +14,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-@Scenario(key = ScenarioBase.COMPASS_MIDDLE, defaultValue = true,
+@Scenario(key = ScenarioBase.COMPASS_MIDDLE, defaultValue = true, meetUpValue = true,
         incompatibleScenarios = ScenarioBase.COMPASS_TARGET_LAST_DEATH)
 public class CompassMiddle extends ListenerManager {
 

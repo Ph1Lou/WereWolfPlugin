@@ -35,7 +35,7 @@ import java.util.List;
 
 @Timer(key = TimerBase.ROLE_DURATION,
         defaultValue = 1200,
-        meetUpValue = 240,
+        meetUpValue = 60,
         decrement = true,
         onZero = RepartitionEvent.class)
 public class RoleDuration extends ListenerManager {

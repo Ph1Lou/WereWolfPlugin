@@ -26,8 +26,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Timer(key =  TimerBase.LOVER_DURATION,
-        defaultValue = 240,
-        meetUpValue = 240,
+        defaultValue = 4 * 60,
+        meetUpValue = 4 * 60,
         decrementAfterRole = true,
         onZero = LoversRepartitionEvent.class)
 public class LoverDuration extends ListenerManager {

@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.random_events;
 
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Event;
+import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
@@ -26,9 +27,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Event(key = EventBase.RUMORS, loreKey = "werewolf.random_events.rumors.description")
+@Event(key = EventBase.RUMORS, loreKey = "werewolf.random_events.rumors.description",
+        timers = {@Timer(key = Rumors.TIMER_START, defaultValue = 80*60, meetUpValue = 30*60),
+                @Timer(key = Rumors.PERIOD, defaultValue = 40*60, meetUpValue = 20*60)})
 public class Rumors extends ListenerManager {
 
+    public static final String TIMER_START = "werewolf.random_events.rumors.timer_start";
+    public static final String PERIOD = "werewolf.random_events.rumors.period";
     private boolean active = false;
 
     private final Map<IPlayerWW, String> rumors = new HashMap<>();
@@ -80,7 +85,8 @@ public class Rumors extends ListenerManager {
                     }, 20L * 60);
                 }
             }
-        }, (long) (20 * 60 * 80 + game.getRandom().nextDouble() * 40 * 60 * 40));
+        }, (long) (20L * game.getConfig().getTimerValue(TIMER_START) +
+                game.getRandom().nextDouble() * 20 * game.getConfig().getTimerValue(PERIOD)));
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

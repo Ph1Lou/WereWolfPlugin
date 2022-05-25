@@ -16,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
 @Configuration(key = ConfigBase.SHOW_ROLE_TO_DEATH, defaultValue = true,
+        meetUpValue = true,
         incompatibleConfigs = {ConfigBase.SHOW_ROLE_CATEGORY_TO_DEATH})
 public class ShowDeathRole extends ListenerManager {
 

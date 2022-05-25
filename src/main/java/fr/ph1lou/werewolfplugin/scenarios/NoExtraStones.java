@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Arrays;
 import java.util.List;
 
-@Scenario(key = ScenarioBase.NO_EXTRA_STONES, defaultValue = true)
+@Scenario(key = ScenarioBase.NO_EXTRA_STONES, defaultValue = true, meetUpValue = true)
 public class NoExtraStones extends ListenerManager {
 
     public NoExtraStones(GetWereWolfAPI main) {

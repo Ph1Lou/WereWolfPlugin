@@ -8,7 +8,7 @@ import fr.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 
-@Scenario(key = ScenarioBase.NO_FIRE_WEAPONS, defaultValue = true)
+@Scenario(key = ScenarioBase.NO_FIRE_WEAPONS, defaultValue = true, meetUpValue = true)
 public class NoFireWeapon extends ListenerManager {
 
     public NoFireWeapon(GetWereWolfAPI main) {

@@ -56,7 +56,7 @@ public class TenebrousWerewolf extends RoleWereWolf implements IPower, IAffected
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.role.tenebrous_werewolf.description",
-                        Formatter.format("&range&", game.getConfig().getValue(DISTANCE)),
+                        Formatter.number(game.getConfig().getValue(DISTANCE)),
                         Formatter.format("&time&", game.getConfig().getTimerValue(TimerBase.WEREWOLF_TENEBROUS_DURATION))))
                 .setEffects(game.translate("werewolf.description.werewolf"))
                 .setCommand(game.translate("werewolf.role.tenebrous_werewolf.description_command"))

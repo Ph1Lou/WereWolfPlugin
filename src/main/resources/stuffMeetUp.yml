@@ -1,7 +1,7 @@
 start_loot:
   0:
     ==: org.bukkit.inventory.ItemStack
-    type: DIAMOND_SWORD
+    type: IRON_SWORD
     meta:
       ==: ItemMeta
       meta-type: UNSPECIFIC
@@ -14,7 +14,7 @@ start_loot:
       ==: ItemMeta
       meta-type: UNSPECIFIC
       enchants:
-        ARROW_DAMAGE: 3
+        ARROW_DAMAGE: 2
   2:
     ==: org.bukkit.inventory.ItemStack
     type: DIAMOND_PICKAXE

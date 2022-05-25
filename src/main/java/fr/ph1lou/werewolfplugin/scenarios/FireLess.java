@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 
-@Scenario(key = ScenarioBase.FIRE_LESS, defaultValue = true)
+@Scenario(key = ScenarioBase.FIRE_LESS, defaultValue = true, meetUpValue = true)
 public class FireLess extends ListenerManager {
 
     public FireLess(GetWereWolfAPI main) {

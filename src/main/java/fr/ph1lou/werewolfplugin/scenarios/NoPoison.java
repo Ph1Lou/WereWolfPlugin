@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 
-@Scenario(key = ScenarioBase.NO_POISON, defaultValue = true)
+@Scenario(key = ScenarioBase.NO_POISON, defaultValue = true, meetUpValue = true)
 public class NoPoison extends ListenerManager {
 
     public NoPoison(GetWereWolfAPI main) {
