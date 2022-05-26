@@ -40,6 +40,14 @@ public class SmallFeaturesListener implements Listener {
     @EventHandler
     public void onBarrierEditionInventoryMode(InventoryClickEvent event) {
 
+        if(event.getClickedInventory() == null){
+            return;
+        }
+
+        if(event.getCurrentItem() == null){
+            return;
+        }
+
         if(event.getClickedInventory().getType() != InventoryType.PLAYER){
             return;
         }

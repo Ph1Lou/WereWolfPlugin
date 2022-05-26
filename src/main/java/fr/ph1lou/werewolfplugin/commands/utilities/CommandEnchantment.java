@@ -1,12 +1,11 @@
 package fr.ph1lou.werewolfplugin.commands.utilities;
 
 import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import org.bukkit.entity.Player;
-
-import java.util.Arrays;
 
 @PlayerCommand(key = "werewolf.menu.enchantments.command",
         descriptionKey = "werewolf.menu.enchantments.description",
@@ -18,55 +17,41 @@ public class CommandEnchantment implements ICommand {
 
         player.sendMessage(
                 game.translate(
-                        "werewolf.menu.enchantments.title"
+                        Prefix.BLUE,"werewolf.menu.enchantments.title"
                 )
         );
 
         player.sendMessage(
                 game.translate(
-                        "werewolf.menu.enchantments.iron_protection",
-                        Formatter.number(game.getConfig().getLimitProtectionIron())));
+                        "werewolf.menu.enchantments.iron_diamond_protection",
+                        Formatter.number(game.getConfig().getLimitProtectionIron()),
+                        Formatter.format("&number2&",
+                                game.getConfig().getLimitProtectionDiamond())));
+
+        player.sendMessage(
+                game.translate("werewolf.menu.enchantments.iron_diamond_sharpness",
+                        Formatter.number(game.getConfig().getLimitSharpnessIron()),
+                        Formatter.format("&number2&",
+                                game.getConfig().getLimitSharpnessDiamond())));
 
         player.sendMessage(
                 game.translate(
-                        "werewolf.menu.enchantments.diamond_protection",
-                        Formatter.number(game.getConfig().getLimitProtectionDiamond())));
-
-        player.sendMessage(
-                game.translate("werewolf.menu.enchantments.sharpness_iron",
-                        Formatter.number(game.getConfig().getLimitSharpnessIron())));
-
-        player.sendMessage(
-                game.translate("werewolf.menu.enchantments.sharpness_diamond",
-                        Formatter.number(game.getConfig().getLimitSharpnessDiamond())));
-
+                        "werewolf.menu.enchantments.punch_power",
+                        Formatter.number(game.getConfig().getLimitPowerBow()),
+                        Formatter.format("&number2&",
+                                game.getConfig().getLimitPunch())));
 
         player.sendMessage(
                 game.translate(
-                        "werewolf.menu.enchantments.power",
-                        Formatter.number(game.getConfig().getLimitPowerBow())));
+                        "werewolf.menu.enchantments.knock_back_depth_rider",
+                        Formatter.number(game.getConfig().getLimitKnockBack()),
+                        Formatter.format("&number2&",game.getConfig().getLimitDepthStrider())));
 
-        player.sendMessage(
-                game.translate(
-                        "werewolf.menu.enchantments.punch",
-                        Formatter.number(game.getConfig().getLimitPunch())));
+        if(game.getConfig().isKnockBackForInvisibleRoleOnly()){
+            player.sendMessage( game.translate("werewolf.menu.enchantments.knock_back_invisible"));
+        }
 
-        player.sendMessage(
-                game.translate(
-                        "werewolf.menu.enchantments.knock_back",
-                        Formatter.number(game.getConfig().getLimitKnockBack())));
-
-        player.sendMessage(
-                game.translate("werewolf.menu.enchantments.depth_rider",
-                        Formatter.number(game.getConfig().getLimitDepthStrider())));
-
-        player.sendMessage(
-                Arrays.asList(
-                        game.translate(
-                                "werewolf.menu.enchantments.knock_back_invisible"),
-                        "")
-                        .get(game.getConfig().getKnockBackMode()));
-
+        player.sendMessage(game.translate("werewolf.menu.enchantments.note"));
 
     }
 }

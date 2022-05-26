@@ -44,7 +44,7 @@ public class MeetUpGUI implements InventoryProvider {
         WereWolfAPI game = main.getWereWolfAPI();
 
         contents.set(0, 4, ClickableItem.of((new ItemBuilder(game.getConfig().isMeetUp() ?
-                Material.BARRIER : Material.GOLD_SWORD)
+                Material.BARRIER : UniversalMaterial.GOLDEN_SWORD.getType())
                 .setDisplayName(game.translate(game.getConfig().isMeetUp() ?
                         "werewolf.menu.meet_up.disable":
                         "werewolf.menu.meet_up.enable"))
@@ -67,7 +67,7 @@ public class MeetUpGUI implements InventoryProvider {
                 game.getStuffs().clearDeathLoot();
             }
             e.setCurrentItem(new ItemBuilder(game.getConfig().isMeetUp() ?
-                    Material.BARRIER : Material.GOLD_SWORD)
+                    Material.BARRIER : UniversalMaterial.GOLDEN_SWORD.getType())
                     .setDisplayName(game.translate(game.getConfig().isMeetUp() ?
                             "werewolf.menu.meet_up.disable":
                             "werewolf.menu.meet_up.enable"))

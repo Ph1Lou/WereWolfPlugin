@@ -2,21 +2,18 @@ package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.Day;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
-import fr.ph1lou.werewolfapi.events.game.life_cycle.ResurrectionEvent;
-import fr.ph1lou.werewolfapi.events.game.utils.GoldenAppleParticleEvent;
 import fr.ph1lou.werewolfapi.events.roles.InvisibleEvent;
-import fr.ph1lou.werewolfapi.events.roles.StealEvent;
 import fr.ph1lou.werewolfapi.events.roles.will_o_the_wisp.WillOTheWispRecoverRoleEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
@@ -35,7 +32,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffectType;
@@ -187,14 +183,6 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
     }
 
     @EventHandler
-    public void onStealEvent(StealEvent event) {
-
-        if (!event.getThiefWW().equals(getPlayerWW())) return;
-
-        this.setInvisible(false);
-    }
-
-    @EventHandler
     private void onCloseInvent(InventoryCloseEvent event) {
 
         Player player = (Player) event.getPlayer();
@@ -282,18 +270,6 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
         }
     }
 
-    @EventHandler
-    public void onGoldenAppleEat(GoldenAppleParticleEvent event) {
-
-        if (!event.getPlayerWW().equals(this.getPlayerWW())) return;
-
-        if (!this.isInvisible()) return;
-
-        if (this.game.isDay(Day.DAY)) return;
-
-        event.setCancelled(true);
-    }
-
     @Override
     public void disableAbilitiesRole() {
 
@@ -314,14 +290,6 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
                     new InvisibleEvent(this.getPlayerWW(), false));
             Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
         }
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onResurrection(ResurrectionEvent event) {
-
-        if (!event.getPlayerWW().equals(getPlayerWW())) return;
-
-        this.setInvisible(false);
     }
 
     @EventHandler

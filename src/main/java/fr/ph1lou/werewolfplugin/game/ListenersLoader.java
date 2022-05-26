@@ -12,6 +12,7 @@ import fr.ph1lou.werewolfplugin.listeners.CycleListener;
 import fr.ph1lou.werewolfplugin.listeners.DamagesListener;
 import fr.ph1lou.werewolfplugin.listeners.DeathListener;
 import fr.ph1lou.werewolfplugin.listeners.EnchantmentListener;
+import fr.ph1lou.werewolfplugin.listeners.InvisibleListener;
 import fr.ph1lou.werewolfplugin.listeners.PatchPotions;
 import fr.ph1lou.werewolfplugin.listeners.PlayerListener;
 import fr.ph1lou.werewolfplugin.listeners.SmallFeaturesListener;
@@ -41,6 +42,7 @@ public class ListenersLoader {
         this.listeners.add(new TabManager(this.game));
         this.listeners.add(new DeathListener(this.game));
         this.listeners.add(new DamagesListener(this.game));
+        this.listeners.add(new InvisibleListener(this.game));
         this.listeners.add((Listener) this.game.getVoteManager());
         this.listeners.forEach(BukkitUtils::registerListener);
     }

@@ -6,6 +6,6 @@ import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 
 @Timer(key = TimerBase.VOTE_DURATION,
         defaultValue = 60 * 3,
-        meetUpValue = 60 * 1)
+        meetUpValue = 60)
 public class VoteDuration {
 }

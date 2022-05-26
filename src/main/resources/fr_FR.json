@@ -5,7 +5,7 @@
     "role": {
       "serial_killer": {
         "display": "Tueur en Série",
-        "items": "Un livre Sharpness III, un livre Protection III et un livre Power III",
+        "items": "Un livre Sharpness III, un livre Protection III et un livre Puissance III",
         "effect": "Force avant son premier kill",
         "hearts": "Coeur(s) en Plus : §b&heart&\n",
         "power": "Lorsque vous tuez un joueur, vous gagnez un coeur permanent supplémentaire et une pomme d'or.",
@@ -254,7 +254,7 @@
       "assassin": {
         "display": "Assassin",
         "effect": "Force le Jour",
-        "items": "un livre Sharpness III, un livre Protection III et un livre Power III",
+        "items": "un livre Sharpness III, un livre Protection III et un livre Puissance III",
         "limit": "limite d'armure, d'arc et d'épée (+1)"
       },
       "falsifier_werewolf": {
@@ -387,7 +387,7 @@
         "display": "Cupidon",
         "lover": "§bCouple§f : &lovers&\n",
         "none": "§cAucun§f",
-        "items": "Un Livre Power II, Punch I, 64 flèches, 3 fils",
+        "items": "Un Livre Puissance II, Frappe I, 64 flèches, 3 fils",
         "description": "Vous devez gagner avec votre couple puis avec le Village.",
         "extra": "Vous avez le droit à un arc Puissance §b&number&",
         "lover_designation_message": "Vous devez désigner un Couple, §b/ww couple§r, vous avez §b&timer&",
@@ -1182,7 +1182,7 @@
         "particles": "Particules des Pommes d'Or",
         "particles_on": "§bActivé§r pour tous les joueurs",
         "particles_off": "§4Désactivé§r pour tous les joueurs",
-        "exception": "§6Désactivé pour la Petite Fille et le Loup Garou Perfide invisible"
+        "exception": "§6Désactivé§f pour les rôles invisibles"
       },
       "troll": "Configuration §bTroll",
       "roles": {
@@ -1256,17 +1256,22 @@
         "command": "enchantement",
         "description": "Pour voir les limites d'enchantements",
         "name": "Configuration §bEnchantements",
-        "title": "Limite d'enchantement :",
-        "iron_protection": "Limite de Protection sur le fer : §b&number&",
-        "diamond_protection": "Limite de Protection sur le diamant : §b&number&",
-        "power": "Power §b&number&",
-        "sharpness_iron": "Epee en fer : Max Tranchant §b&number&",
-        "sharpness_diamond": "Epee en diamant : Max Tranchant §b&number&",
-        "knock_back": "KnockBack §b&number&",
-        "knock_back_invisible": "§4KnockBack seulement \n§4pour la Petite Fille\n§4 et le Perfide",
+        "title": "Limite d'enchantements :",
+        "iron_diamond_protection": "- Protection Armure §6Fer§f : §b&number&§f / §3Diamant§f : §b&number2&§f",
+        "iron_diamond_sharpness" : "- Tranchant Epee §6Fer§f : §b&number&§f / §3Diamant§f : §b&number2&§f",
+        "punch_power": "- Arc Puissance : §b&number&§f / Frappe : §b&number2&",
+        "knock_back_depth_rider": "- Recul : §b&number&§f / Agilité aquatique : §b&number2&",
+        "iron_protection" : "Armure §6Fer§f : Protection §b&number&",
+        "diamond_protection": "Armure §3Diamant§f : Protection §b&number&",
+        "power": "Puissance : §b&number&",
+        "sharpness_iron": "Epee §6Fer§f : Tranchant §b&number&",
+        "sharpness_diamond": "Epee §3Diamant§f : Tranchant §b&number&",
+        "knock_back": "Recul §b&number&",
+        "knock_back_invisible": "§cRecul§f seulement pour les rôles §ainvisibles",
         "knock_back_normal": "§bShift§f-Clique >> configurer",
-        "punch": "Punch §b&number&",
-        "depth_rider": "Depth Strider §b&number&"
+        "punch": "Frappe : §b&number&",
+        "depth_rider": "Agilité aquatique : §b&number&",
+        "note": "§oCertains rôles peuvent outrepasser certaines limites"
       },
       "timers": {
         "list": "Liste des §bTimers §f :\n",

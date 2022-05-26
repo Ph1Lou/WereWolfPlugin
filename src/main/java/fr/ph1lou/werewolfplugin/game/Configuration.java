@@ -29,7 +29,7 @@ public class Configuration implements IConfiguration {
     private int borderMax;
     private int borderMin;
     private int limitDepthStrider;
-    private int knockBackMode;
+    private boolean knockBackForInvisibleOnly;
     private String trollKey;
     private int spectatorMode;  // 0 no Spectators, 1 allowed for death players, 2 for all players;
     private boolean whiteList;
@@ -61,7 +61,7 @@ public class Configuration implements IConfiguration {
         this.borderMax = 2000;
         this.borderMin = 300;
         this.limitDepthStrider = 0;
-        this.knockBackMode = 0;
+        this.knockBackForInvisibleOnly = true;
         this.trollKey = RoleBase.VILLAGER;
         this.spectatorMode = 2;  // 0 no Spectators, 1 allowed for death players, 2 for all players;
         this.whiteList = false;
@@ -330,13 +330,13 @@ public class Configuration implements IConfiguration {
     }
 
     @Override
-    public int getKnockBackMode() {
-        return knockBackMode;
+    public boolean isKnockBackForInvisibleRoleOnly() {
+        return this.knockBackForInvisibleOnly;
     }
 
     @Override
-    public void setKnockBackMode(int knockBackMode) {
-        this.knockBackMode = knockBackMode;
+    public void setKnockBackForInvisibleRoleOnly(boolean knockBackMode) {
+        this.knockBackForInvisibleOnly = knockBackMode;
     }
 
     @Override

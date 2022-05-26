@@ -143,7 +143,7 @@ public class Config implements InventoryProvider {
 
         WereWolfAPI game = JavaPlugin.getPlugin(Main.class).getWereWolfAPI();
 
-        contents.set(0, 3, ClickableItem.of((new ItemBuilder(Material.GOLD_SWORD)
+        contents.set(0, 3, ClickableItem.of((new ItemBuilder(UniversalMaterial.GOLDEN_SWORD.getStack())
                 .setDisplayName(game.translate("werewolf.menu.meet_up.button",
                         Formatter.format("&on&", game.translate(game.getConfig().isMeetUp() ?
                                 "werewolf.utils.on":

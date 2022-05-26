@@ -37,10 +37,13 @@ public class Benefactor extends RoleVillage implements IAffectedPlayers {
 
     @Override
     public void second() {
-        super.second();
+
         if(!this.isAbilityEnabled()) return;
+
         if(this.affectedPlayers.size() < 3) return;
+
         if(this.game.getTimer() % (3*60) != 0) return;
+
         this.getPlayerWW().addPlayerHealth(2);
     }
 

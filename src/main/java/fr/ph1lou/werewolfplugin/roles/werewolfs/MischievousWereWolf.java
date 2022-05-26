@@ -2,24 +2,19 @@ package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
 
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.Day;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayWillComeEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
-import fr.ph1lou.werewolfapi.events.game.life_cycle.DeathItemsEvent;
-import fr.ph1lou.werewolfapi.events.game.life_cycle.ResurrectionEvent;
-import fr.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
-import fr.ph1lou.werewolfapi.events.game.utils.GoldenAppleParticleEvent;
 import fr.ph1lou.werewolfapi.events.roles.InvisibleEvent;
-import fr.ph1lou.werewolfapi.events.roles.StealEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -30,13 +25,10 @@ import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
@@ -131,32 +123,6 @@ public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
         }
     }
 
-
-    @EventHandler
-    public void onGoldenAppleEat(GoldenAppleParticleEvent event) {
-
-        if (!event.getPlayerWW().equals(getPlayerWW())) return;
-
-        if (!isInvisible()) return;
-
-        if (game.isDay(Day.DAY)) return;
-
-        event.setCancelled(true);
-
-    }
-
-    @EventHandler
-    public void onEnchantment(EnchantmentEvent event){
-
-        if (!event.getPlayerWW().equals(getPlayerWW())) return;
-
-        if (event.getEnchants().containsKey(Enchantment.KNOCKBACK)) {
-            event.getFinalEnchants().put(Enchantment.KNOCKBACK,
-                    Math.min(event.getEnchants().get(Enchantment.KNOCKBACK),
-                            game.getConfig().getLimitKnockBack()));
-        }
-    }
-
     @EventHandler
     public void onDayWillCome(DayWillComeEvent event) {
 
@@ -167,22 +133,6 @@ public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
 
         this.getPlayerWW().sendMessageWithKey(
                 Prefix.ORANGE , "werewolf.role.little_girl.soon_to_be_day");
-    }
-
-    @EventHandler
-    public void onFinalDeath(DeathItemsEvent event) {
-
-        if (!event.getPlayerWW().equals(this.getPlayerWW())) return;
-
-        this.setInvisible(false);
-
-        if (this.game.getConfig().getLimitKnockBack() == 2) return;
-
-        for (ItemStack i : event.getItems()) {
-            if (i != null) {
-                i.removeEnchantment(Enchantment.KNOCKBACK);
-            }
-        }
     }
 
     @Override
@@ -196,13 +146,6 @@ public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
     }
 
 
-    @EventHandler
-    public void onStealEvent(StealEvent event) {
-
-        if (!event.getThiefWW().equals(getPlayerWW())) return;
-
-        setInvisible(false);
-    }
 
     @Override
     public void recoverPower() {
@@ -265,15 +208,6 @@ public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
                     new InvisibleEvent(this.getPlayerWW(), false));
             Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
         }
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onResurrection(ResurrectionEvent event){
-
-        if (!event.getPlayerWW().equals(getPlayerWW())) return;
-
-        setInvisible(false);
-
     }
 
     @Override

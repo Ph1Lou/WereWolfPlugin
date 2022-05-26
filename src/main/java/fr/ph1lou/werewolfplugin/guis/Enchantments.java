@@ -14,7 +14,9 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Enchantments implements InventoryProvider {
@@ -100,39 +102,41 @@ public class Enchantments implements InventoryProvider {
                                                     Formatter.number(game.getConfig().getLimitPowerBow())))
                             .setLore(lore).build());
                 }));
-        contents.set(0, 8, ClickableItem.of((
+
+        List<String> lores = new ArrayList<>(Collections.singletonList(
+                game.translate("werewolf.menu.enchantments.knock_back_normal")));
+
+        lores.addAll(lore);
+        if(game.getConfig().isKnockBackForInvisibleRoleOnly()){
+            lores.add(0, game.translate("werewolf.menu.enchantments.knock_back_invisible"));
+        }
+
+        contents.set(0, 8, ClickableItem.of(
                         new ItemBuilder(Material.STICK)
                                 .setDisplayName(game.translate("werewolf.menu.enchantments.knock_back",
                                                 Formatter.number(game.getConfig().getLimitKnockBack())))
-                                .setLore(Arrays.asList(
-                                        Arrays.asList(
-                                                game.translate("werewolf.menu.enchantments.knock_back_invisible"),
-                                                "")
-                                                .get(game.getConfig().getKnockBackMode()),
-                                        game.translate("werewolf.menu.enchantments.knock_back_normal"),
-                                        lore.get(0),
-                                        lore.get(1))
-                                )).build(),
+                                .setLore(lores)
+                                .build(),
                 e -> {
                     if (e.isShiftClick()) {
-                        game.getConfig().setKnockBackMode((game.getConfig().getKnockBackMode() + 1) % 2);
+                        game.getConfig().setKnockBackForInvisibleRoleOnly(!game.getConfig().isKnockBackForInvisibleRoleOnly());
                     } else if (e.isLeftClick()) {
                         game.getConfig().setLimitKnockBack(game.getConfig().getLimitKnockBack() + 1);
                     } else if (game.getConfig().getLimitKnockBack() > 0) {
                         game.getConfig().setLimitKnockBack(game.getConfig().getLimitKnockBack() - 1);
                     }
+                    List<String> lore1 = new ArrayList<>(Collections.singletonList(
+                            game.translate("werewolf.menu.enchantments.knock_back_normal")));
+
+                    lore1.addAll(lore);
+                    if(game.getConfig().isKnockBackForInvisibleRoleOnly()){
+                        lore1.add(0, game.translate("werewolf.menu.enchantments.knock_back_invisible"));
+                    }
                     e.setCurrentItem(new ItemBuilder(Material.STICK)
                             .setDisplayName(game.translate("werewolf.menu.enchantments.knock_back",
                                     Formatter.number(game.getConfig().getLimitKnockBack())))
-                            .setLore(
-                                    Arrays.asList(
-                                            Arrays.asList(
-                                                    game.translate("werewolf.menu.enchantments.knock_back_invisible"),
-                                                    "")
-                                                    .get(game.getConfig().getKnockBackMode()),
-                                            game.translate("werewolf.menu.enchantments.knock_back_normal"),
-                                            lore.get(0),
-                                            lore.get(1))).build());
+                            .setLore(lore1)
+                            .build());
                 }));
         contents.set(1, 2, ClickableItem.of((new ItemBuilder(Material.IRON_SWORD)
                         .setDisplayName(game.translate("werewolf.menu.enchantments.sharpness_iron",
