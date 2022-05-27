@@ -1,8 +1,10 @@
 package fr.ph1lou.werewolfplugin.scenarios;
 
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Scenario;
 import fr.ph1lou.werewolfapi.basekeys.ScenarioBase;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.StateGame;
@@ -19,8 +21,18 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.Map;
 
-@Scenario(key = ScenarioBase.DIAMOND_LIMIT, defaultValue = true)
+@Scenario(key = ScenarioBase.DIAMOND_LIMIT, defaultValue = true,
+        loreKey = {
+                "werewolf.menu.advanced_tool.diamond_lore",
+                "werewolf.menu.shift"
+        },
+        configValues = @IntValue(key = DiamondLimit.LIMIT, defaultValue = 17,
+                meetUpValue = 0,
+                step = 1,
+        item = UniversalMaterial.DIAMOND))
 public class DiamondLimit extends ListenerManager {
+
+    public static final String LIMIT = "werewolf.menu.advanced_tool.diamond";
 
     final Map<String, Integer> diamondPerPlayer = new HashMap<>();
 
@@ -60,7 +72,7 @@ public class DiamondLimit extends ListenerManager {
             return;
         }
         if (diamondPerPlayer.getOrDefault(playerName, 0) >=
-                game.getConfig().getDiamondLimit()) {
+                game.getConfig().getValue(LIMIT)) {
             block.getWorld().dropItem(loc, new ItemStack(Material.GOLD_INGOT, 1));
             block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop());
             block.setType(Material.AIR);

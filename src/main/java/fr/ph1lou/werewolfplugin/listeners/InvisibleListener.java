@@ -45,6 +45,7 @@ public class InvisibleListener implements Listener {
             return;
         }
 
+
         ((IInvisible)event.getPlayerWW().getRole()).setInvisible(false);
     }
 

@@ -168,18 +168,4 @@ public class SmallFeaturesListener implements Listener {
         event.getWorld().setWeatherDuration(0);
         event.getWorld().setThundering(false);
     }
-
-    @EventHandler
-    public void onEnderManDeath(EntityDeathEvent event) {
-
-        if (!event.getEntity().getType().equals(EntityType.ENDERMAN)) return;
-
-        List<ItemStack> loots = event.getDrops();
-
-        loots.clear();
-        if (Math.random() * 100 < game.getConfig().getPearlRate()) {
-            loots.add(new ItemStack(Material.ENDER_PEARL));
-        }
-    }
-
 }

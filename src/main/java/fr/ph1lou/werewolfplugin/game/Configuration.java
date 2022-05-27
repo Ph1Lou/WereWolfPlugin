@@ -12,12 +12,7 @@ public class Configuration implements IConfiguration {
     private transient Map<String, StorageConfiguration> storageConfigurations;
     private int strengthRate;
     private int resistanceRate;
-    private int appleRate;
-    private int flintRate;
-    private int pearlRate;
-    private int xpBoost;
     private int playerRequiredBeforeVotingEnds;
-    private int diamondLimit;
     private int limitProtectionIron;
     private int limitProtectionDiamond;
     private int limitSharpnessDiamond;
@@ -43,12 +38,7 @@ public class Configuration implements IConfiguration {
     public Configuration(){
         this.strengthRate = 30;
         this.resistanceRate = 20;
-        this.appleRate = 2;
-        this.flintRate = 10;
-        this.pearlRate = 30;
-        this.xpBoost = 500;
         this.playerRequiredBeforeVotingEnds = 10;
-        this.diamondLimit = 17;
         this.limitProtectionIron = 3;
         this.limitProtectionDiamond = 2;
         this.limitSharpnessDiamond = 3;
@@ -88,16 +78,6 @@ public class Configuration implements IConfiguration {
     }
 
     @Override
-    public int getDiamondLimit() {
-        return this.diamondLimit;
-    }
-
-    @Override
-    public void setDiamondLimit(int diamondLimit) {
-        this.diamondLimit = diamondLimit;
-    }
-
-    @Override
     public int getStrengthRate() {
         return this.strengthRate;
     }
@@ -115,46 +95,6 @@ public class Configuration implements IConfiguration {
     @Override
     public void setPlayerRequiredVoteEnd(int playerRequiredBeforeVotingEnds) {
         this.playerRequiredBeforeVotingEnds = playerRequiredBeforeVotingEnds;
-    }
-
-    @Override
-    public int getPearlRate() {
-        return pearlRate;
-    }
-
-    @Override
-    public void setPearlRate(int pearlRate) {
-        this.pearlRate = pearlRate;
-    }
-
-    @Override
-    public int getFlintRate() {
-        return flintRate;
-    }
-
-    @Override
-    public void setFlintRate(int flintRate) {
-        this.flintRate = flintRate;
-    }
-
-    @Override
-    public int getAppleRate() {
-        return appleRate;
-    }
-
-    @Override
-    public void setAppleRate(int appleRate) {
-        this.appleRate = appleRate;
-    }
-
-    @Override
-    public int getXpBoost() {
-        return xpBoost;
-    }
-
-    @Override
-    public void setXpBoost(int xpBoost) {
-        this.xpBoost = xpBoost;
     }
 
     @Override

@@ -12,6 +12,7 @@ import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
+import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Material;
@@ -66,7 +67,15 @@ public class ScenariosGUI implements InventoryProvider {
                 .forEach(scenarioRegister -> {
                     List<String> lore = new ArrayList<>();
                     Arrays.stream(scenarioRegister.getMetaDatas().loreKey())
-                            .map(game::translate)
+                            .map(s -> game.translate(s, Arrays.stream(scenarioRegister
+                                            .getMetaDatas()
+                                            .configValues())
+                                    .map(intValue -> {
+                                        String[] intValueKey = intValue.key().split("\\.");
+                                        return Formatter.format(String.format("&%s&",intValueKey[intValueKey.length - 1]),
+                                                game.getConfig().getValue(intValue.key()));
+                                    })
+                                    .toArray(Formatter[]::new)))
                             .map(s -> Arrays.stream(s.split("\\n")).collect(Collectors.toList()))
                             .forEach(lore::addAll);
                     ItemStack itemStack;
@@ -94,7 +103,11 @@ public class ScenariosGUI implements InventoryProvider {
                             .setDisplayName(game.translate(scenarioRegister.getMetaDatas().key()))
                             .setLore(lore).build()), e -> {
 
-                        if (!incompatible.isPresent() || config.isScenarioActive(scenarioRegister.getMetaDatas().key())) {
+
+                        if(e.isShiftClick()){
+                            AdvancedScenarioMenu.getInventory(scenarioRegister).open(player);
+                        }
+                        else if (!incompatible.isPresent() || config.isScenarioActive(scenarioRegister.getMetaDatas().key())) {
                             config.switchScenarioValue(scenarioRegister.getMetaDatas().key());
                             scenarioRegister.getObject().ifPresent(listenerManager -> listenerManager
                                     .register(config.isScenarioActive(scenarioRegister.getMetaDatas().key())));

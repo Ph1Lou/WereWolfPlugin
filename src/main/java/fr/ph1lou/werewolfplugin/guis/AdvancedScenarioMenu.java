@@ -6,14 +6,13 @@ import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
-import fr.ph1lou.werewolfapi.annotations.Event;
+import fr.ph1lou.werewolfapi.annotations.Scenario;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
-import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Main;
 import org.bukkit.entity.Player;
@@ -25,15 +24,15 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class AdvancedEventMenu implements InventoryProvider {
+public class AdvancedScenarioMenu implements InventoryProvider {
 
-    private final Wrapper<ListenerManager, Event> register;
+    private final Wrapper<ListenerManager, Scenario> register;
 
-    public AdvancedEventMenu(Wrapper<ListenerManager, Event> register) {
+    public AdvancedScenarioMenu(Wrapper<ListenerManager, Scenario> register) {
         this.register = register;
     }
 
-    public static SmartInventory getInventory(Wrapper<ListenerManager, Event> register) {
+    public static SmartInventory getInventory(Wrapper<ListenerManager, Scenario> register) {
 
         GetWereWolfAPI api = JavaPlugin.getPlugin(Main.class);
 
@@ -41,11 +40,9 @@ public class AdvancedEventMenu implements InventoryProvider {
         return SmartInventory.builder()
                 .id("advanced" + register.getMetaDatas().key())
                 .manager(api.getInvManager())
-                .provider(new AdvancedEventMenu(register))
-                .size(Math.min(54, (Math.max(0, ((register.getMetaDatas().configurations().length
-                +register.getMetaDatas().timers().length +
-                        register.getMetaDatas().configValues().length)
-                        * 2 - 6)) / 9 + 1) * 9) / 9, 9)
+                .provider(new AdvancedScenarioMenu(register))
+                .size(Math.min(54, (Math.max(0, register.getMetaDatas().configValues().length
+                        * 2 - 6) / 9 + 1) * 9) / 9, 9)
                 .title(game.translate("werewolf.menu.advanced_tool_role.menu",
                                 Formatter.role(game.translate(register.getMetaDatas().key()))))
                 .closeable(true)
@@ -60,7 +57,7 @@ public class AdvancedEventMenu implements InventoryProvider {
 
         contents.set(0, 0, ClickableItem.of(new ItemBuilder(UniversalMaterial.COMPASS.getType())
                         .setDisplayName(game.translate("werewolf.menu.return")).build(),
-                e -> RandomEvents.INVENTORY.open(player)));
+                e -> ScenariosGUI.INVENTORY.open(player)));
 
     }
 
@@ -75,63 +72,9 @@ public class AdvancedEventMenu implements InventoryProvider {
             contents.set(i.get() / 9, i.get() % 9, clickableItem);
             i.set(i.get() + 2);
         });
-
-        this.getTimersEvent(main, this.register).forEach(clickableItem -> {
-            contents.set(i.get() / 9, i.get() % 9, clickableItem);
-            i.set(i.get() + 2);
-        });
-
-        this.getConfigsEvent(main, this.register).forEach(clickableItem -> {
-            contents.set(i.get() / 9, i.get() % 9, clickableItem);
-            i.set(i.get() + 2);
-        });
     }
 
-
-    public List<ClickableItem> getConfigsEvent(GetWereWolfAPI main, Wrapper<ListenerManager, Event> roleRegister){
-        WereWolfAPI game = main.getWereWolfAPI();
-        return Arrays.stream(roleRegister.getMetaDatas().configurations())
-                .map(configRegister -> GlobalConfigs.getClickableItem(game, new Wrapper<>(roleRegister.getClazz(),
-                        configRegister, roleRegister.getAddonKey(), null)))
-                .collect(Collectors.toList());
-    }
-
-    public List<ClickableItem> getTimersEvent(GetWereWolfAPI main, Wrapper<ListenerManager, Event> roleRegister){
-
-        WereWolfAPI game = main.getWereWolfAPI();
-        return Arrays.stream(roleRegister.getMetaDatas().timers())
-                .map(timerRegister -> {
-                    IConfiguration config = game.getConfig();
-                    List<String> lore = new ArrayList<>(Arrays.asList(game.translate("werewolf.menu.left"),
-                            game.translate("werewolf.menu.right")));
-                    Arrays.stream(timerRegister.loreKey())
-                            .map(game::translate)
-                            .map(s -> Arrays.stream(s.split("\\n"))
-                                    .collect(Collectors.toList()))
-                            .forEach(lore::addAll);
-                    return ClickableItem.of(new ItemBuilder(UniversalMaterial.ANVIL.getStack())
-                            .setLore(lore)
-                            .setDisplayName(game.translate(timerRegister.key(),
-                                    Formatter.timer(Utils.conversion(config.getTimerValue(timerRegister.key())))))
-                            .build(),e -> {
-
-
-                        if (e.isLeftClick()) {
-                            config.moveTimer(timerRegister.key(), timerRegister.step());
-                        } else if (config.getTimerValue(timerRegister.key()) - timerRegister.step() > 0) {
-                            config.moveTimer(timerRegister.key(), - timerRegister.step());
-                        }
-
-                        e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                                .setLore(lore)
-                                .setDisplayName(game.translate(timerRegister.key(),
-                                        Formatter.timer(Utils.conversion(config.getTimerValue(timerRegister.key())))))
-                                .build());
-                    });
-                }).collect(Collectors.toList());
-    }
-
-    public List<ClickableItem> getIntConfigEvent(GetWereWolfAPI main, Wrapper<ListenerManager, Event> roleRegister){
+    public List<ClickableItem> getIntConfigEvent(GetWereWolfAPI main, Wrapper<ListenerManager, Scenario> roleRegister){
 
         WereWolfAPI game = main.getWereWolfAPI();
         return Arrays.stream(roleRegister.getMetaDatas().configValues())

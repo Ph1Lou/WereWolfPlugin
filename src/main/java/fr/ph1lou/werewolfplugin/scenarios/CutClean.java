@@ -57,7 +57,7 @@ public class CutClean extends ListenerManager {
                 if (!currentItemType.equals(Material.DIAMOND_PICKAXE) && !currentItemType.equals(Material.IRON_PICKAXE) && !currentItemType.equals(Material.STONE_PICKAXE)) {
                     return;
                 }
-                block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(game.getConfig().isScenarioActive(ScenarioBase.XP_BOOST) ? (int) (game.getConfig().getXpBoost() / 100f) : 1);
+                block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(game.getConfig().isScenarioActive(ScenarioBase.XP_BOOST) ? (int) (game.getConfig().getValue(XpBoost.KEY) / 100f) : 1);
                 block.setType(Material.AIR);
                 block.getWorld().dropItem(loc, new ItemStack(Material.IRON_INGOT, 1));
                 break;
@@ -66,7 +66,7 @@ public class CutClean extends ListenerManager {
                 if (!currentItemType.equals(Material.DIAMOND_PICKAXE) && !currentItemType.equals(Material.IRON_PICKAXE)) {
                     return;
                 }
-                block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(game.getConfig().isScenarioActive(ScenarioBase.XP_BOOST) ? (int) (game.getConfig().getXpBoost() / 100f) : 1);
+                block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(game.getConfig().isScenarioActive(ScenarioBase.XP_BOOST) ? (int) (game.getConfig().getValue(XpBoost.KEY) / 100f) : 1);
                 block.setType(Material.AIR);
                 block.getWorld().dropItem(loc, new ItemStack(Material.GOLD_INGOT, 1));
                 break;
