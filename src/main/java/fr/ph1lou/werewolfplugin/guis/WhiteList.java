@@ -52,6 +52,13 @@ public class WhiteList implements InventoryProvider {
                 game.translate("werewolf.menu.whitelist.open")).build()), e -> {
             config.setWhiteList(!config.isWhiteList());
             game.getModerationManager().checkQueue();
+
+            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                    .setDisplayName(config.isWhiteList() ?
+                            game.translate("werewolf.menu.whitelist.close") :
+                            game.translate("werewolf.menu.whitelist.open"))
+                    .build());
+
         }));
         contents.set(1, 1, ClickableItem.of((new ItemBuilder(UniversalMaterial.SKELETON_SKULL.getStack())
                 .setDisplayName(game.translate("werewolf.menu.whitelist.spectator_mode"))
@@ -62,6 +69,13 @@ public class WhiteList implements InventoryProvider {
             if (e.isLeftClick()) {
                 config.setSpectatorMode((config.getSpectatorMode() + 1) % 3);
             } else config.setSpectatorMode((config.getSpectatorMode() + 2) % 3);
+
+            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                    .setDisplayName(game.translate("werewolf.menu.whitelist.spectator_mode"))
+                    .setLore(Collections.singletonList(Arrays.asList(game.translate("werewolf.menu.whitelist.disable"),
+                            game.translate("werewolf.menu.whitelist.death_only"),
+                            game.translate("werewolf.menu.whitelist.enable")).get(config.getSpectatorMode())))
+                    .build());
         }));
         contents.set(1, 3, ClickableItem.of((new ItemBuilder(UniversalMaterial.PLAYER_HEAD.getStack())
                 .setDisplayName(game.translate("werewolf.menu.whitelist.max",
@@ -70,8 +84,14 @@ public class WhiteList implements InventoryProvider {
             if (e.isLeftClick()) {
                 config.setPlayerMax(config.getPlayerMax() + 1);
                 game.getModerationManager().checkQueue();
-            } else if (config.getPlayerMax() - 1 > 0)
+            } else if (config.getPlayerMax() - 1 > 0) {
                 config.setPlayerMax(config.getPlayerMax() - 1);
+            }
+
+            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
+                    .setDisplayName(game.translate("werewolf.menu.whitelist.max",
+                            Formatter.number(config.getPlayerMax())))
+                    .build());
         }));
 
     }

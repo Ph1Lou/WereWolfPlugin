@@ -1,5 +1,6 @@
 package fr.ph1lou.werewolfplugin.listeners;
 
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Sound;
@@ -64,7 +65,7 @@ public class DeathListener implements Listener {
         BukkitUtils.scheduleSyncDelayedTask(() -> player.spigot().respawn(), 10L);
         event.setKeepInventory(true);
 
-        if (game.getConfig().isTrollSV()) return;
+        if (game.getConfig().isConfigActive(ConfigBase.TROLL_ROLE)) return;
 
         if (game.isState(StateGame.GAME)) {
 
@@ -326,7 +327,7 @@ public class DeathListener implements Listener {
             } else if (game.isState(StateGame.START) ||
                     game.isState(StateGame.TRANSPORTATION) ||
                     (game.isState(StateGame.GAME) &&
-                            game.getConfig().isTrollSV())) {
+                            game.getConfig().isConfigActive(ConfigBase.TROLL_ROLE))) {
 
                 event.setRespawnLocation(
                         playerWW.getSpawn());

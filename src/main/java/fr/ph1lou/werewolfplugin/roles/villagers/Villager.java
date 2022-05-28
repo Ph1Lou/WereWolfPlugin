@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -33,8 +34,11 @@ public class Villager extends RoleVillage {
     public Villager(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
         if (!game.isState(StateGame.GAME)) return;
+        
         villagerKit = VillagerKit.values()[(int) Math.floor(game.getRandom().nextFloat() * VillagerKit.values().length)];
-        if (game.getConfig().isTrollSV()) return;
+        
+        if (game.getConfig().isConfigActive(ConfigBase.TROLL_ROLE)) return;
+        
         Bukkit.getPluginManager().callEvent(new VillagerKitEvent(this.getPlayerWW(), villagerKit.getKey()));
     }
 
@@ -49,7 +53,7 @@ public class Villager extends RoleVillage {
     @Override
     public void recoverPower() {
 
-        if (game.getConfig().isTrollSV()) return;
+        if (game.getConfig().isConfigActive(ConfigBase.TROLL_ROLE)) return;
 
         if(!this.isAbilityEnabled()) return;
 

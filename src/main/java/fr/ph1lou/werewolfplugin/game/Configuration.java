@@ -29,9 +29,7 @@ public class Configuration implements IConfiguration {
     private boolean whiteList;
     private int playerMax;
     private double borderSpeed ;
-    private boolean trollSV;
-    private boolean trollLover;
-    private boolean meetup;
+    private boolean meetUp;
 
     public Configuration(){
         this.strengthRate = 30;
@@ -44,7 +42,6 @@ public class Configuration implements IConfiguration {
         this.limitPunch = 1;
         this.limitKnockBack = 1;
         this.goldenAppleParticles = 1;
-        this.trollSV = false;
         this.borderMax = 2000;
         this.borderMin = 300;
         this.limitDepthStrider = 0;
@@ -54,8 +51,7 @@ public class Configuration implements IConfiguration {
         this.whiteList = false;
         this.playerMax = 30;
         this.borderSpeed = 0.3;
-        this.trollLover = false;
-        this.meetup = false;
+        this.meetUp = false;
     }
 
     public Configuration setConfigurations(Map<String, StorageConfiguration> storageConfigurations) {
@@ -175,16 +171,6 @@ public class Configuration implements IConfiguration {
     }
 
     @Override
-    public boolean isTrollSV() {
-        return trollSV;
-    }
-
-    @Override
-    public void setTrollSV(boolean trollSV) {
-        this.trollSV = trollSV;
-    }
-
-    @Override
     public int getBorderMax() {
         return borderMax;
     }
@@ -266,23 +252,13 @@ public class Configuration implements IConfiguration {
     }
 
     @Override
-    public boolean isTrollLover() {
-        return this.trollLover;
-    }
-
-    @Override
-    public void setTrollLover(boolean trollLover) {
-        this.trollLover = trollLover;
-    }
-
-    @Override
     public boolean isMeetUp() {
-        return this.meetup;
+        return this.meetUp;
     }
 
     @Override
-    public void setMeetUp(boolean meetup) {
-        this.meetup = meetup;
+    public void setMeetUp(boolean meetUp) {
+        this.meetUp = meetUp;
     }
 
     @Override

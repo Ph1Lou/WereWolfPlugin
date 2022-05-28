@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.tasks;
 
 
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
@@ -88,7 +89,7 @@ public class GameTask extends BukkitRunnable {
 
 					if (timerRegister.decrement() ||
 							(timerRegister.decrementAfterRole() &&
-									!game.getConfig().isTrollSV() &&
+									!game.getConfig().isConfigActive(ConfigBase.TROLL_ROLE) &&
 									game.getConfig().getTimerValue(TimerBase.ROLE_DURATION) < 0) ||
 							(!timerRegister.decrementAfterTimer().equals("") &&
 									game.getConfig().getTimerValue(timerRegister.decrementAfterTimer()) < 0)) {

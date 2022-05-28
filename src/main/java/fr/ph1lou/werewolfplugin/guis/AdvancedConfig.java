@@ -6,12 +6,12 @@ import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfplugin.Main;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
+import fr.ph1lou.werewolfplugin.Main;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -27,7 +27,7 @@ public class AdvancedConfig implements InventoryProvider {
             .id("advancedConfig")
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
             .provider(new AdvancedConfig())
-            .size(2, 9)
+            .size(1, 9)
             .title(JavaPlugin.getPlugin(Main.class)
                     .getWereWolfAPI().translate("werewolf.menu.advanced_tool.name"))
             .closeable(true)
@@ -58,7 +58,7 @@ public class AdvancedConfig implements InventoryProvider {
         contents.set(0, 2, ClickableItem.of((
                 new ItemBuilder(Material.POTION)
                         .setDisplayName(game.translate("werewolf.menu.advanced_tool.strength",
-                                        Formatter.number(config.getStrengthRate())))
+                                Formatter.number(config.getStrengthRate())))
                         .setLore(lore).build()), e -> {
             if (e.isLeftClick()) {
                 config.setStrengthRate(config.getStrengthRate() + 10);
@@ -70,13 +70,13 @@ public class AdvancedConfig implements InventoryProvider {
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setLore(lore)
                     .setDisplayName(game.translate("werewolf.menu.advanced_tool.strength",
-                                    Formatter.number(config.getStrengthRate())))
+                            Formatter.number(config.getStrengthRate())))
                     .build());
 
         }));
         contents.set(0, 4, ClickableItem.of((new ItemBuilder(Material.POTION)
                 .setDisplayName(game.translate("werewolf.menu.advanced_tool.resistance",
-                                Formatter.number(config.getResistanceRate())))
+                        Formatter.number(config.getResistanceRate())))
                 .setLore(lore).build()), e -> {
             if (e.isLeftClick()) {
                 config.setResistanceRate(config.getResistanceRate() + 2);
@@ -87,7 +87,7 @@ public class AdvancedConfig implements InventoryProvider {
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setLore(lore)
                     .setDisplayName(game.translate("werewolf.menu.advanced_tool.resistance",
-                                    Formatter.number(config.getResistanceRate())))
+                            Formatter.number(config.getResistanceRate())))
                     .build());
 
         }));
@@ -95,38 +95,18 @@ public class AdvancedConfig implements InventoryProvider {
 
         contents.set(0, 6, ClickableItem.of((
                 new ItemBuilder(Material.BREAD)
-                        .setDisplayName(game.translate(config.isTrollSV() ?
-                                "werewolf.menu.advanced_tool.troll_on" :
-                                "werewolf.menu.advanced_tool.troll_off"))
-                        .setLore(Arrays.asList(game.translate(config.getTrollKey()),
-                                game.translate("werewolf.menu.advanced_tool.troll_set")))
-                        .build()), e -> {
-
-            if (e.isShiftClick()) {
-                TrollChoice.getInventory(player, Category.WEREWOLF).open(player);
-            } else {
-                config.setTrollSV(!config.isTrollSV());
-            }
-
-            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setDisplayName(game.translate(config.isTrollSV() ?
-                            "werewolf.menu.advanced_tool.troll_on" :
-                            "werewolf.menu.advanced_tool.troll_off"))
-                    .setLore(Arrays.asList(game.translate(config.getTrollKey()),
-                            game.translate("werewolf.menu.advanced_tool.troll_set")))
-                    .build());
-
-
-        }));
+                        .setDisplayName(game.translate("werewolf.menu.troll.name"))
+                        .setLore(game.translate("werewolf.menu.troll.current",Formatter.role(game.translate(config.getTrollKey()))))
+                        .build()), e -> TrollChoice.getInventory(player, Category.WEREWOLF).open(player)));
 
         contents.set(0, 8, ClickableItem.of((
                 new ItemBuilder(Material.GOLD_NUGGET)
                         .setDisplayName(game.translate("werewolf.menu.advanced_tool.particles"))
                         .setLore(Collections.singletonList(
                                 Arrays.asList(
-                                        game.translate("werewolf.menu.advanced_tool.particles_off"),
-                                        game.translate("werewolf.menu.advanced_tool.exception"),
-                                        game.translate("werewolf.menu.advanced_tool.particles_on"))
+                                                game.translate("werewolf.menu.advanced_tool.particles_off"),
+                                                game.translate("werewolf.menu.advanced_tool.exception"),
+                                                game.translate("werewolf.menu.advanced_tool.particles_on"))
                                         .get(config.getGoldenAppleParticles()))).build()), e -> {
 
             if (e.isLeftClick()) {
@@ -140,35 +120,14 @@ public class AdvancedConfig implements InventoryProvider {
                     .setDisplayName(game.translate("werewolf.menu.advanced_tool.particles"))
                     .setLore(Collections.singletonList(
                             Arrays.asList(
-                                    game.translate("werewolf.menu.advanced_tool.particles_off"),
-                                    game.translate("werewolf.menu.advanced_tool.exception"),
-                                    game.translate("werewolf.menu.advanced_tool.particles_on"))
+                                            game.translate("werewolf.menu.advanced_tool.particles_off"),
+                                            game.translate("werewolf.menu.advanced_tool.exception"),
+                                            game.translate("werewolf.menu.advanced_tool.particles_on"))
                                     .get(config.getGoldenAppleParticles())))
                     .build());
 
         }));
-
-        contents.set(1, 1, ClickableItem.of((
-                        new ItemBuilder(Material.ARROW)
-                                .setDisplayName(game.translate(config.isTrollLover() ?
-                                        "werewolf.menu.advanced_tool.troll_lover_on" :
-                                        "werewolf.menu.advanced_tool.troll_lover_off"))
-                                .build())
-                , e -> {
-
-                    config.setTrollLover(!config.isTrollLover());
-
-                    e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                            .setDisplayName(game.translate(config.isTrollLover() ?
-                                    "werewolf.menu.advanced_tool.troll_lover_on" :
-                                    "werewolf.menu.advanced_tool.troll_lover_off"))
-                            .build());
-
-                }));
     }
-
-
-
 
 }
 

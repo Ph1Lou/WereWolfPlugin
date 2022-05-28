@@ -203,7 +203,7 @@
         "description": "Vous pouvez flairer les joueurs pour savoir si ils sont Loup-Garou. Les joueurs devront se situer à moins de §b&number&§f blocs pendant §b&timer&§f. Vous disposez de §b&number1&§f flair(s).",
         "smell_message": "Vous pouvez flairer un joueur §b/ww flairer§f. Si vous êtes déjà en train de flairer quelqu'un, il sera remplacé par le nouveau joueur et la progression sera remis à 0. Il vous reste §b&number&§r flair(s)",
         "smell_beginning": "Vous commencez à flairer §b&player&",
-        "not_werewolf": "&player& §2n'est pas dans le camp des Loups Garous",
+        "not_werewolf": "&player& §an'est pas dans le camp des Loups Garous",
         "warn": "Il sera prévenu dans 5 minutes que vous l'avez flairé",
         "werewolf": "&player& §4est dans le camp des Loups Garous.§f Il sera prévenu qu'il a été flairé dans 5 minutes",
         "not_enough_near": "Vous n'êtes pas assez proche de la personne que vous voulez flairer",
@@ -280,7 +280,7 @@
         "display": "Détective",
         "description": "Chaque matin, vous pouvez tester deux joueurs pour savoir s'ils appartiennent, ou non, au même camp.",
         "inspection_message": "Inspectez deux joueurs §b/ww inspecter§r vous avez §b&timer&",
-        "same_camp": "&player1& et &player2& §2sont dans le même camp",
+        "same_camp": "&player1& et &player2& §asont dans le même camp",
         "opposing_camp": "&player1& et &player2& §4ne sont pas dans le même camp",
         "already_inspect": "Au moins un de ces joueurs a déjà été inspecté",
         "command": "inspecter",
@@ -1147,9 +1147,9 @@
       "description": "Pour configurer la Partie",
       "name": "Option §bLG",
       "return": "Revenir au Menu Principal",
-      "left": "§fClique-§bGauche§f >> +",
-      "right": "§fClique-§bDroit§f >> -",
-      "shift": "§bShift§f-Clique >> Configuration avancée",
+      "left": "§fClique-§bGauche§f » +",
+      "right": "§fClique-§bDroit§f » -",
+      "shift": "§bShift§f-Clique » Configuration avancée",
       "addon": {
         "name": "Réglages Addons"
       },
@@ -1162,15 +1162,11 @@
         "enable": "§aActiver§f Mode MeetUp",
         "disable": "§cDésactiver§f Mode MeetUp",
         "name": "Gestion §bMeetUp",
+        "config": "MeetUp",
         "warning": "§cAttention§f, cela supprime vos configurations actuelles"
       },
       "advanced_tool": {
         "name": "Configuration §bAvancée",
-        "troll_on": "Troll §2Activé",
-        "troll_off": "Troll §4Désactivé",
-        "troll_lover_on": "Troll Saint Valentin §2Activé",
-        "troll_lover_off": "Troll Saint Valentin §4Désactivé",
-        "troll_set": "§bShift§f-Clique pour configurer",
         "resistance": "Resistance §b&number&%",
         "strength": "Force + §b&number&%",
         "particles": "Particules des Pommes d'Or",
@@ -1178,7 +1174,11 @@
         "particles_off": "§4Désactivé§r pour tous les joueurs",
         "exception": "§6Désactivé§f pour les joueurs invisibles"
       },
-      "troll": "Configuration §bTroll",
+      "troll": {
+        "name": "Configuration §bTroll Rôle",
+        "current": "Rôle actuel §b&role&"
+      },
+
       "roles": {
         "command_1": "role",
         "need": "§cCe rôle nécessite un §f&role&§c dans la compo",
@@ -1197,11 +1197,11 @@
         "name": "Configuration §bWhiteList",
         "max": "Joueurs Max §b&number&",
         "spectator_mode": "§fMode Spectateur :",
-        "open": "§fWhiteList §2ouverte",
-        "close": "§fWhiteList §4fermée",
-        "disable": "§4Désactivé§f pour tous",
+        "open": "§fWhiteList §aouverte",
+        "close": "§fWhiteList §cfermée",
+        "disable": "§cDésactivé§f pour tous",
         "death_only": "§fPour les Morts §6uniquement",
-        "enable": "§2Activé§f pour tous"
+        "enable": "§aActivé§f pour tous"
       },
       "scenarios": {
         "disable": "L'affichage des scénarios est désactivés",
@@ -1273,7 +1273,7 @@
         "sharpness_diamond": "Epee §3Diamant§f : Tranchant §b&number&",
         "knock_back": "Recul §b&number&",
         "knock_back_invisible": "§cRecul§f seulement pour les rôles §ainvisibles",
-        "knock_back_normal": "§bShift§f-Clique >> configurer",
+        "knock_back_normal": "§bShift§f-Clique » configurer",
         "punch": "Frappe : §b&number&",
         "depth_rider": "Agilité aquatique : §b&number&",
         "note": "§oCertains rôles peuvent outrepasser certaines limites"
@@ -1325,7 +1325,7 @@
         "delete": "§4Supprimer§r le Stuff de Départ et de Mort",
         "death": "Configuration §bStuff à la mort",
         "start": "Configuration §bStuff de Départ",
-        "reset": "§aRecharger§f le Stuff des rôles par défaut"
+        "reset": "§aCharger§f le Stuff des rôles par défaut"
       },
       "global": {
         "list": "Liste des §bRègles §f :\n",
@@ -1351,6 +1351,8 @@
         "double_troll": "Double Troll",
         "lone_wolf": "Loup Solitaire",
         "new_vote": "Nouveau Vote",
+        "troll_role": "Troll Rôle",
+        "troll_lover": "Troll Saint Valentin",
         "incompatible": "§cConfiguration incompatible chargée : §b&configuration&"
       },
       "border": {
@@ -1560,9 +1562,7 @@
       "off": "§cOFF",
       "debug": "§fMode §4debug",
       "author": "§fAuteur(s) :",
-      "bar": "§r§b§m§l-+-----------------------------------+-§r§r§r§f",
-      "cross": "(§cX§f)",
-      "check": "(§aV§f)"
+      "bar": "§r§b§m§l-+-----------------------------------+-§r§r§r§f"
     },
     "categories": {
       "villager": "Villageois",

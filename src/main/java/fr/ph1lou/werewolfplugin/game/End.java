@@ -43,7 +43,7 @@ public class End {
             return;
         }
 
-        if (game.getConfig().isTrollSV()) return;
+        if (game.getConfig().isConfigActive(ConfigBase.TROLL_ROLE)) return;
 
         if (game.isState(StateGame.END)) return;
 

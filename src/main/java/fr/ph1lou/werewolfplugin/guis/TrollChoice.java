@@ -40,7 +40,7 @@ public class TrollChoice implements InventoryProvider {
                 .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
                 .provider(new TrollChoice(player, category))
                 .size(6, 9)
-                .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.troll"))
+                .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.troll.name"))
                 .closeable(true)
                 .build();
     }

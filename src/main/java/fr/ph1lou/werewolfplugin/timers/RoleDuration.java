@@ -99,7 +99,7 @@ public class RoleDuration extends ListenerManager {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onRepartitionFirst(RepartitionEvent event){
-        if (this.getGame().getConfig().isTrollSV()) {
+        if (this.getGame().getConfig().isConfigActive(ConfigBase.TROLL_ROLE)) {
             Bukkit.getPluginManager().callEvent(new TrollEvent());
             event.setCancelled(true);
         }
@@ -164,7 +164,7 @@ public class RoleDuration extends ListenerManager {
                     game.getConfig().switchConfigValue(ConfigBase.DOUBLE_TROLL);
                     game.setDebug(false);
                 } else {
-                    game.getConfig().setTrollSV(false);
+                    game.getConfig().setConfig(ConfigBase.TROLL_ROLE, false);
                     Bukkit.getPluginManager().callEvent(new RepartitionEvent());
                 }
             }

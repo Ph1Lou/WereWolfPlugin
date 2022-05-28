@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.timers;
 
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Timer;
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -39,7 +40,7 @@ public class LoverDuration extends ListenerManager {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onLover(LoversRepartitionEvent event){
-        if (this.getGame().getConfig().isTrollLover()) {
+        if (this.getGame().getConfig().isConfigActive(ConfigBase.TROLL_LOVER)) {
             Bukkit.getPluginManager().callEvent(new TrollLoverEvent());
             event.setCancelled(true);
         }
@@ -92,7 +93,7 @@ public class LoverDuration extends ListenerManager {
                                     .sendMessageWithKey(Prefix.GREEN , "werewolf.announcement.lover_troll");
                             loverAPIS.forEach(((IPlayerWW)playerWW)::removeLover);
                         });
-                game.getConfig().setTrollLover(false);
+                game.getConfig().setConfig(ConfigBase.TROLL_LOVER,false);
                 Bukkit.getPluginManager().callEvent(new LoversRepartitionEvent());
             }
 

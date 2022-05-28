@@ -59,6 +59,7 @@ public class Register implements IRegisterManager {
         INSTANCE = this;
         for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
             ModuleWerewolf moduleWerewolf = plugin.getClass().getAnnotation(ModuleWerewolf.class);
+
             if(moduleWerewolf != null){
 
                 if(moduleWerewolf.key().startsWith("werewolf.") && !plugin.equals(main)){

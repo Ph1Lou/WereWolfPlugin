@@ -1,5 +1,6 @@
 package fr.ph1lou.werewolfplugin.game;
 
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.game.IStorageConfiguration;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfplugin.Register;

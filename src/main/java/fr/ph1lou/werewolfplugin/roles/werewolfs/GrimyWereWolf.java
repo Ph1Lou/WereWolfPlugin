@@ -77,7 +77,7 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
 
     @Override
     public void recoverPower() {
-        if (!game.getConfig().isTrollSV()) {
+        if (!game.getConfig().isConfigActive(ConfigBase.TROLL_ROLE)) {
             game.getConfig().addOneRole(RoleBase.WEREWOLF);
         }
     }
