@@ -59,7 +59,7 @@ public class CommandWillOTheWisp implements ICommandRole {
         playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.WITHER,
                 400,
                 0,
-                "no_fall"));
+                playerWW.getRole().getKey()));
 
     }
 }

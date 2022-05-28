@@ -113,7 +113,7 @@ public class Seer extends RoleWithLimitedSelectionDuration implements IAffectedP
     @Override
     public void recoverPotionEffect() {
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION,"seer"));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION,this.getKey()));
     }
 
     public void setDisablePower() {

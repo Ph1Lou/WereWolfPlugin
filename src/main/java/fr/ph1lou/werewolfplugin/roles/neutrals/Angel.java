@@ -305,7 +305,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
                         Formatter.format("&form&",game.translate(RoleBase.FALLEN_ANGEL)));
                 setChoice(AngelForm.FALLEN_ANGEL);
                 if (game.isDay(Day.NIGHT)) {
-                    this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,"fallen_angel"));
+                    this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,this.getKey()));
                 }
             } else {
                 this.getPlayerWW().sendMessageWithKey(
@@ -549,7 +549,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
 
         if (!choice.equals(AngelForm.FALLEN_ANGEL)) return;
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,"fallen_angel",0));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,this.getKey(),0));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -559,12 +559,12 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
 
         if(!this.isAbilityEnabled()) return;
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,"fallen_angel"));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,this.getKey()));
     }
 
 
     @Override
     public void disableAbilitiesRole() {
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,"fallen_angel",0));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,this.getKey(),0));
     }
 }

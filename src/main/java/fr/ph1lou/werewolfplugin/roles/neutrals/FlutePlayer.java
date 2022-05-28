@@ -291,14 +291,14 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
                                     .add(PotionEffectType.DAMAGE_RESISTANCE,
                                             240,
                                             0,
-                                            "flute_player"));
+                                            this.getKey()));
         }
         else{
             this.getPlayerWW()
                     .addPotionModifier(
                             PotionModifier
                                     .remove(PotionEffectType.DAMAGE_RESISTANCE,
-                                            "flute_player",
+                                            this.getKey(),
                                             0));
         }
     }
@@ -433,7 +433,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
     private void checkStrength() {
 
         if (this.all) {
-            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"flute_player"));
+            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,this.getKey()));
             return;
         }
 

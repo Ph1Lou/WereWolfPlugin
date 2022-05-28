@@ -112,7 +112,7 @@ public class TenebrousWerewolf extends RoleWereWolf implements IPower, IAffected
         if (damagerWW == null) return;
 
         if (damagerWW.getRole().isWereWolf()) {
-            targetWW.addPotionModifier(PotionModifier.remove(PotionEffectType.BLINDNESS, "tenebrous", 1));
+            targetWW.addPotionModifier(PotionModifier.remove(PotionEffectType.BLINDNESS, this.getKey(), 1));
             affectedPlayers.remove(targetWW);
         }
     }

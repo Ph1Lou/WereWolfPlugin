@@ -85,7 +85,7 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
 
         if(game.isDay(Day.DAY)){
             this.getPlayerWW().addPotionModifier(PotionModifier
-                    .add(PotionEffectType.SPEED,"wild_o_the_wisp"));
+                    .add(PotionEffectType.SPEED,this.getKey()));
         }
     }
 
@@ -137,7 +137,7 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
 
 
         this.getPlayerWW().addPotionModifier(PotionModifier
-                .remove(PotionEffectType.SPEED,"wild_o_the_wisp",0));
+                .remove(PotionEffectType.SPEED,this.getKey(),0));
 
         if(!this.isAbilityEnabled()){
             return;
@@ -211,21 +211,21 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
                 this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE,
                         "werewolf.role.will_o_the_wisp.use_tp",Formatter.number(2-this.use));
                 this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INVISIBILITY,
-                        "will_o_the_wisp"));
+                        this.getKey()));
                 this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.ABSORPTION,
                         Integer.MAX_VALUE,1,
-                        "will_o_the_wisp"));
+                        this.getKey()));
 
                 this.timer = BukkitUtils.scheduleSyncDelayedTask(() -> {
                     if(this.isInvisible()){
                         this.setInvisible(false);
                         this.getPlayerWW().addPotionModifier(PotionModifier
                                 .remove(PotionEffectType.INVISIBILITY,
-                                        "will_o_the_wisp",
+                                        this.getKey(),
                                         0));
                         this.getPlayerWW().addPotionModifier(PotionModifier
                                 .remove(PotionEffectType.ABSORPTION,
-                                        "will_o_the_wisp",
+                                        this.getKey(),
                                         1));
                         Bukkit.getPluginManager().callEvent(new InvisibleEvent(this.getPlayerWW(), false));
                         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
@@ -235,7 +235,7 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
                 if (isInfected() && game.isDay(Day.NIGHT)) {
                     this.getPlayerWW().addPotionModifier(PotionModifier
                             .remove(PotionEffectType.INCREASE_DAMAGE,
-                                    "werewolf",
+                                    this.getKey(),
                                     0));
 
                 }
@@ -249,15 +249,15 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
             if (this.isInfected() && game.isDay(Day.NIGHT)) {
                 this.getPlayerWW().addPotionModifier(PotionModifier
                         .add(PotionEffectType.INCREASE_DAMAGE,
-                                "werewolf"));
+                                this.getKey()));
             }
             this.getPlayerWW().addPotionModifier(PotionModifier
                     .remove(PotionEffectType.INVISIBILITY,
-                            "will_o_the_wisp",
+                            this.getKey(),
                             0));
             this.getPlayerWW().addPotionModifier(PotionModifier
                     .remove(PotionEffectType.ABSORPTION,
-                            "will_o_the_wisp",
+                            this.getKey(),
                             1));
             if(this.timer != -1){
                 Bukkit.getScheduler().cancelTask(this.timer);
@@ -277,13 +277,13 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
             getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.role.little_girl.ability_disabled");
             this.getPlayerWW().addPotionModifier(PotionModifier
                     .remove(PotionEffectType.INCREASE_DAMAGE,
-                            "werewolf",0));
+                            this.getKey(),0));
             this.getPlayerWW().addPotionModifier(PotionModifier
                     .remove(PotionEffectType.ABSORPTION,
-                            "will_o_the_wisp",1));
+                            this.getKey(),1));
             this.getPlayerWW().addPotionModifier(PotionModifier
                     .remove(PotionEffectType.INVISIBILITY,
-                            "will_o_the_wisp",0));
+                            this.getKey(),0));
 
             setInvisible(false);
             Bukkit.getPluginManager().callEvent(
@@ -300,7 +300,7 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
         }
 
         this.getPlayerWW().addPotionModifier(PotionModifier
-                .add(PotionEffectType.SPEED,"wild_o_the_wisp"));
+                .add(PotionEffectType.SPEED,this.getKey()));
     }
 
     @Override

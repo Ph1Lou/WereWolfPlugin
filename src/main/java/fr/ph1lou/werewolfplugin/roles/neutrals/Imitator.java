@@ -41,8 +41,6 @@ import java.util.List;
         attributes = RoleAttribute.NEUTRAL)
 public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
 
-    public static final String POTION = "imitator";
-
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private boolean power = true;
 
@@ -103,7 +101,7 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
                 PotionEffectType.SPEED,
                 1200,
                 0,
-                "imitator"));
+                this.getKey()));
 
     }
 
@@ -145,10 +143,16 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
 
         setPower(false);
 
-        HandlerList.unregisterAll(this.getPlayerWW().getRole());
         IRole roleClone = role.publicClone();
+
+        if(roleClone == null){
+            return;
+        }
+
+        HandlerList.unregisterAll(this);
+
         this.getPlayerWW().setRole(roleClone);
-        assert roleClone != null;
+
         BukkitUtils.registerListener(roleClone);
         if (this.isInfected()) {
             roleClone.setInfected();
@@ -165,8 +169,8 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
                 Formatter.role(game.translate(role.getKey())));
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.role.thief.details");
 
-        this.getPlayerWW()
-                .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,POTION,0));
+        this.getPlayerWW().clearPotionEffects(this.getKey());
+
         Bukkit.getPluginManager().callEvent(new StealEvent(this.getPlayerWW(),
                 playerWW,
                 roleClone.getKey()));
@@ -203,13 +207,13 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
 
         if(!isAbilityEnabled()) return;
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,POTION));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,this.getKey()));
 
     }
 
     @Override
     public void disableAbilitiesRole() {
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,POTION,0));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,this.getKey(),0));
     }
 }

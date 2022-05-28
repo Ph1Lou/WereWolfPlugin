@@ -60,7 +60,7 @@ public class Comedian extends RoleWithLimitedSelectionDuration {
 
         getLastMask().ifPresent(comedianMask -> this.getPlayerWW()
                 .addPotionModifier(PotionModifier.remove(comedianMask.getPotionEffectType(),
-                        "comedian",
+                        this.getKey(),
                         0)));
 
         if (getMasks().size() >= 3) return;

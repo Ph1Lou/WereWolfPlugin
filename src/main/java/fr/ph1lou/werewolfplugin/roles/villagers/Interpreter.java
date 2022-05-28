@@ -215,8 +215,9 @@ public class Interpreter extends RoleVillage implements IPower {
 
                         if (!game.isState(StateGame.END) && !this.getPlayerWW().isState(StatePlayer.DEATH)) {
                             HandlerList.unregisterAll(role);
+                            this.getPlayerWW().clearPotionEffects(this.getPlayerWW().getRole().getKey());
                             this.getPlayerWW().setRole(this);
-                            this.getPlayerWW().clearPotionEffects(); //todo clear les effets de l'anciens rôle
+
                             Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
                             this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,"werewolf.role.interpreter.end");
                         }

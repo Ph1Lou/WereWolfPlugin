@@ -312,6 +312,16 @@ public class PlayerWW implements IPlayerWW {
     }
 
     @Override
+    public void clearPotionEffects(String key) {
+        this.potionModifiers.keySet()
+                .stream()
+                .filter(potionModifier -> potionModifier.getIdentifier().equals(key))
+                .forEach(potionModifier -> this.addPotionModifier(PotionModifier.remove(potionModifier.getPotionEffectType(),
+                        potionModifier.getIdentifier(),
+                        potionModifier.getAmplifier())));
+    }
+
+    @Override
     public Set<? extends PotionModifier> getPotionModifiers() {
         return this.potionModifiers.keySet();
     }
@@ -507,7 +517,7 @@ public class PlayerWW implements IPlayerWW {
         });
         if(this.tpWhenDisconnected){
             this.tpWhenDisconnected=false;
-            this.addPotionModifier(PotionModifier.add(PotionEffectType.WITHER,400,0,"no_fall"));
+            this.addPotionModifier(PotionModifier.add(PotionEffectType.WITHER,400,0,MapManager.NO_FALL));
         }
         player.teleport(this.disconnectedLocation);
 

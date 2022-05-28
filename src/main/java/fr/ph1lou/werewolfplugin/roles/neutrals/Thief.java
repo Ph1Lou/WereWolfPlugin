@@ -101,7 +101,7 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
 
         if (!isAbilityEnabled()) return;
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,"thief"));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,this.getKey()));
 
     }
 
@@ -117,7 +117,7 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
                 PotionEffectType.SPEED,
                 1200,
                 0,
-                "thief"));
+                this.getKey()));
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -158,10 +158,16 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
         IRole role = playerWW.getRole();
 
         this.setPower(false);
-        HandlerList.unregisterAll(this);
         IRole roleClone = role.publicClone();
+
+        if(roleClone == null){
+            return;
+        }
+
+        HandlerList.unregisterAll(this);
+
         this.getPlayerWW().setRole(roleClone);
-        assert roleClone != null;
+
         BukkitUtils.registerListener(roleClone);
         if (this.isInfected()) {
             roleClone.setInfected();
@@ -177,7 +183,7 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
                 Formatter.role(game.translate(role.getKey())));
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.role.thief.details");
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,"thief",0));
+        this.getPlayerWW().clearPotionEffects(this.getKey());
 
         Bukkit.getPluginManager().callEvent(new StealEvent(this.getPlayerWW(),
                 playerWW,
@@ -210,6 +216,6 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
             return;
         }
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,"thief",0));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,this.getKey(),0));
     }
 }

@@ -65,7 +65,7 @@ public class CommandShaman implements ICommandRole {
         }
 
         playerWW.removePlayerMaxHealth(2);
-        playerWW.getRole().addAuraModifier(new AuraModifier("shaman", Aura.DARK,1,false));
+        playerWW.getRole().addAuraModifier(new AuraModifier(playerWW.getRole().getKey(), Aura.DARK,1,false));
 
         if (game.getRandom().nextBoolean()) {
             playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.shaman.victim_name",

@@ -72,7 +72,7 @@ public class CommandSendToLibrarian implements ICommand {
                     librarianGiveBackEvent.getTargetWW().sendMessageWithKey(
                             Prefix.GREEN , "werewolf.role.librarian.contribution",
                             Formatter.player(player.getName()),
-                            Formatter.format("message",librarianGiveBackEvent.getInfo()));
+                            Formatter.format("&message&",librarianGiveBackEvent.getInfo()));
                 });
 
 

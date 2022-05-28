@@ -136,7 +136,7 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
                     PotionEffectType.DAMAGE_RESISTANCE,
                     100,
                     0,
-                    "sister"));
+                    this.getKey()));
         }
 
 

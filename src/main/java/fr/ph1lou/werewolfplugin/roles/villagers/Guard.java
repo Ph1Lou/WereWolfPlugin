@@ -106,7 +106,7 @@ public class Guard extends RoleWithLimitedSelectionDuration implements IAffected
     public void onDay(DayEvent event) {
 
         if (this.last != null) {
-            this.last.getRole().removeAuraModifier("guarded");
+            this.last.getRole().removeAuraModifier(this.getKey());
             this.last = null;
         }
 

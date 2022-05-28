@@ -163,7 +163,7 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
         targetRole.recoverPower();
         targetRole.recoverPotionEffects();
         target.addPlayerMaxHealth(20-target.getMaxHealth());
-        target.clearPotionEffects();
+        target.clearPotionEffects(targetRole.getKey());
         newRole.disableAbilities();
         target.setRole(newRole);
         BukkitUtils.registerListener(target.getRole());

@@ -71,7 +71,7 @@ public class CommandAngelRegen implements ICommandRole {
         playerWW1.addPotionModifier(PotionModifier.add( PotionEffectType.REGENERATION,
                 400,
                 0,
-                "angel_regen"));
+                playerWW.getRole().getKey()));
 
         playerWW1.sendMessageWithKey(Prefix.GREEN , "werewolf.role.guardian_angel.get_regeneration");
         playerWW.sendMessageWithKey(

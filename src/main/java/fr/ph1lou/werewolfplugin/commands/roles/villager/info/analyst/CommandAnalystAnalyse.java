@@ -86,6 +86,6 @@ public class CommandAnalystAnalyse implements ICommandRole {
                     Formatter.player(playerWW.getName()));
         }
 
-        analyst.addAuraModifier(new AuraModifier("analyst", Aura.DARK,1,false));
+        analyst.addAuraModifier(new AuraModifier(analyst.getKey(), Aura.DARK,1,false));
     }
 }

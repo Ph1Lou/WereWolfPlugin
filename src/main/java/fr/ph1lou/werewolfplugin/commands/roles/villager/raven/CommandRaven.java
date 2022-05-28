@@ -61,8 +61,8 @@ public class CommandRaven implements ICommandRole {
 
         ((IAffectedPlayers) raven).clearAffectedPlayer();
         ((IAffectedPlayers) raven).addAffectedPlayer(playerWW1);
-        playerWW1.addPotionModifier(PotionModifier.add(PotionEffectType.JUMP,"raven"));
-        playerWW1.getRole().addAuraModifier(new AuraModifier("cursed", Aura.DARK, 20, true));
+        playerWW1.addPotionModifier(PotionModifier.add(PotionEffectType.JUMP,playerWW.getRole().getKey()));
+        playerWW1.getRole().addAuraModifier(new AuraModifier(playerWW.getRole().getKey(), Aura.DARK, 20, true));
         playerWW1.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.raven.get_curse");
         playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.raven.curse_perform",
                 Formatter.player(playerArg.getName()));

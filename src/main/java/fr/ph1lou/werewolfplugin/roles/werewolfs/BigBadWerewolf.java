@@ -47,7 +47,7 @@ public class BigBadWerewolf extends RoleWereWolf implements IPower {
     public void disableAbilitiesRole() {
         this.getPlayerWW()
                 .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
-                        "big_bad_werewolf",0));
+                        this.getKey(),0));
 
     }
 
@@ -60,7 +60,7 @@ public class BigBadWerewolf extends RoleWereWolf implements IPower {
 
         if(event.getPlayerWW().getRole().isWereWolf()){
             this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
-                    "big_bad_werewolf",0));
+                    this.getKey(),0));
             if(!this.getPlayerWW().isState(StatePlayer.DEATH)){
                 this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE,
                         "werewolf.role.big_bad_werewolf.werewolf_death");
@@ -72,7 +72,7 @@ public class BigBadWerewolf extends RoleWereWolf implements IPower {
     @Override
     public void recoverPotionEffect() {
         if(this.isAbilityEnabled() && this.hasPower()){
-            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"big_bad_werewolf"));
+            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,this.getKey()));
         }
     }
 

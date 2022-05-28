@@ -66,8 +66,8 @@ public class CommandProtector implements ICommandRole {
         ((IAffectedPlayers) protector).clearAffectedPlayer();
         ((IAffectedPlayers) protector).addAffectedPlayer(playerWW1);
 
-        playerWW1.addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,"protector"));
-        playerWW1.getRole().addAuraModifier(new AuraModifier("protection", Aura.LIGHT, 40, true));
+        playerWW1.addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,playerWW.getRole().getKey()));
+        playerWW1.getRole().addAuraModifier(new AuraModifier(playerWW.getRole().getKey(), Aura.LIGHT, 40, true));
         playerWW1.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.protector.get_protection");
         playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.protector.protection_perform",
                 Formatter.player(playerArg.getName()));

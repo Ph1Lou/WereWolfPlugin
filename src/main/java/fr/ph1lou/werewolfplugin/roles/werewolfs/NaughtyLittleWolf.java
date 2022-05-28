@@ -45,7 +45,7 @@ public class NaughtyLittleWolf extends RoleWereWolf {
     @Override
     public void recoverPotionEffect() {
         if (game.isDay(Day.NIGHT)) {
-            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.SPEED, "naughty"));
+            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.SPEED, this.getKey()));
         }
     }
 
@@ -60,12 +60,12 @@ public class NaughtyLittleWolf extends RoleWereWolf {
             return;
         }
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.SPEED, "naughty"));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.SPEED, this.getKey()));
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onDay(DayEvent event) {
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.SPEED, "naughty",0));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.SPEED, this.getKey(),0));
     }
 
     @Override
@@ -75,7 +75,7 @@ public class NaughtyLittleWolf extends RoleWereWolf {
             return;
         }
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.SPEED,"naughty",0));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.SPEED,this.getKey(),0));
     }
 
 

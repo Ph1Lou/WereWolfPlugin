@@ -126,7 +126,7 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
                 PotionEffectType.SPEED,
                 3600,
                 0,
-                "fox"));
+                this.getKey()));
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -222,7 +222,7 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
                             Formatter.player(playerWW.getName()));
                     this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.role.fox.warn");
 
-                    this.addAuraModifier(new AuraModifier("fox", Aura.DARK,1,false));
+                    this.addAuraModifier(new AuraModifier(this.getKey(), Aura.DARK,1,false));
 
                 } else {
                     this.getPlayerWW().sendMessageWithKey(

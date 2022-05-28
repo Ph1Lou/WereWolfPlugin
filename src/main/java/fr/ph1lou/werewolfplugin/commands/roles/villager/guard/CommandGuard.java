@@ -66,7 +66,7 @@ public class CommandGuard implements ICommandRole {
         }
 
         ((IAffectedPlayers) guard).addAffectedPlayer(playerWW1);
-        playerWW1.getRole().addAuraModifier(new AuraModifier("guarded",
+        playerWW1.getRole().addAuraModifier(new AuraModifier(playerWW.getRole().getKey(),
                 Aura.LIGHT,
                 40,
                 true));

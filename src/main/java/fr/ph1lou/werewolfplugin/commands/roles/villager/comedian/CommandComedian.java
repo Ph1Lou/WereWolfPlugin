@@ -54,7 +54,7 @@ public class CommandComedian implements ICommandRole {
             playerWW.sendMessageWithKey(
                     Prefix.YELLOW , "werewolf.role.comedian.wear_mask_perform",
                     Formatter.format("&mask&",game.translate(ComedianMask.values()[i].getKey())));
-            playerWW.addPotionModifier(PotionModifier.add(ComedianMask.values()[i].getPotionEffectType(),"comedian"));
+            playerWW.addPotionModifier(PotionModifier.add(ComedianMask.values()[i].getPotionEffectType(),playerWW.getRole().getKey()));
 
         } catch (NumberFormatException ignored) {
         }

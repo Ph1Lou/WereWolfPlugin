@@ -46,7 +46,7 @@ public class AlphaWereWolf extends RoleWereWolf {
             if (!this.isAbilityEnabled()) {
                 return;
             }
-            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.ABSORPTION, 6000, 0,"alpha-werewolf"));
+            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.ABSORPTION, 6000, 0,this.getKey()));
         }
     }
 
@@ -56,7 +56,7 @@ public class AlphaWereWolf extends RoleWereWolf {
         if (!this.isAbilityEnabled()) {
             return;
         }
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.ABSORPTION, 6000, 0,"alpha-werewolf"));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.ABSORPTION, 6000, 0,this.getKey()));
     }
 
     @EventHandler

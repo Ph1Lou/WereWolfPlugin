@@ -113,16 +113,16 @@ public class BearTrainer extends RoleVillage {
 
         int growl = event.getPlayerWWS().size();
 
-        this.removeAuraModifier("bear_trainer");
+        this.removeAuraModifier(this.getKey());
 
         if(growl == 0){
-            this.addAuraModifier(new AuraModifier("bear_trainer", Aura.LIGHT,1,true));
+            this.addAuraModifier(new AuraModifier(this.getKey(), Aura.LIGHT,1,true));
         }
         else if(growl == 1){
-            this.addAuraModifier(new AuraModifier("bear_trainer", Aura.NEUTRAL,1,true));
+            this.addAuraModifier(new AuraModifier(this.getKey(), Aura.NEUTRAL,1,true));
         }
         else{
-            this.addAuraModifier(new AuraModifier("bear_trainer", Aura.DARK,1,true));
+            this.addAuraModifier(new AuraModifier(this.getKey(), Aura.DARK,1,true));
         }
 
     }

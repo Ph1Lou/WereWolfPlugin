@@ -73,8 +73,8 @@ public class Protector extends RoleWithLimitedSelectionDuration implements IAffe
         if (this.last != null) {
 
 
-            this.last.addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,"protector",0));
-            this.last.getRole().removeAuraModifier("protection");
+            this.last.addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,this.getKey(),0));
+            this.last.getRole().removeAuraModifier(this.getKey());
             this.last.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.protector.no_longer_protected");
             this.last = null;
         }
@@ -98,8 +98,8 @@ public class Protector extends RoleWithLimitedSelectionDuration implements IAffe
 
         if (!event.getThiefWW().equals(this.last)) return;
 
-        this.last.addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,"protector"));
-        this.last.getRole().addAuraModifier(new AuraModifier("protection", Aura.LIGHT, 40, true));
+        this.last.addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,this.getKey()));
+        this.last.getRole().addAuraModifier(new AuraModifier(this.getKey(), Aura.LIGHT, 40, true));
     }
 
     @Override

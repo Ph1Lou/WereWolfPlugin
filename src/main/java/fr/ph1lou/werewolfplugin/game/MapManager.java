@@ -28,6 +28,7 @@ import java.io.IOException;
 
 public class MapManager implements IMapManager {
 
+    public static final String NO_FALL = "no_fall";
     private final Main main;
     private World world;
     private WorldFillTask wft = null;
@@ -200,7 +201,7 @@ public class MapManager implements IMapManager {
         int x = (int) (Math.round(wb.getSize() / 3 * Math.cos(d) + world.getSpawnLocation().getX()));
         int z = (int) (Math.round(wb.getSize() / 3 * Math.sin(d) + world.getSpawnLocation().getZ()));
 
-        playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.WITHER, 400, 0,"no_fall"));
+        playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.WITHER, 400, 0,NO_FALL));
         playerWW.teleport(new Location(world, x, world.getHighestBlockYAt(x, z) + 100, z));
     }
 

@@ -148,8 +148,8 @@ public class Servitor extends RoleVillage implements IPower {
         if (master == null) return;
 
         if (!master.isState(StatePlayer.ALIVE)) {
-            getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS, "servitor",0));
-            getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE, "servitor",0));
+            getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS, this.getKey(),0));
+            getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE, this.getKey(),0));
             return;
         }
 
@@ -161,13 +161,13 @@ public class Servitor extends RoleVillage implements IPower {
 
         if (checkDistance(master, location)) {
             if (power) {
-                getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE, "servitor")); //TODO patch potions
+                getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE, this.getKey())); //TODO patch potions
             } else {
-                getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.WEAKNESS, "servitor"));
+                getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.WEAKNESS, this.getKey()));
             }
         } else {
-            getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS, "servitor",0));
-            getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE, "servitor",0));
+            getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS, this.getKey(),0));
+            getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE, this.getKey(),0));
         }
     }
 

@@ -38,7 +38,6 @@ import java.util.Optional;
 public class Hermit extends RoleVillage {
 
     public static final String DISTANCE = "werewolf.role.hermit.distance";
-    public static final String POTION = "hermit";
 
     public Hermit(WereWolfAPI game, IPlayerWW playerWW) {
         super(game, playerWW);
@@ -63,16 +62,16 @@ public class Hermit extends RoleVillage {
 
         this.getPlayerWW()
                 .addPotionModifier(PotionModifier.remove(PotionEffectType.SPEED,
-                        POTION,0));
+                        this.getKey(),0));
         this.getPlayerWW()
                 .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
-                        POTION,0));
+                        this.getKey(),0));
         this.getPlayerWW()
                 .addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
-                        POTION,0));
+                        this.getKey(),0));
         this.getPlayerWW()
                 .addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS,
-                        POTION,0));
+                        this.getKey(),0));
     }
 
     @EventHandler
@@ -156,46 +155,46 @@ public class Hermit extends RoleVillage {
         if(number == 0){
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.add(PotionEffectType.SPEED,
-                            POTION));
+                            this.getKey()));
         }
         else{
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.remove(PotionEffectType.SPEED,
-                            POTION,0));
+                            this.getKey(),0));
         }
 
         if(number >= 5){
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.add(PotionEffectType.WEAKNESS,
-                            POTION));
+                            this.getKey()));
 
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
-                            POTION,0));
+                            this.getKey(),0));
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
-                            POTION,0));
+                            this.getKey(),0));
         }
         else{
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS,
-                            POTION,0));
+                            this.getKey(),0));
             
             if(game.isDay(Day.DAY)){
                 this.getPlayerWW()
                         .addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
-                                POTION,0));
+                                this.getKey(),0));
                 this.getPlayerWW()
                         .addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,
-                                POTION));
+                                this.getKey()));
             }
             else{
                 this.getPlayerWW()
                         .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
-                                POTION,0));
+                                this.getKey(),0));
                 this.getPlayerWW()
                         .addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,
-                                POTION));
+                                this.getKey()));
             }
         }
     }

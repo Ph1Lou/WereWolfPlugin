@@ -140,50 +140,50 @@ public class FearFulWerewolf extends RoleWereWolf {
         if(number == 0){
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.add(PotionEffectType.SPEED,
-                            "fearful"));
+                            this.getKey()));
         }
         else{
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.remove(PotionEffectType.SPEED,
-                            "fearful",0));
+                            this.getKey(),0));
         }
 
         if(number >= 4){
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.add(PotionEffectType.WEAKNESS,
-                            "fearful"));
+                            this.getKey()));
         }
         else{
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS,
-                            "fearful",0));
+                            this.getKey(),0));
         }
 
         if(number <= 2){
             if(game.isDay(Day.DAY)){
                 this.getPlayerWW()
                         .addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,
-                                "fearful"));
+                                this.getKey()));
                 this.getPlayerWW()
                         .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
-                                "werewolf",0));
+                                this.getKey(),0));
             }
             else{
                 this.getPlayerWW()
                         .addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,
-                                "werewolf"));
+                                this.getKey()));
                 this.getPlayerWW()
                         .addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
-                                "fearful",0));
+                                this.getKey(),0));
             }
         }
         else{
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
-                            "werewolf",0));
+                            this.getKey(),0));
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
-                            "fearful",0));
+                            this.getKey(),0));
         }
     }
 
@@ -192,12 +192,12 @@ public class FearFulWerewolf extends RoleWereWolf {
 
         this.getPlayerWW()
                 .addPotionModifier(PotionModifier.remove(PotionEffectType.SPEED,
-                        "fearful",0));
+                        this.getKey(),0));
         this.getPlayerWW()
                 .addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
-                        "fearful",0));
+                        this.getKey(),0));
         this.getPlayerWW()
                 .addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS,
-                        "fearful",0));
+                        this.getKey(),0));
     }
 }

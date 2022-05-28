@@ -69,7 +69,7 @@ public class LittleGirl extends RoleVillage implements IInvisible {
             return;
         }
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INVISIBILITY,"little_girl",0));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INVISIBILITY,this.getKey(),0));
 
         Bukkit.getPluginManager().callEvent(
                 new InvisibleEvent(this.getPlayerWW(),
@@ -164,7 +164,7 @@ public class LittleGirl extends RoleVillage implements IInvisible {
     @Override
     public void recoverPotionEffect() {
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION,"little_girl"));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION,this.getKey()));
     }
 
     @EventHandler
@@ -193,10 +193,10 @@ public class LittleGirl extends RoleVillage implements IInvisible {
                 }
 
                 player.sendMessage(game.translate(Prefix.GREEN , "werewolf.role.little_girl.remove_armor_perform"));
-                this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INVISIBILITY,"little_girl"));
+                this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INVISIBILITY,this.getKey()));
 
                 if (isInfected()) {
-                    this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"werewolf",0));
+                    this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,this.getKey(),0));
 
                 }
                 this.setInvisible(true);
@@ -207,9 +207,9 @@ public class LittleGirl extends RoleVillage implements IInvisible {
             player.sendMessage(game.translate(
                     Prefix.YELLOW , "werewolf.role.little_girl.visible"));
             if (this.isInfected()) {
-                this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"werewolf"));
+                this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,this.getKey()));
             }
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INVISIBILITY,"little_girl",0));
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INVISIBILITY,this.getKey(),0));
             this.setInvisible(false);
             Bukkit.getPluginManager().callEvent(
                     new InvisibleEvent(this.getPlayerWW(), false));
@@ -237,9 +237,9 @@ public class LittleGirl extends RoleVillage implements IInvisible {
 
         if (isInvisible()) {
             getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.role.little_girl.ability_disabled");
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"werewolf",0));
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,this.getKey(),0));
 
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INVISIBILITY,"little_girl",0));
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INVISIBILITY,this.getKey(),0));
 
             setInvisible(false);
             Bukkit.getPluginManager().callEvent(

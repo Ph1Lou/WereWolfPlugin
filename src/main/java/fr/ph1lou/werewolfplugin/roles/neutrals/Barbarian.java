@@ -30,6 +30,7 @@ import org.bukkit.projectiles.ProjectileSource;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -193,7 +194,7 @@ public class Barbarian extends RoleNeutral implements IPower, IAffectedPlayers {
 
     @Override
     public List<? extends IPlayerWW> getAffectedPlayers() {
-        return null;
+        return Collections.singletonList(this.playerWW);
     }
 
     @Override

@@ -61,7 +61,7 @@ public class CommandTenebrous implements ICommandRole {
         for (IPlayerWW p : affectedPlayers) {
             role.addAffectedPlayer(p);
             p.addPotionModifier(PotionModifier.add(PotionEffectType.BLINDNESS, game.getConfig()
-                    .getTimerValue(TimerBase.WEREWOLF_TENEBROUS_DURATION) * 20, 1, "tenebrous"));
+                    .getTimerValue(TimerBase.WEREWOLF_TENEBROUS_DURATION) * 20, 1, playerWW.getRole().getKey()));
             p.sendMessageWithKey(Prefix.RED ,"werewolf.role.tenebrous_werewolf.darkness");
         }
 
@@ -69,7 +69,7 @@ public class CommandTenebrous implements ICommandRole {
                 .filter(player1->player1.isState(StatePlayer.ALIVE))
                 .filter(player1 -> player1.getRole().isWereWolf()).collect(Collectors.toList());
 
-        playerWW.getRole().addAuraModifier(new AuraModifier("tenebrous", Aura.DARK,1,false));
+        playerWW.getRole().addAuraModifier(new AuraModifier(playerWW.getRole().getKey(), Aura.DARK,1,false));
 
         for (IPlayerWW ww :  werewolves) {
             ww.sendMessageWithKey(Prefix.YELLOW, "werewolf.role.tenebrous_werewolf.darkness_wolves");

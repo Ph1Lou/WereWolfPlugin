@@ -23,7 +23,7 @@ public class CatEyes extends ListenerManager {
     @EventHandler
     private void onStartEvent(StartEvent event) {
 
-        this.getGame().getPlayersWW().forEach(playerWW -> playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION,"cat_eyes")));
+        this.getGame().getPlayersWW().forEach(playerWW -> playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION,ScenarioBase.CAT_EYES)));
     }
 
     @Override
@@ -32,7 +32,7 @@ public class CatEyes extends ListenerManager {
 
         if (isActive) {
             if (!isRegister()) {
-                this.getGame().getPlayersWW().forEach(playerWW -> playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION,"cat_eyes")));
+                this.getGame().getPlayersWW().forEach(playerWW -> playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION,ScenarioBase.CAT_EYES)));
                 BukkitUtils.registerListener(this);
                 register = true;
             }
@@ -44,7 +44,7 @@ public class CatEyes extends ListenerManager {
                     .forEach(playerWW -> playerWW
                             .addPotionModifier(
                                     PotionModifier.remove(PotionEffectType.NIGHT_VISION,
-                                            "cat_eyes",
+                                            ScenarioBase.CAT_EYES,
                                             0)));
         }
     }

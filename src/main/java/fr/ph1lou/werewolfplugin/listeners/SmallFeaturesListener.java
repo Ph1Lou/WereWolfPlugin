@@ -28,6 +28,7 @@ import org.bukkit.potion.PotionEffectType;
 public class SmallFeaturesListener implements Listener {
 
     private final GameManager game;
+    public final static String GOLDEN_APPLE = "golden_apple";
 
     public SmallFeaturesListener(WereWolfAPI game) {
         this.game = (GameManager) game;
@@ -149,13 +150,13 @@ public class SmallFeaturesListener implements Listener {
                 PotionEffectType.ABSORPTION,
                 2400,
                 0,
-                "golden_apple"));
+                GOLDEN_APPLE));
 
         playerWW.addPotionModifier(PotionModifier.add(
                 PotionEffectType.REGENERATION,
                 100,
                 1,
-                "golden_apple"));
+                GOLDEN_APPLE));
     }
 
     @EventHandler

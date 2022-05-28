@@ -106,12 +106,12 @@ public class Rabbit extends RoleVillage {
 
         if (!this.isAbilityEnabled()) return;
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.WEAKNESS,"rabbit"));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.WEAKNESS,this.getKey()));
     }
 
     @EventHandler
     public void onDay(DayEvent event) {
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS,"rabbit", 0));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS,this.getKey(), 0));
     }
 
     @Override
@@ -128,6 +128,6 @@ public class Rabbit extends RoleVillage {
             return;
         }
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.WEAKNESS,"rabbit"));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.WEAKNESS,this.getKey()));
     }
 }
