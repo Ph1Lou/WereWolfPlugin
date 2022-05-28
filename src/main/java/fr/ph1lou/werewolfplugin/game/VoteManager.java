@@ -22,6 +22,7 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfapi.vote.IVoteManager;
+import fr.ph1lou.werewolfplugin.configs.Vote;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Material;
@@ -71,7 +72,7 @@ public class VoteManager implements Listener, IVoteManager
 		if (this.game.getConfig().getTimerValue(TimerBase.VOTE_BEGIN) > 0) {
 			voterWW.sendMessageWithKey(Prefix.RED, "werewolf.vote.vote_not_yet_activated");
 		}
-		else if (!this.game.getConfig().isConfigActive(ConfigBase.VOTE)) {
+		else if (!this.game.getConfig().isConfigActive(ConfigBase.VOTE) || this.currentStatus == VoteStatus.ENDED) {
 			voterWW.sendMessageWithKey(Prefix.RED, "werewolf.vote.vote_disable");
 		}
 		else if (!this.currentStatus.equals(VoteStatus.IN_PROGRESS)) {
@@ -242,8 +243,8 @@ public class VoteManager implements Listener, IVoteManager
 			return;
 		}
 		if (this.game.getConfig().isConfigActive(ConfigBase.VOTE) &&
-				this.game.getPlayersCount() < this.game.getConfig().getPlayerRequiredVoteEnd()) {
-			this.game.getConfig().switchConfigValue(ConfigBase.VOTE);
+				this.game.getPlayersCount() < this.game.getConfig().getValue(Vote.CONFIG) &&
+			!this.isStatus(VoteStatus.ENDED)) {
 			Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE, "werewolf.vote.vote_deactivate"));
 			this.setStatus(VoteStatus.ENDED);
 			return;
@@ -251,7 +252,7 @@ public class VoteManager implements Listener, IVoteManager
 		int duration = this.game.getConfig().getTimerValue(TimerBase.VOTE_DURATION);
 
 		if (this.game.getConfig().isConfigActive(ConfigBase.VOTE) &&
-				!this.isStatus(VoteStatus.NOT_BEGIN)) {
+				!this.isStatus(VoteStatus.NOT_BEGIN) && !this.isStatus(VoteStatus.ENDED)) {
 
 			this.resetVote();
 			Bukkit.getOnlinePlayers().forEach(Sound.CHICKEN_HURT::play);

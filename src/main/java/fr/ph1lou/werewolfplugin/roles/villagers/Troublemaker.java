@@ -22,6 +22,7 @@ import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
 import fr.ph1lou.werewolfapi.utils.Utils;
+import fr.ph1lou.werewolfplugin.configs.WerewolfChat;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
@@ -124,7 +125,7 @@ public class Troublemaker extends RoleVillage implements IAffectedPlayers, IPowe
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.commands.ww_chat.announce",
                 Formatter.timer(Utils.conversion(game.getConfig()
                         .getTimerValue(TimerBase.WEREWOLF_CHAT_DURATION))),
-                Formatter.number(game.getConfig().getWereWolfChatMaxMessage()));
+                Formatter.number(game.getConfig().getValue(WerewolfChat.CONFIG)));
 
     }
 

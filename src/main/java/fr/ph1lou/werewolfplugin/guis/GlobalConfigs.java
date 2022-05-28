@@ -8,25 +8,24 @@ import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
 import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.game.IConfiguration;
-import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
-import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class GlobalConfigs implements InventoryProvider {
 
@@ -63,7 +62,11 @@ public class GlobalConfigs implements InventoryProvider {
                         .compareToIgnoreCase(game.translate(o2.getMetaDatas().key())))
                 .filter(config1 -> (config1.getMetaDatas().appearInMenu())
                         || game.isDebug())
-                .forEach(configRegister -> items.add(getClickableItem(game, configRegister)));
+                .forEach(configRegister -> items.add(getClickableItem(game, configRegister.getMetaDatas(),
+                        (ListenerManager) configRegister
+                                .getObject()
+                                .filter(o -> o instanceof ListenerManager)
+                                .orElse(null))));
 
         if (items.size() > 45) {
             pagination.setItems(items.toArray(new ClickableItem[0]));
@@ -103,20 +106,24 @@ public class GlobalConfigs implements InventoryProvider {
                 contents.set(k / 9 + 1, k % 9, null);
             }
         }
-        }
+    }
 
-    public static ClickableItem getClickableItem(WereWolfAPI game, Wrapper<?, Configuration> configRegister) {
-        String key = configRegister.getMetaDatas().key();
+    public static ClickableItem getClickableItem(WereWolfAPI game, Configuration configuration,
+                                                 @Nullable ListenerManager listener) {
         IConfiguration config = game.getConfig();
         List<String> lore = new ArrayList<>();
-        Arrays.stream(configRegister.getMetaDatas().loreKey())
-                .map(game::translate)
-                .map(s -> Arrays.stream(s.split("\\n"))
-                        .collect(Collectors.toList()))
-                .forEach(lore::addAll);
+        String key = configuration.key();
         ItemStack itemStack;
 
         if (game.getConfig().isConfigActive(key)) {
+            lore.addAll(AdvancedConfigurationUtils.getLore(game,
+                    configuration.loreKey(),
+                    new Configuration[0],
+                    configuration.timers(),
+                    configuration.configValues()));
+            if(!lore.isEmpty()){
+                lore.add(game.translate("werewolf.menu.shift"));
+            }
             lore.add(0, game.translate("werewolf.utils.enable"));
             itemStack = UniversalMaterial.GREEN_TERRACOTTA.getStack();
         } else {
@@ -124,28 +131,27 @@ public class GlobalConfigs implements InventoryProvider {
             itemStack = UniversalMaterial.RED_TERRACOTTA.getStack();
         }
 
-        Optional<String> incompatible = Arrays.stream(configRegister
-                .getMetaDatas()
+        Optional<String> incompatible = Arrays.stream(configuration
                 .incompatibleConfigs())
                 .filter(s -> game.getConfig().isConfigActive(s))
                 .map(game::translate).findFirst();
 
         incompatible
-                .ifPresent(configuration -> lore.add(game.translate("werewolf.menu.global.incompatible",
-                        Formatter.format("&configuration&",configuration))));
+                .ifPresent(configuration1 -> lore.add(game.translate("werewolf.menu.global.incompatible",
+                        Formatter.format("&configuration&",configuration1))));
 
         return ClickableItem.of(new ItemBuilder(itemStack)
                 .setDisplayName(game.translate(key))
                 .setLore(lore).build(), e -> {
 
-            if (!incompatible.isPresent() || config.isConfigActive(key)) {
+            if(e.isShiftClick()){
+                AdvancedConfigMenu.getInventory(configuration).open((Player) e.getWhoClicked());
+            }
+            else if (!incompatible.isPresent() || config.isConfigActive(key)) {
                 config.switchConfigValue(key);
-                configRegister.getObject()
-                        .ifPresent(object -> {
-                            if(object instanceof ListenerManager){
-                                ((ListenerManager)object).register(config.isConfigActive(key));
-                            }
-                        });
+                if(listener != null){
+                    listener.register(config.isConfigActive(key));
+                }
             }
 
 

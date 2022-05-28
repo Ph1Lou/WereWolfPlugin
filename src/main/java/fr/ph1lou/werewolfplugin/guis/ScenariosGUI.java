@@ -12,7 +12,6 @@ import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
-import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Material;
@@ -24,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class ScenariosGUI implements InventoryProvider {
 
@@ -66,21 +64,17 @@ public class ScenariosGUI implements InventoryProvider {
                         .compareToIgnoreCase(game.translate(o2.getMetaDatas().key())))
                 .forEach(scenarioRegister -> {
                     List<String> lore = new ArrayList<>();
-                    Arrays.stream(scenarioRegister.getMetaDatas().loreKey())
-                            .map(s -> game.translate(s, Arrays.stream(scenarioRegister
-                                            .getMetaDatas()
-                                            .configValues())
-                                    .map(intValue -> {
-                                        String[] intValueKey = intValue.key().split("\\.");
-                                        return Formatter.format(String.format("&%s&",intValueKey[intValueKey.length - 1]),
-                                                game.getConfig().getValue(intValue.key()));
-                                    })
-                                    .toArray(Formatter[]::new)))
-                            .map(s -> Arrays.stream(s.split("\\n")).collect(Collectors.toList()))
-                            .forEach(lore::addAll);
                     ItemStack itemStack;
 
                     if (config.isScenarioActive(scenarioRegister.getMetaDatas().key())) {
+                        lore.addAll(AdvancedConfigurationUtils.getLore(game,
+                                scenarioRegister.getMetaDatas().loreKey(),
+                                scenarioRegister.getMetaDatas().configurations(),
+                                scenarioRegister.getMetaDatas().timers(),
+                                scenarioRegister.getMetaDatas().configValues()));
+                        if(!lore.isEmpty()){
+                            lore.add(game.translate("werewolf.menu.shift"));
+                        }
                         lore.add(0, game.translate("werewolf.utils.enable"));
                         itemStack = UniversalMaterial.GREEN_TERRACOTTA.getStack();
                     } else {
@@ -105,7 +99,7 @@ public class ScenariosGUI implements InventoryProvider {
 
 
                         if(e.isShiftClick()){
-                            AdvancedScenarioMenu.getInventory(scenarioRegister).open(player);
+                            AdvancedScenarioMenu.getInventory(scenarioRegister.getMetaDatas()).open(player);
                         }
                         else if (!incompatible.isPresent() || config.isScenarioActive(scenarioRegister.getMetaDatas().key())) {
                             config.switchScenarioValue(scenarioRegister.getMetaDatas().key());

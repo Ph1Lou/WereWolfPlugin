@@ -11,7 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 
 @Timer(key = TimerBase.PVP,
-        defaultValue = 1500,
+        defaultValue = 25 * 60,
         meetUpValue = 3 * 60,
         decrement = true,
         onZero = PVPEvent.class)

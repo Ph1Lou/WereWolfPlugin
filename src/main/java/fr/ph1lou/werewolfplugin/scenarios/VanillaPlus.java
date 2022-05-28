@@ -20,10 +20,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 @Scenario(key = ScenarioBase.VANILLA_PLUS, defaultValue = true,
-        loreKey = {"werewolf.menu.advanced_tool.ender_pearl_lore",
-                "werewolf.menu.advanced_tool.flint_lore",
-                "werewolf.menu.advanced_tool.apple_lore",
-                "werewolf.menu.shift"},
         configValues = {
                 @IntValue(key = VanillaPlus.FLINT, defaultValue = 10, meetUpValue = 0, step = 5,
                         item = UniversalMaterial.FLINT),
@@ -33,9 +29,9 @@ import java.util.List;
                 @IntValue(key = VanillaPlus.APPLE, defaultValue = 2, meetUpValue = 0, step = 1, item = UniversalMaterial.APPLE)})
 public class VanillaPlus extends ListenerManager {
 
-    public static  final String FLINT = "werewolf.menu.advanced_tool.flint";
-    public static  final String APPLE = "werewolf.menu.advanced_tool.apple";
-    public static  final String PEARL = "werewolf.menu.advanced_tool.ender_pearl";
+    public static  final String FLINT = "werewolf.menu.scenarios.vanilla+.flint";
+    public static  final String APPLE = "werewolf.menu.scenarios.vanilla+.apple";
+    public static  final String PEARL = "werewolf.menu.scenarios.vanilla+.ender_pearl";
 
     public VanillaPlus(GetWereWolfAPI main) {
         super(main);

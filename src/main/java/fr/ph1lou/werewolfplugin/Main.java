@@ -52,8 +52,6 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
         throw new NotImplementedException();
     }
 
-
-
     @Override
     public void onEnable() {
         saveDefaultConfig();

@@ -12,7 +12,6 @@ public class Configuration implements IConfiguration {
     private transient Map<String, StorageConfiguration> storageConfigurations;
     private int strengthRate;
     private int resistanceRate;
-    private int playerRequiredBeforeVotingEnds;
     private int limitProtectionIron;
     private int limitProtectionDiamond;
     private int limitSharpnessDiamond;
@@ -30,7 +29,6 @@ public class Configuration implements IConfiguration {
     private boolean whiteList;
     private int playerMax;
     private double borderSpeed ;
-    private int werewolfChatMaxMessage;
     private boolean trollSV;
     private boolean trollLover;
     private boolean meetup;
@@ -38,7 +36,6 @@ public class Configuration implements IConfiguration {
     public Configuration(){
         this.strengthRate = 30;
         this.resistanceRate = 20;
-        this.playerRequiredBeforeVotingEnds = 10;
         this.limitProtectionIron = 3;
         this.limitProtectionDiamond = 2;
         this.limitSharpnessDiamond = 3;
@@ -57,7 +54,6 @@ public class Configuration implements IConfiguration {
         this.whiteList = false;
         this.playerMax = 30;
         this.borderSpeed = 0.3;
-        this.werewolfChatMaxMessage = 1;
         this.trollLover = false;
         this.meetup = false;
     }
@@ -85,16 +81,6 @@ public class Configuration implements IConfiguration {
     @Override
     public void setStrengthRate(int strengthRate) {
         this.strengthRate = strengthRate;
-    }
-
-    @Override
-    public int getPlayerRequiredVoteEnd() {
-        return this.playerRequiredBeforeVotingEnds;
-    }
-
-    @Override
-    public void setPlayerRequiredVoteEnd(int playerRequiredBeforeVotingEnds) {
-        this.playerRequiredBeforeVotingEnds = playerRequiredBeforeVotingEnds;
     }
 
     @Override
@@ -277,16 +263,6 @@ public class Configuration implements IConfiguration {
     @Override
     public void setKnockBackForInvisibleRoleOnly(boolean knockBackMode) {
         this.knockBackForInvisibleOnly = knockBackMode;
-    }
-
-    @Override
-    public int getWereWolfChatMaxMessage() {
-        return werewolfChatMaxMessage;
-    }
-
-    @Override
-    public void setWereWolfChatMaxMessage(int nbMessage) {
-        this.werewolfChatMaxMessage = nbMessage;
     }
 
     @Override

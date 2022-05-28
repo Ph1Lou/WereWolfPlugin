@@ -11,6 +11,7 @@ import fr.ph1lou.werewolfapi.events.werewolf.WereWolfChatEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfplugin.configs.WerewolfChat;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -42,7 +43,7 @@ public class CommandWereWolfChat implements ICommand {
 
         if (wereWolfCanSpeakInChatEvent.canSpeak()) {
 
-            if (game.getWerewolfChatHandler().getMessagesCount(playerWW) < game.getConfig().getWereWolfChatMaxMessage()) {
+            if (game.getWerewolfChatHandler().getMessagesCount(playerWW) < game.getConfig().getValue(WerewolfChat.CONFIG)) {
                 if (game.getWerewolfChatHandler().isWereWolfChatEnable()) {
 
                     StringBuilder sb = new StringBuilder();
@@ -60,7 +61,7 @@ public class CommandWereWolfChat implements ICommand {
                 }
             } else {
                 playerWW.sendMessageWithKey(Prefix.RED , "werewolf.commands.ww_chat.speak_number",
-                        Formatter.number(game.getConfig().getWereWolfChatMaxMessage()));
+                        Formatter.number(game.getConfig().getValue(WerewolfChat.CONFIG)));
             }
 
 

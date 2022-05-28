@@ -13,15 +13,13 @@ import org.bukkit.event.block.BlockExpEvent;
 
 @Scenario(key = ScenarioBase.XP_BOOST,
         defaultValue = true,
-        loreKey = {"werewolf.menu.advanced_tool.xp_lore",
-                "werewolf.menu.shift"},
         configValues = @IntValue(key = XpBoost.KEY,
                 defaultValue = 500,
                 meetUpValue = 500,
                 step = 10, item = UniversalMaterial.EXPERIENCE_BOTTLE))
 public class XpBoost extends ListenerManager {
 
-    public static final String KEY = "werewolf.menu.advanced_tool.xp";
+    public static final String KEY = "werewolf.menu.scenarios.xp_boost_config.xp";
 
     public XpBoost(GetWereWolfAPI main) {
         super(main);

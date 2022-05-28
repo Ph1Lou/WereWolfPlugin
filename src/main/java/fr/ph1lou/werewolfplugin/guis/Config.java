@@ -22,6 +22,8 @@ import org.bukkit.block.banner.PatternType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class Config implements InventoryProvider {
@@ -99,9 +101,14 @@ public class Config implements InventoryProvider {
                 .setDisplayName(game.translate("werewolf.menu.advanced_tool.name"))
                 .build()), e -> AdvancedConfig.INVENTORY.open(player)));
 
+        List<String> lore = new ArrayList<>();
+        if(game.isDebug()){
+            lore.add(game.translate("werewolf.utils.debug"));
+        }
+
         contents.set(5, 8, ClickableItem.of((new ItemBuilder(UniversalMaterial.PLAYER_HEAD.getStack())
                 .setDisplayName("Dev §bPh1Lou")
-                .setLore(game.isDebug() ? game.translate("werewolf.utils.debug") : "")
+                .setLore(lore)
                 .setHead("Ph1Lou",
                         Bukkit.getOfflinePlayer(UUID.fromString("056be797-2a0b-4807-9af5-37faf5384396")))
                 .build()), e -> {
@@ -116,9 +123,13 @@ public class Config implements InventoryProvider {
                     Sound.ANVIL_BREAK.play(player);
                     surprise = 0;
                 }
+                List<String> lore1 = new ArrayList<>();
+                if(game.isDebug()){
+                    lore1.add(game.translate("werewolf.utils.debug"));
+                }
                 e.setCurrentItem(new ItemBuilder(UniversalMaterial.PLAYER_HEAD.getStack())
                         .setDisplayName("Dev §bPh1Lou")
-                        .setLore(game.isDebug() ? game.translate("werewolf.utils.debug") : "")
+                        .setLore(lore1)
                         .setHead("Ph1Lou",
                                 Bukkit.getOfflinePlayer(UUID.fromString("056be797-2a0b-4807-9af5-37faf5384396")))
                         .build());

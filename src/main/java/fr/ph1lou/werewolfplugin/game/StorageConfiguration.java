@@ -171,12 +171,26 @@ public class StorageConfiguration implements IStorageConfiguration {
                                         .findFirst()
                                         .orElseGet(() -> Register.get().getLoversRegister()
                                                 .stream()
-                                                .filter(roleRoleWrapper -> roleRoleWrapper.getAddonKey().equals(this.addonKey))
-                                                .flatMap(eventWrapper -> Stream.of(eventWrapper.getMetaDatas().timers()))
+                                                .filter(loverLoverWrapper -> loverLoverWrapper.getAddonKey().equals(this.addonKey))
+                                                .flatMap(loverLoverWrapper -> Stream.of(loverLoverWrapper.getMetaDatas().timers()))
                                                 .filter(timer -> timer.key().equals(key))
                                                 .map(timer -> this.getDefaultValue(timer.defaultValue(), timer.meetUpValue()))
                                                 .findFirst()
-                                                .orElse(0)))));
+                                                .orElseGet(() -> Register.get().getConfigsRegister()
+                                                        .stream()
+                                                        .filter(configurationWrapper -> configurationWrapper.getAddonKey().equals(this.addonKey))
+                                                        .flatMap(configurationWrapper -> Stream.of(configurationWrapper.getMetaDatas().timers()))
+                                                        .filter(timer -> timer.key().equals(key))
+                                                        .map(timer -> this.getDefaultValue(timer.defaultValue(), timer.meetUpValue()))
+                                                        .findFirst()
+                                                        .orElseGet(() -> Register.get().getScenariosRegister()
+                                                                .stream()
+                                                                .filter(managerScenarioWrapper -> managerScenarioWrapper.getAddonKey().equals(this.addonKey))
+                                                                .flatMap(managerScenarioWrapper -> Stream.of(managerScenarioWrapper.getMetaDatas().timers()))
+                                                                .filter(timer -> timer.key().equals(key))
+                                                                .map(timer -> this.getDefaultValue(timer.defaultValue(), timer.meetUpValue()))
+                                                                .findFirst()
+                                                        .orElse(0)))))));
     }
 
     @Override
@@ -208,7 +222,14 @@ public class StorageConfiguration implements IStorageConfiguration {
                                         .filter(configuration -> configuration.key().equals(key))
                                         .map(configuration -> this.getDefaultValue(configuration.defaultValue(), configuration.meetUpValue()))
                                         .findFirst()
-                                        .orElse(false)))));
+                                        .orElseGet(() -> Register.get().getScenariosRegister()
+                                                .stream()
+                                                .filter(managerScenarioWrapper -> managerScenarioWrapper.getAddonKey().equals(this.addonKey))
+                                                .flatMap(scenarioWrapper -> Stream.of(scenarioWrapper.getMetaDatas().configurations()))
+                                                .filter(configuration -> configuration.key().equals(key))
+                                                .map(configuration -> this.getDefaultValue(configuration.defaultValue(), configuration.meetUpValue()))
+                                                .findFirst()
+                                                .orElse(false))))));
     }
 
     @Override

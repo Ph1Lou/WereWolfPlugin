@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Timer(key = TimerBase.DIGGING,
-        defaultValue = 4200,
+        defaultValue = 70 * 60,
         meetUpValue = 0,
         decrement = true,
         onZero = DiggingEndEvent.class)

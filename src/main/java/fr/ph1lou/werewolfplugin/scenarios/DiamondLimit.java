@@ -22,17 +22,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Scenario(key = ScenarioBase.DIAMOND_LIMIT, defaultValue = true,
-        loreKey = {
-                "werewolf.menu.advanced_tool.diamond_lore",
-                "werewolf.menu.shift"
-        },
         configValues = @IntValue(key = DiamondLimit.LIMIT, defaultValue = 17,
                 meetUpValue = 0,
                 step = 1,
         item = UniversalMaterial.DIAMOND))
 public class DiamondLimit extends ListenerManager {
 
-    public static final String LIMIT = "werewolf.menu.advanced_tool.diamond";
+    public static final String LIMIT = "werewolf.menu.scenarios.diamond_limit_config.diamond";
 
     final Map<String, Integer> diamondPerPlayer = new HashMap<>();
 

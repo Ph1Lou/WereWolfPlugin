@@ -8,17 +8,16 @@ import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
 import fr.ph1lou.werewolfapi.annotations.Event;
+import fr.ph1lou.werewolfapi.enums.StateGame;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.game.IConfiguration;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
-import fr.ph1lou.werewolfapi.utils.Utils;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.game.GameManager;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.game.IConfiguration;
-import fr.ph1lou.werewolfapi.enums.StateGame;
-import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
-import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -27,7 +26,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class RandomEvents implements InventoryProvider {
 
@@ -70,7 +68,7 @@ public class RandomEvents implements InventoryProvider {
                     items.add(ClickableItem.of((itemStack), e -> {
 
                         if (e.isShiftClick()) {
-                            AdvancedEventMenu.getInventory(randomEventRegister).open(player);
+                            AdvancedEventMenu.getInventory(randomEventRegister.getMetaDatas()).open(player);
                         }
                         else if (e.isLeftClick()) {
                             int probability = config.getProbability(key);
@@ -141,22 +139,13 @@ public class RandomEvents implements InventoryProvider {
                 game.translate("werewolf.menu.right"),
                 game.translate("werewolf.menu.shift")));
         List<String> lore = new ArrayList<>();
-        Arrays.stream(randomEventRegister.getMetaDatas().loreKey())
-                .map(s -> game.translate(s, Arrays.stream(randomEventRegister
-                                .getMetaDatas()
-                                .timers())
-                        .map(timer -> {
-                            String[] timers = timer.key().split("\\.");
-                            return Formatter.format(String.format("&%s&",timers[timers.length - 1]),
-                                    Utils.conversion(game.getConfig().getTimerValue(timer.key())));
-                        })
-                        .toArray(Formatter[]::new)))
-                .map(s -> Arrays.stream(s.split("\\n"))
-                .collect(Collectors.toList())).forEach(lore::addAll);
         ItemStack itemStack;
 
         if (config.getProbability(key) > 0) {
-            lore.add(0, game.translate("werewolf.utils.enable"));
+            lore.addAll(AdvancedConfigurationUtils.getLoreFormat(game, randomEventRegister.getMetaDatas().loreKey(),
+                    randomEventRegister.getMetaDatas().configurations(),
+                    randomEventRegister.getMetaDatas().timers(),
+                    randomEventRegister.getMetaDatas().configValues()));
             itemStack = UniversalMaterial.GREEN_TERRACOTTA.getStack();
         } else {
             lore.add(0, game.translate("werewolf.utils.disable"));

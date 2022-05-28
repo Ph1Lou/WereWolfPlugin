@@ -237,6 +237,8 @@ public class PlayerWW implements IPlayerWW {
             return;
         }
         AtomicBoolean find = new AtomicBoolean(false);
+        AtomicBoolean particle = new AtomicBoolean(false);
+
         new ArrayList<>(this.potionModifiers.keySet())
                 .stream()
                 .filter(potionModifier1 -> potionModifier1.getPotionEffectType()
@@ -254,8 +256,15 @@ public class PlayerWW implements IPlayerWW {
                                 Bukkit.getScheduler().cancelTask(id);
                             }
                         }
+
                         if(player!=null){
-                            player.removePotionEffect(potionModifier.getPotionEffectType());
+                            if(!particle.get()){
+                                particle.set(player.getActivePotionEffects()
+                                        .stream()
+                                        .filter(potionEffect -> potionEffect.getType().equals(potionModifier1.getPotionEffectType()))
+                                        .anyMatch(PotionEffect::hasParticles));
+                            }
+                            player.removePotionEffect(potionModifier1.getPotionEffectType());
                         }
                     }
                     else if(potionModifier1.getIdentifier().equals(potionModifier.getIdentifier())){
@@ -285,8 +294,8 @@ public class PlayerWW implements IPlayerWW {
             player.addPotionEffect(new PotionEffect(potionModifier.getPotionEffectType(),
                     potionModifier.getDuration(),
                     potionModifier.getAmplifier(),
-                    false,
-                    false));
+                    particle.get(),
+                    particle.get()));
         }
 
     }

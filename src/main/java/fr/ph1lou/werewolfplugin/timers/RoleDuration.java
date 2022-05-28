@@ -34,7 +34,7 @@ import java.util.Iterator;
 import java.util.List;
 
 @Timer(key = TimerBase.ROLE_DURATION,
-        defaultValue = 1200,
+        defaultValue = 20 * 60,
         meetUpValue = 60,
         decrement = true,
         onZero = RepartitionEvent.class)

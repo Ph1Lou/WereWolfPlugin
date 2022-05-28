@@ -382,6 +382,8 @@ public class Register implements IRegisterManager {
     private Optional<String> checkScenarios(String key) {
         return this.scenarios.stream()
                 .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key) ||
+                        Arrays.stream(configurationWrapper.getMetaDatas().timers()).anyMatch(timer -> timer.key().equals(key)) ||
+                        Arrays.stream(configurationWrapper.getMetaDatas().configurations()).anyMatch(configuration -> configuration.key().equals(key)) ||
                         Arrays.stream(configurationWrapper.getMetaDatas().configValues()).anyMatch(intValue -> intValue.key().equals(key)))
                 .map(Wrapper::getAddonKey)
                 .findFirst();
@@ -397,7 +399,8 @@ public class Register implements IRegisterManager {
     private Optional<String> checkConfigurations(String key) {
         return this.configurations.stream()
                 .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key) ||
-                        Arrays.stream(configurationWrapper.getMetaDatas().configValues()).anyMatch(intValue -> intValue.key().equals(key)))
+                        Arrays.stream(configurationWrapper.getMetaDatas().configValues()).anyMatch(intValue -> intValue.key().equals(key)) ||
+                        Arrays.stream(configurationWrapper.getMetaDatas().timers()).anyMatch(timer -> timer.key().equals(key)))
                 .map(Wrapper::getAddonKey)
                 .findFirst();
     }

@@ -30,7 +30,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
 
 public class Roles implements InventoryProvider {
 
@@ -211,10 +210,17 @@ public class Roles implements InventoryProvider {
                         String key = roleRegister.getMetaDatas().key();
                         AtomicBoolean unRemovable = new AtomicBoolean(false);
                         List<String> lore2 = new ArrayList<>(lore);
-                        Arrays.stream(roleRegister.getMetaDatas().loreKey())
-                                .map(game::translate)
-                                .map(s -> Arrays.stream(s.split("\\n"))
-                                        .collect(Collectors.toList())).forEach(lore2::addAll);
+
+
+
+
+                        if(game.getConfig().getRoleCount(key) > 0){
+                            lore2.addAll(AdvancedConfigurationUtils.getLore(game,
+                                    roleRegister.getMetaDatas().loreKey(),
+                                    roleRegister.getMetaDatas().configurations(),
+                                    roleRegister.getMetaDatas().timers(),
+                                    roleRegister.getMetaDatas().configValues()));
+                        }
                         Arrays.stream(roleRegister.getMetaDatas().requireRoles())
                                 .forEach(roleKey -> lore2.add(game.translate("werewolf.menu.roles.need",
                                 Formatter.role(game.translate(roleKey)))));
@@ -247,7 +253,7 @@ public class Roles implements InventoryProvider {
                                             .build()), e -> {
 
                                 if (e.isShiftClick()) {
-                                    AdvancedRoleMenu.getInventory(roleRegister).open(player);
+                                    AdvancedRoleMenu.getInventory(roleRegister.getMetaDatas()).open(player);
                                 } else if (e.isLeftClick()) {
                                     selectPlus(game, key);
                                 } else if (e.isRightClick()) {
@@ -268,7 +274,7 @@ public class Roles implements InventoryProvider {
                                     .setDisplayName(game.translate(key)).build()), e -> {
 
                                 if (e.isShiftClick()) {
-                                    AdvancedRoleMenu.getInventory(roleRegister).open(player);
+                                    AdvancedRoleMenu.getInventory(roleRegister.getMetaDatas()).open(player);
                                 } else if (e.isLeftClick()) {
                                     if(incompatible.isPresent()){
                                         return;

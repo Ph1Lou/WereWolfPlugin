@@ -4,7 +4,8 @@ import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 
 @Configuration(key = ConfigBase.CHAT,
-defaultValue = true, appearInMenu = false)
+        defaultValue = true,
+        meetUpValue = true,
+        appearInMenu = false)
 public class Chat {
 }
-

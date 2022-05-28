@@ -5,7 +5,7 @@
     "role": {
       "serial_killer": {
         "display": "Tueur en Série",
-        "items": "Un livre Sharpness III, un livre Protection III et un livre Puissance III",
+        "items": "Un livre Tranchant III, un livre Protection III et un livre Puissance III",
         "effect": "Force avant son premier kill",
         "hearts": "Coeur(s) en Plus : §b&heart&\n",
         "power": "Lorsque vous tuez un joueur, vous gagnez un coeur permanent supplémentaire et une pomme d'or.",
@@ -1172,22 +1172,11 @@
         "troll_lover_off": "Troll Saint Valentin §4Désactivé",
         "troll_set": "§bShift§f-Clique pour configurer",
         "resistance": "Resistance §b&number&%",
-        "ender_pearl": "Taux de Drop EnderPearl §b&number&%",
-        "flint": "Taux de Drop des Silex §b&number&%",
-        "apple": "Taux de Drop des Pommes §b&number&%",
-        "ender_pearl_lore": "Taux de Drop EnderPearl §b&ender_pearl&%",
-        "flint_lore": "Taux de Drop des Silex §b&flint&%",
-        "apple_lore": "Taux de Drop des Pommes §b&apple&%",
-        "vote": "Fin des votes à §b&number&§r personnes",
-        "diamond": "Limite de diamant : §b&number&",
-        "diamond_lore": "Limite de diamant : §b&diamond&",
-        "xp": "XpBoost : §b&number&%",
-        "xp_lore": "XpBoost : §b&xp&%",
         "strength": "Force + §b&number&%",
         "particles": "Particules des Pommes d'Or",
         "particles_on": "§bActivé§r pour tous les joueurs",
         "particles_off": "§4Désactivé§r pour tous les joueurs",
-        "exception": "§6Désactivé§f pour les rôles invisibles"
+        "exception": "§6Désactivé§f pour les joueurs invisibles"
       },
       "troll": "Configuration §bTroll",
       "roles": {
@@ -1222,10 +1211,18 @@
         "no_end": "NoEnd",
         "description": "Pour voir les scénarios",
         "name": "Configuration §bScenarios",
-        "diamond_limit": "DiamondLimit",
+        "diamond_limit_config": {
+          "name": "DiamondLimit",
+          "diamond": "Limite de diamant : §b&number&"
+        },
         "no_clean_up": "NoCleanUp",
         "cat_eyes": "CatEyes",
-        "vanilla_plus": "Vanilla+",
+        "vanilla+": {
+          "name": "Vanilla+",
+          "ender_pearl": "Taux de Drop EnderPearl §b&number&%",
+          "flint": "Taux de Drop des Silex §b&number&%",
+          "apple": "Taux de Drop des Pommes §b&number&%"
+        },
         "fire_less": "FireLess",
         "no_egg_snowball": "NoSnowBall",
         "no_poison": "NoPoison",
@@ -1234,7 +1231,10 @@
         "no_fall": "NoFall",
         "fast_smelting": "FastMelting",
         "compass_target_last_death": "DeathCompass",
-        "xp_boost": "XPBoost",
+        "xp_boost_config": {
+          "name": "XPBoost",
+          "xp": "XpBoost : §b&number&%"
+        },
         "compass_middle": "MiddleCompass",
         "hastey_boys": "HasteyBoys",
         "no_name_tag": "NoNameTag",
@@ -1284,9 +1284,10 @@
         "description": "Pour voir les timers",
         "name": "Configuration §bTimers",
         "pvp": "PVP (§b&timer&§r)",
-        "vote_duration": "Durée du Vote (§b&timer&§r)",
         "werewolf_chat_duration": "Durée du Chat des Loups Garous (§b&timer&§r)",
+        "vote_duration": "Durée du Vote (§b&timer&§r)",
         "vote_waiting": "Durée de transition du vote (§b&timer&§r)",
+        "vote_begin": "Début des Votes (§b&timer&§r)",
         "border_begin": "Début de la Bordure (§b&timer&§r)",
         "werewolf_list": "Temps d'attente de la liste des Loups (§b&timer&§r)",
         "lover_duration": "Durée pour le choix du Couple et révélation des couples (§b&timer&§r)",
@@ -1294,7 +1295,6 @@
         "role_duration": "Révélation des Rôles (§b&timer&§r)",
         "digging_end": "Fin du Minage (§b&timer&§r)",
         "power_duration": "Durée d'utilisation des pouvoirs le Matin (§b&timer&§r)",
-        "vote_begin": "Début des Votes (§b&timer&§r)",
         "auto_restart_duration": "Durée de redémarrage du serveur (§b&timer&§r)",
         "invulnerability": "Invulnérabilité (§b&timer&§r)"
       },
@@ -1334,10 +1334,15 @@
         "name": "Configuration §bGlobale",
         "victory_couple": "Les Couples ne peuvent gagner qu'en Couple",
         "chat": "Chat",
-        "werewolf_chat": "Chat des Loups Garous",
+        "werewolf_chat_config": {
+          "name": "Chat des Loups Garous"
+        },
         "show_role_to_death": "Affiche le Rôle à la Mort",
         "show_role_category_to_death": "Affiche la Catégorie du Rôle à la Mort",
-        "vote": "Vote",
+        "vote_config": {
+          "name": "Vote",
+          "vote": "Fin des votes à §b&number&§r personnes"
+        },
         "hide_composition": "Composition Cachée",
         "red_name_tag": "Pseudo des Loups Garous en rouge",
         "hide_scenarios": "Cache les Scenarios",
