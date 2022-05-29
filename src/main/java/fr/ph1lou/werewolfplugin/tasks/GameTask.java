@@ -72,7 +72,7 @@ public class GameTask extends BukkitRunnable {
 		world.setTime((long) (world.getTime() + 20 *
 				(600f /
 						game.getConfig().getTimerValue(
-								"werewolf.menu.timers.day_duration") - 1)));
+								TimerBase.DAY_DURATION) - 1)));
 
 		game.setTimer(game.getTimer()+1);
 

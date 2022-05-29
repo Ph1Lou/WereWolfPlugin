@@ -19,7 +19,6 @@ import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.roles.StealEvent;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.impl.RoleWithLimitedSelectionDuration;
-import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -75,7 +74,7 @@ public class Protector extends RoleWithLimitedSelectionDuration implements IAffe
 
             this.last.addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,this.getKey(),0));
             this.last.getRole().removeAuraModifier(this.getKey());
-            this.last.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.protector.no_longer_protected");
+            this.last.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.protector.no_longer_protected");
             this.last = null;
         }
 
@@ -86,9 +85,8 @@ public class Protector extends RoleWithLimitedSelectionDuration implements IAffe
         }
 
         this.getPlayerWW().sendMessageWithKey(
-                Prefix.YELLOW , "werewolf.role.protector.protection_message",
-                Formatter.timer(Utils.conversion(
-                        game.getConfig().getTimerValue(TimerBase.POWER_DURATION))));
+                Prefix.YELLOW , "werewolf.roles.protector.protection_message",
+                Formatter.timer(game, TimerBase.POWER_DURATION));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -105,8 +103,8 @@ public class Protector extends RoleWithLimitedSelectionDuration implements IAffe
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.protector.description"))
-                .setItems(game.translate("werewolf.role.protector.items"))
+                .setDescription(game.translate("werewolf.roles.protector.description"))
+                .setItems(game.translate("werewolf.roles.protector.items"))
                 .build();
     }
 

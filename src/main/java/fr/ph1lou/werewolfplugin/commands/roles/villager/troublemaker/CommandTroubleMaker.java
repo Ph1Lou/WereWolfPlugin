@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-@RoleCommand(key = "werewolf.role.troublemaker.command",
+@RoleCommand(key = "werewolf.roles.troublemaker.command",
         roleKeys = RoleBase.TROUBLEMAKER,
         requiredPower = true,
         argNumbers = 1)
@@ -52,9 +52,9 @@ public class CommandTroubleMaker implements ICommandRole {
 
         ((IAffectedPlayers) troublemaker).addAffectedPlayer(playerWW1);
 
-        playerWW1.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.troublemaker.get_switch");
+        playerWW1.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.troublemaker.get_switch");
         game.getMapManager().transportation(playerWW1, Math.random() * 2 * Math.PI);
-        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.troublemaker.troublemaker_perform",
+        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.troublemaker.troublemaker_perform",
                 Formatter.player(playerArg.getName()));
     }
 }

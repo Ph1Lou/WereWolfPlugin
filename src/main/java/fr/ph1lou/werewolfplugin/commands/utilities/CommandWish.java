@@ -13,8 +13,8 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-@PlayerCommand(key = "werewolf.wish.command",
-        descriptionKey = "werewolf.wish.command_description",
+@PlayerCommand(key = "werewolf.commands.player.wish.command",
+        descriptionKey = "werewolf.commands.player.wish.command_description",
         statesPlayer = StatePlayer.ALIVE,
         statesGame = StateGame.GAME)
 public class CommandWish implements ICommand {
@@ -37,7 +37,7 @@ public class CommandWish implements ICommand {
         if(wishChangeEvent.isCancelled()) {
             playerWW.sendMessageWithKey(Prefix.ORANGE, "werewolf.check.cancel");
         } else {
-            playerWW.sendMessageWithKey(Prefix.LIGHT_BLUE, "werewolf.wish.change_wish",
+            playerWW.sendMessageWithKey(Prefix.LIGHT_BLUE, "werewolf.commands.player.wish.change_wish",
                     Formatter.format("&wish&", builder.toString()));
             playerWW.setWish(builder.toString());
         }

@@ -11,8 +11,8 @@ import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Register;
 import org.bukkit.entity.Player;
 
-@PlayerCommand(key = "werewolf.menu.scenarios.command",
-        descriptionKey = "werewolf.menu.scenarios.description",
+@PlayerCommand(key = "werewolf.commands.player.scenarios.command",
+        descriptionKey = "werewolf.commands.player.scenarios.description",
         argNumbers = 0)
 public class CommandScenarios implements ICommand {
 
@@ -21,12 +21,12 @@ public class CommandScenarios implements ICommand {
 
         if (game.getConfig().isConfigActive(ConfigBase.HIDE_SCENARIOS)) {
 
-            player.sendMessage(game.translate(Prefix.RED , "werewolf.menu.scenarios.disable"));
+            player.sendMessage(game.translate(Prefix.RED , "werewolf.commands.player.scenarios.disable"));
 
             return;
         }
 
-        StringBuilder sb = new StringBuilder(game.translate(Prefix.GREEN , "werewolf.menu.scenarios.list"));
+        StringBuilder sb = new StringBuilder(game.translate(Prefix.GREEN , "werewolf.commands.player.scenarios.list"));
 
         int i = 0;
         for (Wrapper<ListenerManager, Scenario> scenarioRegister : Register.get().getScenariosRegister()) {

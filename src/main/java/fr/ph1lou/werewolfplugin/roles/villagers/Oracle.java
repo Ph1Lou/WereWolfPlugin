@@ -17,7 +17,6 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleWithLimitedSelectionDuration;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -62,8 +61,8 @@ public class Oracle extends RoleWithLimitedSelectionDuration implements IAffecte
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.oracle.description"))
-                .setEffects(game.translate("werewolf.role.oracle.effect"))
+                .setDescription(game.translate("werewolf.roles.oracle.description"))
+                .setEffects(game.translate("werewolf.roles.oracle.effect"))
                 .build();
     }
 
@@ -84,10 +83,8 @@ public class Oracle extends RoleWithLimitedSelectionDuration implements IAffecte
         }
 
         this.getPlayerWW().sendMessageWithKey(
-                Prefix.YELLOW , "werewolf.role.oracle.perform",
-                Formatter.timer(Utils.conversion(
-                        game.getConfig()
-                                .getTimerValue(TimerBase.POWER_DURATION))));
+                Prefix.YELLOW , "werewolf.roles.oracle.perform",
+                Formatter.timer(game, TimerBase.POWER_DURATION));
     }
 
     @Override

@@ -111,7 +111,7 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.amnesiac_werewolf.description"))
+                .setDescription(game.translate("werewolf.roles.amnesiac_werewolf.description"))
                 .setEffects(game.translate("werewolf.description.werewolf"))
                 .build();
     }

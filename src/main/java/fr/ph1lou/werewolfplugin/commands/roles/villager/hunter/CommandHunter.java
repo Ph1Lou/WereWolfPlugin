@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-@RoleCommand(key = "werewolf.role.hunter.command",
+@RoleCommand(key = "werewolf.roles.hunter.command",
         roleKeys = RoleBase.HUNTER,
         requiredPower = true,
         statesPlayer = StatePlayer.DEATH,
@@ -41,7 +41,7 @@ public class CommandHunter implements ICommandRole {
         }
 
         if (playerWW.getLastKiller().isPresent() && playerWW.getLastKiller().get().equals(targetWW)) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.role.hunter.invalid_target");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.hunter.invalid_target");
             return;
         }
         ((IPower) playerWW.getRole()).setPower(false);
@@ -51,6 +51,6 @@ public class CommandHunter implements ICommandRole {
         if (event.isCancelled()) return;
 
         event.getTarget().removePlayerHealth(10);
-        Bukkit.broadcastMessage(game.translate(Prefix.RED, "werewolf.role.hunter.success", Formatter.format("&target&", event.getTarget().getName())));
+        Bukkit.broadcastMessage(game.translate(Prefix.RED, "werewolf.roles.hunter.success", Formatter.format("&target&", event.getTarget().getName())));
     }
 }

@@ -60,7 +60,7 @@ public class LoneWolf extends ListenerManager {
 
         if (event.isCancelled()) return;
 
-        role.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.lone_wolf.message");
+        role.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.configurations.lone_wolf.message");
 
         if (role.getPlayerWW().getMaxHealth() < 30) {
             role.getPlayerWW().addPlayerMaxHealth(Math.min(8, 30 - role.getPlayerWW().getMaxHealth()));

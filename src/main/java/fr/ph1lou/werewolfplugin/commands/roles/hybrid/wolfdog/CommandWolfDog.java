@@ -13,7 +13,7 @@ import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.role.interfaces.ITransformed;
 import org.bukkit.Bukkit;
 
-@RoleCommand(key = "werewolf.role.wolf_dog.command",
+@RoleCommand(key = "werewolf.roles.wolf_dog.command",
         roleKeys = RoleBase.WOLF_DOG,
         argNumbers = 0,
         requiredPower = true)
@@ -34,7 +34,7 @@ public class CommandWolfDog implements ICommandRole {
 
         ((ITransformed) wolfDog).setTransformed(true);
 
-        playerWW.sendMessageWithKey(Prefix.RED , "werewolf.role.wolf_dog.perform");
+        playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.wolf_dog.perform");
 
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(playerWW));
 

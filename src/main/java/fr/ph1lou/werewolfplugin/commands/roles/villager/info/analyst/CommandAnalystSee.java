@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-@RoleCommand(key = "werewolf.role.analyst.command_see",
+@RoleCommand(key = "werewolf.roles.analyst.command_see",
         roleKeys = RoleBase.ANALYST,
         requiredPower = true,
         argNumbers = 1)
@@ -79,11 +79,11 @@ public class CommandAnalystSee implements ICommandRole {
         }
 
         if(analystEvent.hasEffect()){
-            playerWW.sendMessageWithKey(Prefix.GREEN,"werewolf.role.analyst.has_effects",
+            playerWW.sendMessageWithKey(Prefix.GREEN,"werewolf.roles.analyst.has_effects",
                     Formatter.player(playerWW1.getName()));
         }
         else{
-            playerWW.sendMessageWithKey(Prefix.RED,"werewolf.role.analyst.no_effects",
+            playerWW.sendMessageWithKey(Prefix.RED,"werewolf.roles.analyst.no_effects",
                     Formatter.player(playerWW1.getName()));
         }
     }

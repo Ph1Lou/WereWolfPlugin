@@ -17,7 +17,7 @@ import org.bukkit.Bukkit;
 
 import java.util.UUID;
 
-@RoleCommand(key = "werewolf.role.witch.command",
+@RoleCommand(key = "werewolf.roles.witch.command",
         roleKeys = RoleBase.WITCH,
         argNumbers = 1,
         requiredPower = true,
@@ -69,7 +69,7 @@ public class CommandWitch implements ICommandRole {
 
         ((IAffectedPlayers) witch).addAffectedPlayer(playerWW1);
         game.resurrection(playerWW1);
-        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.witch.resuscitation_perform",
+        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.witch.resuscitation_perform",
                 Formatter.player(playerWW1.getName()));
     }
 }

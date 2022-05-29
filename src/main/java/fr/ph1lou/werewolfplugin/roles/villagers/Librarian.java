@@ -70,9 +70,9 @@ public class Librarian extends RoleVillage implements ILimitedUse, IAffectedPlay
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.librarian.description",
+                .setDescription(game.translate("werewolf.roles.librarian.description",
                                 Formatter.number(3 - use)))
-                .setItems(game.translate("werewolf.role.librarian.items"))
+                .setItems(game.translate("werewolf.roles.librarian.items"))
                 .build();
     }
 
@@ -99,11 +99,11 @@ public class Librarian extends RoleVillage implements ILimitedUse, IAffectedPlay
 
         if (!isAbilityEnabled()) return;
 
-        Bukkit.broadcastMessage(game.translate(Prefix.YELLOW , "werewolf.role.librarian.death"));
+        Bukkit.broadcastMessage(game.translate(Prefix.YELLOW , "werewolf.roles.librarian.death"));
         int page = 1;
         for (String message : this.storage) {
             Bukkit.broadcastMessage(game.translate(
-                    Prefix.YELLOW , "werewolf.role.librarian.book",
+                    Prefix.YELLOW , "werewolf.roles.librarian.book",
                     Formatter.format("&page&",page),
                     Formatter.format("&message&",message)));
             page++;

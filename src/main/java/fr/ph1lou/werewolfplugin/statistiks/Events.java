@@ -443,7 +443,7 @@ public class Events implements Listener {
         IPlayerWW playerWW = event.getPlayerWW();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.sniff", playerWW,
                 targetWW, api.getTimer(),
-                event.isWereWolf() ? "werewolf.role.fox.werewolf" : "werewolf.role.fox.not_werewolf"));
+                event.isWereWolf() ? "werewolf.roles.fox.werewolf" : "werewolf.roles.fox.not_werewolf"));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -503,8 +503,8 @@ public class Events implements Listener {
         IPlayerWW playerWW = event.getPlayerWW();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.enquire",
                 playerWW, IPlayerWWS, api.getTimer(),
-                event.isSameCamp() ? "werewolf.role.detective.same_camp" :
-                        "werewolf.role.detective.opposing_camp"));
+                event.isSameCamp() ? "werewolf.roles.detective.same_camp" :
+                        "werewolf.roles.detective.opposing_camp"));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -546,7 +546,7 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.see_werewolf_vote",
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.see_werewolf.configurations.vote",
                 playerWW, event.getTargetWW(), api.getTimer()));
     }
 
@@ -556,7 +556,7 @@ public class Events implements Listener {
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
         IPlayerWW targetWW = event.getTargetWW();
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.vote",
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.configurations.vote",
                 playerWW, targetWW, api.getTimer()));
     }
 
@@ -604,7 +604,7 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.vote_result",
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.configurations.vote_result",
                 playerWW, api.getTimer()));
     }
 
@@ -1168,7 +1168,7 @@ public class Events implements Listener {
         WereWolfAPI api = main.getWereWolfAPI();
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.analyst_see",
                 event.getPlayerWW(),event.getTargetWW(),api.getTimer(),
-                event.hasEffect()?"werewolf.role.analyst.has_effects":"werewolf.role.analyst.no_effects")
+                event.hasEffect()?"werewolf.roles.analyst.has_effects":"werewolf.roles.analyst.no_effects")
                 .setActionableStory(true));
     }
 
@@ -1275,7 +1275,7 @@ public class Events implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onWishEvent(WishChangeEvent event) {
 
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.wish_change",
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.commands.player.wish_change",
                 event.getPlayerWW(), main.getWereWolfAPI().getTimer(), event.getWish()));
     }
 

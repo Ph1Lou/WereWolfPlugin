@@ -4,6 +4,7 @@ import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteBeginEvent;
@@ -27,10 +28,9 @@ import fr.ph1lou.werewolfapi.events.game.vote.VoteBeginEvent;
                         meetUpValue = 60,
                         step = 10)
         },
-        configValues = @IntValue(key = Vote.CONFIG, defaultValue = 10,
+        configValues = @IntValue(key = IntValueBase.VOTE_END, defaultValue = 10,
                 meetUpValue = 8,
                 step = 1, item = UniversalMaterial.PLAYER_HEAD))
 public class Vote {
 
-    public static final String CONFIG = "werewolf.menu.global.vote_config.vote";
 }

@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-@RoleCommand(key = "werewolf.role.detective.command",
+@RoleCommand(key = "werewolf.roles.detective.command",
         roleKeys = RoleBase.DETECTIVE,
         requiredPower = true,
         argNumbers = 2
@@ -66,7 +66,7 @@ public class CommandDetective implements ICommandRole {
             }
 
             if (((IAffectedPlayers) detective).getAffectedPlayers().contains(playerWW1)) {
-                playerWW.sendMessageWithKey(Prefix.RED , "werewolf.role.detective.already_inspect");
+                playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.detective.already_inspect");
                 return;
             }
         }
@@ -101,11 +101,11 @@ public class CommandDetective implements ICommandRole {
         ((IAffectedPlayers) detective).addAffectedPlayer(playerWW2);
 
         if (event.isSameCamp()) {
-            playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.detective.same_camp",
+            playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.detective.same_camp",
                     Formatter.format("&player1&",player1.getName()),
                     Formatter.format("&player2&",player2.getName()));
         } else
-            playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.detective.opposing_camp",
+            playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.detective.opposing_camp",
                     Formatter.format("&player1&",player1.getName()),
                     Formatter.format("&player2&",player2.getName()));
     }

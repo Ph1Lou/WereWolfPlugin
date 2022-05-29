@@ -18,7 +18,6 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleWithLimitedSelectionDuration;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -80,26 +79,24 @@ public class Seer extends RoleWithLimitedSelectionDuration implements IAffectedP
 
         if (disablePower) {
             disablePower = false;
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.role.seer.disable");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.roles.seer.disable");
             return;
         }
 
         setPower(true);
 
         this.getPlayerWW().sendMessageWithKey(
-                Prefix.YELLOW , "werewolf.role.seer.see_camp_message",
-                Formatter.timer(Utils.conversion(
-                        game.getConfig()
-                                .getTimerValue(TimerBase.POWER_DURATION))));
+                Prefix.YELLOW , "werewolf.roles.seer.see_camp_message",
+                Formatter.timer(game, TimerBase.POWER_DURATION));
     }
 
 
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.seer.description"))
-                .setItems(game.translate("werewolf.role.seer.items"))
-                .setEffects(game.translate("werewolf.role.seer.effect"))
+                .setDescription(game.translate("werewolf.roles.seer.description"))
+                .setItems(game.translate("werewolf.roles.seer.items"))
+                .setEffects(game.translate("werewolf.roles.seer.effect"))
                 .build();
     }
 

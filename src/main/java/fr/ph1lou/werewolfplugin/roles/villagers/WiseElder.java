@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
@@ -31,14 +32,12 @@ import java.util.Optional;
 @Role(key = RoleBase.WISE_ELDER, 
         category = Category.VILLAGER, 
         attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION},
-configValues = {@IntValue(key = WiseElder.DISTANCE,
+configValues = {@IntValue(key = IntValueBase.WISE_ELDER_DISTANCE,
         defaultValue = 15, 
         meetUpValue = 15, 
         step = 3, 
         item = UniversalMaterial.BROWN_WOOL)})
 public class WiseElder extends RoleVillage {
-
-    public static final String DISTANCE = "werewolf.role.wise_elder.distance";
 
     private int neutralCounter;
     private int darkCounter;
@@ -52,8 +51,8 @@ public class WiseElder extends RoleVillage {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.wise_elder.description",
-                        Formatter.number(game.getConfig().getValue(WiseElder.DISTANCE))))
+                .setDescription(game.translate("werewolf.roles.wise_elder.description",
+                        Formatter.number(game.getConfig().getValue(IntValueBase.WISE_ELDER_DISTANCE))))
                 .build();
     }
 
@@ -89,7 +88,7 @@ public class WiseElder extends RoleVillage {
                 return;
             }
 
-            getPlayerWW().sendMessageWithKey(Prefix.GREEN,"werewolf.role.wise_elder.end_of_cycle",
+            getPlayerWW().sendMessageWithKey(Prefix.GREEN,"werewolf.roles.wise_elder.end_of_cycle",
                     Formatter.format("&neutral&",neutralCounter),
                     Formatter.format("&dark&",darkCounter),
                     Formatter.format("&light&",lightCounter));
@@ -151,6 +150,6 @@ public class WiseElder extends RoleVillage {
      */
     private boolean checkDistance(IPlayerWW player, Location location) {
         return player.getLocation().getWorld() == location.getWorld() &&
-                player.getLocation().distance(location) < game.getConfig().getValue(WiseElder.DISTANCE);
+                player.getLocation().distance(location) < game.getConfig().getValue(IntValueBase.WISE_ELDER_DISTANCE);
     }
 }

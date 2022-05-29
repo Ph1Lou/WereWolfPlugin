@@ -38,7 +38,7 @@ public class Shaman extends RoleVillage implements IAffectedPlayers {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.shaman.description"))
+                .setDescription(game.translate("werewolf.roles.shaman.description"))
                 .build();
     }
 
@@ -65,9 +65,9 @@ public class Shaman extends RoleVillage implements IAffectedPlayers {
         int nTimesAffected = (int) affectedPlayers.stream().filter(player -> player.equals(playerWW)).count();
 
         TextComponent textComponent = new TextComponent(
-                game.translate(Prefix.YELLOW , "werewolf.role.shaman.choice_message"));
+                game.translate(Prefix.YELLOW , "werewolf.roles.shaman.choice_message"));
         textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/ww %s %s %s",
-                game.translate("werewolf.role.shaman.command"), playerWW.getUUID(), nTimesAffected)));
+                game.translate("werewolf.roles.shaman.command"), playerWW.getUUID(), nTimesAffected)));
 
         this.getPlayerWW().sendMessage(textComponent);
     }

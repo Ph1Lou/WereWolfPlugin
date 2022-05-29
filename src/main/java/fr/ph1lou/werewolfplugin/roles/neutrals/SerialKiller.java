@@ -50,11 +50,11 @@ public class SerialKiller extends RoleNeutral implements IPower {
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setPower(game.translate("werewolf.role.serial_killer.power"))
-                .setEquipments(game.translate("werewolf.role.serial_killer.limit"))
-                .setItems(game.translate("werewolf.role.serial_killer.items"))
-                .setEffects(game.translate("werewolf.role.serial_killer.effect"))
-                .addExtraLines(game.translate("werewolf.role.serial_killer.hearts", Formatter.format("&heart&",extraHeart / 2)))
+                .setPower(game.translate("werewolf.roles.serial_killer.power"))
+                .setEquipments(game.translate("werewolf.roles.serial_killer.limit"))
+                .setItems(game.translate("werewolf.roles.serial_killer.items"))
+                .setEffects(game.translate("werewolf.roles.serial_killer.effect"))
+                .addExtraLines(game.translate("werewolf.roles.serial_killer.hearts", Formatter.format("&heart&",extraHeart / 2)))
                 .build();
     }
 

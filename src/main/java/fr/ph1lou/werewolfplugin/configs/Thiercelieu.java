@@ -74,7 +74,7 @@ public class Thiercelieu extends ListenerManager {
                     .anyMatch(announcementLoverDeathEvent -> announcementLoverDeathEvent
                             .getPlayerWW().equals(announcementDeathEvent.getPlayerWW()))){
                 announcementDeathEvent.getTargetPlayer()
-                        .sendMessageWithKey("werewolf.role.lover.lover_death",
+                        .sendMessageWithKey("werewolf.lovers.lover.lover_death",
                                 Formatter.player(announcementDeathEvent.getPlayerWW().getName()));
             }
 

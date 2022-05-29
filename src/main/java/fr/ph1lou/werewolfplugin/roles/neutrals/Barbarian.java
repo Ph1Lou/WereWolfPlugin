@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -38,14 +39,13 @@ import java.util.Set;
 @Role(key = RoleBase.BARBARIAN, 
         category = Category.NEUTRAL, 
         attributes = RoleAttribute.NEUTRAL,
-        configValues = @IntValue(key = Barbarian.DISTANCE,
+        configValues = @IntValue(key = IntValueBase.BARBARIAN_DISTANCE,
                 defaultValue = 25, 
                 meetUpValue = 25, 
                 step = 5, 
                 item = UniversalMaterial.GRAY_WOOL))
 public class Barbarian extends RoleNeutral implements IPower, IAffectedPlayers {
 
-    public static final String DISTANCE = "werewolf.role.barbarian.distance";
     @Nullable
     private IPlayerWW playerWW;
     private boolean power = true;
@@ -58,10 +58,10 @@ public class Barbarian extends RoleNeutral implements IPower, IAffectedPlayers {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.barbarian.description",
-                        Formatter.number(game.getConfig().getValue(DISTANCE))))
-                .setPower(game.translate("werewolf.role.barbarian.power"))
-                .setItems(game.translate("werewolf.role.barbarian.item"))
+                .setDescription(game.translate("werewolf.roles.barbarian.description",
+                        Formatter.number(game.getConfig().getValue(IntValueBase.BARBARIAN_DISTANCE))))
+                .setPower(game.translate("werewolf.roles.barbarian.power"))
+                .setItems(game.translate("werewolf.roles.barbarian.item"))
                 .build();
     }
 
@@ -89,18 +89,18 @@ public class Barbarian extends RoleNeutral implements IPower, IAffectedPlayers {
         }
 
         if(event.getPlayerWW().getDeathLocation().distance(this.getPlayerWW().getLocation())
-                > game.getConfig().getValue(DISTANCE)){
+                > game.getConfig().getValue(IntValueBase.BARBARIAN_DISTANCE)){
             return;
         }
 
         TextComponent hideMessage = new TextComponent(
                 game.translate(
-                        Prefix.YELLOW , "werewolf.role.barbarian.click_message",
+                        Prefix.YELLOW , "werewolf.roles.barbarian.click_message",
                         Formatter.player(event.getPlayerWW().getName())));
         hideMessage.setClickEvent(
                 new ClickEvent(ClickEvent.Action.RUN_COMMAND,
                         String.format("/ww %s %s",
-                                game.translate("werewolf.role.barbarian.command"),
+                                game.translate("werewolf.roles.barbarian.command"),
                                 event.getPlayerWW().getUUID())));
         getPlayerWW().sendMessage(hideMessage);
     }

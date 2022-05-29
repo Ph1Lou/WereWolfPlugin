@@ -21,7 +21,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.UUID;
 
-@RoleCommand(key = "werewolf.role.raven.command",
+@RoleCommand(key = "werewolf.roles.raven.command",
         roleKeys = RoleBase.RAVEN,
         requiredPower = true,
         argNumbers = 1)
@@ -63,8 +63,8 @@ public class CommandRaven implements ICommandRole {
         ((IAffectedPlayers) raven).addAffectedPlayer(playerWW1);
         playerWW1.addPotionModifier(PotionModifier.add(PotionEffectType.JUMP,playerWW.getRole().getKey()));
         playerWW1.getRole().addAuraModifier(new AuraModifier(playerWW.getRole().getKey(), Aura.DARK, 20, true));
-        playerWW1.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.raven.get_curse");
-        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.raven.curse_perform",
+        playerWW1.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.raven.get_curse");
+        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.raven.curse_perform",
                 Formatter.player(playerArg.getName()));
     }
 }

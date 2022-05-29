@@ -105,7 +105,7 @@ public class TabManager implements Listener {
             sb.append(game.translate("werewolf.commands.admin.moderator.tag"));
         } else if (moderationManager.getQueue().contains(uuid)) {
             if (game.isState(StateGame.LOBBY)) {
-                sb.append(game.translate("werewolf.menu.rank.tag"));
+                sb.append(game.translate("werewolf.commands.player.rank.tag"));
             }
         }
 

@@ -14,8 +14,8 @@ import org.bukkit.entity.Player;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@PlayerCommand(key = "werewolf.menu.roles.command_2",
-        descriptionKey = "werewolf.menu.roles.description2",
+@PlayerCommand(key = "werewolf.commands.player.compo.command",
+        descriptionKey = "werewolf.commands.player.compo.description",
         argNumbers = 0)
 public class CommandCompo implements ICommand {
 
@@ -25,12 +25,12 @@ public class CommandCompo implements ICommand {
 
         if (game.getConfig().isConfigActive(ConfigBase.HIDE_COMPOSITION)) {
 
-            player.sendMessage(game.translate(Prefix.RED , "werewolf.commands.compo.composition_hide"));
+            player.sendMessage(game.translate(Prefix.RED , "werewolf.commands.player.compo.composition_hide"));
 
             return;
         }
 
-        StringBuilder sb = new StringBuilder(game.translate("werewolf.commands.compo._"));
+        StringBuilder sb = new StringBuilder(game.translate("werewolf.commands.player.compo._"));
         sb.append(ChatColor.WHITE);
         if (game.getConfig().getLoverCount(LoverBase.LOVER) > 0) {
             sb.append(LoverType.LOVER.getChatColor()).append(game.translate(LoverBase.LOVER)).append(ChatColor.WHITE);
@@ -63,7 +63,7 @@ public class CommandCompo implements ICommand {
         sb.append(getCompo(game, Category.VILLAGER));
         sb.append(getCompo(game, Category.NEUTRAL));
 
-        sb.append(game.translate("werewolf.commands.compo._"));
+        sb.append(game.translate("werewolf.commands.player.compo._"));
         player.sendMessage(sb.toString());
     }
 

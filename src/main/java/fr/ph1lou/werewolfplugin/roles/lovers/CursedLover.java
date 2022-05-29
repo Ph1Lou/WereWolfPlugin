@@ -65,7 +65,7 @@ public class CursedLover implements ILover, Listener {
         Bukkit.getPluginManager().callEvent(
                 new CursedLoverDeathEvent(event.getPlayerWW(), playerWW1));
 
-        playerWW1.sendMessageWithKey(Prefix.RED , "werewolf.role.cursed_lover.death_cursed_lover");
+        playerWW1.sendMessageWithKey(Prefix.RED , "werewolf.lovers.cursed_lover.death_cursed_lover");
 
         playerWW1.removePlayerMaxHealth(2);
 
@@ -79,7 +79,7 @@ public class CursedLover implements ILover, Listener {
                 playerWW.addPlayerMaxHealth(2);
             }
             this.power1 = true;
-            playerWW.sendMessageWithKey("werewolf.role.cursed_lover.description",
+            playerWW.sendMessageWithKey("werewolf.lovers.cursed_lover.description",
                     Formatter.player(cursedLover2.getName()));
             playerWW.sendSound(Sound.SHEEP_SHEAR);
         } else if (this.cursedLover2.equals(playerWW)) {
@@ -87,7 +87,7 @@ public class CursedLover implements ILover, Listener {
                 playerWW.addPlayerMaxHealth(2);
             }
             this.power2 = true;
-            playerWW.sendMessageWithKey("werewolf.role.cursed_lover.description",
+            playerWW.sendMessageWithKey("werewolf.lovers.cursed_lover.description",
                     Formatter.player(cursedLover1.getName()));
             playerWW.sendSound(Sound.SHEEP_SHEAR);
         }

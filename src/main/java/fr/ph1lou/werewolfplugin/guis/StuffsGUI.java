@@ -31,7 +31,7 @@ public class StuffsGUI implements InventoryProvider {
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
             .provider(new StuffsGUI())
             .size(2, 9)
-            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.stuff.name"))
+            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menus.stuff.name"))
             .closeable(true)
             .build();
 
@@ -41,7 +41,7 @@ public class StuffsGUI implements InventoryProvider {
         Main main = JavaPlugin.getPlugin(Main.class);
         WereWolfAPI game = main.getWereWolfAPI();
 
-        contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType()).setDisplayName(game.translate("werewolf.menu.return")).build()), e -> Config.INVENTORY.open(player)));
+        contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType()).setDisplayName(game.translate("werewolf.menus.return")).build()), e -> MainGUI.INVENTORY.open(player)));
     }
 
     @Override
@@ -51,17 +51,17 @@ public class StuffsGUI implements InventoryProvider {
         WereWolfAPI game = main.getWereWolfAPI();
         UUID uuid = player.getUniqueId();
 
-        contents.set(0, 4, ClickableItem.of((new ItemBuilder(Material.JUKEBOX).setDisplayName(game.translate("werewolf.menu.stuff.chill"))).build(),
+        contents.set(0, 4, ClickableItem.of((new ItemBuilder(Material.JUKEBOX).setDisplayName(game.translate("werewolf.menus.stuff.chill"))).build(),
                 e -> StuffLoader.loadStuffChill(game)));
 
-        contents.set(0, 2, ClickableItem.of((new ItemBuilder(Material.EGG).setDisplayName(game.translate("werewolf.menu.stuff.reset"))).build(),
+        contents.set(0, 2, ClickableItem.of((new ItemBuilder(Material.EGG).setDisplayName(game.translate("werewolf.menus.stuff.reset"))).build(),
                 e -> StuffLoader.loadAllStuffDefault(game)));
 
-        contents.set(1, 1, ClickableItem.of((new ItemBuilder(Material.BARRIER).setDisplayName(game.translate("werewolf.menu.stuff.delete"))).build(), e -> {
+        contents.set(1, 1, ClickableItem.of((new ItemBuilder(Material.BARRIER).setDisplayName(game.translate("werewolf.menus.stuff.delete"))).build(), e -> {
             game.getStuffs().clearStartLoot();
             game.getStuffs().clearDeathLoot();
         }));
-        contents.set(1, 4, ClickableItem.of((new ItemBuilder(Material.CHEST).setDisplayName(game.translate("werewolf.menu.stuff.start"))).build(), e -> {
+        contents.set(1, 4, ClickableItem.of((new ItemBuilder(Material.CHEST).setDisplayName(game.translate("werewolf.menus.stuff.start"))).build(), e -> {
 
 
             if (!game.getModerationManager()
@@ -95,7 +95,7 @@ public class StuffsGUI implements InventoryProvider {
             player.spigot().sendMessage(msg);
             player.closeInventory();
         }));
-        contents.set(1, 7, ClickableItem.of((new ItemBuilder(Material.ENDER_CHEST).setDisplayName(game.translate("werewolf.menu.stuff.death"))).build(), e -> {
+        contents.set(1, 7, ClickableItem.of((new ItemBuilder(Material.ENDER_CHEST).setDisplayName(game.translate("werewolf.menus.stuff.death"))).build(), e -> {
 
             if (!game.getModerationManager()
                     .checkAccessAdminCommand(

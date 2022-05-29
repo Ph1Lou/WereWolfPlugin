@@ -10,7 +10,7 @@ import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfplugin.roles.villagers.Illusionist;
 import org.bukkit.Bukkit;
 
-@RoleCommand(key = "werewolf.role.illusionist.command",
+@RoleCommand(key = "werewolf.roles.illusionist.command",
         roleKeys = RoleBase.ILLUSIONIST,
         argNumbers = 0,
         requiredPower = true)
@@ -32,6 +32,6 @@ public class CommandIllusionist implements ICommandRole {
         }
 
         illusionist.setWait(true);
-        playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.role.illusionist.perform");
+        playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.illusionist.perform");
     }
 }

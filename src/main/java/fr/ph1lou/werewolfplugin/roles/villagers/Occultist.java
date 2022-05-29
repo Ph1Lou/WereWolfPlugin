@@ -49,7 +49,7 @@ public class Occultist extends Villager{
         }
         if(event.getPlayerWW().getUUID().equals(this.getPlayerUUID())){
             this.getPlayerWW().getWish().ifPresent(wish ->
-                    Bukkit.broadcastMessage(game.translate(Prefix.ORANGE,"werewolf.role.occultist.self_death",
+                    Bukkit.broadcastMessage(game.translate(Prefix.ORANGE,"werewolf.roles.occultist.self_death",
                             Formatter.format("&wish&", wish))));
         }
         if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
@@ -67,7 +67,7 @@ public class Occultist extends Villager{
             }
             this.deaths.addAll(this.troublemakers);
             Collections.shuffle(this.deaths, game.getRandom());
-            this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.role.occultist.last_wishes");
+            this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.roles.occultist.last_wishes");
             for(IPlayerWW playerWW : this.deaths){
                 playerWW.getWish().ifPresent(wish -> this.getPlayerWW().sendMessage(new TextComponent(" -> " + wish )));
 
@@ -80,14 +80,14 @@ public class Occultist extends Villager{
     @EventHandler
     public void onDay(DayEvent event){
         if(event.getNumber()==6){
-            Bukkit.broadcastMessage(game.translate(Prefix.ORANGE,"werewolf.role.occultist.command"));
+            Bukkit.broadcastMessage(game.translate(Prefix.ORANGE,"werewolf.roles.occultist.command"));
         }
     }
 
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.occultist.description"))
+                .setDescription(game.translate("werewolf.roles.occultist.description"))
                 .build();
     }
 

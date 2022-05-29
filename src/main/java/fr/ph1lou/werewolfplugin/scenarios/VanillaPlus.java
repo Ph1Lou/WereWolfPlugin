@@ -3,6 +3,7 @@ package fr.ph1lou.werewolfplugin.scenarios;
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Scenario;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.ScenarioBase;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
@@ -21,17 +22,13 @@ import java.util.List;
 
 @Scenario(key = ScenarioBase.VANILLA_PLUS, defaultValue = true,
         configValues = {
-                @IntValue(key = VanillaPlus.FLINT, defaultValue = 10, meetUpValue = 0, step = 5,
+                @IntValue(key = IntValueBase.FLINT_RATE, defaultValue = 10, meetUpValue = 0, step = 5,
                         item = UniversalMaterial.FLINT),
-                @IntValue(key = VanillaPlus.PEARL, defaultValue = 30,
+                @IntValue(key = IntValueBase.PEARL_RATE, defaultValue = 30,
                         meetUpValue = 0,
                         step = 5, item = UniversalMaterial.ENDER_PEARL),
-                @IntValue(key = VanillaPlus.APPLE, defaultValue = 2, meetUpValue = 0, step = 1, item = UniversalMaterial.APPLE)})
+                @IntValue(key = IntValueBase.APPLE_RATE, defaultValue = 2, meetUpValue = 0, step = 1, item = UniversalMaterial.APPLE)})
 public class VanillaPlus extends ListenerManager {
-
-    public static  final String FLINT = "werewolf.menu.scenarios.vanilla+.flint";
-    public static  final String APPLE = "werewolf.menu.scenarios.vanilla+.apple";
-    public static  final String PEARL = "werewolf.menu.scenarios.vanilla+.ender_pearl";
 
     public VanillaPlus(GetWereWolfAPI main) {
         super(main);
@@ -50,7 +47,7 @@ public class VanillaPlus extends ListenerManager {
 
         if (block.getType().equals(Material.GRAVEL)) {
             block.setType(Material.AIR);
-            if (Math.random() * 100 < game.getConfig().getValue(FLINT)) {
+            if (Math.random() * 100 < game.getConfig().getValue(IntValueBase.FLINT_RATE)) {
                 block.getWorld().dropItem(loc, new ItemStack(Material.FLINT, 1));
             } else
                 event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(),
@@ -64,7 +61,7 @@ public class VanillaPlus extends ListenerManager {
         WereWolfAPI game = this.getGame();
 
         event.getBlock().setType(Material.AIR);
-        if (Math.random() * 100 < game.getConfig().getValue(APPLE)) {
+        if (Math.random() * 100 < game.getConfig().getValue(IntValueBase.APPLE_RATE)) {
             event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(),
                     new ItemStack(Material.APPLE));
         }
@@ -78,7 +75,7 @@ public class VanillaPlus extends ListenerManager {
         List<ItemStack> loots = event.getDrops();
 
         loots.clear();
-        if (Math.random() * 100 < this.getGame().getConfig().getValue(PEARL)) {
+        if (Math.random() * 100 < this.getGame().getConfig().getValue(IntValueBase.PEARL_RATE)) {
             loots.add(new ItemStack(Material.ENDER_PEARL));
         }
     }

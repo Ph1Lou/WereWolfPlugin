@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.guis;
 
 import fr.minuskube.inv.ClickableItem;
+import fr.minuskube.inv.SmartInventory;
 import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Timer;
@@ -14,6 +15,7 @@ import fr.ph1lou.werewolfapi.utils.Utils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -24,8 +26,8 @@ public class AdvancedConfigurationUtils {
         return Arrays.stream(values)
                 .map(intValue -> {
                     IConfiguration config = game.getConfig();
-                    List<String> lore = new ArrayList<>(Arrays.asList(game.translate("werewolf.menu.left"),
-                            game.translate("werewolf.menu.right")));
+                    List<String> lore = new ArrayList<>(Arrays.asList(game.translate("werewolf.menus.lore.left"),
+                            game.translate("werewolf.menus.lore.right")));
 
                     return ClickableItem.of(new ItemBuilder(intValue.item().getStack())
                             .setLore(lore)
@@ -55,8 +57,8 @@ public class AdvancedConfigurationUtils {
         return Arrays.stream(timers)
                 .map(timerRegister -> {
                     IConfiguration config = game.getConfig();
-                    List<String> lore = new ArrayList<>(Arrays.asList(game.translate("werewolf.menu.left"),
-                            game.translate("werewolf.menu.right")));
+                    List<String> lore = new ArrayList<>(Arrays.asList(game.translate("werewolf.menus.lore.left"),
+                            game.translate("werewolf.menus.lore.right")));
                     Arrays.stream(timerRegister.loreKey())
                             .map(game::translate)
                             .map(s -> Arrays.stream(s.split("\\n"))
@@ -65,7 +67,7 @@ public class AdvancedConfigurationUtils {
                     return ClickableItem.of(new ItemBuilder(UniversalMaterial.ANVIL.getStack())
                             .setLore(lore)
                             .setDisplayName(game.translate(timerRegister.key(),
-                                    Formatter.timer(Utils.conversion(config.getTimerValue(timerRegister.key())))))
+                                    Formatter.timer(game, timerRegister.key())))
                             .build(),e -> {
 
 
@@ -78,15 +80,15 @@ public class AdvancedConfigurationUtils {
                         e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                                 .setLore(lore)
                                 .setDisplayName(game.translate(timerRegister.key(),
-                                        Formatter.timer(Utils.conversion(config.getTimerValue(timerRegister.key())))))
+                                        Formatter.timer(game, timerRegister.key())))
                                 .build());
                     });
                 }).collect(Collectors.toList());
     }
 
-    public static List<? extends ClickableItem> getConfigs(WereWolfAPI game, Configuration[] configurations){
+    public static List<? extends ClickableItem> getConfigs(WereWolfAPI game, Configuration[] configurations, Supplier<SmartInventory> inventory){
         return Arrays.stream(configurations)
-                .map(configRegister -> GlobalConfigs.getClickableItem(game, configRegister, null))
+                .map(configRegister -> ConfigurationsGUI.getClickableItem(game, configRegister, null, inventory))
                 .collect(Collectors.toList());
     }
 

@@ -32,7 +32,7 @@ public class NaughtyLittleWolf extends RoleWereWolf {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setEffects(game.translate("werewolf.role.naughty_little_wolf.effect"))
+                .setEffects(game.translate("werewolf.roles.naughty_little_wolf.effect"))
                 .build();
     }
 

@@ -23,9 +23,9 @@ public class ChattySeer extends Seer {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.chatty_seer.description"))
-                .setItems(game.translate("werewolf.role.seer.items"))
-                .setEffects(game.translate("werewolf.role.seer.effect"))
+                .setDescription(game.translate("werewolf.roles.chatty_seer.description"))
+                .setItems(game.translate("werewolf.roles.seer.items"))
+                .setEffects(game.translate("werewolf.roles.seer.effect"))
                 .build();
     }
 

@@ -52,8 +52,8 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.imitator.description"))
-                .setEffects(game.translate("werewolf.role.imitator.effect"))
+                .setDescription(game.translate("werewolf.roles.imitator.description"))
+                .setEffects(game.translate("werewolf.roles.imitator.effect"))
                 .build();
     }
 
@@ -165,9 +165,9 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
         roleClone.setTransformedToNeutral(true);
         this.getPlayerWW().addDeathRole(this.getKey());
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.role.thief.realized_theft",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.thief.realized_theft",
                 Formatter.role(game.translate(role.getKey())));
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.role.thief.details");
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.thief.details");
 
         this.getPlayerWW().clearPotionEffects(this.getKey());
 

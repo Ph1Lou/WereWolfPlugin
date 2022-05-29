@@ -12,8 +12,8 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-@AdminCommand(key = "werewolf.commands.late.command",
-        descriptionKey = "werewolf.commands.late.description",
+@AdminCommand(key = "werewolf.commands.admin.late.command",
+        descriptionKey = "werewolf.commands.admin.late.description",
         statesGame = {StateGame.TRANSPORTATION, StateGame.START},
         argNumbers = 1,
         moderatorAccess = true)
@@ -32,7 +32,7 @@ public class CommandLate implements ICommand {
         UUID uuid = player1.getUniqueId();
 
         if (game.getPlayerWW(uuid).isPresent()) {
-            player.sendMessage(game.translate(Prefix.RED , "werewolf.commands.late.in_game"));
+            player.sendMessage(game.translate(Prefix.RED , "werewolf.commands.admin.late.in_game"));
             return;
         }
 
@@ -40,7 +40,7 @@ public class CommandLate implements ICommand {
             return;
         }
 
-        Bukkit.broadcastMessage(game.translate(Prefix.GREEN , "werewolf.commands.late.launch",
+        Bukkit.broadcastMessage(game.translate(Prefix.GREEN , "werewolf.commands.admin.late.launch",
                 Formatter.player(player1.getName())));
 
         ((GameManager) game).addLatePlayer(player1);

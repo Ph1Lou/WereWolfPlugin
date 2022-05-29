@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-@RoleCommand(key = "werewolf.role.wild_child.command",
+@RoleCommand(key = "werewolf.roles.wild_child.command",
         roleKeys = RoleBase.WILD_CHILD,
         argNumbers = 1,
         requiredPower = true)
@@ -51,7 +51,7 @@ public class CommandWildChild implements ICommandRole {
         ((IAffectedPlayers) wildChild).addAffectedPlayer(playerWW1);
         ((IPower) wildChild).setPower(false);
         Bukkit.getPluginManager().callEvent(new ModelEvent(playerWW, playerWW1));
-        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.wild_child.reveal_model",
+        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.wild_child.reveal_model",
                 Formatter.player(playerArg.getName()));
     }
 }

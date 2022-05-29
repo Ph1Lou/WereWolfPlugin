@@ -6,7 +6,6 @@ import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
-import fr.minuskube.inv.content.SlotIterator;
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.LoverBase;
@@ -21,6 +20,7 @@ import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.Register;
 import fr.ph1lou.werewolfplugin.game.GameManager;
+import fr.ph1lou.werewolfplugin.utils.InventoryUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -31,11 +31,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class Roles implements InventoryProvider {
+public class RolesGUI implements InventoryProvider {
 
     private Category category;
 
-    public Roles(Player player, Category category) {
+    public RolesGUI(Player player, Category category) {
         this.category = category;
     }
 
@@ -43,9 +43,9 @@ public class Roles implements InventoryProvider {
         return SmartInventory.builder()
                 .id("roles")
                 .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
-                .provider(new Roles(player, category))
+                .provider(new RolesGUI(player, category))
                 .size(6, 9)
-                .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.roles.name"))
+                .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menus.roles.name"))
                 .closeable(true)
                 .build();
     }
@@ -59,11 +59,11 @@ public class Roles implements InventoryProvider {
 
         contents.set(0, 0, ClickableItem.of((
                 new ItemBuilder(UniversalMaterial.COMPASS.getType())
-                        .setDisplayName(game.translate("werewolf.menu.return"))
-                        .build()), e -> Config.INVENTORY.open(player)));
+                        .setDisplayName(game.translate("werewolf.menus.return"))
+                        .build()), e -> MainGUI.INVENTORY.open(player)));
 
         contents.set(0, 8, ClickableItem.of((new ItemBuilder(UniversalMaterial.BARRIER.getType())
-                .setDisplayName(game.translate("werewolf.menu.roles.zero")).build()), e -> {
+                .setDisplayName(game.translate("werewolf.menus.roles.zero")).build()), e -> {
             for (Wrapper<IRole, Role> roleRegister : main.getRegisterManager().getRolesRegister()) {
                 config.setRole(roleRegister.getMetaDatas().key(), 0);
             }
@@ -82,8 +82,8 @@ public class Roles implements InventoryProvider {
         IConfiguration config = game.getConfig();
         Pagination pagination = contents.pagination();
 
-        List<String> lore = new ArrayList<>(Arrays.asList(game.translate("werewolf.menu.left"),
-                game.translate("werewolf.menu.right")));
+        List<String> lore = new ArrayList<>(Arrays.asList(game.translate("werewolf.menus.lore.left"),
+                game.translate("werewolf.menus.lore.right")));
 
         if (config.getLoverCount(LoverBase.LOVER) > 0) {
             contents.set(0, 2,
@@ -92,7 +92,7 @@ public class Roles implements InventoryProvider {
                                     UniversalMaterial.GREEN_TERRACOTTA
                                             .getStack(config.getLoverCount(LoverBase.LOVER)))
                                     .setDisplayName(game.translate(LoverBase.LOVER) +
-                                            game.translate("werewolf.role.lover.random"))
+                                            game.translate("werewolf.lovers.lover.random"))
                                     .setLore(lore).build()), e -> {
 
                         if (e.isLeftClick()) {
@@ -111,7 +111,7 @@ public class Roles implements InventoryProvider {
                                     UniversalMaterial.RED_TERRACOTTA
                                             .getStack())
                                     .setDisplayName(game.translate(LoverBase.LOVER) +
-                                            game.translate("werewolf.role.lover.random"))
+                                            game.translate("werewolf.lovers.lover.random"))
                                     .setLore(lore).build()), e -> {
                         if (e.isLeftClick()) {
                             config.addOneLover(LoverBase.LOVER);
@@ -191,7 +191,7 @@ public class Roles implements InventoryProvider {
                 .setDisplayName(game.translate("werewolf.categories.addons")).setAmount(Math.max(1, count(main, Category.ADDONS))).build()), e -> this.category = Category.ADDONS));
 
 
-        lore.add(game.translate("werewolf.menu.shift"));
+        lore.add(game.translate("werewolf.menus.lore.shift"));
 
         List<ClickableItem> items = new ArrayList<>();
 
@@ -222,7 +222,7 @@ public class Roles implements InventoryProvider {
                                     roleRegister.getMetaDatas().configValues()));
                         }
                         Arrays.stream(roleRegister.getMetaDatas().requireRoles())
-                                .forEach(roleKey -> lore2.add(game.translate("werewolf.menu.roles.need",
+                                .forEach(roleKey -> lore2.add(game.translate("werewolf.menus.roles.need",
                                 Formatter.role(game.translate(roleKey)))));
                         main.getRegisterManager().getRolesRegister().stream()
                                 .filter(roleRegister1 -> Arrays.stream(roleRegister1.getMetaDatas().requireRoles())
@@ -230,7 +230,7 @@ public class Roles implements InventoryProvider {
                                 .map(iRoleRoleWrapper -> iRoleRoleWrapper.getMetaDatas().key())
                                 .filter(roleRegister1Key -> game.getConfig().getRoleCount(roleRegister1Key) > 0)
                                 .findFirst().ifPresent(role -> {
-                                    lore2.add(game.translate("werewolf.menu.roles.dependant_load",
+                                    lore2.add(game.translate("werewolf.menus.roles.dependant_load",
                                             Formatter.role(game.translate(role))));
                                     unRemovable.set(true);
                                 });
@@ -241,7 +241,7 @@ public class Roles implements InventoryProvider {
                                 .findFirst();
 
                         incompatible
-                                .ifPresent(role -> lore2.add(game.translate("werewolf.menu.roles.incompatible",
+                                .ifPresent(role -> lore2.add(game.translate("werewolf.menus.roles.incompatible",
                                         Formatter.role(role))));
 
                         if (config.getRoleCount(key) > 0) {
@@ -253,7 +253,7 @@ public class Roles implements InventoryProvider {
                                             .build()), e -> {
 
                                 if (e.isShiftClick()) {
-                                    AdvancedRoleMenu.getInventory(roleRegister.getMetaDatas()).open(player);
+                                    AdvancedRolesGUI.getInventory(roleRegister.getMetaDatas(), pagination.getPage()).open(player);
                                 } else if (e.isLeftClick()) {
                                     selectPlus(game, key);
                                 } else if (e.isRightClick()) {
@@ -274,7 +274,7 @@ public class Roles implements InventoryProvider {
                                     .setDisplayName(game.translate(key)).build()), e -> {
 
                                 if (e.isShiftClick()) {
-                                    AdvancedRoleMenu.getInventory(roleRegister.getMetaDatas()).open(player);
+                                    AdvancedRolesGUI.getInventory(roleRegister.getMetaDatas(), pagination.getPage()).open(player);
                                 } else if (e.isLeftClick()) {
                                     if(incompatible.isPresent()){
                                         return;
@@ -294,44 +294,10 @@ public class Roles implements InventoryProvider {
                     }
                 });
 
-        if (items.size() > 36) {
-            pagination.setItems(items.toArray(new ClickableItem[0]));
-            pagination.setItemsPerPage(27);
-            pagination.addToIterator(contents.newIterator(SlotIterator.Type.HORIZONTAL, 1, 0));
-            int page = pagination.getPage() + 1;
-            contents.set(4, 0, null);
-            contents.set(4, 1, null);
-            contents.set(4, 3, null);
-            contents.set(4, 5, null);
-            contents.set(4, 7, null);
-            contents.set(4, 8, null);
-            contents.set(4, 2, ClickableItem.of(new ItemBuilder(Material.ARROW)
-                            .setDisplayName(game.translate("werewolf.menu.roles.previous",
-                                    Formatter.format("&current&",page),
-                                    Formatter.format("&previous&",pagination.isFirst() ? page : page - 1)))
-                            .build(),
-                    e -> getInventory(player, this.category).open(player, pagination.previous().getPage())));
-            contents.set(4, 6, ClickableItem.of(new ItemBuilder(Material.ARROW)
-                            .setDisplayName(game.translate("werewolf.menu.roles.next",
-                                    Formatter.format("&current&",page),
-                                    Formatter.format("&next&",pagination.isLast() ? page : page + 1)))
-                            .build(),
-                    e -> getInventory(player, this.category).open(player, pagination.next().getPage())));
-            contents.set(4, 4, ClickableItem.empty(new ItemBuilder(UniversalMaterial.SIGN.getType())
-                    .setDisplayName(game.translate("werewolf.menu.roles.current",
-                            Formatter.format("&current&",page),
-                            Formatter.format("&sum&",items.size() / 27 + 1)))
-                    .build()));
-        } else {
-            int i = 0;
-            for (ClickableItem clickableItem : items) {
-                contents.set(i / 9 + 1, i % 9, clickableItem);
-                i++;
-            }
-            for (int k = i; k < 36; k++) {
-                contents.set(k / 9 + 1, k % 9, null);
-            }
-        }
+
+        InventoryUtils.fillInventory(game, items, pagination, contents, () -> getInventory(player, this.category), 36);
+
+
 
     }
 

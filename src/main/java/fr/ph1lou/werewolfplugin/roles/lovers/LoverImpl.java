@@ -49,11 +49,11 @@ public class LoverImpl extends AbstractLover {
                 .filter(playerWW1 -> !playerWW1.equals(event.getPlayerWW()))
                 .forEach(playerWW1 -> {
                     game.getPlayersWW().forEach(playerWW -> {
-                        AnnouncementLoverDeathEvent event1 = new AnnouncementLoverDeathEvent(event.getPlayerWW(),playerWW,"werewolf.role.lover.lover_death");
+                        AnnouncementLoverDeathEvent event1 = new AnnouncementLoverDeathEvent(event.getPlayerWW(),playerWW,"werewolf.lovers.lover.lover_death");
                         Bukkit.getPluginManager().callEvent(event1);
 
                         if(!event1.isCancelled()){
-                            playerWW.sendMessageWithKey("werewolf.role.lover.lover_death",Formatter.player(playerWW1.getName()));
+                            playerWW.sendMessageWithKey("werewolf.lovers.lover.lover_death",Formatter.player(playerWW1.getName()));
                         }
 
                     });
@@ -62,9 +62,9 @@ public class LoverImpl extends AbstractLover {
                             .filter(uuid -> !game.getPlayerWW(uuid).isPresent())
                             .map(Bukkit::getPlayer)
                             .filter(Objects::nonNull)
-                            .forEach(player1 -> player1.sendMessage(game.translate("werewolf.role.lover.lover_death",Formatter.player(playerWW1.getName()))));
+                            .forEach(player1 -> player1.sendMessage(game.translate("werewolf.lovers.lover.lover_death",Formatter.player(playerWW1.getName()))));
 
-                    Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.role.lover.lover_death",Formatter.player(playerWW1.getName())));
+                    Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.lovers.lover.lover_death",Formatter.player(playerWW1.getName())));
                     this.game.death(playerWW1);
                 });
         Bukkit.getPluginManager().callEvent(new LoverDeathEvent(this));

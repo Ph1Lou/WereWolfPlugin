@@ -17,7 +17,6 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleWithLimitedSelectionDuration;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -76,17 +75,15 @@ public class Detective extends RoleWithLimitedSelectionDuration implements IAffe
             return;
         }
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.role.detective.inspection_message",
-                Formatter.timer(
-                        Utils.conversion(game.getConfig()
-                                .getTimerValue(TimerBase.POWER_DURATION))));
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.detective.inspection_message",
+                Formatter.timer(game, TimerBase.POWER_DURATION));
     }
 
 
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.detective.description"))
+                .setDescription(game.translate("werewolf.roles.detective.description"))
                 .build();
     }
 

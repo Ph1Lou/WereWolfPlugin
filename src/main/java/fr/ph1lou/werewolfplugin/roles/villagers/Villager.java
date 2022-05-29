@@ -98,7 +98,7 @@ public class Villager extends RoleVillage {
 
         StringBuilder sb = event.getEndMessage();
 
-        sb.append(game.translate("werewolf.role.villager.kit",
+        sb.append(game.translate("werewolf.roles.villager.kit",
                 Formatter.format("&kit&",game.translate(villagerKit.getKey()))));
 
     }

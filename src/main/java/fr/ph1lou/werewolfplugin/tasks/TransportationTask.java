@@ -9,7 +9,6 @@ import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
-import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.game.GameManager;
@@ -149,7 +148,7 @@ public class TransportationTask implements Listener {
             if (this.game.getPlayerWW(player.getUniqueId()).isPresent()) {
                 player.setGameMode(GameMode.SURVIVAL);
                 player.sendMessage(this.game.translate(Prefix.YELLOW , "werewolf.announcement.start.message",
-                        Formatter.timer(Utils.conversion(this.game.getConfig().getTimerValue(TimerBase.INVULNERABILITY)))));
+                        Formatter.timer(game, TimerBase.INVULNERABILITY)));
             } else {
                 player.teleport(this.game.getMapManager().getWorld().getSpawnLocation());
                 player.setGameMode(GameMode.SPECTATOR);

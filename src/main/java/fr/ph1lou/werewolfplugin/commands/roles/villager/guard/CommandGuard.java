@@ -19,7 +19,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-@RoleCommand(key = "werewolf.role.guard.command",
+@RoleCommand(key = "werewolf.roles.guard.command",
         roleKeys = RoleBase.GUARD,
         requiredPower = true,
         argNumbers = 1)
@@ -71,7 +71,7 @@ public class CommandGuard implements ICommandRole {
                 40,
                 true));
 
-        playerWW.sendMessageWithKey(Prefix.GREEN , "werewolf.role.guard.perform",
+        playerWW.sendMessageWithKey(Prefix.GREEN , "werewolf.roles.guard.perform",
                 Formatter.player(playerArg.getName()));
     }
 }

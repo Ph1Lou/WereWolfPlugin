@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.fruitmerchant;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -26,7 +27,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@RoleCommand(key = "werewolf.role.fruit_merchant.command",
+@RoleCommand(key = "werewolf.roles.fruit_merchant.command",
         roleKeys = RoleBase.FRUIT_MERCHANT,
         requiredPower = true,
         argNumbers = 0)
@@ -49,7 +50,7 @@ public class CommandFruitMerchant implements ICommandRole {
                     Location location = iPlayerWW.getLocation();
                     return location.getWorld() == playerWW.getLocation().getWorld() &&
                             location.distance(playerWW.getLocation()) <
-                                    game.getConfig().getValue(FruitMerchant.DISTANCE);
+                                    game.getConfig().getValue(IntValueBase.FRUIT_MERCHANT_DISTANCE);
                 })
                 .collect(Collectors.toSet());
 
@@ -68,7 +69,7 @@ public class CommandFruitMerchant implements ICommandRole {
 
         fruitMerchantCommandEvent.getPlayerWWS().forEach(fruitMerchant::addAffectedPlayer);
 
-        playerWW.sendMessageWithKey(Prefix.GREEN , "werewolf.role.fruit_merchant.perform",
+        playerWW.sendMessageWithKey(Prefix.GREEN , "werewolf.roles.fruit_merchant.perform",
                 Formatter.format("&players&",
                         fruitMerchantCommandEvent.getPlayerWWS()
                                 .stream()
@@ -95,15 +96,15 @@ public class CommandFruitMerchant implements ICommandRole {
                         return;
                     }
 
-                    playerWW.sendMessageWithKey(Prefix.LIGHT_BLUE,"werewolf.role.fruit_merchant.announce_info");
-                    fruitMerchantRecoverInformationEvent.getPlayerWWS().forEach(playerWW1 -> playerWW.sendMessageWithKey(Prefix.YELLOW,"werewolf.role.fruit_merchant.info",
+                    playerWW.sendMessageWithKey(Prefix.LIGHT_BLUE,"werewolf.roles.fruit_merchant.announce_info");
+                    fruitMerchantRecoverInformationEvent.getPlayerWWS().forEach(playerWW1 -> playerWW.sendMessageWithKey(Prefix.YELLOW,"werewolf.roles.fruit_merchant.info",
                             Formatter.player(playerWW1.getName()),
                             Formatter.number(fruitMerchantRecoverInformationEvent.getGoldenAppleCount(playerWW1).getOldCount()),
                             Formatter.format("&number2&", fruitMerchantRecoverInformationEvent.getGoldenAppleCount(playerWW1).getNewCount())));
 
                     BukkitUtils.scheduleSyncDelayedTask(() -> {
                         fruitMerchant.setPower(true);
-                        playerWW.sendMessageWithKey(Prefix.GREEN,"werewolf.role.fruit_merchant.recover");
+                        playerWW.sendMessageWithKey(Prefix.GREEN,"werewolf.roles.fruit_merchant.recover");
                     },game.getConfig().getTimerValue(TimerBase.FRUIT_MERCHANT_COOL_DOWN) / 2 * 20L);
                 }
             }

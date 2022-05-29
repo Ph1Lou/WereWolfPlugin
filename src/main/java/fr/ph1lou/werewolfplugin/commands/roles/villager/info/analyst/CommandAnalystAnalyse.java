@@ -21,7 +21,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@RoleCommand(key = "werewolf.role.analyst.command_analyse",
+@RoleCommand(key = "werewolf.roles.analyst.command_analyse",
         roleKeys = RoleBase.ANALYST,
         argNumbers = 1)
 public class CommandAnalystAnalyse implements ICommandRole {
@@ -46,7 +46,7 @@ public class CommandAnalystAnalyse implements ICommandRole {
         }
 
         if(!analyst.getAffectedPlayers().contains(playerWW1)){
-            playerWW.sendMessageWithKey(Prefix.ORANGE,"werewolf.role.analyst.not_affected");
+            playerWW.sendMessageWithKey(Prefix.ORANGE,"werewolf.roles.analyst.not_affected");
             return;
         }
 
@@ -71,7 +71,7 @@ public class CommandAnalystAnalyse implements ICommandRole {
             return;
         }
 
-        playerWW.sendMessageWithKey(Prefix.GREEN,"werewolf.role.analyst.effects",
+        playerWW.sendMessageWithKey(Prefix.GREEN,"werewolf.roles.analyst.effects",
                 Formatter.player(playerWW1.getName()),
                 Formatter.format("&list&",analystEvent.getPotions()
                         .stream()
@@ -79,10 +79,10 @@ public class CommandAnalystAnalyse implements ICommandRole {
                         .collect(Collectors.joining(", "))));
 
         if(playerWW1.getRole().isCamp(Camp.VILLAGER)){
-            playerWW1.sendMessageWithKey(Prefix.RED,"werewolf.role.analyst.call_back");
+            playerWW1.sendMessageWithKey(Prefix.RED,"werewolf.roles.analyst.call_back");
         }
         else{
-            playerWW1.sendMessageWithKey(Prefix.RED,"werewolf.role.analyst.call_back_no_villager",
+            playerWW1.sendMessageWithKey(Prefix.RED,"werewolf.roles.analyst.call_back_no_villager",
                     Formatter.player(playerWW.getName()));
         }
 

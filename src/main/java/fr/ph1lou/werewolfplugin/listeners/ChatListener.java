@@ -78,10 +78,10 @@ public class ChatListener implements Listener {
                 sb.append(w).append(" ");
             }
             sb.delete(0, args[0].length() + args[1].length() + 2);
-            recipient.sendMessage(game.translate("werewolf.commands.message.received",
+            recipient.sendMessage(game.translate("werewolf.commands.player.message.received",
                     Formatter.player(player.getName()),
                     Formatter.format("&message&",sb.toString())));
-            player.sendMessage(game.translate("werewolf.commands.message.send",
+            player.sendMessage(game.translate("werewolf.commands.player.message.send",
                     Formatter.player(args[1]),
                     Formatter.format("&message&",sb.toString())));
             Sound.ANVIL_USE.play(recipient);
@@ -201,7 +201,7 @@ public class ChatListener implements Listener {
         game.getModerationManager().getModerators().stream()
                 .map(Bukkit::getPlayer)
                 .filter(Objects::nonNull)
-                .forEach(player -> player.sendMessage(game.translate("werewolf.commands.ww_chat.modo",
+                .forEach(player -> player.sendMessage(game.translate("werewolf.commands.player.ww_chat.modo",
                         Formatter.format("&name&",event.getPlayerWW().getName()),
                         Formatter.format("&message&",event.getMessage()))));
 

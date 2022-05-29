@@ -31,7 +31,7 @@ public class SaveGUI implements InventoryProvider {
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
             .provider(new SaveGUI())
             .size(2, 9)
-            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.save.name"))
+            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menus.save.name"))
             .closeable(true)
             .build();
 
@@ -42,7 +42,7 @@ public class SaveGUI implements InventoryProvider {
     public void init(Player player, InventoryContents contents) {
         Main main = JavaPlugin.getPlugin(Main.class);
         WereWolfAPI game = main.getWereWolfAPI();
-        contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType()).setDisplayName(game.translate("werewolf.menu.return")).build()), e -> Config.INVENTORY.open(player)));
+        contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType()).setDisplayName(game.translate("werewolf.menus.return")).build()), e -> MainGUI.INVENTORY.open(player)));
     }
 
     @Override
@@ -54,14 +54,14 @@ public class SaveGUI implements InventoryProvider {
         File repertoire = new File(main.getDataFolder() + File.separator + "configs");
         File[] files = repertoire.listFiles();
 
-        contents.set(1, 0, ClickableItem.of((new ItemBuilder(Material.EMERALD_BLOCK).setDisplayName(game.translate("werewolf.menu.save.new")).build()), e -> new AnvilGUI.Builder()
+        contents.set(1, 0, ClickableItem.of((new ItemBuilder(Material.EMERALD_BLOCK).setDisplayName(game.translate("werewolf.menus.save.new")).build()), e -> new AnvilGUI.Builder()
                 .onComplete((player2, text) -> {
                     save(main, text, player);
                     return AnvilGUI.Response.close();
                 })
                 .preventClose()
                 .text(" ")
-                .title(game.translate("werewolf.menu.save.save_menu"))
+                .title(game.translate("werewolf.menus.save.save_menu"))
                 .itemLeft(new ItemStack(Material.EMERALD_BLOCK))
                 .plugin(main)
                 .onClose((player2) -> BukkitUtils.scheduleSyncDelayedTask(() -> SaveGUI.INVENTORY.open(player)))
@@ -82,12 +82,12 @@ public class SaveGUI implements InventoryProvider {
             } else if (i == j) {
                 contents.set(0, i + 1,
                         ClickableItem.empty((new ItemBuilder(UniversalMaterial.FEATHER.getType())
-                                .setDisplayName(game.translate("werewolf.menu.save.configuration",
+                                .setDisplayName(game.translate("werewolf.menus.save.configuration",
                                         Formatter.format("&save&",files[i].getName()))).build())));
             } else {
                 int finalI = i;
                 contents.set(0, i + 1, ClickableItem.of((new ItemBuilder(UniversalMaterial.PAPER.getType())
-                        .setDisplayName(game.translate("werewolf.menu.save.configuration",
+                        .setDisplayName(game.translate("werewolf.menus.save.configuration",
                                 Formatter.format("&save&",files[i].getName())))
                         .build()), e -> j = finalI));
             }
@@ -97,19 +97,19 @@ public class SaveGUI implements InventoryProvider {
             contents.set(1, 3,
                     ClickableItem.of((new ItemBuilder(
                             UniversalMaterial.BED.getType())
-                            .setDisplayName(game.translate("werewolf.menu.save.load",
+                            .setDisplayName(game.translate("werewolf.menus.save.load",
                                     Formatter.format("&save&",files[j].getName())))
                             .build()), e -> {
                         load(main);
-                        player.sendMessage(game.translate(Prefix.GREEN , "werewolf.menu.save.load_message",
+                        player.sendMessage(game.translate(Prefix.GREEN , "werewolf.menus.save.load_message",
                                 Formatter.format("&save&",files[j].getName())));
                     }));
             contents.set(1, 5, ClickableItem.of((
                     new ItemBuilder(UniversalMaterial.BARRIER.getType())
-                            .setDisplayName(game.translate("werewolf.menu.save.delete",
+                            .setDisplayName(game.translate("werewolf.menus.save.delete",
                                     Formatter.format("&save&",files[j].getName())))
                             .build()), e -> {
-                player.sendMessage(game.translate(Prefix.RED , "werewolf.menu.save.delete_message",
+                player.sendMessage(game.translate(Prefix.RED , "werewolf.menus.save.delete_message",
                         Formatter.format("&save&",files[j].getName())));
                 erase(main);
             }));
@@ -140,8 +140,8 @@ public class SaveGUI implements InventoryProvider {
         if (files == null || files.length < 8) {
             ConfigurationLoader.saveConfig(game, saveName);
             StuffLoader.saveStuff(game, saveName);
-            player.sendMessage(game.translate(Prefix.GREEN , "werewolf.menu.save.success"));
-        } else player.sendMessage(game.translate(Prefix.RED , "werewolf.menu.save.failure"));
+            player.sendMessage(game.translate(Prefix.GREEN , "werewolf.menus.save.success"));
+        } else player.sendMessage(game.translate(Prefix.RED , "werewolf.menus.save.failure"));
     }
 
     public void erase(Main main) {

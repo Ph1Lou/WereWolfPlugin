@@ -2,7 +2,41 @@
   "werewolf": {
     "name": "WereWolfPlugin",
     "description_plugin": "Plugin de base",
-    "role": {
+    "lovers": {
+      "lover": {
+        "display": "Couple",
+        "random": " Aléatoire",
+        "description": "§6LOUP-GAROU §7➽§d Vous tombez éperdument amoureux de §b&player&§d.\n§dSi l'un meurt, l'autre le rejoindra par amour.\n§dVous pouvez envoyer de la vie à votre âme soeur avec §b/ww don §d[% de vie à envoyer] [facultatif:joueur à qui l'envoyer]",
+        "not_in_pairs": "Vous n'êtes pas en couple",
+        "lover_death": "§d&player& par amour, le rejoint dans sa tombe",
+        "not_enough_players": "il n'y a pas assez de personnes pour former un couple",
+        "not_lover": "Vous ne pouvez partager des coeurs qu'avec un amant",
+        "polygamy": "En raison du trop faible nombre de joueur par rapport au nombre de couples la polygamie est activée",
+        "received": "Vous recevez §b&number&§r % de la vie de §b&player&",
+        "disconnected": "Votre amant n'est pas connecté",
+        "complete": "Vous venez d'envoyer §b&number&§r % de votre vie à §b&player&",
+        "100": "Vous ne pouvez pas envoyer 100% ou plus de votre vie",
+        "command": "don",
+        "too_many_heart": "§b&player&§r a trop de vie"
+      },
+      "cursed_lover": {
+        "display": "Couple Maudit",
+        "description": "§6LOUP-GAROU §7➽§c Une liaison destructive entre §6&player&§c et vous vient de naitre, même si vous êtes dans le même camp, vous ne pouvez gagner ensemble.\n§c Vous possédez un coeur supplémentaire permanent et chute Amortie tant que vous êtes les deux en vie.",
+        "death_cursed_lover": "Votre Couple Maudit est Mort, vous perdez vos Bonus associés",
+        "not_enough_players": "Il n'y a pas assez de personnes pour former un couple maudit"
+      },
+      "amnesiac_lover": {
+        "display": "Couple Amnésique",
+        "not_enough_players": "Il n'y a pas assez de personnes pour former un couple amnésique",
+        "configurations": {
+          "distance": "Champ d'action du couple amnésique §b&number&"
+        }
+      },
+      "fake_lover": {
+        "display": "Couple"
+      }
+    },
+    "roles": {
       "serial_killer": {
         "display": "Tueur en Série",
         "items": "Un livre Tranchant III, un livre Protection III et un livre Puissance III",
@@ -41,8 +75,10 @@
         "model": "§bModele§f : &player&\n",
         "command": "modele",
         "change": "Votre modèle est maintenant §b&player&",
-        "model_duration": "Durée pour le choix d'un Modèle (§b&timer&§r)",
-        "model_end": " modèle &player&"
+        "model_end": " modèle &player&",
+        "timers": {
+          "model_duration": "Durée pour le choix d'un Modèle (§b&timer&§r)"
+        }
       },
       "sister": {
         "display": "Soeur",
@@ -62,7 +98,9 @@
         "reveal_killer_role": "Votre soeur a été tué par un §b&role&",
         "sisters_list": "Liste de vos Soeurs : §b&list&\n",
         "sisters": "Soeurs : §b&list&",
-        "distance": "Champ d'action des Soeurs §b&number&"
+        "configurations": {
+          "distance": "Champ d'action des Soeurs §b&number&"
+        }
       },
       "wolf_dog": {
         "display": "Chien Loup",
@@ -88,7 +126,9 @@
         "resuscitation_message": "§b&player&§r est mort, pour le ressusciter, §6Cliquez ici §r(Vous avez §b7sec§r)",
         "resuscitation_perform": "Vous venez de ressusciter §b&player&",
         "command": "sauver_witch",
-        "auto_rez_witch": "la Sorcière peut se ressusciter elle même"
+        "configurations": {
+          "auto_rez_witch": "la Sorcière peut se ressusciter elle même"
+        }
       },
       "little_girl": {
         "display": "Petite Fille",
@@ -130,7 +170,7 @@
         "new_vote_count": "Le joueur &player& a reçu &number& votes.",
         "hide_composition": "Il y a &number& rôle dans la composition parmi : &role1&, &role2&, &role3&",
         "werewolf_new_vote": "Aucun joueur n'a été voté par les Loups Garous",
-        "click_to_see_werewolf_vote": "Cliquez ici pour voir le résultat du vote Loup Garou",
+        "click_to_see_werewolf.configurations.vote": "Cliquez ici pour voir le résultat du vote Loup Garou",
         "rumor": "Le joueur §b&player&§f a écrit la rumeur &message&"
       },
       "angel": {
@@ -147,9 +187,13 @@
         "command_1": "gardien",
         "command_2": "dechu",
         "choice": "il a choisi &form&",
-        "sweet_angel": "L'ange Gardien gagne Village quand son protégé meurt",
-        "angel_duration": "Durée pour le choix de l'Ange (§b&timer&§r)",
-        "choice_form": "Ange choisi : §b&form&"
+        "choice_form": "Ange choisi : §b&form&",
+        "timers": {
+          "angel_duration": "Durée pour le choix de l'Ange (§b&timer&§r)"
+        },
+        "configurations": {
+          "sweet_angel": "L'ange Gardien gagne Village quand son protégé meurt"
+        }
       },
       "fallen_angel": {
         "display": "Ange Déchu",
@@ -193,9 +237,11 @@
         "description": "Lors de l'annonce du couple vous obtiendrez le rôle de deux personnes formant un couple. Dans §b&timer&§r, vous obtiendrez une liste de 5 joueurs contenant les noms des deux amoureux. \nSi vous tuez un membre du couple, vous prendrez sa place et devrez gagner avec son couple. \nEn revanche, si le couple meurt, vous devrez gagner seul et vous perdrez 5 coeurs (vous récupèrerez un coeurs par minute). Vous connaissez la direction du cupidon si il est présent dans la partie.",
         "lover": "Votre couple associé de la partie se compose d'un §b&role1&§f et d'un §b&role2&§f.",
         "error": "Aucun couple n'a été trouvé pour votre rôle (Rival)",
-        "rival_duration": "Attente des informations du rival (§b&timer&§r)",
         "find_lovers": "Le couple se trouve parmi les joueurs suivants : &player1&, &player2&, &player3&, &player4&, &player5&",
-        "lover_death": "Le couple est mort, vous êtes maintenant forcé de gagner seul, votre barre de vie est réduite de 2 coeurs."
+        "lover_death": "Le couple est mort, vous êtes maintenant forcé de gagner seul, votre barre de vie est réduite de 2 coeurs.",
+        "timers": {
+          "rival_duration": "Attente des informations du rival (§b&timer&§r)"
+        }
       },
       "fox": {
         "display": "Renard",
@@ -210,9 +256,13 @@
         "progress": "Progression du Flair §b&progress&%",
         "smell": "Vous avez été flairé par un §bRenard§f il y a 5 minutes",
         "command": "flairer",
-        "fox_smell_duration": "Durée du Flair du Renard (§b&timer&§r)",
-        "fox_smell_number": "Nombre de Flair du Renard §b&number&",
-        "distance": "Champ d'action du Renard §b&number&"
+        "timers": {
+          "fox_smell_duration": "Durée du Flair du Renard (§b&timer&§r)"
+        },
+        "configurations": {
+          "fox_smell_number": "Nombre de Flair du Renard §b&number&",
+          "distance": "Champ d'action du Renard §b&number&"
+        }
       },
       "raven": {
         "display": "Corbeau",
@@ -284,7 +334,9 @@
         "opposing_camp": "&player1& et &player2& §4ne sont pas dans le même camp",
         "already_inspect": "Au moins un de ces joueurs a déjà été inspecté",
         "command": "inspecter",
-        "detective_every_other_day": "Detective tous les deux jours"
+        "configurations": {
+          "detective_every_other_day": "Detective tous les deux jours"
+        }
       },
       "naughty_little_wolf": {
         "display": "Vilain Petit Loup",
@@ -317,7 +369,9 @@
         "not_enough_life": "Vous n'avez plus assez de vie pour espionner un joueur",
         "see_villager": "Vous venez d'espionner un membre du Village vous perdez 3 coeurs et vous ne pourrez pas utiliser votre pouvoir pour la prochaine fois",
         "command": "voir",
-        "seer_every_other_day": "Voyante tous les deux jours"
+        "configurations": {
+          "seer_every_other_day": "Voyante tous les deux jours"
+        }
       },
       "priestess": {
         "display": "Prêtresse",
@@ -329,7 +383,9 @@
         "werewolf_death": "Un Loup Garou que vous avez espionné est mort, vous regagnez 1 coeur",
         "perform": "Découvrez le camp d'un joueur à moins de §b&number&§r blocs de vous avec §b/ww spec§r vous avez §b&timer&",
         "distance": "Vous devez être à moins de &number& blocs du joueur",
-        "distance_field": "Champ d'action de la Prêtresse §b&number&"
+        "configurations": {
+          "distance": "Champ d'action de la Prêtresse §b&number&"
+        }
       },
       "oracle": {
         "display": "Oracle",
@@ -341,7 +397,9 @@
         "light": "Lumineuse",
         "neutral": "Neutre",
         "dark": "Obscure",
-        "oracle_every_other_day": "Oracle tous les deux jours"
+        "configurations": {
+          "oracle_every_other_day": "Oracle tous les deux jours"
+        }
       },
       "protector": {
         "display": "Salvateur",
@@ -368,7 +426,9 @@
         "description": "Vous avez la particularité de grogner au début du jour si un Loup-Garou se trouve dans votre voisinage de §b&number&§f blocs. Un message sera envoyé dans le chat global.",
         "growling_message": "&growling&",
         "growling": "Grrrr ",
-        "distance": "Champ d'action du Montreur d'Ours §b&number&"
+        "configurations": {
+          "distance": "Champ d'action du Montreur d'Ours §b&number&"
+        }
       },
       "avenger_werewolf": {
         "display": "Loup Garou Vengeur",
@@ -376,7 +436,9 @@
         "description": "Lorsque vous croisez d'autres Loup Garou à moins de §b&number&§f blocs, ceux-ci sont enregistrés.",
         "add": "§b&player&§f a été enregistré",
         "remove": "§b&player&§f était dans votre liste d'enregistrement, vous récupérez un coeur permanent supplémentaire",
-        "distance": "Champ d'action du Loup Garou Vengeur §b&number&"
+        "configurations": {
+          "distance": "Champ d'action du Loup Garou Vengeur §b&number&"
+        }
       },
       "white_werewolf": {
         "display": "Loup Garou Blanc",
@@ -393,8 +455,11 @@
         "lover_designation_message": "Vous devez désigner un Couple, §b/ww couple§r, vous avez §b&timer&",
         "designation_perform": "Votre couple associé est §b&player1&§r et §b&player2&",
         "command": "couple",
-        "random": "Le paramètre Cupidon aléatoire est activé",
-        "wait": "Annonce du Couple dans §b&timer&"
+        "wait": "Annonce du Couple dans §b&timer&",
+        "random_cupid_message": "Le paramètre Cupidon aléatoire est activé",
+        "configurations": {
+          "random_cupid": "Cupidon Aléatoire"
+        }
       },
       "siamese_twin": {
         "display": "Frère Siamois",
@@ -408,36 +473,6 @@
         "description": "Votre pseudo est visible par les autres Loups dans le chat.",
         "effect": "2 ♥ d’absorption pendant 5 minutes au début de chaque nuit.",
         "prefix": "[§c&alpha&§r] &message&"
-      },
-      "lover": {
-        "display": "Couple",
-        "random": " Aléatoire",
-        "description": "§6LOUP-GAROU §7➽§d Vous tombez éperdument amoureux de §b&player&§d.\n§dSi l'un meurt, l'autre le rejoindra par amour.\n§dVous pouvez envoyer de la vie à votre âme soeur avec §b/ww don §d[% de vie à envoyer] [facultatif:joueur à qui l'envoyer]",
-        "not_in_pairs": "Vous n'êtes pas en couple",
-        "lover_death": "§d&player& par amour, le rejoint dans sa tombe",
-        "not_enough_players": "il n'y a pas assez de personnes pour former un couple",
-        "not_lover": "Vous ne pouvez partager des coeurs qu'avec un amant",
-        "polygamy": "En raison du trop faible nombre de joueur par rapport au nombre de couples la polygamie est activée",
-        "received": "Vous recevez §b&number&§r % de la vie de §b&player&",
-        "disconnected": "Votre amant n'est pas connecté",
-        "complete": "Vous venez d'envoyer §b&number&§r % de votre vie à §b&player&",
-        "100": "Vous ne pouvez pas envoyer 100% ou plus de votre vie",
-        "command": "don",
-        "too_many_heart": "§b&player&§r a trop de vie"
-      },
-      "cursed_lover": {
-        "display": "Couple Maudit",
-        "description": "§6LOUP-GAROU §7➽§c Une liaison destructive entre §6&player&§c et vous vient de naitre, même si vous êtes dans le même camp, vous ne pouvez gagner ensemble.\n§c Vous possédez un coeur supplémentaire permanent et chute Amortie tant que vous êtes les deux en vie.",
-        "death_cursed_lover": "Votre Couple Maudit est Mort, vous perdez vos Bonus associés",
-        "not_enough_players": "Il n'y a pas assez de personnes pour former un couple maudit"
-      },
-      "amnesiac_lover": {
-        "display": "Couple Amnésique",
-        "not_enough_players": "Il n'y a pas assez de personnes pour former un couple amnésique",
-        "distance": "Champ d'action du couple amnésique §b&number&"
-      },
-      "fake_lover": {
-        "display": "Couple"
       },
       "mischievous_werewolf": {
         "display": "Loup Garou Perfide",
@@ -470,8 +505,12 @@
         "craft": "Vous venez de fabriquer une nouvelle flûte (§f&number&§f flûte(s) en stock), faites clique droit sur un joueur pour lui donner sans éveiller les soupcons. Il charmera les personnes autour de lui tant qu'il ne remarque pas la flûte dans son inventaire",
         "perform": "Vous venez de réaliser §bvotre flûte§f, vous commencez à charmer les personnes à §b&number&§f blocks de vous",
         "item": "Flûte magique",
-        "distance": "Champ d'action du Joueur de Flûte §b&number&",
-        "timer": "Charme 1% toutes les §b&timer&"
+        "timers": {
+          "progress": "Charme 1% toutes les §b&timer&"
+        },
+        "configurations": {
+          "distance": "Champ d'action du Joueur de Flûte §b&number&"
+        }
       },
       "librarian": {
         "display": "Bibliothécaire",
@@ -525,8 +564,12 @@
         "progress_charm": "Progression du Charme §b&progress&%",
         "command": "charmer",
         "change": "Votre charmée est maintenant §b&player&",
-        "succubus_duration": "Durée du Charme du Succube (§b&timer&§r)",
-        "distance": "Champ d'action du Succube §b&number&"
+        "timers": {
+          "succubus_duration": "Durée du Charme du Succube (§b&timer&§r)"
+        },
+        "configurations": {
+          "distance": "Champ d'action du Succube §b&number&"
+        }
       },
       "shaman": {
         "display": "Chaman",
@@ -551,19 +594,25 @@
         "lover_death": "Vous gagnez l'effet §bVitesse§f et 10 coeurs d'absorption suite à la mort du couple",
         "perform": "Vous venez de charmer &player&",
         "announcement": "Votre charmé &player& vient d'être informé de son couple",
-        "charmer_countdown": "Durée du compte à rebours de la Charmeuse (§b&timer&§r)"
+        "timers": {
+          "charmer_countdown": "Durée du compte à rebours de la Charmeuse (§b&timer&§r)"
+        }
       },
       "fearful_werewolf": {
         "display": "Loup Garou Craintif",
         "description": "Vous disposez d'effets dépendant du nombre de loups garous présent à &number& blocs autour de vous. Vous ne pouvez pas voter, et votre mort ne sera pas annoncée dans le chat global",
         "effects": "4 LG ou plus : Faiblesse, 2 LG ou moins : Resistance le Jour, Force la nuit, Seul : Vitesse",
-        "distance": "Champ d'action du Loup-Garou Craintif §b&number&"
+        "configurations": {
+          "distance": "Champ d'action du Loup-Garou Craintif §b&number&"
+        }
       },
       "hermit": {
         "display": "Ermite",
         "description": "Vous disposez d'effets dépendant du nombre de personnes présent à &number& blocs autour de vous. Vous ne pouvez pas voter, et votre mort ne sera pas annoncée dans le chat global",
         "effects": "5 personnes ou plus : Faiblesse sinon Resistance la Nuit, Force le Jour, Seul : Vitesse",
-        "distance": "Champ d'action de l'Ermite §b&number&"
+        "configurations": {
+          "distance": "Champ d'action de l'Ermite §b&number&"
+        }
       },
       "big_bad_werewolf": {
         "display": "Grand Méchant Loup",
@@ -579,13 +628,17 @@
         "should_be_invisible": "Vous devez être invisible pour utiliser cette commande",
         "role_reveal": "Un joueur situé à moins de §b&number&§f blocs est §b&role&",
         "use_tp": "Vous pouvez encore utiliser §b&number&§f fois votre commande §b/ww tp§f ",
-        "distance": "Champ d'action du Feu Follet §b&number&"
+        "configurations": {
+          "distance": "Champ d'action du Feu Follet §b&number&"
+        }
       },
       "howling_werewolf": {
         "display": "Loup Garou Hurleur",
         "description": "À chaque début de nuit, vous hurlez si il y a plus de 5 joueurs à &number& blocs de vous. En fonction du nombre de non Loup qui ont entendu votre cri, vous gagnez des slots de coeurs supplémentaires pendant cinq minutes. [2 ou 3 = 1♥ / 4 ou 5 = 2♥ / 6+ = 3♥]",
         "message": "Il y avait §b&number&§f personne(s) non Loup Garou autour de vous. Vous gagnez ainsi §b&heart&§f coeurs en plus pendant 5 minutes",
-        "distance": "Champ d'action du Loup Garou Hurleur §b&number&"
+        "configurations": {
+          "distance": "Champ d'action du Loup Garou Hurleur §b&number&"
+        }
       },
       "twin": {
         "display": "Jumeau",
@@ -597,8 +650,13 @@
         "list_near": "Voici la liste des joueurs à moins de &number& blocs de votre Jumeau, &list&",
         "role_near": "Un joueur situé à moins de &number& blocs de votre Jumeau est §b&role&§f",
         "death": "Votre Jumeau &player& est mort, de rage vous disposez de cinq minutes de Force et de Vitesse",
-        "twin_duration": "Durée pour la révélation des Jumeaux (§b&timer&§r)",
-        "distance": "Champ d'action des Jumeaux §b&number&"
+        "configurations": {
+          "distance": "Champ d'action des Jumeaux §b&number&"
+        },
+        "timers": {
+          "twin_duration": "Durée pour la révélation des Jumeaux (§b&timer&§r)"
+        }
+
       },
       "analyst": {
         "display": "Analyste",
@@ -611,8 +669,10 @@
         "call_back_no_villager": "L'§bAnalyste§f &player& vient d'observer vos effets",
         "command_see": "observer",
         "command_analyse": "analyser",
-        "analyse_duration": "Début du pouvoir Analyste (§b&timer&§r)",
-        "not_affected": "Vous ne pouvez effectuer cette commande que sur un joueur observé precedemment via §b/ww oberver§f"
+        "not_affected": "Vous ne pouvez effectuer cette commande que sur un joueur observé precedemment via §b/ww oberver§f",
+        "timers": {
+          "analyse_duration": "Début du pouvoir Analyste (§b&timer&§r)"
+        }
       },
 
       "servitor": {
@@ -622,19 +682,22 @@
         "effects": "Force I, si votre maître est à moins de &number& blocs de vous",
         "effects_death": "Faiblesse I, si votre maître est à moins de &number& blocs de vous",
         "resurrection": "Votre maître &player& vous a tué, il devient définitif et vous donne Faiblesse I à &number& blocs de vous",
-        "distance": "Champ d'action du Serviteur §b&number&"
+        "configurations": {
+          "distance": "Champ d'action du Serviteur §b&number&"
+        }
       },
       "scammer": {
         "display": "Escroc",
         "message_villager": "L'§bEscroc§f vous a escroqué, vous devenez §bSimple Villageois§f",
         "message_werewolf": "L'§bEscroc§f vous a escroqué, vous devenez §bLoup Garou§f sans pouvoir",
         "description": "Vous volez progressivement le rôle des joueurs à §b&number&§f blocs de vous au rythme de 1% toutes les §b&timer&§f. Le premier joueur escroqué devient Loup-Garou sans pouvoir s’il était dans le camp des Loups sinon Simple Villageois",
-        "config": {
-          "lore": "Modifier le délai entre chaque mise à jour du %",
-          "name": "Délai Escroc &timer&"
-        },
         "message": "Vous venez d'escroquer le rôle de &player&",
-        "distance": "Champ d'action de l'Escroc §b&number&"
+        "timers": {
+          "scammer_delay": "Délai Escroc &timer&"
+        },
+        "configurations": {
+          "distance": "Champ d'action de l'Escroc §b&number&"
+        }
       },
       "fruit_merchant": {
         "display": "Marchande de Fruit",
@@ -642,24 +705,32 @@
         "announce_info": "Vous recevez les informations suite à votre commande",
         "info": "Le joueur &player& avait &number& pomme(s) d'or lors de l'execution de votre commande, il en a maintenant &number2&",
         "command": "compter",
-        "fruit_merchant_cooldown": "Cooldown de la Marchande de Fruit (§b&timer&§r)",
         "recover": "Vous venez de récupérer votre pouvoir. Faites §b/ww compter§f pour le réutiliser",
         "description": "Avec §b/ww compter§f, vous pouvez compter les pommes d'or des joueurs à §b&number&§f blocs de vous.",
         "power": "1 chance sur 4 de régénérer 3 ♥ avec les pommes d’or, la nourriture vous donne 1 gigot de plus.",
-        "distance": "Champ d'action de la Marchande de fruit §b&number&"
+        "configurations": {
+          "distance": "Champ d'action de la Marchande de fruit §b&number&"
+        },
+        "timers": {
+          "fruit_merchant_cooldown": "Cooldown de la Marchande de Fruit (§b&timer&§r)"
+        }
       },
       "druid": {
         "display": "Druide",
         "perform": "Vous venez d'utiliser votre pouvoir, il y a &number& aura(s) sombre(s) à &blocks& blocs de vous",
         "description": "Vous pouvez connaître le nombre d’auras obscures dans un rayon de &number& blocs en mangeant une pomme d’or accroupi pendant la nuit",
         "day": "Vous pouvez de nouveau utiliser votre pouvoir",
-        "distance": "Champ d'action du Druide §b&number&"
+        "configurations": {
+          "distance": "Champ d'action du Druide §b&number&"
+        }
       },
       "wise_elder": {
         "display": "Vieux sage",
         "description": "A partir du jour 6, vous disposez d'un compteur pour chaque type d'Aura\nPour chaque seconde passée à moins de &number& blocs d'un joueur, le compteur correspondant à son aura s'incrémente.",
         "end_of_cycle": "Vous recevez le contenu des compteurs => \nCompteur Aura §fNeutre§f: &neutral&§r.\n Compteur Aura §0Obscure§f: &dark&§r.\n Compteur Aura §eLumineuse§f: &light&",
-        "distance": "Champ d'action du Vieux Sage §b&number&"
+        "configurations": {
+          "distance": "Champ d'action du Vieux Sage §b&number&"
+        }
       },
       "tenebrous_werewolf": {
         "display": "Loup Ténébreux",
@@ -671,8 +742,12 @@
         "not_night": "Vous ne pouvez pas effectuer cette action le jour",
         "power_available": "Vous pouvez §aencore§f utiliser votre pouvoir",
         "power_not_available": "Vous avez §cdéjà§f utilisé votre pouvoir",
-        "darkness_distance": "Rayon d'action des ténèbres: §b&number&§r blocs",
-        "darkness_duration": "Durée des ténèbres: §b&timer&§r secondes"
+        "timers": {
+          "darkness_duration": "Durée des ténèbres: §b&timer&§r secondes"
+        },
+        "configurations": {
+          "darkness_distance": "Champ d'action des ténèbres: §b&number&§r blocs"
+        }
       },
       "gravedigger": {
         "display": "Fossoyeur",
@@ -680,7 +755,9 @@
         "clue_player": "§b&player&§r est mort ici, §b&number&§r autres joueurs se trouvaient à proximité lors de sa mort",
         "clue_role": "§b&victim&§r était §b&role&§r. §b&players&§r étaient proches de lui lors de sa mort",
         "clue_nearby": "§b&players&§r étaient proches de §b&victim&§r lors de sa mort",
-        "config": "L'enquête révèle les joueurs à §b&number&§r blocs du mort"
+        "configurations":{
+          "distance": "L'enquête révèle les joueurs à §b&number&§r blocs du mort"
+        }
       },
       "occultist": {
         "display": "Occultiste",
@@ -700,8 +777,10 @@
         "perform": "Vous pouvez tirer sur un joueur autre que votre tueur pour lui faire perdre 5 coeurs avec §b/ww tirer§r. Vous avez 30 seconds",
         "invalid_target": "Vous ne pouvez pas tirer sur cette cible",
         "success": "Le chasseur a tiré sur &target&. Il perd 5 coeurs.",
-        "can_shoot": "Chasseur peut tirer après sa mort",
-        "werewolf_slain": "Vous avez tué un loup; vous infligez désormais plus de dégâts aux loups."
+        "werewolf_slain": "Vous avez tué un loup; vous infligez désormais plus de dégâts aux loups.",
+        "configurations": {
+          "can_shoot": "Chasseur peut tirer après sa mort"
+        }
       },
       "thug": {
         "display": "Voyou",
@@ -709,14 +788,16 @@
         "power": "§b&number&% de chance que votre rôle s'affiche si vous tuez un §bjoueur",
         "command_message": "Vous pouvez masquer le §bnametag§f d'un joueur, faites §b/ww masquer",
         "effect": "§bRésistance§f après votre premier meurtre, un coeur permanent supplémentaire par joueur tué ayant fait un meurtre",
-        "death_message": "Le §bVoyou§f a tué &player& qui éait &role&",
+        "death_message": "Le §bVoyou§f a tué &player& qui était &role&",
         "new_heart": "Vous gagnez un coeur permanent supplémentaire suite au meurtre de &player& qui avait déjà tué quelqu'un",
         "resistance": "Vous recevez résistance suite à votre premier meurtre",
         "get_apple": "Vous recevez §b&number&§f pommes d'or du stuff du cadavre de §b&player&§f, la probabilité que votre prochaine meurtre affiche votre rôle augmente de §b10%§f à &number1&%",
         "perform": "Vous venez de masquer le nametag de §b&player&",
         "alert": "Le §bVoyou§f vient de masquer votre nametag jusqu'au prochain matin",
         "command": "masquer",
-        "distance": "Champ d'action du Voyou §b&number&"
+        "configurations": {
+          "distance": "Champ d'action du Voyou §b&number&"
+        }
       },
       "barbarian": {
         "display": "Barbare",
@@ -726,7 +807,9 @@
         "command": "barbarian_hide",
         "item": "Livre Tranchant III",
         "perform": "Vous venez de dissimuler le rôle de &player&",
-        "distance": "Champ d'action du Barbare §b&number&"
+        "configurations": {
+          "distance": "Champ d'action du Barbare §b&number&"
+        }
       },
       "necromancer": {
         "description": "Après activation de votre pouvoir, vous ressuscitez le 1er joueur qui meurt à - de §b&number&§f blocs et lui volez de la vie progressivement",
@@ -739,9 +822,11 @@
         "necromancer_steal": "Le Nécromancien vous vole un coeur permanent",
         "steal": "Vous récuperez un coeur permanent supplémentaire sur §b&player&",
         "use": "Vous venez d'activer votre pouvoir",
-        "config": "Champ d'action du Nécromancien §b&number&§f blocs",
         "resurrection": "Vous venez d'être ressuscité par un §bNécromancien§f",
-        "necromancer_death": "Le §bNécromancien§f vient de mourir, vous récuperez un coeur permanent toutes les trois minutes"
+        "necromancer_death": "Le §bNécromancien§f vient de mourir, vous récuperez un coeur permanent toutes les trois minutes",
+        "configurations": {
+          "distance": "Champ d'action du Nécromancien §b&number&§f blocs"
+        }
       },
       "devoted_servant": {
         "display": "Servante dévouée",
@@ -805,44 +890,6 @@
         "perform": "Votre pouvoir a été activé"
       }
     },
-    "vote": {
-      "already_voted": "Vous avez déjà voté aujourd'hui",
-      "not_vote_time": "Ce n'est plus l'heure du vote",
-      "player_already_voted": "Ce joueur a déjà été voté",
-      "perform_vote": "Vous avez voté pour §b&player&",
-      "vote_disable": "Les Votes sont désactivés",
-      "vote_deactivate": "En raison du nombre de joueurs, les Votes sont désactivés",
-      "vote_not_yet_activated": "Les Votes ne sont pas encore activés",
-      "vote_result": "§b&player&§f est celui qui a recueilli le plus de votes : §b&number&§r. Il perd 5 coeurs",
-      "no_result": "Aucun joueur n'a été voté",
-      "no_result_more_one": "Aucun joueur n'a été voté plus d'une fois",
-      "vote_time": "C'est l'heure de voter §b/ww vote§r Vous avez §b&timer&",
-      "command": "vote",
-      "new_voted": "Vous avez été le plus voté lors du dernier vote, vous ne pouvez donc pas voter cette fois ci",
-      "neutral": "Les rôles neutres ne peuvent pas voter",
-      "new_vote_villager": "§b&player&§f est celui qui a recueilli le plus de votes auprès des Villageois.",
-      "new_vote_werewolf": "§b&player&§f est celui qui a recueilli le plus de votes auprès des Loups Garous."
-    },
-    "wish": {
-      "command": "wish",
-      "command_description": "Définis votre dernière volonté",
-      "change_wish": "Votre dernière volonté est désormais: &wish&"
-    },
-    "lone_wolf": {
-      "message": "Vous devenez Solitaire. A partir de maintenant,vous devez gagner Seul. Pour cela, vous bénéficiez de quatres coeurs permanents supplémentaires (dans la limite de 15 coeurs max)"
-    },
-    "hidden_roles": {
-      "display": "Rôles Masqués",
-      "description": "permet d’activer le système de Rôles masqués sans avoir de Prêtresse dans la composition. \nUn joueur du Village est alors choisi aléatoirement au début de la partie sans qu'il le sache",
-      "magic": "§kCoucou"
-    },
-    "thiercelieu": {
-      "name": "Thiercelieu",
-      "description": "Les morts sont annoncées le matin"
-    },
-    "random_cupid": {
-      "display": "Cupidon Aléatoire"
-    },
     "announcement": {
       "restart": "Redémarrage de la partie dans §b&timer&",
       "pvp": "PVP activé",
@@ -859,8 +906,7 @@
       "start": {
         "message": "Vous avez §b&timer&§r d'invulnérabilité\n§f Plus d'infos sur la partie §b/ww h",
         "top_title": "Début de Partie",
-        "bot_title": "§bBonne Game",
-        "launch": "Lancer la §bPartie"
+        "bot_title": "§bBonne Game"
       },
       "potential_revive": "En attente d'une potentielle resurrection",
       "invulnerability": "Fin de l'invulnérabilité",
@@ -896,41 +942,42 @@
       "admin": {
         "stop": {
           "command": "stop",
-          "message": "Stopper la Partie",
-          "send": "§b&player&§r a stoppé la partie",
-          "description": "Pour stopper la partie"
+          "description": "Pour stopper la partie",
+          "send": "§b&player&§r a stoppé la partie"
         },
         "start": {
           "command": "start",
-          "too_much_role": "Vous devez enlever des rôles pour lancer la partie.",
-          "description": "Pour lancer la partie"
+          "description": "Pour lancer la partie",
+          "too_much_role": "Vous devez enlever des rôles pour lancer la partie."
         },
         "group": {
           "command": "group",
-          "command_2": "setgroup",
+          "description": "Pour envoyer un message pour faire respecter les groupes",
           "group_change": "Les groupes passent à §b&number&",
           "respect_limit": "Respectez les limites, groupes de §b&number&",
           "top_title": "Respectez la limite",
-          "bot_title": "groupe de §b&number&",
-          "description1": "Pour envoyer un message pour faire respecter les groupes",
-          "description2": "Pour changer la taille des groupes"
+          "bot_title": "groupe de §b&number&"
+        },
+        "set_group": {
+          "command": "setgroup",
+          "description": "Pour changer la taille des groupes"
         },
         "info": {
           "command": "info",
-          "send": "§b§l[Info]§r » §b&message&",
-          "description": "Pour envoyer une information dans le chat global"
+          "description": "Pour envoyer une information dans le chat global",
+          "send": "§b§l[Info]§r » §b&message&"
         },
         "set_game_name": {
-          "send": "Nom de la partie configuré",
           "command": "name",
-          "description": "Pour changer le nom de la partie"
+          "description": "Pour changer le nom de la partie",
+          "send": "Nom de la partie configuré"
         },
         "chat": {
           "command": "chat",
+          "description": "Pour activer/désactiver le chat",
           "on": "Le Chat est §bactivé",
           "off": "Le Chat est §bdésactivé",
-          "template": "&player& : &message&",
-          "description": "Pour activer/désactiver le chat"
+          "template": "&player& : &message&"
         },
         "stuff_start": {
           "command": "lootStart",
@@ -949,6 +996,7 @@
         },
         "role": {
           "command": "role",
+          "description": "Pour voir le rôle des joueurs",
           "in_game": "Vous ne pouvez pas voir le rôle du joueur si vous êtes encore dans la partie",
           "affected": "Affecte : §b&player&",
           "cursed_lover": "En Liaison maudite avec : §b&player&",
@@ -959,94 +1007,93 @@
           "role": "§b&player&§r est §b&role&",
           "transformed": "Transformé : §b&on&",
           "yes": "oui",
-          "no": "non",
-          "description": "Pour voir le rôle des joueurs"
+          "no": "non"
         },
         "final_heal": {
           "command": "fh",
-          "send": "Final Heal !",
-          "description": "Pour soigner tout les joueurs"
+          "description": "Pour soigner tout les joueurs",
+          "send": "Final Heal !"
         },
         "generation": {
           "command": "generation",
+          "description": "Pour générer la Carte",
           "already_start": "La Génération est déjà lancée",
           "perform": "La Génération du monde a commencé",
           "not_generated": "Carte non générée. Faites §b/a generation",
-          "not_finished": "Attendez la fin de génération de la carte (§b&progress&%§r)",
-          "description": "Pour générer la Carte"
+          "not_finished": "Attendez la fin de génération de la carte (§b&progress&%§r)"
         },
         "change": {
           "command": "change",
+          "description": "Pour changer la Carte",
           "in_progress": "Changement de la Carte en cours",
-          "finished": "Nouvelle Carte créée",
-          "description": "Pour changer la Carte"
+          "finished": "Nouvelle Carte créée"
         },
         "preview": {
           "command": "preview",
+          "description": "Pour se téléporter sur la carte de jeu",
           "map": "Vous venez d'être téléporté au centre de la map de la partie\n §b/a preview§r pour revenir",
           "lobby": "Vous êtes revenu au lobby",
-          "create": "Création de la Carte en cours, veuillez patienter...",
-          "description": "Pour se téléporter sur la carte de jeu"
+          "create": "Création de la Carte en cours, veuillez patienter..."
         },
         "tp_group": {
           "command": "tpgroup",
+          "description": "Pour téléporter une partie d'un trop gros groupe",
           "broadcast": "§b&players&§r ont été téléporté par §b&player&",
-          "perform": "Vous venez d'être téléporté par §b&player&",
-          "description": "Pour téléporter une partie d'un trop gros groupe"
+          "perform": "Vous venez d'être téléporté par §b&player&"
         },
         "disconnected": {
           "command": "disc",
-          "send": "§b&player&§r s'est déconnecté il y a §b&timer&",
-          "description": "Pour voir les joueurs déconnectés"
+          "description": "Pour voir les joueurs déconnectés",
+          "send": "§b&player&§r s'est déconnecté il y a §b&timer&"
         },
         "revive": {
           "command": "revive",
+          "description": "Pour ressusciter un joueur",
           "perform": "§b&player&§r a été ressuscité par §b&admin&",
-          "not_death": "Le joueur n'est pas Mort",
-          "description": "Pour ressusciter un joueur"
+          "not_death": "Le joueur n'est pas Mort"
         },
         "size": {
           "command": "size",
+          "description": "Pour voir la taille du biome central",
           "begin": "Début du Calcul de la surface du Biome central",
           "result": "Le Biome central occupe §b&number&§r blocs.",
-          "change": "Cliquez ici pour changer de Map",
-          "description": "Pour voir la taille du biome central"
+          "change": "Cliquez ici pour changer de Map"
         },
         "host": {
           "command": "host",
+          "description": "Pour ajouter un host",
           "name": "Host",
           "add": "§b&player&§r est à présent Host",
           "remove": "§b&player&§r n'est plus Host",
           "one": "Il faut au minimum un host",
-          "tag": "§cHost§r » ",
-          "description": "Pour ajouter un host"
+          "tag": "§cHost§r » "
         },
         "whitelist": {
           "command": "whitelist",
+          "description": "Pour ajouter une personne à la whitelist",
           "add": "Le joueur &player& a été ajouté à la whitelist",
           "remove": "Le joueur &player& a été enlevé de la whitelist",
-          "player_not_whitelisted": "Vous n'êtes pas sur la whiteList",
-          "description": "Pour ajouter une personne à la whitelist"
+          "player_not_whitelisted": "Vous n'êtes pas sur la whiteList"
         },
         "moderator": {
           "command": "moderator",
+          "description": "Pour ajouter un modérateur",
           "name": "Modérateur",
           "add": "§b&player&§r est à présent modérateur",
           "remove": "§b&player&§r n'est plus modérateur",
           "player_living": "Vous ne pouvez pas mettre modérateur un joueur encore vivant",
           "tag": "§bModo§r » ",
-          "message": "Vous êtes en Mode Modération",
-          "description": "Pour ajouter un modérateur"
+          "message": "Vous êtes en Mode Modération"
         },
         "gamemode": {
           "command": "gamemode",
-          "send": "§b&player&§r s'est mis en gamemode §b&number&",
-          "description": "Pour changer son mode de jeu"
+          "description": "Pour changer son mode de jeu",
+          "send": "§b&player&§r s'est mis en gamemode §b&number&"
         },
         "teleportation": {
           "command": "tp",
-          "send": "Téléportation de §b&player1&§r vers §b&player2&",
-          "description": "Pour se téléporter"
+          "description": "Pour se téléporter",
+          "send": "Téléportation de §b&player1&§r vers §b&player2&"
         },
         "help": {
           "command": "h",
@@ -1055,101 +1102,163 @@
         "inventory": {
           "command": "inv",
           "description": "Pour voir l'inventaire d'un joueur"
+        },
+        "kill": {
+          "command": "kill",
+          "description": "Pour enlever un joueur de la partie",
+          "on_line": "Le joueur est en ligne",
+          "remove_role": "Enlevez un rôle dans la config pour compenser le joueur",
+          "not_living": "Le joueur n'est pas vivant"
+        },
+        "late": {
+          "command": "late",
+          "description": "Pour rajouter un joueur au cours de la partie",
+          "in_game": "Le joueur est déjà dans la partie",
+          "launch": "§b&player&§r vient d'être rajouté à la partie"
+        },
+        "config": {
+          "command": "config",
+          "description": "Pour configurer la Partie"
         }
       },
-      "anonymous_chat": {
-        "command": "?",
-        "send": "[§b&player&§r] &message& (Cliquez pour répondre)",
-        "anonyme": "Anonyme",
-        "failure": "Votre message n'a pas pu être envoyé. Aucun Staff de connecté",
-        "description": "Pour envoyer un message anonyme",
-        "empty": "Vous devez envoyer un message après le ?"
-      },
-      "ww_chat": {
-        "name": "chatlg",
-        "prefix": "[§cChat LG§r] &message&",
-        "modo": "[§c&name&§r] &message&",
-        "announce": "Vous avez §b&timer&§f secondes pour écrire §b&number&§f message(s) dans le chat des Loups Garous §b/ww chatlg§r <message>, attention des rôles peuvent voit le contenu du chat",
-        "timer": "Le temps pour parler dans le chat des Loups Garous est écoulé",
-        "not_access": "Vous ne pouvez pas parler dans le chat des Loups Garous",
-        "disable": "Le chat des Loups Garous est désactivé",
-        "number": "§b&number&§r messages par cycle dans le chat Loup Garou",
-        "speak_number": "Vous ne pouvez parler que §b&number&§r fois par cycle",
-        "drunken": "Attention, le loup bourré est présent dans cette partie",
-        "description": "Commande pour parler dans le chat des Loups Garous"
-      },
-      "message": {
-        "send": "[Message envoyé à §b&player&§r] » §b&message&",
-        "received": "[Message de §b&player&§r] » §b&message&"
-      },
-      "compo": {
-        "composition_hide": "La Composition est cachée",
-        "description": "Pour voir la composition",
-        "_": "§6================================\n"
-      },
-      "aura": {
-        "command": "aura",
-        "messages": [
-          "Rôles à aura Lumineuse :",
-          "§cChien-Loup (Loup), Loup-Garou Mystique, Loup-Garou Grimeur",
-          "§bVoyante, Renard, Montreur d'Ours, Tombeur, Bibliothécaire, Trappeur, Prêtresse, Jumeaux, Analyste, Soeurs, Salvateur, Citoyen, Idiot du Village, Simple Villageois, Vieux Sage, Serviteur, Marchande de Fruit, Conteuse",
-          "§aAnge, Charmeuse, Feu Follet, Joueur de Flûte, §6Cupidon",
-          "Rôles à aura Neutre :",
-          "§cLoup-Garou Perfide, Loup-Garou Amnésique, Loup-Garou Craintif, Loup-Garou Vengeur",
-          "§bChaman, Comédien, Frère Siamois, Chasseur, Ancien, Oracle, Ermite, Garde, Détective, Petite Fille, Servante Dévouée",
-          "§aImitateur, Barbare, §6Enfant Sauvage, Voleur, Trublion, Escroc, Voyou",
-          "Rôles à aura Obscure :",
-          "§cTous les autres Loups-Garous",
-          "§bSorcière, Corbeau, Chien-Loup (Chien), Druide",
-          "§aAssassin, Rival, Succube, Tueur en Série, §6Loup-Garou Blanc§f",
-          "Cas particuliers :",
-          "Tuer un joueur (qui ne se fait pas ressusciter) donne une aura §bObscure",
-          "Se faire protéger par le §bSalvateur§f ou le §bGarde§f donne une aura §bLumineuse",
-          "Se faire maudire par le §bCorbeau§f donne une aura Obscure",
-          "Se faire ressusciter donne une aura §bNeutre",
-          "Le §cLoup-Garou Feutré§f obtient l'aura par défaut de son rôle de façade",
-          "Le §6Voleur§f et l'§6Imitateur§f obtiennent l'aura du joueur qu'ils volent",
-          "Le §bMontreur d’Ours§f change d’aura en fonction du nombre de “Grrrrr” (§b0§f / §71§f / §c2+§f)",
-          "Quand le §bRenard§f renifle un Loup-Garou, son aura devient Obscure",
-          "Quand le §bChaman§f et le §cLoup-Garou Ténébreux§f utilisent leur pouvoir, leur aura devient Obscure",
-          "Quand l’§bAnalyste§f utilise son pouvoir d’analyse, son aura devient Obscure",
-          "Quand le §cLoup-Garou Vengeur§f atteint 10 ♥, son aura devient Obscure",
-          "La §bPrêtresse§f et l'§aAnge§f gardent TOUJOURS une aura Lumineuse",
-          "Le §cGrand Méchant Loup§f garde TOUJOURS une aura Obscure"
-        ],
-        "description": "Explication sur les auras",
-        "prefix": "Descriptif des Auras :"
-      },
-      "doc": {
-        "command": "doc",
-        "description": "Pour avoir le doc des rôles",
-        "link": "Cliquez ici pour avoir accès au document des rôles"
-      },
-      "kill": {
-        "command": "kill",
-        "on_line": "Le joueur est en ligne",
-        "remove_role": "Enlevez un rôle dans la config pour compenser le joueur",
-        "not_living": "Le joueur n'est pas vivant",
-        "description": "Pour enlever un joueur de la partie"
-      },
-      "late": {
-        "command": "late",
-        "in_game": "Le joueur est déjà dans la partie",
-        "launch": "§b&player&§r vient d'être rajouté à la partie",
-        "description": "Pour rajouter un joueur au cours de la partie"
-      },
-      "help": {
-        "command": "h"
+      "player": {
+        "anonymous_chat": {
+          "command": "?",
+          "description": "Pour envoyer un message anonyme",
+          "send": "[§b&player&§r] &message& (Cliquez pour répondre)",
+          "anonyme": "Anonyme",
+          "failure": "Votre message n'a pas pu être envoyé. Aucun Staff de connecté",
+          "empty": "Vous devez envoyer un message après le ?"
+        },
+        "ww_chat": {
+          "command": "chatlg",
+          "description": "Commande pour parler dans le chat des Loups Garous",
+          "prefix": "[§cChat LG§r] &message&",
+          "modo": "[§c&name&§r] &message&",
+          "announce": "Vous avez §b&timer&§f secondes pour écrire §b&number&§f message(s) dans le chat des Loups Garous §b/ww chatlg§r <message>, attention des rôles peuvent voit le contenu du chat",
+          "timer": "Le temps pour parler dans le chat des Loups Garous est écoulé",
+          "not_access": "Vous ne pouvez pas parler dans le chat des Loups Garous",
+          "disable": "Le chat des Loups Garous est désactivé",
+          "speak_number": "Vous ne pouvez parler que §b&number&§r fois par cycle",
+          "drunken": "Attention, le loup bourré est présent dans cette partie"
+        },
+        "message": {
+          "send": "[Message envoyé à §b&player&§r] » §b&message&",
+          "received": "[Message de §b&player&§r] » §b&message&"
+        },
+        "compo": {
+          "command": "compo",
+          "description": "Pour voir la composition",
+          "composition_hide": "La Composition est cachée",
+          "_": "§6================================\n"
+        },
+        "aura": {
+          "command": "aura",
+          "description": "Explication sur les auras",
+          "messages": [
+            "Rôles à aura Lumineuse :",
+            "§cChien-Loup (Loup), Loup-Garou Mystique, Loup-Garou Grimeur",
+            "§bVoyante, Renard, Montreur d'Ours, Tombeur, Bibliothécaire, Trappeur, Prêtresse, Jumeaux, Analyste, Soeurs, Salvateur, Citoyen, Idiot du Village, Simple Villageois, Vieux Sage, Serviteur, Marchande de Fruit, Conteuse",
+            "§aAnge, Charmeuse, Feu Follet, Joueur de Flûte, §6Cupidon",
+            "Rôles à aura Neutre :",
+            "§cLoup-Garou Perfide, Loup-Garou Amnésique, Loup-Garou Craintif, Loup-Garou Vengeur",
+            "§bChaman, Comédien, Frère Siamois, Chasseur, Ancien, Oracle, Ermite, Garde, Détective, Petite Fille, Servante Dévouée",
+            "§aImitateur, Barbare, §6Enfant Sauvage, Voleur, Trublion, Escroc, Voyou",
+            "Rôles à aura Obscure :",
+            "§cTous les autres Loups-Garous",
+            "§bSorcière, Corbeau, Chien-Loup (Chien), Druide",
+            "§aAssassin, Rival, Succube, Tueur en Série, §6Loup-Garou Blanc§f",
+            "Cas particuliers :",
+            "Tuer un joueur (qui ne se fait pas ressusciter) donne une aura §bObscure",
+            "Se faire protéger par le §bSalvateur§f ou le §bGarde§f donne une aura §bLumineuse",
+            "Se faire maudire par le §bCorbeau§f donne une aura Obscure",
+            "Se faire ressusciter donne une aura §bNeutre",
+            "Le §cLoup-Garou Feutré§f obtient l'aura par défaut de son rôle de façade",
+            "Le §6Voleur§f et l'§6Imitateur§f obtiennent l'aura du joueur qu'ils volent",
+            "Le §bMontreur d’Ours§f change d’aura en fonction du nombre de “Grrrrr” (§b0§f / §71§f / §c2+§f)",
+            "Quand le §bRenard§f renifle un Loup-Garou, son aura devient Obscure",
+            "Quand le §bChaman§f et le §cLoup-Garou Ténébreux§f utilisent leur pouvoir, leur aura devient Obscure",
+            "Quand l’§bAnalyste§f utilise son pouvoir d’analyse, son aura devient Obscure",
+            "Quand le §cLoup-Garou Vengeur§f atteint 10 ♥, son aura devient Obscure",
+            "La §bPrêtresse§f et l'§aAnge§f gardent TOUJOURS une aura Lumineuse",
+            "Le §cGrand Méchant Loup§f garde TOUJOURS une aura Obscure"
+          ],
+          "prefix": "Descriptif des Auras :"
+        },
+        "doc": {
+          "command": "doc",
+          "description": "Pour avoir le doc des rôles",
+          "link": "Cliquez ici pour avoir accès au document des rôles"
+        },
+        "role": {
+          "command": "role",
+          "description": "Pour voir la description de son rôle"
+        },
+        "help": {
+          "command": "h"
+        },
+        "rank": {
+          "command": "rang",
+          "description": "Pour voir son rang dans la queue",
+          "perform": "Vous êtes en position §b&number&§r dans la queue",
+          "not_in_queue": "Vous n'êtes pas dans la file d'attente",
+          "tag": "§6Queue§r » "
+        },
+        "enchantments": {
+          "command": "enchantement",
+          "description": "Pour voir les limites d'enchantements",
+          "note": "§oCertains rôles peuvent outrepasser certaines limites",
+          "iron_diamond_protection": "- Protection Armure §6Fer§f : §b&number&§f / §3Diamant§f : §b&number2&§f",
+          "iron_diamond_sharpness" : "- Tranchant Epee §6Fer§f : §b&number&§f / §3Diamant§f : §b&number2&§f",
+          "punch_power": "- Arc Puissance : §b&number&§f / Frappe : §b&number2&",
+          "knock_back_depth_rider": "- Recul : §b&number&§f / Agilité aquatique : §b&number2&",
+          "knock_back_invisible": "§cRecul§f seulement pour les joueurs §ainvisibles"
+        },
+        "timers": {
+          "command": "timers",
+          "description": "Pour voir les timers",
+          "list": "Liste des §bTimers §f :"
+        },
+        "configurations": {
+          "command": "regles",
+          "description": "Pour voir la configuration générale",
+          "list": "Liste des §bRègles §f :"
+        },
+        "random_events": {
+          "command": "events",
+          "description": "Pour voir les Events Aléatoires",
+          "list": "Liste des évènements aléatoires §bactivés§f :",
+          "disable": "L'affichage des events aléatoires est désactivés",
+          "command_message": "§b&event& §f(probabilité §b&number&%§f)"
+        },
+        "scenarios": {
+          "command": "scenarios",
+          "description": "Pour voir les scénarios",
+          "disable": "L'affichage des scénarios est désactivés",
+          "list": "Liste des Scénarios §bactivés§f :"
+        },
+        "wish": {
+          "command": "wish",
+          "command_description": "Définis votre dernière volonté",
+          "change_wish": "Votre dernière volonté est désormais: &wish&"
+        }
       }
     },
-    "menu": {
-      "command": "config",
-      "description": "Pour configurer la Partie",
-      "name": "Option §bLG",
+    "menus": {
       "return": "Revenir au Menu Principal",
-      "left": "§fClique-§bGauche§f » +",
-      "right": "§fClique-§bDroit§f » -",
-      "shift": "§bShift§f-Clique » Configuration avancée",
+      "lore": {
+        "left": "§fClique-§bGauche§f » +",
+        "right": "§fClique-§bDroit§f » -",
+        "shift": "§bShift§f-Clique » Configuration"
+      },
+      "pagination": {
+        "previous": "Précédent §b&current& §r»§b &previous& ",
+        "next": "Suivant §b&current& §r»§b &next&",
+        "current": "Page §b&current&§r/§b&sum&"
+      },
+      "main": {
+        "name": "Option §bLG"
+      },
       "addon": {
         "name": "Réglages Addons"
       },
@@ -1162,7 +1271,6 @@
         "enable": "§aActiver§f Mode MeetUp",
         "disable": "§cDésactiver§f Mode MeetUp",
         "name": "Gestion §bMeetUp",
-        "config": "MeetUp",
         "warning": "§cAttention§f, cela supprime vos configurations actuelles"
       },
       "advanced_tool": {
@@ -1178,19 +1286,11 @@
         "name": "Configuration §bTroll Rôle",
         "current": "Rôle actuel §b&role&"
       },
-
       "roles": {
-        "command_1": "role",
         "need": "§cCe rôle nécessite un §f&role&§c dans la compo",
         "dependant_load": "§cRôle dépendant chargé (§f&role&§c)",
-        "command_2": "compo",
-        "description1": "Pour voir la description de son rôle",
-        "description2": "Pour voir la composition",
         "name": "Configuration §bRôles",
         "zero": "Tout mettre à zéro",
-        "previous": "Précédent §b&current& §r»§b &previous& ",
-        "next": "Suivant §b&current& §r»§b &next&",
-        "current": "Page §b&current&§r/§b&sum&",
         "incompatible": "§cRole incompatible chargé : §b&role&"
       },
       "whitelist": {
@@ -1204,107 +1304,27 @@
         "enable": "§aActivé§f pour tous"
       },
       "scenarios": {
-        "disable": "L'affichage des scénarios est désactivés",
-        "list": "Liste des Scénarios §bactivés§f :\n",
-        "command": "scenarios",
-        "no_nether": "NoNether",
-        "no_end": "NoEnd",
-        "description": "Pour voir les scénarios",
         "name": "Configuration §bScenarios",
-        "diamond_limit_config": {
-          "name": "DiamondLimit",
-          "diamond": "Limite de diamant : §b&number&"
-        },
-        "no_clean_up": "NoCleanUp",
-        "cat_eyes": "CatEyes",
-        "vanilla+": {
-          "name": "Vanilla+",
-          "ender_pearl": "Taux de Drop EnderPearl §b&number&%",
-          "flint": "Taux de Drop des Silex §b&number&%",
-          "apple": "Taux de Drop des Pommes §b&number&%"
-        },
-        "fire_less": "FireLess",
-        "no_egg_snowball": "NoSnowBall",
-        "no_poison": "NoPoison",
-        "horse_less": "HorseLess",
-        "cut_clean": "CutClean",
-        "no_fall": "NoFall",
-        "fast_smelting": "FastMelting",
-        "compass_target_last_death": "DeathCompass",
-        "xp_boost_config": {
-          "name": "XPBoost",
-          "xp": "XpBoost : §b&number&%"
-        },
-        "compass_middle": "MiddleCompass",
-        "hastey_boys": "HasteyBoys",
-        "no_name_tag": "NoNameTag",
-        "rod_less": "RodLess",
-        "slow_bow": "SlowBow",
-        "no_fire_weapons": "NoFireWeapons",
-        "timber": "Timber",
-        "double_jump": "Double Jump",
-        "incompatible": "§cScénario incompatible chargé : §b&scenario&",
-        "hastey_babies": "Hastey Babies",
-        "no_extra_stones": "No Extra Stones",
-        "safe_miner": "Safe Miner",
-        "final_heal": "Final Heal",
-        "beta_zombies": "Beta Zombies"
-      },
-      "rank": {
-        "command": "rang",
-        "description": "Pour voir son rang dans la queue",
-        "perform": "Vous êtes en position §b&number&§r dans la queue",
-        "not_in_queue": "Vous n'êtes pas dans la file d'attente",
-        "tag": "§6Queue§r » "
+        "incompatible": "§cScénario incompatible chargé : §b&scenario&"
       },
       "enchantments": {
-        "command": "enchantement",
-        "description": "Pour voir les limites d'enchantements",
         "name": "Configuration §bEnchantements",
         "title": "Limite d'enchantements :",
-        "iron_diamond_protection": "- Protection Armure §6Fer§f : §b&number&§f / §3Diamant§f : §b&number2&§f",
-        "iron_diamond_sharpness" : "- Tranchant Epee §6Fer§f : §b&number&§f / §3Diamant§f : §b&number2&§f",
-        "punch_power": "- Arc Puissance : §b&number&§f / Frappe : §b&number2&",
-        "knock_back_depth_rider": "- Recul : §b&number&§f / Agilité aquatique : §b&number2&",
         "iron_protection" : "Armure §6Fer§f : Protection §b&number&",
         "diamond_protection": "Armure §3Diamant§f : Protection §b&number&",
         "power": "Puissance : §b&number&",
         "sharpness_iron": "Epee §6Fer§f : Tranchant §b&number&",
         "sharpness_diamond": "Epee §3Diamant§f : Tranchant §b&number&",
         "knock_back": "Recul §b&number&",
-        "knock_back_invisible": "§cRecul§f seulement pour les rôles §ainvisibles",
-        "knock_back_normal": "§bShift§f-Clique » configurer",
+        "knock_back_invisible": "§cRecul§f seulement pour les joueurs §ainvisibles",
         "punch": "Frappe : §b&number&",
-        "depth_rider": "Agilité aquatique : §b&number&",
-        "note": "§oCertains rôles peuvent outrepasser certaines limites"
+        "depth_rider": "Agilité aquatique : §b&number&"
       },
       "timers": {
-        "list": "Liste des §bTimers §f :\n",
-        "command": "timers",
-        "description": "Pour voir les timers",
-        "name": "Configuration §bTimers",
-        "pvp": "PVP (§b&timer&§r)",
-        "werewolf_chat_duration": "Durée du Chat des Loups Garous (§b&timer&§r)",
-        "vote_duration": "Durée du Vote (§b&timer&§r)",
-        "vote_waiting": "Durée de transition du vote (§b&timer&§r)",
-        "vote_begin": "Début des Votes (§b&timer&§r)",
-        "border_begin": "Début de la Bordure (§b&timer&§r)",
-        "werewolf_list": "Temps d'attente de la liste des Loups (§b&timer&§r)",
-        "lover_duration": "Durée pour le choix du Couple et révélation des couples (§b&timer&§r)",
-        "day_duration": "Durée du Jour/Nuit (§b&timer&§r)",
-        "role_duration": "Révélation des Rôles (§b&timer&§r)",
-        "digging_end": "Fin du Minage (§b&timer&§r)",
-        "power_duration": "Durée d'utilisation des pouvoirs le Matin (§b&timer&§r)",
-        "auto_restart_duration": "Durée de redémarrage du serveur (§b&timer&§r)",
-        "invulnerability": "Invulnérabilité (§b&timer&§r)"
+        "name": "Configuration §bTimers"
       },
       "random_events": {
-        "list": "Liste des évènements aléatoires §bactivés§f :\n",
         "name": "Configuration §bEvents",
-        "command": "events",
-        "disable": "L'affichage des events aléatoires est désactivés",
-        "description": "Pour voir les Events Aléatoires",
-        "command_message": "§b&event& §f(probabilité §b&number&%§f)",
         "probability": "§fProbabilité : §b&number&§f%"
       },
       "save": {
@@ -1327,32 +1347,8 @@
         "start": "Configuration §bStuff de Départ",
         "reset": "§aCharger§f le Stuff des rôles par défaut"
       },
-      "global": {
-        "list": "Liste des §bRègles §f :\n",
-        "command": "regles",
-        "description": "Pour voir la configuration générale",
+      "configurations": {
         "name": "Configuration §bGlobale",
-        "victory_couple": "Les Couples ne peuvent gagner qu'en Couple",
-        "chat": "Chat",
-        "werewolf_chat_config": {
-          "name": "Chat des Loups Garous"
-        },
-        "show_role_to_death": "Affiche le Rôle à la Mort",
-        "show_role_category_to_death": "Affiche la Catégorie du Rôle à la Mort",
-        "vote_config": {
-          "name": "Vote",
-          "vote": "Fin des votes à §b&number&§r personnes"
-        },
-        "hide_composition": "Composition Cachée",
-        "red_name_tag": "Pseudo des Loups Garous en rouge",
-        "hide_scenarios": "Cache les Scenarios",
-        "hide_events": "Cache les Events",
-        "proximity_chat": "Chat de Proximité",
-        "double_troll": "Double Troll",
-        "lone_wolf": "Loup Solitaire",
-        "new_vote": "Nouveau Vote",
-        "troll_role": "Troll Rôle",
-        "troll_lover": "Troll Saint Valentin",
         "incompatible": "§cConfiguration incompatible chargée : §b&configuration&"
       },
       "border": {
@@ -1368,6 +1364,10 @@
       },
       "languages": {
         "name": "Configuration §bLangue"
+      },
+      "start_stop": {
+        "stop": "Stopper la Partie",
+        "launch": "Lancer la §bPartie"
       }
     },
     "tab": {
@@ -1426,6 +1426,231 @@
         "§b&name&"
       ],
       "default_game_name": "@Ph1Lou_"
+    },
+    "timers": {
+      "pvp": {
+        "name": "PVP (§b&timer&§r)"
+      },
+      "border_begin": {
+        "name": "Début de la Bordure (§b&timer&§r)"
+      },
+      "werewolf_list": {
+        "name": "Temps d'attente de la liste des Loups (§b&timer&§r)"
+      },
+      "lover_duration": {
+        "name": "Durée pour le choix du Couple et révélation des couples (§b&timer&§r)"
+      },
+      "day_duration": {
+        "name": "Durée du Jour/Nuit (§b&timer&§r)"
+      },
+      "role_duration": {
+        "name": "Révélation des Rôles (§b&timer&§r)"
+      },
+      "digging_end": {
+        "name": "Fin du Minage (§b&timer&§r)"
+      },
+      "power_duration": {
+        "name": "Durée d'utilisation des pouvoirs le Matin (§b&timer&§r)"
+      },
+      "auto_restart_duration": {
+        "name": "Durée de redémarrage du serveur (§b&timer&§r)"
+      },
+      "invulnerability": {
+        "name": "Invulnérabilité (§b&timer&§r)"
+      }
+    },
+    "configurations": {
+      "victory_lovers": {
+        "name": "Les Couples ne peuvent gagner qu'en Couple"
+      },
+      "chat": {
+        "name": "Chat"
+      },
+      "werewolf_chat": {
+        "name": "Chat des Loups Garous",
+        "configurations": {
+          "vote_end": "§b&number&§r messages par cycle dans le chat Loup Garou"
+        },
+        "timers": {
+          "werewolf_chat_duration":"Durée du Chat des Loups Garous (§b&timer&§r)"
+        }
+      },
+      "show_role_to_death": {
+        "name": "Affiche le Rôle à la Mort"
+      },
+      "show_role_category_to_death": {
+        "name": "Affiche la Catégorie du Rôle à la Mort"
+      },
+      "vote": {
+        "name": "Vote",
+        "timers": {
+          "vote_duration": {
+            "name": "Durée du Vote (§b&timer&§r)"
+          },
+          "vote_waiting": {
+            "name": "Durée de transition du vote (§b&timer&§r)"
+          },
+          "vote_begin": {
+            "name": "Début des Votes (§b&timer&§r)"
+          }
+        },
+        "configurations": {
+          "vote_end": "Fin des votes à §b&number&§r personnes"
+        },
+        "already_voted": "Vous avez déjà voté aujourd'hui",
+        "not_vote_time": "Ce n'est plus l'heure du vote",
+        "player_already_voted": "Ce joueur a déjà été voté",
+        "perform_vote": "Vous avez voté pour §b&player&",
+        "vote_disable": "Les Votes sont désactivés",
+        "vote_deactivate": "En raison du nombre de joueurs, les Votes sont désactivés",
+        "vote_not_yet_activated": "Les Votes ne sont pas encore activés",
+        "vote_result": "§b&player&§f est celui qui a recueilli le plus de votes : §b&number&§r. Il perd 5 coeurs",
+        "no_result": "Aucun joueur n'a été voté",
+        "no_result_more_one": "Aucun joueur n'a été voté plus d'une fois",
+        "vote_time": "C'est l'heure de voter §b/ww vote§r Vous avez §b&timer&",
+        "command": "vote",
+        "new_voted": "Vous avez été le plus voté lors du dernier vote, vous ne pouvez donc pas voter cette fois ci",
+        "neutral": "Les rôles neutres ne peuvent pas voter",
+        "new_vote_villager": "§b&player&§f est celui qui a recueilli le plus de votes auprès des Villageois.",
+        "new_vote_werewolf": "§b&player&§f est celui qui a recueilli le plus de votes auprès des Loups Garous."
+      },
+      "hide_composition": {
+        "name": "Composition Cachée"
+      },
+      "red_name_tag": {
+        "name": "Pseudo des Loups Garous en rouge"
+      },
+      "hide_scenarios": {
+        "name": "Cache les Scenarios"
+      },
+      "hide_events": {
+        "name": "Cache les Events"
+      },
+      "proximity_chat": {
+        "name": "Chat de Proximité"
+      },
+      "double_troll": {
+        "name": "Double Troll"
+      },
+      "lone_wolf": {
+        "name": "Loup Solitaire",
+        "message": "Vous devenez Solitaire. A partir de maintenant,vous devez gagner Seul. Pour cela, vous bénéficiez de quatres coeurs permanents supplémentaires (dans la limite de 15 coeurs max)"
+      },
+      "new_vote": {
+        "name": "Nouveau Vote"
+      },
+      "troll_role": {
+        "name": "Troll Rôle"
+      },
+      "troll_lover": {
+        "name": "Troll Saint Valentin"
+      },
+      "hidden_roles": {
+        "name": "Rôles Masqués",
+        "description": "permet d’activer le système de Rôles masqués sans avoir de Prêtresse dans la composition. \nUn joueur du Village est alors choisi aléatoirement au début de la partie sans qu'il le sache",
+        "magic": "§kCoucou"
+      },
+      "thiercelieu": {
+        "name": "Thiercelieu",
+        "description": "Les morts sont annoncées le matin"
+      }
+    },
+    "scenarios": {
+      "no_nether": {
+        "name": "NoNether"
+      },
+      "no_end": {
+        "name": "NoEnd"
+      },
+      "diamond_limit": {
+        "name": "DiamondLimit",
+        "configurations": {
+          "limit": "Limite de diamant : §b&number&"
+        }
+      },
+      "no_clean_up": {
+        "name": "NoCleanUp"
+      },
+      "cat_eyes": {
+        "name": "CatEyes"
+      },
+      "vanilla+": {
+        "name": "Vanilla+",
+        "configurations": {
+          "ender_pearl_rate": "Taux de Drop EnderPearl §b&number&%",
+          "flint_rate": "Taux de Drop des Silex §b&number&%",
+          "apple_rate": "Taux de Drop des Pommes §b&number&%"
+        }
+      },
+      "fire_less": {
+        "name": "FireLess"
+      },
+      "no_egg_snowball": {
+        "name": "NoSnowBall"
+      },
+      "no_poison": {
+        "name": "NoPoison"
+      },
+      "horse_less": {
+        "name": "HorseLess"
+      },
+      "cut_clean": {
+        "name": "CutClean"
+      },
+      "no_fall": {
+        "name": "NoFall"
+      },
+      "fast_smelting":{
+        "name": "FastMelting"
+      },
+      "compass_target_last_death": {
+        "name": "DeathCompass"
+      },
+      "xp_boost": {
+        "name": "XPBoost",
+        "configurations": {
+          "xp": "XpBoost : §b&number&%"
+        }
+      },
+      "compass_middle": {
+        "name": "MiddleCompass"
+      },
+      "hastey_boys": {
+        "name": "HasteyBoys"
+      },
+      "no_name_tag": {
+        "name": "NoNameTag"
+      },
+      "rod_less": {
+        "name": "RodLess"
+      },
+      "slow_bow": {
+        "name": "SlowBow"
+      },
+      "no_fire_weapons": {
+        "name": "NoFireWeapons"
+      },
+      "timber": {
+        "name": "Timber"
+      },
+      "double_jump": {
+        "name": "Double Jump"
+      },
+      "hastey_babies": {
+        "name": "Hastey Babies"
+      },
+      "no_extra_stones": {
+        "name": "No Extra Stones"
+      },
+      "safe_miner": {
+        "name": "Safe Miner"
+      },
+      "final_heal": {
+        "name": "Final Heal"
+      },
+      "beta_zombies": {
+        "name": "Beta Zombies"
+      }
     },
     "random_events": {
       "exposed": {

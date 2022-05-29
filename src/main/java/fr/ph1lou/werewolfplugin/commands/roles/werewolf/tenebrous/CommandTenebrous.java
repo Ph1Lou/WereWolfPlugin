@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.commands.roles.werewolf.tenebrous;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
@@ -21,7 +22,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RoleCommand(key = "werewolf.role.tenebrous_werewolf.command",
+@RoleCommand(key = "werewolf.roles.tenebrous_werewolf.command",
         roleKeys = RoleBase.TENEBROUS_WEREWOLF,
         requiredPower = true,
         argNumbers = 0)
@@ -31,13 +32,13 @@ public class CommandTenebrous implements ICommandRole {
     public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] strings) {
 
         if (game.isDay(Day.DAY)) {
-            playerWW.sendMessageWithKey(Prefix.RED,"werewolf.role.tenebrous_werewolf.not_night");
+            playerWW.sendMessageWithKey(Prefix.RED,"werewolf.roles.tenebrous_werewolf.not_night");
             return;
         }
 
         Location location = playerWW.getLocation();
 
-        int range = game.getConfig().getValue(TenebrousWerewolf.DISTANCE);
+        int range = game.getConfig().getValue(IntValueBase.TENEBROUS_WEREWOLF_DISTANCE);
 
         List<IPlayerWW> affectedPlayers = game.getPlayersWW().stream()
                 .filter(player1 -> player1.isState(StatePlayer.ALIVE))
@@ -62,7 +63,7 @@ public class CommandTenebrous implements ICommandRole {
             role.addAffectedPlayer(p);
             p.addPotionModifier(PotionModifier.add(PotionEffectType.BLINDNESS, game.getConfig()
                     .getTimerValue(TimerBase.WEREWOLF_TENEBROUS_DURATION) * 20, 1, playerWW.getRole().getKey()));
-            p.sendMessageWithKey(Prefix.RED ,"werewolf.role.tenebrous_werewolf.darkness");
+            p.sendMessageWithKey(Prefix.RED ,"werewolf.roles.tenebrous_werewolf.darkness");
         }
 
         List<IPlayerWW> werewolves =  game.getPlayersWW().stream()
@@ -72,7 +73,7 @@ public class CommandTenebrous implements ICommandRole {
         playerWW.getRole().addAuraModifier(new AuraModifier(playerWW.getRole().getKey(), Aura.DARK,1,false));
 
         for (IPlayerWW ww :  werewolves) {
-            ww.sendMessageWithKey(Prefix.YELLOW, "werewolf.role.tenebrous_werewolf.darkness_wolves");
+            ww.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.tenebrous_werewolf.darkness_wolves");
         }
 
     }

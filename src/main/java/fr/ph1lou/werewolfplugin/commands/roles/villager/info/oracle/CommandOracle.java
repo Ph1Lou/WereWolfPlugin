@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-@RoleCommand(key = "werewolf.role.oracle.command",
+@RoleCommand(key = "werewolf.roles.oracle.command",
         roleKeys = RoleBase.ORACLE,
         requiredPower = true,
         argNumbers = 1)
@@ -57,7 +57,7 @@ public class CommandOracle implements ICommandRole {
 
         ((IAffectedPlayers) oracle).addAffectedPlayer(playerWW1);
 
-        playerWW.sendMessageWithKey(Prefix.RED , "werewolf.role.oracle.message",
+        playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.oracle.message",
                 Formatter.player(playerWW1.getName()),
                 Formatter.format("&aura&",aura.getChatColor() + game.translate(aura.getKey())));
     }

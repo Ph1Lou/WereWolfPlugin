@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
 
-@RoleCommand(key = "werewolf.role.charmer.command",
+@RoleCommand(key = "werewolf.roles.charmer.command",
         roleKeys = RoleBase.CHARMER,
         requiredPower = true,
         argNumbers = 1)
@@ -65,7 +65,7 @@ public class CommandCharmer implements ICommandRole {
         ((IAffectedPlayers) charmer).clearAffectedPlayer();
         ((IAffectedPlayers) charmer).addAffectedPlayer(playerWW1);
 
-        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.charmer.perform",
+        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.charmer.perform",
                 Formatter.player(playerArg.getName()));
 
         game.getLoversManager().addLover(new FakeLoverCharmer(game,new ArrayList<>(Arrays.asList(playerWW,playerWW1)),playerWW));

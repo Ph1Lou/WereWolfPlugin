@@ -132,11 +132,11 @@ public class DevotedServant extends RoleVillage implements IPower, IAffectedPlay
 
         TextComponent resurrectionMessage = new TextComponent(
                 game.translate(
-                        Prefix.YELLOW , "werewolf.role.devoted_servant.click"));
+                        Prefix.YELLOW , "werewolf.roles.devoted_servant.click"));
         resurrectionMessage.setClickEvent(
                 new ClickEvent(ClickEvent.Action.RUN_COMMAND,
                         String.format("/ww %s %s",
-                                game.translate("werewolf.role.devoted_servant.command"),
+                                game.translate("werewolf.roles.devoted_servant.command"),
                                 event.getPlayerWW().getUUID())));
         getPlayerWW().sendMessage(resurrectionMessage);
 
@@ -153,7 +153,7 @@ public class DevotedServant extends RoleVillage implements IPower, IAffectedPlay
 
             if(!this.playerWW.isState(StatePlayer.DEATH)){
                 this.playerWW = null;
-                this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,"werewolf.role.devoted_servant.resurrection",
+                this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,"werewolf.roles.devoted_servant.resurrection",
                         Formatter.player(event.getPlayerWW().getName()));
                 return;
             }
@@ -190,7 +190,7 @@ public class DevotedServant extends RoleVillage implements IPower, IAffectedPlay
             roleClone.recoverPotionEffects();
 
             this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE,
-                    "werewolf.role.devoted_servant.steal",
+                    "werewolf.roles.devoted_servant.steal",
                     Formatter.player(event.getPlayerWW().getName()));
         },15*20);
     }
@@ -198,7 +198,7 @@ public class DevotedServant extends RoleVillage implements IPower, IAffectedPlay
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.devoted_servant.description"))
+                .setDescription(game.translate("werewolf.roles.devoted_servant.description"))
                 .build();
     }
 

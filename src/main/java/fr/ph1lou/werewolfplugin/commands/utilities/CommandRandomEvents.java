@@ -12,8 +12,8 @@ import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Register;
 import org.bukkit.entity.Player;
 
-@PlayerCommand(key = "werewolf.menu.random_events.command",
-        descriptionKey = "werewolf.menu.random_events.description",
+@PlayerCommand(key = "werewolf.commands.player.random_events.command",
+        descriptionKey = "werewolf.commands.player.random_events.description",
         argNumbers = 0)
 public class CommandRandomEvents implements ICommand {
 
@@ -22,17 +22,17 @@ public class CommandRandomEvents implements ICommand {
 
         if (game.getConfig().isConfigActive(ConfigBase.HIDE_EVENTS)) {
 
-            player.sendMessage(game.translate(Prefix.RED , "werewolf.menu.random_events.disable"));
+            player.sendMessage(game.translate(Prefix.RED , "werewolf.commands.player.random_events.disable"));
 
             return;
         }
 
-        StringBuilder sb = new StringBuilder(game.translate(Prefix.GREEN , "werewolf.menu.random_events.list"));
+        StringBuilder sb = new StringBuilder(game.translate(Prefix.GREEN , "werewolf.commands.player.random_events.list"));
 
         for (Wrapper<ListenerManager, Event> randomEventRegister : Register.get().getRandomEventsRegister()) {
 
             if (game.getConfig().getProbability(randomEventRegister.getMetaDatas().key()) > 0) {
-                sb.append(game.translate("werewolf.menu.random_events.command_message",
+                sb.append(game.translate("werewolf.commands.player.random_events.command_message",
                         Formatter.format("&event&",game.translate(randomEventRegister.getMetaDatas().key())),
                                 Formatter.number(game.getConfig().getProbability(randomEventRegister.getMetaDatas().key()))))
                         .append(", ");

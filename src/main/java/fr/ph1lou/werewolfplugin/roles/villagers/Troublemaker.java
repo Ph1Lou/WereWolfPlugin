@@ -21,7 +21,6 @@ import fr.ph1lou.werewolfapi.events.werewolf.WereWolfCanSpeakInChatEvent;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
-import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfplugin.configs.WerewolfChat;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -53,7 +52,7 @@ public class Troublemaker extends RoleVillage implements IAffectedPlayers, IPowe
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         Bukkit.getPluginManager().callEvent(new TroubleMakerDeathEvent(getPlayerWW()));
-        Bukkit.broadcastMessage(game.translate(Prefix.YELLOW , "werewolf.role.troublemaker.troublemaker_death"));
+        Bukkit.broadcastMessage(game.translate(Prefix.YELLOW , "werewolf.roles.troublemaker.troublemaker_death"));
 
         AtomicInteger i = new AtomicInteger();
 
@@ -99,8 +98,8 @@ public class Troublemaker extends RoleVillage implements IAffectedPlayers, IPowe
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.troublemaker.description"))
-                .setPower(game.translate("werewolf.role.troublemaker.chat"))
+                .setDescription(game.translate("werewolf.roles.troublemaker.description"))
+                .setPower(game.translate("werewolf.roles.troublemaker.chat"))
                 .build();
     }
 
@@ -122,9 +121,8 @@ public class Troublemaker extends RoleVillage implements IAffectedPlayers, IPowe
 
         if (!game.getConfig().isConfigActive(ConfigBase.WEREWOLF_CHAT)) return;
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.commands.ww_chat.announce",
-                Formatter.timer(Utils.conversion(game.getConfig()
-                        .getTimerValue(TimerBase.WEREWOLF_CHAT_DURATION))),
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.commands.player.ww_chat.announce",
+                Formatter.timer(game, TimerBase.WEREWOLF_CHAT_DURATION),
                 Formatter.number(game.getConfig().getValue(WerewolfChat.CONFIG)));
 
     }

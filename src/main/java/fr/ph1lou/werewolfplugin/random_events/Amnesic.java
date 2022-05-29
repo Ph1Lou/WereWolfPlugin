@@ -20,7 +20,6 @@ import fr.ph1lou.werewolfapi.events.random_events.AmnesicEvent;
 import fr.ph1lou.werewolfapi.events.random_events.AmnesicTransformEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
-import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -121,7 +120,7 @@ public class Amnesic extends ListenerManager {
 
         this.temp.getRole().setInfected();
         this.temp.sendMessageWithKey("werewolf.random_events.amnesic.message",
-                Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TIMER))));
+                Formatter.timer(game, TIMER));
 
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent((Player) event.getEntity()));
 
@@ -163,12 +162,12 @@ public class Amnesic extends ListenerManager {
 
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(player));
 
-        playerWW.sendMessageWithKey(Prefix.ORANGE , "werewolf.role.werewolf.new_werewolf");
+        playerWW.sendMessageWithKey(Prefix.ORANGE , "werewolf.roles.werewolf.new_werewolf");
         Sound.WOLF_HOWL.play(playerWW);
 
         this.temp.sendMessageWithKey(Prefix.GREEN , "werewolf.random_events.amnesic.new",
                 Formatter.player(playerWW.getName()),
-                Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TIMER))));
+                Formatter.timer(game, TIMER));
 
         BukkitUtils.scheduleSyncDelayedTask(this::revealWereWolf, 20L * game.getConfig().getTimerValue(TIMER));
 

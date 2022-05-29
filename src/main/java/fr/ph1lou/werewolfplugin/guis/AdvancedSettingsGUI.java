@@ -20,16 +20,16 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class AdvancedConfig implements InventoryProvider {
+public class AdvancedSettingsGUI implements InventoryProvider {
 
 
     public static final SmartInventory INVENTORY = SmartInventory.builder()
             .id("advancedConfig")
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
-            .provider(new AdvancedConfig())
+            .provider(new AdvancedSettingsGUI())
             .size(1, 9)
             .title(JavaPlugin.getPlugin(Main.class)
-                    .getWereWolfAPI().translate("werewolf.menu.advanced_tool.name"))
+                    .getWereWolfAPI().translate("werewolf.menus.advanced_tool.name"))
             .closeable(true)
             .build();
 
@@ -41,8 +41,8 @@ public class AdvancedConfig implements InventoryProvider {
 
         contents.set(0, 0, ClickableItem.of((new ItemBuilder(
                 UniversalMaterial.COMPASS.getType())
-                .setDisplayName(game.translate("werewolf.menu.return"))
-                .build()), e -> Config.INVENTORY.open(player)));
+                .setDisplayName(game.translate("werewolf.menus.return"))
+                .build()), e -> MainGUI.INVENTORY.open(player)));
     }
 
     @Override
@@ -52,12 +52,12 @@ public class AdvancedConfig implements InventoryProvider {
         WereWolfAPI game = main.getWereWolfAPI();
         IConfiguration config = game.getConfig();
 
-        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
-                game.translate("werewolf.menu.right"));
+        List<String> lore = Arrays.asList(game.translate("werewolf.menus.lore.left"),
+                game.translate("werewolf.menus.lore.right"));
 
         contents.set(0, 2, ClickableItem.of((
                 new ItemBuilder(Material.POTION)
-                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.strength",
+                        .setDisplayName(game.translate("werewolf.menus.advanced_tool.strength",
                                 Formatter.number(config.getStrengthRate())))
                         .setLore(lore).build()), e -> {
             if (e.isLeftClick()) {
@@ -69,13 +69,13 @@ public class AdvancedConfig implements InventoryProvider {
 
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setLore(lore)
-                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.strength",
+                    .setDisplayName(game.translate("werewolf.menus.advanced_tool.strength",
                             Formatter.number(config.getStrengthRate())))
                     .build());
 
         }));
         contents.set(0, 4, ClickableItem.of((new ItemBuilder(Material.POTION)
-                .setDisplayName(game.translate("werewolf.menu.advanced_tool.resistance",
+                .setDisplayName(game.translate("werewolf.menus.advanced_tool.resistance",
                         Formatter.number(config.getResistanceRate())))
                 .setLore(lore).build()), e -> {
             if (e.isLeftClick()) {
@@ -86,7 +86,7 @@ public class AdvancedConfig implements InventoryProvider {
 
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setLore(lore)
-                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.resistance",
+                    .setDisplayName(game.translate("werewolf.menus.advanced_tool.resistance",
                             Formatter.number(config.getResistanceRate())))
                     .build());
 
@@ -95,18 +95,18 @@ public class AdvancedConfig implements InventoryProvider {
 
         contents.set(0, 6, ClickableItem.of((
                 new ItemBuilder(Material.BREAD)
-                        .setDisplayName(game.translate("werewolf.menu.troll.name"))
-                        .setLore(game.translate("werewolf.menu.troll.current",Formatter.role(game.translate(config.getTrollKey()))))
-                        .build()), e -> TrollChoice.getInventory(player, Category.WEREWOLF).open(player)));
+                        .setDisplayName(game.translate("werewolf.menus.troll.name"))
+                        .setLore(game.translate("werewolf.menus.troll.current",Formatter.role(game.translate(config.getTrollKey()))))
+                        .build()), e -> TrollChoiceGUI.getInventory(player, Category.WEREWOLF).open(player)));
 
         contents.set(0, 8, ClickableItem.of((
                 new ItemBuilder(Material.GOLD_NUGGET)
-                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.particles"))
+                        .setDisplayName(game.translate("werewolf.menus.advanced_tool.particles"))
                         .setLore(Collections.singletonList(
                                 Arrays.asList(
-                                                game.translate("werewolf.menu.advanced_tool.particles_off"),
-                                                game.translate("werewolf.menu.advanced_tool.exception"),
-                                                game.translate("werewolf.menu.advanced_tool.particles_on"))
+                                                game.translate("werewolf.menus.advanced_tool.particles_off"),
+                                                game.translate("werewolf.menus.advanced_tool.exception"),
+                                                game.translate("werewolf.menus.advanced_tool.particles_on"))
                                         .get(config.getGoldenAppleParticles()))).build()), e -> {
 
             if (e.isLeftClick()) {
@@ -117,12 +117,12 @@ public class AdvancedConfig implements InventoryProvider {
 
 
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.particles"))
+                    .setDisplayName(game.translate("werewolf.menus.advanced_tool.particles"))
                     .setLore(Collections.singletonList(
                             Arrays.asList(
-                                            game.translate("werewolf.menu.advanced_tool.particles_off"),
-                                            game.translate("werewolf.menu.advanced_tool.exception"),
-                                            game.translate("werewolf.menu.advanced_tool.particles_on"))
+                                            game.translate("werewolf.menus.advanced_tool.particles_off"),
+                                            game.translate("werewolf.menus.advanced_tool.exception"),
+                                            game.translate("werewolf.menus.advanced_tool.particles_on"))
                                     .get(config.getGoldenAppleParticles())))
                     .build());
 

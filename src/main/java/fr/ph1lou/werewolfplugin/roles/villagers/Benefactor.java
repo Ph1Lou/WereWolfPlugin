@@ -28,10 +28,10 @@ public class Benefactor extends RoleVillage implements IAffectedPlayers {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(this.game, this)
-                .setDescription(this.game.translate("werewolf.role.benefactor.description"))
-                .setItems(this.game.translate("werewolf.role.benefactor.items"))
-                .setCommand(this.game.translate("werewolf.role.benefactor.command_description"))
-                .setEffects(game.translate("werewolf.role.benefactor.effect"))
+                .setDescription(this.game.translate("werewolf.roles.benefactor.description"))
+                .setItems(this.game.translate("werewolf.roles.benefactor.items"))
+                .setCommand(this.game.translate("werewolf.roles.benefactor.command_description"))
+                .setEffects(game.translate("werewolf.roles.benefactor.effect"))
                 .build();
     }
 

@@ -17,7 +17,6 @@ import fr.ph1lou.werewolfapi.events.game.life_cycle.ThirdDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.guard.GuardResurrectionEvent;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.impl.RoleWithLimitedSelectionDuration;
-import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -78,9 +77,9 @@ public class Guard extends RoleWithLimitedSelectionDuration implements IAffected
 
         this.game.resurrection(this.last);
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.role.guard.resurrection");
+        this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.roles.guard.resurrection");
 
-        this.last.sendMessageWithKey(Prefix.GREEN , "werewolf.role.guard.protect");
+        this.last.sendMessageWithKey(Prefix.GREEN , "werewolf.roles.guard.protect");
 
         event.setCancelled(true);
 
@@ -120,17 +119,16 @@ public class Guard extends RoleWithLimitedSelectionDuration implements IAffected
         this.setPower(true);
 
         this.getPlayerWW().sendMessageWithKey(
-                Prefix.YELLOW , "werewolf.role.guard.message",
-                Formatter.timer(Utils.conversion(
-                        this.game.getConfig().getTimerValue(TimerBase.POWER_DURATION))));
+                Prefix.YELLOW , "werewolf.roles.guard.message",
+                Formatter.timer(game, TimerBase.POWER_DURATION));
     }
 
     @Override
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(this.game, this)
-                .setDescription(this.game.translate("werewolf.role.guard.description"))
-                .setItems(this.game.translate("werewolf.role.guard.items"))
+                .setDescription(this.game.translate("werewolf.roles.guard.description"))
+                .setItems(this.game.translate("werewolf.roles.guard.items"))
                 .build();
     }
 

@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-@RoleCommand(key = "werewolf.role.thug.command",
+@RoleCommand(key = "werewolf.roles.thug.command",
         roleKeys = RoleBase.THUG,
         argNumbers = 1,
         requiredPower = true)
@@ -63,9 +63,9 @@ public class CommandThug implements ICommandRole {
         ((IAffectedPlayers) thug).clearAffectedPlayer();
         ((IAffectedPlayers) thug).addAffectedPlayer(playerWW1);
 
-        playerWW.sendMessageWithKey(Prefix.YELLOW,"werewolf.role.thug.perform",Formatter.player(playerWW1.getName()));
+        playerWW.sendMessageWithKey(Prefix.YELLOW,"werewolf.roles.thug.perform",Formatter.player(playerWW1.getName()));
 
-        playerWW1.sendMessageWithKey(Prefix.RED,"werewolf.role.thug.alert");
+        playerWW1.sendMessageWithKey(Prefix.RED,"werewolf.roles.thug.alert");
 
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(playerWW1));
     }

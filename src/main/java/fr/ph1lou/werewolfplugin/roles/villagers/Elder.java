@@ -49,9 +49,9 @@ public class Elder extends RoleVillage implements IPower {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.elder.description"))
-                .setPower(game.translate(power ? "werewolf.role.elder.available" : "werewolf.role.elder.not_available"))
-                .setEffects(game.translate("werewolf.role.elder.effect"))
+                .setDescription(game.translate("werewolf.roles.elder.description"))
+                .setPower(game.translate(power ? "werewolf.roles.elder.available" : "werewolf.roles.elder.not_available"))
+                .setEffects(game.translate("werewolf.roles.elder.effect"))
                 .build();
     }
 
@@ -108,7 +108,7 @@ public class Elder extends RoleVillage implements IPower {
                 killerWW.ifPresent(playerWW -> {
                     playerWW.removePlayerHealth(10);
                     playerWW.getRole().disableAbilities();
-                    playerWW.sendMessageWithKey(Prefix.RED,"werewolf.role.elder.info_villager");
+                    playerWW.sendMessageWithKey(Prefix.RED,"werewolf.roles.elder.info_villager");
                 });
             }
             else{

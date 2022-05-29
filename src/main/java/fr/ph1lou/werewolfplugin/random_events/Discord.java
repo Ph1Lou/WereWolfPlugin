@@ -91,7 +91,7 @@ public class Discord extends ListenerManager {
                     if (discordEvent.isCancelled()) return;
 
                     werewolf.getRole().setSolitary(true);
-                    werewolf.sendMessageWithKey(Prefix.RED , "werewolf.lone_wolf.message");
+                    werewolf.sendMessageWithKey(Prefix.RED , "werewolf.configurations.lone_wolf.message");
 
                     if (werewolf.getMaxHealth() < 30) {
                         werewolf.addPlayerMaxHealth(Math.min(8, 30 - werewolf.getMaxHealth()));

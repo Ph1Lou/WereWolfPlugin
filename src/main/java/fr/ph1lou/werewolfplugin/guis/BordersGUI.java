@@ -17,17 +17,17 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.text.DecimalFormat;
 
-public class Borders implements InventoryProvider {
+public class BordersGUI implements InventoryProvider {
 
 
     public static final SmartInventory INVENTORY = SmartInventory.builder()
             .id("borders")
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
-            .provider(new Borders())
+            .provider(new BordersGUI())
             .size(3, 9)
             .title(JavaPlugin.getPlugin(Main.class)
                     .getWereWolfAPI()
-                    .translate("werewolf.menu.border.name"))
+                    .translate("werewolf.menus.border.name"))
             .closeable(true)
             .build();
 
@@ -39,8 +39,8 @@ public class Borders implements InventoryProvider {
 
         contents.set(0, 0, ClickableItem.of(
                 (new ItemBuilder(UniversalMaterial.COMPASS.getType())
-                        .setDisplayName(game.translate("werewolf.menu.return"))
-                        .build()), e -> Config.INVENTORY.open(player)));
+                        .setDisplayName(game.translate("werewolf.menus.return"))
+                        .build()), e -> MainGUI.INVENTORY.open(player)));
     }
 
     @Override
@@ -67,7 +67,7 @@ public class Borders implements InventoryProvider {
                     }
                 }));
         contents.set(0, 4, ClickableItem.empty((new ItemBuilder(Material.GLASS)
-                .setDisplayName(game.translate("werewolf.menu.border.radius_border_max",
+                .setDisplayName(game.translate("werewolf.menus.border.radius_border_max",
                         Formatter.format("&size&",config.getBorderMax()))).build())));
         contents.set(0, 5, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON)
                 .setDisplayName(game.translate("werewolf.utils.display",
@@ -99,7 +99,7 @@ public class Borders implements InventoryProvider {
 
 
         contents.set(1, 4, ClickableItem.empty((new ItemBuilder(Material.GLASS)
-                .setDisplayName(game.translate("werewolf.menu.border.radius_border_min",
+                .setDisplayName(game.translate("werewolf.menus.border.radius_border_min",
                         Formatter.format("&size&",config.getBorderMin()))).build())));
         contents.set(1, 5, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON)
                 .setDisplayName(game.translate("werewolf.utils.display",
@@ -133,7 +133,7 @@ public class Borders implements InventoryProvider {
             }
         }));
         contents.set(2, 4, ClickableItem.empty((new ItemBuilder(Material.GLASS)
-                .setDisplayName(game.translate("werewolf.menu.border.speed",
+                .setDisplayName(game.translate("werewolf.menus.border.speed",
                         Formatter.format("&speed&",borderSpeed))).build())));
         contents.set(2, 5, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON)
                 .setDisplayName(game.translate("werewolf.utils.display",

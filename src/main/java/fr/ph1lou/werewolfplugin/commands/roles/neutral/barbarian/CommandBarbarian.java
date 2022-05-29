@@ -16,7 +16,7 @@ import org.bukkit.Bukkit;
 
 import java.util.UUID;
 
-@RoleCommand(key = "werewolf.role.barbarian.command",
+@RoleCommand(key = "werewolf.roles.barbarian.command",
         roleKeys = RoleBase.BARBARIAN,
         autoCompletion = false,
         requiredPower = true,
@@ -58,7 +58,7 @@ public class CommandBarbarian implements ICommandRole {
         ((IAffectedPlayers) barbarian).addAffectedPlayer(playerWW1);
 
         playerWW.sendMessageWithKey(Prefix.YELLOW ,
-                "werewolf.role.barbarian.perform",
+                "werewolf.roles.barbarian.perform",
                 Formatter.player(playerWW1.getName()));
     }
 }

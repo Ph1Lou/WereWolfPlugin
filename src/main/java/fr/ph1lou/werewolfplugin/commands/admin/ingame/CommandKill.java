@@ -13,8 +13,8 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-@AdminCommand(key = "werewolf.commands.kill.command",
-        descriptionKey = "werewolf.commands.kill.description",
+@AdminCommand(key = "werewolf.commands.admin.kill.command",
+        descriptionKey = "werewolf.commands.admin.kill.description",
         argNumbers = 1,
         statesGame = {StateGame.START, StateGame.GAME })
 public class CommandKill implements ICommand {
@@ -41,16 +41,16 @@ public class CommandKill implements ICommand {
         }
 
         if (!playerWW1.isState(StatePlayer.ALIVE)) {
-            player.sendMessage(game.translate(Prefix.RED , "werewolf.commands.kill.not_living"));
+            player.sendMessage(game.translate(Prefix.RED , "werewolf.commands.admin.kill.not_living"));
             return;
         }
         if (game.isState(StateGame.START)) {
             ((GameManager) game).remove(argUUID);
-            player.sendMessage(game.translate(Prefix.ORANGE , "werewolf.commands.kill.remove_role"));
+            player.sendMessage(game.translate(Prefix.ORANGE , "werewolf.commands.admin.kill.remove_role"));
             return;
         }
         if (Bukkit.getPlayer(args[0]) != null) {
-            player.sendMessage(game.translate(Prefix.RED , "werewolf.commands.kill.on_line"));
+            player.sendMessage(game.translate(Prefix.RED , "werewolf.commands.admin.kill.on_line"));
             return;
         }
 

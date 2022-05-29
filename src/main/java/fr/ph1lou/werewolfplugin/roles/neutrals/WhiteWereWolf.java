@@ -32,8 +32,8 @@ public class WhiteWereWolf extends RoleNeutral {
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.white_werewolf.description"))
-                .setPower(game.translate("werewolf.role.white_werewolf.heart"))
+                .setDescription(game.translate("werewolf.roles.white_werewolf.description"))
+                .setPower(game.translate("werewolf.roles.white_werewolf.heart"))
                 .build();
     }
 

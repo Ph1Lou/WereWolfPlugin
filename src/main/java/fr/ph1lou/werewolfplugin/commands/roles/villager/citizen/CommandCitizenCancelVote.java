@@ -13,7 +13,7 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfplugin.roles.villagers.Citizen;
 import org.bukkit.Bukkit;
 
-@RoleCommand(key = "werewolf.role.citizen.command_2",
+@RoleCommand(key = "werewolf.roles.citizen.command_2",
         roleKeys = RoleBase.CITIZEN,
         requiredPower = true,
         argNumbers = 0,
@@ -52,12 +52,12 @@ public class CommandCitizenCancelVote implements ICommandRole {
 
         game.getVoteManager().resetVote();
         Bukkit.broadcastMessage(game.translate(
-                Prefix.GREEN , "werewolf.role.citizen.cancelling_broadcast"));
+                Prefix.GREEN , "werewolf.roles.citizen.cancelling_broadcast"));
 
         if (voteWW == null) return;
 
         playerWW.sendMessageWithKey(
-                Prefix.YELLOW , "werewolf.role.citizen.cancelling_vote_perform",
+                Prefix.YELLOW , "werewolf.roles.citizen.cancelling_vote_perform",
                 Formatter.player(voteWW.getName()));
         citizen.addAffectedPlayer(voteWW);
 

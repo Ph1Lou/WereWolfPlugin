@@ -75,15 +75,15 @@ public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.witch.description"))
-                .setPower(game.translate(power ? "werewolf.role.witch.power_available" : "werewolf.role.witch.power_not_available"))
-                .setItems(game.translate("werewolf.role.witch.items"))
+                .setDescription(game.translate("werewolf.roles.witch.description"))
+                .setPower(game.translate(power ? "werewolf.roles.witch.power_available" : "werewolf.roles.witch.power_not_available"))
+                .setItems(game.translate("werewolf.roles.witch.items"))
                 .addExtraLines(game.translate("werewolf.description.power",
                                 Formatter.format("&on&",game.translate(game.getConfig().isConfigActive(ConfigBase.WITCH_AUTO_RESURRECTION)
                                 ?
-                                "werewolf.role.witch.himself"
+                                "werewolf.roles.witch.himself"
                                 :
-                                "werewolf.role.witch.not_himself"))))
+                                "werewolf.roles.witch.not_himself"))))
                 .build();
     }
 
@@ -120,12 +120,12 @@ public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
         TextComponent textComponent =
                 new TextComponent(
                         game.translate(
-                                Prefix.YELLOW , "werewolf.role.witch.resuscitation_message",
+                                Prefix.YELLOW , "werewolf.roles.witch.resuscitation_message",
                                 Formatter.player(playerWW.getName())));
         textComponent.setClickEvent(new ClickEvent(
                 ClickEvent.Action.RUN_COMMAND,
                 String.format("/ww %s %s",
-                        game.translate("werewolf.role.witch.command"),
+                        game.translate("werewolf.roles.witch.command"),
                         playerWW.getUUID())));
         this.getPlayerWW().sendMessage(textComponent);
     }

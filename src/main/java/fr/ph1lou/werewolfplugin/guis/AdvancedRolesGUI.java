@@ -14,6 +14,7 @@ import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import fr.ph1lou.werewolfplugin.Main;
+import fr.ph1lou.werewolfplugin.utils.InventoryUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -27,15 +28,17 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class AdvancedRoleMenu implements InventoryProvider {
+public class AdvancedRolesGUI implements InventoryProvider {
 
     private final Role register;
+    private final int page;
 
-    public AdvancedRoleMenu(Role register) {
+    public AdvancedRolesGUI(Role register, int page) {
         this.register = register;
+        this.page = page;
     }
 
-    public static SmartInventory getInventory(Role register) {
+    public static SmartInventory getInventory(Role register, int page) {
 
         GetWereWolfAPI api = JavaPlugin.getPlugin(Main.class);
 
@@ -43,12 +46,12 @@ public class AdvancedRoleMenu implements InventoryProvider {
         return SmartInventory.builder()
                 .id("advanced" + register.key())
                 .manager(api.getInvManager())
-                .provider(new AdvancedRoleMenu(register))
-                .size(Math.min(54, (Math.max(0, ((register.configurations().length
-                +register.timers().length +
-                        register.configValues().length)
-                        * 2 - 6)) / 9 + 1) * 9) / 9, 9)
-                .title(game.translate("werewolf.menu.advanced_tool_role.menu",
+                .provider(new AdvancedRolesGUI(register, page))
+                .size(InventoryUtils.getRowNumbers(
+                                (register.configurations().length
+                        +register.timers().length +
+                        register.configValues().length + 1)*2, true), 9)
+                .title(game.translate("werewolf.menus.advanced_tool_role.menu",
                                 Formatter.role(game.translate(register.key()))))
                 .closeable(true)
                 .build();
@@ -61,10 +64,10 @@ public class AdvancedRoleMenu implements InventoryProvider {
         WereWolfAPI game = main.getWereWolfAPI();
 
         contents.set(0, 0, ClickableItem.of(new ItemBuilder(UniversalMaterial.COMPASS.getType())
-                        .setDisplayName(game.translate("werewolf.menu.return")).build(),
-                e -> Roles.getInventory(player, register.category()).open(player)));
+                        .setDisplayName(game.translate("werewolf.menus.return")).build(),
+                e -> RolesGUI.getInventory(player, register.category()).open(player, page)));
 
-        contents.set(0, 2, ClickableItem.of(new ItemBuilder(UniversalMaterial.CHEST.getType()).setDisplayName(game.translate("werewolf.menu.advanced_tool_role.config",
+        contents.set(0, 2, ClickableItem.of(new ItemBuilder(UniversalMaterial.CHEST.getType()).setDisplayName(game.translate("werewolf.menus.advanced_tool_role.config",
                         Formatter.role(game.translate(register.key())))).build(),
                 event -> manageStuff(player)));
     }
@@ -88,7 +91,7 @@ public class AdvancedRoleMenu implements InventoryProvider {
             i.set(i.get() + 2);
         });
 
-        AdvancedConfigurationUtils.getConfigs(game, this.register.configurations()).forEach(clickableItem -> {
+        AdvancedConfigurationUtils.getConfigs(game, this.register.configurations(), () -> getInventory(this.register, this.page)).forEach(clickableItem -> {
             contents.set(i.get() / 9, i.get() % 9, clickableItem);
             i.set(i.get() + 2);
         });

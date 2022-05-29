@@ -79,7 +79,7 @@ public class CommandAdminRole implements ICommand {
         if (role instanceof Angel && role.isKey(RoleBase.ANGEL) &&
                 !((Angel) role).isChoice(AngelForm.ANGEL)) {
 
-            player.sendMessage(game.translate("werewolf.role.angel.choice_form",
+            player.sendMessage(game.translate("werewolf.roles.angel.choice_form",
                     Formatter.format("&form&",game.translate(((Angel) role).isChoice(AngelForm.FALLEN_ANGEL) ?
                             RoleBase.FALLEN_ANGEL :
                             RoleBase.GUARDIAN_ANGEL))));
@@ -139,7 +139,7 @@ public class CommandAdminRole implements ICommand {
                 }
             }
             if (sb.length() != 0) {
-                player.sendMessage(game.translate("werewolf.role.sister.sisters",
+                player.sendMessage(game.translate("werewolf.roles.sister.sisters",
                         Formatter.format("&list&",sb.toString())));
 
             }
@@ -154,7 +154,7 @@ public class CommandAdminRole implements ICommand {
                 }
             }
             if (sb.length() != 0) {
-                player.sendMessage(game.translate("werewolf.role.siamese_twin.siamese_twin",
+                player.sendMessage(game.translate("werewolf.roles.siamese_twin.siamese_twin",
                         Formatter.format("&list&",sb.toString())));
 
             }

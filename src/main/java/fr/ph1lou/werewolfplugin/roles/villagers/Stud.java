@@ -42,7 +42,7 @@ public class Stud extends RoleVillage implements IPower {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.stud.description"))
+                .setDescription(game.translate("werewolf.roles.stud.description"))
                 .build();
     }
 

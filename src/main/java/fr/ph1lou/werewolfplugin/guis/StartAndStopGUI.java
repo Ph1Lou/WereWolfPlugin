@@ -13,18 +13,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class Start implements InventoryProvider {
+public class StartAndStopGUI implements InventoryProvider {
 
 
     public static final SmartInventory INVENTORY = SmartInventory.builder()
             .id("startGame")
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
-            .provider(new Start())
+            .provider(new StartAndStopGUI())
             .size(3, 9)
             .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI()
-                    .translate("werewolf.announcement.start.launch"))
+                    .translate("werewolf.menus.start_stop.launch"))
             .closeable(true)
-            .parent(Config.INVENTORY)
+            .parent(MainGUI.INVENTORY)
             .build();
 
     @Override
@@ -34,7 +34,7 @@ public class Start implements InventoryProvider {
 
         contents.fillBorders(ClickableItem.empty(new ItemStack(UniversalMaterial.ORANGE_STAINED_GLASS_PANE.getStack())));
 
-        contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType()).setDisplayName(game.translate("werewolf.menu.return")).build()), e -> Config.INVENTORY.open(player)));
+        contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType()).setDisplayName(game.translate("werewolf.menus.return")).build()), e -> MainGUI.INVENTORY.open(player)));
 
     }
 
@@ -47,7 +47,7 @@ public class Start implements InventoryProvider {
             contents.set(1, 4, ClickableItem.of((
                     new ItemBuilder(UniversalMaterial.LIME_WOOL
                             .getStack())
-                            .setDisplayName(game.translate("werewolf.announcement.start.launch"))
+                            .setDisplayName(game.translate("werewolf.menus.start_stop.launch"))
                             .build()), e -> player.performCommand(
                     String.format("a %s",
                             game.translate(
@@ -57,7 +57,7 @@ public class Start implements InventoryProvider {
             contents.set(1, 4, ClickableItem.of((
                     new ItemBuilder(UniversalMaterial.RED_WOOL
                             .getStack())
-                            .setDisplayName(game.translate("werewolf.commands.admin.stop.message"))
+                            .setDisplayName(game.translate("werewolf.menus.start_stop.stop"))
                             .build()), e -> player.performCommand(String.format("a %s", game.translate("werewolf.commands.admin.stop.command")))));
         }
     }

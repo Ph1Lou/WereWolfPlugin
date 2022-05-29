@@ -11,8 +11,8 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.UUID;
 
-@PlayerCommand(key = "werewolf.menu.rank.command",
-        descriptionKey = "werewolf.menu.rank.description",
+@PlayerCommand(key = "werewolf.commands.player.rank.command",
+        descriptionKey = "werewolf.commands.player.rank.description",
         statesGame = StateGame.LOBBY,
         argNumbers = 0)
 public class CommandRank implements ICommand {
@@ -30,10 +30,10 @@ public class CommandRank implements ICommand {
         }
 
         if (queue.contains(uuid)) {
-            player.sendMessage(game.translate(Prefix.GREEN , "werewolf.menu.rank.perform",
+            player.sendMessage(game.translate(Prefix.GREEN , "werewolf.commands.player.rank.perform",
                     Formatter.number(queue.indexOf(uuid) + 1)));
         } else {
-            player.sendMessage(game.translate(Prefix.RED , "werewolf.menu.rank.not_in_queue"));
+            player.sendMessage(game.translate(Prefix.RED , "werewolf.commands.player.rank.not_in_queue"));
         }
     }
 }

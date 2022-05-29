@@ -79,14 +79,14 @@ public class Trapper extends RoleVillage implements IAffectedPlayers, IPower {
         setPower(true);
 
         this.getPlayerWW().sendMessageWithKey(
-                Prefix.YELLOW , "werewolf.role.trapper.tracking_message");
+                Prefix.YELLOW , "werewolf.roles.trapper.tracking_message");
     }
 
 
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.trapper.description"))
+                .setDescription(game.translate("werewolf.roles.trapper.description"))
                 .build();
     }
 

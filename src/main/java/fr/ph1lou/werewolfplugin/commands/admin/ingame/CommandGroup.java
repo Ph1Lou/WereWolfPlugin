@@ -11,7 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 @AdminCommand(key = "werewolf.commands.admin.group.command",
-        descriptionKey = "werewolf.commands.admin.group.description1",
+        descriptionKey = "werewolf.commands.admin.group.description",
         moderatorAccess = true,
         argNumbers = 0,
         statesGame = StateGame.GAME)

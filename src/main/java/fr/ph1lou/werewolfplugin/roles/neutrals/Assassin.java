@@ -103,9 +103,9 @@ public class Assassin extends RoleNeutral {
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setEquipments(game.translate("werewolf.role.assassin.limit"))
-                .setItems(game.translate("werewolf.role.assassin.items"))
-                .setEffects(game.translate("werewolf.role.assassin.effect"))
+                .setEquipments(game.translate("werewolf.roles.assassin.limit"))
+                .setItems(game.translate("werewolf.roles.assassin.items"))
+                .setEffects(game.translate("werewolf.roles.assassin.effect"))
                 .build();
     }
 

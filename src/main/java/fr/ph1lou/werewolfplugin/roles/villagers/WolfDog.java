@@ -25,7 +25,6 @@ import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.role.interfaces.ITransformed;
 import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
-import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -47,12 +46,12 @@ public class WolfDog extends RoleVillage implements ITransformed, IPower {
 
         return new DescriptionBuilder(game, this)
                 .setDescription(power ?
-                        game.translate("werewolf.role.wolf_dog.description")
-                                + '\n' + game.translate("werewolf.role.wolf_dog.description_2")
+                        game.translate("werewolf.roles.wolf_dog.description")
+                                + '\n' + game.translate("werewolf.roles.wolf_dog.description_2")
                         :
-                        game.translate(this.transformed ? "werewolf.role.wolf_dog.description_2"
+                        game.translate(this.transformed ? "werewolf.roles.wolf_dog.description_2"
                                 :
-                                "werewolf.role.wolf_dog.description"))
+                                "werewolf.roles.wolf_dog.description"))
                 .build();
 
     }
@@ -64,8 +63,8 @@ public class WolfDog extends RoleVillage implements ITransformed, IPower {
         int timer = game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST);
 
         if (timer > 0) {
-            this.getPlayerWW().sendMessageWithKey(Prefix.GREEN , "werewolf.role.wolf_dog.transform",
-                    Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST))));
+            this.getPlayerWW().sendMessageWithKey(Prefix.GREEN , "werewolf.roles.wolf_dog.transform",
+                    Formatter.timer(game, TimerBase.WEREWOLF_LIST));
         }
     }
 
@@ -83,7 +82,7 @@ public class WolfDog extends RoleVillage implements ITransformed, IPower {
     public void onWereWolfList(WereWolfListEvent event) {
 
         if (this.power) {
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.role.wolf_dog.time_over");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.roles.wolf_dog.time_over");
         }
         this.power = false;
     }

@@ -34,7 +34,7 @@ public class StoryTeller extends RoleVillage {
 
     private final Set<IPlayerWW> players = new HashSet<>();
 
-    public static final String DAY = "werewolf.role.story_teller.day";
+    public static final String DAY = "werewolf.roles.story_teller.day";
 
     public StoryTeller(WereWolfAPI game, IPlayerWW playerWW) {
         super(game, playerWW);
@@ -65,7 +65,7 @@ public class StoryTeller extends RoleVillage {
                         }
                         else{
                             this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,
-                                    "werewolf.role.story_teller.players",
+                                    "werewolf.roles.story_teller.players",
                                     Formatter.format("&players&", this.players.stream()
                                             .map(IPlayerWW::getName)
                                             .collect(Collectors.joining(", "))));
@@ -81,9 +81,9 @@ public class StoryTeller extends RoleVillage {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.story_teller.description",
+                .setDescription(game.translate("werewolf.roles.story_teller.description",
                         Formatter.number(game.getConfig().getValue(DAY))))
-                .setItems(game.translate("werewolf.role.story_teller.items"))
+                .setItems(game.translate("werewolf.roles.story_teller.items"))
                 .build();
     }
 

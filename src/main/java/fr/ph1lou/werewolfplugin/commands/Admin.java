@@ -55,7 +55,6 @@ public class Admin implements TabExecutor {
         return true;
     }
 
-
     private void execute(String commandName, Player player, String[] args) {
 
         Wrapper<ICommand, AdminCommand> commandRegister = null;

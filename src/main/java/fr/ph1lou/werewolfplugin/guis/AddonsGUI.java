@@ -20,16 +20,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AddonMenu implements InventoryProvider {
+public class AddonsGUI implements InventoryProvider {
 
 
     public static final SmartInventory INVENTORY = SmartInventory.builder()
             .id("addonMenu")
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
-            .provider(new AddonMenu())
+            .provider(new AddonsGUI())
             .size(4, 9)
             .title(JavaPlugin.getPlugin(Main.class)
-                    .getWereWolfAPI().translate("werewolf.menu.addon.name"))
+                    .getWereWolfAPI().translate("werewolf.menus.addon.name"))
             .closeable(true)
             .build();
 
@@ -56,8 +56,8 @@ public class AddonMenu implements InventoryProvider {
         }
         contents.set(0, 0, ClickableItem.of((new ItemBuilder(
                 UniversalMaterial.COMPASS.getType())
-                .setDisplayName(game.translate("werewolf.menu.return"))
-                .build()), e -> Config.INVENTORY.open(player)));
+                .setDisplayName(game.translate("werewolf.menus.return"))
+                .build()), e -> MainGUI.INVENTORY.open(player)));
     }
 
     @Override

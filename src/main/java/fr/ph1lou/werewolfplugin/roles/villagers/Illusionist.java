@@ -52,9 +52,9 @@ public class Illusionist extends RoleVillage implements IPower, IAffectedPlayers
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.illusionist.description"))
-                .setPower(game.translate("werewolf.role.illusionist.power"))
-                .setCommand(game.translate(this.hasPower() ?"werewolf.role.illusionist.activate":"werewolf.role.illusionist.already_activate"))
+                .setDescription(game.translate("werewolf.roles.illusionist.description"))
+                .setPower(game.translate("werewolf.roles.illusionist.power"))
+                .setCommand(game.translate(this.hasPower() ?"werewolf.roles.illusionist.activate":"werewolf.roles.illusionist.already_activate"))
                 .build();
     }
 
@@ -107,7 +107,7 @@ public class Illusionist extends RoleVillage implements IPower, IAffectedPlayers
                 .filter(playerWW1 -> playerWW1.getRole().isWereWolf())
                 .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                 .forEach(player1 -> {
-                    player1.sendMessageWithKey(Prefix.RED ,"werewolf.role.werewolf.new_werewolf");
+                    player1.sendMessageWithKey(Prefix.RED ,"werewolf.roles.werewolf.new_werewolf");
                     Sound.WOLF_HOWL.play(player1);
                 });
 
@@ -115,7 +115,7 @@ public class Illusionist extends RoleVillage implements IPower, IAffectedPlayers
 
             if(!game.isState(StateGame.END) && this.getPlayerWW().isState(StatePlayer.ALIVE)){
 
-                playerWW.sendMessageWithKey(Prefix.GREEN,"werewolf.role.illusionist.reveal");
+                playerWW.sendMessageWithKey(Prefix.GREEN,"werewolf.roles.illusionist.reveal");
                 List<IPlayerWW> players1WW = game.getPlayersWW()
                         .stream()
                         .filter(playerWW1 -> !playerWW1.equals(this.getPlayerWW()))
@@ -146,7 +146,7 @@ public class Illusionist extends RoleVillage implements IPower, IAffectedPlayers
                 }
 
                 this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,
-                        "werewolf.role.illusionist.reveal_pseudos",
+                        "werewolf.roles.illusionist.reveal_pseudos",
                         Formatter.format("&names&", finalPlayersWW.stream().map(IPlayerWW::getName)
                                 .collect(Collectors.joining(", "))));
             }

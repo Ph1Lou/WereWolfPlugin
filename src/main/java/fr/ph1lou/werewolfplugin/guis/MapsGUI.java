@@ -19,15 +19,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
 
-public class Maps implements InventoryProvider {
+public class MapsGUI implements InventoryProvider {
 
 
     public static final SmartInventory INVENTORY = SmartInventory.builder()
             .id("maps")
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
-            .provider(new Maps())
+            .provider(new MapsGUI())
             .size(2, 9)
-            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.maps.name"))
+            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menus.maps.name"))
             .closeable(true)
             .build();
 
@@ -36,7 +36,7 @@ public class Maps implements InventoryProvider {
     public void init(Player player, InventoryContents contents) {
         Main main = JavaPlugin.getPlugin(Main.class);
         WereWolfAPI game = main.getWereWolfAPI();
-        contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType()).setDisplayName(game.translate("werewolf.menu.return")).build()), e -> Config.INVENTORY.open(player)));
+        contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType()).setDisplayName(game.translate("werewolf.menus.return")).build()), e -> MainGUI.INVENTORY.open(player)));
     }
 
     @Override
@@ -53,7 +53,7 @@ public class Maps implements InventoryProvider {
         for (File file : files) {
             contents.set(0, i, ClickableItem.of((
                             new ItemBuilder(UniversalMaterial.MAP.getType())
-                                    .setDisplayName(game.translate("werewolf.menu.maps.map",
+                                    .setDisplayName(game.translate("werewolf.menus.maps.map",
                                             Formatter.format("&world&",file.getName()))).build()),
                     e -> {
                         if (!game.isState(StateGame.LOBBY)) {
@@ -72,7 +72,7 @@ public class Maps implements InventoryProvider {
 
         contents.set(1, 1, ClickableItem.of((
                         new ItemBuilder(UniversalMaterial.LAVA_BUCKET.getType())
-                                .setDisplayName(game.translate("werewolf.menu.maps.new")).build()),
+                                .setDisplayName(game.translate("werewolf.menus.maps.new")).build()),
                 e -> BukkitUtils.scheduleSyncDelayedTask(() -> {
                     if (!game.isState(StateGame.LOBBY)) {
                         player.sendMessage(game.translate(Prefix.RED , "werewolf.check.game_in_progress"));

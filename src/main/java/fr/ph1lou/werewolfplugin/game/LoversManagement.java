@@ -48,7 +48,7 @@ public class LoversManagement implements ILoverManager {
 
 
 		if (cursedLovers.size() < 2 && game.getConfig().getLoverCount(LoverBase.CURSED_LOVER) > 0) {
-			Bukkit.broadcastMessage(game.translate(Prefix.RED , "werewolf.role.cursed_lover.not_enough_players"));
+			Bukkit.broadcastMessage(game.translate(Prefix.RED , "werewolf.lovers.cursed_lover.not_enough_players"));
 			game.getConfig().setLoverCount(LoverBase.CURSED_LOVER, 0);
 			return;
 		}
@@ -79,7 +79,7 @@ public class LoversManagement implements ILoverManager {
 				.collect(Collectors.toList());
 
 		if (amnesiacLovers.size() < 2 && game.getConfig().getLoverCount(LoverBase.AMNESIAC_LOVER) > 0) {
-			Bukkit.broadcastMessage(game.translate(Prefix.RED , "werewolf.role.amnesiac_lover.not_enough_players"));
+			Bukkit.broadcastMessage(game.translate(Prefix.RED , "werewolf.lovers.amnesiac_lover.not_enough_players"));
 			game.getConfig().setLoverCount(LoverBase.AMNESIAC_LOVER, 0);
 			return;
 		}
@@ -129,7 +129,7 @@ public class LoversManagement implements ILoverManager {
 
 		if (loversAvailable.size() < 2 && game.getConfig().getRoleCount(RoleBase.CUPID) +
 				game.getConfig().getLoverCount(LoverBase.LOVER) > 0) {
-			Bukkit.broadcastMessage(game.translate(Prefix.RED , "werewolf.role.lover.not_enough_players"));
+			Bukkit.broadcastMessage(game.translate(Prefix.RED , "werewolf.lovers.lover.not_enough_players"));
 			return;
 		}
 
@@ -144,7 +144,7 @@ public class LoversManagement implements ILoverManager {
 								game.getPlayersCount())) {
 
 			polygamy = true;
-			Bukkit.broadcastMessage(game.translate(Prefix.ORANGE , "werewolf.role.lover.polygamy"));
+			Bukkit.broadcastMessage(game.translate(Prefix.ORANGE , "werewolf.lovers.lover.polygamy"));
 		}
 
 		IPlayerWW playerWW1;
@@ -181,7 +181,7 @@ public class LoversManagement implements ILoverManager {
 					cupid.addAffectedPlayer(playerWW1);
 					cupid.setPower(false);
 					Bukkit.getPluginManager().callEvent(new CupidLoversEvent(playerWW, Sets.newHashSet(cupid.getAffectedPlayers())));
-					playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.cupid.designation_perform",
+					playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.cupid.designation_perform",
 							Formatter.format("&player1&",playerWW2.getName()),
 							Formatter.format("&player2&",playerWW1.getName()));
 

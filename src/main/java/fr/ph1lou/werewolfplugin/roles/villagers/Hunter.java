@@ -42,11 +42,11 @@ public class Hunter extends RoleVillage implements IPower {
     @Override
     public @NotNull String getDescription() {
         DescriptionBuilder descBuilder = new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.hunter.description"))
-                .setItems(game.translate("werewolf.role.hunter.items"))
-                .setEffects(game.translate("werewolf.role.hunter.effect", Formatter.format("&number&", 0.5 + damageBonus)));
-        if (game.getConfig().isConfigActive("werewolf.role.hunter.can_shoot")) {
-            descBuilder = descBuilder.addExtraLines(game.translate("werewolf.role.hunter.description_shoot"));
+                .setDescription(game.translate("werewolf.roles.hunter.description"))
+                .setItems(game.translate("werewolf.roles.hunter.items"))
+                .setEffects(game.translate("werewolf.roles.hunter.effect", Formatter.format("&number&", 0.5 + damageBonus)));
+        if (game.getConfig().isConfigActive("werewolf.roles.hunter.can_shoot")) {
+            descBuilder = descBuilder.addExtraLines(game.translate("werewolf.roles.hunter.description_shoot"));
         }
         return descBuilder.build();
     }
@@ -66,9 +66,9 @@ public class Hunter extends RoleVillage implements IPower {
         IPlayerWW playerWW = event.getPlayerWW();
 
         if (playerWW.equals(this.getPlayerWW())) {
-            if (game.getConfig().isConfigActive("werewolf.role.hunter.can_shoot")) {
+            if (game.getConfig().isConfigActive("werewolf.roles.hunter.can_shoot")) {
                 this.setPower(true);
-                getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.role.hunter.perform");
+                getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.hunter.perform");
                 BukkitUtils.scheduleSyncDelayedTask(() -> {
                     getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.check.end_selection");
                     setPower(false);
@@ -81,7 +81,7 @@ public class Hunter extends RoleVillage implements IPower {
 
         if (playerWW.getLastKiller().isPresent() && playerWW.getLastKiller().get().equals(getPlayerWW())) {
             damageBonus += 0.1;
-            getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.role.hunter.werewolf_slain");
+            getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.hunter.werewolf_slain");
         }
     }
 

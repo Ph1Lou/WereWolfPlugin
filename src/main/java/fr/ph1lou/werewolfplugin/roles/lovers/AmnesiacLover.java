@@ -3,6 +3,7 @@ package fr.ph1lou.werewolfplugin.roles.lovers;
 import com.google.common.collect.Sets;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Lover;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StateGame;
@@ -37,7 +38,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Lover(key = LoverBase.AMNESIAC_LOVER,
-        configValues = @IntValue(key = AmnesiacLover.DISTANCE,
+        configValues = @IntValue(key = IntValueBase.AMNESIAC_LOVER_DISTANCE,
                 defaultValue = 15,
                 meetUpValue = 15,
                 step = 2,
@@ -45,8 +46,6 @@ import java.util.UUID;
         )
 )
 public class AmnesiacLover implements ILover, Listener {
-
-    public static final String DISTANCE = "werewolf.role.amnesiac_lover.distance";
 
     private final WereWolfAPI game;
     private IPlayerWW amnesiacLover1;
@@ -85,11 +84,11 @@ public class AmnesiacLover implements ILover, Listener {
         IPlayerWW playerWW1 = getOtherLover(event.getPlayerWW());
 
         game.getPlayersWW().forEach(playerWW -> {
-            AnnouncementLoverDeathEvent event1 = new AnnouncementLoverDeathEvent(event.getPlayerWW(),playerWW,"werewolf.role.lover.lover_death");
+            AnnouncementLoverDeathEvent event1 = new AnnouncementLoverDeathEvent(event.getPlayerWW(),playerWW,"werewolf.lovers.lover.lover_death");
             Bukkit.getPluginManager().callEvent(event1);
 
             if(!event1.isCancelled()){
-                playerWW.sendMessageWithKey("werewolf.role.lover.lover_death",Formatter.player(playerWW1.getName()));
+                playerWW.sendMessageWithKey("werewolf.lovers.lover.lover_death",Formatter.player(playerWW1.getName()));
             }
 
         });
@@ -98,9 +97,9 @@ public class AmnesiacLover implements ILover, Listener {
                 .filter(uuid -> !game.getPlayerWW(uuid).isPresent())
                 .map(Bukkit::getPlayer)
                 .filter(Objects::nonNull)
-                .forEach(player1 -> player1.sendMessage(game.translate("werewolf.role.lover.lover_death",Formatter.player(playerWW1.getName()))));
+                .forEach(player1 -> player1.sendMessage(game.translate("werewolf.lovers.lover.lover_death",Formatter.player(playerWW1.getName()))));
 
-        Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.role.lover.lover_death",Formatter.player(playerWW1.getName())));
+        Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.lovers.lover.lover_death",Formatter.player(playerWW1.getName())));
 
         Bukkit.getPluginManager().callEvent(
                 new AmnesiacLoverDeathEvent(event.getPlayerWW(), playerWW1));
@@ -126,7 +125,7 @@ public class AmnesiacLover implements ILover, Listener {
         }
 
         if (player1.getLocation().distance(player2.getLocation()) <
-                this.game.getConfig().getValue(DISTANCE)) {
+                this.game.getConfig().getValue(IntValueBase.AMNESIAC_LOVER_DISTANCE)) {
 
             Bukkit.getPluginManager().callEvent(new RevealAmnesiacLoversEvent(
                     Sets.newHashSet(this.amnesiacLover1, this.amnesiacLover2)));
@@ -147,11 +146,11 @@ public class AmnesiacLover implements ILover, Listener {
         if (!this.find) return;
 
         if (this.amnesiacLover1.equals(playerWW)) {
-            playerWW.sendMessageWithKey("werewolf.role.lover.description",
+            playerWW.sendMessageWithKey("werewolf.lovers.lover.description",
                     Formatter.player(this.amnesiacLover2.getName()));
             playerWW.sendSound(Sound.PORTAL_TRAVEL);
         } else if (this.amnesiacLover2.equals(playerWW)) {
-            playerWW.sendMessageWithKey("werewolf.role.lover.description",
+            playerWW.sendMessageWithKey("werewolf.lovers.lover.description",
                     Formatter.player(this.amnesiacLover1.getName()));
             playerWW.sendSound(Sound.PORTAL_TRAVEL);
         }

@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
@@ -35,14 +36,13 @@ import java.util.Optional;
 @Role(key = RoleBase.SERVITOR,
         category = Category.VILLAGER,
         attributes = RoleAttribute.VILLAGER,
-configValues = {@IntValue(key = Servitor.DISTANCE,
+configValues = {@IntValue(key = IntValueBase.SERVITOR_DISTANCE,
         defaultValue = 25, 
         meetUpValue = 25, 
         step = 5, 
         item = UniversalMaterial.BROWN_WOOL)})
 public class Servitor extends RoleVillage implements IPower {
 
-    public static final String DISTANCE = "werewolf.role.servitor.distance";
     private boolean power = true;
     private IPlayerWW master;
 
@@ -53,9 +53,9 @@ public class Servitor extends RoleVillage implements IPower {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game,this)
-                .setDescription(game.translate("werewolf.role.servitor.description"))
-                .setEffects(game.translate(this.hasPower()?"werewolf.role.servitor.effects":"werewolf.role.servitor.effects_death",
-                        Formatter.number(game.getConfig().getValue(DISTANCE))))
+                .setDescription(game.translate("werewolf.roles.servitor.description"))
+                .setEffects(game.translate(this.hasPower()?"werewolf.roles.servitor.effects":"werewolf.roles.servitor.effects_death",
+                        Formatter.number(game.getConfig().getValue(IntValueBase.SERVITOR_DISTANCE))))
                 .build();
     }
 
@@ -89,7 +89,7 @@ public class Servitor extends RoleVillage implements IPower {
 
         this.master = event1.getTargetWW();
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE,"werewolf.role.servitor.message",
+        this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE,"werewolf.roles.servitor.message",
                 Formatter.player(master.getName()));
     }
 
@@ -116,9 +116,9 @@ public class Servitor extends RoleVillage implements IPower {
 
         if (playerWW.equals(getPlayerWW()) && lastKiller.get().equals(master)) {
             event.setCancelled(true);
-            this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE,"werewolf.role.servitor.resurrection",
+            this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE,"werewolf.roles.servitor.resurrection",
                     Formatter.player(lastKiller.get().getName()),
-                    Formatter.number(game.getConfig().getValue(DISTANCE)));
+                    Formatter.number(game.getConfig().getValue(IntValueBase.SERVITOR_DISTANCE)));
             autoResurrection();
         }
     }
@@ -180,7 +180,7 @@ public class Servitor extends RoleVillage implements IPower {
      */
     private boolean checkDistance(IPlayerWW player, Location location) {
         return player.getLocation().getWorld() == location.getWorld() &&
-                player.getLocation().distance(location) < game.getConfig().getValue(DISTANCE);
+                player.getLocation().distance(location) < game.getConfig().getValue(IntValueBase.SERVITOR_DISTANCE);
     }
     
     @Override

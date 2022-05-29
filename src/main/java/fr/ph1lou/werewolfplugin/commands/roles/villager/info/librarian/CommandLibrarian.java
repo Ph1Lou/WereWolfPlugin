@@ -19,7 +19,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-@RoleCommand(key = "werewolf.role.librarian.command",
+@RoleCommand(key = "werewolf.roles.librarian.command",
         roleKeys = RoleBase.LIBRARIAN,
         argNumbers = 1)
 public class CommandLibrarian implements ICommandRole {
@@ -52,7 +52,7 @@ public class CommandLibrarian implements ICommandRole {
         }
 
         if (((IAffectedPlayers) librarian).getAffectedPlayers().contains(playerWW1)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.role.librarian.waiting");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.librarian.waiting");
             return;
         }
 
@@ -74,17 +74,17 @@ public class CommandLibrarian implements ICommandRole {
         ((IAffectedPlayers) librarian).addAffectedPlayer(playerWW1);
 
         TextComponent contributionMessage = new TextComponent(game.translate(
-                Prefix.YELLOW , "werewolf.role.librarian.message"));
+                Prefix.YELLOW , "werewolf.roles.librarian.message"));
         contributionMessage
                 .setClickEvent(new ClickEvent(
                         ClickEvent.Action.SUGGEST_COMMAND,
                         String.format(
                                 "/ww %s",
-                                game.translate("werewolf.role.librarian.request_command"))));
+                                game.translate("werewolf.roles.librarian.request_command"))));
         selectionPlayer.spigot().sendMessage(contributionMessage);
 
         playerWW.sendMessageWithKey(
-                Prefix.YELLOW , "werewolf.role.librarian.perform",
+                Prefix.YELLOW , "werewolf.roles.librarian.perform",
                 Formatter.player(selectionPlayer.getName()));
     }
 }

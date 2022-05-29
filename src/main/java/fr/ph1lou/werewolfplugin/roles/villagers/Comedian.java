@@ -16,7 +16,6 @@ import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.role.impl.RoleWithLimitedSelectionDuration;
-import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -71,10 +70,8 @@ public class Comedian extends RoleWithLimitedSelectionDuration {
             return;
         }
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.role.comedian.wear_mask_message",
-                Formatter.timer(Utils.conversion(
-                        game.getConfig().getTimerValue(
-                                TimerBase.POWER_DURATION))));
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.comedian.wear_mask_message",
+                Formatter.timer(game, TimerBase.POWER_DURATION));
 
     }
 
@@ -82,10 +79,10 @@ public class Comedian extends RoleWithLimitedSelectionDuration {
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.comedian.description"))
-                .addExtraLines(game.translate("werewolf.role.comedian.masks",
+                .setDescription(game.translate("werewolf.roles.comedian.description"))
+                .addExtraLines(game.translate("werewolf.roles.comedian.masks",
                                 Formatter.format("&mask&",comedianMasks.isEmpty() ?
-                                game.translate("werewolf.role.comedian.none") :
+                                game.translate("werewolf.roles.comedian.none") :
                                 comedianMasks.stream()
                                         .map(comedianMasks1 -> game.translate(comedianMasks1.getKey()))
                                         .collect(Collectors.joining(" ")))))

@@ -29,9 +29,9 @@ public class AlphaWereWolf extends RoleWereWolf {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.alpha_werewolf.description"))
+                .setDescription(game.translate("werewolf.roles.alpha_werewolf.description"))
                 .setEffects(game.translate("werewolf.description.werewolf"))
-                .setPower(game.translate("werewolf.role.alpha_werewolf.effect"))
+                .setPower(game.translate("werewolf.roles.alpha_werewolf.effect"))
                 .build();
     }
 
@@ -66,7 +66,7 @@ public class AlphaWereWolf extends RoleWereWolf {
 
         if (!event.getRequester().getRole().isWereWolf()) return;
 
-        event.setPrefix("werewolf.role.alpha_werewolf.prefix");
+        event.setPrefix("werewolf.roles.alpha_werewolf.prefix");
 
         event.addFormatter(Formatter.format("&alpha&",this.getPlayerWW().getName()));
     }

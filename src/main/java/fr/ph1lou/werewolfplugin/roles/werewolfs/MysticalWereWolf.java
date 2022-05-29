@@ -37,7 +37,7 @@ public class MysticalWereWolf extends RoleWereWolf {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.mystical_werewolf.description"))
+                .setDescription(game.translate("werewolf.roles.mystical_werewolf.description"))
                 .setEffects(game.translate("werewolf.description.werewolf"))
                 .build();
     }
@@ -58,7 +58,7 @@ public class MysticalWereWolf extends RoleWereWolf {
 
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.role.mystical_werewolf.no_message");
+        this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.roles.mystical_werewolf.no_message");
         event.setCancelled(true);
     }
 
@@ -74,7 +74,7 @@ public class MysticalWereWolf extends RoleWereWolf {
         if (!event.getPlayerWW().getRole().isWereWolf()) return;
 
         if (!isAbilityEnabled()) {
-            getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.role.mystical_werewolf.ability_disabled");
+            getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.roles.mystical_werewolf.ability_disabled");
             return;
         }
 
@@ -89,7 +89,7 @@ public class MysticalWereWolf extends RoleWereWolf {
 
         Bukkit.getPluginManager().callEvent(new MysticalWerewolfRevelationEvent(this.getPlayerWW(), roleWW));
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.role.mystical_werewolf.werewolf_death",
+        this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.roles.mystical_werewolf.werewolf_death",
                 Formatter.player(roleWW.getName()),
                 Formatter.role(game.translate(roleWW.getRole().getKey())));
     }

@@ -40,10 +40,10 @@ public class VillageIdiot extends RoleVillage implements IPower {
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(this.game, this)
-                .setDescription(this.game.translate("werewolf.role.village_idiot.description"))
+                .setDescription(this.game.translate("werewolf.roles.village_idiot.description"))
                 .setPower(this.game.translate(this.power ?
-                        "werewolf.role.village_idiot.power_on" :
-                        "werewolf.role.village_idiot.power_off"))
+                        "werewolf.roles.village_idiot.power_on" :
+                        "werewolf.roles.village_idiot.power_off"))
                 .build();
     }
 
@@ -76,7 +76,7 @@ public class VillageIdiot extends RoleVillage implements IPower {
 
         event.setCancelled(true);
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.RED,"werewolf.role.village_idiot.vote");
+        this.getPlayerWW().sendMessageWithKey(Prefix.RED,"werewolf.roles.village_idiot.vote");
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -88,7 +88,7 @@ public class VillageIdiot extends RoleVillage implements IPower {
 
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
-        event.setSuffix(event.getSuffix() + " " + this.game.translate("werewolf.role.village_idiot.suffix"));
+        event.setSuffix(event.getSuffix() + " " + this.game.translate("werewolf.roles.village_idiot.suffix"));
     }
 
 
@@ -135,7 +135,7 @@ public class VillageIdiot extends RoleVillage implements IPower {
         }
         this.getPlayerWW().removePlayerMaxHealth(4);
         event.setCancelled(true);
-        Bukkit.broadcastMessage(this.game.translate(Prefix.YELLOW , "werewolf.role.village_idiot.announce",
+        Bukkit.broadcastMessage(this.game.translate(Prefix.YELLOW , "werewolf.roles.village_idiot.announce",
                 Formatter.player(this.getPlayerWW().getName())));
     }
 }

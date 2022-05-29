@@ -22,7 +22,7 @@ public class MeetUpGUI implements InventoryProvider {
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
             .provider(new MeetUpGUI())
             .size(1, 9)
-            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.meet_up.name"))
+            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menus.meet_up.name"))
             .closeable(true)
             .build();
 
@@ -33,8 +33,8 @@ public class MeetUpGUI implements InventoryProvider {
         WereWolfAPI game = main.getWereWolfAPI();
 
         contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType())
-                .setDisplayName(game.translate("werewolf.menu.return"))
-                .build()), e -> Config.INVENTORY.open(player)));
+                .setDisplayName(game.translate("werewolf.menus.return"))
+                .build()), e -> MainGUI.INVENTORY.open(player)));
     }
 
     @Override
@@ -46,9 +46,9 @@ public class MeetUpGUI implements InventoryProvider {
         contents.set(0, 4, ClickableItem.of((new ItemBuilder(game.getConfig().isMeetUp() ?
                 Material.BARRIER : UniversalMaterial.GOLDEN_SWORD.getType())
                 .setDisplayName(game.translate(game.getConfig().isMeetUp() ?
-                        "werewolf.menu.meet_up.disable":
-                        "werewolf.menu.meet_up.enable"))
-                .setLore(game.translate("werewolf.menu.meet_up.warning"))
+                        "werewolf.menus.meet_up.disable":
+                        "werewolf.menus.meet_up.enable"))
+                .setLore(game.translate("werewolf.menus.meet_up.warning"))
                 .build()), e -> {
             game.getConfig().setMeetUp(!game.getConfig().isMeetUp());
             game.getConfig().resetSwitchMeetUp();
@@ -69,9 +69,9 @@ public class MeetUpGUI implements InventoryProvider {
             e.setCurrentItem(new ItemBuilder(game.getConfig().isMeetUp() ?
                     Material.BARRIER : UniversalMaterial.GOLDEN_SWORD.getType())
                     .setDisplayName(game.translate(game.getConfig().isMeetUp() ?
-                            "werewolf.menu.meet_up.disable":
-                            "werewolf.menu.meet_up.enable"))
-                    .setLore(game.translate("werewolf.menu.meet_up.warning"))
+                            "werewolf.menus.meet_up.disable":
+                            "werewolf.menus.meet_up.enable"))
+                    .setLore(game.translate("werewolf.menus.meet_up.warning"))
                     .build());
         }));
 

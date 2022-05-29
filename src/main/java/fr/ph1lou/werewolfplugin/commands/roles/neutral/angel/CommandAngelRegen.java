@@ -17,7 +17,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
-@RoleCommand(key = "werewolf.role.guardian_angel.command",
+@RoleCommand(key = "werewolf.roles.guardian_angel.command",
         roleKeys = {RoleBase.ANGEL, RoleBase.GUARDIAN_ANGEL},
         argNumbers = 0)
 public class CommandAngelRegen implements ICommandRole {
@@ -42,7 +42,7 @@ public class CommandAngelRegen implements ICommandRole {
 
         if (((IAffectedPlayers) guardianAngel)
                 .getAffectedPlayers().isEmpty()) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.role.guardian_angel.no_protege");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.guardian_angel.no_protege");
             return;
         }
 
@@ -51,7 +51,7 @@ public class CommandAngelRegen implements ICommandRole {
         Player playerProtected = Bukkit.getPlayer(playerWW1.getUUID());
 
         if (playerProtected == null) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.role.guardian_angel.disconnected_protege");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.guardian_angel.disconnected_protege");
             return;
         }
 
@@ -73,9 +73,9 @@ public class CommandAngelRegen implements ICommandRole {
                 0,
                 playerWW.getRole().getKey()));
 
-        playerWW1.sendMessageWithKey(Prefix.GREEN , "werewolf.role.guardian_angel.get_regeneration");
+        playerWW1.sendMessageWithKey(Prefix.GREEN , "werewolf.roles.guardian_angel.get_regeneration");
         playerWW.sendMessageWithKey(
-                Prefix.GREEN , "werewolf.role.guardian_angel.perform",
+                Prefix.GREEN , "werewolf.roles.guardian_angel.perform",
                 Formatter.number(3 - ((ILimitedUse) guardianAngel).getUse()));
     }
 }

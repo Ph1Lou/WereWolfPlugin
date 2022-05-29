@@ -54,7 +54,7 @@ public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
             return;
         }
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.role.little_girl.remove_armor");
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.little_girl.remove_armor");
     }
 
     @Override
@@ -119,7 +119,7 @@ public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
                     false));
             Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
             this.getPlayerWW().sendMessageWithKey(
-                    Prefix.YELLOW , "werewolf.role.little_girl.visible");
+                    Prefix.YELLOW , "werewolf.roles.little_girl.visible");
         }
     }
 
@@ -132,16 +132,16 @@ public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
 
 
         this.getPlayerWW().sendMessageWithKey(
-                Prefix.ORANGE , "werewolf.role.little_girl.soon_to_be_day");
+                Prefix.ORANGE , "werewolf.roles.little_girl.soon_to_be_day");
     }
 
     @Override
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.mischievous_werewolf.description"))
-                .setItems(game.translate("werewolf.role.mischievous_werewolf.items"))
-                .setEffects(game.translate("werewolf.role.mischievous_werewolf.effect"))
+                .setDescription(game.translate("werewolf.roles.mischievous_werewolf.description"))
+                .setItems(game.translate("werewolf.roles.mischievous_werewolf.items"))
+                .setEffects(game.translate("werewolf.roles.mischievous_werewolf.effect"))
                 .build();
     }
 
@@ -188,7 +188,7 @@ public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
                     return;
                 }
                 player.sendMessage(game.translate(
-                        Prefix.GREEN , "werewolf.role.little_girl.remove_armor_perform"));
+                        Prefix.GREEN , "werewolf.roles.little_girl.remove_armor_perform"));
                 this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INVISIBILITY,this.getKey()));
                 this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,this.getKey(),0));
 
@@ -198,7 +198,7 @@ public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
                 Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
             }
         } else if (isInvisible()) {
-            player.sendMessage(game.translate(Prefix.YELLOW , "werewolf.role.little_girl.visible"));
+            player.sendMessage(game.translate(Prefix.YELLOW , "werewolf.roles.little_girl.visible"));
             this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,this.getKey()));
 
             this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INVISIBILITY,this.getKey(),0));
@@ -218,7 +218,7 @@ public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
         }
 
         if (isInvisible()) {
-            getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.role.little_girl.ability_disabled");
+            getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.roles.little_girl.ability_disabled");
             this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,this.getKey(),0));
 
             this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INVISIBILITY,this.getKey(),0));

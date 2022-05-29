@@ -16,7 +16,7 @@ import org.bukkit.Bukkit;
 
 import java.util.UUID;
 
-@RoleCommand(key = "werewolf.role.citizen.command_1",
+@RoleCommand(key = "werewolf.roles.citizen.command_1",
         roleKeys = RoleBase.CITIZEN,
         argNumbers = 0,
         autoCompletion = false)
@@ -59,7 +59,7 @@ public class CommandCitizenSeeVote implements ICommandRole
             playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
-        playerWW.sendMessageWithKey(Prefix.RED, "werewolf.vote.new_vote_werewolf",
+        playerWW.sendMessageWithKey(Prefix.RED, "werewolf.configurations.vote.new_vote_werewolf",
                 Formatter.player(event1.getTargetWW().getName()));
     }
 
@@ -79,10 +79,10 @@ public class CommandCitizenSeeVote implements ICommandRole
             playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
-        playerWW.sendMessageWithKey(Prefix.GREEN, "werewolf.role.citizen.count_votes");
+        playerWW.sendMessageWithKey(Prefix.GREEN, "werewolf.roles.citizen.count_votes");
 
         game.getVoteManager().getPlayerVotes()
-                .forEach((voterWW, voteWW) -> playerWW.sendMessageWithKey("werewolf.role.citizen.see_vote",
+                .forEach((voterWW, voteWW) -> playerWW.sendMessageWithKey("werewolf.roles.citizen.see_vote",
                 Formatter.format("&voter&", voterWW.getName()),
                 Formatter.player(voteWW.getName())));
     }

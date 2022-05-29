@@ -34,7 +34,7 @@ public class BigBadWerewolf extends RoleWereWolf implements IPower {
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game,this)
                 .setDescription(game.translate("werewolf.description.werewolf"))
-                .setEffects(game.translate("werewolf.role.big_bad_werewolf.effects"))
+                .setEffects(game.translate("werewolf.roles.big_bad_werewolf.effects"))
                 .build();
     }
 
@@ -63,7 +63,7 @@ public class BigBadWerewolf extends RoleWereWolf implements IPower {
                     this.getKey(),0));
             if(!this.getPlayerWW().isState(StatePlayer.DEATH)){
                 this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE,
-                        "werewolf.role.big_bad_werewolf.werewolf_death");
+                        "werewolf.roles.big_bad_werewolf.werewolf_death");
             }
             this.setPower(false);
         }

@@ -37,23 +37,23 @@ public class SiameseTwin extends RoleVillage {
         String extraLines;
 
         if (game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST) > 0) {
-            extraLines= game.translate("werewolf.role.siamese_twin.siamese_twin_list",
+            extraLines= game.translate("werewolf.roles.siamese_twin.siamese_twin_list",
                     Formatter.format("&list&",Utils.conversion(game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST))));
         } else {
-            extraLines=  game.translate("werewolf.role.siamese_twin.siamese_twin_list",
+            extraLines=  game.translate("werewolf.roles.siamese_twin.siamese_twin_list",
                     Formatter.format("&list&",this.getBrother()));
         }
 
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.siamese_twin.description"))
-                .setPower(game.translate("werewolf.role.siamese_twin.power"))
+                .setDescription(game.translate("werewolf.roles.siamese_twin.description"))
+                .setPower(game.translate("werewolf.roles.siamese_twin.power"))
                 .addExtraLines(extraLines)
                 .build();
     }
 
     @EventHandler
     public void onWerewolfList(WereWolfListEvent event) {
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.role.siamese_twin.siamese_twin_list",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.roles.siamese_twin.siamese_twin_list",
                 Formatter.format("&list&",this.getBrother()));
     }
 

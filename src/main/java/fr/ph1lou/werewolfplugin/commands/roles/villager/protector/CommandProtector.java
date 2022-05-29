@@ -21,7 +21,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.UUID;
 
-@RoleCommand(key = "werewolf.role.protector.command",
+@RoleCommand(key = "werewolf.roles.protector.command",
         roleKeys = RoleBase.PROTECTOR,
         requiredPower = true,
         argNumbers = 1)
@@ -68,8 +68,8 @@ public class CommandProtector implements ICommandRole {
 
         playerWW1.addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,playerWW.getRole().getKey()));
         playerWW1.getRole().addAuraModifier(new AuraModifier(playerWW.getRole().getKey(), Aura.LIGHT, 40, true));
-        playerWW1.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.protector.get_protection");
-        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.protector.protection_perform",
+        playerWW1.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.protector.get_protection");
+        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.protector.protection_perform",
                 Formatter.player(playerArg.getName()));
     }
 }

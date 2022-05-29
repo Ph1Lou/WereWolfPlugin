@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.enums.Category;
@@ -37,14 +38,12 @@ import java.util.stream.Collectors;
         category = Category.VILLAGER,
         attributes = {RoleAttribute.VILLAGER,
                 RoleAttribute.INFORMATION},
-        configValues = {@IntValue(key = BearTrainer.DISTANCE,
+        configValues = {@IntValue(key = IntValueBase.BEAR_TRAINER_DISTANCE,
                 defaultValue = 50,
                 meetUpValue = 50,
                 step = 5,
                 item = UniversalMaterial.BROWN_WOOL)})
 public class BearTrainer extends RoleVillage {
-
-    public static final String DISTANCE = "werewolf.role.bear_trainer.distance";
 
     public BearTrainer(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
@@ -67,7 +66,7 @@ public class BearTrainer extends RoleVillage {
                 .stream()
                 .filter(player1 -> player1.getWorld().equals(oursLocation.getWorld())
                         && oursLocation.distance(player1.getLocation())
-                        < game.getConfig().getValue(DISTANCE))
+                        < game.getConfig().getValue(IntValueBase.BEAR_TRAINER_DISTANCE))
                 .map(Entity::getUniqueId)
                 .map(game::getPlayerWW)
                 .filter(Optional::isPresent)
@@ -102,13 +101,13 @@ public class BearTrainer extends RoleVillage {
         }
 
         String builder = event.getPlayerWWS().stream().map(ignored ->
-                game.translate("werewolf.role.bear_trainer.growling"))
+                game.translate("werewolf.roles.bear_trainer.growling"))
                 .collect(Collectors.joining());
 
         Bukkit.getOnlinePlayers()
                 .forEach(Sound.WOLF_GROWL::play);
 
-        Bukkit.broadcastMessage(game.translate(Prefix.YELLOW , "werewolf.role.bear_trainer.growling_message",
+        Bukkit.broadcastMessage(game.translate(Prefix.YELLOW , "werewolf.roles.bear_trainer.growling_message",
                 Formatter.format("&growling&",builder)));
 
         int growl = event.getPlayerWWS().size();
@@ -131,8 +130,8 @@ public class BearTrainer extends RoleVillage {
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.bear_trainer.description",
-                                Formatter.number(game.getConfig().getValue(DISTANCE))))
+                .setDescription(game.translate("werewolf.roles.bear_trainer.description",
+                                Formatter.number(game.getConfig().getValue(IntValueBase.BEAR_TRAINER_DISTANCE))))
                 .build();
     }
 

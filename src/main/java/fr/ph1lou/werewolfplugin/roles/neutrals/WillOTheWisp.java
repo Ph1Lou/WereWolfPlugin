@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Category;
@@ -47,11 +48,10 @@ import java.util.stream.Collectors;
 
 @Role(key = RoleBase.WILL_O_THE_WISP, 
             category = Category.NEUTRAL, attributes = RoleAttribute.NEUTRAL,
-        configValues = {@IntValue(key = WillOTheWisp.DISTANCE,
+        configValues = {@IntValue(key = IntValueBase.WILL_O_THE_WISP_DISTANCE,
         defaultValue = 50, meetUpValue = 50, step = 5, item = UniversalMaterial.YELLOW_WOOL)})
 public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse {
 
-    public static final String DISTANCE = "werewolf.role.will_o_the_wisp.distance";
     private boolean invisible = false;
     private int use=0;
     private int timer=-1;
@@ -63,12 +63,12 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game,this)
-                .setDescription(game.translate("werewolf.role.will_o_the_wisp.description",
-                        Formatter.number(game.getConfig().getValue(DISTANCE))))
-                .setEffects(game.translate("werewolf.role.will_o_the_wisp.effects"))
-                .setCommand(game.translate("werewolf.role.will_o_the_wisp.command_info",
+                .setDescription(game.translate("werewolf.roles.will_o_the_wisp.description",
+                        Formatter.number(game.getConfig().getValue(IntValueBase.WILL_O_THE_WISP_DISTANCE))))
+                .setEffects(game.translate("werewolf.roles.will_o_the_wisp.effects"))
+                .setCommand(game.translate("werewolf.roles.will_o_the_wisp.command_info",
                         Formatter.number(2-this.use),
-                        Formatter.format("&number2&", game.getConfig().getValue(DISTANCE))))
+                        Formatter.format("&number2&", game.getConfig().getValue(IntValueBase.WILL_O_THE_WISP_DISTANCE))))
                 .build();
     }
 
@@ -155,7 +155,7 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
                     Location wildLocation = this.getPlayerWW().getLocation();
                     Location playerLocation = playerWW.getLocation();
                     return wildLocation.getWorld() == playerLocation.getWorld() &&
-                            wildLocation.distance(playerLocation) < game.getConfig().getValue(DISTANCE);
+                            wildLocation.distance(playerLocation) < game.getConfig().getValue(IntValueBase.WILL_O_THE_WISP_DISTANCE);
                 })
                 .collect(Collectors.toList());
 
@@ -176,8 +176,8 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
             return;
         }
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.role.will_o_the_wisp.role_reveal",
-                Formatter.number(game.getConfig().getValue(DISTANCE)),
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.roles.will_o_the_wisp.role_reveal",
+                Formatter.number(game.getConfig().getValue(IntValueBase.WILL_O_THE_WISP_DISTANCE)),
                 Formatter.role(game.translate(event1.getRoleKey())));
 
     }
@@ -207,9 +207,9 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
                 }
 
                 player.sendMessage(game.translate(Prefix.GREEN ,
-                        "werewolf.role.little_girl.remove_armor_perform"));
+                        "werewolf.roles.little_girl.remove_armor_perform"));
                 this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE,
-                        "werewolf.role.will_o_the_wisp.use_tp",Formatter.number(2-this.use));
+                        "werewolf.roles.will_o_the_wisp.use_tp",Formatter.number(2-this.use));
                 this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INVISIBILITY,
                         this.getKey()));
                 this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.ABSORPTION,
@@ -245,7 +245,7 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
             }
         } else if (this.isInvisible()) {
             player.sendMessage(game.translate(
-                    Prefix.YELLOW , "werewolf.role.little_girl.visible"));
+                    Prefix.YELLOW , "werewolf.roles.little_girl.visible"));
             if (this.isInfected() && game.isDay(Day.NIGHT)) {
                 this.getPlayerWW().addPotionModifier(PotionModifier
                         .add(PotionEffectType.INCREASE_DAMAGE,
@@ -274,7 +274,7 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
     public void disableAbilitiesRole() {
 
         if (isInvisible()) {
-            getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.role.little_girl.ability_disabled");
+            getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.roles.little_girl.ability_disabled");
             this.getPlayerWW().addPotionModifier(PotionModifier
                     .remove(PotionEffectType.INCREASE_DAMAGE,
                             this.getKey(),0));

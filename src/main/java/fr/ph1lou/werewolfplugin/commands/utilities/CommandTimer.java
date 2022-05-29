@@ -5,22 +5,21 @@ import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfplugin.Register;
 import org.bukkit.entity.Player;
 
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
-@PlayerCommand(key = "werewolf.menu.timers.command",
-        descriptionKey = "werewolf.menu.timers.description",
+@PlayerCommand(key = "werewolf.commands.player.timers.command",
+        descriptionKey = "werewolf.commands.player.timers.description",
         argNumbers = 0)
 public class CommandTimer implements ICommand {
 
     @Override
     public void execute(WereWolfAPI game, Player player, String[] args) {
 
-        player.sendMessage(game.translate(Prefix.BLUE,"werewolf.menu.timers.list"));
+        player.sendMessage(game.translate(Prefix.BLUE,"werewolf.commands.player.timers.list"));
 
         String message = Register.get().getTimersRegister()
                 .stream()
@@ -50,8 +49,7 @@ public class CommandTimer implements ICommand {
                     return 0;
                 })
                 .map(timerWrapper -> game.translate(timerWrapper.getMetaDatas().key(),
-                        Formatter.timer(Utils.conversion(game.getConfig()
-                            .getTimerValue(timerWrapper.getMetaDatas().key())))))
+                        Formatter.timer(game, timerWrapper.getMetaDatas().key())))
                 .collect(Collectors.joining(", "));
 
         player.sendMessage(message);

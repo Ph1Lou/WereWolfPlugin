@@ -13,12 +13,11 @@ import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfplugin.roles.neutrals.Angel;
 import org.bukkit.Bukkit;
 import org.bukkit.potion.PotionEffectType;
 
-@RoleCommand(key = "werewolf.role.angel.command_2",
+@RoleCommand(key = "werewolf.roles.angel.command_2",
         roleKeys = RoleBase.ANGEL,
         autoCompletion = false,
         argNumbers = 0)
@@ -36,9 +35,9 @@ public class CommandFallenAngel implements ICommandRole {
 
         role.setChoice(AngelForm.FALLEN_ANGEL);
         Bukkit.getPluginManager().callEvent(new AngelChoiceEvent(playerWW, AngelForm.FALLEN_ANGEL));
-        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.angel.angle_choice_click",
+        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.angel.angle_choice_click",
                 Formatter.format("&form&",game.translate(RoleBase.FALLEN_ANGEL)),
-                Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.ANGEL_DURATION))));
+                Formatter.timer(game, TimerBase.ANGEL_DURATION));
 
         if (game.isDay(Day.NIGHT)) {
             playerWW.addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,playerWW.getRole().getKey(),0));

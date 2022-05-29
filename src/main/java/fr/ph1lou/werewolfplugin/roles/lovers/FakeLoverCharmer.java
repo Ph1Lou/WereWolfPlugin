@@ -21,7 +21,7 @@ public class FakeLoverCharmer extends FakeLover{
         if(playerWW.equals(this.charmer)){
             this.charmer
                     .sendMessageWithKey(Prefix.YELLOW,
-                            "werewolf.role.charmer.announcement",
+                            "werewolf.roles.charmer.announcement",
                             Formatter.player(this.getLovers().stream()
                                     .filter(playerWW1 -> !playerWW1.equals(playerWW))
                                     .map(IPlayerWW::getName)

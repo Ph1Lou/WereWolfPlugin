@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.commands.roles.neutral.willothewisp;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.commands.ICommandRole;
@@ -11,14 +12,13 @@ import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.role.interfaces.IInvisible;
 import fr.ph1lou.werewolfapi.role.interfaces.ILimitedUse;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
-import fr.ph1lou.werewolfplugin.roles.neutrals.WillOTheWisp;
 import org.bukkit.Bukkit;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import java.util.Objects;
 
-@RoleCommand(key = "werewolf.role.will_o_the_wisp.command",
+@RoleCommand(key = "werewolf.roles.will_o_the_wisp.command",
         roleKeys = RoleBase.WILL_O_THE_WISP,
         argNumbers = 0)
 public class CommandWillOTheWisp implements ICommandRole {
@@ -35,7 +35,7 @@ public class CommandWillOTheWisp implements ICommandRole {
         }
 
         if(!(willOTheWisp instanceof IInvisible) || !((IInvisible)willOTheWisp).isInvisible()){
-            playerWW.sendMessageWithKey(Prefix.RED,"werewolf.role.will_o_the_wisp.should_be_invisible");
+            playerWW.sendMessageWithKey(Prefix.RED,"werewolf.roles.will_o_the_wisp.should_be_invisible");
             return;
         }
 
@@ -52,7 +52,7 @@ public class CommandWillOTheWisp implements ICommandRole {
         Vector vector = playerWW.getEyeLocation().getDirection();
         vector
                 .normalize()
-                .multiply(game.getConfig().getValue(WillOTheWisp.DISTANCE))
+                .multiply(game.getConfig().getValue(IntValueBase.WILL_O_THE_WISP_DISTANCE))
                 .setY(Objects.requireNonNull(playerWW.getLocation().getWorld()).getHighestBlockYAt(playerWW.getLocation()) - playerWW.getLocation().getBlockY() + 10);
 
         playerWW.teleport(playerWW.getLocation().add(vector));

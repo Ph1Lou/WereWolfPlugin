@@ -37,8 +37,8 @@ public class Rabbit extends RoleVillage {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(this.game, this)
-                .setDescription(this.game.translate("werewolf.role.rabbit.description"))
-                .setEffects(this.game.translate("werewolf.role.rabbit.effects"))
+                .setDescription(this.game.translate("werewolf.roles.rabbit.description"))
+                .setEffects(this.game.translate("werewolf.roles.rabbit.effects"))
                 .build();
     }
 

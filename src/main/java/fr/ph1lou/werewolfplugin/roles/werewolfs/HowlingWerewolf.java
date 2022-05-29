@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Category;
@@ -31,11 +32,9 @@ import java.util.stream.Collectors;
 
 @Role(key = RoleBase.HOWLING_WEREWOLF, category = Category.WEREWOLF,
         attributes = RoleAttribute.WEREWOLF,
-        configValues = @IntValue(key = HowlingWerewolf.DISTANCE,
+        configValues = @IntValue(key = IntValueBase.HOWLING_WEREWOLF_DISTANCE,
                 defaultValue = 80, meetUpValue = 80, step = 5, item = UniversalMaterial.LIGHT_GRAY_WOOL))
 public class HowlingWerewolf extends RoleWereWolf {
-
-    public static final String DISTANCE = "werewolf.role.howling_werewolf.distance";
 
     public HowlingWerewolf(WereWolfAPI game, IPlayerWW playerWW) {
         super(game, playerWW);
@@ -44,8 +43,8 @@ public class HowlingWerewolf extends RoleWereWolf {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game,this)
-                .setDescription(game.translate("werewolf.role.howling_werewolf.description",
-                        Formatter.number(game.getConfig().getValue(DISTANCE))))
+                .setDescription(game.translate("werewolf.roles.howling_werewolf.description",
+                        Formatter.number(game.getConfig().getValue(IntValueBase.HOWLING_WEREWOLF_DISTANCE))))
                 .setEffects(game.translate("werewolf.description.werewolf"))
                 .build();
     }
@@ -72,7 +71,7 @@ public class HowlingWerewolf extends RoleWereWolf {
                     Location location = playerWW.getLocation();
                     Location playerLocation = this.getPlayerWW().getLocation();
                     return location.getWorld() == playerLocation.getWorld() &&
-                            location.distance(playerLocation) < game.getConfig().getValue(DISTANCE);
+                            location.distance(playerLocation) < game.getConfig().getValue(IntValueBase.HOWLING_WEREWOLF_DISTANCE);
                 })
                 .collect(Collectors.toSet());
 
@@ -112,7 +111,7 @@ public class HowlingWerewolf extends RoleWereWolf {
 
         this.getPlayerWW().addPlayerMaxHealth(finalHeart);
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.role.howling_werewolf.message",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.roles.howling_werewolf.message",
                 Formatter.number(howlEvent.getNotWerewolfSize()),
                 Formatter.format("&heart&",heart));
 

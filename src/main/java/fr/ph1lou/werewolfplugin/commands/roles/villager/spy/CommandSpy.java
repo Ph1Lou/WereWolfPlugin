@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-@RoleCommand(key = "werewolf.role.spy.command",
+@RoleCommand(key = "werewolf.roles.spy.command",
         roleKeys = RoleBase.SPY,
         argNumbers = 1,
         requiredPower = true)
@@ -61,7 +61,7 @@ public class CommandSpy implements ICommandRole {
         ((IAffectedPlayers) spy).clearAffectedPlayer();
         ((IAffectedPlayers) spy).addAffectedPlayer(playerWW1);
 
-        playerWW.sendMessageWithKey(Prefix.ORANGE, "werewolf.role.spy.perform",
+        playerWW.sendMessageWithKey(Prefix.ORANGE, "werewolf.roles.spy.perform",
                 Formatter.player(playerWW1.getName()));
     }
 }

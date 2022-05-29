@@ -26,16 +26,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Config implements InventoryProvider {
+public class MainGUI implements InventoryProvider {
 
     private int surprise = 0;
 
     public static final SmartInventory INVENTORY = SmartInventory.builder()
             .id("config")
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
-            .provider(new Config())
+            .provider(new MainGUI())
             .size(6, 9)
-            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.name"))
+            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menus.main.name"))
             .closeable(true)
             .build();
 
@@ -44,62 +44,62 @@ public class Config implements InventoryProvider {
         GameManager game = (GameManager) JavaPlugin.getPlugin(Main.class).getWereWolfAPI();
 
         contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.PLAYER_HEAD.getStack())
-                .setDisplayName(game.translate("werewolf.menu.whitelist.name"))
-                .build()), e -> WhiteList.INVENTORY.open(player)));
+                .setDisplayName(game.translate("werewolf.menus.whitelist.name"))
+                .build()), e -> WhiteListGUI.INVENTORY.open(player)));
 
         contents.set(0,8,ClickableItem.of((new ItemBuilder(UniversalMaterial.ARROW.getStack())
-                .setDisplayName(game.translate("werewolf.menu.addon.name")))
-                .build(), e -> AddonMenu.INVENTORY.open(player)));
+                .setDisplayName(game.translate("werewolf.menus.addon.name")))
+                .build(), e -> AddonsGUI.INVENTORY.open(player)));
 
         contents.set(1, 4, ClickableItem.of((new ItemBuilder(Material.BEACON)
-                .setDisplayName(game.translate("werewolf.menu.roles.name"))
-                .build()), e -> Roles.getInventory(player, Category.WEREWOLF).open(player)));
+                .setDisplayName(game.translate("werewolf.menus.roles.name"))
+                .build()), e -> RolesGUI.getInventory(player, Category.WEREWOLF).open(player)));
 
         contents.set(2, 4, ClickableItem.of((new ItemBuilder(UniversalMaterial.CLOCK.getType())
-                .setDisplayName(game.translate("werewolf.menu.timers.name"))
+                .setDisplayName(game.translate("werewolf.menus.timers.name"))
                 .build()), e -> TimersGUI.getInventory(player).open(player)));
 
         contents.set(3, 2, ClickableItem.of((new ItemBuilder(Material.PUMPKIN)
-                .setDisplayName(game.translate("werewolf.menu.scenarios.name"))
+                .setDisplayName(game.translate("werewolf.menus.scenarios.name"))
                 .build()), e -> ScenariosGUI.INVENTORY.open(player)));
 
         contents.set(3, 3, ClickableItem.of((new ItemBuilder(UniversalMaterial.NAME_TAG.getType())
-                .setDisplayName(game.translate("werewolf.menu.global.name"))
-                .build()), e -> GlobalConfigs.INVENTORY.open(player)));
+                .setDisplayName(game.translate("werewolf.menus.configurations.name"))
+                .build()), e -> ConfigurationsGUI.INVENTORY.open(player)));
 
         contents.set(3, 4, ClickableItem.of((new ItemBuilder(UniversalMaterial.CHEST.getType())
-                .setDisplayName(game.translate("werewolf.menu.stuff.name"))
+                .setDisplayName(game.translate("werewolf.menus.stuff.name"))
                 .build()), e -> StuffsGUI.INVENTORY.open(player)));
 
         contents.set(3, 5, ClickableItem.of((new ItemBuilder(Material.GLASS)
-                .setDisplayName(game.translate("werewolf.menu.border.name"))
-                .build()), e -> Borders.INVENTORY.open(player)));
+                .setDisplayName(game.translate("werewolf.menus.border.name"))
+                .build()), e -> BordersGUI.INVENTORY.open(player)));
 
         contents.set(3, 6, ClickableItem.of((new ItemBuilder(UniversalMaterial.ENCHANTING_TABLE.getType())
-                .setDisplayName(game.translate("werewolf.menu.enchantments.name"))
-                .build()), e -> Enchantments.INVENTORY.open(player)));
+                .setDisplayName(game.translate("werewolf.menus.enchantments.name"))
+                .build()), e -> EnchantmentsGUI.INVENTORY.open(player)));
 
         contents.set(4, 4, ClickableItem.of((new ItemBuilder(UniversalMaterial.MAP.getType())
-                .setDisplayName(game.translate("werewolf.menu.maps.name"))
-                .build()), e -> Maps.INVENTORY.open(player)));
+                .setDisplayName(game.translate("werewolf.menus.maps.name"))
+                .build()), e -> MapsGUI.INVENTORY.open(player)));
 
         contents.set(5, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.WHITE_BANNER.getStack())
-                .setDisplayName(game.translate("werewolf.menu.languages.name"))
+                .setDisplayName(game.translate("werewolf.menus.languages.name"))
                 .addPattern(new Pattern(DyeColor.WHITE, PatternType.BASE))
                 .addPattern(new Pattern(DyeColor.CYAN, PatternType.STRAIGHT_CROSS))
-                .build()), e -> Languages.INVENTORY.open(player)));
+                .build()), e -> LanguagesGUI.INVENTORY.open(player)));
 
         contents.set(5, 3, ClickableItem.of((new ItemBuilder(Material.ARMOR_STAND)
-                .setDisplayName(game.translate("werewolf.menu.save.name"))
+                .setDisplayName(game.translate("werewolf.menus.save.name"))
                 .build()), e -> SaveGUI.INVENTORY.open(player)));
 
         contents.set(5, 4, ClickableItem.of((new ItemBuilder(Material.EGG)
-                .setDisplayName(game.translate("werewolf.menu.random_events.name"))
-                .build()), e -> RandomEvents.INVENTORY.open(player)));
+                .setDisplayName(game.translate("werewolf.menus.random_events.name"))
+                .build()), e -> RandomEventsGUI.INVENTORY.open(player)));
 
         contents.set(5, 5, ClickableItem.of((new ItemBuilder(UniversalMaterial.CRAFTING_TABLE.getType())
-                .setDisplayName(game.translate("werewolf.menu.advanced_tool.name"))
-                .build()), e -> AdvancedConfig.INVENTORY.open(player)));
+                .setDisplayName(game.translate("werewolf.menus.advanced_tool.name"))
+                .build()), e -> AdvancedSettingsGUI.INVENTORY.open(player)));
 
         List<String> lore = new ArrayList<>();
         if(game.isDebug()){
@@ -155,7 +155,7 @@ public class Config implements InventoryProvider {
         WereWolfAPI game = JavaPlugin.getPlugin(Main.class).getWereWolfAPI();
 
         contents.set(0, 3, ClickableItem.of((new ItemBuilder(UniversalMaterial.GOLDEN_SWORD.getStack())
-                .setDisplayName(game.translate("werewolf.menu.meet_up.button",
+                .setDisplayName(game.translate("werewolf.menus.meet_up.button",
                         Formatter.format("&on&", game.translate(game.getConfig().isMeetUp() ?
                                 "werewolf.utils.on":
                                 "werewolf.utils.off"))))
@@ -164,14 +164,14 @@ public class Config implements InventoryProvider {
         if (game.isState(StateGame.LOBBY)) {
             contents.set(0, 4, ClickableItem.of((new ItemBuilder(UniversalMaterial.LIME_WOOL
                             .getStack())
-                            .setDisplayName(game.translate("werewolf.announcement.start.launch"))
+                            .setDisplayName(game.translate("werewolf.menus.start_stop.launch"))
                             .build()),
-                    e -> Start.INVENTORY.open(player)));
+                    e -> StartAndStopGUI.INVENTORY.open(player)));
         } else {
             contents.set(0, 4, ClickableItem.of((new ItemBuilder(UniversalMaterial.RED_WOOL
                     .getStack())
-                    .setDisplayName(game.translate("werewolf.commands.admin.stop.message"))
-                    .build()), e -> Start.INVENTORY.open(player)));
+                    .setDisplayName(game.translate("werewolf.menus.start_stop.stop"))
+                    .build()), e -> StartAndStopGUI.INVENTORY.open(player)));
         }
 
     }

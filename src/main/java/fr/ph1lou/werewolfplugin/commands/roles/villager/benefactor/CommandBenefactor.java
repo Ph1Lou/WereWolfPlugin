@@ -14,7 +14,7 @@ import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-@RoleCommand(key = "werewolf.role.benefactor.command",
+@RoleCommand(key = "werewolf.roles.benefactor.command",
         roleKeys = RoleBase.BENEFACTOR,
         argNumbers = 1)
 public class CommandBenefactor implements ICommandRole {
@@ -27,7 +27,7 @@ public class CommandBenefactor implements ICommandRole {
         if(!(benefactor instanceof IAffectedPlayers)) return;
 
         if(((IAffectedPlayers) benefactor).getAffectedPlayers().size() >= 3) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.role.benefactor.too_many_players");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.benefactor.too_many_players");
             return;
         }
 
@@ -46,7 +46,7 @@ public class CommandBenefactor implements ICommandRole {
 
         if(((IAffectedPlayers) benefactor).getAffectedPlayers().contains(targetWW)){
             playerWW.sendMessageWithKey(Prefix.RED,
-                    "werewolf.role.benefactor.already_use_on_player");
+                    "werewolf.roles.benefactor.already_use_on_player");
             return;
         }
 
@@ -63,8 +63,8 @@ public class CommandBenefactor implements ICommandRole {
         }
 
         ((IAffectedPlayers) benefactor).addAffectedPlayer(targetWW);
-        targetWW.sendMessageWithKey(Prefix.GREEN, "werewolf.role.benefactor.target_message");
+        targetWW.sendMessageWithKey(Prefix.GREEN, "werewolf.roles.benefactor.target_message");
         targetWW.addPlayerMaxHealth(2);
-        playerWW.sendMessageWithKey(Prefix.GREEN, "werewolf.role.benefactor.perform", Formatter.player(targetWW.getName()));
+        playerWW.sendMessageWithKey(Prefix.GREEN, "werewolf.roles.benefactor.perform", Formatter.player(targetWW.getName()));
     }
 }

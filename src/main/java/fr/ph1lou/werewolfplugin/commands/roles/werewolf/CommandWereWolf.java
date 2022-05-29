@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-@PlayerCommand(key = "werewolf.role.werewolf.command",
+@PlayerCommand(key = "werewolf.roles.werewolf.command",
         descriptionKey = "",
         argNumbers = 0,
         statesGame = StateGame.GAME,
@@ -34,7 +34,7 @@ public class CommandWereWolf implements ICommand {
         if (playerWW == null) return;
 
         if (game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST) > 0) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.role.werewolf.list_not_revealed");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.werewolf.list_not_revealed");
             return;
         }
 
@@ -42,7 +42,7 @@ public class CommandWereWolf implements ICommand {
         Bukkit.getPluginManager().callEvent(requestSeeWereWolfListEvent);
 
         if (!requestSeeWereWolfListEvent.isAccept()) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.role.werewolf.not_werewolf");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.werewolf.not_werewolf");
             return;
         }
 
@@ -58,12 +58,12 @@ public class CommandWereWolf implements ICommand {
                 list.append(playerWW1.getName()).append(" ");
             }
         }
-        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.werewolf.werewolf_list", Formatter.format("&list&",list.toString()));
+        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.werewolf.werewolf_list", Formatter.format("&list&",list.toString()));
         if (Register.get().getRandomEventsRegister().stream()
                 .filter(randomEventRegister -> randomEventRegister.getMetaDatas().key().equals(EventBase.DRUNKEN_WEREWOLF))
                 .anyMatch(randomEventRegister -> randomEventRegister.getObject().isPresent() &&
                         randomEventRegister.getObject().get().isRegister())) {
-            playerWW.sendMessageWithKey("werewolf.commands.ww_chat.drunken");
+            playerWW.sendMessageWithKey("werewolf.commands.player.ww_chat.drunken");
         }
 
     }

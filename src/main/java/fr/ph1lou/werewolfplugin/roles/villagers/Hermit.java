@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
@@ -33,11 +34,9 @@ import java.util.Optional;
 
 @Role(key = RoleBase.HERMIT, 
         category = Category.VILLAGER, attributes = RoleAttribute.VILLAGER,
-        configValues = @IntValue(key = Hermit.DISTANCE, defaultValue = 20,
+        configValues = @IntValue(key = IntValueBase.HERMIT_DISTANCE, defaultValue = 20,
                 meetUpValue = 20, step = 4, item = UniversalMaterial.WHITE_WOOL))
 public class Hermit extends RoleVillage {
-
-    public static final String DISTANCE = "werewolf.role.hermit.distance";
 
     public Hermit(WereWolfAPI game, IPlayerWW playerWW) {
         super(game, playerWW);
@@ -46,9 +45,9 @@ public class Hermit extends RoleVillage {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game,this)
-                .setDescription(game.translate("werewolf.role.hermit.description",
-                        Formatter.number(game.getConfig().getValue(DISTANCE))))
-                .setEffects(game.translate("werewolf.role.hermit.effects"))
+                .setDescription(game.translate("werewolf.roles.hermit.description",
+                        Formatter.number(game.getConfig().getValue(IntValueBase.HERMIT_DISTANCE))))
+                .setEffects(game.translate("werewolf.roles.hermit.effects"))
                 .build();
     }
 
@@ -148,7 +147,7 @@ public class Hermit extends RoleVillage {
                     Location hermit = this.getPlayerWW().getLocation();
                     Location player = iPlayerWW.getLocation();
                     return (hermit.getWorld() == player.getWorld() &&
-                    hermit.distance(player) < game.getConfig().getValue(DISTANCE));
+                    hermit.distance(player) < game.getConfig().getValue(IntValueBase.HERMIT_DISTANCE));
                 })
                 .count();
 

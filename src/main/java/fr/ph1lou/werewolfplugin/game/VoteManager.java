@@ -5,6 +5,7 @@
 package fr.ph1lou.werewolfplugin.game;
 
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StateGame;
@@ -22,7 +23,6 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfapi.vote.IVoteManager;
-import fr.ph1lou.werewolfplugin.configs.Vote;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Material;
@@ -66,26 +66,26 @@ public class VoteManager implements Listener, IVoteManager
 			return;
 		}
 		if(voterWW.equals(this.lastVote)){
-			voterWW.sendMessageWithKey(Prefix.RED,"werewolf.vote.new_voted");
+			voterWW.sendMessageWithKey(Prefix.RED,"werewolf.configurations.vote.new_voted");
 			return;
 		}
 		if (this.game.getConfig().getTimerValue(TimerBase.VOTE_BEGIN) > 0) {
-			voterWW.sendMessageWithKey(Prefix.RED, "werewolf.vote.vote_not_yet_activated");
+			voterWW.sendMessageWithKey(Prefix.RED, "werewolf.configurations.vote.vote_not_yet_activated");
 		}
 		else if (!this.game.getConfig().isConfigActive(ConfigBase.VOTE) || this.currentStatus == VoteStatus.ENDED) {
-			voterWW.sendMessageWithKey(Prefix.RED, "werewolf.vote.vote_disable");
+			voterWW.sendMessageWithKey(Prefix.RED, "werewolf.configurations.vote.vote_disable");
 		}
 		else if (!this.currentStatus.equals(VoteStatus.IN_PROGRESS)) {
-			voterWW.sendMessageWithKey(Prefix.RED, "werewolf.vote.not_vote_time");
+			voterWW.sendMessageWithKey(Prefix.RED, "werewolf.configurations.vote.not_vote_time");
 		}
 		else if (this.voters.containsKey(voterWW)) {
-			voterWW.sendMessageWithKey(Prefix.RED, "werewolf.vote.already_voted");
+			voterWW.sendMessageWithKey(Prefix.RED, "werewolf.configurations.vote.already_voted");
 		}
 		else if (this.tempPlayers.contains(vote)) {
-			voterWW.sendMessageWithKey(Prefix.RED, "werewolf.vote.player_already_voted");
+			voterWW.sendMessageWithKey(Prefix.RED, "werewolf.configurations.vote.player_already_voted");
 		}
 		else if (this.game.getConfig().isConfigActive(ConfigBase.NEW_VOTE) && voterWW.getRole().isNeutral()) {
-			voterWW.sendMessageWithKey(Prefix.RED, "werewolf.vote.neutral");
+			voterWW.sendMessageWithKey(Prefix.RED, "werewolf.configurations.vote.neutral");
 		}
 		else {
 			VoteEvent voteEvent = new VoteEvent(voterWW, vote);
@@ -102,7 +102,7 @@ public class VoteManager implements Listener, IVoteManager
 			else {
 				this.votesVillager.merge(vote, 1, Integer::sum);
 			}
-			voterWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.vote.perform_vote", Formatter.player(vote.getName()));
+			voterWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.configurations.vote.perform_vote", Formatter.player(vote.getName()));
 		}
 	}
 
@@ -174,10 +174,10 @@ public class VoteManager implements Listener, IVoteManager
 		if (this.game.getConfig().isConfigActive(ConfigBase.NEW_VOTE)) {
 			IPlayerWW werewolfWW = this.getResult(this.votesWerewolf).orElse(null);
 			if (playerWW != null) {
-				Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE, "werewolf.vote.new_vote_villager", Formatter.player(playerWW.getName())));
+				Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE, "werewolf.configurations.vote.new_vote_villager", Formatter.player(playerWW.getName())));
 			}
 			else {
-				Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE, "werewolf.vote.no_result"));
+				Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE, "werewolf.configurations.vote.no_result"));
 			}
 			if (werewolfWW != null) {
 
@@ -186,7 +186,7 @@ public class VoteManager implements Listener, IVoteManager
 						.filter(playerWW2 -> playerWW2.getRole().isWereWolf() ||
 								playerWW2.getRole().isNeutral())
 						.forEach(playerWW2 -> {
-							playerWW2.sendMessageWithKey(Prefix.ORANGE, "werewolf.vote.new_vote_werewolf",
+							playerWW2.sendMessageWithKey(Prefix.ORANGE, "werewolf.configurations.vote.new_vote_werewolf",
 									Formatter.player(werewolfWW.getName()));
 							if (!playerWW2.getRole().isNeutral()) {
 								Player player = Bukkit.getPlayer(playerWW2.getUUID());
@@ -203,11 +203,11 @@ public class VoteManager implements Listener, IVoteManager
 			return;
 		}
 		if (playerWW == null) {
-			Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE, "werewolf.vote.no_result"));
+			Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE, "werewolf.configurations.vote.no_result"));
 			return;
 		}
 		if (this.votes.getOrDefault(playerWW, 0) <= 1) {
-			Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE, "werewolf.vote.no_result_more_one"));
+			Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE, "werewolf.configurations.vote.no_result_more_one"));
 			return;
 		}
 		double health = 5;
@@ -215,7 +215,7 @@ public class VoteManager implements Listener, IVoteManager
 			health = playerWW.getMaxHealth() / 2 - 1;
 		}
 		playerWW.removePlayerMaxHealth(10);
-		Bukkit.broadcastMessage(this.game.translate(Prefix.YELLOW, "werewolf.vote.vote_result",
+		Bukkit.broadcastMessage(this.game.translate(Prefix.YELLOW, "werewolf.configurations.vote.vote_result",
 				Formatter.player(playerWW.getName()),
 				Formatter.number(this.votes.getOrDefault(playerWW, 0))));
 		int task = BukkitUtils.scheduleSyncRepeatingTask(() -> {
@@ -243,9 +243,9 @@ public class VoteManager implements Listener, IVoteManager
 			return;
 		}
 		if (this.game.getConfig().isConfigActive(ConfigBase.VOTE) &&
-				this.game.getPlayersCount() < this.game.getConfig().getValue(Vote.CONFIG) &&
+				this.game.getPlayersCount() < this.game.getConfig().getValue(IntValueBase.VOTE_END) &&
 			!this.isStatus(VoteStatus.ENDED)) {
-			Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE, "werewolf.vote.vote_deactivate"));
+			Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE, "werewolf.configurations.vote.vote_deactivate"));
 			this.setStatus(VoteStatus.ENDED);
 			return;
 		}
@@ -256,7 +256,7 @@ public class VoteManager implements Listener, IVoteManager
 
 			this.resetVote();
 			Bukkit.getOnlinePlayers().forEach(Sound.CHICKEN_HURT::play);
-			Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE, "werewolf.vote.vote_time",
+			Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE, "werewolf.configurations.vote.vote_time",
 					Formatter.timer(Utils.conversion(duration))));
 			this.setStatus(VoteStatus.IN_PROGRESS);
 			BukkitUtils.scheduleSyncDelayedTask(() -> {

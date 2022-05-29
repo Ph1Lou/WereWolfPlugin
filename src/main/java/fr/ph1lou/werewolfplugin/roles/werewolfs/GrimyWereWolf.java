@@ -69,7 +69,7 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.grimy_werewolf.description"))
+                .setDescription(game.translate("werewolf.roles.grimy_werewolf.description"))
                 .setEffects(game.translate("werewolf.description.werewolf"))
                 .build();
     }
@@ -92,7 +92,7 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
             this.power = false;
         } else if (!this.affectedPlayer.isEmpty()) {
             game.getConfig().removeOneRole(this.affectedPlayer.get(0).getRole().getKey());
-            Bukkit.broadcastMessage(game.translate(Prefix.GREEN , "werewolf.role.grimy_werewolf.actualize",
+            Bukkit.broadcastMessage(game.translate(Prefix.GREEN , "werewolf.roles.grimy_werewolf.actualize",
                     Formatter.role(game.translate(this.affectedPlayer.get(0).getRole().getKey()))));
         }
 
@@ -130,7 +130,7 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
             this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
             return;
         }
-        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN , "werewolf.role.grimy_werewolf.perform",
+        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN , "werewolf.roles.grimy_werewolf.perform",
                 Formatter.player(event.getPlayerWW().getName()),
                 Formatter.role(game.translate(event.getPlayerWW().getRole().getKey())));
 

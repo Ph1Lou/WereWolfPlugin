@@ -73,10 +73,10 @@ public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPl
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.infect_father_of_the_wolves.description"))
+                .setDescription(game.translate("werewolf.roles.infect_father_of_the_wolves.description"))
                 .setEffects(game.translate("werewolf.description.werewolf"))
-                .setPower(game.translate(power ? "werewolf.role.infect_father_of_the_wolves.power_available" : "werewolf.role.infect_father_of_the_wolves.power_not_available"))
-                .setItems(game.translate("werewolf.role.infect_father_of_the_wolves.items"))
+                .setPower(game.translate(power ? "werewolf.roles.infect_father_of_the_wolves.power_available" : "werewolf.roles.infect_father_of_the_wolves.power_not_available"))
+                .setItems(game.translate("werewolf.roles.infect_father_of_the_wolves.items"))
                 .build();
     }
 
@@ -117,12 +117,12 @@ public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPl
 
         TextComponent infectMessage = new TextComponent(
                 game.translate(
-                        Prefix.YELLOW , "werewolf.role.infect_father_of_the_wolves.infection_message",
+                        Prefix.YELLOW , "werewolf.roles.infect_father_of_the_wolves.infection_message",
                         Formatter.player(playerWW.getName())));
         infectMessage.setClickEvent(
                 new ClickEvent(ClickEvent.Action.RUN_COMMAND,
                         String.format("/ww %s %s",
-                                game.translate("werewolf.role.infect_father_of_the_wolves.command"),
+                                game.translate("werewolf.roles.infect_father_of_the_wolves.command"),
                                 playerWW.getUUID())));
         getPlayerWW().sendMessage(infectMessage);
     }

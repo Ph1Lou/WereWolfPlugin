@@ -4,6 +4,7 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.annotations.Timer;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
@@ -23,7 +24,6 @@ import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
@@ -46,12 +46,10 @@ import java.util.stream.Collectors;
                 defaultValue = 1800, meetUpValue = 1800,
         decrementAfterRole = true,
         onZero = AutoTwinEvent.class)},
-        configValues = {@IntValue(key = Twin.DISTANCE,
+        configValues = {@IntValue(key = IntValueBase.TWIN_DISTANCE,
                 defaultValue = 50,
                 meetUpValue = 50, step = 5, item = UniversalMaterial.GREEN_WOOL)})
 public class Twin extends RoleVillage {
-
-    public static final String DISTANCE = "werewolf.role.twin.distance";
 
     @Nullable
     private List<IPlayerWW> twinList;
@@ -64,13 +62,13 @@ public class Twin extends RoleVillage {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.twin.description",
-                        Formatter.number(game.getConfig().getValue(DISTANCE)),
-                        Formatter.format("&number2&",game.getConfig().getValue(DISTANCE)*2)))
-                .setEffects(game.translate("werewolf.role.twin.effects",Formatter.number(game.getConfig().getValue(DISTANCE))))
+                .setDescription(game.translate("werewolf.roles.twin.description",
+                        Formatter.number(game.getConfig().getValue(IntValueBase.TWIN_DISTANCE)),
+                        Formatter.format("&number2&",game.getConfig().getValue(IntValueBase.TWIN_DISTANCE)*2)))
+                .setEffects(game.translate("werewolf.roles.twin.effects",Formatter.number(game.getConfig().getValue(IntValueBase.TWIN_DISTANCE))))
                 .setPower(this.twinList == null ?
-                        game.translate("werewolf.role.twin.timer", Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.TWIN_DURATION))))
-                        : game.translate("werewolf.role.twin.twin_list", Formatter.format("&list&", this.twinList
+                        game.translate("werewolf.roles.twin.timer", Formatter.timer(game, TimerBase.TWIN_DURATION))
+                        : game.translate("werewolf.roles.twin.twin_list", Formatter.format("&list&", this.twinList
                                 .stream()
                                 .map(IPlayerWW::getName)
                                 .collect(Collectors.joining(", "))))
@@ -109,7 +107,7 @@ public class Twin extends RoleVillage {
             return;
         }
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.BLUE,"werewolf.role.twin.twin_list",
+        this.getPlayerWW().sendMessageWithKey(Prefix.BLUE,"werewolf.roles.twin.twin_list",
                 Formatter.format("&list&", this.twinList
                         .stream()
                         .map(IPlayerWW::getName)
@@ -135,7 +133,7 @@ public class Twin extends RoleVillage {
             return;
         }
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.RED,"werewolf.role.twin.death", Formatter.player(event.getPlayerWW().getName()));
+        this.getPlayerWW().sendMessageWithKey(Prefix.RED,"werewolf.roles.twin.death", Formatter.player(event.getPlayerWW().getName()));
 
         this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,6000,0,this.getKey()));
 
@@ -164,8 +162,8 @@ public class Twin extends RoleVillage {
                         return;
                     }
 
-                    if(twinLocation.distance(playerLocation) < game.getConfig().getValue(DISTANCE) * 2){
-                        this.getPlayerWW().sendMessageWithKey(Prefix.RED,"werewolf.role.twin.too_near");
+                    if(twinLocation.distance(playerLocation) < game.getConfig().getValue(IntValueBase.TWIN_DISTANCE) * 2){
+                        this.getPlayerWW().sendMessageWithKey(Prefix.RED,"werewolf.roles.twin.too_near");
                         return;
                     }
 
@@ -178,7 +176,7 @@ public class Twin extends RoleVillage {
                                 Location location = playerWW1.getLocation();
 
                                 return twinLocation.getWorld() == location.getWorld() &&
-                                        twinLocation.distance(location) < game.getConfig().getValue(DISTANCE);
+                                        twinLocation.distance(location) < game.getConfig().getValue(IntValueBase.TWIN_DISTANCE);
 
                             })
                             .collect(Collectors.toList());
@@ -194,8 +192,8 @@ public class Twin extends RoleVillage {
                             return;
                         }
 
-                        this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE,"werewolf.role.twin.list_near",
-                        Formatter.number(game.getConfig().getValue(DISTANCE)),
+                        this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE,"werewolf.roles.twin.list_near",
+                        Formatter.number(game.getConfig().getValue(IntValueBase.TWIN_DISTANCE)),
                                 Formatter.format("&list&",twinListEvent.getPlayerWWS().stream().map(IPlayerWW::getName).collect(Collectors.joining(", "))));
                     }
                     else{
@@ -214,8 +212,8 @@ public class Twin extends RoleVillage {
                             return;
                         }
 
-                        this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE,"werewolf.role.twin.role_near",
-                                Formatter.number(game.getConfig().getValue(DISTANCE)),
+                        this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE,"werewolf.roles.twin.role_near",
+                                Formatter.number(game.getConfig().getValue(IntValueBase.TWIN_DISTANCE)),
                                 Formatter.role(game.translate(twinRoleEvent.getTargetWW().getRole().getKey())));
                     }
                 });

@@ -16,7 +16,7 @@ import org.bukkit.Bukkit;
 
 import java.util.UUID;
 
-@RoleCommand(key = "werewolf.role.shaman.command",
+@RoleCommand(key = "werewolf.roles.shaman.command",
         roleKeys = RoleBase.SHAMAN,
         argNumbers = 2,
         autoCompletion = false)
@@ -33,7 +33,7 @@ public class CommandShaman implements ICommandRole {
         }
 
         if (playerWW.getHealth() < 3) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.role.shaman.not_enough_life");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.shaman.not_enough_life");
             return;
         }
 
@@ -49,7 +49,7 @@ public class CommandShaman implements ICommandRole {
         if (game.getTimer() - playerWW1.getDeathTime() > 30 ||
                 ((IAffectedPlayers) playerWW.getRole()).getAffectedPlayers().stream()
                         .filter(p -> p.equals(playerWW1)).count() > nTimesAffected) {
-            playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.shaman.cannot_use");
+            playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.shaman.cannot_use");
             return;
         }
 
@@ -68,11 +68,11 @@ public class CommandShaman implements ICommandRole {
         playerWW.getRole().addAuraModifier(new AuraModifier(playerWW.getRole().getKey(), Aura.DARK,1,false));
 
         if (game.getRandom().nextBoolean()) {
-            playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.shaman.victim_name",
+            playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.shaman.victim_name",
                     Formatter.player(playerWW1.getName()));
         } else {
             IRole role = playerWW1.getRole();
-            playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.shaman.victim_role",
+            playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.shaman.victim_role",
                     Formatter.role(game.translate(role.getDisplayRole())));
         }
 

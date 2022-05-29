@@ -18,7 +18,6 @@ import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteEvent;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.impl.RoleWithLimitedSelectionDuration;
-import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -73,7 +72,7 @@ public class Raven extends RoleWithLimitedSelectionDuration implements IAffected
             this.last.addPotionModifier(PotionModifier.remove(PotionEffectType.JUMP,this.getKey(),0));
 
             this.last.getRole().removeAuraModifier(this.getKey());
-            this.last.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.raven.no_longer_curse");
+            this.last.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.raven.no_longer_curse");
             this.last = null;
         }
 
@@ -83,19 +82,17 @@ public class Raven extends RoleWithLimitedSelectionDuration implements IAffected
 
         setPower(true);
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.role.raven.curse_message",
-                Formatter.timer(Utils.conversion(
-                        game.getConfig()
-                                .getTimerValue(TimerBase.POWER_DURATION))));
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.raven.curse_message",
+                Formatter.timer(game, TimerBase.POWER_DURATION));
     }
 
 
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.raven.description"))
-                .setItems(game.translate("werewolf.role.raven.item"))
-                .setEffects(game.translate("werewolf.role.raven.effect"))
+                .setDescription(game.translate("werewolf.roles.raven.description"))
+                .setItems(game.translate("werewolf.roles.raven.item"))
+                .setEffects(game.translate("werewolf.roles.raven.effect"))
                 .build();
     }
 

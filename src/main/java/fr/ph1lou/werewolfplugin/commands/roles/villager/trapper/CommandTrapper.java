@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-@RoleCommand(key = "werewolf.role.trapper.command",
+@RoleCommand(key = "werewolf.roles.trapper.command",
         roleKeys = RoleBase.TRAPPER,
         requiredPower = true,
         argNumbers = 1)
@@ -66,8 +66,8 @@ public class CommandTrapper implements ICommandRole {
         ((IAffectedPlayers) trapper).clearAffectedPlayer();
         ((IAffectedPlayers) trapper).addAffectedPlayer(playerWW1);
 
-        playerArg.sendMessage(game.translate(Prefix.YELLOW , "werewolf.role.trapper.get_track"));
-        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.trapper.tracking_perform",
+        playerArg.sendMessage(game.translate(Prefix.YELLOW , "werewolf.roles.trapper.get_track"));
+        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.trapper.tracking_perform",
                 Formatter.player(playerArg.getName()));
     }
 }

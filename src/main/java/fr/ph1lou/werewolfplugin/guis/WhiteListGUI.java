@@ -17,15 +17,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class WhiteList implements InventoryProvider {
+public class WhiteListGUI implements InventoryProvider {
 
 
     public static final SmartInventory INVENTORY = SmartInventory.builder()
             .id("whitelist")
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
-            .provider(new WhiteList())
+            .provider(new WhiteListGUI())
             .size(2, 9)
-            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.whitelist.name"))
+            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menus.whitelist.name"))
             .closeable(true)
             .build();
 
@@ -36,8 +36,8 @@ public class WhiteList implements InventoryProvider {
         WereWolfAPI game = main.getWereWolfAPI();
 
         contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType())
-                .setDisplayName(game.translate("werewolf.menu.return")).build()),
-                e -> Config.INVENTORY.open(player)));
+                .setDisplayName(game.translate("werewolf.menus.return")).build()),
+                e -> MainGUI.INVENTORY.open(player)));
     }
 
     @Override
@@ -48,37 +48,37 @@ public class WhiteList implements InventoryProvider {
         IConfiguration config = game.getConfig();
 
         contents.set(0, 2, ClickableItem.of((new ItemBuilder(UniversalMaterial.MAP.getType()).setDisplayName(config.isWhiteList() ?
-                game.translate("werewolf.menu.whitelist.close") :
-                game.translate("werewolf.menu.whitelist.open")).build()), e -> {
+                game.translate("werewolf.menus.whitelist.close") :
+                game.translate("werewolf.menus.whitelist.open")).build()), e -> {
             config.setWhiteList(!config.isWhiteList());
             game.getModerationManager().checkQueue();
 
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setDisplayName(config.isWhiteList() ?
-                            game.translate("werewolf.menu.whitelist.close") :
-                            game.translate("werewolf.menu.whitelist.open"))
+                            game.translate("werewolf.menus.whitelist.close") :
+                            game.translate("werewolf.menus.whitelist.open"))
                     .build());
 
         }));
         contents.set(1, 1, ClickableItem.of((new ItemBuilder(UniversalMaterial.SKELETON_SKULL.getStack())
-                .setDisplayName(game.translate("werewolf.menu.whitelist.spectator_mode"))
-                .setLore(Collections.singletonList(Arrays.asList(game.translate("werewolf.menu.whitelist.disable"),
-                        game.translate("werewolf.menu.whitelist.death_only"),
-                game.translate("werewolf.menu.whitelist.enable")).get(config.getSpectatorMode())))
+                .setDisplayName(game.translate("werewolf.menus.whitelist.spectator_mode"))
+                .setLore(Collections.singletonList(Arrays.asList(game.translate("werewolf.menus.whitelist.disable"),
+                        game.translate("werewolf.menus.whitelist.death_only"),
+                game.translate("werewolf.menus.whitelist.enable")).get(config.getSpectatorMode())))
                 .build()), e -> {
             if (e.isLeftClick()) {
                 config.setSpectatorMode((config.getSpectatorMode() + 1) % 3);
             } else config.setSpectatorMode((config.getSpectatorMode() + 2) % 3);
 
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setDisplayName(game.translate("werewolf.menu.whitelist.spectator_mode"))
-                    .setLore(Collections.singletonList(Arrays.asList(game.translate("werewolf.menu.whitelist.disable"),
-                            game.translate("werewolf.menu.whitelist.death_only"),
-                            game.translate("werewolf.menu.whitelist.enable")).get(config.getSpectatorMode())))
+                    .setDisplayName(game.translate("werewolf.menus.whitelist.spectator_mode"))
+                    .setLore(Collections.singletonList(Arrays.asList(game.translate("werewolf.menus.whitelist.disable"),
+                            game.translate("werewolf.menus.whitelist.death_only"),
+                            game.translate("werewolf.menus.whitelist.enable")).get(config.getSpectatorMode())))
                     .build());
         }));
         contents.set(1, 3, ClickableItem.of((new ItemBuilder(UniversalMaterial.PLAYER_HEAD.getStack())
-                .setDisplayName(game.translate("werewolf.menu.whitelist.max",
+                .setDisplayName(game.translate("werewolf.menus.whitelist.max",
                         Formatter.number(config.getPlayerMax())))
                 .build()), e -> {
             if (e.isLeftClick()) {
@@ -89,7 +89,7 @@ public class WhiteList implements InventoryProvider {
             }
 
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setDisplayName(game.translate("werewolf.menu.whitelist.max",
+                    .setDisplayName(game.translate("werewolf.menus.whitelist.max",
                             Formatter.number(config.getPlayerMax())))
                     .build());
         }));

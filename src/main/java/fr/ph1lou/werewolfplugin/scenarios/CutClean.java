@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.scenarios;
 
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Scenario;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.ScenarioBase;
@@ -57,7 +58,7 @@ public class CutClean extends ListenerManager {
                 if (!currentItemType.equals(Material.DIAMOND_PICKAXE) && !currentItemType.equals(Material.IRON_PICKAXE) && !currentItemType.equals(Material.STONE_PICKAXE)) {
                     return;
                 }
-                block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(game.getConfig().isScenarioActive(ScenarioBase.XP_BOOST) ? (int) (game.getConfig().getValue(XpBoost.KEY) / 100f) : 1);
+                block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(game.getConfig().isScenarioActive(ScenarioBase.XP_BOOST) ? (int) (game.getConfig().getValue(IntValueBase.XP_BOOST) / 100f) : 1);
                 block.setType(Material.AIR);
                 block.getWorld().dropItem(loc, new ItemStack(Material.IRON_INGOT, 1));
                 break;
@@ -66,7 +67,7 @@ public class CutClean extends ListenerManager {
                 if (!currentItemType.equals(Material.DIAMOND_PICKAXE) && !currentItemType.equals(Material.IRON_PICKAXE)) {
                     return;
                 }
-                block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(game.getConfig().isScenarioActive(ScenarioBase.XP_BOOST) ? (int) (game.getConfig().getValue(XpBoost.KEY) / 100f) : 1);
+                block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(game.getConfig().isScenarioActive(ScenarioBase.XP_BOOST) ? (int) (game.getConfig().getValue(IntValueBase.XP_BOOST) / 100f) : 1);
                 block.setType(Material.AIR);
                 block.getWorld().dropItem(loc, new ItemStack(Material.GOLD_INGOT, 1));
                 break;

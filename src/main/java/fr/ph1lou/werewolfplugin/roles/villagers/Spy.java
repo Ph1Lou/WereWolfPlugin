@@ -66,7 +66,7 @@ public class Spy extends RoleVillage implements IAffectedPlayers, IPower {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.spy.description"))
+                .setDescription(game.translate("werewolf.roles.spy.description"))
                 .build();
     }
 
@@ -107,14 +107,14 @@ public class Spy extends RoleVillage implements IAffectedPlayers, IPower {
                     }
                     else{
                         this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,
-                                "werewolf.role.spy.result",
+                                "werewolf.roles.spy.result",
                                 Formatter.player(this.playerWW.getName()),
                                 Formatter.number(this.count));
                     }
                 }
             }
 
-            this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,"werewolf.role.spy.use_power");
+            this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,"werewolf.roles.spy.use_power");
         }
 
         this.count = 0;

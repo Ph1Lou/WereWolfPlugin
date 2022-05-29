@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
@@ -33,21 +34,19 @@ import java.util.Optional;
 @Role(key = RoleBase.FEARFUL_WEREWOLF, 
         category = Category.WEREWOLF, 
         attributes = RoleAttribute.WEREWOLF,
-        configValues = @IntValue(key = FearFulWerewolf.DISTANCE,
+        configValues = @IntValue(key = IntValueBase.FEARFUL_WEREWOLF_DISTANCE,
         defaultValue = 20, meetUpValue = 20, step = 4, item = UniversalMaterial.MAGENTA_WOOL))
 public class FearFulWerewolf extends RoleWereWolf {
     public FearFulWerewolf(WereWolfAPI game, IPlayerWW playerWW) {
         super(game, playerWW);
     }
 
-    public static final String DISTANCE = "werewolf.role.fearful_werewolf.distance";
-
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game,this)
-                .setDescription(game.translate("werewolf.role.fearful_werewolf.description",
-                        Formatter.number(game.getConfig().getValue(DISTANCE))))
-                .setEffects(game.translate("werewolf.role.fearful_werewolf.effects"))
+                .setDescription(game.translate("werewolf.roles.fearful_werewolf.description",
+                        Formatter.number(game.getConfig().getValue(IntValueBase.FEARFUL_WEREWOLF_DISTANCE))))
+                .setEffects(game.translate("werewolf.roles.fearful_werewolf.effects"))
                 .build();
     }
 
@@ -133,7 +132,7 @@ public class FearFulWerewolf extends RoleWereWolf {
                     Location fearful = this.getPlayerWW().getLocation();
                     Location player = iPlayerWW.getLocation();
                     return (fearful.getWorld() == player.getWorld() &&
-                    fearful.distance(player) < game.getConfig().getValue(DISTANCE));
+                    fearful.distance(player) < game.getConfig().getValue(IntValueBase.FEARFUL_WEREWOLF_DISTANCE));
                 })
                 .count();
 

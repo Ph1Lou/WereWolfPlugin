@@ -116,8 +116,8 @@ public class Interpreter extends RoleVillage implements IPower {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.interpreter.description"))
-                .setPower(game.translate("werewolf.role.interpreter.power",
+                .setDescription(game.translate("werewolf.roles.interpreter.description"))
+                .setPower(game.translate("werewolf.roles.interpreter.power",
                         Formatter.format("&roles&",
                                 this.roles.stream().map(roleRegister -> game.translate(roleRegister.getMetaDatas().key()))
                                         .collect(Collectors.joining(", ")))))
@@ -219,11 +219,11 @@ public class Interpreter extends RoleVillage implements IPower {
                             this.getPlayerWW().setRole(this);
 
                             Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
-                            this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,"werewolf.role.interpreter.end");
+                            this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,"werewolf.roles.interpreter.end");
                         }
                     }, (long) (game.getConfig().getTimerValue(TimerBase.DAY_DURATION) * 20 * 1.6));
 
-                    this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.role.interpreter.perform",
+                    this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.interpreter.perform",
                             Formatter.role(game.translate(roleKey)));
                     return true;
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException ignored) {
@@ -241,10 +241,10 @@ public class Interpreter extends RoleVillage implements IPower {
     }
 
     private TextComponent changeRole(String roleKey) {
-        TextComponent textComponent = new TextComponent(this.game.translate(Prefix.GREEN,"werewolf.role.interpreter.click",
+        TextComponent textComponent = new TextComponent(this.game.translate(Prefix.GREEN,"werewolf.roles.interpreter.click",
                 Formatter.role(game.translate(roleKey))));
         textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/ww %s %s",
-                this.game.translate("werewolf.role.interpreter.command"), roleKey)));
+                this.game.translate("werewolf.roles.interpreter.command"), roleKey)));
         textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                 new ComponentBuilder(this.game.translate(roleKey)).create()));
         return textComponent;

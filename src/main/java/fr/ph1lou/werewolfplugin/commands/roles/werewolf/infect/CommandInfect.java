@@ -18,7 +18,7 @@ import org.bukkit.Bukkit;
 import java.util.Optional;
 import java.util.UUID;
 
-@RoleCommand(key = "werewolf.role.infect_father_of_the_wolves.command",
+@RoleCommand(key = "werewolf.roles.infect_father_of_the_wolves.command",
         roleKeys = RoleBase.INFECT,
         requiredPower = true,
         autoCompletion = false,
@@ -63,7 +63,7 @@ public class CommandInfect implements ICommandRole {
                         .isWereWolf() ||
                 game.getTimer() - playerWW1.getDeathTime() > 7) {
 
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.role.infect_father_of_the_wolves.player_cannot_be_infected");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.infect_father_of_the_wolves.player_cannot_be_infected");
             return;
         }
 
@@ -80,7 +80,7 @@ public class CommandInfect implements ICommandRole {
 
         ((IAffectedPlayers) infect).addAffectedPlayer(playerWW1);
 
-        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.infect_father_of_the_wolves.infection_perform",
+        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.infect_father_of_the_wolves.infection_perform",
                 Formatter.player(playerWW1.getName()));
         game.resurrection(playerWW1);
 

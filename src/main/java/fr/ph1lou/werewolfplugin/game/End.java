@@ -17,7 +17,6 @@ import fr.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.WinConditionsCheckEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AroundLoverEvent;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
-import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -169,7 +168,7 @@ public class End {
 
         BukkitUtils.scheduleSyncDelayedTask(game::stopGame, 20L * game.getConfig().getTimerValue(TimerBase.AUTO_RESTART_DURATION));
         Bukkit.broadcastMessage(game.translate(Prefix.ORANGE , "werewolf.announcement.restart",
-                Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.AUTO_RESTART_DURATION)))));
+                Formatter.timer(game, TimerBase.AUTO_RESTART_DURATION)));
     }
 
 

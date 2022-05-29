@@ -13,7 +13,7 @@ import org.bukkit.Bukkit;
 
 import java.util.UUID;
 
-@RoleCommand(key = "werewolf.role.sister.command_name",
+@RoleCommand(key = "werewolf.roles.sister.command_name",
         roleKeys = RoleBase.SISTER,
         argNumbers = 1,
         autoCompletion = false)
@@ -27,7 +27,7 @@ public class CommandSisterSeeName implements ICommandRole {
         IAffectedPlayers affectedPlayers = (IAffectedPlayers) playerWW.getRole();
 
         if (!affectedPlayers.getAffectedPlayers().contains(killerWW)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.role.sister.already");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.sister.already");
             return;
         }
 
@@ -43,7 +43,7 @@ public class CommandSisterSeeName implements ICommandRole {
         }
 
 
-        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.sister.reveal_killer_name",
+        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.sister.reveal_killer_name",
                 Formatter.player(
                 killerWW != null ?
                         killerWW.getName() :

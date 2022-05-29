@@ -3,6 +3,7 @@ package fr.ph1lou.werewolfplugin.roles.neutrals;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.annotations.Timer;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
@@ -22,7 +23,6 @@ import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
-import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfplugin.roles.villagers.Villager;
 import fr.ph1lou.werewolfplugin.roles.werewolfs.WereWolf;
 import org.bukkit.Bukkit;
@@ -46,12 +46,10 @@ import java.util.Optional;
         category = Category.NEUTRAL, 
         attributes = RoleAttribute.HYBRID,
         incompatibleRoles = {RoleBase.CHARMER},
-        timers = {@Timer(key = TimerBase.SCAM_DELAY, defaultValue = 9, meetUpValue = 3)},
-        configValues = {@IntValue(key = Scammer.DISTANCE,
+        timers = {@Timer(key = TimerBase.SCAMMER_DELAY, defaultValue = 9, meetUpValue = 3)},
+        configValues = {@IntValue(key = IntValueBase.SCAMMER_DISTANCE,
                 defaultValue = 20, meetUpValue = 20, step = 2, item = UniversalMaterial.BROWN_WOOL)})
 public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
-
-    public static final String DISTANCE = "werewolf.role.scammer.distance";
 
     private final Map<IPlayerWW, Integer> affectedPlayer = new HashMap<>();
     private boolean power = true;
@@ -63,9 +61,9 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.scammer.description",
-                        Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.SCAM_DELAY))),
-                        Formatter.number(game.getConfig().getValue(DISTANCE))))
+                .setDescription(game.translate("werewolf.roles.scammer.description",
+                        Formatter.timer(game, TimerBase.SCAMMER_DELAY),
+                        Formatter.number(game.getConfig().getValue(IntValueBase.SCAMMER_DISTANCE))))
                 .build();
     }
 
@@ -81,7 +79,7 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
             return;
         }
 
-        this.count = this.count++ % game.getConfig().getTimerValue(TimerBase.SCAM_DELAY);
+        this.count = this.count++ % game.getConfig().getTimerValue(TimerBase.SCAMMER_DELAY);
 
         if(count != 0){
             return;
@@ -143,11 +141,11 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
                     newRole.setTransformedToNeutral(true);
                 }
             }
-            target.sendMessageWithKey(Prefix.ORANGE,"werewolf.role.scammer.message_werewolf");
+            target.sendMessageWithKey(Prefix.ORANGE,"werewolf.roles.scammer.message_werewolf");
 
         } else {
             newRole = new Villager(game, target);
-            target.sendMessageWithKey(Prefix.ORANGE,"werewolf.role.scammer.message_villager");
+            target.sendMessageWithKey(Prefix.ORANGE,"werewolf.roles.scammer.message_villager");
         }
         if (this.isInfected()) {
             targetRole.setInfected();
@@ -167,7 +165,7 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
         newRole.disableAbilities();
         target.setRole(newRole);
         BukkitUtils.registerListener(target.getRole());
-        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,"werewolf.role.scammer.message",
+        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,"werewolf.roles.scammer.message",
                 Formatter.player(target.getName()));
     }
 
@@ -200,7 +198,7 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
      */
     private boolean checkDistance(IPlayerWW player, Location location) {
         return player.getLocation().getWorld() == location.getWorld() &&
-                player.getLocation().distance(location) < game.getConfig().getValue(DISTANCE);
+                player.getLocation().distance(location) < game.getConfig().getValue(IntValueBase.SCAMMER_DISTANCE);
     }
 
     @Override

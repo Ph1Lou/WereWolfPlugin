@@ -13,7 +13,7 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 
-@PlayerCommand(key = "werewolf.commands.help.command",
+@PlayerCommand(key = "werewolf.commands.player.help.command",
         descriptionKey = "")
 public class CommandHelp implements ICommand {
 

@@ -45,7 +45,7 @@ public class Analyst extends RoleWithLimitedSelectionDuration implements ILimite
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game,this)
-                .setDescription(game.translate("werewolf.role.analyst.description",
+                .setDescription(game.translate("werewolf.roles.analyst.description",
                         Formatter.timer(
                                 Utils.conversion(
                                         Math.max(0,
@@ -78,10 +78,9 @@ public class Analyst extends RoleWithLimitedSelectionDuration implements ILimite
         }
 
         this.getPlayerWW().sendMessageWithKey(
-                Prefix.YELLOW , "werewolf.role.analyst.message_see",
+                Prefix.YELLOW , "werewolf.roles.analyst.message_see",
                 Formatter.number(5 - this.use),
-                Formatter.timer(Utils.conversion(
-                        game.getConfig().getTimerValue(TimerBase.POWER_DURATION))));
+                Formatter.timer(game, TimerBase.POWER_DURATION));
     }
 
     @Override

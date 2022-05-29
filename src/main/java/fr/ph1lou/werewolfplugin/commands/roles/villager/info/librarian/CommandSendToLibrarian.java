@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@PlayerCommand(key = "werewolf.role.librarian.request_command",
+@PlayerCommand(key = "werewolf.roles.librarian.request_command",
         descriptionKey = "",
         autoCompletion = false)
 public class CommandSendToLibrarian implements ICommand {
@@ -67,17 +67,17 @@ public class CommandSendToLibrarian implements ICommand {
 
                     ((Librarian) roles).addStorage(sb2.toString());
 
-                    playerWW.sendMessageWithKey(Prefix.GREEN , "werewolf.role.librarian.contribute");
+                    playerWW.sendMessageWithKey(Prefix.GREEN , "werewolf.roles.librarian.contribute");
                     find.set(true);
                     librarianGiveBackEvent.getTargetWW().sendMessageWithKey(
-                            Prefix.GREEN , "werewolf.role.librarian.contribution",
+                            Prefix.GREEN , "werewolf.roles.librarian.contribution",
                             Formatter.player(player.getName()),
                             Formatter.format("&message&",librarianGiveBackEvent.getInfo()));
                 });
 
 
         if (!find.get()) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.role.librarian.prohibit");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.librarian.prohibit");
         }
 
 

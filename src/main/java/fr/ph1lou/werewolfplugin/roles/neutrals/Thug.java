@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -44,11 +45,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Role(key = RoleBase.THUG, 
         category = Category.NEUTRAL, 
         attributes = RoleAttribute.NEUTRAL,
-        configValues = {@IntValue(key = Thug.DISTANCE,
+        configValues = {@IntValue(key = IntValueBase.THUG_DISTANCE,
         defaultValue = 25, meetUpValue = 25, step = 5, item = UniversalMaterial.GRAY_WOOL)})
 public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
-
-    public static final String DISTANCE = "werewolf.role.thug.distance";
 
     private int probability = 10;
     private boolean power = false;
@@ -65,10 +64,10 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
 
     @Override
     public @NotNull String getDescription() {
-        return new DescriptionBuilder(game, this).setDescription(game.translate("werewolf.role.thug.description",
-                        Formatter.number(game.getConfig().getValue(DISTANCE))))
-                .setEffects(game.translate("werewolf.role.thug.effect"))
-                .setPower(game.translate("werewolf.role.thug.power", Formatter.number(this.probability)))
+        return new DescriptionBuilder(game, this).setDescription(game.translate("werewolf.roles.thug.description",
+                        Formatter.number(game.getConfig().getValue(IntValueBase.THUG_DISTANCE))))
+                .setEffects(game.translate("werewolf.roles.thug.effect"))
+                .setPower(game.translate("werewolf.roles.thug.power", Formatter.number(this.probability)))
                 .build();
     }
 
@@ -93,7 +92,7 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
         if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
             return;
         }
-        this.getPlayerWW().sendMessageWithKey(Prefix.BLUE,"werewolf.role.thug.command_message");
+        this.getPlayerWW().sendMessageWithKey(Prefix.BLUE,"werewolf.roles.thug.command_message");
 
     }
 
@@ -139,13 +138,13 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
 
                     if(!this.hasPower2()){
                         this.setPower2(true);
-                        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.role.thug.resistance");
+                        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.roles.thug.resistance");
                         this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,this.getKey()));
                     }
 
                     if(!event.getPlayerWW().getPlayersKills().isEmpty()){
                         this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE,
-                                "werewolf.role.thug.new_heart",
+                                "werewolf.roles.thug.new_heart",
                                 Formatter.player(event.getPlayerWW().getName()));
                         this.getPlayerWW().addPlayerMaxHealth(2);
                     }
@@ -166,7 +165,7 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
     public void onAnnouncement(AnnouncementDeathEvent event){
 
         if(event.getPlayerWW().equals(this.deathPlayerWithRoleRevealed)){
-            event.setFormat("werewolf.role.thug.death_message");
+            event.setFormat("werewolf.roles.thug.death_message");
         }
     }
 
@@ -230,7 +229,7 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
 
         probability+=10;
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.BLUE,"werewolf.role.thug.get_apple",
+        this.getPlayerWW().sendMessageWithKey(Prefix.BLUE,"werewolf.roles.thug.get_apple",
                 Formatter.format("&number2&",this.probability),
                 Formatter.number(thugRecoverGoldenAppleEvent.getGoldenApple()),
                 Formatter.player(event.getPlayerWW().getName()));

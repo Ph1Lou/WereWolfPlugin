@@ -29,7 +29,7 @@ public class WerewolfList extends ListenerManager {
                 .filter(playerWW -> !playerWW.isState(StatePlayer.DEATH))
                 .filter(playerWW -> playerWW.getRole().isWereWolf())
                 .forEach(playerWW -> {
-                    playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.werewolf.see_others");
+                    playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.werewolf.see_others");
                     Sound.WOLF_HOWL.play(playerWW);
                     Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(playerWW));
                 });

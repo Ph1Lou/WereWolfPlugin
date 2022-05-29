@@ -14,7 +14,7 @@ import org.bukkit.Bukkit;
 
 import java.util.UUID;
 
-@RoleCommand(key = "werewolf.role.devoted_servant.command",
+@RoleCommand(key = "werewolf.roles.devoted_servant.command",
         roleKeys = RoleBase.DEVOTED_SERVANT,
         requiredPower = true,
         autoCompletion = false,
@@ -55,7 +55,7 @@ public class CommandDevotedServant implements ICommandRole {
         }
         ((IAffectedPlayers) devotedServant).addAffectedPlayer(playerWW1);
 
-        playerWW.sendMessageWithKey(Prefix.LIGHT_BLUE,"werewolf.role.devoted_servant.perform",
+        playerWW.sendMessageWithKey(Prefix.LIGHT_BLUE,"werewolf.roles.devoted_servant.perform",
                 Formatter.player(playerWW1.getName()));
 
     }

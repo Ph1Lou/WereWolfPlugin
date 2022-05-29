@@ -19,15 +19,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Collections;
 
-public class Languages implements InventoryProvider {
+public class LanguagesGUI implements InventoryProvider {
 
 
     public static final SmartInventory INVENTORY = SmartInventory.builder()
             .id("languages")
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
-            .provider(new Languages())
+            .provider(new LanguagesGUI())
             .size(2, 9)
-            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.languages.name"))
+            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menus.languages.name"))
             .closeable(true)
             .build();
 
@@ -38,8 +38,8 @@ public class Languages implements InventoryProvider {
         WereWolfAPI game = main.getWereWolfAPI();
 
         contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType())
-                        .setDisplayName(game.translate("werewolf.menu.return")).build()),
-                e -> Config.INVENTORY.open(player)));
+                        .setDisplayName(game.translate("werewolf.menus.return")).build()),
+                e -> MainGUI.INVENTORY.open(player)));
 
         ItemBuilder fr = new ItemBuilder(UniversalMaterial.WHITE_BANNER.getStack());
         fr.addPattern(new Pattern(DyeColor.BLUE, PatternType.STRIPE_LEFT));
@@ -63,12 +63,12 @@ public class Languages implements InventoryProvider {
         contents.set(0, 2, ClickableItem.of((en.build()), e -> {
             main.getConfig().set("lang", "en_EN");
             Bukkit.getPluginManager().callEvent(new UpdateLanguageEvent());
-            Languages.INVENTORY.open(player);
+            LanguagesGUI.INVENTORY.open(player);
         }));
         contents.set(0, 4, ClickableItem.of((fr.build()), e -> {
             main.getConfig().set("lang", "fr_FR");
             Bukkit.getPluginManager().callEvent(new UpdateLanguageEvent());
-            Languages.INVENTORY.open(player);
+            LanguagesGUI.INVENTORY.open(player);
         }));
     }
 

@@ -19,7 +19,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-@RoleCommand(key = "werewolf.role.cupid.command",
+@RoleCommand(key = "werewolf.roles.cupid.command",
         roleKeys = RoleBase.CUPID,
         requiredPower = true,
         argNumbers = 2)
@@ -38,7 +38,7 @@ public class CommandCupid implements ICommandRole {
         }
 
         if(game.getConfig().isConfigActive(ConfigBase.RANDOM_CUPID)){
-            playerWW.sendMessageWithKey(Prefix.GREEN,"werewolf.role.cupid.random");
+            playerWW.sendMessageWithKey(Prefix.GREEN,"werewolf.roles.cupid.random_cupid_message");
             return;
         }
 
@@ -75,7 +75,7 @@ public class CommandCupid implements ICommandRole {
         }
         ((IPower) cupid).setPower(false);
         Bukkit.getPluginManager().callEvent(new CupidLoversEvent(playerWW, Sets.newHashSet(((IAffectedPlayers) cupid).getAffectedPlayers())));
-        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.cupid.designation_perform",
+        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.cupid.designation_perform",
                 Formatter.format("&player1&",args[0]),
                         Formatter.format("&player2&",args[1]));
     }

@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.commands.roles.neutral.succubus;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.commands.ICommandRole;
@@ -11,14 +12,13 @@ import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
-import fr.ph1lou.werewolfplugin.roles.neutrals.Succubus;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-@RoleCommand(key = "werewolf.role.succubus.command",
+@RoleCommand(key = "werewolf.roles.succubus.command",
         roleKeys = RoleBase.SUCCUBUS,
         requiredPower = true,
         argNumbers = 1)
@@ -59,8 +59,8 @@ public class CommandSuccubus implements ICommandRole {
         Location locationTarget = playerArg.getLocation();
 
         if (location.getWorld() == playerArg.getWorld()) {
-            if (location.distance(locationTarget) > game.getConfig().getValue(Succubus.DISTANCE)) {
-                playerWW.sendMessageWithKey(Prefix.RED , "werewolf.role.succubus.not_enough_near");
+            if (location.distance(locationTarget) > game.getConfig().getValue(IntValueBase.SUCCUBUS_DISTANCE)) {
+                playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.succubus.not_enough_near");
                 return;
             }
         } else {
@@ -77,7 +77,7 @@ public class CommandSuccubus implements ICommandRole {
         }
 
         ((IAffectedPlayers) succubus).addAffectedPlayer(playerWW1);
-        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.role.succubus.charming_beginning",
+        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.succubus.charming_beginning",
                 Formatter.player(playerArg.getName()));
     }
 }

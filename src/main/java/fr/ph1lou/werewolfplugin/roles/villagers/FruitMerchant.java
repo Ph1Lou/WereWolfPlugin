@@ -3,6 +3,7 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.annotations.Timer;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
@@ -40,11 +41,9 @@ import java.util.Map;
          attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION},
          timers = {@Timer(key = TimerBase.FRUIT_MERCHANT_COOL_DOWN,
                  defaultValue = 1200, meetUpValue = 5 * 60)},
- configValues = {@IntValue(key = FruitMerchant.DISTANCE,
+ configValues = {@IntValue(key = IntValueBase.FRUIT_MERCHANT_DISTANCE,
          defaultValue = 50, meetUpValue = 50, step = 5, item = UniversalMaterial.ORANGE_WOOL)})
 public class FruitMerchant extends RoleVillage implements IAffectedPlayers, IPower {
-
-    public static final String DISTANCE = "werewolf.role.fruit_merchant.distance";
 
     private boolean power = true;
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
@@ -57,12 +56,12 @@ public class FruitMerchant extends RoleVillage implements IAffectedPlayers, IPow
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game,this)
-                .setDescription(game.translate("werewolf.role.fruit_merchant.description",
-                        Formatter.number(game.getConfig().getValue(DISTANCE)),
+                .setDescription(game.translate("werewolf.roles.fruit_merchant.description",
+                        Formatter.number(game.getConfig().getValue(IntValueBase.FRUIT_MERCHANT_DISTANCE)),
                         Formatter.timer(Utils
                                 .conversion(game.getConfig()
                                         .getTimerValue(TimerBase.FRUIT_MERCHANT_COOL_DOWN)/2))))
-                .setPower(game.translate("werewolf.role.fruit_merchant.power"))
+                .setPower(game.translate("werewolf.roles.fruit_merchant.power"))
                 .build();
     }
 
@@ -128,7 +127,7 @@ public class FruitMerchant extends RoleVillage implements IAffectedPlayers, IPow
             return;
         }
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.role.fruit_merchant.info",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.roles.fruit_merchant.info",
                 Formatter.player(event.getPlayerWW().getName()),
                 Formatter.number(fruitMerchantDeathEvent.getGoldenAppleCount().getOldCount()),
                 Formatter.format("&number2&", fruitMerchantDeathEvent.getGoldenAppleCount().getNewCount()));

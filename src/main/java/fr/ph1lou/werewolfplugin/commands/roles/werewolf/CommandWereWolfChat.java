@@ -17,8 +17,8 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-@PlayerCommand(key = "werewolf.commands.ww_chat.name",
-        descriptionKey = "werewolf.commands.ww_chat.description",
+@PlayerCommand(key = "werewolf.commands.player.ww_chat.command",
+        descriptionKey = "werewolf.commands.player.ww_chat.description",
         statesPlayer = StatePlayer.ALIVE,
         statesGame = StateGame.GAME)
 public class CommandWereWolfChat implements ICommand {
@@ -32,7 +32,7 @@ public class CommandWereWolfChat implements ICommand {
         if (playerWW == null) return;
 
         if (!game.getConfig().isConfigActive(ConfigBase.WEREWOLF_CHAT)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.commands.ww_chat.disable");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.commands.player.ww_chat.disable");
             return;
         }
 
@@ -57,14 +57,14 @@ public class CommandWereWolfChat implements ICommand {
                     WereWolfChatEvent wereWolfChatEvent = new WereWolfChatEvent(playerWW, sb.toString());
                     Bukkit.getPluginManager().callEvent(wereWolfChatEvent);
                 } else {
-                    playerWW.sendMessageWithKey(Prefix.RED , "werewolf.commands.ww_chat.timer");
+                    playerWW.sendMessageWithKey(Prefix.RED , "werewolf.commands.player.ww_chat.timer");
                 }
             } else {
-                playerWW.sendMessageWithKey(Prefix.RED , "werewolf.commands.ww_chat.speak_number",
+                playerWW.sendMessageWithKey(Prefix.RED , "werewolf.commands.player.ww_chat.speak_number",
                         Formatter.number(game.getConfig().getValue(WerewolfChat.CONFIG)));
             }
 
 
-        } else playerWW.sendMessageWithKey(Prefix.RED , "werewolf.commands.ww_chat.not_access");
+        } else playerWW.sendMessageWithKey(Prefix.RED , "werewolf.commands.player.ww_chat.not_access");
     }
 }

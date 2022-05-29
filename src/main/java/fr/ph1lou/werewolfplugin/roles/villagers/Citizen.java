@@ -24,7 +24,6 @@ import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.ILimitedUse;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfplugin.Register;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -119,7 +118,7 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
     public String getDescription() {
         return new DescriptionBuilder(this.game, this)
                 .setDescription(this.game.translate(this.game.getConfig()
-                        .isConfigActive(ConfigBase.NEW_VOTE) ? "werewolf.role.citizen.description_new_vote" : "werewolf.role.citizen.description")).addExtraLines(this.game.translate("werewolf.role.citizen.description_extra")).build();
+                        .isConfigActive(ConfigBase.NEW_VOTE) ? "werewolf.roles.citizen.description_new_vote" : "werewolf.roles.citizen.description")).addExtraLines(this.game.translate("werewolf.roles.citizen.description_extra")).build();
     }
 
     @EventHandler
@@ -142,7 +141,7 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
         }
         Collections.shuffle(roles, this.game.getRandom());
         int count = roles.subList(0, 3).stream().mapToInt(s -> this.game.getConfig().getRoleCount(s)).sum();
-        this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE, "werewolf.role.citizen.hide_composition", Formatter.format("&role1&", this.game.translate(roles.get(0))), Formatter.format("&role2&", this.game.translate(roles.get(1))), Formatter.format("&role3&", this.game.translate(roles.get(2))), Formatter.number(count));
+        this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE, "werewolf.roles.citizen.hide_composition", Formatter.format("&role1&", this.game.translate(roles.get(0))), Formatter.format("&role2&", this.game.translate(roles.get(1))), Formatter.format("&role3&", this.game.translate(roles.get(2))), Formatter.number(count));
     }
 
     @Override
@@ -163,35 +162,34 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
         if (event.getPlayerVotedByVillagerWW() == null) {
             return;
         }
-        this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE, "werewolf.role.citizen.new_vote_count",
+        this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE, "werewolf.roles.citizen.new_vote_count",
                 Formatter.player(event.getPlayerVotedByVillagerWW().getName()),
                 Formatter.number(this.game.getVoteManager().getVotes().getOrDefault(event.getPlayerVotedByVillagerWW(), 0)));
     }
 
     private TextComponent cancelVote() {
-        TextComponent cancelVote = new TextComponent(this.game.translate("werewolf.role.citizen.click"));
-        cancelVote.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/ww %s", this.game.translate("werewolf.role.citizen.command_2"))));
-        cancelVote.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(this.game.translate("werewolf.role.citizen.cancel")).create()));
-        TextComponent cancel = new TextComponent(this.game.translate(Prefix.YELLOW, "werewolf.role.citizen.cancel_vote_message", Formatter.number(this.hasPower() ? 1 : 0)));
+        TextComponent cancelVote = new TextComponent(this.game.translate("werewolf.roles.citizen.click"));
+        cancelVote.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/ww %s", this.game.translate("werewolf.roles.citizen.command_2"))));
+        cancelVote.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(this.game.translate("werewolf.roles.citizen.cancel")).create()));
+        TextComponent cancel = new TextComponent(this.game.translate(Prefix.YELLOW, "werewolf.roles.citizen.cancel_vote_message", Formatter.number(this.hasPower() ? 1 : 0)));
         cancel.addExtra(cancelVote);
-        cancel.addExtra(new TextComponent(this.game.translate("werewolf.role.citizen.time_left", Formatter.timer(
-                Utils.conversion(this.game.getConfig().getTimerValue(TimerBase.VOTE_WAITING))))));
+        cancel.addExtra(new TextComponent(this.game.translate("werewolf.roles.citizen.time_left", Formatter.timer(game, TimerBase.VOTE_WAITING))));
         return cancel;
     }
 
     private TextComponent seeVote() {
-        TextComponent seeVote = new TextComponent(this.game.translate("werewolf.role.citizen.click"));
-        seeVote.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/ww %s", this.game.translate("werewolf.role.citizen.command_1"))));
-        seeVote.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(this.game.translate("werewolf.role.citizen.see")).create()));
-        TextComponent see = new TextComponent(this.game.translate(Prefix.YELLOW, "werewolf.role.citizen.see_vote_message", Formatter.number(2 - this.getUse())));
+        TextComponent seeVote = new TextComponent(this.game.translate("werewolf.roles.citizen.click"));
+        seeVote.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/ww %s", this.game.translate("werewolf.roles.citizen.command_1"))));
+        seeVote.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(this.game.translate("werewolf.roles.citizen.see")).create()));
+        TextComponent see = new TextComponent(this.game.translate(Prefix.YELLOW, "werewolf.roles.citizen.see_vote_message", Formatter.number(2 - this.getUse())));
         see.addExtra(seeVote);
-        see.addExtra(new TextComponent(this.game.translate("werewolf.role.citizen.time_left", Formatter.timer(Utils.conversion(this.game.getConfig().getTimerValue(TimerBase.VOTE_WAITING))))));
+        see.addExtra(new TextComponent(this.game.translate("werewolf.roles.citizen.time_left", Formatter.timer(game, TimerBase.VOTE_WAITING))));
         return see;
     }
 
     private TextComponent seeWerewolfVote(UUID werewolf) {
-        TextComponent seeVote = new TextComponent(this.game.translate(Prefix.GREEN, "werewolf.role.citizen.click_to_see_werewolf_vote"));
-        seeVote.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/ww %s %s", this.game.translate("werewolf.role.citizen.command_1"),
+        TextComponent seeVote = new TextComponent(this.game.translate(Prefix.GREEN, "werewolf.roles.citizen.click_to_see_werewolf.configurations.vote"));
+        seeVote.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/ww %s %s", this.game.translate("werewolf.roles.citizen.command_1"),
                 werewolf.toString())));
         return seeVote;
     }
@@ -208,7 +206,7 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
             return;
         }
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.role.citizen.rumor",
+        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.citizen.rumor",
                 Formatter.player(event.getPlayerWW().getName()),
                 Formatter.format("&message&", event.getMessage()));
     }

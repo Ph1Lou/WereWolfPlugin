@@ -10,7 +10,7 @@ import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfplugin.roles.villagers.Interpreter;
 import org.bukkit.Bukkit;
 
-@RoleCommand(key = "werewolf.role.interpreter.command",
+@RoleCommand(key = "werewolf.roles.interpreter.command",
         roleKeys = RoleBase.INTERPRETER,
         requiredPower = true,
         autoCompletion = false,

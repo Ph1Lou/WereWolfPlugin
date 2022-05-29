@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -30,11 +31,9 @@ import java.util.Optional;
 @Role(key = RoleBase.AVENGER_WEREWOLF, 
           category = Category.WEREWOLF, 
           attributes = RoleAttribute.WEREWOLF,
-        configValues = {@IntValue(key = AvengerWereWolf.DISTANCE,
+        configValues = {@IntValue(key = IntValueBase.AVENGER_WEREWOLF_DISTANCE,
         defaultValue = 10, meetUpValue = 10, step = 2, item = UniversalMaterial.RED_WOOL)})
 public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
-
-    public static final String DISTANCE = "werewolf.role.avenger_werewolf.distance";
 
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
 
@@ -47,10 +46,10 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.avenger_werewolf.description",
+                .setDescription(game.translate("werewolf.roles.avenger_werewolf.description",
                                 Formatter.number(game.getConfig()
-                                        .getValue(DISTANCE))))
-                .setPower(game.translate("werewolf.role.avenger_werewolf.power"))
+                                        .getValue(IntValueBase.AVENGER_WEREWOLF_DISTANCE))))
+                .setPower(game.translate("werewolf.roles.avenger_werewolf.power"))
                 .setEffects(game.translate("werewolf.description.werewolf"))
                 .build();
     }
@@ -77,7 +76,7 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
         }
 
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN , "werewolf.role.avenger_werewolf.remove",
+        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN , "werewolf.roles.avenger_werewolf.remove",
                 Formatter.player(event.getPlayerWW().getName()));
         this.getPlayerWW().addPlayerMaxHealth(2);
     }
@@ -101,7 +100,7 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
                     Location playerLocation = this.getPlayerWW().getLocation();
                     if (playerLocation.getWorld() == playerWW.getLocation().getWorld()) {
                         return playerLocation.distance(playerWW.getLocation()) < game.getConfig()
-                                .getValue(DISTANCE);
+                                .getValue(IntValueBase.AVENGER_WEREWOLF_DISTANCE);
                     }
                     return false;
                 })
@@ -116,7 +115,7 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
                         }
 
                         this.affectedPlayers.add(playerWW);
-                        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.role.avenger_werewolf.add",
+                        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.avenger_werewolf.add",
                                 Formatter.player(playerWW.getName()));
                     }
                 });
