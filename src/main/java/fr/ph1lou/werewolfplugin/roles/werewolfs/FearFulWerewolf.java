@@ -165,12 +165,12 @@ public class FearFulWerewolf extends RoleWereWolf {
                                 this.getKey()));
                 this.getPlayerWW()
                         .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
-                                this.getKey(),0));
+                                RoleBase.WEREWOLF,0));
             }
             else{
                 this.getPlayerWW()
                         .addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,
-                                this.getKey()));
+                                RoleBase.WEREWOLF));
                 this.getPlayerWW()
                         .addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
                                 this.getKey(),0));
@@ -179,7 +179,7 @@ public class FearFulWerewolf extends RoleWereWolf {
         else{
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
-                            this.getKey(),0));
+                            RoleBase.WEREWOLF,0));
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
                             this.getKey(),0));

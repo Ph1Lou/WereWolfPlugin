@@ -235,7 +235,7 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
                 if (isInfected() && game.isDay(Day.NIGHT)) {
                     this.getPlayerWW().addPotionModifier(PotionModifier
                             .remove(PotionEffectType.INCREASE_DAMAGE,
-                                    this.getKey(),
+                                    RoleBase.WEREWOLF,
                                     0));
 
                 }
@@ -249,7 +249,7 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
             if (this.isInfected() && game.isDay(Day.NIGHT)) {
                 this.getPlayerWW().addPotionModifier(PotionModifier
                         .add(PotionEffectType.INCREASE_DAMAGE,
-                                this.getKey()));
+                                RoleBase.WEREWOLF));
             }
             this.getPlayerWW().addPotionModifier(PotionModifier
                     .remove(PotionEffectType.INVISIBILITY,
@@ -277,7 +277,7 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
             getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.roles.little_girl.ability_disabled");
             this.getPlayerWW().addPotionModifier(PotionModifier
                     .remove(PotionEffectType.INCREASE_DAMAGE,
-                            this.getKey(),0));
+                            RoleBase.WEREWOLF,0));
             this.getPlayerWW().addPotionModifier(PotionModifier
                     .remove(PotionEffectType.ABSORPTION,
                             this.getKey(),1));

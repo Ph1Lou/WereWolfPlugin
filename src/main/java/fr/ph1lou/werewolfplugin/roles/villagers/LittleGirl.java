@@ -196,7 +196,7 @@ public class LittleGirl extends RoleVillage implements IInvisible {
                 this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INVISIBILITY,this.getKey()));
 
                 if (isInfected()) {
-                    this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,this.getKey(),0));
+                    this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,RoleBase.WEREWOLF,0));
 
                 }
                 this.setInvisible(true);
@@ -207,7 +207,7 @@ public class LittleGirl extends RoleVillage implements IInvisible {
             player.sendMessage(game.translate(
                     Prefix.YELLOW , "werewolf.roles.little_girl.visible"));
             if (this.isInfected()) {
-                this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,this.getKey()));
+                this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,RoleBase.WEREWOLF));
             }
             this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INVISIBILITY,this.getKey(),0));
             this.setInvisible(false);
@@ -237,7 +237,7 @@ public class LittleGirl extends RoleVillage implements IInvisible {
 
         if (isInvisible()) {
             getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.roles.little_girl.ability_disabled");
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,this.getKey(),0));
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,RoleBase.WEREWOLF,0));
 
             this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INVISIBILITY,this.getKey(),0));
 

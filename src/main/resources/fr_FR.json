@@ -769,7 +769,7 @@
 
       "hunter": {
         "display": "Chasseur",
-        "description": "A chaque fois que vous tuez un loup, les dégâts que vous infligez aux loups sont définitivement augmentés",
+        "description": "A chaque fois que vous tuez un loup, les dégâts que vous infligez aux Loups sont définitivement augmentés",
         "effect": "&number& force contre les loups",
         "description_shoot": "A votre mort, vous pouvez tirer sur un joueur de votre choix autre que votre tueur",
         "items": "3 fils, 64 flèches, un livre power III",
