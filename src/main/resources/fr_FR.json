@@ -1688,7 +1688,7 @@
         "message": "[§5Amnesic§r] Vous découvrez que vous êtes en fait un Loup Garou. Vous connaitrez un Loup toutes les &timer&",
         "description": "Au moment de la liste des Loups,\nune personne non Loup est choisi aléatoirement\net devient Amnésique.\nSi elle se fait taper par un Loup Garou \nelle passera dans leur camp \net connaitra un membre des Loups \ntoutes les §b&timer&§f. \nSi elle n'est pas transformée \nelle garde son camp d'origine",
         "new": "§b&player&§f est un Loup Garou, prochain pseudo dans &timer&",
-        "timer": "Nouveau Loup Garou tout les &timer&"
+        "timer": "Nouveau Loup Garou tout les §b&timer&"
       },
       "triple": {
         "name": "Trouple",
