@@ -35,7 +35,7 @@ public class CommandHelp implements ICommand {
                         new HoverEvent(
                                 HoverEvent.Action.SHOW_TEXT,
                                 new ComponentBuilder(
-                                        game.translate(command.getMetaDatas().key()))
+                                        game.translate(command.getMetaDatas().descriptionKey()))
                                         .create()));
                 textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,String.format("/ww %s ",
                         game.translate(command.getMetaDatas().key()))));

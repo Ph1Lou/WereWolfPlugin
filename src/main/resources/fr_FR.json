@@ -764,7 +764,7 @@
         "description": "Tout les 4 décès, vous voyez les dernières volontés des précédents défunts et celle du Trublion si il l'a modifié entre temps. À votre mort votre dernière volonté est révélée",
         "last_wishes": "Voici les volontés des 4 derniers morts",
         "self_death": "L'Occultiste est mort sa dernière volonté était : &wish&",
-        "command": "L'Occultiste est présent dans la partie, vous pouvez faire §b/ww wish§f pour écrire votre dernière volontée."
+        "command": "L'Occultiste est présent dans la partie, vous pouvez faire §b/ww volonte§f pour écrire votre dernière volontée."
       },
 
       "hunter": {
@@ -1132,7 +1132,7 @@
         },
         "ww_chat": {
           "command": "chatlg",
-          "description": "Commande pour parler dans le chat des Loups Garous",
+          "description": "Pour parler dans le chat des Loups Garous",
           "prefix": "[§cChat LG§r] &message&",
           "modo": "[§c&name&§r] &message&",
           "announce": "Vous avez §b&timer&§f secondes pour écrire §b&number&§f message(s) dans le chat des Loups Garous §b/ww chatlg§r <message>, attention des rôles peuvent voit le contenu du chat",
@@ -1207,6 +1207,7 @@
         "enchantments": {
           "command": "enchantement",
           "description": "Pour voir les limites d'enchantements",
+          "title": "Limites d'enchantements :",
           "note": "§oCertains rôles peuvent outrepasser certaines limites",
           "iron_diamond_protection": "- Protection Armure §6Fer§f : §b&number&§f / §3Diamant§f : §b&number2&§f",
           "iron_diamond_sharpness" : "- Tranchant Epee §6Fer§f : §b&number&§f / §3Diamant§f : §b&number2&§f",
@@ -1220,9 +1221,14 @@
           "list": "Liste des §bTimers §f :"
         },
         "configurations": {
-          "command": "regles",
+          "command": "configurations",
           "description": "Pour voir la configuration générale",
-          "list": "Liste des §bRègles §f :"
+          "list": "Liste des §bConfigurations §f :"
+        },
+        "configurations_roles": {
+          "command": "configroles",
+          "description": "Pour voir la configuration des rôles",
+          "list": "Liste des §bConfigurations Rôles §f :"
         },
         "random_events": {
           "command": "events",
@@ -1238,9 +1244,13 @@
           "list": "Liste des Scénarios §bactivés§f :"
         },
         "wish": {
-          "command": "wish",
-          "command_description": "Définis votre dernière volonté",
+          "command": "volonte",
+          "description": "Définis votre dernière volonté",
           "change_wish": "Votre dernière volonté est désormais: &wish&"
+        },
+        "vote": {
+          "command": "vote",
+          "description": "Permet de Voter"
         }
       }
     },
@@ -1309,7 +1319,6 @@
       },
       "enchantments": {
         "name": "Configuration §bEnchantements",
-        "title": "Limite d'enchantements :",
         "iron_protection" : "Armure §6Fer§f : Protection §b&number&",
         "diamond_protection": "Armure §3Diamant§f : Protection §b&number&",
         "power": "Puissance : §b&number&",
@@ -1508,7 +1517,6 @@
         "no_result": "Aucun joueur n'a été voté",
         "no_result_more_one": "Aucun joueur n'a été voté plus d'une fois",
         "vote_time": "C'est l'heure de voter §b/ww vote§r Vous avez §b&timer&",
-        "command": "vote",
         "new_voted": "Vous avez été le plus voté lors du dernier vote, vous ne pouvez donc pas voter cette fois ci",
         "neutral": "Les rôles neutres ne peuvent pas voter",
         "new_vote_villager": "§b&player&§f est celui qui a recueilli le plus de votes auprès des Villageois.",

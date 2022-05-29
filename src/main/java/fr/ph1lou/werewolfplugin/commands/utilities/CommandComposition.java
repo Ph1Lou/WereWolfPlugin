@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @PlayerCommand(key = "werewolf.commands.player.compo.command",
         descriptionKey = "werewolf.commands.player.compo.description",
         argNumbers = 0)
-public class CommandCompo implements ICommand {
+public class CommandComposition implements ICommand {
 
     @Override
     public void execute(WereWolfAPI game, Player player, String[] args) {

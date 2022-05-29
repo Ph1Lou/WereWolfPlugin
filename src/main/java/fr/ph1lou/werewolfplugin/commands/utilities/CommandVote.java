@@ -12,8 +12,8 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-@PlayerCommand(key = "werewolf.configurations.vote.command",
-        descriptionKey = "",
+@PlayerCommand(key = "werewolf.commands.player.vote.command",
+        descriptionKey = "werewolf.commands.player.vote.description",
         statesPlayer = StatePlayer.ALIVE,
         statesGame = StateGame.GAME,
         argNumbers = 1)

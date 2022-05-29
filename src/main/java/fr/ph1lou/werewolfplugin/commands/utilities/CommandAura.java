@@ -7,7 +7,7 @@ import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import org.bukkit.entity.Player;
 
 @PlayerCommand(key = "werewolf.commands.player.aura.command",
-        descriptionKey = "werewolf.menus.aura.description",
+        descriptionKey = "werewolf.commands.player.aura.description",
         argNumbers = 0)
 public class CommandAura implements ICommand {
 

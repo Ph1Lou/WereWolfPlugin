@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 @PlayerCommand(key = "werewolf.commands.player.enchantments.command",
         descriptionKey = "werewolf.commands.player.enchantments.description",
         argNumbers = 0)
-public class CommandEnchantment implements ICommand {
+public class CommandEnchantments implements ICommand {
 
     @Override
     public void execute(WereWolfAPI game, Player player, String[] args) {

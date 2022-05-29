@@ -26,7 +26,8 @@ public class CommandScenarios implements ICommand {
             return;
         }
 
-        StringBuilder sb = new StringBuilder(game.translate(Prefix.GREEN , "werewolf.commands.player.scenarios.list"));
+        player.sendMessage(game.translate(Prefix.GREEN , "werewolf.commands.player.scenarios.list"));
+        StringBuilder sb = new StringBuilder();
 
         int i = 0;
         for (Wrapper<ListenerManager, Scenario> scenarioRegister : Register.get().getScenariosRegister()) {

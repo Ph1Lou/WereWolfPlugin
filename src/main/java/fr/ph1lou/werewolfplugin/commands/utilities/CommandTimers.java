@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @PlayerCommand(key = "werewolf.commands.player.timers.command",
         descriptionKey = "werewolf.commands.player.timers.description",
         argNumbers = 0)
-public class CommandTimer implements ICommand {
+public class CommandTimers implements ICommand {
 
     @Override
     public void execute(WereWolfAPI game, Player player, String[] args) {

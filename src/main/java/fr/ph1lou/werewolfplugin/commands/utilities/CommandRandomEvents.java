@@ -27,7 +27,9 @@ public class CommandRandomEvents implements ICommand {
             return;
         }
 
-        StringBuilder sb = new StringBuilder(game.translate(Prefix.GREEN , "werewolf.commands.player.random_events.list"));
+        player.sendMessage(game.translate(Prefix.GREEN , "werewolf.commands.player.random_events.list"));
+
+        StringBuilder sb = new StringBuilder();
 
         for (Wrapper<ListenerManager, Event> randomEventRegister : Register.get().getRandomEventsRegister()) {
 

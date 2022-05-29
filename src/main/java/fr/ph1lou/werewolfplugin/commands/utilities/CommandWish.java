@@ -14,7 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 @PlayerCommand(key = "werewolf.commands.player.wish.command",
-        descriptionKey = "werewolf.commands.player.wish.command_description",
+        descriptionKey = "werewolf.commands.player.wish.description",
         statesPlayer = StatePlayer.ALIVE,
         statesGame = StateGame.GAME)
 public class CommandWish implements ICommand {
