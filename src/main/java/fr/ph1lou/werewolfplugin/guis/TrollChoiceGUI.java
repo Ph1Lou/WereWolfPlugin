@@ -119,7 +119,7 @@ public class TrollChoiceGUI implements InventoryProvider {
                     }
                 });
 
-        InventoryUtils.fillInventory(game, items, pagination, contents, () -> getInventory(player, this.category), 45);
+        InventoryUtils.fillInventory(game, items, pagination, contents, () -> getInventory(player, this.category), 36);
 
     }
 }

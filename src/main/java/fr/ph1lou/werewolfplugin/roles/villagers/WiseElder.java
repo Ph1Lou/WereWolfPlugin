@@ -3,10 +3,10 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
-import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
@@ -32,11 +32,16 @@ import java.util.Optional;
 @Role(key = RoleBase.WISE_ELDER, 
         category = Category.VILLAGER, 
         attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION},
-configValues = {@IntValue(key = IntValueBase.WISE_ELDER_DISTANCE,
-        defaultValue = 15, 
-        meetUpValue = 15, 
-        step = 3, 
-        item = UniversalMaterial.BROWN_WOOL)})
+        configValues = {@IntValue(key = IntValueBase.WISE_ELDER_DISTANCE,
+                defaultValue = 15,
+                meetUpValue = 15,
+                step = 3,
+                item = UniversalMaterial.BROWN_WOOL),
+                @IntValue(key = IntValueBase.WISE_ELDER_BEGIN_DAY,
+                        defaultValue = 6,
+                        meetUpValue = 3,
+                        step = 1,
+                        item = UniversalMaterial.BED)})
 public class WiseElder extends RoleVillage {
 
     private int neutralCounter;
@@ -52,7 +57,9 @@ public class WiseElder extends RoleVillage {
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.roles.wise_elder.description",
-                        Formatter.number(game.getConfig().getValue(IntValueBase.WISE_ELDER_DISTANCE))))
+                        Formatter.number(game.getConfig().getValue(IntValueBase.WISE_ELDER_DISTANCE)),
+                        Formatter.format("&day&",
+                                game.getConfig().getValue(IntValueBase.WISE_ELDER_DISTANCE))))
                 .build();
     }
 
@@ -72,7 +79,7 @@ public class WiseElder extends RoleVillage {
             return;
         }
 
-        if (event.getNumber() == 6) {
+        if (event.getNumber() == game.getConfig().getValue(IntValueBase.WISE_ELDER_BEGIN_DAY)) {
             this.active = true;
         }
 

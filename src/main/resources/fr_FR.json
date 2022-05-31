@@ -356,7 +356,10 @@
         "infection_message": "§b&player&§r est mort, pour l'infecter §6Cliquez ici §r(Vous avez §b7sec§r)",
         "infection_perform": "Vous venez d'infecter §b&player&",
         "player_cannot_be_infected": "Le joueur ne peut pas (plus) être infecté",
-        "command": "infecter_infect"
+        "command": "infecter_infect",
+        "configurations": {
+          "auto_rez": "L'Infect peut se ressusciter"
+        }
       },
       "seer": {
         "display": "Voyante",
@@ -726,10 +729,11 @@
       },
       "wise_elder": {
         "display": "Vieux sage",
-        "description": "A partir du jour 6, vous disposez d'un compteur pour chaque type d'Aura\nPour chaque seconde passée à moins de &number& blocs d'un joueur, le compteur correspondant à son aura s'incrémente.",
+        "description": "A partir du jour &day&, vous disposez d'un compteur pour chaque type d'Aura\nPour chaque seconde passée à moins de &number& blocs d'un joueur, le compteur correspondant à son aura s'incrémente.",
         "end_of_cycle": "Vous recevez le contenu des compteurs => \nCompteur Aura §fNeutre§f: &neutral&§r.\n Compteur Aura §0Obscure§f: &dark&§r.\n Compteur Aura §eLumineuse§f: &light&",
         "configurations": {
-          "distance": "Champ d'action du Vieux Sage §b&number&"
+          "distance": "Champ d'action du Vieux Sage §b&number&",
+          "begin_day": "Début du pouvoir §b&number&"
         }
       },
       "tenebrous_werewolf": {
@@ -1346,7 +1350,7 @@
         "delete_message": "Configuration §b&save&§r supprimée",
         "success": "Configuration §bsauvegardée",
         "failure": "Slot de configuration plein",
-        "save_menu": "§bMenu de §bSauvegarde"
+        "save_menu": "Menu de §bSauvegarde"
       },
       "stuff": {
         "name": "Configuration §bStuff",
@@ -1742,7 +1746,7 @@
       },
       "rumors": {
         "name": "Rumeurs",
-        "description": "Une fois dans la partie, l'évènement peut se déclencher pendant une période de §b&period&§f à partir de §b&timer_start&§f après les rôles,\nun message annonce aux joueurs qu’ils ont 20 secondes pour envoyer un message dans le chat.\nLes messages de tous les joueurs sont ensuite affichés anonymement\net dans le désordre. Seul le Citoyen pourra voir le pseudo\ndu joueur ayant écrit une des rumeurs.",
+        "description": "Une fois dans la partie, l'évènement peut se déclencher \npendant une période de §b&period&§f à partir de §b&timer_start&§f après les rôles,\nun message annonce aux joueurs qu’ils ont 20 secondes \npour envoyer un message dans le chat.\nLes messages de tous les joueurs sont ensuite affichés anonymement\net dans le désordre. Seul le Citoyen pourra voir le pseudo\ndu joueur ayant écrit une des rumeurs.",
         "message": "[§5Rumeur§r] Vous avez §b20§f secondes pour envoyer un message, §bcliquez ici",
         "rumors_announcement": "[§5Rumeur§r] Les rumeurs sont : &rumors&",
         "command": "rumor",

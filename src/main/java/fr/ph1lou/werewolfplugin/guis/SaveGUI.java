@@ -56,11 +56,12 @@ public class SaveGUI implements InventoryProvider {
 
         contents.set(1, 0, ClickableItem.of((new ItemBuilder(Material.EMERALD_BLOCK).setDisplayName(game.translate("werewolf.menus.save.new")).build()), e -> new AnvilGUI.Builder()
                 .onComplete((player2, text) -> {
+                    if(text.isEmpty()){
+                        return AnvilGUI.Response.text("Incorrect.");
+                    }
                     save(main, text, player);
                     return AnvilGUI.Response.close();
                 })
-                .preventClose()
-                .text(" ")
                 .title(game.translate("werewolf.menus.save.save_menu"))
                 .itemLeft(new ItemStack(Material.EMERALD_BLOCK))
                 .plugin(main)

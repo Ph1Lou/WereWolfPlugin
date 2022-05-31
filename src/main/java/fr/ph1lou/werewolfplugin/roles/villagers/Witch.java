@@ -111,7 +111,7 @@ public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
         IPlayerWW playerWW = event.getPlayerWW();
 
         if (playerWW.equals(getPlayerWW())) {
-            event.setCancelled(autoResurrection(playerWW));
+            event.setCancelled(autoResurrection());
             return;
         }
 
@@ -130,7 +130,7 @@ public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
         this.getPlayerWW().sendMessage(textComponent);
     }
 
-    private boolean autoResurrection(IPlayerWW player) {
+    private boolean autoResurrection() {
 
         if (!game.getConfig().isConfigActive(ConfigBase.WITCH_AUTO_RESURRECTION)) {
             return false;
@@ -147,7 +147,7 @@ public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
             return true;
         }
 
-        player.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+        this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
 
         return false;
     }

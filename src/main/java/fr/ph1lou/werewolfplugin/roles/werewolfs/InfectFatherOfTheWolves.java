@@ -1,22 +1,26 @@
 package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
 
+import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
+import fr.ph1lou.werewolfapi.events.roles.infect_father_of_the_wolves.InfectionEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.role.impl.RoleWereWolf;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
-import fr.ph1lou.werewolfapi.role.impl.RoleWereWolf;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +31,8 @@ import java.util.Optional;
 
 @Role(key = RoleBase.INFECT, category= Category.WEREWOLF,
         attributes = {RoleAttribute.WEREWOLF},
-        weight = 1.5f)
+        weight = 1.5f,
+        configurations = @Configuration(key = ConfigBase.INFECT_AUTO_RESURRECTION))
 public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
@@ -110,6 +115,7 @@ public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPl
         }
 
         if (playerWW.equals(getPlayerWW())) {
+            event.setCancelled(this.autoResurrection());
             return;
         }
 
@@ -125,5 +131,27 @@ public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPl
                                 game.translate("werewolf.roles.infect_father_of_the_wolves.command"),
                                 playerWW.getUUID())));
         getPlayerWW().sendMessage(infectMessage);
+    }
+
+    private boolean autoResurrection() {
+
+        if (!game.getConfig().isConfigActive(ConfigBase.INFECT_AUTO_RESURRECTION)) {
+            return false;
+        }
+
+        InfectionEvent infectionEvent =
+                new InfectionEvent(this.getPlayerWW(),
+                        getPlayerWW());
+        Bukkit.getPluginManager().callEvent(infectionEvent);
+        setPower(false);
+
+        if (!infectionEvent.isCancelled()) {
+            game.resurrection(getPlayerWW());
+            return true;
+        }
+
+        this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+
+        return false;
     }
 }

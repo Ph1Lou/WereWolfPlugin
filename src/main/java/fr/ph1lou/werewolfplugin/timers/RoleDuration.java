@@ -97,7 +97,7 @@ public class RoleDuration extends ListenerManager {
 
 
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onRepartitionFirst(RepartitionEvent event){
         if (this.getGame().getConfig().isConfigActive(ConfigBase.TROLL_ROLE)) {
             Bukkit.getPluginManager().callEvent(new TrollEvent());
