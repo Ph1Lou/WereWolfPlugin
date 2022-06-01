@@ -1,5 +1,7 @@
 # WereWolfPlugin LG UHC
 
+[![Crowdin](https://badges.crowdin.net/plugin-werewolf-uhc/localized.svg)](https://crowdin.com/project/plugin-werewolf-uhc)
+
 # Découvrez l'API du plugin ici
 
 <https://github.com/Ph1Lou/WereWolfAPI>
