@@ -90,7 +90,7 @@ public class FalsifierWereWolf extends RoleWereWolf {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.roles.falsifier_werewolf.description"))
                 .setEffects(game.translate("werewolf.description.werewolf"))
-                .addExtraLines(game.translate("werewolf.roles.falsifier_werewolf.roles",
+                .addExtraLines(game.translate("werewolf.roles.falsifier_werewolf.role",
                                 Formatter.role(game.translate(this.getDisplayRole()))))
                 .build();
     }

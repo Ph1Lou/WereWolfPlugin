@@ -66,12 +66,11 @@ public class LanguageManager implements ILanguageManager {
                             .collect(Collectors.toList());
                 }
                 else{
-                    return Collections.singletonList("Message is not an array");
+                    return Collections.singletonList(String.format("Message %s is not an array", key));
                 }
             }
         }
-
-        return Collections.singletonList("Array Message not found");
+        return Collections.singletonList(String.format("Array %s Message not found", key));
     }
 
 
@@ -95,11 +94,11 @@ public class LanguageManager implements ILanguageManager {
                     return message;
                 }
                 else{
-                    return "Message is not a string";
+                    return String.format("Message %s is not a string", key);
                 }
             }
         }
 
-        return "Message not found";
+        return String.format("Message %s not found", key);
     }
 }
