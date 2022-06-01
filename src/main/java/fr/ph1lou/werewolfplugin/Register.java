@@ -1,6 +1,5 @@
 package fr.ph1lou.werewolfplugin;
 
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.AdminCommand;
 import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.annotations.DisableAutoLoad;
@@ -14,7 +13,7 @@ import fr.ph1lou.werewolfapi.annotations.Scenario;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.commands.ICommandRole;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.lovers.ILover;
 import fr.ph1lou.werewolfapi.registers.IRegisterManager;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
@@ -25,9 +24,10 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -36,8 +36,8 @@ public class Register implements IRegisterManager {
 
     private final Set<Wrapper<JavaPlugin, ModuleWerewolf>> modules = new HashSet<>();
     private final Set<Wrapper<IRole, Role>> roles = new HashSet<>();
-    private final Set<Wrapper<ListenerManager, Scenario>> scenarios = new HashSet<>();
-    private final Set<Wrapper<ListenerManager, Event>> events = new HashSet<>();
+    private final Set<Wrapper<ListenerWerewolf, Scenario>> scenarios = new HashSet<>();
+    private final Set<Wrapper<ListenerWerewolf, Event>> events = new HashSet<>();
     private final Set<Wrapper<ICommand, PlayerCommand>> commands = new HashSet<>();
     private final Set<Wrapper<ICommandRole, RoleCommand>> roleCommands = new HashSet<>();
     private final Set<Wrapper<ICommand, AdminCommand>> adminCommands = new HashSet<>();
@@ -46,7 +46,7 @@ public class Register implements IRegisterManager {
     private final Set<Wrapper<?, Timer>> timers = new HashSet<>();
 
     private final Set<Wrapper<ILover, Lover>> lovers = new HashSet<>();
-    private final GetWereWolfAPI main;
+    private final Map<String,JavaPlugin> addons = new HashMap<>();
 
     public static Register get() {
         return INSTANCE;
@@ -55,7 +55,6 @@ public class Register implements IRegisterManager {
     private static Register INSTANCE;
 
     public Register(Main main){
-        this.main = main;
         INSTANCE = this;
         for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
             ModuleWerewolf moduleWerewolf = plugin.getClass().getAnnotation(ModuleWerewolf.class);
@@ -75,43 +74,16 @@ public class Register implements IRegisterManager {
                     continue;
                 }
 
+                this.addons.put(moduleWerewolf.key(), (JavaPlugin)plugin);
                 this.modules.add(new Wrapper<>(JavaPlugin.class,
                         moduleWerewolf,
-                        moduleWerewolf.key(),
-                        (JavaPlugin)plugin));
+                        moduleWerewolf.key()));
                 this.register(plugin.getClass().getPackage().getName(),
                         moduleWerewolf,
                         plugin,
                         prefix);
             }
         }
-    }
-
-
-
-    public <T> T instantiate(Class<T> clazz){
-        if(ListenerManager.class.isAssignableFrom(clazz)){
-            try {
-                return clazz.getConstructor(GetWereWolfAPI.class).newInstance(main);
-            } catch (InstantiationException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
-        }
-        if(ICommand.class.isAssignableFrom(clazz)){
-            try {
-                return clazz.getConstructor().newInstance();
-            } catch (InstantiationException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
-        }
-        if(ICommandRole.class.isAssignableFrom(clazz)){
-            try {
-                return clazz.getConstructor().newInstance();
-            } catch (InstantiationException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
     }
 
     public void register(String packageName, ModuleWerewolf addon, Plugin plugin, String prefix){
@@ -135,8 +107,7 @@ public class Register implements IRegisterManager {
                                 if(role.key().startsWith(prefix)){
                                     this.roles.add(new Wrapper<>((Class<IRole>)clazz,
                                             role,
-                                            addon.key(),
-                                            null));
+                                            addon.key()));
                                 }
                                 else{
                                     Bukkit.getLogger().warning(String.format(
@@ -153,13 +124,12 @@ public class Register implements IRegisterManager {
 
                             Scenario scenario = clazz.getAnnotation(Scenario.class);
 
-                            if(ListenerManager.class.isAssignableFrom(clazz)){
+                            if(ListenerWerewolf.class.isAssignableFrom(clazz)){
 
                                 if(scenario.key().startsWith(prefix)){
-                                    this.scenarios.add(new Wrapper<>((Class<ListenerManager>)clazz,
+                                    this.scenarios.add(new Wrapper<>((Class<ListenerWerewolf>)clazz,
                                             scenario,
-                                            addon.key(),
-                                            this.instantiate((Class<ListenerManager>)clazz)));
+                                            addon.key()));
                                 }
                                 else{
                                     Bukkit.getLogger().warning(String.format(
@@ -169,20 +139,19 @@ public class Register implements IRegisterManager {
 
                             }
                             else{
-                                Bukkit.getLogger().warning(String.format("Scenario %s doesn't extend ListenerManager", scenario.key()));
+                                Bukkit.getLogger().warning(String.format("Scenario %s doesn't extend ListenerWerewolf", scenario.key()));
                             }
                         }
                         else if(clazz.getAnnotation(Event.class) != null){
 
                             Event event = clazz.getAnnotation(Event.class);
 
-                            if(ListenerManager.class.isAssignableFrom(clazz)){
+                            if(ListenerWerewolf.class.isAssignableFrom(clazz)){
 
                                 if(event.key().startsWith(prefix)){
-                                    this.events.add(new Wrapper<>((Class<ListenerManager>)clazz,
+                                    this.events.add(new Wrapper<>((Class<ListenerWerewolf>)clazz,
                                             event,
-                                            addon.key(),
-                                            this.instantiate((Class<ListenerManager>)clazz)));
+                                            addon.key()));
                                 }
                                 else{
                                     Bukkit.getLogger().warning(String.format(
@@ -191,7 +160,7 @@ public class Register implements IRegisterManager {
                                 }
                             }
                             else{
-                                Bukkit.getLogger().warning(String.format("Event %s doesn't extend ListenerManager", event.key()));
+                                Bukkit.getLogger().warning(String.format("Event %s doesn't extend ListenerWerewolf", event.key()));
                             }
                         }
                         else if(clazz.getAnnotation(Configuration.class) != null){
@@ -201,8 +170,7 @@ public class Register implements IRegisterManager {
                             if(configuration.key().startsWith(prefix)){
                                 this.configurations.add(new Wrapper<>((Class<ICommand>)clazz,
                                         configuration,
-                                        addon.key(),
-                                        this.instantiate((Class<ICommand>)clazz)));
+                                        addon.key()));
                             }
                             else{
                                 Bukkit.getLogger().warning(String.format(
@@ -217,8 +185,7 @@ public class Register implements IRegisterManager {
                             if(timer.key().startsWith(prefix)){
                                 this.timers.add(new Wrapper<>((Class<ICommand>)clazz,
                                         timer,
-                                        addon.key(),
-                                        this.instantiate((Class<ICommand>)clazz)));
+                                        addon.key()));
                             }
                             else{
                                 Bukkit.getLogger().warning(String.format(
@@ -235,8 +202,7 @@ public class Register implements IRegisterManager {
                                 if(playerCommand.key().startsWith(prefix)){
                                     this.commands.add(new Wrapper<>((Class<ICommand>)clazz,
                                             playerCommand,
-                                            addon.key(),
-                                            this.instantiate((Class<ICommand>)clazz)));
+                                            addon.key()));
                                 }
                                 else {
                                     Bukkit.getLogger().warning(String.format(
@@ -257,8 +223,7 @@ public class Register implements IRegisterManager {
                                 if(roleCommand.key().startsWith(prefix)){
                                     this.roleCommands.add(new Wrapper<>((Class<ICommandRole>)clazz,
                                             roleCommand,
-                                            addon.key(),
-                                            this.instantiate((Class<ICommandRole>)clazz)));
+                                            addon.key()));
                                 }
                                 else {
                                     Bukkit.getLogger().warning(String.format(
@@ -279,8 +244,7 @@ public class Register implements IRegisterManager {
                                 if(adminCommand.key().startsWith(prefix)){
                                     this.adminCommands.add(new Wrapper<>((Class<ICommand>)clazz,
                                             adminCommand,
-                                            addon.key(),
-                                            this.instantiate((Class<ICommand>)clazz)));
+                                            addon.key()));
                                 }
                                 else {
                                     Bukkit.getLogger().warning(String.format(
@@ -301,8 +265,7 @@ public class Register implements IRegisterManager {
                                 if(lover.key().startsWith(prefix)){
                                     this.lovers.add(new Wrapper<>((Class<ILover>)clazz,
                                             lover,
-                                            addon.key(),
-                                            null));
+                                            addon.key()));
                                 }
                                 else {
                                     Bukkit.getLogger().warning(String.format(
@@ -427,7 +390,7 @@ public class Register implements IRegisterManager {
     }
 
     @Override
-    public Set<Wrapper<ListenerManager, Scenario>> getScenariosRegister() {
+    public Set<Wrapper<ListenerWerewolf, Scenario>> getScenariosRegister() {
         return this.scenarios;
     }
 
@@ -462,7 +425,12 @@ public class Register implements IRegisterManager {
     }
 
     @Override
-    public Set<Wrapper<ListenerManager, Event>> getRandomEventsRegister() {
+    public Set<Wrapper<ListenerWerewolf, Event>> getRandomEventsRegister() {
         return this.events;
+    }
+
+    @Override
+    public Optional<JavaPlugin> getAddon(String key) {
+        return Optional.ofNullable(this.addons.get(key));
     }
 }

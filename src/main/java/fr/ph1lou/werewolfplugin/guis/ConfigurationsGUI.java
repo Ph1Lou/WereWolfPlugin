@@ -10,7 +10,7 @@ import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import fr.ph1lou.werewolfplugin.Main;
@@ -70,9 +70,7 @@ public class ConfigurationsGUI implements InventoryProvider {
                 .filter(config1 -> (config1.getMetaDatas().appearInMenu())
                         || game.isDebug())
                 .forEach(configRegister -> items.add(getClickableItem(game, configRegister.getMetaDatas(),
-                        (ListenerManager) configRegister
-                                .getObject()
-                                .filter(o -> o instanceof ListenerManager)
+                        game.getListenersManager().getConfiguration(configRegister.getMetaDatas().key())
                                 .orElse(null),
                         () -> AdvancedConfigurationsGUI.getInventory(configRegister.getMetaDatas(),
                                 pagination.getPage()))));
@@ -81,7 +79,7 @@ public class ConfigurationsGUI implements InventoryProvider {
     }
 
     public static ClickableItem getClickableItem(WereWolfAPI game, Configuration configuration,
-                                                 @Nullable ListenerManager listener,
+                                                 @Nullable ListenerWerewolf listener,
                                                  Supplier<SmartInventory> inventory) {
         IConfiguration config = game.getConfig();
         List<String> lore = new ArrayList<>();

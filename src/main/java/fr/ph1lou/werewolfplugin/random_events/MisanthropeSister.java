@@ -1,6 +1,6 @@
 package fr.ph1lou.werewolfplugin.random_events;
 
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Event;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -14,7 +14,7 @@ import fr.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.NewWereWolfEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfCanSpeakInChatEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -25,12 +25,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Event(key = EventBase.SISTER_MISANTHROPE, loreKey = "werewolf.random_events.sister_misanthrope.description")
-public class MisanthropeSister extends ListenerManager {
+public class MisanthropeSister extends ListenerWerewolf {
 
     @Nullable()
     private IPlayerWW sisterWW;
 
-    public MisanthropeSister(GetWereWolfAPI main) {
+    public MisanthropeSister(WereWolfAPI main) {
         super(main);
     }
 

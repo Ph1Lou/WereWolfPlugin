@@ -5,7 +5,6 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Event;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -30,7 +29,7 @@ public class AdvancedEventsGUI implements InventoryProvider {
 
     public static SmartInventory getInventory(Event register, int page) {
 
-        GetWereWolfAPI api = JavaPlugin.getPlugin(Main.class);
+        Main api = JavaPlugin.getPlugin(Main.class);
 
         WereWolfAPI game = api.getWereWolfAPI();
         return SmartInventory.builder()

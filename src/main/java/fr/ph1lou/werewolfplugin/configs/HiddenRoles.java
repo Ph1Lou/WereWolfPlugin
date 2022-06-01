@@ -1,6 +1,6 @@
 package fr.ph1lou.werewolfplugin.configs;
 
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
@@ -12,7 +12,7 @@ import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.UpdateCompositionEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -23,12 +23,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Configuration(key = ConfigBase.HIDDEN_ROLES, loreKey = "werewolf.hidden_roles.description")
-public class HiddenRoles extends ListenerManager {
+public class HiddenRoles extends ListenerWerewolf {
 
     @Nullable
     private IPlayerWW playerWW;
 
-    public HiddenRoles(GetWereWolfAPI main) {
+    public HiddenRoles(WereWolfAPI main) {
         super(main);
     }
 

@@ -4,9 +4,9 @@ import fr.ph1lou.werewolfapi.annotations.Event;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Sound;
@@ -35,13 +35,13 @@ import java.util.stream.Collectors;
 @Event(key = EventBase.AMNESIC,
         loreKey = "werewolf.random_events.amnesic.description",
         timers = @Timer(key = Amnesic.TIMER, defaultValue = 300, meetUpValue = 180))
-public class Amnesic extends ListenerManager {
+public class Amnesic extends ListenerWerewolf {
 
     public final static String TIMER = "werewolf.random_events.amnesic.timer";
     private final List<UUID> list = new ArrayList<>();
     private IPlayerWW temp;
 
-    public Amnesic(GetWereWolfAPI main) {
+    public Amnesic(WereWolfAPI main) {
         super(main);
     }
 

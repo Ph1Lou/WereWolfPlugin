@@ -1,18 +1,18 @@
 package fr.ph1lou.werewolfplugin.scenarios;
 
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Scenario;
 import fr.ph1lou.werewolfapi.basekeys.ScenarioBase;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 
 @Scenario(key = ScenarioBase.NO_NAME_TAG)
-public class NoNameTag extends ListenerManager {
+public class NoNameTag extends ListenerWerewolf {
 
-    public NoNameTag(GetWereWolfAPI main) {
+    public NoNameTag(WereWolfAPI main) {
         super(main);
     }
 

@@ -1,10 +1,10 @@
 package fr.ph1lou.werewolfplugin.random_events;
 
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Event;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -25,13 +25,13 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Event(key = EventBase.DRUNKEN_WEREWOLF, loreKey = "werewolf.random_events.drunken_werewolf.description")
-public class DrunkenWereWolf extends ListenerManager {
+public class DrunkenWereWolf extends ListenerWerewolf {
 
     private final Set<UUID> fakeList = new HashSet<>();
     private IPlayerWW temp;
 
 
-    public DrunkenWereWolf(GetWereWolfAPI main) {
+    public DrunkenWereWolf(WereWolfAPI main) {
         super(main);
     }
 

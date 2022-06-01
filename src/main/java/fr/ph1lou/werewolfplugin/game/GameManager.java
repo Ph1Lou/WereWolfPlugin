@@ -12,20 +12,18 @@ import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalJoinEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.ResurrectionEvent;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.game.ILanguageManager;
+import fr.ph1lou.werewolfapi.game.IListenersManager;
 import fr.ph1lou.werewolfapi.game.IMapManager;
 import fr.ph1lou.werewolfapi.game.IModerationManager;
 import fr.ph1lou.werewolfapi.game.IStuffManager;
 import fr.ph1lou.werewolfapi.game.IWerewolfChatHandler;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
 import fr.ph1lou.werewolfapi.lovers.ILoverManager;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
-import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import fr.ph1lou.werewolfapi.vote.IVoteManager;
 import fr.ph1lou.werewolfplugin.Main;
-import fr.ph1lou.werewolfplugin.Register;
 import fr.ph1lou.werewolfplugin.save.ConfigurationLoader;
 import fr.ph1lou.werewolfplugin.save.LanguageLoader;
 import fr.ph1lou.werewolfplugin.save.StuffLoader;
@@ -38,7 +36,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -50,6 +47,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class GameManager implements WereWolfAPI {
 
@@ -69,7 +67,7 @@ public class GameManager implements WereWolfAPI {
     private final End end = new End(this);
     private final StuffManager stuff = new StuffManager();
     private final LanguageManager languageManager = new LanguageManager(this);
-    private final ListenersLoader listenersLoader = new ListenersLoader(this);
+    private final ListenersManager listenersManager = new ListenersManager(this);
     private final Random r = new Random(System.currentTimeMillis());
     private final UUID gameUUID = UUID.randomUUID();
     private String gameName;
@@ -80,15 +78,23 @@ public class GameManager implements WereWolfAPI {
     private int roleInitialSize = 0;
 
 
-    public GameManager(Main main) {
+    private GameManager(Main main) {
         this.main = main;
+    }
+
+    public static void createGame(Main main, Consumer<WereWolfAPI> game){
+        GameManager gameManager = new GameManager(main);
+        game.accept(gameManager);
+        gameManager.init();
+    }
+
+    private void init(){
         this.setDay(Day.DAY);
         this.setState(StateGame.LOBBY);
         LanguageLoader.loadLanguage(this, this.getLanguage());
-        ConfigurationLoader.loadConfig(this, "saveCurrent");
         StuffLoader.loadStuff(this, "saveCurrent");
         this.gameName = this.translate("werewolf.score_board.default_game_name");
-        this.mapManager.init();
+        ConfigurationLoader.loadConfig(this, "saveCurrent");
         Bukkit.getPluginManager().callEvent(new LoadEvent(this));
         LobbyTask start = new LobbyTask(this);
         start.runTaskTimer(main, 0, 20);
@@ -123,7 +129,6 @@ public class GameManager implements WereWolfAPI {
                 Formatter.number(this.getPlayersCount()),
                 Formatter.format("&sum&",this.getRoleInitialSize()),
                 Formatter.player(player.getName())));
-        clearPlayer(player);
         player.setGameMode(GameMode.ADVENTURE);
         IPlayerWW playerWW = new PlayerWW(this, player);
         this.playerLG.put(uuid, playerWW);
@@ -151,8 +156,6 @@ public class GameManager implements WereWolfAPI {
 
     public void addLatePlayer(Player player) {
 
-        clearPlayer(player);
-
         Inventory inventory = player.getInventory();
 
         player.setGameMode(GameMode.SURVIVAL);
@@ -166,24 +169,6 @@ public class GameManager implements WereWolfAPI {
         this.stuff.getStartLoot().forEach(inventory::addItem);
 
         this.mapManager.transportation(playerWW, 0);
-    }
-
-    public void clearPlayer(Player player) {
-
-        PlayerInventory inventory = player.getInventory();
-        VersionUtils.getVersionUtils().setPlayerMaxHealth(player, 20);
-        player.setHealth(20);
-        player.setExp(0);
-        player.setLevel(0);
-        inventory.clear();
-        inventory.setHelmet(null);
-        inventory.setChestplate(null);
-        inventory.setLeggings(null);
-        inventory.setBoots(null);
-
-        for (PotionEffect po : player.getActivePotionEffects()) {
-            player.removePotionEffect(po.getType());
-        }
     }
 
     public void setState(StateGame state) {
@@ -228,7 +213,7 @@ public class GameManager implements WereWolfAPI {
 
         Bukkit.getPluginManager().callEvent(new StopEvent(this));
 
-        this.listenersLoader.delete();
+        this.listenersManager.delete();
 
         this.main.createGame();
 
@@ -443,6 +428,11 @@ public class GameManager implements WereWolfAPI {
         return this.languageManager;
     }
 
+    @Override
+    public IListenersManager getListenersManager() {
+        return this.listenersManager;
+    }
+
     public boolean isCrack() {
         return crack;
     }
@@ -455,31 +445,4 @@ public class GameManager implements WereWolfAPI {
         return this.score;
     }
 
-    public void updateListeners() {
-
-        Register registerManager = Register.get();
-
-        registerManager.getScenariosRegister()
-                .forEach(scenarioRegister -> scenarioRegister.getObject()
-                        .ifPresent(listenerManager -> listenerManager.register(this.getConfig()
-                                .isScenarioActive(scenarioRegister.getMetaDatas().key()))
-                        ));
-
-        registerManager.getConfigsRegister()
-                .forEach(configurationWrapper -> configurationWrapper.getObject()
-                        .ifPresent(object -> {
-                            if(object instanceof ListenerManager){
-                                ((ListenerManager)object).register(this.getConfig()
-                                        .isConfigActive(configurationWrapper.getMetaDatas().key()));
-                            }
-                        }));
-
-        registerManager.getTimersRegister()
-                .forEach(timerWrapper -> timerWrapper.getObject()
-                        .ifPresent(object -> {
-                            if(object instanceof ListenerManager){
-                                ((ListenerManager)object).register(true);
-                            }
-                        }));
-    }
 }

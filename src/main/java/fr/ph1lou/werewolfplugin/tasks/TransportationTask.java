@@ -189,7 +189,7 @@ public class TransportationTask implements Listener {
         if (player != null) {
             player.setCompassTarget(playerWW.getSpawn());
             player.setGameMode(GameMode.ADVENTURE);
-            this.game.clearPlayer(player);
+            playerWW.clearPlayer();
         }
         this.game.getStuffs().getStartLoot().forEach(playerWW::addItem);
 

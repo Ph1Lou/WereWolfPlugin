@@ -1,11 +1,11 @@
 package fr.ph1lou.werewolfplugin.random_events;
 
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Event;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -23,12 +23,12 @@ import java.util.stream.Collectors;
 @Event(key = EventBase.INFECTION, loreKey = "werewolf.random_events.infection.description",
         timers = {@Timer(key = Infection.TIMER_START, defaultValue = 60*60, meetUpValue = 30*60),
                 @Timer(key = Infection.PERIOD, defaultValue = 15*60, meetUpValue = 10*60)})
-public class Infection extends ListenerManager {
+public class Infection extends ListenerWerewolf {
 
     public static final String TIMER_START = "werewolf.random_events.infection.timer_start";
     public static final String PERIOD = "werewolf.random_events.infection.period";
 
-    public Infection(GetWereWolfAPI main) {
+    public Infection(WereWolfAPI main) {
         super(main);
     }
 

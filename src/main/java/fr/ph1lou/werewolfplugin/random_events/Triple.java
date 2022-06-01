@@ -1,11 +1,11 @@
 package fr.ph1lou.werewolfplugin.random_events;
 
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Event;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -21,9 +21,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Event(key = EventBase.TRIPLE, loreKey = "werewolf.random_events.triple.description")
-public class Triple extends ListenerManager {
+public class Triple extends ListenerWerewolf {
 
-    public Triple(GetWereWolfAPI main) {
+    public Triple(WereWolfAPI main) {
         super(main);
     }
 

@@ -23,7 +23,7 @@ public class LanguageLoader {
         StatistiksUtils.loadMessages();
         main.getRegisterManager().getModulesRegister().forEach(addon -> {
             String defaultLanguages = addon.getMetaDatas().defaultLanguage();
-            addon.getObject()
+            main.getRegisterManager().getAddon(addon.getAddonKey())
                     .ifPresent(javaPlugin -> game.getLanguageManager().loadTranslations(addon.getMetaDatas().key().split("\\.")[0],
                     loadTranslations(javaPlugin,
                     FileUtils_.loadContent(buildLanguageFile(javaPlugin, defaultLanguages, language)))));

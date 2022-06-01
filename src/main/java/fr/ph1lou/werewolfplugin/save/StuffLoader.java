@@ -1,6 +1,5 @@
 package fr.ph1lou.werewolfplugin.save;
 
-import fr.ph1lou.werewolfapi.annotations.ModuleWerewolf;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
@@ -33,16 +32,16 @@ public class StuffLoader {
 
     public static void deleteStuff(String name) {
 
-        for (Wrapper<JavaPlugin, ModuleWerewolf> addonWrapper : Register.get().getModulesRegister()) {
-            addonWrapper.getObject()
-                    .ifPresent(javaPlugin -> {
-                        File fileValuesAddon = new File(javaPlugin.getDataFolder()
-                                + File.separator + "stuffs"
-                                + File.separator, name + ".yml");
+        Register.get().getModulesRegister()
+                .forEach(javaPluginModuleWerewolfWrapper -> Register.get()
+                        .getAddon(javaPluginModuleWerewolfWrapper.getAddonKey())
+                        .ifPresent(javaPlugin -> {
+                            File fileValuesAddon = new File(javaPlugin.getDataFolder()
+                                    + File.separator + "stuffs"
+                                    + File.separator, name + ".yml");
 
-                        fileValuesAddon.delete();
-                    });
-        }
+                            fileValuesAddon.delete();
+                        }));
     }
 
     public static void loadAllStuffDefault(WereWolfAPI game) {
@@ -70,14 +69,14 @@ public class StuffLoader {
 
     public static void saveStuff(WereWolfAPI game, String configName) {
 
-        for(Wrapper<JavaPlugin, ModuleWerewolf> addon:Register.get().getModulesRegister()){
-            addon.getObject()
-                    .ifPresent(javaPlugin -> saveStuffRole(
-                            javaPlugin,
-                            game,
-                            configName,
-                            addon.getMetaDatas().key()));
-        }
+        Register.get().getModulesRegister()
+                .forEach(javaPluginModuleWerewolfWrapper -> Register.get()
+                        .getAddon(javaPluginModuleWerewolfWrapper.getAddonKey())
+                        .ifPresent(javaPlugin -> saveStuffRole(
+                                javaPlugin,
+                                game,
+                                configName,
+                                javaPluginModuleWerewolfWrapper.getAddonKey())));
 
         saveStuffStartAndDeath(game, configName);
 
@@ -267,7 +266,7 @@ public class StuffLoader {
 
         Register.get()
                 .getModulesRegister()
-                .forEach(addonRegister -> addonRegister.getObject()
+                .forEach(addonRegister -> Register.get().getAddon(addonRegister.getAddonKey())
                         .ifPresent(javaPlugin -> loadStuff(javaPlugin, addonRegister.getAddonKey(), configName)
                                 .forEach((key, itemStacks) -> game.getStuffs().setStuffRole(key, itemStacks))));
 
@@ -277,17 +276,19 @@ public class StuffLoader {
     }
 
     private static void recoverFromPluginRessources(String name) {
-        for(Wrapper<JavaPlugin, ModuleWerewolf> addon:Register.get().getModulesRegister()){
-            addon.getObject()
-                    .ifPresent(javaPlugin -> {
-                        FileUtils_.copy(javaPlugin.getResource(name+".yml"),
-                                javaPlugin.getDataFolder() +
-                                        File.separator + "stuffs" + File.separator + name+".yml");
 
-                        if (!(new File(javaPlugin.getDataFolder() + File.separator + "stuffs" + File.separator, name + ".yml")).exists()) {
-                            FileUtils_.copy(javaPlugin.getResource("stuffRole.yml"), javaPlugin.getDataFolder() + File.separator + "stuffs" + File.separator + name + ".yml");
-                        }
-                    });
-        }
+
+        Register.get().getModulesRegister()
+                .forEach(javaPluginModuleWerewolfWrapper -> Register.get()
+                        .getAddon(javaPluginModuleWerewolfWrapper.getAddonKey())
+                        .ifPresent(javaPlugin -> {
+                            FileUtils_.copy(javaPlugin.getResource(name+".yml"),
+                                    javaPlugin.getDataFolder() +
+                                            File.separator + "stuffs" + File.separator + name+".yml");
+
+                            if (!(new File(javaPlugin.getDataFolder() + File.separator + "stuffs" + File.separator, name + ".yml")).exists()) {
+                                FileUtils_.copy(javaPlugin.getResource("stuffRole.yml"), javaPlugin.getDataFolder() + File.separator + "stuffs" + File.separator + name + ".yml");
+                            }
+                        }));
     }
 }

@@ -2,9 +2,9 @@ package fr.ph1lou.werewolfplugin.listeners;
 
 import fr.mrmicky.fastboard.FastBoard;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.game.IModerationManager;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -15,7 +15,6 @@ import fr.ph1lou.werewolfplugin.game.PlayerWW;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.World;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -238,10 +237,10 @@ public class PlayerListener implements Listener {
 						Formatter.number(game.getPlayersCount()),
 						Formatter.format("&sum&",game.getRoleInitialSize()),
 						Formatter.player(player.getName())));
-				game.clearPlayer(player);
+				playerWW.clearPlayer();
 			} else if (game.isState(StateGame.END) || !playerWW.isState(StatePlayer.ALIVE)) {
 				player.setGameMode(GameMode.SPECTATOR);
-				game.clearPlayer(player);
+				playerWW.clearPlayer();
 				player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
 				event.setQuitMessage(game.translate("werewolf.announcement.leave_in_spec",
 						Formatter.player(playerName)));

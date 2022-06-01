@@ -1,9 +1,9 @@
 package fr.ph1lou.werewolfplugin.scenarios;
 
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Scenario;
 import fr.ph1lou.werewolfapi.basekeys.ScenarioBase;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -12,9 +12,9 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 @Scenario(key = ScenarioBase.COMPASS_TARGET_LAST_DEATH,
         incompatibleScenarios = ScenarioBase.COMPASS_MIDDLE)
-public class CompassTargetLastDeath extends ListenerManager {
+public class CompassTargetLastDeath extends ListenerWerewolf {
 
-    public CompassTargetLastDeath(GetWereWolfAPI main) {
+    public CompassTargetLastDeath(WereWolfAPI main) {
         super(main);
     }
 

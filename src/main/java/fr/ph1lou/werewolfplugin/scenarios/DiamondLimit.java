@@ -1,12 +1,12 @@
 package fr.ph1lou.werewolfplugin.scenarios;
 
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Scenario;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.ScenarioBase;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
@@ -27,11 +27,11 @@ import java.util.Map;
                 meetUpValue = 0,
                 step = 1,
         item = UniversalMaterial.DIAMOND))
-public class DiamondLimit extends ListenerManager {
+public class DiamondLimit extends ListenerWerewolf {
 
     final Map<String, Integer> diamondPerPlayer = new HashMap<>();
 
-    public DiamondLimit(GetWereWolfAPI main) {
+    public DiamondLimit(WereWolfAPI main) {
         super(main);
     }
 

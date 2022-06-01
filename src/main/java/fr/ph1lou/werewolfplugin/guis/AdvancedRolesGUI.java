@@ -5,7 +5,6 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
@@ -17,7 +16,6 @@ import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.utils.InventoryUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -40,7 +38,7 @@ public class AdvancedRolesGUI implements InventoryProvider {
 
     public static SmartInventory getInventory(Role register, int page) {
 
-        GetWereWolfAPI api = JavaPlugin.getPlugin(Main.class);
+        Main api = JavaPlugin.getPlugin(Main.class);
 
         WereWolfAPI game = api.getWereWolfAPI();
         return SmartInventory.builder()
@@ -100,10 +98,7 @@ public class AdvancedRolesGUI implements InventoryProvider {
 
     private void manageStuff(Player player) {
 
-        GetWereWolfAPI api = Bukkit.getServer().getServicesManager().load(GetWereWolfAPI.class);
-        if (api == null) {
-            throw new RuntimeException("WereWolfPlugin not loaded");
-        }
+        Main api = JavaPlugin.getPlugin(Main.class);
 
         WereWolfAPI game = api.getWereWolfAPI();
 

@@ -1,12 +1,12 @@
 package fr.ph1lou.werewolfplugin.timers;
 
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.game.timers.BorderStartEvent;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 
@@ -15,9 +15,9 @@ import org.bukkit.event.EventHandler;
         meetUpValue = 30 * 60,
         decrement = true,
         onZero = BorderStartEvent.class)
-public class BorderBegin extends ListenerManager {
+public class BorderBegin extends ListenerWerewolf {
 
-    public BorderBegin(GetWereWolfAPI main) {
+    public BorderBegin(WereWolfAPI main) {
         super(main);
     }
 

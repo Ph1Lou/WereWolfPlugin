@@ -134,18 +134,4 @@ public class CycleListener implements Listener {
                     });
         }
     }
-
-
-
-
-
-    @EventHandler
-    public void onStart(StartEvent event) {
-        Register.get().getRandomEventsRegister()
-                .forEach(randomEventRegister -> randomEventRegister.getObject().ifPresent(listenerManager ->
-                    listenerManager
-                            .register(game.getRandom().nextDouble() * 100 <
-                                    game.getConfig()
-                                            .getProbability(randomEventRegister.getMetaDatas().key()))));
-    }
 }

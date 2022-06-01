@@ -1,9 +1,10 @@
 package fr.ph1lou.werewolfplugin.configs;
 
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
@@ -12,7 +13,7 @@ import fr.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AnnouncementLoverDeathEvent;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import org.apache.commons.lang.ArrayUtils;
@@ -26,25 +27,34 @@ import java.util.List;
 import java.util.Set;
 
 @Configuration(key = ConfigBase.THIERCELIEU, loreKey = "werewolf.thiercelieu.description")
-public class Thiercelieu extends ListenerManager {
+public class Thiercelieu extends ListenerWerewolf {
 
     private final List<AnnouncementDeathEvent> announcementDeathEvents = new ArrayList<>();
     private final Set<IPlayerWW> playerWWList = new HashSet<>();
     private final List<AnnouncementLoverDeathEvent> loversList = new ArrayList<>();
 
-    public Thiercelieu(GetWereWolfAPI main) {
+    public Thiercelieu(WereWolfAPI main) {
         super(main);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onAnnouncement(AnnouncementDeathEvent event){
+
+        if(getGame().isDay(Day.DAY)){
+            return;
+        }
+
         event.setCancelled(true);
-        this.announcementDeathEvents.add(event);
+        this.announcementDeathEvents.add(0, event);
         this.playerWWList.add(event.getPlayerWW());
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onUpdate(UpdatePlayerNameTagEvent event) {
+
+        if(getGame().isDay(Day.DAY)){
+            return;
+        }
 
         if(this.playerWWList.stream()
                 .noneMatch(playerWW -> playerWW.getUUID().equals(event.getPlayerUUID()))){
@@ -56,6 +66,11 @@ public class Thiercelieu extends ListenerManager {
 
     @EventHandler
     public void onLoverDeathMessage(AnnouncementLoverDeathEvent event){
+
+        if(getGame().isDay(Day.DAY)){
+            return;
+        }
+
         this.loversList.add(event);
         event.setCancelled(true);
     }

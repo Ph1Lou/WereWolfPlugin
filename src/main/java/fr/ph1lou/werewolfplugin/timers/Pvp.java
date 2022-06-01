@@ -1,12 +1,12 @@
 package fr.ph1lou.werewolfplugin.timers;
 
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.game.timers.PVPEvent;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 
@@ -15,10 +15,10 @@ import org.bukkit.event.EventHandler;
         meetUpValue = 3 * 60,
         decrement = true,
         onZero = PVPEvent.class)
-public class Pvp extends ListenerManager {
+public class Pvp extends ListenerWerewolf {
 
 
-    public Pvp(GetWereWolfAPI main) {
+    public Pvp(WereWolfAPI main) {
         super(main);
     }
 

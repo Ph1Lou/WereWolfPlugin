@@ -1,6 +1,6 @@
 package fr.ph1lou.werewolfplugin.random_events;
 
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Event;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
@@ -11,7 +11,7 @@ import fr.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
 import fr.ph1lou.werewolfapi.events.random_events.RumorsEvent;
 import fr.ph1lou.werewolfapi.events.random_events.RumorsWriteEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
@@ -30,7 +30,7 @@ import java.util.Map;
 @Event(key = EventBase.RUMORS, loreKey = "werewolf.random_events.rumors.description",
         timers = {@Timer(key = Rumors.TIMER_START, defaultValue = 80*60, meetUpValue = 30*60),
                 @Timer(key = Rumors.PERIOD, defaultValue = 40*60, meetUpValue = 20*60)})
-public class Rumors extends ListenerManager {
+public class Rumors extends ListenerWerewolf {
 
     public static final String TIMER_START = "werewolf.random_events.rumors.timer_start";
     public static final String PERIOD = "werewolf.random_events.rumors.period";
@@ -38,7 +38,7 @@ public class Rumors extends ListenerManager {
 
     private final Map<IPlayerWW, String> rumors = new HashMap<>();
 
-    public Rumors(GetWereWolfAPI main) {
+    public Rumors(WereWolfAPI main) {
         super(main);
     }
 

@@ -104,8 +104,9 @@ public class ScenariosGUI implements InventoryProvider {
                         }
                         else if (!incompatible.isPresent() || config.isScenarioActive(scenarioRegister.getMetaDatas().key())) {
                             config.switchScenarioValue(scenarioRegister.getMetaDatas().key());
-                            scenarioRegister.getObject().ifPresent(listenerManager -> listenerManager
-                                    .register(config.isScenarioActive(scenarioRegister.getMetaDatas().key())));
+                            game.getListenersManager().getScenario(scenarioRegister.getMetaDatas().key())
+                                            .ifPresent(listenerWerewolf -> listenerWerewolf
+                                                    .register(config.isScenarioActive(scenarioRegister.getMetaDatas().key())));
                         }
                     }));
                 });

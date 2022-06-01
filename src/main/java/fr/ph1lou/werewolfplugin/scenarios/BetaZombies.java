@@ -1,10 +1,10 @@
 package fr.ph1lou.werewolfplugin.scenarios;
 
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Scenario;
 import fr.ph1lou.werewolfapi.basekeys.ScenarioBase;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -13,9 +13,9 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 @Scenario(key = ScenarioBase.BETA_ZOMBIES)
-public class BetaZombies extends ListenerManager {
+public class BetaZombies extends ListenerWerewolf {
 
-    public BetaZombies(GetWereWolfAPI main) {
+    public BetaZombies(WereWolfAPI main) {
         super(main);
     }
 

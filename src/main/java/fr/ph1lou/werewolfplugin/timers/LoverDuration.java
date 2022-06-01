@@ -1,6 +1,6 @@
 package fr.ph1lou.werewolfplugin.timers;
 
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -10,7 +10,7 @@ import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.TrollLoverEvent;
 import fr.ph1lou.werewolfapi.events.lovers.LoversRepartitionEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.lovers.ILover;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
@@ -31,10 +31,10 @@ import java.util.stream.Collectors;
         meetUpValue = 4 * 60,
         decrementAfterRole = true,
         onZero = LoversRepartitionEvent.class)
-public class LoverDuration extends ListenerManager {
+public class LoverDuration extends ListenerWerewolf {
 
 
-    public LoverDuration(GetWereWolfAPI main) {
+    public LoverDuration(WereWolfAPI main) {
         super(main);
     }
 

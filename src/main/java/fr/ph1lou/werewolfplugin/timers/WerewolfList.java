@@ -1,6 +1,6 @@
 package fr.ph1lou.werewolfplugin.timers;
 
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Sound;
@@ -8,7 +8,7 @@ import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 
@@ -17,9 +17,9 @@ import org.bukkit.event.EventHandler;
         meetUpValue = 60 * 5,
         decrementAfterRole = true,
         onZero = WereWolfListEvent.class)
-public class WerewolfList extends ListenerManager {
+public class WerewolfList extends ListenerWerewolf {
 
-    public WerewolfList(GetWereWolfAPI main) {
+    public WerewolfList(WereWolfAPI main) {
         super(main);
     }
 

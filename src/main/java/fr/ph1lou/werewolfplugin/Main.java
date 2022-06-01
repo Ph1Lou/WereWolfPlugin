@@ -15,6 +15,7 @@ import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import fr.ph1lou.werewolfplugin.commands.Admin;
 import fr.ph1lou.werewolfplugin.commands.Command;
 import fr.ph1lou.werewolfplugin.game.GameManager;
+import fr.ph1lou.werewolfplugin.game.MapManager;
 import fr.ph1lou.werewolfplugin.statistiks.Events;
 import fr.ph1lou.werewolfplugin.statistiks.StatistiksUtils;
 import org.apache.commons.lang.NotImplementedException;
@@ -33,7 +34,7 @@ import java.util.Objects;
 public class Main extends JavaPlugin implements GetWereWolfAPI {
 
     public static final String KEY = "werewolf.name";
-    private GameManager currentGame;
+    private WereWolfAPI currentGame;
     private Register registerManager;
     private final InventoryManager invManager = new InventoryManager(this);
     private GameReview currentGameReview;
@@ -58,11 +59,13 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
                         ServicePriority.Normal);
         this.invManager.init();
         BukkitUtils.registerListener(new Events(this));
-        Objects.requireNonNull(getCommand("a")).setExecutor(new Admin(this));
-        Objects.requireNonNull(getCommand("ww")).setExecutor(new Command(this));
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
-            this.registerManager = new Register(this);
-            this.currentGame = new GameManager(this);
+            this.registerManager = new Register(this); //to do before all things who need register
+            Objects.requireNonNull(getCommand("a")).setExecutor(new Admin(this));
+            Objects.requireNonNull(getCommand("ww")).setExecutor(new Command(this));
+            GameManager.createGame(this, wereWolfAPI -> this.currentGame = wereWolfAPI);
+            MapManager mapManager = (MapManager) currentGame.getMapManager();
+            mapManager.init(); //first game only
             Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> Bukkit.getOnlinePlayers()
                     .forEach(player -> {
                         ActionBarEvent actionBarEvent = new ActionBarEvent(player.getUniqueId());
@@ -95,7 +98,7 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
     }
 
     public void createGame() {
-        this.currentGame = new GameManager(this);
+        GameManager.createGame(this, wereWolfAPI -> this.currentGame = wereWolfAPI);
     }
 
     public GameReview getCurrentGameReview() {

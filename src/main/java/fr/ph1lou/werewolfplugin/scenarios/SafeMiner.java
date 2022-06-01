@@ -1,18 +1,18 @@
 package fr.ph1lou.werewolfplugin.scenarios;
 
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Scenario;
 import fr.ph1lou.werewolfapi.basekeys.ScenarioBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 @Scenario(key = ScenarioBase.SAFE_MINER)
-public class SafeMiner extends ListenerManager {
+public class SafeMiner extends ListenerWerewolf {
 
-    public SafeMiner(GetWereWolfAPI main) {
+    public SafeMiner(WereWolfAPI main) {
         super(main);
     }
 

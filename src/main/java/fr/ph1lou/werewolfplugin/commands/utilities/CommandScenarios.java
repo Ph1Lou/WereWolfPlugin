@@ -6,7 +6,7 @@ import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Register;
 import org.bukkit.entity.Player;
@@ -30,7 +30,7 @@ public class CommandScenarios implements ICommand {
         StringBuilder sb = new StringBuilder();
 
         int i = 0;
-        for (Wrapper<ListenerManager, Scenario> scenarioRegister : Register.get().getScenariosRegister()) {
+        for (Wrapper<ListenerWerewolf, Scenario> scenarioRegister : Register.get().getScenariosRegister()) {
             if (game.getConfig().isScenarioActive(scenarioRegister.getMetaDatas().key())) {
                 sb.append(i % 2 == 0 ? "§b" : "")
                         .append(game.translate(scenarioRegister.getMetaDatas().key()))

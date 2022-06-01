@@ -1,9 +1,9 @@
 package fr.ph1lou.werewolfplugin.scenarios;
 
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Scenario;
 import fr.ph1lou.werewolfapi.basekeys.ScenarioBase;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
@@ -16,9 +16,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 @Scenario(key = ScenarioBase.COMPASS_MIDDLE, defaultValue = true, meetUpValue = true,
         incompatibleScenarios = ScenarioBase.COMPASS_TARGET_LAST_DEATH)
-public class CompassMiddle extends ListenerManager {
+public class CompassMiddle extends ListenerWerewolf {
 
-    public CompassMiddle(GetWereWolfAPI main) {
+    public CompassMiddle(WereWolfAPI main) {
         super(main);
     }
 

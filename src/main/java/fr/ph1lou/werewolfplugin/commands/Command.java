@@ -3,24 +3,27 @@ package fr.ph1lou.werewolfplugin.commands;
 
 import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.commands.ICommandRole;
-import fr.ph1lou.werewolfapi.utils.Wrapper;
-import fr.ph1lou.werewolfplugin.Main;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
+import fr.ph1lou.werewolfplugin.Main;
+import fr.ph1lou.werewolfplugin.Register;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -29,9 +32,37 @@ import java.util.stream.Stream;
 public class Command implements TabExecutor {
 
     private final Main main;
+    private final Map<String ,ICommand> commands = new HashMap<>();
+    private final Map<String ,ICommandRole> commandsRoles = new HashMap<>();
+
 
     public Command(Main main) {
         this.main = main;
+        Register.get().getRoleCommandsRegister()
+                .forEach(iCommandRoleRoleCommandWrapper -> this.commandsRoles.put(iCommandRoleRoleCommandWrapper.getMetaDatas().key(),
+                        this.instantiate(iCommandRoleRoleCommandWrapper.getClazz())));
+        Register.get().getPlayerCommandsRegister()
+                .forEach(iCommandRoleRoleCommandWrapper -> this.commands.put(iCommandRoleRoleCommandWrapper.getMetaDatas().key(),
+                        this.instantiate(iCommandRoleRoleCommandWrapper.getClazz())));
+    }
+
+    public <T> T instantiate(Class<T> clazz){
+
+        if(ICommand.class.isAssignableFrom(clazz)){
+            try {
+                return clazz.getConstructor().newInstance();
+            } catch (InstantiationException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+        else if(ICommandRole.class.isAssignableFrom(clazz)){
+            try {
+                return clazz.getConstructor().newInstance();
+            } catch (InstantiationException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
 
@@ -66,12 +97,18 @@ public class Command implements TabExecutor {
         main.getRegisterManager().getRoleCommandsRegister()
                 .stream()
                 .filter(commandRegister1 -> game.translate(commandRegister1.getMetaDatas().key()).equalsIgnoreCase(commandName))
-                .forEach(commandRegister1 -> messages.add(checkCommands(game, player, commandRegister1, args)));
+                .filter(iCommandRoleRoleCommandWrapper -> this.commandsRoles.containsKey(iCommandRoleRoleCommandWrapper.getMetaDatas().key()))
+                .forEach(commandRegister1 -> messages.add(checkCommands(game, player, commandRegister1.getMetaDatas(),
+                        this.commandsRoles.get(commandRegister1.getMetaDatas().key()),
+                        args)));
 
         main.getRegisterManager().getPlayerCommandsRegister()
                 .stream()
                 .filter(commandRegister1 -> game.translate(commandRegister1.getMetaDatas().key()).equalsIgnoreCase(commandName))
-                .forEach(commandRegister1 -> messages.add(checkCommand(game, player, commandRegister1, args)));
+                .filter(iCommandPlayerCommandWrapper -> this.commands.containsKey(iCommandPlayerCommandWrapper.getMetaDatas().key()))
+                .forEach(commandRegister1 -> messages.add(checkCommand(game, player,
+                        commandRegister1.getMetaDatas(),
+                        this.commands.get(commandRegister1.getMetaDatas().key()), args)));
 
         if (messages.isEmpty()) {
             execute("h", player, new String[0]);
@@ -86,10 +123,9 @@ public class Command implements TabExecutor {
 
     }
 
-    private String checkCommands(WereWolfAPI game, Player player, Wrapper<ICommandRole, RoleCommand> wrapper, String[] args) {
+    private String checkCommands(WereWolfAPI game, Player player, RoleCommand command, ICommandRole commandRole, String[] args) {
 
         UUID uuid = player.getUniqueId();
-        RoleCommand command = wrapper.getMetaDatas();
         IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
 
         if (playerWW == null) {
@@ -132,14 +168,14 @@ public class Command implements TabExecutor {
                         Formatter.number(Arrays.stream(command.argNumbers()).min().orElse(0)));
             }
         }
-        wrapper.getObject().ifPresent(iCommand -> iCommand.execute(game,playerWW, args));
+
+        commandRole.execute(game,playerWW, args);
         return "";
     }
 
-    private String checkCommand(WereWolfAPI game, Player player, Wrapper<ICommand, PlayerCommand> wrapper, String[] args) {
+    private String checkCommand(WereWolfAPI game, Player player, PlayerCommand command, ICommand commandPlayer, String[] args) {
 
         UUID uuid = player.getUniqueId();
-        PlayerCommand command = wrapper.getMetaDatas();
         IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
 
 
@@ -164,7 +200,7 @@ public class Command implements TabExecutor {
                         Formatter.number(Arrays.stream(command.argNumbers()).min().orElse(0)));
             }
         }
-        wrapper.getObject().ifPresent(iCommand -> iCommand.execute(game,player, args));
+        commandPlayer.execute(game,player, args);
         return "";
     }
 

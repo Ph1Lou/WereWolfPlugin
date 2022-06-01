@@ -1,11 +1,11 @@
 package fr.ph1lou.werewolfplugin.random_events;
 
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Event;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -40,13 +40,13 @@ import java.util.stream.Collectors;
 
 @Event(key = EventBase.LOOT_BOX,
         loreKey = "werewolf.random_events.loot_box.description")
-public class LootBox extends ListenerManager {
+public class LootBox extends ListenerWerewolf {
 
     private final Map<Location, Boolean> chestHasBeenOpen = new HashMap<>();
     private final List<Location> chestLocation = new ArrayList<>();
     private boolean eventActive = false;
 
-    public LootBox(GetWereWolfAPI main) {
+    public LootBox(WereWolfAPI main) {
         super(main);
     }
 

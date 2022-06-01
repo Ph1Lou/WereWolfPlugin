@@ -1,12 +1,12 @@
 package fr.ph1lou.werewolfplugin.scenarios;
 
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Scenario;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.ScenarioBase;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -28,9 +28,9 @@ import java.util.List;
                         meetUpValue = 0,
                         step = 5, item = UniversalMaterial.ENDER_PEARL),
                 @IntValue(key = IntValueBase.APPLE_RATE, defaultValue = 2, meetUpValue = 0, step = 1, item = UniversalMaterial.APPLE)})
-public class VanillaPlus extends ListenerManager {
+public class VanillaPlus extends ListenerWerewolf {
 
-    public VanillaPlus(GetWereWolfAPI main) {
+    public VanillaPlus(WereWolfAPI main) {
         super(main);
     }
 

@@ -1,10 +1,10 @@
 package fr.ph1lou.werewolfplugin.scenarios;
 
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Scenario;
 import fr.ph1lou.werewolfapi.basekeys.ScenarioBase;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -17,9 +17,9 @@ import java.util.Arrays;
 import java.util.List;
 
 @Scenario(key = ScenarioBase.NO_EXTRA_STONES, defaultValue = true, meetUpValue = true)
-public class NoExtraStones extends ListenerManager {
+public class NoExtraStones extends ListenerWerewolf {
 
-    public NoExtraStones(GetWereWolfAPI main) {
+    public NoExtraStones(WereWolfAPI main) {
         super(main);
     }
 

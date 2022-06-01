@@ -4,9 +4,9 @@ import fr.ph1lou.werewolfapi.annotations.Event;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -31,14 +31,14 @@ import java.util.stream.Collectors;
         timers = {@Timer(key = Exposed.TIMER_START_1, defaultValue = 65*60, meetUpValue = 20*60),
                 @Timer(key = Exposed.TIMER_START_2, defaultValue = 30*60, meetUpValue = 15*60),
                 @Timer(key = Exposed.PERIOD, defaultValue = 15*60, meetUpValue = 15*60)})
-public class Exposed extends ListenerManager {
+public class Exposed extends ListenerWerewolf {
   
     private IPlayerWW temp = null;
     public static final String TIMER_START_1 = "werewolf.random_events.exposed.timer_start_1";
     public static final String TIMER_START_2 = "werewolf.random_events.exposed.timer_start_2";
     public static final String PERIOD = "werewolf.random_events.exposed.period";
 
-    public Exposed(GetWereWolfAPI main) {
+    public Exposed(WereWolfAPI main) {
         super(main);
     }
 

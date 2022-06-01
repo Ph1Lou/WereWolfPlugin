@@ -141,8 +141,8 @@ public class StorageConfiguration implements IStorageConfiguration {
                         .filter(timerWrapper -> timerWrapper.getAddonKey().equals(this.addonKey))
                         .filter(scenarioRegister -> scenarioRegister.getMetaDatas().key().equals(key))
                         .findFirst()
-                        .map(listenerManagerScenarioWrapper -> this.getDefaultValue(listenerManagerScenarioWrapper.getMetaDatas().defaultValue(),
-                                listenerManagerScenarioWrapper.getMetaDatas().meetUpValue()))
+                        .map(ListenerWerewolfScenarioWrapper -> this.getDefaultValue(ListenerWerewolfScenarioWrapper.getMetaDatas().defaultValue(),
+                                ListenerWerewolfScenarioWrapper.getMetaDatas().meetUpValue()))
                         .orElse(false));
     }
 
@@ -238,8 +238,8 @@ public class StorageConfiguration implements IStorageConfiguration {
                 .filter(timerWrapper -> timerWrapper.getAddonKey().equals(this.addonKey))
                 .filter(randomEventRegister -> randomEventRegister.getMetaDatas().key().equals(key))
                 .findFirst()
-                .map(listenerManagerEventWrapper -> this.getDefaultValue(listenerManagerEventWrapper.getMetaDatas().defaultValue(),
-                                listenerManagerEventWrapper.getMetaDatas().meetUpValue()))
+                .map(ListenerWerewolfEventWrapper -> this.getDefaultValue(ListenerWerewolfEventWrapper.getMetaDatas().defaultValue(),
+                                ListenerWerewolfEventWrapper.getMetaDatas().meetUpValue()))
                 .orElse(0));
     }
 

@@ -1,10 +1,10 @@
 package fr.ph1lou.werewolfplugin.random_events;
 
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Event;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StateGame;
@@ -21,9 +21,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Event(key = EventBase.SWAP, loreKey = "werewolf.random_events.swap.description")
-public class Swap extends ListenerManager {
+public class Swap extends ListenerWerewolf {
 
-    public Swap(GetWereWolfAPI main) {
+    public Swap(WereWolfAPI main) {
         super(main);
     }
 

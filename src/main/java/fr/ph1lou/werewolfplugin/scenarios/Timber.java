@@ -1,10 +1,10 @@
 package fr.ph1lou.werewolfplugin.scenarios;
 
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Scenario;
 import fr.ph1lou.werewolfapi.basekeys.ScenarioBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfplugin.Main;
 import org.bukkit.Material;
@@ -21,9 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Scenario(key = ScenarioBase.TIMBER)
-public class Timber extends ListenerManager {
+public class Timber extends ListenerWerewolf {
 
-    public Timber(GetWereWolfAPI main) {
+    public Timber(WereWolfAPI main) {
         super(main);
     }
 

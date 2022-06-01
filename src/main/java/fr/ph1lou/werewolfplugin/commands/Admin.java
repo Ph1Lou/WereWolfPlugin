@@ -8,6 +8,7 @@ import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Main;
+import fr.ph1lou.werewolfplugin.Register;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -15,19 +16,40 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 public class Admin implements TabExecutor {
 
     private final Main main;
     private static Admin instance;
+    private final Map<String ,ICommand> commands = new HashMap<>();
 
     public Admin(Main main) {
         this.main = main;
         instance = this;
+        Register.get().getAdminCommandsRegister()
+                .forEach(iCommandAdminCommandWrapper -> commands.put(iCommandAdminCommandWrapper.getMetaDatas().key(),
+                        this.instantiate(iCommandAdminCommandWrapper.getClazz())));
+
+    }
+
+    public <T> T instantiate(Class<T> clazz){
+
+        if(ICommand.class.isAssignableFrom(clazz)){
+            try {
+                return clazz.getConstructor().newInstance();
+            } catch (InstantiationException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
     public static Admin get() {
@@ -57,33 +79,31 @@ public class Admin implements TabExecutor {
 
     private void execute(String commandName, Player player, String[] args) {
 
-        Wrapper<ICommand, AdminCommand> commandRegister = null;
         WereWolfAPI game = main.getWereWolfAPI();
+        AtomicBoolean found = new AtomicBoolean(false);
 
-        for (Wrapper<ICommand, AdminCommand> commandRegister1 : main.getRegisterManager().getAdminCommandsRegister()) {
-            if (game.translate(commandRegister1.getMetaDatas().key()).equalsIgnoreCase(commandName)) {
-                commandRegister = commandRegister1;
-            }
-        }
+        main.getRegisterManager().getAdminCommandsRegister()
+                .stream().filter(iCommandAdminCommandWrapper -> game.translate(iCommandAdminCommandWrapper
+                        .getMetaDatas().key()).equalsIgnoreCase(commandName))
+                .filter(iCommandAdminCommandWrapper -> accessCommand(iCommandAdminCommandWrapper.getMetaDatas(), player, args.length, true))
+                .filter(iCommandAdminCommandWrapper -> this.commands.containsKey(iCommandAdminCommandWrapper.getMetaDatas().key()))
+                .forEach(iCommandAdminCommandWrapper -> {
+                    this.commands.get(iCommandAdminCommandWrapper.getMetaDatas().key()).execute(game, player, args);
+                    found.set(true);
+                });
 
-        if (commandRegister == null) {
+        if (!found.get()) {
             execute("h", player, new String[0]);
-            return;
         }
-
-        if (accessCommand(commandRegister, player, args.length, true)) {
-            commandRegister.getObject().ifPresent(iCommand -> iCommand.execute(game,player, args));
-        }
-
     }
 
 
-    public boolean accessCommand(Wrapper<ICommand, AdminCommand> commandRegister, Player player, int args, boolean seePermissionMessages) {
+    public boolean accessCommand(AdminCommand adminCommand, Player player, int args, boolean seePermissionMessages) {
 
         WereWolfAPI game = main.getWereWolfAPI();
 
-        if (commandRegister.getMetaDatas().statesGame().length > 0 &&
-                Arrays.stream(commandRegister.getMetaDatas().statesGame())
+        if (adminCommand.statesGame().length > 0 &&
+                Arrays.stream(adminCommand.statesGame())
                         .noneMatch(stateGame -> stateGame == game.getState())) {
             if (seePermissionMessages) {
                 player.sendMessage(game.translate(Prefix.RED , "werewolf.check.state"));
@@ -91,16 +111,16 @@ public class Admin implements TabExecutor {
             return false;
         }
 
-        if (commandRegister.getMetaDatas().argNumbers().length > 0 &&
-            Arrays.stream(commandRegister.getMetaDatas().argNumbers()).noneMatch(value -> value == args)) {
+        if (adminCommand.argNumbers().length > 0 &&
+            Arrays.stream(adminCommand.argNumbers()).noneMatch(value -> value == args)) {
             if (seePermissionMessages) {
                 player.sendMessage(game.translate(Prefix.RED , "werewolf.check.parameters",
-                        Formatter.number(Arrays.stream(commandRegister.getMetaDatas().argNumbers()).min().orElse(0))));
+                        Formatter.number(Arrays.stream(adminCommand.argNumbers()).min().orElse(0))));
             }
             return false;
         }
 
-        if (!checkPermission(commandRegister, player)) {
+        if (!checkPermission(adminCommand, player)) {
             if (seePermissionMessages) {
                 player.sendMessage(game.translate(Prefix.RED , "werewolf.check.permission_denied"));
             }
@@ -114,26 +134,26 @@ public class Admin implements TabExecutor {
     public boolean checkAccess(String commandeKey, Player player, boolean seePermissionMessages) {
         for (Wrapper<ICommand, AdminCommand> commandRegister : main.getRegisterManager().getAdminCommandsRegister()) {
             if (commandRegister.getMetaDatas().key().equals(commandeKey)) {
-                return accessCommand(commandRegister, player, Arrays.stream(commandRegister.getMetaDatas().argNumbers()).min().orElse(0), seePermissionMessages);
+                return accessCommand(commandRegister.getMetaDatas(), player, Arrays.stream(commandRegister.getMetaDatas().argNumbers()).min().orElse(0), seePermissionMessages);
             }
         }
         return false;
     }
 
 
-    private boolean checkPermission(Wrapper<ICommand, AdminCommand> commandRegister, Player player) {
+    private boolean checkPermission(AdminCommand adminCommand, Player player) {
 
         WereWolfAPI game = main.getWereWolfAPI();
         IModerationManager moderationManager = game.getModerationManager();
         UUID uuid = player.getUniqueId();
 
-        boolean pass = commandRegister.getMetaDatas().hostAccess() && moderationManager.getHosts().contains(uuid);
+        boolean pass = adminCommand.hostAccess() && moderationManager.getHosts().contains(uuid);
 
-        if (commandRegister.getMetaDatas().moderatorAccess() && moderationManager.getModerators().contains(uuid)) {
+        if (adminCommand.moderatorAccess() && moderationManager.getModerators().contains(uuid)) {
             pass = true;
         }
 
-        if (player.hasPermission("a." + game.translate(commandRegister.getMetaDatas().key()))) {
+        if (player.hasPermission("a." + game.translate(adminCommand.key()))) {
             pass = true;
         }
 
@@ -154,12 +174,13 @@ public class Admin implements TabExecutor {
         }
 
         return main.getRegisterManager().getAdminCommandsRegister().stream()
-                .filter(commandRegister -> (args[0].isEmpty() || game.translate(commandRegister.getMetaDatas().key()).startsWith(args[0])))
-                .filter(iCommandAdminCommandWrapper -> iCommandAdminCommandWrapper.getMetaDatas().autoCompletion())
+                .map(Wrapper::getMetaDatas)
+                .filter(commandRegister -> (args[0].isEmpty() || game.translate(commandRegister.key()).startsWith(args[0])))
+                .filter(AdminCommand::autoCompletion)
                 .filter(commandRegister -> checkPermission(commandRegister, player))
-                .filter(commandRegister -> commandRegister.getMetaDatas().statesGame().length == 0 ||
-                        Arrays.stream(commandRegister.getMetaDatas().statesGame()).anyMatch(stateGame -> stateGame == game.getState()))
-                .map(commandRegister -> game.translate(commandRegister.getMetaDatas().key()))
+                .filter(commandRegister -> commandRegister.statesGame().length == 0 ||
+                        Arrays.stream(commandRegister.statesGame()).anyMatch(stateGame -> stateGame == game.getState()))
+                .map(commandRegister -> game.translate(commandRegister.key()))
                 .collect(Collectors.toList());
     }
 

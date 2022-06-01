@@ -1,10 +1,10 @@
 package fr.ph1lou.werewolfplugin.configs;
 
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StateGame;
@@ -22,9 +22,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Configuration(key = ConfigBase.LONE_WOLF)
-public class LoneWolf extends ListenerManager {
+public class LoneWolf extends ListenerWerewolf {
 
-    public LoneWolf(GetWereWolfAPI main) {
+    public LoneWolf(WereWolfAPI main) {
         super(main);
     }
 

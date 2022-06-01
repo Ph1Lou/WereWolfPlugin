@@ -1,9 +1,9 @@
 package fr.ph1lou.werewolfplugin.scenarios;
 
-import fr.ph1lou.werewolfapi.GetWereWolfAPI;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Scenario;
 import fr.ph1lou.werewolfapi.basekeys.ScenarioBase;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
@@ -13,10 +13,10 @@ import org.bukkit.potion.PotionEffectType;
 
 
 @Scenario(key = ScenarioBase.CAT_EYES, meetUpValue = true)
-public class CatEyes extends ListenerManager {
+public class CatEyes extends ListenerWerewolf {
 
 
-    public CatEyes(GetWereWolfAPI main) {
+    public CatEyes(WereWolfAPI main) {
         super(main);
     }
 

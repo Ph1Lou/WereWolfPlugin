@@ -19,6 +19,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -79,6 +80,32 @@ public class PlayerWW implements IPlayerWW {
             this.mojangUUID = getUUID(name);
         } catch (Exception ignored) {
             this.game.setCrack();
+        }
+        this.clearPlayer();
+    }
+
+    @Override
+    public void clearPlayer() {
+
+        Player player = Bukkit.getPlayer(this.uuid);
+
+        if(player == null){
+            return;
+        }
+
+        PlayerInventory inventory = player.getInventory();
+        VersionUtils.getVersionUtils().setPlayerMaxHealth(player, 20);
+        player.setHealth(20);
+        player.setExp(0);
+        player.setLevel(0);
+        inventory.clear();
+        inventory.setHelmet(null);
+        inventory.setChestplate(null);
+        inventory.setLeggings(null);
+        inventory.setBoots(null);
+
+        for (PotionEffect po : player.getActivePotionEffects()) {
+            player.removePotionEffect(po.getType());
         }
     }
 
