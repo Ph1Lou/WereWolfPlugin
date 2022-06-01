@@ -11,6 +11,7 @@ import fr.ph1lou.werewolfplugin.utils.Contributor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
@@ -41,8 +42,9 @@ public class StatistiksUtils {
         return contributors;
     }
 
-    public static void loadMessages(Main main){
+    public static void loadMessages(){
 
+        Main main = JavaPlugin.getPlugin(Main.class);
         String language = main.getConfig().getString("lang");
 
         try {

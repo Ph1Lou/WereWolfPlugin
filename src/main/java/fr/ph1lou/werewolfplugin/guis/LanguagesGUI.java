@@ -5,12 +5,10 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
-import fr.ph1lou.werewolfplugin.Main;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
-import fr.ph1lou.werewolfapi.events.UpdateLanguageEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
-import org.bukkit.Bukkit;
+import fr.ph1lou.werewolfplugin.Main;
 import org.bukkit.DyeColor;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
@@ -61,13 +59,11 @@ public class LanguagesGUI implements InventoryProvider {
         en.setDisplayName("English");
         en.setLore(Collections.singletonList("By Jormunth"));
         contents.set(0, 2, ClickableItem.of((en.build()), e -> {
-            main.getConfig().set("lang", "en_EN");
-            Bukkit.getPluginManager().callEvent(new UpdateLanguageEvent());
+            game.setLangage("en_EN");
             LanguagesGUI.INVENTORY.open(player);
         }));
         contents.set(0, 4, ClickableItem.of((fr.build()), e -> {
-            main.getConfig().set("lang", "fr_FR");
-            Bukkit.getPluginManager().callEvent(new UpdateLanguageEvent());
+            game.setLangage("fr_FR");
             LanguagesGUI.INVENTORY.open(player);
         }));
     }

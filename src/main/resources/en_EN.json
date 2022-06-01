@@ -1,7 +1,35 @@
 {
   "werewolf": {
     "name": "WereWolfPlugin",
-    "role": {
+    "lovers": {
+      "lover": {
+        "display": "Lovers",
+        "random": " Random",
+        "description": "§6WEREWOLF §7➽§d You madly fall in love with §b&player&§d.\n§dIf they die, you will kill yourself in despair.\n§dYou can send heart points to your soul mate with §b/ww donate §d[% of life to send] [optional:player who will receive the hearts]",
+        "not_in_pairs": "You are not in love",
+        "lover_death": "§d&player& by love, joins them in their grave",
+        "not_enough_players": "there aren't enough players to add lovers",
+        "not_lover": "You can only donate hearts to your lover",
+        "polygamy": "Due to a lack of players compared to the number of players, polygamy is disabled",
+        "received": "You receive §b&number&§r % of §b&player& 's life",
+        "disconnected": "You lover isn't online",
+        "complete": "You sent §b&number&§r % of your life to §b&player&",
+        "100": "You cannot send 100% or more of your life",
+        "command": "donate",
+        "too_many_heart": "§b&player&§r has too much life"
+      },
+      "cursed_lover": {
+        "display": "Cursed Lovers",
+        "description": "§6Werewolf §7➽§c A destructive link between §6&player&§c and you has emerged. You cannot win together, even if you are in the same team.\n §c You have an additional heart and NoFall while both of you are alive.",
+        "death_cursed_lover": "Your cursed lover is dead, you loose all your bonus effects",
+        "not_enough_players": "There aren't enough players to add cursed lovers"
+      },
+      "amnesiac_lover": {
+        "display": "Amnesiac Lovers",
+        "not_enough_players": "There aren't enough players to add amnesiac lovers"
+      }
+    },
+    "roles": {
       "serial_killer": {
         "display": "Serial Killer",
         "items": "A Sharpness III book, a Protection III book and a Power III book",
@@ -383,32 +411,6 @@
         "description": "Your name is visible for all other Werewolves in the wolf chat.",
         "effect": "2 ♥ of Absorption for 5 minutes at the beginning of each night.",
         "prefix": "[§c&alpha&§r] &message&"
-      },
-      "lover": {
-        "display": "Lovers",
-        "random": " Random",
-        "description": "§6WEREWOLF §7➽§d You madly fall in love with §b&player&§d.\n§dIf they die, you will kill yourself in despair.\n§dYou can send heart points to your soul mate with §b/ww donate §d[% of life to send] [optional:player who will receive the hearts]",
-        "not_in_pairs": "You are not in love",
-        "lover_death": "§d&player& by love, joins them in their grave",
-        "not_enough_players": "there aren't enough players to add lovers",
-        "not_lover": "You can only donate hearts to your lover",
-        "polygamy": "Due to a lack of players compared to the number of players, polygamy is disabled",
-        "received": "You receive §b&number&§r % of §b&player& 's life",
-        "disconnected": "You lover isn't online",
-        "complete": "You sent §b&number&§r % of your life to §b&player&",
-        "100": "You cannot send 100% or more of your life",
-        "command": "donate",
-        "too_many_heart": "§b&player&§r has too much life"
-      },
-      "cursed_lover": {
-        "display": "Cursed Lovers",
-        "description": "§6Werewolf §7➽§c A destructive link between §6&player&§c and you has emerged. You cannot win together, even if you are in the same team.\n §c You have an additional heart and NoFall while both of you are alive.",
-        "death_cursed_lover": "Your cursed lover is dead, you loose all your bonus effects",
-        "not_enough_players": "There aren't enough players to add cursed lovers"
-      },
-      "amnesiac_lover": {
-        "display": "Amnesiac Lovers",
-        "not_enough_players": "There aren't enough players to add amnesiac lovers"
       },
       "mischievous_werewolf": {
         "display": "Mischievous Wolf",

@@ -95,7 +95,7 @@ public class ConfigurationLoader {
         game.setConfig(config);
         game.setRoleInitialSize(0);
         game.getModerationManager().checkQueue();
-        game.getListenersLoader().update();
+        game.updateListeners();
 
         for (Wrapper<IRole, Role> roleRegister : main.getRegisterManager().getRolesRegister()) {
             String key = roleRegister.getMetaDatas().key();

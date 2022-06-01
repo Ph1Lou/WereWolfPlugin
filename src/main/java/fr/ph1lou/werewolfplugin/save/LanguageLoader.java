@@ -1,43 +1,40 @@
 package fr.ph1lou.werewolfplugin.save;
 
-
 import com.eclipsesource.json.Json;
-import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.events.UpdateLanguageEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.statistiks.StatistiksUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-public class LanguageManager implements Listener {
+public class LanguageLoader {
 
-    private final Main main;
-    private final Map<String, JsonValue> extraTexts = new HashMap<>();
-    private final Map<String, JsonValue> language = new HashMap<>();
+    public static void loadLanguage(WereWolfAPI game, String language){
 
+        Main main = JavaPlugin.getPlugin(Main.class);
 
-    public LanguageManager(Main main) {
-        this.main = main;
+        StatistiksUtils.loadMessages();
+        main.getRegisterManager().getModulesRegister().forEach(addon -> {
+            String defaultLanguages = addon.getMetaDatas().defaultLanguage();
+            addon.getObject()
+                    .ifPresent(javaPlugin -> game.getLanguageManager().loadTranslations(addon.getMetaDatas().key().split("\\.")[0],
+                    loadTranslations(javaPlugin,
+                    FileUtils_.loadContent(buildLanguageFile(javaPlugin, defaultLanguages, language)))));
+        });
     }
 
-    private Map<String, JsonValue> loadTranslations(Plugin plugin, String file) {
+    private static Map<String, JsonValue> loadTranslations(Plugin plugin, String file) {
 
         try {
             JsonObject jsonObject = Json.parse(file).asObject();
-            return this.loadTranslationsRec(plugin, "", jsonObject, new HashMap<>());
+            return loadTranslationsRec(plugin, "", jsonObject, new HashMap<>());
         } catch (Exception exception) {
             exception.printStackTrace();
         }
@@ -47,7 +44,10 @@ public class LanguageManager implements Listener {
 
     }
 
-    private Map<String, JsonValue> loadTranslationsRec(Plugin plugin, String currentPath, JsonValue jsonValue, Map<String, JsonValue> keys) {
+    private static Map<String, JsonValue> loadTranslationsRec(Plugin plugin, String currentPath, JsonValue jsonValue, Map<String, JsonValue> keys) {
+
+        Main main = JavaPlugin.getPlugin(Main.class);
+
         // This value is an object - it means she contains sub-section that should be analyzed
         if (jsonValue.isObject()) {
 
@@ -60,7 +60,7 @@ public class LanguageManager implements Listener {
                 }
                 String newPath = String.format("%s%s%s", currentPath, currentPath.equals("") ? "" : ".", member.getName());
 
-                this.loadTranslationsRec(plugin,newPath, member.getValue(), keys);
+                loadTranslationsRec(plugin,newPath, member.getValue(), keys);
             }
         }
 
@@ -71,26 +71,9 @@ public class LanguageManager implements Listener {
         return keys;
     }
 
+    private static File buildLanguageFile(Plugin plugin, String defaultLang, String lang) {
 
-    @EventHandler(priority = EventPriority.LOW)
-    private void updateLanguage(UpdateLanguageEvent event) {
-        StatistiksUtils.loadMessages(main);
-        this.language.clear();
-        this.language.putAll(loadTranslations(main, FileUtils_.loadContent(buildLanguageFile(main, "fr_FR"))));
-        this.extraTexts.clear();
-
-        this.main.getRegisterManager().getModulesRegister().forEach(addon -> {
-            String defaultLanguages = addon.getMetaDatas().defaultLanguage();
-            addon.getObject().ifPresent(javaPlugin -> this.extraTexts.putAll(loadTranslations(javaPlugin,
-                    FileUtils_.loadContent(buildLanguageFile(javaPlugin, defaultLanguages)))));
-        });
-    }
-
-    private File buildLanguageFile(Plugin plugin, String defaultLang) {
-
-        String lang = main.getConfig().getString("lang");
         File file = new File(plugin.getDataFolder() + File.separator + "languages" + File.separator, lang + ".json");
-
 
         if (!file.exists()) {
             FileUtils_.copy(plugin.getResource(lang + ".json"), plugin.getDataFolder() + File.separator + "languages" + File.separator + lang + ".json");
@@ -125,46 +108,6 @@ public class LanguageManager implements Listener {
             FileUtils_.saveJson(file, jsonObject);
         }
         return file;
-    }
-
-    public List<String> getTranslationList(String key, Formatter... formatters) {
-
-        JsonArray array;
-        if (!language.containsKey(key) || !language.get(key).isArray()) {
-            if (this.extraTexts.containsKey(key) && this.extraTexts.get(key).isArray()) {
-                array = this.extraTexts.get(key).asArray();
-            }
-            else{
-                return Collections.singletonList("Array Message error");
-            }
-        }
-        else{
-            array = this.language.get(key).asArray();
-        }
-        return array.values()
-                .stream().filter(JsonValue::isString)
-                .map(JsonValue::asString)
-                .map(s -> {
-                    String message = s;
-                    for(Formatter formatter:formatters){
-                        message = formatter.handle(message);
-                    }
-                    return message;
-                })
-                .collect(Collectors.toList());
-    }
-
-
-    public String getTranslation(String key) {
-
-        if (!this.language.containsKey(key) || !this.language.get(key).isString()) {
-
-            if (this.extraTexts.containsKey(key) && this.extraTexts.get(key).isString()) {
-                return this.extraTexts.get(key).asString();
-            }
-            return String.format("Message error (%s) ", key.toLowerCase());
-        }
-        return this.language.get(key).asString();
     }
 
 

@@ -6,7 +6,6 @@ import fr.ph1lou.werewolfapi.annotations.Author;
 import fr.ph1lou.werewolfapi.annotations.ModuleWerewolf;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.ActionBarEvent;
-import fr.ph1lou.werewolfapi.events.UpdateLanguageEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.registers.IRegisterManager;
@@ -16,8 +15,6 @@ import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import fr.ph1lou.werewolfplugin.commands.Admin;
 import fr.ph1lou.werewolfplugin.commands.Command;
 import fr.ph1lou.werewolfplugin.game.GameManager;
-import fr.ph1lou.werewolfplugin.game.MapManager;
-import fr.ph1lou.werewolfplugin.save.LanguageManager;
 import fr.ph1lou.werewolfplugin.statistiks.Events;
 import fr.ph1lou.werewolfplugin.statistiks.StatistiksUtils;
 import org.apache.commons.lang.NotImplementedException;
@@ -36,7 +33,6 @@ import java.util.Objects;
 public class Main extends JavaPlugin implements GetWereWolfAPI {
 
     public static final String KEY = "werewolf.name";
-    private final LanguageManager languageManager = new LanguageManager(this);
     private GameManager currentGame;
     private Register registerManager;
     private final InventoryManager invManager = new InventoryManager(this);
@@ -62,17 +58,11 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
                         ServicePriority.Normal);
         this.invManager.init();
         BukkitUtils.registerListener(new Events(this));
-        BukkitUtils.registerListener(languageManager);
         Objects.requireNonNull(getCommand("a")).setExecutor(new Admin(this));
         Objects.requireNonNull(getCommand("ww")).setExecutor(new Command(this));
-
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
             this.registerManager = new Register(this);
-            Bukkit.getPluginManager().callEvent(new UpdateLanguageEvent());
             this.currentGame = new GameManager(this);
-            this.currentGame.init();
-            MapManager mapManager = (MapManager) currentGame.getMapManager();
-            mapManager.init();
             Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> Bukkit.getOnlinePlayers()
                     .forEach(player -> {
                         ActionBarEvent actionBarEvent = new ActionBarEvent(player.getUniqueId());
@@ -106,7 +96,6 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
 
     public void createGame() {
         this.currentGame = new GameManager(this);
-        this.currentGame.init();
     }
 
     public GameReview getCurrentGameReview() {
@@ -115,10 +104,6 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
 
     public void setCurrentGameReview(GameReview currentGameReview) {
         this.currentGameReview = currentGameReview;
-    }
-
-    public LanguageManager getLanguageManager() {
-        return languageManager;
     }
 }
 

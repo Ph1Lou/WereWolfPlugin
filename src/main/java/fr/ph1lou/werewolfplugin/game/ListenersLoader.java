@@ -1,11 +1,9 @@
 package fr.ph1lou.werewolfplugin.game;
 
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
 import fr.ph1lou.werewolfapi.lovers.ILover;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
-import fr.ph1lou.werewolfplugin.Register;
 import fr.ph1lou.werewolfplugin.listeners.ActionBarListener;
 import fr.ph1lou.werewolfplugin.listeners.ChatListener;
 import fr.ph1lou.werewolfplugin.listeners.CycleListener;
@@ -62,31 +60,5 @@ public class ListenersLoader {
         }
     }
 
-    public void update() {
 
-        Register registerManager = Register.get();
-
-        registerManager.getScenariosRegister()
-                .forEach(scenarioRegister -> scenarioRegister.getObject()
-                        .ifPresent(listenerManager -> listenerManager.register(game.getConfig()
-                                .isScenarioActive(scenarioRegister.getMetaDatas().key()))
-                        ));
-
-        registerManager.getConfigsRegister()
-                .forEach(configurationWrapper -> configurationWrapper.getObject()
-                        .ifPresent(object -> {
-                            if(object instanceof ListenerManager){
-                                ((ListenerManager)object).register(game.getConfig()
-                                        .isConfigActive(configurationWrapper.getMetaDatas().key()));
-                            }
-                        }));
-
-        registerManager.getTimersRegister()
-                .forEach(timerWrapper -> timerWrapper.getObject()
-                        .ifPresent(object -> {
-                            if(object instanceof ListenerManager){
-                                ((ListenerManager)object).register(true);
-                            }
-                        }));
-    }
 }

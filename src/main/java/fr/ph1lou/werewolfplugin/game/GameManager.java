@@ -11,11 +11,13 @@ import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalJoinEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.ResurrectionEvent;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
+import fr.ph1lou.werewolfapi.game.ILanguageManager;
 import fr.ph1lou.werewolfapi.game.IMapManager;
 import fr.ph1lou.werewolfapi.game.IModerationManager;
 import fr.ph1lou.werewolfapi.game.IStuffManager;
 import fr.ph1lou.werewolfapi.game.IWerewolfChatHandler;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerManager;
 import fr.ph1lou.werewolfapi.lovers.ILoverManager;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -23,13 +25,13 @@ import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import fr.ph1lou.werewolfapi.vote.IVoteManager;
 import fr.ph1lou.werewolfplugin.Main;
+import fr.ph1lou.werewolfplugin.Register;
 import fr.ph1lou.werewolfplugin.save.ConfigurationLoader;
-import fr.ph1lou.werewolfplugin.save.LanguageManager;
+import fr.ph1lou.werewolfplugin.save.LanguageLoader;
 import fr.ph1lou.werewolfplugin.save.StuffLoader;
 import fr.ph1lou.werewolfplugin.scoreboards.ScoreBoard;
 import fr.ph1lou.werewolfplugin.tasks.LobbyTask;
 import fr.ph1lou.werewolfplugin.utils.UpdateChecker;
-import fr.ph1lou.werewolfplugin.utils.random_config.RandomConfig;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -62,12 +64,12 @@ public class GameManager implements WereWolfAPI {
     private final LoversManagement loversManage = new LoversManagement(this);
     private final ModerationManager moderationManager = new ModerationManager(this);
     private final WerewolfChatHandler werewolfChatHandler = new WerewolfChatHandler();
-    private final MapManager mapManager;
+    private final MapManager mapManager = new MapManager(this);
     private Configuration configuration;
     private final End end = new End(this);
-    private final StuffManager stuff;
-    private final RandomConfig randomConfig;
-    private final ListenersLoader listenersLoader;
+    private final StuffManager stuff = new StuffManager();
+    private final LanguageManager languageManager = new LanguageManager(this);
+    private final ListenersLoader listenersLoader = new ListenersLoader(this);
     private final Random r = new Random(System.currentTimeMillis());
     private final UUID gameUUID = UUID.randomUUID();
     private String gameName;
@@ -80,23 +82,17 @@ public class GameManager implements WereWolfAPI {
 
     public GameManager(Main main) {
         this.main = main;
-        this.randomConfig = new RandomConfig(main);
-        this.mapManager = new MapManager(main);
-        this.stuff = new StuffManager();
-        this.listenersLoader = new ListenersLoader(this);
         this.setDay(Day.DAY);
         this.setState(StateGame.LOBBY);
-        this.gameName = this.translate("werewolf.score_board.default_game_name");
-    }
-
-    public void init(){
+        LanguageLoader.loadLanguage(this, this.getLanguage());
         ConfigurationLoader.loadConfig(this, "saveCurrent");
         StuffLoader.loadStuff(this, "saveCurrent");
+        this.gameName = this.translate("werewolf.score_board.default_game_name");
+        this.mapManager.init();
         Bukkit.getPluginManager().callEvent(new LoadEvent(this));
         LobbyTask start = new LobbyTask(this);
         start.runTaskTimer(main, 0, 20);
     }
-
 
     public void join(Player player) {
 
@@ -297,19 +293,14 @@ public class GameManager implements WereWolfAPI {
 
     @Override
     public String translate(String prefixKey, String key, Formatter... formatters) {
-        LanguageManager languageManager = main.getLanguageManager();
-        String message = languageManager.getTranslation(key);
-        String prefix = prefixKey.isEmpty() ? "": languageManager.getTranslation(prefixKey);
-        for(Formatter formatter:formatters){
-            message = formatter.handle(message);
-        }
+        String message = this.languageManager.getTranslation(key, formatters);
+        String prefix = prefixKey.isEmpty() ? "": this.languageManager.getTranslation(prefixKey);
         return prefix+message;
     }
 
     @Override
     public List<String> translateArray(String key, Formatter... formatters) {
-        LanguageManager languageManager = main.getLanguageManager();
-        return languageManager.getTranslationList(key, formatters);
+        return this.languageManager.getTranslationList(key, formatters);
     }
 
     @Override
@@ -414,10 +405,6 @@ public class GameManager implements WereWolfAPI {
         }
     }
 
-    public RandomConfig getRandomConfig() {
-        return this.randomConfig;
-    }
-
     public void setRoleInitialSize(int roleInitialSize) {
         this.roleInitialSize = roleInitialSize;
     }
@@ -428,10 +415,6 @@ public class GameManager implements WereWolfAPI {
 
     public void setTimer(int timer) {
         this.timer = timer;
-    }
-
-    public ListenersLoader getListenersLoader() {
-        return this.listenersLoader;
     }
 
     @Override
@@ -449,6 +432,17 @@ public class GameManager implements WereWolfAPI {
         return main.getConfig().getString("lang");
     }
 
+    @Override
+    public void setLangage(String langage) {
+        main.getConfig().set("lang", langage);
+        LanguageLoader.loadLanguage(this, langage);
+    }
+
+    @Override
+    public ILanguageManager getLanguageManager() {
+        return this.languageManager;
+    }
+
     public boolean isCrack() {
         return crack;
     }
@@ -459,5 +453,33 @@ public class GameManager implements WereWolfAPI {
 
     public ScoreBoard getScore() {
         return this.score;
+    }
+
+    public void updateListeners() {
+
+        Register registerManager = Register.get();
+
+        registerManager.getScenariosRegister()
+                .forEach(scenarioRegister -> scenarioRegister.getObject()
+                        .ifPresent(listenerManager -> listenerManager.register(this.getConfig()
+                                .isScenarioActive(scenarioRegister.getMetaDatas().key()))
+                        ));
+
+        registerManager.getConfigsRegister()
+                .forEach(configurationWrapper -> configurationWrapper.getObject()
+                        .ifPresent(object -> {
+                            if(object instanceof ListenerManager){
+                                ((ListenerManager)object).register(this.getConfig()
+                                        .isConfigActive(configurationWrapper.getMetaDatas().key()));
+                            }
+                        }));
+
+        registerManager.getTimersRegister()
+                .forEach(timerWrapper -> timerWrapper.getObject()
+                        .ifPresent(object -> {
+                            if(object instanceof ListenerManager){
+                                ((ListenerManager)object).register(true);
+                            }
+                        }));
     }
 }

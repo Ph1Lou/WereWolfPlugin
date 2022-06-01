@@ -5,7 +5,6 @@ import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
-import fr.ph1lou.werewolfapi.events.UpdateLanguageEvent;
 import fr.ph1lou.werewolfapi.game.IModerationManager;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -212,18 +211,6 @@ public class PlayerListener implements Listener {
 			BukkitUtils.scheduleSyncDelayedTask(() ->
 					player.teleport(game.getMapManager().getWorld().getSpawnLocation()), 10);
 		}
-	}
-
-	@EventHandler
-	public void onLanguageUpdate(UpdateLanguageEvent event) {
-
-		Bukkit.getOnlinePlayers()
-				.stream()
-				.map(Entity::getUniqueId)
-				.filter(uuid -> game.getBoards().containsKey(uuid))
-				.map(uuid -> game.getBoards().get(uuid))
-				.forEach(fastBoard -> fastBoard.updateTitle(
-						game.translate("werewolf.score_board.title")));
 	}
 
 	@EventHandler

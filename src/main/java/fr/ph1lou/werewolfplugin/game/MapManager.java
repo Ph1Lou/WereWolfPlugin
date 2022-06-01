@@ -1,5 +1,6 @@
 package fr.ph1lou.werewolfplugin.game;
 
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.worldloader.WorldFillTask;
 import fr.ph1lou.werewolfapi.game.IMapManager;
@@ -19,6 +20,7 @@ import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,12 +31,13 @@ import java.io.IOException;
 public class MapManager implements IMapManager {
 
     public static final String NO_FALL = "no_fall";
-    private final Main main;
+    private final WereWolfAPI game;
     private World world;
     private WorldFillTask wft = null;
 
-    public MapManager(Main main) {
-        this.main = main;
+    public MapManager(WereWolfAPI game) {
+        this.game = game;
+        Main main = JavaPlugin.getPlugin(Main.class);
         File mapFolder = new File(main.getDataFolder() +
                 File.separator + "maps");
         if (!mapFolder.exists()) {
@@ -51,8 +54,6 @@ public class MapManager implements IMapManager {
 
     @Override
     public void generateMap(CommandSender sender, int mapRadius) {
-
-        GameManager game = (GameManager) main.getWereWolfAPI();
 
         if (world == null) {
             createMap();
@@ -74,7 +75,7 @@ public class MapManager implements IMapManager {
     }
 
     public void createMap(boolean roofed) {
-        Bukkit.broadcastMessage(main.getWereWolfAPI().translate(Prefix.RED , "werewolf.commands.admin.preview.create"));
+        Bukkit.broadcastMessage(game.translate(Prefix.RED , "werewolf.commands.admin.preview.create"));
         WorldCreator wc = new WorldCreator("werewolf_map");
         wc.environment(World.Environment.NORMAL);
         wc.type(WorldType.NORMAL);
@@ -219,6 +220,8 @@ public class MapManager implements IMapManager {
     }
 
     public void setLobbyWorld() {
+
+        Main main = JavaPlugin.getPlugin(Main.class);
 
         World world = Bukkit.getWorlds().get(0);
         world.setWeatherDuration(0);
