@@ -1,7 +1,6 @@
 package fr.ph1lou.werewolfplugin.random_events;
 
 import com.google.common.collect.Sets;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Event;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;

@@ -81,10 +81,8 @@ public class ConfigurationLoader {
 
         main.getRegisterManager().getModulesRegister()
                 .forEach(javaPluginModuleWerewolfWrapper -> main.getRegisterManager().getAddon(javaPluginModuleWerewolfWrapper.getAddonKey())
-                        .ifPresent(javaPlugin -> {
-                            configurationMap.put(javaPluginModuleWerewolfWrapper.getAddonKey(),
-                                    loadConfig(javaPlugin, name).setAddonKey(javaPluginModuleWerewolfWrapper.getAddonKey(), game));
-                        }));
+                        .ifPresent(javaPlugin -> configurationMap.put(javaPluginModuleWerewolfWrapper.getAddonKey(),
+                                loadConfig(javaPlugin, name).setAddonKey(javaPluginModuleWerewolfWrapper.getAddonKey(), game))));
 
 
         Configuration config;

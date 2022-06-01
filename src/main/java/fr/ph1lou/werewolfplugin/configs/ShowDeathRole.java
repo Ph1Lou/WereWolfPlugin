@@ -1,6 +1,5 @@
 package fr.ph1lou.werewolfplugin.configs;
 
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
