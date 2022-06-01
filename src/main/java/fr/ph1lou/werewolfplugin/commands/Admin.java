@@ -92,7 +92,7 @@ public class Admin implements TabExecutor {
                     found.set(true);
                 });
 
-        if (!found.get()) {
+        if (!found.get() && !commandName.equals("h")) {
             execute("h", player, new String[0]);
         }
     }
