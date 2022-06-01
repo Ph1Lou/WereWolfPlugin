@@ -340,7 +340,7 @@ public class PlayerWW implements IPlayerWW {
 
     @Override
     public void clearPotionEffects(String key) {
-        this.potionModifiers.keySet()
+        new ArrayList<>(this.potionModifiers.keySet())
                 .stream()
                 .filter(potionModifier -> potionModifier.getIdentifier().equals(key))
                 .forEach(potionModifier -> this.addPotionModifier(PotionModifier.remove(potionModifier.getPotionEffectType(),

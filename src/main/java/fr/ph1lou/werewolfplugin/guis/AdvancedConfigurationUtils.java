@@ -38,7 +38,7 @@ public class AdvancedConfigurationUtils {
                         if (e.isLeftClick()) {
                             config.setValue(intValue.key(),
                                     config.getValue(intValue.key()) + intValue.step());
-                        } else if (config.getValue(intValue.key()) - intValue.step() > 0) {
+                        } else if (config.getValue(intValue.key()) - intValue.step() >= 0) {
                             config.setValue(intValue.key(),
                                     config.getValue(intValue.key()) - intValue.step());
                         }
@@ -73,7 +73,7 @@ public class AdvancedConfigurationUtils {
 
                         if (e.isLeftClick()) {
                             config.moveTimer(timerRegister.key(), timerRegister.step());
-                        } else if (config.getTimerValue(timerRegister.key()) - timerRegister.step() > 0) {
+                        } else if (config.getTimerValue(timerRegister.key()) - timerRegister.step() >= 0) {
                             config.moveTimer(timerRegister.key(), - timerRegister.step());
                         }
 
