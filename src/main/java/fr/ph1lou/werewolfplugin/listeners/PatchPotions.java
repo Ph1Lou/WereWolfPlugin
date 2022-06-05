@@ -60,11 +60,33 @@ public class PatchPotions implements Listener {
                 .map(livingEntity -> game.getPlayerWW(livingEntity.getUniqueId()))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .forEach(playerWW -> event.getPotion().getEffects().forEach(potionEffect -> playerWW.addPotionModifier(PotionModifier.add(
-                        potionEffect.getType(),
-                        potionEffect.getDuration(),
-                        potionEffect.getAmplifier(),
-                        "splash_potion"))));
+                .forEach(playerWW -> event.getPotion().getEffects().forEach(potionEffect -> {
+                    if(potionEffect.getDuration() == 1){ //handle instant potion
+                        if(potionEffect.getType().equals(PotionEffectType.HEAL)){
+                            if(potionEffect.getAmplifier() == 0){
+                                playerWW.addPlayerHealth(4);
+                            }
+                            else{
+                                playerWW.addPlayerHealth(8);
+                            }
+                        }
+                        else if (potionEffect.getType().equals(PotionEffectType.HARM)){
+                            if(potionEffect.getAmplifier() == 0){
+                                playerWW.removePlayerHealth(6);
+                            }
+                            else{
+                                playerWW.removePlayerHealth(12);
+                            }
+                        }
+                    }
+                    else{
+                        playerWW.addPotionModifier(PotionModifier.add(
+                                potionEffect.getType(),
+                                potionEffect.getDuration(),
+                                potionEffect.getAmplifier(),
+                                "splash_potion"));
+                    }
+                }));
     }
 
 

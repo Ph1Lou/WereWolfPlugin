@@ -18,6 +18,7 @@ import fr.ph1lou.werewolfplugin.listeners.PatchPotions;
 import fr.ph1lou.werewolfplugin.listeners.PlayerListener;
 import fr.ph1lou.werewolfplugin.listeners.SmallFeaturesListener;
 import fr.ph1lou.werewolfplugin.listeners.TabManager;
+import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 

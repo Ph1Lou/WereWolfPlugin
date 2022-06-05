@@ -52,6 +52,8 @@ public class MeetUpGUI implements InventoryProvider {
                 .build()), e -> {
             game.getConfig().setMeetUp(!game.getConfig().isMeetUp());
             game.getConfig().resetSwitchMeetUp();
+            game.getListenersManager().updateListeners();
+
             if(game.getConfig().isMeetUp()){
                 StuffLoader.loadAllStuffMeetUP(game);
                 game.getConfig().setBorderMax(1000);

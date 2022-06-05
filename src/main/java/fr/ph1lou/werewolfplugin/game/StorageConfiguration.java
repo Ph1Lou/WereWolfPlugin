@@ -127,7 +127,6 @@ public class StorageConfiguration implements IStorageConfiguration {
     @Override
     public void resetSwitchMeetUp() {
         this.timerValues.clear();
-        this.randomEventsValues.clear();
         this.configValues.clear();
         this.scenarioValues.clear();
         this.values.clear();
