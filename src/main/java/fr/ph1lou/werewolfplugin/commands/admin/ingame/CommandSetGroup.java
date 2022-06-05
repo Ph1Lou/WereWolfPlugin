@@ -2,13 +2,15 @@ package fr.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import fr.ph1lou.werewolfapi.annotations.AdminCommand;
 import fr.ph1lou.werewolfapi.commands.ICommand;
+import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import org.bukkit.entity.Player;
 
 @AdminCommand(key = "werewolf.commands.admin.set_group.command",
         descriptionKey = "werewolf.commands.admin.set_group.description",
         moderatorAccess = true,
-        argNumbers = 1)
+        argNumbers = 1,
+        statesGame = StateGame.GAME)
 public class CommandSetGroup implements ICommand {
 
     @Override
@@ -16,7 +18,7 @@ public class CommandSetGroup implements ICommand {
 
         try {
             game.setGroup(Integer.parseInt(args[0]));
-            player.performCommand(String.format("ww %s", game.translate("werewolf.commands.admin.group.command")));
+            player.performCommand(String.format("a %s", game.translate("werewolf.commands.admin.group.command")));
 
         } catch (NumberFormatException ignored) {
         }
