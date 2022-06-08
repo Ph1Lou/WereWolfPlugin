@@ -27,7 +27,6 @@ public class WorldFillTask implements Runnable
 	private transient boolean pausedForMemory = false;
 	private transient int taskID = -1;
 	private final transient int chunksPerRun;
-	private transient boolean continueNotice = false;
 	private final transient boolean forceLoad;
 
 	// values for the spiral pattern check which fills out the map to the border
@@ -157,13 +156,6 @@ public class WorldFillTask implements Runnable
 	@Override
 	public void run()
 	{
-		if (continueNotice)
-		{	// notify user that task has continued automatically
-			continueNotice = false;
-			sendMessage("World map generation task automatically continuing.");
-			sendMessage("Reminder: you can cancel at any time with \"wb fill cancel\", or pause/unpause with \"wb fill pause\".");
-		}
-
 		if (pausedForMemory)
 		{	// if available memory gets too low, we automatically pause, so handle that
 			if (AvailableMemoryTooLow())

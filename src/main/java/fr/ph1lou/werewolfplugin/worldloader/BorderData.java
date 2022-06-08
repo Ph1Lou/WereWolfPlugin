@@ -22,6 +22,7 @@ public class BorderData
 	private double DefiniteRectangleX;
 	private double DefiniteRectangleZ;
 	private double radiusSquaredQuotient;
+	private final DecimalFormat format = new DecimalFormat("0.0");
 
 	public BorderData(double x, double z, int radiusX, int radiusZ, Boolean shapeRound, boolean wrap)
 	{
@@ -91,7 +92,7 @@ public class BorderData
 	@Override
 	public String toString()
 	{
-		return "radius " + ((radiusX == radiusZ) ? radiusX : radiusX + "x" + radiusZ) + " at X: " + new DecimalFormat("0.0").format(x) + " Z: " + new DecimalFormat("0.0").format(z) + (shapeRound != null ? (" (shape override: elliptic/round)") : "") + (wrapping ? (" (wrapping)") : "");
+		return "radius " + ((radiusX == radiusZ) ? radiusX : radiusX + "x" + radiusZ) + " at X: " + format.format(x) + " Z: " + format.format(z) + (shapeRound != null ? (" (shape override: elliptic/round)") : "") + (wrapping ? (" (wrapping)") : "");
 	}
 
 	// This algorithm of course needs to be fast, since it will be run very frequently
