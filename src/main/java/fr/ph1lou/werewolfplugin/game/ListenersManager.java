@@ -18,7 +18,6 @@ import fr.ph1lou.werewolfplugin.listeners.PatchPotions;
 import fr.ph1lou.werewolfplugin.listeners.PlayerListener;
 import fr.ph1lou.werewolfplugin.listeners.SmallFeaturesListener;
 import fr.ph1lou.werewolfplugin.listeners.TabManager;
-import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 
@@ -76,7 +75,7 @@ public class ListenersManager implements IListenersManager {
 
         registerManager.getConfigsRegister()
                 .forEach(configurationWrapper -> this.instantiate(configurationWrapper.getClazz())
-                        .ifPresent(listenerWerewolf -> this.listenersConfigurations.put(configurationWrapper.getMetaDatas().key(), listenerWerewolf)));
+                        .ifPresent(listenerWerewolf -> this.listenersConfigurations.put(configurationWrapper.getMetaDatas().config().key(), listenerWerewolf)));
     }
 
     public void delete() {
@@ -158,10 +157,10 @@ public class ListenersManager implements IListenersManager {
 
         registerManager.getConfigsRegister()
                 .forEach(configurationWrapper -> {
-                    ListenerWerewolf listenerWerewolf = this.listenersConfigurations.get(configurationWrapper.getMetaDatas().key());
+                    ListenerWerewolf listenerWerewolf = this.listenersConfigurations.get(configurationWrapper.getMetaDatas().config().key());
                     if(listenerWerewolf != null){
                         listenerWerewolf.register(game.getConfig()
-                                .isConfigActive(configurationWrapper.getMetaDatas().key()));
+                                .isConfigActive(configurationWrapper.getMetaDatas().config().key()));
                     }
                 });
         registerManager.getRandomEventsRegister()

@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
 
 import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -32,7 +33,7 @@ import java.util.Optional;
 @Role(key = RoleBase.INFECT, category= Category.WEREWOLF,
         attributes = {RoleAttribute.WEREWOLF},
         weight = 1.5f,
-        configurations = @Configuration(key = ConfigBase.INFECT_AUTO_RESURRECTION))
+        configurations = @Configuration(config = @ConfigurationBasic(key = ConfigBase.INFECT_AUTO_RESURRECTION)))
 public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();

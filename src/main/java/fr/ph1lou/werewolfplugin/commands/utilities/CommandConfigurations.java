@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.commands.utilities;
 
 import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -25,8 +26,9 @@ public class CommandConfigurations implements ICommand {
         String message = Register.get().getConfigsRegister()
                 .stream()
                 .map(Wrapper::getMetaDatas)
-                .filter(Configuration::appearInMenu)
-                .filter(Configuration::appearInConfigurationList)
+                .map(Configuration::config)
+                .filter(ConfigurationBasic::appearInMenu)
+                .filter(ConfigurationBasic::appearInConfigurationList)
                 .filter(configurationWrapper -> game.getConfig().isConfigActive(configurationWrapper.key()) &&
                         this.hideCompositionCondition(game, configurationWrapper.key()))
                 .map(configurationWrapper -> "§a-§f " + game.translate(configurationWrapper.key()))

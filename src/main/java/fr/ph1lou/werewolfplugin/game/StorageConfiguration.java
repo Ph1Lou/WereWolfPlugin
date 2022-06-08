@@ -1,7 +1,9 @@
 package fr.ph1lou.werewolfplugin.game;
 
+import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.game.IStorageConfiguration;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Register;
 
 import java.util.HashMap;
@@ -197,38 +199,56 @@ public class StorageConfiguration implements IStorageConfiguration {
         return configValues.getOrDefault(key, Register.get().getConfigsRegister()
                 .stream()
                 .filter(timerWrapper -> timerWrapper.getAddonKey().equals(this.addonKey))
-                .filter(configRegister -> configRegister.getMetaDatas().key().equals(key))
-                .findFirst().map(configurationWrapper -> this.getDefaultValue(configurationWrapper.getMetaDatas().defaultValue(),
-                        configurationWrapper.getMetaDatas().meetUpValue()))
+                .map(Wrapper::getMetaDatas)
+                .map(Configuration::config)
+                .filter(configRegister -> configRegister.key().equals(key))
+                .findFirst().map(configurationWrapper -> this.getDefaultValue(configurationWrapper.defaultValue(),
+                        configurationWrapper.meetUpValue()))
                 .orElseGet(() -> Register.get().getRolesRegister()
                         .stream()
                         .filter(roleRoleWrapper -> roleRoleWrapper.getAddonKey().equals(this.addonKey))
-                        .flatMap(iRoleRoleWrapper -> Stream.of(iRoleRoleWrapper.getMetaDatas().configurations()))
+                        .map(Wrapper::getMetaDatas)
+                        .flatMap(iRoleRoleWrapper -> Stream.of(iRoleRoleWrapper.configurations()))
+                        .map(Configuration::config)
                         .filter(configuration -> configuration.key().equals(key))
                         .map(configuration -> this.getDefaultValue(configuration.defaultValue(), configuration.meetUpValue()))
                         .findFirst()
                         .orElseGet(() -> Register.get().getRandomEventsRegister()
                                 .stream()
                                 .filter(roleRoleWrapper -> roleRoleWrapper.getAddonKey().equals(this.addonKey))
-                                .flatMap(eventWrapper -> Stream.of(eventWrapper.getMetaDatas().configurations()))
+                                .map(Wrapper::getMetaDatas)
+                                .flatMap(iRoleRoleWrapper -> Stream.of(iRoleRoleWrapper.configurations()))
+                                .map(Configuration::config)
                                 .filter(configuration -> configuration.key().equals(key))
                                 .map(configuration -> this.getDefaultValue(configuration.defaultValue(), configuration.meetUpValue()))
                                 .findFirst()
                                 .orElseGet(() -> Register.get().getLoversRegister()
                                         .stream()
                                         .filter(roleRoleWrapper -> roleRoleWrapper.getAddonKey().equals(this.addonKey))
-                                        .flatMap(eventWrapper -> Stream.of(eventWrapper.getMetaDatas().configurations()))
+                                        .map(Wrapper::getMetaDatas)
+                                        .flatMap(iRoleRoleWrapper -> Stream.of(iRoleRoleWrapper.configurations()))
+                                        .map(Configuration::config)
                                         .filter(configuration -> configuration.key().equals(key))
                                         .map(configuration -> this.getDefaultValue(configuration.defaultValue(), configuration.meetUpValue()))
                                         .findFirst()
                                         .orElseGet(() -> Register.get().getScenariosRegister()
                                                 .stream()
                                                 .filter(managerScenarioWrapper -> managerScenarioWrapper.getAddonKey().equals(this.addonKey))
-                                                .flatMap(scenarioWrapper -> Stream.of(scenarioWrapper.getMetaDatas().configurations()))
+                                                .map(Wrapper::getMetaDatas)
+                                                .flatMap(iRoleRoleWrapper -> Stream.of(iRoleRoleWrapper.configurations()))
+                                                .map(Configuration::config)
                                                 .filter(configuration -> configuration.key().equals(key))
                                                 .map(configuration -> this.getDefaultValue(configuration.defaultValue(), configuration.meetUpValue()))
                                                 .findFirst()
-                                                .orElse(false))))));
+                                                .orElseGet(() ->  Register.get().getConfigsRegister()
+                                                        .stream()
+                                                        .filter(managerScenarioWrapper -> managerScenarioWrapper.getAddonKey().equals(this.addonKey))
+                                                        .map(Wrapper::getMetaDatas)
+                                                        .flatMap(configurationWrapper -> Stream.of(configurationWrapper.configurations()))
+                                                        .filter(configuration -> configuration.key().equals(key))
+                                                        .map(configuration -> this.getDefaultValue(configuration.defaultValue(), configuration.meetUpValue()))
+                                                        .findFirst()
+                                                        .orElse(false)))))));
     }
 
     @Override
@@ -238,7 +258,7 @@ public class StorageConfiguration implements IStorageConfiguration {
                 .filter(randomEventRegister -> randomEventRegister.getMetaDatas().key().equals(key))
                 .findFirst()
                 .map(ListenerWerewolfEventWrapper -> this.getDefaultValue(ListenerWerewolfEventWrapper.getMetaDatas().defaultValue(),
-                                ListenerWerewolfEventWrapper.getMetaDatas().meetUpValue()))
+                        ListenerWerewolfEventWrapper.getMetaDatas().meetUpValue()))
                 .orElse(0));
     }
 

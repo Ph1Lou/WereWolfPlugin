@@ -6,6 +6,7 @@ import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
+import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -71,7 +72,8 @@ public class ScenariosGUI implements InventoryProvider {
                                 scenarioRegister.getMetaDatas().loreKey(),
                                 scenarioRegister.getMetaDatas().configurations(),
                                 scenarioRegister.getMetaDatas().timers(),
-                                scenarioRegister.getMetaDatas().configValues()));
+                                scenarioRegister.getMetaDatas().configValues(),
+                                new ConfigurationBasic[]{}));
                         if(!lore.isEmpty()){
                             lore.add(game.translate("werewolf.menus.lore.shift"));
                         }

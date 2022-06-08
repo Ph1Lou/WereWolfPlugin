@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.configs;
 
 import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
@@ -9,9 +10,9 @@ import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteBeginEvent;
 
-@Configuration(key = ConfigBase.VOTE,
+@Configuration(config = @ConfigurationBasic(key = ConfigBase.VOTE,
         defaultValue = true,
-        meetUpValue = true,
+        meetUpValue = true),
         timers = {
                 @Timer(key = TimerBase.VOTE_BEGIN,
                         defaultValue = 40 * 60,
@@ -30,7 +31,8 @@ import fr.ph1lou.werewolfapi.events.game.vote.VoteBeginEvent;
         },
         configValues = @IntValue(key = IntValueBase.VOTE_END, defaultValue = 10,
                 meetUpValue = 8,
-                step = 1, item = UniversalMaterial.PLAYER_HEAD))
+                step = 1, item = UniversalMaterial.PLAYER_HEAD),
+        configurations = @ConfigurationBasic(key = ConfigBase.VOTE_EVERY_OTHER_DAY))
 public class Vote {
 
 }

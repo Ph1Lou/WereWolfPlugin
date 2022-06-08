@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
 import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Category;
@@ -28,7 +29,7 @@ import java.util.stream.Collectors;
 
 @Role(key = RoleBase.CUPID, category = Category.VILLAGER,
            attributes = RoleAttribute.HYBRID,
-            configurations = @Configuration(key = ConfigBase.RANDOM_CUPID))
+            configurations = @Configuration(config = @ConfigurationBasic(key = ConfigBase.RANDOM_CUPID)))
 public class Cupid extends RoleVillage implements IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();

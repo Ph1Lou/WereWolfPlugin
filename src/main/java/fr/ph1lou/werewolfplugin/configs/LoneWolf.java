@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.configs;
 
 import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
@@ -20,7 +21,7 @@ import org.bukkit.event.EventHandler;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Configuration(key = ConfigBase.LONE_WOLF)
+@Configuration(config = @ConfigurationBasic(key = ConfigBase.LONE_WOLF))
 public class LoneWolf extends ListenerWerewolf {
 
     public LoneWolf(WereWolfAPI main) {

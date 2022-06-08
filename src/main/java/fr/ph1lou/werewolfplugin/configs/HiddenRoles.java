@@ -1,5 +1,6 @@
 package fr.ph1lou.werewolfplugin.configs;
 
+import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.enums.Camp;
@@ -22,7 +23,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Configuration(key = ConfigBase.HIDDEN_ROLES, loreKey = "werewolf.hidden_roles.description")
+@Configuration(config = @ConfigurationBasic(key = ConfigBase.HIDDEN_ROLES,
+        loreKey = "werewolf.hidden_roles.description"))
 public class HiddenRoles extends ListenerWerewolf {
 
     @Nullable

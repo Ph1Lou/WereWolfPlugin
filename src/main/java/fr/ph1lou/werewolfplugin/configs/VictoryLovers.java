@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.configs;
 
 import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.events.game.utils.WinConditionsCheckEvent;
@@ -10,7 +11,7 @@ import fr.ph1lou.werewolfapi.lovers.ILover;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
-@Configuration(key = ConfigBase.VICTORY_LOVERS)
+@Configuration(config = @ConfigurationBasic(key = ConfigBase.VICTORY_LOVERS))
 public class VictoryLovers extends ListenerWerewolf {
 
     public VictoryLovers(WereWolfAPI main) {

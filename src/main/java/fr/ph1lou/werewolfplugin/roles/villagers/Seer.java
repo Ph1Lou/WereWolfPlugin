@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
 import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
@@ -30,7 +31,7 @@ import java.util.List;
         category = Category.VILLAGER,
         attributes = {RoleAttribute.VILLAGER,
                 RoleAttribute.INFORMATION},
-        configurations = {@Configuration(key = ConfigBase.SEER_EVERY_OTHER_DAY)})
+        configurations = {@Configuration(config = @ConfigurationBasic(key = ConfigBase.SEER_EVERY_OTHER_DAY))})
 public class Seer extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
     private int dayNumber = -8;

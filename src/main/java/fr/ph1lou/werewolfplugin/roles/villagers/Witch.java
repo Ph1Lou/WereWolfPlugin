@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
 import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
@@ -30,7 +31,7 @@ import java.util.List;
 
 @Role(key = RoleBase.WITCH, category = Category.VILLAGER,
          attributes = RoleAttribute.VILLAGER,
-configurations = {@Configuration(key = ConfigBase.WITCH_AUTO_RESURRECTION, defaultValue = true)})
+configurations = {@Configuration(config = @ConfigurationBasic(key = ConfigBase.WITCH_AUTO_RESURRECTION, defaultValue = true))})
 public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();

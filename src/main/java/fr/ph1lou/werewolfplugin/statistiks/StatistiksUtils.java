@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.statistiks;
 
 import com.google.gson.Gson;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.statistics.impl.GameReview;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfplugin.Main;
@@ -47,6 +48,7 @@ public class StatistiksUtils {
     public static void loadMessages(){
 
         Main main = JavaPlugin.getPlugin(Main.class);
+        WereWolfAPI game = main.getWereWolfAPI();
         String language = main.getConfig().getString("lang");
 
         try {
@@ -65,7 +67,7 @@ public class StatistiksUtils {
                 }
 
                 messages = Arrays.stream(new Gson().fromJson(response.toString(), String[].class))
-                        .map(s -> Prefix.LIGHT_BLUE+" "+s).collect(Collectors.toList());
+                        .map(s -> game.translate(Prefix.LIGHT_BLUE)+" "+s).collect(Collectors.toList());
             } catch (Exception ignored) {
             }
         } catch (IOException ignored) {

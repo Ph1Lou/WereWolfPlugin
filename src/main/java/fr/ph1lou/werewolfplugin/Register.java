@@ -167,7 +167,7 @@ public class Register implements IRegisterManager {
 
                             Configuration configuration = clazz.getAnnotation(Configuration.class);
 
-                            if(configuration.key().startsWith(prefix)){
+                            if(configuration.config().key().startsWith(prefix)){
                                 this.configurations.add(new Wrapper<>((Class<ICommand>)clazz,
                                         configuration,
                                         addon.key()));
@@ -175,7 +175,7 @@ public class Register implements IRegisterManager {
                             else{
                                 Bukkit.getLogger().warning(String.format(
                                         "The configuration key %s does not have the same prefix as the addon key %s",
-                                        configuration.key(), prefix));
+                                        configuration.config().key(), prefix));
                             }
                         }
                         else if(clazz.getAnnotation(Timer.class) != null){
@@ -305,7 +305,7 @@ public class Register implements IRegisterManager {
     private Optional<String> checkLovers(String key) {
         return this.lovers.stream()
                 .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key) ||
-                        Arrays.stream(configurationWrapper.getMetaDatas().configurations()).anyMatch(configuration -> configuration.key().equals(key)) ||
+                        Arrays.stream(configurationWrapper.getMetaDatas().configurations()).anyMatch(configuration -> configuration.config().key().equals(key)) ||
                         Arrays.stream(configurationWrapper.getMetaDatas().timers()).anyMatch(timer -> timer.key().equals(key)) ||
                         Arrays.stream(configurationWrapper.getMetaDatas().configValues()).anyMatch(intValue -> intValue.key().equals(key)))
                 .map(Wrapper::getAddonKey)
@@ -337,7 +337,7 @@ public class Register implements IRegisterManager {
         return this.events.stream()
                 .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key) ||
                         Arrays.stream(configurationWrapper.getMetaDatas().configValues()).anyMatch(intValue -> intValue.key().equals(key)) ||
-                        Arrays.stream(configurationWrapper.getMetaDatas().configurations()).anyMatch(configuration -> configuration.key().equals(key)) ||
+                        Arrays.stream(configurationWrapper.getMetaDatas().configurations()).anyMatch(configuration -> configuration.config().key().equals(key)) ||
                         Arrays.stream(configurationWrapper.getMetaDatas().timers()).anyMatch(timer -> timer.key().equals(key)))
                 .map(Wrapper::getAddonKey)
                 .findFirst();
@@ -347,7 +347,7 @@ public class Register implements IRegisterManager {
         return this.scenarios.stream()
                 .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key) ||
                         Arrays.stream(configurationWrapper.getMetaDatas().timers()).anyMatch(timer -> timer.key().equals(key)) ||
-                        Arrays.stream(configurationWrapper.getMetaDatas().configurations()).anyMatch(configuration -> configuration.key().equals(key)) ||
+                        Arrays.stream(configurationWrapper.getMetaDatas().configurations()).anyMatch(configuration -> configuration.config().key().equals(key)) ||
                         Arrays.stream(configurationWrapper.getMetaDatas().configValues()).anyMatch(intValue -> intValue.key().equals(key)))
                 .map(Wrapper::getAddonKey)
                 .findFirst();
@@ -362,9 +362,10 @@ public class Register implements IRegisterManager {
 
     private Optional<String> checkConfigurations(String key) {
         return this.configurations.stream()
-                .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key) ||
+                .filter(configurationWrapper -> configurationWrapper.getMetaDatas().config().key().equals(key) ||
                         Arrays.stream(configurationWrapper.getMetaDatas().configValues()).anyMatch(intValue -> intValue.key().equals(key)) ||
-                        Arrays.stream(configurationWrapper.getMetaDatas().timers()).anyMatch(timer -> timer.key().equals(key)))
+                        Arrays.stream(configurationWrapper.getMetaDatas().timers()).anyMatch(timer -> timer.key().equals(key)) ||
+                        Arrays.stream(configurationWrapper.getMetaDatas().configurations()).anyMatch(configurationBasic -> configurationBasic.key().equals(key)))
                 .map(Wrapper::getAddonKey)
                 .findFirst();
     }
@@ -373,7 +374,7 @@ public class Register implements IRegisterManager {
         return this.roles.stream()
                 .filter(iRoleRoleWrapper -> iRoleRoleWrapper.getMetaDatas().key().equals(key) ||
                         Arrays.stream(iRoleRoleWrapper.getMetaDatas().timers()).anyMatch(timer -> timer.key().equals(key)) ||
-                        Arrays.stream(iRoleRoleWrapper.getMetaDatas().configurations()).anyMatch(configuration -> configuration.key().equals(key)) ||
+                        Arrays.stream(iRoleRoleWrapper.getMetaDatas().configurations()).anyMatch(configuration -> configuration.config().key().equals(key)) ||
                         Arrays.stream(iRoleRoleWrapper.getMetaDatas().configValues()).anyMatch(intValue -> intValue.key().equals(key)))
                 .map(Wrapper::getAddonKey)
                 .findFirst();

@@ -1508,7 +1508,8 @@
           }
         },
         "configurations": {
-          "vote_end": "Fin des votes à §b&number&§r personnes"
+          "vote_end": "Fin des votes à §b&number&§r personnes",
+          "vote_every_other_day": "Vote un jour sur deux"
         },
         "already_voted": "Vous avez déjà voté aujourd'hui",
         "not_vote_time": "Ce n'est plus l'heure du vote",

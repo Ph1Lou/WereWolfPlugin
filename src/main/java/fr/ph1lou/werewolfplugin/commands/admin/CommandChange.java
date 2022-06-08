@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.commands.admin;
 
 import fr.ph1lou.werewolfapi.annotations.AdminCommand;
+import fr.ph1lou.werewolfapi.annotations.DisableAutoLoad;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -9,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import java.io.IOException;
 
+@DisableAutoLoad
 @AdminCommand(key = "werewolf.commands.admin.change.command",
         descriptionKey = "werewolf.commands.admin.change.description",
         statesGame = StateGame.LOBBY,

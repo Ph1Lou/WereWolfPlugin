@@ -13,6 +13,7 @@ import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
+import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfplugin.utils.InventoryUtils;
@@ -65,14 +66,15 @@ public class ConfigurationsGUI implements InventoryProvider {
 
         main.getRegisterManager().getConfigsRegister()
                 .stream()
-                .sorted((o1, o2) -> game.translate(o1.getMetaDatas().key())
-                        .compareToIgnoreCase(game.translate(o2.getMetaDatas().key())))
-                .filter(config1 -> (config1.getMetaDatas().appearInMenu())
+                .map(Wrapper::getMetaDatas)
+                .sorted((o1, o2) -> game.translate(o1.config().key())
+                        .compareToIgnoreCase(game.translate(o2.config().key())))
+                .filter(config1 -> (config1.config().appearInMenu())
                         || game.isDebug())
-                .forEach(configRegister -> items.add(getClickableItem(game, configRegister.getMetaDatas(),
-                        game.getListenersManager().getConfiguration(configRegister.getMetaDatas().key())
+                .forEach(configRegister -> items.add(getClickableItem(game, configRegister,
+                        game.getListenersManager().getConfiguration(configRegister.config().key())
                                 .orElse(null),
-                        () -> AdvancedConfigurationsGUI.getInventory(configRegister.getMetaDatas(),
+                        () -> AdvancedConfigurationsGUI.getInventory(configRegister,
                                 pagination.getPage()))));
 
         InventoryUtils.fillInventory(game, items, pagination, contents, () -> INVENTORY, 45);
@@ -83,15 +85,16 @@ public class ConfigurationsGUI implements InventoryProvider {
                                                  Supplier<SmartInventory> inventory) {
         IConfiguration config = game.getConfig();
         List<String> lore = new ArrayList<>();
-        String key = configuration.key();
+        String key = configuration.config().key();
         ItemStack itemStack;
 
         if (game.getConfig().isConfigActive(key)) {
             lore.addAll(AdvancedConfigurationUtils.getLore(game,
-                    configuration.loreKey(),
+                    configuration.config().loreKey(),
                     new Configuration[0],
                     configuration.timers(),
-                    configuration.configValues()));
+                    configuration.configValues(),
+                    configuration.configurations()));
             if(!lore.isEmpty()){
                 lore.add(game.translate("werewolf.menus.lore.shift"));
             }
@@ -103,6 +106,7 @@ public class ConfigurationsGUI implements InventoryProvider {
         }
 
         Optional<String> incompatible = Arrays.stream(configuration
+                        .config()
                 .incompatibleConfigs())
                 .filter(s -> game.getConfig().isConfigActive(s))
                 .map(game::translate).findFirst();
@@ -113,7 +117,8 @@ public class ConfigurationsGUI implements InventoryProvider {
 
         return ClickableItem.of(new ItemBuilder(itemStack)
                 .setDisplayName(game.translate(key))
-                .setLore(lore).build(), e -> {
+                .setLore(lore)
+                .build(), e -> {
 
             if(e.isShiftClick()){
                 inventory.get().open((Player) e.getWhoClicked());

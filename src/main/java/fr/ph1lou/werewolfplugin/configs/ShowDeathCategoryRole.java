@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.configs;
 
 import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
@@ -13,8 +14,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
-@Configuration(key = ConfigBase.SHOW_ROLE_CATEGORY_TO_DEATH,
-        incompatibleConfigs = {ConfigBase.SHOW_ROLE_TO_DEATH})
+@Configuration(config = @ConfigurationBasic(key = ConfigBase.SHOW_ROLE_CATEGORY_TO_DEATH,
+        incompatibleConfigs = {ConfigBase.SHOW_ROLE_TO_DEATH}))
 public class ShowDeathCategoryRole extends ListenerWerewolf {
 
     public ShowDeathCategoryRole(WereWolfAPI main) {

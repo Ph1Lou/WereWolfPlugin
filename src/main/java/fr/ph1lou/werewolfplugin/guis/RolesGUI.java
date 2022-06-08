@@ -6,6 +6,7 @@ import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
+import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.LoverBase;
@@ -40,12 +41,14 @@ public class RolesGUI implements InventoryProvider {
     }
 
     public static SmartInventory getInventory(Player player, Category category) {
+
+        Main main = JavaPlugin.getPlugin(Main.class);
         return SmartInventory.builder()
                 .id("roles")
-                .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
+                .manager(main.getInvManager())
                 .provider(new RolesGUI(player, category))
                 .size(6, 9)
-                .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menus.roles.name"))
+                .title(main.getWereWolfAPI().translate("werewolf.menus.roles.name"))
                 .closeable(true)
                 .build();
     }
@@ -219,7 +222,8 @@ public class RolesGUI implements InventoryProvider {
                                     roleRegister.getMetaDatas().loreKey(),
                                     roleRegister.getMetaDatas().configurations(),
                                     roleRegister.getMetaDatas().timers(),
-                                    roleRegister.getMetaDatas().configValues()));
+                                    roleRegister.getMetaDatas().configValues(),
+                                    new ConfigurationBasic[]{}));
                         }
                         Arrays.stream(roleRegister.getMetaDatas().requireRoles())
                                 .forEach(roleKey -> lore2.add(game.translate("werewolf.menus.roles.need",

@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
@@ -29,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 @Role(key = RoleBase.HUNTER,
         category = Category.VILLAGER,
         attributes = RoleAttribute.VILLAGER,
-        configurations = @Configuration(key = ConfigBase.HUNTER_CAN_SHOOT, meetUpValue = true))
+        configurations = @Configuration(config = @ConfigurationBasic(key = ConfigBase.HUNTER_CAN_SHOOT, meetUpValue = true)))
 public class Hunter extends RoleVillage implements IPower {
 
     private boolean power = false;

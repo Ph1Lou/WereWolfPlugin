@@ -1,11 +1,12 @@
 package fr.ph1lou.werewolfplugin.configs;
 
 import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 
-@Configuration(key = ConfigBase.CHAT,
+@Configuration(config = @ConfigurationBasic(key = ConfigBase.CHAT,
         defaultValue = true,
         meetUpValue = true,
-        appearInMenu = false)
+        appearInMenu = false))
 public class Chat {
 }

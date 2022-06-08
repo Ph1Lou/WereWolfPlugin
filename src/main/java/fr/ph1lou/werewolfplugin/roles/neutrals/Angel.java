@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.enums.Category;
@@ -60,7 +61,7 @@ import java.util.List;
                 defaultValue = 240, meetUpValue = 240,
         decrementAfterRole = true,
         onZero = AutoAngelEvent.class),
-        configurations = @Configuration(key = ConfigBase.SWEET_ANGEL)
+        configurations = @Configuration(config = @ConfigurationBasic(key = ConfigBase.SWEET_ANGEL))
 )
 public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse {
 

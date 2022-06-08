@@ -1,5 +1,6 @@
 package fr.ph1lou.werewolfplugin.configs;
 
+import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
@@ -26,7 +27,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Configuration(key = ConfigBase.THIERCELIEU, loreKey = "werewolf.thiercelieu.description")
+@Configuration(config = @ConfigurationBasic(key = ConfigBase.THIERCELIEU,
+        loreKey = "werewolf.thiercelieu.description"))
 public class Thiercelieu extends ListenerWerewolf {
 
     private final List<AnnouncementDeathEvent> announcementDeathEvents = new ArrayList<>();

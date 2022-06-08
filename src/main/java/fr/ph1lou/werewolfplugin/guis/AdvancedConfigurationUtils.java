@@ -3,6 +3,7 @@ package fr.ph1lou.werewolfplugin.guis;
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
@@ -11,10 +12,12 @@ import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import fr.ph1lou.werewolfapi.utils.Utils;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -101,9 +104,9 @@ public class AdvancedConfigurationUtils {
                 .map(s -> game.translate(s,
                         Stream.concat(Arrays.stream(configurations)
                                                 .map(intValue -> {
-                                                    String[] intValueKey = intValue.key().split("\\.");
+                                                    String[] intValueKey = intValue.config().key().split("\\.");
                                                     return Formatter.format(String.format("&%s&",intValueKey[intValueKey.length - 1]),
-                                                            game.translate(game.getConfig().isConfigActive(intValue.key()) ?
+                                                            game.translate(game.getConfig().isConfigActive(intValue.config().key()) ?
                                                                     "werewolf.utils.on":
                                                                     "werewolf.utils.off"));
                                                 }),
@@ -127,14 +130,15 @@ public class AdvancedConfigurationUtils {
     }
 
     public static List<? extends String> getLore(WereWolfAPI game,
-                                                       String[] loreKeys,
-                                                       Configuration[] configurations,
-                                                       Timer[] timers,
-                                                       IntValue[] values){
+                                                 String[] loreKeys,
+                                                 Configuration[] configurations,
+                                                 Timer[] timers,
+                                                 IntValue[] values,
+                                                 ConfigurationBasic[] configurationBasics){
         return Stream.concat(Arrays.stream(loreKeys).map(game::translate),
                 Stream.concat(Arrays.stream(configurations)
-                                .map(configuration -> String.format("%s : %s",game.translate(configuration.key()),
-                                                game.translate(game.getConfig().isConfigActive(configuration.key()) ?
+                                .map(configuration -> String.format("%s : %s",game.translate(configuration.config().key()),
+                                                game.translate(game.getConfig().isConfigActive(configuration.config().key()) ?
                                                         "werewolf.utils.on":
                                                         "werewolf.utils.off"))),
                                         Stream.concat(Arrays.stream(timers)
@@ -143,9 +147,52 @@ public class AdvancedConfigurationUtils {
                                                                         .timer(Utils
                                                                                 .conversion(game.getConfig()
                                                                                         .getTimerValue(timer.key()))))),
-                                                Arrays.stream(values).map(intValue -> game.translate(intValue.key(),
-                                                        Formatter.number(game.getConfig().getValue(intValue.key())))))))
+                                                Stream.concat(Arrays.stream(values).map(intValue -> game.translate(intValue.key(),
+                                                        Formatter.number(game.getConfig().getValue(intValue.key())))),
+                                                        Arrays.stream(configurationBasics).map(configuration -> String.format("%s : %s",game.translate(configuration.key()),
+                                                                game.translate(game.getConfig().isConfigActive(configuration.key()) ?
+                                                                        "werewolf.utils.on":
+                                                                        "werewolf.utils.off")))))))
                 .flatMap(s -> Arrays.stream(s.split("\\n")))
+                .collect(Collectors.toList());
+    }
+
+    public static List<? extends ClickableItem> getConfigBasic(WereWolfAPI game, ConfigurationBasic[] configurations) {
+
+        return Arrays.stream(configurations)
+                .map(configuration -> {
+                    IConfiguration config = game.getConfig();
+                    List<String> lore = new ArrayList<>();
+                    String key = configuration.key();
+                    ItemStack itemStack;
+
+                    if (game.getConfig().isConfigActive(key)) {
+                        lore.add(0, game.translate("werewolf.utils.enable"));
+                        itemStack = UniversalMaterial.GREEN_TERRACOTTA.getStack();
+                    } else {
+                        lore.add(0, game.translate("werewolf.utils.disable"));
+                        itemStack = UniversalMaterial.RED_TERRACOTTA.getStack();
+                    }
+
+                    Optional<String> incompatible = Arrays.stream(configuration
+                                    .incompatibleConfigs())
+                            .filter(s -> game.getConfig().isConfigActive(s))
+                            .map(game::translate).findFirst();
+
+                    incompatible
+                            .ifPresent(configuration1 -> lore.add(game.translate("werewolf.menus.configurations.incompatible",
+                                    Formatter.format("&configuration&",configuration1))));
+
+                    return ClickableItem.of(new ItemBuilder(itemStack)
+                            .setDisplayName(game.translate(key))
+                            .setLore(lore)
+                            .build(), e -> {
+
+                       if (!incompatible.isPresent() || config.isConfigActive(key)) {
+                            config.switchConfigValue(key);
+                        }
+                    });
+                })
                 .collect(Collectors.toList());
     }
 }

@@ -33,14 +33,14 @@ public class AdvancedConfigurationsGUI implements InventoryProvider {
 
         WereWolfAPI game = api.getWereWolfAPI();
         return SmartInventory.builder()
-                .id("advanced" + configuration.key())
+                .id("advanced" + configuration.config().key())
                 .manager(api.getInvManager())
                 .provider(new AdvancedConfigurationsGUI(configuration, page))
                 .size(InventoryUtils.getRowNumbers((configuration.timers().length +
-                                configuration.configValues().length)*2, true),
+                                configuration.configValues().length + configuration.configurations().length)*2, true),
                         9)
                 .title(game.translate("werewolf.menus.advanced_tool_role.menu",
-                                Formatter.role(game.translate(configuration.key()))))
+                                Formatter.role(game.translate(configuration.config().key()))))
                 .closeable(true)
                 .build();
     }
@@ -70,6 +70,11 @@ public class AdvancedConfigurationsGUI implements InventoryProvider {
         });
 
         AdvancedConfigurationUtils.getTimers(game, this.configuration.timers()).forEach(clickableItem -> {
+            contents.set(i.get() / 9, i.get() % 9, clickableItem);
+            i.set(i.get() + 2);
+        });
+
+        AdvancedConfigurationUtils.getConfigBasic(game, this.configuration.configurations()).forEach(clickableItem -> {
             contents.set(i.get() / 9, i.get() % 9, clickableItem);
             i.set(i.get() + 2);
         });

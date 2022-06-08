@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.random_events;
 
 import fr.ph1lou.werewolfapi.annotations.Event;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -70,6 +71,8 @@ public class Swap extends ListenerWerewolf {
                     playerWW2.addPlayerMaxHealth(20 - playerWW2.getMaxHealth());
                     playerWW1.clearPotionEffects(roles1.getKey());
                     playerWW2.clearPotionEffects(roles2.getKey());
+                    playerWW1.clearPotionEffects(RoleBase.WEREWOLF);
+                    playerWW2.clearPotionEffects(RoleBase.WEREWOLF);
                     playerWW1.sendMessageWithKey(Prefix.RED , "werewolf.random_events.swap.concerned");
                     playerWW2.sendMessageWithKey(Prefix.RED , "werewolf.random_events.swap.concerned");
                     roles1.recoverPower();

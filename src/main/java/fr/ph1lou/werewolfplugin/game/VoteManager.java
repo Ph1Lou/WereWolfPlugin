@@ -239,20 +239,28 @@ public class VoteManager implements Listener, IVoteManager
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onDay(DayEvent event) {
+
+		if(!this.game.getConfig().isConfigActive(ConfigBase.VOTE)){
+			return;
+		}
+
 		if (this.isStatus(VoteStatus.IN_PROGRESS) || this.isStatus(VoteStatus.WAITING)) {
 			return;
 		}
-		if (this.game.getConfig().isConfigActive(ConfigBase.VOTE) &&
-				this.game.getPlayersCount() < this.game.getConfig().getValue(IntValueBase.VOTE_END) &&
+		if (this.game.getPlayersCount() < this.game.getConfig().getValue(IntValueBase.VOTE_END) &&
 			!this.isStatus(VoteStatus.ENDED)) {
 			Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE, "werewolf.configurations.vote.vote_deactivate"));
 			this.setStatus(VoteStatus.ENDED);
 			return;
 		}
+
+		if(event.getNumber() % 2 == 1 && this.game.getConfig().isConfigActive(ConfigBase.VOTE_EVERY_OTHER_DAY)){
+			return;
+		}
+
 		int duration = this.game.getConfig().getTimerValue(TimerBase.VOTE_DURATION);
 
-		if (this.game.getConfig().isConfigActive(ConfigBase.VOTE) &&
-				!this.isStatus(VoteStatus.NOT_BEGIN) && !this.isStatus(VoteStatus.ENDED)) {
+		if (!this.isStatus(VoteStatus.NOT_BEGIN) && !this.isStatus(VoteStatus.ENDED)) {
 
 			this.resetVote();
 			Bukkit.getOnlinePlayers().forEach(Sound.CHICKEN_HURT::play);
