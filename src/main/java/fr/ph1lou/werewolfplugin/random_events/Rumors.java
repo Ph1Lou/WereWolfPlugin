@@ -27,8 +27,8 @@ import java.util.List;
 import java.util.Map;
 
 @Event(key = EventBase.RUMORS, loreKey = "werewolf.random_events.rumors.description",
-        timers = {@Timer(key = Rumors.TIMER_START, defaultValue = 80*60, meetUpValue = 30*60),
-                @Timer(key = Rumors.PERIOD, defaultValue = 40*60, meetUpValue = 20*60)})
+        timers = {@Timer(key = Rumors.TIMER_START, defaultValue = 80*60, meetUpValue = 30*60, step = 30),
+                @Timer(key = Rumors.PERIOD, defaultValue = 40*60, meetUpValue = 20*60, step = 30)})
 public class Rumors extends ListenerWerewolf {
 
     public static final String TIMER_START = "werewolf.random_events.rumors.timer_start";

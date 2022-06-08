@@ -19,8 +19,6 @@ public class LanguageLoader {
     public static void loadLanguage(WereWolfAPI game, String language){
 
         Main main = JavaPlugin.getPlugin(Main.class);
-
-        StatistiksUtils.loadMessages();
         main.getRegisterManager().getModulesRegister().forEach(addon -> {
             String defaultLanguages = addon.getMetaDatas().defaultLanguage();
             main.getRegisterManager().getAddon(addon.getAddonKey())
@@ -28,6 +26,8 @@ public class LanguageLoader {
                     loadTranslations(javaPlugin,
                     FileUtils_.loadContent(buildLanguageFile(javaPlugin, defaultLanguages, language)))));
         });
+        StatistiksUtils.loadMessages();
+
     }
 
     private static Map<String, JsonValue> loadTranslations(Plugin plugin, String file) {

@@ -19,8 +19,8 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import java.util.Objects;
 
 @Event(key = EventBase.PUTREFACTION, loreKey = "werewolf.random_events.putrefaction.description",
-        timers = {@Timer(key = Putrefaction.TIMER_START, defaultValue = 60*60, meetUpValue = 30*60),
-                @Timer(key = Putrefaction.PERIOD, defaultValue = 15*60, meetUpValue = 10*60)})
+        timers = {@Timer(key = Putrefaction.TIMER_START, defaultValue = 60*60, meetUpValue = 30*60, step = 30),
+                @Timer(key = Putrefaction.PERIOD, defaultValue = 15*60, meetUpValue = 10*60, step = 30)})
 public class Putrefaction extends ListenerWerewolf {
 
     public static final String TIMER_START = "werewolf.random_events.putrefaction.timer_start";

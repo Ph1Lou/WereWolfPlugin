@@ -1,16 +1,17 @@
 package fr.ph1lou.werewolfplugin.commands.admin;
 
 import fr.ph1lou.werewolfapi.annotations.AdminCommand;
-import fr.ph1lou.werewolfapi.annotations.DisableAutoLoad;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfplugin.Main;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 
-@DisableAutoLoad
 @AdminCommand(key = "werewolf.commands.admin.change.command",
         descriptionKey = "werewolf.commands.admin.change.description",
         statesGame = StateGame.LOBBY,
@@ -20,9 +21,8 @@ public class CommandChange implements ICommand {
     @Override
     public void execute(WereWolfAPI game, Player player, String[] args) {
 
+
         player.sendMessage(game.translate(Prefix.YELLOW , "werewolf.commands.admin.change.in_progress"));
-
-
         try {
             game.getMapManager().loadMap();
         } catch (IOException ignored) {

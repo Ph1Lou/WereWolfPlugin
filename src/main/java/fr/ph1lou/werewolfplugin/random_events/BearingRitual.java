@@ -17,8 +17,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 @Event(key = EventBase.BEARING_RITUAL, loreKey = "werewolf.random_events.bearing_ritual.description",
-timers = {@Timer(key = BearingRitual.TIMER_START, defaultValue = 60*60, meetUpValue = 30*60),
-        @Timer(key = BearingRitual.PERIOD, defaultValue = 40*60, meetUpValue = 20*60)})
+timers = {@Timer(key = BearingRitual.TIMER_START, defaultValue = 60*60, meetUpValue = 30*60, step = 30),
+        @Timer(key = BearingRitual.PERIOD, defaultValue = 40*60, meetUpValue = 20*60, step = 30)})
 public class BearingRitual extends ListenerWerewolf {
 
     public static final String TIMER_START = "werewolf.random_events.bearing_ritual.timer_start";

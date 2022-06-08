@@ -26,11 +26,6 @@ public class CommandSize implements ICommand {
 
         World world = game.getMapManager().getWorld();
 
-        if (world == null) {
-            game.getMapManager().createMap();
-            world = game.getMapManager().getWorld();
-        }
-
         Location location = world.getSpawnLocation();
         player.sendMessage(game.translate(Prefix.YELLOW , "werewolf.commands.admin.size.begin"));
         int size = VersionUtils.getVersionUtils().biomeSize(location, world);

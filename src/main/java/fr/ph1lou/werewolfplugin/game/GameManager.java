@@ -227,10 +227,6 @@ public class GameManager implements WereWolfAPI {
                 player.setGameMode(GameMode.ADVENTURE);
                 newGame.join(player);
             }
-
-            if (this.getTimer() <= 60) {
-                newGame.getMapManager().generateMap(newGame.getConfig().getBorderMax());
-            }
         }, 10);
 
         Bukkit.getOnlinePlayers()
@@ -241,6 +237,7 @@ public class GameManager implements WereWolfAPI {
         if (this.getTimer() > 60) { //Si la game a commencé depuis moins d'une minute on ne delete pas la map
             this.mapManager.deleteMap();
         }
+        this.mapManager.createMap();
     }
 
     @Override

@@ -27,9 +27,9 @@ import java.util.stream.Collectors;
 
 @Event(key = EventBase.EXPOSED,
         loreKey = "werewolf.random_events.exposed.description",
-        timers = {@Timer(key = Exposed.TIMER_START_1, defaultValue = 65*60, meetUpValue = 20*60),
-                @Timer(key = Exposed.TIMER_START_2, defaultValue = 30*60, meetUpValue = 15*60),
-                @Timer(key = Exposed.PERIOD, defaultValue = 15*60, meetUpValue = 15*60)})
+        timers = {@Timer(key = Exposed.TIMER_START_1, defaultValue = 65*60, meetUpValue = 20*60, step = 30),
+                @Timer(key = Exposed.TIMER_START_2, defaultValue = 30*60, meetUpValue = 15*60, step = 30),
+                @Timer(key = Exposed.PERIOD, defaultValue = 15*60, meetUpValue = 15*60, step = 30)})
 public class Exposed extends ListenerWerewolf {
   
     private IPlayerWW temp = null;

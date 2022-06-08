@@ -1,14 +1,14 @@
 package fr.ph1lou.werewolfplugin.game;
 
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfplugin.Main;
-import fr.ph1lou.werewolfplugin.worldloader.WorldFillTask;
-import fr.ph1lou.werewolfapi.game.IMapManager;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.game.IMapManager;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
+import fr.ph1lou.werewolfplugin.Main;
+import fr.ph1lou.werewolfplugin.worldloader.WorldFillTask;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -18,7 +18,6 @@ import org.bukkit.World;
 import org.bukkit.WorldBorder;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
@@ -49,15 +48,12 @@ public class MapManager implements IMapManager {
 
     public void init() {
         setLobbyWorld();
-        createMap();
+        createMap(true);
     }
 
     @Override
-    public void generateMap(CommandSender sender, int mapRadius) {
+    public void generateMap(int mapRadius) {
 
-        if (world == null) {
-            createMap();
-        }
         int chunksPerRun = 80;
         if (wft == null || wft.getPercentageCompleted() == 100) {
             wft = new WorldFillTask(
@@ -67,9 +63,6 @@ public class MapManager implements IMapManager {
                     false,
                     mapRadius);
             wft.setTaskID(BukkitUtils.scheduleSyncRepeatingTask(wft, 1, 1));
-            sender.sendMessage(game.translate(Prefix.YELLOW , "werewolf.commands.admin.generation.perform"));
-        } else {
-            sender.sendMessage(game.translate(Prefix.RED , "werewolf.commands.admin.generation.already_start"));
         }
     }
 
@@ -79,33 +72,43 @@ public class MapManager implements IMapManager {
         createMap(true);
     }
 
+
     public void createMap(boolean roofed) {
         Bukkit.broadcastMessage(game.translate(Prefix.RED , "werewolf.commands.admin.preview.create"));
         WorldCreator wc = new WorldCreator("werewolf_map");
         wc.environment(World.Environment.NORMAL);
         wc.type(WorldType.NORMAL);
         this.world = wc.createWorld();
-        setWorld(roofed);
+        BukkitUtils.scheduleSyncDelayedTask(() -> {
+            setWorld(roofed);
+            generateMap(game.getConfig().getBorderMax()/2);
+        });
     }
 
     @Override
-    public void loadMap() throws IOException {
+    public void loadMap() {
         loadMap(null);
     }
 
     @Override
-    public void loadMap(@Nullable File map) throws IOException {
+    public void loadMap(@Nullable File map) {
 
         File werewolfWorld = this.world.getWorldFolder();
 
         deleteMap();
-
         if (map != null && map.exists()) {
-            FileUtils.copyDirectory(map, werewolfWorld);
-            createMap(false);
-        } else createMap();
-    }
+            try {
+                FileUtils.copyDirectory(map, werewolfWorld);
+                createMap(false);
+            } catch (IOException ignored) {
+                this.createMap();
+            }
+        }
+        else {
+            this.createMap();
+        }
 
+    }
 
     @Override
     public void deleteMap() {
@@ -136,6 +139,7 @@ public class MapManager implements IMapManager {
     public void setWorld(boolean roofed) {
 
         try {
+            world.setAutoSave(false);
             world.setWeatherDuration(0);
             world.setThundering(false);
             world.setTime(0);
@@ -184,12 +188,6 @@ public class MapManager implements IMapManager {
             generateMap(mapRadius);
         }
     }
-
-    @Override
-    public void generateMap(int mapRadius) {
-        generateMap(Bukkit.getConsoleSender(), mapRadius);
-    }
-
 
     @Override
     public void transportation(IPlayerWW playerWW, double d) {

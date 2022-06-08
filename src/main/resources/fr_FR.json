@@ -952,7 +952,8 @@
         "start": {
           "command": "start",
           "description": "Pour lancer la partie",
-          "too_much_role": "Vous devez enlever des rôles pour lancer la partie."
+          "too_much_role": "Vous devez enlever des rôles pour lancer la partie.",
+          "generation_not_finished": "Attendez la fin de génération de la carte (§b&progress&%§r)"
         },
         "group": {
           "command": "group",
@@ -1017,14 +1018,6 @@
           "command": "fh",
           "description": "Pour soigner tout les joueurs",
           "send": "Final Heal !"
-        },
-        "generation": {
-          "command": "generation",
-          "description": "Pour générer la Carte",
-          "already_start": "La Génération est déjà lancée",
-          "perform": "La Génération du monde a commencé",
-          "not_generated": "Carte non générée. Faites §b/a generation",
-          "not_finished": "Attendez la fin de génération de la carte (§b&progress&%§r)"
         },
         "change": {
           "command": "change",

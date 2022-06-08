@@ -32,15 +32,9 @@ public class CommandStart implements ICommand {
             return;
         }
 
-        if (game.getMapManager().getPercentageGenerated() == 0) {
-            player.sendMessage(
-                    game.translate(Prefix.RED , "werewolf.commands.admin.generation.not_generated"));
-            return;
-        }
-
         if (game.getMapManager().getPercentageGenerated() < 100) {
             player.sendMessage(
-                    game.translate(Prefix.RED , "werewolf.commands.admin.generation.not_finished",
+                    game.translate(Prefix.RED , "werewolf.commands.admin.start.generation_not_finished",
                             Formatter.format("&progress&",new DecimalFormat("0.0")
                                     .format(game.getMapManager().getPercentageGenerated()))));
             return;

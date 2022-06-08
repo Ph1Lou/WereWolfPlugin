@@ -20,6 +20,7 @@ import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
+import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -164,5 +165,11 @@ public class SmallFeaturesListener implements Listener {
         event.setCancelled(true);
         event.getWorld().setWeatherDuration(0);
         event.getWorld().setThundering(false);
+    }
+
+
+    @EventHandler
+    public void initWorld(WorldInitEvent event) {
+        event.getWorld().setKeepSpawnInMemory(false); //for avoid crash when map change
     }
 }

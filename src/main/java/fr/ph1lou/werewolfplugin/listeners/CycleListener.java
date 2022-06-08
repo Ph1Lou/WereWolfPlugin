@@ -18,6 +18,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.world.WorldInitEvent;
 
 
 public class CycleListener implements Listener {
@@ -56,7 +57,6 @@ public class CycleListener implements Listener {
 
         }
     }
-
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onNight(NightEvent event) {

@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Event(key = EventBase.DISCORD, loreKey = "werewolf.random_events.discord.description",
-        timers = {@Timer(key = Discord.TIMER_START, defaultValue = 55*60, meetUpValue = 20*60),
-                @Timer(key = Discord.PERIOD, defaultValue = 30*60, meetUpValue = 15*60)})
+        timers = {@Timer(key = Discord.TIMER_START, defaultValue = 55*60, meetUpValue = 20*60, step = 30),
+                @Timer(key = Discord.PERIOD, defaultValue = 30*60, meetUpValue = 15*60, step = 30)})
 public class Discord extends ListenerWerewolf {
 
     public static final String TIMER_START = "werewolf.random_events.discord.timer_start";

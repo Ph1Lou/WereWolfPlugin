@@ -32,7 +32,10 @@ import fr.ph1lou.werewolfapi.events.game.vote.VoteBeginEvent;
         configValues = @IntValue(key = IntValueBase.VOTE_END, defaultValue = 10,
                 meetUpValue = 8,
                 step = 1, item = UniversalMaterial.PLAYER_HEAD),
-        configurations = @ConfigurationBasic(key = ConfigBase.VOTE_EVERY_OTHER_DAY))
+        configurations = {
+        @ConfigurationBasic(key = ConfigBase.VOTE_EVERY_OTHER_DAY),
+                @ConfigurationBasic(key = ConfigBase.NEW_VOTE)}
+)
 public class Vote {
 
 }

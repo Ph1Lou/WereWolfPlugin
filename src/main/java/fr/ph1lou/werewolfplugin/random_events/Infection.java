@@ -20,8 +20,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Event(key = EventBase.INFECTION, loreKey = "werewolf.random_events.infection.description",
-        timers = {@Timer(key = Infection.TIMER_START, defaultValue = 60*60, meetUpValue = 30*60),
-                @Timer(key = Infection.PERIOD, defaultValue = 15*60, meetUpValue = 10*60)})
+        timers = {@Timer(key = Infection.TIMER_START, defaultValue = 60*60, meetUpValue = 30*60, step = 30),
+                @Timer(key = Infection.PERIOD, defaultValue = 15*60, meetUpValue = 10*60, step = 30)})
 public class Infection extends ListenerWerewolf {
 
     public static final String TIMER_START = "werewolf.random_events.infection.timer_start";

@@ -5,19 +5,18 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
-import fr.ph1lou.werewolfplugin.Main;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
+import fr.ph1lou.werewolfplugin.Main;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.io.IOException;
 
 public class MapsGUI implements InventoryProvider {
 
@@ -60,11 +59,7 @@ public class MapsGUI implements InventoryProvider {
                             player.sendMessage(game.translate(Prefix.RED , "werewolf.check.game_in_progress"));
                             return;
                         }
-                        try {
-                            game.getMapManager().loadMap(file);
-                        } catch (IOException ioException) {
-                            ioException.printStackTrace();
-                        }
+                        game.getMapManager().loadMap(file);
                     }));
             i++;
         }
@@ -78,11 +73,8 @@ public class MapsGUI implements InventoryProvider {
                         player.sendMessage(game.translate(Prefix.RED , "werewolf.check.game_in_progress"));
                         return;
                     }
-                    try {
-                        player.closeInventory();
-                        game.getMapManager().loadMap(null);
-                    } catch (IOException ignored) {
-                    }
+                    player.closeInventory();
+                    game.getMapManager().loadMap(null);
                 })));
     }
 

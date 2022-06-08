@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 
 @Event(key = EventBase.AMNESIC,
         loreKey = "werewolf.random_events.amnesic.description",
-        timers = @Timer(key = Amnesic.TIMER, defaultValue = 300, meetUpValue = 180))
+        timers = @Timer(key = Amnesic.TIMER, defaultValue = 300, meetUpValue = 180, step = 30))
 public class Amnesic extends ListenerWerewolf {
 
     public final static String TIMER = "werewolf.random_events.amnesic.timer";

@@ -21,10 +21,6 @@ public class CommandPreview implements ICommand {
 
         IMapManager mapManager = game.getMapManager();
 
-        if (mapManager.getWorld() == null) {
-            mapManager.createMap();
-        }
-
         if (player.getWorld().equals(game.getMapManager().getWorld())) {
             player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
             player.sendMessage(game.translate(Prefix.YELLOW , "werewolf.commands.admin.preview.lobby"));
