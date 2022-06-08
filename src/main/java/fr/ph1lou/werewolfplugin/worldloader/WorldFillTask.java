@@ -1,5 +1,6 @@
 package fr.ph1lou.werewolfplugin.worldloader;
 
+import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -53,6 +54,7 @@ public class WorldFillTask implements Runnable
 	// unfortunately can't be a Map as a chunk might be needed for
 	// several others.
 	private transient Set<UnloadDependency> preventUnload;
+	private boolean ended = false;
 
 	private static class UnloadDependency
 	{
@@ -227,7 +229,7 @@ public class WorldFillTask implements Runnable
 		{
 			if (!chunkOnUnloadPreventionList(unload.x, unload.z))
 			{
-				world.setChunkForceLoaded(unload.x, unload.z, false);
+				VersionUtils.getVersionUtils().setChunkForceLoaded(world, unload.x, unload.z, false );
 				world.unloadChunkRequest(unload.x, unload.z);
 			}
 		}
@@ -380,6 +382,7 @@ public class WorldFillTask implements Runnable
 		this.paused = true;
 		reportProgress();
 		world.save();
+		this.ended = true;
 		sendMessage("task successfully completed for world \"" + refWorld() + "\"!");
 		this.stop();
 	}
@@ -410,7 +413,7 @@ public class WorldFillTask implements Runnable
 			preventUnload = null;
 			for (UnloadDependency entry: tempPreventUnload)
 			{
-				world.setChunkForceLoaded(entry.neededX, entry.neededZ, false);
+				VersionUtils.getVersionUtils().setChunkForceLoaded(world,entry.neededX, entry.neededZ, false);
 				world.unloadChunkRequest(entry.neededX, entry.neededZ);
 			}
 		}
@@ -485,6 +488,9 @@ public class WorldFillTask implements Runnable
 	 */
 	public double getPercentageCompleted()
 	{
+		if(this.ended){
+			return 100;
+		}
 		return ((double) (reportTotal + reportNum) / (double) reportTarget) * 100;
 	}
 
@@ -497,7 +503,7 @@ public class WorldFillTask implements Runnable
 			if (chunk != null)
 			{
 				// toggle "force loaded" flag on for chunk to prevent it from being unloaded while we need it
-				world.setChunkForceLoaded(x, z, true);
+				VersionUtils.getVersionUtils().setChunkForceLoaded(world, x, z, true);
 
 				// alternatively for 1.14.4+
 				//world.addPluginChunkTicket(x, z, pluginInstance);
