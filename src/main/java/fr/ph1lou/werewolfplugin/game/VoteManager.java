@@ -5,23 +5,18 @@
 package fr.ph1lou.werewolfplugin.game;
 
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
-import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StateGame;
-import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.VoteStatus;
-import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.NewVoteResultEvent;
-import fr.ph1lou.werewolfapi.events.game.vote.VoteBeginEvent;
-import fr.ph1lou.werewolfapi.events.game.vote.VoteEndEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteResultEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
-import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfapi.vote.IVoteManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
@@ -40,24 +35,36 @@ import java.util.Optional;
 
 public class VoteManager implements Listener, IVoteManager
 {
-	private final WereWolfAPI game;
-	private final List<IPlayerWW> tempPlayers;
 	@Nullable
 	private IPlayerWW lastVote;
-	private final Map<IPlayerWW, Integer> votes;
-	private final Map<IPlayerWW, Integer> votesWerewolf;
-	private final Map<IPlayerWW, Integer> votesVillager;
-	private final Map<IPlayerWW, IPlayerWW> voters;
-	private VoteStatus currentStatus;
+	private final WereWolfAPI game;
+	private final List<IPlayerWW> tempPlayers= new ArrayList<>();
+	private final Map<IPlayerWW, Integer> votes = new HashMap<>();
+	private final Map<IPlayerWW, Integer> votesWerewolf = new HashMap<>();
+	private final Map<IPlayerWW, Integer> votesVillager= new HashMap<>();
+	private final Map<IPlayerWW, IPlayerWW> voters= new HashMap<>();
+	private VoteStatus currentStatus= VoteStatus.NOT_BEGIN;
 
 	public VoteManager(WereWolfAPI game) {
-		this.tempPlayers = new ArrayList<>();
-		this.votes = new HashMap<>();
-		this.votesWerewolf = new HashMap<>();
-		this.votesVillager = new HashMap<>();
-		this.voters = new HashMap<>();
-		this.currentStatus = VoteStatus.NOT_BEGIN;
 		this.game = game;
+	}
+
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onVoteResult(VoteResultEvent event) {
+		if (!event.isCancelled()) {
+			this.showResultVote(event.getPlayerWW());
+			this.lastVote = event.getPlayerWW();
+			if(this.lastVote!= null){
+				this.tempPlayers.add(this.lastVote);
+			}
+			else{
+				event.setCancelled(true);
+			}
+		}
+		else{
+			this.lastVote = null;
+		}
+		this.currentStatus = VoteStatus.NOT_IN_PROGRESS;
 	}
 
 	public void setOneVote(IPlayerWW voterWW, IPlayerWW vote) {
@@ -106,28 +113,7 @@ public class VoteManager implements Listener, IVoteManager
 		}
 	}
 
-	@EventHandler
-	public void onVoteBegin(VoteBeginEvent event) {
-		this.currentStatus = VoteStatus.NOT_IN_PROGRESS;
-	}
 
-	@EventHandler(priority = EventPriority.HIGH)
-	public void onVoteResult(VoteResultEvent event) {
-		if (!event.isCancelled()) {
-			this.showResultVote(event.getPlayerWW());
-			this.lastVote = event.getPlayerWW();
-			if(this.lastVote!= null){
-				this.tempPlayers.add(this.lastVote);
-			}
-			else{
-				event.setCancelled(true);
-			}
-		}
-		else{
-			this.lastVote = null;
-		}
-		this.currentStatus = VoteStatus.NOT_IN_PROGRESS;
-	}
 
 	public void resetVote() {
 		this.voters.clear();
@@ -169,19 +155,28 @@ public class VoteManager implements Listener, IVoteManager
 		return Optional.of(playerVote);
 	}
 
+	public boolean isStatus(VoteStatus status) {
+		return this.currentStatus == status;
+	}
+
+	public void setStatus(VoteStatus status) {
+		this.currentStatus = status;
+	}
+
 	public void showResultVote(@Nullable IPlayerWW playerWW) {
 
-		if (this.game.getConfig().isConfigActive(ConfigBase.NEW_VOTE)) {
+
+		if (game.getConfig().isConfigActive(ConfigBase.NEW_VOTE)) {
 			IPlayerWW werewolfWW = this.getResult(this.votesWerewolf).orElse(null);
 			if (playerWW != null) {
-				Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE, "werewolf.configurations.vote.new_vote_villager", Formatter.player(playerWW.getName())));
+				Bukkit.broadcastMessage(game.translate(Prefix.ORANGE, "werewolf.configurations.vote.new_vote_villager", Formatter.player(playerWW.getName())));
 			}
 			else {
-				Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE, "werewolf.configurations.vote.no_result"));
+				Bukkit.broadcastMessage(game.translate(Prefix.ORANGE, "werewolf.configurations.vote.no_result"));
 			}
 			if (werewolfWW != null) {
 
-				this.game.getPlayersWW()
+				game.getPlayersWW()
 						.stream()
 						.filter(playerWW2 -> playerWW2.getRole().isWereWolf() ||
 								playerWW2.getRole().isNeutral())
@@ -192,7 +187,7 @@ public class VoteManager implements Listener, IVoteManager
 								Player player = Bukkit.getPlayer(playerWW2.getUUID());
 								if (player != null) {
 									Sound.CAT_MEOW.play(playerWW2, werewolfWW.getLocation());
-									player.playEffect(werewolfWW.getLocation(), Effect.STEP_SOUND, (Object)Material.REDSTONE_BLOCK);
+									player.playEffect(werewolfWW.getLocation(), Effect.STEP_SOUND, (Object) Material.REDSTONE_BLOCK);
 								}
 							}
 						});
@@ -203,11 +198,11 @@ public class VoteManager implements Listener, IVoteManager
 			return;
 		}
 		if (playerWW == null) {
-			Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE, "werewolf.configurations.vote.no_result"));
+			Bukkit.broadcastMessage(game.translate(Prefix.ORANGE, "werewolf.configurations.vote.no_result"));
 			return;
 		}
 		if (this.votes.getOrDefault(playerWW, 0) <= 1) {
-			Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE, "werewolf.configurations.vote.no_result_more_one"));
+			Bukkit.broadcastMessage(game.translate(Prefix.ORANGE, "werewolf.configurations.vote.no_result_more_one"));
 			return;
 		}
 		double health = 5;
@@ -215,71 +210,14 @@ public class VoteManager implements Listener, IVoteManager
 			health = playerWW.getMaxHealth() / 2 - 1;
 		}
 		playerWW.removePlayerMaxHealth(10);
-		Bukkit.broadcastMessage(this.game.translate(Prefix.YELLOW, "werewolf.configurations.vote.vote_result",
+		Bukkit.broadcastMessage(game.translate(Prefix.YELLOW, "werewolf.configurations.vote.vote_result",
 				Formatter.player(playerWW.getName()),
 				Formatter.number(this.votes.getOrDefault(playerWW, 0))));
 		int task = BukkitUtils.scheduleSyncRepeatingTask(() -> {
-			if (this.game.isState(StateGame.GAME)) {
+			if (game.isState(StateGame.GAME)) {
 				playerWW.addPlayerMaxHealth(2);
 			}
 		}, 1200L, 1200L);
 		BukkitUtils.scheduleSyncDelayedTask(() -> Bukkit.getScheduler().cancelTask(task), (long) (health * 62L * 20L));
-	}
-
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onVoteEnd(VoteEndEvent event) {
-		this.currentStatus = VoteStatus.WAITING;
-		long duration = this.game.getConfig().getTimerValue(TimerBase.VOTE_WAITING);
-		BukkitUtils.scheduleSyncDelayedTask(() -> {
-			if (!this.game.isState(StateGame.END)) {
-				Bukkit.getPluginManager().callEvent(new VoteResultEvent(this.getResult().orElse(null)));
-			}
-		}, duration * 20L);
-	}
-
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onDay(DayEvent event) {
-
-		if(!this.game.getConfig().isConfigActive(ConfigBase.VOTE)){
-			return;
-		}
-
-		if (this.isStatus(VoteStatus.IN_PROGRESS) || this.isStatus(VoteStatus.WAITING)) {
-			return;
-		}
-		if (this.game.getPlayersCount() < this.game.getConfig().getValue(IntValueBase.VOTE_END) &&
-			!this.isStatus(VoteStatus.ENDED)) {
-			Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE, "werewolf.configurations.vote.vote_deactivate"));
-			this.setStatus(VoteStatus.ENDED);
-			return;
-		}
-
-		if(event.getNumber() % 2 == 1 && this.game.getConfig().isConfigActive(ConfigBase.VOTE_EVERY_OTHER_DAY)){
-			return;
-		}
-
-		int duration = this.game.getConfig().getTimerValue(TimerBase.VOTE_DURATION);
-
-		if (!this.isStatus(VoteStatus.NOT_BEGIN) && !this.isStatus(VoteStatus.ENDED)) {
-
-			this.resetVote();
-			Bukkit.getOnlinePlayers().forEach(Sound.CHICKEN_HURT::play);
-			Bukkit.broadcastMessage(this.game.translate(Prefix.ORANGE, "werewolf.configurations.vote.vote_time",
-					Formatter.timer(Utils.conversion(duration))));
-			this.setStatus(VoteStatus.IN_PROGRESS);
-			BukkitUtils.scheduleSyncDelayedTask(() -> {
-				if (!this.game.isState(StateGame.END)) {
-					Bukkit.getPluginManager().callEvent(new VoteEndEvent());
-				}
-			}, duration * 20L);
-		}
-	}
-
-	public boolean isStatus(VoteStatus status) {
-		return this.currentStatus == status;
-	}
-
-	public void setStatus(VoteStatus status) {
-		this.currentStatus = status;
 	}
 }

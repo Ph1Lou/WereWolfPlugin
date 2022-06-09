@@ -140,11 +140,16 @@ public class StatistiksUtils {
             } catch (Exception ignored) {
             }
 
-            TextComponent msg = new TextComponent(main.getWereWolfAPI().translate(Prefix.ORANGE,"werewolf.statistics"));
-            msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
-                    String.format("https://werewolf.ph1lou.fr/game-view/%s", gameReview.getGameUUID().toString())));
-            BukkitUtils.scheduleSyncDelayedTask(() -> Bukkit.getOnlinePlayers()
-                    .forEach(player -> player.spigot().sendMessage(msg)), 100);
+            try (BufferedReader ignored1 = new BufferedReader(
+                    new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
+
+                TextComponent msg = new TextComponent(main.getWereWolfAPI().translate(Prefix.ORANGE,"werewolf.statistics"));
+                msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
+                        String.format("https://werewolf.ph1lou.fr/game-view/%s", gameReview.getGameUUID().toString())));
+                BukkitUtils.scheduleSyncDelayedTask(() -> Bukkit.getOnlinePlayers()
+                        .forEach(player -> player.spigot().sendMessage(msg)), 100);
+            } catch (Exception ignored) {
+            }
         } catch (IOException ignored) {
         }
     }

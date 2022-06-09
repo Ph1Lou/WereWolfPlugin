@@ -237,7 +237,7 @@ public class GameManager implements WereWolfAPI {
         if (this.getTimer() > 60) { //Si la game a commencé depuis moins d'une minute on ne delete pas la map
             this.mapManager.deleteMap();
         }
-        this.mapManager.createMap();
+        newGame.mapManager.createMap();
     }
 
     @Override

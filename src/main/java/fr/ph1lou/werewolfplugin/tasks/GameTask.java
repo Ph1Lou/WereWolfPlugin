@@ -79,12 +79,16 @@ public class GameTask extends BukkitRunnable {
 		Stream.concat(Register.get().getTimersRegister()
 						.stream()
 						.map(Wrapper::getMetaDatas),
+				Stream.concat(Register.get().getConfigsRegister()
+						.stream()
+						.map(Wrapper::getMetaDatas)
+								.flatMap(configuration -> Stream.of(configuration.timers())),
 				Stream.concat(Register.get().getRolesRegister().stream()
 						.map(Wrapper::getMetaDatas)
 						.flatMap(role -> Stream.of(role.timers())),
 						Register.get().getRandomEventsRegister().stream()
 								.map(Wrapper::getMetaDatas)
-								.flatMap(role -> Stream.of(role.timers()))))
+								.flatMap(role -> Stream.of(role.timers())))))
 				.forEach(timerRegister -> {
 
 					if (timerRegister.decrement() ||
