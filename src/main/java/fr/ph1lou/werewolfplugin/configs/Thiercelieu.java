@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Set;
 
 @Configuration(config = @ConfigurationBasic(key = ConfigBase.THIERCELIEU,
-        loreKey = "werewolf.thiercelieu.description"))
+        loreKey = "werewolf.configurations.thiercelieu.description"))
 public class Thiercelieu extends ListenerWerewolf {
 
     private final List<AnnouncementDeathEvent> announcementDeathEvents = new ArrayList<>();

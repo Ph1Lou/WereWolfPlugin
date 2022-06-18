@@ -230,7 +230,7 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
         probability+=10;
 
         this.getPlayerWW().sendMessageWithKey(Prefix.BLUE,"werewolf.roles.thug.get_apple",
-                Formatter.format("&number2&",this.probability),
+                Formatter.format("&number1&",this.probability),
                 Formatter.number(thugRecoverGoldenAppleEvent.getGoldenApple()),
                 Formatter.player(event.getPlayerWW().getName()));
         this.getPlayerWW().addItem(new ItemStack(Material.GOLDEN_APPLE,thugRecoverGoldenAppleEvent.getGoldenApple()));

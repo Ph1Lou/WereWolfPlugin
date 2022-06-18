@@ -26,7 +26,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.List;
 import java.util.Objects;
 
-@ModuleWerewolf(key = Main.KEY, loreKeys = "werewolf.description_plugin",
+@ModuleWerewolf(key = Main.KEY,
+        loreKeys = "werewolf.description_plugin",
         item = UniversalMaterial.ANVIL,
         defaultLanguage = "fr_FR",
         authors = @Author(uuid = "056be797-2a0b-4807-9af5-37faf5384396",

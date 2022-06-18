@@ -789,7 +789,7 @@
       "thug": {
         "display": "Voyou",
         "description": "Chaque jour, vous pouvez masquer le §bnametag§f d'un joueur, vous obtenez la moitié des pommes d'or si vous êtes à moins de §b&number&§f blocs du cadavre",
-        "power": "§b&number&% de chance que votre rôle s'affiche si vous tuez un §bjoueur",
+        "power": "§b&number&%§f de chance que votre rôle s'affiche si vous tuez un §bjoueur",
         "command_message": "Vous pouvez masquer le §bnametag§f d'un joueur, faites §b/ww masquer",
         "effect": "§bRésistance§f après votre premier meurtre, un coeur permanent supplémentaire par joueur tué ayant fait un meurtre",
         "death_message": "Le §bVoyou§f a tué &player& qui était &role&",

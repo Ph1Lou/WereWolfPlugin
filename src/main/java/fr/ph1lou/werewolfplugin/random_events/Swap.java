@@ -35,6 +35,15 @@ public class Swap extends ListenerWerewolf {
             return;
         }
 
+        int timer = Math.min(
+                game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST),
+                game.getConfig().getTimerValue(TimerBase.LOVER_DURATION)
+        );
+
+        if(timer <= 0){
+            return;
+        }
+
         BukkitUtils.scheduleSyncDelayedTask(() -> {
             if (game.isState(StateGame.GAME)) {
                 if (isRegister()) {
@@ -94,8 +103,7 @@ public class Swap extends ListenerWerewolf {
 
                 }
             }
-        }, (long) (game.getRandom().nextDouble() * Math.min(game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST),
-                game.getConfig().getTimerValue(TimerBase.LOVER_DURATION)) * 20) - 5);
+        }, Math.max(0, (long) (game.getRandom().nextDouble() * timer * 20) - 5));
     }
 
 }
