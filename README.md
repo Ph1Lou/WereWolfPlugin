@@ -10,11 +10,11 @@ This project is a minecraft spigot plugin to play UHC Werewolf.
 
 # Librairies use
 
-<https://github.com/MrMicky-FR/FastBoard>
-<https://github.com/MinusKube/SmartInvs>
-<https://github.com/WesJD/AnvilGUI>
-<https://www.spigotmc.org/>
-<https://github.com/Mezy/BiomeMapping>
+<https://github.com/MrMicky-FR/FastBoard>  
+<https://github.com/MinusKube/SmartInvs>  
+<https://github.com/WesJD/AnvilGUI>  
+<https://www.spigotmc.org/>  
+<https://github.com/Mezy/BiomeMapping>  
 
 ## License
 
