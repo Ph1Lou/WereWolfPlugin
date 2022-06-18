@@ -39,13 +39,15 @@ public class WorldFileData
 		{
 			// check for region folder inside a DIM* folder (DIM-1 for nether, DIM1 for end, DIMwhatever for custom world types)
 			File[] possibleDimFolders = newData.world.getWorldFolder().listFiles(new DimFolderFileFilter());
-			for (File possibleDimFolder : possibleDimFolders)
-			{
-				File possible = new File(newData.world.getWorldFolder(), possibleDimFolder.getName() + File.separator + "region");
-				if (possible.exists() && possible.isDirectory())
+			if (possibleDimFolders != null) {
+				for (File possibleDimFolder : possibleDimFolders)
 				{
-					newData.regionFolder = possible;
-					break;
+					File possible = new File(newData.world.getWorldFolder(), possibleDimFolder.getName() + File.separator + "region");
+					if (possible.exists() && possible.isDirectory())
+					{
+						newData.regionFolder = possible;
+						break;
+					}
 				}
 			}
 			if (!newData.regionFolder.exists() || !newData.regionFolder.isDirectory())
@@ -228,7 +230,7 @@ public class WorldFileData
 	// file filter used for region files
 	private static class ExtFileFilter implements FileFilter
 	{
-		String ext;
+		final String ext;
 		public ExtFileFilter(String extension)
 		{
 			this.ext = extension.toLowerCase();

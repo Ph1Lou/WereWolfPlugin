@@ -8,8 +8,6 @@ import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
-import fr.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
-import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.UpdateCompositionEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
@@ -123,15 +121,5 @@ public class HiddenRoles extends ListenerWerewolf {
         if (!playerWW.isState(StatePlayer.DEATH)) return;
 
         event.setSuffix("");
-    }
-
-    @EventHandler
-    public void onGameStop(StopEvent event) {
-        this.playerWW = null;
-    }
-
-    @EventHandler
-    public void onGameStart(StartEvent event) {
-        this.playerWW = null;
     }
 }

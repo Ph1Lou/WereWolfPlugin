@@ -12,8 +12,6 @@ import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
-import fr.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
-import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import fr.ph1lou.werewolfapi.events.random_events.AmnesicEvent;
 import fr.ph1lou.werewolfapi.events.random_events.AmnesicTransformEvent;
@@ -188,18 +186,5 @@ public class Amnesic extends ListenerWerewolf {
         }
 
         event.setAppear(this.list.contains(event.getPlayerUUID()));
-    }
-
-
-    @EventHandler
-    public void onGameStop(StopEvent event) {
-        temp = null;
-        this.list.clear();
-    }
-
-    @EventHandler
-    public void onGameStart(StartEvent event) {
-        temp = null;
-        this.list.clear();
     }
 }

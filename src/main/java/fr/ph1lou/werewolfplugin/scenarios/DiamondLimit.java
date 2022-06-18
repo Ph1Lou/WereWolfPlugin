@@ -8,7 +8,6 @@ import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.StateGame;
-import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -33,13 +32,6 @@ public class DiamondLimit extends ListenerWerewolf {
     public DiamondLimit(WereWolfAPI main) {
         super(main);
     }
-
-
-    @EventHandler
-    public void onGameStop(StopEvent event) {
-        diamondPerPlayer.clear();
-    }
-
 
     @EventHandler(ignoreCancelled = true)
     private void onBlockBreak(BlockBreakEvent event) {

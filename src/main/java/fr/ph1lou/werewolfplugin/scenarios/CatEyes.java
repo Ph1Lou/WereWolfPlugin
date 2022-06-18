@@ -1,5 +1,6 @@
 package fr.ph1lou.werewolfplugin.scenarios;
 
+import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalJoinEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Scenario;
 import fr.ph1lou.werewolfapi.basekeys.ScenarioBase;
@@ -15,15 +16,20 @@ import org.bukkit.potion.PotionEffectType;
 @Scenario(key = ScenarioBase.CAT_EYES, meetUpValue = true)
 public class CatEyes extends ListenerWerewolf {
 
-
-    public CatEyes(WereWolfAPI main) {
-        super(main);
+    public CatEyes(WereWolfAPI api) {
+        super(api);
     }
 
     @EventHandler
     private void onStartEvent(StartEvent event) {
+        this.getGame()
+                .getPlayersWW()
+                .forEach(playerWW -> playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION,ScenarioBase.CAT_EYES)));
+    }
 
-        this.getGame().getPlayersWW().forEach(playerWW -> playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION,ScenarioBase.CAT_EYES)));
+    @EventHandler
+    private void onFinalJoin(FinalJoinEvent event) {
+        event.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION,ScenarioBase.CAT_EYES));
     }
 
     @Override

@@ -4,8 +4,6 @@ import fr.ph1lou.werewolfapi.annotations.Event;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.enums.StateGame;
-import fr.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
-import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
 import fr.ph1lou.werewolfapi.events.random_events.RumorsEvent;
 import fr.ph1lou.werewolfapi.events.random_events.RumorsWriteEvent;
@@ -100,22 +98,4 @@ public class Rumors extends ListenerWerewolf {
         this.rumors.put(event.getPlayerWW(), event.getMessage());
 
     }
-
-    @EventHandler
-    public void onGameStop(StopEvent event) {
-        active = false;
-        rumors.clear();
-    }
-
-    @EventHandler
-    public void onGameStart(StartEvent event) {
-        active = false;
-        rumors.clear();
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-
 }

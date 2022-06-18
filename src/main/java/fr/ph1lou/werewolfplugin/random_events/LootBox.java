@@ -11,8 +11,6 @@ import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.ActionBarEvent;
-import fr.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
-import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.random_events.FindAllLootBoxEvent;
 import fr.ph1lou.werewolfapi.events.random_events.LootBoxEvent;
@@ -91,20 +89,6 @@ public class LootBox extends ListenerWerewolf {
         sign.update();
         location.getBlock().setType(chest.getType());
         location2.getBlock().setType(sign.getType());
-    }
-
-    @EventHandler
-    public void onGameStop(StopEvent event) {
-        chestHasBeenOpen.clear();
-        chestLocation.clear();
-        eventActive = false;
-    }
-
-    @EventHandler
-    public void onGameStart(StartEvent event) {
-        chestHasBeenOpen.clear();
-        chestLocation.clear();
-        eventActive = false;
     }
 
     @EventHandler

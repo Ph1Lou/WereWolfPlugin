@@ -7,6 +7,7 @@ import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -49,6 +50,7 @@ public class ModerationManager implements IModerationManager {
     public void addQueue(Player player) {
 
         UUID uuid = player.getUniqueId();
+        player.setGameMode(GameMode.SPECTATOR);
 
         if (!this.queue.contains(uuid)) {
             this.queue.add(uuid);

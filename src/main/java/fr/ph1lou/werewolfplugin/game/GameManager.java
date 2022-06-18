@@ -53,7 +53,7 @@ public class GameManager implements WereWolfAPI {
 
     private final Main main;
     private final Map<UUID, FastBoard> boards = new HashMap<>();
-    private final Map<UUID, IPlayerWW> playerLG = new HashMap<>();
+    private final Map<UUID, IPlayerWW> playersWW = new HashMap<>();
     private StateGame state;
     private Day day;
     private boolean debug = false;
@@ -131,7 +131,7 @@ public class GameManager implements WereWolfAPI {
                 Formatter.player(player.getName())));
         player.setGameMode(GameMode.ADVENTURE);
         IPlayerWW playerWW = new PlayerWW(this, player);
-        this.playerLG.put(uuid, playerWW);
+        this.playersWW.put(uuid, playerWW);
         Bukkit.getPluginManager().callEvent(new FinalJoinEvent(playerWW));
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(player));
         player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 0, false, false));
@@ -160,14 +160,15 @@ public class GameManager implements WereWolfAPI {
 
         player.setGameMode(GameMode.SURVIVAL);
         IPlayerWW playerWW = new PlayerWW(this, player);
-        this.playerLG.put(player.getUniqueId(), playerWW);
+        this.playersWW.put(player.getUniqueId(), playerWW);
         Location spawn = this.mapManager.getWorld().getSpawnLocation();
         spawn.setY(spawn.getBlockY() - 4);
         playerWW.setSpawn(spawn);
         this.playerSize++;
 
         this.stuff.getStartLoot().forEach(inventory::addItem);
-
+        Bukkit.getPluginManager().callEvent(new FinalJoinEvent(playerWW));
+        Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(player));
         this.mapManager.transportation(playerWW, 0);
     }
 
@@ -242,18 +243,18 @@ public class GameManager implements WereWolfAPI {
 
     @Override
     public Collection<? extends IPlayerWW> getPlayersWW() {
-        return this.playerLG.values();
+        return this.playersWW.values();
     }
 
 
     @Override
     public Optional<IPlayerWW> getPlayerWW(UUID uuid) {
 
-        if (!this.playerLG.containsKey(uuid)) {
+        if (!this.playersWW.containsKey(uuid)) {
             return Optional.empty();
         }
 
-        return Optional.of(this.playerLG.get(uuid));
+        return Optional.of(this.playersWW.get(uuid));
     }
 
 
@@ -382,7 +383,7 @@ public class GameManager implements WereWolfAPI {
 
 
     public void remove(UUID uuid) {
-        if(this.playerLG.remove(uuid) != null){
+        if(this.playersWW.remove(uuid) != null){
             this.playerSize--;
         }
     }

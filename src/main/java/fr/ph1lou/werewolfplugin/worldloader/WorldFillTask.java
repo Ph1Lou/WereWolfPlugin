@@ -57,8 +57,10 @@ public class WorldFillTask implements Runnable
 
 	private static class UnloadDependency
 	{
-		int neededX, neededZ;
-		int forX, forZ;
+		final int neededX;
+		final int neededZ;
+		final int forX;
+		final int forZ;
 
 		UnloadDependency(int neededX, int neededZ, int forX, int forZ)
 		{

@@ -5,8 +5,6 @@ import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.StateGame;
-import fr.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
-import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
 import fr.ph1lou.werewolfapi.events.random_events.BearingRitualEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -17,8 +15,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 @Event(key = EventBase.BEARING_RITUAL, loreKey = "werewolf.random_events.bearing_ritual.description",
-timers = {@Timer(key = BearingRitual.TIMER_START, defaultValue = 60*60, meetUpValue = 30*60, step = 30),
-        @Timer(key = BearingRitual.PERIOD, defaultValue = 40*60, meetUpValue = 20*60, step = 30)})
+        timers = {@Timer(key = BearingRitual.TIMER_START, defaultValue = 60*60, meetUpValue = 30*60, step = 30),
+                @Timer(key = BearingRitual.PERIOD, defaultValue = 40*60, meetUpValue = 20*60, step = 30)})
 public class BearingRitual extends ListenerWerewolf {
 
     public static final String TIMER_START = "werewolf.random_events.bearing_ritual.timer_start";
@@ -26,8 +24,8 @@ public class BearingRitual extends ListenerWerewolf {
 
     private boolean active = false;
 
-    public BearingRitual(WereWolfAPI main) {
-        super(main);
+    public BearingRitual(WereWolfAPI api) {
+        super(api);
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -69,15 +67,4 @@ public class BearingRitual extends ListenerWerewolf {
 
         event.setCancelled(true);
     }
-
-    @EventHandler
-    public void onGameStop(StopEvent event) {
-        active = false;
-    }
-
-    @EventHandler
-    public void onGameStart(StartEvent event) {
-        active = false;
-    }
-
 }

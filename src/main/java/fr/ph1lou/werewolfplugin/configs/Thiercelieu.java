@@ -10,8 +10,6 @@ import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
-import fr.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
-import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AnnouncementLoverDeathEvent;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
@@ -103,21 +101,6 @@ public class Thiercelieu extends ListenerWerewolf {
             Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(announcementDeathEvent.getPlayerWW()));
         });
 
-        this.announcementDeathEvents.clear();
-        this.loversList.clear();
-        this.playerWWList.clear();
-
-    }
-    @EventHandler
-    public void onGameStop(StopEvent event) {
-        this.announcementDeathEvents.clear();
-        this.loversList.clear();
-        this.playerWWList.clear();
-
-    }
-
-    @EventHandler
-    public void onGameStart(StartEvent event) {
         this.announcementDeathEvents.clear();
         this.loversList.clear();
         this.playerWWList.clear();

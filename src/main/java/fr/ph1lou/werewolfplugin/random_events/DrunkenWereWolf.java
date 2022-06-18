@@ -7,8 +7,6 @@ import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
-import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import fr.ph1lou.werewolfapi.events.random_events.DrunkenWereWolfEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
@@ -96,18 +94,5 @@ public class DrunkenWereWolf extends ListenerWerewolf {
         }
 
         event.setAppear(this.fakeList.contains(event.getPlayerUUID()));
-    }
-
-
-    @EventHandler
-    public void onGameStop(StopEvent event) {
-        temp = null;
-        this.fakeList.clear();
-    }
-
-    @EventHandler
-    public void onGameStart(StartEvent event) {
-        temp = null;
-        this.fakeList.clear();
     }
 }

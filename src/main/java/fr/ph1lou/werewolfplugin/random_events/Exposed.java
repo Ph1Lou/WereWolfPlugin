@@ -9,8 +9,6 @@ import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
-import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
 import fr.ph1lou.werewolfapi.events.random_events.ExposedEvent;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
@@ -128,15 +126,4 @@ public class Exposed extends ListenerWerewolf {
 
         return playerWW;
     }
-
-    @EventHandler
-    public void onGameStop(StopEvent event) {
-        temp = null;
-    }
-
-    @EventHandler
-    public void onGameStart(StartEvent event) {
-        temp = null;
-    }
-
 }

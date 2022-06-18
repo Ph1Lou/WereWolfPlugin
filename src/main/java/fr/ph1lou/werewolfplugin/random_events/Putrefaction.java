@@ -7,8 +7,6 @@ import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
-import fr.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
-import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
 import fr.ph1lou.werewolfapi.events.random_events.PutrefactionEvent;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
@@ -73,15 +71,4 @@ public class Putrefaction extends ListenerWerewolf {
             event.getPlayer().damage(0.5);
         }
     }
-
-    @EventHandler
-    public void onGameStop(StopEvent event) {
-        active = false;
-    }
-
-    @EventHandler
-    public void onGameStart(StartEvent event) {
-        active = false;
-    }
-
 }

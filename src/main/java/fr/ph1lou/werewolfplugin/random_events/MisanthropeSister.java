@@ -5,8 +5,6 @@ import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
-import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import fr.ph1lou.werewolfapi.events.random_events.MysanthropeSisterEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
@@ -78,15 +76,5 @@ public class MisanthropeSister extends ListenerWerewolf {
         if(this.sisterWW != null && event.getPlayerUUID().equals(this.sisterWW.getUUID())){
             event.setAppear(false);
         }
-    }
-
-    @EventHandler
-    public void onGameStop(StopEvent event) {
-        this.sisterWW = null;
-    }
-
-    @EventHandler
-    public void onGameStart(StartEvent event) {
-        this.sisterWW = null;
     }
 }
