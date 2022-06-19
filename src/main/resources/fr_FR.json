@@ -1748,6 +1748,10 @@
         "perform": "Votre rumeur a été envoyée ou actualisée",
         "timer_start" : "Début du déclenchement (§b&timer&§f)",
         "period" : "Période de déclenchement de l'event (§b&timer&§f)"
+      },
+      "not_all_werewolfs": {
+        "name": "Not All Loups",
+        "description": "Quand un Loup (quel qu’il soit) meurt, il apparaît comme \"Loup-Garou\" dans son message de mort.\nLa composition affichée indique uniquement le nombre total de Loups-Garous."
       }
     },
     "check": {
