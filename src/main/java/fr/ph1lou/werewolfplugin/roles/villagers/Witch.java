@@ -1,9 +1,15 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
+import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
+import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.ConfigBase;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.ThirdDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.witch.WitchResurrectionEvent;
@@ -23,13 +29,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+@Role(key = RoleBase.WITCH, category = Category.VILLAGER,
+         attributes = RoleAttribute.VILLAGER,
+configurations = {@Configuration(config = @ConfigurationBasic(key = ConfigBase.WITCH_AUTO_RESURRECTION, defaultValue = true))})
 public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private boolean power = true;
 
-    public Witch(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Witch(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
 
@@ -67,15 +76,15 @@ public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.witch.description"))
-                .setPower(game.translate(power ? "werewolf.role.witch.power_available" : "werewolf.role.witch.power_not_available"))
-                .setItems(game.translate("werewolf.role.witch.items"))
+                .setDescription(game.translate("werewolf.roles.witch.description"))
+                .setPower(game.translate(power ? "werewolf.roles.witch.power_available" : "werewolf.roles.witch.power_not_available"))
+                .setItems(game.translate("werewolf.roles.witch.items"))
                 .addExtraLines(game.translate("werewolf.description.power",
-                                Formatter.format("&on&",game.translate(game.getConfig().isConfigActive(ConfigBase.WITCH_AUTO_RESURRECTION.getKey())
+                                Formatter.format("&on&",game.translate(game.getConfig().isConfigActive(ConfigBase.WITCH_AUTO_RESURRECTION)
                                 ?
-                                "werewolf.role.witch.himself"
+                                "werewolf.roles.witch.himself"
                                 :
-                                "werewolf.role.witch.not_himself"))))
+                                "werewolf.roles.witch.not_himself"))))
                 .build();
     }
 
@@ -103,7 +112,7 @@ public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
         IPlayerWW playerWW = event.getPlayerWW();
 
         if (playerWW.equals(getPlayerWW())) {
-            event.setCancelled(autoResurrection(playerWW));
+            event.setCancelled(autoResurrection());
             return;
         }
 
@@ -112,19 +121,19 @@ public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
         TextComponent textComponent =
                 new TextComponent(
                         game.translate(
-                                Prefix.YELLOW.getKey() , "werewolf.role.witch.resuscitation_message",
+                                Prefix.YELLOW , "werewolf.roles.witch.resuscitation_message",
                                 Formatter.player(playerWW.getName())));
         textComponent.setClickEvent(new ClickEvent(
                 ClickEvent.Action.RUN_COMMAND,
                 String.format("/ww %s %s",
-                        game.translate("werewolf.role.witch.command"),
+                        game.translate("werewolf.roles.witch.command"),
                         playerWW.getUUID())));
         this.getPlayerWW().sendMessage(textComponent);
     }
 
-    private boolean autoResurrection(IPlayerWW player) {
+    private boolean autoResurrection() {
 
-        if (!game.getConfig().isConfigActive(ConfigBase.WITCH_AUTO_RESURRECTION.getKey())) {
+        if (!game.getConfig().isConfigActive(ConfigBase.WITCH_AUTO_RESURRECTION)) {
             return false;
         }
 
@@ -139,7 +148,7 @@ public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
             return true;
         }
 
-        player.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+        this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
 
         return false;
     }

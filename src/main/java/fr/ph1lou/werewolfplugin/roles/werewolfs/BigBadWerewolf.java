@@ -1,11 +1,16 @@
 package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.Day;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
@@ -14,19 +19,23 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
+
+@Role(key = RoleBase.BIG_BAD_WEREWOLF,
+        category = Category.WEREWOLF,
+        attributes = {RoleAttribute.WEREWOLF})
 public class BigBadWerewolf extends RoleWereWolf implements IPower {
 
     private boolean power = true;
 
-    public BigBadWerewolf(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public BigBadWerewolf(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
     }
 
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game,this)
                 .setDescription(game.translate("werewolf.description.werewolf"))
-                .setEffects(game.translate("werewolf.role.big_bad_werewolf.effects"))
+                .setEffects(game.translate("werewolf.roles.big_bad_werewolf.effects"))
                 .build();
     }
 
@@ -39,7 +48,7 @@ public class BigBadWerewolf extends RoleWereWolf implements IPower {
     public void disableAbilitiesRole() {
         this.getPlayerWW()
                 .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
-                        "big_bad_werewolf",0));
+                        RoleBase.WEREWOLF,0));
 
     }
 
@@ -51,11 +60,13 @@ public class BigBadWerewolf extends RoleWereWolf implements IPower {
         }
 
         if(event.getPlayerWW().getRole().isWereWolf()){
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
-                    "big_bad_werewolf",0));
+            if(game.isDay(Day.DAY)){
+                this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
+                        RoleBase.WEREWOLF,0));
+            }
             if(!this.getPlayerWW().isState(StatePlayer.DEATH)){
-                this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE.getKey(),
-                        "werewolf.role.big_bad_werewolf.werewolf_death");
+                this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE,
+                        "werewolf.roles.big_bad_werewolf.werewolf_death");
             }
             this.setPower(false);
         }
@@ -64,7 +75,7 @@ public class BigBadWerewolf extends RoleWereWolf implements IPower {
     @Override
     public void recoverPotionEffect() {
         if(this.isAbilityEnabled() && this.hasPower()){
-            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"big_bad_werewolf"));
+            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,RoleBase.WEREWOLF));
         }
     }
 

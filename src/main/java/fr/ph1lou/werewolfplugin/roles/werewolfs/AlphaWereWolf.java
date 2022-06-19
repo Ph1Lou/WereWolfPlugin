@@ -1,5 +1,9 @@
 package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -13,18 +17,21 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
+@Role(key = RoleBase.ALPHA_WEREWOLF,
+        category = Category.WEREWOLF,
+        attributes = {RoleAttribute.WEREWOLF})
 public class AlphaWereWolf extends RoleWereWolf {
 
-    public AlphaWereWolf(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public AlphaWereWolf(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
     }
 
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.alpha_werewolf.description"))
+                .setDescription(game.translate("werewolf.roles.alpha_werewolf.description"))
                 .setEffects(game.translate("werewolf.description.werewolf"))
-                .setPower(game.translate("werewolf.role.alpha_werewolf.effect"))
+                .setPower(game.translate("werewolf.roles.alpha_werewolf.effect"))
                 .build();
     }
 
@@ -39,7 +46,7 @@ public class AlphaWereWolf extends RoleWereWolf {
             if (!this.isAbilityEnabled()) {
                 return;
             }
-            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.ABSORPTION, 6000, 0,"alpha-werewolf"));
+            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.ABSORPTION, 6000, 0,this.getKey()));
         }
     }
 
@@ -49,7 +56,7 @@ public class AlphaWereWolf extends RoleWereWolf {
         if (!this.isAbilityEnabled()) {
             return;
         }
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.ABSORPTION, 6000, 0,"alpha-werewolf"));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.ABSORPTION, 6000, 0,this.getKey()));
     }
 
     @EventHandler
@@ -59,7 +66,7 @@ public class AlphaWereWolf extends RoleWereWolf {
 
         if (!event.getRequester().getRole().isWereWolf()) return;
 
-        event.setPrefix("werewolf.role.alpha_werewolf.prefix");
+        event.setPrefix("werewolf.roles.alpha_werewolf.prefix");
 
         event.addFormatter(Formatter.format("&alpha&",this.getPlayerWW().getName()));
     }

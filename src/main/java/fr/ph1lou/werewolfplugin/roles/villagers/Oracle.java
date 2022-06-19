@@ -1,9 +1,15 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
-import fr.ph1lou.werewolfapi.enums.ConfigBase;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.enums.TimerBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
@@ -12,7 +18,6 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleWithLimitedSelectionDuration;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -20,13 +25,17 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+@Role(key = RoleBase.ORACLE,
+        category = Category.VILLAGER,
+        attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION},
+        configurations = {@Configuration(config = @ConfigurationBasic(key = ConfigBase.ORACLE_EVERY_OTHER_DAY))})
 public class Oracle extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
     private int dayNumber = -8;
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
 
-    public Oracle(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public Oracle(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
         setPower(false);
     }
 
@@ -53,15 +62,15 @@ public class Oracle extends RoleWithLimitedSelectionDuration implements IAffecte
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.oracle.description"))
-                .setEffects(game.translate("werewolf.role.oracle.effect"))
+                .setDescription(game.translate("werewolf.roles.oracle.description"))
+                .setEffects(game.translate("werewolf.roles.oracle.effect"))
                 .build();
     }
 
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if (game.getConfig().isConfigActive(ConfigBase.ORACLE_EVERY_OTHER_DAY.getKey()) &&
+        if (game.getConfig().isConfigActive(ConfigBase.ORACLE_EVERY_OTHER_DAY) &&
                 event.getNumber() == dayNumber + 1) {
             return;
         }
@@ -75,10 +84,8 @@ public class Oracle extends RoleWithLimitedSelectionDuration implements IAffecte
         }
 
         this.getPlayerWW().sendMessageWithKey(
-                Prefix.YELLOW.getKey() , "werewolf.role.oracle.perform",
-                Formatter.timer(Utils.conversion(
-                        game.getConfig()
-                                .getTimerValue(TimerBase.POWER_DURATION.getKey()))));
+                Prefix.YELLOW , "werewolf.roles.oracle.perform",
+                Formatter.timer(game, TimerBase.POWER_DURATION));
     }
 
     @Override
@@ -89,7 +96,7 @@ public class Oracle extends RoleWithLimitedSelectionDuration implements IAffecte
     @Override
     public void recoverPotionEffect() {
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.NIGHT_VISION,"oracle",0));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION,this.getKey()));
 
     }
 }

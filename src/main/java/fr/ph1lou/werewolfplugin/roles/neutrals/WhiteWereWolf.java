@@ -1,5 +1,9 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -7,10 +11,14 @@ import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
 import org.jetbrains.annotations.NotNull;
 
+
+@Role(key = RoleBase.WHITE_WEREWOLF,
+        category = Category.NEUTRAL,
+        attributes = RoleAttribute.HYBRID)
 public class WhiteWereWolf extends RoleNeutral {
 
-    public WhiteWereWolf(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public WhiteWereWolf(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
 
@@ -24,8 +32,8 @@ public class WhiteWereWolf extends RoleNeutral {
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.white_werewolf.description"))
-                .setPower(game.translate("werewolf.role.white_werewolf.heart"))
+                .setDescription(game.translate("werewolf.roles.white_werewolf.description"))
+                .setPower(game.translate("werewolf.roles.white_werewolf.heart"))
                 .build();
     }
 

@@ -1,258 +1,437 @@
 package fr.ph1lou.werewolfplugin;
 
-import fr.ph1lou.werewolfplugin.registers.EventRandomsRegister;
-import fr.ph1lou.werewolfplugin.registers.RolesRegister;
-import fr.ph1lou.werewolfplugin.registers.ScenariosRegister;
-import fr.ph1lou.werewolfplugin.registers.TimersRegister;
-import fr.ph1lou.werewolfapi.registers.impl.AddonRegister;
-import fr.ph1lou.werewolfapi.registers.impl.CommandRegister;
-import fr.ph1lou.werewolfapi.registers.impl.ConfigRegister;
-import fr.ph1lou.werewolfapi.registers.interfaces.IRegister;
-import fr.ph1lou.werewolfapi.registers.interfaces.IRegisterManager;
-import fr.ph1lou.werewolfapi.registers.impl.RandomEventRegister;
-import fr.ph1lou.werewolfapi.registers.impl.RoleRegister;
-import fr.ph1lou.werewolfapi.registers.impl.ScenarioRegister;
-import fr.ph1lou.werewolfapi.registers.impl.TimerRegister;
-import fr.ph1lou.werewolfplugin.registers.AdminCommandsRegister;
-import fr.ph1lou.werewolfplugin.registers.CommandsRegister;
-import fr.ph1lou.werewolfplugin.registers.ConfigsRegister;
+import fr.ph1lou.werewolfapi.annotations.AdminCommand;
+import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.DisableAutoLoad;
+import fr.ph1lou.werewolfapi.annotations.Event;
+import fr.ph1lou.werewolfapi.annotations.Lover;
+import fr.ph1lou.werewolfapi.annotations.ModuleWerewolf;
+import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.annotations.RoleCommand;
+import fr.ph1lou.werewolfapi.annotations.Scenario;
+import fr.ph1lou.werewolfapi.annotations.Timer;
+import fr.ph1lou.werewolfapi.commands.ICommand;
+import fr.ph1lou.werewolfapi.commands.ICommandRole;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
+import fr.ph1lou.werewolfapi.lovers.ILover;
+import fr.ph1lou.werewolfapi.registers.IRegisterManager;
+import fr.ph1lou.werewolfapi.role.interfaces.IRole;
+import fr.ph1lou.werewolfapi.utils.Wrapper;
+import fr.ph1lou.werewolfplugin.utils.ReflectionUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
+import java.util.Set;
 
+@SuppressWarnings({"unchecked"})
 public class Register implements IRegisterManager {
 
-    private final String key;
-    private final Map<AddonRegister,Register> addonsRegister = new HashMap<>();
-    private final List<RoleRegister> rolesRegister;
-    private final List<ScenarioRegister> scenariosRegister;
-    private final List<ConfigRegister> configsRegister;
-    private final List<TimerRegister> timersRegister;
-    private final List<CommandRegister> commandsRegister;
-    private final List<CommandRegister> adminCommandsRegister;
-    private final List<RandomEventRegister> eventRandomsRegister;
+    private final Set<Wrapper<JavaPlugin, ModuleWerewolf>> modules = new HashSet<>();
+    private final Set<Wrapper<IRole, Role>> roles = new HashSet<>();
+    private final Set<Wrapper<ListenerWerewolf, Scenario>> scenarios = new HashSet<>();
+    private final Set<Wrapper<ListenerWerewolf, Event>> events = new HashSet<>();
+    private final Set<Wrapper<ICommand, PlayerCommand>> commands = new HashSet<>();
+    private final Set<Wrapper<ICommandRole, RoleCommand>> roleCommands = new HashSet<>();
+    private final Set<Wrapper<ICommand, AdminCommand>> adminCommands = new HashSet<>();
+
+    private final Set<Wrapper<?, Configuration>> configurations = new HashSet<>();
+    private final Set<Wrapper<?, Timer>> timers = new HashSet<>();
+
+    private final Set<Wrapper<ILover, Lover>> lovers = new HashSet<>();
+    private final Map<String,JavaPlugin> addons = new HashMap<>();
+
+    public static Register get() {
+        return INSTANCE;
+    }
+
+    private static Register INSTANCE;
 
     public Register(Main main){
-        this.key = "werewolf.name";
-        this.rolesRegister = RolesRegister.registerRoles();
-        this.scenariosRegister = ScenariosRegister.registerScenarios(main);
-        this.configsRegister = ConfigsRegister.registerConfigs(main);
-        this.timersRegister = TimersRegister.registerTimers();
-        this.commandsRegister = CommandsRegister.registerCommands();
-        this.adminCommandsRegister = AdminCommandsRegister.registerAdminCommands();
-        this.eventRandomsRegister = EventRandomsRegister.registerRandomEvents(main);
+        INSTANCE = this;
+        for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
+            ModuleWerewolf moduleWerewolf = plugin.getClass().getAnnotation(ModuleWerewolf.class);
+
+            if(moduleWerewolf != null){
+
+                if(moduleWerewolf.key().startsWith("werewolf.") && !plugin.equals(main)){
+                    Bukkit.getLogger().warning(String.format("Addon keys %s can't start with 'werewolf.'", moduleWerewolf.key()));
+                    continue;
+                }
+
+                String prefix = moduleWerewolf.key().split("\\.")[0];
+
+                if(this.modules.stream().anyMatch(javaPluginModuleWerewolfWrapper -> javaPluginModuleWerewolfWrapper.getAddonKey().split("\\.")[0]
+                        .equals(prefix))){
+                    Bukkit.getLogger().warning(String.format("An addon key already starts with %s", prefix));
+                    continue;
+                }
+
+                this.addons.put(moduleWerewolf.key(), (JavaPlugin)plugin);
+                this.modules.add(new Wrapper<>(JavaPlugin.class,
+                        moduleWerewolf,
+                        moduleWerewolf.key()));
+                this.register(plugin.getClass().getPackage().getName(),
+                        moduleWerewolf,
+                        plugin,
+                        prefix);
+            }
+        }
     }
 
-    public Register(String key){
-        this.key =key;
-        this.rolesRegister = new ArrayList<>();
-        this.scenariosRegister = new ArrayList<>();
-        this.configsRegister = new ArrayList<>();
-        this.timersRegister = new ArrayList<>();
-        this.commandsRegister = new ArrayList<>();
-        this.adminCommandsRegister = new ArrayList<>();
-        this.eventRandomsRegister = new ArrayList<>();
+    public void register(String packageName, ModuleWerewolf addon, Plugin plugin, String prefix){
+
+        try {
+            ReflectionUtils.findAllClasses(plugin, packageName)
+                    .forEach(clazz -> {
+
+                        if(clazz.getAnnotation(DisableAutoLoad.class) != null){
+                            if(clazz.getAnnotation(DisableAutoLoad.class).isDisable()){
+                                return;
+                            }
+                        }
+
+                        if(clazz.getAnnotation(Role.class) != null){
+
+                            Role role = clazz.getAnnotation(Role.class);
+
+                            if(IRole.class.isAssignableFrom(clazz)){
+
+                                if(role.key().startsWith(prefix)){
+                                    this.roles.add(new Wrapper<>((Class<IRole>)clazz,
+                                            role,
+                                            addon.key()));
+                                }
+                                else{
+                                    Bukkit.getLogger().warning(String.format(
+                                            "The role key %s does not have the same prefix as the addon key %s",
+                                            role.key(), prefix));
+                                }
+
+                            }
+                            else{
+                                Bukkit.getLogger().warning(String.format("Role %s doesn't implement IRole", role.key()));
+                            }
+                        }
+                        else if(clazz.getAnnotation(Scenario.class) != null){
+
+                            Scenario scenario = clazz.getAnnotation(Scenario.class);
+
+                            if(ListenerWerewolf.class.isAssignableFrom(clazz)){
+
+                                if(scenario.key().startsWith(prefix)){
+                                    this.scenarios.add(new Wrapper<>((Class<ListenerWerewolf>)clazz,
+                                            scenario,
+                                            addon.key()));
+                                }
+                                else{
+                                    Bukkit.getLogger().warning(String.format(
+                                            "The scenario key %s does not have the same prefix as the addon key %s",
+                                            scenario.key(), prefix));
+                                }
+
+                            }
+                            else{
+                                Bukkit.getLogger().warning(String.format("Scenario %s doesn't extend ListenerWerewolf", scenario.key()));
+                            }
+                        }
+                        else if(clazz.getAnnotation(Event.class) != null){
+
+                            Event event = clazz.getAnnotation(Event.class);
+
+                            if(ListenerWerewolf.class.isAssignableFrom(clazz)){
+
+                                if(event.key().startsWith(prefix)){
+                                    this.events.add(new Wrapper<>((Class<ListenerWerewolf>)clazz,
+                                            event,
+                                            addon.key()));
+                                }
+                                else{
+                                    Bukkit.getLogger().warning(String.format(
+                                            "The event key %s does not have the same prefix as the addon key %s",
+                                            event.key(), prefix));
+                                }
+                            }
+                            else{
+                                Bukkit.getLogger().warning(String.format("Event %s doesn't extend ListenerWerewolf", event.key()));
+                            }
+                        }
+                        else if(clazz.getAnnotation(Configuration.class) != null){
+
+                            Configuration configuration = clazz.getAnnotation(Configuration.class);
+
+                            if(configuration.config().key().startsWith(prefix)){
+                                this.configurations.add(new Wrapper<>((Class<ICommand>)clazz,
+                                        configuration,
+                                        addon.key()));
+                            }
+                            else{
+                                Bukkit.getLogger().warning(String.format(
+                                        "The configuration key %s does not have the same prefix as the addon key %s",
+                                        configuration.config().key(), prefix));
+                            }
+                        }
+                        else if(clazz.getAnnotation(Timer.class) != null){
+
+                            Timer timer = clazz.getAnnotation(Timer.class);
+
+                            if(timer.key().startsWith(prefix)){
+                                this.timers.add(new Wrapper<>((Class<ICommand>)clazz,
+                                        timer,
+                                        addon.key()));
+                            }
+                            else{
+                                Bukkit.getLogger().warning(String.format(
+                                        "The timer key %s does not have the same prefix as the addon key %s",
+                                        timer.key(), prefix));
+                            }
+                        }
+                        else if(clazz.getAnnotation(PlayerCommand.class) != null){
+
+                            PlayerCommand playerCommand = clazz.getAnnotation(PlayerCommand.class);
+
+                            if(ICommand.class.isAssignableFrom(clazz)){
+
+                                if(playerCommand.key().startsWith(prefix)){
+                                    this.commands.add(new Wrapper<>((Class<ICommand>)clazz,
+                                            playerCommand,
+                                            addon.key()));
+                                }
+                                else {
+                                    Bukkit.getLogger().warning(String.format(
+                                            "The playercommand key %s does not have the same prefix as the addon key %s",
+                                            playerCommand.key(), prefix));
+                                }
+                            }
+                            else{
+                                Bukkit.getLogger().warning(String.format("PlayerCommand %s doesn't implement ICommand", playerCommand.key()));
+                            }
+                        }
+                        else if(clazz.getAnnotation(RoleCommand.class) != null){
+
+                            RoleCommand roleCommand = clazz.getAnnotation(RoleCommand.class);
+
+                            if(ICommandRole.class.isAssignableFrom(clazz)){
+
+                                if(roleCommand.key().startsWith(prefix)){
+                                    this.roleCommands.add(new Wrapper<>((Class<ICommandRole>)clazz,
+                                            roleCommand,
+                                            addon.key()));
+                                }
+                                else {
+                                    Bukkit.getLogger().warning(String.format(
+                                            "The rolecommand key %s does not have the same prefix as the addon key %s",
+                                            roleCommand.key(), prefix));
+                                }
+                            }
+                            else{
+                                Bukkit.getLogger().warning(String.format("RoleCommand %s doesn't implement ICommandRole", roleCommand.key()));
+                            }
+                        }
+                        else if(clazz.getAnnotation(AdminCommand.class) != null){
+
+                            AdminCommand adminCommand = clazz.getAnnotation(AdminCommand.class);
+
+                            if(ICommand.class.isAssignableFrom(clazz)){
+
+                                if(adminCommand.key().startsWith(prefix)){
+                                    this.adminCommands.add(new Wrapper<>((Class<ICommand>)clazz,
+                                            adminCommand,
+                                            addon.key()));
+                                }
+                                else {
+                                    Bukkit.getLogger().warning(String.format(
+                                            "The admincommand key %s does not have the same prefix as the addon key %s",
+                                            adminCommand.key(), prefix));
+                                }
+                            }
+                            else{
+                                Bukkit.getLogger().warning(String.format("AdminCommand %s doesn't implement ICommand", adminCommand.key()));
+                            }
+                        }
+                        else if(clazz.getAnnotation(Lover.class) != null){
+
+                            Lover lover = clazz.getAnnotation(Lover.class);
+
+                            if(ILover.class.isAssignableFrom(clazz)){
+
+                                if(lover.key().startsWith(prefix)){
+                                    this.lovers.add(new Wrapper<>((Class<ILover>)clazz,
+                                            lover,
+                                            addon.key()));
+                                }
+                                else {
+                                    Bukkit.getLogger().warning(String.format(
+                                            "The lover key %s does not have the same prefix as the addon key %s",
+                                            lover.key(), prefix));
+                                }
+                            }
+                            else{
+                                Bukkit.getLogger().warning(String.format("Lover %s doesn't implement ILover", lover.key()));
+                            }
+                        }
+                    });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public Optional<IRegisterManager> getRegister(String key){
-        if(this.key.equals(key)){
-            return Optional.of(this);
-        }
-        if(this.addonsRegister.isEmpty()){
+    public Optional<String> getModuleKey(String key) {
+        String addonKey = this.checkRoles(key)
+                .orElseGet(() -> this.checkConfigurations(key)
+                        .orElseGet(() -> this.checkTimers(key)
+                                .orElseGet(() -> this.checkScenarios(key)
+                                        .orElseGet(() -> this.checkEvents(key)
+                                                .orElseGet(() -> this.checkRoleCommands(key)
+                                                        .orElseGet(() -> this.checkCommands(key)
+                                                                .orElseGet(() -> this.checkAdminCommands(key)
+                                                                        .orElseGet(() -> this.checkLovers(key)
+                                                                                .orElse("")))))))));
+
+        if(addonKey.isEmpty()){
             return Optional.empty();
         }
-        return this.addonsRegister
-                .values()
-                .stream()
-                .map(addonRegister -> addonRegister.getRegister(key))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
+        return Optional.of(addonKey);
+    }
+
+    private Optional<String> checkLovers(String key) {
+        return this.lovers.stream()
+                .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key) ||
+                        Arrays.stream(configurationWrapper.getMetaDatas().configurations()).anyMatch(configuration -> configuration.config().key().equals(key)) ||
+                        Arrays.stream(configurationWrapper.getMetaDatas().timers()).anyMatch(timer -> timer.key().equals(key)) ||
+                        Arrays.stream(configurationWrapper.getMetaDatas().configValues()).anyMatch(intValue -> intValue.key().equals(key)))
+                .map(Wrapper::getAddonKey)
+                .findFirst();
+    }
+
+    private Optional<String> checkAdminCommands(String key) {
+        return this.adminCommands.stream()
+                .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key))
+                .map(Wrapper::getAddonKey)
+                .findFirst();
+    }
+
+    private Optional<String> checkCommands(String key) {
+        return this.commands.stream()
+                .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key))
+                .map(Wrapper::getAddonKey)
+                .findFirst();
+    }
+
+    private Optional<String> checkRoleCommands(String key) {
+        return this.roleCommands.stream()
+                .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key))
+                .map(Wrapper::getAddonKey)
+                .findFirst();
+    }
+
+    private Optional<String> checkEvents(String key) {
+        return this.events.stream()
+                .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key) ||
+                        Arrays.stream(configurationWrapper.getMetaDatas().configValues()).anyMatch(intValue -> intValue.key().equals(key)) ||
+                        Arrays.stream(configurationWrapper.getMetaDatas().configurations()).anyMatch(configuration -> configuration.config().key().equals(key)) ||
+                        Arrays.stream(configurationWrapper.getMetaDatas().timers()).anyMatch(timer -> timer.key().equals(key)))
+                .map(Wrapper::getAddonKey)
+                .findFirst();
+    }
+
+    private Optional<String> checkScenarios(String key) {
+        return this.scenarios.stream()
+                .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key) ||
+                        Arrays.stream(configurationWrapper.getMetaDatas().timers()).anyMatch(timer -> timer.key().equals(key)) ||
+                        Arrays.stream(configurationWrapper.getMetaDatas().configurations()).anyMatch(configuration -> configuration.config().key().equals(key)) ||
+                        Arrays.stream(configurationWrapper.getMetaDatas().configValues()).anyMatch(intValue -> intValue.key().equals(key)))
+                .map(Wrapper::getAddonKey)
+                .findFirst();
+    }
+
+    private Optional<String> checkTimers(String key) {
+        return this.timers.stream()
+                .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key))
+                .map(Wrapper::getAddonKey)
+                .findFirst();
+    }
+
+    private Optional<String> checkConfigurations(String key) {
+        return this.configurations.stream()
+                .filter(configurationWrapper -> configurationWrapper.getMetaDatas().config().key().equals(key) ||
+                        Arrays.stream(configurationWrapper.getMetaDatas().configValues()).anyMatch(intValue -> intValue.key().equals(key)) ||
+                        Arrays.stream(configurationWrapper.getMetaDatas().timers()).anyMatch(timer -> timer.key().equals(key)) ||
+                        Arrays.stream(configurationWrapper.getMetaDatas().configurations()).anyMatch(configurationBasic -> configurationBasic.key().equals(key)))
+                .map(Wrapper::getAddonKey)
+                .findFirst();
+    }
+
+    private Optional<String> checkRoles(String key) {
+        return this.roles.stream()
+                .filter(iRoleRoleWrapper -> iRoleRoleWrapper.getMetaDatas().key().equals(key) ||
+                        Arrays.stream(iRoleRoleWrapper.getMetaDatas().timers()).anyMatch(timer -> timer.key().equals(key)) ||
+                        Arrays.stream(iRoleRoleWrapper.getMetaDatas().configurations()).anyMatch(configuration -> configuration.config().key().equals(key)) ||
+                        Arrays.stream(iRoleRoleWrapper.getMetaDatas().configValues()).anyMatch(intValue -> intValue.key().equals(key)))
+                .map(Wrapper::getAddonKey)
                 .findFirst();
     }
 
     @Override
-    public List<? extends RoleRegister> getRolesRegister() {
-        List<RoleRegister> rolesRegister1 = this.addonsRegister
-                .values()
-                .stream().map(Register::getRolesRegister)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
-        rolesRegister1.addAll(this.rolesRegister);
-
-        return rolesRegister1;
+    public Set<Wrapper<IRole, Role>> getRolesRegister() {
+        return this.roles;
     }
 
     @Override
-    public List<? extends ScenarioRegister> getScenariosRegister() {
-        List<ScenarioRegister> scenariosRegister1 = this.addonsRegister
-                .values()
-                .stream()
-                .map(Register::getScenariosRegister)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
-        scenariosRegister1.addAll(this.scenariosRegister);
-
-        return scenariosRegister1;
+    public Set<Wrapper<ILover, Lover>> getLoversRegister() {
+        return this.lovers;
     }
 
     @Override
-    public List<? extends ConfigRegister> getConfigsRegister() {
-        List<ConfigRegister> scenariosRegister1 = this.addonsRegister
-                .values()
-                .stream()
-                .map(Register::getConfigsRegister)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
-        scenariosRegister1.addAll(this.configsRegister);
-
-        return scenariosRegister1;
+    public Set<Wrapper<ListenerWerewolf, Scenario>> getScenariosRegister() {
+        return this.scenarios;
     }
 
     @Override
-    public List<? extends TimerRegister> getTimersRegister() {
-        List<TimerRegister> timerRegisters = this.addonsRegister
-                .values()
-                .stream()
-                .map(Register::getTimersRegister)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
-        timerRegisters.addAll(this.timersRegister);
-
-        return timerRegisters;
+    public Set<Wrapper<?, Configuration>> getConfigsRegister() {
+        return this.configurations;
     }
 
     @Override
-    public List<? extends CommandRegister> getCommandsRegister() {
-        List<CommandRegister> commandRegisters = this.addonsRegister
-                .values()
-                .stream()
-                .map(Register::getCommandsRegister)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
-        commandRegisters.addAll(this.commandsRegister);
-
-        return commandRegisters;
+    public Set<Wrapper<?, Timer>> getTimersRegister() {
+        return this.timers;
     }
 
     @Override
-    public List<? extends CommandRegister> getAdminCommandsRegister() {
-        List<CommandRegister> commandRegisters = this.addonsRegister
-                .values()
-                .stream()
-                .map(Register::getAdminCommandsRegister)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
-        commandRegisters.addAll(this.adminCommandsRegister);
-
-        return commandRegisters;
+    public Set<Wrapper<ICommand, PlayerCommand>> getPlayerCommandsRegister() {
+        return this.commands;
     }
 
     @Override
-    public List<? extends AddonRegister> getAddonsRegister() {
-        List<AddonRegister> addonRegisters = this.addonsRegister
-                .values()
-                .stream()
-                .map(Register::getAddonsRegister)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
-        addonRegisters.addAll(this.addonsRegister.keySet());
-
-        return addonRegisters;
+    public Set<Wrapper<ICommandRole, RoleCommand>> getRoleCommandsRegister() {
+        return this.roleCommands;
     }
 
     @Override
-    public List<? extends RandomEventRegister> getRandomEventsRegister() {
-        List<RandomEventRegister> randomEventRegisters = this.addonsRegister
-                .values()
-                .stream()
-                .map(Register::getRandomEventsRegister)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
-        randomEventRegisters.addAll(this.eventRandomsRegister);
-
-        return randomEventRegisters;
+    public Set<Wrapper<ICommand, AdminCommand>> getAdminCommandsRegister() {
+        return this.adminCommands;
     }
 
     @Override
-    public void registerAddon(AddonRegister addonRegister) {
-        List<AddonRegister> addonRegisters = new ArrayList<>();
-        register(addonRegister,
-                addonRegisters,
-                iRegisterManager -> iRegisterManager.registerAddon(addonRegister));
-        if(!addonRegisters.isEmpty()){
-            this.addonsRegister.put(addonRegister,new Register(addonRegister.getKey()));
-        }
+    public Set<Wrapper<JavaPlugin, ModuleWerewolf>> getModulesRegister() {
+        return this.modules;
     }
 
     @Override
-    public void registerRole(RoleRegister roleRegister) {
-        register(roleRegister,
-                this.rolesRegister,
-                iRegisterManager -> iRegisterManager.registerRole(roleRegister));
+    public Set<Wrapper<ListenerWerewolf, Event>> getRandomEventsRegister() {
+        return this.events;
     }
 
     @Override
-    public void registerScenario(ScenarioRegister scenarioRegister) {
-        register(scenarioRegister,
-                this.scenariosRegister,
-                iRegisterManager -> iRegisterManager.registerScenario(scenarioRegister));
+    public Optional<JavaPlugin> getAddon(String key) {
+        return Optional.ofNullable(this.addons.get(key));
     }
-
-    @Override
-    public void registerConfig(ConfigRegister configRegister) {
-        register(configRegister,
-                this.configsRegister,
-                iRegisterManager -> iRegisterManager.registerConfig(configRegister));
-    }
-
-    @Override
-    public void registerTimer(TimerRegister timerRegister) {
-        register(timerRegister,
-                this.timersRegister,
-                iRegisterManager -> iRegisterManager.registerTimer(timerRegister));
-    }
-
-    @Override
-    public void registerCommands(CommandRegister commandRegister) {
-        register(commandRegister,
-                this.commandsRegister,
-                iRegisterManager -> iRegisterManager.registerCommands(commandRegister));
-    }
-
-    @Override
-    public void registerRandomEvents(RandomEventRegister randomEventRegister) {
-        register(randomEventRegister,
-                this.eventRandomsRegister,
-                iRegisterManager -> iRegisterManager.registerRandomEvents(randomEventRegister));
-    }
-
-    @Override
-    public void registerAdminCommands(CommandRegister commandRegister) {
-        register(commandRegister,
-                this.adminCommandsRegister,
-                iRegisterManager -> iRegisterManager.registerAdminCommands(commandRegister));
-    }
-
-    private <A extends IRegister> void register(A register, List<A> registerList, Consumer<IRegisterManager> registers) {
-        Optional<AddonRegister> addonRegister = this.addonsRegister
-                .keySet()
-                .stream()
-                .filter(addonRegister1 -> addonRegister1.getKey().equals(register.getKey()))
-                .findFirst();
-
-        if(addonRegister.isPresent()){
-            registers.accept(this.addonsRegister.get(addonRegister.get()));
-        }
-        else{
-            registerList.add(register);
-        }
-    }
-
 }

@@ -1,7 +1,7 @@
 package fr.ph1lou.werewolfplugin.listeners;
 
-import fr.ph1lou.werewolfapi.enums.ConfigBase;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfChatEvent;
@@ -43,11 +43,11 @@ public class ChatListener implements Listener {
                 args[0].equalsIgnoreCase("/bukkit:rl") ||
                 args[0].equalsIgnoreCase("/bukkit:reload")) {
             event.setCancelled(true);
-            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.disabled_command"));
+            player.sendMessage(game.translate(Prefix.RED , "werewolf.check.disabled_command"));
         } else if (args[0].equalsIgnoreCase("/me") ||
                 args[0].equalsIgnoreCase("/minecraft:me")) {
             event.setCancelled(true);
-            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.disabled_command"));
+            player.sendMessage(game.translate(Prefix.RED , "werewolf.check.disabled_command"));
         } else if (args[0].equalsIgnoreCase("/tellRaw") ||
                 args[0].equalsIgnoreCase("/msg") ||
                 args[0].equalsIgnoreCase("/tell") ||
@@ -60,7 +60,7 @@ public class ChatListener implements Listener {
 
             if (recipient == null) {
                 player.sendMessage(game.
-                        translate(Prefix.RED.getKey() , "werewolf.check.offline_player"));
+                        translate(Prefix.RED , "werewolf.check.offline_player"));
                 return;
             }
 
@@ -68,7 +68,7 @@ public class ChatListener implements Listener {
 
                 if (!moderationManager.isStaff(recipient.getUniqueId()) &&
                         !moderationManager.isStaff(player.getUniqueId())) {
-                    player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.permission_denied"));
+                    player.sendMessage(game.translate(Prefix.RED , "werewolf.check.permission_denied"));
                     return;
                 }
             }
@@ -78,10 +78,10 @@ public class ChatListener implements Listener {
                 sb.append(w).append(" ");
             }
             sb.delete(0, args[0].length() + args[1].length() + 2);
-            recipient.sendMessage(game.translate("werewolf.commands.message.received",
+            recipient.sendMessage(game.translate("werewolf.commands.player.message.received",
                     Formatter.player(player.getName()),
                     Formatter.format("&message&",sb.toString())));
-            player.sendMessage(game.translate("werewolf.commands.message.send",
+            player.sendMessage(game.translate("werewolf.commands.player.message.send",
                     Formatter.player(args[1]),
                     Formatter.format("&message&",sb.toString())));
             Sound.ANVIL_USE.play(recipient);
@@ -146,11 +146,11 @@ public class ChatListener implements Listener {
             event.setFormat(format);
         }
 
-        if (!game.getConfig().isConfigActive(ConfigBase.CHAT.getKey())) {
+        if (!game.getConfig().isConfigActive(ConfigBase.CHAT)) {
             event.setCancelled(true);
-            event.getPlayer().sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.commands.admin.chat.off"));
+            event.getPlayer().sendMessage(game.translate(Prefix.RED , "werewolf.commands.admin.chat.off"));
 
-        } else if (game.getConfig().isConfigActive(ConfigBase.PROXIMITY_CHAT.getKey()) &&
+        } else if (game.getConfig().isConfigActive(ConfigBase.PROXIMITY_CHAT) &&
                 !game.isState(StateGame.LOBBY)) {
             event.setCancelled(true);
 
@@ -201,7 +201,7 @@ public class ChatListener implements Listener {
         game.getModerationManager().getModerators().stream()
                 .map(Bukkit::getPlayer)
                 .filter(Objects::nonNull)
-                .forEach(player -> player.sendMessage(game.translate("werewolf.commands.admin.ww_chat.modo",
+                .forEach(player -> player.sendMessage(game.translate("werewolf.commands.player.ww_chat.modo",
                         Formatter.format("&name&",event.getPlayerWW().getName()),
                         Formatter.format("&message&",event.getMessage()))));
 

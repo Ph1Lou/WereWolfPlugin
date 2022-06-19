@@ -1,14 +1,18 @@
 package fr.ph1lou.werewolfplugin.commands.admin.ingame;
 
+import fr.ph1lou.werewolfapi.annotations.AdminCommand;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
+@AdminCommand(key = "werewolf.commands.admin.inventory.command",
+        descriptionKey = "werewolf.commands.admin.inventory.description",
+        moderatorAccess = true,
+        argNumbers = 1)
 public class CommandInventory implements ICommand {
-
 
     @Override
     public void execute(WereWolfAPI game, Player player, String[] args) {
@@ -16,7 +20,7 @@ public class CommandInventory implements ICommand {
         Player pInv = Bukkit.getPlayer(args[0]);
 
         if (pInv == null) {
-            player.sendMessage(game.translate(Prefix.RED.getKey() , "werewolf.check.offline_player"));
+            player.sendMessage(game.translate(Prefix.RED , "werewolf.check.offline_player"));
             return;
         }
 

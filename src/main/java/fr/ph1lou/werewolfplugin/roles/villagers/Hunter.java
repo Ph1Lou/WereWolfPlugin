@@ -1,7 +1,14 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
+import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfKillEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -20,24 +27,27 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author havwila
  */
-
+@Role(key = RoleBase.HUNTER,
+        category = Category.VILLAGER,
+        attributes = RoleAttribute.VILLAGER,
+        configurations = @Configuration(config = @ConfigurationBasic(key = ConfigBase.HUNTER_CAN_SHOOT, meetUpValue = true)))
 public class Hunter extends RoleVillage implements IPower {
 
     private boolean power = false;
     private double damageBonus = 0;
 
-    public Hunter(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public Hunter(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
     }
 
     @Override
     public @NotNull String getDescription() {
         DescriptionBuilder descBuilder = new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.hunter.description"))
-                .setItems(game.translate("werewolf.role.hunter.items"))
-                .setEffects(game.translate("werewolf.role.hunter.effect", Formatter.format("&number&", 0.5 + damageBonus)));
-        if (game.getConfig().isConfigActive("werewolf.role.hunter.can_shoot")) {
-            descBuilder = descBuilder.addExtraLines(game.translate("werewolf.role.hunter.description_shoot"));
+                .setDescription(game.translate("werewolf.roles.hunter.description"))
+                .setItems(game.translate("werewolf.roles.hunter.items"))
+                .setEffects(game.translate("werewolf.roles.hunter.effect", Formatter.format("&number&", 0.5 + damageBonus)));
+        if (game.getConfig().isConfigActive("werewolf.roles.hunter.can_shoot")) {
+            descBuilder = descBuilder.addExtraLines(game.translate("werewolf.roles.hunter.description_shoot"));
         }
         return descBuilder.build();
     }
@@ -57,11 +67,11 @@ public class Hunter extends RoleVillage implements IPower {
         IPlayerWW playerWW = event.getPlayerWW();
 
         if (playerWW.equals(this.getPlayerWW())) {
-            if (game.getConfig().isConfigActive("werewolf.role.hunter.can_shoot")) {
+            if (game.getConfig().isConfigActive("werewolf.roles.hunter.can_shoot")) {
                 this.setPower(true);
-                getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey(), "werewolf.role.hunter.perform");
+                getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.hunter.perform");
                 BukkitUtils.scheduleSyncDelayedTask(() -> {
-                    getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey(), "werewolf.check.end_selection");
+                    getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.check.end_selection");
                     setPower(false);
                 }, 20 * 30);
             }
@@ -72,7 +82,7 @@ public class Hunter extends RoleVillage implements IPower {
 
         if (playerWW.getLastKiller().isPresent() && playerWW.getLastKiller().get().equals(getPlayerWW())) {
             damageBonus += 0.1;
-            getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey(), "werewolf.role.hunter.werewolf_slain");
+            getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.hunter.werewolf_slain");
         }
     }
 

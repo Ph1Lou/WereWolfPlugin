@@ -3,7 +3,7 @@ package fr.ph1lou.werewolfplugin.roles.lovers;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 
 import java.util.List;
 
@@ -20,8 +20,8 @@ public class FakeLoverCharmer extends FakeLover{
     public void announceLovers(IPlayerWW playerWW) {
         if(playerWW.equals(this.charmer)){
             this.charmer
-                    .sendMessageWithKey(Prefix.YELLOW.getKey(),
-                            "werewolf.role.charmer.announcement",
+                    .sendMessageWithKey(Prefix.YELLOW,
+                            "werewolf.roles.charmer.announcement",
                             Formatter.player(this.getLovers().stream()
                                     .filter(playerWW1 -> !playerWW1.equals(playerWW))
                                     .map(IPlayerWW::getName)

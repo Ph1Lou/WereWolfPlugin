@@ -69,7 +69,7 @@ public class EnchantmentListener implements Listener {
             result.removeEnchantment(e);
 
             if (Enchantment.KNOCKBACK.equals(e)) {
-                if (game.getConfig().getKnockBackMode() == 1) {
+                if (!game.getConfig().isKnockBackForInvisibleRoleOnly()) {
                     tempEnchant.put(e, Math.min(enchant.get(e),
                             game.getConfig().getLimitKnockBack()));
                 }

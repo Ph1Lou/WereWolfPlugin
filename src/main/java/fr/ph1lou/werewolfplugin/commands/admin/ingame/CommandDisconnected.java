@@ -1,5 +1,7 @@
 package fr.ph1lou.werewolfplugin.commands.admin.ingame;
 
+import fr.ph1lou.werewolfapi.annotations.AdminCommand;
+import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -9,8 +11,12 @@ import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+@AdminCommand(key = "werewolf.commands.admin.disconnected.command",
+        descriptionKey = "werewolf.commands.admin.disconnected.description",
+        moderatorAccess = true,
+        statesGame = {StateGame.START, StateGame.GAME},
+        argNumbers = 0)
 public class CommandDisconnected implements ICommand {
-
 
     @Override
     public void execute(WereWolfAPI game, Player player, String[] args) {

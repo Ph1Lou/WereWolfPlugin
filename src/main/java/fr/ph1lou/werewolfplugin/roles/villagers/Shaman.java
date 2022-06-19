@@ -1,10 +1,14 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FirstDeathEvent;
@@ -19,10 +23,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+
+@Role(key = RoleBase.SHAMAN,
+        category = Category.VILLAGER,
+        attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION})
 public class Shaman extends RoleVillage implements IAffectedPlayers {
 
-    public Shaman(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Shaman(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
@@ -30,7 +38,7 @@ public class Shaman extends RoleVillage implements IAffectedPlayers {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.shaman.description"))
+                .setDescription(game.translate("werewolf.roles.shaman.description"))
                 .build();
     }
 
@@ -57,14 +65,14 @@ public class Shaman extends RoleVillage implements IAffectedPlayers {
         int nTimesAffected = (int) affectedPlayers.stream().filter(player -> player.equals(playerWW)).count();
 
         TextComponent textComponent = new TextComponent(
-                game.translate(Prefix.YELLOW.getKey() , "werewolf.role.shaman.choice_message"));
+                game.translate(Prefix.YELLOW , "werewolf.roles.shaman.choice_message"));
         textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/ww %s %s %s",
-                game.translate("werewolf.role.shaman.command"), playerWW.getUUID(), nTimesAffected)));
+                game.translate("werewolf.roles.shaman.command"), playerWW.getUUID(), nTimesAffected)));
 
         this.getPlayerWW().sendMessage(textComponent);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGH)
     public void onAnnounceDeath(AnnouncementDeathEvent event) {
 
         if (!event.getTargetPlayer().equals(getPlayerWW())) {

@@ -1,10 +1,15 @@
 package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
-import fr.minuskube.inv.ClickableItem;
+import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.annotations.Timer;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.TimerBase;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
-import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -13,7 +18,6 @@ import fr.ph1lou.werewolfapi.role.impl.RoleWereWolf;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -21,21 +25,26 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+@Role(key = RoleBase.TENEBROUS_WEREWOLF, 
+        category = Category.WEREWOLF, 
+        attributes = {RoleAttribute.WEREWOLF},
+        timers = {@Timer(key = TimerBase.WEREWOLF_TENEBROUS_DURATION, defaultValue = 30, meetUpValue = 20)},
+        configValues = {@IntValue(key = IntValueBase.TENEBROUS_WEREWOLF_DISTANCE,
+                defaultValue = 50, meetUpValue = 50, step = 5, item = UniversalMaterial.BLACK_WOOL)})
 public class TenebrousWerewolf extends RoleWereWolf implements IPower, IAffectedPlayers {
 
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
     private boolean power = true;
 
-    public TenebrousWerewolf(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public TenebrousWerewolf(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     @Override
-    public void setPower(boolean b) {
-        power = b;
+    public void setPower(boolean power) {
+        this.power = power;
     }
 
     @Override
@@ -46,12 +55,12 @@ public class TenebrousWerewolf extends RoleWereWolf implements IPower, IAffected
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.tenebrous_werewolf.description",
-                        Formatter.format("&range&", game.getConfig().getDistanceTenebrous()),
-                        Formatter.format("&time&", game.getConfig().getTimerValue(TimerBase.WEREWOLF_TENEBROUS_DURATION.getKey()))))
+                .setDescription(game.translate("werewolf.roles.tenebrous_werewolf.description",
+                        Formatter.number(game.getConfig().getValue(IntValueBase.TENEBROUS_WEREWOLF_DISTANCE)),
+                        Formatter.format("&time&", game.getConfig().getTimerValue(TimerBase.WEREWOLF_TENEBROUS_DURATION))))
                 .setEffects(game.translate("werewolf.description.werewolf"))
-                .setCommand(game.translate("werewolf.role.tenebrous_werewolf.description_command"))
-                .setPower(game.translate(power ? "werewolf.role.tenebrous_werewolf.power_available" : "werewolf.role.tenebrous_werewolf.power_not_available"))
+                .setCommand(game.translate("werewolf.roles.tenebrous_werewolf.description_command"))
+                .setPower(game.translate(power ? "werewolf.roles.tenebrous_werewolf.power_available" : "werewolf.roles.tenebrous_werewolf.power_not_available"))
                 .build();
     }
 
@@ -103,34 +112,8 @@ public class TenebrousWerewolf extends RoleWereWolf implements IPower, IAffected
         if (damagerWW == null) return;
 
         if (damagerWW.getRole().isWereWolf()) {
-            targetWW.addPotionModifier(PotionModifier.remove(PotionEffectType.BLINDNESS, "tenebrous", 1));
+            targetWW.addPotionModifier(PotionModifier.remove(PotionEffectType.BLINDNESS, this.getKey(), 1));
             affectedPlayers.remove(targetWW);
         }
-    }
-
-    public static ClickableItem configDistance(WereWolfAPI game) {
-        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
-                game.translate("werewolf.menu.right"));
-        IConfiguration config = game.getConfig();
-
-        return ClickableItem.of(
-                new ItemBuilder(UniversalMaterial.BLACK_WOOL.getType())
-                        .setLore(lore)
-                        .setDisplayName(game.translate("werewolf.role.tenebrous_werewolf.darkness_distance",
-                                Formatter.format("&range&",config.getDistanceTenebrous())))
-                        .build(), e -> {
-                    if (e.isLeftClick()) {
-                        config.setDistanceTenebrous(config.getDistanceTenebrous() + 5);
-                    } else if (config.getDistanceTenebrous() > 5) {
-                        config.setDistanceTenebrous(config.getDistanceTenebrous() - 5);
-                    }
-
-
-                    e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                            .setDisplayName(game.translate("werewolf.role.tenebrous_werewolf.darkness_distance",
-                                    Formatter.format("&range&",config.getDistanceTenebrous())))
-                            .build());
-
-                });
     }
 }

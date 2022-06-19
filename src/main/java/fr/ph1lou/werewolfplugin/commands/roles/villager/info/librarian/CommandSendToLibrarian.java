@@ -1,11 +1,12 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.info.librarian;
 
+import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Prefix;
-import fr.ph1lou.werewolfapi.enums.RolesBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.librarian.LibrarianGiveBackEvent;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
@@ -16,8 +17,10 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+@PlayerCommand(key = "werewolf.roles.librarian.request_command",
+        descriptionKey = "",
+        autoCompletion = false)
 public class CommandSendToLibrarian implements ICommand {
-
 
     @Override
     public void execute(WereWolfAPI game, Player player, String[] args) {
@@ -29,7 +32,7 @@ public class CommandSendToLibrarian implements ICommand {
 
 
         if (args.length == 0) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.parameters",
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.parameters",
                     Formatter.number(1));
             return;
         }
@@ -45,7 +48,7 @@ public class CommandSendToLibrarian implements ICommand {
                 .stream()
                 .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                 .map(IPlayerWW::getRole)
-                .filter(role -> role.isKey(RolesBase.LIBRARIAN.getKey()))
+                .filter(role -> role.isKey(RoleBase.LIBRARIAN))
                 .filter(roles -> ((IAffectedPlayers) roles).getAffectedPlayers().contains(playerWW))
                 .forEach(roles -> {
 
@@ -58,23 +61,23 @@ public class CommandSendToLibrarian implements ICommand {
                     Bukkit.getPluginManager().callEvent(librarianGiveBackEvent);
 
                     if (librarianGiveBackEvent.isCancelled()) {
-                        playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+                        playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
                         return;
                     }
 
                     ((Librarian) roles).addStorage(sb2.toString());
 
-                    playerWW.sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.role.librarian.contribute");
+                    playerWW.sendMessageWithKey(Prefix.GREEN , "werewolf.roles.librarian.contribute");
                     find.set(true);
                     librarianGiveBackEvent.getTargetWW().sendMessageWithKey(
-                            Prefix.GREEN.getKey() , "werewolf.role.librarian.contribution",
+                            Prefix.GREEN , "werewolf.roles.librarian.contribution",
                             Formatter.player(player.getName()),
-                            Formatter.format("message",librarianGiveBackEvent.getInfo()));
+                            Formatter.format("&message&",librarianGiveBackEvent.getInfo()));
                 });
 
 
         if (!find.get()) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.librarian.prohibit");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.librarian.prohibit");
         }
 
 

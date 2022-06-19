@@ -1,23 +1,22 @@
 package fr.ph1lou.werewolfplugin.game;
 
 
+import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.enums.ConfigBase;
-import fr.ph1lou.werewolfapi.enums.LoverType;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.enums.TimerBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.WinEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.CountRemainingRolesCategoriesEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.WinConditionsCheckEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AroundLoverEvent;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
-import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -39,7 +38,11 @@ public class End {
 
     public void checkVictory() {
 
-        if (game.getConfig().isTrollSV()) return;
+        if(game.isDebug()){
+            return;
+        }
+
+        if (game.getConfig().isConfigActive(ConfigBase.TROLL_ROLE)) return;
 
         if (game.isState(StateGame.END)) return;
 
@@ -50,11 +53,11 @@ public class End {
         }
         IConfiguration config = game.getConfig();
 
-        if (config.getLoverCount(LoverType.AMNESIAC_LOVER.getKey()) *
-                config.getLoverCount(LoverType.LOVER.getKey()) <= 1) {
+        if (config.getLoverCount(LoverBase.AMNESIAC_LOVER) *
+                config.getLoverCount(LoverBase.LOVER) <= 1) {
 
             game.getLoversManager().getLovers().stream()
-                    .filter(lover -> lover.isKey(LoverType.AMNESIAC_LOVER.getKey()) || lover.isKey(LoverType.LOVER.getKey()))
+                    .filter(lover -> lover.isKey(LoverBase.AMNESIAC_LOVER) || lover.isKey(LoverBase.LOVER))
                     .forEach(lover -> {
                         Set<IPlayerWW> lovers = new HashSet<>(lover.getLovers());
 
@@ -123,7 +126,7 @@ public class End {
 
         game.setState(StateGame.END);
 
-        game.getConfig().setConfig(ConfigBase.CHAT.getKey(), true);
+        game.getConfig().setConfig(ConfigBase.CHAT, true);
 
         for (IPlayerWW playerWW1 : game.getPlayersWW()) {
 
@@ -153,19 +156,19 @@ public class End {
         }
 
         for (Player p : Bukkit.getOnlinePlayers()) {
-            p.sendMessage(game.translate(Prefix.ORANGE.getKey() , "werewolf.end.message",
+            p.sendMessage(game.translate(Prefix.ORANGE , "werewolf.end.message",
                     Formatter.format("&winner&",subtitles_victory)));
             VersionUtils.getVersionUtils().sendTitle(p, game.translate("werewolf.end.victory"), subtitles_victory, 20, 60, 20);
-            TextComponent msg = new TextComponent(game.translate("werewolf.utils.bar")+
-                    game.translate(Prefix.YELLOW.getKey(),"werewolf.bug") +
+            TextComponent msg = new TextComponent(game.translate("werewolf.utils.bar")+ "\n" +
+                    game.translate(Prefix.YELLOW,"werewolf.bug") + "\n" +
                     game.translate("werewolf.utils.bar"));
             msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/GXXCVUA"));
             p.spigot().sendMessage(msg);
         }
 
-        BukkitUtils.scheduleSyncDelayedTask(game::stopGame, 20L * game.getConfig().getTimerValue(TimerBase.AUTO_RESTART_DURATION.getKey()));
-        Bukkit.broadcastMessage(game.translate(Prefix.ORANGE.getKey() , "werewolf.announcement.restart",
-                Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.AUTO_RESTART_DURATION.getKey())))));
+        BukkitUtils.scheduleSyncDelayedTask(game::stopGame, 20L * game.getConfig().getTimerValue(TimerBase.AUTO_RESTART_DURATION));
+        Bukkit.broadcastMessage(game.translate(Prefix.ORANGE , "werewolf.announcement.restart",
+                Formatter.timer(game, TimerBase.AUTO_RESTART_DURATION)));
     }
 
 

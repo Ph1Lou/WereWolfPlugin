@@ -1,43 +1,50 @@
 package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
-import fr.minuskube.inv.ClickableItem;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.game.IConfiguration;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import fr.ph1lou.werewolfapi.events.roles.howling_werewolf.HowlEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleWereWolf;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
-import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
+@Role(key = RoleBase.HOWLING_WEREWOLF, category = Category.WEREWOLF,
+        attributes = RoleAttribute.WEREWOLF,
+        configValues = @IntValue(key = IntValueBase.HOWLING_WEREWOLF_DISTANCE,
+                defaultValue = 80, meetUpValue = 80, step = 5, item = UniversalMaterial.LIGHT_GRAY_WOOL))
 public class HowlingWerewolf extends RoleWereWolf {
-    public HowlingWerewolf(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+
+    public HowlingWerewolf(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
     }
 
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game,this)
-                .setDescription(game.translate("werewolf.role.howling_werewolf.description",
-                        Formatter.number(game.getConfig().getDistanceHowlingWerewolf())))
+                .setDescription(game.translate("werewolf.roles.howling_werewolf.description",
+                        Formatter.number(game.getConfig().getValue(IntValueBase.HOWLING_WEREWOLF_DISTANCE))))
                 .setEffects(game.translate("werewolf.description.werewolf"))
                 .build();
     }
@@ -64,7 +71,7 @@ public class HowlingWerewolf extends RoleWereWolf {
                     Location location = playerWW.getLocation();
                     Location playerLocation = this.getPlayerWW().getLocation();
                     return location.getWorld() == playerLocation.getWorld() &&
-                            location.distance(playerLocation) < game.getConfig().getDistanceHowlingWerewolf();
+                            location.distance(playerLocation) < game.getConfig().getValue(IntValueBase.HOWLING_WEREWOLF_DISTANCE);
                 })
                 .collect(Collectors.toSet());
 
@@ -80,7 +87,7 @@ public class HowlingWerewolf extends RoleWereWolf {
         Bukkit.getPluginManager().callEvent(howlEvent);
 
         if(howlEvent.isCancelled()){
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
             return;
         }
 
@@ -104,7 +111,7 @@ public class HowlingWerewolf extends RoleWereWolf {
 
         this.getPlayerWW().addPlayerMaxHealth(finalHeart);
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey(),"werewolf.role.howling_werewolf.message",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.roles.howling_werewolf.message",
                 Formatter.number(howlEvent.getNotWerewolfSize()),
                 Formatter.format("&heart&",heart));
 
@@ -112,33 +119,6 @@ public class HowlingWerewolf extends RoleWereWolf {
             if(game.isState(StateGame.GAME)){
                 this.getPlayerWW().removePlayerMaxHealth(finalHeart);
             }
-        });
-    }
-
-    public static ClickableItem config(WereWolfAPI game) {
-        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
-                game.translate("werewolf.menu.right"));
-        IConfiguration config = game.getConfig();
-
-        return ClickableItem.of((
-                new ItemBuilder(UniversalMaterial.LIGHT_GRAY_WOOL.getStack())
-                        .setDisplayName(game.translate("werewolf.menu.advanced_tool.howling_werewolf",
-                                Formatter.number(config.getDistanceHowlingWerewolf())))
-                        .setLore(lore).build()), e -> {
-
-            if (e.isLeftClick()) {
-                config.setDistanceHowlingWerewolf((config.getDistanceHowlingWerewolf() + 2));
-            } else if (config.getDistanceHowlingWerewolf() - 2 > 0) {
-                config.setDistanceHowlingWerewolf(config.getDistanceHowlingWerewolf() - 2);
-            }
-
-
-            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setLore(lore)
-                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.howling_werewolf",
-                            Formatter.number(config.getDistanceHowlingWerewolf())))
-                    .build());
-
         });
     }
 }

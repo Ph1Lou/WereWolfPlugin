@@ -1,37 +1,44 @@
 package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
-import fr.minuskube.inv.ClickableItem;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.game.IConfiguration;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.avenger_werewolf.DeathAvengerListEvent;
 import fr.ph1lou.werewolfapi.events.roles.avenger_werewolf.RegisterAvengerListEvent;
-import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleWereWolf;
-import fr.ph1lou.werewolfapi.utils.ItemBuilder;
+import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+@Role(key = RoleBase.AVENGER_WEREWOLF, 
+          category = Category.WEREWOLF, 
+          attributes = RoleAttribute.WEREWOLF,
+        configValues = {@IntValue(key = IntValueBase.AVENGER_WEREWOLF_DISTANCE,
+        defaultValue = 10, meetUpValue = 10, step = 2, item = UniversalMaterial.RED_WOOL)})
 public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
 
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
 
-    public AvengerWereWolf(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public AvengerWereWolf(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
 
@@ -39,9 +46,10 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.avenger_werewolf.description",
-                                Formatter.number(game.getConfig().getDistanceAvengerWerewolf())))
-                .setPower(game.translate("werewolf.role.avenger_werewolf.power"))
+                .setDescription(game.translate("werewolf.roles.avenger_werewolf.description",
+                                Formatter.number(game.getConfig()
+                                        .getValue(IntValueBase.AVENGER_WEREWOLF_DISTANCE))))
+                .setPower(game.translate("werewolf.roles.avenger_werewolf.power"))
                 .setEffects(game.translate("werewolf.description.werewolf"))
                 .build();
     }
@@ -63,12 +71,12 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
         Bukkit.getPluginManager().callEvent(event1);
 
         if (event1.isCancelled()) {
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
             return;
         }
 
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN.getKey() , "werewolf.role.avenger_werewolf.remove",
+        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN , "werewolf.roles.avenger_werewolf.remove",
                 Formatter.player(event.getPlayerWW().getName()));
         this.getPlayerWW().addPlayerMaxHealth(2);
     }
@@ -91,7 +99,8 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
                 .filter(playerWW -> {
                     Location playerLocation = this.getPlayerWW().getLocation();
                     if (playerLocation.getWorld() == playerWW.getLocation().getWorld()) {
-                        return playerLocation.distance(playerWW.getLocation()) < game.getConfig().getDistanceAvengerWerewolf();
+                        return playerLocation.distance(playerWW.getLocation()) < game.getConfig()
+                                .getValue(IntValueBase.AVENGER_WEREWOLF_DISTANCE);
                     }
                     return false;
                 })
@@ -106,7 +115,7 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
                         }
 
                         this.affectedPlayers.add(playerWW);
-                        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.avenger_werewolf.add",
+                        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.avenger_werewolf.add",
                                 Formatter.player(playerWW.getName()));
                     }
                 });
@@ -138,32 +147,7 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
         return new ArrayList<>(this.affectedPlayers);
     }
 
-    public static ClickableItem config(WereWolfAPI game) {
-
-        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
-                game.translate("werewolf.menu.right"));
-        IConfiguration config = game.getConfig();
-
-        return ClickableItem.of((new ItemBuilder(
-                UniversalMaterial.RED_WOOL.getStack())
-                .setDisplayName(game.translate("werewolf.menu.advanced_tool.avenger_werewolf",
-                                Formatter.number(config.getDistanceAvengerWerewolf())))
-                .setLore(lore).build()), e -> {
-            if (e.isLeftClick()) {
-                config.setDistanceAvengerWerewolf((config.getDistanceAvengerWerewolf() + 2));
-            } else if (config.getDistanceAvengerWerewolf() - 2 > 0) {
-                config.setDistanceAvengerWerewolf(config.getDistanceAvengerWerewolf() - 2);
-            }
-
-
-            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setLore(lore)
-                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.avenger_werewolf",
-                                    Formatter.number(config.getDistanceAvengerWerewolf())))
-                    .build());
-
-        });
-    }
+   
 
     @Override
     public Aura getDefaultAura() {

@@ -1,6 +1,10 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -20,10 +24,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
+@Role(key = RoleBase.SERIAL_KILLER,
+         category = Category.NEUTRAL,
+        attributes = RoleAttribute.NEUTRAL)
 public class SerialKiller extends RoleNeutral implements IPower {
 
-    public SerialKiller(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public SerialKiller(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     private boolean power = true;
@@ -43,11 +50,11 @@ public class SerialKiller extends RoleNeutral implements IPower {
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setPower(game.translate("werewolf.role.serial_killer.power"))
-                .setEquipments(game.translate("werewolf.role.serial_killer.limit"))
-                .setItems(game.translate("werewolf.role.serial_killer.items"))
-                .setEffects(game.translate("werewolf.role.serial_killer.effect"))
-                .addExtraLines(game.translate("werewolf.role.serial_killer.hearts", Formatter.format("&heart&",extraHeart / 2)))
+                .setPower(game.translate("werewolf.roles.serial_killer.power"))
+                .setEquipments(game.translate("werewolf.roles.serial_killer.limit"))
+                .setItems(game.translate("werewolf.roles.serial_killer.items"))
+                .setEffects(game.translate("werewolf.roles.serial_killer.effect"))
+                .addExtraLines(game.translate("werewolf.roles.serial_killer.hearts", Formatter.format("&heart&",extraHeart / 2)))
                 .build();
     }
 
@@ -106,7 +113,7 @@ public class SerialKiller extends RoleNeutral implements IPower {
 
         if (!hasPower()) return;
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"serial_killer"));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,this.getKey()));
     }
 
     @Override
@@ -128,7 +135,7 @@ public class SerialKiller extends RoleNeutral implements IPower {
                 this.getPlayerWW(),
                 playerWW));
         if (hasPower()) {
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"serial_killer",0));
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,this.getKey(),0));
             setPower(false);
         }
         if (!isAbilityEnabled()) return;
@@ -142,7 +149,7 @@ public class SerialKiller extends RoleNeutral implements IPower {
     public void disableAbilitiesRole() {
 
         if (this.hasPower()) {
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"serial_killer",0));
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,this.getKey(),0));
         }
 
     }

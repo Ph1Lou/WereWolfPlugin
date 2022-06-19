@@ -2,34 +2,34 @@ package fr.ph1lou.werewolfplugin.game;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.lovers.ILover;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfplugin.utils.MessageAction;
-import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
-import fr.ph1lou.werewolfapi.enums.RolesBase;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.lovers.ILover;
+import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import fr.ph1lou.werewolfplugin.roles.villagers.Villager;
+import fr.ph1lou.werewolfplugin.utils.MessageAction;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -47,7 +47,7 @@ public class PlayerWW implements IPlayerWW {
     private final Map<PotionModifier,Integer> potionModifiers = new HashMap<>();
     private final List<MessageAction> disconnectedMessages = new ArrayList<>();
     private final List<ItemStack> decoItems = new ArrayList<>();
-    private int maxHealth = 20;
+    private double maxHealth = 20;
     private Location disconnectedLocation = null;
     private int disconnectedChangeHealth = 0;
     @Nullable
@@ -74,13 +74,38 @@ public class PlayerWW implements IPlayerWW {
         this.spawn = player.getWorld().getSpawnLocation();
         this.uuid = player.getUniqueId();
         this.name = player.getName();
-        this.role = new Villager(api, this,
-                RolesBase.VILLAGER.getKey());
+        this.role = new Villager(api, this);
         this.game = api;
         try {
             this.mojangUUID = getUUID(name);
         } catch (Exception ignored) {
             this.game.setCrack();
+        }
+        this.clearPlayer();
+    }
+
+    @Override
+    public void clearPlayer() {
+
+        Player player = Bukkit.getPlayer(this.uuid);
+
+        if(player == null){
+            return;
+        }
+
+        PlayerInventory inventory = player.getInventory();
+        VersionUtils.getVersionUtils().setPlayerMaxHealth(player, 20);
+        player.setHealth(20);
+        player.setExp(0);
+        player.setLevel(0);
+        inventory.clear();
+        inventory.setHelmet(null);
+        inventory.setChestplate(null);
+        inventory.setLeggings(null);
+        inventory.setBoots(null);
+
+        for (PotionEffect po : player.getActivePotionEffects()) {
+            player.removePotionEffect(po.getType());
         }
     }
 
@@ -94,7 +119,7 @@ public class PlayerWW implements IPlayerWW {
     }
 
     @Override
-    public void addPlayerHealth(int health) {
+    public void addPlayerHealth(double health) {
 
         Player player = Bukkit.getPlayer(this.uuid);
 
@@ -107,7 +132,7 @@ public class PlayerWW implements IPlayerWW {
     }
 
     @Override
-    public void removePlayerHealth(int health) {
+    public void removePlayerHealth(double health) {
 
         Player player = Bukkit.getPlayer(this.uuid);
 
@@ -121,7 +146,7 @@ public class PlayerWW implements IPlayerWW {
     }
 
     @Override
-    public void addPlayerMaxHealth(int health) {
+    public void addPlayerMaxHealth(double health) {
 
         Player player = Bukkit.getPlayer(uuid);
 
@@ -136,7 +161,7 @@ public class PlayerWW implements IPlayerWW {
     }
 
     @Override
-    public void removePlayerMaxHealth(int health) {
+    public void removePlayerMaxHealth(double health) {
 
         Player player = Bukkit.getPlayer(uuid);
 
@@ -239,6 +264,8 @@ public class PlayerWW implements IPlayerWW {
             return;
         }
         AtomicBoolean find = new AtomicBoolean(false);
+        AtomicBoolean particle = new AtomicBoolean(false);
+
         new ArrayList<>(this.potionModifiers.keySet())
                 .stream()
                 .filter(potionModifier1 -> potionModifier1.getPotionEffectType()
@@ -256,8 +283,15 @@ public class PlayerWW implements IPlayerWW {
                                 Bukkit.getScheduler().cancelTask(id);
                             }
                         }
+
                         if(player!=null){
-                            player.removePotionEffect(potionModifier.getPotionEffectType());
+                            if(!particle.get()){
+                                particle.set(player.getActivePotionEffects()
+                                        .stream()
+                                        .filter(potionEffect -> potionEffect.getType().equals(potionModifier1.getPotionEffectType()))
+                                        .anyMatch(PotionEffect::hasParticles));
+                            }
+                            player.removePotionEffect(potionModifier1.getPotionEffectType());
                         }
                     }
                     else if(potionModifier1.getIdentifier().equals(potionModifier.getIdentifier())){
@@ -287,8 +321,8 @@ public class PlayerWW implements IPlayerWW {
             player.addPotionEffect(new PotionEffect(potionModifier.getPotionEffectType(),
                     potionModifier.getDuration(),
                     potionModifier.getAmplifier(),
-                    false,
-                    false));
+                    particle.get(),
+                    particle.get()));
         }
 
     }
@@ -302,6 +336,16 @@ public class PlayerWW implements IPlayerWW {
         if(player!=null){
             player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
         }
+    }
+
+    @Override
+    public void clearPotionEffects(String key) {
+        new ArrayList<>(this.potionModifiers.keySet())
+                .stream()
+                .filter(potionModifier -> potionModifier.getIdentifier().equals(key))
+                .forEach(potionModifier -> this.addPotionModifier(PotionModifier.remove(potionModifier.getPotionEffectType(),
+                        potionModifier.getIdentifier(),
+                        potionModifier.getAmplifier())));
     }
 
     @Override
@@ -329,9 +373,9 @@ public class PlayerWW implements IPlayerWW {
     }
 
     @Override
-    public void setItemDeath(ItemStack[] itemStacks) {
+    public void setItemDeath(List<ItemStack> itemStacks) {
         itemsDeath.clear();
-        itemsDeath.addAll(new ArrayList<>(Arrays.asList(itemStacks)));
+        itemsDeath.addAll(itemStacks);
     }
 
     @Override
@@ -500,7 +544,7 @@ public class PlayerWW implements IPlayerWW {
         });
         if(this.tpWhenDisconnected){
             this.tpWhenDisconnected=false;
-            this.addPotionModifier(PotionModifier.add(PotionEffectType.WITHER,400,0,"no_fall"));
+            this.addPotionModifier(PotionModifier.add(PotionEffectType.WITHER,400,0,MapManager.NO_FALL));
         }
         player.teleport(this.disconnectedLocation);
 
@@ -556,27 +600,19 @@ public class PlayerWW implements IPlayerWW {
     }
 
     @Override
-    public int getMaxHealth() {
+    public double getMaxHealth() {
         return maxHealth;
     }
 
     @Override
     public double getHealth() {
-        return Bukkit.getPlayer(uuid).getHealth();
-    }
 
-    @Override
-    public void addHealth(double v) {
         Player player = Bukkit.getPlayer(uuid);
 
-        player.setHealth(player.getHealth() + v);
-    }
-
-    @Override
-    public void removeHealth(double v) {
-        Player player = Bukkit.getPlayer(uuid);
-
-        player.setHealth(player.getHealth() - v);
+        if (player != null) {
+            return player.getHealth();
+        }
+        return 20d;
     }
 
     @Override
@@ -587,6 +623,13 @@ public class PlayerWW implements IPlayerWW {
         if (player == null) return disconnectedLocation;
 
         return player.getLocation().clone();
+    }
+
+    @Override
+    public @NotNull Location getEyeLocation() {
+        Location loc = this.getLocation();
+        loc.setY(loc.getY() + 1.8);
+        return loc;
     }
 
     @Override

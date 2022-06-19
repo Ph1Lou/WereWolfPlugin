@@ -1,4 +1,4 @@
-werewolf.role.cupid.display:
+werewolf.roles.cupid.display:
   0:
     ==: org.bukkit.inventory.ItemStack
     type: ENCHANTED_BOOK
@@ -17,12 +17,12 @@ werewolf.role.cupid.display:
     type: STRING
     amount: 3
 
-werewolf.role.mischievous_werewolf.display:
+werewolf.roles.mischievous_werewolf.display:
   0:
     ==: org.bukkit.inventory.ItemStack
     type: TNT
     amount: 5
-werewolf.role.witch.display:
+werewolf.roles.witch.display:
   0:
     potion_data: 16389
     item:
@@ -45,24 +45,42 @@ werewolf.role.witch.display:
       type: POTION
       amount: 2
 
-werewolf.role.little_girl.display:
+werewolf.roles.little_girl.display:
   0:
     ==: org.bukkit.inventory.ItemStack
     type: TNT
     amount: 5
-werewolf.role.protector.display:
+werewolf.roles.protector.display:
   0:
     potion_data: 16389
     item:
       ==: org.bukkit.inventory.ItemStack
       type: POTION
       amount: 3
-werewolf.role.librarian.display:
+werewolf.roles.librarian.display:
   0:
     ==: org.bukkit.inventory.ItemStack
     type: BOOKSHELF
     amount: 4
-werewolf.role.chatty_seer.display:
+
+werewolf.roles.story_teller.display:
+  0:
+    ==: org.bukkit.inventory.ItemStack
+    type: BOOKSHELF
+    amount: 2
+
+werewolf.roles.benefactor.display:
+  0:
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    amount: 2
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        PROTECTION_ENVIRONMENTAL: 2
+
+werewolf.roles.chatty_seer.display:
   0:
     ==: org.bukkit.inventory.ItemStack
     type: BOOKSHELF
@@ -71,13 +89,13 @@ werewolf.role.chatty_seer.display:
     ==: org.bukkit.inventory.ItemStack
     type: OBSIDIAN
     amount: 4
-werewolf.role.guard.display:
+werewolf.roles.guard.display:
   0:
     potion_data: 16393
     item:
       ==: org.bukkit.inventory.ItemStack
       type: POTION
-werewolf.role.seer.display:
+werewolf.roles.seer.display:
   0:
     ==: org.bukkit.inventory.ItemStack
     type: BOOKSHELF
@@ -87,7 +105,7 @@ werewolf.role.seer.display:
     type: OBSIDIAN
     amount: 4
 
-werewolf.role.raven.display:
+werewolf.roles.raven.display:
   0:
     ==: org.bukkit.inventory.ItemStack
     type: ENCHANTED_BOOK
@@ -96,7 +114,7 @@ werewolf.role.raven.display:
       meta-type: ENCHANTED
       stored-enchants:
         PROTECTION_FALL: 3
-werewolf.role.barbarian.display:
+werewolf.roles.barbarian.display:
   0:
     ==: org.bukkit.inventory.ItemStack
     type: ENCHANTED_BOOK
@@ -105,32 +123,7 @@ werewolf.role.barbarian.display:
       meta-type: ENCHANTED
       stored-enchants:
         DAMAGE_ALL: 3
-werewolf.role.assassin.display:
-  0:
-    ==: org.bukkit.inventory.ItemStack
-    type: ENCHANTED_BOOK
-    meta:
-      ==: ItemMeta
-      meta-type: ENCHANTED
-      stored-enchants:
-        DAMAGE_ALL: 3
-  1:
-    ==: org.bukkit.inventory.ItemStack
-    type: ENCHANTED_BOOK
-    meta:
-      ==: ItemMeta
-      meta-type: ENCHANTED
-      stored-enchants:
-        PROTECTION_ENVIRONMENTAL: 3
-  2:
-    ==: org.bukkit.inventory.ItemStack
-    type: ENCHANTED_BOOK
-    meta:
-      ==: ItemMeta
-      meta-type: ENCHANTED
-      stored-enchants:
-        ARROW_DAMAGE: 3
-werewolf.role.serial_killer.display:
+werewolf.roles.assassin.display:
   0:
     ==: org.bukkit.inventory.ItemStack
     type: ENCHANTED_BOOK
@@ -155,7 +148,32 @@ werewolf.role.serial_killer.display:
       meta-type: ENCHANTED
       stored-enchants:
         ARROW_DAMAGE: 3
-werewolf.role.infect_father_of_the_wolves.display:
+werewolf.roles.serial_killer.display:
+  0:
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        DAMAGE_ALL: 3
+  1:
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        PROTECTION_ENVIRONMENTAL: 3
+  2:
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        ARROW_DAMAGE: 3
+werewolf.roles.infect_father_of_the_wolves.display:
   0:
     potion_data: 16453
     item:
@@ -163,7 +181,7 @@ werewolf.role.infect_father_of_the_wolves.display:
       type: POTION
       amount: 2
 
-werewolf.role.rival.display:
+werewolf.roles.rival.display:
   0:
     potion_data: 16460
     item:
@@ -188,13 +206,13 @@ werewolf.role.rival.display:
     type: STRING
     amount: 3
 
-werewolf.role.priestess.display:
+werewolf.roles.priestess.display:
   0:
     ==: org.bukkit.inventory.ItemStack
     type: OBSIDIAN
     amount: 4
 
-werewolf.role.hunter.display:
+werewolf.roles.hunter.display:
   0:
     ==: org.bukkit.inventory.ItemStack
     type: STRING

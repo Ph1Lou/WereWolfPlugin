@@ -1,12 +1,16 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
-import fr.ph1lou.werewolfplugin.roles.lovers.Lover;
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.LoverBase;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfplugin.roles.lovers.LoverImpl;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.lovers.ILover;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.LoverType;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
@@ -24,18 +28,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 
+@Role(key = RoleBase.STUD,
+          category = Category.VILLAGER,
+          attributes = RoleAttribute.HYBRID)
 public class Stud extends RoleVillage implements IPower {
     private boolean power = true;
 
-    public Stud(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Stud(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
 
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.stud.description"))
+                .setDescription(game.translate("werewolf.roles.stud.description"))
                 .build();
     }
 
@@ -52,7 +59,7 @@ public class Stud extends RoleVillage implements IPower {
 
         if (power) return;
 
-        game.getConfig().addOneLover(LoverType.LOVER.getKey()); //pour rajouter dans la compo le couple à la mort du tombeur (puisque le couple du tombeur est pas affiché dans la compo)
+        game.getConfig().addOneLover(LoverBase.LOVER); //pour rajouter dans la compo le couple à la mort du tombeur (puisque le couple du tombeur est pas affiché dans la compo)
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -82,11 +89,11 @@ public class Stud extends RoleVillage implements IPower {
 
         setPower(false);
 
-        Lover lover = new Lover(game, new ArrayList<>(Arrays.asList(getPlayerWW(), killerWW.get())));
+        LoverImpl loverImpl = new LoverImpl(game, new ArrayList<>(Arrays.asList(getPlayerWW(), killerWW.get())));
 
-        game.getLoversManager().addLover(lover);
-        BukkitUtils.registerEvents(lover);
-        lover.announceLovers();
+        game.getLoversManager().addLover(loverImpl);
+        BukkitUtils.registerListener(loverImpl);
+        loverImpl.announceLovers();
 
         event.setCancelled(true);
 

@@ -1,14 +1,19 @@
 package fr.ph1lou.werewolfplugin.commands.admin.ingame;
 
+import fr.ph1lou.werewolfapi.annotations.AdminCommand;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+@AdminCommand(key = "werewolf.commands.admin.gamemode.command",
+        descriptionKey = "werewolf.commands.admin.gamemode.description",
+        moderatorAccess = true,
+        argNumbers = 1)
 public class CommandGamemode implements ICommand {
 
     @Override
@@ -27,7 +32,7 @@ public class CommandGamemode implements ICommand {
             }
 
             player.setGameMode(GameMode.values()[j]);
-            String message = game.translate(Prefix.YELLOW.getKey() , "werewolf.commands.admin.gamemode.send",
+            String message = game.translate(Prefix.YELLOW , "werewolf.commands.admin.gamemode.send",
                     Formatter.player(player.getName()),
                     Formatter.number(gamemode));
 

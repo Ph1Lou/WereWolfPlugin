@@ -1,12 +1,16 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.lovers.ILover;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
@@ -31,21 +35,25 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+
+@Role(key = RoleBase.IMITATOR,
+        category = Category.NEUTRAL,
+        attributes = RoleAttribute.NEUTRAL)
 public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private boolean power = true;
 
-    public Imitator(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Imitator(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     @Override
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.imitator.description"))
-                .setEffects(game.translate("werewolf.role.imitator.effect"))
+                .setDescription(game.translate("werewolf.roles.imitator.description"))
+                .setEffects(game.translate("werewolf.roles.imitator.effect"))
                 .build();
     }
 
@@ -93,7 +101,7 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
                 PotionEffectType.SPEED,
                 1200,
                 0,
-                "imitator"));
+                this.getKey()));
 
     }
 
@@ -135,11 +143,17 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
 
         setPower(false);
 
-        HandlerList.unregisterAll(this.getPlayerWW().getRole());
         IRole roleClone = role.publicClone();
+
+        if(roleClone == null){
+            return;
+        }
+
+        HandlerList.unregisterAll(this);
+
         this.getPlayerWW().setRole(roleClone);
-        assert roleClone != null;
-        BukkitUtils.registerEvents(roleClone);
+
+        BukkitUtils.registerListener(roleClone);
         if (this.isInfected()) {
             roleClone.setInfected();
         } else if (roleClone.isWereWolf()) {
@@ -151,12 +165,12 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
         roleClone.setTransformedToNeutral(true);
         this.getPlayerWW().addDeathRole(this.getKey());
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.thief.realized_theft",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.thief.realized_theft",
                 Formatter.role(game.translate(role.getKey())));
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.thief.details");
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.thief.details");
 
-        this.getPlayerWW()
-                .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"imitator",0));
+        this.getPlayerWW().clearPotionEffects(this.getKey());
+
         Bukkit.getPluginManager().callEvent(new StealEvent(this.getPlayerWW(),
                 playerWW,
                 roleClone.getKey()));
@@ -193,13 +207,13 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
 
         if(!isAbilityEnabled()) return;
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"imitator"));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,this.getKey()));
 
     }
 
     @Override
     public void disableAbilitiesRole() {
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"imitator",0));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,this.getKey(),0));
     }
 }
