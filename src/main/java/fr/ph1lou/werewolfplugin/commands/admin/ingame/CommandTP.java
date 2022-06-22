@@ -6,6 +6,7 @@ import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.game.IModerationManager;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -39,8 +40,8 @@ public class CommandTP implements ICommand {
                 player.sendMessage(game.translate(Prefix.RED , "werewolf.check.offline_player"));
                 return;
             }
+            PaperLib.teleportAsync(player, playerArg1.getLocation());
 
-            player.teleport(playerArg1);
             String message = game.translate(Prefix.YELLOW , "werewolf.commands.admin.teleportation.send",
                     Formatter.format("&player1&",player.getName()),
                     Formatter.format("&player2&",playerArg1.getName()));
@@ -71,8 +72,8 @@ public class CommandTP implements ICommand {
             player.sendMessage(game.translate(Prefix.RED , "werewolf.check.offline_player"));
             return;
         }
+        PaperLib.teleportAsync(playerArg1, playerArg2.getLocation());
 
-        playerArg1.teleport(playerArg1);
         String message = game.translate(Prefix.YELLOW , "werewolf.commands.admin.teleportation.send",
                 Formatter.format("&player1&",playerArg1.getName()),
                 Formatter.format("&player2&",playerArg2.getName()));

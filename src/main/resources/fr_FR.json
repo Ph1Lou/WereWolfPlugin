@@ -592,7 +592,7 @@
         "command": "charmer",
         "timer": "Vous pourrez tuer votre charmé &player& sans malus dans &timer&",
         "affected": "Votre charmé est &player&, vous pouvez le tuer sans malus",
-        "reveal": "Votre couple avec &player& était en faite faux",
+        "reveal": "Votre couple avec &player& était un faux couple",
         "before_count_down": "Votre charmé est mort avant la fin du compte à rebours, vous perdez 3 coeurs permanents",
         "lover_death": "Vous gagnez l'effet §bVitesse§f et 10 coeurs d'absorption suite à la mort du couple",
         "perform": "Vous venez de charmer &player&",

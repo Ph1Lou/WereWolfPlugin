@@ -62,6 +62,7 @@ public class MapManager implements IMapManager {
                     chunksPerRun,
                     false,
                     mapRadius);
+
             wft.setTaskID(BukkitUtils.scheduleSyncRepeatingTask(wft, 1, 1));
         }
     }
@@ -138,44 +139,56 @@ public class MapManager implements IMapManager {
 
     public void setWorld(boolean roofed) {
 
-        try {
-            world.setAutoSave(false);
-            world.setWeatherDuration(0);
-            world.setThundering(false);
-            world.setTime(0);
-            world.setPVP(false);
-            VersionUtils.getVersionUtils().setGameRuleValue(world, "doFireTick", false);
-            VersionUtils.getVersionUtils().setGameRuleValue(world, "reducedDebugInfo", true);
-            VersionUtils.getVersionUtils().setGameRuleValue(world, "naturalRegeneration", false);
-            VersionUtils.getVersionUtils().setGameRuleValue(world, "keepInventory", true);
-            VersionUtils.getVersionUtils().setGameRuleValue(world, "announceAdvancements", false);
-            world.save();
-            int x = world.getSpawnLocation().getBlockX();
-            int z = world.getSpawnLocation().getBlockZ();
-            world.getWorldBorder().reset();
+        world.setAutoSave(false);
+        world.setWeatherDuration(0);
+        world.setThundering(false);
+        world.setTime(0);
+        world.setPVP(false);
+        VersionUtils.getVersionUtils().setGameRuleValue(world, "doFireTick", false);
+        VersionUtils.getVersionUtils().setGameRuleValue(world, "reducedDebugInfo", true);
+        VersionUtils.getVersionUtils().setGameRuleValue(world, "naturalRegeneration", false);
+        VersionUtils.getVersionUtils().setGameRuleValue(world, "keepInventory", true);
+        VersionUtils.getVersionUtils().setGameRuleValue(world, "announceAdvancements", false);
+        world.save();
 
-            if (roofed) {
-                Location biome = VersionUtils.getVersionUtils().findBiome(world);
-                x = biome.getBlockX();
-                z = biome.getBlockZ();
+        world.getWorldBorder().reset();
+
+        if (roofed) {
+            VersionUtils.getVersionUtils().findBiome(world)
+                    .thenAccept(location -> BukkitUtils
+                            .scheduleSyncDelayedTask(() -> this
+                                    .generatePlatform(world, location.getBlockX(), location.getBlockZ())));
+        }
+        else{
+            this.generatePlatform(world, world.getSpawnLocation().getBlockX(), world.getSpawnLocation().getBlockZ());
+        }
+    }
+
+    private void generatePlatform(World world, int x, int z) {
+
+        world.setSpawnLocation(x, 151, z);
+
+        for (int i = -16; i <= 16; i++) {
+
+            for (int j = -16; j <= 16; j++) {
+                Location location1 = new Location(world, i + x, 150, j + z);
+                Location location2 = new Location(world, i + x, 154, j + z);
+
+                location1.getBlock().setType(Material.BARRIER, false);
+                location2.getBlock().setType(Material.BARRIER, false);
             }
-            world.setSpawnLocation(x, 151, z);
+            for (int j = 151; j < 154; j++) {
 
-            for (int i = -16; i <= 16; i++) {
+                Location location1 = new Location(world, i + x, j, z - 16);
+                Location location2 = new Location(world, i + x, j, z + 16);
+                Location location3 = new Location(world, x - 16, j, i + z);
+                Location location4 = new Location(world, x + 16, j, i + z);
 
-                for (int j = -16; j <= 16; j++) {
-
-                    new Location(world, i + x, 150, j + z).getBlock().setType(Material.BARRIER);
-                    new Location(world, i + x, 154, j + z).getBlock().setType(Material.BARRIER);
-                }
-                for (int j = 151; j < 154; j++) {
-                    new Location(world, i + x, j, z - 16).getBlock().setType(Material.BARRIER);
-                    new Location(world, i + x, j, z + 16).getBlock().setType(Material.BARRIER);
-                    new Location(world, x - 16, j, i + z).getBlock().setType(Material.BARRIER);
-                    new Location(world, x + 16, j, i + z).getBlock().setType(Material.BARRIER);
-                }
+                location1.getBlock().setType(Material.BARRIER, false);
+                location2.getBlock().setType(Material.BARRIER, false);
+                location3.getBlock().setType(Material.BARRIER, false);
+                location4.getBlock().setType(Material.BARRIER, false);
             }
-        } catch (Exception ignored) {
         }
     }
 
@@ -239,23 +252,7 @@ public class MapManager implements IMapManager {
         world.getWorldBorder().reset();
 
         if (main.getConfig().getBoolean("default_lobby")) {
-
-            world.setSpawnLocation(x, 151, z);
-
-            for (int i = -16; i <= 16; i++) {
-
-                for (int j = -16; j <= 16; j++) {
-
-                    new Location(world, i + x, 150, j + z).getBlock().setType(Material.BARRIER);
-                    new Location(world, i + x, 154, j + z).getBlock().setType(Material.BARRIER);
-                }
-                for (int j = 151; j < 154; j++) {
-                    new Location(world, i + x, j, z - 16).getBlock().setType(Material.BARRIER);
-                    new Location(world, i + x, j, z + 16).getBlock().setType(Material.BARRIER);
-                    new Location(world, x - 16, j, i + z).getBlock().setType(Material.BARRIER);
-                    new Location(world, x + 16, j, i + z).getBlock().setType(Material.BARRIER);
-                }
-            }
+            this.generatePlatform(world, x, z);
         }
     }
 }

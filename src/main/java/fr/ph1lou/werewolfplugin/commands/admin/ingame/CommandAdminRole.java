@@ -122,7 +122,9 @@ public class CommandAdminRole implements ICommand {
             IAffectedPlayers affectedPlayers = (IAffectedPlayers) targetWW.getRole();
 
             for (IPlayerWW playerWW1 : affectedPlayers.getAffectedPlayers()) {
-                sb.append(playerWW1.getName()).append(" ");
+                if(playerWW1 != null){
+                    sb.append(playerWW1.getName()).append(" ");
+                }
             }
             if (sb.length() != 0) {
                 player.sendMessage(game.translate("werewolf.commands.admin.role.affected",

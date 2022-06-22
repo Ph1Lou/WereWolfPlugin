@@ -14,6 +14,7 @@ import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import fr.ph1lou.werewolfplugin.roles.villagers.Villager;
 import fr.ph1lou.werewolfplugin.utils.MessageAction;
+import io.papermc.lib.PaperLib;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -359,7 +360,7 @@ public class PlayerWW implements IPlayerWW {
         Player player = Bukkit.getPlayer(uuid);
 
         if (player != null) {
-            player.teleport(location);
+            PaperLib.teleportAsync(player, location);
             return;
         }
         this.tpWhenDisconnected = true;

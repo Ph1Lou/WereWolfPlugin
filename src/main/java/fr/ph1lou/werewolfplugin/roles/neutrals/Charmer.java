@@ -42,9 +42,9 @@ import java.util.stream.Collectors;
         category = Category.NEUTRAL,
         attributes = RoleAttribute.NEUTRAL,
         timers = @Timer(key = TimerBase.CHARMER_COUNTDOWN,
-                defaultValue = 6000, meetUpValue = 3000,
+                defaultValue = 6000, meetUpValue = 1200,
         decrementAfterRole = true),
-        incompatibleRoles = {RoleBase.SCAMMER})
+        incompatibleRoles = RoleBase.SCAMMER)
 public class Charmer extends RoleNeutral implements IPower, IAffectedPlayers {
 
     @Nullable
