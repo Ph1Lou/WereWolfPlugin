@@ -46,7 +46,7 @@ public class Hunter extends RoleVillage implements IPower {
                 .setDescription(game.translate("werewolf.roles.hunter.description"))
                 .setItems(game.translate("werewolf.roles.hunter.items"))
                 .setEffects(game.translate("werewolf.roles.hunter.effect", Formatter.format("&number&", 0.5 + damageBonus)));
-        if (game.getConfig().isConfigActive("werewolf.roles.hunter.can_shoot")) {
+        if (game.getConfig().isConfigActive(ConfigBase.HUNTER_CAN_SHOOT)) {
             descBuilder = descBuilder.addExtraLines(game.translate("werewolf.roles.hunter.description_shoot"));
         }
         return descBuilder.build();
@@ -67,7 +67,7 @@ public class Hunter extends RoleVillage implements IPower {
         IPlayerWW playerWW = event.getPlayerWW();
 
         if (playerWW.equals(this.getPlayerWW())) {
-            if (game.getConfig().isConfigActive("werewolf.roles.hunter.can_shoot")) {
+            if (game.getConfig().isConfigActive(ConfigBase.HUNTER_CAN_SHOOT)) {
                 this.setPower(true);
                 getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.hunter.perform");
                 BukkitUtils.scheduleSyncDelayedTask(() -> {

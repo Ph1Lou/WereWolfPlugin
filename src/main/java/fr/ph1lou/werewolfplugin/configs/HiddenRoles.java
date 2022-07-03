@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Configuration(config = @ConfigurationBasic(key = ConfigBase.HIDDEN_ROLES,
-        loreKey = "werewolf.hidden_roles.description"))
+        loreKey = "werewolf.configurations.hidden_roles.description"))
 public class HiddenRoles extends ListenerWerewolf {
 
     @Nullable
@@ -75,30 +75,30 @@ public class HiddenRoles extends ListenerWerewolf {
 
         if (playerWW.getRole().isNeutral()) {
             if (this.playerWW.isState(StatePlayer.ALIVE) && getGame().getRandom().nextFloat() > 0.95) {
-                event.setRole("werewolf.hidden_roles.magic");
+                event.setRole("werewolf.configurations.hidden_roles.magic");
             }
         } else if (getGame().getRandom().nextFloat() < 0.8) {
 
             if (this.playerWW.isState(StatePlayer.ALIVE)) {
                 if(playerWW.getRole().isWereWolf()){
-                    event.setRole("werewolf.hidden_roles.magic");
+                    event.setRole("werewolf.configurations.hidden_roles.magic");
                 }
 
             }
             else{
                 if(!playerWW.getRole().isWereWolf()){
-                    event.setRole("werewolf.hidden_roles.magic");
+                    event.setRole("werewolf.configurations.hidden_roles.magic");
                 }
             }
         } else {
             if (this.playerWW.isState(StatePlayer.ALIVE)) {
                 if(!playerWW.getRole().isWereWolf()){
-                    event.setRole("werewolf.hidden_roles.magic");
+                    event.setRole("werewolf.configurations.hidden_roles.magic");
                 }
             }
             else{
                 if(playerWW.getRole().isWereWolf()){
-                    event.setRole("werewolf.hidden_roles.magic");
+                    event.setRole("werewolf.configurations.hidden_roles.magic");
                 }
             }
         }

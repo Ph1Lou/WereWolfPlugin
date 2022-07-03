@@ -42,7 +42,6 @@ public class Amnesic extends ListenerWerewolf {
         super(main);
     }
 
-
     @EventHandler(priority = EventPriority.LOW)
     public void onWereWolfList(WereWolfListEvent event) {
 

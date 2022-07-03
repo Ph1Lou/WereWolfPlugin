@@ -57,13 +57,28 @@ public class LanguagesGUI implements InventoryProvider {
         en.addPattern(new Pattern(DyeColor.WHITE, PatternType.STRIPE_MIDDLE));
         en.addPattern(new Pattern(DyeColor.RED, PatternType.STRAIGHT_CROSS));
         en.setDisplayName("English");
-        en.setLore(Collections.singletonList("By Jormunth"));
+        en.setLore(Collections.singletonList("By Jormunth and Havwilla"));
+
+
+        ItemBuilder it = new ItemBuilder(UniversalMaterial.WHITE_BANNER.getStack());
+        it.addPattern(new Pattern(DyeColor.GREEN, PatternType.STRIPE_LEFT));
+        it.addPattern(new Pattern(DyeColor.WHITE, PatternType.STRIPE_CENTER));
+        it.addPattern(new Pattern(DyeColor.RED, PatternType.STRIPE_RIGHT));
+        it.setDisplayName("Italiano");
+        it.setLore(Collections.singletonList("Di MarioMatto22"));
+
+
         contents.set(0, 2, ClickableItem.of((en.build()), e -> {
             game.setLangage("en_EN");
             LanguagesGUI.INVENTORY.open(player);
         }));
         contents.set(0, 4, ClickableItem.of((fr.build()), e -> {
             game.setLangage("fr_FR");
+            LanguagesGUI.INVENTORY.open(player);
+        }));
+
+        contents.set(0, 6, ClickableItem.of((fr.build()), e -> {
+            game.setLangage("it_IT");
             LanguagesGUI.INVENTORY.open(player);
         }));
     }

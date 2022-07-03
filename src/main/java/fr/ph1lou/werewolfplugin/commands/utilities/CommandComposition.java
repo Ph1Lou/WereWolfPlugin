@@ -31,6 +31,7 @@ public class CommandComposition implements ICommand {
         }
 
         StringBuilder sb = new StringBuilder(game.translate("werewolf.commands.player.compo._"));
+        sb.append('\n');
         sb.append(ChatColor.WHITE);
         if (game.getConfig().getLoverCount(LoverBase.LOVER) > 0) {
             sb.append(LoverType.LOVER.getChatColor()).append(game.translate(LoverBase.LOVER)).append(ChatColor.WHITE);

@@ -84,6 +84,7 @@ public class Exposed extends ListenerWerewolf {
                 .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                 .filter(playerWW1 -> !playerWW.equals(playerWW1))
                 .map(IPlayerWW::getRole)
+                .filter(iRole -> !iRole.isKey(playerWW.getRole().getKey()))
                 .filter(roles -> !roles.isCamp(playerWW.getRole().getCamp()))
                 .collect(Collectors.toList());
 
@@ -95,7 +96,8 @@ public class Exposed extends ListenerWerewolf {
                 .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                 .filter(playerWW1 -> !playerWW.equals(playerWW1))
                 .map(IPlayerWW::getRole)
-                .filter(roles -> !roles.equals(role1))
+                .filter(roles -> !roles.isKey(role1.getKey()))
+                .filter(iRole -> !iRole.isKey(playerWW.getRole().getKey()))
                 .collect(Collectors.toList());
 
         if (role2List.isEmpty()) return null;

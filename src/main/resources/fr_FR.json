@@ -1147,7 +1147,7 @@
           "command": "compo",
           "description": "Pour voir la composition",
           "composition_hide": "La Composition est cachée",
-          "_": "§6================================\n"
+          "_": "§6================================"
         },
         "aura": {
           "command": "aura",
@@ -1806,7 +1806,7 @@
       "addons": "Rôles Addons"
     },
     "description": {
-      "_": "§b================================\n",
+      "_": "§b================================",
       "doc": "https://docs.google.com/spreadsheets/d/1jkos7zslxBl6NCWy4FXuQXtFkvtPLa9e6UOlpmcsDm0/edit?usp=sharing",
       "role": "§fVous êtes §b&role&\n",
       "description": "§bDescription :§f &text&\n",

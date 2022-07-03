@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 
 @Event(key = EventBase.NOTALLWEREWOLFS, loreKey = "werewolf.random_events.not_all_werewolfs.description")
 public class NotAllWereWolfs extends ListenerWerewolf {
+
     public NotAllWereWolfs(WereWolfAPI game) {
         super(game);
     }

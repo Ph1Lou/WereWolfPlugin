@@ -29,7 +29,6 @@ public class BorderData
 		setData(x, z, radiusX, radiusZ, shapeRound, wrap);
 	}
 
-
 	public final void setData(double x, double z, int radiusX, int radiusZ, Boolean shapeRound, boolean wrap)
 	{
 		this.x = x;

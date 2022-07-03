@@ -138,7 +138,7 @@ public class PlayerWW implements IPlayerWW {
         Player player = Bukkit.getPlayer(this.uuid);
 
         if (player != null) {
-            player.setHealth(player.getHealth() - health);
+            player.setHealth(Math.min(0, player.getHealth() - health));
             return;
         }
 
