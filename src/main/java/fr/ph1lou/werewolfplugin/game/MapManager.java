@@ -54,15 +54,12 @@ public class MapManager implements IMapManager {
     @Override
     public void generateMap(int mapRadius) {
 
-        int chunksPerRun = 80;
+        if (world == null) {
+            createMap();
+        }
+        int chunksPerRun = 20;
         if (wft == null || wft.getPercentageCompleted() == 100) {
-            wft = new WorldFillTask(
-                    Bukkit.getServer(),
-                    world.getName(),
-                    chunksPerRun,
-                    false,
-                    mapRadius);
-
+            wft = new WorldFillTask(world, chunksPerRun, mapRadius);
             wft.setTaskID(BukkitUtils.scheduleSyncRepeatingTask(wft, 1, 1));
         }
     }
@@ -119,7 +116,7 @@ public class MapManager implements IMapManager {
         }
 
         if (wft != null) {
-            wft.cancel();
+            wft.stop();
             wft = null;
         }
 
@@ -196,7 +193,7 @@ public class MapManager implements IMapManager {
     public void changeBorder(int mapRadius) {
 
         if (wft != null) {
-            wft.cancel();
+            wft.stop();
             wft = null;
             generateMap(mapRadius);
         }

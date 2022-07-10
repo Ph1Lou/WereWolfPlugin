@@ -39,12 +39,13 @@
     "roles": {
       "mire": {
         "display": "Mire",
-        "desc": "Lorsqu’il mange une pomme d’or, il connaît le pseudo du joueur le plus bas en vie (en % par rapport à sa vie maximale).\nQuand un joueur proche (moins de 60 blocs) passe en-dessous de 3 ♥, il reçoit un message.\nIl obtient 1 ♥ d’Absorption à chaque fois qu’il tombe en-dessous de 3 ♥",
+        "description": "Lorsque vous mangez une pomme d’or, vous connaîssez le pseudo du joueur le plus bas en vie (en % par rapport à sa vie maximale).\nQuand un joueur proche (moins de &number& blocs) passe en-dessous de 3 ♥, vous recevez un message.",
+        "effect": "2 ♥ d’Absorption en-dessous de 3 ♥",
         "min_health": "Le joueur &player& est le plus bas niveau vie.",
-        "all_full": "Tous les joueurs sont full vie.",
-        "warning_death": "Un joueur à moins de 60 blocs de vous est sur le point de mourir !",
+        "all_full": "Tous les joueurs ont leur vie remplie ou il n'y a personne dans les alentours (§b&number&§f blocs).",
+        "warning_death": "Un joueur à moins de &number& blocs de vous est sur le point de mourir !",
         "configurations": {
-          "distance": "Champ d'action du mire §b&number&§r"
+          "distance": "Champ d'action du Mire §b&number&§r"
         }
       },
       "serial_killer": {

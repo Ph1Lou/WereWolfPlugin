@@ -96,9 +96,12 @@ import fr.ph1lou.werewolfapi.events.roles.interpreter.InterpreterEvent;
 import fr.ph1lou.werewolfapi.events.roles.librarian.LibrarianDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.librarian.LibrarianGiveBackEvent;
 import fr.ph1lou.werewolfapi.events.roles.librarian.LibrarianRequestEvent;
+import fr.ph1lou.werewolfapi.events.roles.mire.MireEatGappleEvent;
+import fr.ph1lou.werewolfapi.events.roles.mire.MireNearbyPlayerUnderThreeHeartEvent;
+import fr.ph1lou.werewolfapi.events.roles.mire.MireUnderThreeHeartsEvent;
 import fr.ph1lou.werewolfapi.events.roles.mystical_werewolf.MysticalWerewolfRevelationEvent;
 import fr.ph1lou.werewolfapi.events.roles.necromancer.NecromancerResurrectionEvent;
-import fr.ph1lou.werewolfapi.events.roles.occultist.OccultistRevealWishes;
+import fr.ph1lou.werewolfapi.events.roles.occultist.OccultistRevealWishesEvent;
 import fr.ph1lou.werewolfapi.events.roles.occultist.WishChangeEvent;
 import fr.ph1lou.werewolfapi.events.roles.oracle.OracleEvent;
 import fr.ph1lou.werewolfapi.events.roles.priestess.PriestessEvent;
@@ -546,7 +549,7 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.see_werewolf.configurations.vote",
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.see_werewolf.vote",
                 playerWW, event.getTargetWW(), api.getTimer()));
     }
 
@@ -556,7 +559,7 @@ public class Events implements Listener {
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
         IPlayerWW targetWW = event.getTargetWW();
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.configurations.vote",
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.vote",
                 playerWW, targetWW, api.getTimer()));
     }
 
@@ -604,7 +607,7 @@ public class Events implements Listener {
 
         WereWolfAPI api = main.getWereWolfAPI();
         IPlayerWW playerWW = event.getPlayerWW();
-        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.configurations.vote_result",
+        main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.vote_result",
                 playerWW, api.getTimer()));
     }
 
@@ -1280,7 +1283,7 @@ public class Events implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onRevealWishes(OccultistRevealWishes event) {
+    public void onRevealWishes(OccultistRevealWishesEvent event) {
 
         main.getCurrentGameReview().addRegisteredAction(new RegisteredAction("werewolf.reveal_wishes_occultist",
                 event.getPlayerWW(), main.getWereWolfAPI().getTimer()));
@@ -1391,9 +1394,9 @@ public class Events implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onRumorsEnable(RumorsEvent event) {
-                main.getCurrentGameReview()
+        main.getCurrentGameReview()
                 .addRegisteredAction(new RegisteredAction("werewolf.rumors_event",
-                         main.getWereWolfAPI().getTimer()));
+                        main.getWereWolfAPI().getTimer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -1404,5 +1407,31 @@ public class Events implements Listener {
                         event.getPlayerWW(),
                         main.getWereWolfAPI().getTimer(),
                         event.getMessage()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onMireEatGapple(MireEatGappleEvent event) {
+        main.getCurrentGameReview()
+                .addRegisteredAction(new RegisteredAction("werewolf.mire_eat_gapple",
+                        event.getPlayerWW(),
+                        event.getTargetWW(),
+                        main.getWereWolfAPI().getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onMireUnderThreeHeartsEvent(MireUnderThreeHeartsEvent event) {
+        main.getCurrentGameReview()
+                .addRegisteredAction(new RegisteredAction("werewolf.mire_under_three_hearts",
+                        event.getPlayerWW(),
+                        main.getWereWolfAPI().getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onMireNearbyPlayerUnderThreeHeartEvent(MireNearbyPlayerUnderThreeHeartEvent event) {
+        main.getCurrentGameReview()
+                .addRegisteredAction(new RegisteredAction("werewolf.mire_nearby_player",
+                        event.getPlayerWW(),
+                        event.getTargetWW(),
+                        main.getWereWolfAPI().getTimer()));
     }
 }

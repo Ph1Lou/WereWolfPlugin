@@ -9,7 +9,7 @@ import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
-import fr.ph1lou.werewolfapi.events.roles.occultist.OccultistRevealWishes;
+import fr.ph1lou.werewolfapi.events.roles.occultist.OccultistRevealWishesEvent;
 import fr.ph1lou.werewolfapi.events.roles.occultist.WishChangeEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -57,7 +57,7 @@ public class Occultist extends Villager{
         }
         this.addDeathPlayer(event.getPlayerWW());
         if(this.deaths.size() == 4){
-            OccultistRevealWishes occultistRevealWishes = new OccultistRevealWishes(this.getPlayerWW());
+            OccultistRevealWishesEvent occultistRevealWishes = new OccultistRevealWishesEvent(this.getPlayerWW());
             Bukkit.getPluginManager().callEvent(occultistRevealWishes);
             if(occultistRevealWishes.isCancelled()){
                 getPlayerWW().sendMessageWithKey(Prefix.ORANGE, "werewolf.check.cancel");
