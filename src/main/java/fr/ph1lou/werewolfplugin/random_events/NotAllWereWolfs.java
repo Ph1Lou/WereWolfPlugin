@@ -67,7 +67,9 @@ public class NotAllWereWolfs extends ListenerWerewolf {
         IPlayerWW playerWW = this.getGame().getPlayerWW(event.getPlayerUUID()).orElse(null);
 
         if (playerWW == null) return;
+
         if(!playerWW.isState(StatePlayer.DEATH)) return;
+
         if(!this.isDefaultWereWolf(playerWW)) return;
 
         if (this.getGame().getConfig().isConfigActive(ConfigBase.SHOW_ROLE_TO_DEATH)) {
