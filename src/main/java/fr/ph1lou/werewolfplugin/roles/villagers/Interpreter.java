@@ -189,7 +189,8 @@ public class Interpreter extends RoleVillage implements IPower {
     }
 
     public boolean isRoleValid(String roleKey){
-        return this.roles.stream().anyMatch(roleRegister -> roleRegister.getMetaDatas().key().equals(roleKey));
+        return this.roles.stream()
+                .anyMatch(roleRegister -> roleRegister.getMetaDatas().key().equals(roleKey));
     }
 
     public void activateRole(String roleKey){
@@ -202,6 +203,13 @@ public class Interpreter extends RoleVillage implements IPower {
                             .getConstructor(WereWolfAPI.class,
                                     IPlayerWW.class).newInstance(game,
                             this.getPlayerWW());
+
+                    if(this.isWereWolf()){
+                        role.setInfected();
+                    }
+                    if(this.isNeutral()){
+                        role.setTransformedToNeutral(true);
+                    }
 
                     role.recoverPotionEffects();
 
