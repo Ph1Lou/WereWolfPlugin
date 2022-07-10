@@ -41,7 +41,11 @@
         "display": "Mire",
         "desc": "Lorsqu’il mange une pomme d’or, il connaît le pseudo du joueur le plus bas en vie (en % par rapport à sa vie maximale).\nQuand un joueur proche (moins de 60 blocs) passe en-dessous de 3 ♥, il reçoit un message.\nIl obtient 1 ♥ d’Absorption à chaque fois qu’il tombe en-dessous de 3 ♥",
         "min_health": "Le joueur &player& est le plus bas niveau vie.",
-        "warning_death": "Un joueur à moins de 60 blocs de vous est sur le point de mourir !"
+        "all_full": "Tous les joueurs sont full vie.",
+        "warning_death": "Un joueur à moins de 60 blocs de vous est sur le point de mourir !",
+        "configurations": {
+          "distance": "Champ d'action du mire §b&number&§r"
+        }
       },
       "serial_killer": {
         "display": "Tueur en Série",
