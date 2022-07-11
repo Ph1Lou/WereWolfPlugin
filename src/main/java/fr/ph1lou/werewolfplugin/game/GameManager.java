@@ -77,7 +77,6 @@ public class GameManager implements WereWolfAPI {
     private boolean crack = false;
     private int roleInitialSize = 0;
 
-
     private GameManager(Main main) {
         this.main = main;
     }
@@ -104,14 +103,14 @@ public class GameManager implements WereWolfAPI {
 
         UUID uuid = player.getUniqueId();
 
-        if (moderationManager.getWhiteListedPlayers().contains(uuid)) {
+        if (this.moderationManager.getWhiteListedPlayers().contains(uuid)) {
             finalJoin(player);
-        } else if (this.getPlayersCount() >= configuration.getPlayerMax()) {
+        } else if (this.getPlayersCount() >= this.configuration.getPlayerMax()) {
             player.sendMessage(translate(Prefix.RED , "werewolf.check.full"));
-            moderationManager.addQueue(player);
-        } else if (configuration.isWhiteList()) {
+            this.moderationManager.addQueue(player);
+        } else if (this.configuration.isWhiteList()) {
             player.sendMessage(translate(Prefix.RED , "werewolf.commands.admin.whitelist.player_not_whitelisted"));
-            moderationManager.addQueue(player);
+            this.moderationManager.addQueue(player);
         } else {
             finalJoin(player);
         }
