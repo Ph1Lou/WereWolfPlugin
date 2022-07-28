@@ -188,8 +188,9 @@ public class MapManager implements IMapManager {
             }
         }
 
-        generateMap(game.getConfig().getBorderMax()/2);
-
+        if(world.equals(this.world)){
+            generateMap(game.getConfig().getBorderMax()/2);
+        }
     }
 
     @Override

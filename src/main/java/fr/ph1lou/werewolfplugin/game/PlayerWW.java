@@ -94,6 +94,9 @@ public class PlayerWW implements IPlayerWW {
             return;
         }
 
+        float defaultWalkSpeed = 0.2f;
+        player.setWalkSpeed(defaultWalkSpeed);
+
         PlayerInventory inventory = player.getInventory();
         VersionUtils.getVersionUtils().setPlayerMaxHealth(player, 20);
         player.setHealth(20);
