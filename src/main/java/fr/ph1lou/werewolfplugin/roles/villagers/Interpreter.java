@@ -31,6 +31,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -48,6 +49,8 @@ public class Interpreter extends RoleVillage implements IPower {
 
     private boolean power = false;
     private final Set<Wrapper<IRole, Role>> roles = new HashSet<>();
+    @Nullable
+    private IRole role;
 
     public Interpreter(WereWolfAPI game, IPlayerWW playerWW) {
         super(game, playerWW);
@@ -131,6 +134,10 @@ public class Interpreter extends RoleVillage implements IPower {
             return;
         }
 
+        if(this.used){
+            return; //Si encore avec le rôle
+        }
+
         BukkitUtils.scheduleSyncDelayedTask(() -> {
             if(!this.isAbilityEnabled()){
                 return;
@@ -188,6 +195,36 @@ public class Interpreter extends RoleVillage implements IPower {
 
     }
 
+    private boolean used = false;
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onDayEnd(DayEvent event) {
+
+        if(this.getPlayerWW().getRole().equals(this)){
+            return; // Si interprete ne fait rien sinon redevient interprete
+        }
+
+        if(this.role == null){
+            return;
+        }
+
+        if(!this.used){
+            this.used = true;
+            return;
+        }
+
+        if (!game.isState(StateGame.END) && !this.getPlayerWW().isState(StatePlayer.DEATH)) {
+            HandlerList.unregisterAll(this.role);
+            this.role = null;
+            this.getPlayerWW().clearPotionEffects(this.getPlayerWW().getRole().getKey());
+            this.getPlayerWW().setRole(this);
+
+            Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
+            this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,"werewolf.roles.interpreter.end");
+            this.used = false;
+        }
+    }
+
     public boolean isRoleValid(String roleKey){
         return this.roles.stream()
                 .anyMatch(roleRegister -> roleRegister.getMetaDatas().key().equals(roleKey));
@@ -199,7 +236,7 @@ public class Interpreter extends RoleVillage implements IPower {
             if (roleRegister.getMetaDatas().key().equals(roleKey)) {
 
                 try {
-                    IRole role = roleRegister.getClazz()
+                    this.role = roleRegister.getClazz()
                             .getConstructor(WereWolfAPI.class,
                                     IPlayerWW.class).newInstance(game,
                             this.getPlayerWW());
@@ -218,18 +255,6 @@ public class Interpreter extends RoleVillage implements IPower {
                     this.getPlayerWW().setRole(role);
 
                     Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
-
-                    BukkitUtils.scheduleSyncDelayedTask(() -> {
-
-                        if (!game.isState(StateGame.END) && !this.getPlayerWW().isState(StatePlayer.DEATH)) {
-                            HandlerList.unregisterAll(role);
-                            this.getPlayerWW().clearPotionEffects(this.getPlayerWW().getRole().getKey());
-                            this.getPlayerWW().setRole(this);
-
-                            Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
-                            this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,"werewolf.roles.interpreter.end");
-                        }
-                    }, (long) (game.getConfig().getTimerValue(TimerBase.DAY_DURATION) * 20 * 1.6));
 
                     this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.interpreter.perform",
                             Formatter.role(game.translate(roleKey)));

@@ -126,7 +126,8 @@ public class DevotedServant extends RoleVillage implements IPower, IAffectedPlay
         }
 
         if(event.getPlayerWW().getLastKiller().isPresent() &&
-                event.getPlayerWW().getLastKiller().get().equals(this.getPlayerWW())){
+                (event.getPlayerWW().getLastKiller().get().equals(this.getPlayerWW())
+                || event.getPlayerWW().getLastKiller().get().getRole().isKey(RoleBase.GRIMY_WEREWOLF))){
             return;
         }
 

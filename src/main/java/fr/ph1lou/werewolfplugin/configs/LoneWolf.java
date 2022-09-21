@@ -63,7 +63,7 @@ public class LoneWolf extends ListenerWerewolf {
         role.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.configurations.lone_wolf.message");
 
         if (role.getPlayerWW().getMaxHealth() < 30) {
-            role.getPlayerWW().addPlayerMaxHealth(Math.min(8, 30 - role.getPlayerWW().getMaxHealth()));
+            role.getPlayerWW().addPlayerMaxHealth(Math.max(0, Math.min(8, 30 - role.getPlayerWW().getMaxHealth())));
         }
         role.setSolitary(true);
         register(false);

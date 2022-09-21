@@ -21,6 +21,7 @@ import org.bukkit.WorldType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -216,11 +217,17 @@ public class MapManager implements IMapManager {
 
         WorldBorder wb = world.getWorldBorder();
 
-        int x = (int) (Math.round(wb.getSize() / 3 * Math.cos(d) + world.getSpawnLocation().getX()));
-        int z = (int) (Math.round(wb.getSize() / 3 * Math.sin(d) + world.getSpawnLocation().getZ()));
+        double radius = wb.getSize() / 3;
 
+        if(radius <= 50){
+            playerWW.teleport(this.world.getSpawnLocation().add(new Vector(0, -3, 0)));
+        }
+        else {
+            int x = (int) (Math.round(radius * Math.cos(d) + world.getSpawnLocation().getX()));
+            int z = (int) (Math.round(radius * Math.sin(d) + world.getSpawnLocation().getZ()));
+            playerWW.teleport(new Location(world, x, world.getHighestBlockYAt(x, z) + 100, z));
+        }
         playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.WITHER, 400, 0,NO_FALL));
-        playerWW.teleport(new Location(world, x, world.getHighestBlockYAt(x, z) + 100, z));
     }
 
     @Override
