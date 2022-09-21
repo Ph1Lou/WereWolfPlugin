@@ -31,7 +31,7 @@ public class Benefactor extends RoleVillage implements IAffectedPlayers {
                 .setDescription(this.game.translate("werewolf.roles.benefactor.description"))
                 .setItems(this.game.translate("werewolf.roles.benefactor.items"))
                 .setCommand(this.game.translate("werewolf.roles.benefactor.command_description"))
-                .setEffects(game.translate("werewolf.roles.benefactor.effect"))
+                .setEffects(this.game.translate("werewolf.roles.benefactor.effect"))
                 .build();
     }
 

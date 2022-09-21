@@ -24,7 +24,7 @@ import org.bukkit.event.EventPriority;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Event(key = EventBase.NOTALLWEREWOLFS, loreKey = "werewolf.random_events.not_all_werewolfs.description")
+@Event(key = EventBase.NOT_ALL_WEREWOLFS, loreKey = "werewolf.random_events.not_all_werewolfs.description")
 public class NotAllWereWolfs extends ListenerWerewolf {
 
     public NotAllWereWolfs(WereWolfAPI game) {

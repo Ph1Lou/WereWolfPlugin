@@ -1763,6 +1763,17 @@
       "not_all_werewolfs": {
         "name": "Not All Loups",
         "description": "Quand un Loup (quel qu’il soit) meurt, il apparaît comme \"Loup-Garou\" dans son message de mort.\nLa composition affichée indique uniquement le nombre total de Loups-Garous."
+      },
+      "wolf_fleas": {
+        "name": "Puces de Loups",
+        "description": "Chaque joueur Loups en début de partie reçoit à un instant aléatoire à partir de &timer_start& et pendant &period& un message lui indiquant qu’il a attrapé des puces.\nDès lors, après &duration& cumulées passées à côté de tout joueur non-Loup, celui-ci saura qu’un LG est proche de lui.\nPour se débarrasser définitivement de ses puces, un Loup doit plonger entièrement dans l’eau sans armure.",
+        "target_message": "Quelque chose vous gratte...",
+        "werewolf_message": "Vous attrapez des puces ! Vous devez plonger entièrement dans l'eau et sans armure pour vous en débarrasser",
+        "cleaned": "Vous perdez vos puces",
+        "timer_start": "Début du déclenchement (§b&timer&§f)",
+        "period": "Période de déclenchement de l'event (§b&timer&§f)",
+        "duration": "Durée avant propagation des puces (§b&timer&§f)",
+        "distance": "Distance de propagation des puces §b&number&"
       }
     },
     "check": {
