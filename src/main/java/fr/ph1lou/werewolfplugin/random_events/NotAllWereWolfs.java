@@ -31,7 +31,7 @@ public class NotAllWereWolfs extends ListenerWerewolf {
         super(game);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onRoles(RepartitionEvent event) {
         List<IRole> defaultWereWolfs = this.getGame().getPlayersWW().stream()
                 .filter(this::isDefaultWereWolf)

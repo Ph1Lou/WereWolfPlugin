@@ -20,9 +20,12 @@ import fr.ph1lou.werewolfplugin.statistiks.Events;
 import fr.ph1lou.werewolfplugin.statistiks.StatistiksUtils;
 import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.JavaPluginLoader;
 
+import java.io.File;
 import java.util.List;
 import java.util.Objects;
 
@@ -39,6 +42,16 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
     private Register registerManager;
     private final InventoryManager invManager = new InventoryManager(this);
     private GameReview currentGameReview;
+
+    public Main()
+    {
+        super();
+    }
+
+    protected Main(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file)
+    {
+        super(loader, description, dataFolder, file);
+    }
 
     @Override
     public InventoryManager getInvManager() {

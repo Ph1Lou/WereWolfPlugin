@@ -1766,7 +1766,7 @@
       },
       "wolf_fleas": {
         "name": "Puces de Loups",
-        "description": "Chaque joueur Loups en début de partie reçoit à un instant aléatoire à partir de &timer_start& et pendant &period& un message lui indiquant qu’il a attrapé des puces.\nDès lors, après &duration& cumulées passées à côté de tout joueur non-Loup, celui-ci saura qu’un LG est proche de lui.\nPour se débarrasser définitivement de ses puces, un Loup doit plonger entièrement dans l’eau sans armure.",
+        "description": "Chaque joueur Loups en début de partie reçoit\n à un instant aléatoire à partir de §b&timer_start&§f et pendant §b&period&§f\n un message lui indiquant qu’il a attrapé des puces.\nDès lors, après &duration& cumulées passées à côté de tout joueur non-Loup, \ncelui-ci saura qu’un LG est proche de lui.\nPour se débarrasser définitivement de ses puces, \nun Loup doit plonger entièrement dans l’eau sans armure.",
         "target_message": "Quelque chose vous gratte...",
         "werewolf_message": "Vous attrapez des puces ! Vous devez plonger entièrement dans l'eau et sans armure pour vous en débarrasser",
         "cleaned": "Vous perdez vos puces",

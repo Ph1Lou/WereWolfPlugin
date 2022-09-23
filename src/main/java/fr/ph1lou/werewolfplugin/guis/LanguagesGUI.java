@@ -77,7 +77,7 @@ public class LanguagesGUI implements InventoryProvider {
             LanguagesGUI.INVENTORY.open(player);
         }));
 
-        contents.set(0, 6, ClickableItem.of((fr.build()), e -> {
+        contents.set(0, 6, ClickableItem.of((it.build()), e -> {
             game.setLangage("it_IT");
             LanguagesGUI.INVENTORY.open(player);
         }));

@@ -82,15 +82,14 @@ public class WolfFleas extends ListenerWerewolf {
                             && player.getInventory().getLeggings() == null
                             && player.getInventory().getBoots() == null;
                 })
-                .filter(p -> p.getLocation().getBlock().getType() == Material.WATER
-                        && p.getLocation().clone().add(0, 1, 0).getBlock().getType() == Material.WATER)
+                .filter(p -> p.getEyeLocation().getBlock().getType() == Material.WATER)
                 .forEach(p -> {
                     p.sendMessageWithKey(Prefix.GREEN, "werewolf.random_events.wolf_fleas.cleaned");
                     this.fleas.remove(p);
                 });
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onRepartition(RepartitionEvent event) {
         List<IPlayerWW> defaultWereWolfs = this.getGame()
                 .getPlayersWW().stream()

@@ -67,7 +67,7 @@ public class StatistiksUtils {
                 }
 
                 messages = Arrays.stream(new Gson().fromJson(response.toString(), String[].class))
-                        .map(s -> game.translate(Prefix.LIGHT_BLUE)+" "+s).collect(Collectors.toList());
+                        .map(s -> game.translate(Prefix.LIGHT_BLUE)+s).collect(Collectors.toList());
             } catch (Exception ignored) {
             }
         } catch (IOException ignored) {

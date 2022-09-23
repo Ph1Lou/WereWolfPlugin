@@ -69,7 +69,10 @@ public class CycleListener implements Listener {
         if(event.getNumber()%2==0){
             BukkitUtils.scheduleSyncDelayedTask(() -> {
                 if(!game.isState(StateGame.END)){
-                    Bukkit.broadcastMessage(StatistiksUtils.getMessage());
+                    String message = StatistiksUtils.getMessage();
+                    if(!message.isEmpty()){
+                        Bukkit.broadcastMessage(message);
+                    }
                 }
             }, game.getConfig().getTimerValue(TimerBase.DAY_DURATION) * 10L);
         }
