@@ -205,7 +205,9 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
 
         if (temp >= 100) {
 
-            boolean isWereWolf = playerWW.getRole().isDisplayCamp(Camp.WEREWOLF.getKey());
+            boolean isWereWolf = playerWW.getRole().isDisplayCamp(Camp.WEREWOLF.getKey()) ||
+                    (playerWW.getRole().getDisplayCamp().equals(playerWW.getRole().getCamp().getKey()) &&
+                            playerWW.getRole().isWereWolf());
 
             SniffEvent sniffEvent = new SniffEvent(this.getPlayerWW(),
                     playerWW, isWereWolf);
@@ -227,7 +229,7 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
                 }
 
 
-                if (playerWW.getRole().isWereWolf()) {
+                if (sniffEvent.isWereWolf()) {
                     BukkitUtils.scheduleSyncDelayedTask(() -> {
                         if (game.isState(StateGame.GAME)) {
                             playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.fox.smell");

@@ -911,9 +911,9 @@
       "border": "La bordure commence à se déplacer",
       "mining": "Minage Désactivé",
       "day": "C'est le Jour §b&number&§r ✸ ",
-      "death_message_with_role": "  §b&player&§r est mort, il était §b&role&§r",
-      "death_message_with_camp": "  §b&player&§r est mort, il était dans le camp des §b&role&",
-      "death_message": "      §b&player&§r est mort",
+      "death_message_with_role": "§b&player&§r est mort, il était §b&role&§r",
+      "death_message_with_camp": "§b&player&§r est mort, il était dans le camp des §b&role&",
+      "death_message": "§b&player&§r est mort",
       "review_role": "Pour revoir la description §b/ww role",
       "troll": "Bon ok, la blague a assez duré ! Voici ton vrai role : ",
       "lover_troll": "Le troll Saint Valentin est fini, votre couple était faux",
@@ -1496,7 +1496,7 @@
         "name": "Affiche le Rôle à la Mort"
       },
       "show_role_category_to_death": {
-        "name": "Affiche la Catégorie du Rôle à la Mort"
+        "name": "Affiche le camp du Rôle à la Mort"
       },
       "vote": {
         "name": "Vote",

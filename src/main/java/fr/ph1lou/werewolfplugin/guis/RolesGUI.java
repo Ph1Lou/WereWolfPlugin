@@ -7,6 +7,8 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
+import fr.ph1lou.werewolfapi.enums.Day;
+import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.LoverBase;
@@ -298,17 +300,13 @@ public class RolesGUI implements InventoryProvider {
                     }
                 });
 
-
         InventoryUtils.fillInventory(game, items, pagination, contents, () -> getInventory(player, this.category), 36);
-
-
-
     }
 
-
-
-
     public void selectMinus(GameManager game, String key) {
+
+        if(game.isState(StateGame.GAME)) return;
+
         IConfiguration config = game.getConfig();
         if (config.getRoleCount(key) > 0) {
             game.setRoleInitialSize(game.getRoleInitialSize() - 1);
@@ -317,6 +315,9 @@ public class RolesGUI implements InventoryProvider {
     }
 
     public void selectPlus(GameManager game, String key) {
+
+        if(game.isState(StateGame.GAME)) return;
+
         IConfiguration config = game.getConfig();
         config.addOneRole(key);
         game.setRoleInitialSize(game.getRoleInitialSize() + 1);
