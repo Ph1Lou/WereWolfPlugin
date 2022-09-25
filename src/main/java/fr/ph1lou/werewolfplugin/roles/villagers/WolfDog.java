@@ -148,11 +148,6 @@ public class WolfDog extends RoleVillage implements ITransformed, IPower {
     }
 
     @Override
-    public boolean isDisplayCamp(String camp) {
-        return getDisplayCamp().equals(camp);
-    }
-
-    @Override
     public String getDisplayCamp() {
 
         if (this.transformed) {

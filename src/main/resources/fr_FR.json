@@ -744,7 +744,7 @@
         "end_of_cycle": "Vous recevez le contenu des compteurs => \nCompteur Aura §fNeutre§f: &neutral&§r.\n Compteur Aura §0Obscure§f: &dark&§r.\n Compteur Aura §eLumineuse§f: &light&",
         "configurations": {
           "distance": "Champ d'action du Vieux Sage §b&number&",
-          "begin_day": "Début du pouvoir §b&number&"
+          "begin_day": "Début du pouvoir Jour : §b&number&"
         }
       },
       "tenebrous_werewolf": {
@@ -903,6 +903,20 @@
         "reveal_pseudos": "Le pseudo du joueur que vous avez ajouté à la liste des Loups est parmi : §b&names&",
         "command": "activate",
         "perform": "Votre pouvoir a été activé"
+      },
+      "poacher": {
+        "display": "Braconnier",
+        "actionbar": "§c========§r",
+        "description": "Votre action bar se colore en rouge à - de §b&number&§f blocs d’un cadavre de Loup.\nEn y restant §b&timer&§f, vous pouvez prendre sa fourrure.\nDès la première fourrure récupérée, vous apparaissez Loup-Garou pour tous les rôles à infos.",
+        "effects": "Une fourrure : Resistance §b10%§f puis §b+3%§f de Resistance par fourrure",
+        "fur_numbers": "Nombre de fourrures : §b&number&",
+        "recover": "Vous récuperez la fourrure de §b&player&",
+        "timers": {
+          "progress": "Durée de la récupération de la fourrure §b&timer&"
+        },
+        "configurations": {
+          "distance": "Champ d'action du Braconnier §b&number&§f blocs"
+        }
       }
     },
     "announcement": {
@@ -1170,7 +1184,7 @@
             "§aAnge, Charmeuse, Feu Follet, Joueur de Flûte, §6Cupidon",
             "Rôles à aura Neutre :",
             "§cLoup-Garou Perfide, Loup-Garou Amnésique, Loup-Garou Craintif, Loup-Garou Vengeur",
-            "§bChaman, Comédien, Frère Siamois, Chasseur, Ancien, Oracle, Ermite, Garde, Détective, Petite Fille, Servante Dévouée, Mire",
+            "§bChaman, Comédien, Frère Siamois, Chasseur, Ancien, Oracle, Ermite, Garde, Détective, Petite Fille, Servante Dévouée, Mire, Braconnier",
             "§aImitateur, Barbare, §6Enfant Sauvage, Voleur, Trublion, Escroc, Voyou",
             "Rôles à aura Obscure :",
             "§cTous les autres Loups-Garous",
@@ -1551,7 +1565,8 @@
       },
       "lone_wolf": {
         "name": "Loup Solitaire",
-        "message": "Vous devenez Solitaire. A partir de maintenant,vous devez gagner Seul. Pour cela, vous bénéficiez de quatres coeurs permanents supplémentaires (dans la limite de 15 coeurs max)"
+        "message": "Vous devenez Solitaire. A partir de maintenant,vous devez gagner Seul. Pour cela, vous bénéficiez de quatres coeurs permanents supplémentaires (dans la limite de 15 coeurs max)",
+        "timer": "Durée de déclenchement du Loup Solitaire (§b&timer&§f)"
       },
       "new_vote": {
         "name": "Nouveau Vote"
@@ -1766,7 +1781,7 @@
       },
       "wolf_fleas": {
         "name": "Puces de Loups",
-        "description": "Chaque joueur Loups en début de partie reçoit\n à un instant aléatoire à partir de §b&timer_start&§f et pendant §b&period&§f\n un message lui indiquant qu’il a attrapé des puces.\nDès lors, après &duration& cumulées passées à côté de tout joueur non-Loup, \ncelui-ci saura qu’un LG est proche de lui.\nPour se débarrasser définitivement de ses puces, \nun Loup doit plonger entièrement dans l’eau sans armure.",
+        "description": "Chaque joueur Loups en début de partie reçoit\n à un instant aléatoire à partir de §b&timer_start&§f et pendant §b&period&§f\n un message lui indiquant qu’il a attrapé des puces.\nDès lors, après §b&duration&§f cumulées passées à côté de tout joueur non-Loup, \ncelui-ci saura qu’un LG est proche de lui.\nPour se débarrasser définitivement de ses puces, \nun Loup doit plonger entièrement dans l’eau sans armure.",
         "target_message": "Quelque chose vous gratte...",
         "werewolf_message": "Vous attrapez des puces ! Vous devez plonger entièrement dans l'eau et sans armure pour vous en débarrasser",
         "cleaned": "Vous perdez vos puces",

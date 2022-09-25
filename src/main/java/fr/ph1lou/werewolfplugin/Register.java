@@ -13,6 +13,7 @@ import fr.ph1lou.werewolfapi.annotations.Scenario;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.commands.ICommandRole;
+import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.lovers.ILover;
 import fr.ph1lou.werewolfapi.registers.IRegisterManager;
@@ -433,5 +434,21 @@ public class Register implements IRegisterManager {
     @Override
     public Optional<JavaPlugin> getAddon(String key) {
         return Optional.ofNullable(this.addons.get(key));
+    }
+
+    @Override
+    public Optional<Category> getCategory(String key) {
+
+        Optional<Category> category = Category.fromKey(key);
+
+        if(category.isPresent()){
+            return category;
+        }
+
+        return this.roles.stream()
+                .map(Wrapper::getMetaDatas)
+                .filter(role -> role.key().equals(key))
+                .findFirst()
+                .map(Role::category);
     }
 }

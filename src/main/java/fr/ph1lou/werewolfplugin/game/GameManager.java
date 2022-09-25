@@ -56,7 +56,7 @@ public class GameManager implements WereWolfAPI {
     private final Map<UUID, IPlayerWW> playersWW = new HashMap<>();
     private StateGame state;
     private Day day;
-    private boolean debug = false;
+    private boolean debug;
     private final ScoreBoard score = new ScoreBoard(this);
     private IVoteManager voteManager = new VoteManager(this);
     private final LoversManagement loversManage = new LoversManagement(this);
@@ -88,6 +88,8 @@ public class GameManager implements WereWolfAPI {
     }
 
     private void init(){
+
+        this.debug = main.getConfig().getBoolean("debug");
         this.setDay(Day.DAY);
         this.setState(StateGame.LOBBY);
         LanguageLoader.loadLanguage(this, this.getLanguage());

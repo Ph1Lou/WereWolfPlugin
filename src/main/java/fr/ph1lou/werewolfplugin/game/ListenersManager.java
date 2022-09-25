@@ -147,24 +147,18 @@ public class ListenersManager implements IListenersManager {
         Register registerManager = Register.get();
 
         registerManager.getScenariosRegister()
-                .forEach(scenarioRegister -> {
-                            ListenerWerewolf listenerWerewolf = this.listenersScenarios.get(scenarioRegister.getMetaDatas().key());
-                            if(listenerWerewolf != null){
-                                listenerWerewolf.register(game.getConfig().isScenarioActive(scenarioRegister.getMetaDatas().key()));
-                            }
-                        }
+                .forEach(scenarioRegister -> this.getScenario(scenarioRegister.getMetaDatas().key())
+                        .ifPresent(listenerWerewolf -> listenerWerewolf
+                                .register(game.getConfig().isScenarioActive(scenarioRegister.getMetaDatas().key())))
                 );
 
         registerManager.getConfigsRegister()
-                .forEach(configurationWrapper -> {
-                    ListenerWerewolf listenerWerewolf = this.listenersConfigurations.get(configurationWrapper.getMetaDatas().config().key());
-                    if(listenerWerewolf != null){
-                        listenerWerewolf.register(game.getConfig()
-                                .isConfigActive(configurationWrapper.getMetaDatas().config().key()));
-                    }
-                });
+                .forEach(configurationWrapper -> this.getConfiguration(configurationWrapper.getMetaDatas().config().key())
+                                .ifPresent(listenerWerewolf -> listenerWerewolf.register(game.getConfig()
+                                        .isConfigActive(configurationWrapper.getMetaDatas().config().key()))));
+
         registerManager.getRandomEventsRegister()
-                .forEach(listenerWerewolfEventWrapper -> game.getListenersManager().getRandomEvent(listenerWerewolfEventWrapper.getMetaDatas().key())
+                .forEach(listenerWerewolfEventWrapper -> this.getRandomEvent(listenerWerewolfEventWrapper.getMetaDatas().key())
                         .ifPresent(listenerWerewolf -> listenerWerewolf
                                 .register(game.getRandom().nextDouble() * 100 < game.getConfig().getProbability(listenerWerewolfEventWrapper.getMetaDatas().key()))));
 

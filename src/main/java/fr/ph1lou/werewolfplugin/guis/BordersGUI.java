@@ -19,7 +19,6 @@ import java.text.DecimalFormat;
 
 public class BordersGUI implements InventoryProvider {
 
-
     public static final SmartInventory INVENTORY = SmartInventory.builder()
             .id("borders")
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
@@ -30,7 +29,6 @@ public class BordersGUI implements InventoryProvider {
                     .translate("werewolf.menus.border.name"))
             .closeable(true)
             .build();
-
 
     @Override
     public void init(Player player, InventoryContents contents) {

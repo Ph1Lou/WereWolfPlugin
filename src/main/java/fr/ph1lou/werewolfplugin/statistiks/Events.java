@@ -104,6 +104,7 @@ import fr.ph1lou.werewolfapi.events.roles.necromancer.NecromancerResurrectionEve
 import fr.ph1lou.werewolfapi.events.roles.occultist.OccultistRevealWishesEvent;
 import fr.ph1lou.werewolfapi.events.roles.occultist.WishChangeEvent;
 import fr.ph1lou.werewolfapi.events.roles.oracle.OracleEvent;
+import fr.ph1lou.werewolfapi.events.roles.poacher.PoacherRecoverFurEvent;
 import fr.ph1lou.werewolfapi.events.roles.priestess.PriestessEvent;
 import fr.ph1lou.werewolfapi.events.roles.protector.ProtectionEvent;
 import fr.ph1lou.werewolfapi.events.roles.raven.CurseEvent;
@@ -1433,5 +1434,14 @@ public class Events implements Listener {
                         event.getPlayerWW(),
                         event.getTargetWW(),
                         main.getWereWolfAPI().getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPoacherRecoverFur(PoacherRecoverFurEvent event) {
+        main.getCurrentGameReview()
+                .addRegisteredAction(new RegisteredAction("werewolf.poacher_recover_fur",
+                        event.getPlayerWW(),
+                        main.getWereWolfAPI().getTimer(),
+                        event.getFurNumbers()));
     }
 }

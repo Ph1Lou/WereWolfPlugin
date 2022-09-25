@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.game;
 
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.game.IMapManager;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
@@ -196,6 +197,10 @@ public class MapManager implements IMapManager {
 
     @Override
     public void changeBorder(int mapRadius) {
+
+        if(!game.isState(StateGame.LOBBY)){
+            return;
+        }
 
         if (wft != null) {
             wft.cancel();

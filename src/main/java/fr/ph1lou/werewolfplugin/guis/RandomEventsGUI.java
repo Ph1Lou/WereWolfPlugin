@@ -85,6 +85,10 @@ public class RandomEventsGUI implements InventoryProvider {
                             if (probability == 1) {
                                 game.getListenersManager().getRandomEvent(key).ifPresent(listenerWerewolf -> listenerWerewolf.register(false));
                             }
+                            else{
+                                game.getListenersManager().getRandomEvent(key).ifPresent(listenerWerewolf -> listenerWerewolf
+                                        .register(game.getRandom().nextDouble() * 100 < game.getConfig().getProbability(key)));
+                            }
                             e.setCurrentItem(getItemStack(game, randomEventRegister));
                         }
                     }));
