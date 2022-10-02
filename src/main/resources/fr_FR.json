@@ -1789,6 +1789,11 @@
         "period": "Période de déclenchement de l'event (§b&timer&§f)",
         "duration": "Durée avant propagation des puces (§b&timer&§f)",
         "distance": "Distance de propagation des puces §b&number&"
+      },
+      "vaccination": {
+        "name": "Vaccination",
+        "description": "Le joueur infecté par l'infect père des loups\n est mis au courrant qu'exceptionellement \nil ne rejoint pas le camps des loups\n Les loups seront néanmoins informés que ce joueur \nà bien rejoint leur camp.",
+        "infection_cancelled": "Vous avez été infectés par l'infect père des loups mais exceptionnellement, vous ne rejoignez pas le camp des loups. Ces derniers vous verront comme appartenant à leur camp."
       }
     },
     "check": {
