@@ -9,6 +9,7 @@ import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
+import fr.ph1lou.werewolfapi.events.random_events.WolfFleasEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -97,6 +98,14 @@ public class WolfFleas extends ListenerWerewolf {
                 .collect(Collectors.toList());
 
         if(defaultWereWolfs.isEmpty()) return;
+
+        WolfFleasEvent wolfFleasEvent = new WolfFleasEvent();
+
+        Bukkit.getPluginManager().callEvent(wolfFleasEvent);
+
+        if(wolfFleasEvent.isCancelled()){
+            return;
+        }
 
         int start = this.getGame().getConfig().getTimerValue(WolfFleas.TIMER_START);
         int period = this.getGame().getConfig().getTimerValue(WolfFleas.PERIOD);
