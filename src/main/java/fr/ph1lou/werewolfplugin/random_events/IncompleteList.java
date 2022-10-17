@@ -14,9 +14,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Event(key = EventBase.INCOMPLETE_LIST, loreKey = "werewolf.random_events.incomplete_list.description")
 public class IncompleteList extends ListenerWerewolf {
@@ -57,13 +59,20 @@ public class IncompleteList extends ListenerWerewolf {
                         this.forgetWerewolves.get(playerWW1).add(playerWW2);
                     }
                 }
+                Collections.shuffle(this.forgetWerewolves.get(playerWW1), this.getGame().getRandom());
+                AtomicInteger werewolfSize = new AtomicInteger((this.forgetWerewolves.get(playerWW1).size() - 1) / 2);
                 //Remove half of werewolves
-                this.forgetWerewolves.get(playerWW1).removeIf(playerWW -> this.getGame().getRandom().nextBoolean());
+                this.forgetWerewolves.get(playerWW1).removeIf(playerWW -> {
+                    if(playerWW.equals(playerWW1)){
+                        return true;
+                    }
+                    return werewolfSize.getAndDecrement() > 0;
+                });
             }
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onAppearInWerewolfListEvent(AppearInWereWolfListEvent event){
 
         this.getGame().getPlayerWW(event.getRequesterUUID())
