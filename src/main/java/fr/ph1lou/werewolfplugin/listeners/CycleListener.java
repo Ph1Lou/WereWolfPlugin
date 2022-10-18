@@ -47,12 +47,7 @@ public class CycleListener implements Listener {
         if (2L * game.getConfig().getTimerValue(TimerBase.DAY_DURATION)
                 - duration > 0) {
 
-            BukkitUtils.scheduleSyncDelayedTask(() -> {
-
-                if (!game.isState(StateGame.END)) {
-                    Bukkit.getPluginManager().callEvent(new SelectionEndEvent());
-                }
-            }, duration * 20);
+            BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getPluginManager().callEvent(new SelectionEndEvent()), duration * 20);
 
         }
     }
@@ -67,12 +62,10 @@ public class CycleListener implements Listener {
         if (game.isState(StateGame.END)) return;
 
         if(event.getNumber()%2==0){
-            BukkitUtils.scheduleSyncDelayedTask(() -> {
-                if(!game.isState(StateGame.END)){
-                    String message = StatistiksUtils.getMessage();
-                    if(!message.isEmpty()){
-                        Bukkit.broadcastMessage(message);
-                    }
+            BukkitUtils.scheduleSyncDelayedTask(game, () -> {
+                String message = StatistiksUtils.getMessage();
+                if(!message.isEmpty()){
+                    Bukkit.broadcastMessage(message);
                 }
             }, game.getConfig().getTimerValue(TimerBase.DAY_DURATION) * 10L);
         }
@@ -84,20 +77,10 @@ public class CycleListener implements Listener {
         groupSizeChange();
 
         if (duration > 0) {
-            BukkitUtils.scheduleSyncDelayedTask(() -> {
-                if (!game.isState(StateGame.END)) {
-                    Bukkit.getPluginManager().callEvent(new DayWillComeEvent());
-                }
-
-            }, duration * 20);
+            BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getPluginManager().callEvent(new DayWillComeEvent()), duration * 20);
         }
 
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
-            if (!game.isState(StateGame.END)) {
-                Bukkit.getPluginManager().callEvent(new DayEvent(event.getNumber() + 1));
-            }
-
-        }, (duration + 30) * 20);
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getPluginManager().callEvent(new DayEvent(event.getNumber() + 1)), (duration + 30) * 20);
     }
 
     public void groupSizeChange() {

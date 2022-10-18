@@ -7,7 +7,6 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
 import fr.ph1lou.werewolfapi.events.random_events.ExposedEvent;
@@ -43,25 +42,21 @@ public class Exposed extends ListenerWerewolf {
     public void onRepartition(RepartitionEvent event) {
         WereWolfAPI game = this.getGame();
 
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
-            if (game.isState(StateGame.GAME)) {
-                if (isRegister()) {
-                    IPlayerWW playerWW = announce();
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> {
+            if (isRegister()) {
+                IPlayerWW playerWW = announce();
 
-                    if (temp == null && playerWW != null) {
-                        temp = playerWW;
-                        BukkitUtils.scheduleSyncDelayedTask(() -> {
-                            if (game.isState(StateGame.GAME)) {
-                                if (isRegister()) {
-                                    announce();
-                                    temp = null;
-                                    register(false);
-                                }
-                            }
-                        }, game.getConfig().getTimerValue(TIMER_START_2) * 20L);
-                    }
-
+                if (temp == null && playerWW != null) {
+                    temp = playerWW;
+                    BukkitUtils.scheduleSyncDelayedTask(game, () -> {
+                        if (isRegister()) {
+                            announce();
+                            temp = null;
+                            register(false);
+                        }
+                    }, game.getConfig().getTimerValue(TIMER_START_2) * 20L);
                 }
+
             }
         }, (long) (20L * game.getConfig().getTimerValue(TIMER_START_1) + game.getRandom().nextDouble() * game.getConfig().getTimerValue(PERIOD) * 20));
     }

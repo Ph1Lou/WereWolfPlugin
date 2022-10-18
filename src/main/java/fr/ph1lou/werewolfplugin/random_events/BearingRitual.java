@@ -4,7 +4,6 @@ import fr.ph1lou.werewolfapi.annotations.Event;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
-import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
 import fr.ph1lou.werewolfapi.events.random_events.BearingRitualEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -32,28 +31,24 @@ public class BearingRitual extends ListenerWerewolf {
     public void onRepartition(RepartitionEvent event) {
         WereWolfAPI game = this.getGame();
 
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
-            if (game.isState(StateGame.GAME)) {
-                if (isRegister()) {
-                    BearingRitualEvent bearingRitualEvent = new BearingRitualEvent();
-                    Bukkit.getPluginManager().callEvent(bearingRitualEvent);
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> {
+            if (isRegister()) {
+                BearingRitualEvent bearingRitualEvent = new BearingRitualEvent();
+                Bukkit.getPluginManager().callEvent(bearingRitualEvent);
 
-                    if (bearingRitualEvent.isCancelled()) return;
+                if (bearingRitualEvent.isCancelled()) return;
 
-                    active = true;
+                active = true;
 
-                    Bukkit.broadcastMessage(game.translate("werewolf.random_events.bearing_ritual.message"));
+                Bukkit.broadcastMessage(game.translate("werewolf.random_events.bearing_ritual.message"));
 
-                    BukkitUtils.scheduleSyncDelayedTask(() -> {
-                        if (game.isState(StateGame.GAME)) {
-                            if (isRegister()) {
-                                active = false;
-                                register(false);
-                                Bukkit.broadcastMessage(game.translate("werewolf.random_events.bearing_ritual.end"));
-                            }
-                        }
-                    }, game.getConfig().getTimerValue(TimerBase.DAY_DURATION) * 40L);
-                }
+                BukkitUtils.scheduleSyncDelayedTask(game, () -> {
+                    if (isRegister()) {
+                        active = false;
+                        register(false);
+                        Bukkit.broadcastMessage(game.translate("werewolf.random_events.bearing_ritual.end"));
+                    }
+                }, game.getConfig().getTimerValue(TimerBase.DAY_DURATION) * 40L);
             }
         }, (long) (20L * game.getConfig().getTimerValue(TIMER_START) + game.getRandom().nextDouble() * 15 * game.getConfig().getTimerValue(PERIOD)));
     }

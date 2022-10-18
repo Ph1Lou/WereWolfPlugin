@@ -65,7 +65,7 @@ public class MapManager implements IMapManager {
                     false,
                     mapRadius);
 
-            this.wft.setTaskID(BukkitUtils.scheduleSyncRepeatingTask(this.wft, 1, 1));
+            this.wft.setTaskID(BukkitUtils.scheduleSyncRepeatingTask(game, this.wft, 1, 1));
         }
     }
 
@@ -138,6 +138,8 @@ public class MapManager implements IMapManager {
 
     public void setWorld(boolean roofed) {
 
+        Main main = JavaPlugin.getPlugin(Main.class);
+
         world.setAutoSave(false);
         world.setWeatherDuration(0);
         world.setThundering(false);
@@ -154,8 +156,8 @@ public class MapManager implements IMapManager {
 
         if (roofed) {
             VersionUtils.getVersionUtils().findBiome(world)
-                    .thenAccept(location -> BukkitUtils
-                            .scheduleSyncDelayedTask(() -> this
+                    .thenAccept(location -> Bukkit.getScheduler()
+                            .scheduleSyncDelayedTask(main, () -> this
                                     .generatePlatform(world, location.getBlockX(), location.getBlockZ())));
         }
         else{

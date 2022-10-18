@@ -186,7 +186,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
 
         event.getInventory().clear();
 
-        BukkitUtils.scheduleSyncDelayedTask(() -> event.getWhoClicked().closeInventory());
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> event.getWhoClicked().closeInventory());
 
     }
 

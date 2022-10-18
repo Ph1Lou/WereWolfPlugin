@@ -207,7 +207,7 @@ public class PlayerListener implements Listener {
 				player.sendMessage(game.translate(Prefix.RED , "werewolf.check.already_begin"));
 
 			}
-			BukkitUtils.scheduleSyncDelayedTask(() ->
+			BukkitUtils.scheduleSyncDelayedTask(game, () ->
 					player.teleport(game.getMapManager().getWorld().getSpawnLocation()), 10);
 		}
 	}

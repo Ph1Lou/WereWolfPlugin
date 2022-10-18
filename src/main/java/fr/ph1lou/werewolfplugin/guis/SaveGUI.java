@@ -65,7 +65,7 @@ public class SaveGUI implements InventoryProvider {
                 .title(game.translate("werewolf.menus.save.save_menu"))
                 .itemLeft(new ItemStack(Material.EMERALD_BLOCK))
                 .plugin(main)
-                .onClose((player2) -> BukkitUtils.scheduleSyncDelayedTask(() -> SaveGUI.INVENTORY.open(player)))
+                .onClose((player2) -> BukkitUtils.scheduleSyncDelayedTask(game, () -> SaveGUI.INVENTORY.open(player)))
                 .open(player)));
 
         if (files == null) return;

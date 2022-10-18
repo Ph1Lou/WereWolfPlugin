@@ -22,6 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
@@ -40,15 +41,16 @@ public class TransportationTask implements Listener {
 
     public TransportationTask(GameManager game) {
         this.game = game;
-        step0();
+        Main main = JavaPlugin.getPlugin(Main.class);
+        step0(main);
     }
 
 
-    private void step0() {
+    private void step0(Plugin main) {
 
         World world = this.game.getMapManager().getWorld();
         AtomicInteger i = new AtomicInteger();
-        taskIdManager(0, BukkitUtils.scheduleSyncRepeatingTask(() -> {
+        taskIdManager(0, Bukkit.getScheduler().scheduleSyncRepeatingTask(main, () -> {
 
             if (this.game.isState(StateGame.END)) {
                 kill(0);
@@ -58,7 +60,7 @@ public class TransportationTask implements Listener {
 
             if (i.get() == this.game.getPlayersCount()) {
                 kill(0);
-                step1();
+                step1(main);
 
                 return;
             }
@@ -69,11 +71,11 @@ public class TransportationTask implements Listener {
     }
 
 
-    private void step1() {
+    private void step1(Plugin main) {
 
         AtomicInteger i = new AtomicInteger();
 
-        taskIdManager(1, BukkitUtils.scheduleSyncRepeatingTask(() -> {
+        taskIdManager(1, Bukkit.getScheduler().scheduleSyncRepeatingTask(main, () -> {
 
             if (this.game.isState(StateGame.END)) {
                 kill(1);
@@ -84,7 +86,7 @@ public class TransportationTask implements Listener {
             if (i.get() == this.game.getPlayersCount()) {
                 kill(1);
                 HandlerList.unregisterAll(this);
-                step2();
+                step2(main);
                 return;
             }
             teleportPlayer(i.getAndIncrement());
@@ -93,11 +95,11 @@ public class TransportationTask implements Listener {
 
     }
 
-    private void step2() {
+    private void step2(Plugin main) {
 
         AtomicInteger i = new AtomicInteger(10);
 
-        taskIdManager(2, BukkitUtils.scheduleSyncRepeatingTask(() -> {
+        taskIdManager(2, Bukkit.getScheduler().scheduleSyncRepeatingTask(main, () -> {
 
             if (this.game.isState(StateGame.END)) {
                 kill(2);
@@ -106,7 +108,7 @@ public class TransportationTask implements Listener {
 
             if (i.get() == 0) {
                 kill(2);
-                step3();
+                step3(main);
                 return;
             }
             for (Player p : Bukkit.getOnlinePlayers()) {
@@ -120,9 +122,9 @@ public class TransportationTask implements Listener {
 
     }
 
-    private void step3() {
+    private void step3(Plugin main) {
 
-        taskIdManager(3, BukkitUtils.scheduleSyncRepeatingTask(() -> {
+        taskIdManager(3, Bukkit.getScheduler().scheduleSyncRepeatingTask(main, () -> {
 
             if (this.game.isState(StateGame.END)) {
                 kill(3);
@@ -165,12 +167,7 @@ public class TransportationTask implements Listener {
         this.game.setState(StateGame.START);
         GameTask start = new GameTask(this.game);
         start.runTaskTimer(JavaPlugin.getPlugin(Main.class), 0, 20);
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
-            if (!this.game.isState(StateGame.END)) {
-                Bukkit.getPluginManager().callEvent(new DayEvent(1));
-            }
-
-        }, 20);
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getPluginManager().callEvent(new DayEvent(1)), 20);
     }
 
     private void teleportPlayer(int i) {

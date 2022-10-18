@@ -68,7 +68,7 @@ public class MapsGUI implements InventoryProvider {
         contents.set(1, 1, ClickableItem.of((
                         new ItemBuilder(UniversalMaterial.LAVA_BUCKET.getType())
                                 .setDisplayName(game.translate("werewolf.menus.maps.new")).build()),
-                e -> BukkitUtils.scheduleSyncDelayedTask(() -> {
+                e -> BukkitUtils.scheduleSyncDelayedTask(game, () -> {
                     if (!game.isState(StateGame.LOBBY)) {
                         player.sendMessage(game.translate(Prefix.RED , "werewolf.check.game_in_progress"));
                         return;

@@ -141,7 +141,7 @@ public class DevotedServant extends RoleVillage implements IPower, IAffectedPlay
                                 event.getPlayerWW().getUUID())));
         getPlayerWW().sendMessage(resurrectionMessage);
 
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> {
 
             if(!this.isAbilityEnabled()){
                 return;

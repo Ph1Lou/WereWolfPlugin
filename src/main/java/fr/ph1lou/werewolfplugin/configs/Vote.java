@@ -9,7 +9,6 @@ import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Sound;
-import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.enums.VoteStatus;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
@@ -71,11 +70,9 @@ public class Vote extends ListenerWerewolf {
 
                 voteManager.setStatus(VoteStatus.WAITING);
 
-                BukkitUtils.scheduleSyncDelayedTask(() -> {
-                        if (!game.isState(StateGame.END)) {
-                                Bukkit.getPluginManager().callEvent(new VoteResultEvent(voteManager.getResult().orElse(null)));
-                        }
-                }, game.getConfig().getTimerValue(TimerBase.VOTE_WAITING) * 20L);
+                BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getPluginManager()
+                        .callEvent(new VoteResultEvent(voteManager.getResult().orElse(null))),
+                        game.getConfig().getTimerValue(TimerBase.VOTE_WAITING) * 20L);
         }
 
         @EventHandler(priority = EventPriority.LOWEST)
@@ -106,11 +103,7 @@ public class Vote extends ListenerWerewolf {
                         Bukkit.broadcastMessage(game.translate(Prefix.ORANGE, "werewolf.configurations.vote.vote_time",
                                 Formatter.timer(Utils.conversion(duration))));
                         voteManager.setStatus(VoteStatus.IN_PROGRESS);
-                        BukkitUtils.scheduleSyncDelayedTask(() -> {
-                                if (!game.isState(StateGame.END)) {
-                                        Bukkit.getPluginManager().callEvent(new VoteEndEvent());
-                                }
-                        }, duration * 20L);
+                        BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getPluginManager().callEvent(new VoteEndEvent()), duration * 20L);
                 }
         }
 }

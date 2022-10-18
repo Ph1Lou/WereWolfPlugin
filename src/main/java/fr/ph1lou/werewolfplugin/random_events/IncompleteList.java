@@ -79,7 +79,7 @@ public class IncompleteList extends ListenerWerewolf {
                 .ifPresent(playerWW1 -> this.getGame().getPlayerWW(event.getPlayerUUID())
                         .ifPresent(playerWW2 -> {
                             if(this.forgetWerewolves.containsKey(playerWW1) &&
-                                this.forgetWerewolves.get(playerWW1).contains(playerWW2)){
+                                    this.forgetWerewolves.get(playerWW1).contains(playerWW2)){
                                 event.setAppear(false);
                             }
                         }));

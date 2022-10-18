@@ -8,7 +8,6 @@ import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.game.configs.LoneWolfEvent;
@@ -35,11 +34,9 @@ public class LoneWolf extends ListenerWerewolf {
 
         WereWolfAPI game = this.getGame();
 
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
-            if (!game.isState(StateGame.END) && isRegister()) {
-                this.designSolitary();
-            }
-        }, (long) (game.getRandom().nextFloat() * game.getConfig().getTimerValue(TimerBase.LONE_WOLF_DURATION) * 20));
+        BukkitUtils.scheduleSyncDelayedTask(game,
+                this::designSolitary,
+                (long) (game.getRandom().nextFloat() * game.getConfig().getTimerValue(TimerBase.LONE_WOLF_DURATION) * 20));
     }
 
     private void designSolitary() {

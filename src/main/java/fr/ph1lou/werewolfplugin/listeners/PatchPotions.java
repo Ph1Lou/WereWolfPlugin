@@ -102,7 +102,7 @@ public class PatchPotions implements Listener {
 
             event.setCancelled(true);
 
-            BukkitUtils.scheduleSyncDelayedTask(() ->
+            BukkitUtils.scheduleSyncDelayedTask(game, () ->
             {
                 ItemStack itemStack1 = VersionUtils.getVersionUtils().getItemInHand(player);
 

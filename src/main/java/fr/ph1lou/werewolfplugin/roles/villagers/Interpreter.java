@@ -138,11 +138,7 @@ public class Interpreter extends RoleVillage implements IPower {
             return; //Si encore avec le rôle
         }
 
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
-
-            if(this.game.isState(StateGame.END)){
-                return;
-            }
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> {
 
             if(!this.isAbilityEnabled()){
                 return;

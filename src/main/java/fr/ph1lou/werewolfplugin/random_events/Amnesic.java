@@ -3,19 +3,18 @@ package fr.ph1lou.werewolfplugin.random_events;
 import fr.ph1lou.werewolfapi.annotations.Event;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Sound;
-import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import fr.ph1lou.werewolfapi.events.random_events.AmnesicEvent;
 import fr.ph1lou.werewolfapi.events.random_events.AmnesicTransformEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -120,11 +119,7 @@ public class Amnesic extends ListenerWerewolf {
 
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent((Player) event.getEntity()));
 
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
-            if (!game.isState(StateGame.END)) {
-                this.revealWereWolf();
-            }
-        }, 20L * game.getConfig().getTimerValue(TIMER));
+        BukkitUtils.scheduleSyncDelayedTask(game, this::revealWereWolf, 20L * game.getConfig().getTimerValue(TIMER));
     }
 
 
@@ -165,7 +160,7 @@ public class Amnesic extends ListenerWerewolf {
                 Formatter.player(playerWW.getName()),
                 Formatter.timer(game, TIMER));
 
-        BukkitUtils.scheduleSyncDelayedTask(this::revealWereWolf, 20L * game.getConfig().getTimerValue(TIMER));
+        BukkitUtils.scheduleSyncDelayedTask(game, this::revealWereWolf, 20L * game.getConfig().getTimerValue(TIMER));
 
     }
 

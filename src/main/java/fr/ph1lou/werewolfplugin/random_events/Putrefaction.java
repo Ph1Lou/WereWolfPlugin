@@ -5,7 +5,6 @@ import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
 import fr.ph1lou.werewolfapi.events.random_events.PutrefactionEvent;
@@ -34,29 +33,25 @@ public class Putrefaction extends ListenerWerewolf {
     public void onRepartition(RepartitionEvent event) {
         WereWolfAPI game = this.getGame();
 
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
-            if (game.isState(StateGame.GAME)) {
-                if (isRegister()) {
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> {
+            if (isRegister()) {
 
-                    PutrefactionEvent putrefactionEvent = new PutrefactionEvent();
-                    Bukkit.getPluginManager().callEvent(putrefactionEvent);
+                PutrefactionEvent putrefactionEvent = new PutrefactionEvent();
+                Bukkit.getPluginManager().callEvent(putrefactionEvent);
 
-                    if (putrefactionEvent.isCancelled()) return;
+                if (putrefactionEvent.isCancelled()) return;
 
-                    active = true;
+                active = true;
 
-                    Bukkit.broadcastMessage(game.translate("werewolf.random_events.putrefaction.message"));
+                Bukkit.broadcastMessage(game.translate("werewolf.random_events.putrefaction.message"));
 
-                    BukkitUtils.scheduleSyncDelayedTask(() -> {
-                        if (game.isState(StateGame.GAME)) {
-                            if (isRegister()) {
-                                active = false;
-                                register(false);
-                                Bukkit.broadcastMessage(game.translate("werewolf.random_events.putrefaction.end"));
-                            }
-                        }
-                    }, game.getConfig().getTimerValue(TimerBase.DAY_DURATION) * 40L);
-                }
+                BukkitUtils.scheduleSyncDelayedTask(game, () -> {
+                    if (isRegister()) {
+                        active = false;
+                        register(false);
+                        Bukkit.broadcastMessage(game.translate("werewolf.random_events.putrefaction.end"));
+                    }
+                }, game.getConfig().getTimerValue(TimerBase.DAY_DURATION) * 40L);
             }
         }, (long) (20L * game.getConfig().getTimerValue(TIMER_START) +
                 game.getRandom().nextDouble() * game.getConfig().getTimerValue(PERIOD) * 20));

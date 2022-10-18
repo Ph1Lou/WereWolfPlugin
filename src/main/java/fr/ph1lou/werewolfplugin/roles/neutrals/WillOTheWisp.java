@@ -216,7 +216,7 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
                         Integer.MAX_VALUE,1,
                         this.getKey()));
 
-                this.timer = BukkitUtils.scheduleSyncDelayedTask(() -> {
+                this.timer = BukkitUtils.scheduleSyncDelayedTask(game, () -> {
                     if(this.isInvisible()){
                         this.setInvisible(false);
                         this.getPlayerWW().addPotionModifier(PotionModifier
