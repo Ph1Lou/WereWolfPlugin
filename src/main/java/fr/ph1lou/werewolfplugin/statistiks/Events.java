@@ -1448,6 +1448,13 @@ public class Events implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onVaccinationEvent(VaccinationEvent e){
+        main.getCurrentGameReview()
+                .addRegisteredAction(new RegisteredAction("werewolf.random_events.vaccination",
+                        e.getPlayerWW(),
+                        e.getTargetWW(),
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onWolfFleasTriggerEvent(WolfFleasEvent event) {
         main.getCurrentGameReview()
                 .addRegisteredAction(new RegisteredAction("werewolf.wolf_fleas_event",

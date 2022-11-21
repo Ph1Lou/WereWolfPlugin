@@ -67,13 +67,14 @@ public class CommandInfect implements ICommandRole {
             return;
         }
 
-
         ((IPower) infect).setPower(false);
 
         InfectionEvent infectionEvent = new InfectionEvent(playerWW, playerWW1);
         Bukkit.getPluginManager().callEvent(infectionEvent);
 
         if (infectionEvent.isCancelled()) {
+            if (!infectionEvent.isInformInfectionError()) return; //ne prévient dans le cas d'une erreur
+
             playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
             return;
         }
