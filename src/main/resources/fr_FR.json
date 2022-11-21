@@ -906,7 +906,8 @@
       },
       "poacher": {
         "display": "Braconnier",
-        "actionbar": "§c========§r",
+        "actionbar_1": "§c========§r",
+        "actionbar_2": "§6========§r",
         "description": "Votre action bar se colore en rouge à - de §b&number&§f blocs d’un cadavre de Loup.\nEn y restant §b&timer&§f, vous pouvez prendre sa fourrure.\nDès la première fourrure récupérée, vous apparaissez Loup-Garou pour tous les rôles à infos.",
         "effects": "Une fourrure : Resistance §b10%§f puis §b+3%§f de Resistance par fourrure",
         "fur_numbers": "Nombre de fourrures : §b&number&",
@@ -1794,6 +1795,10 @@
         "name": "Vaccination",
         "description": "Le joueur infecté par l'infect père des loups\n est mis au courrant qu'exceptionellement \nil ne rejoint pas le camps des loups\n Les loups seront néanmoins informés que ce joueur \nà bien rejoint leur camp.",
         "infection_cancelled": "Vous avez été infectés par l'infect père des loups mais exceptionnellement, vous ne rejoignez pas le camp des loups. Ces derniers vous verront comme appartenant à leur camp."
+      },
+      "incomplete_list": {
+        "name": "Liste à Trous",
+        "description": "Les membres du camp des Loups n’ont dans leur liste \nque le pseudo de la moitié de leurs coéquipiers. \nTout joueur qui rejoint le camp des Loups par la suite\n aura accès à l’intégralité de la liste\n et fera partie de la liste chez tous ses coéquipiers."
       }
     },
     "check": {

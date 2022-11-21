@@ -8,7 +8,6 @@ import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Sound;
-import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.VoteStatus;
 import fr.ph1lou.werewolfapi.events.game.vote.NewVoteResultEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteEvent;
@@ -213,11 +212,7 @@ public class VoteManager implements Listener, IVoteManager
 		Bukkit.broadcastMessage(game.translate(Prefix.YELLOW, "werewolf.configurations.vote.vote_result",
 				Formatter.player(playerWW.getName()),
 				Formatter.number(this.votes.getOrDefault(playerWW, 0))));
-		int task = BukkitUtils.scheduleSyncRepeatingTask(() -> {
-			if (game.isState(StateGame.GAME)) {
-				playerWW.addPlayerMaxHealth(2);
-			}
-		}, 1200L, 1200L);
-		BukkitUtils.scheduleSyncDelayedTask(() -> Bukkit.getScheduler().cancelTask(task), (long) (health * 62L * 20L));
+		int task = BukkitUtils.scheduleSyncRepeatingTask(game, () -> playerWW.addPlayerMaxHealth(2), 1200L, 1200L);
+		BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getScheduler().cancelTask(task), (long) (health * 62L * 20L));
 	}
 }

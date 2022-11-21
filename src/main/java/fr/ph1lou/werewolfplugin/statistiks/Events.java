@@ -31,7 +31,23 @@ import fr.ph1lou.werewolfapi.events.lovers.DonEvent;
 import fr.ph1lou.werewolfapi.events.lovers.LoverDeathEvent;
 import fr.ph1lou.werewolfapi.events.lovers.RevealAmnesiacLoversEvent;
 import fr.ph1lou.werewolfapi.events.lovers.RevealLoversEvent;
-import fr.ph1lou.werewolfapi.events.random_events.*;
+import fr.ph1lou.werewolfapi.events.random_events.AmnesicEvent;
+import fr.ph1lou.werewolfapi.events.random_events.AmnesicTransformEvent;
+import fr.ph1lou.werewolfapi.events.random_events.BearingRitualEvent;
+import fr.ph1lou.werewolfapi.events.random_events.DrunkenWereWolfEvent;
+import fr.ph1lou.werewolfapi.events.random_events.ExposedEvent;
+import fr.ph1lou.werewolfapi.events.random_events.FindAllLootBoxEvent;
+import fr.ph1lou.werewolfapi.events.random_events.GodMiracleEvent;
+import fr.ph1lou.werewolfapi.events.random_events.InfectionRandomEvent;
+import fr.ph1lou.werewolfapi.events.random_events.LootBoxEvent;
+import fr.ph1lou.werewolfapi.events.random_events.MysanthropeSisterEvent;
+import fr.ph1lou.werewolfapi.events.random_events.NotAllWerewolfEvent;
+import fr.ph1lou.werewolfapi.events.random_events.PutrefactionEvent;
+import fr.ph1lou.werewolfapi.events.random_events.RumorsEvent;
+import fr.ph1lou.werewolfapi.events.random_events.RumorsWriteEvent;
+import fr.ph1lou.werewolfapi.events.random_events.SwapEvent;
+import fr.ph1lou.werewolfapi.events.random_events.TroupleEvent;
+import fr.ph1lou.werewolfapi.events.random_events.WolfFleasEvent;
 import fr.ph1lou.werewolfapi.events.roles.InvisibleEvent;
 import fr.ph1lou.werewolfapi.events.roles.StealEvent;
 import fr.ph1lou.werewolfapi.events.roles.amnesiac.AmnesiacTransformationEvent;
@@ -1437,6 +1453,25 @@ public class Events implements Listener {
                 .addRegisteredAction(new RegisteredAction("werewolf.random_events.vaccination",
                         e.getPlayerWW(),
                         e.getTargetWW(),
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onWolfFleasTriggerEvent(WolfFleasEvent event) {
+        main.getCurrentGameReview()
+                .addRegisteredAction(new RegisteredAction("werewolf.wolf_fleas_event",
+                        main.getWereWolfAPI().getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onNotAllWerewolfTriggerEvent(NotAllWerewolfEvent event) {
+        main.getCurrentGameReview()
+                .addRegisteredAction(new RegisteredAction("werewolf.not_all_werewolf_event",
+                        main.getWereWolfAPI().getTimer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onIncompleteListTriggerEvent(NotAllWerewolfEvent event) {
+        main.getCurrentGameReview()
+                .addRegisteredAction(new RegisteredAction("werewolf.incomplete_list_event",
                         main.getWereWolfAPI().getTimer()));
     }
 }

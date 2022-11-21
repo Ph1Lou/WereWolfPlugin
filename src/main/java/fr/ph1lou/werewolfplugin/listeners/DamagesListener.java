@@ -51,11 +51,7 @@ public class DamagesListener implements Listener {
                 .ifPresent(playerWW -> game.getPlayerWW(striker.getUniqueId())
                         .ifPresent(strikerWW -> {
                             ((PlayerWW)playerWW).addLastMinutesDamagedPlayer(strikerWW);
-                            BukkitUtils.scheduleSyncDelayedTask(() -> {
-                                if(game.isState(StateGame.GAME)){
-                                    ((PlayerWW)playerWW).removeLastMinutesDamagedPlayer(strikerWW);
-                                }
-                            },60 * 20);
+                            BukkitUtils.scheduleSyncDelayedTask(game, () -> ((PlayerWW)playerWW).removeLastMinutesDamagedPlayer(strikerWW),60 * 20);
                         }));
     }
 

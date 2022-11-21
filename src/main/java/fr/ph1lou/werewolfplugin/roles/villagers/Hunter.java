@@ -70,7 +70,7 @@ public class Hunter extends RoleVillage implements IPower {
             if (game.getConfig().isConfigActive(ConfigBase.HUNTER_CAN_SHOOT)) {
                 this.setPower(true);
                 getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.hunter.perform");
-                BukkitUtils.scheduleSyncDelayedTask(() -> {
+                BukkitUtils.scheduleSyncDelayedTask(game, () -> {
                     getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.check.end_selection");
                     setPower(false);
                 }, 20 * 30);

@@ -3,7 +3,6 @@ package fr.ph1lou.werewolfplugin.timers;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.TrollLoverEvent;
@@ -82,20 +81,16 @@ public class LoverDuration extends ListenerWerewolf {
         loverAPIS.forEach(BukkitUtils::registerListener);
         loverAPIS.forEach(iLover -> ((FakeLover)iLover).announceLovers());
 
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
-
-            if (!game.isState(StateGame.END)) {
-                loverAPIS.forEach(HandlerList::unregisterAll);
-                game.getPlayersWW()
-                        .forEach(playerWW -> {
-                            playerWW
-                                    .sendMessageWithKey(Prefix.GREEN , "werewolf.announcement.lover_troll");
-                            loverAPIS.forEach(((IPlayerWW)playerWW)::removeLover);
-                        });
-                game.getConfig().setConfig(ConfigBase.TROLL_LOVER,false);
-                Bukkit.getPluginManager().callEvent(new LoversRepartitionEvent());
-            }
-
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> {
+            loverAPIS.forEach(HandlerList::unregisterAll);
+            game.getPlayersWW()
+                    .forEach(playerWW -> {
+                        playerWW
+                                .sendMessageWithKey(Prefix.GREEN , "werewolf.announcement.lover_troll");
+                        loverAPIS.forEach(((IPlayerWW)playerWW)::removeLover);
+                    });
+            game.getConfig().setConfig(ConfigBase.TROLL_LOVER,false);
+            Bukkit.getPluginManager().callEvent(new LoversRepartitionEvent());
         }, 1200L);
     }
 }

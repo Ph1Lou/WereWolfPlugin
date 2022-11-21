@@ -50,6 +50,7 @@ public class Poacher extends RoleVillage {
     private int progress = 0;
     @Nullable
     private IPlayerWW playerWW;
+    private int switchColor = 0;
 
     public Poacher(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
@@ -119,9 +120,13 @@ public class Poacher extends RoleVillage {
         }
 
         StringBuilder sb = new StringBuilder(event.getActionBar());
+        String actionBar = this.switchColor++ < 20 ?
+                game.translate("werewolf.roles.poacher.actionbar_1") :
+                game.translate("werewolf.roles.poacher.actionbar_2");
+        this.switchColor%=40;
 
-        sb.insert(0, game.translate("werewolf.roles.poacher.actionbar"));
-        sb.append(game.translate("werewolf.roles.poacher.actionbar"));
+        sb.insert(0, actionBar + " ");
+        sb.append(" ").append(actionBar);
         event.setActionBar(sb.toString());
     }
 

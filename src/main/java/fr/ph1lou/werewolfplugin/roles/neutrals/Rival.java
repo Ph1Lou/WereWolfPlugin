@@ -213,13 +213,9 @@ public class Rival extends RoleNeutral implements IPower {
         }
         this.getPlayerWW().removePlayerMaxHealth(10);
 
-        int task = BukkitUtils.scheduleSyncRepeatingTask(() -> {
-            if (game.isState(StateGame.GAME)) {
-                this.getPlayerWW().addPlayerMaxHealth(2);
-            }
-        }, 1200, 1200);
+        int task = BukkitUtils.scheduleSyncRepeatingTask(game, () -> this.getPlayerWW().addPlayerMaxHealth(2), 1200, 1200);
 
-        BukkitUtils.scheduleSyncDelayedTask(() -> Bukkit.getScheduler().cancelTask(task), (long) health * 62 * 20);
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getScheduler().cancelTask(task), (long) health * 62 * 20);
 
         this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.roles.rival.lover_death");
         Bukkit.getPluginManager().callEvent(new RivalLoverDeathEvent(this.getPlayerWW(), new ArrayList<>(lover.getLovers())));

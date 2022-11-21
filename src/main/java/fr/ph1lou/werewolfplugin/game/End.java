@@ -16,12 +16,13 @@ import fr.ph1lou.werewolfapi.events.game.utils.CountRemainingRolesCategoriesEven
 import fr.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.WinConditionsCheckEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AroundLoverEvent;
-import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
+import fr.ph1lou.werewolfplugin.Main;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -166,7 +167,7 @@ public class End {
             p.spigot().sendMessage(msg);
         }
 
-        BukkitUtils.scheduleSyncDelayedTask(game::stopGame, 20L * game.getConfig().getTimerValue(TimerBase.AUTO_RESTART_DURATION));
+        Bukkit.getScheduler().scheduleSyncDelayedTask(JavaPlugin.getPlugin(Main.class), game::stopGame, 20L * game.getConfig().getTimerValue(TimerBase.AUTO_RESTART_DURATION));
         Bukkit.broadcastMessage(game.translate(Prefix.ORANGE , "werewolf.announcement.restart",
                 Formatter.timer(game, TimerBase.AUTO_RESTART_DURATION)));
     }

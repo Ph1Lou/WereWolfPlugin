@@ -221,7 +221,7 @@ public class GameManager implements WereWolfAPI {
 
         GameManager newGame = (GameManager) this.main.getWereWolfAPI();
 
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
+        BukkitUtils.scheduleSyncDelayedTask(newGame, () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 FastBoard fastboard = new FastBoard(player);
                 fastboard.updateTitle(newGame.translate("werewolf.score_board.title"));

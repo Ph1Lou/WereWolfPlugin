@@ -6,7 +6,6 @@ import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Sound;
-import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
@@ -111,47 +110,45 @@ public class Illusionist extends RoleVillage implements IPower, IAffectedPlayers
                     Sound.WOLF_HOWL.play(player1);
                 });
 
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> {
 
-            if(!game.isState(StateGame.END) && this.getPlayerWW().isState(StatePlayer.ALIVE)){
+            if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+                return;
+            }
+            playerWW.sendMessageWithKey(Prefix.GREEN,"werewolf.roles.illusionist.reveal");
+            List<IPlayerWW> players1WW = game.getPlayersWW()
+                    .stream()
+                    .filter(playerWW1 -> !playerWW1.equals(this.getPlayerWW()))
+                    .filter(playerWW1 -> !playerWW1.equals(playerWW))
+                    .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
+                    .map(IPlayerWW::getRole)
+                    .map(IRole::getPlayerWW)
+                    .collect(Collectors.toList());
 
-                playerWW.sendMessageWithKey(Prefix.GREEN,"werewolf.roles.illusionist.reveal");
-                List<IPlayerWW> players1WW = game.getPlayersWW()
-                        .stream()
-                        .filter(playerWW1 -> !playerWW1.equals(this.getPlayerWW()))
-                        .filter(playerWW1 -> !playerWW1.equals(playerWW))
-                        .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
-                        .map(IPlayerWW::getRole)
-                        .map(IRole::getPlayerWW)
-                        .collect(Collectors.toList());
-
-                if(players1WW.size() < 2){
-                    return;
-                }
-
-                Collections.shuffle(players1WW, game.getRandom());
-
-                List<IPlayerWW> finalPlayersWW = new ArrayList<>(Arrays.asList(playerWW, players1WW.get(0), players1WW.get(1)));
-
-                Collections.shuffle(finalPlayersWW, game.getRandom());
-
-                IllusionistGetNamesEvent illusionistGetNamesEvent =
-                        new IllusionistGetNamesEvent(this.getPlayerWW(), new HashSet<>(finalPlayersWW));
-
-                Bukkit.getPluginManager().callEvent(illusionistGetNamesEvent);
-
-                if(illusionistGetNamesEvent.isCancelled()){
-                    this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
-                    return;
-                }
-
-                this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,
-                        "werewolf.roles.illusionist.reveal_pseudos",
-                        Formatter.format("&names&", finalPlayersWW.stream().map(IPlayerWW::getName)
-                                .collect(Collectors.joining(", "))));
+            if(players1WW.size() < 2){
+                return;
             }
 
+            Collections.shuffle(players1WW, game.getRandom());
 
+            List<IPlayerWW> finalPlayersWW = new ArrayList<>(Arrays.asList(playerWW, players1WW.get(0), players1WW.get(1)));
+
+            Collections.shuffle(finalPlayersWW, game.getRandom());
+
+            IllusionistGetNamesEvent illusionistGetNamesEvent =
+                    new IllusionistGetNamesEvent(this.getPlayerWW(), new HashSet<>(finalPlayersWW));
+
+            Bukkit.getPluginManager().callEvent(illusionistGetNamesEvent);
+
+            if(illusionistGetNamesEvent.isCancelled()){
+                this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+                return;
+            }
+
+            this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,
+                    "werewolf.roles.illusionist.reveal_pseudos",
+                    Formatter.format("&names&", finalPlayersWW.stream().map(IPlayerWW::getName)
+                            .collect(Collectors.joining(", "))));
         }, 20*60L);
     }
 

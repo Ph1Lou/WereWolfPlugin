@@ -3,7 +3,6 @@ package fr.ph1lou.werewolfplugin.random_events;
 import fr.ph1lou.werewolfapi.annotations.Event;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
-import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
 import fr.ph1lou.werewolfapi.events.random_events.RumorsEvent;
 import fr.ph1lou.werewolfapi.events.random_events.RumorsWriteEvent;
@@ -43,44 +42,40 @@ public class Rumors extends ListenerWerewolf {
     public void onRepartition(RepartitionEvent event) {
         WereWolfAPI game = this.getGame();
 
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
-            if (game.isState(StateGame.GAME)) {
-                if (isRegister()) {
-                    RumorsEvent rumorEvent = new RumorsEvent();
-                    Bukkit.getPluginManager().callEvent(rumorEvent);
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> {
+            if (isRegister()) {
+                RumorsEvent rumorEvent = new RumorsEvent();
+                Bukkit.getPluginManager().callEvent(rumorEvent);
 
-                    if (rumorEvent.isCancelled()) return;
+                if (rumorEvent.isCancelled()) return;
 
-                    active = true;
+                active = true;
 
-                    TextComponent textComponent = new TextComponent(
-                            game.translate(
-                                     "werewolf.random_events.rumors.message"));
-                    textComponent.setClickEvent(
-                            new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,
-                                    String.format("/ww %s",
-                                            game.translate("werewolf.random_events.rumors.command"))));
-                    Bukkit.getOnlinePlayers().forEach(player -> player.spigot().sendMessage(textComponent));
+                TextComponent textComponent = new TextComponent(
+                        game.translate(
+                                "werewolf.random_events.rumors.message"));
+                textComponent.setClickEvent(
+                        new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,
+                                String.format("/ww %s",
+                                        game.translate("werewolf.random_events.rumors.command"))));
+                Bukkit.getOnlinePlayers().forEach(player -> player.spigot().sendMessage(textComponent));
 
-                    BukkitUtils.scheduleSyncDelayedTask(() -> {
-                        if (game.isState(StateGame.GAME)) {
-                            if (isRegister()) {
-                                active = false;
-                                register(false);
-                                List<String> rumors = new ArrayList<>(this.rumors.values());
+                BukkitUtils.scheduleSyncDelayedTask(game, () -> {
+                    if (isRegister()) {
+                        active = false;
+                        register(false);
+                        List<String> rumors = new ArrayList<>(this.rumors.values());
 
-                                if(rumors.size() == 0){
-                                    return;
-                                }
-
-                                Collections.shuffle(rumors, game.getRandom());
-
-                                Bukkit.broadcastMessage(game.translate("werewolf.random_events.rumors.rumors_announcement",
-                                        Formatter.format("&rumors&", String.join("\n", rumors))));
-                            }
+                        if(rumors.size() == 0){
+                            return;
                         }
-                    }, 20L * 60);
-                }
+
+                        Collections.shuffle(rumors, game.getRandom());
+
+                        Bukkit.broadcastMessage(game.translate("werewolf.random_events.rumors.rumors_announcement",
+                                Formatter.format("&rumors&", String.join("\n", rumors))));
+                    }
+                }, 20L * 60);
             }
         }, (long) (20L * game.getConfig().getTimerValue(TIMER_START) +
                 game.getRandom().nextDouble() * 20 * game.getConfig().getTimerValue(PERIOD)));

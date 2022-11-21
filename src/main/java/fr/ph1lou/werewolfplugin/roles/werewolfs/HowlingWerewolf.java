@@ -8,7 +8,6 @@ import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.Sound;
-import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
@@ -115,10 +114,6 @@ public class HowlingWerewolf extends RoleWereWolf {
                 Formatter.number(howlEvent.getNotWerewolfSize()),
                 Formatter.format("&heart&",heart));
 
-        BukkitUtils.scheduleSyncDelayedTask(() ->  {
-            if(game.isState(StateGame.GAME)){
-                this.getPlayerWW().removePlayerMaxHealth(finalHeart);
-            }
-        });
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> this.getPlayerWW().removePlayerMaxHealth(finalHeart));
     }
 }

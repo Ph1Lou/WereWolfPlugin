@@ -91,7 +91,7 @@ public class RoleDuration extends ListenerWerewolf {
         game.getPlayersWW()
                 .forEach(playerWW -> playerWW.getRole().roleAnnouncement());
 
-        BukkitUtils.scheduleSyncDelayedTask(game::checkVictory);
+        BukkitUtils.scheduleSyncDelayedTask(game, game::checkVictory);
     }
 
 
@@ -140,32 +140,30 @@ public class RoleDuration extends ListenerWerewolf {
         game.getPlayersWW()
                 .forEach(playerWW -> playerWW.getRole().roleAnnouncement());
 
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> {
 
-            if (!game.isState(StateGame.END)) {
-                game.getPlayersWW()
-                        .forEach(playerWW -> {
-                            HandlerList.unregisterAll(playerWW.getRole());
-                            Sound.PORTAL_TRIGGER.play(playerWW);
-                            playerWW.clearPotionEffects();
-                            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.announcement.troll");
-                            playerWW.addPlayerMaxHealth(20 - playerWW.getMaxHealth());
-                        });
-                game.getPlayersWW().forEach(IPlayerWW::clearLover);
-                Iterator<? extends ILover> iterator = game.getLoversManager().getLovers().iterator();
-                while (iterator.hasNext()){
-                    HandlerList.unregisterAll(iterator.next());
-                    iterator.remove();
-                }
+            game.getPlayersWW()
+                    .forEach(playerWW -> {
+                        HandlerList.unregisterAll(playerWW.getRole());
+                        Sound.PORTAL_TRIGGER.play(playerWW);
+                        playerWW.clearPotionEffects();
+                        playerWW.sendMessageWithKey(Prefix.RED , "werewolf.announcement.troll");
+                        playerWW.addPlayerMaxHealth(20 - playerWW.getMaxHealth());
+                    });
+            game.getPlayersWW().forEach(IPlayerWW::clearLover);
+            Iterator<? extends ILover> iterator = game.getLoversManager().getLovers().iterator();
+            while (iterator.hasNext()){
+                HandlerList.unregisterAll(iterator.next());
+                iterator.remove();
+            }
 
-                if (game.getConfig().isConfigActive(ConfigBase.DOUBLE_TROLL)) {
-                    Bukkit.getPluginManager().callEvent(new TrollEvent());
-                    game.getConfig().switchConfigValue(ConfigBase.DOUBLE_TROLL);
-                    game.setDebug(false);
-                } else {
-                    game.getConfig().setConfig(ConfigBase.TROLL_ROLE, false);
-                    Bukkit.getPluginManager().callEvent(new RepartitionEvent());
-                }
+            if (game.getConfig().isConfigActive(ConfigBase.DOUBLE_TROLL)) {
+                Bukkit.getPluginManager().callEvent(new TrollEvent());
+                game.getConfig().switchConfigValue(ConfigBase.DOUBLE_TROLL);
+                game.setDebug(false);
+            } else {
+                game.getConfig().setConfig(ConfigBase.TROLL_ROLE, false);
+                Bukkit.getPluginManager().callEvent(new RepartitionEvent());
             }
 
         }, 1800L);

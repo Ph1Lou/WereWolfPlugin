@@ -3,7 +3,6 @@ package fr.ph1lou.werewolfplugin.game;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.ph1lou.werewolfapi.enums.Sound;
-import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.lovers.ILover;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
@@ -309,13 +308,9 @@ public class PlayerWW implements IPlayerWW {
 
         if(potionModifier.getDuration()<1000000000){
             potionModifier.setTimer(game.getTimer());
-            this.potionModifiers.put(potionModifier,BukkitUtils.scheduleSyncDelayedTask(() -> {
-                if(!this.game.isState(StateGame.END)){
-                    this.addPotionModifier(PotionModifier.remove(potionModifier.getPotionEffectType(),
-                            potionModifier.getIdentifier(),
-                            potionModifier.getAmplifier()));
-                }
-            },potionModifier.getDuration()));
+            this.potionModifiers.put(potionModifier,BukkitUtils.scheduleSyncDelayedTask(game, () -> this.addPotionModifier(PotionModifier.remove(potionModifier.getPotionEffectType(),
+                    potionModifier.getIdentifier(),
+                    potionModifier.getAmplifier())),potionModifier.getDuration()));
         }
         else {
             this.potionModifiers.put(potionModifier,-1);

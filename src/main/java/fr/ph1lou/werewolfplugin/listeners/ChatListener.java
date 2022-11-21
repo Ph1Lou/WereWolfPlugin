@@ -44,6 +44,10 @@ public class ChatListener implements Listener {
                 args[0].equalsIgnoreCase("/bukkit:reload")) {
             event.setCancelled(true);
             player.sendMessage(game.translate(Prefix.RED , "werewolf.check.disabled_command"));
+        } else if (args[0].equalsIgnoreCase("/stop") ||
+                args[0].equalsIgnoreCase("/bukkit:stop")) {
+            event.setCancelled(true);
+            player.performCommand(String.format("a %s", game.translate("werewolf.commands.admin.stop.command")));
         } else if (args[0].equalsIgnoreCase("/me") ||
                 args[0].equalsIgnoreCase("/minecraft:me")) {
             event.setCancelled(true);

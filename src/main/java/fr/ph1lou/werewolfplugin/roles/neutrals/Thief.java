@@ -2,27 +2,26 @@ package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.lovers.ILover;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FirstDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.StealEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.NewWereWolfEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.lovers.ILover;
+import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
-import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -133,20 +132,13 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
 
         event.setCancelled(true);
 
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
-            if (!game.isState(StateGame.END)) {
-                if (this.getPlayerWW().isState(StatePlayer.ALIVE)
-                        && hasPower()) {
-                    thiefRecoverRole(playerWW);
-                } else {
-                    BukkitUtils.scheduleSyncDelayedTask(() -> {
-                        if (!game.isState(StateGame.END)) {
-                            Bukkit.getPluginManager().callEvent(
-                                    new SecondDeathEvent(playerWW, event.getLastStrikers()));
-                        }
-
-                    }, 20L);
-                }
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> {
+            if (this.getPlayerWW().isState(StatePlayer.ALIVE)
+                    && hasPower()) {
+                thiefRecoverRole(playerWW);
+            } else {
+                BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getPluginManager().callEvent(
+                        new SecondDeathEvent(playerWW, event.getLastStrikers())), 20L);
             }
 
         },7*20);

@@ -66,7 +66,7 @@ public class DoubleJump extends ListenerWerewolf {
         player.setVelocity(player.getLocation().getDirection().multiply(vel).setY(1));
 
         this.jumpTime.put(uuid, System.currentTimeMillis());
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
+        BukkitUtils.scheduleSyncDelayedTask(this.getGame(), () -> {
             if (player.isFlying()) {
                 player.setAllowFlight(false);
             }

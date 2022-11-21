@@ -12,7 +12,6 @@ import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Sound;
-import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
@@ -230,11 +229,9 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
 
 
                 if (sniffEvent.isWereWolf()) {
-                    BukkitUtils.scheduleSyncDelayedTask(() -> {
-                        if (game.isState(StateGame.GAME)) {
-                            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.fox.smell");
-                            playerWW.sendSound(Sound.DONKEY_ANGRY);
-                        }
+                    BukkitUtils.scheduleSyncDelayedTask(game, () -> {
+                        playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.fox.smell");
+                        playerWW.sendSound(Sound.DONKEY_ANGRY);
                     }, 20 * 60 * 5);
                 }
 

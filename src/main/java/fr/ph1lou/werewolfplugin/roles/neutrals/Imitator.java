@@ -11,7 +11,6 @@ import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FirstDeathEvent;
@@ -118,20 +117,13 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
 
         event.setCancelled(true);
 
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
-            if (!game.isState(StateGame.END)) {
-                if (this.getPlayerWW().isState(StatePlayer.ALIVE)
-                        && hasPower()) {
-                    imitatorRecoverRole(playerWW);
-                } else {
-                    BukkitUtils.scheduleSyncDelayedTask(() -> {
-                        if (!game.isState(StateGame.END)) {
-                            Bukkit.getPluginManager().callEvent(
-                                    new SecondDeathEvent(playerWW, event.getLastStrikers()));
-                        }
-
-                    }, 20L);
-                }
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> {
+            if (this.getPlayerWW().isState(StatePlayer.ALIVE)
+                    && hasPower()) {
+                imitatorRecoverRole(playerWW);
+            } else {
+                BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getPluginManager().callEvent(
+                        new SecondDeathEvent(playerWW, event.getLastStrikers())), 20L);
             }
         }, 7 * 20);
     }

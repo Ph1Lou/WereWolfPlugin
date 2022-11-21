@@ -8,7 +8,6 @@ import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
@@ -170,12 +169,8 @@ public class Necromancer extends RoleNeutral implements IPower, IProgress {
 
         this.playerWW.sendMessageWithKey(Prefix.ORANGE,"werewolf.roles.necromancer.necromancer_death");
 
-        int task = BukkitUtils.scheduleSyncRepeatingTask(() -> {
-            if (this.game.isState(StateGame.GAME)) {
-                playerWW.addPlayerMaxHealth(2);
-            }
-        }, 20 * 60 * 3, 20 * 60 * 3);
-        BukkitUtils.scheduleSyncDelayedTask(() -> Bukkit.getScheduler().cancelTask(task), this.health * 20 * 61 * 3L);
+        int task = BukkitUtils.scheduleSyncRepeatingTask(game, () -> playerWW.addPlayerMaxHealth(2), 20 * 60 * 3, 20 * 60 * 3);
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getScheduler().cancelTask(task), this.health * 20 * 61 * 3L);
     }
 
     @Override

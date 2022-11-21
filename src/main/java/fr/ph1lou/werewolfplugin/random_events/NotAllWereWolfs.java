@@ -13,11 +13,13 @@ import fr.ph1lou.werewolfapi.events.game.game_cycle.UpdateCompositionEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
+import fr.ph1lou.werewolfapi.events.random_events.NotAllWerewolfEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfplugin.Register;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
@@ -33,6 +35,15 @@ public class NotAllWereWolfs extends ListenerWerewolf {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onRoles(RepartitionEvent event) {
+
+        NotAllWerewolfEvent notAllWerewolfEvent = new NotAllWerewolfEvent();
+
+        Bukkit.getPluginManager().callEvent(notAllWerewolfEvent);
+
+        if(notAllWerewolfEvent.isCancelled()){
+            return;
+        }
+
         List<IRole> defaultWereWolfs = this.getGame().getPlayersWW().stream()
                 .filter(this::isDefaultWereWolf)
                 .map(IPlayerWW::getRole)

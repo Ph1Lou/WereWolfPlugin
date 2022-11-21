@@ -60,7 +60,7 @@ public class SmallFeaturesListener implements Listener {
 
         event.setCancelled(true);
 
-        BukkitUtils.scheduleSyncDelayedTask(() -> ((Player)event.getView().getPlayer()).updateInventory());
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> ((Player)event.getView().getPlayer()).updateInventory());
     }
 
     @EventHandler
@@ -101,7 +101,7 @@ public class SmallFeaturesListener implements Listener {
         if (UniversalMaterial.ENCHANTED_GOLDEN_APPLE.getStack(
                 event.getItem().getAmount()).equals(event.getItem())) {
             event.setCancelled(true);
-            BukkitUtils.scheduleSyncDelayedTask(() ->
+            BukkitUtils.scheduleSyncDelayedTask(game, () ->
                     player.getInventory().remove(event.getItem()));
 
         } else if (event.getItem().getType().equals(Material.GOLDEN_APPLE)) {
@@ -109,7 +109,7 @@ public class SmallFeaturesListener implements Listener {
             event.setCancelled(true);
             player.setFoodLevel(player.getFoodLevel()+4);
             player.setSaturation(player.getSaturation()+9.6f);
-            BukkitUtils.scheduleSyncDelayedTask(() -> {
+            BukkitUtils.scheduleSyncDelayedTask(game, () -> {
 
                 ItemStack itemStack = VersionUtils.getVersionUtils().getItemInHand(player);
 
