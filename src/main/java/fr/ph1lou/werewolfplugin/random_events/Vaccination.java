@@ -49,8 +49,8 @@ public class Vaccination extends ListenerWerewolf {
             return;
         }
 
-        //annule l'évennement mais cache l'annulation à l'ipdl
-        e.setInformInfectionError(false);
+        //annule l'évenement mais cache l'annulation à l'ipdl
+        e.setInformInfectionCancelledMessage(false);
         e.setCancelled(true);
 
         infectPlayer.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.infect_father_of_the_wolves.infection_perform",
