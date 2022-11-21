@@ -57,7 +57,7 @@ public class Vaccination extends ListenerWerewolf {
                 Formatter.player(infectedPlayerWW.getName()));
 
         this.getGame().resurrection(infectedPlayerWW);
-        infectedPlayerWW.sendMessageWithKey("werewolf.random_events.vaccination.infection_cancelled");
+        infectedPlayerWW.sendMessageWithKey(Prefix.RED,"werewolf.random_events.vaccination.infection_cancelled");
 
         NewWereWolfEvent newWereWolfEvent = new NewWereWolfEvent(infectedPlayerWW);
         Bukkit.getPluginManager().callEvent(newWereWolfEvent);

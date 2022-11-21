@@ -1793,8 +1793,8 @@
       },
       "vaccination": {
         "name": "Vaccination",
-        "description": "Le joueur infecté par l'infect père des loups\n est mis au courrant qu'exceptionellement \nil ne rejoint pas le camps des loups\n Les loups seront néanmoins informés que ce joueur \nà bien rejoint leur camp.",
-        "infection_cancelled": "Vous avez été infectés par l'infect père des loups mais exceptionnellement, vous ne rejoignez pas le camp des loups. Ces derniers vous verront comme appartenant à leur camp."
+        "description": "Le joueur infecté par l'Infect Père des Loups\n est mis au courant qu'exceptionellement \nil ne rejoint pas le camps des Loups\n Les Loups seront néanmoins informés que ce joueur \na bien rejoint leur camp.",
+        "infection_cancelled": "Vous avez été infectés par l'Infect Père des Loups mais exceptionnellement, vous ne rejoignez pas le camp des Loups. Ces derniers vous verront comme appartenant à leur camp."
       },
       "incomplete_list": {
         "name": "Liste à Trous",
