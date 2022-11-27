@@ -7,6 +7,7 @@ import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.roles.mire.MireNearbyPlayerUnderThreeHeartEvent;
@@ -68,6 +69,10 @@ public class Mire extends RoleVillage {
         IPlayerWW playerWW = game.getPlayerWW(player.getUniqueId()).orElse(null);
 
         if(playerWW == null) return;
+
+        if(!this.game.isState(StateGame.GAME)){
+            return;
+        }
 
         if(!playerWW.isState(StatePlayer.ALIVE)) return;
 
