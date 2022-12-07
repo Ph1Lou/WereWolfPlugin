@@ -9,6 +9,7 @@ import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -188,7 +189,7 @@ public class WorldFileData
 					if (regionData.getChannel().read(header) == -1)
 						throw new EOFException();
 				}
-				header.clear(); //cast usefull else java 8 java.lang.NoSuchMethodError: java.nio.ByteBuffer.clear()Ljava/nio/ByteBuffer;
+				((Buffer)header).clear(); //cast usefull else java 8 java.lang.NoSuchMethodError: java.nio.ByteBuffer.clear()Ljava/nio/ByteBuffer;
 				IntBuffer headerAsInts = header.asIntBuffer();
 
 				// first 4096 bytes of region file consists of 4-byte int pointers to chunk data in the file (32*32 chunks = 1024; 1024 chunks * 4 bytes each = 4096)

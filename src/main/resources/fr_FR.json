@@ -648,8 +648,8 @@
       },
       "howling_werewolf": {
         "display": "Loup Garou Hurleur",
-        "description": "À chaque début de nuit, vous hurlez si il y a plus de 5 joueurs à &number& blocs de vous. En fonction du nombre de joueurs non Loup Garou qui ont entendu votre cri, vous gagnez des slots de coeurs supplémentaires pendant 5 minutes. [2 ou 3 = 1♥ / 4 ou 5 = 2♥ / 6+ = 3♥]",
-        "message": "Il y avait §b&number&§f personne(s) non Loup Garou autour de vous. Vous gagnez ainsi §b&heart&§f coeurs en plus pendant 5 minutes",
+        "description": "À chaque début de nuit, vous hurlez si il y a plus de 5 joueurs à &number& blocs de vous. En fonction du nombre de joueurs non Loup Garou qui ont entendu votre cri, vous gagnez des slots de coeurs supplémentaires pendant &timer&. [2 ou 3 = 1♥ / 4 ou 5 = 2♥ / 6+ = 3♥]",
+        "message": "Il y avait §b&number&§f personne(s) non Loup Garou autour de vous. Vous gagnez ainsi §b&heart&§f coeurs en plus pendant &timer&",
         "configurations": {
           "distance": "Champ d'action du Loup Garou Hurleur §b&number&"
         }

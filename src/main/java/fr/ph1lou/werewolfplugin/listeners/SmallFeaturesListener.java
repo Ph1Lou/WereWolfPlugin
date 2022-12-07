@@ -111,7 +111,7 @@ public class SmallFeaturesListener implements Listener {
             player.setSaturation(player.getSaturation()+9.6f);
             BukkitUtils.scheduleSyncDelayedTask(game, () -> {
 
-                ItemStack itemStack = VersionUtils.getVersionUtils().getItemInHand(player);
+                ItemStack itemStack = event.getItem();
 
                 if(itemStack.getAmount() > 1){
                     itemStack.setAmount(itemStack.getAmount()-1);

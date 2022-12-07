@@ -89,16 +89,19 @@ public class Twin extends RoleVillage {
             return;
         }
 
-        this.twinList = new ArrayList<>(Arrays.asList(playerWWS.get(0), playerWWS.get(1)));
-        twinList.addAll(game.getPlayersWW()
+        List<IPlayerWW> players = new ArrayList<>(Arrays.asList(playerWWS.get(0), playerWWS.get(1)));
+
+        this.twinList = game.getPlayersWW()
                 .stream()
                 .filter(playerWW -> playerWW.getRole().isKey(RoleBase.TWIN))
                 .filter(playerWW -> !playerWW.equals(this.getPlayerWW()))
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
 
-        Collections.shuffle(this.twinList, game.getRandom());
+        players.addAll(this.twinList);
 
-        TwinRevealEvent twinRevealEvent = new TwinRevealEvent(this.getPlayerWW(), new HashSet<>(this.twinList));
+        Collections.shuffle(players, game.getRandom());
+
+        TwinRevealEvent twinRevealEvent = new TwinRevealEvent(this.getPlayerWW(), new HashSet<>(players));
 
         Bukkit.getPluginManager().callEvent(twinRevealEvent);
 
@@ -108,7 +111,7 @@ public class Twin extends RoleVillage {
         }
 
         this.getPlayerWW().sendMessageWithKey(Prefix.BLUE,"werewolf.roles.twin.twin_list",
-                Formatter.format("&list&", this.twinList
+                Formatter.format("&list&", players
                         .stream()
                         .map(IPlayerWW::getName)
                         .collect(Collectors.joining(", "))));
@@ -152,7 +155,8 @@ public class Twin extends RoleVillage {
             return;
         }
 
-        this.twinList.stream().filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+        this.twinList.stream()
+                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .findFirst()
                 .ifPresent(playerWW -> {
                     Location twinLocation = playerWW.getLocation();

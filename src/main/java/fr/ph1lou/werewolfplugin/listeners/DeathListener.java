@@ -225,7 +225,7 @@ public class DeathListener implements Listener {
 
         Bukkit.getConsoleSender().sendMessage(this.sendOriginalDeathMessage(playerWW));
 
-        UpdateCompositionEvent updateCompositionReason = new UpdateCompositionEvent(playerWW.getDeathRole(), UpdateCompositionReason.DEATH, -1);
+        UpdateCompositionEvent updateCompositionReason = new UpdateCompositionEvent(playerWW, playerWW.getDeathRole(), UpdateCompositionReason.DEATH, -1);
         Bukkit.getPluginManager().callEvent(updateCompositionReason);
 
         if (!updateCompositionReason.isCancelled()) {

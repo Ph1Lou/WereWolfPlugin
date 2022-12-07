@@ -94,11 +94,16 @@ public class StuffLoader {
             return;
         }
 
+        config.set("start_loot", null);
+
         for (ItemStack i : game.getStuffs().getStartLoot()) {
             setItem(config,"start_loot." + pos,i);
             pos++;
         }
         pos = 0;
+
+        config.set("death_loot", null);
+
         for (ItemStack i : game.getStuffs().getDeathLoot()) {
             setItem(config,"death_loot." + pos, i);
             pos++;
@@ -128,6 +133,7 @@ public class StuffLoader {
         for (Wrapper<IRole, Role> roleRegister: Register.get().getRolesRegister()) {
             if(roleRegister.getAddonKey().equals(addonKey)){
                 String key = roleRegister.getMetaDatas().key();
+                config.set(key, null);
                 for (ItemStack i : game.getStuffs().getStuffRole(key)) {
                     setItem(config,key + "." + pos,i);
                     pos++;
