@@ -1,6 +1,10 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -17,10 +21,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+@Role(key = RoleBase.SIAMESE_TWIN,
+        category = Category.VILLAGER, 
+        attributes = RoleAttribute.VILLAGER,
+        requireDouble = true)
 public class SiameseTwin extends RoleVillage {
 
-    public SiameseTwin(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public SiameseTwin(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     @Override
@@ -28,24 +36,24 @@ public class SiameseTwin extends RoleVillage {
 
         String extraLines;
 
-        if (game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST.getKey()) > 0) {
-            extraLines= game.translate("werewolf.role.siamese_twin.siamese_twin_list",
-                    Formatter.format("&list&",Utils.conversion(game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST.getKey()))));
+        if (game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST) > 0) {
+            extraLines= game.translate("werewolf.roles.siamese_twin.siamese_twin_list",
+                    Formatter.format("&list&",Utils.conversion(game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST))));
         } else {
-            extraLines=  game.translate("werewolf.role.siamese_twin.siamese_twin_list",
+            extraLines=  game.translate("werewolf.roles.siamese_twin.siamese_twin_list",
                     Formatter.format("&list&",this.getBrother()));
         }
 
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.siamese_twin.description"))
-                .setPower(game.translate("werewolf.role.siamese_twin.power"))
+                .setDescription(game.translate("werewolf.roles.siamese_twin.description"))
+                .setPower(game.translate("werewolf.roles.siamese_twin.power"))
                 .addExtraLines(extraLines)
                 .build();
     }
 
     @EventHandler
     public void onWerewolfList(WereWolfListEvent event) {
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey(),"werewolf.role.siamese_twin.siamese_twin_list",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.roles.siamese_twin.siamese_twin_list",
                 Formatter.format("&list&",this.getBrother()));
     }
 
@@ -59,7 +67,7 @@ public class SiameseTwin extends RoleVillage {
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> !playerWW.getRole().equals(this))
                 .filter(playerWW -> playerWW.getRole().isKey(
-                        RolesBase.SIAMESE_TWIN.getKey()))
+                        RoleBase.SIAMESE_TWIN))
                 .forEach(playerWW -> list.append(playerWW.getName()).append(" "));
 
         return list.toString();
@@ -84,7 +92,7 @@ public class SiameseTwin extends RoleVillage {
                 .stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .map(IPlayerWW::getRole)
-                .filter(roles -> roles.isKey(RolesBase.SIAMESE_TWIN.getKey()))
+                .filter(roles -> roles.isKey(RoleBase.SIAMESE_TWIN))
                 .map(IRole::getPlayerUUID)
                 .map(Bukkit::getPlayer)
                 .filter(Objects::nonNull)
@@ -97,7 +105,7 @@ public class SiameseTwin extends RoleVillage {
                 .stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .map(IPlayerWW::getRole)
-                .filter(roles -> roles.isKey(RolesBase.SIAMESE_TWIN.getKey()))
+                .filter(roles -> roles.isKey(RoleBase.SIAMESE_TWIN))
                 .map(IRole::getPlayerUUID)
                 .map(Bukkit::getPlayer)
                 .filter(Objects::nonNull)

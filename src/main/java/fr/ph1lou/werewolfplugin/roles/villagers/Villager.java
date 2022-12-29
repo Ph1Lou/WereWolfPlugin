@@ -1,6 +1,11 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -18,15 +23,22 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+
+@Role(key = RoleBase.VILLAGER,
+        category = Category.VILLAGER,
+        attributes = RoleAttribute.VILLAGER)
 public class Villager extends RoleVillage {
 
     private VillagerKit villagerKit;
 
-    public Villager(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Villager(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
         if (!game.isState(StateGame.GAME)) return;
+        
         villagerKit = VillagerKit.values()[(int) Math.floor(game.getRandom().nextFloat() * VillagerKit.values().length)];
-        if (game.getConfig().isTrollSV()) return;
+        
+        if (game.getConfig().isConfigActive(ConfigBase.TROLL_ROLE)) return;
+        
         Bukkit.getPluginManager().callEvent(new VillagerKitEvent(this.getPlayerWW(), villagerKit.getKey()));
     }
 
@@ -41,7 +53,7 @@ public class Villager extends RoleVillage {
     @Override
     public void recoverPower() {
 
-        if (game.getConfig().isTrollSV()) return;
+        if (game.getConfig().isConfigActive(ConfigBase.TROLL_ROLE)) return;
 
         if(!this.isAbilityEnabled()) return;
 
@@ -86,7 +98,7 @@ public class Villager extends RoleVillage {
 
         StringBuilder sb = event.getEndMessage();
 
-        sb.append(game.translate("werewolf.role.villager.kit",
+        sb.append(game.translate("werewolf.roles.villager.kit",
                 Formatter.format("&kit&",game.translate(villagerKit.getKey()))));
 
     }

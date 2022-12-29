@@ -1,7 +1,8 @@
 package fr.ph1lou.werewolfplugin.listeners;
 
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.Prefix;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -12,6 +13,7 @@ import fr.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.DeathItemsEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FirstDeathEvent;
+import fr.ph1lou.werewolfapi.events.game.life_cycle.PlayerWWDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.ResurrectionEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.ThirdDeathEvent;
@@ -21,6 +23,7 @@ import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
+import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfplugin.game.PlayerWW;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -35,11 +38,14 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -58,10 +64,10 @@ public class DeathListener implements Listener {
 
         Player player = event.getEntity();
         UUID uuid = player.getUniqueId();
-        BukkitUtils.scheduleSyncDelayedTask(() -> player.spigot().respawn(), 10L);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(JavaPlugin.getPlugin(Main.class), () -> player.spigot().respawn(), 10L);
         event.setKeepInventory(true);
 
-        if (game.getConfig().isTrollSV()) return;
+        if (game.getConfig().isConfigActive(ConfigBase.TROLL_ROLE)) return;
 
         if (game.isState(StateGame.GAME)) {
 
@@ -79,16 +85,17 @@ public class DeathListener implements Listener {
             playerWW.setState(StatePlayer.JUDGEMENT);
             ((PlayerWW)playerWW).setDeathTime(game.getTimer());
 
-            Inventory inv = Bukkit.createInventory(null, 45);
-
+            List<ItemStack> items = new ArrayList<>();
             for (int i = 0; i < 40; i++) {
-                inv.setItem(i, player.getInventory().getItem(i));
+                ItemStack item = player.getInventory().getItem(i);
+                if(item != null){
+                    items.add(item);
+                }
             }
-
-            playerWW.setItemDeath(inv.getContents());
+            playerWW.setItemDeath(items);
 
             player.setGameMode(GameMode.ADVENTURE);
-            player.sendMessage(game.translate(Prefix.ORANGE.getKey() , "werewolf.announcement.potential_revive"));
+            player.sendMessage(game.translate(Prefix.ORANGE , "werewolf.announcement.potential_revive"));
 
             if (player.getKiller() != null) {
 
@@ -97,19 +104,21 @@ public class DeathListener implements Listener {
                 IPlayerWW killerWW = game.getPlayerWW(killerUUID).orElse(null);
                 playerWW.addKiller(killerWW);
 
+                Bukkit.getPluginManager().callEvent(new PlayerWWDeathEvent(playerWW, killerWW));
+
                 if (killerWW != null) {
                     killerWW.addOneKill(playerWW);
                 }
-            } else playerWW.addKiller(null);
+            } else {
+                playerWW.addKiller(null);
+                Bukkit.getPluginManager().callEvent(new PlayerWWDeathEvent(playerWW, null));
 
-            BukkitUtils.scheduleSyncDelayedTask(() -> {
-                if (!game.isState(StateGame.END)) {
-                    FirstDeathEvent firstDeathEvent = new FirstDeathEvent(playerWW,
-                            new HashSet<>(playerWW.getLastMinutesDamagedPlayer()));
-                    Bukkit.getPluginManager().callEvent(firstDeathEvent);
-                }
+            }
 
-
+            BukkitUtils.scheduleSyncDelayedTask(game, () -> {
+                FirstDeathEvent firstDeathEvent = new FirstDeathEvent(playerWW,
+                        new HashSet<>(playerWW.getLastMinutesDamagedPlayer()));
+                Bukkit.getPluginManager().callEvent(firstDeathEvent);
             }, 20L);
         }
     }
@@ -132,15 +141,12 @@ public class DeathListener implements Listener {
 
         if (event.isCancelled()) return;
 
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
-            if (!game.isState(StateGame.END)) {
-                if (event.getPlayerWW().isState(StatePlayer.JUDGEMENT)) {
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> {
+            if (event.getPlayerWW().isState(StatePlayer.JUDGEMENT)) {
 
-                    ThirdDeathEvent thirdDeathEvent = new ThirdDeathEvent(event.getPlayerWW(), event.getLastStrikers());
-                    Bukkit.getPluginManager().callEvent(thirdDeathEvent);
-                }
+                ThirdDeathEvent thirdDeathEvent = new ThirdDeathEvent(event.getPlayerWW(), event.getLastStrikers());
+                Bukkit.getPluginManager().callEvent(thirdDeathEvent);
             }
-
         }, 7 * 20);
     }
 
@@ -149,13 +155,10 @@ public class DeathListener implements Listener {
 
         if (event.isCancelled()) return;
 
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
-            if (!game.isState(StateGame.END)) {
-                if (event.getPlayerWW().isState(StatePlayer.JUDGEMENT)) {
-                    Bukkit.getPluginManager().callEvent(new FinalDeathEvent(event.getPlayerWW(),event.getLastStrikers()));
-                }
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> {
+            if (event.getPlayerWW().isState(StatePlayer.JUDGEMENT)) {
+                Bukkit.getPluginManager().callEvent(new FinalDeathEvent(event.getPlayerWW(),event.getLastStrikers()));
             }
-
         }, 7 * 20);
     }
 
@@ -173,12 +176,14 @@ public class DeathListener implements Listener {
             if (player != null) {
                 playerWW.setDeathLocation(player.getLocation());
 
-                Inventory inv = Bukkit.createInventory(null, 45);
-
-                for (int j = 0; j < 40; j++) {
-                    inv.setItem(j, player.getInventory().getItem(j));
+                List<ItemStack> items = new ArrayList<>();
+                for (int i = 0; i < 40; i++) {
+                    ItemStack item = player.getInventory().getItem(i);
+                    if(item != null){
+                        items.add(item);
+                    }
                 }
-                playerWW.setItemDeath(inv.getContents());
+                playerWW.setItemDeath(items);
             }
             playerWW.setDeathTime(game.getTimer());
         }
@@ -197,7 +202,7 @@ public class DeathListener implements Listener {
                         new Formatter[]{Formatter.player( announcementDeathEvent.getPlayerName()),
                                 Formatter.role(game.translate(announcementDeathEvent.getRole()))});
                 announcementDeathEvent.getTargetPlayer().sendMessageWithKey("werewolf.utils.bar");
-                announcementDeathEvent.getTargetPlayer().sendMessageWithKey(Prefix.RED.getKey(),announcementDeathEvent.getFormat(),formatters);
+                announcementDeathEvent.getTargetPlayer().sendMessageWithKey(Prefix.RED,announcementDeathEvent.getFormat(),formatters);
                 announcementDeathEvent.getTargetPlayer().sendMessageWithKey("werewolf.utils.bar");
                 announcementDeathEvent.getTargetPlayer().sendSound(Sound.AMBIENCE_THUNDER);
             }
@@ -220,7 +225,7 @@ public class DeathListener implements Listener {
 
         Bukkit.getConsoleSender().sendMessage(this.sendOriginalDeathMessage(playerWW));
 
-        UpdateCompositionEvent updateCompositionReason = new UpdateCompositionEvent(playerWW.getDeathRole(), UpdateCompositionReason.DEATH, -1);
+        UpdateCompositionEvent updateCompositionReason = new UpdateCompositionEvent(playerWW, playerWW.getDeathRole(), UpdateCompositionReason.DEATH, -1);
         Bukkit.getPluginManager().callEvent(updateCompositionReason);
 
         if (!updateCompositionReason.isCancelled()) {
@@ -238,18 +243,14 @@ public class DeathListener implements Listener {
         Bukkit.getPluginManager().callEvent(deathItemsEvent);
 
         if(!deathItemsEvent.isCancelled()){
-            deathItemsEvent.getItems().forEach(itemStack -> {
-                if(itemStack != null){
-                    world.dropItem(deathItemsEvent.getLocation(), itemStack);
-                }
-            });
+            deathItemsEvent.getItems().forEach(itemStack -> world.dropItem(deathItemsEvent.getLocation(), itemStack));
         }
 
         if (player != null) {
 
             player.setGameMode(GameMode.SPECTATOR);
-            TextComponent msg = new TextComponent(game.translate("werewolf.utils.bar")+
-                    game.translate(Prefix.YELLOW.getKey(),"werewolf.bug") +
+            TextComponent msg = new TextComponent(game.translate("werewolf.utils.bar")+ "\n" +
+                    game.translate(Prefix.YELLOW,"werewolf.bug") + "\n" +
                     game.translate("werewolf.utils.bar"));
             msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
                     "https://discord.gg/GXXCVUA"));
@@ -257,15 +258,15 @@ public class DeathListener implements Listener {
             if (game.getConfig().getSpectatorMode() == 0 &&
                     !player.isOp() &&
                     !game.getModerationManager().isStaff(player.getUniqueId())) {
-                player.kickPlayer(game.translate(Prefix.RED.getKey() , "werewolf.check.spectator_disabled"));
+                player.kickPlayer(game.translate(Prefix.RED , "werewolf.check.spectator_disabled"));
             }
             Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(player));
         }
-        BukkitUtils.scheduleSyncDelayedTask(game::checkVictory);
+        BukkitUtils.scheduleSyncDelayedTask(game, game::checkVictory);
     }
 
     private String sendOriginalDeathMessage(IPlayerWW playerWW) {
-        return game.translate("werewolf.utils.bar") + game.translate(Prefix.RED.getKey() , "werewolf.announcement.death_message_with_role",
+        return game.translate("werewolf.utils.bar") + game.translate(Prefix.RED , "werewolf.announcement.death_message_with_role",
                 Formatter.player( playerWW.getName()),
                 Formatter.role( game.translate(playerWW.getRole().getKey())))
                 + game.translate("werewolf.utils.bar");
@@ -289,11 +290,11 @@ public class DeathListener implements Listener {
             ((PlayerWW)playerWW).updatePotionEffects(player);
         }
 
-        playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.announcement.resurrection");
+        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.announcement.resurrection");
         game.getMapManager().transportation(playerWW, Math.random() * Math.PI * 2);
 
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(playerWW));
-        BukkitUtils.scheduleSyncDelayedTask(game::checkVictory);
+        BukkitUtils.scheduleSyncDelayedTask(game, game::checkVictory);
     }
 
     @EventHandler
@@ -307,7 +308,7 @@ public class DeathListener implements Listener {
             ((PlayerWW)playerWW).updatePotionEffects(player);
 
             if (game.isState(StateGame.LOBBY)) {
-                BukkitUtils.scheduleSyncDelayedTask(() ->
+                BukkitUtils.scheduleSyncDelayedTask(game, () ->
                                 event.getPlayer().addPotionEffect(new PotionEffect(
                                         PotionEffectType.SATURATION,
                                         Integer.MAX_VALUE,
@@ -318,11 +319,11 @@ public class DeathListener implements Listener {
             } else if (game.isState(StateGame.START) ||
                     game.isState(StateGame.TRANSPORTATION) ||
                     (game.isState(StateGame.GAME) &&
-                            game.getConfig().isTrollSV())) {
+                            game.getConfig().isConfigActive(ConfigBase.TROLL_ROLE))) {
 
                 event.setRespawnLocation(
                         playerWW.getSpawn());
-                BukkitUtils.scheduleSyncDelayedTask(() -> playerWW.addPotionModifier(PotionModifier.add(
+                BukkitUtils.scheduleSyncDelayedTask(game, () -> playerWW.addPotionModifier(PotionModifier.add(
                                 PotionEffectType.WITHER,
                                 400,
                                 0,

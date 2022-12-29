@@ -1,10 +1,14 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.librarian.LibrarianDeathEvent;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
@@ -17,14 +21,18 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+@Role(key = RoleBase.LIBRARIAN,
+        category = Category.VILLAGER,
+        attributes = {RoleAttribute.VILLAGER,
+                RoleAttribute.MINOR_INFORMATION})
 public class Librarian extends RoleVillage implements ILimitedUse, IAffectedPlayers {
 
     private int use = 0;
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private final List<String> storage = new ArrayList<>();
 
-    public Librarian(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Librarian(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     @Override
@@ -62,9 +70,9 @@ public class Librarian extends RoleVillage implements ILimitedUse, IAffectedPlay
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.librarian.description",
+                .setDescription(game.translate("werewolf.roles.librarian.description",
                                 Formatter.number(3 - use)))
-                .setItems(game.translate("werewolf.role.librarian.items"))
+                .setItems(game.translate("werewolf.roles.librarian.items"))
                 .build();
     }
 
@@ -91,11 +99,11 @@ public class Librarian extends RoleVillage implements ILimitedUse, IAffectedPlay
 
         if (!isAbilityEnabled()) return;
 
-        Bukkit.broadcastMessage(game.translate(Prefix.YELLOW.getKey() , "werewolf.role.librarian.death"));
+        Bukkit.broadcastMessage(game.translate(Prefix.YELLOW , "werewolf.roles.librarian.death"));
         int page = 1;
         for (String message : this.storage) {
             Bukkit.broadcastMessage(game.translate(
-                    Prefix.YELLOW.getKey() , "werewolf.role.librarian.book",
+                    Prefix.YELLOW , "werewolf.roles.librarian.book",
                     Formatter.format("&page&",page),
                     Formatter.format("&message&",message)));
             page++;

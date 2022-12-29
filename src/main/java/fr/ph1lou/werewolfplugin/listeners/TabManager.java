@@ -3,7 +3,7 @@ package fr.ph1lou.werewolfplugin.listeners;
 import fr.ph1lou.werewolfapi.game.IModerationManager;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.ConfigBase;
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
@@ -33,7 +33,7 @@ import java.util.UUID;
 
 public class TabManager implements Listener {
 
-    final WereWolfAPI game;
+    private final WereWolfAPI game;
 
     public TabManager(WereWolfAPI game) {
         this.game = game;
@@ -105,7 +105,7 @@ public class TabManager implements Listener {
             sb.append(game.translate("werewolf.commands.admin.moderator.tag"));
         } else if (moderationManager.getQueue().contains(uuid)) {
             if (game.isState(StateGame.LOBBY)) {
-                sb.append(game.translate("werewolf.menu.rank.tag"));
+                sb.append(game.translate("werewolf.commands.player.rank.tag"));
             }
         }
 
@@ -144,7 +144,7 @@ public class TabManager implements Listener {
                 AppearInWereWolfListEvent appearInWereWolfListEvent = new AppearInWereWolfListEvent(player.getUniqueId(), uuid1);
                 Bukkit.getPluginManager().callEvent(appearInWereWolfListEvent);
                 if (appearInWereWolfListEvent.isAppear()) {
-                    if (game.getConfig().isConfigActive(ConfigBase.RED_NAME_TAG.getKey())) {
+                    if (game.getConfig().isConfigActive(ConfigBase.RED_NAME_TAG)) {
                         sb.append(ChatColor.DARK_RED);
                     }
                 }

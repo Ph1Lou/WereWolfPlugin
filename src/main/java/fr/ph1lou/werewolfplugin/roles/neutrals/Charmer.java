@@ -1,25 +1,29 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.annotations.Timer;
+import fr.ph1lou.werewolfapi.basekeys.LoverBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.LoverType;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.enums.TimerBase;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.lovers.LoverDeathEvent;
 import fr.ph1lou.werewolfapi.events.lovers.RevealLoversEvent;
 import fr.ph1lou.werewolfapi.events.roles.charmer.CharmedDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.charmer.CharmerGetEffectDeathEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
-import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
-import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfplugin.roles.lovers.FakeLoverCharmer;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -33,6 +37,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+@Role(key = RoleBase.CHARMER,
+        category = Category.NEUTRAL,
+        attributes = RoleAttribute.NEUTRAL,
+        timers = @Timer(key = TimerBase.CHARMER_COUNTDOWN,
+                defaultValue = 6000, meetUpValue = 1200,
+        decrementAfterRole = true),
+        incompatibleRoles = RoleBase.SCAMMER)
 public class Charmer extends RoleNeutral implements IPower, IAffectedPlayers {
 
     @Nullable
@@ -40,37 +52,34 @@ public class Charmer extends RoleNeutral implements IPower, IAffectedPlayers {
 
     private boolean power = true;
 
-    public Charmer(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Charmer(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     @Override
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.charmer.description"))
+                .setDescription(game.translate("werewolf.roles.charmer.description"))
                 .setPower(
                         this.playerWW == null ?
-                                game.translate("werewolf.role.charmer.choose", Formatter.timer(
-                                                Utils.conversion(
-                                                        game.getConfig().getTimerValue(TimerBase.LOVER_DURATION.getKey())
-                                                )
+                                game.translate("werewolf.roles.charmer.choose", Formatter.timer(game, TimerBase.LOVER_DURATION
+
                                         )
                                 )
                                 :
-                                game.getConfig().getTimerValue(TimerBase.CHARMER_COUNTDOWN.getKey())>0?
-                                        game.translate("werewolf.role.charmer.timer",
+                                game.getConfig().getTimerValue(TimerBase.CHARMER_COUNTDOWN)>0?
+                                        game.translate("werewolf.roles.charmer.timer",
                                                 Formatter.timer(
-                                                        Utils.conversion(
-                                                                game.getConfig().getTimerValue(TimerBase.CHARMER_COUNTDOWN.getKey())
-                                                        )
+                                                        game, TimerBase.CHARMER_COUNTDOWN
+
                                                 ),
                                                 Formatter.player(this.playerWW.getName())
                                         )
                                         :
-                                        game.translate("werewolf.role.charmer.affected")
+                                        game.translate("werewolf.roles.charmer.affected")
                 )
-                .setEffects(game.translate("werewolf.role.charmer.effects"))
+                .setEffects(game.translate("werewolf.roles.charmer.effects"))
                 .build();
     }
 
@@ -91,13 +100,13 @@ public class Charmer extends RoleNeutral implements IPower, IAffectedPlayers {
 
         CharmedDeathEvent charmedDeathEvent = new CharmedDeathEvent(this.getPlayerWW(),
                 this.playerWW,
-                this.game.getConfig().getTimerValue(TimerBase.CHARMER_COUNTDOWN.getKey())>0);
+                this.game.getConfig().getTimerValue(TimerBase.CHARMER_COUNTDOWN)>0);
         Bukkit.getPluginManager().callEvent(charmedDeathEvent);
 
         if(!charmedDeathEvent.isCancelled()){
             if(charmedDeathEvent.isBeforeCountDown()){
                 this.getPlayerWW().removePlayerMaxHealth(6);
-                this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE.getKey(),"werewolf.role.charmer.before_count_down");
+                this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE,"werewolf.roles.charmer.before_count_down");
             }
         }
     }
@@ -106,8 +115,8 @@ public class Charmer extends RoleNeutral implements IPower, IAffectedPlayers {
     public void onLoverDead(LoverDeathEvent event){
 
 
-        if(!event.getLover().getKey().equals(LoverType.LOVER.getKey()) &&
-                !event.getLover().getKey().equals(LoverType.AMNESIAC_LOVER.getKey())){
+        if(!event.getLover().getKey().equals(LoverBase.LOVER) &&
+                !event.getLover().getKey().equals(LoverBase.AMNESIAC_LOVER)){
             return;
         }
 
@@ -117,16 +126,16 @@ public class Charmer extends RoleNeutral implements IPower, IAffectedPlayers {
 
         if(effectDeath.isCancelled() || !this.isAbilityEnabled()){
             this.getPlayerWW()
-                    .sendMessageWithKey(Prefix.RED.getKey() ,
+                    .sendMessageWithKey(Prefix.RED ,
                             "werewolf.check.cancel");
             return;
         }
         this.getPlayerWW().addPotionModifier(PotionModifier
-                .add(PotionEffectType.ABSORPTION,Integer.MAX_VALUE,4,"charmer"));
+                .add(PotionEffectType.ABSORPTION,Integer.MAX_VALUE,4,this.getKey()));
         this.getPlayerWW().addPotionModifier(PotionModifier
-                .add(PotionEffectType.SPEED,"charmer"));
-        this.getPlayerWW().sendMessageWithKey(Prefix.LIGHT_BLUE.getKey(),
-                "werewolf.role.charmer.lover_death");
+                .add(PotionEffectType.SPEED,this.getKey()));
+        this.getPlayerWW().sendMessageWithKey(Prefix.LIGHT_BLUE,
+                "werewolf.roles.charmer.lover_death");
     }
 
     @EventHandler
@@ -136,7 +145,7 @@ public class Charmer extends RoleNeutral implements IPower, IAffectedPlayers {
         }
 
         if(this.playerWW != null){
-            this.playerWW.sendMessageWithKey(Prefix.BLUE.getKey(),"werewolf.role.charmer.reveal",
+            this.playerWW.sendMessageWithKey(Prefix.BLUE,"werewolf.roles.charmer.reveal",
                     Formatter.player(this.getPlayerWW().getName()));
         }
     }
@@ -182,12 +191,12 @@ public class Charmer extends RoleNeutral implements IPower, IAffectedPlayers {
 
             IPlayerWW playerWW = playerWWS.get(0);
             this.playerWW=playerWW;
-            this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey(),"werewolf.role.charmer.perform",
+            this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.roles.charmer.perform",
                     Formatter.player(playerWW.getName()));
 
             FakeLoverCharmer fakeLover = new FakeLoverCharmer(game,new ArrayList<>(Arrays.asList(this.getPlayerWW(), playerWW)), this.getPlayerWW());
             game.getLoversManager().addLover(fakeLover);
-            BukkitUtils.registerEvents(fakeLover);
+            BukkitUtils.registerListener(fakeLover);
             fakeLover.announceLovers();
         }
         else{

@@ -2,12 +2,6 @@ package fr.ph1lou.werewolfplugin.save;
 
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.WriterConfig;
-import fr.ph1lou.werewolfapi.game.IConfiguration;
-import fr.ph1lou.werewolfapi.registers.interfaces.IRegisterManager;
-import fr.ph1lou.werewolfapi.registers.impl.RoleRegister;
-import fr.ph1lou.werewolfplugin.Main;
-import fr.ph1lou.werewolfplugin.RegisterManager;
-import fr.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 
 import java.io.BufferedReader;
@@ -39,30 +33,6 @@ public class FileUtils_ {
         }
     }
 
-    public static void loadConfig(Main main, String name){
-
-        GameManager game = (GameManager) main.getWereWolfAPI();
-
-        File file = new File(main.getDataFolder() + File.separator + "configs" + File.separator, name + ".json");
-
-        if (file.exists()) {
-            game.setConfig(Serializer.deserialize(loadContent(file)));
-            game.setRoleInitialSize(0);
-            game.getModerationManager().checkQueue();
-            ((Configuration) game.getConfig()).addRegister((RegisterManager) main.getRegisterManager());
-            game.getListenersLoader().update();
-        }
-
-        IConfiguration config = game.getConfig();
-        IRegisterManager register = main.getRegisterManager();
-
-        for (RoleRegister roleRegister : register.getRolesRegister()) {
-            String key = roleRegister.getKey();
-            game.setRoleInitialSize(game.getRoleInitialSize() + config.getRoleCount(key));
-        }
-
-        save(file, Serializer.serialize(game.getConfig()));
-    }
 
     public static void save(File file, String text) {
 

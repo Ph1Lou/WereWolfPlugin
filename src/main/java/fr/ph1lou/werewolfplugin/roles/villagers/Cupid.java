@@ -1,7 +1,14 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
-import fr.ph1lou.werewolfapi.enums.ConfigBase;
+import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -12,7 +19,6 @@ import fr.ph1lou.werewolfapi.events.lovers.AroundLoverEvent;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
-import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
@@ -21,13 +27,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Role(key = RoleBase.CUPID, category = Category.VILLAGER,
+           attributes = RoleAttribute.HYBRID,
+            configurations = @Configuration(config = @ConfigurationBasic(key = ConfigBase.RANDOM_CUPID)))
 public class Cupid extends RoleVillage implements IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private boolean power = true;
 
-    public Cupid(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Cupid(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     @Override
@@ -64,22 +73,18 @@ public class Cupid extends RoleVillage implements IAffectedPlayers, IPower {
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.role.cupid.description"))
-                .setItems(game.translate("werewolf.role.cupid.items"))
-                .setEquipments(game.translate("werewolf.role.cupid.extra",
+                .setDescription(game.translate("werewolf.roles.cupid.description"))
+                .setItems(game.translate("werewolf.roles.cupid.items"))
+                .setEquipments(game.translate("werewolf.roles.cupid.extra",
                                 Formatter.number(game.getConfig().getLimitPowerBow() + 1)))
-                .addExtraLines(game.translate("werewolf.role.cupid.lover",
+                .addExtraLines(game.translate("werewolf.roles.cupid.lover",
                                 Formatter.format("&lovers&",this.affectedPlayer.isEmpty() ?
                                 this.hasPower() ?
-                                        game.getConfig().isConfigActive(ConfigBase.RANDOM_CUPID.getKey()) ?
-                                        game.translate("werewolf.role.cupid.wait",Formatter.timer(Utils.conversion(
-                                                game.getConfig()
-                                                        .getTimerValue("werewolf.menu.timers.lover_duration")))):
-                                        game.translate("werewolf.role.cupid.lover_designation_message",
-                                                Formatter.timer(Utils.conversion(
-                                                        game.getConfig()
-                                                                .getTimerValue("werewolf.menu.timers.lover_duration")))) :
-                                        game.translate("werewolf.role.cupid.none") :
+                                        game.getConfig().isConfigActive(ConfigBase.RANDOM_CUPID) ?
+                                        game.translate("werewolf.roles.cupid.wait",Formatter.timer(game, TimerBase.LOVER_DURATION)):
+                                        game.translate("werewolf.roles.cupid.lover_designation_message",
+                                                Formatter.timer(game,TimerBase.LOVER_DURATION)) :
+                                        game.translate("werewolf.roles.cupid.none") :
                                 affectedPlayer.stream().map(IPlayerWW::getName)
                                         .collect(Collectors.joining(" ")))))
                 .build();

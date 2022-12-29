@@ -1,14 +1,16 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.cupid;
 
 import com.google.common.collect.Sets;
-import fr.ph1lou.werewolfapi.enums.ConfigBase;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.commands.ICommand;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.annotations.RoleCommand;
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.lovers.CupidLoversEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
@@ -17,25 +19,26 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandCupid implements ICommand {
+@RoleCommand(key = "werewolf.roles.cupid.command",
+        roleKeys = RoleBase.CUPID,
+        requiredPower = true,
+        argNumbers = 2)
+public class CommandCupid implements ICommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, Player player, String[] args) {
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
 
-        UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
-
-        if (playerWW == null) return;
+        UUID uuid = playerWW.getUUID();
 
         IRole cupid = playerWW.getRole();
 
         if (args[0].equalsIgnoreCase(args[1])) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.two_distinct_player");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.two_distinct_player");
             return;
         }
 
-        if(game.getConfig().isConfigActive(ConfigBase.RANDOM_CUPID.getKey())){
-            playerWW.sendMessageWithKey(Prefix.GREEN.getKey(),"werewolf.role.cupid.random");
+        if(game.getConfig().isConfigActive(ConfigBase.RANDOM_CUPID)){
+            playerWW.sendMessageWithKey(Prefix.GREEN,"werewolf.roles.cupid.random_cupid_message");
             return;
         }
 
@@ -44,7 +47,7 @@ public class CommandCupid implements ICommand {
             Player playerArg = Bukkit.getPlayer(p);
 
             if (playerArg == null) {
-                playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.offline_player");
+                playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.offline_player");
                 return;
             }
 
@@ -52,12 +55,12 @@ public class CommandCupid implements ICommand {
             IPlayerWW playerWW1 = game.getPlayerWW(uuid1).orElse(null);
 
             if (playerWW1 == null || playerWW1.isState(StatePlayer.DEATH)) {
-                playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.player_not_found");
+                playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.player_not_found");
                 return;
             }
 
             if (uuid.equals(uuid1)) {
-                playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.not_yourself");
+                playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.not_yourself");
                 return;
             }
         }
@@ -72,7 +75,7 @@ public class CommandCupid implements ICommand {
         }
         ((IPower) cupid).setPower(false);
         Bukkit.getPluginManager().callEvent(new CupidLoversEvent(playerWW, Sets.newHashSet(((IAffectedPlayers) cupid).getAffectedPlayers())));
-        playerWW.sendMessageWithKey(Prefix.YELLOW.getKey() , "werewolf.role.cupid.designation_perform",
+        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.cupid.designation_perform",
                 Formatter.format("&player1&",args[0]),
                         Formatter.format("&player2&",args[1]));
     }

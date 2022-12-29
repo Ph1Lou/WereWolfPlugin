@@ -1,10 +1,12 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.info.librarian;
 
+import fr.ph1lou.werewolfapi.annotations.RoleCommand;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.librarian.LibrarianRequestEvent;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
@@ -17,29 +19,25 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CommandLibrarian implements ICommand {
-
+@RoleCommand(key = "werewolf.roles.librarian.command",
+        roleKeys = RoleBase.LIBRARIAN,
+        argNumbers = 1)
+public class CommandLibrarian implements ICommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, Player player, String[] args) {
-
-        String playername = player.getName();
-        UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
-
-        if (playerWW == null) return;
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
 
         IRole librarian = playerWW.getRole();
 
-        if (args[0].equalsIgnoreCase(playername)) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.not_yourself");
+        if (args[0].equalsIgnoreCase(playerWW.getName())) {
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.not_yourself");
             return;
         }
 
         Player selectionPlayer = Bukkit.getPlayer(args[0]);
 
         if (selectionPlayer == null) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.offline_player");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.offline_player");
             return;
         }
 
@@ -49,18 +47,18 @@ public class CommandLibrarian implements ICommand {
         if (playerWW1 == null ||
                 !playerWW1.isState(StatePlayer.ALIVE)) {
 
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.player_not_found");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.player_not_found");
             return;
         }
 
         if (((IAffectedPlayers) librarian).getAffectedPlayers().contains(playerWW1)) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.librarian.waiting");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.librarian.waiting");
             return;
         }
 
 
         if (((ILimitedUse) librarian).getUse() >= 3) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.power");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.power");
             return;
         }
 
@@ -69,24 +67,24 @@ public class CommandLibrarian implements ICommand {
         Bukkit.getPluginManager().callEvent(librarianRequestEvent);
 
         if (librarianRequestEvent.isCancelled()) {
-            playerWW.sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
             return;
         }
 
         ((IAffectedPlayers) librarian).addAffectedPlayer(playerWW1);
 
         TextComponent contributionMessage = new TextComponent(game.translate(
-                Prefix.YELLOW.getKey() , "werewolf.role.librarian.message"));
+                Prefix.YELLOW , "werewolf.roles.librarian.message"));
         contributionMessage
                 .setClickEvent(new ClickEvent(
                         ClickEvent.Action.SUGGEST_COMMAND,
                         String.format(
                                 "/ww %s",
-                                game.translate("werewolf.role.librarian.request_command"))));
+                                game.translate("werewolf.roles.librarian.request_command"))));
         selectionPlayer.spigot().sendMessage(contributionMessage);
 
         playerWW.sendMessageWithKey(
-                Prefix.YELLOW.getKey() , "werewolf.role.librarian.perform",
+                Prefix.YELLOW , "werewolf.roles.librarian.perform",
                 Formatter.player(selectionPlayer.getName()));
     }
 }

@@ -6,21 +6,23 @@ import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
-import fr.minuskube.inv.content.SlotIterator;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.game.GameManager;
+import fr.ph1lou.werewolfplugin.utils.InventoryUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,18 +32,20 @@ public class TimersGUI implements InventoryProvider {
     }
 
     public static SmartInventory getInventory(Player player) {
+        Main main = JavaPlugin.getPlugin(Main.class);
+
         return SmartInventory.builder()
                 .id("timers")
-                .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
+                .manager(main.getInvManager())
                 .provider(new TimersGUI(player))
-                .size(Math.min(54, (JavaPlugin.getPlugin(Main.class).getRegisterManager().getTimersRegister().size() / 9 + 2) * 9) / 9, 9)
-                .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menu.timers.name"))
+                .size(InventoryUtils.getRowNumbers(main.getRegisterManager().getTimersRegister().size(), false), 9)
+                .title(main.getWereWolfAPI().translate("werewolf.menus.timers.name"))
                 .closeable(true)
                 .build();
     }
 
 
-    private String key = "werewolf.menu.timers.invulnerability";
+    private String key = TimerBase.INVULNERABILITY;
 
     @Override
     public void init(Player player, InventoryContents contents) {
@@ -50,8 +54,8 @@ public class TimersGUI implements InventoryProvider {
         contents.set(0, 0, ClickableItem.of((
                 new ItemBuilder(UniversalMaterial.COMPASS.getType())
                         .setDisplayName(
-                                game.translate("werewolf.menu.return"))
-                        .build()), e -> Config.INVENTORY.open(player)));
+                                game.translate("werewolf.menus.return"))
+                        .build()), e -> MainGUI.INVENTORY.open(player)));
     }
 
     @Override
@@ -167,70 +171,51 @@ public class TimersGUI implements InventoryProvider {
 
         main.getRegisterManager().getTimersRegister()
                 .stream()
-                .filter(timerRegister -> !timerRegister.getRoleKey().isPresent() || game.isDebug())
+                .sorted(Comparator.comparingInt(o -> game.getConfig().getTimerValue(o.getMetaDatas().key())))
+                .sorted((o1, o2) -> {
+                    if(o1.getMetaDatas().decrement() && o2.getMetaDatas().decrement()){
+                        return 0;
+                    }
+                    if(o1.getMetaDatas().decrement()){
+                        return -1;
+                    }
+                    if(o2.getMetaDatas().decrement()){
+                        return 1;
+                    }
+                    if(o1.getMetaDatas().decrementAfterRole() && o2.getMetaDatas().decrementAfterRole()){
+                        return 0;
+                    }
+                    if(o1.getMetaDatas().decrementAfterRole()){
+                        return -1;
+                    }
+                    if(o2.getMetaDatas().decrementAfterRole()){
+                        return 1;
+                    }
+                    return 0;
+                })
                 .forEach(timerRegister -> {
 
             List<String> lore = new ArrayList<>();
-            timerRegister.getLoreKey().stream()
+                    Arrays.stream(timerRegister.getMetaDatas().loreKey())
                     .map(game::translate)
                     .map(s -> Arrays.stream(s.split("\\n"))
                             .collect(Collectors.toList()))
                     .forEach(lore::addAll);
 
-            if (game.getConfig().getTimerValue(timerRegister.getKey()) >= 0 || game.isDebug()) {
+            if (game.getConfig().getTimerValue(timerRegister.getMetaDatas().key()) >= 0 || game.isDebug()) {
 
-                items.add(ClickableItem.of((new ItemBuilder(timerRegister.getKey().equals(key) ?
+                items.add(ClickableItem.of((new ItemBuilder(timerRegister.getMetaDatas().key().equals(key) ?
                                 Material.FEATHER :
-                                Material.ANVIL)
+                                UniversalMaterial.ANVIL.getType())
                                 .setLore(lore)
-                                .setDisplayName(game.translate(timerRegister.getKey(),
-                                        Formatter.timer(Utils.conversion(config.getTimerValue(timerRegister.getKey())))))
+                                .setDisplayName(game.translate(timerRegister.getMetaDatas().key(),
+                                        Formatter.timer(game, timerRegister.getMetaDatas().key())))
                                 .build()),
-                        e -> this.key = timerRegister.getKey()));
+                        e -> this.key = timerRegister.getMetaDatas().key()));
             }
-
         });
 
-        if (items.size() > 45) {
-            pagination.setItems(items.toArray(new ClickableItem[0]));
-            pagination.setItemsPerPage(36);
-            pagination.addToIterator(contents.newIterator(SlotIterator.Type.HORIZONTAL, 1, 0));
-            int page = pagination.getPage() + 1;
-            contents.set(5, 0, null);
-            contents.set(5, 1, null);
-            contents.set(5, 3, null);
-            contents.set(5, 5, null);
-            contents.set(5, 7, null);
-            contents.set(5, 8, null);
-            contents.set(5, 2, ClickableItem.of(new ItemBuilder(Material.ARROW)
-                            .setDisplayName(game.translate("werewolf.menu.roles.previous",
-                                                    Formatter.format("&current&",page),
-                                                                    Formatter.format("&previous&",pagination.isFirst() ? page : page - 1)))
-                            .build(),
-
-                    e -> getInventory(player).open(player, pagination.previous().getPage())));
-            contents.set(5, 6, ClickableItem.of(new ItemBuilder(Material.ARROW)
-                            .setDisplayName(game.translate("werewolf.menu.roles.next",
-                                                    Formatter.format("&current&",page),
-                                                                    Formatter.format("&next&",pagination.isLast() ? page : page + 1)))
-                            .build(),
-
-                    e -> getInventory(player).open(player, pagination.next().getPage())));
-            contents.set(5, 4, ClickableItem.empty(
-                    new ItemBuilder(UniversalMaterial.SIGN.getType())
-                            .setDisplayName(game.translate("werewolf.menu.roles.current",
-                                    Formatter.format("&current&",page),
-                                            Formatter.format("&sum&",items.size() / 36 + 1))).build()));
-        } else {
-            int i = 0;
-            for (ClickableItem clickableItem : items) {
-                contents.set(i / 9 + 1, i % 9, clickableItem);
-                i++;
-            }
-            for (int k = i; k < (i / 9 + 1) * 9; k++) {
-                contents.set(k / 9 + 1, k % 9, null);
-            }
-        }
+        InventoryUtils.fillInventory(game, items, pagination, contents, () -> getInventory(player), 45);
 
     }
 

@@ -1,11 +1,15 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteEvent;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
@@ -21,22 +25,25 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
+@Role(key = RoleBase.VILLAGE_IDIOT,
+        category = Category.VILLAGER,
+        attributes = RoleAttribute.VILLAGER)
 public class VillageIdiot extends RoleVillage implements IPower {
 
     private boolean power = true;
 
 
-    public VillageIdiot(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public VillageIdiot(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(this.game, this)
-                .setDescription(this.game.translate("werewolf.role.village_idiot.description"))
+                .setDescription(this.game.translate("werewolf.roles.village_idiot.description"))
                 .setPower(this.game.translate(this.power ?
-                        "werewolf.role.village_idiot.power_on" :
-                        "werewolf.role.village_idiot.power_off"))
+                        "werewolf.roles.village_idiot.power_on" :
+                        "werewolf.roles.village_idiot.power_off"))
                 .build();
     }
 
@@ -69,7 +76,7 @@ public class VillageIdiot extends RoleVillage implements IPower {
 
         event.setCancelled(true);
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey(),"werewolf.role.village_idiot.vote");
+        this.getPlayerWW().sendMessageWithKey(Prefix.RED,"werewolf.roles.village_idiot.vote");
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -81,7 +88,7 @@ public class VillageIdiot extends RoleVillage implements IPower {
 
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
-        event.setSuffix(event.getSuffix() + " " + this.game.translate("werewolf.role.village_idiot.suffix"));
+        event.setSuffix(event.getSuffix() + " " + this.game.translate("werewolf.roles.village_idiot.suffix"));
     }
 
 
@@ -117,7 +124,7 @@ public class VillageIdiot extends RoleVillage implements IPower {
         Bukkit.getPluginManager().callEvent(villageIdiotEvent);
 
         if (villageIdiotEvent.isCancelled()) {
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
             return;
         }
         this.game.resurrection(getPlayerWW());
@@ -128,7 +135,7 @@ public class VillageIdiot extends RoleVillage implements IPower {
         }
         this.getPlayerWW().removePlayerMaxHealth(4);
         event.setCancelled(true);
-        Bukkit.broadcastMessage(this.game.translate(Prefix.YELLOW.getKey() , "werewolf.role.village_idiot.announce",
+        Bukkit.broadcastMessage(this.game.translate(Prefix.YELLOW , "werewolf.roles.village_idiot.announce",
                 Formatter.player(this.getPlayerWW().getName())));
     }
 }

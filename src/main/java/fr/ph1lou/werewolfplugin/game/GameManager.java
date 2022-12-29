@@ -1,11 +1,9 @@
 package fr.ph1lou.werewolfplugin.game;
 
 import fr.mrmicky.fastboard.FastBoard;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Day;
-import fr.ph1lou.werewolfapi.enums.Prefix;
 import fr.ph1lou.werewolfapi.enums.StateGame;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.events.UpdateLanguageEvent;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.LoadEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
@@ -13,6 +11,8 @@ import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalJoinEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.ResurrectionEvent;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
+import fr.ph1lou.werewolfapi.game.ILanguageManager;
+import fr.ph1lou.werewolfapi.game.IListenersManager;
 import fr.ph1lou.werewolfapi.game.IMapManager;
 import fr.ph1lou.werewolfapi.game.IModerationManager;
 import fr.ph1lou.werewolfapi.game.IStuffManager;
@@ -22,28 +22,23 @@ import fr.ph1lou.werewolfapi.lovers.ILoverManager;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
-import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import fr.ph1lou.werewolfapi.vote.IVoteManager;
 import fr.ph1lou.werewolfplugin.Main;
-import fr.ph1lou.werewolfplugin.save.Configuration;
-import fr.ph1lou.werewolfplugin.save.FileUtils_;
-import fr.ph1lou.werewolfplugin.save.LanguageManager;
-import fr.ph1lou.werewolfplugin.save.Stuff;
+import fr.ph1lou.werewolfplugin.save.ConfigurationLoader;
+import fr.ph1lou.werewolfplugin.save.LanguageLoader;
+import fr.ph1lou.werewolfplugin.save.StuffLoader;
 import fr.ph1lou.werewolfplugin.scoreboards.ScoreBoard;
 import fr.ph1lou.werewolfplugin.tasks.LobbyTask;
 import fr.ph1lou.werewolfplugin.utils.UpdateChecker;
-import fr.ph1lou.werewolfplugin.utils.random_config.RandomConfig;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -52,79 +47,72 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
-import java.util.stream.Collectors;
+import java.util.function.Consumer;
 
 public class GameManager implements WereWolfAPI {
 
     private final Main main;
     private final Map<UUID, FastBoard> boards = new HashMap<>();
-    private final Map<UUID, IPlayerWW> playerLG = new HashMap<>();
+    private final Map<UUID, IPlayerWW> playersWW = new HashMap<>();
     private StateGame state;
     private Day day;
-    private boolean debug = false;
+    private boolean debug;
     private final ScoreBoard score = new ScoreBoard(this);
     private IVoteManager voteManager = new VoteManager(this);
     private final LoversManagement loversManage = new LoversManagement(this);
     private final ModerationManager moderationManager = new ModerationManager(this);
     private final WerewolfChatHandler werewolfChatHandler = new WerewolfChatHandler();
-    private final MapManager mapManager;
+    private final MapManager mapManager = new MapManager(this);
     private Configuration configuration;
     private final End end = new End(this);
-    private final Stuff stuff;
-    private final RandomConfig randomConfig;
-    private final ListenersLoader listenersLoader;
+    private final StuffManager stuff = new StuffManager();
+    private final LanguageManager languageManager = new LanguageManager(this);
+    private final ListenersManager listenersManager = new ListenersManager(this);
     private final Random r = new Random(System.currentTimeMillis());
     private final UUID gameUUID = UUID.randomUUID();
-    private String gameName="";
+    private String gameName;
     private int groupSize = 5;
     private int playerSize = 0;
     private int timer = 0;
     private boolean crack = false;
     private int roleInitialSize = 0;
 
-
-    public GameManager(Main main) {
+    private GameManager(Main main) {
         this.main = main;
-        this.randomConfig = new RandomConfig(main);
-        this.configuration = new Configuration(main.getRegisterManager());
-        this.mapManager = new MapManager(main);
-        this.stuff = new Stuff(main);
-        this.listenersLoader = new ListenersLoader(this);
-        File mapFolder = new File(main.getDataFolder() +
-                File.separator + "maps");
-        if (!mapFolder.exists()) {
-            if (!mapFolder.mkdirs()) {
-                Bukkit.getLogger().warning("[WereWolfPlugin] Folder Map Creation Failed");
-            }
-        }
-        setDay(Day.DAY);
+    }
 
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
-            Bukkit.getPluginManager().callEvent(new UpdateLanguageEvent());
-            FileUtils_.loadConfig(main, "saveCurrent");
-            main.getWereWolfAPI().getStuffs().load("saveCurrent");
-            listenersLoader.init();
-            this.gameName = this.translate("werewolf.score_board.default_game_name");
-        });
-        setState(StateGame.LOBBY);
+    public static void createGame(Main main, Consumer<WereWolfAPI> game){
+        GameManager gameManager = new GameManager(main);
+        game.accept(gameManager);
+        gameManager.init();
+    }
+
+    private void init(){
+
+        this.debug = main.getConfig().getBoolean("debug");
+        this.setDay(Day.DAY);
+        this.setState(StateGame.LOBBY);
+        LanguageLoader.loadLanguage(this, this.getLanguage());
+        StuffLoader.loadStuff(this, "saveCurrent");
+        this.gameName = this.translate("werewolf.score_board.default_game_name");
+        ConfigurationLoader.loadConfig(this, "saveCurrent");
         Bukkit.getPluginManager().callEvent(new LoadEvent(this));
         LobbyTask start = new LobbyTask(this);
         start.runTaskTimer(main, 0, 20);
     }
 
-
     public void join(Player player) {
 
         UUID uuid = player.getUniqueId();
 
-        if (moderationManager.getWhiteListedPlayers().contains(uuid)) {
+        if (this.moderationManager.getWhiteListedPlayers().contains(uuid)) {
             finalJoin(player);
-        } else if (this.getPlayersCount() >= configuration.getPlayerMax()) {
-            player.sendMessage(translate(Prefix.RED.getKey() , "werewolf.check.full"));
-            moderationManager.addQueue(player);
-        } else if (configuration.isWhiteList()) {
-            player.sendMessage(translate(Prefix.RED.getKey() , "werewolf.commands.admin.whitelist.player_not_whitelisted"));
-            moderationManager.addQueue(player);
+        } else if (this.getPlayersCount() >= this.configuration.getPlayerMax()) {
+            player.sendMessage(translate(Prefix.RED , "werewolf.check.full"));
+            this.moderationManager.addQueue(player);
+        } else if (this.configuration.isWhiteList()) {
+            player.sendMessage(translate(Prefix.RED , "werewolf.commands.admin.whitelist.player_not_whitelisted"));
+            this.moderationManager.addQueue(player);
         } else {
             finalJoin(player);
         }
@@ -142,10 +130,9 @@ public class GameManager implements WereWolfAPI {
                 Formatter.number(this.getPlayersCount()),
                 Formatter.format("&sum&",this.getRoleInitialSize()),
                 Formatter.player(player.getName())));
-        clearPlayer(player);
         player.setGameMode(GameMode.ADVENTURE);
         IPlayerWW playerWW = new PlayerWW(this, player);
-        this.playerLG.put(uuid, playerWW);
+        this.playersWW.put(uuid, playerWW);
         Bukkit.getPluginManager().callEvent(new FinalJoinEvent(playerWW));
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(player));
         player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 0, false, false));
@@ -156,12 +143,12 @@ public class GameManager implements WereWolfAPI {
             DefaultArtifactVersion loadVersion = new DefaultArtifactVersion(main.getDescription().getVersion());
 
             if (loadVersion.compareTo(siteVersion) == 0) {
-                player.sendMessage(this.translate(Prefix.GREEN.getKey() , "werewolf.update.up_to_date"));
+                player.sendMessage(this.translate(Prefix.GREEN , "werewolf.update.up_to_date"));
             } else if (loadVersion.compareTo(siteVersion) < 0) {
-                player.sendMessage(this.translate(Prefix.ORANGE.getKey() , "werewolf.update.out_of_date"));
+                player.sendMessage(this.translate(Prefix.ORANGE , "werewolf.update.out_of_date"));
             }
             else {
-                player.sendMessage(this.translate(Prefix.GREEN.getKey() , "werewolf.update.snapshot"));
+                player.sendMessage(this.translate(Prefix.GREEN , "werewolf.update.snapshot"));
             }
         });
 
@@ -170,41 +157,20 @@ public class GameManager implements WereWolfAPI {
 
     public void addLatePlayer(Player player) {
 
-        clearPlayer(player);
-
         Inventory inventory = player.getInventory();
 
         player.setGameMode(GameMode.SURVIVAL);
         IPlayerWW playerWW = new PlayerWW(this, player);
-        this.playerLG.put(player.getUniqueId(), playerWW);
+        this.playersWW.put(player.getUniqueId(), playerWW);
         Location spawn = this.mapManager.getWorld().getSpawnLocation();
         spawn.setY(spawn.getBlockY() - 4);
         playerWW.setSpawn(spawn);
         this.playerSize++;
 
-        for (int j = 0; j < 40; j++) {
-            inventory.setItem(j, this.stuff.getStartLoot().getItem(j));
-        }
-
+        this.stuff.getStartLoot().forEach(inventory::addItem);
+        Bukkit.getPluginManager().callEvent(new FinalJoinEvent(playerWW));
+        Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(player));
         this.mapManager.transportation(playerWW, 0);
-    }
-
-    public void clearPlayer(Player player) {
-
-        PlayerInventory inventory = player.getInventory();
-        VersionUtils.getVersionUtils().setPlayerMaxHealth(player, 20);
-        player.setHealth(20);
-        player.setExp(0);
-        player.setLevel(0);
-        inventory.clear();
-        inventory.setHelmet(null);
-        inventory.setChestplate(null);
-        inventory.setLeggings(null);
-        inventory.setBoots(null);
-
-        for (PotionEffect po : player.getActivePotionEffects()) {
-            player.removePotionEffect(po.getType());
-        }
     }
 
     public void setState(StateGame state) {
@@ -249,23 +215,19 @@ public class GameManager implements WereWolfAPI {
 
         Bukkit.getPluginManager().callEvent(new StopEvent(this));
 
-        this.listenersLoader.delete();
+        this.listenersManager.delete();
 
         this.main.createGame();
 
         GameManager newGame = (GameManager) this.main.getWereWolfAPI();
 
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
+        BukkitUtils.scheduleSyncDelayedTask(newGame, () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 FastBoard fastboard = new FastBoard(player);
                 fastboard.updateTitle(newGame.translate("werewolf.score_board.title"));
                 newGame.boards.put(player.getUniqueId(), fastboard);
                 player.setGameMode(GameMode.ADVENTURE);
                 newGame.join(player);
-            }
-
-            if (this.getTimer() <= 60) {
-                newGame.getMapManager().generateMap(newGame.getConfig().getBorderMax());
             }
         }, 10);
 
@@ -277,22 +239,23 @@ public class GameManager implements WereWolfAPI {
         if (this.getTimer() > 60) { //Si la game a commencé depuis moins d'une minute on ne delete pas la map
             this.mapManager.deleteMap();
         }
+        newGame.mapManager.createMap();
     }
 
     @Override
     public Collection<? extends IPlayerWW> getPlayersWW() {
-        return this.playerLG.values();
+        return this.playersWW.values();
     }
 
 
     @Override
     public Optional<IPlayerWW> getPlayerWW(UUID uuid) {
 
-        if (!this.playerLG.containsKey(uuid)) {
+        if (!this.playersWW.containsKey(uuid)) {
             return Optional.empty();
         }
 
-        return Optional.of(this.playerLG.get(uuid));
+        return Optional.of(this.playersWW.get(uuid));
     }
 
 
@@ -314,19 +277,14 @@ public class GameManager implements WereWolfAPI {
 
     @Override
     public String translate(String prefixKey, String key, Formatter... formatters) {
-        LanguageManager languageManager = main.getLanguageManager();
-        String message = languageManager.getTranslation(key);
-        String prefix = prefixKey.isEmpty() ? "": languageManager.getTranslation(prefixKey);
-        for(Formatter formatter:formatters){
-            message = formatter.handle(message);
-        }
+        String message = this.languageManager.getTranslation(key, formatters);
+        String prefix = prefixKey.isEmpty() ? "": this.languageManager.getTranslation(prefixKey);
         return prefix+message;
     }
 
     @Override
     public List<String> translateArray(String key, Formatter... formatters) {
-        LanguageManager languageManager = main.getLanguageManager();
-        return languageManager.getTranslationList(key, formatters);
+        return this.languageManager.getTranslationList(key, formatters);
     }
 
     @Override
@@ -337,22 +295,6 @@ public class GameManager implements WereWolfAPI {
     @Override
     public Random getRandom() {
         return r;
-    }
-
-    @Override
-    public IPlayerWW autoSelect(IPlayerWW playerWW) {
-
-        List<IPlayerWW> players = playerLG.values()
-                .stream()
-                .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
-                .filter(playerWW1 -> !playerWW1.equals(playerWW))
-                .collect(Collectors.toList());
-
-        if (players.isEmpty()) {
-            return playerWW;
-        }
-
-        return players.get((int) Math.floor(getRandom().nextFloat() * players.size()));
     }
 
     @Override
@@ -442,13 +384,9 @@ public class GameManager implements WereWolfAPI {
 
 
     public void remove(UUID uuid) {
-        if(this.playerLG.remove(uuid) != null){
+        if(this.playersWW.remove(uuid) != null){
             this.playerSize--;
         }
-    }
-
-    public RandomConfig getRandomConfig() {
-        return this.randomConfig;
     }
 
     public void setRoleInitialSize(int roleInitialSize) {
@@ -461,10 +399,6 @@ public class GameManager implements WereWolfAPI {
 
     public void setTimer(int timer) {
         this.timer = timer;
-    }
-
-    public ListenersLoader getListenersLoader() {
-        return this.listenersLoader;
     }
 
     @Override
@@ -482,6 +416,22 @@ public class GameManager implements WereWolfAPI {
         return main.getConfig().getString("lang");
     }
 
+    @Override
+    public void setLangage(String langage) {
+        main.getConfig().set("lang", langage);
+        LanguageLoader.loadLanguage(this, langage);
+    }
+
+    @Override
+    public ILanguageManager getLanguageManager() {
+        return this.languageManager;
+    }
+
+    @Override
+    public IListenersManager getListenersManager() {
+        return this.listenersManager;
+    }
+
     public boolean isCrack() {
         return crack;
     }
@@ -493,4 +443,5 @@ public class GameManager implements WereWolfAPI {
     public ScoreBoard getScore() {
         return this.score;
     }
+
 }

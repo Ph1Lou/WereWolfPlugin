@@ -1,31 +1,31 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
-import fr.minuskube.inv.ClickableItem;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.game.IConfiguration;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.Day;
-import fr.ph1lou.werewolfapi.enums.Prefix;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
-import fr.ph1lou.werewolfapi.events.game.life_cycle.ResurrectionEvent;
-import fr.ph1lou.werewolfapi.events.game.utils.GoldenAppleParticleEvent;
 import fr.ph1lou.werewolfapi.events.roles.InvisibleEvent;
-import fr.ph1lou.werewolfapi.events.roles.StealEvent;
 import fr.ph1lou.werewolfapi.events.roles.will_o_the_wisp.WillOTheWispRecoverRoleEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
 import fr.ph1lou.werewolfapi.role.interfaces.IInvisible;
 import fr.ph1lou.werewolfapi.role.interfaces.ILimitedUse;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
-import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
-import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -33,39 +33,42 @@ import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffectType;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+
+@Role(key = RoleBase.WILL_O_THE_WISP, 
+            category = Category.NEUTRAL, attributes = RoleAttribute.NEUTRAL,
+        configValues = {@IntValue(key = IntValueBase.WILL_O_THE_WISP_DISTANCE,
+        defaultValue = 50, meetUpValue = 50, step = 5, item = UniversalMaterial.YELLOW_WOOL)})
 public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse {
 
     private boolean invisible = false;
     private int use=0;
     private int timer=-1;
 
-    public WillOTheWisp(WereWolfAPI game, IPlayerWW playerWW, String key) {
-        super(game, playerWW, key);
+    public WillOTheWisp(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
     }
 
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game,this)
-                .setDescription(game.translate("werewolf.role.will_o_the_wisp.description",
-                        Formatter.number(game.getConfig().getDistanceWillOTheWisp())))
-                .setEffects(game.translate("werewolf.role.will_o_the_wisp.effects"))
-                .setCommand(game.translate("werewolf.role.will_o_the_wisp.command_info",
+                .setDescription(game.translate("werewolf.roles.will_o_the_wisp.description",
+                        Formatter.number(game.getConfig().getValue(IntValueBase.WILL_O_THE_WISP_DISTANCE))))
+                .setEffects(game.translate("werewolf.roles.will_o_the_wisp.effects"))
+                .setCommand(game.translate("werewolf.roles.will_o_the_wisp.command_info",
                         Formatter.number(2-this.use),
-                        Formatter.format("&number2&", game.getConfig().getDistanceWillOTheWisp())))
+                        Formatter.format("&number2&", game.getConfig().getValue(IntValueBase.WILL_O_THE_WISP_DISTANCE))))
                 .build();
     }
 
@@ -82,7 +85,7 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
 
         if(game.isDay(Day.DAY)){
             this.getPlayerWW().addPotionModifier(PotionModifier
-                    .add(PotionEffectType.SPEED,"wild_o_the_wisp"));
+                    .add(PotionEffectType.SPEED,this.getKey()));
         }
     }
 
@@ -134,7 +137,7 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
 
 
         this.getPlayerWW().addPotionModifier(PotionModifier
-                .remove(PotionEffectType.SPEED,"wild_o_the_wisp",0));
+                .remove(PotionEffectType.SPEED,this.getKey(),0));
 
         if(!this.isAbilityEnabled()){
             return;
@@ -152,7 +155,7 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
                     Location wildLocation = this.getPlayerWW().getLocation();
                     Location playerLocation = playerWW.getLocation();
                     return wildLocation.getWorld() == playerLocation.getWorld() &&
-                            wildLocation.distance(playerLocation) < game.getConfig().getDistanceWillOTheWisp();
+                            wildLocation.distance(playerLocation) < game.getConfig().getValue(IntValueBase.WILL_O_THE_WISP_DISTANCE);
                 })
                 .collect(Collectors.toList());
 
@@ -169,22 +172,14 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
         Bukkit.getPluginManager().callEvent(event1);
 
         if(event1.isCancelled()){
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
             return;
         }
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW.getKey(),"werewolf.role.will_o_the_wisp.role_reveal",
-                Formatter.number(game.getConfig().getDistanceWillOTheWisp()),
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.roles.will_o_the_wisp.role_reveal",
+                Formatter.number(game.getConfig().getValue(IntValueBase.WILL_O_THE_WISP_DISTANCE)),
                 Formatter.role(game.translate(event1.getRoleKey())));
 
-    }
-
-    @EventHandler
-    public void onStealEvent(StealEvent event) {
-
-        if (!event.getThiefWW().equals(getPlayerWW())) return;
-
-        this.setInvisible(false);
     }
 
     @EventHandler
@@ -207,30 +202,30 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
                 inventory.getItem(39) == null) {
             if (!this.isInvisible()) {
                 if (!isAbilityEnabled()) {
-                    getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.check.ability_disabled");
+                    getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.ability_disabled");
                     return;
                 }
 
-                player.sendMessage(game.translate(Prefix.GREEN.getKey() ,
-                        "werewolf.role.little_girl.remove_armor_perform"));
-                this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE.getKey(),
-                        "werewolf.role.will_o_the_wisp.use_tp",Formatter.number(2-this.use));
+                player.sendMessage(game.translate(Prefix.GREEN ,
+                        "werewolf.roles.little_girl.remove_armor_perform"));
+                this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE,
+                        "werewolf.roles.will_o_the_wisp.use_tp",Formatter.number(2-this.use));
                 this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INVISIBILITY,
-                        "will_o_the_wisp"));
+                        this.getKey()));
                 this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.ABSORPTION,
                         Integer.MAX_VALUE,1,
-                        "will_o_the_wisp"));
+                        this.getKey()));
 
-                this.timer = BukkitUtils.scheduleSyncDelayedTask(() -> {
+                this.timer = BukkitUtils.scheduleSyncDelayedTask(game, () -> {
                     if(this.isInvisible()){
                         this.setInvisible(false);
                         this.getPlayerWW().addPotionModifier(PotionModifier
                                 .remove(PotionEffectType.INVISIBILITY,
-                                        "will_o_the_wisp",
+                                        this.getKey(),
                                         0));
                         this.getPlayerWW().addPotionModifier(PotionModifier
                                 .remove(PotionEffectType.ABSORPTION,
-                                        "will_o_the_wisp",
+                                        this.getKey(),
                                         1));
                         Bukkit.getPluginManager().callEvent(new InvisibleEvent(this.getPlayerWW(), false));
                         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
@@ -240,7 +235,7 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
                 if (isInfected() && game.isDay(Day.NIGHT)) {
                     this.getPlayerWW().addPotionModifier(PotionModifier
                             .remove(PotionEffectType.INCREASE_DAMAGE,
-                                    "werewolf",
+                                    RoleBase.WEREWOLF,
                                     0));
 
                 }
@@ -250,19 +245,19 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
             }
         } else if (this.isInvisible()) {
             player.sendMessage(game.translate(
-                    Prefix.YELLOW.getKey() , "werewolf.role.little_girl.visible"));
+                    Prefix.YELLOW , "werewolf.roles.little_girl.visible"));
             if (this.isInfected() && game.isDay(Day.NIGHT)) {
                 this.getPlayerWW().addPotionModifier(PotionModifier
                         .add(PotionEffectType.INCREASE_DAMAGE,
-                                "werewolf"));
+                                RoleBase.WEREWOLF));
             }
             this.getPlayerWW().addPotionModifier(PotionModifier
                     .remove(PotionEffectType.INVISIBILITY,
-                            "will_o_the_wisp",
+                            this.getKey(),
                             0));
             this.getPlayerWW().addPotionModifier(PotionModifier
                     .remove(PotionEffectType.ABSORPTION,
-                            "will_o_the_wisp",
+                            this.getKey(),
                             1));
             if(this.timer != -1){
                 Bukkit.getScheduler().cancelTask(this.timer);
@@ -275,46 +270,26 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
         }
     }
 
-    @EventHandler
-    public void onGoldenAppleEat(GoldenAppleParticleEvent event) {
-
-        if (!event.getPlayerWW().equals(this.getPlayerWW())) return;
-
-        if (!this.isInvisible()) return;
-
-        if (this.game.isDay(Day.DAY)) return;
-
-        event.setCancelled(true);
-    }
-
     @Override
     public void disableAbilitiesRole() {
 
         if (isInvisible()) {
-            getPlayerWW().sendMessageWithKey(Prefix.RED.getKey() , "werewolf.role.little_girl.ability_disabled");
+            getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.roles.little_girl.ability_disabled");
             this.getPlayerWW().addPotionModifier(PotionModifier
                     .remove(PotionEffectType.INCREASE_DAMAGE,
-                            "werewolf",0));
+                            RoleBase.WEREWOLF,0));
             this.getPlayerWW().addPotionModifier(PotionModifier
                     .remove(PotionEffectType.ABSORPTION,
-                            "will_o_the_wisp",1));
+                            this.getKey(),1));
             this.getPlayerWW().addPotionModifier(PotionModifier
                     .remove(PotionEffectType.INVISIBILITY,
-                            "will_o_the_wisp",0));
+                            this.getKey(),0));
 
             setInvisible(false);
             Bukkit.getPluginManager().callEvent(
                     new InvisibleEvent(this.getPlayerWW(), false));
             Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
         }
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onResurrection(ResurrectionEvent event) {
-
-        if (!event.getPlayerWW().equals(getPlayerWW())) return;
-
-        this.setInvisible(false);
     }
 
     @EventHandler
@@ -325,7 +300,7 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
         }
 
         this.getPlayerWW().addPotionModifier(PotionModifier
-                .add(PotionEffectType.SPEED,"wild_o_the_wisp"));
+                .add(PotionEffectType.SPEED,this.getKey()));
     }
 
     @Override
@@ -346,32 +321,5 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
     @Override
     public void setUse(int use) {
         this.use=use;
-    }
-
-    public static ClickableItem config(WereWolfAPI game) {
-
-        List<String> lore = Arrays.asList(game.translate("werewolf.menu.left"),
-                game.translate("werewolf.menu.right"));
-        IConfiguration config = game.getConfig();
-
-        return ClickableItem.of((new ItemBuilder(
-                UniversalMaterial.YELLOW_WOOL.getStack())
-                .setDisplayName(game.translate("werewolf.menu.advanced_tool.will_o_the_wisp",
-                        Formatter.number(config.getDistanceWillOTheWisp())))
-                .setLore(lore).build()), e -> {
-            if (e.isLeftClick()) {
-                config.setDistanceWillOTheWisp((config.getDistanceWillOTheWisp() + 5));
-            } else if (config.getDistanceWillOTheWisp() - 5 > 0) {
-                config.setDistanceWillOTheWisp(config.getDistanceWillOTheWisp() - 5);
-            }
-
-
-            e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
-                    .setLore(lore)
-                    .setDisplayName(game.translate("werewolf.menu.advanced_tool.will_o_the_wisp",
-                            Formatter.number(config.getDistanceWillOTheWisp())))
-                    .build());
-
-        });
     }
 }

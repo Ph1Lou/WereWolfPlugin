@@ -1,6 +1,10 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
@@ -20,17 +24,21 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
+
+@Role(key = RoleBase.ASSASSIN,
+        category = Category.NEUTRAL,
+        attributes = RoleAttribute.NEUTRAL)
 public class Assassin extends RoleNeutral {
 
-    public Assassin(WereWolfAPI api, IPlayerWW playerWW, String key) {
-        super(api, playerWW, key);
+    public Assassin(WereWolfAPI api, IPlayerWW playerWW) {
+        super(api, playerWW);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onNight(NightEvent event) {
 
         this.getPlayerWW()
-                .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"assassin",0));
+                .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,this.getKey(),0));
 
     }
 
@@ -40,7 +48,7 @@ public class Assassin extends RoleNeutral {
         if (!isAbilityEnabled()) return;
 
         this.getPlayerWW()
-                .addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"assassin"));
+                .addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,this.getKey()));
 
     }
 
@@ -95,9 +103,9 @@ public class Assassin extends RoleNeutral {
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setEquipments(game.translate("werewolf.role.assassin.limit"))
-                .setItems(game.translate("werewolf.role.assassin.items"))
-                .setEffects(game.translate("werewolf.role.assassin.effect"))
+                .setEquipments(game.translate("werewolf.roles.assassin.limit"))
+                .setItems(game.translate("werewolf.roles.assassin.items"))
+                .setEffects(game.translate("werewolf.roles.assassin.effect"))
                 .build();
     }
 
@@ -115,7 +123,7 @@ public class Assassin extends RoleNeutral {
 
         if (!isAbilityEnabled()) return;
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,"assassin"));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,this.getKey()));
     }
 
     @Override
@@ -126,6 +134,6 @@ public class Assassin extends RoleNeutral {
     @Override
     public void disableAbilitiesRole() {
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,"assassin",0));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,this.getKey(),0));
     }
 }

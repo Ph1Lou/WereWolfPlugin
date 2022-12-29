@@ -1,20 +1,20 @@
 package fr.ph1lou.werewolfplugin.scoreboards;
 
 import fr.mrmicky.fastboard.FastBoard;
-import fr.ph1lou.werewolfplugin.RegisterManager;
-import fr.ph1lou.werewolfplugin.game.GameManager;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.game.IModerationManager;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.enums.ConfigBase;
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
+import fr.ph1lou.werewolfapi.basekeys.LoverBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.enums.LoverType;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.enums.TimerBase;
-import fr.ph1lou.werewolfapi.registers.impl.RoleRegister;
+import fr.ph1lou.werewolfapi.game.IModerationManager;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
+import fr.ph1lou.werewolfplugin.Register;
+import fr.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.WorldBorder;
 
@@ -23,6 +23,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class ScoreBoard {
@@ -31,10 +32,10 @@ public class ScoreBoard {
 
 	private int day;
 	private String dayState;
-	private final List<String> scoreboard1 = new ArrayList<>();
-	private final List<String> scoreboard2 = new ArrayList<>();
-	private final List<String> scoreboard3 = new ArrayList<>();
-	private List<String> roles = new ArrayList<>();
+	private final List<String> scoreboardLobby = new ArrayList<>();
+	private final List<String> scoreboardGame = new ArrayList<>();
+	private final List<String> scoreboardScore = new ArrayList<>();
+	private final List<String> roles = new ArrayList<>();
 
 	public ScoreBoard(GameManager game) {
 		this.game = game;
@@ -42,26 +43,22 @@ public class ScoreBoard {
 
 	public void updateScoreBoard1() {
 
-		scoreboard1.clear();
+		scoreboardLobby.clear();
 
-		scoreboard1.addAll(game.translateArray("werewolf.score_board.scoreboard_1",
-				Formatter.format("&players&", game.getPlayersCount()),
-				Formatter.format("&roles&", game.getRoleInitialSize()),
-				Formatter.format("&max&",game.getConfig().getPlayerMax())).stream()
+		scoreboardLobby.addAll(game.translateArray("werewolf.score_board.scoreboard_lobby",
+						Formatter.format("&players&", game.getPlayersCount()),
+						Formatter.format("&roles&", game.getRoleInitialSize()),
+						Formatter.format("&max&",game.getConfig().getPlayerMax()),
+						Formatter.format("&name&",game.getGameName()))
+				.stream()
 				.map(s -> s.substring(0, Math.min(30, s.length())))
 				.collect(Collectors.toList()));
-
-		String line = game.translate("werewolf.score_board.game_name");
-		scoreboard1.add(line.substring(0, Math.min(30, line.length())));
-		line = game.translate("werewolf.score_board.name",
-				Formatter.format("&name&",game.getGameName()));
-		scoreboard1.add(line.substring(0, Math.min(30, line.length())));
 	}
 	
 	public void updateScoreBoard2(FastBoard board) {
 
 		UUID playerUUID = board.getPlayer().getUniqueId();
-		List<String> score = new ArrayList<>(scoreboard2);
+		List<String> score = new ArrayList<>(scoreboardGame);
 		IPlayerWW playerWW = game.getPlayerWW(playerUUID).orElse(null);
 		IModerationManager moderationManager = game.getModerationManager();
 		String role;
@@ -70,7 +67,7 @@ public class ScoreBoard {
 			if (!playerWW.isState(StatePlayer.DEATH)) {
 
 				if (!game.isState(StateGame.GAME)) {
-					role = Utils.conversion(game.getConfig().getTimerValue(TimerBase.ROLE_DURATION.getKey()));
+					role = Utils.conversion(game.getConfig().getTimerValue(TimerBase.ROLE_DURATION));
 				} else {
 					role = game.translate(playerWW.getRole().getKey());
 				}
@@ -98,129 +95,151 @@ public class ScoreBoard {
 		String borderSize = String.valueOf(Math.round(wb.getSize()));
 		String border;
 
-		if (game.getConfig().getTimerValue(TimerBase.BORDER_BEGIN.getKey()) > 0) {
-			border = Utils.conversion(game.getConfig()
-					.getTimerValue(TimerBase.BORDER_BEGIN.getKey()));
+		if (game.getConfig().getTimerValue(TimerBase.BORDER_BEGIN) > 0) {
+			border = Utils.conversion(game.getConfig().getTimerValue(TimerBase.BORDER_BEGIN));
 		} else {
 			border = game.translate("werewolf.utils.on");
-			if (wb.getSize() > game.getConfig().getBorderMin()) {
+			if (wb.getSize() != game.getConfig().getBorderMin()) {
 				borderSize = borderSize + " > " + game.getConfig().getBorderMin();
 			}
 		}
 
-		scoreboard2.clear();
+		scoreboardGame.clear();
 
 		this.day = game.getTimer() / game.getConfig()
-				.getTimerValue(TimerBase.DAY_DURATION.getKey()) / 2 + 1;
+				.getTimerValue(TimerBase.DAY_DURATION) / 2 + 1;
 		this.dayState = game.translate(game.isDay(Day.DAY) ?
 				"werewolf.score_board.day" : "werewolf.score_board.night");
 
 
-		scoreboard2.addAll(game.translateArray("werewolf.score_board.scoreboard_2",
-				Formatter.timer(Utils.conversion(game.getTimer())),
-				Formatter.format("&day&", this.day),
-				Formatter.format("&players&", game.getPlayersCount()),
-				Formatter.format("&group&", game.getGroup()),
-				Formatter.format("&border&",border),
-				Formatter.format("&daystate&",this.dayState),
-				Formatter.format("&border_size&",borderSize)));
+		scoreboardGame.addAll(game.translateArray("werewolf.score_board.scoreboard_game",
+						Formatter.timer(Utils.conversion(game.getTimer())),
+						Formatter.format("&day&", this.day),
+						Formatter.format("&players&", game.getPlayersCount()),
+						Formatter.format("&group&", game.getGroup()),
+						Formatter.format("&border&",border),
+						Formatter.format("&daystate&",this.dayState),
+						Formatter.format("&border_size&",borderSize),
+						Formatter.format("&name&",game.getGameName()))
+				.stream()
+				.map(s -> s.substring(0, Math.min(30, s.length())))
+				.collect(Collectors.toList()));
 
-		scoreboard2.add(game.translate("werewolf.score_board.game_name"));
-		scoreboard2.add(game.translate("werewolf.score_board.name",
-				Formatter.format("&name&",game.getGameName())));
 	}
 
 	private void updateScoreBoardRole(){
 
 
-		if (game.getConfig().getLoverCount(LoverType.LOVER.getKey()) > 0) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("§3")
-					.append(game.getConfig().getLoverCount(LoverType.LOVER.getKey()))
-					.append("§f ")
-					.append(game.translate(LoverType.LOVER.getKey()));
-			roles.add(sb.substring(0, Math.min(30, sb.length())));
-		}
-		if (game.getConfig().getLoverCount(LoverType.AMNESIAC_LOVER.getKey()) > 0) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("§3").append(game.getConfig().getLoverCount(LoverType.AMNESIAC_LOVER.getKey()))
-					.append("§f ")
-					.append(game.translate(LoverType.AMNESIAC_LOVER.getKey()));
-			roles.add(sb.substring(0, Math.min(30, sb.length())));
-		}
-		if (game.getConfig().getLoverCount(LoverType.CURSED_LOVER.getKey()) > 0) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("§3").append(game.getConfig().getLoverCount(LoverType.CURSED_LOVER.getKey()))
-					.append("§f ")
-					.append(game.translate(LoverType.CURSED_LOVER.getKey()));
-			roles.add(sb.substring(0, Math.min(30, sb.length())));
-		}
-		for (RoleRegister roleRegister : RegisterManager.get().getRolesRegister()) {
-			String key = roleRegister.getKey();
-			if (game.getConfig().getRoleCount(key) > 0) {
-				StringBuilder sb = new StringBuilder();
-				sb
-						.append("§3")
-						.append(game.getConfig().getRoleCount(key))
-						.append("§f ")
-						.append(game.translate(roleRegister.getKey()));
-				roles.add(sb.substring(0, Math.min(30, sb.length())));
-			}
+		roles.clear();
+
+		if(TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) % 60 < 30){
+			return;
 		}
 
-		if (!roles.isEmpty()) {
+		List<String> composition = new ArrayList<>();
+
+		if (game.getConfig().getLoverCount(LoverBase.LOVER) > 0) {
+			StringBuilder sb = new StringBuilder();
+			sb.append(LoverType.LOVER.getChatColor())
+					.append(game.getConfig().getLoverCount(LoverBase.LOVER))
+					.append("§f ")
+					.append(game.translate(LoverBase.LOVER));
+			composition.add(sb.substring(0, Math.min(30, sb.length())));
+		}
+		if (game.getConfig().getLoverCount(LoverBase.AMNESIAC_LOVER) > 0) {
+			StringBuilder sb = new StringBuilder();
+			sb.append(LoverType.AMNESIAC_LOVER.getChatColor()).append(game.getConfig().getLoverCount(LoverBase.AMNESIAC_LOVER))
+					.append("§f ")
+					.append(game.translate(LoverBase.AMNESIAC_LOVER));
+			composition.add(sb.substring(0, Math.min(30, sb.length())));
+		}
+		if (game.getConfig().getLoverCount(LoverBase.CURSED_LOVER) > 0) {
+			StringBuilder sb = new StringBuilder();
+			sb.append(LoverType.CURSED_LOVER.getChatColor()).append(game.getConfig().getLoverCount(LoverBase.CURSED_LOVER))
+					.append("§f ")
+					.append(game.translate(LoverBase.CURSED_LOVER));
+			composition.add(sb.substring(0, Math.min(30, sb.length())));
+		}
+
+		composition.addAll(Register.get().getRolesRegister()
+				.stream()
+				.sorted((o1, o2) -> game.translate(o1.getMetaDatas().key())
+						.compareToIgnoreCase(game.translate(o2.getMetaDatas().key())))
+				.filter(iRoleRoleWrapper -> game.getConfig().getRoleCount(iRoleRoleWrapper.getMetaDatas().key()) > 0)
+				.sorted(Comparator.comparingInt(o -> o.getMetaDatas().category().ordinal()))
+				.map(iRoleRoleWrapper -> {
+					String key = iRoleRoleWrapper.getMetaDatas().key();
+
+					StringBuilder sb = new StringBuilder();
+					sb
+							.append(iRoleRoleWrapper.getMetaDatas().category().getChatColor())
+							.append(game.getConfig().getRoleCount(key))
+							.append("§f ")
+							.append(game.translate(key));
+					return sb.substring(0, Math.min(30, sb.length()));
+				})
+				.collect(Collectors.toList()));
+
+		if (!composition.isEmpty()) {
 
 			int inf= 6*((int) TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())%30/5);
-			int total = (int) Math.ceil(roles.size()/6f);
+			int total = (int) Math.ceil(composition.size()/6f);
 
-			if(inf<roles.size()){
+			if(inf<composition.size()){
 
-				roles=roles.subList(inf,Math.min(roles.size(),inf+6));
-				String up = game.translate("werewolf.score_board.composition");
-				roles.add(0,up.substring(0,Math.min(30,up.length())));
+				composition=composition.subList(inf,Math.min(composition.size(),inf+6));
 
-
-				String down = game.translate("werewolf.score_board.page",
+				this.roles.addAll(game.translateArray("werewolf.score_board.scoreboard_role",
 						Formatter.format("&current&",inf / 6 + 1),
-						Formatter.format("&sum&",total));
+						Formatter.format("&sum&",total),
+						Formatter.format("&name&",game.getGameName()))
+						.stream()
+						.map(s -> s.substring(0, Math.min(30, s.length())))
+						.collect(Collectors.toList()));
 
-				roles.add(roles.size(), down.substring(0, Math.min(30, down.length())));
+				AtomicInteger index = new AtomicInteger(this.roles.indexOf("&roles&"));
 
-			} else roles.clear();
+				if(index.get() != -1){
+					this.roles.remove(index.get());
+					composition.forEach(s -> this.roles.add(index.getAndIncrement(), s.substring(0, Math.min(30, s.length()))));
+				}
+			}
 		}
 	}
 
-	public void getKillCounter() {
+	public void getFinalScore() {
+
+		scoreboardScore.clear();
 
 		List<IPlayerWW> topKillers = game.getPlayersWW().stream()
 				.sorted(Comparator.comparingInt(value -> value.getPlayersKills().size()))
 				.collect(Collectors.toList());
 
-		scoreboard3.add(game.translate("werewolf.score_board.score")
-				.substring(0, Math.min(30, game.translate("werewolf.score_board.score").length())));
+		scoreboardScore.addAll(game.translateArray("werewolf.score_board.scoreboard_score",
+						Formatter.format("&name&",game.getGameName()))
+				.stream()
+				.map(s -> s.substring(0, Math.min(30, s.length())))
+				.collect(Collectors.toList()));
 
-		for (int i = 0; i < Math.min(game.getPlayersWW().size(), 10); i++) {
+		int index = scoreboardScore.indexOf("&scores&");
 
-			scoreboard3.add(topKillers.get(topKillers.size()-1).getName() + "§3 " +topKillers.remove(topKillers.size()-1).getPlayersKills().size());
+		if(index!=-1){
+			scoreboardScore.remove(index);
+			for (int i = 0; i < Math.min(game.getPlayersWW().size(), 10); i++) {
+				scoreboardScore.add(index++, topKillers.get(topKillers.size()-1).getName() +
+						"§3 " +topKillers.remove(topKillers.size()-1).getPlayersKills().size());
+			}
 		}
-		String line = game.translate("werewolf.score_board.game_name");
-		scoreboard3.add(line.substring(0, Math.min(30, line.length())));
-		line = game.translate("werewolf.score_board.name",
-				Formatter.format("&name&",game.getGameName()));
-		scoreboard3.add(line.substring(0, Math.min(30, line.length())));
 	}
 	public void updateBoard() {
 
-		if(game.isState(StateGame.END) && this.scoreboard3.isEmpty()){
-			this.getKillCounter();
+		if(game.isState(StateGame.END) && this.scoreboardScore.isEmpty()){
+			this.getFinalScore();
 		}
 
 		if (Bukkit.getOnlinePlayers().size() == 0) return;
 
-		roles.clear();
-
-		if (!game.getConfig().isConfigActive(ConfigBase.HIDE_COMPOSITION.getKey())
-				&& TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) % 60 >= 30) {
+		if (!game.getConfig().isConfigActive(ConfigBase.HIDE_COMPOSITION)) {
 			updateScoreBoardRole();
 		}
 
@@ -250,11 +269,11 @@ public class ScoreBoard {
 					bot);
 
 			if (game.isState(StateGame.END)) {
-				board.updateLines(scoreboard3);
+				board.updateLines(scoreboardScore);
 			} else if (!roles.isEmpty()) {
 				board.updateLines(roles);
 			} else if (game.isState(StateGame.LOBBY)) {
-				board.updateLines(scoreboard1);
+				board.updateLines(scoreboardLobby);
 			} else {
 				updateScoreBoard2(board);
 			}

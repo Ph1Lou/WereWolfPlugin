@@ -1,8 +1,9 @@
 package fr.ph1lou.werewolfplugin.statistiks;
 
 import com.google.gson.Gson;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.statistics.impl.GameReview;
-import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfplugin.save.FileUtils_;
@@ -11,6 +12,7 @@ import fr.ph1lou.werewolfplugin.utils.Contributor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
@@ -26,23 +28,26 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class StatistiksUtils {
 
-    private static String[] messages = {};
+    private static List<String> messages = new ArrayList<>();
     private static int index = 0;
     private static final List<Contributor> contributors = new ArrayList<>(Collections.singleton(new Contributor(UUID.fromString("056be797-2a0b-4807-9af5-37faf5384396"), 0)));
 
     public static String getMessage(){
-        return messages.length == 0 ? "" : messages[index++%messages.length];
+        return messages.size() == 0 ? "" : messages.get(index++%messages.size());
     }
 
     public static List<? extends Contributor> getContributors(){
         return contributors;
     }
 
-    public static void loadMessages(Main main){
+    public static void loadMessages(){
 
+        Main main = JavaPlugin.getPlugin(Main.class);
+        WereWolfAPI game = main.getWereWolfAPI();
         String language = main.getConfig().getString("lang");
 
         try {
@@ -60,7 +65,8 @@ public class StatistiksUtils {
                     response.append(responseLine.trim());
                 }
 
-                messages = new Gson().fromJson(response.toString(), String[].class);
+                messages = Arrays.stream(new Gson().fromJson(response.toString(), String[].class))
+                        .map(s -> game.translate(Prefix.LIGHT_BLUE)+s).collect(Collectors.toList());
             } catch (Exception ignored) {
             }
         } catch (IOException ignored) {
@@ -133,19 +139,13 @@ public class StatistiksUtils {
             } catch (Exception ignored) {
             }
 
-            try (BufferedReader br = new BufferedReader(
+            try (BufferedReader ignored1 = new BufferedReader(
                     new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
-                StringBuilder response = new StringBuilder();
-                String responseLine;
-                while ((responseLine = br.readLine()) != null) {
-                    response.append(responseLine.trim());
-                }
 
-                TextComponent msg = new TextComponent(response.toString());
+                TextComponent msg = new TextComponent(main.getWereWolfAPI().translate(Prefix.ORANGE,"werewolf.statistics"));
                 msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
                         String.format("https://werewolf.ph1lou.fr/game-view/%s", gameReview.getGameUUID().toString())));
-                BukkitUtils.scheduleSyncDelayedTask(() -> Bukkit.getOnlinePlayers()
-                        .forEach(player -> player.spigot().sendMessage(msg)), 100);
+                Bukkit.getOnlinePlayers().forEach(player -> player.spigot().sendMessage(msg));
             } catch (Exception ignored) {
             }
         } catch (IOException ignored) {

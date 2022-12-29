@@ -51,7 +51,7 @@ public abstract class AbstractLover implements ILover {
                 .filter(playerWW1 -> !playerWW.equals(playerWW1))
                 .forEach(playerWW1 -> couple.append(playerWW1.getName()).append(" "));
 
-        playerWW.sendMessageWithKey("werewolf.role.lover.description",
+        playerWW.sendMessageWithKey("werewolf.lovers.lover.description",
                 Formatter.player(couple.toString()));
         playerWW.sendSound(Sound.SHEEP_SHEAR);
     }
