@@ -56,23 +56,25 @@ public class Innkeeper extends RoleVillage {
             getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.role.innkeeper.kill");
             clientDatas.clear();
         }
-        clientDatas.stream().filter(cliendData -> cliendData.getPlayerWW().isState(StatePlayer.DEATH)).findFirst().ifPresent(clientData -> {
-            Optional<IPlayerWW> lastKiller = clientData.getPlayerWW().getLastKiller();
-            if (lastKiller.isPresent()) {
-                getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.role.innkeeper.dead",
-                        Formatter.role(lastKiller.get().getRole().getDisplayRole()));
-                availableRooms--;
-                clientDatas.remove(clientData);
-                if (availableRooms == 0) {
-                    clientDatas.clear();
-                    Player player = Bukkit.getPlayer(getPlayerUUID());
-                    if (player != null) {
-                        player.setWalkSpeed(player.getWalkSpeed() * 1.1f);
-                        getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.role.innkeeper.speed");
+        clientDatas.stream()
+                .filter(cliendData -> cliendData.getPlayerWW().isState(StatePlayer.DEATH))
+                .forEach(clientData -> {
+                    Optional<IPlayerWW> lastKiller = clientData.getPlayerWW().getLastKiller();
+                    if (lastKiller.isPresent()) {
+                        getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.role.innkeeper.dead",
+                                Formatter.role(lastKiller.get().getRole().getDisplayRole()));
+                        availableRooms--;
+                        clientDatas.remove(clientData);
                     }
-                }
+                });
+        if (availableRooms == 0) {
+            clientDatas.clear();
+            Player player = Bukkit.getPlayer(getPlayerUUID());
+            if (player != null) {
+                player.setWalkSpeed(player.getWalkSpeed() * 1.1f);
+                getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.role.innkeeper.speed");
             }
-        });
+        }
     }
 
     @EventHandler
