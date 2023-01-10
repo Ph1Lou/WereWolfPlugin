@@ -37,6 +37,20 @@
       }
     },
     "roles": {
+      "innkeeper": {
+        "display": "Aubergiste",
+        "description": "Il a 3 chambres.\nLe jour, il peut clic-droit sur un joueur pour l’héberger (pas un même joueur 2 jours d'affilée).\nLe jour suivant, il peut clic-droit sur un client pour savoir le nombre de joueurs croisés pendant la nuit et le nom de l’un d’eux.\nSi un client a fait un kill, il le sait mais tous les clients sont expulsés.\nSi un client meurt, il obtient le rôle du tueur et la chambre ferme.\nQuand il n’a plus de chambre, il obtient Speed 0.5.",
+        "dead": "Un de vos clients est mort, son tueur était &role&",
+        "kill": "Un de vos clients a tué quelqu'un, tous vos clients sont éjectés",
+        "seen_players": "Ce client a vu &number& personnes, l'un d'eux s'appelle &player&",
+        "no_seen_players": "Ce client n'a vu personne",
+        "add_client": "Vous allez héberger &player&",
+        "no_more_room": "Vous n'avez plus de chambre, vous ne pouvez pas héberger ce client",
+        "speed": "Vous n'avez plus de chambre, vous avez maintenant la vitesse 0.5",
+        "configurations": {
+          "detection_radius": "Rayon de détection pour les joueurs rencontrés"
+        }
+      },
       "mire": {
         "display": "Mire",
         "description": "Lorsque vous mangez une pomme d’or, vous connaissez le pseudo du joueur le plus bas en vie (en % par rapport à sa vie maximale).\nQuand un joueur proche (moins de &number& blocs) passe en-dessous de 3 ♥, vous recevez un message.",
