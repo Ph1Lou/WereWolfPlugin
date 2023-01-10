@@ -81,6 +81,7 @@ public class Innkeeper extends RoleVillage {
     public void onNight(NightEvent event) {
         clientDatas.forEach(cliendData -> {
             cliendData.refreshKills();
+            cliendData.getSeenPlayers().clear();
             new BukkitRunnable() {
                 @Override
                 public void run() {
