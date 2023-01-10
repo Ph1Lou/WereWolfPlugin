@@ -64,9 +64,10 @@ public class Innkeeper extends RoleVillage {
                 availableRooms--;
                 clientDatas.remove(clientData);
                 if (availableRooms == 0) {
+                    clientDatas.clear();
                     Player player = Bukkit.getPlayer(getPlayerUUID());
                     if (player != null) {
-                        player.setWalkSpeed(player.getWalkSpeed() * 1.5f);
+                        player.setWalkSpeed(player.getWalkSpeed() * 1.1f);
                         getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.role.innkeeper.speed");
                     }
                 }
