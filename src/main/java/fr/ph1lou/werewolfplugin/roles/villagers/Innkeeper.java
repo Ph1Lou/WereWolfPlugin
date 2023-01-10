@@ -2,7 +2,9 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.*;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
@@ -22,10 +24,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-@Role(key = "werewolf.roles.innkeeper.display",
+@Role(key = RoleBase.INNKEEPER,
         category = Category.VILLAGER,
         attributes = RoleAttribute.VILLAGER,
-        configValues = @IntValue(key = "wereWolf.roles.innkeeper.detection_radius",
+        configValues = @IntValue(key = IntValueBase.INNKEEPER_DETECTION_RADIUS,
                 defaultValue = 10, meetUpValue = 10, step = 1, item = UniversalMaterial.IRON_DOOR))
 public class Innkeeper extends RoleVillage {
     private final List<ClientData> clientDatas = new ArrayList<>();
@@ -85,7 +87,7 @@ public class Innkeeper extends RoleVillage {
                             .filter(iPlayerWW -> !iPlayerWW.equals(cliendData.getPlayerWW()))
                             .filter(iPlayerWW -> iPlayerWW.isState(StatePlayer.ALIVE))
                             .filter(iPlayerWW -> iPlayerWW.getLocation().distance(cliendData.getPlayerWW().getLocation()) <=
-                                    game.getConfig().getValue("wereWolf.roles.innkeeper.detection_radius"))
+                                    game.getConfig().getValue(IntValueBase.INNKEEPER_DETECTION_RADIUS))
                             .forEach(iPlayerWW -> cliendData.getSeenPlayers().add(iPlayerWW));
                 }
             }.runTaskTimerAsynchronously(JavaPlugin.getPlugin(Main.class), 0, 20 * 5);
