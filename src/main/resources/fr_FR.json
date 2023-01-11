@@ -927,6 +927,19 @@
         "reveal_enemy": "La personne ayant blessé la poupée Vaudou à l'effigie de §b&player&§f est §b&name&",
         "doll_ally": "Vous fabriquez une poupée Vaudou à l'effigie de §b&player&§f.\nVous serez notifié si cette poupée est attaquée par un joueur.\nA la suite de cet assaut, la poupée disparaît et vous avez 5 minutes pour sacrifier 2 ♥ permanents afin de connaître l'identité de l'assaillant avec §b/ww reveal",
         "not_an_ally": "Vous n'avez pas encore passé 5 minutes à proximité de §b&player&§f, vous pouvez donc pas encore fabriquer de poupée à son effigie"
+      },
+      "bonesetter": {
+        "display": "Rebouteux",
+        "description": "Il peut appliquer une guérison automatique à 3 joueurs dans la partie sauf lui-même (les cibles sont au courant) : lorsque ces joueurs tomberont en-dessous de 4 ♥, ils recevront 7 secondes de Regeneration II (3 ♥ de heal).\nIl reçoit un message lorsqu'une des cibles active la guérison (sans savoir qui). (Pas 2 fois la même cible ou lui-même)\nIl dispose également de 3 ♥ de Regeneration sur les pommes d'or.",
+        "effect": "Vous obtenez un effet Regeneration lent (1 ♥ toutes les 3 minutes) une fois votre pouvoir entièrement consommé",
+        "items": "2 livres Protection II",
+        "command": "auto_heal",
+        "too_many_players": "Vous avez déja utilisé votre pouvoir sur §b3§f joueurs",
+        "already_use_on_player": "Vous avez déjà utilisé votre pouvoir sur ce joueur",
+        "perform": "§b&player& sera guéri si il perd trop de vie!",
+        "target_message": "Le rebouteux vous guérira de §b3 ♥ §f si vous tombez en dessous de §b4 ♥!",
+        "activate": "Un joueur a été guéri grâce à vous",
+        "receive_heal": "Vous recevez les soins du rebouteux"
       }
     },
     "announcement": {
