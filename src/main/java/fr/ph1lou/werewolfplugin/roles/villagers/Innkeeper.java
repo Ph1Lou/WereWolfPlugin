@@ -126,19 +126,20 @@ public class Innkeeper extends RoleVillage {
             if (clientData.getSeenPlayers().size() != 0) {
                 List<IPlayerWW> playerWWS = new ArrayList<>(clientData.getSeenPlayers());
                 Collections.shuffle(playerWWS);
-                getPlayerWW().sendMessageWithKey("werewolf.roles.innkeeper.seen_players",
+                getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.roles.innkeeper.seen_players",
                         Formatter.number(playerWWS.size()), Formatter.player(playerWWS.get(0).getName()));
             } else {
-                getPlayerWW().sendMessageWithKey("werewolf.roles.innkeeper.no_seen_players");
+                getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.innkeeper.no_seen_players");
             }
             return;
         }
 
         if (clientDatas.size() < availableRooms) {
             clientDatas.add(new ClientData(playerWW));
-            getPlayerWW().sendMessageWithKey("werewolf.roles.innkeeper.add_client");
+            getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.roles.innkeeper.add_client",
+                    Formatter.player(playerWW.getName()));
         } else {
-            getPlayerWW().sendMessageWithKey("werewolf.roles.innkeeper.no_more_room");
+            getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.innkeeper.no_more_room");
         }
     }
 
