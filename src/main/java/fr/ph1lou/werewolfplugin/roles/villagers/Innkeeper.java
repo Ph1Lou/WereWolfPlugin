@@ -48,6 +48,7 @@ public class Innkeeper extends RoleVillage {
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.roles.innkeeper.description"))
+                .setEffects(game.translate("werewolf.roles.innkeeper.effect"))
                 .build();
     }
 
