@@ -3,9 +3,7 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.enums.*;
 import fr.ph1lou.werewolfapi.events.roles.bonesetter.BonesetterHealEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
@@ -55,26 +53,31 @@ public class Bonesetter extends RoleVillage implements IAffectedPlayers, ILimite
     public void onDamage(EntityDamageEvent event) {
         if (!isAbilityEnabled()) return;
 
-        if (!(event.getEntity() instanceof Player)) return;
+        if(!(event.getEntity() instanceof Player)) return;
 
-        if (((Player) event.getEntity()).getHealth() - event.getDamage() < 2 * 4) return;
+        Player player = (Player) event.getEntity();
 
-        IPlayerWW targetWW = game.getPlayersWW().stream()
-                .filter(playerWW -> playerWW.getUUID().equals(event.getEntity().getUniqueId()))
-                .filter(playerWW -> !playerWW.equals(getPlayerWW()))
-                .filter(affectedPlayers::contains)
-                .findFirst()
-                .orElse(null);
+        IPlayerWW playerWW = game.getPlayerWW(player.getUniqueId()).orElse(null);
 
-        if (targetWW == null) return;
+        if(playerWW == null) return;
 
-        BonesetterHealEvent bonesetterHealEvent = new BonesetterHealEvent(getPlayerWW(), targetWW);
+        if (!affectedPlayers.contains(playerWW)) return;
+
+        if(!game.isState(StateGame.GAME)){
+            return;
+        }
+
+        if(!playerWW.isState(StatePlayer.ALIVE)) return;
+
+        if(playerWW.getHealth() >= 8) return;
+
+        BonesetterHealEvent bonesetterHealEvent = new BonesetterHealEvent(getPlayerWW(), playerWW);
         Bukkit.getPluginManager().callEvent(bonesetterHealEvent);
         if (!bonesetterHealEvent.isCancelled()) {
-            targetWW.addPotionModifier(PotionModifier.add(PotionEffectType.REGENERATION, 20 * 7, 1, getKey()));
-            targetWW.sendMessageWithKey(Prefix.GREEN, "werewolf.roles.bonesetter.receive_heal");
+            playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.REGENERATION, 20 * 7, 1, getKey()));
+            playerWW.sendMessageWithKey(Prefix.GREEN, "werewolf.roles.bonesetter.receive_heal");
             getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.bonesetter.activate");
-            affectedPlayers.remove(targetWW);
+            affectedPlayers.remove(playerWW);
         }
     }
 

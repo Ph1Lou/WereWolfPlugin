@@ -25,30 +25,30 @@ public class CommandBonesetter implements ICommandRole {
         }
         Bonesetter bonesetter = (Bonesetter) role;
 
-        if(bonesetter.getUse() == 3) {
+        if (bonesetter.getUse() == 3) {
             playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.bonesetter.too_many_players");
             return;
         }
 
         Player target = Bukkit.getPlayer(args[0]);
-        if(target == null) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.offline_player");
+        if (target == null) {
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.offline_player");
             return;
         }
 
         IPlayerWW targetWW = game.getPlayerWW(target.getUniqueId()).orElse(null);
 
-        if(targetWW == null || !targetWW.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.player_not_found");
+        if (targetWW == null || !targetWW.isState(StatePlayer.ALIVE)) {
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.player_not_found");
             return;
         }
 
-        if(playerWW.getUUID().equals(targetWW.getUUID())) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.not_yourself");
+        if (playerWW.getUUID().equals(targetWW.getUUID())) {
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.not_yourself");
             return;
         }
 
-        if(bonesetter.getAlreadyUsed().contains(targetWW)) {
+        if (bonesetter.getAlreadyUsed().contains(targetWW)) {
             playerWW.sendMessageWithKey(Prefix.RED,
                     "werewolf.roles.benefactor.already_use_on_player");
             return;
@@ -56,6 +56,7 @@ public class CommandBonesetter implements ICommandRole {
 
         bonesetter.setUse(bonesetter.getUse() + 1);
         bonesetter.addAffectedPlayer(targetWW);
+        targetWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.bonesetter.target_message");
         playerWW.sendMessageWithKey(Prefix.GREEN, "werewolf.roles.bonesetter.perform", Formatter.player(targetWW.getName()));
     }
 }
