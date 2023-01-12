@@ -8,6 +8,7 @@ import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.*;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
+import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -34,7 +35,9 @@ import java.util.*;
                 step = 1,
                 item = UniversalMaterial.IRON_DOOR))
 public class Innkeeper extends RoleVillage {
+    private static final float defaultWalkSpeed = 0.2f;
     private final List<ClientData> clientDatas = new ArrayList<>();
+    private final List<ClientData> previousClientDatas = new ArrayList<>();
     private int availableRooms = 3;
 
     public Innkeeper(WereWolfAPI game, IPlayerWW playerWW) {
@@ -54,52 +57,54 @@ public class Innkeeper extends RoleVillage {
     }
 
     @EventHandler
-    public void onDay(DayEvent event) {
-        if (clientDatas.stream()
-                .anyMatch(cliendData -> cliendData.getPlayerWW().getPlayersKills().size() > cliendData.getKills())) {
-            getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.kill");
-            clientDatas.clear();
-        }
-        clientDatas.stream()
-                .filter(cliendData -> cliendData.getPlayerWW().isState(StatePlayer.DEATH))
-                .forEach(clientData -> {
-                    Optional<IPlayerWW> lastKiller = clientData.getPlayerWW().getLastKiller();
-                    if (lastKiller.isPresent()) {
+    public void onKill(FinalDeathEvent event) {
+        event.getPlayerWW().getLastKiller().ifPresent(killer -> {
+            clientDatas.stream()
+                    .filter(clientData -> clientData.playerWW.equals(event.getPlayerWW()))
+                    .findFirst()
+                    .ifPresent(clientData -> {
                         getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.dead",
-                                Formatter.role(lastKiller.get().getRole().getDisplayRole()));
+                                Formatter.role(killer.getRole().getDisplayRole()));
                         availableRooms--;
                         clientDatas.remove(clientData);
-                    }
-                });
-        if (availableRooms == 0) {
-            clientDatas.clear();
-            Player player = Bukkit.getPlayer(getPlayerUUID());
-            if (player != null) {
-                player.setWalkSpeed(player.getWalkSpeed() * 1.1f);
-                getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.speed");
+                        if (availableRooms == 0) {
+                            Player player = Bukkit.getPlayer(getPlayerUUID());
+                            if (player != null) {
+                                player.setWalkSpeed(defaultWalkSpeed * 1.1f);
+                                getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.speed");
+                            }
+                        }
+                    });
+            if (clientDatas.stream().anyMatch(clientData -> clientData.playerWW.equals(killer))) {
+                getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.kill");
+                clientDatas.forEach(clientData -> clientData.watching = false);
             }
-        }
+        });
+    }
+
+    @EventHandler
+    public void onDay(DayEvent event) {
+        previousClientDatas.clear();
+        previousClientDatas.addAll(clientDatas);
+        clientDatas.clear();
     }
 
     @EventHandler
     public void onNight(NightEvent event) {
-        clientDatas.forEach(cliendData -> {
-            cliendData.refreshKills();
-            cliendData.getSeenPlayers().clear();
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (game.isDay(Day.DAY)) cancel();
+        clientDatas.forEach(clientData -> new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (game.isDay(Day.DAY) || !clientData.watching) cancel();
+                else
                     game.getPlayersWW().stream()
                             .filter(iPlayerWW -> !iPlayerWW.equals(getPlayerWW()))
-                            .filter(iPlayerWW -> !iPlayerWW.equals(cliendData.getPlayerWW()))
+                            .filter(iPlayerWW -> !iPlayerWW.equals(clientData.playerWW))
                             .filter(iPlayerWW -> iPlayerWW.isState(StatePlayer.ALIVE))
-                            .filter(iPlayerWW -> iPlayerWW.getLocation().distance(cliendData.getPlayerWW().getLocation()) <=
+                            .filter(iPlayerWW -> iPlayerWW.getLocation().distance(clientData.playerWW.getLocation()) <=
                                     game.getConfig().getValue(IntValueBase.INNKEEPER_DETECTION_RADIUS))
-                            .forEach(iPlayerWW -> cliendData.getSeenPlayers().add(iPlayerWW));
-                }
-            }.runTaskTimerAsynchronously(JavaPlugin.getPlugin(Main.class), 0, 20 * 5);
-        });
+                            .forEach(clientData.seenPlayers::add);
+            }
+        }.runTaskTimerAsynchronously(JavaPlugin.getPlugin(Main.class), 0, 20 * 5));
     }
 
     @EventHandler
@@ -120,13 +125,14 @@ public class Innkeeper extends RoleVillage {
         IPlayerWW playerWW = game.getPlayerWW(event.getRightClicked().getUniqueId()).orElse(null);
         if (playerWW == null) return;
 
-        Optional<ClientData> clientDataOptional = clientDatas.stream().filter(clientData -> clientData.getPlayerWW().equals(playerWW)).findFirst();
+        Optional<ClientData> clientDataOptional = previousClientDatas.stream()
+                .filter(clientData -> clientData.playerWW.equals(playerWW)).findFirst();
         if (clientDataOptional.isPresent()) {
             ClientData clientData = clientDataOptional.get();
-            if (clientData.getSeenPlayers().size() != 0) {
-                List<IPlayerWW> playerWWS = new ArrayList<>(clientData.getSeenPlayers());
+            if (clientData.seenPlayers.size() != 0) {
+                List<IPlayerWW> playerWWS = new ArrayList<>(clientData.seenPlayers);
                 Collections.shuffle(playerWWS);
-                getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.roles.innkeeper.seen_players",
+                getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.seen_players",
                         Formatter.number(playerWWS.size()), Formatter.player(playerWWS.get(0).getName()));
             } else {
                 getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.innkeeper.no_seen_players");
@@ -136,7 +142,7 @@ public class Innkeeper extends RoleVillage {
 
         if (clientDatas.size() < availableRooms) {
             clientDatas.add(new ClientData(playerWW));
-            getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.roles.innkeeper.add_client",
+            getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.add_client",
                     Formatter.player(playerWW.getName()));
         } else {
             getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.innkeeper.no_more_room");
@@ -146,26 +152,10 @@ public class Innkeeper extends RoleVillage {
     private static class ClientData {
         private final IPlayerWW playerWW;
         private final Set<IPlayerWW> seenPlayers = new HashSet<>();
-        private int kills;
+        private boolean watching = true;
 
         public ClientData(IPlayerWW playerWW) {
             this.playerWW = playerWW;
-        }
-
-        public IPlayerWW getPlayerWW() {
-            return playerWW;
-        }
-
-        public void refreshKills() {
-            kills = playerWW.getPlayersKills().size();
-        }
-
-        public Set<IPlayerWW> getSeenPlayers() {
-            return seenPlayers;
-        }
-
-        public int getKills() {
-            return kills;
         }
     }
 }
