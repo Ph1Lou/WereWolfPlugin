@@ -47,6 +47,7 @@
         "add_client": "Vous allez héberger §b&player&§f",
         "no_more_room": "Vous n'avez plus de chambre, vous ne pouvez pas héberger ce client",
         "speed": "Vous n'avez plus de chambre, vous avez maintenant la vitesse 0.5",
+        "already": "Vous hébergez déjà ce client",
         "configurations": {
           "detection_radius": "Rayon de détection pour les joueurs rencontrés §b&number&§r"
         }

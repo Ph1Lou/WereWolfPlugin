@@ -64,7 +64,7 @@ public class Innkeeper extends RoleVillage {
                     .findFirst()
                     .ifPresent(clientData -> {
                         getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.dead",
-                                Formatter.role(killer.getRole().getDisplayRole()));
+                                Formatter.role(game.translate(killer.getRole().getKey())));
                         availableRooms--;
                         clientDatas.remove(clientData);
                         if (availableRooms == 0) {
@@ -140,7 +140,10 @@ public class Innkeeper extends RoleVillage {
             return;
         }
 
-        if (clientDatas.size() < availableRooms) {
+        if (clientDatas.stream().anyMatch(clientData -> clientData.playerWW.equals(playerWW))) {
+            getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.innkeeper.already");
+        }
+        else if (clientDatas.size() < availableRooms) {
             clientDatas.add(new ClientData(playerWW));
             getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.add_client",
                     Formatter.player(playerWW.getName()));
