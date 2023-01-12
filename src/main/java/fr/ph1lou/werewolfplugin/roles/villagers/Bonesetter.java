@@ -69,12 +69,13 @@ public class Bonesetter extends RoleVillage implements IAffectedPlayers, ILimite
 
         if(!playerWW.isState(StatePlayer.ALIVE)) return;
 
-        if(playerWW.getHealth() >= 8) return;
+        if(playerWW.getHealth() - event.getFinalDamage() > 8) return;
 
         BonesetterHealEvent bonesetterHealEvent = new BonesetterHealEvent(getPlayerWW(), playerWW);
         Bukkit.getPluginManager().callEvent(bonesetterHealEvent);
         if (!bonesetterHealEvent.isCancelled()) {
-            playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.REGENERATION, 20 * 7, 1, getKey()));
+            //25 ticks = 1/2 heart
+            playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.REGENERATION, 6 *25, 1, getKey()));
             playerWW.sendMessageWithKey(Prefix.GREEN, "werewolf.roles.bonesetter.receive_heal");
             getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.bonesetter.activate");
             affectedPlayers.remove(playerWW);
