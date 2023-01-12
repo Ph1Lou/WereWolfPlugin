@@ -44,7 +44,7 @@
         "kill": "Un de vos clients a tué quelqu'un, tous vos clients sont éjectés",
         "seen_players": "Ce client a vu &number& personnes, l'un d'eux s'appelle &player&",
         "no_seen_players": "Ce client n'a vu personne",
-        "add_client": "Vous allez héberger &player&",
+        "add_client": "Vous allez héberger §b&player&§f",
         "no_more_room": "Vous n'avez plus de chambre, vous ne pouvez pas héberger ce client",
         "speed": "Vous n'avez plus de chambre, vous avez maintenant la vitesse 0.5",
         "configurations": {
