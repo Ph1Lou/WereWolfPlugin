@@ -27,8 +27,12 @@ import java.util.*;
 @Role(key = RoleBase.INNKEEPER,
         category = Category.VILLAGER,
         attributes = RoleAttribute.VILLAGER,
-        configValues = @IntValue(key = IntValueBase.INNKEEPER_DETECTION_RADIUS,
-                defaultValue = 10, meetUpValue = 10, step = 1, item = UniversalMaterial.IRON_DOOR))
+        configValues = @IntValue(
+                key = IntValueBase.INNKEEPER_DETECTION_RADIUS,
+                defaultValue = 10,
+                meetUpValue = 10,
+                step = 1,
+                item = UniversalMaterial.IRON_DOOR))
 public class Innkeeper extends RoleVillage {
     private final List<ClientData> clientDatas = new ArrayList<>();
     private int availableRooms = 3;
@@ -53,7 +57,7 @@ public class Innkeeper extends RoleVillage {
     public void onDay(DayEvent event) {
         if (clientDatas.stream()
                 .anyMatch(cliendData -> cliendData.getPlayerWW().getPlayersKills().size() > cliendData.getKills())) {
-            getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.role.innkeeper.kill");
+            getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.kill");
             clientDatas.clear();
         }
         clientDatas.stream()
@@ -61,7 +65,7 @@ public class Innkeeper extends RoleVillage {
                 .forEach(clientData -> {
                     Optional<IPlayerWW> lastKiller = clientData.getPlayerWW().getLastKiller();
                     if (lastKiller.isPresent()) {
-                        getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.role.innkeeper.dead",
+                        getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.dead",
                                 Formatter.role(lastKiller.get().getRole().getDisplayRole()));
                         availableRooms--;
                         clientDatas.remove(clientData);
@@ -72,7 +76,7 @@ public class Innkeeper extends RoleVillage {
             Player player = Bukkit.getPlayer(getPlayerUUID());
             if (player != null) {
                 player.setWalkSpeed(player.getWalkSpeed() * 1.1f);
-                getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.role.innkeeper.speed");
+                getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.speed");
             }
         }
     }
@@ -122,19 +126,19 @@ public class Innkeeper extends RoleVillage {
             if (clientData.getSeenPlayers().size() != 0) {
                 List<IPlayerWW> playerWWS = new ArrayList<>(clientData.getSeenPlayers());
                 Collections.shuffle(playerWWS);
-                getPlayerWW().sendMessageWithKey("werewolf.role.innkeeper.seen_players",
+                getPlayerWW().sendMessageWithKey("werewolf.roles.innkeeper.seen_players",
                         Formatter.number(playerWWS.size()), Formatter.player(playerWWS.get(0).getName()));
             } else {
-                getPlayerWW().sendMessageWithKey("werewolf.role.innkeeper.no_seen_players");
+                getPlayerWW().sendMessageWithKey("werewolf.roles.innkeeper.no_seen_players");
             }
             return;
         }
 
         if (clientDatas.size() < availableRooms) {
             clientDatas.add(new ClientData(playerWW));
-            getPlayerWW().sendMessageWithKey("werewolf.role.innkeeper.add_client");
+            getPlayerWW().sendMessageWithKey("werewolf.roles.innkeeper.add_client");
         } else {
-            getPlayerWW().sendMessageWithKey("werewolf.role.innkeeper.no_more_room");
+            getPlayerWW().sendMessageWithKey("werewolf.roles.innkeeper.no_more_room");
         }
     }
 
