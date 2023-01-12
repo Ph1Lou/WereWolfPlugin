@@ -48,7 +48,7 @@
         "no_more_room": "Vous n'avez plus de chambre, vous ne pouvez pas héberger ce client",
         "speed": "Vous n'avez plus de chambre, vous avez maintenant la vitesse 0.5",
         "configurations": {
-          "detection_radius": "Rayon de détection pour les joueurs rencontrés"
+          "detection_radius": "Rayon de détection pour les joueurs rencontrés §b&number&§r"
         }
       },
       "mire": {
