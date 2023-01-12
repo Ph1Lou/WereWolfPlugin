@@ -31,6 +31,7 @@ import java.util.List;
         attributes = RoleAttribute.VILLAGER)
 public class Bonesetter extends RoleVillage implements IAffectedPlayers, ILimitedUse {
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
+    private final List<IPlayerWW> alreadyUsed = new ArrayList<>();
     private int use = 0;
 
     public Bonesetter(WereWolfAPI game, IPlayerWW playerWW) {
@@ -41,6 +42,7 @@ public class Bonesetter extends RoleVillage implements IAffectedPlayers, ILimite
     public @NotNull String getDescription() {
         return new DescriptionBuilder(this.game, this)
                 .setDescription(this.game.translate("werewolf.roles.bonesetter.description"))
+                .setCommand(game.translate("werewolf.roles.bonesetter.command_description"))
                 .build();
     }
 
@@ -50,14 +52,15 @@ public class Bonesetter extends RoleVillage implements IAffectedPlayers, ILimite
     }
 
     @EventHandler
-    public void onDamage(EntityDamageEvent event){
+    public void onDamage(EntityDamageEvent event) {
         if (!isAbilityEnabled()) return;
 
         if (!(event.getEntity() instanceof Player)) return;
 
-        if (((Player) event.getEntity()).getHealth() - event.getFinalDamage() < 2 * 4) return;
+        if (((Player) event.getEntity()).getHealth() - event.getDamage() < 2 * 4) return;
 
         IPlayerWW targetWW = game.getPlayersWW().stream()
+                .filter(playerWW -> playerWW.getUUID().equals(event.getEntity().getUniqueId()))
                 .filter(playerWW -> !playerWW.equals(getPlayerWW()))
                 .filter(affectedPlayers::contains)
                 .findFirst()
@@ -67,7 +70,7 @@ public class Bonesetter extends RoleVillage implements IAffectedPlayers, ILimite
 
         BonesetterHealEvent bonesetterHealEvent = new BonesetterHealEvent(getPlayerWW(), targetWW);
         Bukkit.getPluginManager().callEvent(bonesetterHealEvent);
-        if(!bonesetterHealEvent.isCancelled()) {
+        if (!bonesetterHealEvent.isCancelled()) {
             targetWW.addPotionModifier(PotionModifier.add(PotionEffectType.REGENERATION, 20 * 7, 1, getKey()));
             targetWW.sendMessageWithKey(Prefix.GREEN, "werewolf.roles.bonesetter.receive_heal");
             getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.bonesetter.activate");
@@ -76,11 +79,11 @@ public class Bonesetter extends RoleVillage implements IAffectedPlayers, ILimite
     }
 
     @EventHandler
-    public void onConsume(PlayerItemConsumeEvent event){
+    public void onConsume(PlayerItemConsumeEvent event) {
         if (!event.getPlayer().getUniqueId().equals(getPlayerUUID())) return;
 
-        if (event.getItem().getType().equals(Material.GOLDEN_APPLE)){
-            getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.REGENERATION, 20 * 7, 1, getKey()));
+        if (event.getItem().getType().equals(Material.GOLDEN_APPLE)) {
+            getPlayerWW().addPlayerHealth(2);
         }
     }
 
@@ -92,6 +95,7 @@ public class Bonesetter extends RoleVillage implements IAffectedPlayers, ILimite
     @Override
     public void addAffectedPlayer(IPlayerWW iPlayerWW) {
         this.affectedPlayers.add(iPlayerWW);
+        this.alreadyUsed.add(iPlayerWW);
     }
 
     @Override
@@ -119,5 +123,9 @@ public class Bonesetter extends RoleVillage implements IAffectedPlayers, ILimite
         if (use == 3) return;
         use = i;
         if (use == 3) disableAbilities();
+    }
+
+    public List<IPlayerWW> getAlreadyUsed() {
+        return alreadyUsed;
     }
 }

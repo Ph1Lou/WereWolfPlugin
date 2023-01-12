@@ -930,10 +930,9 @@
       },
       "bonesetter": {
         "display": "Rebouteux",
-        "description": "Il peut appliquer une guérison automatique à 3 joueurs dans la partie sauf lui-même (les cibles sont au courant) : lorsque ces joueurs tomberont en-dessous de 4 ♥, ils recevront 7 secondes de Regeneration II (3 ♥ de heal).\nIl reçoit un message lorsqu'une des cibles active la guérison (sans savoir qui). (Pas 2 fois la même cible ou lui-même)\nIl dispose également de 3 ♥ de Regeneration sur les pommes d'or.",
-        "effect": "Vous obtenez un effet Regeneration lent (1 ♥ toutes les 3 minutes) une fois votre pouvoir entièrement consommé",
-        "items": "2 livres Protection II",
+        "description": "Vous pouvez appliquer une guérison automatique à 3 joueurs dans la partie sauf vous-même (les cibles sont au courant) : lorsque ces joueurs tomberont en-dessous de 4 ♥, ils recevront 7 secondes de Régénération II (3 ♥ de heal).\nVous recevez un message lorsqu'une des cibles active la guérison (sans savoir qui).\nVous disposez également de 3 ♥ de Régénération sur les pommes d'or.",
         "command": "auto_heal",
+        "command_description": "/ww auto_heal",
         "too_many_players": "Vous avez déja utilisé votre pouvoir sur §b3§f joueurs",
         "already_use_on_player": "Vous avez déjà utilisé votre pouvoir sur ce joueur",
         "perform": "§b&player& sera guéri si il perd trop de vie!",

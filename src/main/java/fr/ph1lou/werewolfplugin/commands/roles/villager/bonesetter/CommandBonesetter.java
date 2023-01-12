@@ -48,6 +48,12 @@ public class CommandBonesetter implements ICommandRole {
             return;
         }
 
+        if(bonesetter.getAlreadyUsed().contains(targetWW)) {
+            playerWW.sendMessageWithKey(Prefix.RED,
+                    "werewolf.roles.benefactor.already_use_on_player");
+            return;
+        }
+
         bonesetter.setUse(bonesetter.getUse() + 1);
         bonesetter.addAffectedPlayer(targetWW);
         playerWW.sendMessageWithKey(Prefix.GREEN, "werewolf.roles.bonesetter.perform", Formatter.player(targetWW.getName()));
