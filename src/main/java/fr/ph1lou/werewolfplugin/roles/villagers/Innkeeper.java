@@ -9,6 +9,7 @@ import fr.ph1lou.werewolfapi.enums.*;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import fr.ph1lou.werewolfapi.events.roles.innkeeper.*;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -69,14 +70,22 @@ public class Innkeeper extends RoleVillage implements IPower {
                     } else {
                         role = Formatter.role("pve");
                     }
-                    getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.dead", role);
-                    availableRooms--;
-                    clientDatas.remove(clientData);
-                    if (availableRooms == 0) {
-                        Player player = Bukkit.getPlayer(getPlayerUUID());
-                        if (player != null) {
-                            player.setWalkSpeed(defaultWalkSpeed * 1.1f);
-                            getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.speed");
+                    ClientDeathEvent clientDeathEvent = new ClientDeathEvent(getPlayerWW(), clientData.playerWW, role);
+                    Bukkit.getPluginManager().callEvent(clientDeathEvent);
+                    if (!clientDeathEvent.isCancelled()) {
+                        getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.dead", role);
+                        availableRooms--;
+                        clientDatas.remove(clientData);
+                        if (availableRooms == 0) {
+                            Player player = Bukkit.getPlayer(getPlayerUUID());
+                            if (player != null) {
+                                InnkeeperSpeedEvent innkeeperSpeedEvent = new InnkeeperSpeedEvent(getPlayerWW());
+                                Bukkit.getPluginManager().callEvent(innkeeperSpeedEvent);
+                                if (!innkeeperSpeedEvent.isCancelled()) {
+                                    player.setWalkSpeed(defaultWalkSpeed * 1.1f);
+                                    getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.speed");
+                                }
+                            }
                         }
                     }
                 });
@@ -85,8 +94,12 @@ public class Innkeeper extends RoleVillage implements IPower {
                 .ifPresent(killer -> {
                     if (clientDatas.stream()
                             .anyMatch(clientData -> clientData.playerWW.equals(killer))) {
-                        getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.kill");
-                        clientDatas.forEach(clientData -> clientData.watching = false);
+                        ClientKillEvent clientKillEvent = new ClientKillEvent(getPlayerWW(), killer);
+                        Bukkit.getPluginManager().callEvent(clientKillEvent);
+                        if (!clientKillEvent.isCancelled()) {
+                            getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.kill");
+                            clientDatas.forEach(clientData -> clientData.watching = false);
+                        }
                     }
                 });
     }
@@ -154,9 +167,15 @@ public class Innkeeper extends RoleVillage implements IPower {
             if (!clientData.seenPlayers.isEmpty()) {
                 List<IPlayerWW> playerWWS = new ArrayList<>(clientData.seenPlayers);
                 Collections.shuffle(playerWWS, game.getRandom());
-                getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.seen_players",
-                        Formatter.number(playerWWS.size()), Formatter.player(playerWWS.get(0)
-                                .getName()));
+                InnkeeperInfoMeetEvent innkeeperInfoMeetEvent = new InnkeeperInfoMeetEvent(getPlayerWW(),
+                        playerWWS.size());
+                Bukkit.getPluginManager()
+                        .callEvent(innkeeperInfoMeetEvent);
+                if (!innkeeperInfoMeetEvent.isCancelled()) {
+                    getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.seen_players",
+                            Formatter.number(playerWWS.size()), Formatter.player(playerWWS.get(0)
+                                    .getName()));
+                }
             } else {
                 getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.innkeeper.no_seen_players");
             }
@@ -167,9 +186,14 @@ public class Innkeeper extends RoleVillage implements IPower {
                 .anyMatch(clientData -> clientData.playerWW.equals(playerWW))) {
             getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.innkeeper.already");
         } else if (clientDatas.size() < availableRooms) {
-            clientDatas.add(new ClientData(playerWW));
-            getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.add_client",
-                    Formatter.player(playerWW.getName()));
+            InnkeeperHostEvent hostEvent = new InnkeeperHostEvent(getPlayerWW(), playerWW);
+            Bukkit.getPluginManager()
+                    .callEvent(hostEvent);
+            if (!hostEvent.isCancelled()) {
+                clientDatas.add(new ClientData(playerWW));
+                getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.add_client",
+                        Formatter.player(playerWW.getName()));
+            }
         } else {
             getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.innkeeper.no_more_room");
         }
