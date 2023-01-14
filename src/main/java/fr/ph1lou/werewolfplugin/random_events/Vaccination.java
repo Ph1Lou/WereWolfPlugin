@@ -1,6 +1,6 @@
 package fr.ph1lou.werewolfplugin.random_events;
 
-import fr.ph1lou.werewolfapi.annotations.Event;
+import fr.ph1lou.werewolfapi.annotations.RandomEvent;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -21,7 +21,7 @@ import org.bukkit.event.EventPriority;
 import java.util.*;
 
 @SuppressWarnings("unused")
-@Event(key=EventBase.VACCINATION,
+@RandomEvent(key=EventBase.VACCINATION,
         loreKey = "werewolf.random_events.vaccination.description")
 public class Vaccination extends ListenerWerewolf {
     private final Map<UUID, IPlayerWW> vaccinatedPlayers = new HashMap<>();

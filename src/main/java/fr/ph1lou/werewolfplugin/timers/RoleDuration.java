@@ -99,7 +99,7 @@ public class RoleDuration extends ListenerWerewolf {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onRepartitionFirst(RepartitionEvent event){
         if (this.getGame().getConfig().isConfigActive(ConfigBase.TROLL_ROLE)) {
-            Bukkit.getPluginManager().callEvent(new TrollEvent());
+            Bukkit.getPluginManager().callEvent(new TrollEvent(this.getGame().getConfig().getTrollKey()));
             event.setCancelled(true);
         }
     }
@@ -115,7 +115,7 @@ public class RoleDuration extends ListenerWerewolf {
         Register.get().getRolesRegister()
                 .forEach(roleRegister -> {
 
-                    if (roleRegister.getMetaDatas().key().equals(game.getConfig().getTrollKey())) {
+                    if (roleRegister.getMetaDatas().key().equals(event.getTrollKey())) {
 
                         game.getPlayersWW()
                                 .forEach(playerWW -> {
@@ -158,7 +158,7 @@ public class RoleDuration extends ListenerWerewolf {
             }
 
             if (game.getConfig().isConfigActive(ConfigBase.DOUBLE_TROLL)) {
-                Bukkit.getPluginManager().callEvent(new TrollEvent());
+                Bukkit.getPluginManager().callEvent(new TrollEvent(game.getConfig().getTrollKey()));
                 game.getConfig().switchConfigValue(ConfigBase.DOUBLE_TROLL);
                 game.setDebug(false);
             } else {

@@ -1,6 +1,6 @@
 package fr.ph1lou.werewolfplugin.random_events;
 
-import fr.ph1lou.werewolfapi.annotations.Event;
+import fr.ph1lou.werewolfapi.annotations.RandomEvent;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -26,7 +26,7 @@ import org.bukkit.event.EventPriority;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Event(key = EventBase.NOT_ALL_WEREWOLFS, loreKey = "werewolf.random_events.not_all_werewolfs.description")
+@RandomEvent(key = EventBase.NOT_ALL_WEREWOLFS, loreKey = "werewolf.random_events.not_all_werewolfs.description")
 public class NotAllWereWolfs extends ListenerWerewolf {
 
     public NotAllWereWolfs(WereWolfAPI game) {

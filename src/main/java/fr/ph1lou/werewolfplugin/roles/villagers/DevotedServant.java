@@ -89,7 +89,7 @@ public class DevotedServant extends RoleVillage implements IPower, IAffectedPlay
         event.setCancelled(true);
     }
 
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onUpdate(UpdatePlayerNameTagEvent event) {
 
         IPlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID())

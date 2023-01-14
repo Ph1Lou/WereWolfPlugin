@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -29,12 +30,11 @@ import java.util.stream.Collectors;
 @Role(key = RoleBase.STORY_TELLER,
         category = Category.VILLAGER, attributes = {RoleAttribute.VILLAGER,
         RoleAttribute.INFORMATION},
-        configValues = @IntValue(key = StoryTeller.DAY, defaultValue = 5, meetUpValue = 3, step = 1, item = UniversalMaterial.BED))
+        configValues = @IntValue(key = IntValueBase.STORY_TELLER_DAY, defaultValue = 5, meetUpValue = 3, step = 1, item = UniversalMaterial.BED))
 public class StoryTeller extends RoleVillage {
 
     private final Set<IPlayerWW> players = new HashSet<>();
 
-    public static final String DAY = "werewolf.roles.story_teller.day";
 
     public StoryTeller(WereWolfAPI game, IPlayerWW playerWW) {
         super(game, playerWW);
@@ -42,19 +42,20 @@ public class StoryTeller extends RoleVillage {
 
     @EventHandler
     public void onActionableStory(ActionableStoryEvent event){
-        game.getPlayerWW(event.getPlayer()).ifPresent(players::add);
+        game.getPlayerWW(event.getPlayer())
+                .ifPresent(players::add);
     }
 
     @EventHandler
     public void onDay(DayEvent event){
 
-        if(event.getNumber()>=game.getConfig().getValue(DAY)){
+        if(event.getNumber() >= game.getConfig().getValue(IntValueBase.STORY_TELLER_DAY)){
 
             if(this.getPlayerWW().isState(StatePlayer.ALIVE)){
 
-
                 if(this.isAbilityEnabled()){
-                    if(this.players.size() > 0){
+
+                    if(!this.players.isEmpty()){
 
                         StoryTellerEvent storyTellerEvent = new StoryTellerEvent(this.getPlayerWW(), this.players);
 
@@ -82,7 +83,7 @@ public class StoryTeller extends RoleVillage {
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.roles.story_teller.description",
-                        Formatter.number(game.getConfig().getValue(DAY))))
+                        Formatter.number(game.getConfig().getValue(IntValueBase.STORY_TELLER_DAY))))
                 .setItems(game.translate("werewolf.roles.story_teller.items"))
                 .build();
     }

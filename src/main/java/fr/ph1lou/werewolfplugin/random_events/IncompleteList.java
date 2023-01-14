@@ -1,6 +1,6 @@
 package fr.ph1lou.werewolfplugin.random_events;
 
-import fr.ph1lou.werewolfapi.annotations.Event;
+import fr.ph1lou.werewolfapi.annotations.RandomEvent;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import fr.ph1lou.werewolfapi.events.random_events.IncompleteListEvent;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Event(key = EventBase.INCOMPLETE_LIST, loreKey = "werewolf.random_events.incomplete_list.description")
+@RandomEvent(key = EventBase.INCOMPLETE_LIST, loreKey = "werewolf.random_events.incomplete_list.description")
 public class IncompleteList extends ListenerWerewolf {
 
     private final Map<IPlayerWW, List<IPlayerWW>> forgetWerewolves = new HashMap<>();

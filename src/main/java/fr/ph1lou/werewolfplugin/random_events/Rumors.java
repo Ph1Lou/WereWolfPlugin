@@ -1,6 +1,6 @@
 package fr.ph1lou.werewolfplugin.random_events;
 
-import fr.ph1lou.werewolfapi.annotations.Event;
+import fr.ph1lou.werewolfapi.annotations.RandomEvent;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Event(key = EventBase.RUMORS, loreKey = "werewolf.random_events.rumors.description",
+@RandomEvent(key = EventBase.RUMORS, loreKey = "werewolf.random_events.rumors.description",
         timers = {@Timer(key = Rumors.TIMER_START, defaultValue = 80*60, meetUpValue = 30*60, step = 30),
                 @Timer(key = Rumors.PERIOD, defaultValue = 40*60, meetUpValue = 20*60, step = 30)})
 public class Rumors extends ListenerWerewolf {

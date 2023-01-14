@@ -1,6 +1,6 @@
 package fr.ph1lou.werewolfplugin.random_events;
 
-import fr.ph1lou.werewolfapi.annotations.Event;
+import fr.ph1lou.werewolfapi.annotations.RandomEvent;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
@@ -11,7 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
-@Event(key = EventBase.GOD_MIRACLE, loreKey = "werewolf.random_events.god_miracle.description")
+@RandomEvent(key = EventBase.GOD_MIRACLE, loreKey = "werewolf.random_events.god_miracle.description")
 public class GodMiracle extends ListenerWerewolf {
 
     public GodMiracle(WereWolfAPI main) {

@@ -3,7 +3,7 @@ package fr.ph1lou.werewolfplugin;
 import fr.ph1lou.werewolfapi.annotations.AdminCommand;
 import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.annotations.DisableAutoLoad;
-import fr.ph1lou.werewolfapi.annotations.Event;
+import fr.ph1lou.werewolfapi.annotations.RandomEvent;
 import fr.ph1lou.werewolfapi.annotations.Lover;
 import fr.ph1lou.werewolfapi.annotations.ModuleWerewolf;
 import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
@@ -11,6 +11,7 @@ import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.annotations.Scenario;
 import fr.ph1lou.werewolfapi.annotations.Timer;
+import fr.ph1lou.werewolfapi.annotations.statistics.StatisticsEvent;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.enums.Category;
@@ -21,6 +22,7 @@ import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.utils.ReflectionUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.event.Event;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -38,7 +40,7 @@ public class Register implements IRegisterManager {
     private final Set<Wrapper<JavaPlugin, ModuleWerewolf>> modules = new HashSet<>();
     private final Set<Wrapper<IRole, Role>> roles = new HashSet<>();
     private final Set<Wrapper<ListenerWerewolf, Scenario>> scenarios = new HashSet<>();
-    private final Set<Wrapper<ListenerWerewolf, Event>> events = new HashSet<>();
+    private final Set<Wrapper<ListenerWerewolf, RandomEvent>> randomEvents = new HashSet<>();
     private final Set<Wrapper<ICommand, PlayerCommand>> commands = new HashSet<>();
     private final Set<Wrapper<ICommandRole, RoleCommand>> roleCommands = new HashSet<>();
     private final Set<Wrapper<ICommand, AdminCommand>> adminCommands = new HashSet<>();
@@ -47,6 +49,8 @@ public class Register implements IRegisterManager {
     private final Set<Wrapper<?, Timer>> timers = new HashSet<>();
 
     private final Set<Wrapper<ILover, Lover>> lovers = new HashSet<>();
+
+    private final Set<Wrapper<Event, StatisticsEvent>> statisticsEvents = new HashSet<>();
     private final Map<String,JavaPlugin> addons = new HashMap<>();
 
     public static Register get() {
@@ -57,6 +61,7 @@ public class Register implements IRegisterManager {
 
     public Register(Main main){
         INSTANCE = this;
+
         for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
             ModuleWerewolf moduleWerewolf = plugin.getClass().getAnnotation(ModuleWerewolf.class);
 
@@ -83,6 +88,13 @@ public class Register implements IRegisterManager {
                         moduleWerewolf,
                         plugin,
                         prefix);
+
+                if(plugin.equals(main)){ //register api to
+                    this.register("fr.ph1lou.werewolfapi",
+                            moduleWerewolf,
+                            plugin,
+                            prefix);
+                }
             }
         }
     }
@@ -143,14 +155,14 @@ public class Register implements IRegisterManager {
                                 Bukkit.getLogger().warning(String.format("Scenario %s doesn't extend ListenerWerewolf", scenario.key()));
                             }
                         }
-                        else if(clazz.getAnnotation(Event.class) != null){
+                        else if(clazz.getAnnotation(RandomEvent.class) != null){
 
-                            Event event = clazz.getAnnotation(Event.class);
+                            RandomEvent event = clazz.getAnnotation(RandomEvent.class);
 
                             if(ListenerWerewolf.class.isAssignableFrom(clazz)){
 
                                 if(event.key().startsWith(prefix)){
-                                    this.events.add(new Wrapper<>((Class<ListenerWerewolf>)clazz,
+                                    this.randomEvents.add(new Wrapper<>((Class<ListenerWerewolf>)clazz,
                                             event,
                                             addon.key()));
                                 }
@@ -278,6 +290,30 @@ public class Register implements IRegisterManager {
                                 Bukkit.getLogger().warning(String.format("Lover %s doesn't implement ILover", lover.key()));
                             }
                         }
+                        else if(clazz.getAnnotation(StatisticsEvent.class) != null){
+
+                            StatisticsEvent statisticsEvent = clazz.getAnnotation(StatisticsEvent.class);
+
+                            if(Event.class.isAssignableFrom(clazz)){
+
+                                if(statisticsEvent.key().startsWith(prefix)){
+                                    this.statisticsEvents.add(new Wrapper<>((Class<Event>) clazz,
+                                            statisticsEvent,
+                                            addon.key()));
+                                }
+                                else {
+                                    Bukkit.getLogger().warning(String.format(
+                                            "The event key %s does not have the same prefix as the addon key %s",
+                                            statisticsEvent.key(), prefix));
+                                }
+                            }
+                            else{
+                                Bukkit.getLogger().warning(String.format(
+                                        "The event class %s doesn't extend Event bukkit class",
+                                        clazz.getName()));
+                            }
+
+                        }
                     });
         } catch (IOException e) {
             e.printStackTrace();
@@ -335,7 +371,7 @@ public class Register implements IRegisterManager {
     }
 
     private Optional<String> checkEvents(String key) {
-        return this.events.stream()
+        return this.randomEvents.stream()
                 .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key) ||
                         Arrays.stream(configurationWrapper.getMetaDatas().configValues()).anyMatch(intValue -> intValue.key().equals(key)) ||
                         Arrays.stream(configurationWrapper.getMetaDatas().configurations()).anyMatch(configuration -> configuration.config().key().equals(key)) ||
@@ -427,8 +463,8 @@ public class Register implements IRegisterManager {
     }
 
     @Override
-    public Set<Wrapper<ListenerWerewolf, Event>> getRandomEventsRegister() {
-        return this.events;
+    public Set<Wrapper<ListenerWerewolf, RandomEvent>> getRandomEventsRegister() {
+        return this.randomEvents;
     }
 
     @Override
@@ -450,5 +486,10 @@ public class Register implements IRegisterManager {
                 .filter(role -> role.key().equals(key))
                 .findFirst()
                 .map(Role::category);
+    }
+
+    @Override
+    public Set<Wrapper<Event, StatisticsEvent>> getEventsClass(){
+        return this.statisticsEvents;
     }
 }

@@ -1,6 +1,6 @@
 package fr.ph1lou.werewolfplugin.random_events;
 
-import fr.ph1lou.werewolfapi.annotations.Event;
+import fr.ph1lou.werewolfapi.annotations.RandomEvent;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
@@ -15,7 +15,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.util.Objects;
 
-@Event(key = EventBase.PUTREFACTION, loreKey = "werewolf.random_events.putrefaction.description",
+@RandomEvent(key = EventBase.PUTREFACTION, loreKey = "werewolf.random_events.putrefaction.description",
         timers = {@Timer(key = Putrefaction.TIMER_START, defaultValue = 60*60, meetUpValue = 30*60, step = 30),
                 @Timer(key = Putrefaction.PERIOD, defaultValue = 15*60, meetUpValue = 10*60, step = 30)})
 public class Putrefaction extends ListenerWerewolf {

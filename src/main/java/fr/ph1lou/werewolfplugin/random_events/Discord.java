@@ -1,7 +1,7 @@
 package fr.ph1lou.werewolfplugin.random_events;
 
 import com.google.common.collect.Sets;
-import fr.ph1lou.werewolfapi.annotations.Event;
+import fr.ph1lou.werewolfapi.annotations.RandomEvent;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -22,7 +22,7 @@ import org.bukkit.event.EventHandler;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Event(key = EventBase.DISCORD, loreKey = "werewolf.random_events.discord.description",
+@RandomEvent(key = EventBase.DISCORD, loreKey = "werewolf.random_events.discord.description",
         timers = {@Timer(key = Discord.TIMER_START, defaultValue = 55*60, meetUpValue = 20*60, step = 30),
                 @Timer(key = Discord.PERIOD, defaultValue = 30*60, meetUpValue = 15*60, step = 30)})
 public class Discord extends ListenerWerewolf {

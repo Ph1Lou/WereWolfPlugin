@@ -952,6 +952,7 @@
         "name": "§bBackup §rSettings",
         "new": "Create a new backup",
         "load": "Load §b&save&",
+        "save_name": "Save name",
         "delete": "Delete §b&save&",
         "configuration": "Configuration §b&save&",
         "load_message": "Configurations §b&save&§r loaded",

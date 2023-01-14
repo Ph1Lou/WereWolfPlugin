@@ -1,6 +1,6 @@
 package fr.ph1lou.werewolfplugin.random_events;
 
-import fr.ph1lou.werewolfapi.annotations.Event;
+import fr.ph1lou.werewolfapi.annotations.RandomEvent;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Event(key = EventBase.WOLF_FLEAS, loreKey = "werewolf.random_events.wolf_fleas.description",
+@RandomEvent(key = EventBase.WOLF_FLEAS, loreKey = "werewolf.random_events.wolf_fleas.description",
         configValues = @IntValue(key = WolfFleas.DISTANCE, defaultValue = 30, meetUpValue = 30, step = 1, item = UniversalMaterial.COMPASS),
         timers = {
                 @Timer(key = WolfFleas.TIMER_START, defaultValue = 50*60, meetUpValue = 10*60, step = 30),

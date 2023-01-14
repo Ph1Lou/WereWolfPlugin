@@ -3,26 +3,29 @@ package fr.ph1lou.werewolfplugin.game;
 
 import com.google.common.collect.Sets;
 import fr.ph1lou.werewolfapi.basekeys.LoverBase;
-import fr.ph1lou.werewolfplugin.roles.lovers.AmnesiacLover;
-import fr.ph1lou.werewolfplugin.roles.lovers.CursedLover;
-import fr.ph1lou.werewolfplugin.roles.lovers.LoverImpl;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.lovers.ILover;
-import fr.ph1lou.werewolfapi.lovers.ILoverManager;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.lovers.CupidLoversEvent;
+import fr.ph1lou.werewolfapi.events.lovers.RevealCursedLoversEvent;
 import fr.ph1lou.werewolfapi.events.lovers.RevealLoversEvent;
+import fr.ph1lou.werewolfapi.events.lovers.RevealNormalLoversEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.lovers.ILover;
+import fr.ph1lou.werewolfapi.lovers.ILoverManager;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
+import fr.ph1lou.werewolfplugin.roles.lovers.AmnesiacLover;
+import fr.ph1lou.werewolfplugin.roles.lovers.CursedLover;
+import fr.ph1lou.werewolfplugin.roles.lovers.LoverImpl;
 import fr.ph1lou.werewolfplugin.roles.villagers.Cupid;
 import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -113,6 +116,13 @@ public class LoversManagement implements ILoverManager {
 					BukkitUtils
 							.registerListener(lovers);
 					lovers.getLovers().forEach(playerWW -> Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(playerWW)));
+
+					if(lovers.isKey(LoverBase.CURSED_LOVER)){
+						Bukkit.getPluginManager().callEvent(new RevealCursedLoversEvent(new HashSet<>(lovers.getLovers())));
+					}
+					else{
+						Bukkit.getPluginManager().callEvent(new RevealNormalLoversEvent(new HashSet<>(lovers.getLovers())));
+					}
 				});
 		Bukkit.getPluginManager().callEvent(new RevealLoversEvent(this.lovers));
 		this.game.checkVictory();

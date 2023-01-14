@@ -72,9 +72,10 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
                         this,
                         ServicePriority.Normal);
         this.invManager.init();
-        BukkitUtils.registerListener(new Events(this));
+
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
             this.registerManager = new Register(this); //to do before all things who need register
+            BukkitUtils.registerListener(new Events(this));
             Objects.requireNonNull(getCommand("a")).setExecutor(new Admin(this));
             Objects.requireNonNull(getCommand("ww")).setExecutor(new Command(this));
             GameManager.createGame(this, wereWolfAPI -> this.currentGame = wereWolfAPI);
