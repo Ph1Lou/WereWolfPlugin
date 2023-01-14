@@ -124,9 +124,7 @@ public class Bonesetter extends RoleVillage implements IAffectedPlayers, ILimite
 
     @Override
     public void setUse(int i) {
-        if (use == 3) return;
         use = i;
-        if (use == 3) disableAbilities();
     }
 
     public List<IPlayerWW> getAlreadyUsed() {
