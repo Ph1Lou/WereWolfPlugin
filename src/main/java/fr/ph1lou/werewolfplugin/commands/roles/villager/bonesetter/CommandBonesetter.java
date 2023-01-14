@@ -5,6 +5,7 @@ import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.events.roles.bonesetter.BonesetterChooseEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -53,6 +54,11 @@ public class CommandBonesetter implements ICommandRole {
                     "werewolf.roles.benefactor.already_use_on_player");
             return;
         }
+
+        BonesetterChooseEvent bonesetterChooseEvent = new BonesetterChooseEvent(playerWW, targetWW);
+        Bukkit.getPluginManager().callEvent(bonesetterChooseEvent);
+
+        if (bonesetterChooseEvent.isCancelled()) return;
 
         bonesetter.setUse(bonesetter.getUse() + 1);
         bonesetter.addAffectedPlayer(targetWW);
