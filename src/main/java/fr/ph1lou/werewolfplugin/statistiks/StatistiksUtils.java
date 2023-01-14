@@ -104,7 +104,7 @@ public class StatistiksUtils {
         if (gameReview.getWinnerCampKey() == null) return;
 
         String jsonInputString = Serializer.serialize(gameReview);
-        File file = new File(main.getDataFolder() + File.separator + "statistiks", gameReview.getGameUUID() + ".json");
+        File file = new File(main.getDataFolder() + File.separator + "statistics", gameReview.getGameUUID() + ".json");
 
         FileUtils_.save(file, jsonInputString);
 

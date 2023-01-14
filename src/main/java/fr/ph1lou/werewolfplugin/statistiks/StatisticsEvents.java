@@ -21,6 +21,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -29,18 +30,34 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-public class Events implements Listener {
+public class StatisticsEvents implements Listener {
 
     private final Main main;
+    private UUID serverUUID;
 
-    public Events(Main main) {
+    @Nullable
+    private GameReview currentGameReview;
+
+    public StatisticsEvents(Main main) {
         this.main = main;
+
+        try{
+            serverUUID = UUID.fromString(Objects.requireNonNull(main.getConfig().getString("server_uuid")));
+        }
+        catch (Exception e){
+            serverUUID = UUID.randomUUID();
+            main.getConfig().set("server_uuid", serverUUID);
+        }
 
         main.getRegisterManager().getEventsClass()
                 .forEach(eventClass -> Bukkit.getPluginManager().registerEvent(eventClass.getClazz(),
                         this,
                         EventPriority.MONITOR,
                         (listener, event) -> {
+
+                            if(this.currentGameReview == null){
+                                return;
+                            }
 
                             StatisticsEvent statisticsEvent = eventClass.getClazz().getAnnotation(StatisticsEvent.class);
                             WereWolfAPI api = main.getWereWolfAPI();
@@ -70,7 +87,7 @@ public class Events implements Listener {
                                     event,
                                     StatisticsTargets.class);
 
-                            main.getCurrentGameReview()
+                            this.currentGameReview
                                     .addRegisteredAction(new RegisteredAction(statisticsEvent.key(),
                                             playerWW,
                                             targetsWW,
@@ -78,8 +95,17 @@ public class Events implements Listener {
                                             extraInfo,
                                             extraInt)
                                             .setActionableStory(eventClass.getClazz().getAnnotation(TellableStoryEvent.class) != null));
-                        }, main, true));
 
+                            if(eventClass.getClazz().isAssignableFrom(WinEvent.class)){
+                                this.currentGameReview.end(extraInfo, targetsWW);
+                                StatistiksUtils.postGame(main, this.currentGameReview);
+                            }
+                        }, main, true));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onGameStart(StartEvent event) {
+        this.currentGameReview = new GameReview(main.getWereWolfAPI(), serverUUID);
     }
 
     private <T> T getValue(Class<T> returnedClazz, Class<Event> eventClass, Event event, Class<? extends Annotation> annotationClass) {
@@ -125,27 +151,4 @@ public class Events implements Listener {
                 })
                 .orElse(null);
     }
-
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onWin(WinEvent event) {
-        main.getCurrentGameReview().end(event.getRole(), event.getPlayers());
-        StatistiksUtils.postGame(main, main.getCurrentGameReview());
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onGameStart(StartEvent event) {
-        UUID serverUUID;
-        try{
-            serverUUID = UUID.fromString(Objects.requireNonNull(main.getConfig().getString("server_uuid")));
-        }
-        catch (Exception e){
-            serverUUID = UUID.randomUUID();
-            main.getConfig().set("server_uuid", serverUUID);
-        }
-
-        main.setCurrentGameReview(new GameReview(main.getWereWolfAPI(), serverUUID));
-
-    }
-
-
 }

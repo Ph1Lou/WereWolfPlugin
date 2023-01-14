@@ -1,21 +1,22 @@
 package fr.ph1lou.werewolfplugin.game;
 
 
-import fr.ph1lou.werewolfapi.basekeys.LoverBase;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.game.IConfiguration;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
+import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.WinEvent;
-import fr.ph1lou.werewolfapi.events.game.utils.CountRemainingRolesCategoriesEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.WinConditionsCheckEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AroundLoverEvent;
+import fr.ph1lou.werewolfapi.lovers.ILover;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.role.interfaces.ICamp;
+import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import fr.ph1lou.werewolfplugin.Main;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -23,6 +24,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -30,6 +32,7 @@ import java.util.stream.Collectors;
 
 public class End {
 
+    @Nullable
     private String winner = null;
     private final GameManager game;
 
@@ -47,32 +50,34 @@ public class End {
 
         if (game.isState(StateGame.END)) return;
 
-        if (game.getPlayersCount() == 0) {
+
+        Set<IRole> iRolesAlive = game.getPlayersWW().stream()
+                .filter(iPlayerWW -> iPlayerWW.isState(StatePlayer.ALIVE))
+                .map(IPlayerWW::getRole)
+                .collect(Collectors.toSet());
+
+
+        if (iRolesAlive.isEmpty()) {
             winner = "werewolf.end.death";
             end();
             return;
         }
-        IConfiguration config = game.getConfig();
 
-        if (config.getLoverCount(LoverBase.AMNESIAC_LOVER) *
-                config.getLoverCount(LoverBase.LOVER) <= 1) {
+        game.getLoversManager().getLovers()
+                .stream()
+                .filter(lover -> lover.isKey(LoverBase.AMNESIAC_LOVER) || lover.isKey(LoverBase.LOVER))
+                .filter(ILover::isAlive)
+                .forEach(lover -> {
+                    Set<IPlayerWW> lovers = new HashSet<>(lover.getLovers());
 
-            game.getLoversManager().getLovers().stream()
-                    .filter(lover -> lover.isKey(LoverBase.AMNESIAC_LOVER) || lover.isKey(LoverBase.LOVER))
-                    .forEach(lover -> {
-                        Set<IPlayerWW> lovers = new HashSet<>(lover.getLovers());
+                    AroundLoverEvent event = new AroundLoverEvent(lovers);
+                    Bukkit.getPluginManager().callEvent(event);
 
-                        if (lover.isAlive()) {
-                            AroundLoverEvent event = new AroundLoverEvent(lovers);
-                            Bukkit.getPluginManager().callEvent(event);
-
-                            if (event.getPlayerWWS().size() == game.getPlayersCount()) {
-                                winner = lover.getKey();
-                                end();
-                            }
-                        }
-                    });
-        }
+                    if (event.getPlayerWWS().size() == iRolesAlive.size()) {
+                        winner = lover.getKey();
+                        end();
+                    }
+                });
 
         if (winner != null) return;
 
@@ -89,29 +94,15 @@ public class End {
             return;
         }
 
-        CountRemainingRolesCategoriesEvent event =
-                new CountRemainingRolesCategoriesEvent();
-
-        Bukkit.getPluginManager().callEvent(event);
-
-        if (event.getWerewolf() == game.getPlayersCount()) {
-            if(event.getVillager() == 0){ //useless
-                winner = Category.WEREWOLF.getKey();
-                end();
-                return;
-            }
-            else {
-                Bukkit.broadcastMessage("Signalez ce Code d'erreur à Ph1Lou sur discord : 1398");
-            }
+        if (iRolesAlive.stream().allMatch(ICamp::isWereWolf)) {
+            winner = Category.WEREWOLF.getKey();
+            end();
+            return;
         }
-        if (event.getVillager() == game.getPlayersCount()) {
-            if(event.getWerewolf() == 0) { //useless
-                winner = Category.VILLAGER.getKey();
-                end();
-            }
-            else {
-                Bukkit.broadcastMessage("Signalez ce Code d'erreur à Ph1Lou sur discord : 1399");
-            }
+        if (iRolesAlive.stream().noneMatch(ICamp::isWereWolf) &&
+                iRolesAlive.stream().noneMatch(ICamp::isNeutral)) {
+            winner = Category.VILLAGER.getKey();
+            end();
         }
     }
 
@@ -123,7 +114,7 @@ public class End {
                         .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                         .collect(Collectors.toSet())));
 
-        String subtitles_victory = game.translate(winner);
+        String subtitlesVictory = game.translate(winner);
 
         game.setState(StateGame.END);
 
@@ -158,8 +149,8 @@ public class End {
 
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.sendMessage(game.translate(Prefix.ORANGE , "werewolf.end.message",
-                    Formatter.format("&winner&",subtitles_victory)));
-            VersionUtils.getVersionUtils().sendTitle(p, game.translate("werewolf.end.victory"), subtitles_victory, 20, 60, 20);
+                    Formatter.format("&winner&",subtitlesVictory)));
+            VersionUtils.getVersionUtils().sendTitle(p, game.translate("werewolf.end.victory"), subtitlesVictory, 20, 60, 20);
             TextComponent msg = new TextComponent(game.translate("werewolf.utils.bar")+ "\n" +
                     game.translate(Prefix.YELLOW,"werewolf.bug") + "\n" +
                     game.translate("werewolf.utils.bar"));
