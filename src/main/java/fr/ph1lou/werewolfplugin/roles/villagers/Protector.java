@@ -16,7 +16,6 @@ import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
-import fr.ph1lou.werewolfapi.events.roles.StealEvent;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.impl.RoleWithLimitedSelectionDuration;
 import org.bukkit.entity.Player;
@@ -89,16 +88,6 @@ public class Protector extends RoleWithLimitedSelectionDuration implements IAffe
                 Formatter.timer(game, TimerBase.POWER_DURATION));
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onStealProtection(StealEvent event) {
-
-        if (this.last == null) return;
-
-        if (!event.getThiefWW().equals(this.last)) return;
-
-        this.last.addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,this.getKey()));
-        this.last.getRole().addAuraModifier(new AuraModifier(this.getKey(), Aura.LIGHT, 40, true));
-    }
 
     @Override
     public @NotNull String getDescription() {

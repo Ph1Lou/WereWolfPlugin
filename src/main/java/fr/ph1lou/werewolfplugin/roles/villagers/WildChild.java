@@ -17,7 +17,6 @@ import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
-import fr.ph1lou.werewolfapi.events.roles.StealEvent;
 import fr.ph1lou.werewolfapi.events.roles.wild_child.AutoModelEvent;
 import fr.ph1lou.werewolfapi.events.roles.wild_child.ModelEvent;
 import fr.ph1lou.werewolfapi.events.roles.wild_child.WildChildTransformationEvent;
@@ -139,48 +138,6 @@ public class WildChild extends RoleVillage implements IAffectedPlayers, ITransfo
 
     }
 
-
-    @EventHandler
-    public void onStealEvent(StealEvent event) {
-
-        if (!event.getThiefWW().equals(getPlayerWW())) return;
-
-        if (!transformed) {
-            return;
-        }
-
-        if (this.affectedPlayer.isEmpty()) return;
-
-        IPlayerWW model = getAffectedPlayers().get(0);
-
-        if (model.equals(getPlayerWW())) {
-
-            WildChildTransformationEvent wildChildTransformationEvent =
-                    new WildChildTransformationEvent(
-                            this.getPlayerWW(),
-                            getPlayerWW());
-
-            Bukkit.getPluginManager().callEvent(wildChildTransformationEvent);
-
-            if (wildChildTransformationEvent.isCancelled()) {
-                this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.transformation");
-                return;
-            }
-
-            setTransformed(true);
-
-            if (!super.isWereWolf()) {
-                Bukkit.getPluginManager().callEvent(
-                        new NewWereWolfEvent(getPlayerWW()));
-            }
-
-        } else
-            this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.wild_child.reveal_model",
-                    Formatter.format("&format&",model.getName()));
-
-
-    }
-
     @Override
     public void recoverPower() {
     }
@@ -224,24 +181,6 @@ public class WildChild extends RoleVillage implements IAffectedPlayers, ITransfo
             Bukkit.getPluginManager().callEvent(
                     new NewWereWolfEvent(getPlayerWW()));
         }
-    }
-
-    @EventHandler
-    public void onTargetIsStolen(StealEvent event) {
-
-        IPlayerWW playerWW = event.getPlayerWW();
-        IPlayerWW thiefWW = event.getThiefWW();
-
-        if (!getAffectedPlayers().contains(playerWW)) return;
-
-        removeAffectedPlayer(playerWW);
-        addAffectedPlayer(thiefWW);
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
-
-        this.getPlayerWW().sendMessageWithKey(
-                Prefix.ORANGE , "werewolf.roles.wild_child.change",
-                Formatter.player(thiefWW.getName()));
     }
 
     @EventHandler

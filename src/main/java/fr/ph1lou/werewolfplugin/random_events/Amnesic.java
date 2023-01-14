@@ -1,6 +1,6 @@
 package fr.ph1lou.werewolfplugin.random_events;
 
-import fr.ph1lou.werewolfapi.annotations.Event;
+import fr.ph1lou.werewolfapi.annotations.RandomEvent;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Event(key = EventBase.AMNESIC,
+@RandomEvent(key = EventBase.AMNESIC,
         loreKey = "werewolf.random_events.amnesic.description",
         timers = @Timer(key = Amnesic.TIMER, defaultValue = 300, meetUpValue = 180, step = 30))
 public class Amnesic extends ListenerWerewolf {

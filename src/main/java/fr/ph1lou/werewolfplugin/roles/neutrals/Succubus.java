@@ -18,7 +18,6 @@ import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.WinConditionsCheckEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AroundLoverEvent;
-import fr.ph1lou.werewolfapi.events.roles.StealEvent;
 import fr.ph1lou.werewolfapi.events.roles.succubus.CharmEvent;
 import fr.ph1lou.werewolfapi.events.roles.succubus.SuccubusResurrectionEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -117,26 +116,6 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
                 .build();
     }
 
-    @EventHandler
-    public void onStealEvent(StealEvent event) {
-
-        if (!event.getThiefWW().equals(getPlayerWW())) return;
-
-        if (this.power) {
-            this.affectedPlayer.clear();
-            return;
-        }
-
-        if (getAffectedPlayers().isEmpty()) {
-            return;
-        }
-
-        IPlayerWW affectedWW = getAffectedPlayers().get(0);
-
-        affectedWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.succubus.get_charmed",
-                Formatter.player(this.getPlayerWW().getName()));
-    }
-
     @Override
     public void recoverPower() {
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.succubus.charming_message");
@@ -214,24 +193,6 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
             setPower(false);
         }
 
-    }
-    @EventHandler
-    public void onTargetIsStolen(StealEvent event) {
-
-
-        IPlayerWW playerWW = event.getPlayerWW();
-        IPlayerWW thiefWW = event.getThiefWW();
-
-        if (!getAffectedPlayers().contains(playerWW)) return;
-
-        removeAffectedPlayer(playerWW);
-        addAffectedPlayer(thiefWW);
-
-        thiefWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.succubus.get_charmed",
-                Formatter.player(this.getPlayerWW().getName()));
-
-        playerWW.sendMessageWithKey(Prefix.ORANGE , "werewolf.roles.succubus.change",
-                Formatter.player(thiefWW.getName()));
     }
 
     @EventHandler

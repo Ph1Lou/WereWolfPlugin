@@ -1,6 +1,6 @@
 package fr.ph1lou.werewolfplugin.random_events;
 
-import fr.ph1lou.werewolfapi.annotations.Event;
+import fr.ph1lou.werewolfapi.annotations.RandomEvent;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -18,7 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Event(key = EventBase.TRIPLE, loreKey = "werewolf.random_events.triple.description")
+@RandomEvent(key = EventBase.TRIPLE, loreKey = "werewolf.random_events.triple.description")
 public class Triple extends ListenerWerewolf {
 
     public Triple(WereWolfAPI main) {

@@ -234,7 +234,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
         }
 
         this.timer++;
-        this.timer %= 6;
+        this.timer %= game.getConfig().getTimerValue(TimerBase.FLUTE_PLAYER_PROGRESS);
 
         if (this.timer != 0) {
             return;
@@ -420,7 +420,9 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
 
     @Override
     public void recoverPotionEffect() {
-        this.checkStrength();
+        if (this.all) {
+            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE, this.getKey()));
+        }
     }
 
     @Override
@@ -430,16 +432,14 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
 
     private void checkStrength() {
 
-        if (this.all) {
-            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,this.getKey()));
-            return;
-        }
-
-        if (this.affectedPlayer.stream().filter(playerWW -> playerWW.isState(StatePlayer.ALIVE)).count() + 1
+        if (!this.all && this.affectedPlayer
+                .stream().filter(playerWW -> playerWW.isState(StatePlayer.ALIVE)).count() + 1
                 == game.getPlayersCount()) {
             this.all = true;
             Bukkit.getPluginManager().callEvent(new AllPlayerEnchantedEvent(this.getPlayerWW()));
+            this.recoverPotionEffect();
         }
+
     }
 
     @Override

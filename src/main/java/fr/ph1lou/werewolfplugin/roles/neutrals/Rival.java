@@ -232,7 +232,7 @@ public class Rival extends RoleNeutral implements IPower {
 
         if (!event.getPlayerWW().equals(cupidWW)) return;
 
-        cupidWW = event.getThiefWW();
+        cupidWW = event.getPlayerWW();
     }
 
     @Override

@@ -94,49 +94,52 @@ public class SmallFeaturesListener implements Listener {
     public void onAppleEat(PlayerItemConsumeEvent event) {
 
         Player player = event.getPlayer();
+        ItemStack itemStack = event.getItem();
         IPlayerWW playerWW = game.getPlayerWW(player.getUniqueId()).orElse(null);
 
         if (playerWW == null) return;
 
         if (UniversalMaterial.ENCHANTED_GOLDEN_APPLE.getStack(
-                event.getItem().getAmount()).equals(event.getItem())) {
+                itemStack.getAmount()).equals(itemStack)) {
             event.setCancelled(true);
             BukkitUtils.scheduleSyncDelayedTask(game, () ->
-                    player.getInventory().remove(event.getItem()));
+                    player.getInventory().remove(itemStack));
 
         } else if (event.getItem().getType().equals(Material.GOLDEN_APPLE)) {
 
             event.setCancelled(true);
-            player.setFoodLevel(player.getFoodLevel()+4);
-            player.setSaturation(player.getSaturation()+9.6f);
-            BukkitUtils.scheduleSyncDelayedTask(game, () -> {
+            player.setFoodLevel(player.getFoodLevel() + 4);
+            player.setSaturation(player.getSaturation() + 9.6f);
 
-                ItemStack itemStack = event.getItem();
+            ItemStack itemStack1 = VersionUtils.getVersionUtils().getItemInHand(player);
+            
+            if(itemStack1.getType() != Material.GOLDEN_APPLE){
+                return;
+            }
+            
+            if(itemStack.getAmount() > 1){
+                itemStack.setAmount(itemStack.getAmount() - 1);
+                VersionUtils.getVersionUtils().setItemInHand(player,itemStack);
+            }
+            else{
+                VersionUtils.getVersionUtils().setItemInHand(player,null);
+            }
+            if (game.getConfig().getGoldenAppleParticles() == 2) {
+                this.addGoldenPotionEffectsWithParticles(player);
+            }
+            else if (game.getConfig().getGoldenAppleParticles() == 1) {
 
-                if(itemStack.getAmount() > 1){
-                    itemStack.setAmount(itemStack.getAmount()-1);
-                    VersionUtils.getVersionUtils().setItemInHand(player,itemStack);
-                }
-                else{
-                    VersionUtils.getVersionUtils().setItemInHand(player,null);
-                }
-                if (game.getConfig().getGoldenAppleParticles() == 2) {
+                GoldenAppleParticleEvent goldenAppleParticleEvent =
+                        new GoldenAppleParticleEvent(playerWW);
+
+                Bukkit.getPluginManager().callEvent(goldenAppleParticleEvent);
+
+                if (!goldenAppleParticleEvent.isCancelled()) {
                     this.addGoldenPotionEffectsWithParticles(player);
                 }
-                else if (game.getConfig().getGoldenAppleParticles() == 1) {
+            }
 
-                    GoldenAppleParticleEvent goldenAppleParticleEvent =
-                            new GoldenAppleParticleEvent(playerWW);
-
-                    Bukkit.getPluginManager().callEvent(goldenAppleParticleEvent);
-
-                    if (!goldenAppleParticleEvent.isCancelled()) {
-                        this.addGoldenPotionEffectsWithParticles(player);
-                    }
-                }
-
-                this.setGoldenAppleEffects(playerWW);
-            });
+            this.setGoldenAppleEffects(playerWW);
         }
     }
 

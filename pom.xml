@@ -6,7 +6,7 @@
 
     <groupId>fr.ph1lou</groupId>
     <artifactId>werewolfplugin</artifactId>
-    <version>1.10-SNAPSHOT</version>
+    <version>1.10.1-SNAPSHOT</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -89,7 +89,7 @@
         <dependency>
             <groupId>net.wesjd</groupId>
             <artifactId>anvilgui</artifactId>
-            <version>1.5.3-SNAPSHOT</version>
+            <version>1.6.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>fr.ph1lou</groupId>

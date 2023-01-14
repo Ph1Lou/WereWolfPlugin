@@ -1,6 +1,6 @@
 package fr.ph1lou.werewolfplugin.random_events;
 
-import fr.ph1lou.werewolfapi.annotations.Event;
+import fr.ph1lou.werewolfapi.annotations.RandomEvent;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -18,7 +18,7 @@ import org.bukkit.event.EventHandler;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Event(key = EventBase.INFECTION, loreKey = "werewolf.random_events.infection.description",
+@RandomEvent(key = EventBase.INFECTION, loreKey = "werewolf.random_events.infection.description",
         timers = {@Timer(key = Infection.TIMER_START, defaultValue = 60*60, meetUpValue = 30*60, step = 30),
                 @Timer(key = Infection.PERIOD, defaultValue = 15*60, meetUpValue = 10*60, step = 30)})
 public class Infection extends ListenerWerewolf {

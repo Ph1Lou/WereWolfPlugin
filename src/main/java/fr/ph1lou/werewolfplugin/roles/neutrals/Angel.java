@@ -27,7 +27,6 @@ import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.WinConditionsCheckEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AroundLoverEvent;
-import fr.ph1lou.werewolfapi.events.roles.StealEvent;
 import fr.ph1lou.werewolfapi.events.roles.angel.AngelChoiceEvent;
 import fr.ph1lou.werewolfapi.events.roles.angel.AngelTargetDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.angel.AngelTargetEvent;
@@ -393,33 +392,6 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
             }
         }
 
-    }
-
-    @EventHandler
-    public void onTargetIsStolen(StealEvent event) {
-
-
-        IPlayerWW playerWW = event.getPlayerWW();
-        IPlayerWW thiefWW = event.getThiefWW();
-
-        String targetName = thiefWW.getName();
-
-        if (!getAffectedPlayers().contains(playerWW)) return;
-
-        removeAffectedPlayer(playerWW);
-        addAffectedPlayer(thiefWW);
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
-
-        if (isChoice(AngelForm.FALLEN_ANGEL)) {
-            this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE , "werewolf.roles.fallen_angel.new_target",
-                    Formatter.format("&target&",targetName),
-                    Formatter.role(game.translate(thiefWW.getRole().getKey())));
-        } else if (isChoice(AngelForm.GUARDIAN_ANGEL)) {
-            this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE , "werewolf.roles.guardian_angel.new_protege",
-                    Formatter.player(targetName),
-                    Formatter.role(game.translate(thiefWW.getRole().getKey())));
-        }
     }
 
     @EventHandler

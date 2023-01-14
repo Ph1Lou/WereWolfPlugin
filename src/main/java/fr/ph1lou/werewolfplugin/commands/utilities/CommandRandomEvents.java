@@ -1,7 +1,7 @@
 package fr.ph1lou.werewolfplugin.commands.utilities;
 
 import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
-import fr.ph1lou.werewolfapi.annotations.Event;
+import fr.ph1lou.werewolfapi.annotations.RandomEvent;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.commands.ICommand;
@@ -31,7 +31,7 @@ public class CommandRandomEvents implements ICommand {
 
         StringBuilder sb = new StringBuilder();
 
-        for (Wrapper<ListenerWerewolf, Event> randomEventRegister : Register.get().getRandomEventsRegister()) {
+        for (Wrapper<ListenerWerewolf, RandomEvent> randomEventRegister : Register.get().getRandomEventsRegister()) {
 
             if (game.getConfig().getProbability(randomEventRegister.getMetaDatas().key()) > 0) {
                 sb.append(game.translate("werewolf.commands.player.random_events.command_message",

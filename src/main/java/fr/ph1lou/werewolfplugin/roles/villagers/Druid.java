@@ -104,7 +104,9 @@ public class Druid extends RoleVillage implements IPower {
         World world = this.getPlayerWW().getLocation().getWorld();
 
         List<IPlayerWW> playerWWS = Bukkit.getOnlinePlayers()
-                .stream().map(Entity::getUniqueId)
+                .stream()
+                .map(Entity::getUniqueId)
+                .filter(uuid -> !uuid.equals(this.getPlayerUUID()))
                 .map(game::getPlayerWW)
                 .filter(Optional::isPresent)
                 .map(Optional::get)

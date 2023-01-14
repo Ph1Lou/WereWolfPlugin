@@ -45,12 +45,13 @@ public class CommandHunter implements ICommandRole {
             return;
         }
         ((IPower) playerWW.getRole()).setPower(false);
-        HunterShotEvent event = new HunterShotEvent(targetWW, playerWW);
+        HunterShotEvent event = new HunterShotEvent(playerWW, targetWW);
         Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) return;
 
-        event.getTarget().removePlayerHealth(10);
-        Bukkit.broadcastMessage(game.translate(Prefix.RED, "werewolf.roles.hunter.success", Formatter.format("&target&", event.getTarget().getName())));
+        event.getTargetWW().removePlayerHealth(10);
+        Bukkit.broadcastMessage(game.translate(Prefix.RED, "werewolf.roles.hunter.success", Formatter.format("&target&",
+                event.getTargetWW().getName())));
     }
 }

@@ -115,11 +115,11 @@ public class InvisibleListener implements Listener {
     @EventHandler
     public void onStealEvent(StealEvent event) {
 
-        if(!(event.getThiefWW().getRole() instanceof IInvisible)){
+        if(!(event.getPlayerWW().getRole() instanceof IInvisible)){
             return;
         }
 
-        ((IInvisible)event.getThiefWW().getRole()).setInvisible(false);
+        ((IInvisible)event.getPlayerWW().getRole()).setInvisible(false);
     }
 
     @EventHandler
