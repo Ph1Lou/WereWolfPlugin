@@ -40,10 +40,11 @@
       "innkeeper": {
         "display": "Aubergiste",
         "effect": "Speed quand toutes les chambres sont fermées",
+        "available": "Votre pouvoir est de nouveau disponible",
         "description": "Le jour, vous pouvez clic-droit sur un joueur pour l’héberger.\nLe jour suivant, vous pouvez à nouveau clic-droit sur le client pour savoir le nombre de joueurs croisés pendant la nuit et le nom de l’un d’eux.\nSi un client a fait un kill, vous le savez mais tous les clients sont expulsés.\nSi un client meurt, vous obtenez le rôle du tueur et la chambre ferme.\nQuand vous n'avez plus de chambre, vous obtenez Speed 0.5.",
         "dead": "Un de vos clients est mort, son tueur était &role&",
         "kill": "Un de vos clients a tué quelqu'un, tous vos clients sont éjectés",
-        "seen_players": "Ce client a vu &number& personnes, l'un d'eux s'appelle &player&",
+        "seen_players": "Ce client a vu &number& personne(s) dont &player&",
         "no_seen_players": "Ce client n'a vu personne",
         "add_client": "Vous allez héberger §b&player&§f",
         "no_more_room": "Vous n'avez plus de chambre, vous ne pouvez pas héberger ce client",
