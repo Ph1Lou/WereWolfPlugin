@@ -938,7 +938,7 @@
         "perform": "§b&player& sera guéri si il perd trop de vie!",
         "target_message": "Le rebouteux vous guérira de §b3 ♥ §f si vous tombez en dessous de §b4 ♥!",
         "activate": "Un joueur a été guéri grâce à vous",
-        "receive_heal": "Vous recevez les soins du rebouteux"
+        "receive_heal": "Vous recevez les soins du §bRebouteux"
       }
     },
     "announcement": {
