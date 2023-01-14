@@ -75,7 +75,6 @@ public class StoryTeller extends RoleVillage {
                 }
             }
         }
-
         this.players.clear();
     }
 

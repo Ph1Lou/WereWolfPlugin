@@ -1,11 +1,14 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.actionablestory.ActionableStoryEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.roles.spy.SpyResultEvent;
@@ -26,7 +29,8 @@ import java.util.List;
 
 @Role(key = RoleBase.SPY,
         category = Category.VILLAGER,
-        attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION})
+        attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION},
+        configValues = @IntValue(key = IntValueBase.SPY_DAY, defaultValue = 5, meetUpValue = 2, step = 1, item = UniversalMaterial.ANVIL))
 public class Spy extends RoleVillage implements IAffectedPlayers, IPower {
 
     @Nullable
@@ -87,7 +91,8 @@ public class Spy extends RoleVillage implements IAffectedPlayers, IPower {
 
     @EventHandler
     public void onDay(DayEvent event){
-        if(event.getNumber()>=5){
+
+        if(event.getNumber() >= game.getConfig().getValue(IntValueBase.SPY_DAY)){
             this.power = true;
         }
 

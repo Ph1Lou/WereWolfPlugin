@@ -881,7 +881,8 @@
         "description": "Au bout du 5e jour, vous pouvez espionner un joueur. Vous recevez le nombre d’Actions racontables effectuées par le joueur le jour d'après",
         "use_power": "Vous pouvez espionner un nouveau joueur avec §b/ww spy",
         "result": "Le joueur &player& a effectué &number& action(s) racontable(s)",
-        "perform": "Vous commencez à espionner §b&player&"
+        "perform": "Vous commencez à espionner §b&player&",
+        "day": "Pouvoir activé Jour §b&number&"
       },
       "benefactor": {
         "display": "Bienfaiteur",
@@ -1623,7 +1624,7 @@
         "magic": "§kCoucou"
       },
       "thiercelieu": {
-        "name": "Thiercelieu",
+        "name": "Thiercelieux",
         "description": "Les morts sont annoncées le matin"
       }
     },

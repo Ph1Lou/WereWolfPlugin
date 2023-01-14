@@ -87,7 +87,6 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
                         VersionUtils.getVersionUtils().sendActionBar(player, actionBarEvent.getActionBar());
                     }), 0, 4);
         });
-
         StatistiksUtils.loadContributors();
     }
 

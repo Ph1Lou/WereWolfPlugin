@@ -31,7 +31,6 @@ import java.util.Set;
 import java.util.UUID;
 
 public class StatisticsEvents implements Listener {
-
     private final Main main;
     private UUID serverUUID;
 
@@ -53,7 +52,7 @@ public class StatisticsEvents implements Listener {
                 .forEach(eventClass -> Bukkit.getPluginManager().registerEvent(eventClass.getClazz(),
                         this,
                         EventPriority.MONITOR,
-                        (listener, event) -> {
+                        (ignored, event) -> {
 
                             if(this.currentGameReview == null){
                                 return;
@@ -62,27 +61,27 @@ public class StatisticsEvents implements Listener {
                             StatisticsEvent statisticsEvent = eventClass.getClazz().getAnnotation(StatisticsEvent.class);
                             WereWolfAPI api = main.getWereWolfAPI();
 
-                            IPlayerWW playerWW =  getValue(IPlayerWW.class,
+                            @Nullable IPlayerWW playerWW = getValue(IPlayerWW.class,
                                     eventClass.getClazz(),
                                     event,
                                     StatisticsPlayer.class);
 
-                            String extraInfo = getValue(String.class,
+                            @Nullable String extraInfo = getValue(String.class,
                                     eventClass.getClazz(),
                                     event,
                                     StatisticsExtraInfo.class);
 
-                            Integer extraInt =  getValue(Integer.class,
+                            @Nullable Integer extraInt =  getValue(Integer.class,
                                     eventClass.getClazz(),
                                     event,
                                     StatisticsExtraInt.class);
 
-                            IPlayerWW targetWW = getValue(IPlayerWW.class,
+                            @Nullable IPlayerWW targetWW = getValue(IPlayerWW.class,
                                     eventClass.getClazz(),
                                     event,
                                     StatisticsTarget.class);
 
-                            Set<IPlayerWW> targetsWW = targetWW != null ? Sets.newHashSet(targetWW) : getValue(Set.class,
+                            @Nullable Set<IPlayerWW> targetsWW = targetWW != null ? Sets.newHashSet(targetWW) : getValue(Set.class,
                                     eventClass.getClazz(),
                                     event,
                                     StatisticsTargets.class);

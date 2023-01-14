@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
         attributes = RoleAttribute.VILLAGER,
         requireDouble = true,
         timers = {@Timer(key = TimerBase.TWIN_DURATION,
-                defaultValue = 1800, meetUpValue = 1800,
+                defaultValue = 1800, meetUpValue = 300,
         decrementAfterRole = true,
         onZero = AutoTwinEvent.class)},
         configValues = {@IntValue(key = IntValueBase.TWIN_DISTANCE,

@@ -60,20 +60,21 @@ public class Innkeeper extends RoleVillage implements IPower {
                 .filter(clientData -> clientData.playerWW.equals(event.getPlayerWW()))
                 .findFirst()
                 .ifPresent(clientData -> {
-                    Formatter role;
+                    String role;
                     if (clientData.playerWW.getLastKiller()
                             .isPresent()) {
-                        role = Formatter.role(game.translate(clientData.playerWW.getLastKiller()
+                        role = game.translate(clientData.playerWW.getLastKiller()
                                 .get()
                                 .getRole()
-                                .getKey()));
+                                .getKey());
                     } else {
-                        role = Formatter.role("pve");
+                        role = "pve";
                     }
                     ClientDeathEvent clientDeathEvent = new ClientDeathEvent(getPlayerWW(), clientData.playerWW, role);
                     Bukkit.getPluginManager().callEvent(clientDeathEvent);
                     if (!clientDeathEvent.isCancelled()) {
-                        getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.dead", role);
+                        getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.dead",
+                                Formatter.role(clientDeathEvent.getRole()));
                         availableRooms--;
                         clientDatas.remove(clientData);
                         if (availableRooms == 0) {
@@ -168,7 +169,9 @@ public class Innkeeper extends RoleVillage implements IPower {
                 List<IPlayerWW> playerWWS = new ArrayList<>(clientData.seenPlayers);
                 Collections.shuffle(playerWWS, game.getRandom());
                 InnkeeperInfoMeetEvent innkeeperInfoMeetEvent = new InnkeeperInfoMeetEvent(getPlayerWW(),
+                        playerWWS.get(0),
                         playerWWS.size());
+
                 Bukkit.getPluginManager()
                         .callEvent(innkeeperInfoMeetEvent);
                 if (!innkeeperInfoMeetEvent.isCancelled()) {

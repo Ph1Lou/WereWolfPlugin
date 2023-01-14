@@ -433,7 +433,8 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
     private void checkStrength() {
 
         if (!this.all && this.affectedPlayer
-                .stream().filter(playerWW -> playerWW.isState(StatePlayer.ALIVE)).count() + 1
+                .stream()
+                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE)).count() + 1
                 == game.getPlayersCount()) {
             this.all = true;
             Bukkit.getPluginManager().callEvent(new AllPlayerEnchantedEvent(this.getPlayerWW()));
