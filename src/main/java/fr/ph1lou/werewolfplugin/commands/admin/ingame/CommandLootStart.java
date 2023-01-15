@@ -33,7 +33,7 @@ public class CommandLootStart implements ICommand {
         IStuffManager stuffManager = game.getStuffs();
         UUID uuid = player.getUniqueId();
 
-        if(!stuffManager.isInTempStuff(uuid)){
+        if (!stuffManager.isInTempStuff(uuid)) {
             return;
         }
 
@@ -48,7 +48,7 @@ public class CommandLootStart implements ICommand {
             player.getInventory().setItem(i, items[i]);
         }
 
-        player.sendMessage(game.translate(Prefix.GREEN , "werewolf.commands.admin.stuff_start.perform"));
+        player.sendMessage(game.translate(Prefix.GREEN, "werewolf.commands.admin.stuff_start.perform"));
         player.setGameMode(GameMode.ADVENTURE);
 
         Bukkit.getPluginManager().callEvent(new UpdateStuffEvent());

@@ -40,7 +40,7 @@ public class MisanthropeSister extends ListenerWerewolf {
                 .filter(playerWW -> playerWW.getRole().isKey(RoleBase.SISTER))
                 .collect(Collectors.toList());
 
-        if(sisters.size() < 2){
+        if (sisters.size() < 2) {
             return;
         }
         Collections.shuffle(sisters, game.getRandom());
@@ -55,25 +55,25 @@ public class MisanthropeSister extends ListenerWerewolf {
 
         Bukkit.getPluginManager().callEvent(mysanthropeSisterEvent);
 
-        if(mysanthropeSisterEvent.isCancelled()){
+        if (mysanthropeSisterEvent.isCancelled()) {
             return;
         }
 
-        this.sisterWW.sendMessageWithKey(Prefix.BLUE,"werewolf.random_events.sister_misanthrope.message");
+        this.sisterWW.sendMessageWithKey(Prefix.BLUE, "werewolf.random_events.sister_misanthrope.message");
         this.sisterWW.getRole().setInfected();
         Bukkit.getPluginManager().callEvent(new NewWereWolfEvent(this.sisterWW));
     }
 
     @EventHandler
-    public void onWerewolfChat(WereWolfCanSpeakInChatEvent event){
-        if(event.getPlayerWW().equals(this.sisterWW)){
+    public void onWerewolfChat(WereWolfCanSpeakInChatEvent event) {
+        if (event.getPlayerWW().equals(this.sisterWW)) {
             event.setCanSpeak(false);
         }
     }
 
     @EventHandler
-    public void onRequestWerewolfList(AppearInWereWolfListEvent event){
-        if(this.sisterWW != null && event.getPlayerUUID().equals(this.sisterWW.getUUID())){
+    public void onRequestWerewolfList(AppearInWereWolfListEvent event) {
+        if (this.sisterWW != null && event.getPlayerUUID().equals(this.sisterWW.getUUID())) {
             event.setAppear(false);
         }
     }

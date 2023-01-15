@@ -30,19 +30,19 @@ public class CommandAngelRegen implements ICommandRole {
         Angel guardianAngel = (Angel) playerWW.getRole();
 
         if (!guardianAngel.isChoice(AngelForm.GUARDIAN_ANGEL)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.state_player");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.state_player");
             return;
         }
 
 
         if (((ILimitedUse) guardianAngel).getUse() >= 3) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.power");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.power");
             return;
         }
 
         if (((IAffectedPlayers) guardianAngel)
                 .getAffectedPlayers().isEmpty()) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.guardian_angel.no_protege");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.guardian_angel.no_protege");
             return;
         }
 
@@ -51,7 +51,7 @@ public class CommandAngelRegen implements ICommandRole {
         Player playerProtected = Bukkit.getPlayer(playerWW1.getUUID());
 
         if (playerProtected == null) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.guardian_angel.disconnected_protege");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.guardian_angel.disconnected_protege");
             return;
         }
 
@@ -64,18 +64,18 @@ public class CommandAngelRegen implements ICommandRole {
         Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
 
-        playerWW1.addPotionModifier(PotionModifier.add( PotionEffectType.REGENERATION,
+        playerWW1.addPotionModifier(PotionModifier.add(PotionEffectType.REGENERATION,
                 400,
                 0,
                 playerWW.getRole().getKey()));
 
-        playerWW1.sendMessageWithKey(Prefix.GREEN , "werewolf.roles.guardian_angel.get_regeneration");
+        playerWW1.sendMessageWithKey(Prefix.GREEN, "werewolf.roles.guardian_angel.get_regeneration");
         playerWW.sendMessageWithKey(
-                Prefix.GREEN , "werewolf.roles.guardian_angel.perform",
+                Prefix.GREEN, "werewolf.roles.guardian_angel.perform",
                 Formatter.number(3 - ((ILimitedUse) guardianAngel).getUse()));
     }
 }

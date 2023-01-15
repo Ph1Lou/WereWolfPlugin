@@ -17,8 +17,8 @@ public class CommandNecromancer implements ICommandRole {
     @Override
     public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
 
-        playerWW.sendMessageWithKey(Prefix.YELLOW,"werewolf.roles.necromancer.use");
+        playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.necromancer.use");
 
-        ((IPower)playerWW.getRole()).setPower(false);
+        ((IPower) playerWW.getRole()).setPower(false);
     }
 }

@@ -96,7 +96,7 @@ public class AdvancedSettingsGUI implements InventoryProvider {
         contents.set(0, 6, ClickableItem.of((
                 new ItemBuilder(Material.BREAD)
                         .setDisplayName(game.translate("werewolf.menus.troll.name"))
-                        .setLore(game.translate("werewolf.menus.troll.current",Formatter.role(game.translate(config.getTrollKey()))))
+                        .setLore(game.translate("werewolf.menus.troll.current", Formatter.role(game.translate(config.getTrollKey()))))
                         .build()), e -> TrollChoiceGUI.getInventory(player, Category.WEREWOLF).open(player)));
 
         contents.set(0, 8, ClickableItem.of((

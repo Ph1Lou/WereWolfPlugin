@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Role(key = RoleBase.INFECT, category= Category.WEREWOLF,
+@Role(key = RoleBase.INFECT, category = Category.WEREWOLF,
         attributes = {RoleAttribute.WEREWOLF},
         weight = 1.5f,
         configurations = @Configuration(config = @ConfigurationBasic(key = ConfigBase.INFECT_AUTO_RESURRECTION)))
@@ -124,7 +124,7 @@ public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPl
 
         TextComponent infectMessage = new TextComponent(
                 game.translate(
-                        Prefix.YELLOW , "werewolf.roles.infect_father_of_the_wolves.infection_message",
+                        Prefix.YELLOW, "werewolf.roles.infect_father_of_the_wolves.infection_message",
                         Formatter.player(playerWW.getName())));
         infectMessage.setClickEvent(
                 new ClickEvent(ClickEvent.Action.RUN_COMMAND,
@@ -151,7 +151,7 @@ public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPl
             return true;
         }
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+        this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
 
         return false;
     }

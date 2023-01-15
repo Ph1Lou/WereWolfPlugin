@@ -1,11 +1,11 @@
 package fr.ph1lou.werewolfplugin.commands.utilities;
 
 import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.commands.ICommand;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.enums.StateGame;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -25,15 +25,15 @@ public class CommandRank implements ICommand {
         List<? extends UUID> queue = game.getModerationManager().getQueue();
 
         if (!game.isState(StateGame.LOBBY)) {
-            player.sendMessage(game.translate(Prefix.RED , "werewolf.check.already_begin"));
+            player.sendMessage(game.translate(Prefix.RED, "werewolf.check.already_begin"));
             return;
         }
 
         if (queue.contains(uuid)) {
-            player.sendMessage(game.translate(Prefix.GREEN , "werewolf.commands.player.rank.perform",
+            player.sendMessage(game.translate(Prefix.GREEN, "werewolf.commands.player.rank.perform",
                     Formatter.number(queue.indexOf(uuid) + 1)));
         } else {
-            player.sendMessage(game.translate(Prefix.RED , "werewolf.commands.player.rank.not_in_queue"));
+            player.sendMessage(game.translate(Prefix.RED, "werewolf.commands.player.rank.not_in_queue"));
         }
     }
 }

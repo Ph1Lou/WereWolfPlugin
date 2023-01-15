@@ -28,34 +28,34 @@ public class CommandDevotedServant implements ICommandRole {
 
         IRole devotedServant = playerWW.getRole();
 
-        if(Bukkit.getPlayer(UUID.fromString(args[0]))==null){
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.offline_player");
+        if (Bukkit.getPlayer(UUID.fromString(args[0])) == null) {
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.offline_player");
             return;
         }
         UUID argUUID = UUID.fromString(args[0]);
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (argUUID.equals(uuid)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.not_yourself");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.not_yourself");
             return;
         }
 
         if (playerWW1 == null) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.player_not_found");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.player_not_found");
             return;
         }
 
         if (!playerWW1.isState(StatePlayer.JUDGEMENT)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.not_in_judgement");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.not_in_judgement");
             return;
         }
 
-        if(!((IAffectedPlayers) devotedServant).getAffectedPlayers().isEmpty()){
+        if (!((IAffectedPlayers) devotedServant).getAffectedPlayers().isEmpty()) {
             return;
         }
         ((IAffectedPlayers) devotedServant).addAffectedPlayer(playerWW1);
 
-        playerWW.sendMessageWithKey(Prefix.LIGHT_BLUE,"werewolf.roles.devoted_servant.perform",
+        playerWW.sendMessageWithKey(Prefix.LIGHT_BLUE, "werewolf.roles.devoted_servant.perform",
                 Formatter.player(playerWW1.getName()));
 
     }

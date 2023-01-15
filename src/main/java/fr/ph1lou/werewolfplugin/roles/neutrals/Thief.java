@@ -96,11 +96,11 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
     @Override
     public void recoverPotionEffect() {
 
-        if(!this.power) return;
+        if (!this.power) return;
 
         if (!isAbilityEnabled()) return;
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,this.getKey()));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE, this.getKey()));
 
     }
 
@@ -120,7 +120,7 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onFirstDeathEvent(FirstDeathEvent event){
+    public void onFirstDeathEvent(FirstDeathEvent event) {
 
         IPlayerWW playerWW = event.getPlayerWW();
 
@@ -128,7 +128,7 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
 
         if (!playerWW.getLastKiller().get().equals(getPlayerWW())) return;
 
-        if(!hasPower())return;
+        if (!hasPower()) return;
 
         event.setCancelled(true);
 
@@ -141,7 +141,7 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
                         new SecondDeathEvent(playerWW, event.getLastStrikers())), 20L);
             }
 
-        },7*20);
+        }, 7 * 20);
     }
 
 
@@ -152,7 +152,7 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
         this.setPower(false);
         IRole roleClone = role.publicClone();
 
-        if(roleClone == null){
+        if (roleClone == null) {
             return;
         }
 
@@ -166,14 +166,14 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
         } else if (roleClone.isWereWolf()) {
             Bukkit.getPluginManager().callEvent(new NewWereWolfEvent(getPlayerWW()));
         }
-        if(this.isSolitary()){
+        if (this.isSolitary()) {
             roleClone.setSolitary(true);
         }
         this.getPlayerWW().addDeathRole(this.getKey());
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.thief.realized_theft",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.thief.realized_theft",
                 Formatter.role(game.translate(role.getKey())));
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.thief.details");
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.thief.details");
 
         this.getPlayerWW().clearPotionEffects(this.getKey());
 
@@ -204,10 +204,10 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
     @Override
     public void disableAbilitiesRole() {
 
-        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,this.getKey(),0));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE, this.getKey(), 0));
     }
 }

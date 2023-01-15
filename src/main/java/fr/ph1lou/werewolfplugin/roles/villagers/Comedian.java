@@ -1,21 +1,21 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.annotations.Role;
-import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.ComedianMask;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.enums.Aura;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.ComedianMask;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleWithLimitedSelectionDuration;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,8 +25,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Role(key = RoleBase.COMEDIAN,
-           category = Category.VILLAGER,
-           attributes = RoleAttribute.VILLAGER)
+        category = Category.VILLAGER,
+        attributes = RoleAttribute.VILLAGER)
 public class Comedian extends RoleWithLimitedSelectionDuration {
 
     private final List<ComedianMask> comedianMasks = new ArrayList<>();
@@ -70,7 +70,7 @@ public class Comedian extends RoleWithLimitedSelectionDuration {
             return;
         }
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.comedian.wear_mask_message",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.comedian.wear_mask_message",
                 Formatter.timer(game, TimerBase.POWER_DURATION));
 
     }
@@ -81,7 +81,7 @@ public class Comedian extends RoleWithLimitedSelectionDuration {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.roles.comedian.description"))
                 .addExtraLines(game.translate("werewolf.roles.comedian.masks",
-                                Formatter.format("&mask&",comedianMasks.isEmpty() ?
+                        Formatter.format("&mask&", comedianMasks.isEmpty() ?
                                 game.translate("werewolf.roles.comedian.none") :
                                 comedianMasks.stream()
                                         .map(comedianMasks1 -> game.translate(comedianMasks1.getKey()))

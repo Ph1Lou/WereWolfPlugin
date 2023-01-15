@@ -5,9 +5,9 @@ import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StateGame;
-import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.TrollEvent;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
@@ -80,7 +80,8 @@ public class RoleDuration extends ListenerWerewolf {
                 role = roleRegister.getClazz().getConstructor(WereWolfAPI.class,
                         IPlayerWW.class).newInstance(game,
                         playerWW);
-            } catch (IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException exception) {
+            } catch (IllegalAccessException | InstantiationException | InvocationTargetException |
+                     NoSuchMethodException exception) {
                 exception.printStackTrace();
                 role = new Villager(game, playerWW);
             }
@@ -95,9 +96,8 @@ public class RoleDuration extends ListenerWerewolf {
     }
 
 
-
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onRepartitionFirst(RepartitionEvent event){
+    public void onRepartitionFirst(RepartitionEvent event) {
         if (this.getGame().getConfig().isConfigActive(ConfigBase.TROLL_ROLE)) {
             Bukkit.getPluginManager().callEvent(new TrollEvent(this.getGame().getConfig().getTrollKey()));
             event.setCancelled(true);
@@ -125,7 +125,8 @@ public class RoleDuration extends ListenerWerewolf {
                                                         IPlayerWW.class)
                                                 .newInstance(game,
                                                         playerWW);
-                                    } catch (InstantiationException | InvocationTargetException | IllegalAccessException | NoSuchMethodException exception) {
+                                    } catch (InstantiationException | InvocationTargetException |
+                                             IllegalAccessException | NoSuchMethodException exception) {
                                         exception.printStackTrace();
                                         role = new Villager(game, playerWW);
                                     }
@@ -147,12 +148,12 @@ public class RoleDuration extends ListenerWerewolf {
                         HandlerList.unregisterAll(playerWW.getRole());
                         Sound.PORTAL_TRIGGER.play(playerWW);
                         playerWW.clearPotionEffects();
-                        playerWW.sendMessageWithKey(Prefix.RED , "werewolf.announcement.troll");
+                        playerWW.sendMessageWithKey(Prefix.RED, "werewolf.announcement.troll");
                         playerWW.addPlayerMaxHealth(20 - playerWW.getMaxHealth());
                     });
             game.getPlayersWW().forEach(IPlayerWW::clearLover);
             Iterator<? extends ILover> iterator = game.getLoversManager().getLovers().iterator();
-            while (iterator.hasNext()){
+            while (iterator.hasNext()) {
                 HandlerList.unregisterAll(iterator.next());
                 iterator.remove();
             }

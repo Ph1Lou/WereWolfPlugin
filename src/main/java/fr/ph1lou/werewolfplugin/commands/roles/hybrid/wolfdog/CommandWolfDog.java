@@ -28,13 +28,13 @@ public class CommandWolfDog implements ICommandRole {
         Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
 
         ((ITransformed) wolfDog).setTransformed(true);
 
-        playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.wolf_dog.perform");
+        playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.wolf_dog.perform");
 
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(playerWW));
 

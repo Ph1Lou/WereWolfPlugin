@@ -34,7 +34,7 @@ public class ScenariosGUI implements InventoryProvider {
             .size(InventoryUtils.getRowNumbers(JavaPlugin.getPlugin(Main.class)
                     .getRegisterManager()
                     .getScenariosRegister()
-                            .size(), false), 9)
+                    .size(), false), 9)
             .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menus.scenarios.name"))
             .closeable(true)
             .build();
@@ -74,7 +74,7 @@ public class ScenariosGUI implements InventoryProvider {
                                 scenarioRegister.getMetaDatas().timers(),
                                 scenarioRegister.getMetaDatas().configValues(),
                                 new ConfigurationBasic[]{}));
-                        if(!lore.isEmpty()){
+                        if (!lore.isEmpty()) {
                             lore.add(game.translate("werewolf.menus.lore.shift"));
                         }
                         lore.add(0, game.translate("werewolf.utils.enable"));
@@ -92,7 +92,7 @@ public class ScenariosGUI implements InventoryProvider {
 
                     incompatible
                             .ifPresent(scenario -> lore.add(game.translate("werewolf.menus.scenarios.incompatible",
-                                    Formatter.format("&scenario&",scenario))));
+                                    Formatter.format("&scenario&", scenario))));
 
 
                     items.add(ClickableItem.of((new ItemBuilder(itemStack)
@@ -100,15 +100,14 @@ public class ScenariosGUI implements InventoryProvider {
                             .setLore(lore).build()), e -> {
 
 
-                        if(e.isShiftClick()){
+                        if (e.isShiftClick()) {
                             AdvancedScenariosGUI.getInventory(scenarioRegister.getMetaDatas(),
                                     pagination.getPage()).open(player);
-                        }
-                        else if (!incompatible.isPresent() || config.isScenarioActive(scenarioRegister.getMetaDatas().key())) {
+                        } else if (!incompatible.isPresent() || config.isScenarioActive(scenarioRegister.getMetaDatas().key())) {
                             config.switchScenarioValue(scenarioRegister.getMetaDatas().key());
                             game.getListenersManager().getScenario(scenarioRegister.getMetaDatas().key())
-                                            .ifPresent(listenerWerewolf -> listenerWerewolf
-                                                    .register(config.isScenarioActive(scenarioRegister.getMetaDatas().key())));
+                                    .ifPresent(listenerWerewolf -> listenerWerewolf
+                                            .register(config.isScenarioActive(scenarioRegister.getMetaDatas().key())));
                         }
                     }));
                 });

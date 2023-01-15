@@ -36,54 +36,53 @@ public class CommandAnalystSee implements ICommandRole {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.offline_player");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.offline_player");
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.player_not_found");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.player_not_found");
             return;
         }
 
         List<PotionEffectType> effects = Arrays.asList(PotionEffectType.INCREASE_DAMAGE,
                 PotionEffectType.DAMAGE_RESISTANCE, PotionEffectType.WEAKNESS, PotionEffectType.SPEED, PotionEffectType.INVISIBILITY);
 
-        if(analyst instanceof ILimitedUse){
-            if(((ILimitedUse)analyst).getUse() >= 5){
-                playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.power");
+        if (analyst instanceof ILimitedUse) {
+            if (((ILimitedUse) analyst).getUse() >= 5) {
+                playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.power");
                 return;
             }
-            ((ILimitedUse)analyst).setUse(((ILimitedUse)analyst).getUse()+1);
+            ((ILimitedUse) analyst).setUse(((ILimitedUse) analyst).getUse() + 1);
         }
 
-        if(analyst instanceof IPower){
-            ((IPower)analyst).setPower(false);
+        if (analyst instanceof IPower) {
+            ((IPower) analyst).setPower(false);
         }
 
-        AnalystEvent analystEvent = new AnalystEvent(playerWW,playerWW1, playerWW1.getPotionModifiers()
+        AnalystEvent analystEvent = new AnalystEvent(playerWW, playerWW1, playerWW1.getPotionModifiers()
                 .stream()
                 .filter(PotionModifier::isAdd)
                 .map(PotionModifier::getPotionEffectType).anyMatch(effects::contains));
 
         Bukkit.getPluginManager().callEvent(analystEvent);
 
-        if(analystEvent.isCancelled()){
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+        if (analystEvent.isCancelled()) {
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
 
-        if(analyst instanceof IAffectedPlayers){
-            ((IAffectedPlayers)analyst).addAffectedPlayer(playerWW1);
+        if (analyst instanceof IAffectedPlayers) {
+            ((IAffectedPlayers) analyst).addAffectedPlayer(playerWW1);
         }
 
-        if(analystEvent.hasEffect()){
-            playerWW.sendMessageWithKey(Prefix.GREEN,"werewolf.roles.analyst.has_effects",
+        if (analystEvent.hasEffect()) {
+            playerWW.sendMessageWithKey(Prefix.GREEN, "werewolf.roles.analyst.has_effects",
                     Formatter.player(playerWW1.getName()));
-        }
-        else{
-            playerWW.sendMessageWithKey(Prefix.RED,"werewolf.roles.analyst.no_effects",
+        } else {
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.analyst.no_effects",
                     Formatter.player(playerWW1.getName()));
         }
     }

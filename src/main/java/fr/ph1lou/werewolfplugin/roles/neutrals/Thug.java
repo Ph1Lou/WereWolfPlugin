@@ -3,11 +3,11 @@ package fr.ph1lou.werewolfplugin.roles.neutrals;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
@@ -42,11 +42,11 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
-@Role(key = RoleBase.THUG, 
-        category = Category.NEUTRAL, 
+@Role(key = RoleBase.THUG,
+        category = Category.NEUTRAL,
         attributes = RoleAttribute.NEUTRAL,
         configValues = {@IntValue(key = IntValueBase.THUG_DISTANCE,
-        defaultValue = 25, meetUpValue = 25, step = 5, item = UniversalMaterial.GRAY_WOOL)})
+                defaultValue = 25, meetUpValue = 25, step = 5, item = UniversalMaterial.GRAY_WOOL)})
 public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
 
     private int probability = 10;
@@ -77,38 +77,38 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
     }
 
     @EventHandler
-    public void onDay(DayEvent event){
+    public void onDay(DayEvent event) {
 
         this.setPower(true);
 
-        if(this.playerWW != null){
+        if (this.playerWW != null) {
             Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.playerWW));
         }
 
-        if(!this.isAbilityEnabled()){
+        if (!this.isAbilityEnabled()) {
             return;
         }
 
-        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
-        this.getPlayerWW().sendMessageWithKey(Prefix.BLUE,"werewolf.roles.thug.command_message");
+        this.getPlayerWW().sendMessageWithKey(Prefix.BLUE, "werewolf.roles.thug.command_message");
 
     }
 
     @Override
     public void recoverPotionEffect() {
-        if(this.hasPower2()){
-            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,this.getKey()));
+        if (this.hasPower2()) {
+            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE, this.getKey()));
         }
     }
 
     @Override
     public void disableAbilitiesRole() {
-        if(this.hasPower2()){
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,this.getKey(),0));
+        if (this.hasPower2()) {
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE, this.getKey(), 0));
         }
-        if(this.playerWW!=null){
+        if (this.playerWW != null) {
             Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.playerWW));
         }
     }
@@ -119,42 +119,42 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
     }
 
     @EventHandler
-    public void onPlayerDeath(FinalDeathEvent event){
+    public void onPlayerDeath(FinalDeathEvent event) {
 
-        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        if(!this.isAbilityEnabled()){
+        if (!this.isAbilityEnabled()) {
             return;
         }
 
         event.getPlayerWW()
                 .getLastKiller()
                 .ifPresent(playerWW -> {
-                    if(!playerWW.equals(this.getPlayerWW())){
+                    if (!playerWW.equals(this.getPlayerWW())) {
                         return;
                     }
 
-                    if(!this.hasPower2()){
+                    if (!this.hasPower2()) {
                         this.setPower2(true);
-                        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.roles.thug.resistance");
-                        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,this.getKey()));
+                        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.thug.resistance");
+                        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE, this.getKey()));
                     }
 
-                    if(!event.getPlayerWW().getPlayersKills().isEmpty()){
+                    if (!event.getPlayerWW().getPlayersKills().isEmpty()) {
                         this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE,
                                 "werewolf.roles.thug.new_heart",
                                 Formatter.player(event.getPlayerWW().getName()));
                         this.getPlayerWW().addPlayerMaxHealth(2);
                     }
 
-                    if(game.getRandom().nextInt(100) < probability){
+                    if (game.getRandom().nextInt(100) < probability) {
                         ThugRevealEvent thugRevealEvent = new ThugRevealEvent(playerWW);
 
                         Bukkit.getPluginManager().callEvent(thugRevealEvent);
 
-                        if(!thugRevealEvent.isCancelled()){
+                        if (!thugRevealEvent.isCancelled()) {
                             this.deathPlayerWithRoleRevealed = event.getPlayerWW();
                         }
                     }
@@ -162,28 +162,28 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void onAnnouncement(AnnouncementDeathEvent event){
+    public void onAnnouncement(AnnouncementDeathEvent event) {
 
-        if(event.getPlayerWW().equals(this.deathPlayerWithRoleRevealed)){
+        if (event.getPlayerWW().equals(this.deathPlayerWithRoleRevealed)) {
             event.setFormat("werewolf.roles.thug.death_message");
         }
     }
 
     @EventHandler
-    public void onPlayerDeath(DeathItemsEvent event){
-        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+    public void onPlayerDeath(DeathItemsEvent event) {
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        if(!this.isAbilityEnabled()){
+        if (!this.isAbilityEnabled()) {
             return;
         }
 
-        if(event.getLocation().getWorld() != this.getPlayerWW().getLocation().getWorld()){
+        if (event.getLocation().getWorld() != this.getPlayerWW().getLocation().getWorld()) {
             return;
         }
 
-        if(event.getLocation().distance(this.getPlayerWW().getLocation()) > 25){
+        if (event.getLocation().distance(this.getPlayerWW().getLocation()) > 25) {
             return;
         }
 
@@ -194,17 +194,17 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
                 .mapToInt(ItemStack::getAmount)
                 .sum();
 
-        if(total <= 1){
+        if (total <= 1) {
             return;
         }
 
         ThugRecoverGoldenAppleEvent thugRecoverGoldenAppleEvent = new ThugRecoverGoldenAppleEvent(this.getPlayerWW(),
                 event.getPlayerWW(),
-                total/2);
+                total / 2);
 
         Bukkit.getPluginManager().callEvent(thugRecoverGoldenAppleEvent);
 
-        if(thugRecoverGoldenAppleEvent.isCancelled()){
+        if (thugRecoverGoldenAppleEvent.isCancelled()) {
             return;
         }
 
@@ -215,25 +215,24 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
                 .filter(Objects::nonNull)
                 .filter(itemStack -> itemStack.getType() == UniversalMaterial.GOLDEN_APPLE.getType())
                 .forEach(itemStack -> {
-                    if(temp.get() > 0){
-                        if(itemStack.getAmount() > temp.get()){
-                            itemStack.setAmount(itemStack.getAmount()- temp.get());
+                    if (temp.get() > 0) {
+                        if (itemStack.getAmount() > temp.get()) {
+                            itemStack.setAmount(itemStack.getAmount() - temp.get());
                             temp.set(0);
-                        }
-                        else{
+                        } else {
                             temp.addAndGet(-itemStack.getAmount());
                             itemStack.setType(Material.COBBLESTONE);
                         }
                     }
                 });
 
-        probability+=10;
+        probability += 10;
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.BLUE,"werewolf.roles.thug.get_apple",
-                Formatter.format("&number1&",this.probability),
+        this.getPlayerWW().sendMessageWithKey(Prefix.BLUE, "werewolf.roles.thug.get_apple",
+                Formatter.format("&number1&", this.probability),
                 Formatter.number(thugRecoverGoldenAppleEvent.getGoldenApple()),
                 Formatter.player(event.getPlayerWW().getName()));
-        this.getPlayerWW().addItem(new ItemStack(Material.GOLDEN_APPLE,thugRecoverGoldenAppleEvent.getGoldenApple()));
+        this.getPlayerWW().addItem(new ItemStack(Material.GOLDEN_APPLE, thugRecoverGoldenAppleEvent.getGoldenApple()));
     }
 
     @Override
@@ -256,45 +255,45 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
 
     @Override
     public void addAffectedPlayer(IPlayerWW playerWW) {
-        this.playerWW=playerWW;
+        this.playerWW = playerWW;
     }
 
     @Override
     public void removeAffectedPlayer(IPlayerWW playerWW) {
-        this.playerWW=null;
+        this.playerWW = null;
     }
 
     @Override
     public void clearAffectedPlayer() {
-        this.playerWW=null;
+        this.playerWW = null;
     }
 
     @Override
     public List<? extends IPlayerWW> getAffectedPlayers() {
-        if(playerWW==null){
+        if (playerWW == null) {
             return new ArrayList<>();
         }
         return Collections.singletonList(this.playerWW);
     }
 
     @EventHandler
-    public void onUpdateNameTag(UpdatePlayerNameTagEvent event){
-        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+    public void onUpdateNameTag(UpdatePlayerNameTagEvent event) {
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
-        if(!this.isAbilityEnabled()){
-            return;
-        }
-
-        if(this.playerWW==null){
+        if (!this.isAbilityEnabled()) {
             return;
         }
 
-        if(!event.getPlayerUUID().equals(this.playerWW.getUUID())){
+        if (this.playerWW == null) {
             return;
         }
 
-        if(this.hasPower()){
+        if (!event.getPlayerUUID().equals(this.playerWW.getUUID())) {
+            return;
+        }
+
+        if (this.hasPower()) {
             return;
         }
 

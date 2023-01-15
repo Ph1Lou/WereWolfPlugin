@@ -1580,8 +1580,8 @@
         "description": "permette di attivare il systema di Ruoli nascosti senza avere una sacerdotessa nella composizione.\nUn giocatore nel villaggio è scelto casualmente all'inizio della partita senza che lo sappia",
         "magic": "§kCucu"
       },
-      "thiercelieu": {
-        "name": "Thiercelieu",
+      "thiercelieux": {
+        "name": "Thiercelieux",
         "description": "I morti sono annunciati la mattina"
       }
     },

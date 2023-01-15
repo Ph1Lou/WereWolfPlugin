@@ -3,12 +3,12 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
@@ -45,16 +45,15 @@ import java.util.stream.Collectors;
         category = Category.VILLAGER,
         attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION},
         configValues = {@IntValue(key = IntValueBase.GRAVEDIGGER_DISTANCE,
-        defaultValue = 70, meetUpValue = 30, step = 5, item = UniversalMaterial.BIRCH_LEAVES)})
+                defaultValue = 70, meetUpValue = 30, step = 5, item = UniversalMaterial.BIRCH_LEAVES)})
 public class Gravedigger extends RoleVillage implements IAffectedPlayers {
-
-    public Gravedigger(WereWolfAPI game, IPlayerWW playerWW) {
-        super(game, playerWW);
-    }
 
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
     private final List<GravediggerClue> clues = new ArrayList<>();
     private int secondsCount = 0;
+    public Gravedigger(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);
+    }
 
     @Override
     public @NotNull String getDescription() {
@@ -158,7 +157,7 @@ public class Gravedigger extends RoleVillage implements IAffectedPlayers {
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 
-        if(player == null){
+        if (player == null) {
             return;
         }
 
@@ -207,10 +206,10 @@ public class Gravedigger extends RoleVillage implements IAffectedPlayers {
                             clue.getNamesList(),
                             clue.getRoleKey());
                     Bukkit.getPluginManager().callEvent(event1);
-                    if(event1.isCancelled()) {
+                    if (event1.isCancelled()) {
                         return;
                     }
-                    getPlayerWW().sendMessageWithKey(game.translate(Prefix.YELLOW),"werewolf.roles.gravedigger.clue_player", Formatter.format("&player&", clue.getPlayerWW().getName()),
+                    getPlayerWW().sendMessageWithKey(game.translate(Prefix.YELLOW), "werewolf.roles.gravedigger.clue_player", Formatter.format("&player&", clue.getPlayerWW().getName()),
                             Formatter.format("&number&", Integer.toString(event1.getNumNearbyPlayers())));
                     return;
                 case 12:
@@ -222,10 +221,10 @@ public class Gravedigger extends RoleVillage implements IAffectedPlayers {
                             clue.getNamesList(),
                             clue.getRoleKey());
                     Bukkit.getPluginManager().callEvent(event2);
-                    if(event2.isCancelled()) {
+                    if (event2.isCancelled()) {
                         return;
                     }
-                    getPlayerWW().sendMessageWithKey(game.translate(Prefix.YELLOW),"werewolf.roles.gravedigger.clue_role", Formatter.format("&victim&", clue.getPlayerWW().getName()),
+                    getPlayerWW().sendMessageWithKey(game.translate(Prefix.YELLOW), "werewolf.roles.gravedigger.clue_role", Formatter.format("&victim&", clue.getPlayerWW().getName()),
                             Formatter.format("&role&", game.translate(clue.getRoleKey())),
                             Formatter.format("&players&", buildNamesString(event2.getPlayerNames(), 1)));
                     return;
@@ -238,10 +237,10 @@ public class Gravedigger extends RoleVillage implements IAffectedPlayers {
                             clue.getNamesList(),
                             clue.getRoleKey());
                     Bukkit.getPluginManager().callEvent(event3);
-                    if(event3.isCancelled()) {
+                    if (event3.isCancelled()) {
                         return;
                     }
-                    getPlayerWW().sendMessageWithKey(game.translate(Prefix.YELLOW),"werewolf.roles.gravedigger.clue_nearby", Formatter.format("&players&",  buildNamesString(event3.getPlayerNames(), 2)),
+                    getPlayerWW().sendMessageWithKey(game.translate(Prefix.YELLOW), "werewolf.roles.gravedigger.clue_nearby", Formatter.format("&players&", buildNamesString(event3.getPlayerNames(), 2)),
                             Formatter.format("&victim&", clue.getPlayerWW().getName()));
                 case 24:
                     TriggerGravediggerClueEvent event4 = new TriggerGravediggerClueEvent(this.getPlayerWW(),
@@ -252,7 +251,7 @@ public class Gravedigger extends RoleVillage implements IAffectedPlayers {
                             clue.getNamesList(),
                             clue.getRoleKey());
                     Bukkit.getPluginManager().callEvent(event4);
-                    if(event4.isCancelled()) {
+                    if (event4.isCancelled()) {
                         return;
                     }
                     getPlayerWW().sendMessageWithKey(game.translate(Prefix.YELLOW), "werewolf.roles.gravedigger.clue_nearby", Formatter.format("&players&", buildNamesString(event4.getPlayerNames(), 3)),
@@ -275,7 +274,7 @@ public class Gravedigger extends RoleVillage implements IAffectedPlayers {
         }
         return list.toString();
     }
-    
+
     private static class GravediggerClue {
 
         private final IPlayerWW playerWW;
@@ -325,6 +324,8 @@ public class Gravedigger extends RoleVillage implements IAffectedPlayers {
             return playerNames;
         }
 
-        public String getRoleKey() {return roleKey;}
+        public String getRoleKey() {
+            return roleKey;
+        }
     }
 }

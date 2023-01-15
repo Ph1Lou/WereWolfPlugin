@@ -12,8 +12,6 @@ import java.util.stream.Stream;
 
 public class StorageConfiguration implements IStorageConfiguration {
 
-    private transient String addonKey;
-    private transient WereWolfAPI game;
     private final Map<String, Integer> timerValues;
     private final Map<String, Boolean> configValues;
     private final Map<String, Integer> loverCount;
@@ -21,8 +19,10 @@ public class StorageConfiguration implements IStorageConfiguration {
     private final Map<String, Integer> values;
     private final Map<String, Boolean> scenarioValues;
     private final Map<String, Integer> randomEventsValues;
+    private transient String addonKey;
+    private transient WereWolfAPI game;
 
-    public StorageConfiguration(){
+    public StorageConfiguration() {
         this.timerValues = new HashMap<>();
         this.configValues = new HashMap<>();
         this.loverCount = new HashMap<>();
@@ -160,37 +160,37 @@ public class StorageConfiguration implements IStorageConfiguration {
                         .stream()
                         .filter(roleRoleWrapper -> roleRoleWrapper.getAddonKey().equals(this.addonKey))
                         .flatMap(iRoleRoleWrapper -> Stream.of(iRoleRoleWrapper.getMetaDatas().timers()))
+                        .filter(timer -> timer.key().equals(key))
+                        .map(timer -> this.getDefaultValue(timer.defaultValue(), timer.meetUpValue()))
+                        .findFirst()
+                        .orElseGet(() -> Register.get().getRandomEventsRegister()
+                                .stream()
+                                .filter(roleRoleWrapper -> roleRoleWrapper.getAddonKey().equals(this.addonKey))
+                                .flatMap(eventWrapper -> Stream.of(eventWrapper.getMetaDatas().timers()))
                                 .filter(timer -> timer.key().equals(key))
                                 .map(timer -> this.getDefaultValue(timer.defaultValue(), timer.meetUpValue()))
                                 .findFirst()
-                                .orElseGet(() -> Register.get().getRandomEventsRegister()
+                                .orElseGet(() -> Register.get().getLoversRegister()
                                         .stream()
-                                        .filter(roleRoleWrapper -> roleRoleWrapper.getAddonKey().equals(this.addonKey))
-                                        .flatMap(eventWrapper -> Stream.of(eventWrapper.getMetaDatas().timers()))
+                                        .filter(loverLoverWrapper -> loverLoverWrapper.getAddonKey().equals(this.addonKey))
+                                        .flatMap(loverLoverWrapper -> Stream.of(loverLoverWrapper.getMetaDatas().timers()))
                                         .filter(timer -> timer.key().equals(key))
                                         .map(timer -> this.getDefaultValue(timer.defaultValue(), timer.meetUpValue()))
                                         .findFirst()
-                                        .orElseGet(() -> Register.get().getLoversRegister()
+                                        .orElseGet(() -> Register.get().getConfigsRegister()
                                                 .stream()
-                                                .filter(loverLoverWrapper -> loverLoverWrapper.getAddonKey().equals(this.addonKey))
-                                                .flatMap(loverLoverWrapper -> Stream.of(loverLoverWrapper.getMetaDatas().timers()))
+                                                .filter(configurationWrapper -> configurationWrapper.getAddonKey().equals(this.addonKey))
+                                                .flatMap(configurationWrapper -> Stream.of(configurationWrapper.getMetaDatas().timers()))
                                                 .filter(timer -> timer.key().equals(key))
                                                 .map(timer -> this.getDefaultValue(timer.defaultValue(), timer.meetUpValue()))
                                                 .findFirst()
-                                                .orElseGet(() -> Register.get().getConfigsRegister()
+                                                .orElseGet(() -> Register.get().getScenariosRegister()
                                                         .stream()
-                                                        .filter(configurationWrapper -> configurationWrapper.getAddonKey().equals(this.addonKey))
-                                                        .flatMap(configurationWrapper -> Stream.of(configurationWrapper.getMetaDatas().timers()))
+                                                        .filter(managerScenarioWrapper -> managerScenarioWrapper.getAddonKey().equals(this.addonKey))
+                                                        .flatMap(managerScenarioWrapper -> Stream.of(managerScenarioWrapper.getMetaDatas().timers()))
                                                         .filter(timer -> timer.key().equals(key))
                                                         .map(timer -> this.getDefaultValue(timer.defaultValue(), timer.meetUpValue()))
                                                         .findFirst()
-                                                        .orElseGet(() -> Register.get().getScenariosRegister()
-                                                                .stream()
-                                                                .filter(managerScenarioWrapper -> managerScenarioWrapper.getAddonKey().equals(this.addonKey))
-                                                                .flatMap(managerScenarioWrapper -> Stream.of(managerScenarioWrapper.getMetaDatas().timers()))
-                                                                .filter(timer -> timer.key().equals(key))
-                                                                .map(timer -> this.getDefaultValue(timer.defaultValue(), timer.meetUpValue()))
-                                                                .findFirst()
                                                         .orElse(0)))))));
     }
 
@@ -240,7 +240,7 @@ public class StorageConfiguration implements IStorageConfiguration {
                                                 .filter(configuration -> configuration.key().equals(key))
                                                 .map(configuration -> this.getDefaultValue(configuration.defaultValue(), configuration.meetUpValue()))
                                                 .findFirst()
-                                                .orElseGet(() ->  Register.get().getConfigsRegister()
+                                                .orElseGet(() -> Register.get().getConfigsRegister()
                                                         .stream()
                                                         .filter(managerScenarioWrapper -> managerScenarioWrapper.getAddonKey().equals(this.addonKey))
                                                         .map(Wrapper::getMetaDatas)
@@ -314,8 +314,8 @@ public class StorageConfiguration implements IStorageConfiguration {
         return addonKey;
     }
 
-    private <T> T getDefaultValue(T value, T meetupValue){
-        if(game.getConfig().isMeetUp()){
+    private <T> T getDefaultValue(T value, T meetupValue) {
+        if (game.getConfig().isMeetUp()) {
             return meetupValue;
         }
         return value;

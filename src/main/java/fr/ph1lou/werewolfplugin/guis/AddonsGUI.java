@@ -7,8 +7,8 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.ph1lou.werewolfapi.annotations.Author;
 import fr.ph1lou.werewolfapi.annotations.ModuleWerewolf;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Main;
@@ -41,14 +41,13 @@ public class AddonsGUI implements InventoryProvider {
         int i = 1;
 
 
-
         for (Wrapper<JavaPlugin, ModuleWerewolf> addon : main.getRegisterManager().getModulesRegister()) {
 
             List<String> lore = Arrays.stream(addon.getMetaDatas().loreKeys())
                     .map(game::translate).collect(Collectors.toList());
             lore.add(game.translate("werewolf.utils.author"));
-            lore.addAll(Collections.singletonList(Arrays.stream(addon.getMetaDatas().authors())
-                    .map(Author::name).collect(Collectors.joining(", "))));
+            lore.add(Arrays.stream(addon.getMetaDatas().authors())
+                    .map(Author::name).collect(Collectors.joining(", ")));
 
             contents.set(i / 9, i % 9, ClickableItem.empty(new ItemBuilder(addon.getMetaDatas().item().getStack())
                     .setDisplayName(game.translate(addon.getMetaDatas().key())).setLore(lore).build()));

@@ -5,11 +5,20 @@ import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.enums.*;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.Day;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.enums.StateGame;
+import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
-import fr.ph1lou.werewolfapi.events.roles.innkeeper.*;
+import fr.ph1lou.werewolfapi.events.roles.innkeeper.ClientDeathEvent;
+import fr.ph1lou.werewolfapi.events.roles.innkeeper.ClientKillEvent;
+import fr.ph1lou.werewolfapi.events.roles.innkeeper.InnkeeperHostEvent;
+import fr.ph1lou.werewolfapi.events.roles.innkeeper.InnkeeperInfoMeetEvent;
+import fr.ph1lou.werewolfapi.events.roles.innkeeper.InnkeeperSpeedEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -25,7 +34,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Role(key = RoleBase.INNKEEPER, category = Category.VILLAGER, attributes = {RoleAttribute.VILLAGER,
         RoleAttribute.MINOR_INFORMATION}, configValues = @IntValue(key = IntValueBase.INNKEEPER_DETECTION_RADIUS,
@@ -56,6 +70,11 @@ public class Innkeeper extends RoleVillage implements IPower {
 
     @EventHandler
     public void onKill(FinalDeathEvent event) {
+
+        if (!this.isAbilityEnabled() || !this.getPlayerWW().isState(StatePlayer.ALIVE)) {
+            return;
+        }
+
         clientDatas.stream()
                 .filter(clientData -> clientData.playerWW.equals(event.getPlayerWW()))
                 .findFirst()
@@ -76,6 +95,7 @@ public class Innkeeper extends RoleVillage implements IPower {
                         getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.dead",
                                 Formatter.role(clientDeathEvent.getRole()));
                         availableRooms--;
+                        clientData.watching = false;
                         clientDatas.remove(clientData);
                         if (availableRooms == 0) {
                             Player player = Bukkit.getPlayer(getPlayerUUID());
@@ -105,8 +125,18 @@ public class Innkeeper extends RoleVillage implements IPower {
                 });
     }
 
+    @Override
+    public void disableAbilitiesRole() {
+        this.power = false;
+    }
+
     @EventHandler
     public void onDay(DayEvent event) {
+
+        if (!this.isAbilityEnabled() || !this.getPlayerWW().isState(StatePlayer.ALIVE)) {
+            return;
+        }
+
         power = true;
         getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.available");
         previousClientDatas.clear();
@@ -117,6 +147,11 @@ public class Innkeeper extends RoleVillage implements IPower {
     @EventHandler
     public void onNight(NightEvent event) {
         power = false;
+
+        if (!this.isAbilityEnabled() || !this.getPlayerWW().isState(StatePlayer.ALIVE)) {
+            return;
+        }
+
         clientDatas.forEach(clientData -> new BukkitRunnable() {
             @Override
             public void run() {
@@ -130,7 +165,7 @@ public class Innkeeper extends RoleVillage implements IPower {
                             .filter(iPlayerWW -> iPlayerWW.isState(StatePlayer.ALIVE))
                             .filter(iPlayerWW -> iPlayerWW.getLocation()
                                     .distance(clientData.playerWW.getLocation()) <= game.getConfig()
-                                    .getValue(IntValueBase.INNKEEPER_DETECTION_RADIUS))
+                                    .getValue(IntValueBase.INNKEEPER_DETECTION_RADIUS)) //todo add world check
                             .forEach(clientData.seenPlayers::add);
                 }
             }
@@ -140,13 +175,17 @@ public class Innkeeper extends RoleVillage implements IPower {
     @EventHandler
     public void onRightClick(PlayerInteractAtEntityEvent event) {
 
+        if (!this.isAbilityEnabled()) {
+            return;
+        }
+
         if (event.getPlayer()
                 .getUniqueId() != getPlayerUUID() || !this.getPlayerWW()
                 .isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        if (availableRooms == 0 && !power) {
+        if (availableRooms == 0 || !power) {
             return;
         }
 
@@ -184,7 +223,6 @@ public class Innkeeper extends RoleVillage implements IPower {
             }
             return;
         }
-
         if (clientDatas.stream()
                 .anyMatch(clientData -> clientData.playerWW.equals(playerWW))) {
             getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.innkeeper.already");

@@ -30,17 +30,16 @@ public class CommandBarbarian implements ICommandRole {
 
         UUID uuid1;
 
-        try{
-             uuid1 = UUID.fromString(args[0]);
-        }
-        catch (Exception ignored){
+        try {
+            uuid1 = UUID.fromString(args[0]);
+        } catch (Exception ignored) {
             return;
         }
 
         IPlayerWW playerWW1 = game.getPlayerWW(uuid1).orElse(null);
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.JUDGEMENT)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.player_not_found");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.player_not_found");
             return;
         }
 
@@ -51,13 +50,13 @@ public class CommandBarbarian implements ICommandRole {
         Bukkit.getPluginManager().callEvent(barbarianEvent);
 
         if (barbarianEvent.isCancelled()) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
 
         ((IAffectedPlayers) barbarian).addAffectedPlayer(playerWW1);
 
-        playerWW.sendMessageWithKey(Prefix.YELLOW ,
+        playerWW.sendMessageWithKey(Prefix.YELLOW,
                 "werewolf.roles.barbarian.perform",
                 Formatter.player(playerWW1.getName()));
     }

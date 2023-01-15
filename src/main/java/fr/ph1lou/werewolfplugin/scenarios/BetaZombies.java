@@ -1,9 +1,9 @@
 package fr.ph1lou.werewolfplugin.scenarios;
 
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Scenario;
 import fr.ph1lou.werewolfapi.basekeys.ScenarioBase;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -31,7 +31,7 @@ public class BetaZombies extends ListenerWerewolf {
                 return;
             }
 
-            if(is.getType() == Material.ROTTEN_FLESH){
+            if (is.getType() == Material.ROTTEN_FLESH) {
                 loots.remove(i);
                 loots.add(new ItemStack(UniversalMaterial.FEATHER.getStack()));
             }

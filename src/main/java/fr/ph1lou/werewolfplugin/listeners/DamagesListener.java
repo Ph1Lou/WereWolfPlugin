@@ -15,14 +15,14 @@ public class DamagesListener implements Listener {
 
     private final WereWolfAPI game;
 
-    public DamagesListener(WereWolfAPI game){
+    public DamagesListener(WereWolfAPI game) {
         this.game = game;
     }
 
     @EventHandler
     private void onPlayerDamageByPlayer(EntityDamageByEntityEvent event) {
 
-        if(!game.isState(StateGame.GAME)){
+        if (!game.isState(StateGame.GAME)) {
             return;
         }
 
@@ -42,16 +42,15 @@ public class DamagesListener implements Listener {
             if (!(shooter instanceof Player)) return;
 
             striker = (Player) shooter;
-        }
-        else{
+        } else {
             striker = (Player) event.getDamager();
         }
 
         game.getPlayerWW(player.getUniqueId())
                 .ifPresent(playerWW -> game.getPlayerWW(striker.getUniqueId())
                         .ifPresent(strikerWW -> {
-                            ((PlayerWW)playerWW).addLastMinutesDamagedPlayer(strikerWW);
-                            BukkitUtils.scheduleSyncDelayedTask(game, () -> ((PlayerWW)playerWW).removeLastMinutesDamagedPlayer(strikerWW),60 * 20);
+                            ((PlayerWW) playerWW).addLastMinutesDamagedPlayer(strikerWW);
+                            BukkitUtils.scheduleSyncDelayedTask(game, () -> ((PlayerWW) playerWW).removeLastMinutesDamagedPlayer(strikerWW), 60 * 20);
                         }));
     }
 

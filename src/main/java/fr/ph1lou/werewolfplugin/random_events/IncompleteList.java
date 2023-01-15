@@ -30,13 +30,13 @@ public class IncompleteList extends ListenerWerewolf {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onWerewolfList(WereWolfListEvent event){
+    public void onWerewolfList(WereWolfListEvent event) {
 
         IncompleteListEvent incompleteListEvent = new IncompleteListEvent();
 
         Bukkit.getPluginManager().callEvent(incompleteListEvent);
 
-        if(incompleteListEvent.isCancelled()){
+        if (incompleteListEvent.isCancelled()) {
             return;
         }
 
@@ -45,7 +45,7 @@ public class IncompleteList extends ListenerWerewolf {
             RequestSeeWereWolfListEvent requestSeeWereWolfListEvent = new RequestSeeWereWolfListEvent(playerWW1.getUUID());
             Bukkit.getPluginManager().callEvent(requestSeeWereWolfListEvent);
 
-            if(requestSeeWereWolfListEvent.isAccept()){
+            if (requestSeeWereWolfListEvent.isAccept()) {
 
                 this.forgetWerewolves.put(playerWW1, new ArrayList<>());
 
@@ -63,7 +63,7 @@ public class IncompleteList extends ListenerWerewolf {
                 AtomicInteger werewolfSize = new AtomicInteger((this.forgetWerewolves.get(playerWW1).size() - 1) / 2);
                 //Remove half of werewolves
                 this.forgetWerewolves.get(playerWW1).removeIf(playerWW -> {
-                    if(playerWW.equals(playerWW1)){
+                    if (playerWW.equals(playerWW1)) {
                         return true;
                     }
                     return werewolfSize.getAndDecrement() > 0;
@@ -73,13 +73,13 @@ public class IncompleteList extends ListenerWerewolf {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void onAppearInWerewolfListEvent(AppearInWereWolfListEvent event){
+    public void onAppearInWerewolfListEvent(AppearInWereWolfListEvent event) {
 
         this.getGame().getPlayerWW(event.getRequesterUUID())
                 .ifPresent(playerWW1 -> this.getGame().getPlayerWW(event.getPlayerUUID())
                         .ifPresent(playerWW2 -> {
-                            if(this.forgetWerewolves.containsKey(playerWW1) &&
-                                    this.forgetWerewolves.get(playerWW1).contains(playerWW2)){
+                            if (this.forgetWerewolves.containsKey(playerWW1) &&
+                                    this.forgetWerewolves.get(playerWW1).contains(playerWW2)) {
                                 event.setAppear(false);
                             }
                         }));

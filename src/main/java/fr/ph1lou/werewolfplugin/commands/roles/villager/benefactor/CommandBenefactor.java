@@ -24,41 +24,41 @@ public class CommandBenefactor implements ICommandRole {
 
         IRole benefactor = playerWW.getRole();
 
-        if(!(benefactor instanceof IAffectedPlayers)) return;
+        if (!(benefactor instanceof IAffectedPlayers)) return;
 
-        if(((IAffectedPlayers) benefactor).getAffectedPlayers().size() >= 3) {
+        if (((IAffectedPlayers) benefactor).getAffectedPlayers().size() >= 3) {
             playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.benefactor.too_many_players");
             return;
         }
 
         Player target = Bukkit.getPlayer(args[0]);
-        if(target == null) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.offline_player");
+        if (target == null) {
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.offline_player");
             return;
         }
 
         IPlayerWW targetWW = game.getPlayerWW(target.getUniqueId()).orElse(null);
 
-        if(targetWW == null || !targetWW.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.player_not_found");
+        if (targetWW == null || !targetWW.isState(StatePlayer.ALIVE)) {
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.player_not_found");
             return;
         }
 
-        if(((IAffectedPlayers) benefactor).getAffectedPlayers().contains(targetWW)){
+        if (((IAffectedPlayers) benefactor).getAffectedPlayers().contains(targetWW)) {
             playerWW.sendMessageWithKey(Prefix.RED,
                     "werewolf.roles.benefactor.already_use_on_player");
             return;
         }
 
-        if(playerWW.getUUID().equals(targetWW.getUUID())) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.not_yourself");
+        if (playerWW.getUUID().equals(targetWW.getUUID())) {
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.not_yourself");
             return;
         }
 
         BenefactorGiveHeartEvent event = new BenefactorGiveHeartEvent(playerWW, targetWW);
         Bukkit.getPluginManager().callEvent(event);
-        if(event.isCancelled()) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+        if (event.isCancelled()) {
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
 

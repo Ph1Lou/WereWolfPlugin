@@ -72,7 +72,7 @@ public class StuffManager implements IStuffManager {
     public ItemStack[] recoverTempStuff(UUID uuid) {
         ItemStack[] temp = this.tempStuff.remove(uuid);
 
-        if(temp != null){
+        if (temp != null) {
             return temp;
         }
 

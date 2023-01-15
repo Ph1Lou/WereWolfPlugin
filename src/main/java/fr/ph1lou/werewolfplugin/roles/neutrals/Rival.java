@@ -6,13 +6,10 @@ import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
-import fr.ph1lou.werewolfplugin.roles.lovers.LoverImpl;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.lovers.ILover;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.*;
+import fr.ph1lou.werewolfapi.enums.Aura;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.ActionBarEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
@@ -25,12 +22,18 @@ import fr.ph1lou.werewolfapi.events.roles.rival.RivalAnnouncementEvent;
 import fr.ph1lou.werewolfapi.events.roles.rival.RivalEvent;
 import fr.ph1lou.werewolfapi.events.roles.rival.RivalLoverDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.rival.RivalLoverEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.lovers.ILover;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
-import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.utils.Utils;
+import fr.ph1lou.werewolfplugin.roles.lovers.LoverImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.enchantments.Enchantment;
@@ -50,9 +53,9 @@ import java.util.stream.Collectors;
         category = Category.NEUTRAL,
         attributes = RoleAttribute.NEUTRAL,
         timers = {@Timer(key = TimerBase.RIVAL_DURATION,
-                defaultValue = 2400, meetUpValue = 5*60,
-        decrementAfterRole = true,
-        onZero = RivalEvent.class)},
+                defaultValue = 2400, meetUpValue = 5 * 60,
+                decrementAfterRole = true,
+                onZero = RivalEvent.class)},
         requireRoles = {RoleBase.CUPID})
 public class Rival extends RoleNeutral implements IPower {
 
@@ -84,12 +87,12 @@ public class Rival extends RoleNeutral implements IPower {
 
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.roles.rival.description",
-                                Formatter.timer(Utils.conversion(
+                        Formatter.timer(Utils.conversion(
                                 Math.max(0, game.getConfig().getTimerValue(TimerBase.ROLE_DURATION))
                                         + game.getConfig().getTimerValue(TimerBase.RIVAL_DURATION)))))
                 .setItems(game.translate("werewolf.roles.rival.item"))
                 .setEquipments(game.translate("werewolf.roles.rival.extra",
-                                Formatter.number(game.getConfig().getLimitPowerBow() + 1)))
+                        Formatter.number(game.getConfig().getLimitPowerBow() + 1)))
                 .build();
     }
 
@@ -106,7 +109,7 @@ public class Rival extends RoleNeutral implements IPower {
                 .collect(Collectors.toList());
 
         if (loverAPIs.isEmpty()) {
-            getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.roles.rival.error");
+            getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.rival.error");
             return;
         }
 
@@ -125,9 +128,9 @@ public class Rival extends RoleNeutral implements IPower {
 
         List<IPlayerWW> lovers = new ArrayList<>(lover.getLovers());
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.rival.lover",
-                Formatter.format("&role1&",lovers.isEmpty() ? "" : game.translate(lovers.get(0).getRole().getKey())),
-                Formatter.format("&role2&",lovers.size() == 2 ? game.translate(lovers.get(1).getRole().getKey()) : ""));
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.rival.lover",
+                Formatter.format("&role1&", lovers.isEmpty() ? "" : game.translate(lovers.get(0).getRole().getKey())),
+                Formatter.format("&role2&", lovers.size() == 2 ? game.translate(lovers.get(1).getRole().getKey()) : ""));
     }
 
     @EventHandler
@@ -171,26 +174,26 @@ public class Rival extends RoleNeutral implements IPower {
         Bukkit.getPluginManager().callEvent(rivalAnnouncementEvent);
 
         if (rivalAnnouncementEvent.isCancelled()) {
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.rival.find_lovers",
-                Formatter.format("&player1&",playerWW1S.get(0).getName()),
-                Formatter.format("&player2&",playerWW1S.size() >= 2 ? playerWW1S.get(1).getName() : ""),
-                Formatter.format("&player3&",playerWW1S.size() >= 3 ? playerWW1S.get(2).getName() : ""),
-                Formatter.format("&player4&",playerWW1S.size() >= 4 ? playerWW1S.get(3).getName() : ""),
-                Formatter.format("&player5&",playerWW1S.size() >= 5 ? playerWW1S.get(4).getName() : ""));
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.rival.find_lovers",
+                Formatter.format("&player1&", playerWW1S.get(0).getName()),
+                Formatter.format("&player2&", playerWW1S.size() >= 2 ? playerWW1S.get(1).getName() : ""),
+                Formatter.format("&player3&", playerWW1S.size() >= 3 ? playerWW1S.get(2).getName() : ""),
+                Formatter.format("&player4&", playerWW1S.size() >= 4 ? playerWW1S.get(3).getName() : ""),
+                Formatter.format("&player5&", playerWW1S.size() >= 5 ? playerWW1S.get(4).getName() : ""));
     }
 
     @EventHandler
     public void onLoverDeath(LoverDeathEvent event) {
 
         String loverKey = event.getLover().getKey();
-        if(loverKey.equals(LoverBase.LOVER) ||
-        loverKey.equals(LoverBase.AMNESIAC_LOVER)){
+        if (loverKey.equals(LoverBase.LOVER) ||
+                loverKey.equals(LoverBase.AMNESIAC_LOVER)) {
             List<? extends IPlayerWW> lovers = event.getLover().getLovers();
-            if(lovers.size() >= 2){
+            if (lovers.size() >= 2) {
                 loverDeath(lovers.get(0), lovers.get(1));
             }
         }
@@ -217,7 +220,7 @@ public class Rival extends RoleNeutral implements IPower {
 
         BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getScheduler().cancelTask(task), (long) health * 62 * 20);
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.roles.rival.lover_death");
+        this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.rival.lover_death");
         Bukkit.getPluginManager().callEvent(new RivalLoverDeathEvent(this.getPlayerWW(), new ArrayList<>(lover.getLovers())));
         lover = null;
     }
@@ -269,7 +272,7 @@ public class Rival extends RoleNeutral implements IPower {
         Bukkit.getPluginManager().callEvent(rivalLoverEvent);
 
         if (rivalLoverEvent.isCancelled()) {
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
 

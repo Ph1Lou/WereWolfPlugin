@@ -1,14 +1,14 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Aura;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -44,7 +44,7 @@ public class WhiteWereWolf extends RoleNeutral {
     }
 
     @Override
-    public boolean isNeutral(){
+    public boolean isNeutral() {
         return true;
     }
 

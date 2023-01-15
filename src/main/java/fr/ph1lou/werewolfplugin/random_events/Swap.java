@@ -39,7 +39,7 @@ public class Swap extends ListenerWerewolf {
                 game.getConfig().getTimerValue(TimerBase.LOVER_DURATION)
         );
 
-        if(timer <= 0){
+        if (timer <= 0) {
             return;
         }
 
@@ -80,20 +80,20 @@ public class Swap extends ListenerWerewolf {
                 playerWW2.clearPotionEffects(roles2.getKey());
                 playerWW1.clearPotionEffects(RoleBase.WEREWOLF);
                 playerWW2.clearPotionEffects(RoleBase.WEREWOLF);
-                playerWW1.sendMessageWithKey(Prefix.RED , "werewolf.random_events.swap.concerned");
-                playerWW2.sendMessageWithKey(Prefix.RED , "werewolf.random_events.swap.concerned");
+                playerWW1.sendMessageWithKey(Prefix.RED, "werewolf.random_events.swap.concerned");
+                playerWW2.sendMessageWithKey(Prefix.RED, "werewolf.random_events.swap.concerned");
                 roles1.recoverPower();
                 roles2.recoverPower();
                 roles1.recoverPotionEffects();
                 roles2.recoverPotionEffects();
                 playerWW1.getLovers().forEach(iLover -> {
-                    if(iLover.swap(playerWW1,playerWW2)){
+                    if (iLover.swap(playerWW1, playerWW2)) {
                         playerWW2.addLover(iLover);
                         playerWW1.removeLover(iLover);
                     }
                 });
                 playerWW2.getLovers().forEach(iLover -> {
-                    if(iLover.swap(playerWW2,playerWW1)){
+                    if (iLover.swap(playerWW2, playerWW1)) {
                         playerWW1.addLover(iLover);
                         playerWW2.removeLover(iLover);
                     }

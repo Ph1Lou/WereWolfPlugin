@@ -18,10 +18,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @SuppressWarnings("unused")
-@RandomEvent(key=EventBase.VACCINATION,
+@RandomEvent(key = EventBase.VACCINATION,
         loreKey = "werewolf.random_events.vaccination.description")
 public class Vaccination extends ListenerWerewolf {
     private final Map<UUID, IPlayerWW> vaccinatedPlayers = new HashMap<>();
@@ -31,7 +33,7 @@ public class Vaccination extends ListenerWerewolf {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onInfection(InfectionEvent e){
+    public void onInfection(InfectionEvent e) {
         if (e.isCancelled()) return;
 
 
@@ -45,7 +47,7 @@ public class Vaccination extends ListenerWerewolf {
 
         VaccinationEvent vaccinationEvent = new VaccinationEvent(infectPlayer, infectedPlayerWW);
         Bukkit.getPluginManager().callEvent(vaccinationEvent);
-        if(vaccinationEvent.isCancelled()){
+        if (vaccinationEvent.isCancelled()) {
             return;
         }
 
@@ -53,11 +55,11 @@ public class Vaccination extends ListenerWerewolf {
         e.setInformInfectionCancelledMessage(false);
         e.setCancelled(true);
 
-        infectPlayer.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.infect_father_of_the_wolves.infection_perform",
+        infectPlayer.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.infect_father_of_the_wolves.infection_perform",
                 Formatter.player(infectedPlayerWW.getName()));
 
         this.getGame().resurrection(infectedPlayerWW);
-        infectedPlayerWW.sendMessageWithKey(Prefix.RED,"werewolf.random_events.vaccination.infection_cancelled");
+        infectedPlayerWW.sendMessageWithKey(Prefix.RED, "werewolf.random_events.vaccination.infection_cancelled");
 
         NewWereWolfEvent newWereWolfEvent = new NewWereWolfEvent(infectedPlayerWW);
         Bukkit.getPluginManager().callEvent(newWereWolfEvent);
@@ -69,9 +71,9 @@ public class Vaccination extends ListenerWerewolf {
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    public void onAppearInWereWolfList(AppearInWereWolfListEvent e){
+    public void onAppearInWereWolfList(AppearInWereWolfListEvent e) {
         IPlayerWW playerWW = this.vaccinatedPlayers.get(e.getPlayerUUID());
-        if(playerWW != null && !playerWW.isState(StatePlayer.DEATH)){
+        if (playerWW != null && !playerWW.isState(StatePlayer.DEATH)) {
             e.setAppear(true); //affiche les joueurs vaccinés dans la liste
         }
     }

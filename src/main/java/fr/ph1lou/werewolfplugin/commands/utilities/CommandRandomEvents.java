@@ -2,12 +2,12 @@ package fr.ph1lou.werewolfplugin.commands.utilities;
 
 import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
 import fr.ph1lou.werewolfapi.annotations.RandomEvent;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.commands.ICommand;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.commands.ICommand;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Register;
 import org.bukkit.entity.Player;
@@ -22,12 +22,12 @@ public class CommandRandomEvents implements ICommand {
 
         if (game.getConfig().isConfigActive(ConfigBase.HIDE_EVENTS)) {
 
-            player.sendMessage(game.translate(Prefix.RED , "werewolf.commands.player.random_events.disable"));
+            player.sendMessage(game.translate(Prefix.RED, "werewolf.commands.player.random_events.disable"));
 
             return;
         }
 
-        player.sendMessage(game.translate(Prefix.GREEN , "werewolf.commands.player.random_events.list"));
+        player.sendMessage(game.translate(Prefix.GREEN, "werewolf.commands.player.random_events.list"));
 
         StringBuilder sb = new StringBuilder();
 
@@ -35,7 +35,7 @@ public class CommandRandomEvents implements ICommand {
 
             if (game.getConfig().getProbability(randomEventRegister.getMetaDatas().key()) > 0) {
                 sb.append(game.translate("werewolf.commands.player.random_events.command_message",
-                        Formatter.format("&event&",game.translate(randomEventRegister.getMetaDatas().key())),
+                                Formatter.format("&event&", game.translate(randomEventRegister.getMetaDatas().key())),
                                 Formatter.number(game.getConfig().getProbability(randomEventRegister.getMetaDatas().key()))))
                         .append(", ");
             }

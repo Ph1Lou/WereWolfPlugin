@@ -5,7 +5,7 @@ import com.pieterdebot.biomemapping.BiomeMappingAPI;
 
 public class Replacer {
 
-    public static void replaceBiomes(){
+    public static void replaceBiomes() {
         BiomeMappingAPI biome = new BiomeMappingAPI();
         replaceBiome(biome, Biome.BEACH, Biome.FOREST);
         replaceBiome(biome, Biome.WOODED_HILLS, Biome.PLAINS);
@@ -37,9 +37,9 @@ public class Replacer {
         replaceBiome(biome, Biome.DEEP_COLD_OCEAN, Biome.FOREST);
     }
 
-    private static void replaceBiome(BiomeMappingAPI biome, Biome initial, Biome finalBiome){
+    private static void replaceBiome(BiomeMappingAPI biome, Biome initial, Biome finalBiome) {
         try {
-            if(biome.biomeSupported(initial)){
+            if (biome.biomeSupported(initial)) {
                 biome.replaceBiomes(initial, finalBiome);
             }
         } catch (Exception e) {

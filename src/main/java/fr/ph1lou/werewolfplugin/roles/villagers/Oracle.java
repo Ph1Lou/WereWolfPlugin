@@ -3,13 +3,13 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.annotations.Role;
-import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
@@ -31,8 +31,8 @@ import java.util.List;
         configurations = {@Configuration(config = @ConfigurationBasic(key = ConfigBase.ORACLE_EVERY_OTHER_DAY))})
 public class Oracle extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
-    private int dayNumber = -8;
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
+    private int dayNumber = -8;
 
     public Oracle(WereWolfAPI game, IPlayerWW playerWW) {
         super(game, playerWW);
@@ -84,7 +84,7 @@ public class Oracle extends RoleWithLimitedSelectionDuration implements IAffecte
         }
 
         this.getPlayerWW().sendMessageWithKey(
-                Prefix.YELLOW , "werewolf.roles.oracle.perform",
+                Prefix.YELLOW, "werewolf.roles.oracle.perform",
                 Formatter.timer(game, TimerBase.POWER_DURATION));
     }
 
@@ -96,7 +96,7 @@ public class Oracle extends RoleWithLimitedSelectionDuration implements IAffecte
     @Override
     public void recoverPotionEffect() {
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION,this.getKey()));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION, this.getKey()));
 
     }
 }

@@ -29,18 +29,18 @@ public class CommandFallenAngel implements ICommandRole {
         Angel role = (Angel) playerWW.getRole();
 
         if (!role.isChoice(AngelForm.ANGEL)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.power");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.power");
             return;
         }
 
         role.setChoice(AngelForm.FALLEN_ANGEL);
         Bukkit.getPluginManager().callEvent(new AngelChoiceEvent(playerWW, AngelForm.FALLEN_ANGEL));
-        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.angel.angle_choice_click",
-                Formatter.format("&form&",game.translate(RoleBase.FALLEN_ANGEL)),
+        playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.angel.angle_choice_click",
+                Formatter.format("&form&", game.translate(RoleBase.FALLEN_ANGEL)),
                 Formatter.timer(game, TimerBase.ANGEL_DURATION));
 
         if (game.isDay(Day.NIGHT)) {
-            playerWW.addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,playerWW.getRole().getKey(),0));
+            playerWW.addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE, playerWW.getRole().getKey(), 0));
 
         }
     }

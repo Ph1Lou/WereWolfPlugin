@@ -32,9 +32,9 @@ import java.util.stream.Collectors;
 
 public class End {
 
+    private final GameManager game;
     @Nullable
     private String winner = null;
-    private final GameManager game;
 
     public End(GameManager game) {
         this.game = game;
@@ -42,7 +42,7 @@ public class End {
 
     public void checkVictory() {
 
-        if(game.isDebug()){
+        if (game.isDebug()) {
             return;
         }
 
@@ -148,22 +148,20 @@ public class End {
         }
 
         for (Player p : Bukkit.getOnlinePlayers()) {
-            p.sendMessage(game.translate(Prefix.ORANGE , "werewolf.end.message",
-                    Formatter.format("&winner&",subtitlesVictory)));
+            p.sendMessage(game.translate(Prefix.ORANGE, "werewolf.end.message",
+                    Formatter.format("&winner&", subtitlesVictory)));
             VersionUtils.getVersionUtils().sendTitle(p, game.translate("werewolf.end.victory"), subtitlesVictory, 20, 60, 20);
-            TextComponent msg = new TextComponent(game.translate("werewolf.utils.bar")+ "\n" +
-                    game.translate(Prefix.YELLOW,"werewolf.bug") + "\n" +
+            TextComponent msg = new TextComponent(game.translate("werewolf.utils.bar") + "\n" +
+                    game.translate(Prefix.YELLOW, "werewolf.bug") + "\n" +
                     game.translate("werewolf.utils.bar"));
             msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/GXXCVUA"));
             p.spigot().sendMessage(msg);
         }
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(JavaPlugin.getPlugin(Main.class), game::stopGame, 20L * game.getConfig().getTimerValue(TimerBase.AUTO_RESTART_DURATION));
-        Bukkit.broadcastMessage(game.translate(Prefix.ORANGE , "werewolf.announcement.restart",
+        Bukkit.broadcastMessage(game.translate(Prefix.ORANGE, "werewolf.announcement.restart",
                 Formatter.timer(game, TimerBase.AUTO_RESTART_DURATION)));
     }
-
-
 
 
 }

@@ -33,7 +33,7 @@ public class CommandWereWolf implements ICommand {
         if (playerWW == null) return;
 
         if (game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST) > 0) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.werewolf.list_not_revealed");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.werewolf.list_not_revealed");
             return;
         }
 
@@ -41,7 +41,7 @@ public class CommandWereWolf implements ICommand {
         Bukkit.getPluginManager().callEvent(requestSeeWereWolfListEvent);
 
         if (!requestSeeWereWolfListEvent.isAccept()) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.werewolf.not_werewolf");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.werewolf.not_werewolf");
             return;
         }
 
@@ -57,11 +57,11 @@ public class CommandWereWolf implements ICommand {
                 list.append(playerWW1.getName()).append(" ");
             }
         }
-        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.werewolf.werewolf_list", Formatter.format("&list&",list.toString()));
+        playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.werewolf.werewolf_list", Formatter.format("&list&", list.toString()));
 
         game.getListenersManager().getRandomEvent(EventBase.DRUNKEN_WEREWOLF)
                 .ifPresent(listenerWerewolf -> {
-                    if(listenerWerewolf.isRegister()){
+                    if (listenerWerewolf.isRegister()) {
                         playerWW.sendMessageWithKey("werewolf.commands.player.ww_chat.drunken");
                     }
                 });

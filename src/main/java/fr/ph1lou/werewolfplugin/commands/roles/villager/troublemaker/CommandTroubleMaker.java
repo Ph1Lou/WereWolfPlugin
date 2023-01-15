@@ -30,14 +30,14 @@ public class CommandTroubleMaker implements ICommandRole {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.offline_player");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.offline_player");
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.player_not_found");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.player_not_found");
             return;
         }
 
@@ -46,15 +46,15 @@ public class CommandTroubleMaker implements ICommandRole {
         Bukkit.getPluginManager().callEvent(troubleMakerEvent);
 
         if (troubleMakerEvent.isCancelled()) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
 
         ((IAffectedPlayers) troublemaker).addAffectedPlayer(playerWW1);
 
-        playerWW1.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.troublemaker.get_switch");
+        playerWW1.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.troublemaker.get_switch");
         game.getMapManager().transportation(playerWW1, Math.random() * 2 * Math.PI);
-        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.troublemaker.troublemaker_perform",
+        playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.troublemaker.troublemaker_perform",
                 Formatter.player(playerArg.getName()));
     }
 }

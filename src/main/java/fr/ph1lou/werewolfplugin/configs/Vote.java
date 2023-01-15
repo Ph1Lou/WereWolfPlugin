@@ -48,62 +48,62 @@ import org.bukkit.event.EventPriority;
                 meetUpValue = 8,
                 step = 1, item = UniversalMaterial.PLAYER_HEAD),
         configurations = {
-        @ConfigurationBasic(key = ConfigBase.VOTE_EVERY_OTHER_DAY),
+                @ConfigurationBasic(key = ConfigBase.VOTE_EVERY_OTHER_DAY),
                 @ConfigurationBasic(key = ConfigBase.NEW_VOTE)}
 )
 public class Vote extends ListenerWerewolf {
 
-        public Vote(WereWolfAPI game) {
-                super(game);
-        }
+    public Vote(WereWolfAPI game) {
+        super(game);
+    }
 
-        @EventHandler
-        public void onVoteBegin(VoteBeginEvent event) {
-                this.getGame().getVoteManager().setStatus(VoteStatus.NOT_IN_PROGRESS);
-        }
+    @EventHandler
+    public void onVoteBegin(VoteBeginEvent event) {
+        this.getGame().getVoteManager().setStatus(VoteStatus.NOT_IN_PROGRESS);
+    }
 
-        @EventHandler(priority = EventPriority.LOWEST)
-        public void onVoteEnd(VoteEndEvent event) {
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onVoteEnd(VoteEndEvent event) {
 
-                WereWolfAPI game = this.getGame();
-                IVoteManager voteManager = game.getVoteManager();
+        WereWolfAPI game = this.getGame();
+        IVoteManager voteManager = game.getVoteManager();
 
-                voteManager.setStatus(VoteStatus.WAITING);
+        voteManager.setStatus(VoteStatus.WAITING);
 
-                BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getPluginManager()
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getPluginManager()
                         .callEvent(new VoteResultEvent(voteManager.getResult().orElse(null))),
-                        game.getConfig().getTimerValue(TimerBase.VOTE_WAITING) * 20L);
+                game.getConfig().getTimerValue(TimerBase.VOTE_WAITING) * 20L);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onDay(DayEvent event) {
+
+        WereWolfAPI game = this.getGame();
+        IVoteManager voteManager = game.getVoteManager();
+
+        if (voteManager.isStatus(VoteStatus.IN_PROGRESS) || voteManager.isStatus(VoteStatus.WAITING)) {
+            return;
+        }
+        if (game.getPlayersCount() < game.getConfig().getValue(IntValueBase.VOTE_END) && !voteManager.isStatus(VoteStatus.ENDED)) {
+            Bukkit.broadcastMessage(game.translate(Prefix.ORANGE, "werewolf.configurations.vote.vote_deactivate"));
+            voteManager.setStatus(VoteStatus.ENDED);
+            return;
         }
 
-        @EventHandler(priority = EventPriority.LOWEST)
-        public void onDay(DayEvent event) {
-
-                WereWolfAPI game = this.getGame();
-                IVoteManager voteManager = game.getVoteManager();
-
-                if (voteManager.isStatus(VoteStatus.IN_PROGRESS) || voteManager.isStatus(VoteStatus.WAITING)) {
-                        return;
-                }
-                if (game.getPlayersCount() < game.getConfig().getValue(IntValueBase.VOTE_END) && !voteManager.isStatus(VoteStatus.ENDED)) {
-                        Bukkit.broadcastMessage(game.translate(Prefix.ORANGE, "werewolf.configurations.vote.vote_deactivate"));
-                        voteManager.setStatus(VoteStatus.ENDED);
-                        return;
-                }
-
-                if(event.getNumber() % 2 == 1 && game.getConfig().isConfigActive(ConfigBase.VOTE_EVERY_OTHER_DAY)){
-                        return;
-                }
-
-                int duration = game.getConfig().getTimerValue(TimerBase.VOTE_DURATION);
-
-                if (!voteManager.isStatus(VoteStatus.NOT_BEGIN) && !voteManager.isStatus(VoteStatus.ENDED)) {
-
-                        voteManager.resetVote();
-                        Bukkit.getOnlinePlayers().forEach(Sound.CHICKEN_HURT::play);
-                        Bukkit.broadcastMessage(game.translate(Prefix.ORANGE, "werewolf.configurations.vote.vote_time",
-                                Formatter.timer(Utils.conversion(duration))));
-                        voteManager.setStatus(VoteStatus.IN_PROGRESS);
-                        BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getPluginManager().callEvent(new VoteEndEvent()), duration * 20L);
-                }
+        if (event.getNumber() % 2 == 1 && game.getConfig().isConfigActive(ConfigBase.VOTE_EVERY_OTHER_DAY)) {
+            return;
         }
+
+        int duration = game.getConfig().getTimerValue(TimerBase.VOTE_DURATION);
+
+        if (!voteManager.isStatus(VoteStatus.NOT_BEGIN) && !voteManager.isStatus(VoteStatus.ENDED)) {
+
+            voteManager.resetVote();
+            Bukkit.getOnlinePlayers().forEach(Sound.CHICKEN_HURT::play);
+            Bukkit.broadcastMessage(game.translate(Prefix.ORANGE, "werewolf.configurations.vote.vote_time",
+                    Formatter.timer(Utils.conversion(duration))));
+            voteManager.setStatus(VoteStatus.IN_PROGRESS);
+            BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getPluginManager().callEvent(new VoteEndEvent()), duration * 20L);
+        }
+    }
 }

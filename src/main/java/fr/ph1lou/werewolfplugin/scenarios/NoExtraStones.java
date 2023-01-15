@@ -1,9 +1,9 @@
 package fr.ph1lou.werewolfplugin.scenarios;
 
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Scenario;
 import fr.ph1lou.werewolfapi.basekeys.ScenarioBase;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -31,12 +31,12 @@ public class NoExtraStones extends ListenerWerewolf {
                 UniversalMaterial.DIORITE.getStack(),
                 UniversalMaterial.GRANITE.getStack());
 
-        if(event
+        if (event
                 .getBlock()
                 .getDrops()
                 .stream()
                 .anyMatch(itemStack -> itemStacks.stream()
-                        .anyMatch(itemStack1 -> itemStack1.isSimilar(itemStack)))){
+                        .anyMatch(itemStack1 -> itemStack1.isSimilar(itemStack)))) {
             block.setType(Material.AIR);
             Location loc = new Location(block.getWorld(), block.getLocation().getBlockX() + 0.5, block.getLocation().getBlockY() + 0.5, block.getLocation().getBlockZ() + 0.5);
             block.getWorld().dropItem(loc, new ItemStack(Material.COBBLESTONE, 1));

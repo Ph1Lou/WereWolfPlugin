@@ -1,10 +1,10 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.shaman;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
-import fr.ph1lou.werewolfapi.commands.ICommandRole;
-import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.commands.ICommandRole;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.events.roles.shaman.ShamanEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.AuraModifier;
@@ -33,14 +33,14 @@ public class CommandShaman implements ICommandRole {
         }
 
         if (playerWW.getHealth() < 3) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.shaman.not_enough_life");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.shaman.not_enough_life");
             return;
         }
 
         int nTimesAffected;
         try {
             nTimesAffected = Integer.parseInt(args[1]);
-        } catch(Exception e) {
+        } catch (Exception e) {
             Bukkit.getLogger().warning("Failed to parse second argument");
             return;
         }
@@ -49,7 +49,7 @@ public class CommandShaman implements ICommandRole {
         if (game.getTimer() - playerWW1.getDeathTime() > 30 ||
                 ((IAffectedPlayers) playerWW.getRole()).getAffectedPlayers().stream()
                         .filter(p -> p.equals(playerWW1)).count() > nTimesAffected) {
-            playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.shaman.cannot_use");
+            playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.shaman.cannot_use");
             return;
         }
 
@@ -59,20 +59,20 @@ public class CommandShaman implements ICommandRole {
 
         Bukkit.getPluginManager().callEvent(shamanEvent);
 
-        if(shamanEvent.isCancelled()){
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+        if (shamanEvent.isCancelled()) {
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
 
         playerWW.removePlayerMaxHealth(2);
-        playerWW.getRole().addAuraModifier(new AuraModifier(playerWW.getRole().getKey(), Aura.DARK,1,false));
+        playerWW.getRole().addAuraModifier(new AuraModifier(playerWW.getRole().getKey(), Aura.DARK, 1, false));
 
         if (game.getRandom().nextBoolean()) {
-            playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.shaman.victim_name",
+            playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.shaman.victim_name",
                     Formatter.player(playerWW1.getName()));
         } else {
             IRole role = playerWW1.getRole();
-            playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.shaman.victim_role",
+            playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.shaman.victim_role",
                     Formatter.role(game.translate(role.getDisplayRole())));
         }
 

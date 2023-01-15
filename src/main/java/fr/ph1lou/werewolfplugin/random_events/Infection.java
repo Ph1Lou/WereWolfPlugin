@@ -3,13 +3,13 @@ package fr.ph1lou.werewolfplugin.random_events;
 import fr.ph1lou.werewolfapi.annotations.RandomEvent;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
 import fr.ph1lou.werewolfapi.events.random_events.InfectionRandomEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.NewWereWolfEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import org.bukkit.Bukkit;
@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RandomEvent(key = EventBase.INFECTION, loreKey = "werewolf.random_events.infection.description",
-        timers = {@Timer(key = Infection.TIMER_START, defaultValue = 60*60, meetUpValue = 30*60, step = 30),
-                @Timer(key = Infection.PERIOD, defaultValue = 15*60, meetUpValue = 10*60, step = 30)})
+        timers = {@Timer(key = Infection.TIMER_START, defaultValue = 60 * 60, meetUpValue = 30 * 60, step = 30),
+                @Timer(key = Infection.PERIOD, defaultValue = 15 * 60, meetUpValue = 10 * 60, step = 30)})
 public class Infection extends ListenerWerewolf {
 
     public static final String TIMER_START = "werewolf.random_events.infection.timer_start";
@@ -46,7 +46,7 @@ public class Infection extends ListenerWerewolf {
                         .filter(roles -> !roles.isWereWolf())
                         .collect(Collectors.toList());
 
-                if(roles1.isEmpty()) return;
+                if (roles1.isEmpty()) return;
 
                 IRole role1 = roles1.get((int) Math.floor(game.getRandom().nextDouble() * roles1.size()));
 

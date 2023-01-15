@@ -1,9 +1,9 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
@@ -38,11 +38,11 @@ public class Benefactor extends RoleVillage implements IAffectedPlayers {
     @Override
     public void second() {
 
-        if(!this.isAbilityEnabled()) return;
+        if (!this.isAbilityEnabled()) return;
 
-        if(this.affectedPlayers.size() < 3) return;
+        if (this.affectedPlayers.size() < 3) return;
 
-        if(this.game.getTimer() % (3*60) != 0) return;
+        if (this.game.getTimer() % (3 * 60) != 0) return;
 
         this.getPlayerWW().addPlayerHealth(2);
     }

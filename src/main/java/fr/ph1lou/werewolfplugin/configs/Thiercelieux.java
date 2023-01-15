@@ -1,8 +1,7 @@
 package fr.ph1lou.werewolfplugin.configs;
 
-import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Day;
@@ -12,6 +11,7 @@ import fr.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AnnouncementLoverDeathEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -25,22 +25,22 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Configuration(config = @ConfigurationBasic(key = ConfigBase.THIERCELIEU,
-        loreKey = "werewolf.configurations.thiercelieu.description"))
-public class Thiercelieu extends ListenerWerewolf {
+@Configuration(config = @ConfigurationBasic(key = ConfigBase.THIERCELIEUX,
+        loreKey = "werewolf.configurations.thiercelieux.description"))
+public class Thiercelieux extends ListenerWerewolf {
 
     private final List<AnnouncementDeathEvent> announcementDeathEvents = new ArrayList<>();
     private final Set<IPlayerWW> playerWWList = new HashSet<>();
     private final List<AnnouncementLoverDeathEvent> loversList = new ArrayList<>();
 
-    public Thiercelieu(WereWolfAPI main) {
+    public Thiercelieux(WereWolfAPI main) {
         super(main);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onAnnouncement(AnnouncementDeathEvent event){
+    public void onAnnouncement(AnnouncementDeathEvent event) {
 
-        if(getGame().isDay(Day.DAY)){
+        if (getGame().isDay(Day.DAY)) {
             return;
         }
 
@@ -52,12 +52,12 @@ public class Thiercelieu extends ListenerWerewolf {
     @EventHandler(priority = EventPriority.HIGH)
     public void onUpdate(UpdatePlayerNameTagEvent event) {
 
-        if(getGame().isDay(Day.DAY)){
+        if (getGame().isDay(Day.DAY)) {
             return;
         }
 
-        if(this.playerWWList.stream()
-                .noneMatch(playerWW -> playerWW.getUUID().equals(event.getPlayerUUID()))){
+        if (this.playerWWList.stream()
+                .noneMatch(playerWW -> playerWW.getUUID().equals(event.getPlayerUUID()))) {
             return;
         }
 
@@ -65,9 +65,9 @@ public class Thiercelieu extends ListenerWerewolf {
     }
 
     @EventHandler
-    public void onLoverDeathMessage(AnnouncementLoverDeathEvent event){
+    public void onLoverDeathMessage(AnnouncementLoverDeathEvent event) {
 
-        if(getGame().isDay(Day.DAY)){
+        if (getGame().isDay(Day.DAY)) {
             return;
         }
 
@@ -76,25 +76,25 @@ public class Thiercelieu extends ListenerWerewolf {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onDay(DayEvent event){
+    public void onDay(DayEvent event) {
 
         this.playerWWList.clear();
 
         this.announcementDeathEvents.forEach(announcementDeathEvent -> {
             Formatter[] formatters = (Formatter[]) ArrayUtils.addAll(announcementDeathEvent.getFormatters().toArray(new Formatter[0]),
-                    new Formatter[]{Formatter.player( announcementDeathEvent.getPlayerName()),
+                    new Formatter[]{Formatter.player(announcementDeathEvent.getPlayerName()),
                             Formatter.role(this.getGame().translate(announcementDeathEvent.getRole()))});
 
-            if(this.loversList.stream()
+            if (this.loversList.stream()
                     .anyMatch(announcementLoverDeathEvent -> announcementLoverDeathEvent
-                            .getPlayerWW().equals(announcementDeathEvent.getPlayerWW()))){
+                            .getPlayerWW().equals(announcementDeathEvent.getPlayerWW()))) {
                 announcementDeathEvent.getTargetPlayer()
                         .sendMessageWithKey("werewolf.lovers.lover.lover_death",
                                 Formatter.player(announcementDeathEvent.getPlayerWW().getName()));
             }
 
             announcementDeathEvent.getTargetPlayer().sendMessageWithKey("werewolf.utils.bar");
-            announcementDeathEvent.getTargetPlayer().sendMessageWithKey(Prefix.RED,announcementDeathEvent.getFormat(),formatters);
+            announcementDeathEvent.getTargetPlayer().sendMessageWithKey(Prefix.RED, announcementDeathEvent.getFormat(), formatters);
             announcementDeathEvent.getTargetPlayer().sendMessageWithKey("werewolf.utils.bar");
             announcementDeathEvent.getTargetPlayer().sendSound(Sound.AMBIENCE_THUNDER);
 

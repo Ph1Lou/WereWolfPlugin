@@ -32,7 +32,7 @@ public class CommandTrapper implements ICommandRole {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.offline_player");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.offline_player");
             return;
         }
 
@@ -40,17 +40,17 @@ public class CommandTrapper implements ICommandRole {
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (uuid.equals(argUUID)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.not_yourself");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.not_yourself");
             return;
         }
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.player_not_found");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.player_not_found");
             return;
         }
 
         if (((IAffectedPlayers) trapper).getAffectedPlayers().contains(playerWW1)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.already_get_power");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.already_get_power");
             return;
         }
 
@@ -59,15 +59,15 @@ public class CommandTrapper implements ICommandRole {
         Bukkit.getPluginManager().callEvent(trackEvent);
 
         if (trackEvent.isCancelled()) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
 
         ((IAffectedPlayers) trapper).clearAffectedPlayer();
         ((IAffectedPlayers) trapper).addAffectedPlayer(playerWW1);
 
-        playerArg.sendMessage(game.translate(Prefix.YELLOW , "werewolf.roles.trapper.get_track"));
-        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.trapper.tracking_perform",
+        playerArg.sendMessage(game.translate(Prefix.YELLOW, "werewolf.roles.trapper.get_track"));
+        playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.trapper.tracking_perform",
                 Formatter.player(playerArg.getName()));
     }
 }

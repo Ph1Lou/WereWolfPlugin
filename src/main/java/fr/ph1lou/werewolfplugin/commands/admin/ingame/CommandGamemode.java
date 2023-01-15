@@ -1,10 +1,10 @@
 package fr.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import fr.ph1lou.werewolfapi.annotations.AdminCommand;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
@@ -32,7 +32,7 @@ public class CommandGamemode implements ICommand {
             }
 
             player.setGameMode(GameMode.values()[j]);
-            String message = game.translate(Prefix.YELLOW , "werewolf.commands.admin.gamemode.send",
+            String message = game.translate(Prefix.YELLOW, "werewolf.commands.admin.gamemode.send",
                     Formatter.player(player.getName()),
                     Formatter.number(gamemode));
 
@@ -40,8 +40,7 @@ public class CommandGamemode implements ICommand {
             if (!game.getModerationManager().isStaff(uuid)) {
                 player.sendMessage(message);
             }
-        }
-        catch (NumberFormatException ignored){
+        } catch (NumberFormatException ignored) {
         }
     }
 }

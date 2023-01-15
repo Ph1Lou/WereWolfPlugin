@@ -5,12 +5,12 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
-import fr.ph1lou.werewolfplugin.Main;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
+import fr.ph1lou.werewolfplugin.Main;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -51,46 +51,46 @@ public class BordersGUI implements InventoryProvider {
         contents.set(0, 3, ClickableItem.of(
                 (new ItemBuilder(Material.STONE_BUTTON)
                         .setDisplayName(game.translate("werewolf.utils.display",
-                                Formatter.format("&field&","-"),
-                                Formatter.format("&value&",config.getBorderMax())))
+                                Formatter.format("&field&", "-"),
+                                Formatter.format("&value&", config.getBorderMax())))
                         .build()), e -> {
                     if (game.getConfig().getBorderMax() >= 100) {
                         game.getConfig().setBorderMax(game.getConfig().getBorderMax() - 100);
                         game.getMapManager().changeBorder(game.getConfig().getBorderMax() / 2);
                         e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                                 .setDisplayName(game.translate("werewolf.utils.display",
-                                        Formatter.format("&field&","-"),
-                                        Formatter.format("&value&",config.getBorderMax())))
+                                        Formatter.format("&field&", "-"),
+                                        Formatter.format("&value&", config.getBorderMax())))
                                 .build());
                     }
                 }));
         contents.set(0, 4, ClickableItem.empty((new ItemBuilder(Material.GLASS)
                 .setDisplayName(game.translate("werewolf.menus.border.radius_border_max",
-                        Formatter.format("&size&",config.getBorderMax()))).build())));
+                        Formatter.format("&size&", config.getBorderMax()))).build())));
         contents.set(0, 5, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON)
                 .setDisplayName(game.translate("werewolf.utils.display",
-                        Formatter.format("&field&","+"),
-                        Formatter.format("&value&",config.getBorderMax())))
+                        Formatter.format("&field&", "+"),
+                        Formatter.format("&value&", config.getBorderMax())))
                 .build()), e -> {
             game.getConfig().setBorderMax(game.getConfig().getBorderMax() + 100);
             game.getMapManager().changeBorder(game.getConfig().getBorderMax() / 2);
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setDisplayName(game.translate("werewolf.utils.display",
-                            Formatter.format("&field&","+"),
-                            Formatter.format("&value&",config.getBorderMax())))
+                            Formatter.format("&field&", "+"),
+                            Formatter.format("&value&", config.getBorderMax())))
                     .build());
         }));
         contents.set(1, 3, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON)
                 .setDisplayName(game.translate("werewolf.utils.display",
-                        Formatter.format("&field&","-"),
-                        Formatter.format("&value&",config.getBorderMin())))
+                        Formatter.format("&field&", "-"),
+                        Formatter.format("&value&", config.getBorderMin())))
                 .build()), e -> {
             if (game.getConfig().getBorderMin() >= 100) {
                 game.getConfig().setBorderMin(game.getConfig().getBorderMin() - 100);
                 e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                         .setDisplayName(game.translate("werewolf.utils.display",
-                                Formatter.format("&field&","-"),
-                                Formatter.format("&value&",config.getBorderMin())))
+                                Formatter.format("&field&", "-"),
+                                Formatter.format("&value&", config.getBorderMin())))
                         .build());
             }
         }));
@@ -98,17 +98,17 @@ public class BordersGUI implements InventoryProvider {
 
         contents.set(1, 4, ClickableItem.empty((new ItemBuilder(Material.GLASS)
                 .setDisplayName(game.translate("werewolf.menus.border.radius_border_min",
-                        Formatter.format("&size&",config.getBorderMin()))).build())));
+                        Formatter.format("&size&", config.getBorderMin()))).build())));
         contents.set(1, 5, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON)
                 .setDisplayName(game.translate("werewolf.utils.display",
-                        Formatter.format("&field&","+"),
-                        Formatter.format("&value&",config.getBorderMin())))
+                        Formatter.format("&field&", "+"),
+                        Formatter.format("&value&", config.getBorderMin())))
                 .build()), e -> {
             game.getConfig().setBorderMin(game.getConfig().getBorderMin() + 100);
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setDisplayName(game.translate("werewolf.utils.display",
-                            Formatter.format("&field&","+"),
-                            Formatter.format("&value&",config.getBorderMin())))
+                            Formatter.format("&field&", "+"),
+                            Formatter.format("&value&", config.getBorderMin())))
                     .build());
         }));
 
@@ -117,32 +117,32 @@ public class BordersGUI implements InventoryProvider {
 
         contents.set(2, 3, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON)
                 .setDisplayName(game.translate("werewolf.utils.display",
-                        Formatter.format("&field&","-"),
-                        Formatter.format("&value&",borderSpeed)))
+                        Formatter.format("&field&", "-"),
+                        Formatter.format("&value&", borderSpeed)))
                 .build()), e -> {
             if (game.getConfig().getBorderSpeed() >= 0.1) {
                 game.getConfig().setBorderSpeed(game.getConfig().getBorderSpeed() - 0.1);
                 e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                         .setDisplayName(game.translate("werewolf.utils.display",
-                                Formatter.format("&field&","-"),
-                                Formatter.format("&value&",new DecimalFormat("0.0")
+                                Formatter.format("&field&", "-"),
+                                Formatter.format("&value&", new DecimalFormat("0.0")
                                         .format(config.getBorderSpeed()))))
                         .build());
             }
         }));
         contents.set(2, 4, ClickableItem.empty((new ItemBuilder(Material.GLASS)
                 .setDisplayName(game.translate("werewolf.menus.border.speed",
-                        Formatter.format("&speed&",borderSpeed))).build())));
+                        Formatter.format("&speed&", borderSpeed))).build())));
         contents.set(2, 5, ClickableItem.of((new ItemBuilder(Material.STONE_BUTTON)
                 .setDisplayName(game.translate("werewolf.utils.display",
-                        Formatter.format("&field&","+"),
-                        Formatter.format("&value&",borderSpeed)))
+                        Formatter.format("&field&", "+"),
+                        Formatter.format("&value&", borderSpeed)))
                 .build()), e -> {
             game.getConfig().setBorderSpeed(game.getConfig().getBorderSpeed() + 0.1);
             e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
                     .setDisplayName(game.translate("werewolf.utils.display",
-                            Formatter.format("&field&","+"),
-                            Formatter.format("&value&",new DecimalFormat("0.0")
+                            Formatter.format("&field&", "+"),
+                            Formatter.format("&value&", new DecimalFormat("0.0")
                                     .format(config.getBorderSpeed()))))
                     .build());
         }));

@@ -33,22 +33,22 @@ public class CommandDetective implements ICommandRole {
         IRole detective = playerWW.getRole();
 
         if (args.length != 2) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.parameters",
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.parameters",
                     Formatter.number(2));
             return;
         }
 
         if (args[0].equalsIgnoreCase(args[1])) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.two_distinct_player");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.two_distinct_player");
             return;
         }
 
-        for(String p:args) {
+        for (String p : args) {
 
             Player playerArg = Bukkit.getPlayer(p);
 
             if (playerArg == null) {
-                playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.offline_player");
+                playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.offline_player");
                 return;
             }
 
@@ -56,17 +56,17 @@ public class CommandDetective implements ICommandRole {
             IPlayerWW playerWW1 = game.getPlayerWW(uuid1).orElse(null);
 
             if (playerWW1 == null || playerWW1.isState(StatePlayer.DEATH)) {
-                playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.player_not_found");
+                playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.player_not_found");
                 return;
             }
 
             if (uuid.equals(uuid1)) {
-                playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.not_yourself");
+                playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.not_yourself");
                 return;
             }
 
             if (((IAffectedPlayers) detective).getAffectedPlayers().contains(playerWW1)) {
-                playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.detective.already_inspect");
+                playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.detective.already_inspect");
                 return;
             }
         }
@@ -93,7 +93,7 @@ public class CommandDetective implements ICommandRole {
         Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
 
@@ -101,12 +101,12 @@ public class CommandDetective implements ICommandRole {
         ((IAffectedPlayers) detective).addAffectedPlayer(playerWW2);
 
         if (event.isSameCamp()) {
-            playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.detective.same_camp",
-                    Formatter.format("&player1&",player1.getName()),
-                    Formatter.format("&player2&",player2.getName()));
+            playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.detective.same_camp",
+                    Formatter.format("&player1&", player1.getName()),
+                    Formatter.format("&player2&", player2.getName()));
         } else
-            playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.detective.opposing_camp",
-                    Formatter.format("&player1&",player1.getName()),
-                    Formatter.format("&player2&",player2.getName()));
+            playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.detective.opposing_camp",
+                    Formatter.format("&player1&", player1.getName()),
+                    Formatter.format("&player2&", player2.getName()));
     }
 }

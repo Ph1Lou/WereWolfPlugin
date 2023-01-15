@@ -43,7 +43,7 @@ public class HowlingWerewolf extends RoleWereWolf {
 
     @Override
     public @NotNull String getDescription() {
-        return new DescriptionBuilder(game,this)
+        return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.roles.howling_werewolf.description",
                         Formatter.number(game.getConfig().getValue(IntValueBase.HOWLING_WEREWOLF_DISTANCE)),
                         Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.DAY_DURATION)))))
@@ -57,9 +57,9 @@ public class HowlingWerewolf extends RoleWereWolf {
     }
 
     @EventHandler
-    public void onNight(NightEvent event){
+    public void onNight(NightEvent event) {
 
-        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -79,19 +79,19 @@ public class HowlingWerewolf extends RoleWereWolf {
                 })
                 .collect(Collectors.toSet());
 
-        if(playerWWS.size() < 5){
+        if (playerWWS.size() < 5) {
             return;
         }
 
-        HowlEvent howlEvent = new HowlEvent(this.getPlayerWW(),playerWWS, (int) playerWWS
+        HowlEvent howlEvent = new HowlEvent(this.getPlayerWW(), playerWWS, (int) playerWWS
                 .stream()
                 .map(playerWW -> !playerWW.getRole().isWereWolf())
                 .count());
 
         Bukkit.getPluginManager().callEvent(howlEvent);
 
-        if(howlEvent.isCancelled()){
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+        if (howlEvent.isCancelled()) {
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
 
@@ -99,27 +99,27 @@ public class HowlingWerewolf extends RoleWereWolf {
 
         int heart = 0;
 
-        if(howlEvent.getNotWerewolfSize() > 1){
+        if (howlEvent.getNotWerewolfSize() > 1) {
             heart = 1;
-            if(howlEvent.getNotWerewolfSize() > 3){
+            if (howlEvent.getNotWerewolfSize() > 3) {
                 heart++;
             }
-            if(howlEvent.getNotWerewolfSize() > 5){
+            if (howlEvent.getNotWerewolfSize() > 5) {
                 heart++;
             }
         }
 
-        if(heart == 0){
+        if (heart == 0) {
             return;
         }
 
-        int finalHeart = heart*2;
+        int finalHeart = heart * 2;
 
         this.getPlayerWW().addPlayerMaxHealth(finalHeart);
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.roles.howling_werewolf.message",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.howling_werewolf.message",
                 Formatter.number(howlEvent.getNotWerewolfSize()),
-                Formatter.format("&heart&",heart),
+                Formatter.format("&heart&", heart),
                 Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.DAY_DURATION))));
 
         BukkitUtils.scheduleSyncDelayedTask(game, () -> this.getPlayerWW().removePlayerMaxHealth(finalHeart),

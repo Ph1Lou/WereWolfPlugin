@@ -34,10 +34,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class TransportationTask implements Listener {
 
-    private String actionBar="";
     private final GameManager game;
     private final List<Location> spawns = new ArrayList<>();
     private final Map<Integer, Integer> taskStep = new HashMap<>();
+    private String actionBar = "";
 
     public TransportationTask(GameManager game) {
         this.game = game;
@@ -149,14 +149,14 @@ public class TransportationTask implements Listener {
 
             if (this.game.getPlayerWW(player.getUniqueId()).isPresent()) {
                 player.setGameMode(GameMode.SURVIVAL);
-                player.sendMessage(this.game.translate(Prefix.YELLOW , "werewolf.announcement.start.message",
+                player.sendMessage(this.game.translate(Prefix.YELLOW, "werewolf.announcement.start.message",
                         Formatter.timer(game, TimerBase.INVULNERABILITY)));
             } else {
                 player.teleport(this.game.getMapManager().getWorld().getSpawnLocation());
                 player.setGameMode(GameMode.SPECTATOR);
-                if(game.getConfig().getSpectatorMode() < 2 && !player.isOp() &&
-                !game.getModerationManager().isStaff(player.getUniqueId())){
-                    player.kickPlayer(game.translate(Prefix.RED , "werewolf.check.spectator_disabled"));
+                if (game.getConfig().getSpectatorMode() < 2 && !player.isOp() &&
+                        !game.getModerationManager().isStaff(player.getUniqueId())) {
+                    player.kickPlayer(game.translate(Prefix.RED, "werewolf.check.spectator_disabled"));
                 }
             }
 
@@ -177,7 +177,7 @@ public class TransportationTask implements Listener {
 
         actionBar = this.game.translate("werewolf.action_bar.tp",
                 Formatter.number(i + 1),
-                Formatter.format("&sum&",this.game.getPlayersCount()));
+                Formatter.format("&sum&", this.game.getPlayersCount()));
 
         IPlayerWW playerWW = (IPlayerWW) this.game.getPlayersWW().toArray()[i];
         playerWW.setSpawn(spawns.get(i));
@@ -211,7 +211,7 @@ public class TransportationTask implements Listener {
 
         actionBar = this.game.translate("werewolf.action_bar.create_tp_point",
                 Formatter.number(i + 1),
-                Formatter.format("&sum&",this.game.getPlayersCount()));
+                Formatter.format("&sum&", this.game.getPlayersCount()));
 
         double a = i * 2 * Math.PI / this.game.getPlayersCount();
         int x = (int) (Math.round(wb.getSize() / 3 * Math.cos(a) + world.getSpawnLocation().getX()));

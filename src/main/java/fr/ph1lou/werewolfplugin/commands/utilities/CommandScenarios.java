@@ -2,10 +2,10 @@ package fr.ph1lou.werewolfplugin.commands.utilities;
 
 import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
 import fr.ph1lou.werewolfapi.annotations.Scenario;
-import fr.ph1lou.werewolfapi.commands.ICommand;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.commands.ICommand;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Register;
@@ -21,12 +21,12 @@ public class CommandScenarios implements ICommand {
 
         if (game.getConfig().isConfigActive(ConfigBase.HIDE_SCENARIOS)) {
 
-            player.sendMessage(game.translate(Prefix.RED , "werewolf.commands.player.scenarios.disable"));
+            player.sendMessage(game.translate(Prefix.RED, "werewolf.commands.player.scenarios.disable"));
 
             return;
         }
 
-        player.sendMessage(game.translate(Prefix.GREEN , "werewolf.commands.player.scenarios.list"));
+        player.sendMessage(game.translate(Prefix.GREEN, "werewolf.commands.player.scenarios.list"));
         StringBuilder sb = new StringBuilder();
 
         int i = 0;

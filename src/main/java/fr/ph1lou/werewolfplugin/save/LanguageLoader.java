@@ -16,15 +16,15 @@ import java.util.Map;
 
 public class LanguageLoader {
 
-    public static void loadLanguage(WereWolfAPI game, String language){
+    public static void loadLanguage(WereWolfAPI game, String language) {
 
         Main main = JavaPlugin.getPlugin(Main.class);
         main.getRegisterManager().getModulesRegister().forEach(addon -> {
             String defaultLanguages = addon.getMetaDatas().defaultLanguage();
             main.getRegisterManager().getAddon(addon.getAddonKey())
                     .ifPresent(javaPlugin -> game.getLanguageManager().loadTranslations(addon.getMetaDatas().key().split("\\.")[0],
-                    loadTranslations(javaPlugin,
-                    FileUtils_.loadContent(buildLanguageFile(javaPlugin, defaultLanguages, language)))));
+                            loadTranslations(javaPlugin,
+                                    FileUtils_.loadContent(buildLanguageFile(javaPlugin, defaultLanguages, language)))));
         });
         StatistiksUtils.loadMessages();
 
@@ -54,17 +54,15 @@ public class LanguageLoader {
             // For each child
             for (JsonObject.Member member : jsonValue.asObject()) {
 
-                if(currentPath.equals("") && !plugin.equals(main) && member.getName().equals("werewolf")){ //Nom de domaine réservé au plugin lg
-                    Bukkit.getLogger().warning(String.format("Plugin %s try to load text file with werewolf.* key",plugin.getName()));
+                if (currentPath.equals("") && !plugin.equals(main) && member.getName().equals("werewolf")) { //Nom de domaine réservé au plugin lg
+                    Bukkit.getLogger().warning(String.format("Plugin %s try to load text file with werewolf.* key", plugin.getName()));
                     continue;
                 }
                 String newPath = String.format("%s%s%s", currentPath, currentPath.equals("") ? "" : ".", member.getName());
 
-                loadTranslationsRec(plugin,newPath, member.getValue(), keys);
+                loadTranslationsRec(plugin, newPath, member.getValue(), keys);
             }
-        }
-
-        else if (!jsonValue.isNull()) {
+        } else if (!jsonValue.isNull()) {
             keys.put(currentPath.toLowerCase(), jsonValue);
         }
 
@@ -96,10 +94,10 @@ public class LanguageLoader {
                         tempString = tempString.replaceFirst(temp2 + "\\.", "");
                         temp = temp.get(temp2).asObject();
                     }
-                    String[] strings =tempString.split("\\.");
+                    String[] strings = tempString.split("\\.");
 
-                    for (int i=0;i<strings.length-1;i++){
-                        temp.set(strings[i],new JsonObject());
+                    for (int i = 0; i < strings.length - 1; i++) {
+                        temp.set(strings[i], new JsonObject());
                         temp = temp.get(strings[i]).asObject();
                     }
                     temp.set(strings[strings.length - 1], fr.get(string));

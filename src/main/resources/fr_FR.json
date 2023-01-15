@@ -686,7 +686,6 @@
         "timers": {
           "twin_duration": "Durée pour la révélation des Jumeaux (§b&timer&§r)"
         }
-
       },
       "analyst": {
         "display": "Analyste",
@@ -704,7 +703,6 @@
           "analyse_duration": "Début du pouvoir Analyste (§b&timer&§r)"
         }
       },
-
       "servitor": {
         "display": "Serviteur",
         "message": "Votre maître aujourd'hui est &player&",
@@ -786,7 +784,7 @@
         "clue_player": "§b&player&§r est mort ici, §b&number&§r autres joueurs se trouvaient à proximité lors de sa mort",
         "clue_role": "§b&victim&§r était §b&role&§r. §b&players&§r étaient proches de lui lors de sa mort",
         "clue_nearby": "§b&players&§r étaient proches de §b&victim&§r lors de sa mort",
-        "configurations":{
+        "configurations": {
           "distance": "L'enquête révèle les joueurs à §b&number&§r blocs du mort"
         }
       },
@@ -797,7 +795,6 @@
         "self_death": "L'Occultiste est mort sa dernière volonté était : &wish&",
         "command": "L'Occultiste est présent dans la partie, vous pouvez faire §b/ww volonte§f pour écrire votre dernière volontée."
       },
-
       "hunter": {
         "display": "Chasseur",
         "description": "A chaque fois que vous tuez un loup, les dégâts que vous infligez aux Loups sont définitivement augmentés",
@@ -878,7 +875,7 @@
       "spy": {
         "display": "Espion",
         "command": "spy",
-        "description": "Au bout du 5e jour, vous pouvez espionner un joueur. Vous recevez le nombre d’Actions racontables effectuées par le joueur le jour d'après",
+        "description": "Au bout du §b&number&§fe jour, vous pouvez espionner un joueur. Vous recevez le nombre d’Actions racontables effectuées par le joueur le jour d'après",
         "use_power": "Vous pouvez espionner un nouveau joueur avec §b/ww spy",
         "result": "Le joueur &player& a effectué &number& action(s) racontable(s)",
         "perform": "Vous commencez à espionner §b&player&",
@@ -1272,7 +1269,7 @@
           "title": "Limites d'enchantements :",
           "note": "§oCertains rôles peuvent outrepasser certaines limites",
           "iron_diamond_protection": "- Protection Armure §6Fer§f : §b&number&§f / §3Diamant§f : §b&number2&§f",
-          "iron_diamond_sharpness" : "- Tranchant Epee §6Fer§f : §b&number&§f / §3Diamant§f : §b&number2&§f",
+          "iron_diamond_sharpness": "- Tranchant Epee §6Fer§f : §b&number&§f / §3Diamant§f : §b&number2&§f",
           "punch_power": "- Arc Puissance : §b&number&§f / Frappe : §b&number2&",
           "knock_back_depth_rider": "- Recul : §b&number&§f / Agilité aquatique : §b&number2&",
           "knock_back_invisible": "§cRecul§f seulement pour les joueurs §ainvisibles"
@@ -1381,7 +1378,7 @@
       },
       "enchantments": {
         "name": "Configuration §bEnchantements",
-        "iron_protection" : "Armure §6Fer§f : Protection §b&number&",
+        "iron_protection": "Armure §6Fer§f : Protection §b&number&",
         "diamond_protection": "Armure §3Diamant§f : Protection §b&number&",
         "power": "Puissance : §b&number&",
         "sharpness_iron": "Epee §6Fer§f : Tranchant §b&number&",
@@ -1544,7 +1541,7 @@
           "vote_end": "§b&number&§r messages par cycle dans le chat Loup Garou"
         },
         "timers": {
-          "werewolf_chat_duration":"Durée du Chat des Loups Garous (§b&timer&§r)"
+          "werewolf_chat_duration": "Durée du Chat des Loups Garous (§b&timer&§r)"
         }
       },
       "show_role_to_death": {
@@ -1623,7 +1620,7 @@
         "description": "permet d’activer le système de Rôles masqués sans avoir de Prêtresse dans la composition. \nUn joueur du Village est alors choisi aléatoirement au début de la partie sans qu'il le sache",
         "magic": "§kCoucou"
       },
-      "thiercelieu": {
+      "thiercelieux": {
         "name": "Thiercelieux",
         "description": "Les morts sont annoncées le matin"
       }
@@ -1673,7 +1670,7 @@
       "no_fall": {
         "name": "NoFall"
       },
-      "fast_smelting":{
+      "fast_smelting": {
         "name": "FastMelting"
       },
       "compass_target_last_death": {
@@ -1730,9 +1727,9 @@
         "name": "Exposed",
         "message": "[§5Exposed§r] Le rôle de §b&player&§f se trouve dans la liste suivante §b&role1&, §f&role2& et §b&role3&",
         "description": "Deux fois dans la partie \n(L'événement peut se déclencher pendant une période de §b&period&§f à partir de §b&timer_start_1&§f après les rôles \npuis une deuxième fois §b&timer_start_2&§f après le premier), \nun joueur choisi aléatoirement voit son pseudo \naffiché dans le chat à côté de 3 rôles\ntoujours représentés dans la partie. \nParmi ces 3 rôles se trouvent : son rôle, un rôle d’un camp différent, \nun rôle aléatoire parmi tous les autres.\nUn joueur ne peut pas être exposé deux fois dans la même partie.",
-        "timer_start_1" : "Début du déclenchement 1 (§b&timer&§f)",
-        "timer_start_2" : "Début du déclenchement 2 (§b&timer&§f)",
-        "period" : "Période de déclenchement de l'event (§b&timer&§f)"
+        "timer_start_1": "Début du déclenchement 1 (§b&timer&§f)",
+        "timer_start_2": "Début du déclenchement 2 (§b&timer&§f)",
+        "period": "Période de déclenchement de l'event (§b&timer&§f)"
       },
       "loot_box": {
         "name": "Loot Box",
@@ -1745,8 +1742,8 @@
         "name": "Infection",
         "description": "Une fois dans la partie, un joueur au hasard est infecté.\nL'infection peut se déclencher pendant une période de §b&period&§f à partir de §b&timer_start&§f après les rôles ,\nsi il y a moins de la moitié des joueurs \nqui sont Loups Garous.",
         "message": "[§5Infection§r] Un joueur aléatoire vient d'être infecté",
-        "timer_start" : "Début du déclenchement (§b&timer&§f)",
-        "period" : "Période de déclenchement de l'event (§b&timer&§f)"
+        "timer_start": "Début du déclenchement (§b&timer&§f)",
+        "period": "Période de déclenchement de l'event (§b&timer&§f)"
       },
       "amnesic": {
         "name": "Amnésique",
@@ -1770,16 +1767,16 @@
         "message": "[§5Rituel du Coussinet§r] Pendant un jour, tout le monde à §bNoFall",
         "end": "[§5Rituel du Coussinet§r] Fin de l'évènement aléatoire",
         "description": "Une fois dans la partie, pendant un jour \ntout le monde à Nofall. \nL'évènement peut se déclencher pendant une période de §b&period&§f à partir de §b&timer_start&§f après les rôles ",
-        "timer_start" : "Début du déclenchement (§b&timer&§f)",
-        "period" : "Période de déclenchement de l'event (§b&timer&§f)"
+        "timer_start": "Début du déclenchement (§b&timer&§f)",
+        "period": "Période de déclenchement de l'event (§b&timer&§f)"
       },
       "putrefaction": {
         "name": "Putréfaction",
         "message": "[§5Putrefaction§r] Pendant un jour, l'eau fait prendre des dégâts",
         "end": "[§5Putrefaction§r] Fin de l'évènement",
         "description": "Une fois dans la partie, pendant un jour \nl'eau fait prendre des dégâts.\nL'évènement peut se déclencher pendant une période de §b&period&§f à partir de §b&timer_start&§f après les rôles ",
-        "timer_start" : "Début du déclenchement (§b&timer&§f)",
-        "period" : "Période de déclenchement de l'event (§b&timer&§f)"
+        "timer_start": "Début du déclenchement (§b&timer&§f)",
+        "period": "Période de déclenchement de l'event (§b&timer&§f)"
       },
       "god_miracle": {
         "name": "God Miracle",
@@ -1797,13 +1794,13 @@
         "message": "[§5Zizanie§r] Un membre du Village passe avec les Loups-Garous, un des Loups devient solitaire, enfin un rôle Solo passe avec le Village",
         "description": "Un membre du Village passe avec les Loups-Garous, \nun des Loups devient solitaire \nenfin un rôle Solo passe avec le Village.\nL'évènement peut se déclencher dans une période de §b&period&§f à partir de §b&timer_start&§f après les rôles",
         "to_villager": "Vous passez dans le camp des villageois",
-        "timer_start" : "Début du déclenchement (§b&timer&§f)",
-        "period" : "Période de déclenchement de l'event (§b&timer&§f)"
+        "timer_start": "Début du déclenchement (§b&timer&§f)",
+        "period": "Période de déclenchement de l'event (§b&timer&§f)"
       },
       "sister_misanthrope": {
         "name": "Soeur Misanthrope",
         "message": "[§5Soeur Misanthrope§r] Vous passez dans le camp des Loups Garous, mais vous n'apparaissez pas dans la liste des Loups et ne pouvez pas interagir avec le chat des Loups.",
-        "description" : "À la révélation de la liste des Loups, \nune des Soeurs apprend qu'elle est dans le camp des Loups \n(elle a accès à la liste, obtient Force I la nuit mais n'apparaît pas dans la liste \net ne peut pas interagir avec le chat des Loups."
+        "description": "À la révélation de la liste des Loups, \nune des Soeurs apprend qu'elle est dans le camp des Loups \n(elle a accès à la liste, obtient Force I la nuit mais n'apparaît pas dans la liste \net ne peut pas interagir avec le chat des Loups."
       },
       "rumors": {
         "name": "Rumeurs",
@@ -1813,8 +1810,8 @@
         "command": "rumor",
         "no_rumor": "L'évenement Rumeurs n'est pas en cours",
         "perform": "Votre rumeur a été envoyée ou actualisée",
-        "timer_start" : "Début du déclenchement (§b&timer&§f)",
-        "period" : "Période de déclenchement de l'event (§b&timer&§f)"
+        "timer_start": "Début du déclenchement (§b&timer&§f)",
+        "period": "Période de déclenchement de l'event (§b&timer&§f)"
       },
       "not_all_werewolfs": {
         "name": "Not All Loups",
@@ -1921,6 +1918,49 @@
       "orange": "[§6LG UHC§r] ",
       "blue": "[§9LG UHC§r] ",
       "light_blue": "[§3LG UHC§r] "
+    },
+    "elections": {
+      "name": "§fLes Elections",
+      "election": {
+        "command": "election",
+        "star": "§6⭐ ",
+        "name": "Élections",
+        "regime": {
+          "doctor": {
+            "name": "Docteur",
+            "description": "Vous avez une seconde vie",
+            "resurrection": "Vous ressuscitez avec votre pouvoir de Maire §bMedecin"
+          },
+          "farmer": {
+            "name": "Fermier",
+            "description": "Vous n'avez plus besoin de vous nourrir pendant la partie, vous avez 20% de chance lorsque vous craftez une pomme d'or d'en avoir une en plus"
+          },
+          "undertaker": {
+            "name": "Croque Mort",
+            "description": "Dès que une personne de votre camp meurt, vous gagnez une pomme d'or",
+            "message": "Une personne de votre camp vient de mourir, vous gagnez une pomme d'or"
+          },
+          "black_smith": {
+            "name": "Forgeron",
+            "description": "Vous prenez 10% de dégâts en moins"
+          }
+        },
+        "death": "Le maire est mort",
+        "disable": "Les élections sont désactivées",
+        "not_begin": "Les élections n'ont pas encore commencé",
+        "empty": "Votre message est vide",
+        "register": "Votre participation a été enregistrée",
+        "change": "Votre participation a été changée",
+        "finish": "Les élections sont finies",
+        "menu_title": "Menu des §bVotes",
+        "timer": "Début des élections (§b&timer&§f)",
+        "timer_application": "Durée des candidatures (§b&timer&§f)",
+        "timer_vote_mayor": "Durée du vote pour le Maire (§b&timer&§f)",
+        "application": "Candidature : §b&application&",
+        "begin": "C'est le début des elections du maire, pour vous présenter §b/ww election§f <message pour convaincre les électeurs>, vous avez §b&timer&",
+        "vote": "C'est le moment du vote. Votez pour votre maire avec §b/ww election§f, vous avez §b&timer&",
+        "result": "Le maire &forme& §b&name&§f a été élu avec §b&votes&§f votes. Il a un double vote en plus du pouvoir de sa forme"
+      }
     }
   }
 }

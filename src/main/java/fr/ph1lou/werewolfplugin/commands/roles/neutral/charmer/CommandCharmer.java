@@ -36,19 +36,19 @@ public class CommandCharmer implements ICommandRole {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.offline_player");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.offline_player");
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (argUUID.equals(uuid)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.not_yourself");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.not_yourself");
             return;
         }
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.player_not_found");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.player_not_found");
             return;
         }
 
@@ -58,16 +58,16 @@ public class CommandCharmer implements ICommandRole {
         Bukkit.getPluginManager().callEvent(charmerEvent);
 
         if (charmerEvent.isCancelled()) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
 
         ((IAffectedPlayers) charmer).clearAffectedPlayer();
         ((IAffectedPlayers) charmer).addAffectedPlayer(playerWW1);
 
-        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.charmer.perform",
+        playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.charmer.perform",
                 Formatter.player(playerArg.getName()));
 
-        game.getLoversManager().addLover(new FakeLoverCharmer(game,new ArrayList<>(Arrays.asList(playerWW,playerWW1)),playerWW));
+        game.getLoversManager().addLover(new FakeLoverCharmer(game, new ArrayList<>(Arrays.asList(playerWW, playerWW1)), playerWW));
     }
 }

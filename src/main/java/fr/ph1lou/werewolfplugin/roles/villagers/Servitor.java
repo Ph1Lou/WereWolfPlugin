@@ -3,10 +3,10 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
-import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
@@ -36,11 +36,11 @@ import java.util.Optional;
 @Role(key = RoleBase.SERVITOR,
         category = Category.VILLAGER,
         attributes = RoleAttribute.VILLAGER,
-configValues = {@IntValue(key = IntValueBase.SERVITOR_DISTANCE,
-        defaultValue = 25, 
-        meetUpValue = 25, 
-        step = 5, 
-        item = UniversalMaterial.BROWN_WOOL)})
+        configValues = {@IntValue(key = IntValueBase.SERVITOR_DISTANCE,
+                defaultValue = 25,
+                meetUpValue = 25,
+                step = 5,
+                item = UniversalMaterial.BROWN_WOOL)})
 public class Servitor extends RoleVillage implements IPower {
 
     private boolean power = true;
@@ -52,9 +52,9 @@ public class Servitor extends RoleVillage implements IPower {
 
     @Override
     public @NotNull String getDescription() {
-        return new DescriptionBuilder(game,this)
+        return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.roles.servitor.description"))
-                .setEffects(game.translate(this.hasPower()?"werewolf.roles.servitor.effects":"werewolf.roles.servitor.effects_death",
+                .setEffects(game.translate(this.hasPower() ? "werewolf.roles.servitor.effects" : "werewolf.roles.servitor.effects_death",
                         Formatter.number(game.getConfig().getValue(IntValueBase.SERVITOR_DISTANCE))))
                 .build();
     }
@@ -67,36 +67,36 @@ public class Servitor extends RoleVillage implements IPower {
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if(!this.isAbilityEnabled()){
+        if (!this.isAbilityEnabled()) {
             return;
         }
 
-        if(!this.hasPower()){
+        if (!this.hasPower()) {
             return;
         }
 
-        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
         ServitorMasterChosenEvent event1 = new ServitorMasterChosenEvent(getPlayerWW(), Utils.autoSelect(game, getPlayerWW()));
         Bukkit.getPluginManager().callEvent(event1);
 
-        if (event1.isCancelled()){
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+        if (event1.isCancelled()) {
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
 
         this.master = event1.getTargetWW();
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE,"werewolf.roles.servitor.message",
+        this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE, "werewolf.roles.servitor.message",
                 Formatter.player(master.getName()));
     }
 
     @EventHandler
     public void onThirdDeathEvent(ThirdDeathEvent event) {
 
-        if(!this.isAbilityEnabled()){
+        if (!this.isAbilityEnabled()) {
             return;
         }
 
@@ -116,7 +116,7 @@ public class Servitor extends RoleVillage implements IPower {
 
         if (playerWW.equals(getPlayerWW()) && lastKiller.get().equals(master)) {
             event.setCancelled(true);
-            this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE,"werewolf.roles.servitor.resurrection",
+            this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE, "werewolf.roles.servitor.resurrection",
                     Formatter.player(lastKiller.get().getName()),
                     Formatter.number(game.getConfig().getValue(IntValueBase.SERVITOR_DISTANCE)));
             autoResurrection();
@@ -131,8 +131,8 @@ public class Servitor extends RoleVillage implements IPower {
 
         Bukkit.getPluginManager().callEvent(servitorDefinitiveMasterEvent);
 
-        if(servitorDefinitiveMasterEvent.isCancelled()){
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+        if (servitorDefinitiveMasterEvent.isCancelled()) {
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
         game.resurrection(getPlayerWW());
@@ -141,19 +141,19 @@ public class Servitor extends RoleVillage implements IPower {
     @Override
     public void second() {
 
-        if(!this.isAbilityEnabled()){
+        if (!this.isAbilityEnabled()) {
             return;
         }
 
         if (master == null) return;
 
         if (!master.isState(StatePlayer.ALIVE)) {
-            getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS, this.getKey(),0));
-            getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE, this.getKey(),0));
+            getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS, this.getKey(), 0));
+            getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE, this.getKey(), 0));
             return;
         }
 
-        if(!getPlayerWW().isState(StatePlayer.ALIVE)) {
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -166,8 +166,8 @@ public class Servitor extends RoleVillage implements IPower {
                 getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.WEAKNESS, this.getKey()));
             }
         } else {
-            getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS, this.getKey(),0));
-            getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE, this.getKey(),0));
+            getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS, this.getKey(), 0));
+            getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE, this.getKey(), 0));
         }
     }
 
@@ -182,7 +182,7 @@ public class Servitor extends RoleVillage implements IPower {
         return player.getLocation().getWorld() == location.getWorld() &&
                 player.getLocation().distance(location) < game.getConfig().getValue(IntValueBase.SERVITOR_DISTANCE);
     }
-    
+
     @Override
     public void setPower(boolean b) {
         power = b;

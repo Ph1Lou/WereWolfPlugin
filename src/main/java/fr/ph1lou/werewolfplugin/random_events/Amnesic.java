@@ -153,10 +153,10 @@ public class Amnesic extends ListenerWerewolf {
 
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(player));
 
-        playerWW.sendMessageWithKey(Prefix.ORANGE , "werewolf.roles.werewolf.new_werewolf");
+        playerWW.sendMessageWithKey(Prefix.ORANGE, "werewolf.roles.werewolf.new_werewolf");
         Sound.WOLF_HOWL.play(playerWW);
 
-        this.temp.sendMessageWithKey(Prefix.GREEN , "werewolf.random_events.amnesic.new",
+        this.temp.sendMessageWithKey(Prefix.GREEN, "werewolf.random_events.amnesic.new",
                 Formatter.player(playerWW.getName()),
                 Formatter.timer(game, TIMER));
 

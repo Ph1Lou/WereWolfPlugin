@@ -1,8 +1,5 @@
 package fr.ph1lou.werewolfplugin.listeners;
 
-import fr.ph1lou.werewolfapi.game.IModerationManager;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -12,6 +9,9 @@ import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import fr.ph1lou.werewolfapi.events.game.permissions.UpdateModeratorNameTagEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.RequestSeeWereWolfListEvent;
+import fr.ph1lou.werewolfapi.game.IModerationManager;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.role.interfaces.IInvisible;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
@@ -76,7 +76,7 @@ public class TabManager implements Listener {
         for (Player player1 : Bukkit.getOnlinePlayers()) {
             Scoreboard scoreBoard = player1.getScoreboard();
             Team team = scoreBoard.getTeam(name);
-            if(team != null){
+            if (team != null) {
                 team.unregister();
             }
         }
@@ -128,11 +128,10 @@ public class TabManager implements Listener {
         Team team = scoreboard.getTeam(player.getName());
         StringBuilder sb = new StringBuilder(event1.getPrefix());
 
-        if(event1.isTabVisibility()){
-            VersionUtils.getVersionUtils().showPlayer(target,player);
-        }
-        else{
-            VersionUtils.getVersionUtils().hidePlayer(target,player);
+        if (event1.isTabVisibility()) {
+            VersionUtils.getVersionUtils().showPlayer(target, player);
+        } else {
+            VersionUtils.getVersionUtils().hidePlayer(target, player);
         }
 
         if (team != null) {
@@ -161,7 +160,7 @@ public class TabManager implements Listener {
                 String string1 = event1.getSuffix();
                 team.setSuffix(string1.substring(0, Math.min(16, string1.length())));
                 String string2 = sb.toString();
-                team.setPrefix(string2.substring(Math.max(string2.length()-16,0)));
+                team.setPrefix(string2.substring(Math.max(string2.length() - 16, 0)));
                 VersionUtils.getVersionUtils().setTeamNameTagVisibility(team, event1.isVisibility());
 
             }
@@ -183,9 +182,9 @@ public class TabManager implements Listener {
         game.getPlayerWW(event.getPlayerUUID())
                 .ifPresent(playerWW -> {
                     IRole role = playerWW.getRole();
-                    if(role instanceof IInvisible){
+                    if (role instanceof IInvisible) {
                         if (event.isVisibility()) {
-                            event.setVisibility(!((IInvisible)role).isInvisible());
+                            event.setVisibility(!((IInvisible) role).isInvisible());
                         }
                     }
                 });

@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 
 public class AdvancedConfigurationUtils {
 
-    public static List<? extends ClickableItem> getIntConfigs(WereWolfAPI game, IntValue[] values){
+    public static List<? extends ClickableItem> getIntConfigs(WereWolfAPI game, IntValue[] values) {
 
         return Arrays.stream(values)
                 .map(intValue -> {
@@ -36,7 +36,7 @@ public class AdvancedConfigurationUtils {
                             .setLore(lore)
                             .setDisplayName(game.translate(intValue.key(),
                                     Formatter.number(config.getValue(intValue.key()))))
-                            .build(),e -> {
+                            .build(), e -> {
 
                         if (e.isLeftClick()) {
                             config.setValue(intValue.key(),
@@ -55,7 +55,7 @@ public class AdvancedConfigurationUtils {
                 }).collect(Collectors.toList());
     }
 
-    public static List<? extends ClickableItem> getTimers(WereWolfAPI game, Timer[] timers){
+    public static List<? extends ClickableItem> getTimers(WereWolfAPI game, Timer[] timers) {
 
         return Arrays.stream(timers)
                 .map(timerRegister -> {
@@ -71,13 +71,13 @@ public class AdvancedConfigurationUtils {
                             .setLore(lore)
                             .setDisplayName(game.translate(timerRegister.key(),
                                     Formatter.timer(game, timerRegister.key())))
-                            .build(),e -> {
+                            .build(), e -> {
 
 
                         if (e.isLeftClick()) {
                             config.moveTimer(timerRegister.key(), timerRegister.step());
                         } else if (config.getTimerValue(timerRegister.key()) - timerRegister.step() >= 0) {
-                            config.moveTimer(timerRegister.key(), - timerRegister.step());
+                            config.moveTimer(timerRegister.key(), -timerRegister.step());
                         }
 
                         e.setCurrentItem(new ItemBuilder(e.getCurrentItem())
@@ -89,7 +89,7 @@ public class AdvancedConfigurationUtils {
                 }).collect(Collectors.toList());
     }
 
-    public static List<? extends ClickableItem> getConfigs(WereWolfAPI game, Configuration[] configurations, Supplier<SmartInventory> inventory){
+    public static List<? extends ClickableItem> getConfigs(WereWolfAPI game, Configuration[] configurations, Supplier<SmartInventory> inventory) {
         return Arrays.stream(configurations)
                 .map(configRegister -> ConfigurationsGUI.getClickableItem(game, configRegister, null, inventory))
                 .collect(Collectors.toList());
@@ -99,27 +99,27 @@ public class AdvancedConfigurationUtils {
                                                        String[] loreKeys,
                                                        Configuration[] configurations,
                                                        Timer[] timers,
-                                                       IntValue[] values){
+                                                       IntValue[] values) {
         return Arrays.stream(loreKeys)
                 .map(s -> game.translate(s,
                         Stream.concat(Arrays.stream(configurations)
                                                 .map(intValue -> {
                                                     String[] intValueKey = intValue.config().key().split("\\.");
-                                                    return Formatter.format(String.format("&%s&",intValueKey[intValueKey.length - 1]),
+                                                    return Formatter.format(String.format("&%s&", intValueKey[intValueKey.length - 1]),
                                                             game.translate(game.getConfig().isConfigActive(intValue.config().key()) ?
-                                                                    "werewolf.utils.on":
+                                                                    "werewolf.utils.on" :
                                                                     "werewolf.utils.off"));
                                                 }),
                                         Stream.concat(Arrays.stream(timers)
                                                         .map(timer -> {
                                                             String[] timerKey = timer.key().split("\\.");
-                                                            return Formatter.format(String.format("&%s&",timerKey[timerKey.length - 1]),
+                                                            return Formatter.format(String.format("&%s&", timerKey[timerKey.length - 1]),
                                                                     Utils.conversion(game.getConfig().getTimerValue(timer.key())));
                                                         }),
                                                 Arrays.stream(values)
                                                         .map(value -> {
                                                             String[] timerKey = value.key().split("\\.");
-                                                            return Formatter.format(String.format("&%s&",timerKey[timerKey.length - 1]),
+                                                            return Formatter.format(String.format("&%s&", timerKey[timerKey.length - 1]),
                                                                     game.getConfig().getValue(value.key()));
                                                         }))
 
@@ -134,25 +134,25 @@ public class AdvancedConfigurationUtils {
                                                  Configuration[] configurations,
                                                  Timer[] timers,
                                                  IntValue[] values,
-                                                 ConfigurationBasic[] configurationBasics){
+                                                 ConfigurationBasic[] configurationBasics) {
         return Stream.concat(Arrays.stream(loreKeys).map(game::translate),
-                Stream.concat(Arrays.stream(configurations)
-                                .map(configuration -> String.format("%s : %s",game.translate(configuration.config().key()),
+                        Stream.concat(Arrays.stream(configurations)
+                                        .map(configuration -> String.format("%s : %s", game.translate(configuration.config().key()),
                                                 game.translate(game.getConfig().isConfigActive(configuration.config().key()) ?
-                                                        "werewolf.utils.on":
+                                                        "werewolf.utils.on" :
                                                         "werewolf.utils.off"))),
-                                        Stream.concat(Arrays.stream(timers)
-                                                        .map(timer -> game.translate(timer.key(),
-                                                                Formatter
-                                                                        .timer(Utils
-                                                                                .conversion(game.getConfig()
-                                                                                        .getTimerValue(timer.key()))))),
-                                                Stream.concat(Arrays.stream(values).map(intValue -> game.translate(intValue.key(),
+                                Stream.concat(Arrays.stream(timers)
+                                                .map(timer -> game.translate(timer.key(),
+                                                        Formatter
+                                                                .timer(Utils
+                                                                        .conversion(game.getConfig()
+                                                                                .getTimerValue(timer.key()))))),
+                                        Stream.concat(Arrays.stream(values).map(intValue -> game.translate(intValue.key(),
                                                         Formatter.number(game.getConfig().getValue(intValue.key())))),
-                                                        Arrays.stream(configurationBasics).map(configuration -> String.format("%s : %s",game.translate(configuration.key()),
-                                                                game.translate(game.getConfig().isConfigActive(configuration.key()) ?
-                                                                        "werewolf.utils.on":
-                                                                        "werewolf.utils.off")))))))
+                                                Arrays.stream(configurationBasics).map(configuration -> String.format("%s : %s", game.translate(configuration.key()),
+                                                        game.translate(game.getConfig().isConfigActive(configuration.key()) ?
+                                                                "werewolf.utils.on" :
+                                                                "werewolf.utils.off")))))))
                 .flatMap(s -> Arrays.stream(s.split("\\n")))
                 .collect(Collectors.toList());
     }
@@ -181,14 +181,14 @@ public class AdvancedConfigurationUtils {
 
                     incompatible
                             .ifPresent(configuration1 -> lore.add(game.translate("werewolf.menus.configurations.incompatible",
-                                    Formatter.format("&configuration&",configuration1))));
+                                    Formatter.format("&configuration&", configuration1))));
 
                     return ClickableItem.of(new ItemBuilder(itemStack)
                             .setDisplayName(game.translate(key))
                             .setLore(lore)
                             .build(), e -> {
 
-                       if (!incompatible.isPresent() || config.isConfigActive(key)) {
+                        if (!incompatible.isPresent() || config.isConfigActive(key)) {
                             config.switchConfigValue(key);
                         }
                     });

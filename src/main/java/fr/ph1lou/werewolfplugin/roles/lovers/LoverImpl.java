@@ -2,19 +2,19 @@ package fr.ph1lou.werewolfplugin.roles.lovers;
 
 import fr.ph1lou.werewolfapi.annotations.Lover;
 import fr.ph1lou.werewolfapi.basekeys.LoverBase;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.events.game.permissions.UpdateModeratorNameTagEvent;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.LoverType;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.enums.LoverType;
+import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import fr.ph1lou.werewolfapi.events.game.permissions.UpdateModeratorNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AnnouncementLoverDeathEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AroundLoverEvent;
 import fr.ph1lou.werewolfapi.events.lovers.LoverDeathEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -49,11 +49,11 @@ public class LoverImpl extends AbstractLover {
                 .filter(playerWW1 -> !playerWW1.equals(event.getPlayerWW()))
                 .forEach(playerWW1 -> {
                     game.getPlayersWW().forEach(playerWW -> {
-                        AnnouncementLoverDeathEvent event1 = new AnnouncementLoverDeathEvent(event.getPlayerWW(),playerWW,"werewolf.lovers.lover.lover_death");
+                        AnnouncementLoverDeathEvent event1 = new AnnouncementLoverDeathEvent(event.getPlayerWW(), playerWW, "werewolf.lovers.lover.lover_death");
                         Bukkit.getPluginManager().callEvent(event1);
 
-                        if(!event1.isCancelled()){
-                            playerWW.sendMessageWithKey("werewolf.lovers.lover.lover_death",Formatter.player(playerWW1.getName()));
+                        if (!event1.isCancelled()) {
+                            playerWW.sendMessageWithKey("werewolf.lovers.lover.lover_death", Formatter.player(playerWW1.getName()));
                         }
 
                     });
@@ -62,9 +62,9 @@ public class LoverImpl extends AbstractLover {
                             .filter(uuid -> !game.getPlayerWW(uuid).isPresent())
                             .map(Bukkit::getPlayer)
                             .filter(Objects::nonNull)
-                            .forEach(player1 -> player1.sendMessage(game.translate("werewolf.lovers.lover.lover_death",Formatter.player(playerWW1.getName()))));
+                            .forEach(player1 -> player1.sendMessage(game.translate("werewolf.lovers.lover.lover_death", Formatter.player(playerWW1.getName()))));
 
-                    Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.lovers.lover.lover_death",Formatter.player(playerWW1.getName())));
+                    Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.lovers.lover.lover_death", Formatter.player(playerWW1.getName())));
                     this.game.death(playerWW1);
                 });
         Bukkit.getPluginManager().callEvent(new LoverDeathEvent(this));
@@ -157,10 +157,10 @@ public class LoverImpl extends AbstractLover {
 
         if (lovers.contains(playerWW)) return;
 
-        lovers.forEach(playerWW1 -> playerWW1.sendMessageWithKey(Prefix.GREEN , "werewolf.random_events.triple.lover_join",
+        lovers.forEach(playerWW1 -> playerWW1.sendMessageWithKey(Prefix.GREEN, "werewolf.random_events.triple.lover_join",
                 Formatter.player(playerWW.getName())));
 
-        playerWW.sendMessageWithKey(Prefix.GREEN , "werewolf.random_events.triple.join", Formatter.format("&lovers&",getLovers().stream()
+        playerWW.sendMessageWithKey(Prefix.GREEN, "werewolf.random_events.triple.join", Formatter.format("&lovers&", getLovers().stream()
                 .map(IPlayerWW::getName)
                 .collect(Collectors.joining(" "))));
 

@@ -1,16 +1,16 @@
 package fr.ph1lou.werewolfplugin.configs;
 
-import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Configuration;
-import fr.ph1lou.werewolfapi.enums.Camp;
+import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.UpdateCompositionEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import org.bukkit.event.EventHandler;
@@ -35,9 +35,9 @@ public class HiddenRoles extends ListenerWerewolf {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onRole(RepartitionEvent event) {
 
-        if(this.getGame().getPlayersWW()
+        if (this.getGame().getPlayersWW()
                 .stream()
-                .anyMatch(playerWW1 -> playerWW1.getRole().isKey(RoleBase.PRIESTESS))){
+                .anyMatch(playerWW1 -> playerWW1.getRole().isKey(RoleBase.PRIESTESS))) {
             return;
         }
 
@@ -47,7 +47,7 @@ public class HiddenRoles extends ListenerWerewolf {
                 .filter(playerWW1 -> playerWW1.getRole().isCamp(Camp.VILLAGER))
                 .collect(Collectors.toList());
 
-        if(playerWWs.isEmpty()){
+        if (playerWWs.isEmpty()) {
             return;
         }
 
@@ -59,7 +59,7 @@ public class HiddenRoles extends ListenerWerewolf {
     @EventHandler(priority = EventPriority.HIGH)
     private void sendDeathMessage(AnnouncementDeathEvent event) {
 
-        if(this.playerWW == null){
+        if (this.playerWW == null) {
             return;
         }
 
@@ -80,24 +80,22 @@ public class HiddenRoles extends ListenerWerewolf {
         } else if (getGame().getRandom().nextFloat() < 0.8) {
 
             if (this.playerWW.isState(StatePlayer.ALIVE)) {
-                if(playerWW.getRole().isWereWolf()){
+                if (playerWW.getRole().isWereWolf()) {
                     event.setRole("werewolf.configurations.hidden_roles.magic");
                 }
 
-            }
-            else{
-                if(!playerWW.getRole().isWereWolf()){
+            } else {
+                if (!playerWW.getRole().isWereWolf()) {
                     event.setRole("werewolf.configurations.hidden_roles.magic");
                 }
             }
         } else {
             if (this.playerWW.isState(StatePlayer.ALIVE)) {
-                if(!playerWW.getRole().isWereWolf()){
+                if (!playerWW.getRole().isWereWolf()) {
                     event.setRole("werewolf.configurations.hidden_roles.magic");
                 }
-            }
-            else{
-                if(playerWW.getRole().isWereWolf()){
+            } else {
+                if (playerWW.getRole().isWereWolf()) {
                     event.setRole("werewolf.configurations.hidden_roles.magic");
                 }
             }

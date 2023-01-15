@@ -1,11 +1,11 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
@@ -27,13 +27,12 @@ import java.util.List;
 
 /**
  * @author ThugMonkeyMC
- *
  */
 
 @Role(key = RoleBase.OCCULTIST,
         category = Category.VILLAGER,
         attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION})
-public class Occultist extends Villager{
+public class Occultist extends Villager {
 
     private final List<IPlayerWW> deaths = new ArrayList<>();
     private final List<IPlayerWW> troublemakers = new ArrayList<>();
@@ -43,23 +42,23 @@ public class Occultist extends Villager{
     }
 
     @EventHandler
-    public void onFinalDeath(FinalDeathEvent event){
-        if(!this.isAbilityEnabled()){
+    public void onFinalDeath(FinalDeathEvent event) {
+        if (!this.isAbilityEnabled()) {
             return;
         }
-        if(event.getPlayerWW().getUUID().equals(this.getPlayerUUID())){
+        if (event.getPlayerWW().getUUID().equals(this.getPlayerUUID())) {
             this.getPlayerWW().getWish().ifPresent(wish ->
-                    Bukkit.broadcastMessage(game.translate(Prefix.ORANGE,"werewolf.roles.occultist.self_death",
+                    Bukkit.broadcastMessage(game.translate(Prefix.ORANGE, "werewolf.roles.occultist.self_death",
                             Formatter.format("&wish&", wish))));
         }
-        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
         this.addDeathPlayer(event.getPlayerWW());
-        if(this.deaths.size() == 4){
+        if (this.deaths.size() == 4) {
             OccultistRevealWishesEvent occultistRevealWishes = new OccultistRevealWishesEvent(this.getPlayerWW());
             Bukkit.getPluginManager().callEvent(occultistRevealWishes);
-            if(occultistRevealWishes.isCancelled()){
+            if (occultistRevealWishes.isCancelled()) {
                 getPlayerWW().sendMessageWithKey(Prefix.ORANGE, "werewolf.check.cancel");
                 this.deaths.clear();
                 this.troublemakers.clear();
@@ -67,9 +66,9 @@ public class Occultist extends Villager{
             }
             this.deaths.addAll(this.troublemakers);
             Collections.shuffle(this.deaths, game.getRandom());
-            this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.roles.occultist.last_wishes");
-            for(IPlayerWW playerWW : this.deaths){
-                playerWW.getWish().ifPresent(wish -> this.getPlayerWW().sendMessage(new TextComponent(" -> " + wish )));
+            this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.occultist.last_wishes");
+            for (IPlayerWW playerWW : this.deaths) {
+                playerWW.getWish().ifPresent(wish -> this.getPlayerWW().sendMessage(new TextComponent(" -> " + wish)));
 
             }
             this.deaths.clear();
@@ -78,9 +77,9 @@ public class Occultist extends Villager{
     }
 
     @EventHandler
-    public void onDay(DayEvent event){
-        if(event.getNumber()==6){
-            Bukkit.broadcastMessage(game.translate(Prefix.ORANGE,"werewolf.roles.occultist.command"));
+    public void onDay(DayEvent event) {
+        if (event.getNumber() == 6) {
+            Bukkit.broadcastMessage(game.translate(Prefix.ORANGE, "werewolf.roles.occultist.command"));
         }
     }
 
@@ -97,18 +96,18 @@ public class Occultist extends Villager{
     }
 
     @EventHandler
-    public void onWishChangeEvent(WishChangeEvent event){
-        if(!this.isAbilityEnabled()){
+    public void onWishChangeEvent(WishChangeEvent event) {
+        if (!this.isAbilityEnabled()) {
             return;
         }
-        if(event.getPlayerWW().getRole().getKey().equals(RoleBase.TROUBLEMAKER)){
-            if(!this.troublemakers.contains(event.getPlayerWW())){
+        if (event.getPlayerWW().getRole().getKey().equals(RoleBase.TROUBLEMAKER)) {
+            if (!this.troublemakers.contains(event.getPlayerWW())) {
                 this.troublemakers.add(event.getPlayerWW());
             }
         }
     }
 
-    public void addDeathPlayer(IPlayerWW playerWW){
+    public void addDeathPlayer(IPlayerWW playerWW) {
         this.deaths.add(playerWW);
     }
 

@@ -8,7 +8,7 @@ public class Contributor {
 
     private final int level;
 
-    public Contributor(UUID uuid, int level){
+    public Contributor(UUID uuid, int level) {
         this.uuid = uuid;
         this.level = level;
     }
@@ -23,6 +23,6 @@ public class Contributor {
 
     @Override
     public String toString() {
-        return "uuid : "+this.uuid+" level : "+this.level;
+        return "uuid : " + this.uuid + " level : " + this.level;
     }
 }

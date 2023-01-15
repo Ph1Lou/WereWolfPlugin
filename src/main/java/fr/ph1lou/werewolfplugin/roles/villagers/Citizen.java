@@ -5,13 +5,13 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.annotations.Role;
-import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.NewVoteResultEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteEndEvent;
@@ -38,13 +38,12 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-  @Role(key = RoleBase.CITIZEN,
-          category = Category.VILLAGER,
-          attributes = {RoleAttribute.VILLAGER,RoleAttribute.MINOR_INFORMATION})
-public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayers, IPower
-{
-    private int use;
+@Role(key = RoleBase.CITIZEN,
+        category = Category.VILLAGER,
+        attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION})
+public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayers, IPower {
     private final List<IPlayerWW> affectedPlayer;
+    private int use;
     private boolean power;
 
     public Citizen(WereWolfAPI api, IPlayerWW playerWW) {
@@ -99,7 +98,7 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
-        if(!this.isAbilityEnabled()){
+        if (!this.isAbilityEnabled()) {
             return;
         }
         if (this.game.getConfig().isConfigActive(ConfigBase.NEW_VOTE)) {
@@ -126,7 +125,7 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
         if (this.getPlayerWW().isState(StatePlayer.DEATH)) {
             return;
         }
-        if(!this.isAbilityEnabled()){
+        if (!this.isAbilityEnabled()) {
             return;
         }
         if (!this.game.getConfig().isConfigActive(ConfigBase.HIDE_COMPOSITION)) {
@@ -153,7 +152,7 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
-        if(!this.isAbilityEnabled()){
+        if (!this.isAbilityEnabled()) {
             return;
         }
         if (event.getPlayerVotedByWerewolfWW() != null && this.hasPower()) {
@@ -195,14 +194,14 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
     }
 
     @EventHandler
-    public void onRumor(RumorsWriteEvent event){
-        if(event.isCancelled()){
+    public void onRumor(RumorsWriteEvent event) {
+        if (event.isCancelled()) {
             return;
         }
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
-        if(!this.isAbilityEnabled()){
+        if (!this.isAbilityEnabled()) {
             return;
         }
 

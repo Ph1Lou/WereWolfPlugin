@@ -1,13 +1,13 @@
 package fr.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import fr.ph1lou.werewolfapi.annotations.AdminCommand;
-import fr.ph1lou.werewolfapi.enums.StateGame;
-import fr.ph1lou.werewolfplugin.game.GameManager;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.commands.ICommand;
+import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.game.IModerationManager;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -27,18 +27,18 @@ public class CommandWhitelist implements ICommand {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            player.sendMessage(game.translate(Prefix.RED , "werewolf.check.offline_player"));
+            player.sendMessage(game.translate(Prefix.RED, "werewolf.check.offline_player"));
             return;
         }
 
         UUID uuid = playerArg.getUniqueId();
 
         if (moderationManager.getWhiteListedPlayers().contains(uuid)) {
-            player.sendMessage(game.translate(Prefix.RED , "werewolf.commands.admin.whitelist.remove",
+            player.sendMessage(game.translate(Prefix.RED, "werewolf.commands.admin.whitelist.remove",
                     Formatter.player(playerArg.getName())));
             moderationManager.removePlayerOnWhiteList(uuid);
         } else {
-            player.sendMessage(game.translate(Prefix.GREEN , "werewolf.commands.admin.whitelist.add",
+            player.sendMessage(game.translate(Prefix.GREEN, "werewolf.commands.admin.whitelist.add",
                     Formatter.player(playerArg.getName())));
             moderationManager.addPlayerOnWhiteList(uuid);
             ((GameManager) game).finalJoin(playerArg);

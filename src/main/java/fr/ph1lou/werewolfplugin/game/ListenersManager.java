@@ -68,7 +68,7 @@ public class ListenersManager implements IListenersManager {
         registerManager.getRandomEventsRegister()
                 .forEach(eventWrapper -> this.instantiate(eventWrapper.getClazz())
                         .ifPresent(listenerWerewolf -> this.listenersRandomEvents.put(eventWrapper.getMetaDatas().key(),
-                        listenerWerewolf)));
+                                listenerWerewolf)));
 
         registerManager.getScenariosRegister().forEach(scenarioRegister -> this.instantiate(scenarioRegister.getClazz())
                 .ifPresent(listenerWerewolf -> this.listenersScenarios.put(scenarioRegister.getMetaDatas().key(), listenerWerewolf)));
@@ -110,11 +110,12 @@ public class ListenersManager implements IListenersManager {
     }
 
 
-    private Optional<ListenerWerewolf> instantiate(Class<?> clazz){
-        if(ListenerWerewolf.class.isAssignableFrom(clazz)){
+    private Optional<ListenerWerewolf> instantiate(Class<?> clazz) {
+        if (ListenerWerewolf.class.isAssignableFrom(clazz)) {
             try {
                 return Optional.of((ListenerWerewolf) clazz.getConstructor(WereWolfAPI.class).newInstance(game));
-            } catch (InstantiationException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            } catch (InstantiationException | NoSuchMethodException | IllegalAccessException |
+                     InvocationTargetException e) {
                 e.printStackTrace();
             }
         }
@@ -154,8 +155,8 @@ public class ListenersManager implements IListenersManager {
 
         registerManager.getConfigsRegister()
                 .forEach(configurationWrapper -> this.getConfiguration(configurationWrapper.getMetaDatas().config().key())
-                                .ifPresent(listenerWerewolf -> listenerWerewolf.register(game.getConfig()
-                                        .isConfigActive(configurationWrapper.getMetaDatas().config().key()))));
+                        .ifPresent(listenerWerewolf -> listenerWerewolf.register(game.getConfig()
+                                .isConfigActive(configurationWrapper.getMetaDatas().config().key()))));
 
         registerManager.getRandomEventsRegister()
                 .forEach(listenerWerewolfEventWrapper -> this.getRandomEvent(listenerWerewolfEventWrapper.getMetaDatas().key())

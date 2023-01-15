@@ -28,14 +28,14 @@ public class CommandStart implements ICommand {
 
         if (game.getRoleInitialSize() - game.getPlayersCount() > 0) {
             player.sendMessage(
-                    game.translate(Prefix.RED , "werewolf.commands.admin.start.too_much_role"));
+                    game.translate(Prefix.RED, "werewolf.commands.admin.start.too_much_role"));
             return;
         }
 
         if (game.getMapManager().getPercentageGenerated() < 100) {
             player.sendMessage(
-                    game.translate(Prefix.RED , "werewolf.commands.admin.start.generation_not_finished",
-                            Formatter.format("&progress&",new DecimalFormat("0.0")
+                    game.translate(Prefix.RED, "werewolf.commands.admin.start.generation_not_finished",
+                            Formatter.format("&progress&", new DecimalFormat("0.0")
                                     .format(game.getMapManager().getPercentageGenerated()))));
             return;
         }

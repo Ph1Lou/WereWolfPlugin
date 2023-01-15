@@ -25,14 +25,14 @@ public class CommandGuardianAngel implements ICommandRole {
         Angel angel = (Angel) playerWW.getRole();
 
         if (!angel.isChoice(AngelForm.ANGEL)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.power");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.power");
             return;
         }
 
         Bukkit.getPluginManager().callEvent(new AngelChoiceEvent(playerWW, AngelForm.GUARDIAN_ANGEL));
         angel.setChoice(AngelForm.GUARDIAN_ANGEL);
-        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.angel.angle_choice_click",
-                Formatter.format("&form&",game.translate(RoleBase.GUARDIAN_ANGEL)),
+        playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.angel.angle_choice_click",
+                Formatter.format("&form&", game.translate(RoleBase.GUARDIAN_ANGEL)),
                 Formatter.timer(game, TimerBase.ANGEL_DURATION));
     }
 }

@@ -23,12 +23,12 @@ public class CommandConfigurationsRoles implements ICommand {
     @Override
     public void execute(WereWolfAPI game, Player player, String[] args) {
 
-        if(game.getConfig().isConfigActive(ConfigBase.HIDE_COMPOSITION)){
-            player.sendMessage(game.translate(Prefix.RED,"werewolf.commands.player.compo.composition_hide"));
+        if (game.getConfig().isConfigActive(ConfigBase.HIDE_COMPOSITION)) {
+            player.sendMessage(game.translate(Prefix.RED, "werewolf.commands.player.compo.composition_hide"));
             return;
         }
 
-        player.sendMessage(game.translate(Prefix.ORANGE,"werewolf.commands.player.configurations_roles.list"));
+        player.sendMessage(game.translate(Prefix.ORANGE, "werewolf.commands.player.configurations_roles.list"));
 
         String message = Stream.concat(Register.get().getRolesRegister().stream().map(Wrapper::getMetaDatas)
                                 .filter(role -> game.getConfig().getRoleCount(role.key()) > 0)

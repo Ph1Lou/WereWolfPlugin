@@ -1,10 +1,10 @@
 package fr.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import fr.ph1lou.werewolfapi.annotations.AdminCommand;
-import fr.ph1lou.werewolfapi.commands.ICommand;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.commands.ICommand;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -20,7 +20,7 @@ public class CommandChat implements ICommand {
         game.getConfig().switchConfigValue(ConfigBase.CHAT);
 
         Bukkit.broadcastMessage(game.getConfig().isConfigActive(ConfigBase.CHAT) ?
-                game.translate(Prefix.GREEN , "werewolf.commands.admin.chat.on") :
-                game.translate(Prefix.RED , "werewolf.commands.admin.chat.off"));
+                game.translate(Prefix.GREEN, "werewolf.commands.admin.chat.on") :
+                game.translate(Prefix.RED, "werewolf.commands.admin.chat.off"));
     }
 }

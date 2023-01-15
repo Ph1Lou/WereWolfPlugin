@@ -49,7 +49,7 @@ public class StuffLoader {
         loadStuffRole(game, "stuffRole");
     }
 
-    public static  void loadAllStuffMeetUP(WereWolfAPI game) {
+    public static void loadAllStuffMeetUP(WereWolfAPI game) {
 
         recoverFromPluginRessources("stuffMeetUp");
         loadStuffRole(game, "stuffMeetUp");
@@ -64,7 +64,7 @@ public class StuffLoader {
     public static void loadStuff(WereWolfAPI game, String configName) {
         recoverFromPluginRessources(configName);
         loadStuffRole(game, configName);
-        loadStuffStartAndDeath(game,configName);
+        loadStuffStartAndDeath(game, configName);
     }
 
     public static void saveStuff(WereWolfAPI game, String configName) {
@@ -97,7 +97,7 @@ public class StuffLoader {
         config.set("start_loot", null);
 
         for (ItemStack i : game.getStuffs().getStartLoot()) {
-            setItem(config,"start_loot." + pos,i);
+            setItem(config, "start_loot." + pos, i);
             pos++;
         }
         pos = 0;
@@ -105,7 +105,7 @@ public class StuffLoader {
         config.set("death_loot", null);
 
         for (ItemStack i : game.getStuffs().getDeathLoot()) {
-            setItem(config,"death_loot." + pos, i);
+            setItem(config, "death_loot." + pos, i);
             pos++;
         }
 
@@ -130,12 +130,12 @@ public class StuffLoader {
             return;
         }
 
-        for (Wrapper<IRole, Role> roleRegister: Register.get().getRolesRegister()) {
-            if(roleRegister.getAddonKey().equals(addonKey)){
+        for (Wrapper<IRole, Role> roleRegister : Register.get().getRolesRegister()) {
+            if (roleRegister.getAddonKey().equals(addonKey)) {
                 String key = roleRegister.getMetaDatas().key();
                 config.set(key, null);
                 for (ItemStack i : game.getStuffs().getStuffRole(key)) {
-                    setItem(config,key + "." + pos,i);
+                    setItem(config, key + "." + pos, i);
                     pos++;
                 }
                 pos = 0;
@@ -167,7 +167,7 @@ public class StuffLoader {
                 if (configurationSection != null) {
                     Set<String> sl = configurationSection.getKeys(false);
                     for (String s2 : sl) {
-                        temp.get(key).add(getItem(config,key + "." + s2));
+                        temp.get(key).add(getItem(config, key + "." + s2));
                     }
                 }
             }
@@ -190,57 +190,55 @@ public class StuffLoader {
             Set<String> sl = configurationSection.getKeys(false);
 
             for (String s : sl) {
-                game.getStuffs().addStartLoot(getItem(config,"start_loot." + s));
+                game.getStuffs().addStartLoot(getItem(config, "start_loot." + s));
             }
         }
 
         configurationSection = config.getConfigurationSection("death_loot");
 
-        if(configurationSection!=null){
+        if (configurationSection != null) {
             Set<String> sl = configurationSection.getKeys(false);
             for (String s : sl) {
-                game.getStuffs().addDeathLoot(getItem(config,"death_loot." + s));
+                game.getStuffs().addDeathLoot(getItem(config, "death_loot." + s));
             }
         }
     }
 
-    private static ItemStack getItem(FileConfiguration file, String path){
+    private static ItemStack getItem(FileConfiguration file, String path) {
 
         ItemStack item;
-        if(file.contains(path+".potion_data")){
-            item=file.getItemStack(path+".item");
+        if (file.contains(path + ".potion_data")) {
+            item = file.getItemStack(path + ".item");
+        } else {
+            item = file.getItemStack(path);
         }
-        else{
-            item=file.getItemStack(path);
-        }
-        if(item ==null){
-            item=new ItemStack(Material.AIR);
+        if (item == null) {
+            item = new ItemStack(Material.AIR);
         }
 
-        if (file.contains(path+".potion_data")) {
+        if (file.contains(path + ".potion_data")) {
             int amount = item.getAmount();
             item = VersionUtils.getVersionUtils()
-                    .getPotionItem((short) file.getInt(path+".potion_data"));
+                    .getPotionItem((short) file.getInt(path + ".potion_data"));
             item.setAmount(amount);
         }
         return item;
     }
 
-    private static void setItem(FileConfiguration file, String path,@Nullable ItemStack item){
+    private static void setItem(FileConfiguration file, String path, @Nullable ItemStack item) {
 
-        if(item == null){
-            file.set(path,null);
+        if (item == null) {
+            file.set(path, null);
             return;
         }
 
         short id = VersionUtils.getVersionUtils().generatePotionId(item);
 
-        if(id != 0){
-            file.set(path+".potion_data",id);
-            file.set(path+".item",item);
-        }
-        else{
-            file.set(path,item);
+        if (id != 0) {
+            file.set(path + ".potion_data", id);
+            file.set(path + ".item", item);
+        } else {
+            file.set(path, item);
         }
     }
 
@@ -288,9 +286,9 @@ public class StuffLoader {
                 .forEach(javaPluginModuleWerewolfWrapper -> Register.get()
                         .getAddon(javaPluginModuleWerewolfWrapper.getAddonKey())
                         .ifPresent(javaPlugin -> {
-                            FileUtils_.copy(javaPlugin.getResource(name+".yml"),
+                            FileUtils_.copy(javaPlugin.getResource(name + ".yml"),
                                     javaPlugin.getDataFolder() +
-                                            File.separator + "stuffs" + File.separator + name+".yml");
+                                            File.separator + "stuffs" + File.separator + name + ".yml");
 
                             if (!(new File(javaPlugin.getDataFolder() + File.separator + "stuffs" + File.separator, name + ".yml")).exists()) {
                                 FileUtils_.copy(javaPlugin.getResource("stuffRole.yml"), javaPlugin.getDataFolder() + File.separator + "stuffs" + File.separator + name + ".yml");

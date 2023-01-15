@@ -1,14 +1,14 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.info.librarian;
 
 import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.commands.ICommand;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.librarian.LibrarianGiveBackEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfplugin.roles.villagers.Librarian;
 import org.bukkit.Bukkit;
@@ -32,7 +32,7 @@ public class CommandSendToLibrarian implements ICommand {
 
 
         if (args.length == 0) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.parameters",
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.parameters",
                     Formatter.number(1));
             return;
         }
@@ -61,23 +61,23 @@ public class CommandSendToLibrarian implements ICommand {
                     Bukkit.getPluginManager().callEvent(librarianGiveBackEvent);
 
                     if (librarianGiveBackEvent.isCancelled()) {
-                        playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+                        playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
                         return;
                     }
 
                     ((Librarian) roles).addStorage(sb2.toString());
 
-                    playerWW.sendMessageWithKey(Prefix.GREEN , "werewolf.roles.librarian.contribute");
+                    playerWW.sendMessageWithKey(Prefix.GREEN, "werewolf.roles.librarian.contribute");
                     find.set(true);
                     librarianGiveBackEvent.getTargetWW().sendMessageWithKey(
-                            Prefix.GREEN , "werewolf.roles.librarian.contribution",
+                            Prefix.GREEN, "werewolf.roles.librarian.contribution",
                             Formatter.player(player.getName()),
-                            Formatter.format("&message&",librarianGiveBackEvent.getInfo()));
+                            Formatter.format("&message&", librarianGiveBackEvent.getInfo()));
                 });
 
 
         if (!find.get()) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.librarian.prohibit");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.librarian.prohibit");
         }
 
 

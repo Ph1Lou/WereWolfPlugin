@@ -4,13 +4,13 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
@@ -72,7 +72,7 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
 
         if (!event.getPlayerWW().getRole().isWereWolf()) return;
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN , "werewolf.roles.priestess.werewolf_death");
+        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.priestess.werewolf_death");
 
         this.affectedPlayer.remove(event.getPlayerWW());
 
@@ -89,7 +89,7 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
         setPower(true);
 
         this.getPlayerWW().sendMessageWithKey(
-                Prefix.YELLOW , "werewolf.roles.priestess.perform",
+                Prefix.YELLOW, "werewolf.roles.priestess.perform",
                 Formatter.number(game.getConfig().getValue(IntValueBase.PRIESTESS_DISTANCE)),
                 Formatter.timer(game, TimerBase.POWER_DURATION));
     }
@@ -136,24 +136,22 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
         } else if (game.getRandom().nextFloat() < 0.8) {
 
             if (this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-                if(playerWW.getRole().isWereWolf()){
+                if (playerWW.getRole().isWereWolf()) {
                     event.setRole("werewolf.roles.priestess.magic");
                 }
 
-            }
-            else{
-                if(!playerWW.getRole().isWereWolf()){
+            } else {
+                if (!playerWW.getRole().isWereWolf()) {
                     event.setRole("werewolf.roles.priestess.magic");
                 }
             }
         } else {
             if (this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-                if(!playerWW.getRole().isWereWolf()){
+                if (!playerWW.getRole().isWereWolf()) {
                     event.setRole("werewolf.roles.priestess.magic");
                 }
-            }
-            else{
-                if(playerWW.getRole().isWereWolf()){
+            } else {
+                if (playerWW.getRole().isWereWolf()) {
                     event.setRole("werewolf.roles.priestess.magic");
                 }
             }

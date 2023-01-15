@@ -3,11 +3,11 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.actionablestory.ActionableStoryEvent;
@@ -41,30 +41,29 @@ public class StoryTeller extends RoleVillage {
     }
 
     @EventHandler
-    public void onActionableStory(ActionableStoryEvent event){
+    public void onActionableStory(ActionableStoryEvent event) {
         game.getPlayerWW(event.getPlayer())
                 .ifPresent(players::add);
     }
 
     @EventHandler
-    public void onDay(DayEvent event){
+    public void onDay(DayEvent event) {
 
-        if(event.getNumber() >= game.getConfig().getValue(IntValueBase.STORY_TELLER_DAY)){
+        if (event.getNumber() >= game.getConfig().getValue(IntValueBase.STORY_TELLER_DAY)) {
 
-            if(this.getPlayerWW().isState(StatePlayer.ALIVE)){
+            if (this.getPlayerWW().isState(StatePlayer.ALIVE)) {
 
-                if(this.isAbilityEnabled()){
+                if (this.isAbilityEnabled()) {
 
-                    if(!this.players.isEmpty()){
+                    if (!this.players.isEmpty()) {
 
                         StoryTellerEvent storyTellerEvent = new StoryTellerEvent(this.getPlayerWW(), this.players);
 
                         Bukkit.getPluginManager().callEvent(storyTellerEvent);
 
-                        if(storyTellerEvent.isCancelled()){
-                            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
-                        }
-                        else{
+                        if (storyTellerEvent.isCancelled()) {
+                            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
+                        } else {
                             this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,
                                     "werewolf.roles.story_teller.players",
                                     Formatter.format("&players&", this.players.stream()

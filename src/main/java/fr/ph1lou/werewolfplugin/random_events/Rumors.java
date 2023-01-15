@@ -24,15 +24,14 @@ import java.util.List;
 import java.util.Map;
 
 @RandomEvent(key = EventBase.RUMORS, loreKey = "werewolf.random_events.rumors.description",
-        timers = {@Timer(key = Rumors.TIMER_START, defaultValue = 80*60, meetUpValue = 30*60, step = 30),
-                @Timer(key = Rumors.PERIOD, defaultValue = 40*60, meetUpValue = 20*60, step = 30)})
+        timers = {@Timer(key = Rumors.TIMER_START, defaultValue = 80 * 60, meetUpValue = 30 * 60, step = 30),
+                @Timer(key = Rumors.PERIOD, defaultValue = 40 * 60, meetUpValue = 20 * 60, step = 30)})
 public class Rumors extends ListenerWerewolf {
 
     public static final String TIMER_START = "werewolf.random_events.rumors.timer_start";
     public static final String PERIOD = "werewolf.random_events.rumors.period";
-    private boolean active = false;
-
     private final Map<IPlayerWW, String> rumors = new HashMap<>();
+    private boolean active = false;
 
     public Rumors(WereWolfAPI main) {
         super(main);
@@ -66,7 +65,7 @@ public class Rumors extends ListenerWerewolf {
                         register(false);
                         List<String> rumors = new ArrayList<>(this.rumors.values());
 
-                        if(rumors.size() == 0){
+                        if (rumors.size() == 0) {
                             return;
                         }
 
@@ -86,7 +85,7 @@ public class Rumors extends ListenerWerewolf {
 
         if (!active) return;
 
-        if(event.isCancelled()){
+        if (event.isCancelled()) {
             return;
         }
 

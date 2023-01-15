@@ -37,11 +37,11 @@ public class AdvancedEventsGUI implements InventoryProvider {
                 .manager(api.getInvManager())
                 .provider(new AdvancedEventsGUI(register, page))
                 .size(InventoryUtils.getRowNumbers((register.configurations().length
-                + register.timers().length +
-                        register.configValues().length)* 2, true)
+                                + register.timers().length +
+                                register.configValues().length) * 2, true)
                         , 9)
                 .title(game.translate("werewolf.menus.advanced_tool_role.menu",
-                                Formatter.role(game.translate(register.key()))))
+                        Formatter.role(game.translate(register.key()))))
                 .closeable(true)
                 .build();
     }

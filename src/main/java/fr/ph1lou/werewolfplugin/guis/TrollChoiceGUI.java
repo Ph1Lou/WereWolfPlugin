@@ -45,7 +45,6 @@ public class TrollChoiceGUI implements InventoryProvider {
     }
 
 
-
     @Override
     public void init(Player player, InventoryContents contents) {
         WereWolfAPI game = JavaPlugin.getPlugin(Main.class).getWereWolfAPI();

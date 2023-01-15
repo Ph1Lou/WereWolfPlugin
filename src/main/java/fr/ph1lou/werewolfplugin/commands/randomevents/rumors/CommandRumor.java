@@ -31,13 +31,13 @@ public class CommandRumor implements ICommand {
         }
 
         if (args.length == 0) {
-            player.sendMessage(game.translate(Prefix.RED , "werewolf.check.parameters", Formatter.number(1)));
+            player.sendMessage(game.translate(Prefix.RED, "werewolf.check.parameters", Formatter.number(1)));
             return;
         }
 
         game.getListenersManager().getRandomEvent(EventBase.RUMORS)
                 .ifPresent(listenerWerewolf -> {
-                    if(listenerWerewolf.isRegister()){
+                    if (listenerWerewolf.isRegister()) {
 
                         StringBuilder sb = new StringBuilder();
 
@@ -48,15 +48,14 @@ public class CommandRumor implements ICommand {
                         RumorsWriteEvent event = new RumorsWriteEvent(playerWW, sb.toString());
                         Bukkit.getPluginManager().callEvent(event);
 
-                        if (event.isCancelled()){
-                            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+                        if (event.isCancelled()) {
+                            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
                             return;
                         }
 
                         playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.random_events.rumors.perform");
-                    }
-                    else{
-                        playerWW.sendMessageWithKey(Prefix.RED,"werewolf.random_events.rumors.no_rumor");
+                    } else {
+                        playerWW.sendMessageWithKey(Prefix.RED, "werewolf.random_events.rumors.no_rumor");
                     }
                 });
     }

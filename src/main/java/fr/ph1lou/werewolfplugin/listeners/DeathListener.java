@@ -55,7 +55,7 @@ public class DeathListener implements Listener {
 
     private final WereWolfAPI game;
 
-    public DeathListener(WereWolfAPI game){
+    public DeathListener(WereWolfAPI game) {
         this.game = game;
     }
 
@@ -83,19 +83,19 @@ public class DeathListener implements Listener {
             playerWW.setDeathLocation(player.getLocation());
             playerWW.clearItemDeath();
             playerWW.setState(StatePlayer.JUDGEMENT);
-            ((PlayerWW)playerWW).setDeathTime(game.getTimer());
+            ((PlayerWW) playerWW).setDeathTime(game.getTimer());
 
             List<ItemStack> items = new ArrayList<>();
             for (int i = 0; i < 40; i++) {
                 ItemStack item = player.getInventory().getItem(i);
-                if(item != null){
+                if (item != null) {
                     items.add(item);
                 }
             }
             playerWW.setItemDeath(items);
 
             player.setGameMode(GameMode.ADVENTURE);
-            player.sendMessage(game.translate(Prefix.ORANGE , "werewolf.announcement.potential_revive"));
+            player.sendMessage(game.translate(Prefix.ORANGE, "werewolf.announcement.potential_revive"));
 
             if (player.getKiller() != null) {
 
@@ -157,7 +157,7 @@ public class DeathListener implements Listener {
 
         BukkitUtils.scheduleSyncDelayedTask(game, () -> {
             if (event.getPlayerWW().isState(StatePlayer.JUDGEMENT)) {
-                Bukkit.getPluginManager().callEvent(new FinalDeathEvent(event.getPlayerWW(),event.getLastStrikers()));
+                Bukkit.getPluginManager().callEvent(new FinalDeathEvent(event.getPlayerWW(), event.getLastStrikers()));
             }
         }, 7 * 20);
     }
@@ -179,7 +179,7 @@ public class DeathListener implements Listener {
                 List<ItemStack> items = new ArrayList<>();
                 for (int i = 0; i < 40; i++) {
                     ItemStack item = player.getInventory().getItem(i);
-                    if(item != null){
+                    if (item != null) {
                         items.add(item);
                     }
                 }
@@ -191,18 +191,18 @@ public class DeathListener implements Listener {
         if (playerWW.isState(StatePlayer.DEATH)) return;
 
         playerWW.setState(StatePlayer.DEATH);
-        ((GameManager)game).setPlayerSize(game.getPlayersCount()-1);
+        ((GameManager) game).setPlayerSize(game.getPlayersCount() - 1);
 
         game.getPlayersWW().forEach(playerWW1 -> {
-            AnnouncementDeathEvent announcementDeathEvent = new AnnouncementDeathEvent(playerWW, playerWW1,"werewolf.announcement.death_message");
+            AnnouncementDeathEvent announcementDeathEvent = new AnnouncementDeathEvent(playerWW, playerWW1, "werewolf.announcement.death_message");
             Bukkit.getPluginManager().callEvent(announcementDeathEvent);
 
-            if(!announcementDeathEvent.isCancelled()){
+            if (!announcementDeathEvent.isCancelled()) {
                 Formatter[] formatters = (Formatter[]) ArrayUtils.addAll(announcementDeathEvent.getFormatters().toArray(new Formatter[0]),
-                        new Formatter[]{Formatter.player( announcementDeathEvent.getPlayerName()),
+                        new Formatter[]{Formatter.player(announcementDeathEvent.getPlayerName()),
                                 Formatter.role(game.translate(announcementDeathEvent.getRole()))});
                 announcementDeathEvent.getTargetPlayer().sendMessageWithKey("werewolf.utils.bar");
-                announcementDeathEvent.getTargetPlayer().sendMessageWithKey(Prefix.RED,announcementDeathEvent.getFormat(),formatters);
+                announcementDeathEvent.getTargetPlayer().sendMessageWithKey(Prefix.RED, announcementDeathEvent.getFormat(), formatters);
                 announcementDeathEvent.getTargetPlayer().sendMessageWithKey("werewolf.utils.bar");
                 announcementDeathEvent.getTargetPlayer().sendSound(Sound.AMBIENCE_THUNDER);
             }
@@ -234,23 +234,23 @@ public class DeathListener implements Listener {
 
         DeathItemsEvent deathItemsEvent = new DeathItemsEvent(playerWW,
                 Stream.concat(playerWW.getItemDeath()
-                        .stream(),
-                game.getStuffs().getDeathLoot()
-                        .stream()).collect(Collectors.toList()),
+                                .stream(),
+                        game.getStuffs().getDeathLoot()
+                                .stream()).collect(Collectors.toList()),
                 playerWW.getDeathLocation()
         );
 
         Bukkit.getPluginManager().callEvent(deathItemsEvent);
 
-        if(!deathItemsEvent.isCancelled()){
+        if (!deathItemsEvent.isCancelled()) {
             deathItemsEvent.getItems().forEach(itemStack -> world.dropItem(deathItemsEvent.getLocation(), itemStack));
         }
 
         if (player != null) {
 
             player.setGameMode(GameMode.SPECTATOR);
-            TextComponent msg = new TextComponent(game.translate("werewolf.utils.bar")+ "\n" +
-                    game.translate(Prefix.YELLOW,"werewolf.bug") + "\n" +
+            TextComponent msg = new TextComponent(game.translate("werewolf.utils.bar") + "\n" +
+                    game.translate(Prefix.YELLOW, "werewolf.bug") + "\n" +
                     game.translate("werewolf.utils.bar"));
             msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
                     "https://discord.gg/GXXCVUA"));
@@ -258,7 +258,7 @@ public class DeathListener implements Listener {
             if (game.getConfig().getSpectatorMode() == 0 &&
                     !player.isOp() &&
                     !game.getModerationManager().isStaff(player.getUniqueId())) {
-                player.kickPlayer(game.translate(Prefix.RED , "werewolf.check.spectator_disabled"));
+                player.kickPlayer(game.translate(Prefix.RED, "werewolf.check.spectator_disabled"));
             }
             Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(player));
         }
@@ -266,9 +266,9 @@ public class DeathListener implements Listener {
     }
 
     private String sendOriginalDeathMessage(IPlayerWW playerWW) {
-        return game.translate("werewolf.utils.bar") + game.translate(Prefix.RED , "werewolf.announcement.death_message_with_role",
-                Formatter.player( playerWW.getName()),
-                Formatter.role( game.translate(playerWW.getRole().getKey())))
+        return game.translate("werewolf.utils.bar") + game.translate(Prefix.RED, "werewolf.announcement.death_message_with_role",
+                Formatter.player(playerWW.getName()),
+                Formatter.role(game.translate(playerWW.getRole().getKey())))
                 + game.translate("werewolf.utils.bar");
     }
 
@@ -286,11 +286,11 @@ public class DeathListener implements Listener {
 
         Player player = Bukkit.getPlayer(playerWW.getUUID());
 
-        if(player != null){
-            ((PlayerWW)playerWW).updatePotionEffects(player);
+        if (player != null) {
+            ((PlayerWW) playerWW).updatePotionEffects(player);
         }
 
-        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.announcement.resurrection");
+        playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.announcement.resurrection");
         game.getMapManager().transportation(playerWW, Math.random() * Math.PI * 2);
 
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(playerWW));
@@ -303,9 +303,9 @@ public class DeathListener implements Listener {
         Player player = event.getPlayer();
         IPlayerWW playerWW = game.getPlayerWW(player.getUniqueId()).orElse(null);
 
-        if(playerWW !=null){
+        if (playerWW != null) {
 
-            ((PlayerWW)playerWW).updatePotionEffects(player);
+            ((PlayerWW) playerWW).updatePotionEffects(player);
 
             if (game.isState(StateGame.LOBBY)) {
                 BukkitUtils.scheduleSyncDelayedTask(game, () ->
@@ -333,8 +333,7 @@ public class DeathListener implements Listener {
             } else {
                 event.setRespawnLocation(game.getMapManager().getWorld().getSpawnLocation());
             }
-        }
-        else{
+        } else {
             event.setRespawnLocation(game.getMapManager().getWorld().getSpawnLocation());
         }
 

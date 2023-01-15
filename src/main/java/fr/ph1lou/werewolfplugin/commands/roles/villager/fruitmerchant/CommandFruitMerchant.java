@@ -60,7 +60,7 @@ public class CommandFruitMerchant implements ICommandRole {
         Bukkit.getPluginManager().callEvent(fruitMerchantCommandEvent);
 
         if (fruitMerchantCommandEvent.isCancelled()) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
 
@@ -68,42 +68,42 @@ public class CommandFruitMerchant implements ICommandRole {
 
         fruitMerchantCommandEvent.getPlayerWWS().forEach(fruitMerchant::addAffectedPlayer);
 
-        playerWW.sendMessageWithKey(Prefix.GREEN , "werewolf.roles.fruit_merchant.perform",
+        playerWW.sendMessageWithKey(Prefix.GREEN, "werewolf.roles.fruit_merchant.perform",
                 Formatter.format("&players&",
                         fruitMerchantCommandEvent.getPlayerWWS()
                                 .stream()
                                 .map(IPlayerWW::getName)
                                 .collect(Collectors.joining(", "))),
                 Formatter.timer(Utils.conversion(game.getConfig()
-                        .getTimerValue(TimerBase.FRUIT_MERCHANT_COOL_DOWN)/2)));
+                        .getTimerValue(TimerBase.FRUIT_MERCHANT_COOL_DOWN) / 2)));
 
         BukkitUtils.scheduleSyncDelayedTask(game, () -> {
-            if(playerWW.isState(StatePlayer.ALIVE)){
+            if (playerWW.isState(StatePlayer.ALIVE)) {
                 Map<IPlayerWW, GoldenCount> goldenCountMap = new HashMap<>();
                 fruitMerchant.getAffectedPlayers()
-                        .forEach(playerWW1 -> goldenCountMap.put(playerWW1,new GoldenCount(fruitMerchant.getGoldenAppleNumber(playerWW1),
+                        .forEach(playerWW1 -> goldenCountMap.put(playerWW1, new GoldenCount(fruitMerchant.getGoldenAppleNumber(playerWW1),
                                 Utils.countGoldenApple(playerWW1))));
 
                 fruitMerchant.clearAffectedPlayer();
-                FruitMerchantRecoverInformationEvent fruitMerchantRecoverInformationEvent = new FruitMerchantRecoverInformationEvent(playerWW,goldenCountMap);
+                FruitMerchantRecoverInformationEvent fruitMerchantRecoverInformationEvent = new FruitMerchantRecoverInformationEvent(playerWW, goldenCountMap);
 
                 Bukkit.getPluginManager().callEvent(fruitMerchantRecoverInformationEvent);
 
-                if(fruitMerchantRecoverInformationEvent.isCancelled()){
-                    playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+                if (fruitMerchantRecoverInformationEvent.isCancelled()) {
+                    playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
                     return;
                 }
 
-                playerWW.sendMessageWithKey(Prefix.LIGHT_BLUE,"werewolf.roles.fruit_merchant.announce_info");
-                fruitMerchantRecoverInformationEvent.getPlayerWWS().forEach(playerWW1 -> playerWW.sendMessageWithKey(Prefix.YELLOW,"werewolf.roles.fruit_merchant.info",
+                playerWW.sendMessageWithKey(Prefix.LIGHT_BLUE, "werewolf.roles.fruit_merchant.announce_info");
+                fruitMerchantRecoverInformationEvent.getPlayerWWS().forEach(playerWW1 -> playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.fruit_merchant.info",
                         Formatter.player(playerWW1.getName()),
                         Formatter.number(fruitMerchantRecoverInformationEvent.getGoldenAppleCount(playerWW1).getOldCount()),
                         Formatter.format("&number2&", fruitMerchantRecoverInformationEvent.getGoldenAppleCount(playerWW1).getNewCount())));
 
                 BukkitUtils.scheduleSyncDelayedTask(game, () -> {
                     fruitMerchant.setPower(true);
-                    playerWW.sendMessageWithKey(Prefix.GREEN,"werewolf.roles.fruit_merchant.recover");
-                },game.getConfig().getTimerValue(TimerBase.FRUIT_MERCHANT_COOL_DOWN) / 2 * 20L);
+                    playerWW.sendMessageWithKey(Prefix.GREEN, "werewolf.roles.fruit_merchant.recover");
+                }, game.getConfig().getTimerValue(TimerBase.FRUIT_MERCHANT_COOL_DOWN) / 2 * 20L);
             }
         }, game.getConfig().getTimerValue(TimerBase.FRUIT_MERCHANT_COOL_DOWN) / 2 * 20L);
     }

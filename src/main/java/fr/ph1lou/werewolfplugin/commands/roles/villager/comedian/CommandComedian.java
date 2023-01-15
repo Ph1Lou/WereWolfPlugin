@@ -30,14 +30,14 @@ public class CommandComedian implements ICommandRole {
         try {
             int i = Integer.parseInt(args[0]) - 1;
             if (i < 0 || i > 2) {
-                playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.comedian.mask_unknown");
+                playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.comedian.mask_unknown");
                 return;
             }
 
             if (((Comedian) comedian).getMasks()
                     .contains(ComedianMask.values()[i])) {
 
-                playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.comedian.used_mask");
+                playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.comedian.used_mask");
                 return;
             }
             ((IPower) comedian).setPower(false);
@@ -47,14 +47,14 @@ public class CommandComedian implements ICommandRole {
             Bukkit.getPluginManager().callEvent(useMaskEvent);
 
             if (useMaskEvent.isCancelled()) {
-                playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+                playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
                 return;
             }
 
             playerWW.sendMessageWithKey(
-                    Prefix.YELLOW , "werewolf.roles.comedian.wear_mask_perform",
-                    Formatter.format("&mask&",game.translate(ComedianMask.values()[i].getKey())));
-            playerWW.addPotionModifier(PotionModifier.add(ComedianMask.values()[i].getPotionEffectType(),playerWW.getRole().getKey()));
+                    Prefix.YELLOW, "werewolf.roles.comedian.wear_mask_perform",
+                    Formatter.format("&mask&", game.translate(ComedianMask.values()[i].getKey())));
+            playerWW.addPotionModifier(PotionModifier.add(ComedianMask.values()[i].getPotionEffectType(), playerWW.getRole().getKey()));
 
         } catch (NumberFormatException ignored) {
         }

@@ -4,15 +4,15 @@ import com.google.common.collect.Sets;
 import fr.ph1lou.werewolfapi.annotations.RandomEvent;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
 import fr.ph1lou.werewolfapi.events.random_events.DiscordEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.NewWereWolfEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.role.interfaces.ICamp;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RandomEvent(key = EventBase.DISCORD, loreKey = "werewolf.random_events.discord.description",
-        timers = {@Timer(key = Discord.TIMER_START, defaultValue = 55*60, meetUpValue = 20*60, step = 30),
-                @Timer(key = Discord.PERIOD, defaultValue = 30*60, meetUpValue = 15*60, step = 30)})
+        timers = {@Timer(key = Discord.TIMER_START, defaultValue = 55 * 60, meetUpValue = 20 * 60, step = 30),
+                @Timer(key = Discord.PERIOD, defaultValue = 30 * 60, meetUpValue = 15 * 60, step = 30)})
 public class Discord extends ListenerWerewolf {
 
     public static final String TIMER_START = "werewolf.random_events.discord.timer_start";
@@ -48,7 +48,7 @@ public class Discord extends ListenerWerewolf {
                         .map(IRole::getPlayerWW)
                         .collect(Collectors.toList());
 
-                if(playerWWsWerewolf.isEmpty()) return;
+                if (playerWWsWerewolf.isEmpty()) return;
 
                 IPlayerWW werewolf = playerWWsWerewolf
                         .get((int) Math.floor(game.getRandom().nextDouble() * playerWWsWerewolf.size()));
@@ -62,7 +62,7 @@ public class Discord extends ListenerWerewolf {
                         .map(IRole::getPlayerWW)
                         .collect(Collectors.toList());
 
-                if(playerWWsNeutral.isEmpty()) return;
+                if (playerWWsNeutral.isEmpty()) return;
 
                 IPlayerWW neutral = playerWWsNeutral
                         .get((int) Math.floor(game.getRandom().nextDouble() * playerWWsNeutral.size()));
@@ -77,7 +77,7 @@ public class Discord extends ListenerWerewolf {
                         .map(IRole::getPlayerWW)
                         .collect(Collectors.toList());
 
-                if(playerWWsVillager.isEmpty()) return;
+                if (playerWWsVillager.isEmpty()) return;
 
                 IPlayerWW villager = playerWWsVillager
                         .get((int) Math.floor(game.getRandom().nextDouble() * playerWWsVillager.size()));
@@ -88,14 +88,14 @@ public class Discord extends ListenerWerewolf {
                 if (discordEvent.isCancelled()) return;
 
                 werewolf.getRole().setSolitary(true);
-                werewolf.sendMessageWithKey(Prefix.RED , "werewolf.configurations.lone_wolf.message");
+                werewolf.sendMessageWithKey(Prefix.RED, "werewolf.configurations.lone_wolf.message");
 
                 if (werewolf.getMaxHealth() < 30) {
                     werewolf.addPlayerMaxHealth(Math.min(8, 30 - werewolf.getMaxHealth()));
                 }
                 neutral.getRole().setTransformedToVillager(true);
-                if(neutral.getRole().isCamp(Camp.VILLAGER)){
-                    neutral.sendMessageWithKey(Prefix.RED,"werewolf.random_events.discord.to_villager");
+                if (neutral.getRole().isCamp(Camp.VILLAGER)) {
+                    neutral.sendMessageWithKey(Prefix.RED, "werewolf.random_events.discord.to_villager");
                 }
 
                 villager.getRole().setInfected();

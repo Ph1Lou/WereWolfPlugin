@@ -21,7 +21,7 @@ public class CommandConfigurations implements ICommand {
     @Override
     public void execute(WereWolfAPI game, Player player, String[] args) {
 
-        player.sendMessage(game.translate(Prefix.ORANGE,"werewolf.commands.player.configurations.list"));
+        player.sendMessage(game.translate(Prefix.ORANGE, "werewolf.commands.player.configurations.list"));
 
         String message = Register.get().getConfigsRegister()
                 .stream()

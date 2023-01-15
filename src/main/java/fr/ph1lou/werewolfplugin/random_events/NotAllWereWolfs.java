@@ -40,7 +40,7 @@ public class NotAllWereWolfs extends ListenerWerewolf {
 
         Bukkit.getPluginManager().callEvent(notAllWerewolfEvent);
 
-        if(notAllWerewolfEvent.isCancelled()){
+        if (notAllWerewolfEvent.isCancelled()) {
             return;
         }
 
@@ -55,21 +55,21 @@ public class NotAllWereWolfs extends ListenerWerewolf {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onDeathAnnounce(AnnouncementDeathEvent event) {
-        if(!this.isDefaultWereWolf(event.getRole())) return;
+        if (!this.isDefaultWereWolf(event.getRole())) return;
 
         event.setRole(RoleBase.WEREWOLF);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onAnnounceDeath(FinalDeathEvent event) {
-        if(!this.isDefaultWereWolf(event.getPlayerWW())) return;
+        if (!this.isDefaultWereWolf(event.getPlayerWW())) return;
         this.getGame().getConfig().removeOneRole(RoleBase.WEREWOLF);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCompositionUpdate(UpdateCompositionEvent event) {
-        if(!this.isDefaultWereWolf(event.getKey())) return;
-        if(event.getReason() != UpdateCompositionReason.DEATH) return;
+        if (!this.isDefaultWereWolf(event.getKey())) return;
+        if (event.getReason() != UpdateCompositionReason.DEATH) return;
         event.setCancelled(true);
     }
 
@@ -79,9 +79,9 @@ public class NotAllWereWolfs extends ListenerWerewolf {
 
         if (playerWW == null) return;
 
-        if(!playerWW.isState(StatePlayer.DEATH)) return;
+        if (!playerWW.isState(StatePlayer.DEATH)) return;
 
-        if(!this.isDefaultWereWolf(playerWW)) return;
+        if (!this.isDefaultWereWolf(playerWW)) return;
 
         if (this.getGame().getConfig().isConfigActive(ConfigBase.SHOW_ROLE_TO_DEATH)) {
             event.setSuffix(event.getSuffix()

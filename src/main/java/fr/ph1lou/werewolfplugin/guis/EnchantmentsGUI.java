@@ -5,11 +5,11 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
-import fr.ph1lou.werewolfplugin.Main;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
+import fr.ph1lou.werewolfplugin.Main;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -51,7 +51,7 @@ public class EnchantmentsGUI implements InventoryProvider {
                         new ItemBuilder(Material.IRON_CHESTPLATE)
                                 .setDisplayName(game.translate("werewolf.menus.enchantments.iron_protection",
                                         Formatter.number(game.getConfig().getLimitProtectionIron()))))
-                                .setLore(lore).build(),
+                        .setLore(lore).build(),
                 e -> {
                     if (e.isLeftClick()) {
                         game.getConfig().setLimitProtectionIron(game.getConfig().getLimitProtectionIron() + 1);
@@ -78,7 +78,7 @@ public class EnchantmentsGUI implements InventoryProvider {
                     }
 
                     e.setCurrentItem(new ItemBuilder(Material.DIAMOND_CHESTPLATE).setDisplayName(
-                            game.translate("werewolf.menus.enchantments.diamond_protection",
+                                    game.translate("werewolf.menus.enchantments.diamond_protection",
                                             Formatter.number(game.getConfig().getLimitProtectionDiamond())))
                             .setLore(lore)
                             .build());
@@ -99,7 +99,7 @@ public class EnchantmentsGUI implements InventoryProvider {
                     e.setCurrentItem(new ItemBuilder(Material.BOW)
                             .setDisplayName(
                                     game.translate("werewolf.menus.enchantments.power",
-                                                    Formatter.number(game.getConfig().getLimitPowerBow())))
+                                            Formatter.number(game.getConfig().getLimitPowerBow())))
                             .setLore(lore).build());
                 }));
 
@@ -107,16 +107,16 @@ public class EnchantmentsGUI implements InventoryProvider {
                 game.translate("werewolf.menus.lore.shift")));
 
         lores.addAll(lore);
-        if(game.getConfig().isKnockBackForInvisibleRoleOnly()){
+        if (game.getConfig().isKnockBackForInvisibleRoleOnly()) {
             lores.add(0, game.translate("werewolf.menus.enchantments.knock_back_invisible"));
         }
 
         contents.set(0, 8, ClickableItem.of(
-                        new ItemBuilder(Material.STICK)
-                                .setDisplayName(game.translate("werewolf.menus.enchantments.knock_back",
-                                                Formatter.number(game.getConfig().getLimitKnockBack())))
-                                .setLore(lores)
-                                .build(),
+                new ItemBuilder(Material.STICK)
+                        .setDisplayName(game.translate("werewolf.menus.enchantments.knock_back",
+                                Formatter.number(game.getConfig().getLimitKnockBack())))
+                        .setLore(lores)
+                        .build(),
                 e -> {
                     if (e.isShiftClick()) {
                         game.getConfig().setKnockBackForInvisibleRoleOnly(!game.getConfig().isKnockBackForInvisibleRoleOnly());
@@ -129,7 +129,7 @@ public class EnchantmentsGUI implements InventoryProvider {
                             game.translate("werewolf.menus.lore.shift")));
 
                     lore1.addAll(lore);
-                    if(game.getConfig().isKnockBackForInvisibleRoleOnly()){
+                    if (game.getConfig().isKnockBackForInvisibleRoleOnly()) {
                         lore1.add(0, game.translate("werewolf.menus.enchantments.knock_back_invisible"));
                     }
                     e.setCurrentItem(new ItemBuilder(Material.STICK)
@@ -173,7 +173,7 @@ public class EnchantmentsGUI implements InventoryProvider {
                         new ItemBuilder(Material.ARROW)
                                 .setDisplayName(
                                         game.translate("werewolf.menus.enchantments.punch",
-                                                        Formatter.number(game.getConfig().getLimitPunch())))
+                                                Formatter.number(game.getConfig().getLimitPunch())))
                                 .setLore(lore).build()),
                 e -> {
                     if (e.isLeftClick()) {
@@ -184,7 +184,7 @@ public class EnchantmentsGUI implements InventoryProvider {
                     e.setCurrentItem(new ItemBuilder(Material.ARROW)
                             .setDisplayName(
                                     game.translate("werewolf.menus.enchantments.punch",
-                                                    Formatter.number(game.getConfig().getLimitPunch())))
+                                            Formatter.number(game.getConfig().getLimitPunch())))
                             .setLore(lore).build());
                 }));
         contents.set(1, 8, ClickableItem.of((

@@ -1,22 +1,22 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.events.game.vote.VoteEvent;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
+import fr.ph1lou.werewolfapi.events.game.vote.VoteEvent;
 import fr.ph1lou.werewolfapi.events.roles.village_idiot.VillageIdiotEvent;
-import fr.ph1lou.werewolfapi.role.interfaces.IPower;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.interfaces.IPower;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -61,22 +61,22 @@ public class VillageIdiot extends RoleVillage implements IPower {
     }
 
     @EventHandler
-    public void onVote(VoteEvent event){
-        if(this.hasPower()){
+    public void onVote(VoteEvent event) {
+        if (this.hasPower()) {
             return;
         }
 
-        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        if(!event.getPlayerWW().equals(this.getPlayerWW())){
+        if (!event.getPlayerWW().equals(this.getPlayerWW())) {
             return;
         }
 
         event.setCancelled(true);
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.RED,"werewolf.roles.village_idiot.vote");
+        this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.village_idiot.vote");
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -124,7 +124,7 @@ public class VillageIdiot extends RoleVillage implements IPower {
         Bukkit.getPluginManager().callEvent(villageIdiotEvent);
 
         if (villageIdiotEvent.isCancelled()) {
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
         this.game.resurrection(getPlayerWW());
@@ -135,7 +135,7 @@ public class VillageIdiot extends RoleVillage implements IPower {
         }
         this.getPlayerWW().removePlayerMaxHealth(4);
         event.setCancelled(true);
-        Bukkit.broadcastMessage(this.game.translate(Prefix.YELLOW , "werewolf.roles.village_idiot.announce",
+        Bukkit.broadcastMessage(this.game.translate(Prefix.YELLOW, "werewolf.roles.village_idiot.announce",
                 Formatter.player(this.getPlayerWW().getName())));
     }
 }

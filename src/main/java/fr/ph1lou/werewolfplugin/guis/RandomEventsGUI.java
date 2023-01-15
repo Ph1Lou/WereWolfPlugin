@@ -71,21 +71,18 @@ public class RandomEventsGUI implements InventoryProvider {
 
                         if (e.isShiftClick()) {
                             AdvancedEventsGUI.getInventory(randomEventRegister.getMetaDatas(), pagination.getPage()).open(player);
-                        }
-                        else if (e.isLeftClick()) {
+                        } else if (e.isLeftClick()) {
                             int probability = config.getProbability(key);
                             config.setProbability(key, (probability + 1) % 101);
                             game.getListenersManager().getRandomEvent(key).ifPresent(listenerWerewolf -> listenerWerewolf
                                     .register(game.getRandom().nextDouble() * 100 < game.getConfig().getProbability(key)));
                             e.setCurrentItem(getItemStack(game, randomEventRegister));
-                        }
-                        else if (e.isRightClick()) {
+                        } else if (e.isRightClick()) {
                             int probability = config.getProbability(key);
                             config.setProbability(key, ((probability - 1) + 101) % 101);
                             if (probability == 1) {
                                 game.getListenersManager().getRandomEvent(key).ifPresent(listenerWerewolf -> listenerWerewolf.register(false));
-                            }
-                            else{
+                            } else {
                                 game.getListenersManager().getRandomEvent(key).ifPresent(listenerWerewolf -> listenerWerewolf
                                         .register(game.getRandom().nextDouble() * 100 < game.getConfig().getProbability(key)));
                             }

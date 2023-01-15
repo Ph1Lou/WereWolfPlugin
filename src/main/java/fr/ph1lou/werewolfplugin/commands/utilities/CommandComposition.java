@@ -1,13 +1,13 @@
 package fr.ph1lou.werewolfplugin.commands.utilities;
 
 import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
-import fr.ph1lou.werewolfapi.basekeys.LoverBase;
-import fr.ph1lou.werewolfapi.commands.ICommand;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
-import fr.ph1lou.werewolfapi.enums.LoverType;
+import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.commands.ICommand;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.LoverType;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfplugin.Register;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -25,7 +25,7 @@ public class CommandComposition implements ICommand {
 
         if (game.getConfig().isConfigActive(ConfigBase.HIDE_COMPOSITION)) {
 
-            player.sendMessage(game.translate(Prefix.RED , "werewolf.commands.player.compo.composition_hide"));
+            player.sendMessage(game.translate(Prefix.RED, "werewolf.commands.player.compo.composition_hide"));
 
             return;
         }

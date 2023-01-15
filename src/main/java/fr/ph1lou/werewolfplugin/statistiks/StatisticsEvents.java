@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public class StatisticsEvents implements Listener {
     private final Main main;
@@ -40,66 +41,72 @@ public class StatisticsEvents implements Listener {
     public StatisticsEvents(Main main) {
         this.main = main;
 
-        try{
+        try {
             serverUUID = UUID.fromString(Objects.requireNonNull(main.getConfig().getString("server_uuid")));
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             serverUUID = UUID.randomUUID();
             main.getConfig().set("server_uuid", serverUUID);
         }
 
         main.getRegisterManager().getEventsClass()
-                .forEach(eventClass -> Bukkit.getPluginManager().registerEvent(eventClass.getClazz(),
-                        this,
-                        EventPriority.MONITOR,
-                        (ignored, event) -> {
+                .forEach(eventClass -> {
 
-                            if(this.currentGameReview == null){
-                                return;
-                            }
+                    try {
+                        Bukkit.getPluginManager().registerEvent(eventClass.getClazz(),
+                                this,
+                                EventPriority.MONITOR,
+                                (ignored, event) -> {
 
-                            StatisticsEvent statisticsEvent = eventClass.getClazz().getAnnotation(StatisticsEvent.class);
-                            WereWolfAPI api = main.getWereWolfAPI();
+                                    if (this.currentGameReview == null) {
+                                        return;
+                                    }
 
-                            @Nullable IPlayerWW playerWW = getValue(IPlayerWW.class,
-                                    eventClass.getClazz(),
-                                    event,
-                                    StatisticsPlayer.class);
+                                    StatisticsEvent statisticsEvent = eventClass.getClazz().getAnnotation(StatisticsEvent.class);
+                                    WereWolfAPI api = main.getWereWolfAPI();
 
-                            @Nullable String extraInfo = getValue(String.class,
-                                    eventClass.getClazz(),
-                                    event,
-                                    StatisticsExtraInfo.class);
+                                    @Nullable IPlayerWW playerWW = getValue(IPlayerWW.class,
+                                            eventClass.getClazz(),
+                                            event,
+                                            StatisticsPlayer.class);
 
-                            @Nullable Integer extraInt =  getValue(Integer.class,
-                                    eventClass.getClazz(),
-                                    event,
-                                    StatisticsExtraInt.class);
+                                    @Nullable String extraInfo = getValue(String.class,
+                                            eventClass.getClazz(),
+                                            event,
+                                            StatisticsExtraInfo.class);
 
-                            @Nullable IPlayerWW targetWW = getValue(IPlayerWW.class,
-                                    eventClass.getClazz(),
-                                    event,
-                                    StatisticsTarget.class);
+                                    @Nullable Integer extraInt = getValue(Integer.class,
+                                            eventClass.getClazz(),
+                                            event,
+                                            StatisticsExtraInt.class);
 
-                            @Nullable Set<IPlayerWW> targetsWW = targetWW != null ? Sets.newHashSet(targetWW) : getValue(Set.class,
-                                    eventClass.getClazz(),
-                                    event,
-                                    StatisticsTargets.class);
+                                    @Nullable IPlayerWW targetWW = getValue(IPlayerWW.class,
+                                            eventClass.getClazz(),
+                                            event,
+                                            StatisticsTarget.class);
 
-                            this.currentGameReview
-                                    .addRegisteredAction(new RegisteredAction(statisticsEvent.key(),
-                                            playerWW,
-                                            targetsWW,
-                                            api.getTimer(),
-                                            extraInfo,
-                                            extraInt)
-                                            .setActionableStory(eventClass.getClazz().getAnnotation(TellableStoryEvent.class) != null));
+                                    @Nullable Set<IPlayerWW> targetsWW = targetWW != null ? Sets.newHashSet(targetWW) : getValue(Set.class,
+                                            eventClass.getClazz(),
+                                            event,
+                                            StatisticsTargets.class);
 
-                            if(eventClass.getClazz().isAssignableFrom(WinEvent.class)){
-                                this.currentGameReview.end(extraInfo, targetsWW);
-                                StatistiksUtils.postGame(main, this.currentGameReview);
-                            }
-                        }, main, true));
+                                    this.currentGameReview
+                                            .addRegisteredAction(new RegisteredAction(statisticsEvent.key(),
+                                                    playerWW,
+                                                    targetsWW,
+                                                    api.getTimer(),
+                                                    extraInfo,
+                                                    extraInt)
+                                                    .setActionableStory(eventClass.getClazz().getAnnotation(TellableStoryEvent.class) != null));
+
+                                    if (eventClass.getClazz().isAssignableFrom(WinEvent.class)) {
+                                        this.currentGameReview.end(extraInfo, targetsWW);
+                                        StatistiksUtils.postGame(main, this.currentGameReview);
+                                    }
+                                }, main, true);
+                    } catch (Exception exception) {
+                        Bukkit.getLogger().log(Level.ALL, String.format("Error when register event %s", eventClass.getMetaDatas().key()), exception);
+                    }
+                });
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -116,18 +123,18 @@ public class StatisticsEvents implements Listener {
                         Object object = method.invoke(event);
 
                         Class<?> objectClass = object.getClass();
-                        if(objectClass.isPrimitive()){ // Handle Integer and int
+                        if (objectClass.isPrimitive()) { // Handle Integer and int
                             objectClass = Primitives.wrap(objectClass);
                         }
 
-                        if(returnedClazz.isInterface() &&
+                        if (returnedClazz.isInterface() &&
                                 Arrays.stream(objectClass.getInterfaces())
-                                        .anyMatch(aClass -> aClass.isAssignableFrom(returnedClazz))){
-                            return (T)object;
+                                        .anyMatch(aClass -> aClass.isAssignableFrom(returnedClazz))) {
+                            return (T) object;
                         }
 
-                        if(objectClass.isAssignableFrom(returnedClazz)){
-                            return (T)object;
+                        if (objectClass.isAssignableFrom(returnedClazz)) {
+                            return (T) object;
                         }
                         Bukkit.getLogger()
                                 .warning(String

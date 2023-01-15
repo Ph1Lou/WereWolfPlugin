@@ -1,9 +1,9 @@
 package fr.ph1lou.werewolfplugin.listeners;
 
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.events.ActionBarEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -35,9 +35,9 @@ public class ActionBarListener implements Listener {
 
         int d = Utils.midDistance(player);
         event.setActionBar(event.getActionBar() + game.translate("werewolf.action_bar.in_game",
-                Formatter.format("&min&",d),
-                Formatter.format("&max&",d + 300),
-                Formatter.format("&height&",(int) Math.floor(player.getLocation().getY()))));
+                Formatter.format("&min&", d),
+                Formatter.format("&max&", d + 300),
+                Formatter.format("&height&", (int) Math.floor(player.getLocation().getY()))));
     }
 
     @EventHandler
@@ -67,7 +67,7 @@ public class ActionBarListener implements Listener {
         if (game.getMapManager().getPercentageGenerated() < 100) {
             event.setActionBar(event.getActionBar() +
                     game.translate("werewolf.action_bar.progress",
-                            Formatter.format("&progress&",new DecimalFormat("0.0")
+                            Formatter.format("&progress&", new DecimalFormat("0.0")
                                     .format(game.getMapManager()
                                             .getPercentageGenerated()))));
 

@@ -2,22 +2,20 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.player.impl.AuraModifier;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
-import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleWithLimitedSelectionDuration;
+import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -29,9 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
- @Role(key = RoleBase.PROTECTOR,
-         category = Category.VILLAGER,
-         attributes = RoleAttribute.VILLAGER)
+@Role(key = RoleBase.PROTECTOR,
+        category = Category.VILLAGER,
+        attributes = RoleAttribute.VILLAGER)
 public class Protector extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
@@ -71,9 +69,9 @@ public class Protector extends RoleWithLimitedSelectionDuration implements IAffe
         if (this.last != null) {
 
 
-            this.last.addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,this.getKey(),0));
+            this.last.addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE, this.getKey(), 0));
             this.last.getRole().removeAuraModifier(this.getKey());
-            this.last.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.protector.no_longer_protected");
+            this.last.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.protector.no_longer_protected");
             this.last = null;
         }
 
@@ -84,7 +82,7 @@ public class Protector extends RoleWithLimitedSelectionDuration implements IAffe
         }
 
         this.getPlayerWW().sendMessageWithKey(
-                Prefix.YELLOW , "werewolf.roles.protector.protection_message",
+                Prefix.YELLOW, "werewolf.roles.protector.protection_message",
                 Formatter.timer(game, TimerBase.POWER_DURATION));
     }
 

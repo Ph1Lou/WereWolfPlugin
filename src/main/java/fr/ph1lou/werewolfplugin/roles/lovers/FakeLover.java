@@ -2,9 +2,9 @@ package fr.ph1lou.werewolfplugin.roles.lovers;
 
 import fr.ph1lou.werewolfapi.annotations.Lover;
 import fr.ph1lou.werewolfapi.basekeys.LoverBase;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.LoverType;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
 public class FakeLover extends AbstractLover {
 
     public FakeLover(WereWolfAPI game, List<IPlayerWW> lovers) {
-       super(game, lovers);
+        super(game, lovers);
     }
 
     @Override

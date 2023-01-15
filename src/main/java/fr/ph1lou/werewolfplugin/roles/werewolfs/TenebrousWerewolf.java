@@ -4,11 +4,11 @@ import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
@@ -27,8 +27,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-@Role(key = RoleBase.TENEBROUS_WEREWOLF, 
-        category = Category.WEREWOLF, 
+@Role(key = RoleBase.TENEBROUS_WEREWOLF,
+        category = Category.WEREWOLF,
         attributes = {RoleAttribute.WEREWOLF},
         timers = {@Timer(key = TimerBase.WEREWOLF_TENEBROUS_DURATION, defaultValue = 30, meetUpValue = 20)},
         configValues = {@IntValue(key = IntValueBase.TENEBROUS_WEREWOLF_DISTANCE,

@@ -1,18 +1,18 @@
 package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
 import fr.ph1lou.werewolfapi.annotations.Role;
-import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.Day;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfChatPrefixEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleWereWolf;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.event.EventHandler;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -46,7 +46,7 @@ public class AlphaWereWolf extends RoleWereWolf {
             if (!this.isAbilityEnabled()) {
                 return;
             }
-            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.ABSORPTION, 6000, 0,this.getKey()));
+            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.ABSORPTION, 6000, 0, this.getKey()));
         }
     }
 
@@ -56,7 +56,7 @@ public class AlphaWereWolf extends RoleWereWolf {
         if (!this.isAbilityEnabled()) {
             return;
         }
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.ABSORPTION, 6000, 0,this.getKey()));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.ABSORPTION, 6000, 0, this.getKey()));
     }
 
     @EventHandler
@@ -68,6 +68,6 @@ public class AlphaWereWolf extends RoleWereWolf {
 
         event.setPrefix("werewolf.roles.alpha_werewolf.prefix");
 
-        event.addFormatter(Formatter.format("&alpha&",this.getPlayerWW().getName()));
+        event.addFormatter(Formatter.format("&alpha&", this.getPlayerWW().getName()));
     }
 }

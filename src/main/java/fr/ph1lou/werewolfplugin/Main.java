@@ -38,17 +38,15 @@ import java.util.Objects;
 public class Main extends JavaPlugin implements GetWereWolfAPI {
 
     public static final String KEY = "werewolf.name";
+    private final InventoryManager invManager = new InventoryManager(this);
     private WereWolfAPI currentGame;
     private Register registerManager;
-    private final InventoryManager invManager = new InventoryManager(this);
 
-    public Main()
-    {
+    public Main() {
         super();
     }
 
-    protected Main(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file)
-    {
+    protected Main(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
         super(loader, description, dataFolder, file);
     }
 

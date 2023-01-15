@@ -3,8 +3,8 @@ package fr.ph1lou.werewolfplugin.timers;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.TrollLoverEvent;
 import fr.ph1lou.werewolfapi.events.lovers.LoversRepartitionEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Timer(key =  TimerBase.LOVER_DURATION,
+@Timer(key = TimerBase.LOVER_DURATION,
         defaultValue = 4 * 60,
         meetUpValue = 4 * 60,
         decrementAfterRole = true,
@@ -37,7 +37,7 @@ public class LoverDuration extends ListenerWerewolf {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onLover(LoversRepartitionEvent event){
+    public void onLover(LoversRepartitionEvent event) {
         if (this.getGame().getConfig().isConfigActive(ConfigBase.TROLL_LOVER)) {
             Bukkit.getPluginManager().callEvent(new TrollLoverEvent());
             event.setCancelled(true);
@@ -45,8 +45,8 @@ public class LoverDuration extends ListenerWerewolf {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onLoverRepartition(LoversRepartitionEvent event){
-        ((LoversManagement)this.getGame().getLoversManager()).repartition();
+    public void onLoverRepartition(LoversRepartitionEvent event) {
+        ((LoversManagement) this.getGame().getLoversManager()).repartition();
     }
 
     @EventHandler
@@ -79,17 +79,17 @@ public class LoverDuration extends ListenerWerewolf {
         }
 
         loverAPIS.forEach(BukkitUtils::registerListener);
-        loverAPIS.forEach(iLover -> ((FakeLover)iLover).announceLovers());
+        loverAPIS.forEach(iLover -> ((FakeLover) iLover).announceLovers());
 
         BukkitUtils.scheduleSyncDelayedTask(game, () -> {
             loverAPIS.forEach(HandlerList::unregisterAll);
             game.getPlayersWW()
                     .forEach(playerWW -> {
                         playerWW
-                                .sendMessageWithKey(Prefix.GREEN , "werewolf.announcement.lover_troll");
-                        loverAPIS.forEach(((IPlayerWW)playerWW)::removeLover);
+                                .sendMessageWithKey(Prefix.GREEN, "werewolf.announcement.lover_troll");
+                        loverAPIS.forEach(((IPlayerWW) playerWW)::removeLover);
                     });
-            game.getConfig().setConfig(ConfigBase.TROLL_LOVER,false);
+            game.getConfig().setConfig(ConfigBase.TROLL_LOVER, false);
             Bukkit.getPluginManager().callEvent(new LoversRepartitionEvent());
         }, 1200L);
     }

@@ -30,12 +30,12 @@ public class CommandWillOTheWisp implements ICommandRole {
 
 
         if (!(willOTheWisp instanceof ILimitedUse) || ((ILimitedUse) willOTheWisp).getUse() >= 2) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.power");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.power");
             return;
         }
 
-        if(!(willOTheWisp instanceof IInvisible) || !((IInvisible)willOTheWisp).isInvisible()){
-            playerWW.sendMessageWithKey(Prefix.RED,"werewolf.roles.will_o_the_wisp.should_be_invisible");
+        if (!(willOTheWisp instanceof IInvisible) || !((IInvisible) willOTheWisp).isInvisible()) {
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.will_o_the_wisp.should_be_invisible");
             return;
         }
 
@@ -45,7 +45,7 @@ public class CommandWillOTheWisp implements ICommandRole {
         Bukkit.getPluginManager().callEvent(willOTheWispTeleportEvent);
 
         if (willOTheWispTeleportEvent.isCancelled()) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
 
