@@ -4,6 +4,7 @@ import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.ElectionState;
 import fr.ph1lou.werewolfapi.enums.MayorState;
@@ -48,7 +49,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-@Configuration(config = @ConfigurationBasic(key = ConfigBase.ELECTIONS),
+@Configuration(config = @ConfigurationBasic(key = ConfigBase.ELECTIONS, loreKey = "werewolf.elections.lore"),
         timers = {
                 @Timer(key = TimerBase.ELECTIONS_BEGIN, defaultValue = 1800,
                         meetUpValue = 1800,
@@ -66,6 +67,7 @@ import java.util.concurrent.atomic.AtomicReference;
                         decrementAfterTimer = TimerBase.ELECTIONS_DURATION_APPLICATION)})
 public class Elections extends ListenerWerewolf {
 
+    private static final String MAYOR = "mayor";
     private final Map<IPlayerWW, String> playerMessages = new HashMap<>();
     private final Map<IPlayerWW, IPlayerWW> votes = new HashMap<>();
     private final MayorState mayorState = MayorState.values()[(int) Math.floor(new Random(System.currentTimeMillis()).nextFloat() * MayorState.values().length)];
@@ -159,15 +161,15 @@ public class Elections extends ListenerWerewolf {
         Bukkit.getPluginManager().callEvent(new MayorSelectionEvent(mayor.get(), this.mayorState, max.get()));
 
         if (this.mayorState == MayorState.FARMER) {
-            mayor.get().addPotionModifier(PotionModifier.add(PotionEffectType.SATURATION, "mayor"));
+            mayor.get().addPotionModifier(PotionModifier.add(PotionEffectType.SATURATION, MAYOR));
         }
 
-        Bukkit.broadcastMessage(getGame().translate("werewolf.elections.election.result",
+        Bukkit.broadcastMessage(getGame().translate(Prefix.BLUE, "werewolf.elections.election.result",
                 Formatter.format("&name&", mayor.get().getName()),
                 Formatter.format("&votes&", max.get()),
                 Formatter.format("&forme&", getGame().translate(this.getMayorState().getKey()))));
 
-        mayor.get().sendMessageWithKey(this.mayorState.getDescription());
+        mayor.get().sendMessageWithKey(Prefix.LIGHT_BLUE, this.mayorState.getDescription());
     }
 
     public boolean isPower() {
@@ -196,13 +198,13 @@ public class Elections extends ListenerWerewolf {
         this.getMayor().ifPresent(playerWW -> {
             if (event.getPlayerWW().equals(playerWW)) {
                 this.setMayor(null);
-                Bukkit.broadcastMessage(this.getGame().translate("werewolf.elections.election.death"));
+                Bukkit.broadcastMessage(this.getGame().translate(Prefix.RED, "werewolf.elections.election.death"));
                 Bukkit.getPluginManager().callEvent(new MayorDeathEvent(event.getPlayerWW()));
             } else if (playerWW.isState(StatePlayer.ALIVE) && this.getMayorState() == MayorState.UNDERTAKER) {
 
                 if (event.getPlayerWW().getRole().getCamp().equals(playerWW.getRole().getCamp())) {
                     playerWW.addItem(new ItemStack(Material.GOLDEN_APPLE));
-                    playerWW.sendMessageWithKey("werewolf.elections.election.regime.undertaker.message");
+                    playerWW.sendMessageWithKey(Prefix.ORANGE, "werewolf.elections.election.regime.undertaker.message");
                     Bukkit.getPluginManager().callEvent(new MayorGoldenAppleEvent(playerWW, event.getPlayerWW()));
 
                 }
@@ -243,7 +245,7 @@ public class Elections extends ListenerWerewolf {
 
         WereWolfAPI game = this.getGame();
 
-        Bukkit.broadcastMessage(game.translate("werewolf.elections.election.begin", Formatter.format("&timer&",
+        Bukkit.broadcastMessage(game.translate(Prefix.YELLOW, "werewolf.elections.election.begin", Formatter.format("&timer&",
                 Utils.conversion(game.getConfig().getTimerValue(TimerBase.ELECTIONS_DURATION_APPLICATION)))));
         this.setState(ElectionState.MESSAGE);
     }
@@ -254,7 +256,7 @@ public class Elections extends ListenerWerewolf {
         WereWolfAPI game = this.getGame();
 
         this.setState(ElectionState.ELECTION);
-        Bukkit.broadcastMessage(game.translate("werewolf.elections.election.vote",
+        Bukkit.broadcastMessage(game.translate(Prefix.ORANGE, "werewolf.elections.election.vote",
                 Formatter.format("&timer&",
                         Utils.conversion(game.getConfig().getTimerValue(TimerBase.ELECTIONS_DURATION_CHOICE)))));
     }
@@ -282,7 +284,7 @@ public class Elections extends ListenerWerewolf {
 
             event.setCancelled(true);
 
-            playerWW.sendMessageWithKey("werewolf.elections.election.regime.doctor.resurrection");
+            playerWW.sendMessageWithKey(Prefix.GREEN, "werewolf.elections.election.regime.doctor.resurrection");
 
             Bukkit.getPluginManager().callEvent(new MayorResurrectionEvent(event.getPlayerWW()));
 

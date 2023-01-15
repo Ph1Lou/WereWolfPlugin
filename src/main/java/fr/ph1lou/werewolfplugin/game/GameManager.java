@@ -68,7 +68,7 @@ public class GameManager implements WereWolfAPI {
     private StateGame state;
     private Day day;
     private boolean debug;
-    private IVoteManager voteManager = new VoteManager(this);
+    private IVoteManager voteManager;
     private Configuration configuration;
     private String gameName;
     private int groupSize = 5;

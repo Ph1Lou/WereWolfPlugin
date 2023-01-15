@@ -1921,6 +1921,7 @@
     },
     "elections": {
       "name": "§fLes Elections",
+      "lore": "Permet l'élection d'un §bMaire",
       "election": {
         "command": "election",
         "star": "§6⭐ ",

@@ -67,7 +67,7 @@ public class AdvancedConfigurationUtils {
                             .map(s -> Arrays.stream(s.split("\\n"))
                                     .collect(Collectors.toList()))
                             .forEach(lore::addAll);
-                    return ClickableItem.of(new ItemBuilder(UniversalMaterial.ANVIL.getStack())
+                    return ClickableItem.of(new ItemBuilder(UniversalMaterial.CLOCK.getStack())
                             .setLore(lore)
                             .setDisplayName(game.translate(timerRegister.key(),
                                     Formatter.timer(game, timerRegister.key())))

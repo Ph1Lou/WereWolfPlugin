@@ -53,7 +53,9 @@ public class ListenersManager implements IListenersManager {
         this.listeners.add(new DeathListener(this.game));
         this.listeners.add(new DamagesListener(this.game));
         this.listeners.add(new InvisibleListener(this.game));
-        this.listeners.add((Listener) this.game.getVoteManager());
+        VoteManager voteManager = new VoteManager(this.game);
+        this.game.setVoteManager(voteManager);
+        this.listeners.add(voteManager);
         this.listeners.forEach(BukkitUtils::registerListener);
 
         Register registerManager = Register.get();

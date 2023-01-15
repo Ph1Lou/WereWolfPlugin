@@ -205,7 +205,7 @@ public class TimersGUI implements InventoryProvider {
 
                         items.add(ClickableItem.of((new ItemBuilder(timerRegister.getMetaDatas().key().equals(key) ?
                                         Material.FEATHER :
-                                        UniversalMaterial.ANVIL.getType())
+                                        UniversalMaterial.CLOCK.getType())
                                         .setLore(lore)
                                         .setDisplayName(game.translate(timerRegister.getMetaDatas().key(),
                                                 Formatter.timer(game, timerRegister.getMetaDatas().key())))
