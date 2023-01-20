@@ -101,26 +101,28 @@ public class StatistiksUtils {
 
     public static void postGame(Main main, @NotNull GameReview gameReview) {
 
-        if (gameReview.getWinnerCampKey() == null) return;
-
         String jsonInputString = Serializer.serialize(gameReview);
         File file = new File(main.getDataFolder() + File.separator + "statistics", gameReview.getGameUUID() + ".json");
 
         FileUtils_.save(file, jsonInputString);
 
+        if (gameReview.getWinnerCampKey() == null) {
+            Bukkit.getLogger().warning("[WereWolfPlugin] Statistics no send because game not ended");
+            return;
+        }
 
         if (gameReview.getPlayersCount() < 17) {
-            Bukkit.getLogger().warning("[WereWolfPlugin] Statistiks no send because player size < 17");
+            Bukkit.getLogger().warning("[WereWolfPlugin] Statistics no send because player size < 17");
             return;
         }
 
         if (main.getWereWolfAPI().getTimer() < 3600) {
-            Bukkit.getLogger().warning("[WereWolfPlugin] Statistiks no send because game duration < 1h");
+            Bukkit.getLogger().warning("[WereWolfPlugin] Statistics no send because game duration < 1h");
             return;
         }
 
         if (((GameManager) main.getWereWolfAPI()).isCrack()) {
-            Bukkit.getLogger().warning("[WereWolfPlugin] Statistiks no send because Server Crack");
+            Bukkit.getLogger().warning("[WereWolfPlugin] Statistics no send because Server Crack");
             return;
         }
 

@@ -109,7 +109,6 @@ public class Hunter extends RoleVillage implements IPower {
 
         event.setDamage(event.getDamage() * (1 + (game.getConfig().getStrengthRate() / 100f) * (0.5 + damageBonus)));
     }
-
     @EventHandler
     public void onWerewolfKillEvent(WereWolfKillEvent event) {
         if (event.getVictimWW().equals(getPlayerWW())) {

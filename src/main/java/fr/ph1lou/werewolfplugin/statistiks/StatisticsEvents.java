@@ -10,12 +10,14 @@ import fr.ph1lou.werewolfapi.annotations.statistics.StatisticsPlayer;
 import fr.ph1lou.werewolfapi.annotations.statistics.StatisticsTarget;
 import fr.ph1lou.werewolfapi.annotations.statistics.StatisticsTargets;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
+import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.WinEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.statistics.impl.GameReview;
 import fr.ph1lou.werewolfapi.statistics.impl.RegisteredAction;
 import fr.ph1lou.werewolfplugin.Main;
+import fr.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -26,6 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -114,6 +117,15 @@ public class StatisticsEvents implements Listener {
         this.currentGameReview = new GameReview(main.getWereWolfAPI(), serverUUID);
     }
 
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onGameStop(StopEvent event) {
+
+        if (this.currentGameReview != null && this.currentGameReview.getWinnerCampKey() == null) {
+            this.currentGameReview.end("werewolf.debug", new HashSet<>());
+            StatistiksUtils.postGame(main, this.currentGameReview);
+        }
+    }
+
     private <T> T getValue(Class<T> returnedClazz, Class<Event> eventClass, Event event, Class<? extends Annotation> annotationClass) {
         return Arrays.stream(eventClass.getMethods())
                 .filter(method -> method.getAnnotation(annotationClass) != null)
@@ -121,6 +133,10 @@ public class StatisticsEvents implements Listener {
                 .map(method -> {
                     try {
                         Object object = method.invoke(event);
+
+                        if(object == null){
+                            return null;
+                        }
 
                         Class<?> objectClass = object.getClass();
                         if (objectClass.isPrimitive()) { // Handle Integer and int

@@ -52,7 +52,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @Configuration(config = @ConfigurationBasic(key = ConfigBase.ELECTIONS, loreKey = "werewolf.elections.lore"),
         timers = {
                 @Timer(key = TimerBase.ELECTIONS_BEGIN, defaultValue = 1800,
-                        meetUpValue = 1800,
+                        meetUpValue = 180,
                         decrementAfterRole = true,
                         onZero = MayorElectionApplicationBeginEvent.class),
                 @Timer(key = TimerBase.ELECTIONS_DURATION_APPLICATION,
@@ -66,7 +66,6 @@ import java.util.concurrent.atomic.AtomicReference;
                         onZero = MayorElectionVoteEndEvent.class,
                         decrementAfterTimer = TimerBase.ELECTIONS_DURATION_APPLICATION)})
 public class Elections extends ListenerWerewolf {
-
     private static final String MAYOR = "mayor";
     private final Map<IPlayerWW, String> playerMessages = new HashMap<>();
     private final Map<IPlayerWW, IPlayerWW> votes = new HashMap<>();

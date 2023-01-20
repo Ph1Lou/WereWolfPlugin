@@ -13,7 +13,7 @@ import fr.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.DeathItemsEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FirstDeathEvent;
-import fr.ph1lou.werewolfapi.events.game.life_cycle.PlayerWWDeathEvent;
+import fr.ph1lou.werewolfapi.events.game.life_cycle.PlayerWWKillEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.ResurrectionEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.ThirdDeathEvent;
@@ -104,15 +104,14 @@ public class DeathListener implements Listener {
                 IPlayerWW killerWW = game.getPlayerWW(killerUUID).orElse(null);
                 playerWW.addKiller(killerWW);
 
-                Bukkit.getPluginManager().callEvent(new PlayerWWDeathEvent(playerWW, killerWW));
+                Bukkit.getPluginManager().callEvent(new PlayerWWKillEvent(killerWW, playerWW));
 
                 if (killerWW != null) {
                     killerWW.addOneKill(playerWW);
                 }
             } else {
                 playerWW.addKiller(null);
-                Bukkit.getPluginManager().callEvent(new PlayerWWDeathEvent(playerWW, null));
-
+                Bukkit.getPluginManager().callEvent(new PlayerWWKillEvent(null, playerWW));
             }
 
             BukkitUtils.scheduleSyncDelayedTask(game, () -> {
