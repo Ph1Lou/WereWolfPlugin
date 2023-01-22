@@ -26,6 +26,12 @@ public class CommandWish implements ICommand {
         if (playerWW == null) {
             return;
         }
+
+        if (strings.length == 0) {
+            player.sendMessage(wereWolfAPI.translate(Prefix.RED, "werewolf.check.parameters", Formatter.number(1)));
+            return;
+        }
+
         StringBuilder builder = new StringBuilder();
         for (String string : strings) {
             builder.append(string).append(" ");

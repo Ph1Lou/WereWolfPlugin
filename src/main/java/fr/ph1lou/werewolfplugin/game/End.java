@@ -94,15 +94,16 @@ public class End {
             return;
         }
 
-        if (iRolesAlive.stream().allMatch(ICamp::isWereWolf)) {
-            winner = Category.WEREWOLF.getKey();
-            end();
-            return;
-        }
-        if (iRolesAlive.stream().noneMatch(ICamp::isWereWolf) &&
-                iRolesAlive.stream().noneMatch(ICamp::isNeutral)) {
-            winner = Category.VILLAGER.getKey();
-            end();
+        if(iRolesAlive.stream().noneMatch(ICamp::isNeutral)){
+
+            if (iRolesAlive.stream().allMatch(ICamp::isWereWolf)) {
+                winner = Category.WEREWOLF.getKey();
+                end();
+            }
+            else if (iRolesAlive.stream().noneMatch(ICamp::isWereWolf)) {
+                winner = Category.VILLAGER.getKey();
+                end();
+            }
         }
     }
 

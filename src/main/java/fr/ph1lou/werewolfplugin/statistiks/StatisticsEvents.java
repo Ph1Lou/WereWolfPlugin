@@ -137,7 +137,6 @@ public class StatisticsEvents implements Listener {
                         if(object == null){
                             return null;
                         }
-
                         Class<?> objectClass = object.getClass();
                         if (objectClass.isPrimitive()) { // Handle Integer and int
                             objectClass = Primitives.wrap(objectClass);

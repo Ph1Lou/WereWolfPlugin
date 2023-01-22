@@ -4,7 +4,6 @@ import com.pieterdebot.biomemapping.Biome;
 import com.pieterdebot.biomemapping.BiomeMappingAPI;
 
 public class Replacer {
-
     public static void replaceBiomes() {
         BiomeMappingAPI biome = new BiomeMappingAPI();
         replaceBiome(biome, Biome.BEACH, Biome.FOREST);
@@ -38,7 +37,7 @@ public class Replacer {
     }
 
     private static void replaceBiome(BiomeMappingAPI biome, Biome initial, Biome finalBiome) {
-        try {
+        try { //beach par forest holder 13474 biomebase 14176 id 36 new biomebase 14876
             if (biome.biomeSupported(initial)) {
                 biome.replaceBiomes(initial, finalBiome);
             }

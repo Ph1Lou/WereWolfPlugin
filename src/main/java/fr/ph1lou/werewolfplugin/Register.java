@@ -54,7 +54,13 @@ public class Register implements IRegisterManager {
     public Register(Main main) {
         INSTANCE = this;
 
+        this.scanPlugins(main);
+    }
+
+    private void scanPlugins(Main main) {
+
         for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
+
             ModuleWerewolf moduleWerewolf = plugin.getClass().getAnnotation(ModuleWerewolf.class);
 
             if (moduleWerewolf != null) {
@@ -81,7 +87,7 @@ public class Register implements IRegisterManager {
                         plugin,
                         prefix);
 
-                if (plugin.equals(main)) { //register api to
+                if (plugin.equals(main)) { //register api too
                     this.register("fr.ph1lou.werewolfapi",
                             moduleWerewolf,
                             plugin,
