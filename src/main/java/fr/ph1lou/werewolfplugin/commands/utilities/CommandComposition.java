@@ -76,7 +76,7 @@ public class CommandComposition implements ICommand {
 
         Register.get().getRolesRegister().stream()
                 .filter(roleRegister -> roleRegister.getMetaDatas()
-                        .category() == category)
+                                                .category() == category)
                 .forEach(roleRegister -> {
                     String key = roleRegister.getMetaDatas().key();
                     int number = game.getConfig().getRoleCount(key);

@@ -954,6 +954,98 @@
         "target_message": "Le rebouteux vous guérira de §b3 ♥ §f si vous tombez en dessous de §b4 ♥!",
         "activate": "Un joueur a été guéri grâce à vous",
         "receive_heal": "Vous recevez les soins du §bRebouteux"
+      },
+      "witness": {
+        "display" : "Témoin",
+        "description" : "A l'annonce de la liste des loups, vous connaitrez le pseudo d'un coupable, membre du camp des loups. Toutefois, si le coupable venait a mourir, vous perdrez 4 coeurs permanents. De plus, vous infligez 30%% de dégats en moins au coupable.",
+        "culprit_name" : "Le coupable est §b&player&",
+        "culprit_unknown" : "Le coupable est dévoilé dans &time&",
+        "culprit_dead": "Le coupable est Mort",
+        "item": "Role par havwila",
+        "reveal_culprit" : "Le joueur §b&player&§r appartient au camp des loup-garous",
+        "culprit_death" : "Le coupable est mort, vous perdez donc 4 coeurs permanents",
+        "change" : "L'identité du coupable a changée, il s'agit désormais de §b&player&§r"
+      },
+      "croupier": {
+        "display": "Croupier",
+        "description": "Chaque jour, vous pouvez sélectionner un joueur qui recevra un message contenant le pseudo d'un joueur aléatoire ainsi que 3 roles, parmis lesquels se trouve le role de ce joueur.",
+        "command": "distribuer",
+        "perform": "Vous pouvez distribuer des informations à un joueur avec §b/ww distribuer§r vous avez §b&timer&",
+        "not_enough_players": "Il ne reste pas assez de joueurs pour utiliser cette commande",
+        "yourself": "Vous ne pouvez pas vous sélectionner vous-même",
+        "repeated_target": "Vous ne pouvez sélectionner qu'une seule fois le même joueur",
+        "card": "Grâce au §bCroupier§f, vous savez que le role de §b&player&§r se trouve parmi les suivants: §b&role1&§r, §b&role2&§r, §b&role3&",
+        "confirm": "Le message a été envoyé",
+        "problem": "Il n'y a pas assez de joueurs pour faire la lsite des rôles",
+        "configurations": {
+          "croupier_every_other_day": "Croupier tous les deux jours"
+        }
+      },
+      "romulus_remus": {
+        "display": "Romulus ou Remus",
+        "description_naive": "Pour l'instant, vous pouvez gagner avec votre frère et votre mère adoptive. \nToutefois, si l'un de vous trois meurt, votre objectif changera. \nVous ne connaissez que le rôle de votre mère. \nSi vous passez a coté d'elle, elle saura §b2§f minutes plus tard qu'elle a rencontré un de ces fils.",
+        "power_naive": "Resistance lorsque vous êtes à plus de &number& blocs de votre frère",
+        "mother_role": "Votre mère est un §b&role&§r\n",
+        "brother_name": "Votre frère est §b&name&§r\n",
+        "description_romulus": "Vous êtes Romulus. Vous obtiendrez un effet de force permanent si vous parvenez à tuer votre frère",
+        "description_remus": "Vous êtes Remus. Vous obtiendrez un effet de force permanent si vous tuez votre frère. Les Loups vous verront avec eux dès que vous aurez tué votre frère",
+        "strength": "Force permanente\n",
+        "mother_message": "Vous sentez l'odeur d'un de vos fils adoptifs. Vous étiez proches de lui il y a §b2§f minutes",
+        "killed_brother_strength": "Vous êtes parvenu à tuer votre frère. Vous avez désormais §4Force§r pour le restant de la partie",
+        "mother_dead": "Votre mère est morte. Votre rôle a changé. §b/ww role§r pour en savoir plus.",
+        "family_change": "Un membre de votre famille a changé. §b/ww role§r pour en savoir plus.",
+        "family_init": "Vous connaissez désormais votre famille. §b/ww role§r pour en savoir plus.",
+        "configuration": {
+          "distance_brother": "Distance séparant les frères §b&number&§f blocs"
+        }
+      },
+      "inquisitor": {
+        "display": "Inquisiteur",
+        "description": "Au début du jour, vous pouvez châtier un joueur. Si le joueur est un §cLoup§f, il perd ses pouvoirs et effets. Si le joueur ciblé n'est pas un Loup, vous perdez votre pouvoir",
+        "smite_message": "Châtiez un joueur avec §b/ww chatiment joueur§r, vous avez §b&timer&",
+        "command": "chatiment",
+        "smite_disable": "L'§bInquisiteur§f vous a châtié. Vous perdez vos effets et pouvoirs définitivement",
+        "smite_success": "Votre cible est un Loup, il perd donc définitivement tous ses pouvoirs et effets",
+        "smite_fail": "Le joueur ciblé n'est pas un Loup. Vous perdez donc votre pouvoir définitivement"
+      },
+      "auramancer": {
+        "display": "Auramancien",
+        "description": "Vous possédez des effets différents en fonction de l'aura que vous avez. Lorsque vous êtes affectés par un modificateur d'aura, votre aura devient l'aura du modificateur. Quand vous tuez un joueur avec une aura &dark&§r, votre aura s'améliore d'un cran.",
+        "passive_light": "§bPassif§r: Les joueurs proches à l'aura &light&§r disposent de 0.5 de force.\n",
+        "passive_neutral": "§bPassif§r: Lorsque un joueur est tué proche de vous (50 blocs), vous apprenez quelles sont les auras du mort et du tueur\n",
+        "passive_dark": "§bPassif§r: Vous devez gagner §cseul§r. Vous infligez des dégâts de force aux joueurs avec une aura &light&§r. Vous disposez du pseudo d'un joueur à l'aura &light&. S'il ne reste plus de joueurs à l'aura &light&§r, votre aura ne change plus et vous obtenez speed permanent.\n",
+        "aura_status": "Votre aura est &aura&§r\n",
+        "aura_sense": "Un joueur proche avec une aura &auraVictim&§r a été tué par un joueur avec une aura &auraKiller&",
+        "aura_kill": "Vous avez tué un joueur avec une aura &aura_dead&§r. Votre aura est désormais &aura_new&",
+        "aura_change": "Votre aura a changé. Elle est désormais &aura&",
+        "aura_locked": "Plus aucun autre joueur ne possède une aura &aura_light&§r. Vous gardez votre aura &aura&§r pour le restant de la partie.",
+        "light_player": "Le joueur §b&player&§r a une aura &light&.",
+        "no_light": "Il n'y a plus de joueurs avec l'aura &light&.",
+        "configurations": {
+          "distance": "Champ d'action de l'Auramancien §b&number&§f blocs"
+        }
+      },
+      "mastermind": {
+        "display": "Mastermind",
+        "description": "Vous pouvez deviner les roles des joueurs avec §b/ww deviner joueur§r. Si vous devinez correctement, vous gagnez un coeur permanent, autrement vous en perdez un.",
+        "command": "§b/ww mindsilence joueur§r pour un coeur permanent, desactivez le rôle d'un joueur que vous avez deviné",
+        "repeat_target": "Vous avez déja tenté de deviner le role de ce joueur",
+        "guess_success": "Vous avez deviné le role de &player&. Vous obtenez un coeur permanent supplémentaire",
+        "guess_fail": "Vous vous êtes trompé de rôle. Vous perdez donc un coeur permanent",
+        "not_guessed": "Vous n'avez pas deviné le role de &player&. Vous ne pouvez pas effectuer cette action",
+        "command_disable": "mindsilence",
+        "disable_perform": "Vous avez désactivé les compétences de &player&",
+        "disable_target": "Vos compétences ont été désactivés. Vous perdez vos effets et pouvoirs définitivement"
+      },
+      "silencer_werewolf": {
+        "display": "Loup Muselant",
+        "description":"Une fois par nuit, tant qu'il reste plus de villageois que de loups, vous pouvez tentez de deviner le role d'un villageois. Si vous réussissez, il perdra ses pouvoirs. Si vous vous trompez, vous ne pourrez plus utiliser cette commande jusqu'à la fin de la partie",
+        "desc_command": "/ww deviner joueur",
+        "guess_success": "Vous avez deviné le role de &player&. Il perd ses pouvoirs",
+        "guess_fail": "Vous vous êtes trompé de rôle. Vous ne pouvez désormais plus utiliser cette commande",
+        "disable_target": "Le Loup muselant a trouvé votre role et a désactivé vos pouvoirs jusqu'à la fin de la game",
+        "power": "Vous pouvez à nouveau utiliser votre pouvoir",
+        "more_wolves": "Il y a moins de villageois que de loups. Vous ne pouvez pas utiliser votre pouvoir"
       }
     },
     "announcement": {
@@ -1310,6 +1402,10 @@
         "vote": {
           "command": "vote",
           "description": "Permet de voter"
+        },
+        "guess": {
+          "command": "deviner",
+          "title": "Devinez le role de §b&player&"
         }
       }
     },

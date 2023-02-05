@@ -19,13 +19,13 @@ import java.util.UUID;
 
 @PlayerCommand(key = "werewolf.commands.player.anonymous_chat.command",
         descriptionKey = "werewolf.commands.player.anonymous_chat.description",
-        statesGame = {StateGame.START, StateGame.GAME},
+        statesGame = { StateGame.START, StateGame.GAME },
         statesPlayer = StatePlayer.ALIVE)
 public class CommandAnonymeChat implements ICommand {
 
     private final int cesar = (int) (Math.random() * 26) + 1;
     private final Map<String, UUID> players = new HashMap<>();
-    private final char[] alphabet1 = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '_'};
+    private final char[] alphabet1 = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '_' };
 
     @Override
     public void execute(WereWolfAPI game, Player player, String[] args) {

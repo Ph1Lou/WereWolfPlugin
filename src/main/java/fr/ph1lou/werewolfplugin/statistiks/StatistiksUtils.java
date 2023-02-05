@@ -106,7 +106,7 @@ public class StatistiksUtils {
 
         FileUtils_.save(file, jsonInputString);
 
-        if (gameReview.getWinnerCampKey() == null) {
+        if (gameReview.getWinnerCampKey() == null || gameReview.getWinnerCampKey().equals(StatisticsEvents.DEBUG)) {
             Bukkit.getLogger().warning("[WereWolfPlugin] Statistics no send because game not ended");
             return;
         }

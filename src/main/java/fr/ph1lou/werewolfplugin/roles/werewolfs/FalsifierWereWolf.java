@@ -59,7 +59,7 @@ public class FalsifierWereWolf extends RoleWereWolf {
                 players.add(playerWW1.getUUID());
             }
         }
-        if (players.size() <= 0) {
+        if (players.isEmpty()) {
             return;
         }
 

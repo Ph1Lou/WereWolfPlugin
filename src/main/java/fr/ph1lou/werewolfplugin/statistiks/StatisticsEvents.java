@@ -17,7 +17,6 @@ import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.statistics.impl.GameReview;
 import fr.ph1lou.werewolfapi.statistics.impl.RegisteredAction;
 import fr.ph1lou.werewolfplugin.Main;
-import fr.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -34,7 +33,9 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 
+@SuppressWarnings("unchecked")
 public class StatisticsEvents implements Listener {
+    public static final String DEBUG = "werewolf.debug";
     private final Main main;
     private UUID serverUUID;
 
@@ -63,7 +64,6 @@ public class StatisticsEvents implements Listener {
                                     if (this.currentGameReview == null) {
                                         return;
                                     }
-
                                     StatisticsEvent statisticsEvent = eventClass.getClazz().getAnnotation(StatisticsEvent.class);
                                     WereWolfAPI api = main.getWereWolfAPI();
 
@@ -121,7 +121,7 @@ public class StatisticsEvents implements Listener {
     public void onGameStop(StopEvent event) {
 
         if (this.currentGameReview != null && this.currentGameReview.getWinnerCampKey() == null) {
-            this.currentGameReview.end("werewolf.debug", new HashSet<>());
+            this.currentGameReview.end(DEBUG, new HashSet<>());
             StatistiksUtils.postGame(main, this.currentGameReview);
         }
     }

@@ -53,6 +53,8 @@ import java.util.stream.Stream;
 
 public class DeathListener implements Listener {
 
+    public static final String KILLER = "killer";
+    private static final String RESURRECTION = "resurrection";
     private final WereWolfAPI game;
 
     public DeathListener(WereWolfAPI game) {
@@ -211,7 +213,7 @@ public class DeathListener implements Listener {
                 .getPlayerWW()
                 .getLastKiller()
                 .ifPresent(playerWW1 -> playerWW1.getRole()
-                        .addAuraModifier(new AuraModifier("killer", Aura.DARK, 1, false)));
+                        .addAuraModifier(new AuraModifier(KILLER, Aura.DARK, 1, false)));
 
         game.getModerationManager().getModerators().stream()
                 .filter(uuid -> !game.getPlayerWW(uuid).isPresent())
@@ -281,7 +283,7 @@ public class DeathListener implements Listener {
         if (playerWW.isState(StatePlayer.ALIVE)) return;
 
         playerWW.setState(StatePlayer.ALIVE);
-        playerWW.getRole().addAuraModifier(new AuraModifier("resurrection", Aura.NEUTRAL, 10, false));
+        playerWW.getRole().addAuraModifier(new AuraModifier(RESURRECTION, Aura.NEUTRAL, 10, false));
 
         Player player = Bukkit.getPlayer(playerWW.getUUID());
 
