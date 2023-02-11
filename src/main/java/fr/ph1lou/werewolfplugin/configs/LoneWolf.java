@@ -8,7 +8,6 @@ import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.configs.LoneWolfEvent;
-import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
@@ -66,15 +65,5 @@ public class LoneWolf extends ListenerWerewolf {
         }
         role.setSolitary(true);
         register(false);
-    }
-
-    @EventHandler
-    public void onDeath(FinalDeathEvent event) {
-
-        WereWolfAPI game = this.getGame();
-
-        if (game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST) > 0) return;
-
-        designSolitary();
     }
 }

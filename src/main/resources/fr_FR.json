@@ -507,15 +507,15 @@
       "mischievous_werewolf": {
         "display": "Loup Garou Perfide",
         "items": "5 Tnt",
-        "effect": "Invisibilité en enlevant votre armure la nuit, Force la nuit sinon",
+        "effect": "Invisibilité en enlevant votre armure la nuit",
         "description": "Lorsque vous êtes invisible, vous laissez des particules rouges derrière vous qui sont visibles par les §bPetites Filles§f. Inversement vous pouvez les repérer par leurs particules bleues."
       },
       "elder": {
         "display": "Ancien",
-        "effect": "Résistance",
+        "effect": "Résistance avant de ressusciter",
         "available": "Vous avez §aencore§f votre seconde Vie.",
         "not_available": "Vous n'avez §cplus§f votre seconde Vie.",
-        "description": "Si un Loup Garou vous tue, vous ressuscitez. Si c’est un Villageois qui vous tue, il perdra son pouvoir et cinq coeurs.",
+        "description": "Si un Loup Garou vous tue, vous ressuscitez mais perdez votre §bRésistance§f. Si c’est un Villageois qui vous tue, il perdra son pouvoir et cinq coeurs.",
         "info_villager": "Vous venez de tuer l'Ancien, vous perdez 5 coeurs et votre pouvoir"
       },
       "flute_player": {
@@ -1265,7 +1265,8 @@
           "command": "late",
           "description": "Pour rajouter un joueur au cours de la partie",
           "in_game": "Le joueur est déjà dans la partie",
-          "launch": "§b&player&§r vient d'être rajouté à la partie"
+          "launch": "§b&player&§r vient d'être rajouté à la partie",
+          "teleportation": "Attendez la fin de la téléportaton avant de rajouter un nouveau joueur"
         },
         "config": {
           "command": "config",

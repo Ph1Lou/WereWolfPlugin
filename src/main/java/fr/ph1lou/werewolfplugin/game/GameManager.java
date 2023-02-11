@@ -39,6 +39,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -76,6 +77,7 @@ public class GameManager implements WereWolfAPI {
     private int timer = 0;
     private boolean crack = false;
     private int roleInitialSize = 0;
+    private final List<Integer> scheduleId = new ArrayList<>();
 
     private GameManager(Main main) {
         this.main = main;
@@ -209,6 +211,8 @@ public class GameManager implements WereWolfAPI {
         Bukkit.getPluginManager().callEvent(new StopEvent(this));
 
         this.listenersManager.delete();
+
+        this.scheduleId.forEach(integer -> Bukkit.getScheduler().cancelTask(integer));
 
         this.main.createGame();
 
@@ -421,6 +425,11 @@ public class GameManager implements WereWolfAPI {
     @Override
     public IListenersManager getListenersManager() {
         return this.listenersManager;
+    }
+
+    @Override
+    public void addScheduleId(int id) {
+        this.scheduleId.add(id);
     }
 
     public boolean isCrack() {

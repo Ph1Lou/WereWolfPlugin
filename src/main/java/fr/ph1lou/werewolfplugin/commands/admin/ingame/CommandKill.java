@@ -11,8 +11,6 @@ import fr.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
-
 @AdminCommand(key = "werewolf.commands.admin.kill.command",
         descriptionKey = "werewolf.commands.admin.kill.description",
         argNumbers = 1,
@@ -23,19 +21,13 @@ public class CommandKill implements ICommand {
     @Override
     public void execute(WereWolfAPI game, Player player, String[] args) {
 
-        boolean find = false;
+        IPlayerWW playerWW1 = game.getPlayersWW()
+                .stream()
+                .filter(iPlayerWW -> iPlayerWW.getName().equalsIgnoreCase(args[0]))
+                .findFirst()
+                .orElse(null);
 
-        UUID argUUID = null;
-        IPlayerWW playerWW1 = null;
-
-        for (IPlayerWW playerWW : game.getPlayersWW()) {
-            if (playerWW.getName().equalsIgnoreCase(args[0])) {
-                find = true;
-                argUUID = playerWW.getUUID();
-                playerWW1 = playerWW;
-            }
-        }
-        if (!find) {
+        if (playerWW1 == null) {
             player.sendMessage(game.translate(Prefix.RED, "werewolf.check.not_in_game_player"));
             return;
         }
@@ -45,7 +37,7 @@ public class CommandKill implements ICommand {
             return;
         }
         if (game.isState(StateGame.START)) {
-            ((GameManager) game).remove(argUUID);
+            ((GameManager) game).remove(playerWW1.getUUID());
             player.sendMessage(game.translate(Prefix.ORANGE, "werewolf.commands.admin.kill.remove_role"));
             return;
         }

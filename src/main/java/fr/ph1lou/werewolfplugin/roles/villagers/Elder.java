@@ -66,6 +66,10 @@ public class Elder extends RoleVillage implements IPower {
 
         if (!isAbilityEnabled()) return;
 
+        if(!this.power){
+            return;
+        }
+
         this.getPlayerWW().addPotionModifier(PotionModifier
                 .add(PotionEffectType.DAMAGE_RESISTANCE, this.getKey()));
     }
@@ -114,6 +118,7 @@ public class Elder extends RoleVillage implements IPower {
                     if (playerWW.getRole().isWereWolf()) {
                         event.setCancelled(true);
                         game.resurrection(getPlayerWW());
+                        this.disableAbilities();
                     }
                 });
             }

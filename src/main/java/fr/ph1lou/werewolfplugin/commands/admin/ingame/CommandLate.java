@@ -40,6 +40,11 @@ public class CommandLate implements ICommand {
             return;
         }
 
+        if(game.isState(StateGame.TRANSPORTATION)){
+            player.sendMessage(game.translate(Prefix.RED, "werewolf.commands.admin.late.teleportation"));
+            return;
+        }
+
         Bukkit.broadcastMessage(game.translate(Prefix.GREEN, "werewolf.commands.admin.late.launch",
                 Formatter.player(player1.getName())));
 

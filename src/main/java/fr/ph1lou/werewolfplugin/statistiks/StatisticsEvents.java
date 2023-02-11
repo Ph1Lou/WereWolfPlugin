@@ -102,8 +102,9 @@ public class StatisticsEvents implements Listener {
                                                     .setActionableStory(eventClass.getClazz().getAnnotation(TellableStoryEvent.class) != null));
 
                                     if (eventClass.getClazz().isAssignableFrom(WinEvent.class)) {
-                                        this.currentGameReview.end(extraInfo, targetsWW);
+                                        this.currentGameReview.end(main.getWereWolfAPI(), extraInfo, targetsWW);
                                         StatistiksUtils.postGame(main, this.currentGameReview);
+                                        this.currentGameReview = null;
                                     }
                                 }, main, true);
                     } catch (Exception exception) {
@@ -120,9 +121,10 @@ public class StatisticsEvents implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onGameStop(StopEvent event) {
 
-        if (this.currentGameReview != null && this.currentGameReview.getWinnerCampKey() == null) {
-            this.currentGameReview.end(DEBUG, new HashSet<>());
+        if (this.currentGameReview != null) {
+            this.currentGameReview.end(event.getWereWolfAPI(), DEBUG, new HashSet<>());
             StatistiksUtils.postGame(main, this.currentGameReview);
+            this.currentGameReview = null;
         }
     }
 

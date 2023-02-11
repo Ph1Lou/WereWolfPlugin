@@ -163,9 +163,14 @@ public class Innkeeper extends RoleVillage implements IPower {
                             .filter(iPlayerWW -> !iPlayerWW.equals(getPlayerWW()))
                             .filter(iPlayerWW -> !iPlayerWW.equals(clientData.playerWW))
                             .filter(iPlayerWW -> iPlayerWW.isState(StatePlayer.ALIVE))
-                            .filter(iPlayerWW -> iPlayerWW.getLocation()
-                                    .distance(clientData.playerWW.getLocation()) <= game.getConfig()
-                                    .getValue(IntValueBase.INNKEEPER_DETECTION_RADIUS)) //todo add world check
+                            .filter(iPlayerWW -> {
+                                if(iPlayerWW.getLocation().getWorld() == clientData.playerWW.getLocation().getWorld()){
+                                    return iPlayerWW.getLocation()
+                                                    .distance(clientData.playerWW.getLocation()) <= game.getConfig()
+                                                    .getValue(IntValueBase.INNKEEPER_DETECTION_RADIUS);
+                                }
+                                return false;
+                            })
                             .forEach(clientData.seenPlayers::add);
                 }
             }

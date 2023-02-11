@@ -158,7 +158,6 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
         if (!getAffectedPlayers().contains(playerWW)) {
             return;
         }
-
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
