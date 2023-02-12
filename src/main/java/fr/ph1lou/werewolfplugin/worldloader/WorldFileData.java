@@ -24,10 +24,10 @@ import java.util.Map;
 // by the way, this region file handler was created based on the divulged region file format: http://mojang.com/2011/02/16/minecraft-save-file-format-in-beta-1-3/
 
 public class WorldFileData {
-    private final transient World world;
-    private final transient Map<CoordXZ, List<Boolean>> regionChunkExistence = Collections.synchronizedMap(new HashMap<>());
-    private transient File regionFolder = null;
-    private transient File[] regionFiles = null;
+    private final World world;
+    private final Map<CoordXZ, List<Boolean>> regionChunkExistence = Collections.synchronizedMap(new HashMap<>());
+    private File regionFolder = null;
+    private File[] regionFiles = null;
 
     // the constructor is private; use create() method above to create an instance of this class.
     private WorldFileData(World world) {

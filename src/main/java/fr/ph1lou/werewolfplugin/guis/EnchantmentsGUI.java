@@ -189,7 +189,7 @@ public class EnchantmentsGUI implements InventoryProvider {
                 }));
         contents.set(1, 8, ClickableItem.of((
                         new ItemBuilder(UniversalMaterial.OAK_BOAT.getType())
-                                .setDisplayName(game.translate("werewolf.menus.enchantments.depth_rider",
+                                .setDisplayName(game.translate("werewolf.menus.enchantments.depth_strider",
                                         Formatter.number(game.getConfig().getLimitDepthStrider()))))
                         .setLore(lore).build(),
                 e -> {
@@ -201,7 +201,7 @@ public class EnchantmentsGUI implements InventoryProvider {
 
 
                     e.setCurrentItem(new ItemBuilder(UniversalMaterial.OAK_BOAT.getType())
-                            .setDisplayName(game.translate("werewolf.menus.enchantments.depth_rider",
+                            .setDisplayName(game.translate("werewolf.menus.enchantments.depth_strider",
                                     Formatter.number(game.getConfig().getLimitDepthStrider())))
                             .setLore(lore).build());
                 }));

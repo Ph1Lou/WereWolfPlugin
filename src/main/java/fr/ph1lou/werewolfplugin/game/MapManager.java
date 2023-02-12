@@ -59,8 +59,7 @@ public class MapManager implements IMapManager {
         int chunksPerRun = 80;
         if (this.wft == null || this.wft.getPercentageCompleted() == 100) {
             this.wft = new WorldFillTask(
-                    Bukkit.getServer(),
-                    world.getName(),
+                    world,
                     chunksPerRun,
                     false,
                     mapRadius);
@@ -121,10 +120,12 @@ public class MapManager implements IMapManager {
             wft = null;
         }
 
+        World lobby = Bukkit.getWorlds().get(0);
+
         Bukkit.getOnlinePlayers()
                 .stream()
                 .filter(player -> player.getWorld().equals(world))
-                .forEach(player -> player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation()));
+                .forEach(player -> player.teleport(lobby.getSpawnLocation()));
 
         try {
             Bukkit.unloadWorld(world, false);

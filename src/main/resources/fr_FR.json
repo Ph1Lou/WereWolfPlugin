@@ -976,7 +976,7 @@
         "repeated_target": "Vous ne pouvez sélectionner qu'une seule fois le même joueur",
         "card": "Grâce au §bCroupier§f, vous savez que le role de §b&player&§r se trouve parmi les suivants: §b&role1&§r, §b&role2&§r, §b&role3&",
         "confirm": "Le message a été envoyé",
-        "problem": "Il n'y a pas assez de joueurs pour faire la lsite des rôles",
+        "problem": "Il n'y a pas assez de joueurs pour faire la liste des rôles",
         "configurations": {
           "croupier_every_other_day": "Croupier tous les deux jours"
         }
@@ -1483,7 +1483,7 @@
         "knock_back": "Recul §b&number&",
         "knock_back_invisible": "§cRecul§f seulement pour les joueurs §ainvisibles",
         "punch": "Frappe : §b&number&",
-        "depth_rider": "Agilité aquatique : §b&number&"
+        "depth_strider": "Agilité aquatique : §b&number&"
       },
       "timers": {
         "name": "Configuration §bTimers"

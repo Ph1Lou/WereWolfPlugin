@@ -213,7 +213,8 @@ public class Interpreter extends RoleVillage implements IPower {
             return;
         }
 
-        if (!game.isState(StateGame.END) && !this.getPlayerWW().isState(StatePlayer.DEATH)) {
+        if (!this.getPlayerWW().isState(StatePlayer.DEATH)) {
+
             HandlerList.unregisterAll(this.role);
             this.role = null;
             this.getPlayerWW().clearPotionEffects(this.getPlayerWW().getRole().getKey());

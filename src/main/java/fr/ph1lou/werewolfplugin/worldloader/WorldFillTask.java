@@ -17,59 +17,50 @@ import java.util.concurrent.CompletableFuture;
 
 public class WorldFillTask implements Runnable {
     private static final Runtime rt = Runtime.getRuntime();
-    private final transient World world;
-    private final transient int chunksPerRun;
-    private final transient boolean forceLoad;
-    private final transient CoordXZ lastChunk = new CoordXZ(0, 0);
+    private World world;
+    private final int chunksPerRun;
+    private final boolean forceLoad;
+    private final CoordXZ lastChunk = new CoordXZ(0, 0);
     // general task-related reference data
-    private transient Server server;
-    private transient BorderData border = null;
-    private transient WorldFileData worldData = null;
-    private transient boolean readyToGo = false;
-    private transient boolean paused = false;
-    private transient boolean pausedForMemory = false;
-    private transient int taskID = -1;
+    private Server server;
+    private BorderData border = null;
+    private WorldFileData worldData = null;
+    private boolean readyToGo = false;
+    private boolean paused = false;
+    private boolean pausedForMemory = false;
+    private int taskID = -1;
     // values for the spiral pattern check which fills out the map to the border
-    private transient int x = 0;
-    private transient int z = 0;
-    private transient boolean isZLeg = false;
-    private transient boolean isNeg = false;
-    private transient int length = -1;
-    private transient int current = 0;
-    private transient boolean insideBorder = true;
+    private int x = 0;
+    private int z = 0;
+    private boolean isZLeg = false;
+    private boolean isNeg = false;
+    private int length = -1;
+    private int current = 0;
+    private boolean insideBorder = true;
     // for reporting progress back to user occasionally
-    private transient long lastReport = System.currentTimeMillis();
-    private transient long lastAutosave = System.currentTimeMillis();
-    private transient int reportTarget = 0;
-    private transient int reportTotal = 0;
-    private transient int reportNum = 0;
+    private long lastReport = System.currentTimeMillis();
+    private long lastAutosave = System.currentTimeMillis();
+    private int reportTarget = 0;
+    private int reportTotal = 0;
+    private int reportNum = 0;
     // A map that holds to-be-loaded chunks, and their coordinates
-    private transient Map<CompletableFuture<Void>, CoordXZ> pendingChunks;
+    private Map<CompletableFuture<Void>, CoordXZ> pendingChunks;
 
     // and a set of "Chunk a needed for Chunk b" dependencies, which
     // unfortunately can't be a Map as a chunk might be needed for
     // several others.
-    private transient Set<UnloadDependency> preventUnload;
+    private Set<UnloadDependency> preventUnload;
     private boolean ended = false;
 
-    public WorldFillTask(Server theServer,
-                         String worldName,
+    public WorldFillTask(World world,
                          int chunksPerRun,
                          boolean forceLoad,
                          int radius) {
-        this.server = theServer;
+        this.server = Bukkit.getServer();
         this.chunksPerRun = chunksPerRun;
         this.forceLoad = forceLoad;
 
-        this.world = server.getWorld(worldName);
-        if (this.world == null) {
-            if (worldName.isEmpty())
-                sendMessage("You must specify a world!");
-            else
-                sendMessage("World \"" + worldName + "\" not found!");
-            this.stop();
-            return;
-        }
+        this.world = world;
 
         this.border = new BorderData(x, z, radius, radius, true, false);
 
@@ -339,6 +330,7 @@ public class WorldFillTask implements Runnable {
                 world.unloadChunkRequest(entry.neededX, entry.neededZ);
             }
         }
+        world = null;
     }
 
     public boolean chunkOnUnloadPreventionList(int x, int z) {
