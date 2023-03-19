@@ -52,6 +52,9 @@ import java.util.stream.Collectors;
 public class Twin extends RoleVillage {
 
     @Nullable
+    private List<IPlayerWW> twinInformationList;
+
+    @Nullable
     private List<IPlayerWW> twinList;
 
     public Twin(WereWolfAPI api, IPlayerWW playerWW) {
@@ -66,9 +69,9 @@ public class Twin extends RoleVillage {
                         Formatter.number(game.getConfig().getValue(IntValueBase.TWIN_DISTANCE)),
                         Formatter.format("&number2&", game.getConfig().getValue(IntValueBase.TWIN_DISTANCE) * 2)))
                 .setEffects(game.translate("werewolf.roles.twin.effects", Formatter.number(game.getConfig().getValue(IntValueBase.TWIN_DISTANCE))))
-                .setPower(this.twinList == null ?
+                .setPower(this.twinInformationList == null ?
                         game.translate("werewolf.roles.twin.timer", Formatter.timer(game, TimerBase.TWIN_DURATION))
-                        : game.translate("werewolf.roles.twin.twin_list", Formatter.format("&list&", this.twinList
+                        : game.translate("werewolf.roles.twin.twin_list", Formatter.format("&list&", this.twinInformationList
                         .stream()
                         .map(IPlayerWW::getName)
                         .collect(Collectors.joining(", "))))
@@ -89,19 +92,19 @@ public class Twin extends RoleVillage {
             return;
         }
 
-        List<IPlayerWW> players = new ArrayList<>(Arrays.asList(playerWWS.get(0), playerWWS.get(1)));
-
         this.twinList = game.getPlayersWW()
                 .stream()
                 .filter(playerWW -> playerWW.getRole().isKey(RoleBase.TWIN))
                 .filter(playerWW -> !playerWW.equals(this.getPlayerWW()))
                 .collect(Collectors.toList());
 
-        players.addAll(this.twinList);
+        this.twinInformationList = new ArrayList<>(Arrays.asList(playerWWS.get(0), playerWWS.get(1)));
 
-        Collections.shuffle(players, game.getRandom());
+        this.twinInformationList.addAll(this.twinList);
 
-        TwinRevealEvent twinRevealEvent = new TwinRevealEvent(this.getPlayerWW(), new HashSet<>(players));
+        Collections.shuffle(this.twinInformationList, game.getRandom());
+
+        TwinRevealEvent twinRevealEvent = new TwinRevealEvent(this.getPlayerWW(), new HashSet<>(this.twinInformationList));
 
         Bukkit.getPluginManager().callEvent(twinRevealEvent);
 
@@ -111,7 +114,7 @@ public class Twin extends RoleVillage {
         }
 
         this.getPlayerWW().sendMessageWithKey(Prefix.BLUE, "werewolf.roles.twin.twin_list",
-                Formatter.format("&list&", players
+                Formatter.format("&list&", this.twinInformationList
                         .stream()
                         .map(IPlayerWW::getName)
                         .collect(Collectors.joining(", "))));
@@ -186,6 +189,10 @@ public class Twin extends RoleVillage {
                             .collect(Collectors.toList());
 
                     if (game.getRandom().nextBoolean()) {
+
+                        if (nearPlayers.isEmpty()) {
+                            return;
+                        }
 
                         TwinListEvent twinListEvent = new TwinListEvent(this.getPlayerWW(), new HashSet<>(nearPlayers));
 

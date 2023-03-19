@@ -203,6 +203,7 @@ public class GameManager implements WereWolfAPI {
         end.checkVictory();
     }
 
+
     @Override
     public void stopGame() {
 
@@ -212,7 +213,7 @@ public class GameManager implements WereWolfAPI {
 
         this.listenersManager.delete();
 
-        this.scheduleId.forEach(integer -> Bukkit.getScheduler().cancelTask(integer));
+        this.cleanSchedules();
 
         this.main.createGame();
 
@@ -237,6 +238,13 @@ public class GameManager implements WereWolfAPI {
             this.mapManager.deleteMap();
         }
         newGame.mapManager.createMap();
+    }
+
+    public void cleanSchedules() {
+        this.scheduleId.removeIf(integer -> {
+            Bukkit.getScheduler().cancelTask(integer);
+            return true;
+        });
     }
 
     @Override

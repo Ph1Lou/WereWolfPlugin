@@ -91,7 +91,7 @@ public class AdvancedConfigurationUtils {
 
     public static List<? extends ClickableItem> getConfigs(WereWolfAPI game, Configuration[] configurations, Supplier<SmartInventory> inventory) {
         return Arrays.stream(configurations)
-                .map(configRegister -> ConfigurationsGUI.getClickableItem(game, configRegister, null, inventory))
+                .map(configRegister -> ConfigurationsGUI.getClickableItem(game, configRegister,  inventory))
                 .collect(Collectors.toList());
     }
 

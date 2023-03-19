@@ -318,7 +318,6 @@ public class WorldFillTask implements Runnable {
         if (taskID != -1)
             server.getScheduler().cancelTask(taskID);
         server = null;
-
         // go ahead and unload any chunks we still have loaded
         // Set preventUnload to empty first so the ChunkUnloadEvent Listener
         // doesn't get in our way

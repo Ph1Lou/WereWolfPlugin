@@ -57,7 +57,7 @@ public class MapManager implements IMapManager {
     public void generateMap(int mapRadius) {
 
         int chunksPerRun = 80;
-        if (this.wft == null || this.wft.getPercentageCompleted() == 100) {
+        if (this.wft == null) {
             this.wft = new WorldFillTask(
                     world,
                     chunksPerRun,
@@ -162,7 +162,6 @@ public class MapManager implements IMapManager {
                 location4.getBlock().setType(Material.BARRIER, false);
             }
         }
-
         if (world.equals(this.world)) {
             generateMap(game.getConfig().getBorderMax() / 2);
         }

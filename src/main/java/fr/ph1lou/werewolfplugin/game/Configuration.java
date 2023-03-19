@@ -2,7 +2,9 @@ package fr.ph1lou.werewolfplugin.game;
 
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
+import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.Register;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Collection;
 import java.util.Map;
@@ -266,6 +268,11 @@ public class Configuration implements IConfiguration {
         Register.get().getModuleKey(key).ifPresent(addonKey -> {
             if (this.storageConfigurations.containsKey(addonKey)) {
                 this.storageConfigurations.get(addonKey).switchConfigValue(key);
+
+                JavaPlugin.getPlugin(Main.class).getWereWolfAPI()
+                        .getListenersManager()
+                        .getConfiguration(key)
+                        .ifPresent(listenerWerewolf -> listenerWerewolf.register(!listenerWerewolf.isRegister()));
             }
         });
     }
@@ -275,6 +282,11 @@ public class Configuration implements IConfiguration {
         Register.get().getModuleKey(key).ifPresent(addonKey -> {
             if (this.storageConfigurations.containsKey(addonKey)) {
                 this.storageConfigurations.get(addonKey).switchScenarioValue(key);
+
+                JavaPlugin.getPlugin(Main.class).getWereWolfAPI()
+                        .getListenersManager()
+                        .getScenario(key)
+                        .ifPresent(listenerWerewolf -> listenerWerewolf.register(!listenerWerewolf.isRegister()));
             }
         });
     }
@@ -328,6 +340,11 @@ public class Configuration implements IConfiguration {
         Register.get().getModuleKey(key).ifPresent(addonKey -> {
             if (this.storageConfigurations.containsKey(addonKey)) {
                 this.storageConfigurations.get(addonKey).setConfig(key, value);
+
+                JavaPlugin.getPlugin(Main.class).getWereWolfAPI()
+                        .getListenersManager()
+                        .getConfiguration(key)
+                        .ifPresent(listenerWerewolf -> listenerWerewolf.register(value));
             }
         });
     }
@@ -337,6 +354,11 @@ public class Configuration implements IConfiguration {
         Register.get().getModuleKey(key).ifPresent(addonKey -> {
             if (this.storageConfigurations.containsKey(addonKey)) {
                 this.storageConfigurations.get(addonKey).setScenario(key, value);
+
+                JavaPlugin.getPlugin(Main.class).getWereWolfAPI()
+                        .getListenersManager()
+                        .getScenario(key)
+                        .ifPresent(listenerWerewolf -> listenerWerewolf.register(value));
             }
         });
     }

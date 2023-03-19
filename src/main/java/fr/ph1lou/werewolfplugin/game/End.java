@@ -50,6 +50,9 @@ public class End {
 
         if (game.isState(StateGame.END)) return;
 
+        if(game.getPlayersWW().stream().anyMatch(iPlayerWW -> iPlayerWW.isState(StatePlayer.JUDGEMENT))){
+            return;
+        }
 
         Set<IRole> iRolesAlive = game.getPlayersWW().stream()
                 .filter(iPlayerWW -> iPlayerWW.isState(StatePlayer.ALIVE))
@@ -108,6 +111,8 @@ public class End {
     }
 
     private void end() {
+
+        game.cleanSchedules();
 
         Bukkit.getPluginManager().callEvent(new WinEvent(winner,
                 game.getPlayersWW()
