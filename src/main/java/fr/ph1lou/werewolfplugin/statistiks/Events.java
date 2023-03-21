@@ -61,6 +61,8 @@ import fr.ph1lou.werewolfapi.events.roles.avenger_werewolf.RegisterAvengerListEv
 import fr.ph1lou.werewolfapi.events.roles.barbarian.BarbarianEvent;
 import fr.ph1lou.werewolfapi.events.roles.bear_trainer.GrowlEvent;
 import fr.ph1lou.werewolfapi.events.roles.benefactor.BenefactorGiveHeartEvent;
+import fr.ph1lou.werewolfapi.events.roles.bloodthirsty_werewolf.BloodthirstyWereWolfLowLifeListDisplay;
+import fr.ph1lou.werewolfapi.events.roles.bloodthirsty_werewolf.BloodthirstyWerewolfHuntDownEvent;
 import fr.ph1lou.werewolfapi.events.roles.charmer.CharmedDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.charmer.CharmerEvent;
 import fr.ph1lou.werewolfapi.events.roles.charmer.CharmerGetEffectDeathEvent;
@@ -1443,5 +1445,25 @@ public class Events implements Listener {
                         event.getPlayerWW(),
                         main.getWereWolfAPI().getTimer(),
                         event.getFurNumbers()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onBloodthirstyWerewolfHuntDown(BloodthirstyWerewolfHuntDownEvent event){
+        main.getCurrentGameReview()
+                .addRegisteredAction(new RegisteredAction("werewolf.bloodthirsty_werewolf_hunt_down",
+                        event.getPlayerWW(),
+                        event.getTargetWW(),
+                        main.getWereWolfAPI().getTimer())
+                        .setActionableStory(true));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onBloodthirstyWerewolfLowLifeListDisplay(BloodthirstyWereWolfLowLifeListDisplay e){
+        main.getCurrentGameReview()
+                .addRegisteredAction(new RegisteredAction("werewolf.bloodthirsty_werewolf_low_life_list_display",
+                        e.getPlayerWW(),
+                        e.getPlayersWWSet(),
+                        main.getWereWolfAPI().getTimer()
+                ));
     }
 }

@@ -917,6 +917,31 @@
         "configurations": {
           "distance": "Champ d'action du Braconnier §b&number&§f blocs"
         }
+      },
+      "bloodthirsty_werewolf": {
+        "display": "Loup Sanguinaire",
+        "description_command": "/ww traquer",
+        "command": "traquer",
+        "description": "Vous pouvez traquer des joueurs avec §c/ww traquer§f. Vous obtenez §b&speed&%§f de speed supplémentaire lorsque vous vous dirigez vers le joueur traqué. Vous pouvez traquer un nouveau joueur §b&time&§r après la mort de votre cible précédente. \nA partir du jour &damage_day& et tout les deux jours, vous perdez 4 coeurs si vous n'avez pas infligé de dégat à un joueur non loup durant les 2 jours précédents. \nA partir du jour &list_day& et tout les deux jours, vous recevez une liste contenant tous les joueurs ayant moins de §b&number&%§f de leur vie maximale.",
+        "power_enable": "Vous pouvez traquer un joueur",
+        "power_disable": "Vous ne pouvez pas traquer de joueur pour le moment",
+        "power_already_used": "Vous traquez déjà le joueur §b&player&§f",
+        "hunt_down_confirm": "Vous traquez désormais le joueur §c&player&",
+        "player_cant_be_traqued": "Vous ne pouvez pas traquer le joueur §b&player&§r",
+        "player_death": "Votre cible est morte, vous pourrez traquer un autre joueur dans §b&time&§f",
+        "have_deal_damage": "Vous avez infligé des dégâts à un joueur non loup durant l'épisode précédent, vous ne perdez pas de vie à cet épisode",
+        "havent_deal_damage": "Vous n'avez pas infligé de dégât à un joueur non loup, vous perdez donc 4 coeurs",
+        "low_life_players_list": "Voici la liste des joueurs qui ont moins de §b&number&%§f de vie\n§b&names&",
+        "recover_power": "Vous pouvez à nouveau traquer un joueur",
+        "timers": {
+          "cooldown": "Durée du cooldown: §b&timer&§f"
+        },
+        "configurations": {
+          "max_life": "Vie maximale de §b&number&%§f de la détection du sanguinaire",
+          "speed": "Speed augmentée de §b&number&%§f",
+          "life_detect_day": "Vous commencez à détecter les joueurs avec peu de vie dès le jour §b&number&§f",
+          "take_damage_day": "Vous prendrez des dégats dès le jour §b&number&§f"
+        }
       }
     },
     "announcement": {
@@ -1141,6 +1166,10 @@
         "config": {
           "command": "config",
           "description": "Pour configurer la Partie"
+        },
+        "test": {
+          "command": "particle",
+          "description": "juste pour tester"
         }
       },
       "player": {
