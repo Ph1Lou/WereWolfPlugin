@@ -1166,10 +1166,6 @@
         "config": {
           "command": "config",
           "description": "Pour configurer la Partie"
-        },
-        "test": {
-          "command": "particle",
-          "description": "juste pour tester"
         }
       },
       "player": {

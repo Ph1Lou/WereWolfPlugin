@@ -116,8 +116,8 @@ public class BloodthirstyWereWolf extends RoleWereWolf implements IAffectedPlaye
     public void recoverPower() {
         if (!this.hasPower()){
             this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.bloodthirsty_werewolf.recover_power");
+            this.havePower = true;
         }
-        this.havePower = true;
     }
 
     @Override
