@@ -64,6 +64,6 @@ public class CommandBloodthirsty implements ICommandRole {
             return;
         }
 
-        sanguinaryWolf.startHuntingDownPlayer(selectedPlayerWW);
+        sanguinaryWolf.addAffectedPlayer(selectedPlayerWW);
     }
 }
