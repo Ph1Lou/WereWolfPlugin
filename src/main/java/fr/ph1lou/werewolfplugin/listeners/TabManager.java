@@ -139,6 +139,7 @@ public class TabManager implements Listener {
             RequestSeeWereWolfListEvent requestSeeWereWolfListEvent = new RequestSeeWereWolfListEvent(uuid1);
             Bukkit.getPluginManager().callEvent(requestSeeWereWolfListEvent);
 
+
             if (requestSeeWereWolfListEvent.isAccept()) {
                 AppearInWereWolfListEvent appearInWereWolfListEvent = new AppearInWereWolfListEvent(player.getUniqueId(), uuid1);
                 Bukkit.getPluginManager().callEvent(appearInWereWolfListEvent);
@@ -148,6 +149,14 @@ public class TabManager implements Listener {
                     }
                 }
             }
+
+            game.getPlayerWW(target.getUniqueId())
+                    .ifPresent(targetWW -> game.getPlayerWW(player.getUniqueId())
+                            .ifPresent(playerWW -> {
+                                if(playerWW.isState(StatePlayer.ALIVE)){
+                                    sb.append(targetWW.getColor(playerWW));
+                                }
+                            }));
 
             if (game.getModerationManager().getModerators().contains(uuid1)) {
                 String string1 = event2.getSuffix() + event1.getSuffix();

@@ -179,26 +179,25 @@
       },
       "citizen": {
         "display": "Citoyen",
-        "description": "Vous pouvez, deux fois dans la partie, décider de voir les Votes, et une fois seulement, les annuler.",
-        "description_new_vote": "Vous pouvez une fois dans la partie, connaitre le résultat du vote Loup Garou",
-        "cancel_vote_message": "Vous pouvez encore annuler le vote §b&number&§r fois",
+        "description": "Vous pouvez, §b&number&§f fois dans la partie, décider de voir les Votes, et une fois seulement, les changer.",
+        "change_vote_message": "Vous pouvez encore changer le vote §b&number&§r fois",
         "description_extra": "Lorsque la composition est cachée, vous recevez chaque matin une liste de 3 rôles existants avec le nombre de ces rôles présents dans la partie",
         "see_vote_message": "Vous pouvez encore dépouiller les votes §b&number&§r fois. ",
         "click": "§bCliquez ici ",
-        "cancel": "Annuler le §bVote",
+        "change": "Changer le §bVote pour §b&player&",
         "see": "Voir les §bVotes",
         "time_left": ", vous avez §b&timer&",
-        "cancelling_vote_perform": "Vote annulé, vous venez de sauver §b&player&",
-        "cancelling_broadcast": "Un Citoyen a annulé le vote",
+        "change_vote_perform": "Vous venez de changer le vote pour §b&player&",
         "count_votes": "Dépouillement ",
         "see_vote": "§b&voter&§r a voté pour §b&player&§r",
         "command_1": "depouiller_citizen",
-        "command_2": "annuler_citizen",
+        "command_change": "change_citizen",
         "new_vote_count": "Le joueur &player& a reçu &number& votes.",
         "hide_composition": "Il y a &number& rôle dans la composition parmi : &role1&, &role2&, &role3&",
-        "werewolf_new_vote": "Aucun joueur n'a été voté par les Loups Garous",
-        "click_to_see_werewolf.configurations.vote": "Cliquez ici pour voir le résultat du vote Loup Garou",
-        "rumor": "Le joueur §b&player&§f a écrit la rumeur &message&"
+        "rumor": "Le joueur §b&player&§f a écrit la rumeur &message&",
+        "configurations": {
+          "vote_see_number": "Nombre de dépouillements §b&number&§r"
+        }
       },
       "angel": {
         "display": "Ange",
@@ -1407,6 +1406,12 @@
         "guess": {
           "command": "deviner",
           "title": "Devinez le role de §b&player&"
+        },
+        "color": {
+          "command": "color",
+          "description": "Permet de coloriser le pseudo d'un joueur",
+          "player_choice": "Marquage du §bjoueur",
+          "color_choice": "Choix de la §bcouleur"
         }
       }
     },
@@ -1662,7 +1667,8 @@
         },
         "configurations": {
           "vote_end": "Fin des votes à §b&number&§r personnes",
-          "vote_every_other_day": "Vote un jour sur deux"
+          "vote_every_other_day": "Vote un jour sur deux",
+          "distance": "Distance de rencontre : §b &number& bloc(s)"
         },
         "already_voted": "Vous avez déjà voté aujourd'hui",
         "not_vote_time": "Ce n'est plus l'heure du vote",
@@ -1671,14 +1677,12 @@
         "vote_disable": "Les Votes sont désactivés",
         "vote_deactivate": "En raison du nombre de joueurs, les Votes sont désactivés",
         "vote_not_yet_activated": "Les Votes ne sont pas encore activés",
-        "vote_result": "§b&player&§f est celui qui a recueilli le plus de votes : §b&number&§r. Il perd 5 coeurs",
+        "vote_result": "§b&player&§f est celui qui a recueilli le plus de votes : §b&number&§r. Il a poison pendant 15 secondes",
         "no_result": "Aucun joueur n'a été voté",
         "no_result_more_one": "Aucun joueur n'a été voté plus d'une fois",
         "vote_time": "C'est l'heure de voter §b/ww vote§r Vous avez §b&timer&",
-        "new_voted": "Vous avez été le plus voté lors du dernier vote, vous ne pouvez donc pas voter cette fois ci",
-        "neutral": "Les rôles neutres ne peuvent pas voter",
-        "new_vote_villager": "§b&player&§f est celui qui a recueilli le plus de votes auprès des Villageois.",
-        "new_vote_werewolf": "§b&player&§f est celui qui a recueilli le plus de votes auprès des Loups Garous."
+        "not_met": "Vous ne pouvez pas voter un joueur que vous n'avez pas rencontrer à moins de §b&number& blocs",
+        "distance_voted": "Le joueur voté est à §b&number&§f blocs +- 100"
       },
       "hide_composition": {
         "name": "Composition Cachée"

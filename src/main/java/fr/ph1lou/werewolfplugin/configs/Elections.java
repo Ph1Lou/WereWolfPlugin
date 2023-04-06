@@ -321,8 +321,7 @@ public class Elections extends ListenerWerewolf {
         this.getMayor().ifPresent(playerWW -> {
 
             if (playerWW.equals(event.getPlayerWW())) {
-                Map<IPlayerWW, Integer> votes = this.getGame().getVoteManager().getVotes();
-                votes.put(event.getTargetWW(), votes.getOrDefault(event.getTargetWW(), 0) + 1);
+                this.getGame().getVoteManager().setVotes(event.getTargetWW(), 1 + this.getGame().getVoteManager().getVotes(event.getTargetWW()));
             }
         });
     }

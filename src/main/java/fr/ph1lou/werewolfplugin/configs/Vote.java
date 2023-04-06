@@ -7,6 +7,7 @@ import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.ScenarioBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
@@ -44,12 +45,15 @@ import org.bukkit.event.EventPriority;
                         meetUpValue = 60,
                         step = 10)
         },
-        configValues = @IntValue(key = IntValueBase.VOTE_END, defaultValue = 10,
+        configValues = { @IntValue(key = IntValueBase.VOTE_END, defaultValue = 8,
                 meetUpValue = 8,
                 step = 1, item = UniversalMaterial.PLAYER_HEAD),
+                @IntValue(key = IntValueBase.VOTE_DISTANCE, defaultValue = 20,
+                        meetUpValue = 15,
+                        step = 1, item = UniversalMaterial.BLACK_WOOL)
+        },
         configurations = {
-                @ConfigurationBasic(key = ConfigBase.VOTE_EVERY_OTHER_DAY),
-                @ConfigurationBasic(key = ConfigBase.NEW_VOTE)}
+                @ConfigurationBasic(key = ConfigBase.VOTE_EVERY_OTHER_DAY)}
 )
 public class Vote extends ListenerWerewolf {
 
@@ -60,6 +64,7 @@ public class Vote extends ListenerWerewolf {
     @EventHandler
     public void onVoteBegin(VoteBeginEvent event) {
         this.getGame().getVoteManager().setStatus(VoteStatus.NOT_IN_PROGRESS);
+        this.getGame().getConfig().setScenario(ScenarioBase.NO_POISON, false);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

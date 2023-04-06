@@ -2,8 +2,10 @@ package fr.ph1lou.werewolfplugin.tasks;
 
 
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.StateGame;
+import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -43,9 +45,11 @@ public class GameTask extends BukkitRunnable {
         game.getScore().updateBoard();
 
 
-        game.getPlayersWW().stream().map(IPlayerWW::getRole).forEach(role -> {
+        game.getPlayersWW()
+                .forEach(playerWW -> {
             try {
-                role.second();
+                playerWW.getRole().second();
+                playerWW.second();
             } catch (Exception exception) {
                 exception.printStackTrace();
             }

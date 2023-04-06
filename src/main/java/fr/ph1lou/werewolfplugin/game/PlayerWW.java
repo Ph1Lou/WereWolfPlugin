@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.game;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.lovers.ILover;
@@ -16,6 +17,7 @@ import fr.ph1lou.werewolfplugin.utils.MessageAction;
 import io.papermc.lib.PaperLib;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -32,6 +34,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -44,6 +47,8 @@ public class PlayerWW implements IPlayerWW {
 
     private final List<ILover> lovers = new ArrayList<>();
     private final Map<PotionModifier, Integer> potionModifiers = new HashMap<>();
+
+    private final Map<IPlayerWW, ChatColor> colors = new HashMap<>();
     private final List<MessageAction> disconnectedMessages = new ArrayList<>();
     private final List<ItemStack> decoItems = new ArrayList<>();
     private final List<IPlayerWW> killer = new ArrayList<>();
@@ -70,6 +75,7 @@ public class PlayerWW implements IPlayerWW {
     private String lastWish;
     @Nullable
     private Location deathLocation;
+    private final Set<IPlayerWW> metPlayers = new HashSet<>();
 
     public PlayerWW(GameManager api, Player player) {
         this.spawn = player.getWorld().getSpawnLocation();
@@ -672,6 +678,41 @@ public class PlayerWW implements IPlayerWW {
         return this.deathRoles.get(0);
     }
 
+    @Override
+    public ChatColor getColor(IPlayerWW iPlayerWW) {
+        return this.colors.getOrDefault(iPlayerWW, ChatColor.RESET);
+    }
 
+    @Override
+    public void setColor(IPlayerWW iPlayerWW, ChatColor chatColor) {
+        this.colors.put(iPlayerWW, chatColor);
+    }
+
+    @Override
+    public Set<IPlayerWW> getPlayersMet() {
+        return this.metPlayers;
+    }
+
+    @Override
+    public void addMetPlayer(IPlayerWW iPlayerWW) {
+        this.metPlayers.add(iPlayerWW);
+    }
+
+    @Override
+    public void removeMetPlayer(IPlayerWW iPlayerWW) {
+        this.metPlayers.remove(iPlayerWW);
+    }
+
+    @Override
+    public void second() {
+        game.getPlayersWW()
+                .stream()
+                .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
+                .filter(playerWW1 -> !playerWW1.equals(this))
+                .filter(playerWW1 -> !this.getPlayersMet().contains(playerWW1))
+                .filter(playerWW1 -> playerWW1.getLocation().getWorld() == this.getLocation().getWorld() &&
+                                     playerWW1.getLocation().distance(this.getLocation()) < game.getConfig().getValue(IntValueBase.VOTE_DISTANCE))
+                .forEach(this::addMetPlayer);
+    }
 }
 
