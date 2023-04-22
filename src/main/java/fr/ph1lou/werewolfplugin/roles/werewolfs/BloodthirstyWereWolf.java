@@ -13,7 +13,6 @@ import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.bloodthirsty_werewolf.BloodthirstyWereWolfLowLifeListDisplayEvent;
 import fr.ph1lou.werewolfapi.events.roles.bloodthirsty_werewolf.BloodthirstyWerewolfLifeDetectionEvent;
-import fr.ph1lou.werewolfapi.events.roles.bloodthirsty_werewolf.BloodthirstyWerewolfLifeDetectionEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -73,7 +72,7 @@ import java.util.stream.Collectors;
                 )}
 )
 public class BloodthirstyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPower {
-    private final float baseSpeed = 0.2f;
+    private static float BASE_SPEED = 0.2f;
     private boolean havePower = false;
     public boolean haveDealDamage = false;
     public boolean speedIsAdded = false;
@@ -85,7 +84,7 @@ public class BloodthirstyWereWolf extends RoleWereWolf implements IAffectedPlaye
 
     public BloodthirstyWereWolf(WereWolfAPI game, IPlayerWW playerWW) {
         super(game, playerWW);
-        this.speedModification = this.baseSpeed * (game.getConfig().getValue(IntValueBase.BLOODTHIRSTY_SPEED) / 100F);
+        this.speedModification = this.BASE_SPEED * (game.getConfig().getValue(IntValueBase.BLOODTHIRSTY_SPEED) / 100F);
     }
 
     @Override
@@ -175,7 +174,7 @@ public class BloodthirstyWereWolf extends RoleWereWolf implements IAffectedPlaye
             if(!this.speedIsAdded){
                 float playerWalkSpeed = player.getWalkSpeed();
 
-                this.speedModification = this.baseSpeed * game.getConfig().getValue(IntValueBase.BLOODTHIRSTY_SPEED) / 100F;
+                this.speedModification = this.BASE_SPEED * game.getConfig().getValue(IntValueBase.BLOODTHIRSTY_SPEED) / 100F;
                 player.setWalkSpeed(playerWalkSpeed + this.speedModification);
 
                 this.speedIsAdded = true;
@@ -278,7 +277,7 @@ public class BloodthirstyWereWolf extends RoleWereWolf implements IAffectedPlaye
         if (e.getNumber() >= (game.getConfig().getValue(IntValueBase.BLOODTHIRSTY_TAKE_DAMAGE_DAY))){
             if(this.haveDealDamage){
                 this.getPlayerWW().sendMessageWithKey(Prefix.BLUE,"werewolf.roles.bloodthirsty_werewolf.have_deal_damage");
-            }else if(this.getPlayerWW().getState().equals(StatePlayer.ALIVE)){
+            }else if(this.getPlayerWW().isState(StatePlayer.ALIVE)){
                 this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.bloodthirsty_werewolf.havent_deal_damage");
 
                 if(this.getPlayerWW().getHealth() > 8){
